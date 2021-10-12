@@ -1,36 +1,35 @@
-/**
- * This script conflates rivers using Generic Conflation.
- */
+/*
+  This is the conflate script for River Conflation. Much like road conflation covers everything
+  from dirt paths to interstates, this script, although labeled as "River", covers everything from
+  rivers to creeks, etc....basically any linear waterway.
+*/
 
 "use strict";
-
-// Much like road conflation covers everything from dirt paths to interstates, this script,
-// although labeled as "river", covers everything from rivers to creeks, etc....basically any
-// linear waterway.
 
 exports.description = "Matches rivers";
 exports.experimental = false;
 exports.baseFeatureType = "River";
 exports.geometryType = "line";
-
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
-exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
-
 // This is needed for disabling superfluous conflate ops and calculating a search radius only.
 // exports.isMatchCandidate handles culling match candidates.
 exports.matchCandidateCriterion = "RiverCriterion";
 
-// used during subline matching
-var sublineStringMatcher; // gets set up in calculateSearchRadius function
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
+// These are used to determine type and name similarity and are independent of the other score
+// thresholds.
+exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
+
+// geometry matchers
+var sublineStringMatcher; // gets set up in calculateSearchRadius function
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("river.angle.sample.distance"),
@@ -38,6 +37,7 @@ var sampledAngleHistogramExtractor =
       "angle.histogram.extractor.process.relations" : "false" });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 
+// name matcher
 var nameExtractor = new hoot.NameExtractor(
   new hoot.MaxWordSetDistance(
     { "token.separator": "[\\s-,';]+" },

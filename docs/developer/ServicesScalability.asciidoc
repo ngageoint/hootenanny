@@ -1,0 +1,247 @@
+
+=== Services Scalability
+
+NOTE: The following tests depict results with a specific server configuration, specific
+version numbers and specific hardware. These results should be analogous to
+other installations, but your mileage may vary.
+
+==== Load Testing Approach
+
+There are two different load testing approaches being employed in Hootenanny
+testing: node.js service level testing and Selenium based UI level testing. The
+services level testing allows for efficient and reliable tests that stimulate
+the services stack down through the core. The Selenium based UI tests utilize
+Chrome for testing the UI down through the services and core.
+
+Each testing approach has pros and cons. The node.js tests are fast to write
+and efficient to execute. This means that we can easily scale the tests to
+several hundred users without using large amount of hardware. The Selenium tests
+are more thorough in that they test not only the services, but the interaction
+between Chrome and the services and have the potential to catch some UI level
+bugs that will be missed by the node.js tests.
+
+Many different approaches to load testing were evaluated before choosing node.js
+and Selenium. The specific tools evaluated and the evaluation outcomes can be
+provided upon request.
+
+===== UI Level Selenium Tests
+
+Selenium provides a programming interface for many different browsers and
+enables stimulating and querying the browser in an automated fashion. This works
+well, but in our experimentation a single 8 core machine could only run
+about 5-10 instances of Selenium reliably at one time. Any more and the tests
+became unstable.
+
+It quickly became apparent that we would need many more test servers if we
+wanted to pursue this approach further.
+
+This approach has great promise with regards to automated functional tests and
+is part of our nightly test runs.
+
+[[SimulatedUser]]
+===== Simulated User
+
+We use node.js scripts to simulate the load on the system from a typical user.
+To do this we must make certain assumptions about a user's activities. We also
+must strike a balance between ease of implementation and accurate simulation of
+a user. The following operations attempt to strike that balance:
+
+* Batch User Operations - These operations are typically broken out into jobs
+  and are expected to take anywhere from tens of seconds to hours to complete.
+** Conflate (conflate) - Given two input layers, conflate them and write to an
+output layer. The number of elements in the output layer will be counted and
+checked to be certain something was generated. The data available for conflation
+is listed in <<StressTestFiles>>.
+** Import (ingestZip) - Extract, transform and load layer and wait until completely loaded.
+Verify that the layer is approximately the expected size. Uses the
+<<StressTestFiles, DC Roads>> data.
+** Exports (exportMap) - Translate & export a layer. Wait for it to finish
+exporting and then verify that it is approximately the expected size. This
+operation randomly selects an existing map for export. The maps in the system
+are listed in <<StressTestFiles>>.
+* Low Latency User Operations - These operations are expected to finish very
+  quickly. Typically the user will sit and wait for the UI to respond after the
+  operation is kicked off. Generally we want these operations to occur in less
+  than 100ms when there is no load.
+** Load Map Tile (getTile) - When the user interacts with map tiles (pan, zoom,
+etc.), multiple map tiles are usually loaded at one time. In this case a random
+layer will be selected and 100 to 500 random tiles will be requested. The time
+it takes for each tile load will be recorded. The map is randomly chosen and the
+tiles are randomly selected from within the bounds of the map. For now the tile
+size is hard coded to 0.0055' x 0.0055'. 10% of the time there will be a 400ms
+pause before requesting additional tiles. This simulates a user panning the map
+and then pausing to look around. As expected these can take longer than 100ms
+depending on the complexity of the tile requested.
+** Feature Translation (translateElement) - This simulates a user clicking on a
+feature. The attributes from the feature are translated from OSM and displayed.
+The user usually translates a single feature at a time, but multiple features
+may be requested in quick succession. We will translate between 5 and 100
+features with random pauses between requests 50% of the time.
+** Services Version Number (getVersion) - Requesting the server version number
+is a very quick operation that shows the server response time for a very small
+operation.  If this number gets high it is indicative of the server being under
+too much load, not necessarily an optimization issue. We request the version
+number and record the time it takes to respond.
+
+Each simulated user randomly picks an operation and executes it to completion
+before selecting another operation. To simulate multiple users we spawn one
+process for each user and they all operate independently until a specified
+amount of time has elapsed.
+
+==== Test Setup
+
+The test is configured such that the server under test (server a) is being tested
+by node.js scripts running on another server (server b).
+
+* server a
+** 8 core VM, 72 GB of RAM, Ubuntu 14.04
+* server b
+** 8 core VM, 16 GB of RAM, Ubuntu 14.04
+
+There is enough RAM on both machines that swap is never utilized.
+
+The database is cleared and services are restarted before every test run. The
+tests are run for 15 minutes and all operations that complete are reported. Any
+outstanding operations after 15 minutes are terminated and are not reported.
+
+==== Load Testing Results
+
+[[LoadBenchmark]]
+.Load Benchmark on 3/16/2015
+image::images/load.png[]
+
+The above graphs display the elapsed time for various operations under different
+simulated user loads. The specific tests and files used are described in
+<<SimulatedUser>>. The box plots used in many of the graphs represent the
+quartiles of the elapsed time. More specifically:
+
+* The bottom bar is the minimum elapsed time
+* The bottom of the box represents the first quartile. Stated another way 25% of
+  the elapsed time values are below the bottom of the box.
+* The middle red line represent the median. Stated another way -- half the elapsed
+  time values are below the red line.
+* The top of the box represents the third quartile. Stated another way 75% of
+  the elapsed time values are below the top of the box.
+* The top bar is the maximum elapsed time.
+
+As expected, when the simulated user load increases the elapsed time also
+increases. There are some errors in translate that are currently being
+addressed, but otherwise significant errors are not introduced until
+approximately 75 simulated users.
+
+==== Improvements as a Result of Benchmarking
+
+The benchmarking led to a number of marked improvements in both scalability and
+reliability.
+
+* Limit Batch Operations - To free CPU and memory resources, a cap of five batch
+  jobs is enforced by the services. This allows more resources for low latency
+  operations and avoids bringing the server to a halt if too many batch jobs are
+  spawned.
+* Free file handles - Several problems were found where file handles were being
+  allocated, but not freed. This was identified while benchmarking and resolved.
+* Free open sockets - Similar to above there were more sockets being left open
+  than were strictly necessary. Fixing this problem improved stability.
+* Limit DB connections - A bug was found where many more database connections
+  were being opened than were needed. This has been resolved and improved the
+  stability.
+* Slow Translation - The translation of features is slower than necessary. This
+  is being actively worked to reduce latency and free CPU resources for other
+  tasks.
+
+The load benchmark graph shown (in <<LoadBenchmark>>) is being generated on
+a nightly basis and emailed out to appropriate parties so performance can be
+monitored over time.
+
+==== Future Work
+
+Options for future work are:
+
+* Look at the logs for a user session to get better estimates of the operations
+  performed and their relative distribution and timing.
+* Increase the size of the files used in load testing. See the section below.
+* Add the review process to the load testing.
+* Tune Tomcat settings to improve performance.
+* Monitor RAM, open files, open sockets and CPU usage while tests are running.
+* Increase the duration of the testing. 15 minutes is convenient in that a full
+  test run can be completed in several hours, but running similar tests over
+  several hours or days could be informative.
+
+===== Areas to Improve Hoot
+
+The elapsed time for a translation operation can be improved significantly by
+avoiding the overhead of starting up translation scripts each time they are
+needed. This is being worked on now.
+
+We are currently using a single server to handle all web services, database
+operations and batch jobs. The services are designed to split operations across
+multiple servers. It will not take a major re-factoring of the code to enable
+this to occur. Initially, we could separate these three operations (Services,
+Database and Batch Jobs) onto separate servers. As pain points are recognized,
+additional servers could be introduced to manage batch job load and services.
+This should enable us to handle significantly higher loads, but benchmarking
+will be required to establish the actual figures.
+
+The errors that start occurring with 75+ users have not been thoroughly
+investigated. It is possible that spending some time investigating those errors
+may lead to simple solutions without increasing the server count. While this may
+improve stability while under high load it will likely not impact overall
+throughput or latency.
+
+After conflate and ingest operations complete, the services calculate tiles for
+displaying the density of data. This operation can be made more efficient by
+calculating the density values directly after the ingest or conflation
+operation. This will reduce the load on the database as well. This should
+improve overall throughput and reduce the elapsed time associated with several
+batch operations.
+
+[[StressTestFiles]]
+===== Stress Test Files
+
+We investigated using a very dense 1' x 1' region over Boston as a stress test
+layer. Unfortunately this requires more than 40GB of RAM which made it a bit
+difficult to test. The exact RAM required is unknown because we could
+not let the process run to completion.
+
+The conflation operation randomly uses one of two files. The first option is a
+DC roads conflation, the second is a 1' x 1' conflation of Gaalkacyo, Somalia.
+
+* DC Roads
+** .osm file sizes: 991KB, 716KB
+** area: 0.271' x 0.184', $$~2.3km x ~2.1km$$
+** number of nodes/ways/relations: 4324/374/0, 3163/227/0
+** command line conflation time: 8.3sec
+** .osm output file size: 1.1MB
+* Gaalkacyo, Somalia
+** .osm file sizes: 39MB, 1.9MB
+** area: 1' x 1', $$~110km x ~111km$$
+** number of nodes/ways/relations: 193803/4956/0, 8548/1042/0
+** command line conflation time: 88.3sec
+** .osm output file size: 41MB
+
+==== TIME-WAIT State
+
+This can be an issue when connecting from the web services to the DB (not such
+an issue anymore) or when testing from one client that connects to the Tomcat
+server repeatedly.
+
+This is unlikely to occur in the wild as one IP would have to churn with
+more than 30k connections within 60 seconds.
+
+A good summary of the issue can be found http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html[here]:
+
+If for some reason this is still an issue there are a number of rather straight
+forward fixes:
+
+* Have Tomcat listen on multiple ports. When a new client comes in redirect them
+  to an appropriate port. If we listen on 100 ports it provides roughly 100
+  times as many sockets to use. Unfortunately the client may see
+  "http://hootenanny.com:8123/" in the URL.
+* Listen on multiple IP addresses. This is similar to the solution above, but
+  the client would connect to a more pleasant.
+  "http://hoot23.hootenanny.com/"
+
+For load testing purposes we may exploit either of the above scenarios with the
+assumption that in the real world the client IPs will have enough variation that
+this will not be an issue.
+

@@ -1,0 +1,64 @@
+
+=== Data Schema
+
+The OSM data model is a single "layer" that contains three elementary data types
+and arbitrary attribute tags. This provides great flexibility to the format, and
+topology is inherent in the format, but type checking relies on the user.
+
+Besides the OSM data, all of the data sets provided for conflation were provided
+as tabular GIS files such as Shapefile or File Geodatabase. These tabular
+formats provide each layer (e.g., road, river, building) as a different file or
+table. The available attributes are predefined as columns in the layer, and
+strong type checking is enforced. The rigidity of the format can provide
+benefits during type checking, but given the broad array of layer types we would
+like to handle within Hootenanny, it becomes a hindrance to predefine all
+possible layers and attributes. Also, maintaining topology within these tabular
+formats can be quite complex. To avoid these issues, we convert all tabular data
+into the OSM data model and format.
+
+The following section discusses the internals of the OSM Data Model and schema
+in more detail.
+
+==== The OSM Data Model
+
+The OSM data model is composed of three different elements. Each element may contain an arbitrary list of attributes called tags:
+
+* Node – Similar to a point, a node contains a location (latitude, longitude)
+  and a set of tags.
+* Way – Similar to a line or polygon, a way is an ordered collection of nodes
+  and a set of tags. The way indirectly contains location via the nodes
+  constitute it.
+* Relation – A relation is a group of nodes, ways, or relations and a set of
+  tags. This construct can be used to create complex geometries (e.g.,
+  multi-polygons or polygons with holes) or simply group and tag similar
+  elements such as all the buildings that make up a shopping center.
+
+[[IntersectAurora]]
+.Intersection in Aurora, Colorado
+
+image::images/image019.png[]
+
+The example in <<IntersectAurora>> shows a road found in Aurora, CO. The tags
+for the way are:
+
+* `highway=residential`
+* `surface=asphalt`
+* `name=East Roxbury Place`
+
+These tags show that the road is residential, paved with asphalt, and named
+"East Roxbury Place." By default the way is not one way (Key:oneway -
+OpenStreetMap Wiki, 2012). In the case of the roads just northeast, the
+`oneway=yes` tag is specified to state explicitly that those roads are one way.
+
+The highlighted red node is part of the labeled way and specifies `highway=stop`
+. When this tag is applied to a node, it designates that there is a stop sign at
+that location in the way. In contrast, the relationship between the stop sign
+and road can be encoded within a tabular data model though it is less natural
+due to joining of layers into a topology.
+
+While tags can be arbitrary, there is a standard schema that is defined by the
+OSM community. We take advantage of this standard during conflation when
+matching and merging features. For example, if the name and road surface type
+matches, there is a higher probability that the features are the same. Tag
+matching is addressed in more detail in <<ExplManipulationsMergeWays>>.
+

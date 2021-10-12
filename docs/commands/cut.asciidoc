@@ -29,6 +29,6 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 === See Also
 
 * `cookie.cutter.*` configuration options
-* _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Horizontal Conflation_, <<hootuser,Hootenanny - User Guide>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

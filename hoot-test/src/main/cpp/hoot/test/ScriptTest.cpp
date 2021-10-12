@@ -33,9 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/LogColor.h>
 
-# ifdef HOOT_HAVE_JOSM
 #include <hoot/josm/validation/MapValidator.h>
-# endif
 
 // Qt
 #include <QCoreApplication>

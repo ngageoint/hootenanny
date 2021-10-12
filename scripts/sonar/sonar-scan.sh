@@ -13,7 +13,7 @@ SONAR_HOST_URL="https://sonarcloud.io"
 SONAR_LOGIN=""
 SONAR_ORG="hootenanny"
 SONAR_PROJECT="hoot"
-SONAR_SOURCES="./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs"
+SONAR_SOURCES="./hoot-core,./hoot-js,./tbs,./tgs"
 SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
 
 # Getting parameters from the command line.

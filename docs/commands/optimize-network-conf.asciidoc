@@ -25,7 +25,7 @@ HootTest optimize-network-conf (testsDir) (testType) (testSettings) (numIteratio
 ==== Example
 
 --------------------------------------
-HootTest optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
+HootTest optimize-network-conf test-files/cases/reference/network/conflicts case settings.json 50 output Config.conf
 --------------------------------------
 
 NOTE: To use tests of type 'release' or 'perty' you must have access to the regression tests, which are not supplied 
@@ -33,5 +33,5 @@ with Hootenanny by default. Only the Network Conflation versions of those tests 
 
 === See Also
 
-* <<hootalgo, NetworkConflation>>
+* <<hootuser, NetworkConflation>>
 

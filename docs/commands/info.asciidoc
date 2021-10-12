@@ -24,6 +24,7 @@ Only one of the following options can be passed to the command per invocation:
                                  filtering
 * `--formats`                  - Displays supported data input/output formats
 * `--geometry-type-criteria`   - Displays criteria that identify a feature geometry type
+* `--languages`                - Displays information about translatable/detectable spoken languages
 * `--matchers`                 - Displays available feature matchers used during conflation
 * `--match-creators`           - Displays available feature match creators used during conflation
 * `--mergers`                  - Displays available feature mergers used during conflation
@@ -56,9 +57,10 @@ parameters.
 
 === Cleaning Operations
 
-The `--cleaning-operations` option prints out the currently configured map cleaning operations that 
+The `--cleaning-operations` option prints out the currently configured map cleaning operators that 
 are applied during conflation or with the 'clean' command.  The configuration option 
-'map.cleaner.transforms' controls which operators are applied.
+'map.cleaner.transforms' controls which operators are applied. Note that the operators are 
+purposefully shown in the order they are applied and not in alphabetical order.
 
 ==== Usage
 
@@ -186,6 +188,63 @@ identify an element's geometry.
 hoot info --geometry-type-crieria
 --------------------------------------
 
+=== Languages
+
+The `languages` option displays information about Hootenanny language translation/detection capabilities.
+
+All uses of the `languages` command require the following configuration options to be populated:
+* hoot.services.auth.user.name
+* hoot.services.auth.access.token
+* hoot.services.auth.access.token.secret
+
+For more information on logging into the web services, see the 'login' command documentation.  Those options are omitted 
+from the following command examples.
+
+Only one of the following options can be passed to the command:
+
+* `--detectable`    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
+* `--detectors`     - Prints all available language detector implementations for the translation service
+* `--translatable`  - Prints all spoken languages that Hootenanny translate from to English and the translators that 
+                      can translate them
+* `--translators`   - Prints all available language translator implementations for the translation service
+
+The `--detectors` option prints out all available language detectors that can be used with the Hootenanny web services.
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[Examples]
+
+Each of the following sections describes an option that may be used with this command and its input parameters.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --detectors
+--------------------------------------
+
+The `--translators` option prints out all available language translators that can be used with the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --translators
+--------------------------------------
+
+The `--detectable` option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --detectable
+--------------------------------------
+
+The `--translatable` option prints out spoken languages which Hootenanny can translate from to English when using 
+the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --translatable
+--------------------------------------
+
 === Matchers
 
 The `--matchers` option prints out available conflate matchers that may be applied when conflating 
@@ -292,7 +351,8 @@ hoot info --tag-mergers
 === Validators
 
 The `--validators` option prints out available Hootenanny validators that can be used to validate 
-data. To also see JOSM validators, run `validate --validators` (must be configured `--with-josm`).
+data. To see Hootenanny and JOSM validators together, run `validate --validators` instead (must be 
+configured `--with-josm`).
 
 ==== Usage
 
@@ -325,7 +385,7 @@ hoot info --way-joiners
 === Way Snap Criteria
 
 The `--way-snap-criteria` option prints out all criterion class implementations that may used with 
-`UnconnectedWaySnapper`to filter the types of ways that are snapped to each other. The list is 
+`UnconnectedWaySnapper` to filter the types of ways that are snapped to each other. The list is 
 restricted to a criterion that will snap all feature types (LinearCriterion) or criteria that are 
 both conflatable and represent linear geometry types (e.g. HighwayCriterion). Unlike most other 
 `info` options this prints out a delimited list of class names only with no descriptions. 

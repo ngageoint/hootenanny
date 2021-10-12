@@ -772,8 +772,8 @@ void DiffConflator::_removeRefData(const bool removeSnapped)
   ElementCriterionPtr refCrit = std::make_shared<StatusCriterion>(Status::Unknown1);
   if (!removeSnapped)
   {
-    // Don't remove any features involved in a snap, as they are needed
-    // to properly generate the changeset and keep sec ways snapped in the final output.
+    // Don't remove any features involved in a snap, as they are needed to properly generate the
+    // changeset and keep sec ways snapped in the final output.
     ElementCriterionPtr notSnappedCrit =
       std::make_shared<NotCriterion>(
         std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
@@ -968,7 +968,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   // little weird, but we want something very specific here. We want the old element as it was...
   // with new tags.
 
-  // Copy the old one to get the geometry
+  // Copy the old one to get the geometry.
   ElementPtr pChangeElement = pOldElement->clone();
   assert(pChangeElement->getId() == pOldElement->getId());
 
@@ -981,7 +981,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
       ConfigOptions().getDuplicateNameCaseSensitive());
   pChangeElement->setTags(newTags);
 
-  // Create the change
+  // Create the change.
   return Change(Change::Modify, pChangeElement);
 }
 

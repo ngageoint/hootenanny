@@ -413,12 +413,10 @@ QMap<QString, QString> getAllowedOptions()
     "Do not show test failure detailed messages; disables --diff for script tests";
   options["--trace"] = "Show trace log level messages and above";
   // Don't show this option if we're not configured to validate test output.
-# ifdef HOOT_HAVE_JOSM
   if (ConfigOptions().getTestValidationEnable())
   {
     options["--validated-only"] = "Run only tests where some or all of the output is validated";
   }
-#endif
   options["--verbose"] = "Show verbose log level messages and above";
   options["--warn"] = "Show warning log level messages and above";
   return options;
@@ -545,12 +543,10 @@ void populateTests(
   if (t & CASE_ONLY)
   {
     bool printValidationReportDiff = false;
-  # ifdef HOOT_HAVE_JOSM
     if (ConfigOptions().getTestValidationEnable() && printDiff)
     {
       printValidationReportDiff = true;
     }
-  # endif
     vTests.push_back(
       std::make_shared<ConflateCaseTestSuite>(
         "test-files/cases", suppressFailureDetail, printValidationReportDiff, hideDisableTests));
@@ -663,13 +659,6 @@ void reportFailedTests(int failedTests, int totalTests)
 
 void verifyValidationConfig()
 {
-  // Verify that we have JOSM if running validation on test output is enabled.
-# ifndef HOOT_HAVE_JOSM
-  if (ConfigOptions().getTestValidationEnable())
-  {
-    throw TestConfigurationException("Test output validation requires compilation --with-josm.");
-  }
-# else
   // Script tests require a dummy file written out so that they know its ok to run validation, since
   // they can't do the compile time check.
   const QString testValidationEnabledFile = "test-output/test-validation-enabled";
@@ -687,7 +676,6 @@ void verifyValidationConfig()
       throw TestConfigurationException("Unable to remove: " + testValidationEnabledFile);
     }
   }
-# endif
 }
 
 std::shared_ptr<TestCommand> parseTestCommand(char* argv[])

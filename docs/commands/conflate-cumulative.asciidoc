@@ -3,7 +3,8 @@
 
 === Description
 
-The `conflate-cumulative` command conflates multiple maps into a single map in a cumulative fashion.
+The `conflate-cumulative` command (experimental) conflates multiple maps into a single map in a 
+cumulative fashion.
 
 It is primarily used as a research test bed for prototyping which ultimately gets implemented in 
 production fashion within scripts/conflate/ConflateDirectory.sh.
@@ -31,6 +32,6 @@ hoot conflate-cumulative -D review.tags.treat.as.metadata=false -D tag.merger.de
 
 === See Also
 
-* _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Unifying Conflation_, <<hootuser,Hootenanny - User Guide>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

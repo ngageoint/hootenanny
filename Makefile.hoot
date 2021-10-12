@@ -49,7 +49,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -f lib/*
 	rm -rf test-output/*
 	rm -rf tgs/libTgs.a
-	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/* hoot-js/tmp/debug/* hoot-test/tmp/debug/* tgs/tmp/debug/* hoot-cmd/tmp/debug/*
+	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-js/tmp/debug/* hoot-test/tmp/debug/* tgs/tmp/debug/* hoot-cmd/tmp/debug/*
 	rm -rf bin/*
 	rm -f translations/config.js
 	rm -f conf/core/ConfigOptions.json
@@ -532,16 +532,6 @@ coverage/core/js/index.html:
 	lcov --capture --ignore-errors source -d hoot-js/tmp/debug -b hoot-js/ --output-file coverage/core/js/Js.info 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
 	lcov -r coverage/core/js/Js.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/js/JsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
 	genhtml coverage/core/js/JsTrimmed.info --output-directory coverage/core/js/ 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
-
-coverage/core/rnd/index.html:
-ifeq ($(BUILD_RND),rnd)
-	echo "Generating core rnd code coverage report..."
-	mkdir -p coverage/core/rnd
-	rm -f coverage/core/rnd/log
-	lcov --capture --ignore-errors source -d hoot-rnd/tmp/debug -b hoot-rnd/ --output-file coverage/core/rnd/Rnd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-	lcov -r coverage/core/rnd/Rnd.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/rnd/RndTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-endif
 
 coverage/core/josm/index.html:
 ifeq ($(BUILD_JOSM),josm)

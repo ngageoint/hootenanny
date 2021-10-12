@@ -1,0 +1,305 @@
+
+[[Common-Use-Cases]]
+=== Common Use Cases
+
+The following sections describe some common use cases and how to approach them using Hootenanny.
+
+[[Conflate-Two-Shapefiles]]
+==== Conflate Two Shapefiles
+
+The following subsections describe how to do the following steps:
+
+. Prepare the input for translation
+
+. Translate the Shapefiles into .osm files
+
+. Conflate the Data
+
+. Convert the conflated .osm data back to Shapefile
+
+We'll be using files from the http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[US Census Tiger] data and http://dcgis.dc.gov[DC GIS]
+
+* ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip[Tiger Roads]
+* http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI[DC GIS Roads]
+
+
+[[Prepare-the-Shapefiles]]
+===== Prepare the Shapefiles
+
+First validate that your input shapefiles are both Line String (AKA Polyline) shapefiles. This is easily done with +ogrinfo+:
+
+------
+$ ogrinfo -so tl_2010_12009_roads.shp tl_2010_12009_roads
+INFO: Open of `tl_2010_12009_roads.shp'
+      using driver `ESRI Shapefile' successful.
+
+Layer name: tl_2010_12009_roads
+Geometry: Line String
+Feature Count: 17131
+Extent: (-80.967774, 27.822067) - (-80.448353, 28.791396)
+Layer SRS WKT:
+GEOGCS["GCS_North_American_1983",
+    DATUM["North_American_Datum_1983",
+        SPHEROID["GRS_1980",6378137,298.257222101]],
+    PRIMEM["Greenwich",0],
+    UNIT["Degree",0.017453292519943295]]
+STATEFP: String (2.0)
+COUNTYFP: String (3.0)
+LINEARID: String (22.0)
+FULLNAME: String (100.0)
+RTTYP: String (1.0)
+MTFCC: String (5.0)
+------
+
+[[Translate-the-Shapefiles]]
+===== Translate the Shapefiles
+
+Hootenanny provides a https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
+
+
+[[Crummy-Translation]]
+*_Crummy Translation*_
+
+The following translation code will always work for roads, but drops all the attribution on the input file.
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    return {'highway':'road'}
+------
+
+[[Better-Translation]]
+*_Better Translation_*
+
+The following translation will work well with the tiger data.
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    tags = {}
+    # 95% CE in meters
+    tags['accuracy'] = '10'
+    if 'FULLNAME' in attrs:
+        name = attrs['FULLNAME']
+        if name != 'NULL' and name != '':
+            tags['name'] = name
+    if 'MTFCC' in attrs:
+        mtfcc = attrs['MTFCC']
+        if mtfcc == 'S1100':
+            tags['highway'] = 'primary'
+        if mtfcc == 'S1200':
+            tags['highway'] = 'secondary'
+        if mtfcc == 'S1400':
+            tags['highway'] = 'unclassified'
+        if mtfcc == 'S1500':
+            tags['highway'] = 'track'
+            tags['surface'] = 'unpaved'
+        if mtfcc == 'S1630':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1640':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1710':
+            tags['highway'] = 'path'
+            tags['foot'] = 'designated'
+        if mtfcc == 'S1720':
+            tags['highway'] = 'steps'
+        if mtfcc == 'S1730':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1750':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1780':
+            tags['highway'] = 'service'
+            tags['service'] = 'parking_aisle'
+        if mtfcc == 'S1820':
+            tags['highway'] = 'path'
+            tags['bicycle'] = 'designated'
+        if mtfcc == 'S1830':
+            tags['highway'] = 'path'
+            tags['horse'] = 'designated'
+    return tags
+------
+
+To run the tiger translation put the above code in a file named `translations/TigerRoads.py` and run the following:
+
+------
+hoot convert -D schema.translation.script=TigerRoads tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm
+------
+
+The following translation will work OK with the DC data.
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    tags = {}
+    # 95% CE in meters
+    tags['accuracy'] = '15'
+    name = ''
+    if 'REGISTERED' in attrs:
+        name = attrs['REGISTERED']
+    if 'STREETTYPE' in attrs:
+        name += attrs['STREETTYPE']
+    if name != '':
+        tags['name'] = name
+    if 'SEGMENTTYP' in attrs:
+        t = attrs['SEGMENTTYP']
+        if t == '1' or t == '3':
+            tags['highway'] = 'motorway'
+        else:
+            tags['highway'] = 'road'
+    # There is also a one way attribute in the data, but given the difficulty
+    # in determining which way it is often left out of the mapping.
+    return tags
+------
+
+To run the DC GIS translation put the above code in a file named `translations/DcRoads.py` and run the following:
+
+------
+hoot convert -D schema.translation.script=DcRoads tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm
+------
+
+[[Conflate-the-Data]]
+===== Conflate the Data
+
+If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating.
+
+------
+hoot crop tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
+------
+
+All the hard work is done. Now we let the computer do the work. If you're using the whole DC data set, go get a cup of coffee.
+
+------
+hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
+------
+
+[[Convert-Back-to-Shapefile]]
+===== Convert Back to Shapefile
+
+Now we can convert the final result back into a Shapefile.
+
+------
+hoot convert -D shape.file.writer.cols="name;highway;surface;foot;horse;bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
+------
+
+[[Snap-GPS-Tracks-to-Roads]]
+==== Snap GPS Tracks to Roads
+
+. Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. `accuracy=5`
+
+. Convert your GPX file into an OSM file where each track is now a way.
++
+------
+hoot convert -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;tracks" tmp/MyTracks.osm
+------
+. Use the special track snapping conflation manipulation to snap your tracks to an existing road network and convert to Shapefile.
++
+------
+hoot conflate -D conflator.manipulators=WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
+hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoot:score;name;foot" tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm
+------
+
+[[Maintaining-per-node-attributes]]
+===== Maintaining per node attributes
+
+If you have node attributes that you want to keep you can use the `PointsToTracksOp` operation to join the nodes after translation. This requires two fields on each node:
+
+*  `hoot:track:id` - The id of the track that the node belongs to. The id is simply treated as a string. Nodes with like ids will be grouped together.
+*  `hoot:track:seq` - The sequence of the nodes within the track (way). This is treated as a string and sorted as a string where the smallest value is at the beginning of the track. Be certain to avoid problems with integers during translation. E.g. "13", "112" will not sort properly, but "013", "112" will sort properly. It is also recommended to use `MergeNearbyNodes` as a poor man's line simplification to speed the process up a bit. If this causes problems with your data you can safely drop it.
+
+The command used with a GPX input file is:
+
+------
+hoot convert -D "convert.ops+=PointsToTracksOp" -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;track_points" tmp/MyTracks.osm
+------
+
+An example translation file is:
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    tags = attrs
+    tags['accuracy'] = '5'
+    tags['highway'] = 'road'
+    if 'track_fid' in attrs:
+        tags['hoot:track:id'] = attrs['track_fid']
+        tags['hoot:track:seq'] = "%09d" % int(attrs['track_seg_point_id'])
+    return tags
+------
+
+*Special Rule* If all the nodes in a track have the same `highway=*` setting then the highway attribute will be moved from the node to the way.
+
+
+[[Add-NSG-TLM-Symbology-to-a-FileGeodatabase]]
+==== Add NSG TLM Symbology to a FileGeodatabase
+
+===== Overview
+
+ESRI ArcMap can use Visual Representation rules to display symbology. Hootenanny is able to export Topographic Data Store (TDS) compliant data in a FileGeodatabase that is able to have default symbology applied to it. The command line procedure to create default symbology is as follows.
+
+References:
+
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations]
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000[What are visual specifications]
+
+===== Requirements
+The main requirement is access to a copy of ESRI ArcGIS with the following:
+
+* ArcGIS Standard or ArcGIS Desktop license
+* Production Mapping Extension & license
+* Defense Mapping Extension & license
+
+===== Process
+
+Get an empty TDS template FileGeodatabase::
+* From the ArcGIS Defence Mapping Extension install location.
++
+----
+C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS_4_0.zip
+----
+* Unpack this Zip file and copy the "LTDS_4_0.gdb" File GeoDatabase to your Hootenanny working directory.
+
+Run Hootenanny and add your data to the template File GeoDatabase::
+* Add the "Append Data" flag: `ogr.append.data`
+* Add the template File GeoDatabase to write to.
++
+----
+hoot convert -D schema.translation.script=GpsTrack -D ogr.append.data="true" your_data.osm LTDS_4_0.gdb
+----
+
+Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::
+* Place it in a convenient location
+
+Set the "Product Library" in ArcMap::
+http://resources.arcgis.com/en/help/main/10.2/index.html#//0103000001p0000000[Reference]
+* Copy `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Product Library\LTDS_4_0_Product_Library.zip` to where you saved the Hoot File GeoDatabase
+* Unzip `LTDS_4_0_Product_Library.zip` to get `LTDS_4_0_Product_Library.gdb`
+* Open ArcMap:
+** Click on `Customize->Production->Product Library`
+** Right Click on `Product Library`
+** Click on `Select Product Library`
+** Navigate to wherever you saved the `LTDS_4_0_Product_Library.gdb` and select it.
+
+
+Calculate the Visual Specifications::
+http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_Visual_Specifications/01090000001w000000/[Reference]
+* Open ArcCatalog
+* Run `Toolboxes->System Toolboxes->Production Mapping Toolbox->Symbology->Calculate Visual Specifications`:
+** *Input Features* Browse to where the Hootenanny File GeoDatabase is saved and select all of the features inside the `LTDS` feature dataset
+** *Visual Specification Workspace* Browse to and select `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Cartography\Symbology\LTDS_4_0_NSG_Visual_Specification.mdb`
+** Select `LTDS_NSG::50K` for 50K TLM symbology or `LTDS_100K::100K` for a 100K TLM symbology.
+** Click on `OK`
+** Wait for it to finish. It will take a while.
+
+View the Default Symbology::
+* Open ArcMap
+* Add the `LTDS_4_0.gdb` dataset
+

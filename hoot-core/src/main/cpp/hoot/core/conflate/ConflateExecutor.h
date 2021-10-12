@@ -111,7 +111,17 @@ private:
   Tgs::Timer _taskTimer;
 
   void _initConfig(const QString& output);
+  /**
+   * @brief _updateConfigOptionsForAttributeConflation makes some custom adjustments to config opts
+   * that must be done for Attribute Conflation.
+
+     There may be a way to eliminate some of these by adding more custom behavior to the UI.
+   */
   void _updateConfigOptionsForAttributeConflation() const;
+  /**
+   * @brief _updateConfigOptionsForDifferentialConflation makes some custom adjustments to config
+   * opts that must be done for Differential Conflation.
+   */
   void _updateConfigOptionsForDifferentialConflation() const;
   void _updateConfigOptionsForBounds() const;
   void _updateTranslationDirection(const QString& output) const;

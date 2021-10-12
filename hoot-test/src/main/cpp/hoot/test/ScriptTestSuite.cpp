@@ -51,13 +51,6 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
   // if the web services are disabled, then ignore all script tests that start with Service
 # ifndef HOOT_HAVE_SERVICES
     ignorePrefix << "Service";
-    ignorePrefix << "RndService";
-# endif
-# ifndef HOOT_HAVE_RND
-    ignorePrefix << "Rnd";
-# endif
-# ifndef HOOT_HAVE_JOSM
-    ignorePrefix << "Josm";
 # endif
 
   for (int i = 0; i < files.size(); i++)

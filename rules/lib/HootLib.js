@@ -1,7 +1,7 @@
 "use strict";
 /**
  * @file
- * @par Hoot JavaScript API
+ * @par JavaScript API
  *
  * HootLib allows for quickly adding reusable logic useful to multiple Javascript hoot clients.
  * If you are core developer, determine if all or some of your added logic would be more
@@ -19,6 +19,13 @@
 function testAdd(v1, v2)
 {
   return v1 + v2;
+}
+
+/////////////////GENERAL////////////////
+
+function stringIsEmpty(str)
+{
+  return str === null || str === '' || str === 'undefined';
 }
 
 /////////////////MERGING////////////////

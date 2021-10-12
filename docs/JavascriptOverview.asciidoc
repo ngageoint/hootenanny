@@ -1,6 +1,6 @@
 
 [[HootJavaScriptOverview]]
-== Script Conflation Overview
+=== Script Conflation
 
 The Hootenanny <<JS,JavaScript>> Interfaces provide ways to both call Hootenanny
 programmatically using <<Node.js,Node.js>> and also embed routines within Hootenanny to
@@ -10,13 +10,13 @@ for some of the commonly used JavaScript interfaces.
 
 At this point there are two different implementations of JavaScript within Hootenanny. The older interface uses QtScript for the implementation within the translation scripts. There are plans to replace the QtScript interface with the newer V8 implementation (used by node.js and described below). Until that happens the JavaScript functions described below are not accessible to translation files.
 
-=== Using Hootenanny from Node.js
+==== Using Hootenanny from Node.js
 
 Hoot creates a file called +HootJs.node+ that can be used as part of a node.js
 require statement to include Hootenanny functionality. This file is place in
 the +lib+ directory in +$HOOT_HOME+.
 
-==== Simple Example
+===== Simple Example
 
 For this script to work you must have the +HOOT_HOME+ environment variable set
 properly.
@@ -35,7 +35,7 @@ To run the example above save a file called MyExample.js and call:
 node MyExample.js
 ----
 
-==== Conflate Example
+===== Conflate Example
 
 The following example loads data from the test-files directory, conflates it
 and writes the result out to ../tmp/Conflated.osm. The associated file can
@@ -89,7 +89,7 @@ mkdir -p ../tmp
 node ConflateExample.js
 ----
 
-=== Modifying Hootenanny with Javascript
+==== Modifying Hootenanny with Javascript
 
 node.js does not provide a convenient way to access it from the command line. To work
 around this issue Hootenanny uses the V8 engine (same as Google Chrome) to
@@ -100,7 +100,7 @@ do not have access to some of the node.js specific methods such as +console+ and
 At this point Hootenanny provides the ability to extend the matching and
 merging operations through Javascript.
 
-==== Extending Conflation
+===== Extending Conflation
 
 In +$HOOT_HOME/rules+ there is an example Javascript file for conflating
 buildings. The specifics of the API are discussed in _Javascript Conflation
@@ -129,7 +129,7 @@ hoot conflate -D match.creators=ScriptMatchCreator,PolygonBuilding.js -D merger.
 After the conflation run completes you can see the conflated buildings towards
 the top of the file (in the southern Denver region).
 
-==== Conflating Sets
+===== Conflating Sets
 ////
 // NOTE: Needs to be flushed out.
 ////
@@ -142,7 +142,7 @@ If `isWholeGroup` returns false, then you must implement `mergeSets` or risk
 getting an error. This can handle complex merge situations, but generally uses
 pre-canned merge strategies to keep the JavaScript complexity down.
 
-=== Calculating Search Radius
+==== Calculating Search Radius
 
 There are several ways to calculate the search radius in a JavaScript
 extension. This section discusses these approaches and gives a couple
@@ -152,7 +152,7 @@ is used to determine candidates so you may get more candidates than
 expected. If you would like to filter candidates it is recommended that you
 further filter each candidate based on distance in the matchScore method.
 
-==== Default Search Radius
+===== Default Search Radius
 
 By default if no parameters are specified the circular error of the
 points in question are used to determine if two features are a candidate for
@@ -170,7 +170,7 @@ match, but _A_/_B_ and _B_/_C_ are not.
 .Default Search Radius Example - The blue lines represent the bounds of the CE after buffering the feature.
 image::user/images/DefaultSearchRadiusExample.jpg[]
 
-==== Candidate Sigma Distance
+===== Candidate Sigma Distance
 
 The +candidateDistanceSigma+ parameter provides the ability to modify the
 candidate threshold using CE. The +candidateDistanceSigma+ value is simply
@@ -187,7 +187,7 @@ candidate for matching as the red circles do not overlap.
 .Candidate Sigma Distance Example - The blue lines represent the bounds of the CE after buffering the feature. The red lines represent buffering the feature by CE * +candidateDistanceSigma+ where in this case +candidateDistanceSigma+ is set to 2.0.
 image::user/images/CandidateDistanceSigmaExample.jpg[]
 
-==== Overriding the Circular Error
+===== Overriding the Circular Error
 
 It is also possible to override using the CE in calculating the search radius
 with either a global value, or by specifying a function that determines an
@@ -218,7 +218,7 @@ is the only match candidate.
 .Get Search Radius Example - The blue lines represent the bounds of the CE after buffering the feature. The orange lines represent buffering the feature by a custom value per feature. The definition of the custom value is set by the user in the +getSearchRadius+ method and multiplied by the +candidateDistanceSigma+. In this case the values are arbitrary.
 image::user/images/GetSearchRadiusExample.jpg[]
 
-==== Search Radius Review
+===== Search Radius Review
 
 * You may get more features than your search radius strictly defines. It is up
   to the matchScore method to further limit the candidates.

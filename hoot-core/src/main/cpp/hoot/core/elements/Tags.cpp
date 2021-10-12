@@ -99,6 +99,13 @@ QString Tags::kvpToVal(const QString& kvp)
   return kvpParts[1].trimmed();
 }
 
+QStringList Tags::kvpToParts(const QString& kvp)
+{
+  if (!kvp.contains("="))
+    return QStringList();
+  return kvp.split("=");
+}
+
 void Tags::add(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

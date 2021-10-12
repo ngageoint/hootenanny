@@ -46,11 +46,11 @@ public:
    */
   virtual void enableValidation() = 0;
 
-    /**
-     * @brief Disables validation on the validator.
-     *
-     * Some validators have dual purposes and have the need to have validation capabilities toggled.
-     */
+  /**
+   * @brief Disables validation on the validator.
+   *
+   * Some validators have dual purposes and have the need to have validation capabilities toggled.
+   */
   virtual void disableValidation() = 0;
 
   /**

@@ -1,0 +1,693 @@
+
+[[Translation]]
+=== Translation
+
+Translation is the process of both converting tabular GIS data, such as
+Shapefiles, to the OSM format and schema. There are two main supported formats
+for OSM data, `.osm` , an XML format, and `.osm.pbf` , a compressed binary
+format. Discussions of OSM format reference either of these two data formats.
+
+By far the most complex portion of the translation process is the converting the
+Shapefile's schema to the OSM schema. In many cases a one to one mapping can be
+found due to the richness of the OSM schema, but finding the most appropriate mapping
+can be quite time consuming.  For example, one can spend days translating an obscure
+local language to determine the column headings and values in the context of OSM or
+depending on their knowledge of Python/Javascript, create a custom translation value that
+provides a mapping between the two schemas in a significantly shorter duration of time.
+
+The following sections discuss high level issues associated with translating
+files. For a more nuts and bolts discussion see the `convert` section.
+
+[[JavaScript-Translation]]
+==== JavaScript Translation
+
+Hootenanny support translation files written in both Python and JavaScript (AKA
+ECMA Script). The JavaScript engine used by Hootenanny is the engine integrated
+with Qt. See the http://qt-project.org/doc/qt-4.7/ecmascript.html[Qt ECMA Script
+Documentation] for details on which operations are supported.
+
+[[Overview]]
+===== Overview
+
+[[Special-Operations]]
+*_Special Operations_*
+
+In addition to the operations exposed by Qt, the user also has access to:
+
+*  `require` - Require a JavaScript module provided by Hootenanny. The list of
+   supported modules is still being defined.
+*  `print` - Print a line to stdout
+*  `debug` , `logDebug` - Print debug text to stdout using the Hootenanny
+   logging facilities. Each message will include date/time, filename, and line
+   number. E.g. logs if the `--debug` flag has been set on the command line.
+*  `logInfo` - Print information text to stdout using the Hootenanny logging
+   facilities. Each message will include date/time, filename, and line number.
+*  `warn` , `logWarn` - Print warning text to stdout using the Hootenanny
+   logging facilities. Each message will include date/time, filename, and line
+   number.
+*  `logError` - Print error text to stdout using the Hootenanny logging
+   facilities. Each message will include date/time, filename, and line number.
+*  `logFatal` - Print fatal text to stdout using the Hootenanny logging
+   facilities. Each message will include date/time, filename, and line number.
+
+[[Functions-Called-by-Hootenanny]]
+*_Functions Called by Hootenanny_*
+
+There are several functions that may be called by Hootenanny:
+
+*  `initialize` - An optional method that gets called before any other methods.
+*  `finalize` - An optional method that gets called after all other methods have
+   been completed. This can be useful if you want to print out statistics on the
+   translation.
+*  `translateToOgr` - Required by the `convert` command to translate from OSM
+   to a custom schema.
+*  `translateToOsm` - Required by the `convert` command to translate from a
+   custom schema to the OSM schema. For backwards compatibility reasons
+   `translateAttributes` is also supported, but `translateToOsm` is preferred.
+*  `getDbSchema` - Required by the `convert` command to get the custom schema
+   that OSM data will be converted into.
+
+[[Simple-Example]]
+*_Simple Example_*
+
+Below is about the simplest useful example that supports both `convert`. The following sections go into details on how these function are used.
+------
+// an optional initialize function that gets called once before any
+// translateAttribute calls.
+function initialize() {
+    // The print method simply prints the string representation to stdout
+    print("Initializing.")
+}
+// an optional finalize function that gets called once after all
+// translateAttribute calls.
+function finalize() {
+    // the debug method prints to stdout when --debug has been specified on
+    // the hoot command line. (DEBUG log level)
+    debug("Finalizing.");
+}
+// A very simple function for translating NFDDv4's to OSM:
+// - NAM column to OSM's name tag
+// - TYP column to OSM's highway tag
+// This is far from complete, but demonstrates the concepts.
+function translateToOgr(tags, elementType, geometryType) {
+    var attrs = {};
+    if ('name' in tags) {
+        attrs['NAM'] = tags['name'];
+    }
+    attrs['TYP'] = 0;
+    if (tags['highway'] == 'road') {
+        attrs['TYP'] = 1;
+    }
+    else if (tags['highway'] == 'motorway') {
+        attrs['TYP'] = 41;
+    }
+    return { attrs: attrs, tableName: "LAP030" };
+}
+// A very simple function for translating from OSM's schema to NFDDv4:
+// - name tag to NFDDv4's NAM column
+// - highway tag to NFDDv4's TYP column
+// This is far from complete, but demonstrates the concepts.
+function translateToOsm(attrs, layerName) {
+    tags = {};
+    if (attrs['NAM'] != '') {
+        tags['name'] = attrs['NAM']
+    }
+    if (attrs['TYP'] == 41) {
+        tags['highway'] = 'motorway';
+    }
+    else {
+        tags['highway'] = 'road';
+    }
+    return tags
+}
+// This returns a schema for a subset of the NFDDv4 LAP030 (road) columns.
+function getDbSchema()
+{
+    var schema = [
+        lap030 = {
+            name: 'LAP030',
+            geom: 'Line',
+            columns: [
+                {
+                    name:'NAM',
+                    type:'String'
+                },
+                { name:"TYP",
+                  desc:"Thoroughfare Type" ,
+                  optional:"O" ,
+                  type:"enumeration",
+                  enumerations:[
+                     { name:"Unknown", value:"0" },
+                     { name:"Road", value:"1" },
+                     { name:"Motorway", value:"41" }
+                  ] // End of Enumerations
+                 } // End of TYP
+            ]
+        }
+    ]
+    return schema;
+}
+------
+
+[[JavaScript-to-OSM-Translation]]
+===== JavaScript to OSM Translation
+
+The `translateToOsm` method takes two parameters:
+
+*  `attrs` - A associative array of attributes and values from the source record.
+*  `layerName` - The name of the layer being processed. In the case of a Database source it will be the table name. In the case of a file input it will be the full path to the file. Frequently the `layerName` is useful in decoding the type of feature being processed.
+
+_Note_: The `translateToOsm` was previously called `translateAttributes`. Either name will still work, but `translateToOsm` is preferred. If both are specified then `translateToOsm` will be used.
+
+This method will be called after the `initialize` method is called when translating from an OGR format to a OSM schema. For instance if you call:
+
+------
+hoot convert -D schema.translation.script=tmp/SimpleExample.js "myinput1.shp myinput2.shp" myoutput.osm
+------
+
+The functions will be called in the following order:
+
+.  `initialize`
+
+.  `translateToOsm` - This will be called once for every feature in myinput1.shp
+
+.  `translateToOsm` - This will be called once for every feature in myinput2.shp
+
+.  `finalize`
+
+[[Table-Based-Translation]]
+*_Table Based Translation_*
+
+For more advanced translations it may make sense to define a simple set of tables and use those tables to translate values. An example is below:
+
+------
+// create a table of nfdd biased rules.
+var nfddBiased = [
+    { condition:"attrs['SBB'] == '995'", consequence:"tags['bridge'] = 'yes'" }
+];
+// build a one to one translation table.
+var one2one = [
+    ['ROC', '1',    'surface',  'ground'],
+    ['ROC', '2',    'surface',  'unimproved'],
+    ['WTC', '1',    'all_weather', 'yes'],
+    ['WTC', '2',    'all_weather', 'fair']
+];
+// build a more efficient lookup
+var lookup = {}
+for (var r in one2one) {
+    var row = one2one[r];
+    if (!(row[0] in lookup)) {
+        lookup[row[0]] = {}
+    }
+    lookup[row[0]][row[1]] = [row[2], row[3]];
+}
+// A translateToOsm method that is very similar to the python one
+function translateToOsm(attrs, layerName) {
+    var tags = {};
+    for (var col in attrs) {
+        var value = attrs[col];
+        if (col in lookup) {
+            if (value in lookup[col]) {
+                row = lookup[col][value];
+                tags[row[0]] = row[1];
+            }
+            else {
+                throw "Lookup value not found for column. (" + col + "=" + value + ")";
+            }
+        }
+        else {
+            for (var bi in nfddBiased) {
+                print(attrs['SBB']);
+                print(nfddBiased[bi].condition);
+                print(eval(nfddBiased[bi].condition));
+                print(nfddBiased[bi].consequence);
+                if (eval(nfddBiased[bi].condition)) {
+                    print("Condition true.");
+                    eval(nfddBiased[bi].consequence);
+                }
+            }
+        }
+    }
+    return tags;
+}
+------
+
+[[OGR-to-OSM-Translation]]
+===== OGR to OSM Translation
+
+*_Translation File_*
+
+The purpose of the translation file is to convert your custom Shapefile into the
+http://wiki.openstreetmap.org/wiki/Map_Features[OSM schema]. The translation
+file is a Python script with a global function with the following definition:
+
+* `def translateToOsm(attrs, layerName):`
+** `attrs` - A dictionary of attributes for a single feature to be translated.
+** `layerName` - The name of the layer being translated. This is provided in
+   case multiple files are being translated at one time such as roads, bridges
+   and tunnels. Sometimes this provides additional context when translated a
+   feature.
+
+The function must return either a dictionary of OSM tags or None if the feature
+should be filtered from the data set. When `convert` is launched Hootenanny
+loads the specified Python file. The files in the `translations` directory will
+be included in the Python path. The same Python instance will be used for the
+translations of all files in the _input_ list. This means that the script will
+only be intialized once and then `translateToOsm` will be called once for
+each feature in all of the input files.
+
+*_Example Translation Work Flow_*
+
+Imagine you have a Shapefile named _MyRoads.shp_ for input with the following
+attributes:
+
+|==============================
+| _STNAME_ | _STTYPE_ | _FLOW_
+| Foo St.  | main     | 1
+| Bar Rd.  | res      | 2
+| Foo St.  | main     | 1
+|==============================
+
+In my notional example there are three columns with the following definitions:
+
+* `STNAME` - The name of the street.
+* `STTYPE` - The type of the street.
+* `DIR` - The flow of traffic, either 1 for one way traffic, or 2 for
+  bidirectional traffic.
+
+Hootenanny will call the translateToOsm method 3 times for this input. Each
+call will contain the attributes for a given row. In this case the parameters
+passed will be:
+
+|===================================================================
+| _attrs_                                           | _layerName_
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
+| {"STNAME":"Bar Rd.", "STTYPE":"res", "FLOW","2"}  | "MyRoads.shp"
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
+|===================================================================
+
+The syntax above for _attrs_ is the dictionary syntax in Python. For more
+details see the http://docs.python.org/2/library/stdtypes.html#mapping-types-dict[Python documentation]. You may
+also have noticed that _layerName_ does not change during any of the calls. In
+this case since we're only passing one input file the value will stay the same,
+if we passed multiple files as input then the _layerName_ would change to
+reflect the current input.
+
+We must now write a translation file that will convert our input attributes into
+a set of appropriate OSM tags. Using the
+http://wiki.openstreetmap.org/wiki/Map_Features[Map Feature] reference on the
+OSM wiki you can determine what is appropriate for a given input, but in this
+notional example I'll give you the translations below:
+
+* `STNAME` - Equivalent to the OSM `name` tag.
+* `STTYPE` - `main` is equivalent to `highway=primary` and `res` is equivalent
+  to `highway=residential`
+* `DIR` - 1 is equivalent to `oneway=yes`, 2 is equivalent to `oneway=no`.
+
+So the input/output mapping we want is below:
+
+*Inputs/Outputs Table*
+
+|===============================================================================================================================
+| _attrs_                                           | _layerName_   | _result_
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp" | {"name":"Foo St.", "highway":"primary", "oneway":"yes"}
+| {"STNAME":"Bar Rd.", "STTYPE":"res", "FLOW","2"}  | "MyRoads.shp" | {"name":"Bar Rd.", "highway":"residential", "oneway":"no"}
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp" | {"name":"Foo St.", "highway":"primary", "oneway":"yes"}
+|===============================================================================================================================
+
+To accomplish this we can use the following translation script:
+
+[source,python]
+----
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    # Intialize our results object
+    tags = {}
+    # Is the STNAME attribute properly populated?
+    if 'STNAME' in attrs and attrs['STNAME'] != '':
+        tags['name'] = attrs['STNAME']
+    # Is the STTYPE attribute properly populated?
+    if 'STTYPE' in attrs and attrs['STTYPE'] != '':
+        if attrs['STTYPE'] == 'main':
+            tags['highway'] = 'primary'
+        if attrs['STTYPE'] == 'res':
+            tags['highway'] = 'residential'
+    # Is the FLOW attribute properly populated?
+    if 'FLOW' in attrs and attrs['FLOW'] != '':
+        if attrs['FLOW'] == '1':
+            tags['oneway'] = 'yes'
+        if attrs['FLOW'] == '2':
+            tags['oneway'] = 'no'
+    # Useful when debugging. You can see print statements on stdout when Hootenanny is running
+    #print "Input: " + str(attrs)
+    #print "Output: " + str(tags)
+    # Return our translated tags
+    return tags
+----
+
+The translation script can also be written in JavaScript.
+
+JavaScript notes:
+
+* "tags.highway" is the same as "tags['highway']"
+* OSM tags like "addr:street" MUST be specified using "tags['addr:street']" or
+  you will get errors.
+
+----
+function translateToOsm(attrs, layerName) {
+    tags = {};
+    // Names
+    if (attrs.STNAME) tags.name = attrs.STNAME;
+    // Highways
+    if (attrs.STTYPE == 'main') tags.highway = 'primary';
+    if (attrs.STTYPE == 'res') tags.highway = 'residential';
+    // Flow direction
+    if (attrs.FLOW == '1') tags.oneway = 'yes';
+    if (attrs.FLOW == '2') tags.oneway = 'no';
+    // Print the input attrs for debugging:
+    // This will print:
+    // Input:STNAME: :Foo St.:
+    // Input:STTYPE: :main:
+    // etc
+    // for (var i in attrs) print('Input:' + i + ': :' + attrs[i] + ':');
+    // Print the output tags for debugging. The format is the same as for the
+    // attrs
+    // for (var i in tags) print('Output:' + i + ': :' + tags[i] + ':');
+    return tags;
+}
+----
+
+The translation scripts above will give the values found in the _Inputs/Outputs
+Table_.
+
+*_Example Python Translation File_*
+
+The following script provides a more thorough example for translating
+http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road data]:
+
+[source,python]
+----
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    tags = {}
+    if 'FULLNAME' in attrs:
+        name = attrs['FULLNAME']
+        if name != 'NULL' and name != '':
+            tags['name'] = name
+    if 'MTFCC' in attrs:
+        mtfcc = attrs['MTFCC']
+        if mtfcc == 'S1100':
+            tags['highway'] = 'primary'
+        if mtfcc == 'S1200':
+            tags['highway'] = 'secondary'
+        if mtfcc == 'S1400':
+            tags['highway'] = 'unclassified'
+        if mtfcc == 'S1500':
+            tags['highway'] = 'track'
+            tags['surface'] = 'unpaved'
+        if mtfcc == 'S1630':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1640':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1710':
+            tags['highway'] = 'path'
+            tags['foot'] = 'designated'
+        if mtfcc == 'S1720':
+            tags['highway'] = 'steps'
+        if mtfcc == 'S1730':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1750':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1780':
+            tags['highway'] = 'service'
+            tags['service'] = 'parking_aisle'
+        if mtfcc == 'S1820':
+            tags['highway'] = 'path'
+            tags['bicycle'] = 'designated'
+        if mtfcc == 'S1830':
+            tags['highway'] = 'path'
+            tags['horse'] = 'designated'
+    return tags
+----
+
+*_Example JavaScript Translation File*_
+
+----
+function translateToOsm(attrs, layerName) {
+    tags = {};
+    // Names
+    if (attrs.FULLNAME && attrs.FULLNAME !== 'NULL') tags.name = attrs.FULLNAME;
+    // Highways
+    if (attrs.MTFCC == 'S1100') tags.highway = 'primary';
+    if (attrs.MTFCC == 'S1200') tags.highway = 'secondary';
+    if (attrs.MTFCC == 'S1400') tags.highway = 'unclassified';
+    if (attrs.MTFCC == 'S1500') {
+        tags.highway = 'track';
+        tags.surface = 'unpaved';
+    }
+    if (attrs.MTFCC == 'S1600') tags.highway = 'road';
+    if (attrs.MTFCC == 'S1640') tags.highway = 'service';
+    if (attrs.MTFCC == 'S1710') {
+        tags.highway = 'path';
+        tags.foot = 'designated';
+    }
+    if (attrs.MTFCC == 'S1720') tags.highway = 'steps';
+    if (attrs.MTFCC == 'S1730') tags.highway = 'service';
+    if (attrs.MTFCC == 'S1750') tags.highway = 'road';
+    if (attrs.MTFCC == 'S1780') {
+        tags.highway = 'service';
+        tags.service = 'parking_aisle';
+    }
+    if (attrs.MTFCC == 'S1820') {
+        tags.highway = 'path';
+        tags.bicycle = 'designated';
+    }
+    if (attrs.MTFCC == 'S1830') {
+        tags.highway = 'path';
+        tags.horse = 'designated';
+    }
+    return tags;
+}
+----
+
+[[OSM-to-OGR-Translation]]
+===== OSM to OGR Translation
+
+Using JavaScript translation files it is now possible to convert from OSM to more typical tabular geospatial formats such as Shapefile or FileGDB. In order to convert to these formats some information will likely be lost and these translation files define which attributes will be carried across and how they'll be put into tables/layers.
+
+The necessary functionality is accessed via two methods, `getDbSchema` and `translateToOsm` . Both methods are required.
+
+The `getDbSchema` method takes no arguments and returns a complex schema data structure that is described in theDB Schemasection.
+
+The `translateToOsm` method takes three arguments and returns an associative array values.
+Arguments:
+
+*  `tags` - A associative array of tag key/value pairs from the source element/feature.
+*  `elementType` - The OSM element type being passed in. This is one of "node", "way", or "relation". See the OSM data model for more information.
+*  `geometryType` - The geometry type of the element being passed in. This is one of "Point", "Line", "Area" or "Collection". The value is determined based on both the element type and the tags on a given feature.
+
+Returns:
+
+*  `undefined` if the feature should be dropped, or a single associative array with the following keys:
+*  `attrs` - An associative array of attributes where the key is the column name and the value is the cell's value. The cell's value does not need to be in the same data type as specified by the schema, but must be convertible to that data type. For instance returns a string zero ( +"0"+ ) and integer zero ( +0+ ) are both acceptable for an integer field. The attrs must be consistent with the table schema defined for the given `tableName` .
+*  `tableName` - A string value the determines the table/layer that the feature will be inserted into. This must be one of the tables defined in the DB schema.
+
+
+The methods will be called after the `initialize` method is called when translating from an OGR format to a OSM schema. For instance if you call:
+
+------
+hoot convert -D schema.translation.script=tmp/SimpleExample.js myinput.osm myoutput.shp
+------
+
+The functions will be called in the following order:
+
+.  `initialize`
+
+.  `getDbSchema`
+
+.  `translateToOgr` - This will be called once for every element in myinput.osm that has at least one non-metadata tag. The metadata tags are defined in `$HOOT_HOME/conf/MetadataSchema.json`
+
+.  `finalize`
+
+This is most commonly accessed through the `convert` command.
+
+
+[[DB-Schema]]
+*_DB Schema_*
+
+Hootenanny supports converting OSM data into multiple layers where each layer has its own output schema including data types and column names.
+
+The DB schema result is structured as follows:
+
+------
+// The top level schema is always defined as an array of table schemas
+schema = [
+  // each table is an associative array of key/values
+  {
+    // required name of the layer. This is the layer name that will be created.
+    name: "ROAD_TABLE",
+    // required geometry type for a table. Options are Point, Line and Polygon
+    geom: "Line",
+    // required array of columns in the table.
+    columns: [
+      {
+        // required name of the column
+        name: "NAM",
+        // required type of the column.
+        // Options are listed in "Supported output data types" below.
+        type: "string",
+        // Optional defValue field. If the column isn't populated in attrs then
+        // this defValue will be used. If it isn't specified then the column
+        // must always be specified in attrs.
+        defValue: '',
+        // Optional length field. If the column isn't populated then the default
+        // field size is used as defined by OGR. If it is populated then the
+        // value will be used as the field width.
+        length: 255
+      },
+      // another column
+      { name: "TYP", type: "enumeration",
+        // enumerated values
+        enumerations: [
+          { value: 0 },
+          { value: 1 }
+        ]
+      }
+    ]
+  }
+  // any number of tables can be defined here.
+];
+------
+
+Supported output data types:
+
+*  `string` - A variable length string.
+*  `enumeration` - A 32bit signed integer with specific acceptable enumerated values.
+*  `double` or `real` - 64bit float
+*  `integer` or `long integer` - Aliased to `enumeration`, but it doesn't require an `enumerations` array.
+
+The numeric data types support `minimum` and `maximum`. By default `minimum` and `maximum` are disabled. If min/max values are specified or an enumeration table is populated then Hootenanny will validate all output data before it is written. The following rules are used to determine if a value is valid:
+
+* If the enumeration table is present ( `enumeration` type only) then a value is valid. If the value is in the enumeration table then min/max bounds are ignored.
+* If `maximum` is specified then the value is invalid if it is greater than maximum.
+* If `minimum` is specified then the value is invalid if it is less than minimum.
+
+[[File-Formats]]
+===== File Formats
+
+For the translation operations (and several others) Hootenanny utilizes the well known GDAL/OGR libraries. These libraries support a number of file formats including Shapefile, FileGDB, GeoJSON, PostGIS, etc. While not every format has been tested, many will work with Hootenanny without any modification. Others, such as FileGDB, may require a specially compiled version of GDAL. Please see the GDAL documentation and talk to your administrator for details.
+
+Below are a discussion of some special handling situations when reading and writing to specific formats.
+
+[[Shapefile]]
+*_Shapefile_*
+
+When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
+
+------
+hoot convert -D schema.translation.script=translations/MyTranslation.js input.osm output.shp
+------
+
+The above command will create a new directory called `output` and the layers specified in the `translations/MyTranslation.js` schema will be created as `output/<your layer name>.shp` .
+
+[[CSV]]
+*_CSV_*
+
+CSV files are created using the OGR CSV driver and will contain an associated `.csvt` file that contains the column types. If you're exporting points then you will get an X/Y column prepended onto your data. If you're exporting any other geometry type then you will get a WKT column prepended that contains the Well Known Text representation of your data. If you would like to read from a CSV you must first create a VRT file as described in the OGR CSV documentation. E.g.
+
+Creating a new CSV file:
+
+------
+hoot convert test-files/conflate/unified/AllDataTypesA.osm foo.csv translations/Poi.js
+------
+
+This uses a simple translation script ( `Poi.js` ) that exports POI data and its associated tags. If you would then like to read that data create a new `.vrt` file named `foo.vrt` that contains the following:
+
+------
+<OGRVRTDataSource>
+    <OGRVRTLayer name="foo">
+        <SrcDataSource>foo.csv</SrcDataSource>
+        <GeometryType>wkbPoint</GeometryType>
+        <LayerSRS>WGS84</LayerSRS>
+        <GeometryField encoding="PointFromColumns" x="X" y="Y"/>
+    </OGRVRTLayer>
+</OGRVRTDataSource>
+------
+
+Then to convert the file back into a .osm file run:
+
+------
+hoot convert -D schema.translation.script=translations/Poi.js foo.vrt ConvertedBack.osm
+------
+
+[[Buildings-Translation]]
+==== Buildings Translation
+
+In the simplest case a building is a way tagged with `building=yes`. However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[OSM wiki page on Simple 3D Buildings].
+
+[[Translating-Building-Parts]]
+===== Translating Building Parts
+
+Some Shapefiles contain buildings that are mapped out as independent parts. Where each part refers to the roof type and height of a portion of the building. E.g. The Capital building might be mapped out as one large, low flat roof record and a second tall domed roof record. This provides for very rich data, but also a complex representation in OSM. Fortunately Hootenanny handles most of the heavy lifting for you.
+
+To translate complex building parts simply translate them in the same way you would translate any other building. By default Hootenanny will then search through all the buildings and look for buildings that appear to be part of the same structure. If they're part of the same structure then a complex building will be created for you automatically. The complex buildings will take the form specified in the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[Simple 3D Buildings] specification. The following section gives a specific example.
+
+
+[[Complex-Building-Example]]
+*_Complex Building Example_*
+
+.Example of a Complex Building
+
+image::images/image1348.png[]
+
+In the above image there are three buildings; 123, 124, and 125. Building 123 is broken into two parts, a long rectangular section that is marked as a gabled roof and a squarish section that is marked with a flat roof. In a Shapefile that may look like the following:
+
+|======
+| name | roof_type
+| 123 | gabled
+| 123 | flat
+| 124 | gabled
+| 125 | gabled
+|======
+
+Using an abbreviated OSM JSON representation the resulting OSM data would be:
+
+------
+{ "type": "way", "id": 1, "tags": { "building": "yes", "addr:housenumber": "123", "building:roof:shape": "gabled" } }
+{ "type": "way", "id": 2, "tags": { "building": "yes", "addr:housenumber": "123", "building:roof:shape": "flat" } }
+{ "type": "way", "id": 3, "tags": { "building": "yes", "addr:housenumber": "124", "building:roof:shape": "gabled" } }
+{ "type": "way", "id": 4, "tags": { "building": "yes", "addr:housenumber": "125", "building:roof:shape": "gabled" } }
+------
+
+Hootenanny will automatically detect that the two 123 buildings are part of the same building. This is done by asking the following questions:
+
+* Do the two building share at least two consecutive nodes (share an edge) or does one building completely contain the other building?
+* Do the non-part specific attributes of buildings match very closesly? (E.g. Are the addresses the same? Are the names the same? Ignore any differences in height or roof shape.)
+
+If these two questions answer yes, then the building parts are grouped together. An arbitrary number of building parts may be grouped together in this way to create a larger building. Once the building parts are grouped some new elements are added to the map to represent the building parts as shown in the following OSM JSON snippet.
+
+------
+{ "type": "way", "id": 1, "tags": { "building:part": "yes", "building:roof:shape": "gabled" } }
+{ "type": "way", "id": 2, "tags": { "building:part": "yes", "building:roof:shape": "flat" } }
+{ "type": "way", "id": 3, "tags": { "building": "yes", "addr:housenumber": "124", "building:roof:shape": "gabled" } }
+{ "type": "way", "id": 4, "tags": { "building": "yes", "addr:housenumber": "125", "building:roof:shape": "gabled" } }
+{ "type": "way", "id": 5, "tags": { "building": "yes", "addr:housenumber": "125" } }
+{ "type": "relation", "id": 1, "tags": { "type": "building", "building": "yes", "addr:housenumber": "123" },
+    "members": [
+        { "type": "way", "ref": 1, "role": "part" }
+        { "type": "way", "ref": 2, "role": "part" }
+        { "type": "way", "ref": 5, "role": "outline" } ] }
+------
+
+The astute reader may notice that a new way was created during this process. The new way, 5, is an outline of the entire building. This is done as part of the spec to be certain that older rendering engines don't ignore the complex building. Whenever building outlines are encountered by Hootenanny they are ignored and the more complex representation is used. However, Hootenanny will still generate building outlines. The building outline will always represent the union of all the building parts.
+
+[[Disabling-Complex-Buildings]]
+*_Disabling Complex Buildings_*
+
+By default the when using the convert command to convert an OGR format to OSM `ogr2osm.simplify.complex.buildings` is enabled.  If you would like to disable the automatic construction of complex buildings from the individual parts then simply set `ogr2osm.simplify.complex.buildings` to false.  For example:
+
+------
+hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.complex.buildings=false MyInput.shp MyOutput.osm
+------
+

@@ -1,6 +1,6 @@
 
 [[DetailSummary]]
-== Detail Summary
+=== Detail Summary
 
 Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key/value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups. Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.
 

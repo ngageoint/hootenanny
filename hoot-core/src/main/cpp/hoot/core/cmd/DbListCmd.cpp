@@ -45,6 +45,7 @@ public:
   QString getName() const override { return "db-list"; }
   QString getDescription() const override
   { return "Lists maps in the Hootenanny Web Services database"; }
+  QString getType() const override { return "advanced"; }
 
   int runSimple(QStringList& args) override
   {

@@ -1,5 +1,6 @@
+
 [[NetworkConflation]]
-== Network Conflation
+=== Network Conflation
 
 In the <<UnifyingConflation,unifying>> and greedy implementations of road conflation line matching
  information is limited to the lines being matched and in some cases the immediate
@@ -30,7 +31,7 @@ While this approach could be generalized to any network (e.g. pipelines, railway
  current implementation focuses specifically on road networks that include roads, cart tracks,
  bridges, tunnels and other similar types.
 
-=== Convert the OSM Map to a Network
+==== Convert the OSM Map to a Network
 
 The OSM map already contains enough information in the node/way/relation structure to establish
  network relationships. During this stage of the operation we simplify the information
@@ -39,7 +40,7 @@ The OSM map already contains enough information in the node/way/relation structu
  vertex created. All ways have a corresponding edge created that connects two vertices at its
  endpoints. The map is not altered during this process.
 
-=== Establish Vertex Match Candidates
+==== Establish Vertex Match Candidates
 
 The second stage in network conflation is matching vertices. This is an important aspect to the
  quality of the network match. Omitting a valid vertex match from the match candidates will ensure
@@ -57,7 +58,7 @@ Utilizing the tie point matching techniques established in Rubber Sheeting score
  conflicts with a confident tie point. The math associated with confident tie points is such that
  two confident tie points cannot overlap.
 
-=== Establish Edge Match Candidates
+==== Establish Edge Match Candidates
 
 Edge match candidates are established by iterating over all edges in the first network and
  comparing those edges to edges in the second network. An R-Tree index is used speed the search
@@ -75,12 +76,7 @@ If the edges do not end at a vertex match new edges are added on to the match re
  added to the match before the algorithm will stop searching. While this may result in unmatched
  edges in very complex situations the compute time is reduced dramatically.
 
-**TODO: Insert diagram here**
-
-**TODO: Discuss this in more detail. The implementation specifics of the EdgeMatchSetFinder are
- important.**
-
-=== Refine Match Candidate Scores
+==== Refine Match Candidate Scores
 
 Over time multiple approaches to refining scores were evaluated. A short description of each
  approach will be presented here as well as a long description of the best performing "Conflicts
@@ -107,7 +103,7 @@ Over time multiple approaches to refining scores were evaluated. A short descrip
 Several other variations on each of these approaches were also explored, but they came and went
  quickly and are not worth discussing here.
 
-==== Conflicts Network Matcher
+===== Conflicts Network Matcher
 
 Similar to the other matching techniques, the conflicts network matcher first identifies candidate
  vertex matches and edge matches. There is a special case where an intersection may match a short
@@ -125,14 +121,10 @@ After edge matches have been established each match is evaluated to determine wh
  supports (e.g. shares an intersection) and which matches are conflicting (applying two
  conflicting matches would be illegal). These values are recorded in an index for easy retrieval.
 
-**TODO: Image of support and conflicting matches**
-
 _Stubs_
 
 Stubs are introduced during the edge matching phase to represent situations where small road
  segments match an intersection.
-
-**TODO: Image of a stub**
 
 Unfortunately this can introduce a large amount of complexity in some situations as the number of
  possible options goes up significantly. To help counteract this problem stub matches are given a
@@ -161,47 +153,16 @@ SW(m) - If the two neighbors aren't directly connected, but connected by a stub.
  the highest weight of all the stubs that connect the two matches. Otherwise, return 1.
 stubThrough - `network.conflicts.stub.through.weighting`, defaults to 0.59
 
-// TODO: fix
-// [latexmath]
-// +++++++++++++++++++++++++
-// \[W(m) = s_{m} * SW(m)^{stubThrough}\]
-// \[H(m) = \begin{cases}
-//   stubHandicap, & \text{if m contains a stub match}, \\
-//   partialHandicap, & \text{if m contains a partial match}, \\
-//   1, & \text{otherwise}.
-// \end{cases}\]
-// \[n = s_o * H(x) + \mathlarger{\sum_{i=1}^{n}}\
-// \left(
-// 	H(y_i) *
-//     \begin{cases}
-//   W(y_i), & \text{if neighbor supports scoringMatch}, \\
-//   0, & \text{otherwise}
-// \end{cases}
-// \right)
-// \]
-// \[d = s_o * H(x) + \sum_{i=1}^{n}\
-// 	H(y_i) * W(y_i)
-// \]
-// \[s_n = \left( \frac{n}{d} \right)^a\]
-// +++++++++++++++++++++++++
-// endif::HasLatexMath[]
-
-// ifndef::HasLatexMath[]
-// **Your AsciiDoc rendering does not support LaTeX. Please render as PDF to see LaTeX equations.
-//  Alternatively you can look at the code: `ConflictsNetworkMatcher.cpp`**
-// endif::HasLatexMath[]
-
 At this point 10 iterations are executed of score adjustments before the scores are accepted. In the
  future it may be worth experimenting with dynamically running the converging process. For example,
  if the largest score change is less than a threshold then stop iterating. In a number of
  small real-world datasets 10 iterations is enough to converge.
 
-=== Label Candidate Matches
+==== Label Candidate Matches
 
 After match candidate scores have been refined a new match record is created for all matches
 
-=== Apply Merge Operations
+==== Apply Merge Operations
 
-**TODO: finish**
-
+After match records have been created, features involved in matches are then merged.
 

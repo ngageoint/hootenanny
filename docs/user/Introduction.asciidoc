@@ -1,10 +1,10 @@
 
 [[Introduction]]
-== Detail Summary
+=== Detail Summary
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/SummaryDetail.asciidoc[Detail Summary]
 
-== Conflation Background
+=== Conflation Background
 
 [quote,Seth and Samal,Encyclopedia of GIS]
 _____
@@ -112,9 +112,9 @@ not be modified at all and stitch in data from map B around it.
 
 See also:
 
-* _Unifying Conflation_, <<hootalgo>>
+* _Unifying Conflation_, <<hootuser>>
 
-===== Reference Conflation
+*_Reference Conflation_*
 
 .Vertical Conflation.  Red and blue boxes represent different data sets.  This is a good candidate for Reference Conflation because of the high degree of overlap between the two data sets.
 image::images/VerticalConflation.png[]
@@ -132,11 +132,15 @@ See also:
 
 * <<conflate,conflate command>>
 
-===== Average Conflation
+*_Average Conflation_*
 
-TODO
+Average Conflation attempts to find a midway point between two features when conflating. Neither
+input is considered more important than the other (this was the original Hootenanny conflation 
+strategy). Both geometries and tag values are averaged together to create the conflated output.
 
-===== Horizontal Conflation
+NOTE: Average Conflation is currently only supported for linear features.
+
+*_Horizontal Conflation_*
 
 .Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.
 image::images/HorizontalConflation.png[]
@@ -161,7 +165,7 @@ See also:
 * <<conflate,conflate command>>
 
 [[CookieCutter]]
-===== Cookie Cutter & Horizontal
+*_Cookie Cutter & Horizontal_*
 
 [[CookieCutterImage]]
 .Cookie Cutter & Horizontal.  The left image depicts the overlap of a high quality, smaller area data set overlayed on a coarser regional data set that is typical for Reference/Horizontal Conflation.  The shaded area in the right image depicts the -1km buffer that is applied during the Cookie Cutter operation.
@@ -190,9 +194,9 @@ See also:
 * <<conflate,conflate command>>
 * <<cut,cut command>>
 * <<crop,crop command>>
-* <<hootUI, horizontal conflation example>>
+* <<hootuser, horizontal conflation example>>
 
-===== Differential Conflation
+*_Differential Conflation_*
 
 To use, pass `DifferentialConflation.conf` to the conflate command.
 
@@ -201,9 +205,9 @@ e.g.
 hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm
 --------
 
-More details: <<hootalgo, DifferentialConflation>>
+More details: <<hootuser, DifferentialConflation>>
 
-===== Attribute Conflation
+*_Attribute Conflation_*
 
 To use, pass `AttributeConflation.conf` to the conflate command.
 
@@ -212,7 +216,7 @@ e.g.
 hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
 --------
 
-More details: <<hootalgo, AttributeConflation>>
+More details: <<hootuser, AttributeConflation>>
 
 ==== Review Conflated Results
 
@@ -222,7 +226,7 @@ NOTE: Fill in hoot:review tag details.
 
 Each review flags one or more features. The features are referenced using the <<UUID,uuid>> field. A `hoot:review:note` field is also populated with a brief description of why the features were flagged for review.
 
-===== Reviewing from the Command Line Interface
+*_Reviewing from the Command Line Interface_*
 
 Reviewable items are flagged with several `hoot:review` tags during the conflation process. The user can then edit the resulting output file with an editor of their choosing to resolve the reviewable items. It is worth noting that this review process should occur before the data is exported as exporting the data using the `convert` command or similar will likely strip the review tags.
 
@@ -233,7 +237,7 @@ See also:
 * <<conflate,conflate command>>
 * <<convert,convert command>>
 
-===== Reviewing from the Web Interface
+*_Reviewing from the Web Interface_*
 
 The web interface exposes reviewable items through an intuitive interface that guides the user through the review process.  For additional background on the review process within the user interface please refer to the Hootenanny User Interface Guide.
 
@@ -281,7 +285,7 @@ formats:
   very space efficient.
 
 Despite the potential for some minor changes to data precision (see
-<<hootalgo>>, _Sources of Processing Error_ for details), these formats maintain
+<<hootuser>>, _Sources of Processing Error_ for details), these formats maintain
 the full richness of the topology and tagging structure.
 
 Hootenanny also uses GDAL/OGR footnote:[http://www.gdal.org/] for reading and

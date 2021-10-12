@@ -37,6 +37,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 namespace hoot
 {
@@ -118,6 +119,13 @@ ElementPtr MapUtils::getFirstElementWithTag(
     }
   }
   return ElementPtr();
+}
+
+int MapUtils::getNumReviews(const OsmMapPtr& map)
+{
+  CountUniqueReviewsVisitor vis;
+  map->visitRo(vis);
+  return (int)vis.getStat();
 }
 
 }

@@ -33,9 +33,7 @@
 
 #include <hoot/core/TestUtils.h>
 
-# ifdef HOOT_HAVE_JOSM
 #include <hoot/josm/validation/MapValidator.h>
-# endif
 
 // Qt
 #include <QFileInfo>
@@ -50,11 +48,6 @@ void TestOutputValidator::validate(
   const QString& goldValidationReportPath, const bool suppressFailureDetail,
   const bool printValidationReportDiff)
 {
-  // Validators primarily use JOSM, so we need to be compiled with JOSM support to do this.
-  # ifndef HOOT_HAVE_JOSM
-    throw TestConfigurationException("Test output validation requires compilation --with-josm.");
-  # endif
-
   LOG_VART(testName);
   LOG_VART(testOutputPath);
   LOG_VART(goldValidationReportPath);
@@ -89,13 +82,11 @@ void TestOutputValidator::validate(
       testOutput.baseName(), testOutput.baseName() + "-validated.") + testOutput.completeSuffix();
   LOG_VART(validatedOutputPath);
 
-  # ifdef HOOT_HAVE_JOSM
-    // Write our validated output and validation report. The validated output is for debugging
-    // purposes only and is not compared to anything.
-    MapValidator validator;
-    validator.setReportPath(outputValidationReportPath);
-    validator.validate(QStringList(testOutputPath), validatedOutputPath);
-  # endif
+  // Write our validated output and validation report. The validated output is for debugging
+  // purposes only and is not compared to anything.
+  MapValidator validator;
+  validator.setReportPath(outputValidationReportPath);
+  validator.validate(QStringList(testOutputPath), validatedOutputPath);
 
   // Compare the validation reports and fail if there are any differences.
   if (FileUtils::readFully(goldValidationReportPath) !=

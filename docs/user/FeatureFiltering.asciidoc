@@ -1,12 +1,12 @@
 
 [[FeatureFiltering]]
-== Feature Filtering
+=== Feature Filtering During Conflation
 
 Feature filtering is supported during conflation in order to conflate a subset of the input features. 
 Feature filtering happens in two ways: 1) at the geometry/base feature type level and 2) more granularly at the 
 tag/schema level.
 
-=== Geometry and Base Fature Type Conflation Feature Filtering
+==== By Geometry and Type
 
 Conflation at the geometry/base feature type level is controlled with matchers.  An example of this type of conflation 
 would be Road Conflation or POI Conflation.  Hootenanny has a specific geometric and attribute related definition of 
@@ -15,7 +15,7 @@ the corresponding conflation related sections in this document, as well as the d
 a conflation job results in as much data conflated as possible.  If you desire to perform certain types of conflation 
 only, you can adjust the `match.creators` and `merger.creators` configuration options accordingly.
 
-=== Tag and Schema Conflation Feature Filtering
+==== By Attribute
 
 At a more granular level, Hootenanny allows for filtering out features during conflation via tag/schema 
 relationships.  Hootenanny supports specifying a JSON string or path to a file containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
@@ -30,7 +30,7 @@ relationships.  Hootenanny supports specifying a JSON string or path to a file c
                                   into one of the other matching types (catch all similarity capability)
 * Categories                    - include features that fall into a user defined category
 
-==== Conflation Command Example
+==== Command Example
 
 An example using tag/schema filtering with conflation to conflate only restaurants:
 

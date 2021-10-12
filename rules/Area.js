@@ -1,47 +1,51 @@
-/**
- * This script conflates non-building area polygons (e.g. parks, parking lots, etc.; area as defined by the schema) using Generic Conflation.
- */
-
-"use strict";
-
 /*
-  This matches areas to areas (area=yes), where an area is a non-building polygon.
+  This is the conflate script for areas, where an area is a non-building polygon with area=yes.
 
   Some examples are: a park polygon which encloses several other park related POI nodes and polygons
   or a school polygon which encloses school buildings on the campus.
 */
 
-exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+"use strict";
+
 exports.description = "Matches areas";
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-
-exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
-exports.typeThreshold = parseFloat(hoot.get("area.type.threshold"));
-var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
-var overlapReviewTypeThreshold = parseFloat(hoot.get("area.type.overlap.review.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "Area";
-exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
-
+exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates. This seems like it should probably be NonBuildingAreaCriterion instead
 // but that has some affect on the stats that still needs to be investigated.
 exports.matchCandidateCriterion = "AreaCriterion";
 
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// This is used only to determine type similarity and is independent of the other score
+// thresholds.
+exports.typeThreshold = parseFloat(hoot.get("area.type.threshold"));
+
+// These are used to help with one to many area matching.
+var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
+var overlapReviewTypeThreshold = parseFloat(hoot.get("area.type.overlap.review.threshold"));
+
+// geometry matchers
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 var smallerOverlapExtractor = new hoot.SmallerOverlapExtractor();
 var overlapExtractor = new hoot.OverlapExtractor();
 var bufferedOverlapExtractor = new hoot.BufferedOverlapExtractor();
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
+
+// used for debugging
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+// used for conflate provenance
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is optional, but may
@@ -100,8 +104,6 @@ exports.matchScore = function(map, e1, e2)
   // same that is used with Generic Conflation. The original geometry matching model from Weka has
   // been updated to account for the fact that buffered overlap, edge distance, and overlap are
   // processing intensive (roughly in order from most to least).
-
-  // TODO: Should we do anything with names?
 
   // If both features have types and they aren't just generic types, let's do a detailed type
   // comparison and look for an explicit type mismatch. Otherwise, move on to the geometry

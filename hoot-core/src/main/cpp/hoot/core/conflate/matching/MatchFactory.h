@@ -122,7 +122,6 @@ private:
   void _setTagFilterJson(QString json) { _tagFilterJson = json; }
 
   friend class MatchCandidateCountVisitorTest;
-  friend class MatchCandidateCountVisitorRndTest;
   friend class TestUtils;
 };
 

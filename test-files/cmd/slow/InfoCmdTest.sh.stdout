@@ -3762,3 +3762,63 @@ Listing validators...
 
   RoadCrossingPolyMarker                Marks roads crossing polygons
 
+Listing detectable languages...
+
+detectable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for detection.
+Currently, 2 of those languages are available for detection.
+
+Listing translatable languages...
+
+translatable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for translation.
+Currently, 2 of those languages are available for translation.
+
+Listing available language detectors...
+
+Available language detectors:
+
+Name: TikaLanguageDetector
+Description: blah
+URL: https://tika.apache.org
+Supports confidence: yes
+
+Name: OpenNlpLanguageDetector
+Description: more blah
+URL: https://opennlp.apache.org
+Supports confidence: no
+
+2 detectors are available.
+
+Listing available to English language translators...
+
+Available language translators:
+
+Name: JoshuaLanguageTranslator
+Description: blah
+URL: https://cwiki.apache.org/confluence/display/JOSHUA
+
+Name: HootLanguageTranslator
+Description: more blah
+URL: N/A
+
+2 translators are available.
+

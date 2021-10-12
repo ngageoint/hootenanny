@@ -1,12 +1,12 @@
 
-== Hootenanny Tests
+=== Hootenanny Tests
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.
 Each employs a different testing technologies, which are described here. Before building Hootenanny 
 and running its tests, the application must be configured. See the Building Hootenanny section in 
 this document for details.
 
-=== Test Suites
+==== Test Suites
 
 Tests are divided into the following groups: current, quick, slow, and glacial.
 
@@ -16,9 +16,7 @@ committed in this directory.
 * **slow** - Individual tests that each run in less than 30 sec.
 * **glacial** - Individual tests that each run in less than 15 min. You shouldn't need unit tests 
 that take longer than 15min. If you're writing a regression test that uses large input data and runs 
-longer than 15min, then put it with the regression tests, not the unit tests.  Also, hoot-rnd tests 
-usually get placed in this suite, since they employ non-production based functionality that changes 
-less frequently than code in hoot-core.
+longer than 15min, then put it with the regression tests, not the unit tests.
 
 If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
@@ -32,7 +30,7 @@ make -sj$(nproc) test-all   # glacial tests
 
 To see other, more granular testing options, run 'make help'.
 
-=== Core Tests
+==== Core Tests
 
 The Core Tests test everything that is accessible via the Hootenanny command line interface.
 The core code is written in C++ and employs several different types of tests, which are described
@@ -66,7 +64,7 @@ HootTest --glacial '--include=.*Big.*'
 HootTest --single AlphaShapeTest
 ---------------
 
-==== Unit Tests
+===== Unit Tests
 
 The core unit tests use CPPUnit. The goal is to have one test class for each functional class, but
 in many cases the coverage from the command line tests (described later) prevent this from being 
@@ -98,7 +96,6 @@ You are encouraged to create your configuration locally within each test method 
 Unit Under Test (UUT), however sometimes that is not possible. These are the options for resetting
 the environment between CPPUnit test runs:
 
-
 * `ResetBasic` - This resets element ID counters within `OsmMap`, the random number seed generator, 
 and the UUID generator. Resetting all of this is generally necessary to compare map output within a 
 test. This is the default and does not need to be explicitly specified.
@@ -127,7 +124,7 @@ Note in the above example that two directories are specified. The first is the d
 write test output files. If not input and/or output directories are required by the test, you can
 use `UNUSED_PATH`, which is the default.
 
-===== Testing with Address Data
+*_Testing with Address Data_*
 
 Any tests that manipulate address data must use the third party library, libpostal. libpostal 
 requires a large amount of data at initialization time and is treated as a Singleton with the 
@@ -157,12 +154,12 @@ for the combined `AddressConflateTest`. (related: #4908)
 * Possibly there is a way to load and work with a reduced subset of libpostal data for testing 
 purposes.
 
-===== Additional Details
+*_Additional Details_*
 
 * Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
 * Tests which use the single test OSM API database instance must be run in series.
 
-==== Command Line Tests
+===== Command Line Tests
 
 The C++ portion of Hootenanny exposes functionality via a command line interface. This command line
 interface is tested via simple shell scripts. The shell scripts output is compared against a known
@@ -186,7 +183,7 @@ Core command line tests may be forced to run in series by placing them in a dire
 in their respective test suite directory. e.g. `$HOOT_HOME/tests-files/cmd/slow/serial`. Any test
 not in the "serial" subdirectory is eligible for parallel execution.
 
-===== What Do Command Line Tests Do?
+*_What Do Command Line Tests Do?_*
 
 The basic principal of the command line tests is that they verify that the stdout and stderr are
 consistent with a given baseline. To do this the following must occur:
@@ -302,7 +299,7 @@ this case `quick`.
 mv test-files/cmd/current/Example* test-files/cmd/quick/
 ------------
 
-===== Inconsistent Output
+*_Inconsistent Output_*
 
 Sometimes scripts have output values that change from run to run such as data/time stamps. Many of
 these values get stripped out automatically, but if there is something relevant to just your test
@@ -310,7 +307,7 @@ you can remove it via grep/sed. If that isn't an option you may need to modify S
 be knowledgeable of your situation. Be careful, because it will modify the way that all tests are
 verified.
 
-===== Additional Details
+*_Additional Details_*
 
 * All command line tests should add `Testing.conf` as their final configuration file and then add
 any configuration option customization necessary for the test after it. 
@@ -323,7 +320,7 @@ isolation should be run serially by placing them in the "serial" folder.
 * If you write a class that uses caching, make the cache size configurable and set the size to the 
 lowest possible value in order for tests to pass within `Testing.conf`.
 
-==== Case Tests (Micro Conflate)
+===== Case Tests (Micro Conflate)
 
 Frequently it is desirable to test one aspect of the conflation routines. E.g. did the names get
 merged properly? Did two buildings get matched/merged? etc. The micro conflate tests are designed
@@ -359,7 +356,7 @@ HootTest --case-only
 
 See `test-files/cases/README` for additional information on case tests.
 
-==== Translation Tests
+===== Translation Tests
 
 Formerly known as the "Plugins" tests, these test a variety of `hoot-js` functionality. Not all of 
 the tests are strictly translation related. Tests may be invoked in isolation with:
@@ -375,7 +372,7 @@ cd $HOOT_HOME/translations/test
 mocha <test name>.js
 --------------
 
-==== Regression Tests
+===== Regression Tests
 
 The Regression Tests run Hootenanny command line operations against specific datasets to measure
 Hootenanny performance against particular scenarios. The tests are run against non-public data and,
@@ -386,7 +383,7 @@ Many of the regression tests score Hootenanny's conflation accuracy on a dataset
 as passing or failing based on an allowable score range.  See
 hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 
-==== Test Output Validation
+===== Test Output Validation
 
 Hootenanny has the capability to run validation routines on test output and generate a report with 
 validation failures. A benefit of running the test output validation is that new validation errors 
@@ -414,7 +411,7 @@ implementation of test output validation it has been assumed that the starting o
 good baseline, despite any errors. Going forward, the errors may either be accepted or prevented via
 conflation code improvements.
 
-===== Case Tests
+*_Case Tests_*
 
 Case tests make calls to `TestOutputValidator` to validate their output. Details:
 
@@ -430,7 +427,7 @@ for debugging.
 * Any other CPPUnit test can have its output validated using `TestOutputValidator`, if desired, 
 however some modifications to the code may need to be made to `TestOutputValidator` to do so.
 
-===== Script Tests
+*_Script Tests_*
 
 Script tests may voluntarily elect to have test output validated. To avoid excessive core test suite 
 runtimes, only script tests running conflation and generating smaller outputs (<100k?) should have 
@@ -450,17 +447,17 @@ Details:
 Looking at the function `validateTestOutput` in `ScriptTestUtils.sh`:
 * The empty file, `test-output/test-validation-enabled`, is checked for existence before running 
 validation from a script test. `HootTest` will automatically create this dummy file if the 
-pre-requisites for running validation are met (compiled `--with-josm` and 
-`test.validation.enable=true`). If the pre-requisites have not been met, this file will be removed 
-by `HootTest` and scripts will skip running validation. This is the needed due to the fact the 
-script has no way itself of knowing if the validation pre-requisites have been met.
+pre-requisites for running validation are met (`test.validation.enable=true`). If the pre-requisites 
+have not been met, this file will be removed by `HootTest` and scripts will skip running validation. 
+This is the needed due to the fact the script has no way itself of knowing if the validation 
+pre-requisites have been met.
 * Read the `validateTestOutput` function header for information on the function input variables.
 * A diff is performed against the test output validation report and a baseline validation report. 
 Any differences will show up in the test output and cause the test to fail.
 * There is no set naming convention for validation report and validated output files. Just ensure 
 that if running multiple validations within a single script tests that all file names are unique.
 
-===== Running Only Tests Which Use Validation
+*_Running Only Tests Which Use Validation_*
 
 The `--validated-only` only option passed to `HootTest` allows you to only run tests which perform 
 test output validation when `test.validation.enable` is activated. This may be useful for debugging
@@ -469,7 +466,7 @@ purposes. Example:
 HootTest --warn --validated-only
 --------------
 
-==== Running Tests in Parallel
+===== Running Tests in Parallel
 
 Hootenanny can run Core tests in parallel. Tests in the Translation suite are excluded, however. 
 This is accomplished with the `HootTest` option, `--parallel [n]`, where the optional `[n]` 
@@ -509,7 +506,7 @@ though.
 Regression tests are not run by `HootTest` but may be run in parallel via `make`. e.g. 
 `make -j<nproc>`.
 
-=== Web Services Tests
+==== Web Services Tests
 
 The Web Services tests test the Hootenanny web services interface.  There are two types of
 Hootenanny web services tests.  One type is written in Java and use JUnit, Jersey, and a
@@ -521,7 +518,7 @@ It is important to note that there is also C++ code labeled "services".  That is
 to the Hoot API and OSM API services database and is not affiliated with the Hootenanny Web
 Services Java code.
 
-==== Test Suites
+===== Test Suites
 
 Java web services test methods may be placed into either the UnitTest or IntegrationTest categories.
 The UnitTest suite corresponds to the slow test suite in the Core Tests, and the IntegrationTest
@@ -547,7 +544,7 @@ complete.  There currently is no means to separate the two.
 The mocha based web services tests (see node-export-server/test as an example) are not
 currently aligned with the test suites.
 
-===== Web Services Unit Tests
+*_Unit Tests_*
 
 The Web Services Unit Tests are meant to test the Java web service code at the class level.
 See hoot-services/src/test/java for test examples.
@@ -559,7 +556,7 @@ method declaration:
 @Category(UnitTest.class)
 -----------
 
-===== Web Services Integration Tests
+*_Integration Tests_*
 
 The Web Services Integration Tests are meant to test the Java web service code across logical
 boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java for test examples.
@@ -577,13 +574,13 @@ The decision was made to leave these are Unit Tests, since they are critical and
 with each commit push as part of the slow tests, but those tests should eventually be moved to
 the Integration Tests suite and corresponding class level Unit Tests written for them.
 
-=== User Interface Tests
+==== User Interface Tests
 
 The User Interface tests come in two types. The first type uses Cucumber to test the functionality
 of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.
 The second type uses mocha to test at a more granular level.
 
-==== Cucumber User Interface Tests
+===== Cucumber User Interface Tests
 
 The purpose of these tests is to catch relatively simple errors that get introduced into UI 
 workflows inadvertently, and not to be a bulletproof set of tests for the user interface. Achieving 
@@ -647,7 +644,7 @@ changes in other parts of the hoot code.  e.g. A test that expects an exact numb
 a conflation job.  However, this type of thing is not always completely possible to avoid in order 
 to write good tests.
 
-==== Mocha User Interface Tests
+===== Mocha User Interface Tests
 
 These tests reside in hoot-ui/test/spec/hoot and are not known to be currently supported.  They
 may be run with:
@@ -658,7 +655,7 @@ npm install
 npm test
 ---------------
 
-=== Load Tests
+==== Load Tests
 
 NOTE: The load tests have been inactive for awhile with no current plans to revive them.
 
@@ -670,7 +667,7 @@ metrics:
 
 image::images/LoadLatest.png[]
 
-=== Test Coverage Reporting
+==== Test Coverage Reporting
 
 Reports can be generated which detail the test coverage of Hootenanny code from the command line.
 Hootenanny Core code coverage is supplied `gcov` and `lcov`. Java code coverage is supplied by 
@@ -718,9 +715,9 @@ run with all compile configuration options enabled (--with-rnd, --with-services,
 run 'make test-all', or if you don't want to run the Java web services tests then run something 
 like: 'HootTest --glacial --parallel && make translations-test'.
 
-=== Test Writing Guidelines
+==== Test Writing Guidelines
 
-==== General
+===== General
 
 * Unit tests should strive to test at the single class level only, when possible.
 * Unit tests should have nearly a one to one mapping to each class in code. Use the code coverage
@@ -743,7 +740,7 @@ help with this.
 * Do not access a Singleton's private members from a test. This is tempting in writing tests but may 
 lead to instabilities when the tests are run in parallel.
 
-==== Core Specific
+===== Core Specific
 
 * Use the variable name `uut` to denote the class being tested in a test.
 * During testing you can verify test output via CPPUnit asserts against the state of the output data 
@@ -761,7 +758,7 @@ put a longer running test in the C++ quick tests.
 * Keep test using address data with libpostal confined to a single CPPUnit test (see Testing with 
 Address Data section).
 
-==== Services Specific
+===== Services Specific
 
 * For the Java tests, longer running tests should most likely be put into the integration tests.
 

@@ -107,8 +107,7 @@ IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)  
 void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
   const SearchRadiusProvider& srp)
 {
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children = 368 bytes
+  // No tuning was done, just copied these settings from OsmMapIndex. 10 children = 368 bytes
   _vertex2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   std::vector<Box> boxes;

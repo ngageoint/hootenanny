@@ -3,8 +3,9 @@
 
 === Description
 
-The `crop-random` command randomly crops a section of map data to have a specified maximum node count. This is useful if you 
-have a very large file dataset and need to generate a small subset of data to test conflation against.
+The `crop-random` command (experimental) randomly crops a section of map data to have a specified 
+maximum node count. This is useful if you have a very large file dataset and need to generate a 
+small subset of data to test conflation against.
 
 * `input(s)`      - Input(s); may be any supported input format (e.g. .osm file).
 * `output`        - Output; may be any supported output format (e.g. OSM file)

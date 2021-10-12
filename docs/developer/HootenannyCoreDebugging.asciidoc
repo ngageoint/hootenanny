@@ -1,0 +1,118 @@
+
+=== Core Debugging
+
+==== Debug Logging
+
+While there is no substitute for debugging with breakpoints added to an IDE, sometimes using debug 
+logging can allow you to diagnose and fix a conflation bug more quickly. Hootenanny allows for log 
+statements to be generated at various levels of granularity. The available log levels may be shown 
+by executing `hoot help` from the command line. Hootenanny also allows for filtering which classes 
+are allowed to write log statements to allow for tailoring the debugging experience. To filter logs 
+by class, the `log.class.include.filter` and `log.class.exclude.filter` configuration options may be 
+utilized. Filtering by wildcard with '*' is supported. See the documentation on those configuration 
+options as well as the class documentation for `Log` and `LogGeneric` for additional information.
+
+==== Debug Map Writing
+
+At times, it can be difficult to determine where in the conflate process a particular map
+data change is made. To assist with debugging, map files may be output at various places in
+the chain. To turn on debug map writing, enable the `debug.maps.write` configuration option. To 
+control where the map files are written to, edit the `debug.maps.filename` configuration option.
+Additionally, debug maps be written at a more granular frequency by enabling the 
+`debug.maps.write.detailed` configuration option. Enable the option with care, as it may result in
+many files being written and slow down the debugging process considerably. Also, debug map writing
+may be filtered by class in the same manner that debug logging is filtered. Modify the
+`debug.maps.class.include.filter` and `debug.maps.class.exclude.filter` configuration options to do 
+so. See the documentation on those configuration options as well as the class documentation for `OsmMapWriterFactory::writeDebugMap` for additional information.
+
+Additional helpful debugging options:
+
+* `uuid.helper.repeatable=true`
+* `writer.include.debug.tags=true`
+* `writer.include.conflate.score.tags=true`
+
+==== Inconsistent Conflated Data Output
+
+Given the following conditions the output of Hootenanny should always be exactly the same:
+
+* You're running a single version of hootenanny
+* You're on a single machine (changing OS, libraries, etc. may change the output)
+* You've enabled any necessary flags for consistency between runs (e.g. `-D uuid.helper.repeatable=true`, `unify.optimizer.time.limit=-1`, there may be others depending on the command)
+* You're using the exact same input between runs
+
+While there are any number of issues that can cause these problems, below are a few common problems to check for:
+
+* Using the time in determining program flow
+* Inconsistent random variable seeds
+* Using Qt's UUID generation
+* Uninitialized variables
+* Using pointer locations to determine program flow
+
+===== Using Time to Determine Program Flow
+
+Don't do it.
+
+Check out `unify.optimizer.time.limit` for a case when Hoot uses time for determining program flow. It may make sense to replace this with the `it_lim` option in GLPK. This isn't quite as user friendly, but it will create reproducible results.
+
+===== Inconsistent Random Variables
+
+Provide flags for using a consistent seed as needed. See `uuid.helper.repeatable` for an example.
+
+===== UUIDs
+
+Don't use Qt's UUID generation directly. See UuidHelper::createUuid() and the asssociated `uuid.helper.repeatable` key.
+
+===== Uninitialized Variables
+
+Sometimes GCC doesn't warn about uninitialized variables. There are some link:$$http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals$$[tools in valgrind] that will identify uninitialized variables.
+
+Adding these lines into your `LocalConfig.pri` may also help to flag issues while compiling:
+
+-----
+# Warn about uninitialized variables and set all variables to their default
+# values.
+QMAKE_CXXFLAGS+=-Wuninitialized -fno-common
+# Initialize values in BSS to zero -- dunno if this will help
+QMAKE_CXXFLAGS+=-fzero-initialized-in-bss
+-----
+
+===== Using Pointer Locations to Determine Program Flow
+
+For example:
+
+-----
+main()
+{
+  int* a = new int;
+  int* b = new int;
+
+  if (a < b)
+  {
+    cout << "a < b" << endl;
+  }
+}
+-----
+
+You aren't guaranteed that `a < b` will always be printed. Most frequently this happens when using containers to store values. E.g.
+
+-----
+// bad!
+set<int*> a;
+-----
+
+This will guarantee that you'll never put the same pointer to an int into the set, but the order is now arbitrary. A work around to this issue must be determined on a case by case basis. In the common case of Ways you can use the following mechanism:
+
+-----
+// bad!
+set<ConstWayPtr> w1;
+
+// good
+set<ConstWayPtr, WayPtrCompare> w2;
+-----
+
+===== Listing Unsorted Files From the File System
+
+E.g. using `QDir::entryList` without a sorting option may return the files in a different order each time.
+
+http://doc.qt.io/qt-4.8/qdir.html#entryList
+

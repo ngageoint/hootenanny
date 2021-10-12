@@ -59,7 +59,6 @@ gdb
 go
 hoot-cmd/Makefile
 hoot-js/Makefile
-hoot-rnd/Makefile
 hoot-test/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile

@@ -1,36 +1,138 @@
 
 [[RiverConflation]]
-== River Conflation
+=== River Conflation
 
-TODO
+==== Overview
 
-[[RiverFeatureDefinitions]]
-=== Feature Definitions
+A variant of generic line conflation specific to conflating rivers (linear waterways) is available 
+within Hootenanny. A river conflation model was developed based on test scenarios using manually 
+matched data in the regions of Haiti and San Diego, USA as a baseline for evaluation. The goal for 
+the initial conflation of rivers was that the number of correctly conflated features plus the number 
+of features marked for manual review would equal at least 80% of the overall conflated features in 
+each test dataset, with the plans of improving that correctness score as high as 90-95% in the 
+future.
 
-TODO
+==== Feature Definitions
 
-[[RiverMatching]]
-=== Matching
+River Conflation defines a river as a linear body of water whose tags support the definitions used 
+by OpenStreetMap.
 
-TODO
+==== Approach
 
-[[RiverMerging]]
-=== Merging
+The goal for the initial conflation of rivers was that the number of correctly conflated features 
+plus the number of features marked for manual review would equal at least 80% of the overall 
+conflated features in each test dataset.  It is very likely that over time a higher accuracy than 
+80% could be achieved with Hootenanny, however, this seemed a realistic goal for the initial 
+implementation of generic river conflation.  An attempt was made to have a as close to a minimum of 
+200 manually matched features as possible in each dataset, while keeping datasets small enough that 
+a single test against them could be run in roughly ten minutes or less.  One dataset at a time was 
+tested against until the conflation performance goal was reached before moving onto testing against 
+additional datasets.  After all datasets were tested against, a final model was constructed that 
+performed acceptably against all tested datasets.
 
-TODO
+The original plan was to test against three datasets.  It was later found that the third acquired 
+dataset, rivers in Mexico, contained longer rivers with higher node counts such that the subline 
+matching routine took unreasonable amounts of time to complete.  Optimizing the subline matching to 
+address this issue requires work outside of the scope of this initial river conflation task (see 
+"Future Work" section), therefore, the third dataset was not tested against.
 
-[[RiverConfigurableOptions]]
-=== Configurable Options
+During testing, an optimal search radius (controlled by the "error:circular" attribute) was first 
+determined empirically for each river dataset.  After testing, the capability to automatically 
+calculate this value was added, so manually determining it is no longer necessary but is allowed in 
+the case the auto-calculation does not provide an acceptable value.
 
-TODO
+Initially, during testing reference rubbersheeting was then used to bring the OSM river data towards 
+the dataset it was being conflated with.  This helped increase the conflation accuracy. Later during 
+testing, the addition of the automatically calculated search radius used without rubber sheeting 
+provided even better results. Using the automatically calculated search radius precludes 
+rubbersheeting of the input data since tie points from the rubber sheeting algorithm are used to 
+calculate the search radius.
 
-[[RiverTestResults]]
-=== Test Results
+Several features were extracted from the river data tested against to help determine which ones
+could be used to most accurately conflate the data.  Weka (<<hall2009>>) was used to build models
+based on extracted features.  After running many tests, the two most influential features were found
+to be weighted shape distance and a sampled angle histogram value.  Those features were used to
+derive a model for conflating the river data.
 
-TODO
+Weighted shape distance is similar to Shape Distance as described in <<savary2005>>.
 
-[[RiverFutureWork]]
-=== Future Work
+Angle histogram extraction works by calculating the angle of each line segment in a line string and 
+adding that angle to a histogram where the weight is the length of the line segment. A histogram is 
+built up in this way for both input lines, then normalized, and the difference calculated. To 
+conflate rivers, a sampled angle histogram value was derived, which allows for specifying a 
+configurable distance along each line segment to sample the angle value.  The distance from the 
+sampled location to calculate the directional heading along the way is also configurable.
 
-TODO
+Two additional approaches were attempted that did not increase performance of the river conflation 
+model against the datasets tested, but are worth mentioning: increasing the unnecessary reviewable 
+feature count to aid in decreasing the incorrectly conflated feature count and weighting matches 
+between extracted sublines closer in distance higher than those that were further apart.
+
+==== Matching
+
+River matching allows for a manually configured or automatically calculated search radius when 
+determining the maximum distance between features to search during matching. Automatic search radius 
+calculation is achieved via calculated tie points using the rubbersheeting algorithm.
+
+Matching is based off both tag and geometric attributes. For geometry matching, sampled angle 
+histogram and a weighted shape distance values are used for comparison. Their match thresholds were 
+determined against test data using Weka. Tag matching looks at the similarity of name and type tags.
+
+Long river features can be very computationally expensive to match. Therefore, River Conflation
+employs a backup matching workflow to avoid runaway conflate job times. First, a standard subline 
+matcher used in most Hooteannny linear feature matching is used to match a pair of features. If the 
+matching process exceeds a configurable number of iterations, the matching with that subline matcher 
+is canceled and a second, less complex and processing intensive subline matcher is employed.
+
+==== Merging
+
+River merging uses the standard Hootenanny merging process that is used for merging most linear 
+features, including roads.
+
+==== Configurable Options
+
+See the descriptions for configuration options named `river.*` for more information on how River 
+Conflation behavior may be modified.
+
+==== Test Results
+
+Match truth for several datasets was obtained by having a human manual match features
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
+many matches it correctly made.
+
+.*River Conflation Test Data Sources*
+[options="header"]
+|======
+| *Test* | *AOI* | *Schema 1* | *Schema 2* | *Geospatial Accuracy* | *Type Attribution* | *Name Attribution* | *Address Attribution* | *Phone Number Attribution*
+| 1 | Haiti | CNIGS | OSM | good | poor for one dataset; good for the other | none | none | none
+| 2 | San Diego | NHD | OSM | good | poor for one dataset; good for the other | none in one dataset; good in the other | none | none
+| 3 | Mexico | OSM | NAVTEQ | good | good | good in one dataset; none in the other | none | none
+|======
+
+* CNIGS = Centre National de l'Information Géo-Spatiale (Haiti govt)
+* OSM = OpenStreetMap.org
+* NHD = National Hydrography Dataset
+
+.*River Conflation Test Results - October 2021*
+[width="100%"]
+|======
+| *Test* | *AOI* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unecessary Review* | *Percentage Combined Correct and Reviewable*
+| 1 | Haiti  | 490 | 86.8% | 0.2% | **87.0%**
+| 2 | San Diego | 784 | 72.2% | 4.2% | **76.6%**
+| 3 | Mexico | 261 | 56.5% | 1.6% | **58.1%**
+|======
+
+The initial goal of 80% combined correct and reviewable was met with the Haiti river data, but was 
+not met with the San Diego or Mexico river data. Future work listed in a following section should 
+help to increase the conflation accuracy further. Note that the Mexico test had to be run with the 
+Frechet Subline Matcher due to the data's complexity. The other tests ran with the Maximal Subline 
+Matcher.
+
+Combined Correct = number of correct matches + number of unnecessary reviews
+
+==== Future Work
+
+* Improving the Frechet Distance Subline Matcher for the Mexico test or re-testing with the more 
+recently implemented dual subline matcher approach could possibly improve its score.
 

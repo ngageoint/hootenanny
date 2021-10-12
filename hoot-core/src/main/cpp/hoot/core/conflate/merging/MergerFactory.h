@@ -102,9 +102,8 @@ public:
 private:
 
   // Since this is a Singleton, we shouldn't be accessing its constructor, but there are a some
-  // spots where we are.  This is here to limit any further constructor access.
+  // spots where we are. This is here to limit any further constructor access.
   friend class AbstractConflator;
-  friend class MultiaryUtilities;
 
   MergerFactory() = default;
 

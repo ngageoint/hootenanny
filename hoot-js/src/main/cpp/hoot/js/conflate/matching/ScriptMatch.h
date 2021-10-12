@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
+
 #include <hoot/js/PluginContext.h>
 
 namespace hoot

@@ -46,6 +46,7 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/OpExecutor.h>
+#include <hoot/core/ops/RailwaysCrossingMarker.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/ops/RoadCrossingPolyMarker.h>
@@ -651,9 +652,6 @@ void ConflateExecutor::_disableRoundaboutRemoval() const
 
 void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
 {
-  // These are some custom adjustments to config opts that must be done for Attribute Conflation.
-  // There may be a way to eliminate some of these by adding more custom behavior to the UI.
-
   // If we're just matching, then don't remove secondary data as the default config specifies to do.
   // We'll also leave in review relations for match debugging purposes.
   if (ConfigOptions().getConflateMatchOnly())
@@ -679,12 +677,14 @@ void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
 
 void ConflateExecutor::_updateConfigOptionsForDifferentialConflation() const
 {
-  // This is for custom adjustments to config opts that must be done for Differential Conflation.
-
   // The list option removal being done here could be made obsolete by handling it in the JSON
   // config instead with custom syntax (#3442).
+
+  // These don't seem to make a lot of sense for diff conflate.
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyMarker::className());
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePostOpsKey(), RailwaysCrossingMarker::className());
 }
 
 void ConflateExecutor::_updateConfigOptionsForBounds() const

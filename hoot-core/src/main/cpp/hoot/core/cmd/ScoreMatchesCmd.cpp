@@ -48,6 +48,7 @@ public:
   QString getName() const override { return "score-matches"; }
   QString getDescription() const override
   { return "Scores conflation performance against a manually matched map"; }
+  QString getType() const override { return "advanced"; }
 
   int runSimple(QStringList& args) override
   {

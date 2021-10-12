@@ -27,7 +27,8 @@ Goals:
 
 For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md).
 
-Documentation is included as PDF files with each release. Download the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
+Documentation is in the file named: `Hootenanny - User Guide.pdf`, located in the `.tar.gz` installation 
+file under the "docs" directory.
 
 # Conflatable Feature Types
 
@@ -93,8 +94,6 @@ Hootenanny has several [available filters](https://github.com/ngageoint/hootenan
 Hootenanny has limited data validation reporting of its own, and JOSM validation routines may also be invoked via Hootenanny during batch processing of data.
 
 Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. Some of them are invoked automatically during a conflation job, however, you may also [run them separately](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc). In addition to its own built-in cleaning operations, Hootenanny is also integrated with the auto-fix capabilities of [JOSM](https://josm.openstreetmap.de/). 
-
-**NOTE:** As of 3/19/20 the cleaning/validation integration with JOSM is only available in the Vagrant version of Hootenanny. It may be added to the RPM version of Hootenanny at a later date.
 
 # Configuration
 

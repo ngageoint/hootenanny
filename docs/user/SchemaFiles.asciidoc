@@ -1,6 +1,6 @@
 
 [[SchemaFiles]]
-== Schema Files
+=== Schema
 
 Internally Hootenanny stores all data in the OSM schema (plus some additional
 atypical tags). Using this schema provides us with the flexibility to add new
@@ -25,7 +25,7 @@ several pieces of information:
 * Any categories that the tag may be part of (e.g. POI, building,
   transportation).
 
-=== File Format
+==== File Format
 
 Each file is formatted as a JSON file. The top-most file is `schema.json`.
 `schema.json` contains some of the earliest schema definitions from hootenanny
@@ -137,7 +137,7 @@ There are many more intricacies to the schema file format and how the internal
 structure is built. If you would like more information please post to the GitHub
 site.
 
-=== Compound Tags
+==== Compound Tags
 
 Before describing the details of what a _compound tag_ is within the context of
 a schema a list of the problems with the 2012 schema will be discussed.
@@ -259,9 +259,7 @@ Feature 2:
 
 We can proceed with this comparison using the typical score and aggregate approach and will see that `railway_platform` has a low similarity score to `bus_platform` which is the appropriate result.
 
-=== Comparing Enumerated Tags
-
-NOTE: Still in early development. -JRS
+==== Comparing Enumerated Tags
 
 There are a number of ways to compare enumerated tags. This is simply one
 approach that can be used within Hootenanny. It is not applied this way in all
@@ -281,7 +279,7 @@ _influence_ tag in the schema file.
 
 To aggregate these scores and influence values
 
-=== Visualizing the Graph
+==== Visualizing the Graph
 
 The schema at the time of this writing has nearly 1200 tags defined and nearly
 1600 relationships between those tags. This is difficult to visualize. However,

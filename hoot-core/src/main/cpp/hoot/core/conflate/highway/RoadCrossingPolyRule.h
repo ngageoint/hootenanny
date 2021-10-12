@@ -83,8 +83,8 @@ public:
    * filter
    * @return a tag criterion filter or an empty criterion if the input tags are empty
    */
-  static ElementCriterionPtr tagRuleStringToFilter(const QString& kvpStr,
-                                                   const QStringList& allowedKeys = QStringList());
+  static ElementCriterionPtr tagRuleStringToFilter(
+    const QString& kvpStr, const QStringList& allowedKeys = QStringList());
 
   /**
    * Creates the spatial index used to search for crossing roads
@@ -97,27 +97,26 @@ public:
   void setName(const QString& name) { _name = name; }
 
   QString getPolyFilterString() const { return _polyFilterStr; }
-  void setPolyFilterString(const QString& filterStr) { _polyFilterStr = filterStr; }
   ElementCriterionPtr getPolyFilter() const { return _polyFilter; }
-  void setPolyFilter(const ElementCriterionPtr& filter) { _polyFilter = filter; }
-
   QString getAllowedRoadTagFilterString() const { return _allowedRoadTagFilterStr; }
+  ElementCriterionPtr getAllowedRoadTagFilter() const { return _allowedRoadTagFilter; }
+  std::shared_ptr<Tgs::HilbertRTree> getIndex() const { return _index; }
+  std::deque<ElementId> getIndexToEid() const { return _indexToEid; }
+
+  void setPolyFilterString(const QString& filterStr) { _polyFilterStr = filterStr; }
+  void setPolyFilter(const ElementCriterionPtr& filter) { _polyFilter = filter; }
   void setAllowedRoadTagFilterString(const QString& filterStr)
   { _allowedRoadTagFilterStr = filterStr; }
-  ElementCriterionPtr getAllowedRoadTagFilter() const { return _allowedRoadTagFilter; }
   void setAllowedRoadTagFilter(const ElementCriterionPtr& filter)
   { _allowedRoadTagFilter = filter; }
-
-  std::shared_ptr<Tgs::HilbertRTree> getIndex() const { return _index; }
   void setIndex(const std::shared_ptr<Tgs::HilbertRTree>& index) { _index = index; }
-
-  std::deque<ElementId> getIndexToEid() const { return _indexToEid; }
   void setIndexToEid(const std::deque<ElementId>& indexToEid) { _indexToEid = indexToEid; }
 
 private:
 
   ConstOsmMapPtr _map;
 
+  // name of the rule; shown in reviews
   QString _name;
 
   // raw poly combined filter string used for display purposes only

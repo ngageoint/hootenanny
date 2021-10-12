@@ -63,7 +63,6 @@ for FILENAME in \
   "hoot-core-test/hoot-core-test.pro" \
   "hoot-josm/hoot-josm.pro" \
   "hoot-js/hoot-js.pro" \
-  "hoot-rnd/hoot-rnd.pro" \
   "tgs/src/test/cpp/tgs/TgsTest.pro" \
   "tgs/src/test/cpp/tgs/TgsTestLib.pro" \
   "tgs/tgs.pro"

@@ -108,10 +108,6 @@ void Hoot::_init() const
 
   reinit();
 
-# ifdef HOOT_HAVE_RND
-  loadLibrary("HootRnd");
-# endif
-
 # ifdef HOOT_HAVE_NODEJS
   // sometimes HootJs is loaded by node.js before we get to init.
   if (Factory::getInstance().hasClass(QString("HootJsLoaded")) == false)

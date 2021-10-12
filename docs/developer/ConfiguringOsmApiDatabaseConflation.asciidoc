@@ -1,0 +1,23 @@
+
+[[HootConfiguringOsmApiDatabaseConflation]]
+=== Configuring an OSM API Database Connection
+
+Hootenanny stores conflated data internally in a custom OSM API database (hootapidb://). Hootenanny also keeps a copy of a
+standard OSM API database for internal testing purposes. By default, Hootenanny is configured with an empty test OSM 
+API database. To conflate against your own OSM API database:
+
+* Create a custom OSM API database configuration file `$HOOT_HOME/conf/database/DatabaseConfigLocal.sh` by copying the file
+`$HOOT_HOME/conf/database/DatabaseConfigDefault.sh`
+* Fill in the following settings with your production OSM API database information:
+** database server name: `DB_HOST_OSMAPI`
+** database name: `DB_NAME_OSMAPI`
+** database port: `DB_PORT_OSMAPI`
+** database username for conflating data: `DB_USER_OSMAPI`
+** database password: `DB_PASSWORD_OSMAPI`
+
+Alternatively, if you want to disable OSM API database conflation completely, add the following line to your services local.conf file:
+
+--------
+osmApiDbEnabled=false
+--------
+

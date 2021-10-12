@@ -1,29 +1,28 @@
 /**
- * This script conflates POIs using Generic Conflation.
+ * This is the conflate script for POI Conflation.
  */
 
 exports.description = "Matches POIs";
 exports.experimental = false;
 exports.baseFeatureType = "POI";
-
-exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-
-exports.searchRadius = parseFloat(hoot.get("search.radius.poi"));
-exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
-
+exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+exports.searchRadius = parseFloat(hoot.get("search.radius.poi"));
+// This sets up custom search radii for selected feature types (see conf/core/PoiSearchRadii.json).
+var searchRadii = hoot.PoiSearchRadius.getSearchRadii();
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
 exports.matchCandidateCriterion = "PoiCriterion";
 
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// name matchers
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
 var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
@@ -55,7 +54,10 @@ var weightedWordDistance = new hoot.NameExtractor(
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
-var searchRadii = hoot.PoiSearchRadius.getSearchRadii();
+// used for debugging
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+// used for conflate provenance
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 function distance(e1, e2) {
     return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
