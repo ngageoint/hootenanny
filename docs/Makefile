@@ -92,8 +92,8 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	$(call buildAsciidoc)
 
 schema.asciidoc:
-	hoot schema -D tag.printing.format=asciidoc > schema.asciidoc
+	$$HOOT_HOME/bin/hoot schema -D tag.printing.format=asciidoc > schema.asciidoc
 
 schema.png:
-	hoot schema schema.png
+	$$HOOT_HOME/bin/hoot schema schema.png
 	
