@@ -429,7 +429,7 @@ archive: js-make services-docs docs
 	  tar czf $(HOOT_TARNAME)/$(JAVADOC_TARBALL) hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
-	cp docs/*.pdf docs/*.html docs/*.text docs/schema.png $(HOOT_TARNAME)/docs/
+	cp docs/*.pdf docs/*.html docs/*.text docs/*.png $(HOOT_TARNAME)/docs/
 	cp Makefile.in missing aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
