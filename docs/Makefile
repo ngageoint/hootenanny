@@ -19,9 +19,10 @@ define buildAsciidoc
 	@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
 endef
 
+# Note that we're not calling the schema documentation targets here, as it breaks an archive job. 
+# See the "Core Schema" section under "Documentation" in the Developer Guide for more information.
+
 all: \
-	schema.asciidoc \
-	schema.png \
 	Hootenanny\ -\ User\ Guide.pdf \
 	CoreAPI
 
@@ -38,8 +39,11 @@ $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-f
 	rm -f $(HOME)/.asciidoc/filters/gnuplot/*
 	cp filters/gnuplot/* $(HOME)/.asciidoc/filters/gnuplot/
 
-clean:
-	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI schema.asciidoc schema.png
+clean: clean-schema
+	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI schema.asciidoc 
+	
+clean-schema:
+	rm -f schema.png schema.dot
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
@@ -92,8 +96,8 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	$(call buildAsciidoc)
 
 schema.asciidoc:
-	./GenerateSchemaOsmPlusTable.sh
+	hoot schema -D tag.printing.format=asciidoc > schema.asciidoc
 
 schema.png:
-	./GenerateSchemaGraphImage.sh
+	hoot schema schema.png
 	

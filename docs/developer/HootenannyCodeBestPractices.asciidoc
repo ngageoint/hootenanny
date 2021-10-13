@@ -78,7 +78,9 @@ macro.
 * Refrain from use of `using namespace std;` and the like to avoid potential namespace collisions.
 * Run `make docs` to test your asciidoc documentation changes. Specifically, ensure that your 
 section headers are at appropriate levels in the hierarchy and that newlines have been placed in 
-appropriate places for the table of contents to format properly.
+appropriate places for the table of contents to format properly. If you've made changes to the 
+schema, you'll also need to manually re-generate the schema documentation (see the "Core Schema" 
+section under the "Documentation" section in the Developer Guide).
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.

@@ -29,8 +29,7 @@ automake --add-missing --copy
 ./configure --quiet --with-services --with-postgresql
 
 # Make the archive.
-make -j"$(nproc)" clean-all
-make -j"$(nproc)"
+make -j"$(nproc)" clean
 make -j"$(nproc)" archive
 
 # All done.
