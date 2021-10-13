@@ -797,56 +797,6 @@ void DiffConflator::_removeRefData(const bool removeSnapped)
     " reference elements...");
 }
 
-void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const
-{
-  LOG_TRACE("Adding changes to map...");
-
-  while (pChanges->hasMoreChanges())
-  {
-    Change c = pChanges->readNextChange();
-    LOG_VART(c);
-
-    // Need to add children
-    if (ElementType::Way == c.getElement()->getElementType().getEnum())
-    {
-      WayPtr pWay = _originalMap->getWay(c.getElement()->getId());
-
-      // Add nodes if need to
-      std::vector<long> nIds = pWay->getNodeIds();
-      for (std::vector<long>::iterator it = nIds.begin(); it != nIds.end(); ++it)
-      {
-        if (!map->containsNode(*it))
-        {
-          // Add a copy.
-          NodePtr pNewNode = std::make_shared<Node>(*(_originalMap->getNode(*it)));
-          pNewNode->setStatus(Status::TagChange);
-          map->addNode(pNewNode);
-        }
-      }
-
-      // Add the changed way with merged tags.
-      ConstWayPtr pTempWay = std::dynamic_pointer_cast<const Way>(c.getElement());
-      WayPtr pNewWay = std::make_shared<Way>(*pTempWay);
-      pNewWay->setStatus(Status::TagChange);
-      map->addWay(pNewWay);
-    }
-    else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
-    {
-      // Diff conflation w/ tags doesn't seem to handle relations but that hasn't been a problem so
-      // far. Changed this to log statement that the relations are being skipped here for now.
-
-      LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
-      if (Log::getInstance().getLevel() <= Log::Trace)
-      {
-        ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
-        LOG_VART(relation->getElementId());
-        LOG_VART(OsmUtils::getRelationDetailString(relation, _originalMap));
-      }
-    }
-  }
-  OsmMapWriterFactory::writeDebugMap(map, className(), "after-adding-diff-tag-changes");
-}
-
 void DiffConflator::_calcAndStoreTagChanges()
 {
   QElapsedTimer timer;
@@ -875,7 +825,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
-      // If it's a POI-Poly match, the poi always comes first, even if it's from the secondary
+      // If it's a POI-Poly match the poi always comes first, even if it's from the secondary
       // dataset, so we can't always count on the first being the old element.
       ConstElementPtr pOldElement;
       ConstElementPtr pNewElement;
@@ -915,11 +865,9 @@ void DiffConflator::_calcAndStoreTagChanges()
       if (!_tagChanges->containsChange(pOldElement->getElementId())
           && _tagsAreDifferent(pOldElement->getTags(), pNewElement->getTags()))
       {
-        // Make new change
+        // Make a new change.
         Change newChange = _getChange(pOldElement, pNewElement);
         LOG_VART(newChange);
-
-        // Add it to our list.
         _tagChanges->addChange(newChange);
       }
     }
@@ -929,7 +877,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     {
       PROGRESS_INFO(
         "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " of " <<
-            StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
+        StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
   LOG_STATUS(
@@ -957,7 +905,6 @@ bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) 
       return true;
     }
   }
-
   return false;
 }
 
@@ -982,6 +929,55 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
 
   // Create the change.
   return Change(Change::Modify, pChangeElement);
+}
+
+void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const
+{
+  LOG_TRACE("Adding changes to map...");
+
+  while (pChanges->hasMoreChanges())
+  {
+    Change c = pChanges->readNextChange();
+    LOG_VART(c);
+
+    // add children
+    if (ElementType::Way == c.getElement()->getElementType().getEnum())
+    {
+      WayPtr pWay = _originalMap->getWay(c.getElement()->getId());
+
+      // Add nodes if needed to.
+      std::vector<long> nIds = pWay->getNodeIds();
+      for (std::vector<long>::iterator it = nIds.begin(); it != nIds.end(); ++it)
+      {
+        if (!map->containsNode(*it))
+        {
+          // Add a copy.
+          NodePtr pNewNode = std::make_shared<Node>(*(_originalMap->getNode(*it)));
+          pNewNode->setStatus(Status::TagChange);
+          map->addNode(pNewNode);
+        }
+      }
+
+      // Add the changed way with merged tags.
+      ConstWayPtr pTempWay = std::dynamic_pointer_cast<const Way>(c.getElement());
+      WayPtr pNewWay = std::make_shared<Way>(*pTempWay);
+      pNewWay->setStatus(Status::TagChange);
+      map->addWay(pNewWay);
+    }
+    else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
+    {
+      // Diff conflation w/ tags doesn't seem to handle relations but that hasn't been a problem so
+      // far. Changed this to log statement that the relations are being skipped here for now.
+      LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
+      if (Log::getInstance().getLevel() <= Log::Trace)
+      {
+        ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
+        LOG_VART(relation->getElementId());
+        LOG_VART(OsmUtils::getRelationDetailString(relation, _originalMap));
+      }
+    }
+  }
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-adding-diff-tag-changes");
 }
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
