@@ -824,7 +824,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
         }
       }
 
-      // Add the changed way with merged tags
+      // Add the changed way with merged tags.
       ConstWayPtr pTempWay = std::dynamic_pointer_cast<const Way>(c.getElement());
       WayPtr pNewWay = std::make_shared<Way>(*pTempWay);
       pNewWay->setStatus(Status::TagChange);
@@ -855,7 +855,7 @@ void DiffConflator::_calcAndStoreTagChanges()
 
   MapProjector::projectToWgs84(_map);
 
-  // Make sure we have a container for our changes
+  // Make sure we have a container for our changes.
   if (!_tagChanges)
   {
     _tagChanges = std::make_shared<MemChangesetProvider>(_map->getProjection());
@@ -868,10 +868,10 @@ void DiffConflator::_calcAndStoreTagChanges()
     LOG_VART(match);
     std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
 
-    // Go through our match pairs, calculate tag diff for elements. We only
-    // consider the "Original" elements when we do this - we want to ignore
-    // elements created during map cleaning operations (e.g. intersection splitting)
-    // because the map that the changeset operates on won't have those elements.
+    // Go through our match pairs, calculate tag diff for elements. We only consider the "Original"
+    // elements when we do this. We want to ignore elements created during map cleaning operations
+    // (e.g. intersection splitting) because the map that the changeset operates on won't have those
+    // elements.
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
@@ -891,8 +891,7 @@ void DiffConflator::_calcAndStoreTagChanges()
       }
       else
       {
-        // How do you like me now, SonarQube?
-        // Skip this element, because it's not in the OG map
+        // Skip this element, because it's not in the OG map.
         continue;
       }
 
@@ -912,7 +911,7 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      // Double check to make sure we don't create multiple changes for the same element
+      // Double check to make sure we don't create multiple changes for the same element.
       if (!_tagChanges->containsChange(pOldElement->getElementId())
           && _tagsAreDifferent(pOldElement->getTags(), pNewElement->getTags()))
       {
@@ -920,7 +919,7 @@ void DiffConflator::_calcAndStoreTagChanges()
         Change newChange = _getChange(pOldElement, pNewElement);
         LOG_VART(newChange);
 
-        // Add it to our list
+        // Add it to our list.
         _tagChanges->addChange(newChange);
       }
     }
