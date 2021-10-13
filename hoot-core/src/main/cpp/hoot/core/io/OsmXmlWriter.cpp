@@ -88,14 +88,12 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   {
     QChar c = s[i];
     // See http://stackoverflow.com/questions/730133/invalid-characters-in-xml
-    if (c < 0x20 && c != 0x9 && c != 0xA && c != 0xD)
-    {
+    if (c == 0x1f)
+      result.append('|');
+    else if (c < 0x20 && c != 0x9 && c != 0xA && c != 0xD)
       foundError = true;
-    }
     else
-    {
       result.append(c);
-    }
   }
 
   if (foundError)
