@@ -107,6 +107,15 @@ enum _TimeOutValue
   GLACIAL_WAIT  = 900
 };
 
+static const QRegExp TEST_NAME_FILTER("(N\\d(Tgs|hoot|tbs)*\\d+)|(\\d{2})");
+
+std::string filterTestName(const std::string& name)
+{
+  // Filter out junk in the test names. This is necessary in order for the --single option to work.
+  QString testName = QString::fromStdString(name).remove(TEST_NAME_FILTER);
+  return testName.replace("TestE", "Test").toStdString();
+}
+
 class HootTestListener : public CppUnit::TestListener
 {
 public:
@@ -153,12 +162,12 @@ public:
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
     {
-      cout << test->getName() << " - " << elapsed << endl;
+      cout << filterTestName(test->getName()) << " - " << elapsed << endl;
     }
     if (elapsed > _testTimeout && _testTimeout >= 0.0)
     {
-      cout << "Test " << test->getName().data() << " ran longer than expected -- " << elapsed <<
-              endl;
+      cout << "Test " << filterTestName(test->getName()) << " ran longer than expected -- " <<
+              elapsed << endl;
     }
     cout.flush();
 
@@ -171,7 +180,7 @@ public:
   {
     if (_showTestName)
     {
-      cout << "Starting " << suite->getName().data() << endl << flush;
+      cout << "Starting " << filterTestName(suite->getName()) << endl << flush;
     }
   }
 
@@ -197,8 +206,6 @@ private:
   double _allStart;
   double _testTimeout;
 };
-
-static const QRegExp TEST_NAME_FILTER("(N\\d(tgs|hoot)*\\d{2})|(\\d{2})");
 
 void init()
 {
@@ -281,14 +288,9 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
     vTests.swap(vTestsToRun);
 }
 
-std::string filterTestName(const std::string& name)
-{
-  QString testName = QString::fromStdString(name).remove(TEST_NAME_FILTER);
-  return testName.replace("TestE", "Test").toStdString();
-}
-
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 {
+  name = filterTestName(name);
   const std::string testName = filterTestName(t->getName());
   //cout << testName << endl;
   if (name == testName)
@@ -313,8 +315,9 @@ CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
   return nullptr;
 }
 
-CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
+CppUnit::Test* findTest(const std::vector<TestPtr>& vTests, std::string name)
 {
+  name = filterTestName(name);
   for (size_t i = 0; i < vTests.size(); i++)
   {
     const std::string testName = filterTestName(vTests[i]->getName());
