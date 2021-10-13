@@ -133,7 +133,6 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
 void OsmGeoJsonReader::_parseGeoJson()
 {
   _generator = QString::fromStdString(_propTree.get("generator", string("")));
-  QString type = QString::fromStdString(_propTree.get("type", string("")));
   if (_propTree.not_found() != _propTree.find("bbox"))
   {
     /*Envelope env = */_parseBbox(_propTree.get_child("bbox"));
@@ -234,7 +233,7 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
         _useDataSourceIds = useOld;
       }
       else if ("way" == typeStr ||
-               "Polygon" == geoType ||
+               ("Polygon" == geoType && !_isMultiPoly(geometry)) ||
                "LineString" == geoType)
       {
         bool useOld = _useDataSourceIds;
@@ -247,7 +246,8 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
                "GeometryCollection" == geoType ||
                "MultiPoint" == geoType ||
                "MultiLineString" == geoType ||
-               "MultiPolygon" == geoType)
+               "MultiPolygon" == geoType ||
+               "Polygon" == geoType)  //  Polygon and _isMultiPoly()
       {
         bool useOld = _useDataSourceIds;
         if (id == "")
@@ -517,7 +517,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           relation->addElement(role, ElementType::Node, node_id);
           points++;
         }
-        else if (type == "Polygon" ||
+        else if ((type == "Polygon" && !_isMultiPoly(geo)) ||
                  type == "LineString")
         {
           //  Way
@@ -541,7 +541,8 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
         }
         else if (type == "MultiPoint" ||
                  type == "MultiLineString" ||
-                 type == "MultiPolygon")
+                 type == "MultiPolygon" ||
+                 type == "Polygon") //  Polygon and _isMultiPoly()
         {
           //  Also a Relation but cannot be a relation of relations
           long rid = _map->createNextRelationId();
@@ -551,7 +552,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
             _parseMultiPointGeometry(geo, r);
           else if (type == "MultiLineString")
             _parseMultiLineGeometry(geo, r);
-          else if (type == "MultiPolygon")
+          else if (type == "MultiPolygon" || type == "Polygon")
             _parseMultiPolygonGeometry(geo, r);
           _map->addRelation(r);
           relation->addElement(role, ElementType::Relation, rid);
@@ -590,7 +591,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
       relation->setType(MetadataTags::RelationMultilineString());
     _parseMultiLineGeometry(geometry, relation);
   }
-  else if (geo_type == "MultiPolygon")
+  else if (geo_type == "MultiPolygon" || geo_type == "Polygon")
   {
     if (relation->getType() == "")
       relation->setType(MetadataTags::RelationMultiPolygon());
@@ -659,6 +660,8 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(
   const boost::property_tree::ptree& geometry, const RelationPtr& relation) const
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
+  bool is_polygon = geometry.get("type", "") == "Polygon";
+  int position = 0;
   for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
@@ -680,7 +683,19 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(
       }
     }
     _map->addWay(way);
-    relation->addElement("", ElementType::Way, way_id);
+    //  Multi-polygons don't have defined roles per the GEOJSON spec
+    QString role = "";
+    if (is_polygon)
+    {
+      //  Polygons with multiple LinearRing coordinate arrays specify the first one as the "outer"
+      //  poly and all of the others as "inner" polys
+      if (position == 0)
+        role = MetadataTags::RelationOuter();
+      else
+        role = MetadataTags::RelationInner();
+    }
+    relation->addElement(role, ElementType::Way, way_id);
+    position++;
   }
 }
 
@@ -733,11 +748,11 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry) cons
 vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& geometry) const
 {
   vector<JsonCoordinates> results;
+  pt::ptree coordinates = geometry.get_child("coordinates");
   string type = geometry.get("type", "");
   if (type == "MultiPoint")
   {
     //  MultiPoint is a single array of coordinates (array)
-    pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates point;
@@ -749,7 +764,6 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   }
   else if (type == "MultiLineString")
   {
-    pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates line;
@@ -764,7 +778,6 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   }
   else if (type == "MultiPolygon")
   {
-    pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates polygon;
@@ -780,11 +793,44 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
       results.push_back(polygon);
     }
   }
+  else if (type == "Polygon")
+  {
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      JsonCoordinates polygon;
+      for (pt::ptree::const_iterator poly = it->second.begin(); poly != it->second.end(); ++poly)
+      {
+        std::shared_ptr<Coordinate> pCoord = _readCoordinate(poly->second);
+        if (pCoord)
+          polygon.push_back(*pCoord);
+      }
+      results.push_back(polygon);
+    }
+  }
   else
   {
     LOG_WARN("Unsupported multi JSON geometry type (" << type << ") when parsing GeoJSON");
   }
   return results;
+}
+
+bool OsmGeoJsonReader::_isMultiPoly(const boost::property_tree::ptree& geometry) const
+{
+  int poly_count = 0;
+  pt::ptree coordinates = geometry.get_child("coordinates");
+  for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+  {
+    int coordinate_count = 0;
+    for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+    {
+      std::shared_ptr<Coordinate> pCoord = _readCoordinate(array->second);
+      if (pCoord)
+        coordinate_count++;
+    }
+    if (coordinate_count > 0)
+      poly_count++;
+  }
+  return poly_count > 1;
 }
 
 void OsmGeoJsonReader::_addTags(const pt::ptree& item, const ElementPtr& element)
