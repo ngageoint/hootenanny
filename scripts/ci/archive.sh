@@ -30,6 +30,7 @@ automake --add-missing --copy
 
 # Make the archive.
 make -j"$(nproc)" clean
+make -j"$(nproc)"
 make -j"$(nproc)" archive
 
 # All done.
