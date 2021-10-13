@@ -126,13 +126,12 @@ private:
     for (size_t i = 0; i < cmds.size(); i++)
     {
       const QString cmdClassName = cmds[i];
-      LOG_VART(cmdClassName);
+      LOG_VARD(cmdClassName);
       std::shared_ptr<Command> command =
         Factory::getInstance().constructObject<Command>(cmdClassName);
       if (command->displayInHelp())
       {
         const QString commandName = command->getName();
-        LOG_VART(commandName);
         // Currently, there's only one josm command and we want it in the main list. So, just lump
         // it in with the core commands.
         if ((command->getType() == "core" || command->getType() == "josm"))
