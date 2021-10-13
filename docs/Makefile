@@ -92,8 +92,8 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	$(call buildAsciidoc)
 
 schema.asciidoc:
-	$$HOOT_HOME/bin/hoot schema -D tag.printing.format=asciidoc > schema.asciidoc
+	./GenerateSchemaOsmPlusTable.sh
 
 schema.png:
-	$$HOOT_HOME/bin/hoot schema schema.png
+	./GenerateSchemaGraphImage.sh
 	
