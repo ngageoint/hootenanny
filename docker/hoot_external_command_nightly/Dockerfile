@@ -25,12 +25,12 @@ RUN yum install -y hootenanny-core
 RUN pip3 install flask flask_shell2http flask-executor
 
 # Put the entrypoint & flask scripts into the container
-COPY scripts /scripts
+COPY scripts /home/scripts
 
-ENV FLASK_APP=/scripts/CommandsAcrossContainer.py
+ENV FLASK_APP=/home/scripts/CommandsAcrossContainer.py
 ENV FLASK_ENV=development
 
 RUN yum -y clean all && rm -rf /var/cache/yum
 
-WORKDIR /scripts
-ENTRYPOINT [ "/scripts/hoot_docker_entrypoint.sh" ]
+WORKDIR /home/scripts
+ENTRYPOINT [ "/home/scripts/hoot_docker_entrypoint.sh" ]

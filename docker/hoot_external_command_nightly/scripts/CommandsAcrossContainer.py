@@ -6,14 +6,14 @@ from flask_shell2http import Shell2HTTP
 app = Flask(__name__)
 
 executor = Executor(app)
-shell2http = Shell2HTTP(app=app, executor=executor, base_url_prefix="/scripts/")
+shell2http = Shell2HTTP(app=app, executor=executor, base_url_prefix="/home/scripts/")
 
 def my_callback_fn(context, future):
     #optional user-defined callback function
     print(context, future.result())
 
 #shell2http.register_command(endpoint="saythis", command_name="echo", callback_fn=my_callback_fn, decorators=[])
-shell2http.register_command(endpoint="RunCommandsAcrossContainers", command_name="/scripts/RunCommandsAcrossContainers.sh")
+shell2http.register_command(endpoint="RunCommandsAcrossContainers", command_name="/home/scripts/RunCommandsAcrossContainers.sh")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

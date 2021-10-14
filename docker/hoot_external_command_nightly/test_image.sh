@@ -7,5 +7,5 @@ set -e
 
 curl -s -X POST -H 'Content-Type: application/json' \
   -d '{"args": ["/hoot_data/ToyTestA.osm", "/hoot_data/ToyTestB.osm", "/hoot_data/ToyOutput.osm"]}' \
-  http://127.0.0.1:5000/scripts/RunCommandsAcrossContainers
+  http://127.0.0.1:5000/home/scripts/RunCommandsAcrossContainers
 
