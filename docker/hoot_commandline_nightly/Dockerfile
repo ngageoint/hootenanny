@@ -7,9 +7,9 @@ name="Hootenanny command line environment from nightly RPM" \
 vendor="Maxar"
 
 
-ENV container=docker 
-ENV LANG=en_US.UTF-8 
-ENV LC_ALL=en_US.UTF-8
+ENV container docker \
+ ENV LANG en_US.UTF-8 \
+ ENV LC_ALL en_US.UTF-8
 
 # A bit overkill but allows it to be changed during the build
 ARG DEV_NAME="dev"
@@ -27,10 +27,6 @@ RUN yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x
 
 # RUN yum -y update && \
 RUN yum install -y hootenanny-core
-RUN pip3 install flask flask_shell2http flask-executor
-
-ENV FLASK_APP=/home/${DEV_NAME}/scripts/docker/CommandsAcrossContainer.py
-ENV FLASK_ENV=development
 
 RUN yum -y clean all && rm -rf /var/cache/yum
 
@@ -40,8 +36,6 @@ RUN useradd -mUl -G wheel -u $DEV_UID -s /bin/bash $DEV_NAME \
   && chmod 0440 /etc/sudoers.d/$DEV_NAME \
   && groupmod --gid $DEV_GID $DEV_NAME
 
-COPY hootenanny/scripts/docker/hoot_docker_entrypoint.sh   /hoot_docker_entrypoint.sh
-
 USER $DEV_NAME
 WORKDIR /home/$DEV_NAME
-ENTRYPOINT [ "/hoot_docker_entrypoint.sh" ]
+
