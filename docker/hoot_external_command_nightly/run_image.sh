@@ -17,6 +17,7 @@ else
    -p 5000:5000 \
    --name=${CONTNAME} \
    --shm-size=1g \
+   -v ${PWD}:/hoot_data \
    ${IMGNAME}:latest
 fi
 
