@@ -1,9 +1,9 @@
 FROM centos:7
 
 LABEL \
-description="Container with user for running command line Hootenanny" \
+description="Container for running a Hootenanny command via flask" \
 maintainer="matthew.jackson@maxar.com" \
-name="Hootenanny command line environment from nightly RPM" \
+name="Hootenanny External Command" \
 vendor="Maxar"
 
 
