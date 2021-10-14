@@ -19,4 +19,3 @@ else
    ${IMGNAME}:latest
 fi
 
-#   -v ~:/home/dev \
