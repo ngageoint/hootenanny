@@ -41,7 +41,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -82,6 +81,7 @@ _removeRiverPartialMatchesAsWhole(true),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
+  _init();
 }
 
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
@@ -92,6 +92,18 @@ _removeRiverPartialMatchesAsWhole(true),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
+  _init();
+}
+
+void DiffConflator::_init()
+{
+  _linearFeatureSnapper.setConfiguration(conf());
+  // The ref snapped features must be marked to prevent their removal before changeset generation
+  // later on.
+  _linearFeatureSnapper.setMarkSnappedNodes(true);
+  _linearFeatureSnapper.setMarkSnappedWays(true);
+  _originalSnapWayStatuses = _linearFeatureSnapper.getSnapWayStatuses();
+  _originalSnapToWayStatuses = _linearFeatureSnapper.getSnapToWayStatuses();
 }
 
 void DiffConflator::_reset()
@@ -101,6 +113,7 @@ void DiffConflator::_reset()
   _map.reset();
   _tagChanges.reset();
   _numSnappedWays = 0;
+  _linearFeatureSnapper.setConfiguration(conf());
 
   _geometryChangesetStats = "";
   _tagChangesetStats = "";
@@ -231,7 +244,7 @@ void DiffConflator::apply(OsmMapPtr& map)
       // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
       // dumping the ref elements in the matches, or the roads we need to snap back to won't be
       // there anymore.
-      _numSnappedWays = _snapSecondaryLinearFeaturesBackToRef();
+      _numSnappedWays += _snapSecondaryLinearFeaturesBackToRef();
       MemoryUsageChecker::getInstance().check();
     }
 
@@ -531,35 +544,27 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
 
 long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
 {
-  UnconnectedWaySnapper linearFeatureSnapper;
-  linearFeatureSnapper.setConfiguration(conf());
-  // The ref snapped features must be marked to prevent their removal before changeset generation
-  // later on.
-  linearFeatureSnapper.setMarkSnappedNodes(true);
-  linearFeatureSnapper.setMarkSnappedWays(true);
-  const QStringList originalSnapWayStatuses = linearFeatureSnapper.getSnapWayStatuses();
-  const QStringList originalSnapToWayStatuses = linearFeatureSnapper.getSnapToWayStatuses();
-  const QStringList reversedSnapWayStatuses = originalSnapToWayStatuses;
-  const QStringList reversedSnapToWayStatuses = originalSnapWayStatuses;
+  const QStringList reversedSnapWayStatuses = _originalSnapToWayStatuses;
+  const QStringList reversedSnapToWayStatuses = _originalSnapWayStatuses;
   long numFeaturesSnapped = 0;
 
   // snapping with the default config
-  LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
-  linearFeatureSnapper.apply(_map);
-  LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
-  numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
+  LOG_INFO("\t" << _linearFeatureSnapper.getInitStatusMessage());
+  _linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << _linearFeatureSnapper.getCompletedStatusMessage());
+  numFeaturesSnapped += _linearFeatureSnapper.getNumFeaturesAffected();
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-initial");
 
   // We're going to do a little trick here and reverse the snap from/to statuses and snap again.
   // This has been seen as needed in production diff conflate workflows. We don't want to configure
   // diff to snap ref to ref or sec to sec and running these separately is the only way to get the
   // desired result.
-  linearFeatureSnapper.setSnapToWayStatuses(reversedSnapToWayStatuses);
-  linearFeatureSnapper.setSnapWayStatuses(reversedSnapWayStatuses);
-  LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
-  linearFeatureSnapper.apply(_map);
-  LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
-  numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
+  _linearFeatureSnapper.setSnapToWayStatuses(reversedSnapToWayStatuses);
+  _linearFeatureSnapper.setSnapWayStatuses(reversedSnapWayStatuses);
+  LOG_INFO("\t" << _linearFeatureSnapper.getInitStatusMessage());
+  _linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << _linearFeatureSnapper.getCompletedStatusMessage());
+  numFeaturesSnapped += _linearFeatureSnapper.getNumFeaturesAffected();
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-reversed");
 
   if (numFeaturesSnapped > 0)
@@ -579,12 +584,12 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     // This is getting a little kludgy, but needed to do one more round of snapping after the
     // joining to make some test output better. Only doing it in the default direction, as doing it
     // the reverse direction again had some adverse affects on the diff way snap tests.
-    linearFeatureSnapper.setSnapToWayStatuses(originalSnapToWayStatuses);
-    linearFeatureSnapper.setSnapWayStatuses(originalSnapWayStatuses);
-    LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
-    linearFeatureSnapper.apply(_map);
-    LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
-    numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
+    _linearFeatureSnapper.setSnapToWayStatuses(_originalSnapToWayStatuses);
+    _linearFeatureSnapper.setSnapWayStatuses(_originalSnapWayStatuses);
+    LOG_INFO("\t" << _linearFeatureSnapper.getInitStatusMessage());
+    _linearFeatureSnapper.apply(_map);
+    LOG_DEBUG("\t" << _linearFeatureSnapper.getCompletedStatusMessage());
+    numFeaturesSnapped += _linearFeatureSnapper.getNumFeaturesAffected();
     OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-final");
   }
 
@@ -844,7 +849,6 @@ void DiffConflator::_calcAndStoreTagChanges()
         // Skip this element, because it's not in the OG map.
         continue;
       }
-
       LOG_VART(pOldElement->getElementId());
       LOG_VART(pNewElement->getElementId());
 
@@ -853,7 +857,6 @@ void DiffConflator::_calcAndStoreTagChanges()
       // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we end
       // up adding a conflation type other than poi/poly which matches differing geometry types at
       // some point then this will need to be updated.
-
       if (match->getName() != PoiPolygonMatch().getName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
       {
@@ -931,14 +934,14 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   return Change(Change::Modify, pChangeElement);
 }
 
-void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const
+void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges)
 {
   LOG_TRACE("Adding changes to map...");
 
   while (pChanges->hasMoreChanges())
   {
     Change c = pChanges->readNextChange();
-    LOG_VART(c);
+    LOG_TRACE("Adding change: " << c);
 
     // add children
     if (ElementType::Way == c.getElement()->getElementType().getEnum())
@@ -947,6 +950,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
 
       // Add nodes if needed to.
       std::vector<long> nIds = pWay->getNodeIds();
+      LOG_VART(nIds);
       for (std::vector<long>::iterator it = nIds.begin(); it != nIds.end(); ++it)
       {
         if (!map->containsNode(*it))
@@ -966,8 +970,9 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation w/ tags doesn't seem to handle relations but that hasn't been a problem so
-      // far. Changed this to log statement that the relations are being skipped here for now.
+      // Diff conflation w/ tags wasn't ever set up to handle relations but that hasn't been a
+      // problem so far. Changed this to log statement that the relations are being skipped here
+      // for now.
       LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
       if (Log::getInstance().getLevel() <= Log::Trace)
       {
@@ -978,6 +983,28 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
     }
   }
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-adding-diff-tag-changes");
+
+  if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
+  {
+    // Need to do more way snapping since the original geometries being applied as a result of this
+    // may have destroyed some of our previous snaps.
+    _numSnappedWays += _snapSecondaryLinearFeaturesBackToTagChangedRef();
+  }
+}
+
+long DiffConflator::_snapSecondaryLinearFeaturesBackToTagChangedRef()
+{
+  long numFeaturesSnapped = 0;
+
+  _linearFeatureSnapper.setSnapToWayStatuses(QStringList("TagChange"));
+  _linearFeatureSnapper.setSnapWayStatuses(QStringList("Input2"));
+  LOG_INFO("\t" << _linearFeatureSnapper.getInitStatusMessage());
+  _linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << _linearFeatureSnapper.getCompletedStatusMessage());
+  numFeaturesSnapped += _linearFeatureSnapper.getNumFeaturesAffected();
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-tag-change-snapping");
+
+  return numFeaturesSnapped;
 }
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
