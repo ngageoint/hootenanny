@@ -30,6 +30,6 @@ namespace hoot
 {
 
 /** Matches ANSI text descriptions */
-QRegularExpression LogColor::ColorRegex("\\033\[[0-9|;]*m", QRegularExpression::OptimizeOnFirstUsageOption);
+QRegularExpression LogColor::ColorRegex("\\033\\[[0-9|;]*m", QRegularExpression::OptimizeOnFirstUsageOption);
 
 }
