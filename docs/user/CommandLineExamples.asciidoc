@@ -950,7 +950,7 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot type-similarity amenity=school landuse=residential
 -----
 
-==== Write the internal tag schema that Hootenanny uses to an CSV file:
+==== Write the internal tag schema that Hootenanny uses to a CSV file:
 
 -----
     hoot schema -D tag.printing.format=csv > schema.csv
