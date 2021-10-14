@@ -47,7 +47,7 @@ public:
 
   static QString className() { return "TagMerger"; }
 
-  TagMerger() : _caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive()) {}
+  TagMerger();
   virtual ~TagMerger() = default;
 
   /**
@@ -60,10 +60,10 @@ public:
    */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 
-  void setConfiguration(const Settings& conf) override
-  {
-    _caseSensitive = ConfigOptions(conf).getDuplicateNameCaseSensitive();
-  }
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
 
   QString toString() const override { return ""; }
 

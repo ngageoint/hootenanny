@@ -44,13 +44,19 @@ var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
 var oneToManyMatchEnabled = (hoot.get("railway.one.to.many.match") === 'true');
 // This contains the keys in a secondary feature that will trigger a one to many tag only transfer.
 var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
-// Get the keys that when found in a secondary feature will be transferred to a reference feature
-// when a one a one to many tag only transfer is triggered. Set the transfer keys on
-// SelectiveOverwriteTag1Merger, as that's the tag merger we'll use for this.
-hoot.set({'selective.overwrite.tag.merger.keys': hoot.get("railway.one.to.many.transfer.keys")});
 // Used to tag secondary features to identify them for removal post conflate; matches a var in
 // MetadataTags
 var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
+var transferAllTags = (hoot.get("railway.one.to.many.match.transfer.all.tags") === 'true');
+// Get the keys that when found in a secondary feature will be transferred to a reference feature
+// when a one a one to many tag only transfer is triggered.
+if (!transferAllTags)
+{
+  // Set the transfer keys on SelectiveOverwriteTag1Merger, as that's the tag merger we'll use for
+  // this if we're not transferring all tags.
+  hoot.set({'selective.overwrite.tag.merger.keys': hoot.get("railway.one.to.many.transfer.keys")});
+}
+hoot.set({'selective.overwrite.tag.merger.keys.exclude': oneToManySecondaryMatchTagKey});
 // Determines whether the secondary feature gets deleted from output during merging.
 var oneToManyDeleteSecondary = (hoot.get("railway.one.to.many.delete.secondary") === 'true');
 if (oneToManyDeleteSecondary)
@@ -304,11 +310,16 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   hoot.trace("Merging railways...");
   hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
-  var secondaryElementsIdsMerged = [];
-  var oneToManyMergeOccurred = false;
+
+  // Don't love setting these config options on the fly within the merge loop, but there's no other
+  // way right now to make this change.
+
   // If the current match is one to many, we're only bringing over tags from secondary to
   // reference in our specified list and we're doing no geometry merging.
   hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
+
+  var secondaryElementsIdsMerged = [];
+  var oneToManyMergeOccurred = false;
   hoot.trace("pairs.length: " + pairs.length);
   for (var i = 0; i < pairs.length; i++)
   {
@@ -369,12 +380,13 @@ exports.mergeSets = function(map, pairs, replaced)
   // merge call, then we shouldn't have any other types of merges to perform...not sure yet, though.
   if (!oneToManyMergeOccurred)
   {
+    // Go back to the original default tag merger.
+    hoot.set({'tag.merger.default': defaultTagMerger});
+
     // If its not a one to many match, business as usual...use the conflation behavior built into
     // the linear merger in use. Snap the ways in the second input to the first input. Use the
     // default tag merge method.
     hoot.trace("Performing linear merge...");
-    // Go back to the original default tag merger.
-    hoot.set({'tag.merger.default': defaultTagMerger});
     return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
   }
 };
