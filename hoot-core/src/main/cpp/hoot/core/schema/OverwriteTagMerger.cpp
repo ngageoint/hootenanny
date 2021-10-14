@@ -44,7 +44,7 @@ _swap(swap)
 
 Tags OverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
-  LOG_VART(_overwriteExcludeTagKeys);
+  LOG_VARW(_overwriteExcludeTagKeys);
   LOG_VART(_accumulateValuesTagKeys);
   LOG_VART(_caseSensitive);
 

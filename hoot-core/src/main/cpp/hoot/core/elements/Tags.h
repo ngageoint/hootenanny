@@ -386,6 +386,11 @@ public:
    * @return a list of key/value pairs
    */
   QStringList toKvps() const;
+  /**
+   * @brief toKeys returns the tags as a list of key strings
+   * @return a list of key strings
+   */
+  QStringList toKeys() const;
 
   /**
    * Returns true if the tags have any key in the input list

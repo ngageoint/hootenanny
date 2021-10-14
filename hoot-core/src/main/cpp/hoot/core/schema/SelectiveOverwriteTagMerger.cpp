@@ -46,6 +46,7 @@ void SelectiveOverwriteTagMerger::setConfiguration(const Settings& conf)
   TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setTagKeys(config.getSelectiveOverwriteTagMergerKeys());
+  setTagExcludeKeys(config.getSelectiveOverwriteTagMergerKeysExclude());
 }
 
 Tags SelectiveOverwriteTagMerger::mergeTags(
@@ -68,11 +69,18 @@ Tags SelectiveOverwriteTagMerger::mergeTags(
   LOG_VART(tagsToOverwriteWith);
   LOG_VART(tagsToBeOverwritten);
 
+  // Assume all keys to be transferred if the include list is empty. In that case, this ends up
+  // having the same behavior as OverwriteTagMerger.
+  if (_tagKeys.isEmpty())
+  {
+    _tagKeys = tagsToOverwriteWith.toKeys();
+  }
+
   for (int i = 0; i < _tagKeys.size(); i++)
   {
     const QString tagKey = _tagKeys.at(i);
     LOG_VART(tagKey);
-    if (tagsToOverwriteWith.contains(tagKey))
+    if (tagsToOverwriteWith.contains(tagKey) && !_tagKeysExclude.contains(tagKey))
     {
       tagsToBeOverwritten[tagKey] = tagsToOverwriteWith[tagKey];
     }
