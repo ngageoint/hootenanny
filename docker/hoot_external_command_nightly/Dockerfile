@@ -32,5 +32,5 @@ ENV FLASK_ENV=development
 
 RUN yum -y clean all && rm -rf /var/cache/yum
 
-WORKDIR /home/scripts
+WORKDIR /home
 ENTRYPOINT [ "/home/scripts/hoot_docker_entrypoint.sh" ]
