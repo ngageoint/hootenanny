@@ -176,10 +176,11 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
   return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(const QStringList& apps) const
+QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(
+  const QStringList& apps) const
 { 
   boost::property_tree::ptree requestObj;
-  requestObj.add_child("apps", *StringUtils::stringListToJsonStringArray(apps));
+  requestObj.add_child("apps", *StringUtils::stringListToJsonArray(apps));
 
   std::stringstream requestStrStrm;
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);

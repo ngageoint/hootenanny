@@ -55,6 +55,15 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
     return false;
   }
 
+  // Putting this check here to shortcircut the criterion. If the tag is explicitly set to flase other tests don't matter.
+  if (tags.isFalse("area"))
+  {
+    LOG_TRACE("Found an area tag with a false value. crit failed.");
+    result = false;
+
+    return result;
+  }
+
   LOG_VART(BuildingCriterion(_map).isSatisfied(tags, elementType));
   LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
   LOG_VART(tags.isTrue("area"));

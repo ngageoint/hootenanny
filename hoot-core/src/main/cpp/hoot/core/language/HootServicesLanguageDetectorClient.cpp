@@ -287,7 +287,7 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString& text)
   boost::property_tree::ptree requestObj;
   QByteArray textData = QUrl::toPercentEncoding(text);
   requestObj.put("text", QString(textData).toStdString());
-  requestObj.add_child("detectors", *StringUtils::stringListToJsonStringArray(_detectors));
+  requestObj.add_child("detectors", *StringUtils::stringListToJsonArray(_detectors));
 
   std::stringstream requestStrStrm;
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);

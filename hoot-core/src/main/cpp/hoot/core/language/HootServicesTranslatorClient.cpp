@@ -213,15 +213,16 @@ QString HootServicesTranslatorClient::_getRequestData(const QString& text) const
   const QString performExhaustiveSearchStr = _performExhaustiveSearch ? "true" : "false";
   requestObj.put("performExhaustiveTranslationSearchWithNoDetection",
     performExhaustiveSearchStr.toStdString());
-  requestObj.add_child("detectors", *StringUtils::stringListToJsonStringArray(_detectors));
-  requestObj.add_child("sourceLangCodes", *StringUtils::stringListToJsonStringArray(_sourceLangs));
+  requestObj.add_child("detectors", *StringUtils::stringListToJsonArray(_detectors));
+  requestObj.add_child("sourceLangCodes", *StringUtils::stringListToJsonArray(_sourceLangs));
 
   std::stringstream requestStrStrm;
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
   return QString::fromStdString(requestStrStrm.str());
 }
 
-void HootServicesTranslatorClient::_parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj)
+void HootServicesTranslatorClient::_parseResponse(
+  const std::shared_ptr<boost::property_tree::ptree>& replyObj)
 {
   _translatedText =
     QUrl::fromPercentEncoding(

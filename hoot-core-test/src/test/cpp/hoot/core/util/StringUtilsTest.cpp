@@ -56,9 +56,9 @@ public:
 
   void jsonParseTest()
   {
-    //The json string output from the prop tree will come back formatted with newlines and
-    //indenting, so leaving spaces between items here to match the output string after its
-    //simplified.
+    // The json string output from the prop tree will come back formatted with newlines and
+    // indenting, so leaving spaces between items here to match the output string after its
+    // simplified.
     const QString jsonInput =
       "{ \"apps\": [ { \"name\": \"TikaLanguageDetector\", \"description\": \"blah\", \"url\": \"https://tika.apache.org\" }, { \"name\": \"OpenNlpLanguageDetector\", \"description\": \"more blah\", \"url\": \"https://opennlp.apache.org\" } ] }";
     std::shared_ptr<boost::property_tree::ptree> propTree =

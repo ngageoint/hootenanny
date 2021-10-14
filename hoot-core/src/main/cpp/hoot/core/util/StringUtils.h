@@ -109,7 +109,7 @@ public:
    * @param stringList a list of strings
    * @return a Boost JSON property tree containing a string array
    */
-  static std::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+  static std::shared_ptr<boost::property_tree::ptree> stringListToJsonArray(
     const QStringList& stringList);
 
   /**

@@ -41,6 +41,10 @@ Only one of the following options can be passed to the command per invocation:
 * `--way-joiners`              - Displays available way joiners
 * `--way-snap-criteria`        - Displays available way criteria for snapping ways to each other
 
+A subset of command options support a JSON output format instead of the default text format. To 
+specify a JSON format, use `--json". If the option is specified and the command does not support
+JSON as an output format, an error will be displayed.
+
 All configuration options (-D <option>) added to this command must be added to before the specified 
 option. Example:
 

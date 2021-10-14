@@ -44,7 +44,9 @@ sudo bash -c "cat >> ${TOMCAT_CONFIG}/conf.d/hoot.conf" << EOF
 export GDAL_DATA=/usr/share/gdal
 export HOOT_HOME=${HOOT_HOME}
 export HOOT_WORKING_NAME=hootenanny
-export JAVA_HOME=/usr/lib/jvm
+# This script is only used in the development environment vm
+# that assumes a Java JDK is installed
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:$JAVA_HOME/jre/lib/amd64/server:${HOOT_HOME}/lib
 export PATH=${HOOT_HOME}/bin:${PATH}
 EOF
