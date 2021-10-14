@@ -81,7 +81,6 @@ _removeRiverPartialMatchesAsWhole(true),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
-  _init();
 }
 
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
@@ -92,7 +91,6 @@ _removeRiverPartialMatchesAsWhole(true),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
-  _init();
 }
 
 void DiffConflator::_init()
@@ -148,6 +146,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   LOG_INFO(msg);
 
   _reset();
+  _init();
   // Store the map, as we might need it for a tag diff later.
   _map = map;
 

@@ -246,7 +246,22 @@ private:
   std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2) const;
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map) const;
 
+  /**
+   * @brief _snapSecondaryLinearFeaturesBackToRef snaps secondary features that are part of the diff
+   * back to reference features before the reference features are dropped from the output.
+   * @return the number of ways snapped
+   */
   long _snapSecondaryLinearFeaturesBackToRef();
+  /**
+   * @brief _snapSecondaryLinearFeaturesBackToTagChangedRef snaps secondary features that are part
+   * of the diff back to reference features that had tag changes only applied to them (status=4)
+   * before the reference features are dropped from the output.
+   *
+   * This is necessary due to the fact that diff w/ tags may introduce different reference features
+   * into the diff after the snapping done with _snapSecondaryLinearFeaturesBackToRef if those
+   * reference features had tag changes.
+   * @return the number of ways snapped
+   */
   long _snapSecondaryLinearFeaturesBackToTagChangedRef();
 
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(

@@ -160,15 +160,15 @@ hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapp
   diff $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm
 
 echo ""
-echo "Checking conflation with road snapping w/ tags..."
+echo "Checking conflation with road snapping and w/ tags..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-with-tags-output.osm --differential --include-tags
-hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-tags-output.osm $INPUT_DIR/snapped-output.osm || \
-  diff $OUTPUT_DIR/snapped-with-tags-output.osm $INPUT_DIR/snapped-output.osm
+hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-tags-output.osm $INPUT_DIR/snapped-with-tags-output.osm || \
+  diff $OUTPUT_DIR/snapped-with-tags-output.osm $INPUT_DIR/snapped-with-tags-output.osm
 
 echo ""
 echo "Checking conflation with road snapping and keeping ref data..."
