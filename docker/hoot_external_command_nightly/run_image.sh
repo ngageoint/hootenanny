@@ -14,6 +14,7 @@ if [[ "$(docker images -q ${IMGNAME}:latest)" == "" ]]; then
 else
   # Add more -v directories as needed
   docker run --rm -it \
+   -p 5000:5000 \
    --name=${CONTNAME} \
    --shm-size=1g \
    ${IMGNAME}:latest
