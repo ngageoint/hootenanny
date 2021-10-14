@@ -126,7 +126,7 @@ private:
     for (size_t i = 0; i < cmds.size(); i++)
     {
       const QString cmdClassName = cmds[i];
-      LOG_VARD(cmdClassName);
+      LOG_VART(cmdClassName);
       std::shared_ptr<Command> command =
         Factory::getInstance().constructObject<Command>(cmdClassName);
       if (command->displayInHelp())
