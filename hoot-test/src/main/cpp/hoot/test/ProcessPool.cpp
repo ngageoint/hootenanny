@@ -26,16 +26,15 @@
  */
 #include "ProcessPool.h"
 
+// Hoot
+#include <hoot/core/util/StringUtils.h>
+
 #include <hoot/js/v8Engine.h>
 
+// std
 #include <iostream>
 
 using namespace std;
-
-
-JobQueue::JobQueue()
-{
-}
 
 bool JobQueue::empty()
 {
@@ -57,7 +56,7 @@ QString JobQueue::pop()
 {
   _mutex.lock();
   QString job;
-  //  Don't try to erase a job from an empty queue
+  //  Don't try to erase a job from an empty queue.
   if (!_jobs.empty())
   {
     job = *_jobs.begin();
@@ -75,36 +74,31 @@ void JobQueue::push(const QString& job)
   _mutex.unlock();
 }
 
-ProcessThread::ProcessThread(int threadId,
-                             int maxThreads,
-                             bool showTestName,
-                             bool suppressFailureDetail,
-                             bool printDiff,
-                             bool disableFailureRetries,
-                             double waitTime,
-                             QMutex* outMutex,
-                             JobQueue* parallelJobs,
-                             JobQueue* casesJobs,
-                             JobQueue* serialJobs)
-  : _threadId(threadId),
-    _maxThreads(maxThreads),
-    _showTestName(showTestName),
-    _suppressFailureDetail(suppressFailureDetail),
-    _printDiff(printDiff),
-    _disableFailureRetries(disableFailureRetries),
-    _waitTime(waitTime),
-    _outMutex(outMutex),
-    _parallelJobs(parallelJobs),
-    _casesJobs(casesJobs),
-    _serialJobs(serialJobs),
-    _failures(0),
-    _proc()
+QString JobQueue::toString() const
 {
+  return
+    "Name: " + _name + "; Size: " + QString::number(_jobs.size()) + "; Jobs: " +
+    hoot::StringUtils::setToString(_jobs);
 }
 
-int ProcessThread::getFailures()
+ProcessThread::ProcessThread(
+  int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
+  bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+  JobQueue* casesJobs, JobQueue* serialJobs) :
+_threadId(threadId),
+_maxThreads(maxThreads),
+_showTestName(showTestName),
+_suppressFailureDetail(suppressFailureDetail),
+_printDiff(printDiff),
+_disableFailureRetries(disableFailureRetries),
+_waitTime(waitTime),
+_outMutex(outMutex),
+_parallelJobs(parallelJobs),
+_casesJobs(casesJobs),
+_serialJobs(serialJobs),
+_failures(0),
+_proc()
 {
-  return _failures;
 }
 
 void ProcessThread::resetProcess()
@@ -162,6 +156,8 @@ void ProcessThread::processJobs(JobQueue* queue)
       //  Empty strings can be ignored
       if (test.isEmpty())
         continue;
+      //std::cout << "Running test: " << test.toStdString() << " from queue: "
+      //          << queue->getName().toStdString() << "..." << std::endl;
       _proc->write(QString("%1\n").arg(test).toLatin1());
       //  Read all of the output
       QString output;
@@ -248,7 +244,7 @@ _failed(0)
 {
   _parallelJobs.setName("parallel");
   _serialJobs.setName("serial");
-  _caseJobs.setName("cases");
+  _caseJobs.setName("case");
 
   for (int i = 0; i < nproc; ++i)
   {
@@ -269,6 +265,23 @@ ProcessPool::~ProcessPool()
     _threads[i]->quit();
     _threads[i]->wait();
   }
+}
+
+QString ProcessPool::jobQueueToString(const QString& name) const
+{
+  if (name == "parallel")
+  {
+    return _parallelJobs.toString();
+  }
+  else if (name == "serial")
+  {
+    return _serialJobs.toString();
+  }
+  else if (name == "case")
+  {
+    return _caseJobs.toString();
+  }
+  return "";
 }
 
 void ProcessPool::startProcessing()

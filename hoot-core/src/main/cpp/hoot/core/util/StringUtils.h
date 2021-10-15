@@ -343,6 +343,22 @@ public:
     return out;
   }
 
+  /**
+   * @brief setToString converts a string set to a delimited string
+   * @param set the set to generate a string for
+   * @return a string
+   */
+  static QString setToString(const std::set<QString>& set)
+  {
+    QString out;
+    for (std::set<QString>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
+    {
+      out += (*itr) + ",";
+    }
+    out.chop(1);
+    return out;
+  }
+
 private:
 
   static QString _splitAndRemoveAtIndex(

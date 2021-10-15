@@ -40,12 +40,13 @@ namespace hoot
 
 ConflateCaseTestSuite::ConflateCaseTestSuite(
   const QString& dir, bool suppressFailureDetail, bool printValidationReportDiff,
-  bool hideDisableTests) :
+  bool hideDisableTests, bool allowSerial) :
 AbstractTestSuite(dir),
 _hideDisableTests(hideDisableTests),
 _numTests(0),
 _suppressFailureDetail(suppressFailureDetail),
-_printValidationReportDiff(printValidationReportDiff)
+_printValidationReportDiff(printValidationReportDiff),
+_allowSerial(allowSerial)
 {
   QStringList confs;
   loadDir(dir, confs);
@@ -58,10 +59,15 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   {
     return;
   }
+  // If we're not set up to run serial jobs for this invocation, kick out of this method.
+  if (!_allowSerial && dir.contains("serial"))
+  {
+    //std::cout << "Skipping: " << dir.toStdString() << std::endl;
+    return;
+  }
+
   QDir d(dir);
-
   QFileInfo fi(d.absoluteFilePath("Config.conf"));
-
   if (fi.exists())
   {
     const QString testConfFile = fi.absoluteFilePath();
@@ -72,18 +78,16 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 
   // a list of strings paths to ignore if this string is found in the path
   QStringList ignoreList;
-
 # ifndef HOOT_HAVE_SERVICES
   ignoreList << "hoot-services";
 # endif
 
-  QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+  const QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   for (int i = 0; i < dirs.size(); i++)
   {
-    QString path = d.absoluteFilePath(dirs[i]);
+    const QString path = d.absoluteFilePath(dirs[i]);
 
     bool ignore = false;
-
     for (int i = 0; i < ignoreList.size(); i++)
     {
       if (path.contains(ignoreList[i]))
@@ -109,7 +113,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
     if (QFileInfo(d, "Input1.osm").exists() || QFileInfo(d, "Input2.osm").exists() ||
         QFileInfo(d, "Output.osm").exists())
     {
-      throw HootException("Please put conflate test cases in a directory w/o sub directories.");
+      throw HootException("Please put conflate test cases in a directory without subdirectories.");
     }
   }
   else
@@ -118,6 +122,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
     // test a chance to override it when necessary.
     confs.prepend(ConfPath::search("Testing.conf"));
 
+    //std::cout << "Adding test: " << dir.toStdString() << "..." << std::endl;
     addTest(new ConflateCaseTest(d, confs, _suppressFailureDetail, _printValidationReportDiff));
     _numTests++;
   }
