@@ -31,11 +31,33 @@ The `conflate` command conflates two maps into a single map.
 === Usage
 
 --------------------------------------
-hoot conflate (input1) (input2) (output) [--changeset-stats geometry-stats-filename tags-stats-filename] \
-  [--differential] [--include-tags] [--osmApiDatabaseUrl url] [--separate-output] [--stats filename] 
+hoot conflate [-C workflowConfigFile] [-C algorithmConfigFile] (input1) (input2) (output) \
+  [--changeset-stats geometry-stats-filename tags-stats-filename] [--differential] [--include-tags] \
+  [--osmApiDatabaseUrl url] [--separate-output] [--stats filename] 
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation[Examples]
+
+=== Configuration
+
+Default configuration files custom tailored to certain conflation workflows are available in the 
+`conf/core` directory:
+* `AttributeConflation.conf` - Configures the Attribute Conflation Workflow where attributes are 
+passed from input2 features to input1 features.
+* `AverageConflation.conf` - Configures the Average Conflation Workflow where geometries are 
+averaged together during merging (currently applies to linear features only).
+* `DifferentialConflation.conf` - Configures the Differential Conflation Workflow where the 
+conflated output consists of features or tags from input2 not found in input1. 
+* `ReferenceConflation.conf` - Default configuration where input2 features are merged into input1 
+features giving preference to input1 features. If no workflow configuration file is specified, 
+conflation is configured for the Reference Conflation Workflow.
+
+When performing road conflation, the road conflation algorithm used can be switched by specifying 
+either of the following configuration files (the Network algorithm currently only operates on roads):
+* `NetworkAlgorithm.conf`  - Uses a graph matching approach to match networks of features together.
+* `UnifyingAlgorithm.conf` - Uses a machine learning based approach to match features together.
+
+You can create your own configuration files to support new conflation workflows.
 
 === Feature Tag Filtering
 

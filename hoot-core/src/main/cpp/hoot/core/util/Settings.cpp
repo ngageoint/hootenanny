@@ -382,7 +382,12 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
 
 QStringList Settings::getList(const QString& key) const
 {
-  QStringList list = getString(key).split(";");
+  QString val = getString(key);
+  QStringList list;
+  if (!val.trimmed().isEmpty())
+  {
+    list = val.split(";");
+  }
   _updateClassNamesInList(list);
   return list;
 }
