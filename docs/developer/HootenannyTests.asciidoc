@@ -701,22 +701,25 @@ together:
 ./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
 ----------------
 
-The test coverage reports will be output to _$HOOT_HOME/coverage_.
+**The test coverage reports will be output to `$HOOT_HOME/coverage`.**
 
 Additional notes:
+
 * Running tests `--with-coverage` may signficantly slow down their runtime and increase their memory
 usage. Therefore, its recommended to use `--with-coverage` only when you need to generate a test
 coverage report, and you may need to use a lower `--parallel` test count in conjunction with it.
-* To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before 
-running 'make coverage' for the Hootenanny Core code or you will get incomplete results. The Java 
-Web Services 'make services-coverage' command doesn't actually require 'make test' to be run 
-beforehand since it is done automatically, but if you run 'make coverage' when generating coverage 
-reporting using the `--with-services` configuration option, you should always run 'make test' 
+
+* To get a code coverage report for *all* Hootenanny code, you *must* run `make test-all` before 
+running `make coverage` for the Hootenanny Core code or you will get incomplete results. The Java 
+Web Services 'make services-coverage' command doesn't actually require `make test` to be run 
+beforehand since it is done automatically, but if you run `make coverage` when generating coverage 
+reporting using the `--with-services` configuration option, you should always run `make test`
 beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+
 * For Hootenanny Core code coverage reporting, to get a totally accurate coverage report you need to 
-run with all compile configuration options enabled (--with-rnd, --with-services, etc.), and either 
-run 'make test-all', or if you don't want to run the Java web services tests then run something 
-like: 'HootTest --glacial --parallel && make translations-test'.
+run with all compile configuration options enabled (--with-services, etc.), and either 
+run `make test-all`, or if you don't want to run the Java web services tests then run something 
+like: `HootTest --glacial --parallel && make translations-test`.
 
 ==== Test Writing Guidelines
 
