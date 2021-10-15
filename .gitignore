@@ -34,7 +34,6 @@ DbSchema.sql
 docs/*.epub
 docs/*.pdf
 docs/*-docinfo.xml
-docs/*.png
 docs/**/__*.png
 docs/.*
 docs/*.html
@@ -111,7 +110,7 @@ translations-local
 *.pro.user*
 progress/
 .scannerwork/
-schema.dot
+docs/schema.dot
 src/proto/*.pb.cc
 src/proto/*.pb.h
 stamp-h1

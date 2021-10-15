@@ -55,22 +55,6 @@ function initialize()
   // Print the tagList
   switch (hoot.Settings.get('tag.printing.format'))
   {
-  //         case 'html':
-  //             dumpHtmlTags(tagList);
-  //             break;
-  //
-  //         case 'asciidoc':
-  //             dumpAsciidocTags(tagList);
-  //             break;
-  //
-  //         case 'json':
-  //             dumpJsonTags(tagList);
-  //             break;
-  //
-  //         case 'redmine':
-  //             dumpRedmineTags(tagList);
-  //             break;
-  //
   case 'csv':
   default:
     dumpCsvTags(schema);

@@ -24,7 +24,7 @@ AC_DEFUN([JOSM_INIT],[
 
   AC_LANG_POP
 
-  AC_DEFINE([HAVE_JOSM], [1], [Include JOSM])
+  AC_DEFINE([HAS_JOSM], [1], [Include JOSM])
   AC_SUBST(HAS_JOSM, "josm")
   echo "JOSM functions enabled."
 

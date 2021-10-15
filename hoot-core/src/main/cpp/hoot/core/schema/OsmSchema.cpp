@@ -1567,7 +1567,7 @@ OsmSchema& OsmSchema::getInstance()
     _theInstance.reset(new OsmSchema());
     _theInstance->loadDefault();
 
-    //write this out to a temp file instead of to the log due to its size
+    // Write this out to a temp file instead of to the log due to its size.
     if (Log::getInstance().getLevel() == Log::Trace)
     {
       const QString graphvizPath = "tmp/schema-graphviz";
