@@ -154,11 +154,6 @@ for the combined `AddressConflateTest`. (related: #4908)
 * Possibly there is a way to load and work with a reduced subset of libpostal data for testing 
 purposes.
 
-*_Additional Details_*
-
-* Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
-* Tests which use the single test OSM API database instance must be run in series.
-
 ===== Command Line Tests
 
 The C++ portion of Hootenanny exposes functionality via a command line interface. This command line
@@ -233,18 +228,18 @@ Running HootTest will give an error similar to the one below:
 ----------------
 [hoot2] yubyub:~/dg/src/hoot2$ HootTest --current
 .18:27:35.009 WARN  src/main/cpp/hoot/test/ScriptTest.cpp(130) - STDOUT or STDERR don't exist for \
-/home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh
+dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh
 *************************
   This can be resolved by reviewing the output for correctness and then
   creating a new baseline. E.g.
   verify:
-    less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
-    less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first
+    less dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
+    less dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first
   Make a new baseline:
-    mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first \
-/home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout
-    mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first \
-/home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr
+    mv dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first \
+dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout
+    mv dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first \
+dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr
 *************************
 
 F
@@ -259,8 +254,8 @@ Elapsed: 0.126034
 As the error message suggests you need to verify the output and then create a new baseline:
 -------------
 #  verify. Don't skip this!
-less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
-less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first
+less dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
+less dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first
 -------------
 
 In this case we goofed in the script and revealed this error in the Example.sh.stderr.first file:
@@ -277,16 +272,16 @@ When you rerun `HootTest --current` you'll see the .osm file in the .stdout.firs
 everything looks good create the new baseline.
 ------------
 # Make a new baseline:
-mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first \
-/home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout
-mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first \
-/home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr
+mv dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first \
+dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout
+mv dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first \
+dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr
 ------------
 
 Now run the test again and you should get something like:
 -------------
 [hoot2] yubyub:~/dg/src/hoot2$ HootTest --current
-./home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh - 0.146189
+dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh - 0.146189
 
 Elapsed: 0.146274
 -------------
@@ -313,14 +308,12 @@ verified.
 any configuration option customization necessary for the test after it. 
 * Most tests should run at the `--warn` log level by default.
 * Tests making use of the Hooteanny API services database should start with the prefix `Service`.
-* Tests testing code in `hoot-rnd` should start with the prefix `Rnd`.
-* Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
-* Tests which use the single test OSM API database instance or have any other reason to run in 
-isolation should be run serially by placing them in the "serial" folder.
+* Tests which use the single test OSM API database instance should be run serially by placing them 
+in the "serial" folder.
 * If you write a class that uses caching, make the cache size configurable and set the size to the 
 lowest possible value in order for tests to pass within `Testing.conf`.
 
-===== Case Tests (Micro Conflate)
+===== Conflate Case Tests (Micro Conflate Tests)
 
 Frequently it is desirable to test one aspect of the conflation routines. E.g. did the names get
 merged properly? Did two buildings get matched/merged? etc. The micro conflate tests are designed
@@ -684,7 +677,7 @@ the Hootenanny Core code, 'make test' must be made explicit as described below.
 
 To generate a report for just the Hootenanny Core code:
 ----------------
-./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && HootTest --glacial --parallel && make -j$(nproc) core-coverage
+./configure --with-services --with-coverage && make clean-coverage && make -j$(nproc) && HootTest --glacial --parallel && make -j$(nproc) core-coverage
 ----------------
 
 To generate a report for just the Hootenanny Java web services code:
@@ -695,7 +688,7 @@ To generate a report for just the Hootenanny Java web services code:
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code 
 together:
 ----------------
-./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
+./configure --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
 ----------------
 
 The test coverage reports will be output to _$HOOT_HOME/coverage_.
@@ -711,7 +704,7 @@ beforehand since it is done automatically, but if you run 'make coverage' when g
 reporting using the `--with-services` configuration option, you should always run 'make test' 
 beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
 * For Hootenanny Core code coverage reporting, to get a totally accurate coverage report you need to 
-run with all compile configuration options enabled (--with-rnd, --with-services, etc.), and either 
+run with all compile configuration options enabled (--with-services, etc.), and either 
 run 'make test-all', or if you don't want to run the Java web services tests then run something 
 like: 'HootTest --glacial --parallel && make translations-test'.
 
