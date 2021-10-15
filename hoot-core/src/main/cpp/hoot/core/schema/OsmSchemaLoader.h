@@ -27,6 +27,7 @@
 #ifndef OSM_SCHEMAFILELOADER_H
 #define OSM_SCHEMAFILELOADER_H
 
+// hoot
 #include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
@@ -35,6 +36,7 @@ namespace hoot
 class OsmSchemaLoader
 {
 public:
+
   static QString className() { return "OsmSchemaLoader"; }
 
   OsmSchemaLoader() = default;

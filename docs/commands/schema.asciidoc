@@ -3,12 +3,19 @@
 
 === Description
 
-The `schema` command prints documentation for the OSM tag schema in use.
+The `schema` command generates documentation for the OSM tag schema in use.
+
+Supported textual formats are: csv, html, or asciidoc. The selected format is controlled by the 
+`tag.printing.format` configuration option. Textual format is displayed to the screen and can be 
+routed to file output when the command is executed. 
+
+Supported image formats are: png or svg. Specifying an image format writes a graph representation 
+of the schema to an image file.
 
 === Usage
 
 --------------------------------------
-hoot schema
+hoot schema [output] 
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-internal-tag-schema-that-hootenanny-uses[Examples]
@@ -16,4 +23,5 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 === See Also
 
 * <<hootuser, SchemaFiles>>
+* `tag.printing.*` configuration options
 

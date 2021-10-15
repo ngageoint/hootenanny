@@ -19,6 +19,9 @@ define buildAsciidoc
 	@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
 endef
 
+# Note that we're not calling the schema documentation targets here, as it breaks an archive job. 
+# See the "Core Schema" section under "Documentation" in the Developer Guide for more information.
+
 all: \
 	Hootenanny\ -\ User\ Guide.pdf \
 	CoreAPI
@@ -36,8 +39,11 @@ $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-f
 	rm -f $(HOME)/.asciidoc/filters/gnuplot/*
 	cp filters/gnuplot/* $(HOME)/.asciidoc/filters/gnuplot/
 
-clean:
-	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI
+clean: clean-schema
+	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI schema.asciidoc 
+	
+clean-schema:
+	rm -f schema.png schema.dot
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
@@ -53,7 +59,7 @@ tmp/rules-template-doxygen: RulesTemplate.dox ../rules/template/*
 # This target builds the the core API documentation with doxygen. Tried without success to embed the 
 # Core API docs into asciidoc via XML, like the Javascript API is done, but it errors out with a 
 # non-descript message during the conversion from xml to asciidoc. May be worth trying to fix at 
-# some point. Going with HTML instead for now.
+# some point. Going with standalone HTML that isn't added to the pdf instead for now.
 CoreAPI: developer/CoreAPI/html/index.html
 
 developer/CoreAPI/html/index.html: CoreAPI.dox
@@ -89,3 +95,9 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	user/*.asciidoc
 	$(call buildAsciidoc)
 
+schema.asciidoc:
+	hoot schema -D tag.printing.format=asciidoc > schema.asciidoc
+
+schema.png:
+	hoot schema schema.png
+	

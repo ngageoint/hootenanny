@@ -139,6 +139,10 @@ SERVICES_INIT()
 m4_include([m4/josm.m4])
 JOSM_INIT()
 
+# graphviz is needed to generate the schema graph image.
+m4_include([m4/graphviz.m4])
+GRAPHVIZ_INIT()
+
 # Include UI tests
 m4_include([m4/ax_compare_version.m4])
 m4_include([m4/ruby.m4])

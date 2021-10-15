@@ -4,16 +4,16 @@ Running diff...
 
 Running diff changeset with tags...
 
-20:21:39.768 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
-20:21:41.717 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:33:08.293 WARN   ...core/elements/VersionUtils.cpp(  59) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:33:09.850 WARN   ...core/elements/VersionUtils.cpp(  59) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
 
 Running diff with tags...
 
 
 Running diff changeset with tags, separate outputs...
 
-20:21:45.422 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
-20:21:47.355 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:33:12.984 WARN   ...core/elements/VersionUtils.cpp(  59) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:33:14.581 WARN   ...core/elements/VersionUtils.cpp(  59) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
 
 Checking differential output...
 
@@ -55,6 +55,9 @@ Checking conflation of empty files...
 
 
 Checking conflation with road snapping...
+
+
+Checking conflation with road snapping and w/ tags...
 
 
 Checking conflation with road snapping and keeping ref data...

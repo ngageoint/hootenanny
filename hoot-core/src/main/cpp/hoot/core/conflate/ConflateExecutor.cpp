@@ -552,8 +552,8 @@ void ConflateExecutor::_writeStats(
 {
   _progress->set(
     _getJobPercentComplete(_currentTask - 1),
-    "Calculating output data statistics for: ..." + FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) +
-    "...");
+    "Calculating output data statistics for: ..." +
+    FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) + "...");
   CalculateStatsOp outputCso("output map", true);
   // We only want statistics generated that correspond to the feature types being conflated.
   outputCso.setFilter(SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false));

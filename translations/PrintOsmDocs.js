@@ -57,7 +57,6 @@ hoot.require('ggdm30_rules');
 hoot.require('fcode_common');
 hoot.require('config');
 
-
 // The initialize function gets called once BEFORE the translateToXXX functions
 // We are hijacking this function to print out documentation
 function initialize()
@@ -163,10 +162,6 @@ function initialize()
     dumpCsvTags(tagList);
     break;
 
-  case 'redmine':
-    dumpRedmineTags(tagList);
-    break;
-
   case 'asciidoc':
   default:
     dumpAsciidocTags(tagList);
@@ -182,13 +177,11 @@ function finalize()
   // print('In the finalize function');
 }
 
-
 // We are not using this any more.
 function translateToOsm(attrs, layerName, geometryType)
 {
   return null;
 }
-
 
 // Adds values to the tagList lookup table
 function createLookup(tagList, one2one, source)
@@ -260,7 +253,6 @@ function createLookup(tagList, one2one, source)
     }
   }
 } // End createLookup
-
 
 // Add Text and Number tags to the tagList lookup table
 // Same code as the "standard" createLookup() function
@@ -376,7 +368,6 @@ function dumpHtmlTags(tagList)
 
 } // End dumpHtmlTags
 
-
 // Dump the tagList out in asciidoc format.
 function dumpAsciidocTags(tagList)
 {
@@ -390,8 +381,9 @@ function dumpAsciidocTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  print('Hootennanny OSM+ Tags');
-  print('=====================');
+  print('');
+  print('== Hootennanny OSM+ Tags');
+  print('');
   print('Generated: ' + Date());
   print('');
 
@@ -425,60 +417,9 @@ function dumpAsciidocTags(tagList)
     print('');
     print('');
   }
-
+  
+  print('');
 } // End dumpAsciidocTags
-
-
-// Dump the tagList out in Redmine format.
-function dumpRedmineTags(tagList)
-{
-  var desc = '';
-  var shortTag = '';
-  var source = '';
-  var tag = '';
-  var val = '';
-  var value = '';
-
-  var shortKeys = Object.keys(tagList);
-  shortKeys.sort();
-
-  print('h1. Hootennanny OSM+ Tags');
-  print('');
-  print('Generated: ' + Date());
-  print('');
-  print('----');
-  print('');
-
-  for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
-  {
-    shortTag = shortKeys[i];
-
-    print('h2. ' + shortTag);
-    print('');
-    print('|_.Key| _.Value|_.Comment|_.Source|');
-
-    var extraKeys = Object.keys(tagList[shortTag]);
-    extraKeys.sort();
-
-    for (var j = 0, elen = extraKeys.length; j < elen; j++)
-    {
-      val = extraKeys[j];
-
-      // Just to make things a bit clearer while building the print statement
-      desc = tagList[shortTag][val]['desc'];
-      source = tagList[shortTag][val]['src'];
-      tag = tagList[shortTag][val]['tag'];
-      value = tagList[shortTag][val]['value'];
-
-      print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source + ' |');
-    }
-
-    print('');
-    print('----');
-    print('');
-  }
-} // End dumpRedmineTags
-
 
 // Dump the tagList out as a Large Ugly JSON Blob.
 function dumpJsonTags(tagList)
@@ -486,7 +427,6 @@ function dumpJsonTags(tagList)
   print('JSON format is not working yet');
   print(tagList.toString());
 } // End dumpJsonTags
-
 
 // Dump the tagList out in CSV format.
 function dumpCsvTags(tagList)

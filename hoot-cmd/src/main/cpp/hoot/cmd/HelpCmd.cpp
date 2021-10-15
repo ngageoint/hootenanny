@@ -132,7 +132,6 @@ private:
       if (command->displayInHelp())
       {
         const QString commandName = command->getName();
-        LOG_VART(commandName);
         // Currently, there's only one josm command and we want it in the main list. So, just lump
         // it in with the core commands.
         if ((command->getType() == "core" || command->getType() == "josm"))

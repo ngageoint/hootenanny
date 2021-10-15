@@ -29,8 +29,9 @@ secondary rail identifies how many tracks it represents. The configuration optio
 which attributes identify the track count is `railway.one.to.many.identifying.keys`. Any secondary
 feature that has at least one tag key with the keys from that option will be eligible for one to 
 many matching. Once such a feature is identified, a record is kept of how many matches it is 
-involved in with other reference rail features. Once that match limit is reached, no more matching
-will occur for the secondary feature.
+involved in with other reference rail features. In the initial version of the algorithm, once that 
+match limit was reached, no more matching would occur for the secondary feature. In practice with
+one to many matches this caused variability in the output, so the limit currently is not enforced.
 
 ==== Merging
 
@@ -78,6 +79,11 @@ Combined Correct = number of correct matches + number of unnecessary reviews
 
 The initial 80% conflation accuracy goal was nearly achieved, but since only one test dataset was 
 utilized success cannot be declared.
+
+===== One to Many
+
+No manual match data for the one to many workflow are available yet, so there are no test results to 
+report for the workflow.
 
 ==== Future Work
 

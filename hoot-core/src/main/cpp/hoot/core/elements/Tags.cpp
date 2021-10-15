@@ -862,6 +862,15 @@ QStringList Tags::toKvps() const
   return kvps;
 }
 
+QStringList Tags::toKeys() const
+{
+  QStringList keys;
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+    keys.append(it.key());
+
+  return keys;
+}
+
 bool Tags::hasAnyKey(const QStringList& keys) const
 {
   for (int i = 0; i < keys.size(); i++)

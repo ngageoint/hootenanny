@@ -107,15 +107,16 @@ public:
     LOG_STATUS(
       "Changeset applied in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
-    return 0;
+    return _success ? 0 : -1;
   }
 
 private:
 
   std::shared_ptr<Progress> _progress;
+  bool _success = true;
 
   void _writeXmlChangeset(
-    const bool showProgress, const bool showStats, const QStringList& args) const
+    const bool showProgress, const bool showStats, const QStringList& args)
   {
     //  Get the endpoint URL
     const QString urlStr = args[args.size() - 1];
@@ -176,6 +177,7 @@ private:
       LOG_ERROR(
         QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
       writer.writeErrorFile();
+      _success = false;
     }
 
     //  Output the stats if requested

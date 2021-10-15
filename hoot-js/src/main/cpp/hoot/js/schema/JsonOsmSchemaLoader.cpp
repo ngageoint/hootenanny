@@ -60,7 +60,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
     throw HootException("Error opening JSON file: " + path);
   }
 
-  // maintain a stack of file locations so imports happen properly
+  // Maintain a stack of file locations so imports happen properly.
   _baseDir.append(QDir(path + "/..").absolutePath() + "/");
   _deps.insert(path);
   QByteArray ba = fp.readAll();

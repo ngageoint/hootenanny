@@ -163,7 +163,7 @@ Status::Type Status::fromString(QString statusString)
     return Conflated;
   }
   // This is used by the DiffConflator.
-  else if (statusString == "TagChange" || statusString == QString::number(Status::TagChange))
+  else if (statusString == "tagchange" || statusString == QString::number(Status::TagChange))
   {
     return TagChange;
   }

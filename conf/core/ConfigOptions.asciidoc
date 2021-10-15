@@ -559,9 +559,9 @@ recognized during conflation.
 * Default Value: `false`
 
 If enabled, during building merging conflation will look for a "changed" building defined as a
-matched building pair where their Intersection over Union value is greater than zero but falls below
-the value specified in building.changed.review.iou.threshold. If the pair is classified as "changed"
-they will be marked for review.
+matched building pair where their Intersection Over Union value (IoU) is greater than zero but falls
+below the value specified in building.changed.review.iou.threshold. If the pair is classified as
+"changed" they will be marked for review.
 
 === building.changed.review.iou.threshold
 
@@ -4486,6 +4486,15 @@ having a key matching that in `railway.one.to.many.identifying.keys`. Only tag m
 tags identified in `railway.one.to.many.transfer.keys` will be performed with no geometry merging,
 regardless of the conflation workflow in use.
 
+=== railway.one.to.many.match.transfer.all.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When this and `railway.one.to.many.match` are enabled, all tags from secondary rail features
+involved in a one to many match are transferred over to reference features. This overrides
+`railway.one.to.many.transfer.keys`.
+
 === railway.one.to.many.transfer.keys
 
 * Data Type: list
@@ -5258,6 +5267,15 @@ the entire input dataset. See `search.radius.default`.
 List of keys for tags to be transferred by the `TagMergers` descending from
 `SelectiveOverwriteTagMerger`.
 
+=== selective.overwrite.tag.merger.keys.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of keys for tags not to be transferred by the `TagMergers` descending from
+`SelectiveOverwriteTagMerger`. Overrides `selective.overwrite.tag.merger.keys`.
+
 === set.tag.value.visitor.append.to.existing.value
 
 * Data Type: bool
@@ -5738,8 +5756,8 @@ merging logic under certain circumstances.
 * Data Type: string
 * Default Value: `asciidoc`
 
-Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html',
-'redmine' & 'asciidoc'.
+Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html', and
+'asciidoc'.
 
 === tag.printing.script
 
