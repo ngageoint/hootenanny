@@ -55,7 +55,7 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() == 0)
+    if (args.empty())
     {
       if (!_getSupportedTextualFormats().contains(ConfigOptions().getTagPrintingFormat()))
       {
@@ -109,7 +109,7 @@ private:
     const QString outputFormat = outputFileInfo.suffix().toLower();
     const QString dotFilePath = outputFileInfo.absoluteDir().absolutePath() + "/schema.dot";
 
-    OsmSchema& uut = OsmSchema::getInstance();
+    const OsmSchema& uut = OsmSchema::getInstance();
     QFile fp(dotFilePath);
     fp.open(QFile::WriteOnly);
     fp.write(uut.toGraphvizString().toUtf8());

@@ -534,7 +534,7 @@ ifeq ($(BUILD_JOSM),josm)
 	genhtml coverage/core/josm/JosmTrimmed.info --output-directory coverage/core/josm/ 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
 endif
 
-core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html coverage/core/tgs/index.html coverage/core/cmd/index.html coverage/core/js/index.html coverage/core/rnd/index.html coverage/core/josm/index.html
+core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html coverage/core/tgs/index.html coverage/core/cmd/index.html coverage/core/js/index.html coverage/core/josm/index.html
 
 coverage: services-coverage ui-coverage core-coverage
 

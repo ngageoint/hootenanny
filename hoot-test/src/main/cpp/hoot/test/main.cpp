@@ -90,7 +90,8 @@ enum _TestType
   QUICK_ONLY     = 0x02,
   QUICK          = CURRENT | QUICK_ONLY,
   SERIAL         = 0x04,
-  CASE_ONLY      = 0x08, // conflate case tests
+  CASE_TESTS     = 0x08,
+  CASE_ONLY      = CASE_TESTS | SERIAL,
   VALIDATED_ONLY = 0x10,
   SLOW_TESTS     = 0x20,
   SLOW_ONLY      = SLOW_TESTS | SERIAL | CASE_ONLY,
@@ -463,6 +464,12 @@ void populateTests(
   _TestType t, std::vector<TestPtr>& vTests, bool printDiff, bool suppressFailureDetail,
   bool hideDisableTests = false)
 {
+  bool printValidationReportDiff = false;
+  if (ConfigOptions().getTestValidationEnable() && printDiff)
+  {
+    printValidationReportDiff = true;
+  }
+
   //  Add glacial tests if the bit flag is set
   if (t & GLACIAL_TESTS)
   {
@@ -481,8 +488,7 @@ void populateTests(
     }
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
   }
-  //  Slow tests are included in SLOW and GLACIAL
-  //  Add slow tests if the bit flag is set
+  //  Slow tests are included in SLOW and GLACIAL; Add slow tests if the bit flag is set
   if (t & SLOW_TESTS)
   {
     vTests.push_back(
@@ -500,8 +506,7 @@ void populateTests(
     }
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
   }
-  //  Quick tests are included in QUICK, SLOW, and GLACIAL
-  //  Add quick tests if the bit flag is set
+  //  Quick tests are included in QUICK, SLOW, and GLACIAL; Add quick tests if the bit flag is set
   if (t & QUICK_ONLY)
   {
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
@@ -513,8 +518,8 @@ void populateTests(
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
   }
-  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
-  //  Add current tests if the bit flag is set
+  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL; Add current tests if the bit
+  //  flag is set
   if (t & CURRENT)
   {
     vTests.push_back(
@@ -538,23 +543,28 @@ void populateTests(
           "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
           suppressFailureDetail, false)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
+    vTests.push_back(
+      std::make_shared<ConflateCaseTestSuite>(
+        "test-files/cases/serial", suppressFailureDetail, printValidationReportDiff,
+        hideDisableTests, true));
   }
   //  Test cases go last because of the way they change the environment.
-  if (t & CASE_ONLY)
+  if (t & CASE_TESTS)
   {
-    bool printValidationReportDiff = false;
-    if (ConfigOptions().getTestValidationEnable() && printDiff)
-    {
-      printValidationReportDiff = true;
-    }
     vTests.push_back(
       std::make_shared<ConflateCaseTestSuite>(
         "test-files/cases", suppressFailureDetail, printValidationReportDiff, hideDisableTests));
+    if (t & SERIAL)
+    {
+      vTests.push_back(
+        std::make_shared<ConflateCaseTestSuite>(
+          "test-files/cases/serial", suppressFailureDetail, printValidationReportDiff,
+          hideDisableTests, true));
+    }
   }
-  // If test output validation is enabled, then we want to enable only those tests that use it. This
-  // is currently used by the regression tests to run an additional round of validation tests with a
-  // private JOSM version. At this time that includes all case tests and selected script tests from
-  // the slow and glacial suites (none of which happen to be serial tests). As script tests are
+  // If test output validation is enabled, then we want to enable only those tests that use it. At
+  // this time that includes all case tests (includes serial) and selected script tests from the
+  // slow and glacial suites (none of which happen to be serial tests). As script tests are
   // updated to run output validation, this may need to be updated. Unfortunately, the displayed
   // test count won't be accurate since ScriptTestSuite filters out tests that don't run validation.
   // No need to check test.validation.enable here as the --validated-only command line option is
@@ -577,6 +587,10 @@ void populateTests(
     vTests.push_back(
       std::make_shared<ConflateCaseTestSuite>(
         "test-files/cases", suppressFailureDetail, printValidationReportDiff, hideDisableTests));
+    vTests.push_back(
+      std::make_shared<ConflateCaseTestSuite>(
+        "test-files/cases/serial", suppressFailureDetail, printValidationReportDiff,
+        hideDisableTests, true));
   }
 }
 
@@ -905,7 +919,7 @@ int main(int argc, char* argv[])
 
       //  Get a list of all conflate cases jobs that must be processed last.
       vector<TestPtr> conflateCases;
-      populateTests(CASE_ONLY, conflateCases, printDiff, suppressFailureDetail, true);
+      populateTests(CASE_TESTS, conflateCases, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vConflateCases;
       getTestVector(conflateCases, vConflateCases);
       vector<string> casesNames;
@@ -921,16 +935,27 @@ int main(int argc, char* argv[])
       getNames(serialNames, vSerialTests);
       for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
       {
+        //cout << "serial name: " << *it << endl;
         if (nameCheck.find(*it) != nameCheck.end())
+        {
+          //cout << "Adding serial test: " << QString(it->c_str()).toStdString() << "..." << endl;
           pool.addJob(QString(it->c_str()), ProcessPool::SerialJob);
+        }
       }
       //  Add all of the remaining non-case jobs in the test suite.
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
       {
+        const QString testName = QString(it->c_str());
+        //cout << "case name: " << testName << endl;
         //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's.
-        pool.addJob(QString(it->c_str()),
+        pool.addJob(
+          testName,
           (casesSet.find(*it) != casesSet.end()) ? ProcessPool::ConflateJob : ProcessPool::ParallelJob);
       }
+
+      //std::cout << pool.jobQueueToString("parallel") << std::endl;
+      //std::cout << pool.jobQueueToString("serial") << std::endl;
+      //std::cout << pool.jobQueueToString("case") << std::endl;
 
       pool.startProcessing();
       pool.wait();
