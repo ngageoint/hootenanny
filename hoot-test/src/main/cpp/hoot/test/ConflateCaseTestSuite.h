@@ -48,7 +48,8 @@ public:
    * @param printValidationReportDiff @if true, for failing tests prints the difference between the
    * baseline validation report and the test validation report output
    * @param hideDisableTests if true, status messages for disabled tests are suppressed
-   * @param allowSerial TODO
+   * @param allowSerial if true, case tests under the serial directory are added to the tests to be
+   * run
    */
   ConflateCaseTestSuite(
     const QString& dir, bool suppressFailureDetail = false, bool printValidationReportDiff = false,
