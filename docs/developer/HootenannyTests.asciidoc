@@ -347,8 +347,9 @@ To only run case tests execute:
 HootTest --case-only
 ------------
 
-Case tests may be forced to run in series by placing them in a directory named "serial" under
-`test-files/cases`. Any test not under the "serial" subdirectory is eligible for parallel execution.
+Case tests which make a change to the global configuration must be run in series. Case tests may be 
+forced to run in series by placing them in a directory named "serial" under`test-files/cases`. 
+Any test not under the "serial" subdirectory is eligible for parallel execution.
 
 See `test-files/cases/README` for additional information on case tests.
 
