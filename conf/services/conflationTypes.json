@@ -7,7 +7,7 @@
             "review.score.criterion.max.threshold": "Maximum review score; 0.0 to 1.0",
             "review.score.criterion.min.threshold": "Minimum review score; 0.0 to 1.0",
             "highway.corner.splitter.rounded.split": "Round corners when splitting roads",
-	        "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
+            "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
             "tag.merger.overwrite.exclude": "Tag keys to skip when overwriting"
         }
     },
