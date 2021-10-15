@@ -229,6 +229,19 @@ public class AdvancedConflationOptionsResource {
 
                     addMemberData(diffTemplate);
 
+                    //Add select 'General' options here
+                    JSONObject generalObj = (JSONObject) hoot2Opts.stream().filter(config -> {
+                        return ((JSONObject) config).get("name").equals("General");
+                    }).findFirst().orElse(null);
+                    if (generalObj != null) {
+                        JSONArray generalOpts = (JSONArray) generalObj.get("members");
+                        JSONObject generalOpt = (JSONObject) generalOpts.stream().filter(config -> {
+                            return ((JSONObject) config).get("id").equals("TagMergerOverwriteExclude");
+                        }).findFirst().orElse(null);
+                        diffTemplate.add(0, generalOpt);
+                    }
+
+
                     //Add dropdown for road algorithm
                     JSONObject roadObj = (JSONObject) hoot2Opts.stream().filter(config -> {
                         return ((JSONObject) config).get("name").equals("Roads");
