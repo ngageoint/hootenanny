@@ -727,12 +727,6 @@ mgcp = {
       {
         tags.religion = 'muslim';
       }
-
-      if (tags.with_minaret == 'yes')
-      {
-        tags.religion = 'muslim';
-        tags.building = 'mosque';
-      }
     } // End HWT
 
     // Add the LayerName to the source
@@ -1957,9 +1951,6 @@ mgcp = {
       case 'AL015': // General Building
         // Unknown House of Worship
         if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
-
-        // AL015 doesn't use the religion tag
-        delete attrs.REL;
 
         if (attrs.HWT && ! tags.amenity && ! attrs.FFN)
         {

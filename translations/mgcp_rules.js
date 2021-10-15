@@ -599,7 +599,7 @@ mgcp.rules = {
     ['HWT','3','building','chapel'],
     ['HWT','4','building','church'],
     ['HWT','5','building','marabout'],
-    ['HWT','6','with_minaret','yes'], // Fixed in pre/post processing
+    ['HWT','6','tower:type','minaret'], // Fixed in pre/post processing
     ['HWT','7','building','religious_community'],
     ['HWT','9','building','mosque'],
     ['HWT','11','building','pagoda'],
