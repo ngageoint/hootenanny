@@ -27,6 +27,7 @@
 #ifndef PROCESS_POOL_H
 #define PROCESS_POOL_H
 
+// Hoot
 #include <hoot/core/util/Log.h>
 
 //  Standard
@@ -54,7 +55,7 @@ class JobQueue
 public:
 
   /** Standard constructor */
-  JobQueue();
+  JobQueue() = default;
 
   /**
    * @brief basic empty method on queue class, thread-safe
@@ -80,6 +81,8 @@ public:
    * @param job - name of job to add to back of queue
    */
   void push(const QString& job);
+
+  QString toString() const;
 
   QString getName() const { return _name; }
 
@@ -138,7 +141,7 @@ public:
    * @brief getFailures accessor function of _failures count
    * @return return number of failed tests
    */
-  int getFailures();
+  int getFailures() const { return _failures; }
 
 private:
 
@@ -200,6 +203,7 @@ using ProcessThreadPtr = std::shared_ptr<ProcessThread>;
 class ProcessPool
 {
 public:
+
   /**
    * @brief ProcessPool constructor
    * @param nproc number of threads/processes to add to the pool
@@ -248,7 +252,16 @@ public:
    * @brief wait for all threads (and processes) to finish working
    */
   void wait();
+
+  /**
+   * @brief jobQueueToString prints the contents of a job queue
+   * @param name name of the job queue to print; valid values are: parallel, serial, or case
+   * @return a string
+   */
+  QString jobQueueToString(const QString& name) const;
+
 private:
+
   /** vector of n threads to do the processing */
   std::vector<ProcessThreadPtr> _threads;
   /** queue of jobs that must be run in serial */

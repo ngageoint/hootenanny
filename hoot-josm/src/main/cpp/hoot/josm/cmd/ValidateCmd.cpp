@@ -56,7 +56,7 @@ public:
   QString getType() const override { return "josm"; }
   QString getDescription() const override { return "Checks maps for validation errors"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     bool showAvailableValidatorsOnly = false;
     if (args.contains("--validators"))

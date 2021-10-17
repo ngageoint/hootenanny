@@ -38,10 +38,11 @@
 // Standard
 #include <iomanip>
 #include <iostream>
-using namespace std;
 
 // Qt
 #include <QDateTime>
+
+using namespace std;
 
 namespace hoot
 {
@@ -276,8 +277,6 @@ const char* Log::beginDecoration(WarningLevel level) const
   {
     switch (level)
     {
-    default:
-    case None:    return LogColor::None();
     case Trace:   return LogColor::Trace();
     case Debug:   return LogColor::Debug();
     case Info:    return LogColor::Info();
@@ -285,6 +284,7 @@ const char* Log::beginDecoration(WarningLevel level) const
     case Warn:    return LogColor::Warn();
     case Error:   return LogColor::Error();
     case Fatal:   return LogColor::Fatal();
+    default:      return LogColor::None();
     }
   }
   else

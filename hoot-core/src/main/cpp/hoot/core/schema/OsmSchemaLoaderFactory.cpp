@@ -50,7 +50,6 @@ std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString ur
   {
     std::shared_ptr<OsmSchemaLoader> l =
       Factory::getInstance().constructObject<OsmSchemaLoader>(names[i]);
-
     if (l->isSupported(url))
     {
       return l;

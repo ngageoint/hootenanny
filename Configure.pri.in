@@ -11,7 +11,7 @@ QMAKE_CXXFLAGS += -frounding-math -std=c++11
 
 CONFIG += @HAS_NEWMAT@ @HAS_CPPUNIT@ \
   @HAS_COVERAGE@ @HAS_SERVICES@ @HAS_STXXL@ @HAS_JOSM@ @HAS_NODEJS@ @HAS_UI_TESTS@ \
-  @HAS_LIBPOSTAL@ @HAS_LIBPHONENUMBER@ 
+  @HAS_LIBPOSTAL@ @HAS_LIBPHONENUMBER@ @HAS_GRAPHVIZ@
 
 # Default to release mode, this can be overridden in LocalConfig.pri
 CONFIG += release

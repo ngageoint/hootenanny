@@ -1,7 +1,7 @@
 
-=== Code Documentation
+=== Documentation
 
-==== Core
+==== Core Code
 
 Class documentation is used to build displayable documentation with 
 (https://www.doxygen.nl/index.html)[doxygen]. Details on how to obtain the documentation are 
@@ -68,7 +68,6 @@ It will also work without @brief:
 ===== Variables
 
 Public/Protected variable documentation should look something like this:
-
 -----
 /** This integer variable is documented. */
 static int MY_INT;
@@ -76,4 +75,22 @@ static int MY_INT;
 /// This integer variable is documented.
 static int MY_INT;
 ---- 
+
+==== Core Schema
+
+The core schema documentation files are not currently being auto-generated. This is due to the fact 
+that the CircleCI job that builds the archive is unable to make calls directly to `hoot` to generate 
+the documentation (see `docs/Makefile`). Building the archive with `make archive` locally is 
+actually able to generate the documentation though, but we don't want to break the CircleCI job. At 
+some point The CircleCI job could be updated to allow for the schema documentation generation. In 
+the meantime, run the following to manually generate schema documentation after any changes to the 
+schema:
+-----
+cd docs
+make clean-schema
+make schema.asciidoc
+make schema.png
+-----
+
+Then check in the changes to the modified schema documentation files into source control.
 

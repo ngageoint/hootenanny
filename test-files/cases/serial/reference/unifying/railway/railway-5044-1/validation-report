@@ -1,4 +1,4 @@
-Input: test-files/cases/reference/unifying/railway/railway-5044-1/Output.osm
+Input: test-files/cases/serial/reference/unifying/railway/railway-5044-1/Output.osm
 
 Found 19 validation errors in 149 features with JOSM.
 Overlapping ways errors: 1

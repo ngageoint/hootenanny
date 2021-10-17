@@ -56,7 +56,7 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
   for (int i = 0; i < files.size(); i++)
   {
     QFileInfo fi(d.absoluteFilePath(files[i]));
-    if (files[i].endsWith(".sh") && fi.isExecutable() == false )
+    if (files[i].endsWith(".sh") && fi.isExecutable() == false)
     {
       LOG_WARN("Found a .sh file that is not executable. Is that what you want?");
       LOG_WARN(".sh file: " << fi.absoluteFilePath());
