@@ -79,7 +79,7 @@ class ConflateCommand extends ExternalCommand {
 
             // use default options for map cleaners list...
             cleaningOptions.addAll(Arrays.asList(configOptions.get("MapCleanerTransforms").get("default")
-                .replaceAll("hoot::","").split(";")));
+                .split(";")));
 
         } catch (IOException e) {
             e.printStackTrace();
