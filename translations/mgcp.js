@@ -383,7 +383,7 @@ mgcp = {
   cleanAttrs: function (attrs)
   {
     // Switch to keep all of the default values. Mainly for the schema switcher
-    if (mgcp.configIn.ReaderInputFormat == 'OGR')
+    if (mgcp.configIn.ReaderDropDefaults == 'true')
     {
       mgcp.dropDefaults(attrs);
     }
@@ -2239,7 +2239,7 @@ mgcp = {
       mgcp.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       mgcp.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       mgcp.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      mgcp.configIn.ReaderInputFormat = hoot.Settings.get('reader.input.format');
+      mgcp.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
@@ -2376,7 +2376,7 @@ mgcp = {
 
     // If we are reading from an OGR source, drop all of the output tags with default values
     // This cleans up after the one2one rules since '0' can be a number or an enumerated attribute value
-    if (mgcp.configIn.ReaderInputFormat == 'OGR')
+    if (mgcp.configIn.ReaderDropDefaults == 'true')
     {
       mgcp.dropDefaults(tags);
     }

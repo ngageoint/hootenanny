@@ -2702,7 +2702,7 @@ tds70 = {
       tds70.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       tds70.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       tds70.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds70.configIn.ReaderInputFormat = hoot.Settings.get('reader.input.format');
+      tds70.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes
       tds70.toChange = hoot.Settings.get("schema.translation.override");    }
