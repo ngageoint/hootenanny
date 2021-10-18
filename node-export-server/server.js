@@ -366,13 +366,13 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
         if (overrideTags) {
             if (paramschema === 'OSM') {
-                convertOpts.push('hoot::SchemaTranslationOp');
+                convertOpts.push('SchemaTranslationOp');
                 command += ' -D translation.script=' + hootHome  + '/translations/OSM_Ingest.js';
             }
             command += ' -D schema.translation.override=' + overrideTags;
         }
         if (paramschema !== 'OSM' && config.schemas[paramschema] !== '') {
-            convertOpts.push('hoot::SchemaTranslationOp')
+            convertOpts.push('SchemaTranslationOp')
             command += ' -D schema.translation.script=' + hootHome + '/' + config.schemas[paramschema];
             command += ' -D schema.translation.direction=toogr';
             // Set per schema config options
@@ -380,7 +380,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         }
     } else {
         if (paramschema === 'OSM') command += ' -D writer.include.debug.tags=true';
-        convertOpts.push('hoot::SchemaTranslationOp');
+        convertOpts.push('SchemaTranslationOp');
         command += ' -D schema.translation.script=' + hootHome + '/' + config.schemas[paramschema];
         if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
@@ -395,7 +395,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     //hard clip data to bounds of or bbox or polygon
     if (willCrop) {
         command += ' -D crop.bounds="' + (bbox || poly) + '"';
-        convertOpts.push('hoot::MapCropper');
+        convertOpts.push('MapCropper');
     }
 
     if (convertOpts.length > 0)
