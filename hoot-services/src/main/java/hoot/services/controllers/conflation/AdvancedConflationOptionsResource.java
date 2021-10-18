@@ -108,11 +108,11 @@ public class AdvancedConflationOptionsResource {
     }};
 
     private Map<String, String> matcherMap = new HashMap<String, String>(){{
-        put("GenericLines", "hoot::LinearCriterion");
-        put("PowerLines", "hoot::PowerLineCriterion");
-        put("Railways", "hoot::RailwayCriterion");
-        put("Rivers", "hoot::RiverCriterion");
-        put("Roads", "hoot::HighwayCriterion");
+        put("GenericLines", "LinearCriterion");
+        put("PowerLines", "PowerLineCriterion");
+        put("Railways", "RailwayCriterion");
+        put("Rivers", "RiverCriterion");
+        put("Roads", "HighwayCriterion");
     }};
 
     private static Map<String, Map<String, String>> confOptionsMap = null;

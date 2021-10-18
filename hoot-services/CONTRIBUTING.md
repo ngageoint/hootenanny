@@ -15,8 +15,8 @@ This file includes documentation for updates to services code to do things like.
 ```javascript
 ...
  "Roads": {
-        "matcher": "hoot::HighwayMatchCreator",
-        "merger": "hoot::HighwayMergerCreator",
+        "matcher": "HighwayMatchCreator",
+        "merger": "HighwayMergerCreator",
         "members": {
             "search.radius.highway": "Highway search radius",
             "highway.merge.tags.only": "Merge tags only",
@@ -26,14 +26,14 @@ This file includes documentation for updates to services code to do things like.
 ```
 
 - Since cleaning options are members of the `map.cleaner.transform` option's list value, add the members of that list that a user should be able to toggle on and off
-- for example, if it is helpful to turn on an off the `hoot::RemoveDuplicateAreaVisitor` cleaning option, an update might be...
+- for example, if it is helpful to turn on an off the `RemoveDuplicateAreaVisitor` cleaning option, an update might be...
 
 ```javascript
 ...
    "Cleaning": {
         "members": {
-            "hoot::DualHighwaySplitter": "Split Dual Way",
-            "hoot::RemoveDuplicateAreasVisitor": "Remove Duplicate Area" // new map cleaner...
+            "DualHighwaySplitter": "Split Dual Way",
+            "RemoveDuplicateAreasVisitor": "Remove Duplicate Area" // new map cleaner...
         }
 ...
 ```
