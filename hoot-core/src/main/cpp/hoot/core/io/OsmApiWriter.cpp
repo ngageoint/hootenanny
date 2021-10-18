@@ -73,7 +73,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _apiId(0),
     _threadsCanExit(false),
     _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
-    _timeout(ConfigOptions().getChangesetApidbTimeout())
+    _timeout(ConfigOptions().getChangesetApidbTimeout()),
+    _failed(false)
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -103,7 +104,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _apiId(0),
     _threadsCanExit(false),
     _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
-    _timeout(ConfigOptions().getChangesetApidbTimeout())
+    _timeout(ConfigOptions().getChangesetApidbTimeout()),
+    _failed(false)
 {
   if (isSupported(url))
     _url = url;
@@ -133,6 +135,7 @@ bool OsmApiWriter::apply()
   if (!validatePermissions(request))
   {
     LOG_ERROR("API Permissions error");
+    _failed = true;
     return false;
   }
   _stats.append(SingleStat("API Permissions Query Time (sec)", timer.getElapsedAndRestart()));
@@ -180,6 +183,7 @@ bool OsmApiWriter::apply()
     if (_allThreadsFailed())
     {
       _changeset.failRemainingChangeset();
+      _failed = true;
       _threadsCanExit = true;
       break;
     }
@@ -222,6 +226,7 @@ bool OsmApiWriter::apply()
         _changesetMutex.lock();
         _changeset.failRemainingChangeset();
         _changesetMutex.unlock();
+        _failed = true;
         //  Let the threads know that the remaining changeset has failed
         _threadsCanExit = true;
         break;
@@ -263,6 +268,7 @@ bool OsmApiWriter::apply()
   {
     LOG_ERROR(_errorMessage);
     _changeset.failRemainingChangeset();
+    _failed = true;
   }
   //  Final write for the error file
   _changeset.writeErrorFile();
@@ -417,6 +423,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  If this is the last changeset, error it all out and finish working
         if (workInfo->getFinished())
         {
+          _failed = true;
           //  Fail the entire changeset
           _changeset.updateFailedChangeset(workInfo, true);
           //  Let the threads know that the remaining changeset is the "remaining" changeset
@@ -452,6 +459,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  If this changeset has version failed enough times, don't attempt to fix it
             if (!workInfo->canRetryVersion())
             {
+              _failed = true;
               //  Fail the entire changeset
               _changeset.updateFailedChangeset(workInfo, true);
               //  Let the threads know that the remaining changeset is the "remaining" changeset
@@ -502,6 +510,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             {
               //  Set the element in the changeset to failed because the issues couldn't be resolved
               _changeset.updateFailedChangeset(workInfo);
+              _failed = true;
             }
           }
           break;
@@ -541,7 +550,10 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           if (workInfo->canRetryFailure())
             _pushChangesets(workInfo);
           else
+          {
             _changeset.updateFailedChangeset(workInfo, true);
+            _failed = true;
+          }
           break;
         case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:
           _pushChangesets(workInfo);

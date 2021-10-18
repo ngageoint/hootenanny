@@ -150,6 +150,8 @@ public:
    */
   LastElementInfo getLastElementInfo() const { return _lastElement; }
 
+  bool failed() const { return _failed || containsFailed(); }
+
 private:
   /**
    * @brief The OsmApiFailureInfo struct
@@ -440,6 +442,8 @@ private:
   bool _throttleCgiMap;
   /** Timeout for writer */
   int _timeout;
+  /** Failure flag */
+  bool _failed;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */
