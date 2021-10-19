@@ -44,7 +44,7 @@ In the one to many workflow, selected tags are transferred from one secondary fe
 multiple reference features. No geometry merging is performed. The tags transferred are configurable
 via the `railway.one.to.many.transfer.keys` configuration option where any tag in the secondary 
 feature with key matching those in the option list value will be transferred to a matching reference 
-feature. Optionally, the secondary feature may be deleted from conflated output by specifying `railway.one.to.many.delete.secondary=true`.
+feature. The secondary feature is deleted from conflated output.
 
 ==== Configurable Options
 

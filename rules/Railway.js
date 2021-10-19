@@ -1,7 +1,9 @@
 /*
   This is the conflate script for Railway Conflation. This handles linear railway features only.
 
-  @todo Clean up some of the one to many code by refactoring into separate functions.
+  Note: All test making calls to this script need to be run serially, as this script modifies the
+  global configuration. If ever a workaround is done where the config doesn't need to be modified,
+  then they can be changed back to run in parallel.
 */
 
 "use strict";
@@ -47,7 +49,7 @@ var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").
 // Used to tag secondary features to identify them for removal post conflate; matches a var in
 // MetadataTags
 var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
-var transferAllTags = (hoot.get("railway.one.to.many.match.transfer.all.tags") === 'true');
+var transferAllTags = (hoot.get("railway.one.to.many.transfer.all.tags") === 'true');
 // Get the keys that when found in a secondary feature will be transferred to a reference feature
 // when a one a one to many tag only transfer is triggered.
 if (!transferAllTags)
@@ -57,12 +59,8 @@ if (!transferAllTags)
   hoot.set({'selective.overwrite.tag.merger.keys': hoot.get("railway.one.to.many.transfer.keys")});
 }
 hoot.set({'selective.overwrite.tag.merger.keys.exclude': oneToManySecondaryMatchTagKey});
-// Determines whether the secondary feature gets deleted from output during merging.
-var oneToManyDeleteSecondary = (hoot.get("railway.one.to.many.delete.secondary") === 'true');
-if (oneToManyDeleteSecondary)
-{
-  hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'}, false);
-}
+// The secondary feature gets deleted from output during merging.
+hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'}, false);
 // Save off the default tag merger for merges not involving a one to many match.
 var defaultTagMerger = hoot.get("tag.merger.default");
 // The current one to many match identifying tag key.
@@ -359,17 +357,16 @@ exports.mergeSets = function(map, pairs, replaced)
         var newTags = hoot.TagMergerFactory.mergeTags(refElement.getTags(), secondaryElement.getTags());
         refElement.setTags(newTags);
         refElement.setStatusString("conflated");
+
         // Record the element merges.
         var elementIdPair2 = [];
         elementIdPair2.push(String(refElement.getElementId()));
         elementIdPair2.push(String(secondaryElement.getElementId()));
         replaced.push(elementIdPair2);
-        // If we're deleting secondary match features, mark it for removal later.
-        if (oneToManyDeleteSecondary)
-        {
-          hoot.trace("Adding one to many match tag key to: " + secondaryElement.getElementId());
-          secondaryElement.setTag(oneToManySecondaryMatchTagKey, "yes");
-        }
+
+        // We're deleting secondary match features, so mark it for removal later.
+        hoot.trace("Adding one to many match tag key to: " + secondaryElement.getElementId());
+        secondaryElement.setTag(oneToManySecondaryMatchTagKey, "yes");
         oneToManyMergeOccurred = true;
       }
     }
