@@ -48,11 +48,11 @@ namespace hoot
 class ServicesHootServicesLoginManagerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServicesHootServicesLoginManagerTest);
-  //CPPUNIT_TEST(getRequestTokenTest);
+  CPPUNIT_TEST(getRequestTokenTest);
   #ifdef HOOT_HAVE_SERVICES
   CPPUNIT_TEST(loginRequestTest);
   CPPUNIT_TEST(getAccessTokensTest);
-  //CPPUNIT_TEST(logoutTest);
+  CPPUNIT_TEST(logoutTest);
   CPPUNIT_TEST(logoutInvalidTokensTest);
   CPPUNIT_TEST(logoutInvalidUserTest);
   #endif  // HOOT_HAVE_SERVICES
