@@ -87,7 +87,7 @@ public:
     case GeometricRelationship::Touches:
       return "Touches";
     default:
-      return QString("Unknown type.");
+      throw IllegalArgumentException("Unknown type.");
     }
   }
 

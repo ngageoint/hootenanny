@@ -127,9 +127,9 @@ public:
     try
     {
       ElementGeometryUtils::haveGeometricRelationship(
-        element1, element1, GeometricRelationship::Contains, map);
+        element1, element2, GeometricRelationship::Contains, map);
     }
-    catch (const HootException& e)
+    catch (const IllegalArgumentException& e)
     {
       exceptionMsg = e.what();
     }
@@ -156,7 +156,7 @@ public:
     {
       GeometricRelationship(GeometricRelationship::Invalid).toString();
     }
-    catch (const HootException& e)
+    catch (const IllegalArgumentException& e)
     {
       exceptionMsg = e.what();
     }
