@@ -382,19 +382,6 @@ void HootApiDbWriter::_modifyElement(const ConstElementPtr& element)
   }
 }
 
-void HootApiDbWriter::_deleteElement(const ConstElementPtr& element)
-{
-  if (element->getElementType() == ElementType::Node)
-  {
-    _hootdb.deleteNode(std::dynamic_pointer_cast<const Node>(element));
-  }
-  else
-  {
-    // only supporting nodes for now
-    throw HootException("Unsupported element type");
-  }
-}
-
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());

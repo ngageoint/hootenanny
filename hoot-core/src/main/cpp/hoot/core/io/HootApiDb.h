@@ -253,7 +253,6 @@ public:
   void updateNode(
     const long id, const double lat, const double lon, const long version, const Tags& tags);
   void updateNode(ConstNodePtr node);
-  void deleteNode(ConstNodePtr node);
 
   void updateRelation(const long id, const long version, const Tags& tags);
 
