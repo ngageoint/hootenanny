@@ -1,0 +1,2341 @@
+
+[[align]]
+== align
+
+=== Description
+
+The `align` command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them
+into alignment.  It reads from inputs, matches nodes, transforms input2, and writes the combined data to output.  The input
+parameters are:
+
+* `input1` - Input 1; may be any supported input format (e.g. OSM file).
+* `input2` - Input 2; may be any supported input format (e.g. OSM file).
+* `output` - Output; may be any supported output format (e.g. OSM file).
+
+The following optional defines can be set:
+
+* `rubber.sheet.ref`                   - If set to true then the first input will be treated as a reference layer and 
+                                         the geometries will not be moved. By default `input1` and `input2` are moved 
+                                         towards each other.
+* `rubber.sheet.kernel.estimate.sigma` - The sigma to use when applying a kernel estimation interpolation. By default 
+                                         cross validation is used to determine an appropriate sigma and should be adequate 
+                                         for most purposes.
+
+=== Usage
+
+--------------------------------------
+hoot align (input1) (input2) (output)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment[Examples]
+
+=== Description With Derive Option
+
+To just derive a transform file that can be used separately to rubber sheet data, used the --derive option.  When using the 
+--derive option, the input parameters are:
+
+* `input1`           - Input 1; may be any supported input format (e.g. OSM file).
+* `input2`           - Input 2; may be any supported input format (e.g. OSM file).
+* `transform2to1.rs` - Output transform rubber sheet spec. provides a transform for moving input 2 towards input 1.
+* `transform1to2.rs` - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required 
+                       if --ref is not specified.
+* `--ref `           - If specified, treat input1 as a reference layer and only produce one output transform.
+
+=== Usage With Derive Option
+
+--------------------------------------
+hoot align --derive (input1) (input2) (transform2to1.rs) [transform1to2.rs] [--ref]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-an-alignment-transform-for-two-maps[Examples]
+
+=== Description With Apply Option
+
+To apply a rubber sheet created with the --derive option, use the --apply option.  When using the --apply option, the 
+input parameters are:
+
+* `transform.rs` - Transform rubber sheet spec for moving the input.
+* `input`        - Input; may be any supported input format (e.g. OSM file).
+* `output`       - Write transformed result to this file; may be any supported output format (e.g. OSM file).
+
+=== Usage With Apply Option
+
+--------------------------------------
+hoot align --apply (transform.rs) (input) (output)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-an-alignment-transform-for-two-maps[Examples]
+
+=== See Also
+
+* <<hootuser, RubberSheeting>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[alpha-shape]]
+== alpha-shape
+
+=== Description
+
+The `alpha-shape` command provides a way to generate a concave hull for a set of points. This is most useful when seeding the
+`cut` command. The degree of the concaveness is determined by the alpha parameters.
+
+* `input`    - Input; may be any supported input format (e.g. OSM file). The alpha shape is derived using the boundary of 
+               the input.
+* `output`   - Output; may be any supported output format (e.g. OSM file). When output to a `.osm` file, the alpha 
+               shape will always be a multi-polygon with one attribute `area=yes`. When output as a Shapefile, it will be 
+               a multipolygon shapefile with a single record.
+* `--alpha`  - Optional size in meters used for alpha. A larger value makes a smoother shape closer to a convex hull, and 
+               a smaller value will create a rough shape with more holes and concave sections. An alpha value equal to 
+               the maximum distance between any two points in the data or larger will create a convex hull. If no alpha 
+               value is given, Hootenanny will run an approximation algorithm to find a valid alpha value.
+* `--buffer` - Optional buffer, in meters, to add to the alpha shape before cutting. A negative value will make the 
+               shape smaller. If using the alpha shape command with the `cut` command, it is helpful to use a larger 
+               negative value on complex data shapes to limit the number of holes in the output data. A negative value 
+               equal to the alpha value is a good rule of thumb.
+
+=== Usage
+
+--------------------------------------
+hoot alpha-shape (input) (output) [--alpha value] [--buffer value]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#create-a-shape-that-covers-a-set-of-features-with-a-buffer[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx[Alpha Shape Presentation]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AlphaShape.asciidoc[Alpha Shape Documentation]
+* https://github.com/ngageoint/hootenanny/wiki/files/2010-B-01-AlphaShapes.pdf[Alpha Shape Research Paper]
+* _Horizontal Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Cookie Cutter_ section of <<hootuser, Hootenanny - User Guide>>
+* `cookie.cutter.*` configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[build-model]]
+== build-model
+
+=== Description
+
+The `build-model` command reads input(s), generates a model, and writes the result to an Attribute-Relation file (.arff)
+and/or a Random Forest model file (.rf). Generating a `.arff` file is most useful when trying to reduce the size of a 
+stored model file. The `.arff` file is considerably smaller than the .rf output.
+
+=== Generate Model From Training Data
+
+==== Input Parameters
+
+* `ref1`               - Input with REF1 tags; may be any supported input format (e.g. .osm file).
+* `ref2`               - Input with REF2 tags; may be any supported input format (e.g. .osm file).
+* `output`             - Output model base name (file name with file extension).
+* `--export-arff-only` - Exports only the .arff file and skips the building and exporting of the .rf file.
+
+==== Usage
+
+--------------------------------------
+hoot build-model (ref1 ref2) [ref1 ref2 ...] (output) [--export-arff-only]
+--------------------------------------
+
+=== Generate Model From Attribute-Relation File
+
+==== Input Parameters
+
+* `input.arff` - Input .arff file.
+* `output.rf`  - Output model name.
+
+==== Usage
+
+--------------------------------------
+build-model (input.arff) (output.rf)
+--------------------------------------
+
+See also:
+
+* <<hootuser, RegenerateRandomForestModels>>
+
+
+[[changeset-apply]]
+== changeset-apply
+
+=== Description
+
+The `changeset-apply` command writes changes from a changeset file to an OSM API database.
+
+* `changeset(s)` - Input(s); One or more input OSM XML changesets (.osc) or OSM XML files (.osm). Elements being created 
+                   must have negative element IDs when writing the changeset through the OSM API. If writing directly to an OSM 
+                   API database, then the input must be a single SQL changeset (.osc.sql) file with positive element IDs.
+* `targetUrl`    - Output; If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written 
+                   to. If writing the changeset directly to an OSM API database, this should be the URL of the database 
+                   being written to.
+* `--progress`   - Displays progress as a percent complete while the upload is working; ignored when using SQL changesets.
+* `--stats`      - Displays changeset output statistics; ignored when using SQL changesets.
+
+=== Usage
+
+--------------------------------------
+hoot changeset-apply (changeset1.os*) [changeset2.os* ...] (targetUrl) [--progress] [--stats] 
+hoot changeset-apply (changeset.osc.sql) (targetUrl)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
+
+=== See Also
+
+* `changeset.*` configuration options
+
+
+[[changeset-derive]]
+== changeset-derive
+
+=== Description
+
+The `changeset-derive` command creates an OSM changeset file that represents the difference between two input OSM 
+datasets. When only one dataset is input it generates a changeset file representing all the data in the input dataset. 
+The output changeset file can later be applied to an OSM API database with the `changeset-apply` command. 
+
+* `input1`                - Input 1; may be any supported input format (e.g. .osm file).
+* `input2`                - Input 2; may be any supported input format (e.g. .osm file). Optionally, specify an empty 
+                            string ("") to derive changeset from one input only.
+* `output`                - Output; must be a changeset file (.osc or .osc.sql).
+* `--enable-way-snapping` - Optionally snaps unconnected ways in the replacement data to the data being replaced. This option
+                            is only valid if the `--replacement` option is used. This is generally used to smooth out ways 
+                            at the edge of the replacement boundary when the dataset used for replacement has very 
+                            different linear data than the data being replaced. This option is ignored when using the cut 
+                            only replacement workflow (no second input specified).
+* `--osmApiDatabaseUrl`   - Target OSM API database to which the derived changeset is to be applied, used to maintain 
+                            element ID continuity. Required only if the changeset output format is SQL (.osc.sql).
+* `--replacement`         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
+                            data out of input1 while adding no replacement data from input2.
+* `--stats`               - Displays changeset statistics and optionally writes them to a JSON file (.json). Ignored if 
+                            the changeset output format is SQL (.osc.sql).
+* `--write-bounds`        - If the `bounds` configuration option is specified, this optionally outputs a file containing the 
+                            input bounds. The location of the file is controlled via the `bounds.output.file` 
+                            configuration option.
+
+=== Usage
+
+--------------------------------------
+hoot changeset-derive (input1) [input2] (output) [--osmApiDatabaseUrl url] [--enable-way-snapping] [--replacement] \
+  [--stats filename] [--write-bounds]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
+
+=== Configuration Options
+
+The following describes operation of the command when the `--replacement` option is omitted only:
+
+Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations[Conversion Operations] section of the `convert` command documentation for details.
+
+=== Filtering Features Geographically
+
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration option documentation 
+for formats), changeset derivation will ignore data outside of the bounds when generating changeset statements. The 
+`bounds.*` configuration options allow for further customization of the bounds requirement. If you are generating a 
+changeset with data generated by the `conflate` command that used the `bounds` option, it is possible you will want to 
+use the `bounds` option when making the call to the `changeset-derive` command as well.
+
+=== Feature Sorting
+
+Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with 
+larger datasets.  To perform sorting in a non-memory bound fashion (to external disk), set the configuration 
+option element.sorter.element.buffer.size to a value greater than zero.
+
+Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either 
+operations that are an OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
+
+=== Replacement Operation
+
+The following describe operation of the command when the `--replacement` option is used.
+
+The `changeset-derive-replacement` command creates an OSM changeset file that represents the difference between two 
+OSM datasets within a specified bounds, where the data from the second specified input dataset (secondary layer) 
+completely replaces data in the first specified dataset (reference layer). Since the command replaces all data,
+inputs should be pre-filtered in situations where it is not desirable to replace all of the data.  
+
+The feature replacement algorithm used by this command allows for avoiding unnecessary clipping of features when 
+such modification are undesirable and also stitching up seams in the data when features must be clipped. The output 
+changeset file can be applied directly to an OSM API database via SQL or via the Rails Port API with the 
+`changeset-apply` command. 
+
+Generally, the reference data is sourced from an authoritative data store, such as an OSM API database, and the secondary 
+data is sourced from some non-authoritative data store containing superior data for enrichment. Element IDs in the 
+reference dataset are retained, while element IDs in the secondary data may or may not be retained depending on 
+the configuration (see `changeset.replacement.retain.replacing.data.ids`).
+
+==== Workflow
+
+The high level workflow for the command looks like the following:
+
+* Pre-filter input 1 reference map data to control what types of elements are replaced using the `convert` command (optional)
+* Pre-filter input 2 secondary map data to control what types of elements are added to the final output using the 
+  `convert` command (optional)
+* Load the input 1 reference map (data you are replacing) at the specified bounds
+* Load the input 2 secondary map (data you are using as replacement) at the specified bounds
+* Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the 
+  shape cut out covers the entire specified bounds. If performing overlapping only replacement, the shape cut out is the 
+  shape of the secondary data used for replacement.
+* Combine the cut out reference data back with the replacement data from the secondary map
+* Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data (optional)
+* Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
+
+==== Input Data
+
+All inputs must support bounded reading. To list the Hootenanny input formats that support bounded reading:
+-----
+hoot info --formats --input-bounded
+-----
+
+If you wish to replace only a subset of your data (e.g. only buildings), both sets of input data should be filtered prior
+to using this command to perform the data replacement.
+
+Unless the reference data is being read from a direct connection to an OSM API database (osmapidb://), reference input 
+datasets containing linear data should be slightly larger than the replacement bounds, so as not to drop connected linear 
+out of bounds features in the changeset output. Reference inputs from a direction connection to an OSM API database automatically pull connected linear features outside of the specified bounds. The XML and JSON formats will pull in 
+connected linear features outside of the specified bounds, but can only do so if they are already present in the 
+reference file input data.
+
+GeoJSON output from the Overpass API is not supported as an input to this command, since it does not contain way nodes.
+
+==== Bounds Handling
+
+The handling of the specified replacement bounds is done in a lenient fashion when replacing one set of data with another. 
+This makes replacement of gridded task cells possible without corrupting reference data. This behavior affects the 
+different feature geometry types thusly:
+
+* Point features: N/A as boundary relationships are only handled in a strict fashion where no points outside of the bounds 
+  are modified.
+* Linear features either inside or overlapping the specified bounds are completely replaced.
+* Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never 
+  split but may be conflated at the specified boundary if conflation is enabled.
+
+Alternatively, when removing data without replacing it with new data (cut only workflow), the handling of the specified replacement bounds is done in a strict fashion. This behavior affects the different feature geometry types thusly:
+
+* Point features: Only point features completely inside the specified bounds are replaced.
+* Linear features: Only sections of linear features within the specified bounds are modified, and they may be cut where 
+  they cross the bounds and optionally joined back up with reference data via way snapping (see "Unconnected Way 
+  Snapping" section).
+* Polygon features: Only polygon features completely inside the specified bounds are replaced. Polygon features are never 
+  split.
+
+Currently, only rectangular bounding box or closed polygon shapes are supported for the bounds. Support for other geometries may be added going forward.
+
+===== Out of Bounds Connected Ways
+
+When performing replacement, a method is required to protect the reference linear features that fall outside of the 
+replacement bounds from deletion in the output changeset. The method to protect the ways is to tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution or 
+can be done before the call to this command. 
+
+Hootenanny will automatically add the `hoot:change:exclude:delete=yes` tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the replacement bounds. If this option is specified, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes` tag. 
+
+==== Unconnected Way Snapping
+
+Unconnected way snapping is used to repair cut ways at the replacement boundary seams . The input data must be of a 
+slightly larger area than the replacement AOI in order for there to be any ways to snap back to. This is primarily useful 
+with roads but can be made to work with any linear data.
+
+Alternatively, marking snappable ways as needing review instead of snapping them can be performed to provide more control 
+over the changeset output. See the "Snap Unconnected Ways" section of the User Documentation for more detail.
+
+==== Missing Elements
+
+Changeset replacement derivation will not remove any references to missing children elements passed in the input data. If 
+any ways with references to missing way nodes or relations with references to missing elements are found in the inputs to changeset replacement derivation, they will be tagged with the custom tag, "hoot::missing_child=yes" (configurable; turn 
+off tagging with the `changeset.replacement.mark.elements.with.missing.children` configuration option). This is due to the 
+fact that changeset replacement derivation may inadvertantly introduce duplicate/unwanted child elements into these 
+features since it is not aware of the existence of the missing children. This tag should be searched for after the 
+resulting changeset has been applied and features having it should be manually cleaned up, if necessary.
+
+If you are using this command with file based data sources and in conjunction with other hoot commands (`convert`, etc), 
+you need to use the following configuration options to properly manage references to missing child elements 
+(`changeset-derive` with `--replacement` sets these options automatically internally for itself):
+
+* `bounds.remove.missing.elements`=false
+* `map.reader.add.child.refs.when.missing`=true
+* `log.warnings.for.missing.elements`=false
+
+=== See Also
+
+* `changeset.*` configuration options
+* `cookie.cutter.alpha.*` configuration options
+* "Snap Unconnected Ways" section of the User Documentation
+* `snap.unconnected.ways.*` configuration options
+* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+
+
+[[clean]]
+== clean
+
+=== Description
+
+The `clean` command corrects common erroneous data scenarios from input and writes to output by 
+applying the operations specified in the `map.cleaner.transforms` configuration option. Optionally, 
+https://josm.openstreetmap.de/[JOSM] cleaning operations may be used in addition to Hootenanny 
+cleaning operations. This operation is memory bound.
+
+* `input(s)`          - One or more inputs(s); may be any supported input format (e.g. .osm file)
+                        or a directory if `--recursive` is specified.
+* `output`            - Output; may be any supported output format (e.g. .osm file). This parameter 
+                        may not be specified with the `--separate-output` parameter.
+* `--recursive`       - Allows for processing inputs recursively in a directory structure. This must 
+                        be followed by either "*" to denote no filtering or one or more wildcard 
+                        name filters. e.g. "*.osm;*.json" or "*myFile*". This parameter is not 
+                        compatible with the OGR layer input syntax.
+* `--separate-output` - The default behavior when processing multiple inputs is to combine them into 
+                        the same single output. With this parameter specified, each input is 
+                        processed and written to a separate output with the format specified in 
+                        `output` and the same file name as the input with the text "-converted" 
+                        appended to it. This parameter cannot be used with OSM API database 
+                        (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible 
+                        with the OGR layer input syntax.
+
+To see a list of the default cleaning operation configuration:
+-----
+hoot info --cleaning-operations
+-----
+
+=== Usage
+
+--------------------------------------
+hoot clean (input) [input2] ... (output) [--recursive "*"|"filter1;filter2..."]
+
+hoot clean (input) [input2] ... [--recursive "*"|"filter1;filter2..."] [--separate-output]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]
+
+==== See Also
+
+* `map.cleaner.transforms` configuration option
+* <<hootuser, IngestAndClean>>
+* josm.* and jni.* configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc[JOSM configuration details]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[compare]]
+== compare
+
+=== Description
+
+The `compare` command compares a map to one or two test maps and prints out three score metrics. 
+
+This operation is most commonly used to compare manually conflated data to automatically conflated data. The scores provided 
+give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of 0 means the maps are 
+very different.
+
+* `base1`                 - The first map file to compare against; may be any supported input format (e.g. .osm file).
+* `base2`                 - Optional second base map file to compare against; may be any supported input format 
+                            (e.g. .osm file).
+* `uut`                   - The map input being evaluated; may be any supported input format (e.g. .osm file).
+* `--criteria`            - Optional filtering criteria for the inputs; May be one or more class names inheriting 
+                            from `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set 
+                            the `element.counter.chain.element.criteria` option to true to have the criteria logically 
+                            AND'd together. The criteria can be negated with the option `element.criteria.negate`. Use 
+                            the `info --operators` command to obtain a list of available criteria.
+* `--disable-<scoreType>` - Allows for disabling any of the score types. e.g. `--disable-attribute`.
+
+The following types of scores are provided in the score result:
+
+* Attribute Score                            - A metric describing how similar the attributes are between the two maps
+* Raster Score (AKA Location & Completeness) - A metric describing how complete the data is and how close the features 
+                                               are together
+* Graph Score (AKA Routing)                  - A metric describing how similar the maps would be if used to perform 
+                                               routing analytics
+
+=== Usage
+
+--------------------------------------
+hoot compare (base1) [base2] (uut) [--criteria "criterion1;criterion2..."] \
+  (--disable-attribute | --disable-raster> | --disable-graph)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[conflate]]
+== conflate
+
+=== Description
+
+The `conflate` command conflates two maps into a single map.
+
+* `input1`              - The first input; may be any supported input format (e.g. osm file). If running the Reference 
+                          Conflation workflow, this is treated as reference data.
+* `input2`              - The second input; may be any supported input format (e.g. osm file).
+* `output`              - Output; may be any supported map output format (e.g. osm file) or any supported changeset 
+                          format (e.g. .osc or .osc.sql file) if the `--differential` option is specified. 
+* `--changeset-stats`   - Displays changeset statistics and may be optionally followed by an output JSON file to be 
+                          written to. Valid only if the `--differential` option is specified and the output format is 
+                          changeset XML (.osc). If the `--include-tags`` option is specified, tag changeset statistics are 
+                          also output.
+* `--differential`      - Calculates the the differential between two conflation inputs. The output will be all elements 
+                          in input2 that do not exist in input1.
+* `--include-tags`      - Includes a check for modified tags when using the `--differential` option. The output will 
+                          include unmodified geometries from input1 with new/updated tags from input2. Valid only when the 
+                          `--differential` option is used.
+* `--osmApiDatabaseUrl` - Target OSM API database the derived changeset is to be applied, used to maintain element 
+                          ID continuity. Required only if the changeset output format is SQL (.osc.sql).
+* `--separate-output`   - Writes separate output files for geometry and tag changes. Valid only when the `--differential`
+                          and `--include-tags`` options are used.
+* `--stats`             - Displays map statistics and may be optionally followed by an output JSON file name to be written to. 
+* `--write-bounds`      - If the `bounds` configuration option is specified, optionally outputs a file containing the 
+                          input bounds. The location of the file is controlled via the `bounds.output.file` 
+                          configuration option.
+
+=== Usage
+
+--------------------------------------
+hoot conflate [-C workflowConfigFile] [-C algorithmConfigFile] (input1) (input2) (output) \
+  [--changeset-stats geometry-stats-filename tags-stats-filename] [--differential] [--include-tags] \
+  [--osmApiDatabaseUrl url] [--separate-output] [--stats filename] 
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation[Examples]
+
+=== Configuration
+
+Default configuration files custom tailored to certain conflation workflows are available in the 
+`conf/core` directory:
+* `AttributeConflation.conf` - Configures the Attribute Conflation Workflow where attributes are 
+passed from input2 features to input1 features.
+* `AverageConflation.conf` - Configures the Average Conflation Workflow where geometries are 
+averaged together during merging (currently applies to linear features only).
+* `DifferentialConflation.conf` - Configures the Differential Conflation Workflow where the 
+conflated output consists of features or tags from input2 not found in input1. 
+* `ReferenceConflation.conf` - Default configuration where input2 features are merged into input1 
+features giving preference to input1 features. If no workflow configuration file is specified, 
+conflation is configured for the Reference Conflation Workflow.
+
+When performing road conflation, the road conflation algorithm used can be switched by specifying 
+either of the following configuration files (the Network algorithm currently only operates on roads):
+* `NetworkAlgorithm.conf`  - Uses a graph matching approach to match networks of features together.
+* `UnifyingAlgorithm.conf` - Uses a machine learning based approach to match features together.
+
+You can create your own configuration files to support new conflation workflows.
+
+=== Feature Tag Filtering
+
+A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration 
+option. The option allows for JSON feature tag filtering by specifying either inline JSON or the 
+path to a JSON file.  For more information, see the "Feature Filtering" section of the Hootenanny 
+User Guide.
+
+=== Filtering Features Geographically
+
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
+option documentation for formats), conflation will conflate data only from within the specified 
+bounds. The `bounds.*` configuration options allow for further customization of the bounds 
+requirement. If you are generating a changeset with data generated by the `conflate` command that 
+used the `bounds` option, it is possible you will want to use the `bounds` option when making the 
+call to the `changeset-derive` command as well.
+
+=== See Also
+
+* _Unifying Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Differential Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Attribute Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Horizontal Conflation_, <<hootuser,Hootenanny - User Guide>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[conflate-cumulative]]
+== conflate-cumulative
+
+=== Description
+
+The `conflate-cumulative` command (experimental) conflates multiple maps into a single map in a 
+cumulative fashion.
+
+It is primarily used as a research test bed for prototyping which ultimately gets implemented in 
+production fashion within scripts/conflate/ConflateDirectory.sh.
+
+This command must be run with the following configuration options:
+* writer.clean.review.tags=false
+* tag.merger.default=ProvenanceAwareOverwriteTagMerger
+
+This command does not work with the --stats option.
+
+* `inputDir` - Input directory; may contain any supported input format.
+* `output`   - The output path.
+
+=== Usage
+
+--------------------------------------
+conflate-cumulative (inputDir) (output)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot conflate-cumulative -D review.tags.treat.as.metadata=false -D tag.merger.default=ProvenanceAwareOverwriteTagMerger input1.osm input2.osm input3.osm input4.osm output.osm
+--------------------------------------
+
+=== See Also
+
+* _Unifying Conflation_, <<hootuser,Hootenanny - User Guide>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[convert]]
+== convert
+
+=== Description
+
+The `convert` command converts map data from one format to another. The process may be memory bound 
+depending upon the input or output formats selected.
+
+* `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+                        if `--recursive` is specified.
+* `output`            - Output; may be any supported output format (e.g. .osm file). If 
+                        `--separate-output` is specified, this should be the format file extension 
+                        (e.g. shp) or base URL of the output to be written and not a full URL 
+                        (e.g. hootapidb://<user name>:<password>@<host name>:<port>/<database name>).
+                        or hootapidb://<user name>:<password>@<host name>:<port>/<database name>).
+* `--recursive`       - Allows for processing the files contained in any directories specified in 
+                        `input(s)` recursively. This parameter has no effect on the processing of 
+                        non-directory inputs. This must be followed by either "*" to denote no 
+                        filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
+                        "*myFile*". This parameter is not compatible with the OGR layer input 
+                        syntax.
+* `--separate-output` - The default behavior when processing multiple inputs is to combine them into 
+                        the same single output. With this parameter specified, each input is 
+                        processed and written to a separate output with the format specified in 
+                        `output` and the same file name as the input with the text "-converted" 
+                        appended to it. This parameter cannot be used with OSM API database 
+                        (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible 
+                        with the OGR layer input syntax.
+* `--write-bounds`    - If the `bounds` configuration option is specified, optionally outputs a file 
+                        containing the input bounds. The location of the file is controlled via the 
+                        `bounds.output.file` configuration option.
+
+=== Usage
+
+--------------------------------------
+hoot convert (input) [input2...] (output) [--recursive "*"|"filter1;filter2..."] [--separate-output] [--write-bounds]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Examples]
+
+=== Translating Features
+
+The configuration option, `schema.translation.script`, may be used to schema translate feature 
+during the conversion process.
+
+=== Conversion Operations
+
+The `convert.ops` configuration option can be used to apply map operations to data during 
+conversion. Information about the available conversion operations may be found with:
+
+-----
+hoot info --operators
+-----
+
+=== Filtering Features Geographically
+
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
+option documentation for formats), supporting readers will read data only from within the specified 
+bounds. The `bounds.*` configuration options allow for further customization of the bounds 
+requirement.
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc[Supported Input Formats]
+* `bounds.*` configuration options
+
+
+[[count]]
+== count
+
+=== Description
+
+The `count` command displays a count of the number of features in one or more maps.
+
+* `input(s)`        - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+                      if `--recursive` is specified.
+* `--all-elements`  - Counts all elements instead of just counting features. The default behavior is 
+                      to only count features. Features are defined as elements with at least one 
+                      information tag, whereas elements have no tag requirements.
+* `--criteria`      - Optional filtering criteria for the inputs; May be one or more class names 
+                      inheriting from `ElementCriterion`. By default, multiple criteria are 
+                      logically OR'd together. Set the `element.counter.chain.element.criteria` 
+                      option to true to have the criteria logically AND'd together. The criteria can 
+                      be negated with the option `element.criteria.negate`. Use the 
+                      `info --operators` command to obtain a list of available criteria.
+* `--recursive`     - Allows for processing the files contained in any directories specified in 
+                      `input(s)` recursively. This parameter has no effect on the processing of 
+                      non-directory inputs. This must be followed by either "*" to denote no 
+                      filtering or one or more wildcard name filters. e.g. "*.osm;*.json"  or 
+                      "*myFile*". This parameter is not compatible with the OGR layer input syntax.
+
+=== Usage
+
+--------------------------------------
+hoot count (input) [input2...] [--all-elements] [--criteria "criterion1;criterion2..."] [--recursive "*"|"filter1;filter2..."]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#count-all-features-in-a-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[crop]]
+== crop
+
+=== Description
+
+The `crop` command crops a map to a specified bounds. 
+
+This operation is memory bound and may not be appropriate to crop very large pieces of data. The 
+default cropping behavior is that individual features on the border are modified to make sure 
+nothing is outside the given bounds. This behavior may be customized with the `crop.*` configuration 
+options.
+
+* `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+                        if  `--recursive` is specified.
+* `output`            - Output; may be any supported output format (e.g. .osm file). Not used if 
+                        `--separate-output` is specified.
+* `bounds`            - The boundary to crop the data to of the format: minx,miny,maxx,maxy 
+                        e.g. 38,-105,39,-104
+* `--recursive`       - Allows for processing the files contained in any directories specified in 
+                        `input(s)` recursively. This parameter has no effect on the processing of 
+                        non-directory inputs. This must be followed by either "*" to denote no 
+                        filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
+                        "*myFile*". This parameter is not compatible with the OGR layer input 
+                        syntax.
+* `--separate-output` - The default behavior when processing multiple inputs is to combine them into 
+                        the same single output. With this parameter specified, each input is 
+                        processed and written to a separate output. The `output` parameter is 
+                        invalid in combination with this parameter, and output is written back to a 
+                        new URL with the same base name as each input with the text "-cropped" 
+                        appended to it. This parameter cannot be used with OSM API database 
+                        (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible 
+                        with the OGR layer input syntax.
+* `--write-bounds`    - Optionally outputs a file containing the cropped bounds. The location of the 
+                        file is controlled via the `bounds.output.file` configuration option.
+
+=== Usage
+
+--------------------------------------
+hoot crop (input1) [input2...] (output) (bounds) [--recursive "*"|"filter1;filter2..."] [--write-bounds]
+
+hoot crop (input1) [input2...] (bounds) [--recursive "*"|"filter1;filter2..."] [--separate-output] [--write-bounds] 
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[crop-random]]
+== crop-random
+
+=== Description
+
+The `crop-random` command (experimental) randomly crops a section of map data to have a specified 
+maximum node count. This is useful if you have a very large file dataset and need to generate a 
+small subset of data to test conflation against.
+
+* `input(s)`      - Input(s); may be any supported input format (e.g. .osm file).
+* `output`        - Output; may be any supported output format (e.g. OSM file)
+* `maxNodeCount`  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is 
+                    less than the specified number, no cropping will occur. If too low a value is specified for `maxNodeCount` 
+                    or too high a value is specified for `pixelSize`, the algorithm used to crop may not be able to find 
+                    a solution.
+* `pixelSize`     - The pixel size in degrees. A good starting default is 0.001.
+* `--randomSeed`  - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for 
+                    no seeding
+* `--write-tiles` - Optionally writes the calculated tile footprints to a separate file in the same output directory 
+                    as `output`.
+
+=== Usage
+
+--------------------------------------
+hoot crop-random (input1) [input2...] (output.osm) (maxNodeCount) (pixelSize) [--randomSeed seedValue]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-out-a-random-subset-of-data-with-a-maximum-node-size[Examples]
+
+=== Configuration Options
+
+The following cropping configuration options are not supported:
+
+* `crop.bounds` - This is unnecessary since the command calculates the crop bounds automatically based on maximum node count.
+* `crop.invert`
+
+See the `crop` command for details on the remaining supported cropping configuration options.
+
+If you need to run random map cropping inline with another command, use the RandomMapCropper OSM map operation along 
+with crop.random.* configuration options.
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[cut]]
+== cut
+
+=== Description
+
+The `cut` command cuts a section out of a map.
+
+When you have two data sets to conflate where one is clearly better than the other in every way (attributes and 
+geometric accuracy), the cookie cutter can be a very useful tool. For instance, you may have country wide primary roads 
+and very high quality city scale roads for a small region. In this case you'll want to remove a section of the country 
+scale roads, then conflate the high quality roads back in.  The `cut` command functions by reading in a OSM input file 
+as the `cutter-shape` and removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries 
+are written to 'output'. The dough input is limited by the available RAM.
+
+* `cutter-shape` - The input to use as the cutter shape; may be any supported input format (e.g. .osm file).
+* `dough`        - The input data to cut from; may be any supported input format (e.g. .osm file).
+* `output`       - Output; may be any supported output format (e.g. .osm file).
+* `--buffer`     - Optional buffer value to buffer the shape with before cutting. The value may be positive or negative.
+* `--crop`       - Optionally crops the exterior based on the cutter shape rather than cutting from inside the cutter shape.
+
+=== Usage
+
+--------------------------------------
+hoot cut (cutter-shape) (dough) (output) [--buffer value] [--crop]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cut-a-section-out-of-a-map[Examples]
+
+=== See Also
+
+* `cookie.cutter.*` configuration options
+* _Horizontal Conflation_, <<hootuser,Hootenanny - User Guide>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[db-delete]]
+== db-delete
+
+=== Description
+
+The `db-delete` command deletes maps from the Hootenanny Web Services database.
+
+* `mapDatabaseLayerUrl(s)` - One or more URLs pointing to database maps.
+
+=== Usage
+
+--------------------------------------
+hoot db-delete (mapDatabaseLayerUrl1) [mapDatabaseLayerUrl2...}
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#delete-a-map-from-the-hootenanny-web-services-database[Examples]
+
+
+
+[[db-list]]
+== db-list
+
+=== Description
+
+The `db-list` command lists the names of all maps available in the Hootenanny Web Services database that are either 
+public or are privately owned by the specified user. The `api.db.email` configuration option must be specified to identify 
+the user.
+
+* `mapDatabaseLayerUrl` - URL of the Hootenanny Web Services database (without including a map layer name)
+
+=== Usage
+
+--------------------------------------
+hoot db-list (mapDatabaseLayerUrl)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-maps-in-the-hootenanny-web-services-database[Examples]
+
+
+[[de-duplicate]]
+== de-duplicate
+
+=== Description
+
+The `de-duplicate` command (experimental) removes intra-map duplicate elements from a single map or 
+inter-map duplicate elements across two separate maps. For inter-map de-duplication, the first map's 
+features are kept. Unlike duplicate element removal cleaning operations, such as 
+`DuplicateWayRemover`, this command will only remove completely identical elements and not simply 
+those that are very similar.
+
+* `input1`                 - The first input map with features to de-duplicate; may be any supported input format 
+                             (e.g. .osm file). If only one map input is specified, only intra-map de-duplication is 
+                             performed. When two input maps are specified and identical features are found between both 
+                             maps, this map's features are retained.
+* `input2`                 - Optional second input map with features to de-duplicate; may be any supported input format 
+                             (e.g. .osm file). When two input maps are specified, both intra-map and inter-map de-duplicate 
+                             is performed. When two input maps are specified and identical features are found between both 
+                             maps, this map's features are removed.
+* `output1`                - The de-duplicated first map output; may be any supported output format (e.g. .osm file).
+* `output2`                - The de-duplicated second map output; may be any supported output format (e.g. .osm file); 
+                             required if two inputs are specified.
+* `--favor-connected-ways` - When two identical ways are found, causes de-duplication to favor the way having more 
+                             connections with other ways, regardless of which input map its from.
+
+=== Usage
+
+--------------------------------------
+hoot de-duplicate (input1) [input2] (output1) [output2] [--favor-connected-ways]
+--------------------------------------
+
+=== Examples
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[diff]]
+== diff
+
+=== Description
+
+The `diff` command finds differences between two maps. It returns 0 if they are the same or 1 if they differ significantly. 
+If they differ significantly, the differences will be displayed. 
+
+* `input1`          - Input 1; may be any supported input format (e.g. .osm file), XML changeset (.osc), or a 
+                      directory containing XML changesets.
+* `input2`          - Input 2; may be any supported input format (e.g. .osm file), XML changeset (.osc), or a 
+                      directory containing XML changesets.
+* `--error-limit`   - Increase the compare error limit from the default value
+* `--ignore-uuid`   - Ignores UUID's during comparison
+* `--use-datetime`  - Ignores `source:datetime` and `source:ingest:datetime` tags during comparison
+
+=== Usage
+
+--------------------------------------
+hoot diff (input1) (input2) [--error-limit limit] [--ignore-uuid] [--use-datetime]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-difference-between-two-maps[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[extent]]
+== extent
+
+=== Description
+
+The `extent` command displays the geospatial bounds of one or more maps.
+
+* `input(s)`    - Inputs(s); may be any supported input format (e.g. .osm file) or a directory if 
+                  `--recursive` is specified.
+* `--recursive` - Allows for processing the files contained in any directories specified in 
+                  `input(s)` recursively. This parameter has no effect on the processing of 
+                  non-directory inputs. This must be followed by either "*" to denote no filtering 
+                  or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". This 
+                  parameter is not compatible with the OGR layer input syntax.
+
+=== Usage
+
+--------------------------------------
+hoot extent (input1) [input2...] [--recursive "*"|"filter1;filter2..."]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-geospatial-extent-of-a-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[help]]
+== help
+
+=== Description
+
+The `help` command prints help for commands.
+
+* `command`   - Optionally specify a command
+* `--verbose` - Prints detailed help for all commands
+
+=== Usage
+
+--------------------------------------
+hoot help [command] [--verbose]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#help[Examples]
+
+
+
+[[info]]
+== info
+
+The `info` command displays information about command capabilities.
+
+=== Option Overview
+
+Only one of the following options can be passed to the command per invocation:
+
+* `--cleaning-operations`      - Displays the default configured options for cleaning map data
+* `--config-options`           - Displays available configuration options
+* `--conflatable-criteria`     - Displays criteria that identify conflatable elements
+* `--conflate-post-operations` - Displays operations configured by default to run after a conflation 
+                                 job (can be customized via the `conflate.post.ops` configuration 
+                                 option)
+* `--conflate-pre-operations`  - Displays operations configured by default to run before a 
+                                 conflation job (can be customized via the `conflate.pre.ops` 
+                                 configuration option)
+* `--criterion-consumers`      - Displays operations capable of taking in an ElementCriterion as 
+                                 input
+* `--feature-extractors`       - Displays available feature extractors used in conflation model 
+                                 building
+* `--filters`                  - Displays a list of all criteria that can be used for element 
+                                 filtering
+* `--formats`                  - Displays supported data input/output formats
+* `--geometry-type-criteria`   - Displays criteria that identify a feature geometry type
+* `--languages`                - Displays information about translatable/detectable spoken languages
+* `--matchers`                 - Displays available feature matchers used during conflation
+* `--match-creators`           - Displays available feature match creators used during conflation
+* `--mergers`                  - Displays available feature mergers used during conflation
+* `--merger-creators`          - Displays available feature merger creators used during conflation
+* `--operators`                - Displays available inline operators that can be applied to map 
+                                 datasets
+* `--string-comparators`       - Displays available string comparators
+* `--subline-matchers`         - Displays available subline matchers
+* `--subline-string-matchers`  - Displays available subline string matchers
+* `--tag-mergers`              - Displays available feature tag mergers used during conflation
+* `--validators`               - Displays available non-JOSM validators.
+* `--value-aggregators`        - Displays available feature tag value aggregators used in conflation 
+                                 model building
+* `--way-joiners`              - Displays available way joiners
+* `--way-snap-criteria`        - Displays available way criteria for snapping ways to each other
+
+A subset of command options support a JSON output format instead of the default text format. To 
+specify a JSON format, use `--json". If the option is specified and the command does not support
+JSON as an output format, an error will be displayed.
+
+All configuration options (-D <option>) added to this command must be added to before the specified 
+option. Example:
+
+--------
+hoot info -D match.creators="HighwayMatchCreator;ScriptMatchCreator,River.js" --way-snap-criteria
+--------
+
+Note how "--way-snap-criteria" is specified after the single configuration option.
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[Examples]
+
+Each of the following sections describes an option that may be used with this command and its input 
+parameters.
+
+=== Cleaning Operations
+
+The `--cleaning-operations` option prints out the currently configured map cleaning operators that 
+are applied during conflation or with the 'clean' command.  The configuration option 
+'map.cleaner.transforms' controls which operators are applied. Note that the operators are 
+purposefully shown in the order they are applied and not in alphabetical order.
+
+==== Usage
+
+--------------------------------------
+hoot info --cleaning-operations
+--------------------------------------
+
+=== Configuration Options
+
+The `--config-options` option prints out available Hootenanny configuration options.
+
+==== Input Parameters
+
+One of the following input parameters must be specified:
+
+* `name`             - name or partial name of a configuration option to list and/or print a 
+                       description for
+* `--option-names`   - if no name is specified, lists all configuration option names; if a name is 
+                       specified, lists only configuration option names that have a full or partial 
+                       match with the input name
+* `--option-details` - if no name is specified, lists all configuration option names and 
+                       descriptions; if a name is specified, lists only configuration option names 
+                       and descriptions that have a full or partial match with the input name
+
+==== Usage
+
+--------------------------------------
+hoot info --config-options [--option-names]
+hoot info --config-options [--option-details]
+hoot info --config-options (name) [--option-names]
+hoot info --config-options (name) [--option-details]
+--------------------------------------
+
+=== Conflatable Criteria
+
+The `--conflatable-crieria`` option prints out all element criteria classes that can be used to
+ identify conflatable elements.
+
+==== Usage
+
+--------------------------------------
+hoot info --conflatable-criteria
+--------------------------------------
+
+=== Conflate Post Operations
+
+The `--conflate-post-operations` option prints out the currently configured operations to run 
+immediately after a conflation job with the 'conflate' command.  The configuration option 
+'conflate.post.ops' controls which operators are applied.
+
+==== Usage
+
+--------------------------------------
+hoot info --conflate-post-operations
+--------------------------------------
+
+=== Conflate Pre Operations
+
+The `--conflate-pre-operations` option prints out the currently configured operations to run 
+immediately after a conflation job with the 'conflate' command.  The configuration option 
+'conflate.pre.ops' controls which operators are applied.
+
+==== Usage
+
+--------------------------------------
+hoot info --conflate-pre-operations
+--------------------------------------
+
+=== Element Criterion Consumers
+
+The `--criterion-consumers`` option prints out all operations that are capable of taking an 
+`ElementCriterion` as input. Passing in an `ElementCriterion` to an operation can be useful when 
+filtering elements before performing data transformations on them.
+
+==== Usage
+
+--------------------------------------
+hoot info --criterion-consumers
+--------------------------------------
+
+=== Feature Extractors
+
+The `--feature-extractors` option prints out available feature extractors that can be used when 
+building a conflation model with manually matched map training data.
+
+==== Usage
+
+--------------------------------------
+hoot info --feature-extractors
+--------------------------------------
+
+=== Filters
+
+The `--filters`` option prints out all the element criteria classes, which are a subset of what is 
+displayed with the `--operators` option. Element criteria can be used to filter elements during a 
+conversion or conflation job.
+
+==== Usage
+
+--------------------------------------
+hoot info --filters
+--------------------------------------
+
+=== Formats
+
+The `--formats` option prints out supported data formats. 
+
+The --input-bounded sub-option prints out input formats that support bounded reads with the `bounds`
+configuration option.
+
+==== Usage
+
+--------------------------------------
+hoot info --formats [--input] [--input-bounded] [--input-streamable] [--ogr] [--output] [--output-streamable]
+--------------------------------------
+
+=== Geometry Type Criteria
+
+The `--geometry-type-crieria`` option prints out all element criteria classes that can be used to 
+identify an element's geometry.
+
+==== Usage
+
+--------------------------------------
+hoot info --geometry-type-crieria
+--------------------------------------
+
+=== Languages
+
+The `languages` option displays information about Hootenanny language translation/detection capabilities.
+
+All uses of the `languages` command require the following configuration options to be populated:
+* hoot.services.auth.user.name
+* hoot.services.auth.access.token
+* hoot.services.auth.access.token.secret
+
+For more information on logging into the web services, see the 'login' command documentation.  Those options are omitted 
+from the following command examples.
+
+Only one of the following options can be passed to the command:
+
+* `--detectable`    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
+* `--detectors`     - Prints all available language detector implementations for the translation service
+* `--translatable`  - Prints all spoken languages that Hootenanny translate from to English and the translators that 
+                      can translate them
+* `--translators`   - Prints all available language translator implementations for the translation service
+
+The `--detectors` option prints out all available language detectors that can be used with the Hootenanny web services.
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[Examples]
+
+Each of the following sections describes an option that may be used with this command and its input parameters.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --detectors
+--------------------------------------
+
+The `--translators` option prints out all available language translators that can be used with the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --translators
+--------------------------------------
+
+The `--detectable` option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --detectable
+--------------------------------------
+
+The `--translatable` option prints out spoken languages which Hootenanny can translate from to English when using 
+the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+hoot info-rnd --languages --translatable
+--------------------------------------
+
+=== Matchers
+
+The `--matchers` option prints out available conflate matchers that may be applied when conflating 
+data. Matchers contain the criteria to match a specific pair of features
+
+==== Usage
+
+--------------------------------------
+hoot info --matchers
+--------------------------------------
+
+=== Match Creators
+
+The `--match-creators` option prints out available conflate match creators that may be applied when 
+conflating data. Match Creators are responsible for spawning matchers.
+
+==== Usage
+
+--------------------------------------
+hoot info --match-creators
+--------------------------------------
+
+=== Mergers
+
+The `--mergers` option prints out available conflate mergers that may be applied when conflating 
+data. Mergers are created to merge a feature pair supported by a corresponding matcher.
+
+==== Usage
+
+--------------------------------------
+hoot info --mergers
+--------------------------------------
+
+=== Merger Creators
+
+The `--merger-creators` option prints out available conflate merger creators that may be applied 
+when conflating data. Merger Creators are responsible for spawning mergers.
+
+==== Usage
+
+--------------------------------------
+hoot info --merger-creators
+--------------------------------------
+
+=== Operators
+
+The `--operators` option prints out available inline operators that can be applied to map data in a 
+Hootenanny command. Map operators can be criterion, operations, or visitors.
+
+* An example of an operation is DuplicateWayRemover, which removes all duplicate ways from a map.
+* An example of a criterion is NodeCriterion, which acts as a filter to return all nodes in a map.
+* An example of a visitor is RemoveTagsVisitor, which removes selected tags from features in a map.
+
+==== Usage
+
+--------------------------------------
+hoot info --operators
+--------------------------------------
+
+=== Subline Matchers
+
+The `--subline-matchers` option prints out available subline matchers that determine which method of 
+line matching is used during conflation.
+
+==== Usage
+
+--------------------------------------
+hoot info --subline-matchers
+--------------------------------------
+
+=== Subline String Matchers
+
+The `--subline-string-matchers` option prints out available subline string matchers that determine 
+which method of multilinestring matching is used during conflation.
+
+==== Usage
+
+--------------------------------------
+hoot info --subline-string-matchers
+--------------------------------------
+
+=== String Comparators
+
+The `--string-comparators` option prints out available string comparators that can be used during 
+conflation when comparing tag string values.
+
+==== Usage
+
+--------------------------------------
+hoot info --string-comparators
+--------------------------------------
+
+=== Tag Mergers
+
+The `--tag-mergers` option prints out available tag mergers that may be applied when conflating
+ data.
+
+==== Usage
+
+--------------------------------------
+hoot info --tag-mergers
+--------------------------------------
+
+=== Validators
+
+The `--validators` option prints out available Hootenanny validators that can be used to validate 
+data. To see Hootenanny and JOSM validators together, run `validate --validators` instead (must be 
+configured `--with-josm`).
+
+==== Usage
+
+--------------------------------------
+hoot info --validators
+--------------------------------------
+
+=== Value Aggregators
+
+The `--value-aggregators` option prints out available tag value aggregation methods that can be used 
+when building a conflation model with manually matched map training data.
+
+==== Usage
+
+--------------------------------------
+hoot info --value-aggregators
+--------------------------------------
+
+=== Way Joiners
+
+The `--way-joiners` option prints out all way joiner class implementations that may either be used 
+independently or in conjunction with the OsmMapOperation, `WayJoinerOp`.
+
+==== Usage
+
+--------------------------------------
+hoot info --way-joiners
+--------------------------------------
+
+=== Way Snap Criteria
+
+The `--way-snap-criteria` option prints out all criterion class implementations that may used with 
+`UnconnectedWaySnapper` to filter the types of ways that are snapped to each other. The list is 
+restricted to a criterion that will snap all feature types (LinearCriterion) or criteria that are 
+both conflatable and represent linear geometry types (e.g. HighwayCriterion). Unlike most other 
+`info` options this prints out a delimited list of class names only with no descriptions. 
+Optionally, this command call takes in the `match.creators` configuration option to determine the 
+appropriate list of criterion that goes with a specific set of matchers. If `match.creators` is not 
+passed in, then a list with all available snapping criteria are returned. The list of available
+ matchers can be obtained with `hoot info --match-creators`.
+
+==== Usage
+
+--------------------------------------
+hoot info --way-snap-criteria
+--------------------------------------
+
+
+
+[[is-sorted]]
+== is-sorted
+
+=== Description
+
+The `is-sorted` command determines whether data has been sorted by element type and ID.
+
+This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted. For all 
+other formats, the data is read in one feature at a time and a negative result is returned as soon as an unsorted element 
+is found. If the data is sorted, the entire contents of the input will be read before a positive verification.
+
+* `input` - Input; may be any supported input format (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+hoot is-sorted (input)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#determine-if-a-map-is-sorted-to-the-osm-standard[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[login]]
+== login
+
+The `login` command logs a user into the web services, and returns access tokens for use in command invocations. Some 
+commands require web services authentication before use (e.g. `languages` command).
+
+The access tokens retrieved after login, along with their associated user name, must be used as configuration options 
+when using any Hootenanny commands requiring Hootenanny Web Services authentication:
+* hoot.services.auth.user.name
+* hoot.services.auth.access.token
+* hoot.services.auth.access.token.secret
+
+For the login command to work correctly, the oauthRedirectURL property for the web services in `hoot-services.conf` must 
+be pointed to the page 'out-of-band.html' found in the web services application.  ee the Hootenanny OAuth documentation for 
+more detail on the Hootenanny authentication process.
+
+=== Usage
+
+--------------------------------------
+hoot login
+--------------------------------------
+
+=== Example
+
+--------------------------------------
+[vagrant@centos7-hoot hoot]$ hoot login
+
+Authorization URL: https://www.openstreetmap.org/oauth/authorize?oauth_token=xSpqQk
+
+1. Using the authorization URL shown above, authenticate through the 3rd party application.
+2. Grant Hootenanny access to the application.
+3. Copy and paste your verifier code from the browser here and press ENTER: E50JtUb
+
+user name=icenine18
+oauth_token=xIhWho
+oauth_token_secret=GTSwRn
+
+Use the above information with all Hootenanny commands that require use of the Hootenanny Web Services:
+-D hoot.services.auth.user.name=icenine18
+-D hoot.services.auth.access.token=xIhWho
+-D hoot.services.auth.access.token.secret=GTSwRn
+--------------------------------------
+
+
+[[logout]]
+== logout
+
+The `logout` command logs a user out of the web services. It requires the OAuth credentials of the user be passed in 
+as configuration options.
+
+=== Usage
+
+--------------------------------------
+hoot logout -D hoot.services.auth.user.name=<username> -D hoot.services.auth.access.token=<token> -D hoot.services.auth.access.token.secret=<token>
+--------------------------------------
+
+=== Example
+
+--------------------------------------
+$ hoot logout -D hoot.services.auth.user.name=icenine18 D hoot.services.auth.access.token=<accessToken> -D hoot.services.auth.access.token.secret=<accessTokenSecret>
+The user: icenine18 was logged out of the Hootenanny Web Services.
+--------------------------------------
+
+
+[[perturb]]
+== perturb
+
+=== Description
+
+The `perturb` command perturbs map data using the PERTY algorithm based on the paper, 
+"Evaluating conflation methods using uncertainty modeling," P. Doucette, et. al, 2012. This can be
+useful when you need to generate test data for conflation. Conflating unperturbed data with 
+perturbed data is a technique you can use to evaluate the quality of a conflation routine.
+
+* `input`   - Input; may be any supported input format (e.g. .osm file).
+* `output`  - Output; may be any supported output format (e.g. .osm file). If specifying --score or 
+              --test this must be a directory.
+* `--score` - Generates a PERTY score for a conflation operation. Not valid in combination with the 
+              `--test` option.
+* `--test`  - Generates a series of PERTY scores for the same set of conflation inputs and averages 
+              them together yielding a single score. Not valid in combination with the `--score` 
+              option.
+
+=== Optional Defines
+
+`perty.*` and `random.*` configuration options can be used with this command. See the Configuration 
+Options section for details. Use the `info` command to learn more about the available configuration 
+options.
+
+=== Usage
+
+--------------------------------------
+hoot perturb (input) (output) [--score]|[--test]
+--------------------------------------
+
+=== Examples
+
+The following example perturbs the file `reference-in.osm`, given the specified PERTY options 
+(overrides default settings for those options), and writes the perturbed data to a file 
+`perturbed-out.osm`:
+
+--------------------------------------
+hoot perturb -D perty.search.distance=20 -D random.way.generalizer.probability=0.7
+  reference-in.osm perturbed-out.osm
+--------------------------------------
+
+The following example perturbs a copy of the input file `reference-in.osm`, conflates 
+`reference-in.osm` with the copy, and  displays a PERTY score to define how accurately the data was 
+conflated. The conflated data, along with the perturbed and reference data are written to the 
+`outdir` directory:
+
+--------------------------------------
+hoot perturb -D perty.systematic.error.x=1 -D perty.systematic.error.y=1 \
+ reference-in.osm /my/output/directory --score
+--------------------------------------
+
+The following example will run 10 separate tests with five simulations per test (a total of 50 
+generated PERTY scores, five per test). It assigns a value of 1.0 to two PERTY related input 
+variables and increments them by 5.0 for each successive simulation run inside of each test run 
+(test run 1/simulation 1 has value 1.0; test run 1/simulation 2 has value 6.0, etc.).  It compares 
+the averaged score for each test run to the specified list of scores passed to the command as input. 
+If the average of the generated scores for each simulation within a test run is greater than or 
+equal to the corresponding score from the list, `/- the allowable specified score variance of .05, 
+the test is described as passing in the command's output.  Otherwise, it is described as failing. 
+A summarized list of scores for each test run is displayed upon completion of all of the test runs.
+
+--------------------------------------
+hoot perturb -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
+  -D perty.test.dynamic.variables=perty.systematic.error.x;perty.systematic.error.y \
+  -D perty.test.dynamic.variable.start.value=1.0 \
+  -D perty.test.dynamic.variable.increment=5.0 \
+  -D perty.test.expected.scores=0.9;0.95;0.93;0.952;0.91;0.95;0.9;0.95;0.95;0.95 \
+  -D perty.test.allowed.score.variance=0.05 reference-in.osm /my/output/directory --test
+--------------------------------------
+
+=== Perty Tests
+
+The `--test` option optionally allows for altering a single, user selected PERTY input variable value 
+across each test run (multiple input variables can be altered per test run but each must receive the 
+same value).
+
+The averaged PERTY score generated by the test run across all simulations is compared to a user 
+input set of expected scores for each test run (the number of expected scores must match the number 
+of test runs specified). If the actual averaged PERTY score for a test run falls within an allowed 
+user specified score variance threshold when compared to the expected score, the test is classified 
+as passing.  Otherwise the test is classified as having failed.  Note: If you want to bypass the 
+"pass/fail" determination of the command, you can set the `perty.test.allowed.score.variance` equal 
+to 1.0 and set `perty.test.expected.scores` to a list the same size as the number of of test runs. 
+This effectively disables the score validation.
+
+=== See Also
+
+* `perty.*` and `random.*` configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[plot-node-density]]
+== plot-node-density
+
+=== Description
+
+The `plot-node-density` command creates a density plot from a specified input.
+
+* `input`         - Input; may be any supported input format (e.g. .osm file).
+* `output`        - Output; Must be a Portable Network Graphic image (.png) file.
+* `max-dimension` - Maximum size of the image on one side. The actual size will be determined based on the envelope. If 
+                    the envelope is wider than tall, then this will be the width of the image (and vice versa). The pixels 
+                    in the output image will always be square, and the image may be slightly larger than the envelope 
+                    to accommodate this.
+* `--base-colors` - Base colors to use for each image channel. These will be added to each channel (R,G,B,A). An alpha value 
+                    of 255 is opaque.
+* `--multiplier`  - Multiplies the log count ratio by these values (R,G,B,A).
+
+By default, the colors of the image are black to white where black represents no data. The colors are always in log scale. 
+You can manipulate the `base-color` and `count-colors` parameters to change the colors. This approach allows creating 
+simple positive gradients. If you require more complex color mappings you may want to take a peek at link:$$http://www.imagemagick.org/$$[ImageMagick] or some other similar mechanism.
+
+The coloring uses the following equations for each pixel:
+
+// print pretty equations
+ifdef::HasLatexMath[]
+[latexmath]
++++++++++++++++++++++++++
+\[v = \frac{log(pixelCount + 1)}{log(maxPixelCount)}\]
+\[red = v \cdot colorMultiplier[0] + baseColor[0]\]
+\[green = v \cdot colorMultiplier[1] + baseColor[1]\]
+\[blue = v \cdot colorMultiplier[2] + baseColor[2]\]
+\[alpha = v \cdot colorMultiplier[3] + baseColor[3]\]
++++++++++++++++++++++++++
+endif::HasLatexMath[]
+
+// print simple equations
+ifndef::HasLatexMath[]
+--------------------------------------
+v = log(pixelCount + 1) / log(maxPixelCount)
+red = v * colorMultiplier[0] + baseColor[0]
+green = v * colorMultiplier[1] + baseColor[1]
+blue = v * colorMultiplier[2] + baseColor[2]
+alpha = v * colorMultiplier[3] + baseColor[3]
+--------------------------------------
+endif::HasLatexMath[]
+
+* `pixelCount` The number of nodes in a given pixel.
+* `maxPixelCount` The maximum number of nodes in any pixel.
+* `colorMultiplier` The array passed in the `multiplier` argument.
+* `baseColor` The array passed in the `base-colors` argument.
+
+All the color values are bound to 0-255 before being assigned in the output image.
+
+The amount of time this takes depends on many factors, but on circa 2012 hardware processing all of OSM's planet file in 
+a `.osm.pbf` format took about 4.5 hours.
+
+=== Usage
+
+--------------------------------------
+hoot plot-node-density (input) (output-image) (max-dimension) [--base-colors] [--multiplier]
+--------------------------------------
+
+==== Example
+
+Paint node density using the default color scale of black to white where black is no data. The image will either have a 
+maximum height of 100 pixels or a maximum width of 100 pixels.
+
+--------------------------------------
+hoot plot-node-density MyInput.osm.pbf MyLocalOutput.png 100
+--------------------------------------
+
+Paint node density using the default color scale of transparent brown to opaque green. Transparent is no data. The image 
+will be at most 256 pixels on one side.
+
+--------------------------------------
+hoot plot-node-density MyInput.osm.pbf MyLocalOutput.png 256 --base-colors "100,0,0,0" --multiplier "0,255,0,255"
+--------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[schema]]
+== schema
+
+=== Description
+
+The `schema` command generates documentation for the OSM tag schema in use.
+
+Supported textual formats are: csv, html, or asciidoc. The selected format is controlled by the 
+`tag.printing.format` configuration option. Textual format is displayed to the screen and can be 
+routed to file output when the command is executed. 
+
+Supported image formats are: png or svg. Specifying an image format writes a graph representation 
+of the schema to an image file.
+
+=== Usage
+
+--------------------------------------
+hoot schema [output] 
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-internal-tag-schema-that-hootenanny-uses[Examples]
+
+=== See Also
+
+* <<hootuser, SchemaFiles>>
+* `tag.printing.*` configuration options
+
+
+
+[[score-matches]]
+== score-matches
+
+=== Description
+
+The `score-matches` command scores how well conflation performs using manually matched data as a reference. The command 
+will return an error if any manual match is invalid.
+
+* `input`            - One or more pairs of inputs where the first item in the pair contains REF1 data (no manual matches) 
+                       and the second item in the pair contains REF2 or REVIEW data (manual matches); may be any supported 
+                       input format (e.g. .osm file).
+* `output`           - Output for debugging; may be any supported output format (e.g. .osm file). Only the first conflated 
+                       file will be output. Invalid if `--optimize` is selected.
+* `--confusion`      - Prints a confusion matrix
+* `--optimize`       - Optimizes the scoring function; No file is output when this option is used.
+* `--validation-off` - Turns off manual match validation; recommended for debugging manual matches only
+
+=== Usage
+
+--------------------------------------
+hoot score-matches (input1 input2) [input1 input2 ...] (output) [--confusion] [--validation-off]
+hoot score-matches (input1 input2) [input1 input2 ...] [--confusion] [--optimize] [--validation-off]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+# Displays match scores for multiple input pairs and writes conflated output a file
+hoot score-matches --confusion input1a.osm input2a.osm input2b.osm input2a.osm output.osm
+
+# Displays match scores for a single input pair with optimization
+hoot score-matches --confusion --optimize input1.osm input2.osm
+--------------------------------------
+
+=== See Also
+
+* <<hootuser, HootenannyManualConflation>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[score-matches-diff]]
+== score-matches-diff
+
+=== Description
+
+The `score-matches-diff` command (experimental) displays the difference between two scored conflated 
+output files created by the `score-matches` command.
+
+* `input1` - Input 1; must be OSM XML (.osm) file output from the `score-matches` command
+* `input2` - Input 2; must be an OSM XML (.osm) file output from the `score-matches` command
+* `output` - Diffential output; must be a file without an extension or a text file (.txt)
+
+=== Usage
+
+--------------------------------------
+hoot score-matches-diff (input1) (input2) (output)
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+hoot score-matches-diff input1.osm input2.osm output
+--------------------------------------
+
+=== See Also
+
+* <<hootuser, HootenannyManualConflation>>
+
+
+
+[[sort]]
+== sort
+
+=== Description
+
+The `sort` command sorts a file first by element type, then by increasing element ID. The element type sorting order 
+is: nodes, ways, and then relations.
+
+* `input`  - Input; may be any supported input format (e.g. .osm file).
+* `output` - Output; may be any supported output format (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+hoot sort (input) (output)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#sort-a-map-to-the-osm-standard-in-memory[Examples]
+
+=== Notes
+
+* Element sorting is performed in memory by default.  To perform sorting in a non-memory bound fashion, set the 
+configuration option, `element.sorter.element.buffer.size`, to a value greater than zero.
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[split]]
+== split
+
+=== Description
+
+The `split` command splits a map into multiple parts. 
+
+It reads in tile boundaries, uses them to process a map, and writes out multiple maps. One map is written for each tile in 
+the tile boundary containing only the elements that reside within that boundary. For elements that span multiple boundaries, 
+the geospatial envelope of the element is compared to all tiles it intersects and they are stored in the one that contains the 
+highest percentage of overlap.
+
+* `tiles`  - Tile map; may be any supported input format (e.g. .osm file). For use with tile maps generated by the
+             https://github.com/ngageoint/hootenanny/blob/master/docs/commands/task-grid.asciidoc[task-grid] command.
+* `input`  - Input; may be any supported input format (e.g. .osm file).
+* `output` - Output; may be any suppported output format (e.g. .osm file). The output will consist of 'n' number 
+             of output files where 'n' is the number of tiles in the `tiles` map. Each resulting map will contain only 
+             the elements whose geospatial envelope is mostly contained by the tile.
+
+=== Usage
+
+--------------------------------------
+hoot split (tiles) (input) (output)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#split-a-map-into-multiple-maps-using-tiles-from-a-file[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/commands/grid-node-density.asciidoc[grid-node-density Command]
+
+
+[[stat]]
+== stat
+
+=== Description
+
+The `stat` command displays a single statistic calculated from the features in a map.
+
+* `input(s)`    - Input(s); may be any supported input format (e.g. .osm file) or a directory if 
+                  `--recursive` is specified.
+* `visitor`     - The stat visitor must be the single class name of a Hootenanny visitor that 
+                  inherits from `ConstElementVisitor` and supports the `SingleStatistic` or 
+                  `NumericStatistic` interfaces. Use the `info --operators` command to obtain a 
+                  list of available visitors.
+* `--recursive` - Allows for processing the files contained in any directories specified in 
+                  `input(s)` recursively. This parameter has no effect on the processing of 
+                  non-directory inputs. This must be followed by either "*" to denote no filtering 
+                  or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". This 
+                  parameter is not compatible with the OGR layer input syntax.
+* `--statType`  - If `visitor` implements `NumericStatistic`, this optional parameter allows for 
+                  specifying the statistic type to collect. Supported types are 'total', 'min', 
+                  'max', and 'average'. If `visitor` implements `SingleStatistic`, this parameter is 
+                  ignored and 'total' is automatically used.
+
+=== Usage
+
+--------------------------------------
+hoot stat (input1) [input2...] (visitor) [--recursive "*"|"filter1;filter2..."] [--statType type]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-area-of-all-features-in-a-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[stats]]
+== stats
+
+=== Description
+
+The `stats` command calculates a pre-determined set of statistics for one or more maps.
+
+* `input(s)`    - Input(s); may be any supported input format (e.g. .osm file) or a directory if 
+                  `--recursive` is specified.
+* `--brief`     - Only calculates subset of statistics. 
+* `--output`    - Optional output; supported formats are text (.txt) and JSON (.json).
+* `--recursive` - Allows for processing the files contained in any directories specified in 
+                  `input(s)` recursively. This parameter has no effect on the processing of 
+                  non-directory inputs. This must be followed by either "*" to denote no filtering 
+                  or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". This 
+                  parameter is not compatible with the OGR layer input syntax.
+
+=== Usage
+
+--------------------------------------
+hoot stats (input1) [input2...] [--brief] [--output path] [--recursive]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-a-set-of-statistics-for-a-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[sync-element-ids]]
+== sync-element-ids
+
+=== Description
+
+The `sync-element-ids` command (experimental) copies element IDs from one map to another for 
+elements that are identical between the two of them.
+
+* `input1` - Source input from which to copy element IDs from; may be any supported input format (e.g. .osm file).
+* `input2` - Target input to copy element IDs to; may be any supported input format (e.g. .osm file).
+* `output` - Modified output for input2; may be any supported output format (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+hoot sync-element-ids (input1) (input2) (output)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#copy-element-ids-from-one-map-to-another-where-identical-elements-are-found-between-them[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[tag-compare]]
+== tag-compare
+
+=== Description
+
+The `tag-compare` command displays a comparison of tag values from two inputs.
+
+* `input1` -     Input 1; may be any supported input format (e.g. .osm file).
+* `input2` -     Input 2; may be any supported input format (e.g. .osm file).
+* `--no-table` - Prints the matrix as a list instead of a table.
+
+=== Usage
+
+--------------------------------------
+hoot tag-compare (input1 input2) [--no-table]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#compare-the-tags-in-two-maps[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[tag-distribution]]
+== tag-distribution
+
+=== Description
+
+The `tag-distribution` command displays a distribution of values for tags in one or more maps.
+
+* `input(s)`                 - Input(s); may be any supported input format (e.g. .osm file) or a 
+                               directory if `--recursive` is specified.
+* `--criteria`               - Optional filtering criteria for the inputs; May be one or more class 
+                               names inheriting from 
+                               `ElementCriterion`. By default, multiple criteria are logically OR'd
+                               together. Set the `tag.distribution.chain.element.criteria` option to 
+                               true to have the criteria logically AND'd together. The criteria can 
+                               be negated with the option `element.criteria.negate`.
+                               Use the `info --operators` command to obtain a list of available 
+                               criteria.
+* `--limit`                  - Limits the number of results returned.
+* `--names`                  - If specified, name tags, as defined by Hootenanny's schema, are used 
+                               as the tag keys to 
+                               gather statistics for. This is incompatible with the `--types` option.
+* `--percentage-of-matching` - By default with this option omitted, tag distribution percentages are 
+                               based on all elements
+                               parsed. Elements not possessing the tags specified in `tagKeys`, 
+                               `--names`, or `--types` are counted in the element total. With this 
+                               option enabled, only elements which have one of the specified tags 
+                               are counted in the element total. Enabling this option has no effect 
+                               if all tag keys are parsed (nothing specified for `tagKeys`).
+* `--recursive`              - Allows for processing the files contained in any directories 
+                               specified in `input(s)` recursively. This parameter has no effect on 
+                               the processing of non-directory inputs. This must be followed by 
+                               either "*" to denote no filtering or one or more wildcard name 
+                               filters. e.g. "*.osm;*.json" or "*myFile*". This parameter is not 
+                               compatible with the OGR layer input syntax.
+* `--sort-by-value `         - Sorts results alphabetically by tag value. If not specified, results 
+                               are sorted by decreasing tag value occurrence frequency.
+* `--tagKeys`                - The tag keys to gather statistics for. If this parameter is omitted, 
+                               all tag keys are processed. This parameter is ignored if `--names` or 
+                               `--types` are used.
+* `--tokenize`               - Breaks tag values up into individual tokens before counting them.
+* `--types`                  - If specified, type tags, as defined by Hootenanny's schema, are used 
+                               as the tag keys to gather statistics for. This is incompatible with 
+                               the `--names` option.
+
+=== Usage
+
+--------------------------------------
+hoot tag-distribution (input1) [input2...] [--criteria "criterion1;criterion2..."] [--limit value] [--names] \
+  [--percentage-of-matching] [--recursive "*"|"filter1;filter2..."]  [--sort-by-value] [--tagKeys "tagKey1;tagKey2..."] \
+  [--tokenize] [--types]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map[Examples]
+
+=== Percentage Calculation Methods
+
+Usage of options can change the way the tag percentages are calculated. 
+
+As an example, here we calculate the distribution of "highway" tags for all elements in a map:
+
+-----
+hoot tag-distribution input.osm --tagKeys highway --limit 3
+
+Total elements processed: 8,707. Total tags processed: 6,529.
+401	(4.61%)	highway=residential
+97	(1.11%)	highway=service
+56	(<1%)	highway=secondary
+-----
+
+The above results reflect the percentage of "highway" tags found among all feature in the map, which 
+include road ways, road nodes, etc.
+
+Now, we run the same calculation, but restrict the elements parsed to only those that Hootenanny 
+classifies as roads (`HighwayCriterion`). Hootenanny classifies roads as way elements possessing a 
+"highway" tag.
+
+-----
+hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
+
+Total elements processed: 673. Total tags processed: 5,565. Filtered by: HighwayCriterion.
+401	(59.6%)	highway=residential
+97	(14.4%)	highway=service
+56	(8.32%)	highway=secondary
+-----
+
+In the above results, the lower total number of elements and changed percentage values are a result 
+of restricting the counting to only road features. 
+
+Finally, we have a third option for counting "highway" tags where we only count elements that have 
+the tag but without without restricting the elements parsed to those that Hootenanny deems to be 
+roads (`HighwayCriterion`).
+
+-----
+hoot tag-distribution input.osm --tagKeys highway --percentage-of-matching --limit 3
+
+Total elements processed: 721. Total tags processed: 6,529.
+401	(55.6%)	highway=residential
+97	(13.5%)	highway=service
+56	(7.77%)	highway=secondary
+-----
+
+The increased total element count includes non-way elements with a "highway" tag, e.g. 
+`highway=traffic_signals` and `highway=turning_circle` nodes.
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[tag-info]]
+== tag-info
+
+=== Description
+
+The `tag-info` command displays unique feature tag values, grouped by tag key, found in one or more maps. 
+
+* `input(s)`            - Inputs(s); may be any supported input format (e.g. .osm file) or a directory 
+                          if `--recursive` is specified.
+* `--case-insensitive`  - Makes tag key comparisons case insensitive. By default the comparisons are 
+                          case sensitive.
+* `--delimited-text`    - By default, JSON output is generated. If this option is specified, a 
+                          delimited list with the format "key1;key2..." is returned. Value when the 
+                          `--keys-only` option is used only.
+* `--keys`              - Displays unique tag values for the specified keys only. This option is 
+                          ignored if `--keys-only` is specified.
+* `--keys-only`         - Displays tag keys only and does not print any associated values.
+* `--partial-key-match` - Causes any key in a feature which partially matches the given set of keys 
+                          in `--keys` to have its tag value added to the output. By default, keys 
+                          must be an exact match with each other for the tag value to be written to 
+                          output.
+* `--recursive`         - Allows for processing the files contained in any directories specified in 
+                          `input(s)` recursively. This parameter has no effect on the processing of 
+                          non-directory inputs. This must be followed by either "*" to denote no 
+                          filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
+                          "*myFile*". This parameter is not compatible with the OGR layer input 
+                          syntax.
+* `--tag-values-limit`  - Limits the number of unique tag values printed per tag key. By default, 
+                          there is no limit. This option is ignored if `--keys-only` is specified.
+
+=== Usage
+
+--------------------------------------
+hoot tag-info (input1) [input2...] [--case-insensitive] [--delimited-text] [--keys "key1;key2..."] [--keys-only] \
+  [--partial-key-match] [--recursive "*"|"filter1;filter2..."] [--tag-values-limit]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-tag-schema-information-for-a-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+
+[[task-grid]]
+== task-grid
+
+=== Description
+
+The `task-grid` command generates a grid consisting of rectangle shaped bounding boxes that can be used for dividing work to 
+be performed on a map.
+
+=== Uniform Grid
+
+If the `--uniform` option is specified, a task grid consisting of regular rectangle shaped bounding boxes that are 
+uniformly distributed across an area is generated. The following options may be used with `--uniform`:
+
+* `input(s)/bounds`   - Either one or more inputs or a bounding box string. If input(s) are specified, the task grid bounds 
+                        will be the entire extent of the input data. Otherwise, the extent will match the specified 
+                        bounding box in `bounds`. Inputs may be any supported input format (e.g. .osm file). `bounds` must 
+                        be of the form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
+* `output`            - Output; must be a GeoJSON (.geojson) or OSM (.osm) file.
+* `gridDimensionSize` - The number of rows and columns in the grid.
+
+=== Uniform Grid Usage
+
+--------------------------------------
+hoot task-grid (input1.osm) [input2.osm...] | (bounds) (output) (gridDimensionSize) (--uniform)
+--------------------------------------
+
+=== Node Density Grid
+
+If the `--node-density` option is specified, a task grid consisting of irregular rectangle shaped bounding boxes that 
+contain roughly equal distributions of node data from the specified input(s) is generated. The following options may be used 
+with `--node-density`:
+
+* `input(s)`                   - Input(s); may be any supported input format (e.g. .osm file).
+* `output`                     - Output; must be a GeoJSON (.geojson) or OSM (.osm) file.
+* `--bounds`                   - Optional bounding box to further restrict the extent of the task grid; must be of the 
+                                 form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
+* `--maxNodesPerCell`          - Optional maximum number of nodes to be found in any grid cell. The default value is 1000. If the 
+                                 specified value is less than the number of nodes in the input data, then a single bounding 
+                                 box containing all of the data is output. If too low a value is specified for 
+                                 `--maxNodesPerCell` or too high a value is specified for `--pixelSize`, the task grid 
+                                 generation algorithm  may not be able to find a solution and the runtime may increase
+                                 dramatically. The `--maxAttempts` option allows you to let the algorithm find potentially better 
+                                 input values.
+* `--pixelSize`                - Optional size of the pixel, in degrees, used in the calculation. The default size is 0.001.
+* `--maxAttempts`              - Optional maximum number of calculation attempts. Defaults to three attempts. This is 
+                                 useful when using this command in an automated fashion via a script. If this is set to 
+                                 greater than one and the first calculation attempt fails, additional calculation attempts 
+                                 will automatically be made after tweaking the initial input parameters. Note that as 
+                                 additional attempts are made, the adjustments to the inputs may dramatically increase 
+                                 the runtime of a calculation.
+* `--maxTimePerAttempt`        - Optional maximum time allowed, in seconds, for a single calculation attempt. Defaults to no 
+                                 time limit (-1). The timeout is not guaranteed to happen exactly after the specified time 
+                                 has elapsed and will happen as close to it as possible.
+* `--pixelSizeReductionFactor` - Optional percentage by which `--pixelSize` will be automatically reduced if `--maxAttempts` 
+                                 is greater than one and any calculation attempt fails. The default value is 10%.
+* `--random`                   - Optionally selects a single random grid cell from those calculated.
+* `--randomSeed`               - Optionally seeds the random number generator for consistent grid cell selection; valid only 
+                                 if `--random` is specified; use -1 for pseudo-random seeding; defaults to -1.
+
+=== Node Density Usage
+
+--------------------------------------
+hoot task-grid (input1.osm) [input2.osm...] (output) (--node-density) [--bounds <value>] [--maxNodesPerCell <value>] \
+  [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] \
+  [--random] [--randomSeed <value>]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-regular-shaped-cells-across-an-entire-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[type-similarity]]
+== type-similarity
+
+=== Description
+
+The `type-similarity` command returns a similarity score for two type tags based on the schema in use. This may be useful when debugging conflation matches. If a type is passed into either input that is not present in the schema, an error will be returned.
+
+* `tag1`  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
+* `tag2`  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
+
+=== Usage
+
+--------------------------------------
+hoot type-similarity (tag1) (tag2)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#obtain-a-similarity-score-for-two-type-tags-based-on-the-internal-schema[Examples]
+
+==== See Also
+
+* `schema` command
+
+
+[[type-tagger-rules]]
+== type-tagger-rules
+
+=== Description
+
+The `type-tagger-rules` command allows for creating an implicit tag rules database that can be used to implicitly add type 
+tags to features based on their names. See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User 
+Guide for more information.
+
+=== Creating the Raw Implicit Type Tagging Rules File
+
+A raw rules file must be created before generating a rules database.  Use the `--create-raw` option to generate it:
+
+* `input(s)`       - Input(s); may be any supported input format (e.g. .osm file).
+* `translation(s)` - Translation scripts used to translate each input dataset; must be either a Javascript (.js) or Python 
+                     (.py) translation file. Specify 'none' as an individual entry to skip translation of an input.
+* `output`         - A implicit tag rules file (.implicitTagRules).
+
+Relevant configuration options are those beginning with implicit.tagging.raw.rules.deriver.*, and in some cases those beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
+
+==== Usage
+
+--------------------------------------
+hoot type-tagger-rules --create-raw ("input1;input2...") ("translation1;translation2...") (output)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot type-tagger-rules --create-raw "myInput.osm.pbf;myInput.geonames" \
+  "translations/OSM_Ingest.js;translations/GeoNames_to_OSM.js" \
+  myRules.implicitTagRules
+--------------------------------------
+
+=== Creating the Implicit Type Tagging Rules Database
+
+Once a raw rules file has been generated, an implicit type tag rules database may be generated with the `--create-db` option:
+
+* `input`  - Input; must be an implicit tag rules (.implicitTagRules) file
+* `output` - Output; must be a SQLLite database (.sqlite).
+
+Relevant configuration options are those beginning with implicit.tagging.database.deriver.*, and in some cases, also those 
+beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
+
+==== Usage
+
+--------------------------------------
+hoot type-tagger-rules --create-db (input) (output)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot type-tagger-rules --create-db myInput.implicitTagRules implicitTagRules.sqlite
+--------------------------------------
+
+=== Showing Rules Database Statistics
+
+Statistics for a rules database can be displayed with the `--db-stats` option:
+
+* `input` - Input; an implicit tag rules (.implicitTagRules) file
+
+==== Usage
+
+--------------------------------------
+hoot type-tagger-rules --db-stats (input)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot type-tagger-rules --db-stats implicitTagRules.sqlite
+--------------------------------------
+
+=== See Also
+
+* <<hootuser, ImplicitTypeTaggingUser>>
+* <<hootuser, ImplicitTypeTaggingAlg>>
+* <<hootuser, ImplicitTagRulesDatabaseGeneration>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[validate]]
+== validate
+
+=== Description
+
+The `validate` command uses https://josm.openstreetmap.de/[JOSM] to identify map data with erroneous 
+aspects.
+
+To list information about the available validators use the following options:
+
+* `--validators` - Displays available JOSM validators for use in validation.
+                        
+To generate validation reports and/or mark data with validation errors use the following options:
+
+* `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+                        if `--recursive` is specified. Files with "-validated" in the name will be 
+                        ignored, as these are considered to be output of a previous validation.
+* `--report-output`   - Writes combined report output to a file instead of writing it to the 
+                        display.
+* `--output`          - Optional single validated file output; may be any supported output format 
+                        (e.g. .osm file). If specified, all inputs will be combined and elements 
+                        with validation errors will be marked with tags in the output file. Required 
+                        if `--recursive` is specified. Not compatible with `--separate-output`.
+* `--separate-output` - Optional multiple validated file outputs. Each input is processed and 
+                        written to a separate output location with the same base name as each input 
+                        with the text "-validated" appended to it. Not compatible with `--output`, 
+                        OSM API database (osmapidb://) or OSM API (http://) formats, or the OGR 
+                        layer input syntax.
+ * `--recursive`      - Allows for processing the files contained in any directories specified in 
+                        `input(s)` recursively. This parameter must be followed by either "*" to 
+                        denote no filtering or one or more wildcard name filters. e.g. 
+                        "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR 
+                        layer input syntax.   
+
+=== Usage
+
+--------------------------------------
+# list the available validators
+hoot validate [--validators]
+
+# perform validation
+hoot validate (input1) [input2...] [--report-output path] [--output path] [--recursive "*"|"filter1;filter2..."]
+
+# perform validation and write to separate outputs
+hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output]
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]
+
+==== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc[JOSM configuration details]
+* josm.* and jni.* configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+
+
+[[version]]
+== version
+
+=== Description
+
+The `version` command prints the version of the software.
+
+* `--debug` - Display detailed version information.
+
+=== Usage
+
+--------------------------------------
+hoot version [--debug]
+--------------------------------------
+
+
