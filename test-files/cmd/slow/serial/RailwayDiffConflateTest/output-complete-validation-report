@@ -1,4 +1,4 @@
-Input: test-output/cmd/slow/RailwayDiffConflateTest/output-complete.osm
+Input: test-output/cmd/slow/serial/RailwayDiffConflateTest/output-complete.osm
 
 Found 32 validation errors in 216 features with JOSM.
 Tag checker (MapCSS based) errors: 32

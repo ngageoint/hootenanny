@@ -1,4 +1,4 @@
-Input: test-output/cmd/slow/RailwayAttributeConflateTest/output.osm
+Input: test-output/cmd/slow/serial/RailwayAttributeConflateTest/output.osm
 
 Found 66 validation errors in 1,151 features with JOSM.
 Crossing ways errors: 2

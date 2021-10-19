@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 #include <hoot/js/PluginContext.h>
 
@@ -43,9 +44,8 @@ class ScriptMatchVisitor;
  * Match creator for all generic conflation scripts
  *
  * @sa ScriptMatch
- * @todo This class could use some refactoring after recent changes.
  */
-class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
+class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider, public Configurable
 {
 public:
 
@@ -53,30 +53,45 @@ public:
 
   static const QString POINT_POLYGON_SCRIPT_NAME;
 
-  ScriptMatchCreator() = default;
+  ScriptMatchCreator();
   ~ScriptMatchCreator() override = default;
 
   /**
    * @see SearchRadiusProvider
    */
   void init(const ConstOsmMapPtr& map) override;
-
   /**
    * @see SearchRadiusProvider
    */
   Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
 
   /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
+
+  /**
    * @see MatchCreator
    */
   MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
-
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
   void createMatches(
     const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
+  /**
+   * Determines whether an element is a candidate for matching for this match creator
+   *
+   * @param element element to determine the match candidate status of
+   * @param map the map the element whose candidacy is being determined belongs to
+   * @return true if the element is a match candidate; false otherwise
+   */
+  bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
+  /**
+   * @see MatchCreator
+   */
+  std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
   /**
    * @see MatchCreator
@@ -89,20 +104,6 @@ public:
   void setArguments(const QStringList& args) override;
 
   /**
-   * Determines whether an element is a candidate for matching for this match creator
-   *
-   * @param element element to determine the match candidate status of
-   * @param map the map the element whose candidacy is being determined belongs to
-   * @return true if the element is a match candidate; false otherwise
-   */
-  bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
-
-  /**
-   * @see MatchCreator
-   */
-  std::shared_ptr<MatchThreshold> getMatchThreshold() override;
-
-  /**
    * @see MatchCreator
    */
   QString getName() const override;
@@ -112,19 +113,6 @@ public:
    */
   QStringList getCriteria() const override;
 
-  /**
-   * @brief setRunOneToManyRailMatching toggles activation of the one to many rail matching routine
-   * when this instance runs Railway Conflation (uses Railway.js).
-   * @param runMatching turns one to many rail matching on/off
-   * @param scriptInfo determines which feature type is being conflated by this match creator
-   * @param identifyingKeys tags used to identify secondary one to many matching eligible rail
-   * features (only one must be satisfied)
-   * @param transferKeys
-   */
-  void setRunOneToManyRailMatching(
-    const bool runMatching, const CreatorDescription::BaseFeatureType& scriptInfo,
-    const QStringList& identifyingKeys, const QStringList& transferKeys) const;
-
 private:
 
   friend class ScriptMatchCreatorTest;
@@ -132,6 +120,16 @@ private:
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
   CreatorDescription _scriptInfo;
+
+  // options vals to validate; Its sometimes easier to perform validation on these types of options
+  // with core C++ as opposed to in the script JS files. As this list grows, consider creating a new
+  // options class for each feature type.
+
+  // railway
+  bool _railwayOneToManyMatchEnabled;
+  QStringList _railwayOneToManyIdentifyingKeys;
+  QStringList _railwayOneToManyTransferKeys;
+  bool _railwayOneToManyTransferAllKeys;
 
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;
@@ -143,7 +141,21 @@ private:
   ElementCriterionPtr _pointPolyPointCrit;
 
   CreatorDescription _getScriptDescription(QString path) const;
-  void _validateRailConfig(v8::Local<v8::Object> plugin) const;
+  /**
+   * @brief _validateConfigOptions TODO
+   * @param baseFeatureType
+   */
+  void _validateConfig(const CreatorDescription::BaseFeatureType& baseFeatureType);
+  /**
+   * @brief _validatePluginConfig TODO
+   * @param baseFeatureType
+   * @param plugin
+   * @todo This needs to be moved into _validateConfig but haven't figured out a good way to do it
+   * due to needing the plugin object. Also, the type match threshold range checking within this
+   * methods being done for rails needs to be extended to all scripts that use it.
+   */
+  void _validatePluginConfig(
+    const CreatorDescription::BaseFeatureType& baseFeatureType, v8::Local<v8::Object> plugin) const;
 
   std::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };

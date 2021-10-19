@@ -653,7 +653,7 @@ public:
 
 private:
 
-  // don't hold on to the map.
+  // Don't hold on to the map.
   std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
 
@@ -701,6 +701,22 @@ private:
   set<ElementId> _empty;
 };
 
+ScriptMatchCreator::ScriptMatchCreator() :
+_railwayOneToManyMatchEnabled(false),
+_railwayOneToManyTransferAllKeys(false)
+{
+}
+
+void ScriptMatchCreator::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  _railwayOneToManyMatchEnabled = opts.getRailwayOneToManyMatch();
+  _railwayOneToManyIdentifyingKeys = opts.getRailwayOneToManyIdentifyingKeys();
+  _railwayOneToManyTransferKeys = opts.getRailwayOneToManyTransferKeys();
+  _railwayOneToManyTransferAllKeys = opts.getRailwayOneToManyTransferAllTags();
+}
+
 void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
 {
   _getCachedVisitor(map)->initSearchRadiusInfo();
@@ -730,42 +746,59 @@ void ScriptMatchCreator::setArguments(const QStringList& args)
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
 
-  // Validate one to many rail matching config options based on the currently configured options and
-  // whether this match creator is dealing with rail matches or not.
-  setRunOneToManyRailMatching(
-    ConfigOptions().getRailwayOneToManyMatch(), _scriptInfo.getBaseFeatureType(),
-    ConfigOptions().getRailwayOneToManyIdentifyingKeys(),
-    ConfigOptions().getRailwayOneToManyTransferKeys());
+  setConfiguration(conf());
+  // TODO
+  _validateConfig(_scriptInfo.getBaseFeatureType());
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
 }
 
-void ScriptMatchCreator::setRunOneToManyRailMatching(
-  const bool runMatching, const CreatorDescription::BaseFeatureType& baseFeatureType,
-  const QStringList& identifyingKeys, const QStringList& transferKeys) const
+void ScriptMatchCreator::_validateConfig(
+  const CreatorDescription::BaseFeatureType& baseFeatureType)
 {
-  if (runMatching && baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
+  ConfigOptions opts;
+
+  // Other feature types may also need settings validation.
+  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway &&
+      _railwayOneToManyMatchEnabled)
   {
-    QStringList identifyingKeysTemp = identifyingKeys;
-    StringUtils::removeEmptyStrings(identifyingKeysTemp);
-    if (identifyingKeysTemp.empty())
+    StringUtils::removeEmptyStrings(_railwayOneToManyIdentifyingKeys);
+    if (_railwayOneToManyIdentifyingKeys.empty())
     {
       throw IllegalArgumentException(
         "No railway one to many identifying keys specified in " +
         ConfigOptions::getRailwayOneToManyIdentifyingKeysKey() + ".");
     }
 
-    QStringList transferKeysTemp = transferKeys;
-    StringUtils::removeEmptyStrings(transferKeysTemp);
-    if (transferKeysTemp.empty())
+    if (!_railwayOneToManyTransferAllKeys)
     {
-      throw IllegalArgumentException(
-        "No railway one to many transfer tag keys specified in " +
-        ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey() + ".");
+      StringUtils::removeEmptyStrings(_railwayOneToManyTransferKeys);
+      if (_railwayOneToManyTransferKeys.empty())
+      {
+        throw IllegalArgumentException(
+          "No railway one to many transfer tag keys specified in " +
+          ConfigOptions::getRailwayOneToManyTransferKeysKey() + ".");
+      }
     }
 
     LOG_STATUS("Running railway one to many custom conflation workflow...");
+  }
+}
+
+void ScriptMatchCreator::_validatePluginConfig(
+  const CreatorDescription::BaseFeatureType& baseFeatureType, Local<Object> plugin) const
+{
+  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
+  {
+    const double railwayTypeMatchThreshold =
+      ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
+     if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
+     {
+       throw IllegalArgumentException(
+         "Railway type match threshold out of range: " +
+         QString::number(railwayTypeMatchThreshold) + ".");
+     }
   }
 }
 
@@ -1107,12 +1140,8 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   QFileInfo fi(path);
   result.setClassName(className() + "," + fi.fileName());
 
-  // config error handling
-  // TODO: The type match threshold range checking needs to be extended to all scripts that use it.
-  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
-  {
-    _validateRailConfig(ToLocal(&plugin));
-  }
+  // config error handling that required plugin
+  _validatePluginConfig(baseFeatureType, ToLocal(&plugin));
 
   return result;
 }
@@ -1173,18 +1202,6 @@ QString ScriptMatchCreator::getName() const
 QStringList ScriptMatchCreator::getCriteria() const
 {
   return _scriptInfo.getMatchCandidateCriteria();
-}
-
-void ScriptMatchCreator::_validateRailConfig(Local<Object> plugin) const
-{
-  const double railwayTypeMatchThreshold =
-    ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
-  if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
-  {
-    throw IllegalArgumentException(
-      "Railway type match threshold out of range: " + QString::number(railwayTypeMatchThreshold) +
-      ".");
-  }
 }
 
 }

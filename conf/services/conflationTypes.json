@@ -141,10 +141,9 @@
         "merger": "ScriptMergerCreator",
         "members": {
             "railway.one.to.many.match": "Enable one to many matching from secondary to reference features",
-            "railway.one.to.many.delete.secondary": "Delete the secondary feature from output when a one to many feature tag transfer occurs from secondary to reference",
             "railway.one.to.many.identifying.keys": "Tag keys allowing for a one to many feature tag transfer from secondary to reference",
             "railway.one.to.many.transfer.keys": "Keys of tags to transfer in a one to many feature tag transfer from secondary to reference",
-            "railway.one.to.many.match.transfer.all.tags": "Transfer all tags from secondary to reference features (overrides keys list)",
+            "railway.one.to.many.transfer.all.tags": "Transfer all tags from secondary to reference features (overrides transfer keys list)",
             "railways.crossing.marker.ignore.types": "Types to ignore when detecting crossing railways",
             "railways.crossing.marker.mark.intra.dataset.crossings": "Mark crossing railways within the same input dataset",
             "search.radius.railway": "Search radius (m); -1 for default",
