@@ -39,7 +39,6 @@ Basic Commands:
 Advanced Commands:
 
   build-model                   Builds a random forest model to be used by conflation
-  conflate-cumulative           Conflates multiple maps in a cumulative fashion (experimental)
   crop-random                   Crops out a random section of a map (experimental)
   db-delete                     Deletes a map from the Hootenanny Web Services database
   db-list                       Lists maps in the Hootenanny Web Services database
