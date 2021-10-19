@@ -53,9 +53,7 @@ class MapComparatorTest : public HootTestFixture
 
 public:
 
-  MapComparatorTest()
-    : HootTestFixture("test-files/",
-                      UNUSED_PATH)
+  MapComparatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
   }
 
