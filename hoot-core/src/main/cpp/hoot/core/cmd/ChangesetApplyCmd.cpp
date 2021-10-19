@@ -119,8 +119,8 @@ private:
     const bool showProgress, const bool showStats, const QStringList& args)
   {
     //  Get the endpoint URL
-    const QString urlStr = args[args.size() - 1];
-    if (!urlStr.toLower().startsWith("http://") && !urlStr.toLower().startsWith("https://"))
+    const QString urlStr = args[args.size() - 1].toLower();
+    if (!urlStr.startsWith("http://") && !urlStr.startsWith("https://"))
     {
       throw IllegalArgumentException(
         QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
@@ -177,7 +177,6 @@ private:
       LOG_ERROR(
         QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
       writer.writeErrorFile();
-      _success = false;
     }
 
     //  Output the stats if requested
@@ -189,6 +188,7 @@ private:
       QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
       cout << "stats = (stat)\n" << statsMsg << endl;
     }
+    _success = !writer.failed();
   }
 
   void _writeSqlChangeset(const QStringList& args) const

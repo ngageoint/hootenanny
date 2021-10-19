@@ -166,9 +166,14 @@ var endPoint = '</node></osm>';
 var endLine = '</way></osm>'; // NOTE: This is also for Areas as well
 
 // Test a translated feature
-function testTranslated(schema,featureCode,tagList)
+function testTranslated(schema,featureCode,tagList,geomList)
 {
   console.log('---------------');
+
+  if (geomList == undefined)
+  {
+    geomList = ['Point','Line','Area']
+  }
 
   var osmFeatures = {};
 
@@ -184,7 +189,7 @@ function testTranslated(schema,featureCode,tagList)
   for (var tag in tagList) { osmFeatures.Area += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
   osmFeatures.Area += endLine;
 
-  for (var geom in osmFeatures)
+  for (var geom of geomList)
   {
     console.log('' + schema + '  ' + featureCode + '  ' + geom);
 

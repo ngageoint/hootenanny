@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-IN_DIR=test-files/cmd/slow/RailwayDiffConflateTest
-IN_DIR_2=test-files/cmd/slow/RailwayConflateTest
-OUT_DIR=test-output/cmd/slow/RailwayDiffConflateTest
+IN_DIR=test-files/cmd/slow/serial/RailwayDiffConflateTest
+IN_DIR_2=test-files/cmd/slow/serial/RailwayConflateTest
+OUT_DIR=test-output/cmd/slow/serial/RailwayDiffConflateTest
 mkdir -p $OUT_DIR
 LOG_LEVEL=--warn
 CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf \

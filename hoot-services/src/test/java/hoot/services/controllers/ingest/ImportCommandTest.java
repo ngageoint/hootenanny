@@ -66,7 +66,7 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("ogr2osm.simplify.complex.buildings=true");
         options.add("hootapi.db.writer.create.user=true");
@@ -122,7 +122,7 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
@@ -176,7 +176,7 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");options.add("ogr2osm.simplify.complex.buildings=true");
 
         options.add("hootapi.db.writer.create.user=true");
@@ -236,11 +236,11 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
-        options.add("convert.ops=hoot::SchemaTranslationVisitor");
+        options.add("convert.ops=SchemaTranslationVisitor");
         options.add("schema.translation.script=" + "/" + translation);
 
         String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
@@ -282,11 +282,11 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
-        options.add("convert.ops=hoot::SchemaTranslationVisitor");
+        options.add("convert.ops=SchemaTranslationVisitor");
         options.add("schema.translation.script=" + HOME_FOLDER + "/" + translation);
 
         String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
