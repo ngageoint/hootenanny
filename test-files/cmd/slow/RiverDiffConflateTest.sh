@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-# Note that differential.remove.river.partial.matches.as.whole overrides differential.remove.linear.partial.matches.as.whole.
+# Note that differential.remove.river.partial.matches.as.whole overrides 
+# differential.remove.linear.partial.matches.as.whole.
 
 IN_DIR=test-files/cmd/slow/RiverDiffConflateTest
 IN_DIR_2=test-files/conflate/generic/rivers
