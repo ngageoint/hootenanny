@@ -91,8 +91,6 @@ public:
     }
     CPPUNIT_ASSERT(!match);
   }
-
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapComparatorTest, "quick");
