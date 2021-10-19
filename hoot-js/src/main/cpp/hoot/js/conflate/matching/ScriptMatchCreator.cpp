@@ -747,7 +747,8 @@ void ScriptMatchCreator::setArguments(const QStringList& args)
   _scriptInfo = _getScriptDescription(_scriptPath);
 
   setConfiguration(conf());
-  // TODO
+  // Validate the configuration outside of setConfiguration, since it needs to be done each time a
+  // different conflate script is specified.
   _validateConfig(_scriptInfo.getBaseFeatureType());
 
   LOG_DEBUG(

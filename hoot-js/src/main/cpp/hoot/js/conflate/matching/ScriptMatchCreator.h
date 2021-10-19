@@ -142,14 +142,16 @@ private:
 
   CreatorDescription _getScriptDescription(QString path) const;
   /**
-   * @brief _validateConfigOptions TODO
-   * @param baseFeatureType
+   * @brief _validateConfigOptions validates configuration options for the specified feature type
+   * being conflated
+   * @param baseFeatureType the type of feature to conflate
    */
   void _validateConfig(const CreatorDescription::BaseFeatureType& baseFeatureType);
   /**
-   * @brief _validatePluginConfig TODO
-   * @param baseFeatureType
-   * @param plugin
+   * @brief _validatePluginConfig validates configuration options for the specified feature type
+   * being conflated when a call into the conflate script must be made to retrieve information
+   * @param baseFeatureType the type of feature to conflate
+   * @param plugin conflate script being executed
    * @todo This needs to be moved into _validateConfig but haven't figured out a good way to do it
    * due to needing the plugin object. Also, the type match threshold range checking within this
    * methods being done for rails needs to be extended to all scripts that use it.
