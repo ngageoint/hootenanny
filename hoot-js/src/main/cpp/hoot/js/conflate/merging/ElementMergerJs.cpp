@@ -67,11 +67,12 @@ void ElementMergerJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  exports->Set(context, toV8("mergeElements"),
-               FunctionTemplate::New(current, mergeElements)->GetFunction(context).ToLocalChecked());
+  exports->Set(
+    context, toV8("merge"),
+    FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
 }
 
-void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
+void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
 {
   LOG_INFO("Merging elements...");
 
@@ -89,15 +90,16 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
       return;
     }
 
-    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
+    OsmMapPtr map(
+      node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
     LOG_VART(map->getElementCount());
-    _mergeElements(map, current);
+    _merge(map, current);
     LOG_VART(map->getElementCount());
 
     Local<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
-  // This error handling has been proven to not work as it never returns the error message to the
+  // This error handling has been proven to not work, as it never returns the error message to the
   // nodejs calling service....makes debugging very difficult. Need to fix: #2231. As a workaround,
   // use scripts/core/MergeElements.js to see log output during merging.
   catch (const HootException& e)
@@ -129,7 +131,7 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
   return "";
 }
 
-void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
+void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
 {  
   const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
@@ -149,7 +151,7 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   switch (mergeType)
   {
     case MergeType::BuildingToBuilding:
-      BuildingMerger::mergeBuildings(map, mergeTargetId);
+      BuildingMerger::merge(map, mergeTargetId);
       break;
 
     case MergeType::PoiToPolygon:
@@ -159,12 +161,12 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
       break;
 
     case MergeType::PoiToPoi:
-      PoiMergerJs::mergePois(map, mergeTargetId, current);
+      PoiMergerJs::merge(map, mergeTargetId, current);
       scriptMerge = true;
       break;
 
     case MergeType::AreaToArea:
-      AreaMergerJs::mergeAreas(map, mergeTargetId, current);
+      AreaMergerJs::merge(map, mergeTargetId, current);
       scriptMerge = true;
       break;
 
@@ -226,7 +228,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
     CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map);
   LOG_VART(containsBuildings);
   const bool containsPois =
-    CriterionUtils::containsSatisfyingElements<PoiCriterion>(map); //general poi definition
+    CriterionUtils::containsSatisfyingElements<PoiCriterion>(map); // general poi definition
   LOG_VART(containsPois);
   if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
       CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true))

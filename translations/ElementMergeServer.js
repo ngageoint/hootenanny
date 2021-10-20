@@ -123,7 +123,7 @@ var postHandler = function(data)
 
   var map = new hoot.OsmMap();
   hoot.loadMapFromStringPreserveIdAndStatus(map, data);
-  var mergedMap = hoot.mergeElements(map);
+  var mergedMap = hoot.mergeElements(map/*, mergeMode*/);
   var xml = hoot.OsmWriter.toString(mergedMap);
   return xml;
 }

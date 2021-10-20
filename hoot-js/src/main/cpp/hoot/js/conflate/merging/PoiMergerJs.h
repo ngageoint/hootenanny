@@ -52,7 +52,7 @@ public:
    * @param mergeTargetId the ID of the area which all other POIs should be merged into
    * @param current the context this method should run under
    */
-  static void mergePois(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
+  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
 };
 
 }

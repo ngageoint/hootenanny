@@ -43,7 +43,7 @@ using namespace v8;
 namespace hoot
 {
 
-void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
+void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
 {
   LOG_INFO("Merging POIs...");
 

@@ -379,7 +379,7 @@ exports.mergeSets = function(map, pairs, replaced)
   hoot.trace("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
 
   // *Think* this is the correct behavior...if we had any many to one merges earlier during this
-  // merge call, then we shouldn't have any other types of merges to perform...not sure yet, though.
+  // merge call, then we shouldn't have any other types of merges to perform.
   if (!oneToManyMergeOccurred)
   {
     // Go back to the original default tag merger.

@@ -77,7 +77,7 @@ public:
  ~ElementMergerJs() override = default;
 
  static void Init(v8::Local<v8::Object> target);
- static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
+ static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
@@ -85,7 +85,7 @@ private:
 
   ElementMergerJs() = default;
 
-  static void _mergeElements(OsmMapPtr map, v8::Isolate* current);
+  static void _merge(OsmMapPtr map, v8::Isolate* current);
 
   static MergeType _determineMergeType(ConstOsmMapPtr map);
   // feature being merged into must have a custom hoot tag for all merge types except poi/poly

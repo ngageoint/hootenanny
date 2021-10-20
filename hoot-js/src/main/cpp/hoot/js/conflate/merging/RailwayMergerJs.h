@@ -24,23 +24,39 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "OneToManyRailwayMerger.h"
 
-// hoot
+#ifndef RAILWAY_MERGER_JS_H
+#define RAILWAY_MERGER_JS_H
 
+// Hoot
+#include <hoot/js/HootJsStable.h>
+#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/PluginContext.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-void OneToManyRailwayMerger::setConfiguration(const Settings& /*conf*/)
+/**
+ * Merges railways
+ */
+class RailwayMergerJs
 {
 
+public:
+
+  /**
+   * Merges an unlimited number of railways together using a generic conflation script
+   *
+   * The map passed may or may not contain constituent elements (way nodes, relation members).
+   *
+   * @param map a map containing the railways to be merged
+   * @param mergeTargetId the ID of the area which all other railways should be merged into
+   * @param current the context this method should run under
+   */
+  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
+};
+
 }
 
-void OneToManyRailwayMerger::apply(
-  const OsmMapPtr& /*map*/, std::vector<std::pair<ElementId, ElementId>>& /*replaced*/)
-{
-
-}
-
-}
+#endif // RAILWAY_MERGER_JS_H

@@ -32,8 +32,8 @@ function stringIsEmpty(str)
 
 /**
  * This will merge elements 1 and 2. The geometry of 1 will be kept and 2 discarded. If element 2 is
-   part of another element (e.g. in a way or relation) element 1 will take its place in that
-   element.
+   part of another element (e.g. in a way or relation), element 1 will take its place in that
+   element. Tag merging adheres to the configured tag merging strategy.
  */
 function mergeElements(map, e1, e2) 
 {

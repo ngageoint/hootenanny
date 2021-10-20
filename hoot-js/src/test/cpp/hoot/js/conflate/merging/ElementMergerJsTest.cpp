@@ -131,6 +131,8 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingRelationTest);
   CPPUNIT_TEST(buildingToBuildingInputWithConflatedStatusTest);
 
+  // TODO: add railway to railway
+
   // INVALID FEATURE COMBOS
   CPPUNIT_TEST(invalidFeatureCombinationTest1);
   CPPUNIT_TEST(invalidFeatureCombinationTest2);
@@ -165,7 +167,7 @@ public:
       OsmMapPtr map = std::make_shared<OsmMap>();
       OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
 
-      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+      ElementMergerJs::_merge(map, v8::Isolate::GetCurrent());
 
       MapProjector::projectToWgs84(map);
       OsmMapWriterFactory::write(map, _outputPath + outFileName);

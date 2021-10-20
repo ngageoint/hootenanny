@@ -44,7 +44,7 @@ using namespace v8;
 namespace hoot
 {
 
-void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
+void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
 {
   LOG_INFO("Merging areas...");
 
