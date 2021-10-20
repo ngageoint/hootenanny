@@ -22,42 +22,34 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
+#include "RailwayOneToManyCriterion.h"
 
-#ifndef RAILWAY_MERGER_JS_H
-#define RAILWAY_MERGER_JS_H
-
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/PluginContext.h>
+// hoot
+#include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Merges railways
- */
-class RailwayMergerJs
+HOOT_FACTORY_REGISTER(ElementCriterion, RailwayOneToManyCriterion)
+
+bool RailwayOneToManyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-
-public:
-
-  /**
-   * Merges an unlimited number of railways together using a generic conflation script
-   *
-   * The map passed may or may not contain constituent elements (way nodes, relation members).
-   *
-   * @param map a map containing the railways to be merged
-   * @param mergeTargetId the ID of the area which all other railways should be merged into
-   * @param current the context this method should run under
-   */
-  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
-};
-
+  QList<ElementCriterionPtr> crits;
+  ElementCriterionPtr typeCrit = std::make_shared<RailwayCriterion>();
+  crits.append(typeCrit);
+  ElementCriterionPtr statusCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
+  crits.append(statusCrit);
+  ElementCriterionPtr tagCrit =
+    std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes");
+  crits.append(tagCrit);
+  return CriterionUtils::combineCriterion(crits)->isSatisfied(e);
 }
 
-#endif // RAILWAY_MERGER_JS_H
+}

@@ -160,17 +160,9 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
             // and tag those for debugging purposes.
             LOG_TRACE(
               "Marking for review: " << way->getElementId() << " and " << neighborId << "...");
-            // We append custom text to the review type if either of these features was the result
-            // of a one to many match. This text is checked for by external callers that need to
-            // merge features during the review process.
-            QString reviewType = "Crossing railways";
-            if (way->getTag(MetadataTags::HootRailwayOneToManyMatchSecondary()) == "yes" ||
-                neighbor->getTag(MetadataTags::HootRailwayOneToManyMatchSecondary()) == "yes")
-            {
-              reviewType += " (OneToMany)";
-            }
             reviewMarker.mark(
-              _map, way, neighbor, reviewType, MetadataTags::HootReviewCrossingRailways(), 1.0);
+              _map, way, neighbor, "Crossing railways", MetadataTags::HootReviewCrossingRailways(),
+              1.0);
             _markedRailways.insert(idStr1);
             _markedRailways.insert(idStr2);
             _numAffected++;

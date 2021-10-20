@@ -22,47 +22,45 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef NEEDSREVIEWCRITERION_H
-#define NEEDSREVIEWCRITERION_H
+#ifndef RAILWAY_ONE_TO_MANY_CRITERION_H
+#define RAILWAY_ONE_TO_MANY_CRITERION_H
 
-// Hoot
+// hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Determines if a feature requires manual review
+ * TODO
  */
-class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class RailwayOneToManyCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "NeedsReviewCriterion"; }
+  static QString className() { return "RailwayOneToManyCriterion"; }
 
-  NeedsReviewCriterion() = default;
-  NeedsReviewCriterion(const ConstOsmMapPtr& map);
-  ~NeedsReviewCriterion() override = default;
+  RailwayOneToManyCriterion() = default;
+  ~RailwayOneToManyCriterion() override = default;
 
+  /**
+   * @see ElementCriterion
+   */
   bool isSatisfied(const ConstElementPtr& e) const override;
-  ElementCriterionPtr clone() override { return std::make_shared<NeedsReviewCriterion>(_map); }
 
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+  /**
+   * @see ElementCriterion
+   */
+  ElementCriterionPtr clone() override { return std::make_shared<RailwayOneToManyCriterion>(); }
 
-  QString getDescription() const override { return "Identifies features that need to be reviewed"; }
+  QString getDescription() const override { return "TODO"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // NEEDSREVIEWCRITERION_H
+#endif // RAILWAY_ONE_TO_MANY_CRITERION_H

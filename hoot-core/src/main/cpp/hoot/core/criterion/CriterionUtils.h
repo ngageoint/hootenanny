@@ -60,7 +60,6 @@ public:
   static ElementCriterionPtr constructCriterion(
     const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
     bool& isStreamable);
-
   /**
    * Constructs a criterion that is the combination of multiple criterion
    *
@@ -73,7 +72,6 @@ public:
    */
   static ElementCriterionPtr constructCriterion(
     const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
-
   /**
    * @brief combineCriterion combines multiple criterion into a single criteria
    * @param criteria individual criterion to combine

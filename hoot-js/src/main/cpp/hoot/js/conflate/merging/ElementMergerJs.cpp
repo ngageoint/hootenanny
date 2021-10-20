@@ -37,6 +37,7 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/RailwayOneToManyCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -86,25 +87,20 @@ void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
   Local<Context> context = current->GetCurrentContext();
   try
   {
-    if (args.Length() > 2)
+    if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
         current->ThrowException(
           HootExceptionJs::create(
-            IllegalArgumentException("Expected one to two arguments passed to 'merge'."))));
+            IllegalArgumentException("Expected one argument passed to 'merge'."))));
       return;
     }
 
     OsmMapPtr map(
       node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
-    QString mergeMode;
-    if (args.Length() == 2)
-    {
-      mergeMode = toCpp<QString>(args[1]);
-    }
 
     LOG_VART(map->getElementCount());
-    _merge(map, current, mergeMode);
+    _merge(map, current);
     LOG_VART(map->getElementCount());
 
     Local<Object> returnMap = OsmMapJs::create(map);
@@ -134,17 +130,15 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
       return "Area";
     case MergeType::Railway:
       return "Railway";
-    case MergeType::RailwayOneToMany:
-      return "RailwayOneToMany";
     default:
       throw IllegalArgumentException("Invalid merge type.");
   }
   return "";
 }
 
-void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current, const QString mergeMode)
+void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
 {  
-  const MergeType mergeType = _determineMergeType(map, mergeMode);
+  const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
 
   ElementId mergeTargetId;
@@ -152,7 +146,7 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current, const QString merg
   // element itself.
   if (mergeType != MergeType::PoiToPolygon)
   {
-    mergeTargetId = _getMergeTargetFeatureId(map, mergeType);
+    mergeTargetId = _getMergeTargetFeatureId(map);
     LOG_VART(mergeTargetId);
   }
 
@@ -182,10 +176,6 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current, const QString merg
       RailwayMergerJs::merge(map, mergeTargetId, current);
       break;
 
-    case MergeType::RailwayOneToMany:
-      RailwayMergerJs::merge(map, mergeTargetId, current, true);
-      break;
-
     default:
       throw HootException("Invalid merge type.");
   }
@@ -200,19 +190,24 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current, const QString merg
   LOG_VART(mergedElement);
 }
 
-ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map, const MergeType& mergeType)
+ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
-  if (mergeType == MergeType::RailwayOneToMany)
+  const bool containsAtLeastOneRailwayOneToManyMatchedElement =
+    CriterionUtils::containsSatisfyingElements<RailwayOneToManyCriterion>(map);
+  if (containsAtLeastOneRailwayOneToManyMatchedElement)
   {
-    const long numStatus2Elements =
+    const long numOneToManySecondaryMatchElements =
       (long)FilteredVisitor::getStat(
-        std::make_shared<StatusCriterion>(Status::Unknown2),
+        std::make_shared<RailwayOneToManyCriterion>(),
         std::make_shared<ElementCountVisitor>(), map);
-    if (numStatus2Elements != 1)
+    if (numOneToManySecondaryMatchElements != 1)
     {
-      throw IllegalArgumentException("Input map must have exactly one feature with status=2.");
+      throw IllegalArgumentException(
+        "Input map for railway one to many merging must have exactly one qualifying "
+        "secondary feature.");
     }
 
+    // _determineMergeType has already validated feature type, so just check status here.
     const long numStatus1Elements =
       (long)FilteredVisitor::getStat(
         std::make_shared<StatusCriterion>(Status::Unknown1),
@@ -224,46 +219,43 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map, const Me
 
     return MapUtils::getFirstElementWithStatus(map, Status::Unknown2)->getElementId();
   }
-  else
+
+  const long numMergeTargets =
+    (long)FilteredVisitor::getStat(
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootMergeTarget()),
+      std::make_shared<ElementCountVisitor>(), map);
+  LOG_VART(numMergeTargets);
+  if (numMergeTargets != 1)
   {
-    const long numMergeTargets =
-      (long)FilteredVisitor::getStat(
-        std::make_shared<TagKeyCriterion>(MetadataTags::HootMergeTarget()),
-        std::make_shared<ElementCountVisitor>(), map);
-    LOG_VART(numMergeTargets);
-    if (numMergeTargets != 1)
-    {
-      throw IllegalArgumentException(
-        "Input map must have exactly one feature marked with a " + MetadataTags::HootMergeTarget() +
-        " tag.");
-    }
-
-    const long numNonMergeTargets =
-      (long)FilteredVisitor::getStat(
-        std::make_shared<NotCriterion>(
-          std::make_shared<TagKeyCriterion>(MetadataTags::HootMergeTarget())),
-        std::make_shared<ElementCountVisitor>(), map);
-    LOG_VART(numMergeTargets);
-    if (numNonMergeTargets < 1)
-    {
-      throw IllegalArgumentException(
-        "Input map must have at least one feature not marked with a " +
-        MetadataTags::HootMergeTarget() + " tag.");
-    }
-
-    TagKeyCriterion mergeTagCrit(MetadataTags::HootMergeTarget());
-    UniqueElementIdVisitor idSetVis;
-    FilteredVisitor filteredVis(mergeTagCrit, idSetVis);
-    map->visitRo(filteredVis);
-    const std::set<ElementId>& mergeTargetIds = idSetVis.getElementSet();
-    assert(mergeTargetIds.size() == 1);
-
-    return *mergeTargetIds.begin();
+    throw IllegalArgumentException(
+      "Input map must have exactly one feature marked with a " + MetadataTags::HootMergeTarget() +
+      " tag.");
   }
+
+  const long numNonMergeTargets =
+    (long)FilteredVisitor::getStat(
+      std::make_shared<NotCriterion>(
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootMergeTarget())),
+      std::make_shared<ElementCountVisitor>(), map);
+  LOG_VART(numMergeTargets);
+  if (numNonMergeTargets < 1)
+  {
+    throw IllegalArgumentException(
+      "Input map must have at least one feature not marked with a " +
+      MetadataTags::HootMergeTarget() + " tag.");
+  }
+
+  TagKeyCriterion mergeTagCrit(MetadataTags::HootMergeTarget());
+  UniqueElementIdVisitor idSetVis;
+  FilteredVisitor filteredVis(mergeTagCrit, idSetVis);
+  map->visitRo(filteredVis);
+  const std::set<ElementId>& mergeTargetIds = idSetVis.getElementSet();
+  assert(mergeTargetIds.size() == 1);
+
+  return *mergeTargetIds.begin();
 }
 
-ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(
-  ConstOsmMapPtr map, const QString mergeMode)
+ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
   // Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
   // multiple feature types within the same map.  After the initial feature requirements are
@@ -272,19 +264,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(
 
   MergeType mergeType;
 
-  const bool containsRailways = CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2);
-  if (mergeMode == "OneToMany")
-  {
-    if (!containsRailways)
-    {
-      throw IllegalArgumentException("Invalid merge mode specified for input data: " + mergeMode);
-    }
-    else
-    {
-      mergeType = MergeType::RailwayOneToMany;
-      return mergeType;
-    }
-  }
+  // TODO: clean this up to require only elements of a single type
 
   const bool containsPolys =
     CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map);
@@ -319,7 +299,8 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(
   {
     mergeType = MergeType::Area;
   }
-  else if (containsRailways) // regular rail ref conflate merge
+  // regular rail ref conflate merge
+  else if (CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2))
   {
     mergeType = MergeType::Railway;
   }

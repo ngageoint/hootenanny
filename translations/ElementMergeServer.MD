@@ -10,18 +10,15 @@
 #### * one POI with one polygon
 #### * railways with railways
 ####
-#### Some feature types have different merge modes, which must be explicitly specified to the merger 
-#### when the default merging behavior is not desired. The custom merge modes are:
-#### * railways
-#### ** OneToMany - Initiates a One To Many Railway Conflation Workflow merge. This should be
-####                specified if the features being merged belong to a review with the text
-####                "OneToMany" contained in the review's type.
-####
-#### The merger will select the appropriate merge type based on the type of elements passed to it.
-#### The element being merged into must have the "hoot:merge:target=yes" tag, except for POI/Polygon
-#### merging which always merges the POI into the polygon and Railway merging in the OneToMany mode
-#### which always merges a single secondary feature into one or more reference features (status=2 
-#### into status=1; the status tag must be left on the input elements).
+#### The merger will select the appropriate merge type based on the elements contained in the map 
+#### passed to it.
+#### The element being merged into must have the "hoot:merge:target=yes" tag with the following 
+#### exceptions where the tag is not needed and is ignored: 
+#### * POI/Polygon merging always merges the POI into the polygon 
+#### * Railway merging where features are involved in a One To Many match always merges secondary 
+####   features in to reference features (status=2 into status=1). The metadata tag:
+####   'hoot:railway:one:to:many:match:secondary=yes' must not be removed from secondary features in 
+####   order for this type of merging to work.
 ####
 #### Constituent elements (way nodes or relation members) are optional in the request. Whether they
 #### are passed in the request or not, the caller is responsible for deleting those that belong to 

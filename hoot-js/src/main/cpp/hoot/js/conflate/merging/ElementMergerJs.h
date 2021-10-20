@@ -73,8 +73,7 @@ public:
    PoiToPolygon,    // one poi and one poly
    Area,            // supports multiple
    Building,        // supports multiple
-   Railway,         // supports multiple
-   RailwayOneToMany // supports multiple
+   Railway          // supports multiple
  };
 
  ~ElementMergerJs() override = default;
@@ -97,26 +96,22 @@ private:
    * @brief _merge TODO
    * @param map
    * @param current
-   * @param mergeMode
    */
-  static void _merge(OsmMapPtr map, v8::Isolate* current, const QString mergeMode = "");
+  static void _merge(OsmMapPtr map, v8::Isolate* current);
   /**
    * @brief _determineMergeType TODO
    * @param map
-   * @param mergeMode
    * @return
    */
-  static MergeType _determineMergeType(ConstOsmMapPtr map, const QString mergeMode = "");
-  //
+  static MergeType _determineMergeType(ConstOsmMapPtr map);
   /**
    * @brief _getMergeTargetFeatureId TODO
    *
    * The feature being merged into must have a custom hoot tag for all merge types except poi/poly.
    * @param map
-   * @param mergeType
    * @return
    */
-  static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map, const MergeType& mergeType);
+  static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   /**
    * @brief _mergeTypeToString TODO
    * @param mergeType
