@@ -57,9 +57,9 @@ public:
    *
    * @param matches Set of matches that should evaluated to look for mergers.
    * @param mergers Vector of mergers that will contain the new mergers created. Newly created
-   *  mergers should only be added and no elements in the vector should be modified.
+   * mergers should only be added and no elements in the vector should be modified.
    * @return Returns true if one or more mergers were created and added to the provided mergers
-   *  vector.
+   * vector.
    */
   virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const = 0;
 
