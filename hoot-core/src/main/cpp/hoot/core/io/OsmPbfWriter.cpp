@@ -250,13 +250,6 @@ void OsmPbfWriter::close()
   }
 }
 
-void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta)
-{
-  _nodeIdDelta = nodeIdDelta;
-  _wayIdDelta = wayIdDelta;
-  _relationIdDelta = relationIdDelta;
-}
-
 int OsmPbfWriter::_toRelationMemberType(ElementType t) const
 {
   // This is actually a 1 to 1 translation, but I don't want to rely on the element type
@@ -311,33 +304,6 @@ void OsmPbfWriter::write(const ConstOsmMapPtr& map, const QString& path)
   }
 
   write(map, &output);
-}
-
-void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
-{
-  LOG_DEBUG("Writing header...");
-
-  _out = strm;
-
-  _rawSize = 0;
-
-  // write out the "OSMHeader fileblock"
-  _writeOsmHeader(includeBounds, sorted);
-}
-
-void OsmPbfWriter::writePb(const ConstOsmMapPtr& m, ostream* strm)
-{
-  _initBlob();
-
-  _map = m;
-  bool oldSetting = _enablePbFlushing;
-  _enablePbFlushing = false;
-  _writeMap();
-  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
-  strm->write((const char*)&size, sizeof(uint32_t));
-  _d->primitiveBlock.SerializePartialToOstream(strm);
-  _map.reset();
-  _enablePbFlushing = oldSetting;
 }
 
 void OsmPbfWriter::writePb(const ConstNodePtr& n, ostream* strm)

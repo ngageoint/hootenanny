@@ -85,18 +85,6 @@ public:
     const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
-   * Counts superfluous nodes in a map without removing them
-   *
-   * @param map map from which to count the nodes
-   * @param ignoreInformationTags if true, will count nodes even if they have an info tag
-   * @param e bounds within which to count nodes
-   * @return the number of superfluous nodes found
-   */
-  static long countSuperfluousNodes(
-    std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
-
-  /**
    * Collects superfluous nodes from a map without removing them
    *
    * @param map map from which to collect the node IDs

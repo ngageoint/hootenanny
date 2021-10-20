@@ -84,8 +84,6 @@ public:
    */
   void setSlop(int slop) { _slop = slop; }
 
-  bool rangeCoversIdentity(const Range& r) const;
-
 private:
 
   /**

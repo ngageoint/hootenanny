@@ -136,19 +136,6 @@ std::set<QString> WayUtils::getContainingWaysMostSpecificTypes(
   return uniqueTypes;
 }
 
-std::set<QString> WayUtils::getContainingWaysMostSpecificTypeKeys(
-  const long nodeId, const ConstOsmMapPtr& map)
-{
-  std::set<QString> uniqueTypeKeys;
-  const std::set<QString> uniqueTypes = getContainingWaysMostSpecificTypes(nodeId, map);
-  for (std::set<QString>::const_iterator uniqueTypesItr = uniqueTypes.begin();
-       uniqueTypesItr != uniqueTypes.end(); ++uniqueTypesItr)
-  {
-    uniqueTypeKeys.insert(Tags::kvpToKey(*uniqueTypesItr));
-  }
-  return uniqueTypeKeys;
-}
-
 QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& map)
 {
   QSet<long> connectedWayIds;
@@ -445,24 +432,6 @@ std::vector<long> WayUtils::getIntersectingWayIdsConst(const long wayId, const C
     }
   }
   return intersectingWayIds;
-}
-
-std::vector<ConstWayPtr> WayUtils::getIntersectingWaysConst(
-  const long wayId, const ConstOsmMapPtr& map)
-{
-  std::vector<ConstWayPtr> intersectingWays;
-  const std::vector<long> intersectingWayIds = getIntersectingWayIdsConst(wayId, map);
-  for (std::vector<long>::const_iterator itr = intersectingWayIds.begin();
-       itr != intersectingWayIds.end(); ++itr)
-  {
-    const long intersectingWayId = *itr;
-    ConstWayPtr way = map->getWay(intersectingWayId);
-    if (way)
-    {
-      intersectingWays.push_back(way);
-    }
-  }
-  return intersectingWays;
 }
 
 bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(

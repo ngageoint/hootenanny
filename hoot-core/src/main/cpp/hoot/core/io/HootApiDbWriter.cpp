@@ -356,32 +356,6 @@ void HootApiDbWriter::_startNewChangeSet()
   _hootdb.beginChangeset(tags);
 }
 
-void HootApiDbWriter::_createElement(const ConstElementPtr& element)
-{
-  if (element->getElementType() == ElementType::Node)
-  {
-    _hootdb.insertNode(std::dynamic_pointer_cast<const Node>(element));
-  }
-  else
-  {
-    // only supporting nodes for now
-    throw HootException("Unsupported element type");
-  }
-}
-
-void HootApiDbWriter::_modifyElement(const ConstElementPtr& element)
-{
-  if (element->getElementType() == ElementType::Node)
-  {
-    _hootdb.updateNode(std::dynamic_pointer_cast<const Node>(element));
-  }
-  else
-  {
-    // only supporting nodes for now
-    throw HootException("Unsupported element type");
-  }
-}
-
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());

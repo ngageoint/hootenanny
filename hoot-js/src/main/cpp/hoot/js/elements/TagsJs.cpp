@@ -63,7 +63,6 @@ void TagsJs::Init(Local<Object> target)
   tpl->PrototypeTemplate()->Set(current, "get", FunctionTemplate::New(current, get));
   tpl->PrototypeTemplate()->Set(
     current, "getInformationCount", FunctionTemplate::New(current, getInformationCount));
-  tpl->PrototypeTemplate()->Set(current, "getNames", FunctionTemplate::New(current, getNames));
   tpl->PrototypeTemplate()->Set(current, "set", FunctionTemplate::New(current, set));
   tpl->PrototypeTemplate()->Set(current, "toDict", FunctionTemplate::New(current, toDict));
   tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
@@ -157,15 +156,6 @@ void TagsJs::getInformationCount(const FunctionCallbackInfo<Value>& args)
   const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   args.GetReturnValue().Set(toV8(t.getInformationCount()));
-}
-
-void TagsJs::getNames(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
-
-  args.GetReturnValue().Set(toV8(t.getNames()));
 }
 
 void TagsJs::set(const FunctionCallbackInfo<Value>& args)

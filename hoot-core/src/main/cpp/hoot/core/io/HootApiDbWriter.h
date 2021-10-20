@@ -102,9 +102,6 @@ protected:
 
   bool _includeDebug;
 
-  void _createElement(const ConstElementPtr& element);
-  void _modifyElement(const ConstElementPtr& element);
-
   /**
    * Return the remapped ID for the specified element if it exists
    * @param eid The ID for the ID from the source data

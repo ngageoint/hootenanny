@@ -817,16 +817,6 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   return true;
 }
 
-bool HootApiDb::insertNode(ConstNodePtr node, long version)
-{
-  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags(), version);
-}
-
-void HootApiDb::updateNode(ConstNodePtr node)
-{
-  return updateNode(node->getId(), node->getY(), node->getX(), node->getVersion(), node->getTags());
-}
-
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId, long version)
 {
   assignedId = _getNextRelationId();
@@ -1118,7 +1108,6 @@ void HootApiDb::_resetQueries()
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
-  _mapExistsByName.reset();
   _getMapIdByName.reset();
   _insertChangeSet2.reset();
   _numChangesets.reset();
@@ -1620,23 +1609,6 @@ bool HootApiDb::mapExists(const long id)
   return _mapExistsById->next();
 }
 
-bool HootApiDb::mapExists(const QString& name)
-{
-  if (_mapExistsByName == nullptr)
-  {
-    _mapExistsByName = std::make_shared<QSqlQuery>(_db);
-    _mapExistsByName->prepare("SELECT id FROM " + getMapsTableName() +
-                              " WHERE display_name = :mapName");
-  }
-  _mapExistsByName->bindValue(":mapName", name);
-  if (_mapExistsByName->exec() == false)
-  {
-    throw HootException(_mapExistsByName->lastError().text());
-  }
-
-  return _mapExistsByName->next();
-}
-
 long HootApiDb::getMapIdByName(const QString& name)
 {
   //assuming unique name here
@@ -1958,8 +1930,9 @@ QString HootApiDb::getSessionIdByUserId(const long userId)
   return sessionId;
 }
 
-QString HootApiDb::getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
-                                              const QString& accessTokenSecret)
+QString HootApiDb::getSessionIdByAccessTokens(
+  const QString& userName, const QString& accessToken,
+  const QString& accessTokenSecret)
 {
   QString sessionId = "";
 

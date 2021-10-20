@@ -48,15 +48,15 @@ QHash<QString, QString>()
   set(key, value);
 }
 
-Tags::Tags(const QString& kvp)
-{
-  const QString errorMsg = "Invalid key/value pair passed to Tags: " + kvp;
-  if (!isValidKvp(kvp))
-    throw IllegalArgumentException(errorMsg);
+//Tags::Tags(const QString& kvp)
+//{
+//  const QString errorMsg = "Invalid key/value pair passed to Tags: " + kvp;
+//  if (!isValidKvp(kvp))
+//    throw IllegalArgumentException(errorMsg);
 
-  const QStringList kvpParts = kvp.split("=");
-  set(kvpParts[0], kvpParts[1]);
-}
+//  const QStringList kvpParts = kvp.split("=");
+//  set(kvpParts[0], kvpParts[1]);
+//}
 
 bool Tags::isValidKvp(const QString& str)
 {
@@ -618,23 +618,6 @@ int Tags::removeKeys(const QList<QRegExp>& regexes)
   return numRemoved;
 }
 
-int Tags::removeByTagKeyContains(const QString& tagKeySubstring)
-{
-  QStringList keysToRemove;
-  for (Tags::const_iterator it = begin(); it != end(); ++it)
-  {
-    const QString key = it.key();
-    if (key.contains(tagKeySubstring))
-      keysToRemove.append(key);
-  }
-
-  int numRemoved = 0;
-  for (int i = 0; i < keysToRemove.size(); i++)
-    numRemoved += remove(keysToRemove.at(i));
-
-  return numRemoved;
-}
-
 int Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
 {
   QStringList keysToRemove;
@@ -709,18 +692,6 @@ void Tags::readValues(const QString &k, QStringList& list) const
   }
   else if (contains(k))
     list.append(split(value(k)));
-}
-
-int Tags::removeEmpty()
-{
-  // remove all the empty tags
-  int numRemoved = 0;
-  for (Tags::const_iterator it = begin(); it != end(); ++it)
-  {
-    if (get(it.key()).trimmed().isEmpty())
-      numRemoved += remove(it.key());
-  }
-  return numRemoved;
 }
 
 void Tags::set(const QString& key, const QString& value)
@@ -922,16 +893,6 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
   return tags;
 }
 
-bool Tags::intersects(const Tags& other) const
-{
-  for (Tags::const_iterator tagItr = other.begin(); tagItr != other.end(); ++tagItr)
-  {
-    if (get(tagItr.key()) == other.get(tagItr.key()))
-      return true;
-  }
-  return false;
-}
-
 bool Tags::bothContainKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
 {
   return tags1.hasKvp(kvp) && tags2.hasKvp(kvp);
@@ -942,29 +903,6 @@ bool Tags::onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QStrin
   const bool firstHasKvp = tags1.hasKvp(kvp);
   const bool secondHasKvp = tags2.hasKvp(kvp);
   return (!firstHasKvp && secondHasKvp) || (firstHasKvp && !secondHasKvp);
-}
-
-QString Tags::getDiffString(const Tags& other) const
-{
-  if (this->operator ==(other))
-    return "";
-
-  QStringList keys = this->keys();
-  keys.append(other.keys());
-  keys.removeDuplicates();
-  keys.sort();
-
-  QString diffStr;
-  for (int i = 0; i < keys.size(); i++)
-  {
-    QString k = keys[i];
-    if (this->operator [](k) != other[k])
-    {
-      diffStr += "< " + k + " = " + this->operator [](k) + "\n";
-      diffStr += "> " + k + " = " + other[k] + "\n";
-    }
-  }
-  return diffStr.trimmed();
 }
 
 bool Tags::bothHaveInformation(const Tags& tags1, const Tags& tags2)

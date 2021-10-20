@@ -70,71 +70,71 @@ QMatrix GeometryPainter::createMatrix(const QRect& window, const OGREnvelope& wo
   return m;
 }
 
-QMatrix GeometryPainter::createMatrix(const QRect& window, const OGREnvelope& world,
-  const OGRPoint& worldCenter)
-{
-  // determine if the image is bigger or smaller than the display area and size it accordingly
-  double xRatio = ((double)window.width() - 1.0) / (world.MaxX - world.MinX);
-  double yRatio = ((double)window.height() - 1.0) / (world.MaxY - world.MinY);
-  double ratio;
-  if (xRatio < yRatio)
-  {
-    ratio = xRatio;
-  }
-  else
-  {
-    ratio = yRatio;
-  }
-  double scale = 1.0 * ratio;
+//QMatrix GeometryPainter::createMatrix(const QRect& window, const OGREnvelope& world,
+//  const OGRPoint& worldCenter)
+//{
+//  // determine if the image is bigger or smaller than the display area and size it accordingly
+//  double xRatio = ((double)window.width() - 1.0) / (world.MaxX - world.MinX);
+//  double yRatio = ((double)window.height() - 1.0) / (world.MaxY - world.MinY);
+//  double ratio;
+//  if (xRatio < yRatio)
+//  {
+//    ratio = xRatio;
+//  }
+//  else
+//  {
+//    ratio = yRatio;
+//  }
+//  double scale = 1.0 * ratio;
 
-  /*
-  This code transforms from world's coord system to qt's based on the following assumptions:
-  1) Qt's minX & minY are at top left (Quadrant II)
-  2) real world minX & minY are at bottom left (Quadrant I)
+//  /*
+//  This code transforms from world's coord system to qt's based on the following assumptions:
+//  1) Qt's minX & minY are at top left (Quadrant II)
+//  2) real world minX & minY are at bottom left (Quadrant I)
 
-                  ^
-                  |
-           IV     |    I
-                  |
-       <-------------------->
-                  |
-           III    |    II
-                  |
-                  Y
+//                  ^
+//                  |
+//           IV     |    I
+//                  |
+//       <-------------------->
+//                  |
+//           III    |    II
+//                  |
+//                  Y
 
-    In order to get from II to I, we must do the following:
-    1) invert the Y axis
-        a) move Y points above the x axis
-        b) convert all negative y points to positives
-    2) recenter based on worldcenter
-    3) scale to current scale (based on zoom and ratio)
-    4)  move image to window's center
+//    In order to get from II to I, we must do the following:
+//    1) invert the Y axis
+//        a) move Y points above the x axis
+//        b) convert all negative y points to positives
+//    2) recenter based on worldcenter
+//    3) scale to current scale (based on zoom and ratio)
+//    4)  move image to window's center
 
-  */
+//  */
 
-  // 1a.move Y points above the x axis
-  QMatrix moveY;
-  moveY.translate(0, -(2 * world.MinY) - (world.MaxY - world.MinY));
+//  // 1a.move Y points above the x axis
+//  QMatrix moveY;
+//  moveY.translate(0, -(2 * world.MinY) - (world.MaxY - world.MinY));
 
-  // 1b.  convert all negative y points to positives
-  QMatrix swapY;
-  swapY.scale(1, -1);
+//  // 1b.  convert all negative y points to positives
+//  QMatrix swapY;
+//  swapY.scale(1, -1);
 
-  // 2. recenter based on worldcenter
-  QMatrix centerMatrix;
-  centerMatrix.translate(-worldCenter.getX(), -worldCenter.getY());
+//  // 2. recenter based on worldcenter
+//  QMatrix centerMatrix;
+//  centerMatrix.translate(-worldCenter.getX(), -worldCenter.getY());
 
-  // 3. scale to current scale (based on zoom and ratio)
-  QMatrix scaleMatrix;
-  scaleMatrix.scale(scale, scale);
+//  // 3. scale to current scale (based on zoom and ratio)
+//  QMatrix scaleMatrix;
+//  scaleMatrix.scale(scale, scale);
 
-  // 4. move image to window's center
-  QMatrix moveToWindowCenter;
-  moveToWindowCenter.translate((double)(window.width()) / 2.0,
-    (double)(window.height()) / 2.0);
+//  // 4. move image to window's center
+//  QMatrix moveToWindowCenter;
+//  moveToWindowCenter.translate((double)(window.width()) / 2.0,
+//    (double)(window.height()) / 2.0);
 
-  return moveY * swapY * centerMatrix * scaleMatrix * moveToWindowCenter;
-}
+//  return moveY * swapY * centerMatrix * scaleMatrix * moveToWindowCenter;
+//}
 
 void GeometryPainter::drawElement(QPainter& pt, const OsmMap* map, const Element* e,
   const QMatrix& m)

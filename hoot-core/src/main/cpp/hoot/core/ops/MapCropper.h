@@ -122,7 +122,6 @@ private:
    * Returns true if the specified envelope is wholly inside the region that will be kept.
    */
   bool _isWhollyInside(const geos::geom::Envelope& e) const;
-  bool _isWhollyInside(const geos::geom::Geometry& e) const;
 
   /**
    * Returns true if the specified envelope is wholly outside the region that will be kept.
