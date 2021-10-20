@@ -58,6 +58,8 @@ namespace hoot
  * easier to read, and avoid unnecessary calls out to Javascript.  However, since the generic
  * scripts have their own merge functions already defined that users may want to customize, for
  * consistency's sake it makes more sense to use this hybrid approach.
+ *
+ * Update translations/ElementMergeServer.MD if you add any feature types to the merging process.
  */
 class ElementMergerJs : public HootBaseJs
 {
@@ -86,7 +88,7 @@ private:
   static void _mergeElements(OsmMapPtr map, v8::Isolate* current);
 
   static MergeType _determineMergeType(ConstOsmMapPtr map);
-  //feature being merged into must have a custom hoot tag for all merge types except poi/poly
+  // feature being merged into must have a custom hoot tag for all merge types except poi/poly
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   static QString _mergeTypeToString(const MergeType& mergeType);
 };

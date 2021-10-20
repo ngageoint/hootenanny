@@ -32,13 +32,13 @@
 namespace hoot
 {
 
-void OneToManyRailwayMerger::setConfiguration(const Settings& conf)
+void OneToManyRailwayMerger::setConfiguration(const Settings& /*conf*/)
 {
 
 }
 
 void OneToManyRailwayMerger::apply(
-  const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const OsmMapPtr& /*map*/, std::vector<std::pair<ElementId, ElementId>>& /*replaced*/)
 {
 
 }

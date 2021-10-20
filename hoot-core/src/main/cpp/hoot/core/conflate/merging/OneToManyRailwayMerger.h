@@ -56,13 +56,13 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
-  QString getInitStatusMessage() const override { return "Removing duplicate name tags..."; }
-  QString getCompletedStatusMessage() const override
-  { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
+//  QString getInitStatusMessage() const override { return "Removing duplicate name tags..."; }
+//  QString getCompletedStatusMessage() const override
+//  { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
 
-  QString getDescription() const override { return "Removes duplicate name tags from a feature"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
+//  QString getDescription() const override { return "Removes duplicate name tags from a feature"; }
+//  QString getName() const override { return className(); }
+//  QString getClassName() const override { return className(); }
 
 private:
 
