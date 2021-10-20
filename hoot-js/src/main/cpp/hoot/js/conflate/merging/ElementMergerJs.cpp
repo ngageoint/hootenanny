@@ -115,16 +115,12 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
   {
     case MergeType::BuildingToBuilding:
       return "BuildingToBuilding";
-
     case MergeType::PoiToPolygon:
       return "PoiToPolygon";
-
     case MergeType::PoiToPoi:
       return "PoiToPoi";
-
     case MergeType::AreaToArea:
       return "AreaToArea";
-
     default:
       throw IllegalArgumentException("Invalid merge type.");
   }
