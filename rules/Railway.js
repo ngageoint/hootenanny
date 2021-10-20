@@ -314,6 +314,29 @@ exports.matchScore = function(map, e1, e2)
 exports.mergeSets = function(map, pairs, replaced)
 {
   hoot.trace("Merging railways...");
+
+  var oneToManyMergeOccurred = attemptOneToManyMerge(map, pairs, replaced);
+  hoot.trace("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
+
+  // If we had any many to one merges earlier during this merge call, then we shouldn't have any
+  // other types of merges to perform.
+  if (!oneToManyMergeOccurred)
+  {
+    // Go back to the original default tag merger.
+    hoot.set({'tag.merger.default': defaultTagMerger});
+
+    // If its not a one to many match, business as usual...use the conflation behavior built into
+    // the linear merger in use. Snap the ways in the second input to the first input. Use the
+    // default tag merge method.
+    hoot.trace("Performing linear merge...");
+    return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
+  }
+};
+
+function attemptOneToManyMerge(map, pairs, replaced)
+{
+  var oneToManyMergeOccurred = false;
+
   hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
 
   // Don't love setting these config options on the fly within the merge loop, but there's no other
@@ -324,7 +347,6 @@ exports.mergeSets = function(map, pairs, replaced)
   hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
 
   var secondaryElementsIdsMerged = [];
-  var oneToManyMergeOccurred = false;
   hoot.trace("pairs.length: " + pairs.length);
   for (var i = 0; i < pairs.length; i++)
   {
@@ -378,22 +400,9 @@ exports.mergeSets = function(map, pairs, replaced)
       }
     }
   }
-  hoot.trace("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
 
-  // If we had any many to one merges earlier during this merge call, then we shouldn't have any
-  // other types of merges to perform.
-  if (!oneToManyMergeOccurred)
-  {
-    // Go back to the original default tag merger.
-    hoot.set({'tag.merger.default': defaultTagMerger});
-
-    // If its not a one to many match, business as usual...use the conflation behavior built into
-    // the linear merger in use. Snap the ways in the second input to the first input. Use the
-    // default tag merge method.
-    hoot.trace("Performing linear merge...");
-    return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
-  }
-};
+  return oneToManyMergeOccurred;
+}
 
 exports.getMatchFeatureDetails = function(map, e1, e2)
 {
