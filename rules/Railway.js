@@ -281,6 +281,8 @@ exports.matchScore = function(map, e1, e2)
     }
     oneToManyMatchIds[e2.getElementId()] = matchIds;
     hoot.trace("total matches for " + e2.getElementId() + ": " + String(numTotalMatches));
+    // It would be simpler to just tag the secondary element here with
+    // oneToManySecondaryMatchTagKey, but the elements are const here.
     if (!oneToManySecondaryMatchElementIds.includes(String(e2.getElementId().toString())))
     {
       oneToManySecondaryMatchElementIds.push(String(e2.getElementId().toString()));
