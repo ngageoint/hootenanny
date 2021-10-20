@@ -1,9 +1,17 @@
 # Element Merge Server API
 
-#### Merges two or more OSM features. Currently supports merging POIs with POIs, one POI with one
-#### polygon, areas with areas, or buildings with buildings. The element being merged into must have
-#### the "hoot:merge:target=yes" tag, except for POI/polygon merging which always merges the POI
-#### into the polygon.
+#### Feature merging service primarily used to merge features during the conflate manual review
+#### process. Merges two or more OSM features.
+####
+#### Supports merging the following feature types:
+#### * areas with areas,
+#### * buildings with buildings.
+#### * POIs with POIs
+#### * one POI with one polygon
+#### * railways conflated using the One to Many Railway Conflation Workflow
+####
+#### The element being merged into must have the "hoot:merge:target=yes" tag, except for POI/polygon
+#### merging which always merges the POI into the polygon.
 ####
 #### Constituent elements (way nodes or relation members) are optional in the request.  Whether they
 #### are passed in the request or not, the caller is responsible for deleting the ones that belong
