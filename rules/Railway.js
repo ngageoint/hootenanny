@@ -1,6 +1,11 @@
 /*
   This is the conflate script for Railway Conflation. This handles linear railway features only.
 
+  If the railway.one.to.many.match option is enabled, the script will attempt to conflate features
+  using the One to Many Railway Conflation Workflow (see description in Algorithms section of the
+  documentation). If the features can't be conflated using that workflow, another attempt will be
+  made to conflate them according to the current conflation configuration.
+
   Note: All test making calls to this script need to be run serially, as this script modifies the
   global configuration. If ever a workaround is done where the config doesn't need to be modified,
   then they can be changed back to run in parallel.
