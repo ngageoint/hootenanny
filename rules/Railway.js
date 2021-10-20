@@ -380,7 +380,12 @@ function attemptOneToManyMerge(map, pairs, replaced)
       hoot.trace("refElement: " + refElement.getElementId());
       hoot.trace("secondaryElement: " + secondaryElement.getElementId());
 
-      if (oneToManySecondaryMatchElementIds.includes(String(secondaryElement.getElementId().toString())))
+      // We check here either that the ID of the secondary element is in the collection of secondary
+      // element IDs involved in a one to many match (workflow when script is called from the
+      // conflate command) or that the element has a custom tag (workflow when a merge is called in
+      // externally by the merge server). As noted above, the tag method can't be used in tandem
+      // with matching, as the elements being conflated are passed in as const.
+      if (oneToManySecondaryMatchElementIds.includes(String(secondaryElement.getElementId().toString())) || secondaryElement.getTags().get(oneToManySecondaryMatchTagKey) === "yes")
       {
         hoot.trace("Merging one to many tags for " + refElement.getElementId() + " and " + secondaryElement.getElementId() + "...");
         var newTags = hoot.TagMergerFactory.mergeTags(refElement.getTags(), secondaryElement.getTags());
