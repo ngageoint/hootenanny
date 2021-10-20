@@ -65,7 +65,6 @@ public:
 
   Tags() = default;
   Tags(const QString& key, const QString& value);
-  //Tags(const QString& kvp);
   virtual ~Tags() = default;
 
   bool operator==(const Tags& other) const;

@@ -69,12 +69,6 @@ public:
   * the appropriate aspect ratio.
   */
   static QMatrix createMatrix(const QRect& window, const OGREnvelope& world);
-//  /**
-//   * Create a matrix for drawing to a painter in world coordinates. This matrix will maintain
-//   * the appropriate aspect ratio.
-//   */
-//  static QMatrix createMatrix(const QRect& window, const OGREnvelope& world,
-//    const OGRPoint& worldCenter);
 
   static void drawElement(QPainter& pt, const OsmMap *map, const Element *e, const QMatrix &m);
   static void drawGeometry(QPainter& pt, const OGRGeometry* geom, const QMatrix& m = QMatrix());
