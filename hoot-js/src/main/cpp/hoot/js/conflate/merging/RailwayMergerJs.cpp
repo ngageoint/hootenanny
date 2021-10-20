@@ -44,7 +44,8 @@ using namespace v8;
 namespace hoot
 {
 
-void RailwayMergerJs::merge(OsmMapPtr /*map*/, const ElementId& /*mergeTargetId*/, Isolate* /*current*/)
+void RailwayMergerJs::merge(
+  OsmMapPtr /*map*/, const ElementId& /*mergeTargetId*/, Isolate* /*current*/, const bool /*oneToMany*/)
 {
 
 }

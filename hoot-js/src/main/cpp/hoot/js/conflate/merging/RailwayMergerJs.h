@@ -29,10 +29,11 @@
 #define RAILWAY_MERGER_JS_H
 
 // Hoot
+#include <hoot/core/elements/OsmMap.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -53,8 +54,11 @@ public:
    * @param map a map containing the railways to be merged
    * @param mergeTargetId the ID of the area which all other railways should be merged into
    * @param current the context this method should run under
+   * @param oneToMany TODO
    */
-  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
+  static void merge(
+    OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current,
+    const bool oneToMany = false);
 };
 
 }

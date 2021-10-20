@@ -52,8 +52,8 @@ public:
    * @param copyChildren if true, child elements are copied
    * @return a copied subset map
    */
-  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,
-                                const bool copyChildren = true);
+  static OsmMapPtr getMapSubset(
+    const ConstOsmMapPtr& map, const ElementCriterionPtr& filter, const bool copyChildren = true);
 
   /**
    * Determines if a map contains only nodes that are not way nodes
@@ -86,7 +86,6 @@ public:
   static ElementPtr getFirstElementWithNote(
     const OsmMapPtr& map, const QString& note,
     const ElementType& elementType = ElementType::Unknown);
-
   /**
    * Gets a single element by tag
    *
@@ -100,6 +99,13 @@ public:
   static ElementPtr getFirstElementWithTag(
     const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
     const ElementType& elementType = ElementType::Unknown);
+  /**
+   * @brief getFirstElementWithStatus TODO
+   * @param map
+   * @param status
+   * @return
+   */
+  static ConstElementPtr getFirstElementWithStatus(const ConstOsmMapPtr& map, const Status& status);
 
   /**
    * @brief getNumReviews returns the number of unique reviews in a map

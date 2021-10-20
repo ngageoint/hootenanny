@@ -45,21 +45,22 @@ namespace hoot
  *
  * This class will handle either the case where a valid map is passed in with all constituent
  * elements (way nodes, relation members) or an invalid map passed in without the constituent
- * elements.  It can do this because only the parent elements are needed for actual merging.  The
+ * elements. It can do this because only the parent elements are needed for actual merging. The
  * invalid map input case is necessary b/c the UI sends the server only the features that need
  * merging and then handles removing any constituent features itself after the merge with a call to
- * the OSM services.  Technically, we have no known client code sending in valid maps with
+ * the OSM services. Technically, we have no known client code sending in valid maps with
  * constituent features for merging at this time, but since that could change, and its easy to
  * support, we'll supporting both types of inputs.
  *
  * This class has a mix of functionality where the merging is done by hoot-js calls into generic
- * scripts and functionality where the merging is done strictly by hoot-core code.  Arguably, you
+ * scripts and functionality where the merging is done strictly by hoot-core code. Arguably, you
  * could do all the merging via hoot-core C++ code which would make the workflow simpler, the code
- * easier to read, and avoid unnecessary calls out to Javascript.  However, since the generic
+ * easier to read, and avoid unnecessary calls out to Javascript. However, since the generic
  * scripts have their own merge functions already defined that users may want to customize, for
  * consistency's sake it makes more sense to use this hybrid approach.
  *
- * Update translations/ElementMergeServer.MD if you add any feature types to the merging process.
+ * Update translations/ElementMergeServer.MD and the supported feature types error message if you
+ * add any feature types to the merging process.
  */
 class ElementMergerJs : public HootBaseJs
 {
@@ -68,15 +69,22 @@ public:
 
  enum MergeType
  {
-   PoiToPoi = 0,        // supports multiple
-   PoiToPolygon,        // one poi and one poly
-   AreaToArea,          // supports multiple
-   BuildingToBuilding   // supports multiple
-  };
+   Poi = 0,         // supports multiple
+   PoiToPolygon,    // one poi and one poly
+   Area,            // supports multiple
+   Building,        // supports multiple
+   Railway,         // supports multiple
+   RailwayOneToMany // supports multiple
+ };
 
  ~ElementMergerJs() override = default;
 
  static void Init(v8::Local<v8::Object> target);
+
+ /**
+  * @brief merge TODO
+  * @param args
+  */
  static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
@@ -85,11 +93,35 @@ private:
 
   ElementMergerJs() = default;
 
-  static void _merge(OsmMapPtr map, v8::Isolate* current);
-
-  static MergeType _determineMergeType(ConstOsmMapPtr map);
-  // feature being merged into must have a custom hoot tag for all merge types except poi/poly
-  static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
+  /**
+   * @brief _merge TODO
+   * @param map
+   * @param current
+   * @param mergeMode
+   */
+  static void _merge(OsmMapPtr map, v8::Isolate* current, const QString mergeMode = "");
+  /**
+   * @brief _determineMergeType TODO
+   * @param map
+   * @param mergeMode
+   * @return
+   */
+  static MergeType _determineMergeType(ConstOsmMapPtr map, const QString mergeMode = "");
+  //
+  /**
+   * @brief _getMergeTargetFeatureId TODO
+   *
+   * The feature being merged into must have a custom hoot tag for all merge types except poi/poly.
+   * @param map
+   * @param mergeType
+   * @return
+   */
+  static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map, const MergeType& mergeType);
+  /**
+   * @brief _mergeTypeToString TODO
+   * @param mergeType
+   * @return
+   */
   static QString _mergeTypeToString(const MergeType& mergeType);
 };
 

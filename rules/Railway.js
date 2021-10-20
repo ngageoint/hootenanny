@@ -6,6 +6,10 @@
   documentation). If the features can't be conflated using that workflow, another attempt will be
   made to conflate them according to the current conflation configuration.
 
+  This script does not yet generate reviews. If it ever does and any of the features involved in
+  the reviews are involved in a One To Many match, the review type should include the text
+  "OneToMany".
+
   Note: All test making calls to this script need to be run serially, as this script modifies the
   global configuration. If ever a workaround is done where the config doesn't need to be modified,
   then they can be changed back to run in parallel.
