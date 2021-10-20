@@ -381,6 +381,27 @@ void StringUtils::replaceLastIndexOf(
   }
 }
 
+bool StringUtils::insertAfter(
+  QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert)
+{
+  const int beforeIndex = strList.indexOf(QRegExp(strToInsertAfter));
+
+  if (beforeIndex == -1)
+  {
+    return false;
+  }
+
+  if (strList.at(beforeIndex + 1) != strToInsert)
+  {
+    strList.insert(beforeIndex + 1, strToInsert);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
 {
   QStringList tokens = input.split(splitExp);

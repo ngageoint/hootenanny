@@ -287,6 +287,16 @@ public:
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
+   * @brief insertAfter TODO
+   * @param strList
+   * @param strToInsertAfter
+   * @param strToInsert
+   * @return
+   */
+  static bool insertAfter(
+    QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert);
+
+  /**
    * Splits a string on the first matching token in a group of regular expressions and returns it
    * only if is of a specified size
    *

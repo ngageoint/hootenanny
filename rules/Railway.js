@@ -64,8 +64,13 @@ if (!transferAllTags)
   hoot.set({'selective.overwrite.tag.merger.keys': hoot.get("railway.one.to.many.transfer.keys")});
 }
 hoot.set({'selective.overwrite.tag.merger.keys.exclude': oneToManySecondaryMatchTagKey});
-// The secondary feature gets deleted from output during merging.
-hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'}, false);
+// The secondary feature gets deleted from output during merging, so add an op to do it. We need
+// the op to run after the crossing rails review marker, so that it can adjust the type of review
+// based on whether there was a one to many match or not.
+if (!hoot.listContains("conflate.post.ops", "RailwayOneToManySecondaryMatchElementRemover"))
+{
+  hoot.placeAfterInList("conflate.post.ops", "RailwaysCrossingMarker", "RailwayOneToManySecondaryMatchElementRemover");
+}
 // Save off the default tag merger for merges not involving a one to many match.
 var defaultTagMerger = hoot.get("tag.merger.default");
 // The current one to many match identifying tag key.
