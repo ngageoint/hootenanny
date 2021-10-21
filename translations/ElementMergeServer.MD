@@ -1,30 +1,30 @@
 # Element Merge Server API
 
 #### This feature merging service is primarily used to merge features during the conflation manual 
-#### review process. Merges two or more OSM features.
+#### review process.
 ####
 #### Supports merging the following feature types:
-#### * areas with areas
-#### * buildings with buildings
-#### * POIs with POIs
-#### * one POI with one polygon
-#### * railways with railways
+#### * one or more areas into one area
+#### * one or more buildings into one building
+#### * one or more POIs into one POI
+#### * one POI into one polygon
+#### * one or more railways into one railway
 ####
 #### The merger will select the appropriate merge type based on the elements contained in the map 
-#### passed to it.
-#### The element being merged into must have the "hoot:merge:target=yes" tag with the following 
-#### exceptions where the tag is not needed and is ignored: 
-#### * POI/Polygon merging always merges the POI into the polygon 
+#### passed to it. The 'hoot:status' tag must be present on the features being merged.
+#### The element being merged into must also have the "hoot:merge:target=yes" tag with the following 
+#### exceptions where the tag is not needed and ignored: 
+#### * POI/Polygon merging always merges the POI into the polygon. 
 #### * Railway merging where features are involved in a One To Many match always merges secondary 
-####   features in to reference features (status=2 into status=1). The metadata tag:
-####   'hoot:railway:one:to:many:match:secondary=yes' must not be removed from secondary features in 
-####   order for this type of merging to work.
+####   features into reference or previously conflated features (status=2 into status=1 or 3). The 
+####   metadata tag: 'hoot:railway:one:to:many:match:secondary=yes' must remain present on secondary 
+####   features involved in a one to many match in order for this type of merging to work properly.
 ####
 #### Constituent elements (way nodes or relation members) are optional in the request. Whether they
 #### are passed in the request or not, the caller is responsible for deleting those that belong to 
 #### any parent features that were merged into other features.
 ___
-## POST /elementmerge?mergeMode=
+## POST /elementmerge
 
 ### Body
 

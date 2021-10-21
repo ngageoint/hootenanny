@@ -117,7 +117,6 @@ public:
     LOG_VART(count);
     return exactCount ? (count == minCount) : (count >= minCount);
   }
-
   /**
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
    * times. Only objects of type ElementCriterion are allowed, all others will return false
