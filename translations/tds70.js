@@ -573,11 +573,46 @@ tds70 = {
     }
   },
 
+  // Function to drop  default and usless values
+  // NOTE: This is also called to remove translated tag values
+  dropDefaults: function (feat)
+  {
+    for (var col in feat)
+    {
+      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+      // First, push to lowercase
+      var attrValue = feat[col].toString().toLowerCase();
+
+      // Get rid of the spaces in the text
+      attrValue = attrValue.replace(/\s/g, '');
+
+      // Wipe out the useless values
+      if (feat[col] == '' || feat[col] == ' ' || attrValue in tds70.rules.dropList || feat[col] in tds70.rules.dropList)
+      {
+        // debug: Comment this out to leave all of the No Info stuff in for testing
+        // print('Dropping: ' + col + ' = ' + feat[col]);
+        delete feat[col];
+        continue;
+      }
+    } // End col in attrs loop
+
+  }, // End dropDefaults
+
+
   // Clean up the attributes
   cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
     delete attrs.FCSUBTYPE;
+
+    // Drop the mosaic tag if we don't have an image id
+    if (attrs.image_id == 'No Information') delete attrs.img_mosaic;
+
+    // Switch to keep all of the default values. Mainly for the schema switcher
+    if (tds70.configIn.ReaderDropDefaults == 'true')
+    {
+      tds70.dropDefaults(attrs);
+    }
 
     // Backward compatibility
     if (attrs.AEI)
@@ -586,36 +621,13 @@ tds70 = {
       delete attrs.AEI;
     }
 
-    // Drop the mosaic tag if we don't have an image id
-    if (attrs.image_id == 'No Information') delete attrs.img_mosaic;
-
-    // List of data values to drop/ignore
-    var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
-
-    // List of attributes that can't have '0' as a value
-    var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
-
     // This is a handy loop. We use it to:
     // 1) Remove all of the "No Information" and -999999 fields
     // 2) Convert all of the Attrs to uppercase - if needed
     for (var col in attrs)
     {
-      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
-      // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
-
-      // Get rid of the spaces in the text
-      attrValue = attrValue.replace(/\s/g, '');
-
-      // Wipe out the useless values
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
-      {
-        delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-        continue;
-      }
-
       // Remove attributes with '0' values if they can't be '0'
-      if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+      if (tds70.rules.noZeroList.indexOf(col) > -1 && attrs[col] == '0')
       {
         delete attrs[col];
         continue;
@@ -2530,24 +2542,12 @@ tds70 = {
       attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
     }
 
-    // Now try using tags from Taginfo
     if (!attrs.ZI001_SDV)
-    {
-      // Use the imagery date if we have it.
-      // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-      if (tags['source:imagery:datetime'])
-      {
-        attrs.ZI001_SDV = tags['source:imagery:datetime'];
-      }
-      else if (tags['source:date'])
-      {
-        attrs.ZI001_SDV = tags['source:date'];
-      }
-      else if (tags['source:geometry:date'])
-      {
-        attrs.ZI001_SDV = tags['source:geometry:date'];
-      }
-    }
+      attrs.ZI001_SDV = tags['source:imagery:datetime']
+        || tags['source:imagery:earliestDate']
+        || tags['source:date']
+        || tags['source:geometry:date']
+        || '';
 
     // Fix the ZI020_GE4X Values
     // NOTE: This is the opposite to what is done in the toOSM post processing
@@ -2815,6 +2815,12 @@ tds70 = {
 
     // post processing
     tds70.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+
+    // If we are reading from an OGR source, drop all of the output tags with default values
+    if (tds70.configIn.ReaderDropDefaults == 'true')
+    {
+      tds70.dropDefaults(tags);
+    }
 
     // Debug: Add the FCODE to the tags
     if (tds70.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;

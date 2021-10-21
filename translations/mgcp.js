@@ -371,7 +371,7 @@ mgcp = {
       if (feat[col] == '' || feat[col] == ' ' || attrValue in mgcp.rules.dropList || feat[col] in mgcp.rules.dropList)
       {
         // debug: Comment this out to leave all of the No Info stuff in for testing
-        // print('Dropping: ' + col + ' = ' + attrs[col]);
+        // print('Dropping: ' + col + ' = ' + feat[col]);
         delete feat[col];
         continue;
       }
@@ -2149,6 +2149,7 @@ mgcp = {
     //default in mgcp_rules is 'source:datetime'
     if (! attrs.SDV)
       attrs.SDV = tags['source:imagery:datetime']
+        || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
         || '';
