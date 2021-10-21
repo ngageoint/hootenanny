@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-98889113' action='modify' visible='true' lat='39.12841652664' lon='-76.69622451335' />
+  <node id='-98889114' action='modify' visible='true' lat='39.12821470044' lon='-76.69618964463' />
+  <node id='-98889115' action='modify' visible='true' lat='39.12800247021' lon='-76.69614404708' />
+  <node id='-98889116' action='modify' visible='true' lat='39.12753639373' lon='-76.69605016977' />
+  <node id='-98889117' action='modify' visible='true' lat='39.12696419741' lon='-76.69595092803' />
+  <way id='-98867419' action='modify' visible='true'>
+    <nd ref='-98889113' />
+    <nd ref='-98889114' />
+    <nd ref='-98889115' />
+    <nd ref='-98889116' />
+    <nd ref='-98889117' />
+    <tag k='arrangement' v='multiple' />
+    <tag k='lanes' v='3' />
+    <tag k='length' v='163.4' />
+    <tag k='lines' v='3' />
+    <tag k='name' v='AwesomeRail' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='hoot:status' v='2' />
+    <tag k='hoot:railway:one:to:many:match:secondary=yes' v='yes' />
+  </way>
+</osm>

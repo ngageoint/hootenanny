@@ -69,7 +69,6 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   }
 
   int numMerged = 0;
-
   RailwayCriterion crit;
 
   const WayMap ways = map->getWays();

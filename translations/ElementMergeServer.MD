@@ -3,15 +3,15 @@
 #### This feature merging service is primarily used to merge features during the conflation manual 
 #### review process.
 ####
-#### Supports merging the following feature types:
+#### It supports merging the following feature types:
 #### * one or more areas into one area
 #### * one or more buildings into one building
 #### * one or more POIs into one POI
 #### * one POI into one polygon
 #### * one or more railways into one railway
 ####
-#### The merger will select the appropriate merge type based on the elements contained in the map 
-#### passed to it. The 'hoot:status' tag must be present on the features being merged.
+#### The merger will select the appropriate feature merge type based on the elements contained in 
+#### the map passed into it. The 'hoot:status' tag must be present on the features being merged.
 #### The element being merged into must also have the "hoot:merge:target=yes" tag with the following 
 #### exceptions where the tag is not needed and ignored: 
 #### * POI/Polygon merging always merges the POI into the polygon. 
@@ -20,9 +20,10 @@
 ####   metadata tag: 'hoot:railway:one:to:many:match:secondary=yes' must remain present on secondary 
 ####   features involved in a one to many match in order for this type of merging to work properly.
 ####
-#### Constituent elements (way nodes or relation members) are optional in the request. Whether they
-#### are passed in the request or not, the caller is responsible for deleting those that belong to 
-#### any parent features that were merged into other features.
+#### Constituent elements (way nodes or relation members) are optional in the request for polygon 
+#### features. They are, however, required for linear features. Whether they are passed in with the 
+#### request for polygon features or not, the caller is responsible for deleting those constituent 
+#### features that belong to any parent features that were merged into other features.
 ___
 ## POST /elementmerge
 

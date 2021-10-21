@@ -50,7 +50,7 @@ namespace hoot
  * merging and then handles removing any constituent features itself after the merge with a call to
  * the OSM services. Technically, we have no known client code sending in valid maps with
  * constituent features for merging at this time, but since that could change, and its easy to
- * support, we'll supporting both types of inputs.
+ * support both.
  *
  * This class has a mix of functionality where the merging is done by hoot-js calls into generic
  * scripts and functionality where the merging is done strictly by hoot-core code. Arguably, you
@@ -58,6 +58,13 @@ namespace hoot
  * easier to read, and avoid unnecessary calls out to Javascript. However, since the generic
  * scripts have their own merge functions already defined that users may want to customize, for
  * consistency's sake it makes more sense to use this hybrid approach.
+ *
+ * The original merger only merged POIs and supported many into one merging. For consistency's sake
+ * all follow on support for additional features types, with the exception of POI to Polygon, also
+ * allows for many into one merging. However, don't think many to one merging is actually used by
+ * any clients and that all merging is done one feature into one other feature. So, this code and
+ * supporting tests could probably be simplified by removing support for many into one merging if
+ * it is not being utilized.
  *
  * Update translations/ElementMergeServer.MD and the supported feature types error message if you
  * add any feature types to the merging process.
@@ -69,11 +76,11 @@ public:
 
  enum MergeType
  {
-   Poi = 0,         // supports multiple
+   Poi = 0,         // supports two or more pois
    PoiToPolygon,    // one poi and one poly
-   Area,            // supports multiple
-   Building,        // supports multiple
-   Railway          // supports multiple
+   Area,            // supports two or more areas
+   Building,        // supports two or more buildings
+   Railway          // supports two or more railways
  };
 
  ~ElementMergerJs() override = default;
