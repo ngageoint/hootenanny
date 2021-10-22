@@ -300,6 +300,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   const bool containsRailways = CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map);
   LOG_VART(containsRailways);
   LOG_VART(CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2));
+
   if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
       CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true))
   {
@@ -320,6 +321,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   {
     mergeType = MergeType::Area;
   }
+  // TODO: if the POI is standalone, no dice; if part of the rail, then ok
   else if (CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2) &&
            !containsBuildings && /*!containsPois &&*/ !containsAreas)
   {

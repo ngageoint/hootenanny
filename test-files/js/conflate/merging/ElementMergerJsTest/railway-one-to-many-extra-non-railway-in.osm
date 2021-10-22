@@ -60,7 +60,6 @@
     <nd ref='-98889163' />
     <nd ref='-98889159' />
     <tag k='building' v='yes' />
-    <tag k='hoot:merge:target' v='yes' />
     <tag k='name' v='building 1' />
     <tag k='hoot:status' v='1' />
   </way>

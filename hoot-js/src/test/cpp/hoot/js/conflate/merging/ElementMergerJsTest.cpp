@@ -49,15 +49,13 @@ namespace hoot
  * elements. For those tests we're setting the log at error, so as not to see the missing element
  * warnings.
  * 3) missing feature inputs - all merging requires at least two features
- * 4) extra unrelated features - any features that aren't mergeable should pass through to the
- * output
- * 5) more than two feature inputs - some merging can support more than two input features
- * 6) duplicated/missing target tag - merging requires a particular tag to denote which feature
+ * 4) more than two feature inputs - some merging can support more than two input features
+ * 5) duplicated/missing target tag - merging requires a particular tag to denote which feature
  * gets other features merged into it; this applies to all types of merging except poi/poly
- * 7) invalid feature combinations - merging doesn't allow input with more than one mergeable
+ * 6) invalid feature combinations - merging doesn't allow input with more than one mergeable
  * feature type associated with different types of conflation; e.g. an input with both buildings
  * and POIs in it
- * 8) input features with a conflated status - A conflated status only causes problems with POI to
+ * 7) input features with a conflated status - A conflated status only causes problems with POI to
  * Poly and Building to Building conflation generally, however tests have been added for it for all
  * conflation types to be safe. The aforementioned types of conflation both use building merging,
  * which expects all inputs to have a status of either Unknown1 or Unknown2.
@@ -71,89 +69,75 @@ class ElementMergerJsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementMergerJsTest);
 
-//  // POI TO POLYGON
-//  CPPUNIT_TEST(poiToPolyMergeWayAsPolyTest);
-//  CPPUNIT_TEST(poiToPolyMergeWayAsPolyNoConstituentsTest);
-//  CPPUNIT_TEST(poiToPolyMergeRelationAsPolyTest);
-//  CPPUNIT_TEST(poiToPolyMergeRelationAsPolyNoConstituentsTest);
-//  CPPUNIT_TEST(poiToPolyMergeMissingPoiInputTest);
-//  CPPUNIT_TEST(poiToPolyMergeMissingPolyInputTest);
-//  CPPUNIT_TEST(poiToPolyMergeMoreThanOnePolyInputTest);
-//  CPPUNIT_TEST(poiToPolyMergeMoreThanOnePoiInputTest);
-//  CPPUNIT_TEST(poiToPolyMergeExtraNonPolyWayTest);
-//  CPPUNIT_TEST(poiToPolyMergeExtraNonPolyRelationTest);
-//  CPPUNIT_TEST(poiToPolyMergeExtraNonPoiNodeTest);
-//  CPPUNIT_TEST(poiToPolyPolyInputWithConflatedStatusTest);
-//  CPPUNIT_TEST(poiToPolyPoiInputWithConflatedStatusTest);
+  // POI TO POLYGON
+  CPPUNIT_TEST(poiToPolyMergeWayAsPolyTest);
+  CPPUNIT_TEST(poiToPolyMergeWayAsPolyNoConstituentsTest);
+  CPPUNIT_TEST(poiToPolyMergeRelationAsPolyTest);
+  CPPUNIT_TEST(poiToPolyMergeRelationAsPolyNoConstituentsTest);
+  CPPUNIT_TEST(poiToPolyMergeMissingPoiInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMissingPolyInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMoreThanOnePolyInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMoreThanOnePoiInputTest);
+  CPPUNIT_TEST(poiToPolyPolyInputWithConflatedStatusTest);
+  CPPUNIT_TEST(poiToPolyPoiInputWithConflatedStatusTest);
 
-//  // POI
-//  CPPUNIT_TEST(poiMergeTwoPoisTest);
-//  CPPUNIT_TEST(poiMergeMoreThanTwoPoisTest);
-//  CPPUNIT_TEST(poiMergeTooFewPoisTest);
-//  CPPUNIT_TEST(poiMergeMissingTargetTagTest);
-//  CPPUNIT_TEST(poiMergeDuplicateTargetTagTest);
-//  CPPUNIT_TEST(poiMergeExtraNonPoiNodeTest);
-//  CPPUNIT_TEST(poiInputWithConflatedStatusTest);
+  // POI
+  CPPUNIT_TEST(poiMergeTwoPoisTest);
+  CPPUNIT_TEST(poiMergeMoreThanTwoPoisTest);
+  CPPUNIT_TEST(poiMergeTooFewPoisTest);
+  CPPUNIT_TEST(poiMergeMissingTargetTagTest);
+  CPPUNIT_TEST(poiMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(poiInputWithConflatedStatusTest);
 
-//  // AREA
-//  CPPUNIT_TEST(areaMergeTwoWaysTest);
-//  CPPUNIT_TEST(areaMergeTwoWaysNoConstituentsTest);
-//  CPPUNIT_TEST(areaMergeTwoRelationsTest);
-//  CPPUNIT_TEST(areaMergeTwoRelationsNoConstituentsTest);
-//  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsWayTest);
-//  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
-//  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsRelationTest);
-//  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
-//  CPPUNIT_TEST(areaMergeMoreThanTwoAreasTest);
-//  CPPUNIT_TEST(areaMergeMoreThanTwoAreasNoConstituentsTest);
-//  CPPUNIT_TEST(areaMergeTooFewAreasTest);
-//  CPPUNIT_TEST(areaMergeMissingTargetTagTest);
-//  CPPUNIT_TEST(areaMergeDuplicateTargetTagTest);
-//  CPPUNIT_TEST(areaMergeExtraNonAreaWayTest);
-//  CPPUNIT_TEST(areaMergeExtraNonAreaRelationTest);
-//  CPPUNIT_TEST(areaInputWithConflatedStatusTest);
+  // AREA
+  CPPUNIT_TEST(areaMergeTwoWaysTest);
+  CPPUNIT_TEST(areaMergeTwoWaysNoConstituentsTest);
+  CPPUNIT_TEST(areaMergeTwoRelationsTest);
+  CPPUNIT_TEST(areaMergeTwoRelationsNoConstituentsTest);
+  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsWayTest);
+  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsRelationTest);
+  CPPUNIT_TEST(areaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+  CPPUNIT_TEST(areaMergeMoreThanTwoAreasTest);
+  CPPUNIT_TEST(areaMergeMoreThanTwoAreasNoConstituentsTest);
+  CPPUNIT_TEST(areaMergeTooFewAreasTest);
+  CPPUNIT_TEST(areaMergeMissingTargetTagTest);
+  CPPUNIT_TEST(areaMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(areaInputWithConflatedStatusTest);
 
-//  // BUILDING
-//  CPPUNIT_TEST(buildingMergeTwoWaysTest);
-//  CPPUNIT_TEST(buildingMergeTwoWaysNoConstituentsTest);
-//  CPPUNIT_TEST(buildingMergeTwoRelationsTest);
-//  CPPUNIT_TEST(buildingMergeTwoRelationsNoConstituentsTest);
-//  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsWayTest);
-//  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
-//  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsRelationTest);
-//  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
-//  CPPUNIT_TEST(buildingMergeMoreThanTwoBuildingsTest);
-//  CPPUNIT_TEST(buildingMergeMoreThanTwoBuildingsNoConstituentsTest);
-//  CPPUNIT_TEST(buildingMergeTooFewBuildingsTest);
-//  CPPUNIT_TEST(buildingMergeMissingTargetTagTest);
-//  CPPUNIT_TEST(buildingMergeDuplicateTargetTagTest);
-//  CPPUNIT_TEST(buildingMergeExtraNonBuildingWayTest);
-//  CPPUNIT_TEST(buildingMergeExtraNonBuildingRelationTest);
-//  CPPUNIT_TEST(buildingInputWithConflatedStatusTest);
+  // BUILDING
+  CPPUNIT_TEST(buildingMergeTwoWaysTest);
+  CPPUNIT_TEST(buildingMergeTwoWaysNoConstituentsTest);
+  CPPUNIT_TEST(buildingMergeTwoRelationsTest);
+  CPPUNIT_TEST(buildingMergeTwoRelationsNoConstituentsTest);
+  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsWayTest);
+  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsRelationTest);
+  CPPUNIT_TEST(buildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+  CPPUNIT_TEST(buildingMergeMoreThanTwoBuildingsTest);
+  CPPUNIT_TEST(buildingMergeMoreThanTwoBuildingsNoConstituentsTest);
+  CPPUNIT_TEST(buildingMergeTooFewBuildingsTest);
+  CPPUNIT_TEST(buildingMergeMissingTargetTagTest);
+  CPPUNIT_TEST(buildingMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(buildingInputWithConflatedStatusTest);
 
-//  // RAILWAY
-//  CPPUNIT_TEST(railwayMergeTwoWaysTest);
-//  CPPUNIT_TEST(railwayMergeMoreThanTwoRailwaysTest);
-//  CPPUNIT_TEST(railwayMergeTooFewRailwaysTest);
-//  CPPUNIT_TEST(railwayMergeMissingTargetTagTest);
-//  CPPUNIT_TEST(railwayMergeDuplicateTargetTagTest);
-//  CPPUNIT_TEST(railwayMergeExtraNonRailwayTest);
-//  CPPUNIT_TEST(railwayInputWithConflatedStatusTest);
+  // RAILWAY
+  CPPUNIT_TEST(railwayMergeTwoWaysTest);
+  CPPUNIT_TEST(railwayMergeMoreThanTwoRailwaysTest);
+  CPPUNIT_TEST(railwayMergeTooFewRailwaysTest);
+  CPPUNIT_TEST(railwayMergeMissingTargetTagTest);
+  CPPUNIT_TEST(railwayMergeDuplicateTargetTagTest);
+  //CPPUNIT_TEST(railwayMergeExtraNonRailwayTest); // TODO: fix
+  CPPUNIT_TEST(railwayInputWithConflatedStatusTest);
 
   // RAILWAY ONE TO MANY
-  //CPPUNIT_TEST(railwayOneToManyMergeTwoWaysTest); // works
+  CPPUNIT_TEST(railwayOneToManyMergeTwoWaysTest);
   //CPPUNIT_TEST(railwayOneToManyMergeMoreThanTwoRailwaysTest); // crashes
-  //CPPUNIT_TEST(railwayOneToManyMergeTooFewRailwaysTest); // works
-  //CPPUNIT_TEST(railwayOneToManyMergeMissingOneToManyFeatureTest); //works
-  //CPPUNIT_TEST(railwayOneToManyMergeDuplicateOneToManyFeatureTest); // worksdfdd
+  CPPUNIT_TEST(railwayOneToManyMergeTooFewRailwaysTest);
+  CPPUNIT_TEST(railwayOneToManyMergeMissingOneToManyFeatureTest);
+  CPPUNIT_TEST(railwayOneToManyMergeDuplicateOneToManyFeatureTest);
   CPPUNIT_TEST(railwayOneToManyMergeExtraNonRailwayTest);
-  //CPPUNIT_TEST(railwayOneToManyInputWithConflatedStatusTest);
-
-  // INVALID FEATURE COMBOS - Re-enable and add to these as part of #5103
-//  CPPUNIT_TEST(invalidFeatureCombinationTest1);
-//  CPPUNIT_TEST(invalidFeatureCombinationTest2);
-//  CPPUNIT_TEST(invalidFeatureCombinationTest3);
-//  CPPUNIT_TEST(invalidFeatureCombinationTest4);
+  CPPUNIT_TEST(railwayOneToManyInputWithConflatedStatusTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -222,21 +206,6 @@ public:
       "Invalid inputs passed to the element merger");
   }
 
-  void poiToPolyMergeExtraNonPolyWayTest()
-  {
-    _testMerge("poi-poly-extra-non-poly-way-in.osm", "poi-poly-extra-non-poly-way-out.osm");
-  }
-
-  void poiToPolyMergeExtraNonPolyRelationTest()
-  {
-    _testMerge("poi-poly-extra-non-poly-relation-in.osm", "poi-poly-extra-non-poly-relation-out.osm");
-  }
-
-  void poiToPolyMergeExtraNonPoiNodeTest()
-  {
-    _testMerge("poi-poly-extra-non-poi-node-in.osm", "poi-poly-extra-non-poi-node-out.osm");
-  }
-
   void poiToPolyPolyInputWithConflatedStatusTest()
   {
     _testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-poly-input-conflated-out.osm");
@@ -278,11 +247,6 @@ public:
     _testMerge(
       "poi-duplicate-target-tag-in.osm", "poi-duplicate-target-tag-out.osm",
       "Input map must have exactly one feature marked with a hoot:merge:target tag");
-  }
-
-  void poiMergeExtraNonPoiNodeTest()
-  {
-    _testMerge("poi-extra-non-poi-node-in.osm", "poi-extra-non-poi-node-out.osm");
   }
 
   void poiInputWithConflatedStatusTest()
@@ -375,16 +339,6 @@ public:
     _testMerge(
       "area-duplicate-target-tag-in.osm", "area-duplicate-target-tag-out.osm",
       "Input map must have exactly one feature marked with a hoot:merge:target tag");
-  }
-
-  void areaMergeExtraNonAreaWayTest()
-  {
-    _testMerge("area-extra-non-area-way-in.osm", "area-extra-non-area-way-out.osm");
-  }
-
-  void areaMergeExtraNonAreaRelationTest()
-  {
-    _testMerge("area-extra-non-area-relation-in.osm", "area-extra-non-area-relation-out.osm");
   }
 
   void areaInputWithConflatedStatusTest()
@@ -483,23 +437,9 @@ public:
         "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
-  void buildingMergeExtraNonBuildingWayTest()
-  {
-    _testMerge("building-extra-non-building-way-in.osm", "building-extra-non-building-way-out.osm");
-  }
-
-  void buildingMergeExtraNonBuildingRelationTest()
-  {
-    _testMerge(
-      "building-extra-non-building-relation-in.osm",
-      "building-extra-non-building-relation-out.osm");
-  }
-
   void buildingInputWithConflatedStatusTest()
   {
-    _testMerge(
-      "building-two-ways-conflated-in.osm", "building-two-ways-out.osm",
-      "Elements being merged must have an Unknown1 or Unknown2 status.");
+    _testMerge("building-two-ways-conflated-in.osm", "building-two-ways-out.osm");
   }
 
   // RAILWAY
@@ -543,7 +483,8 @@ public:
   void railwayMergeExtraNonRailwayTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge("railway-extra-non-railway-in.osm", "railway-extra-non-railway-out.osm");
+    _testMerge("railway-extra-non-railway-in.osm", "railway-extra-non-railway-out.osm",
+    "Invalid inputs passed to element merger");
   }
 
   void railwayInputWithConflatedStatusTest()
@@ -599,7 +540,8 @@ public:
     _enableOneToManyRailwayConflation();
     _testMerge(
       "railway-one-to-many-extra-non-railway-in.osm",
-      "railway-one-to-many-extra-non-railway-out.osm");
+      "railway-one-to-many-extra-non-railway-out.osm",
+      "Invalid inputs passed to the element merger");
   }
 
   void railwayOneToManyInputWithConflatedStatusTest()
@@ -607,28 +549,6 @@ public:
     _enableOneToManyRailwayConflation();
     _testMerge(
       "railway-one-to-many-two-conflated-in.osm", "railway-one-to-many-two-conflated-out.osm");
-  }
-
-  // MISC
-
-  void invalidFeatureCombinationTest1()
-  {
-    _testMerge("invalidFetureCombinationTest1.osm", "", "Invalid inputs passed to the element merger");
-  }
-
-  void invalidFeatureCombinationTest2()
-  {
-    _testMerge("invalidFetureCombinationTest2.osm", "", "Invalid inputs passed to the element merger");
-  }
-
-  void invalidFeatureCombinationTest3()
-  {
-    _testMerge("invalidFetureCombinationTest3.osm", "", "Invalid inputs passed to the element merger");
-  }
-
-  void invalidFeatureCombinationTest4()
-  {
-    _testMerge("invalidFetureCombinationTest4.osm", "", "Invalid inputs passed to the element merger");
   }
 
 private:
@@ -659,38 +579,38 @@ private:
     LOG_VART(inFileName);
     LOG_VART(outFileName);
     LOG_VART(expectedExceptionMsgContains);
+
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
+
     QString exceptionMsg("");
     try
     {
-      OsmMapPtr map = std::make_shared<OsmMap>();
-      OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
-
       ElementMergerJs::_merge(map, v8::Isolate::GetCurrent());
-
-      MapProjector::projectToWgs84(map);
-      OsmMapWriterFactory::write(map, _outputPath + outFileName);
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
 
-    if (!exceptionMsg.isEmpty())
+    if (!expectedExceptionMsgContains.isEmpty())
     {
-      LOG_TRACE(
-        "Expected exception substring: " << expectedExceptionMsgContains <<
-        "; Actual exception: " << exceptionMsg)
-      if (!expectedExceptionMsgContains.isEmpty())
+      if (exceptionMsg.isEmpty())
       {
-        CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
+        throw HootException(
+          "Expected exception substring: " + expectedExceptionMsgContains + "; Actual exception: " +
+          exceptionMsg);
       }
       else
       {
-        throw HootException(exceptionMsg);
+        CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
       }
     }
     else
     {
+      MapProjector::projectToWgs84(map);
+      OsmMapWriterFactory::write(map, _outputPath + outFileName);
+
       HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
     }
   }
