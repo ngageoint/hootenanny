@@ -38,7 +38,7 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/RailwayOneToManyCriterion.h>
+#include <hoot/core/criterion/RailwayOneToManySourceCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -198,15 +198,18 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
-  // TODO
   const bool containsAtLeastOneRailwayOneToManyMatchedElement =
-    CriterionUtils::containsSatisfyingElements<RailwayOneToManyCriterion>(map);
+    CriterionUtils::containsSatisfyingElements<RailwayOneToManySourceCriterion>(map);
   LOG_VART(containsAtLeastOneRailwayOneToManyMatchedElement);
   if (containsAtLeastOneRailwayOneToManyMatchedElement)
   {
+    // If the input contains a rail feature matched with the One To Many workflow, we do different
+    // error checking here. We're looking for exactly one secondary feature with a custom tag added
+    // by Railway.js and exactly one reference feature to merge tags into.
+
     const long numOneToManySecondaryMatchElements =
       (long)FilteredVisitor::getStat(
-        std::make_shared<RailwayOneToManyCriterion>(),
+        std::make_shared<RailwayOneToManySourceCriterion>(),
         std::make_shared<ElementCountVisitor>(), map);
     if (numOneToManySecondaryMatchElements != 1)
     {
@@ -215,19 +218,21 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
         "secondary feature.");
     }
 
-    // _determineMergeType has already validated feature type, so just check status here.
+    // _determineMergeType has already validated the input feature types, so just check status here.
+    // We can merge into either a reference or already conflated feature.
     const long numStatus1Elements =
       (long)FilteredVisitor::getStat(
         std::make_shared<OrCriterion>(
           std::make_shared<StatusCriterion>(Status::Unknown1),
           std::make_shared<StatusCriterion>(Status::Conflated)),
         std::make_shared<ElementCountVisitor>(), map);
-    if (numStatus1Elements < 1)
+    if (numStatus1Elements != 1)
     {
       throw IllegalArgumentException(
-        "Input map must have at least one feature with status=1 or status=3.");
+        "Input map must have at exactly one feature with status=1 or status=3.");
     }
 
+    // Return the ref or already conflated feature's ID as the target ID.
     ConstElementPtr status1Element = MapUtils::getFirstElementWithStatus(map, Status::Unknown1);
     if (status1Element)
     {
@@ -238,6 +243,9 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
       return MapUtils::getFirstElementWithStatus(map, Status::Conflated)->getElementId();
     }
   }
+
+  // This logic is for all merge input validation except One To Many rail. We should have exactly
+  // one feature identified as the target and one or more features to merge into.
 
   const long numMergeTargets =
     (long)FilteredVisitor::getStat(
@@ -277,27 +285,23 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
   // Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
-  // multiple feature types within the same map. The logic here still needs some work.
+  // multiple feature types within the same map. Technically, guess it could be done but was trying
+  // to keep things simple. The logic in this method could use some cleaning up possibly.
 
   MergeType mergeType;
 
   // This should be able to be made cleaner.
   const bool containsPolys =
     CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map);
-  LOG_VART(containsPolys);
   //non-building areas
   const bool containsAreas =
     CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map);
-  LOG_VART(containsAreas);
   const bool containsBuildings =
     CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map);
-  LOG_VART(containsBuildings);
   const bool containsPois =
-    CriterionUtils::containsSatisfyingElements<PoiCriterion>(map); // general poi definition
-  LOG_VART(containsPois);
+    CriterionUtils::containsSatisfyingElements<PoiCriterion>(map);
+  //const bool containsStandalonePois = false;
   const bool containsRailways = CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map);
-  LOG_VART(containsRailways);
-  LOG_VART(CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2));
 
   if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
       CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true) &&
@@ -321,7 +325,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
     mergeType = MergeType::Area;
   }
   // TODO: if the POI is standalone, no dice; if part of the rail, then ok
-  else if (CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2) &&
+  else if (CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2, true) &&
            !containsBuildings && /*!containsPois &&*/ !containsAreas)
   {
     mergeType = MergeType::Railway;

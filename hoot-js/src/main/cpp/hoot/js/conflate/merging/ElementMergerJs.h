@@ -59,12 +59,11 @@ namespace hoot
  * scripts have their own merge functions already defined that users may want to customize, for
  * consistency's sake it makes more sense to use this hybrid approach.
  *
- * The original merger only merged POIs and supported many into one merging. For consistency's sake
- * all follow on support for additional features types, with the exception of POI to Polygon, also
- * allows for many into one merging. However, don't think many to one merging is actually used by
- * any clients and that all merging is done one feature into one other feature. So, this code and
- * supporting tests could probably be simplified by removing support for many into one merging if
- * it is not being utilized.
+ * The original merger only merged POIs and supported many into one merging. Many into one merging
+ * is supported for all feature types except POI to Polygon and rail. However, don't actually think
+ * many to one merging is actually used by any clients and that all merging is done as one feature
+ * into one other feature. So, this code and supporting tests could probably be simplified by
+ * removing support for many into one merging if it is not being utilized.
  *
  * Update translations/ElementMergeServer.MD and the supported feature types error message if you
  * add any feature types to the merging process.
@@ -80,7 +79,7 @@ public:
    PoiToPolygon,    // one poi and one poly
    Area,            // supports two or more areas
    Building,        // supports two or more buildings
-   Railway          // supports two or more railways
+   Railway          // supports two railways
  };
 
  ~ElementMergerJs() override = default;
@@ -88,8 +87,8 @@ public:
  static void Init(v8::Local<v8::Object> target);
 
  /**
-  * @brief merge TODO
-  * @param args
+  * @brief merge merges two or elements into a single element
+  * @param args a single argument containing a map with elements to merge
   */
  static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
 
@@ -99,31 +98,23 @@ private:
 
   ElementMergerJs() = default;
 
-  /**
-   * @brief _merge TODO
-   * @param map
-   * @param current
-   */
   static void _merge(OsmMapPtr map, v8::Isolate* current);
   /**
-   * @brief _determineMergeType TODO
-   * @param map
-   * @return
+   * @brief _determineMergeType determines the type of merge to be done based on the feature types
+   * of the elements passed in to merge
+   * @param map the map containing the elements to merge
+   * @return a merge type
    */
   static MergeType _determineMergeType(ConstOsmMapPtr map);
   /**
-   * @brief _getMergeTargetFeatureId TODO
+   * @brief _getMergeTargetFeatureId determines which feature in the input map should be the feature
+   * that other features are merged into
    *
    * The feature being merged into must have a custom hoot tag for all merge types except poi/poly.
-   * @param map
-   * @return
+   * @param map the map containing the elements to merge
+   * @return an element ID
    */
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
-  /**
-   * @brief _mergeTypeToString TODO
-   * @param mergeType
-   * @return
-   */
   static QString _mergeTypeToString(const MergeType& mergeType);
 };
 

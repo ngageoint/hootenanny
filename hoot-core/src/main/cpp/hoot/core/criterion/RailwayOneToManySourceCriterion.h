@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef RAILWAY_ONE_TO_MANY_CRITERION_H
-#define RAILWAY_ONE_TO_MANY_CRITERION_H
+#ifndef RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H
+#define RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
@@ -34,16 +34,17 @@ namespace hoot
 {
 
 /**
- * TODO
+ * This identifies a rail feature that is the merge source from a One To Many Railway workflow
+ * match.
  */
-class RailwayOneToManyCriterion : public ElementCriterion
+class RailwayOneToManySourceCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "RailwayOneToManyCriterion"; }
+  static QString className() { return "RailwayOneToManySourceCriterion"; }
 
-  RailwayOneToManyCriterion() = default;
-  ~RailwayOneToManyCriterion() override = default;
+  RailwayOneToManySourceCriterion() = default;
+  ~RailwayOneToManySourceCriterion() override = default;
 
   /**
    * @see ElementCriterion
@@ -53,9 +54,11 @@ public:
   /**
    * @see ElementCriterion
    */
-  ElementCriterionPtr clone() override { return std::make_shared<RailwayOneToManyCriterion>(); }
+  ElementCriterionPtr clone() override
+  { return std::make_shared<RailwayOneToManySourceCriterion>(); }
 
-  QString getDescription() const override { return "TODO"; }
+  QString getDescription() const override
+  { return "Identifies secondary features matched by One To Many Railway Conflation"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
@@ -63,4 +66,4 @@ public:
 
 }
 
-#endif // RAILWAY_ONE_TO_MANY_CRITERION_H
+#endif // RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "RailwayOneToManyCriterion.h"
+#include "RailwayOneToManySourceCriterion.h"
 
 // hoot
 #include <hoot/core/criterion/CriterionUtils.h>
@@ -37,10 +37,11 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, RailwayOneToManyCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RailwayOneToManySourceCriterion)
 
-bool RailwayOneToManyCriterion::isSatisfied(const ConstElementPtr& e) const
+bool RailwayOneToManySourceCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  // Secondary railways with the custom tag added by Railway.js satisfy this.
   QList<ElementCriterionPtr> crits;
   ElementCriterionPtr typeCrit = std::make_shared<RailwayCriterion>();
   crits.append(typeCrit);

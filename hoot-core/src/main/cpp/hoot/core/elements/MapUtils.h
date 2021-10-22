@@ -75,7 +75,7 @@ public:
   static void combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes);
 
   /**
-   * Gets a single element by the "note" tag
+   * Returns the first element with a "note" tag
    *
    * @param map map containing the element
    * @param note note tag value to search for
@@ -87,7 +87,7 @@ public:
     const OsmMapPtr& map, const QString& note,
     const ElementType& elementType = ElementType::Unknown);
   /**
-   * Gets a single element by tag
+   * Returns the first element with a specified tag
    *
    * @param map map containing the element
    * @param tagKey tag key to search for
@@ -100,10 +100,10 @@ public:
     const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
     const ElementType& elementType = ElementType::Unknown);
   /**
-   * @brief getFirstElementWithStatus TODO
-   * @param map
-   * @param status
-   * @return
+   * @brief getFirstElementWithStatus Returns the first element with a specified status
+   * @param map map containing the element
+   * @param status status to search for
+   * @return returns the first element found with the status; returns a null element otherwise
    */
   static ConstElementPtr getFirstElementWithStatus(const ConstOsmMapPtr& map, const Status& status);
 

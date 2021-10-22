@@ -287,11 +287,11 @@ public:
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
-   * @brief insertAfter TODO
-   * @param strList
-   * @param strToInsertAfter
-   * @param strToInsert
-   * @return
+   * @brief insertAfter inserts a specified string after another string in a list
+   * @param strList the list to modify
+   * @param strToInsertAfter the string to insert strToInsert after in the list
+   * @param strToInsert the string to insert after strToInsertAfter in the list
+   * @return true if the string was inserted; false otherwise
    */
   static bool insertAfter(
     QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert);

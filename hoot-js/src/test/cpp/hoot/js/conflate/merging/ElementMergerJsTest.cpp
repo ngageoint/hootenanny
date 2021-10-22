@@ -124,7 +124,6 @@ class ElementMergerJsTest : public HootTestFixture
 
   // RAILWAY
   CPPUNIT_TEST(railwayMergeTwoWaysTest);
-  CPPUNIT_TEST(railwayMergeMoreThanTwoRailwaysTest);
   CPPUNIT_TEST(railwayMergeTooFewRailwaysTest);
   CPPUNIT_TEST(railwayMergeMissingTargetTagTest);
   CPPUNIT_TEST(railwayMergeDuplicateTargetTagTest);
@@ -133,9 +132,6 @@ class ElementMergerJsTest : public HootTestFixture
 
   // RAILWAY ONE TO MANY
   CPPUNIT_TEST(railwayOneToManyMergeTwoWaysTest);
-  // TODO: This is crashing...not sure why yet. Don't think we'll be passing in multiple rail
-  // features so may a lower priority to fix.
-  //CPPUNIT_TEST(railwayOneToManyMergeMoreThanTwoRailwaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeTooFewRailwaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeMissingOneToManyFeatureTest);
   CPPUNIT_TEST(railwayOneToManyMergeDuplicateOneToManyFeatureTest);
@@ -453,12 +449,6 @@ public:
     _testMerge("railway-two-in.osm", "railway-two-out.osm");
   }
 
-  void railwayMergeMoreThanTwoRailwaysTest()
-  {
-    _disableOneToManyRailwayConflation();
-    _testMerge("railway-more-than-two-in.osm", "railway-more-than-two-out.osm");
-  }
-
   void railwayMergeTooFewRailwaysTest()
   {
     _disableOneToManyRailwayConflation();
@@ -502,13 +492,6 @@ public:
   {
     _enableOneToManyRailwayConflation();
     _testMerge("railway-one-to-many-two-in.osm", "railway-one-to-many-two-out.osm");
-  }
-
-  void railwayOneToManyMergeMoreThanTwoRailwaysTest()
-  {
-    _enableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-one-to-many-more-than-two-in.osm", "railway-one-to-many-more-than-two-out.osm");
   }
 
   void railwayOneToManyMergeTooFewRailwaysTest()

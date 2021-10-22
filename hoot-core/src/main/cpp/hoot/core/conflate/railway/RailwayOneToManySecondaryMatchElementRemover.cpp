@@ -31,7 +31,7 @@
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/RailwayOneToManyCriterion.h>
+#include <hoot/core/criterion/RailwayOneToManySourceCriterion.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -45,7 +45,7 @@ RailwayOneToManySecondaryMatchElementRemover::RailwayOneToManySecondaryMatchElem
   // if they aren't involved in a review.
   addCriterion(
     std::make_shared<ChainCriterion>(
-      std::make_shared<RailwayOneToManyCriterion>(),
+      std::make_shared<RailwayOneToManySourceCriterion>(),
       std::make_shared<NotCriterion>(std::make_shared<NeedsReviewCriterion>())));
   setRecursive(true);
   setRecursiveRemoveRefsFromParents(true);

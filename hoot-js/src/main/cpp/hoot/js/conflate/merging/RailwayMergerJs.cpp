@@ -46,8 +46,6 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
 {
   LOG_INFO("Merging railways...");
 
-  // TODO: abstract this code and that in AreaMergerJs and PoiMergerJs into a base class
-
   // instantiate the script merger
   std::shared_ptr<PluginContext> script = std::make_shared<PluginContext>();
   HandleScope handleScope(current);
@@ -91,6 +89,9 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
     }
   }
 
+  // We'll go ahead and remove the secondary feature. As noted in the ElementMergerServer
+  // documentation, the client shouldn't actually delete this feature from the data store if its
+  // involved in any other reviews.
   RailwayOneToManySecondaryMatchElementRemover remover;
   map->visitWaysRw(remover);
 

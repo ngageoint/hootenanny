@@ -8,7 +8,7 @@
 #### * one or more buildings into one building
 #### * one or more POIs into one POI
 #### * one POI into one polygon
-#### * one or more railways into one railway
+#### * one railway into another railway
 ####
 #### The merger will select the appropriate feature merge type based on the elements contained in 
 #### the map passed into it. The 'hoot:status' tag must be present on the features being merged.
@@ -27,14 +27,13 @@
 #### * The metadata tag: 'hoot:railway:one:to:many:match:secondary=yes' must remain present on 
 ####   secondary features involved in a one to many match in order for this type of merging to work 
 ####   properly.
-#### * The merging process deletes the secondary way after merging. If all features to be merged are 
-####   passed in at once, this should not cause any problems. However, if one to many reviews are 
-####   being merged one at a time, then the secondary way being merged should not be deleted on the 
-####   client end until it is no longer involved in reviews.
+#### * The merging process deletes the secondary way after merging. Since multiple one to many 
+####   reviews are being merged one at a time, then the secondary way being merged should not be 
+####   deleted on the client end until it is no longer involved in reviews.
 ___
 ## POST /elementmerge
 
-### Example Body #1
+### Example Body #1 - Merge two POIs
 
 ```
 <?xml version='1.0' encoding='UTF-8'?>
@@ -54,7 +53,7 @@ ___
 </osm>
 ```
 
-### Example Response #1
+### Example Response #1 - Merge two POIs
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
@@ -67,25 +66,57 @@ ___
 </osm>
 ```
 
-### Example Body #2
+### Example Body #2 - Merge two buildings with no child node data specified
 
 ```
-TODO: no constituents
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+    <way id='-222330' action='modify' visible='true'>
+        <nd ref='-222258' />
+        <nd ref='-222256' />
+        <nd ref='-222254' />
+        <nd ref='-222252' />
+        <nd ref='-222264' />
+        <nd ref='-222258' />
+        <tag k='building' v='yes' />
+        <tag k='name' v='building 1' />
+        <tag k='hoot:merge:target' v='yes'/>
+    </way>\
+    <way id='-222332' action='modify' visible='true'>
+        <nd ref='-222264' />
+        <nd ref='-222262' />
+        <nd ref='-222260' /
+        <nd ref='-222258' />
+        <nd ref='-222264' />
+        <tag k='building' v='yes' />
+        <tag k='name' v='building 2' />
+    </way>
+</osm>
 ```
 
-### Example Response #2
+### Example Response #2 - Merge two buildings with no child node data specified
 ```
-TODO: no constituents
-```
-
-### Example Body #3
-
-```
-TODO: one to many rail
-```
-
-### Example Response #3
-```
-TODO: one to many rail
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.74025976923" minlon="-104.99544904472" maxlat="39.74068671108" maxlon="-104.99490314789"/>
+    <node visible="true" id="-222264" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7403925161399982" lon="-104.9954490447200044"/>
+    <node visible="true" id="-222258" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405109118200031" lon="-104.9952950738200030"/>
+    <node visible="true" id="-222256" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7406867110800022" lon="-104.9950687832500051"/>
+    <node visible="true" id="-222254" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405485831299998" lon="-104.9949031478899997"/>
+    <node visible="true" id="-222252" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7402597692300006" lon="-104.9952857422500045"/>
+    <way visible="true" id="-222330" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-222258"/>
+        <nd ref="-222256"/>
+        <nd ref="-222254"/>
+        <nd ref="-222252"/>
+        <nd ref="-222264"/>
+        <nd ref="-222258"/>
+        <tag k="alt_name" v="building 2"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="building 1"/>
+    </way>
+</osm>
 ```
 ___

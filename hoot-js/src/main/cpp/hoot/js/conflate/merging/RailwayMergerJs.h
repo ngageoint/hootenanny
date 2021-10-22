@@ -49,12 +49,12 @@ class RailwayMergerJs
 public:
 
   /**
-   * Merges an unlimited number of railways together using a generic conflation script
+   * Merges an one railway into another railway using a generic conflation script
    *
    * The map passed may or may not contain constituent elements (way nodes, relation members).
    *
    * @param map a map containing the railways to be merged
-   * @param mergeTargetId the ID of the area which all other railways should be merged into
+   * @param mergeTargetId the ID of the area which the other railway should be merged into
    * @param current the context this method should run under
    */
   static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
