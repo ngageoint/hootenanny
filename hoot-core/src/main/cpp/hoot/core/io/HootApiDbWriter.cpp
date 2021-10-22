@@ -356,63 +356,6 @@ void HootApiDbWriter::_startNewChangeSet()
   _hootdb.beginChangeset(tags);
 }
 
-void HootApiDbWriter::writeChange(const Change& change)
-{
-  switch (change.getType())
-  {
-    case Change::Create:
-      _createElement(change.getElement());
-      break;
-    case Change::Modify:
-      _modifyElement(change.getElement());
-      break;
-    case Change::Delete:
-      _deleteElement(change.getElement());
-      break;
-    default:
-      throw IllegalArgumentException("Unexpected change type.");
-  }
-}
-
-void HootApiDbWriter::_createElement(const ConstElementPtr& element)
-{
-  if (element->getElementType() == ElementType::Node)
-  {
-    _hootdb.insertNode(std::dynamic_pointer_cast<const Node>(element));
-  }
-  else
-  {
-    // only supporting nodes for now
-    throw HootException("Unsupported element type");
-  }
-}
-
-void HootApiDbWriter::_modifyElement(const ConstElementPtr& element)
-{
-  if (element->getElementType() == ElementType::Node)
-  {
-    _hootdb.updateNode(std::dynamic_pointer_cast<const Node>(element));
-  }
-  else
-  {
-    // only supporting nodes for now
-    throw HootException("Unsupported element type");
-  }
-}
-
-void HootApiDbWriter::_deleteElement(const ConstElementPtr& element)
-{
-  if (element->getElementType() == ElementType::Node)
-  {
-    _hootdb.deleteNode(std::dynamic_pointer_cast<const Node>(element));
-  }
-  else
-  {
-    // only supporting nodes for now
-    throw HootException("Unsupported element type");
-  }
-}
-
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());

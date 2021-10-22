@@ -65,7 +65,6 @@ public:
 
   Tags() = default;
   Tags(const QString& key, const QString& value);
-  Tags(const QString& kvp);
   virtual ~Tags() = default;
 
   bool operator==(const Tags& other) const;
@@ -224,11 +223,6 @@ public:
   Meters readMeters(const QString& key) const;
 
   /**
-   * Remove all tags with empty strings as values.
-   */
-  int removeEmpty();
-
-  /**
    * Removes all metadata tags (hoot:* and those identified in the schema)
    *
    * @return the number of tags removed
@@ -258,13 +252,6 @@ public:
    * @return the number of tags removed
    */
   int removeKeys(const QList<QRegExp>& regexes);
-  /**
-   * Removes all tags with keys that contain the input substring
-   *
-   * @param tagKeySubstring a substring to match
-   * @return the number of tags removed
-   */
-  int removeByTagKeyContains(const QString& tagKeySubstring);
 
   /**
    * Removes all tags with keys that start with the input substring
@@ -431,22 +418,6 @@ public:
    * @return true if at least one name exists; false otherwise
    */
   bool hasName() const;
-
-  /**
-   * Returns a string showing the difference between this set of tags and another
-   *
-   * @param other set of tags to compare these tags to
-   * @return a tag diff string
-   */
-  QString getDiffString(const Tags& other) const;
-
-  /**
-   * Determines if another set of tags intersects with this one
-   *
-   * @param other tags to compare against
-   * @return true if the tags being compared against have at least one tag in similar
-   */
-  bool intersects(const Tags& other) const;
 
   /**
    * Determines if two sets of tags contain a particular key/value pair

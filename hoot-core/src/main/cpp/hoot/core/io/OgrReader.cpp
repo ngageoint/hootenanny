@@ -187,8 +187,6 @@ private:
 
   void _reproject(double& x, double& y);
 
-  const QString& _saveMemory(const QString& s);
-
   virtual void _translate(Tags&);
 
   void populateElementMap();
@@ -1281,15 +1279,6 @@ void OgrReaderInternal::_reproject(double& x, double& y)
                                      "projection bounds?");
     }
   }
-}
-
-const QString& OgrReaderInternal::_saveMemory(const QString& s)
-{
-  if (!_strings.contains(s))
-  {
-    _strings[s] = s;
-  }
-  return _strings[s];
 }
 
 void OgrReaderInternal::_translate(Tags& t)

@@ -87,12 +87,6 @@ public:
   void insert(const std::vector<std::pair<double, double>>& points);
 
   /**
-   * @brief toString returns a string representation of the shape.
-   * @return a string
-   */
-  QString toString() const;
-
-  /**
    * @brief getLongestFaceEdge returns the length of the longest face edge used to create the shape.
    * @return a length
    */
@@ -119,15 +113,9 @@ private:
   GeometryPtr _convertFaceToPolygon(const Tgs::Face& face) const;
 
   /*
-   * Returns true if the face is on the boundary of the triangulation
-   */
-  bool _isBoundary(const double alpha, const Tgs::Edge& e) const;
-
-  /*
    * Returns true if the face is inside an alpha shape.
    */
   bool _isInside(const double alpha, const Tgs::Face& face) const;
-
   bool _isTooLong(const double alpha, const Tgs::Edge& e) const;
 
   /**
@@ -137,7 +125,8 @@ private:
    * @param e Envelope containing all faces
    * @return Sum of the area of all faces
    */
-  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
+  double _collectValidFaces(
+    const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
 
   /**
    * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha shape
@@ -146,13 +135,18 @@ private:
    * @param e Populates the envelope of the faces used in the alpha shape
    * @param area Populates the area of the alpha shape
    * @param face_count Number of total faces in the Delaunay Triangulation
-   * @param alpha_options List of all Delaunay Triangulation face edge lengths (deduplicated) as candidate alpha values
-   * @param min_index Minimum search index in the alpha_options vector, for binary search; starts at 0
-   * @param max_index Maximum search index in the alpha_options vector, for binary search; starts at alpha_options.size() - 1
+   * @param alpha_options List of all Delaunay Triangulation face edge lengths (deduplicated) as
+   * candidate alpha values
+   * @param min_index Minimum search index in the alpha_options vector, for binary search; starts at
+   * 0
+   * @param max_index Maximum search index in the alpha_options vector, for binary search; starts at
+   * alpha_options.size() - 1
    * @return True when alpha value is found
    */
-  bool _searchAlpha(double& alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e, double& area,
-                    size_t face_count, const std::vector<double>& alpha_options, size_t min_index, size_t max_index);
+  bool _searchAlpha(
+    double& alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e, double& area,
+    size_t face_count, const std::vector<double>& alpha_options, size_t min_index,
+    size_t max_index);
 
   GeometryPtr _validateGeometry(const GeometryPtr& g);
 

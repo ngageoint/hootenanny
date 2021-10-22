@@ -70,11 +70,6 @@ public:
                                     const RelationData::Entry& member,
                                     const unsigned int memberSequenceIndex,
                                     const unsigned long version);
-  QString changesetToSqlString(const long changesetId, const long changesetUserId,
-                               const long numChangesInChangeset,
-                               const geos::geom::Envelope& changesetBounds);
-  QString elementToSqlString(const ConstElementPtr& element, const long elementId,
-                                  const long changesetId);
 
   inline static QString getNodeSqlHeaderString(const long mapId)
   {

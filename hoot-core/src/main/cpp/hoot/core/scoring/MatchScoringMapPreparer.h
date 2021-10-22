@@ -46,9 +46,8 @@ public:
     Prepares a map for match scoring
 
     @param map the map to prepare
-    @param removeNodes if true, removes all nodes from the map
     */
-  void prepMap(OsmMapPtr map, const bool removeNodes) const;
+  void prepMap(OsmMapPtr map) const;
 };
 
 }

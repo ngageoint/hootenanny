@@ -224,8 +224,6 @@ private:
 
   void _countNode(const std::shared_ptr<Node>& n);
 
-  double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
-
   void _exportImage(cv::Mat& r, QString output) const;
   void _exportResult(const std::vector<PixelBox>& boxes, QString output);
 
