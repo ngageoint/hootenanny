@@ -302,7 +302,8 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   LOG_VART(CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2));
 
   if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
-      CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true))
+      CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true) &&
+      !containsRailways)
   {
     mergeType = MergeType::PoiToPolygon;
   }
