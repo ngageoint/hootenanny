@@ -4452,15 +4452,6 @@ The distance around a point on a railway to look when calculating the heading. S
 
 Sets that maximum angle, in degrees, that is still considered a railway match.
 
-=== railway.one.to.many.delete.secondary
-
-* Data Type: bool
-* Default Value: `true`
-
-If this is enabled, `railway.one.to.many.match` is enabled, and the conditions specified in
-`railway.one.to.many.match` are met, then matching secondary rail features will be deleted from
-conflated output.
-
 === railway.one.to.many.identifying.keys
 
 * Data Type: list
@@ -4486,7 +4477,7 @@ having a key matching that in `railway.one.to.many.identifying.keys`. Only tag m
 tags identified in `railway.one.to.many.transfer.keys` will be performed with no geometry merging,
 regardless of the conflation workflow in use.
 
-=== railway.one.to.many.match.transfer.all.tags
+=== railway.one.to.many.transfer.all.tags
 
 * Data Type: bool
 * Default Value: `false`

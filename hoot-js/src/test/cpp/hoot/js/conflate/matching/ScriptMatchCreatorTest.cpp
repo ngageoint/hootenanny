@@ -49,7 +49,7 @@ class ScriptMatchCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchCreatorTest);
   CPPUNIT_TEST(runIsCandidateTest);
-  CPPUNIT_TEST(runBadOneToManyRailOptionsTest);
+  CPPUNIT_TEST(runBadRailOptionsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -57,7 +57,7 @@ public:
   ScriptMatchCreatorTest() :
   HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
-    setResetType(ResetConfigs);
+    setResetType(ResetEnvironment);
   }
 
   void runIsCandidateTest()
@@ -92,28 +92,36 @@ public:
     HOOT_STR_EQUALS(true, uut.isMatchCandidate(way1, map));
   }
 
-  void runBadOneToManyRailOptionsTest()
+  void runBadRailOptionsTest()
   {
+    // TODO: need test for _validatePluginConfig
+
     ScriptMatchCreator uut;
     QString exceptionMsg;
+    Settings settings;
 
     // No error here, despite empty option values, since one to many rail matching is turned off.
-    uut.setRunOneToManyRailMatching(
-      false, CreatorDescription::BaseFeatureType::Railway, QStringList(), QStringList());
-
-    // No error here, despite empty option values, since a non-rail feature type is passed in.
-    uut.setRunOneToManyRailMatching(
-      false, CreatorDescription::BaseFeatureType::Highway, QStringList(), QStringList());
+    settings.clear();
+    settings.set(ConfigOptions::getRailwayOneToManyMatchKey(), false);
+    uut.setConfiguration(settings);
+    uut._validateConfig(CreatorDescription::BaseFeatureType::Railway);
 
     // No error here since validation only errors on empty option values.
-    uut.setRunOneToManyRailMatching(
-      true, CreatorDescription::BaseFeatureType::Railway, QStringList("blah"), QStringList("blah"));
+    settings.clear();
+    settings.set(ConfigOptions::getRailwayOneToManyMatchKey(), true);
+    settings.set(ConfigOptions::getRailwayOneToManyIdentifyingKeysKey(), QStringList("blah"));
+    settings.set(ConfigOptions::getRailwayOneToManyTransferKeysKey(), QStringList("blah"));
+    uut.setConfiguration(settings);
+    uut._validateConfig(CreatorDescription::BaseFeatureType::Railway);
 
+    // Error here since one of the option values list is empty.
+    settings.clear();
+    settings.set(ConfigOptions::getRailwayOneToManyMatchKey(), true);
+    settings.set(ConfigOptions::getRailwayOneToManyIdentifyingKeysKey(), QStringList());
+    uut.setConfiguration(settings);
     try
     {
-      // Error here since one of the option values list is empty.
-      uut.setRunOneToManyRailMatching(
-        true, CreatorDescription::BaseFeatureType::Railway, QStringList(), QStringList("blah"));
+      uut._validateConfig(CreatorDescription::BaseFeatureType::Railway);
     }
     catch (const HootException& e)
     {
@@ -121,17 +129,28 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("No railway one to many identifying keys specified in"));
 
+    // Error here since one of the option values list is empty.
+    settings.clear();
+    settings.set(ConfigOptions::getRailwayOneToManyMatchKey(), true);
+    settings.set(ConfigOptions::getRailwayOneToManyTransferKeysKey(), QStringList());
+    uut.setConfiguration(settings);
     try
     {
-      // Error here since one of the option values list is empty.
-      uut.setRunOneToManyRailMatching(
-        true, CreatorDescription::BaseFeatureType::Railway, QStringList("blah"), QStringList());
+      uut._validateConfig(CreatorDescription::BaseFeatureType::Railway);
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("No railway one to many transfer tag keys specified in"));
+
+    // No error here for empty transfer tags list since transfer of all tags is enabled.
+    settings.clear();
+    settings.set(ConfigOptions::getRailwayOneToManyMatchKey(), true);
+    settings.set(ConfigOptions::getRailwayOneToManyTransferKeysKey(), QStringList());
+    settings.set(ConfigOptions::getRailwayOneToManyTransferAllTagsKey(), true);
+    uut.setConfiguration(settings);
+    uut._validateConfig(CreatorDescription::BaseFeatureType::Railway);
   }
 };
 
