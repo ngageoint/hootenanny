@@ -39,7 +39,9 @@ namespace hoot
 {
 
 /**
- * Merges railways
+ * Merges railways via script
+ *
+ * @todo There's a log of duplicated code in the *MergerJs classes. It should be consolidated.
  */
 class RailwayMergerJs
 {

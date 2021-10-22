@@ -29,16 +29,19 @@
 #define AREAMERGERJS_H
 
 // Hoot
+#include <hoot/core/elements/OsmMap.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Merges areas
+ * Merges areas via script
+ *
+ * @todo There's a log of duplicated code in the *MergerJs classes. It should be consolidated.
  */
 class AreaMergerJs
 {
