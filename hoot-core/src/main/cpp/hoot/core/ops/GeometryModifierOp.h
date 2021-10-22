@@ -43,7 +43,7 @@ namespace hoot
   class GeometryModifierAction;
   struct GeometryModifierActionDesc;
 
-  /*
+  /**
    * Geometry modifier operation used to run specific processes changing the actual
    * geometry of elements, e.g. turning ways into polygons, collapsing polygons to points, etc.
    *
@@ -93,10 +93,12 @@ namespace hoot
     QList<GeometryModifierActionDesc> _readJsonRules();
 
     // json filter parser
-    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
+    void _parseFilter(
+      GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     // json action arguments parser
-    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
+    void _parseArguments(
+      GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     const Settings* _pConf;
   };

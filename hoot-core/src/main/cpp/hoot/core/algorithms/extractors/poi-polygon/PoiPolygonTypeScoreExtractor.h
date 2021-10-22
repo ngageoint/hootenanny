@@ -53,11 +53,6 @@ public:
   PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   ~PoiPolygonTypeScoreExtractor() = default;
 
-  QString getClassName() const override { return className(); }
-  QString getName() const override { return className(); }
-  QString getDescription() const override
-  { return "Scores element type similarity for POI/Polygon conflation"; }
-
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
    *
@@ -69,6 +64,11 @@ public:
     const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
+
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getDescription() const override
+  { return "Scores element type similarity for POI/Polygon conflation"; }
 
   double getTypeScoreThreshold() const { return _typeScoreThreshold; }
   QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }

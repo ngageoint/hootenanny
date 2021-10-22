@@ -84,11 +84,12 @@ private:
   /** Flag to trigger _coverStragglers (read description). */
   bool _manuallyCoverSmallPointClusters;
   /**
-   * @brief _coverStragglers This is a bit of hack to the alg, if you will, that will alow for covering
-   * small groups of features when a smaller alpha value is selected. This is desirable in certain
-   * situations when using the alpha shape to feed a tasking grid. Attempts were made to make this
-   * change in AlphaShape itself, but it wasn't feasible due to relying on the buffering of the shape which
-   * happens in this class. Its possible that part could be moved to AlphaShape, if needed.
+   * @brief _coverStragglers This is a bit of hack to the alg, if you will, that will alow for
+   * covering small groups of features when a smaller alpha value is selected. This is desirable in
+   * certain situations when using the alpha shape to feed a tasking grid. Attempts were made to
+   * make this change in AlphaShape itself, but it wasn't feasible due to relying on the buffering
+   * of the shape which happens in this class. Its possible that part could be moved to AlphaShape,
+   * if needed.
    */
   void _coverStragglers(const ConstOsmMapPtr& map);
   /**

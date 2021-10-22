@@ -103,8 +103,8 @@ public:
    * @param map2Inputs A set of maps with the new state of the data.
    * @param output the changeset output file target
    */
-  void create(const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs,
-              const QString& output);
+  void create(
+    const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs, const QString& output);
 
   int getNumCreateChanges() const { return _numCreateChanges; }
   int getNumModifyChanges() const { return _numModifyChanges; }
@@ -156,18 +156,21 @@ private:
   /*
    * Reads both inputs into memory and populates maps for them
    */
-  void _readInputsFully(const QString& input1, const QString& input2, OsmMapPtr& map1,
-                        OsmMapPtr& map2, Progress progress);
+  void _readInputsFully(
+    const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2,
+    Progress progress);
   /*
    * Logic for dealing with map consuming convert ops
    */
-  void _handleUnstreamableConvertOpsInMemory(const QString& input1, const QString& input2,
-                                             OsmMapPtr& map1, OsmMapPtr& map2, Progress progress);
+  void _handleUnstreamableConvertOpsInMemory(
+    const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2,
+    Progress progress);
   /*
    * Logic for dealing with non-map consuming convert ops
    */
-  void _handleStreamableConvertOpsInMemory(const QString& input1, const QString& input2,
-                                           OsmMapPtr& map1, OsmMapPtr& map2, Progress progress);
+  void _handleStreamableConvertOpsInMemory(
+    const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2,
+    Progress progress);
   ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map) const;
 
   // EXTERNAL DISK SORTING BASED METHODS
@@ -179,10 +182,11 @@ private:
   /*
    * Runs the two data source streams through a changeset deriver
    */
-  void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
-                              const QString& output);
-  void _streamChangesetOutput(const QList<ElementInputStreamPtr>& inputs1,
-                              const QList<ElementInputStreamPtr>& inputs2, const QString& output);
+  void _streamChangesetOutput(
+    ElementInputStreamPtr input1, ElementInputStreamPtr input2, const QString& output);
+  void _streamChangesetOutput(
+    const QList<ElementInputStreamPtr>& inputs1, const QList<ElementInputStreamPtr>& inputs2,
+    const QString& output);
 };
 
 }

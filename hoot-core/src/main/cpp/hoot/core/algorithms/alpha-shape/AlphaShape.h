@@ -131,28 +131,36 @@ private:
   bool _isTooLong(const double alpha, const Tgs::Edge& e) const;
 
   /**
-   * @brief _collectValidFaces Iterate all Delaunay Triangulation faces with the specified alpha value
+   * @brief _collectValidFaces Iterate all Delaunay Triangulation faces with the specified alpha
+   * value
    * @param alpha Alpha value used to collect faces
    * @param faces Vector of Delaunay Triangulation faces that conform to the specified alpha value
    * @param e Envelope containing all faces
    * @return Sum of the area of all faces
    */
-  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
+  double _collectValidFaces(
+    const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
 
   /**
-   * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha shape
+   * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha
+   * shape
    * @param alpha Populates the return alpha value
    * @param faces Populates the vector of faces used to create the alpha shape
    * @param e Populates the envelope of the faces used in the alpha shape
    * @param area Populates the area of the alpha shape
    * @param face_count Number of total faces in the Delaunay Triangulation
-   * @param alpha_options List of all Delaunay Triangulation face edge lengths (deduplicated) as candidate alpha values
-   * @param min_index Minimum search index in the alpha_options vector, for binary search; starts at 0
-   * @param max_index Maximum search index in the alpha_options vector, for binary search; starts at alpha_options.size() - 1
+   * @param alpha_options List of all Delaunay Triangulation face edge lengths (deduplicated) as
+   * candidate alpha values
+   * @param min_index Minimum search index in the alpha_options vector, for binary search; starts at
+   * 0
+   * @param max_index Maximum search index in the alpha_options vector, for binary search; starts at
+   * alpha_options.size() - 1
    * @return True when alpha value is found
    */
-  bool _searchAlpha(double& alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e, double& area,
-                    size_t face_count, const std::vector<double>& alpha_options, size_t min_index, size_t max_index);
+  bool _searchAlpha(
+    double& alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e, double& area,
+    size_t face_count, const std::vector<double>& alpha_options, size_t min_index,
+    size_t max_index);
 
   GeometryPtr _validateGeometry(const GeometryPtr& g);
 

@@ -46,29 +46,15 @@ class TagFilter
 
 public:
 
-  TagFilter(const QString& key, const QString& value,
-            const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
-
-  QString getKey() const { return _key; }
-
-  QString getValue() const { return _value; }
-
-  bool getAllowAliases() const { return _allowAliases; }
-  void setAllowAliases(bool allow) { _allowAliases = allow; }
-
-  double getSimilarityThreshold() const { return _similarityThreshold; }
-  void setSimilarityThreshold(double threshold);
-
-  bool getAllowChildren() const { return _allowChildren; }
-  void setAllowChildren(bool allow) { _allowChildren = allow; }
-
-  bool getAllowAncestors() const { return _allowAncestors; }
-  void setAllowAncestors(bool allow) { _allowAncestors = allow; }
-
-  bool getAllowAssociations() const { return _allowAssociations; }
-  void setAllowAssociations(bool allow) { _allowAssociations = allow; }
-
-  OsmSchemaCategory getCategory() const { return _category; }
+  /**
+   * @brief Constructor
+   * @param key tag key to apply to the filter
+   * @param value tag value to apply to the filter
+   * @param category schema category to apply to the filter
+   */
+  TagFilter(
+    const QString& key, const QString& value,
+    const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
 
   /**
    * Creates a tag filter from a JSON node
@@ -77,6 +63,21 @@ public:
    * @return a tag filter
    */
   static TagFilter fromJson(const boost::property_tree::ptree::value_type& tagFilterPart);
+
+  OsmSchemaCategory getCategory() const { return _category; }
+  QString getKey() const { return _key; }
+  QString getValue() const { return _value; }
+  bool getAllowAliases() const { return _allowAliases; }
+  double getSimilarityThreshold() const { return _similarityThreshold; }
+  bool getAllowChildren() const { return _allowChildren; }
+  bool getAllowAncestors() const { return _allowAncestors; }
+  bool getAllowAssociations() const { return _allowAssociations; }
+
+  void setAllowAliases(bool allow) { _allowAliases = allow; }
+  void setSimilarityThreshold(double threshold);
+  void setAllowChildren(bool allow) { _allowChildren = allow; }
+  void setAllowAncestors(bool allow) { _allowAncestors = allow; }
+  void setAllowAssociations(bool allow) { _allowAssociations = allow; }
 
   QString toString() const;
 

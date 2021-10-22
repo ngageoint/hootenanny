@@ -61,13 +61,12 @@ public:
   void check();
 
   /**
-   * Retrun true if schemavertex is unkonw vertex type.
+   * Retrun true if schemavertex is unknown vertex type.
    */
   static bool isUnknownVertexType(const SchemaVertex& schemaVertex)
   { return schemaVertex.isValid(); }
-
   /**
-   * Return true if schemavertex has empty geometry.
+   * Return true if schemavertex has an empty geometry.
    */
   static bool isEmptyGeometry(const SchemaVertex& schemaVertex)
   { return schemaVertex.getGeometries() > 0; }

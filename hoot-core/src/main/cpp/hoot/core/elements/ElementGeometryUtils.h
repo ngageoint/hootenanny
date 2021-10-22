@@ -65,8 +65,8 @@ public:
   /**
    * Calculate the length of the given way in meters. The projection must be planar.
    */
-  static Meters calculateLength(const ConstElementPtr& e,
-                                const ConstElementProviderPtr& constProvider);
+  static Meters calculateLength(
+    const ConstElementPtr& e, const ConstElementProviderPtr& constProvider);
 
 private:
 

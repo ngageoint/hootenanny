@@ -32,6 +32,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The AverageTagMerger class merges tags by averaging based on their tag values.
+ */
 class AverageTagMerger : public TagMerger
 {
 public:
@@ -41,6 +44,9 @@ public:
   AverageTagMerger() = default;
   ~AverageTagMerger() override = default;
 
+  /**
+   * @see TagMerger
+   */
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   QString getDescription() const override

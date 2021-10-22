@@ -58,8 +58,9 @@ public:
    * @param elementType the type of element to synchronize the IDs of; all element types will have
    * IDs synchronized if no type is specified
    */
-  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
-                           const ElementType& elementType = ElementType::Unknown);
+  virtual void synchronize(
+    const OsmMapPtr& map1, const OsmMapPtr& map2,
+    const ElementType& elementType = ElementType::Unknown);
 
   int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
   int getNumWayIdsSynchronized() const { return _updatedWayCtr; }

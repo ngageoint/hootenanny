@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The RelationMemberUtilsJs class is a JS wrapper around the RelationMemberUtils class
+ */
 class RelationMemberUtilsJs : public HootBaseJs
 {
 public:
@@ -42,11 +45,29 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
+  /**
+   * @brief see RelationMemberUtils::isMemberOfRelationWithType
+   */
   static void isMemberOfRelationWithType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @brief see RelationMemberUtils::isMemberOfRelationWithType
+   */
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @brief see RelationMemberUtils::isMemberOfRelationWithType
+   */
   static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @brief see RelationMemberUtils::isMemberOfRelationWithType
+   */
   static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @brief see RelationMemberUtils::isMemberOfRelationWithType
+   */
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @brief see RelationMemberUtils::isMemberOfRelationWithType
+   */
   static void isMemberOfRelationSatisfyingCriterion(
     const v8::FunctionCallbackInfo<v8::Value>& args);
 

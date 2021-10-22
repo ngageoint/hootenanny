@@ -110,8 +110,8 @@ public:
    * @return true if containingElement contains the containedElement geographicaly; false otherwise
    * or if the containment could not be calculated
    */
-  bool elementContains(const ConstElementPtr& containingElement,
-                       const ConstElementPtr& containedElement);
+  bool elementContains(
+    const ConstElementPtr& containingElement, const ConstElementPtr& containedElement);
 
   /**
    * @brief elementsIntersect determines if an element intersects another element; backed by a
