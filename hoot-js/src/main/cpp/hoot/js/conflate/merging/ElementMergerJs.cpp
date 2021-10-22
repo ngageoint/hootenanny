@@ -277,9 +277,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
   // Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
-  // multiple feature types within the same map. After the initial feature requirements are
-  // satisfied, any other features in the map with types other than what we know how to merge
-  // should just pass through.
+  // multiple feature types within the same map. The logic here still needs some work.
 
   MergeType mergeType;
 

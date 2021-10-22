@@ -133,7 +133,9 @@ class ElementMergerJsTest : public HootTestFixture
 
   // RAILWAY ONE TO MANY
   CPPUNIT_TEST(railwayOneToManyMergeTwoWaysTest);
-  //CPPUNIT_TEST(railwayOneToManyMergeMoreThanTwoRailwaysTest); // crashes
+  // TODO: This is crashing...not sure why yet. Don't think we'll be passing in multiple rail
+  // features so may a lower priority to fix.
+  //CPPUNIT_TEST(railwayOneToManyMergeMoreThanTwoRailwaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeTooFewRailwaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeMissingOneToManyFeatureTest);
   CPPUNIT_TEST(railwayOneToManyMergeDuplicateOneToManyFeatureTest);
