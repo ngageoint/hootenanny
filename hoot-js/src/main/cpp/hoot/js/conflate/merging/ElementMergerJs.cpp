@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/StandalonePoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
@@ -285,8 +286,9 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
   // Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
-  // multiple feature types within the same map. Technically, guess it could be done but was trying
-  // to keep things simple. The logic in this method could use some cleaning up possibly.
+  // multiple feature types within the same map. Technically, guess multiple type merging could be
+  // done separately but was trying to keep things simple. The logic in this method could use some
+  // cleaning up possibly.
 
   MergeType mergeType;
 
@@ -298,16 +300,17 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
     CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map);
   const bool containsBuildings =
     CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map);
-  const bool containsPois =
-    CriterionUtils::containsSatisfyingElements<PoiCriterion>(map);
-  //const bool containsStandalonePois = false;
+  // You may occasionally see a POI node that is part of a linear or polygonal feature. That's
+  // ok and we'll allow it.
+  const bool containsStandalonePois =
+    CriterionUtils::containsSatisfyingElements<StandalonePoiCriterion>(map);
   const bool containsRailways = CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map);
 
   if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
       CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true) &&
       !containsRailways)
   {
-    mergeType = MergeType::PoiToPolygon;
+    return MergeType::PoiToPolygon;
   }
   else if (CriterionUtils::containsSatisfyingElements<PoiCriterion>(map, 2) && !containsPolys &&
            !containsAreas && !containsBuildings && !containsRailways)
@@ -315,18 +318,17 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
     mergeType = MergeType::Poi;
   }
   else if (CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map, 2) &&
-           !containsAreas && !containsPois && !containsRailways)
+           !containsAreas && !containsStandalonePois && !containsRailways)
   {
     mergeType = MergeType::Building;
   }
   else if (CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map, 2) &&
-           !containsBuildings && !containsPois && !containsRailways)
+           !containsBuildings && !containsStandalonePois && !containsRailways)
   {
     mergeType = MergeType::Area;
   }
-  // TODO: if the POI is standalone, no dice; if part of the rail, then ok
   else if (CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map, 2, true) &&
-           !containsBuildings && /*!containsPois &&*/ !containsAreas)
+           !containsBuildings && !containsStandalonePois && !containsAreas)
   {
     mergeType = MergeType::Railway;
   }
@@ -334,9 +336,9 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   {
     // Update this error message as support feature types are added to this merger.
     const QString errorMsg =
-      QString("Invalid inputs passed to the element merger. Inputs must contain only one ") +
+      QString("Invalid inputs passed to the element merger. Input must contain only one ") +
       QString("combination of the following: 1) two or more POIs, 2) two or more buildings, 3)") +
-      QString("two or more areas, 4) one POI and one polygon, or 5) two or more railways");
+      QString("two or more areas, 4) one POI and one polygon, or 5) two railways");
     throw IllegalArgumentException(errorMsg);
   }
 

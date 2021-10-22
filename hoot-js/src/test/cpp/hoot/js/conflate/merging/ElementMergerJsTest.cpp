@@ -65,6 +65,9 @@ namespace hoot
  * we're not testing here in the merging of features through the js bindings workflow is the
  * conversion of the map arg from a nodejs object to a hoot object. That gets tested by the element
  * merge service mocha plugin test, translations/test/ElementMergerServer.js.
+ *
+ * @note The conflate output for the ref rails test doesn't cleanly merge the inputs, so it may be
+ * worthwhile to pick a different input for it.
  */
 class ElementMergerJsTest : public HootTestFixture
 {
