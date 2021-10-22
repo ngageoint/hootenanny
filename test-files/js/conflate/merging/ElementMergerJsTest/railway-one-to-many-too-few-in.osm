@@ -26,6 +26,6 @@
     <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
     <tag k='source:imagery:sensor' v='WV01' />
     <tag k='hoot:status' v='2' />
-    <tag k='hoot:railway:one:to:many:match:secondary=yes' v='yes' />
+    <tag k='hoot:railway:one:to:many:match:secondary' v='yes' />
   </way>
 </osm>

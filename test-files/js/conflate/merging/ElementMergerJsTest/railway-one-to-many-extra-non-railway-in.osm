@@ -36,7 +36,7 @@
     <nd ref='-98889141' />
     <nd ref='-98889142' />
     <tag k='arrangement' v='multiple' />
-    <tag k='hoot:railway:one:to:many:match:secondary=yes' v='yes' />
+    <tag k='hoot:railway:one:to:many:match:secondary' v='yes' />
     <tag k='hoot:status' v='2' />
     <tag k='lanes' v='3' />
     <tag k='length' v='163.4' />
@@ -62,5 +62,6 @@
     <tag k='building' v='yes' />
     <tag k='hoot:merge:target' v='yes' />
     <tag k='name' v='building 1' />
+    <tag k='hoot:status' v='1' />
   </way>
 </osm>

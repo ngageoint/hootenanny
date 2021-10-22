@@ -166,6 +166,7 @@
     <tag k='railway:pzb' v='no' />
     <tag k='source:datetime' v='2020-01-17T17:39:21Z' />
     <tag k='usage' v='main' />
+    <tag k='hoot:status' v='2' />
   </way>
   <way id='-98867524' action='modify' visible='true'>
     <nd ref='-98889708' />
@@ -204,5 +205,6 @@
     <tag k='railway:pzb' v='no' />
     <tag k='source:datetime' v='2020-01-17T17:39:21Z' />
     <tag k='usage' v='main' />
+    <tag k='hoot:status' v='2' />
   </way>
 </osm>

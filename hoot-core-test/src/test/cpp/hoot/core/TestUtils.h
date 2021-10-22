@@ -247,13 +247,14 @@ class HootTestFixture : public CppUnit::TestFixture
 {
 protected:
 
-  /** Each Reset* builds on the prior, Configs also resets Basic, Environment rests Basic and Configs, etc. */
+  /** Each Reset* builds on the prior, Configs also resets Basic, Environment rests Basic and
+   * Configs, etc. */
   enum HootTestReset
   {
     ResetBasic,         // resets counters
     ResetConfigs,       // resets configurations
-    ResetEnvironment,   // resets entire environment except for MatchFactory (see additional
-                        // explanation in resetEnvironment)
+    ResetEnvironment,   // resets entire environment except for MatchFactory (see explanation
+                        // in TestUtils::resetEnvironment)
     ResetAll            // resets entire environment (config, etc.); This can be fairly resource
                         // expensive due to the call to ScriptMatchCreator::setArguments but
                         // only if you have script matchers configured to run.

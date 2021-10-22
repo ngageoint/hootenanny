@@ -201,6 +201,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
   // TODO
   const bool containsAtLeastOneRailwayOneToManyMatchedElement =
     CriterionUtils::containsSatisfyingElements<RailwayOneToManyCriterion>(map);
+  LOG_VART(containsAtLeastOneRailwayOneToManyMatchedElement);
   if (containsAtLeastOneRailwayOneToManyMatchedElement)
   {
     const long numOneToManySecondaryMatchElements =

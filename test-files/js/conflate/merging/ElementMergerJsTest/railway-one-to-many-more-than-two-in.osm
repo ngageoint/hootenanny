@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-98890633' action='modify' visible='true' lat='39.12843109139' lon='-76.69613063604' />
+  <node id='-98890634' action='modify' visible='true' lat='39.12802119643' lon='-76.69605016977' />
+  <node id='-98890635' action='modify' visible='true' lat='39.12743027768' lon='-76.69594824582' />
+  <node id='-98890636' action='modify' visible='true' lat='39.12691842151' lon='-76.69586241513' />
+  <node id='-98890637' action='modify' visible='true' lat='39.12691634078' lon='-76.69592410594' />
+  <node id='-98890638' action='modify' visible='true' lat='39.12748853749' lon='-76.69601798326' />
+  <node id='-98890639' action='modify' visible='true' lat='39.12809818196' lon='-76.69613331825' />
+  <node id='-98890640' action='modify' visible='true' lat='39.12843941411' lon='-76.69621110231' />
+  <node id='-98890641' action='modify' visible='true' lat='39.12844565614' lon='-76.69628620416' />
+  <node id='-98890642' action='modify' visible='true' lat='39.12812523091' lon='-76.69620305568' />
+  <node id='-98890643' action='modify' visible='true' lat='39.12745316547' lon='-76.69607699186' />
+  <node id='-98890644' action='modify' visible='true' lat='39.12690801789' lon='-76.69599920779' />
+  <node id='-98890679' action='modify' visible='true' lat='39.12841808559' lon='-76.69622518189' />
+  <node id='-98890680' action='modify' visible='true' lat='39.12821625939' lon='-76.69619031317' />
+  <node id='-98890681' action='modify' visible='true' lat='39.12800402917' lon='-76.69614471562' />
+  <node id='-98890682' action='modify' visible='true' lat='39.1275379527' lon='-76.69605083831' />
+  <node id='-98890683' action='modify' visible='true' lat='39.12696575639' lon='-76.69595159657' />
+  <way id='-98867644' action='modify' visible='true'>
+    <nd ref='-98890633' />
+    <nd ref='-98890634' />
+    <nd ref='-98890635' />
+    <nd ref='-98890636' />
+    <tag k='length' v='170.0' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-98867645' action='modify' visible='true'>
+    <nd ref='-98890637' />
+    <nd ref='-98890638' />
+    <nd ref='-98890639' />
+    <nd ref='-98890640' />
+    <tag k='length' v='171.4' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-98867646' action='modify' visible='true'>
+    <nd ref='-98890641' />
+    <nd ref='-98890642' />
+    <nd ref='-98890643' />
+    <nd ref='-98890644' />
+    <tag k='length' v='173.0' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-98867674' action='modify' visible='true'>
+    <nd ref='-98890679' />
+    <nd ref='-98890680' />
+    <nd ref='-98890681' />
+    <nd ref='-98890682' />
+    <nd ref='-98890683' />
+    <tag k='arrangement' v='multiple' />
+    <tag k='hoot:railway:one:to:many:match:secondary' v='yes' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='3' />
+    <tag k='length' v='163.4' />
+    <tag k='lines' v='3' />
+    <tag k='name' v='AwesomeRail' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='hoot:status' v='2' />
+  </way>
+</osm>

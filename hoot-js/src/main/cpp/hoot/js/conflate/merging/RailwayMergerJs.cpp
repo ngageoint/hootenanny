@@ -28,6 +28,7 @@
 
 // Hoot
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/conflate/railway/RailwayOneToManySecondaryMatchElementRemover.h>
 #include <hoot/core/util/ConfPath.h>
 
 #include <hoot/js/HootJsStable.h>
@@ -92,6 +93,9 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
       numMerged++;
     }
   }
+
+  RailwayOneToManySecondaryMatchElementRemover remover;
+  map->visitWaysRw(remover);
 
   LOG_INFO("Merged " << numMerged << " railways.");
 }
