@@ -38,6 +38,7 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
@@ -72,7 +73,7 @@ public class ImportResourceUtilsTest {
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
             HootCustomPropertiesSetter.setProperty("UPLOAD_FOLDER", homeFolder.getAbsolutePath() + "/" + "upload");
 
-            copyResourcesInfoTestFolder(new String[] {"ogr.zip", "zip1.zip", "osm.zip",
+            copyResourcesInfoTestFolder(new String[] {"ogr.zip", "zip1.zip", "roads.osm.zip",
                     "osm1.osm", "osm2.osm", "fgdb_ogr.zip", "TransportationGroundCrv.shp",  "DcGisRoads.zip" });
 
 //            String command = "/usr/bin/unzip " + new File(homeFolder, "DcGisRoads.zip").getAbsolutePath() +
@@ -190,14 +191,14 @@ public class ImportResourceUtilsTest {
         assertNotNull(filesToImport);
         assertEquals(1, filesToImport.size());
         assertEquals(1, counts.get(GEONAMES).intValue());
-        
+
         counts.clear();
         uploadedFile = new File("file.gpkg");
         filesToImport = ImportResourceUtils.handleUploadedFile(GPKG, uploadedFile, counts, workDir, uploadType);
         assertNotNull(filesToImport);
         assertEquals(1, filesToImport.size());
         assertEquals(1, counts.get(GPKG).intValue());
-        
+
         counts.clear();
         uploadedFile = new File("gdb");
         filesToImport = ImportResourceUtils.handleUploadedFile(FGDB, uploadedFile, counts, workDir, "DIR");
@@ -222,20 +223,27 @@ public class ImportResourceUtilsTest {
     public void testHandleOSMZip() throws Exception {
         File workDir = homeFolder;
         List<File> zipsToImport = new LinkedList<>();
-        zipsToImport.add(new File(homeFolder, "osm.zip"));
+        zipsToImport.add(new File(homeFolder, "roads.osm.zip"));
         List<File> filesToImport = new LinkedList<>();
         List<String> fileNames = new LinkedList<>();
-        fileNames.add("osm.zip");
+        fileNames.add("roads.osm.zip");
 
-        String command = "/usr/bin/unzip " + new File(homeFolder, "osm.zip").getAbsolutePath() +
-                " -d " + new File(homeFolder, "osm").getAbsolutePath();
+        String command = "/usr/bin/unzip " + new File(homeFolder, "roads.osm.zip").getAbsolutePath() +
+                " -d " + new File(homeFolder, "roads.osm").getAbsolutePath();
 
         Process p = Runtime.getRuntime().exec(command);
 
         ImportResourceUtils.handleOSMZip(workDir, zipsToImport, filesToImport, fileNames);
 
         assertNotNull(filesToImport);
+        List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
+        inputs.stream().forEach(input -> {
+            //make sure "roads.osm" unzipped folder name is in the file paths
+            assertTrue(input.contains("roads.osm"));
+        });
+
         assertEquals(2, filesToImport.size());
+
     }
 
     @Test
