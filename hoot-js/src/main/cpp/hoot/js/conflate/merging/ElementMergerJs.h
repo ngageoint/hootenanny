@@ -38,7 +38,10 @@ namespace hoot
 {
 
 /**
- * Merges two or more elements based on their feature type, accepting a nodejs map as input
+ * Merges two or more elements based on their feature type, accepting a nodejs map as input.
+ *
+ * This class has been tested mostly against the Reference Conflation workflow. Its possible it may
+ * need modifications to support other worfklows.
  *
  * This class should be used with a data reader that uses the element source IDs and uses a default
  * status of Unknown1.
