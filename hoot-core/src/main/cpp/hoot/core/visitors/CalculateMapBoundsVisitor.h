@@ -52,7 +52,9 @@ public:
 
   OGREnvelope getBounds() const { return _envelope; }
 
-  // Note: should only visit nodes when calculating bounds
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   // Convenient way to get bounds

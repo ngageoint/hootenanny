@@ -38,11 +38,11 @@
 namespace hoot
 {
 
-/*
- * Visitor utilized by the GeometryModifierOp.
- * Processes an element as requested in the currently set GeometryModifierActionDesc.
- * Applies the filter to the node and if it matches calls the requested modifier's
- * process function.
+/**
+ * @brief The GeometryModifierVisitor class is a Visitor utilized by the GeometryModifierOp.
+ *
+ * It Pprocesses an element as requested in the currently set GeometryModifierActionDesc, applies
+ * the filter to the node and if it matches calls the requested modifier's process function.
  */
 class GeometryModifierVisitor : public ElementVisitor
 {
@@ -73,6 +73,7 @@ public:
    void setActionDesc(const GeometryModifierActionDesc& actionDesc ) { _actionDesc = actionDesc; }
 
 private:
+
   OsmMap* _pMap;
   GeometryModifierActionDesc _actionDesc;
 };

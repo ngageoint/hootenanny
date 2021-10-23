@@ -47,7 +47,7 @@ public:
    * reading
    * @param displayOutputs if true, displays output formats
    * @param displayOutputsSupportingStreaming if true, displays streamable output formats
-   * @param displayOgrOnly TODO
+   * @param displayOgrOnly displays formats supported by OGR only
    * @return a string describing the requested formats
    */
   static QString display(

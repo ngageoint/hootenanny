@@ -47,6 +47,9 @@ public:
   void setOsmMap(OsmMap* map) override { _map = map; }
   void setOsmMap(const OsmMap* /*map*/) override { throw NotImplementedException(); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
   /**
    * TODO: ElementVisitor already implements visit(const ElementPtr&)

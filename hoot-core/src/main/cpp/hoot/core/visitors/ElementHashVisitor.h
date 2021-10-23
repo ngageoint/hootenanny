@@ -56,6 +56,9 @@ public:
   ElementHashVisitor();
   ~ElementHashVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   /**
