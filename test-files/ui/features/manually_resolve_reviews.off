@@ -1,5 +1,7 @@
 Feature: Manually resolve reviews feature
 
+  # TODO: This will be re-enabled after the problem is diagnosed on the testing server.
+
   Scenario: I can conflate the AllDataTypes data, manually resolve some reviews, and merge some POIs during the review process
     Given I am on Hootenanny
     And I resize the window
@@ -138,16 +140,15 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to not see "Please wait while loading missing features."
     And I press "Merge"
     Then I wait 30 "seconds" to not see "Please wait while merging review items."
-    # TODO: This will be re-enabled after the problem is diagnosed on the testing server.
-    #And I click on "a.next"
-    #Then I wait 10 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
-    #And I click on "a.previous"
-    #Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
-    #And I press "Resolved"
-    #Then I wait 30 "seconds" to see "There are no more available features to review."
-    #Then I should not see "Reviews remaining:"
-    #Then I should not see "Hide Table"
-    #Then I should not see "name"
-    #Then I should not see "a.previous"
-    #Then I should not see "a.next"
-    #Then I should not see "Resolved"
+    And I click on "a.next"
+    Then I wait 10 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
+    And I click on "a.previous"
+    Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
+    And I press "Resolved"
+    Then I wait 30 "seconds" to see "There are no more available features to review."
+    Then I should not see "Reviews remaining:"
+    Then I should not see "Hide Table"
+    Then I should not see "name"
+    Then I should not see "a.previous"
+    Then I should not see "a.next"
+    Then I should not see "Resolved"
