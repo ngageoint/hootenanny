@@ -24,31 +24,46 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef RELATION_MERGER_JS_H
-#define RELATION_MERGER_JS_H
+#ifndef RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H
+#define RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H
 
-// Hoot
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/HootBaseJs.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class RelationMergerJs : public HootBaseJs
+/**
+ * This identifies a rail feature that is the merge source from a One To Many Railway workflow
+ * match.
+ */
+class RailwayOneToManySourceCriterion : public ElementCriterion
 {
 public:
 
-  ~RelationMergerJs() override = default;
+  static QString className() { return "RailwayOneToManySourceCriterion"; }
 
-  static void Init(v8::Local<v8::Object> target);
+  RailwayOneToManySourceCriterion() = default;
+  ~RailwayOneToManySourceCriterion() override = default;
 
-  static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @see ElementCriterion
+   */
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-private:
+  /**
+   * @see ElementCriterion
+   */
+  ElementCriterionPtr clone() override
+  { return std::make_shared<RailwayOneToManySourceCriterion>(); }
 
-  RelationMergerJs() = default;
+  QString getDescription() const override
+  { return "Identifies secondary features matched by One To Many Railway Conflation"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }
 
-#endif // RELATION_MERGER_JS_H
+#endif // RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H

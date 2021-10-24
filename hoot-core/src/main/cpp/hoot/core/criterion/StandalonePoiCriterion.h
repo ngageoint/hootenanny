@@ -24,31 +24,48 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef RELATION_MERGER_JS_H
-#define RELATION_MERGER_JS_H
+#ifndef STANDALONE_POI_CRITERION_H
+#define STANDALONE_POI_CRITERION_H
 
-// Hoot
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/HootBaseJs.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class RelationMergerJs : public HootBaseJs
+class StandalonePoiCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  ~RelationMergerJs() override = default;
+  static QString className() { return "StandalonePoiCriterion"; }
 
-  static void Init(v8::Local<v8::Object> target);
+  StandalonePoiCriterion() = default;
+  StandalonePoiCriterion(ConstOsmMapPtr map);
+  ~StandalonePoiCriterion() override = default;
 
-  static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @see ElementCriterion
+   */
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<StandalonePoiCriterion>(_map); }
+
+  void setOsmMap(const OsmMap* map) override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies POIs that are not way nodes"; }
+  QString toString() const override { return className(); }
 
 private:
 
-  RelationMergerJs() = default;
+  ConstOsmMapPtr _map;
+  ElementCriterionPtr _crit;
+
+  void _createCrit();
 };
 
 }
 
-#endif // RELATION_MERGER_JS_H
+#endif // STANDALONE_POI_CRITERION_H

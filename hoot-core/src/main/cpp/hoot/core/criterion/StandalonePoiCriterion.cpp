@@ -24,31 +24,51 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef RELATION_MERGER_JS_H
-#define RELATION_MERGER_JS_H
+#include "StandalonePoiCriterion.h"
 
-// Hoot
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/HootBaseJs.h>
+// hoot
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-class RelationMergerJs : public HootBaseJs
+HOOT_FACTORY_REGISTER(ElementCriterion, StandalonePoiCriterion)
+
+StandalonePoiCriterion::StandalonePoiCriterion(ConstOsmMapPtr map) :
+_map(map)
 {
-public:
-
-  ~RelationMergerJs() override = default;
-
-  static void Init(v8::Local<v8::Object> target);
-
-  static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-private:
-
-  RelationMergerJs() = default;
-};
-
+  _createCrit();
 }
 
-#endif // RELATION_MERGER_JS_H
+void StandalonePoiCriterion::_createCrit()
+{
+  if (!_map)
+  {
+    throw IllegalArgumentException("No map specified.");
+  }
+  _crit =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<PoiCriterion>(),
+      std::make_shared<NotCriterion>(std::make_shared<WayNodeCriterion>(_map)));
+}
+
+void StandalonePoiCriterion::setOsmMap(const OsmMap* map)
+{
+  _map = map->shared_from_this();
+  _createCrit();
+}
+
+bool StandalonePoiCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  if (!_map)
+  {
+    throw IllegalArgumentException("No map specified.");
+  }
+  return _crit->isSatisfied(e);
+}
+
+}

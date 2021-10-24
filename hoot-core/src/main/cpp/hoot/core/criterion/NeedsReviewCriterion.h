@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Filters out everything except the specified status.
+ * Determines if a feature requires manual review
  */
 class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {

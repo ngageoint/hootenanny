@@ -55,11 +55,12 @@ void RelationMergerJs::Init(Local<Object> exports)
   Local<Object> thisObj = Object::New(current);
   exports->Set(context, toV8("RelationMerger"), thisObj);
 
-  thisObj->Set(context, toV8("mergeRelations"),
-               FunctionTemplate::New(current, mergeRelations)->GetFunction(context).ToLocalChecked());
+  thisObj->Set(
+    context, toV8("merge"),
+    FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
 }
 
-void RelationMergerJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
+void RelationMergerJs::merge(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);

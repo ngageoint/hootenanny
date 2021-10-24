@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef AREAMERGERJS_H
-#define AREAMERGERJS_H
+#ifndef RAILWAY_MERGER_JS_H
+#define RAILWAY_MERGER_JS_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -39,22 +39,22 @@ namespace hoot
 {
 
 /**
- * Merges areas via script
+ * Merges railways via script
  *
  * @todo There's a log of duplicated code in the *MergerJs classes. It should be consolidated.
  */
-class AreaMergerJs
+class RailwayMergerJs
 {
 
 public:
 
   /**
-   * Merges an unlimited number of areas together using a generic conflation script
+   * Merges an one railway into another railway using a generic conflation script
    *
    * The map passed may or may not contain constituent elements (way nodes, relation members).
    *
-   * @param map a map containing the buildings to be merged
-   * @param mergeTargetId the ID of the area which all other areas should be merged into
+   * @param map a map containing the railways to be merged
+   * @param mergeTargetId the ID of the area which the other railway should be merged into
    * @param current the context this method should run under
    */
   static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
@@ -62,4 +62,4 @@ public:
 
 }
 
-#endif // AREAMERGERJS_H
+#endif // RAILWAY_MERGER_JS_H

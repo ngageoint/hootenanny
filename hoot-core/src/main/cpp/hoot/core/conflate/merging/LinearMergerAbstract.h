@@ -36,7 +36,6 @@
 namespace hoot
 {
 
-// TODO: move this to its own class
 class ShortestFirstComparator
 {
 public:

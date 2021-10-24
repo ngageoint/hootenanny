@@ -137,7 +137,6 @@ bool HighwayMergerCreator::isConflicting(
 {
   const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1.get());
   const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2.get());
-
   if (hm1 && hm2)
   {
     const bool conflicting = m1->isConflicting(m2, map);

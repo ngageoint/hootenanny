@@ -22,38 +22,35 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "RailwayOneToManySecondaryMatchElementRemover.h"
+#include "RailwayOneToManySourceCriterion.h"
 
 // hoot
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
-#include <hoot/core/criterion/NeedsReviewCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/RailwayOneToManySourceCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RailwayOneToManySecondaryMatchElementRemover)
+HOOT_FACTORY_REGISTER(ElementCriterion, RailwayOneToManySourceCriterion)
 
-RailwayOneToManySecondaryMatchElementRemover::RailwayOneToManySecondaryMatchElementRemover()
+bool RailwayOneToManySourceCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // We're looking to remove secondary railways with the many to one match identifying tag, but only
-  // if they aren't involved in a review.
-  addCriterion(
-    std::make_shared<ChainCriterion>(
-      std::make_shared<RailwayOneToManySourceCriterion>(),
-      std::make_shared<NotCriterion>(std::make_shared<NeedsReviewCriterion>())));
-  setRecursive(true);
-  setRecursiveRemoveRefsFromParents(true);
-}
-
-void RailwayOneToManySecondaryMatchElementRemover::setConfiguration(const Settings& /*conf*/)
-{
- // overriding here to keep our hardcoded config
+  // Secondary railways with the custom tag added by Railway.js satisfy this.
+  QList<ElementCriterionPtr> crits;
+  ElementCriterionPtr typeCrit = std::make_shared<RailwayCriterion>();
+  crits.append(typeCrit);
+  ElementCriterionPtr statusCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
+  crits.append(statusCrit);
+  ElementCriterionPtr tagCrit =
+    std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes");
+  crits.append(tagCrit);
+  return CriterionUtils::combineCriterion(crits)->isSatisfied(e);
 }
 
 }

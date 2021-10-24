@@ -779,7 +779,7 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
   }
 }
 
-void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
+void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
 {
   LOG_INFO("Merging buildings...");
 

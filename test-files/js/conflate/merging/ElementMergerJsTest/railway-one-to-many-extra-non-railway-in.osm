@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-98889138' action='modify' visible='true' lat='39.12841652664' lon='-76.69622451335' />
+  <node id='-98889139' action='modify' visible='true' lat='39.12821470044' lon='-76.69618964463' />
+  <node id='-98889140' action='modify' visible='true' lat='39.12800247021' lon='-76.69614404708' />
+  <node id='-98889141' action='modify' visible='true' lat='39.12753639373' lon='-76.69605016977' />
+  <node id='-98889142' action='modify' visible='true' lat='39.12696419741' lon='-76.69595092803' />
+  <node id='-98889143' action='modify' visible='true' lat='39.12844565614' lon='-76.69628620416' />
+  <node id='-98889144' action='modify' visible='true' lat='39.12812523091' lon='-76.69620305568' />
+  <node id='-98889145' action='modify' visible='true' lat='39.12745316547' lon='-76.69607699186' />
+  <node id='-98889146' action='modify' visible='true' lat='39.12690801789' lon='-76.69599920779' />
+  <node id='-98889159' action='modify' visible='true' lat='39.12779703298' lon='-76.69578022697' />
+  <node id='-98889160' action='modify' visible='true' lat='39.12797438519' lon='-76.6955539364' />
+  <node id='-98889161' action='modify' visible='true' lat='39.12783503706' lon='-76.69538830104' />
+  <node id='-98889162' action='modify' visible='true' lat='39.12754367188' lon='-76.6957708954' />
+  <node id='-98889163' action='modify' visible='true' lat='39.12767759143' lon='-76.69593419787' />
+  <way id='-98867422' action='modify' visible='true'>
+    <nd ref='-98889143' />
+    <nd ref='-98889144' />
+    <nd ref='-98889145' />
+    <nd ref='-98889146' />
+    <tag k='hoot:status' v='1' />
+    <tag k='length' v='173.0' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+  </way>
+  <way id='-98867423' action='modify' visible='true'>
+    <nd ref='-98889138' />
+    <nd ref='-98889139' />
+    <nd ref='-98889140' />
+    <nd ref='-98889141' />
+    <nd ref='-98889142' />
+    <tag k='arrangement' v='multiple' />
+    <tag k='hoot:railway:one:to:many:match:secondary' v='yes' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='3' />
+    <tag k='length' v='163.4' />
+    <tag k='lines' v='3' />
+    <tag k='name' v='AwesomeRail' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
+    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+  </way>
+  <way id='-98867430' action='modify' visible='true'>
+    <nd ref='-98889159' />
+    <nd ref='-98889160' />
+    <nd ref='-98889161' />
+    <nd ref='-98889162' />
+    <nd ref='-98889163' />
+    <nd ref='-98889159' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='building 1' />
+    <tag k='hoot:status' v='1' />
+  </way>
+</osm>
