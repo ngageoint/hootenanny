@@ -8,7 +8,7 @@ change the way that Hootenanny conflates data. This documentation both explains
 how to use JavaScript in both ways as well as provides reference documentation
 for some of the commonly used JavaScript interfaces.
 
-At this point there are two different implementations of JavaScript within Hootenanny. The older interface uses QtScript for the implementation within the translation scripts. There are plans to replace the QtScript interface with the newer V8 implementation (used by node.js and described below). Until that happens the JavaScript functions described below are not accessible to translation files.
+At this point there are two different implementations of JavaScript within Hootenanny. The older interface uses QtScript for the implementation within the translation scripts. There are plans to replace the QtScript interface with the newer V8 implementation (used by node.js and described below). Until that happens the JavaScript functions described below are not accessible to translation files. (TODO: verify this paragraph is still accurate)
 
 ==== Using Hootenanny from Node.js
 
@@ -37,7 +37,7 @@ node MyExample.js
 
 ===== Conflate Example
 
-The following example loads data from the test-files directory, conflates it
+The following example loads data from the test-files directory, conflates it,
 and writes the result out to ../tmp/Conflated.osm. The associated file can
 be found in +$HOOT_HOME/scripts/ConflateExample.js+.
 
@@ -92,7 +92,7 @@ node ConflateExample.js
 ==== Modifying Hootenanny with Javascript
 
 node.js does not provide a convenient way to access it from the command line. To work
-around this issue Hootenanny uses the V8 engine (same as Google Chrome) to
+around this issue Hootenanny uses the V8 engine (same as used in Google Chrome) to
 call Javascript methods. This gives you all the power of Javascript, but you
 do not have access to some of the node.js specific methods such as +console+ and
 +require+.
@@ -112,7 +112,7 @@ are enabled through the following defines:
 * +merger.creators+ - List of classes and appropriate parameters to enable
   specific merger creators.
 
-A match and merger are generally paired together and by enabling or disabling
+A match and merger are generally paired together, and by enabling or disabling
 specific creators you can dramatically change the way the system works. In our
 simple examples we'll simply set the creators to only use our example +.js+
 files, but you could just as easily enable additional creators.
@@ -217,6 +217,12 @@ is the only match candidate.
 [[GetSearchRadiusExample]]
 .Get Search Radius Example - The blue lines represent the bounds of the CE after buffering the feature. The orange lines represent buffering the feature by a custom value per feature. The definition of the custom value is set by the user in the +getSearchRadius+ method and multiplied by the +candidateDistanceSigma+. In this case the values are arbitrary.
 image::user/images/GetSearchRadiusExample.jpg[]
+
+===== Automatic Search Radius Calculation
+
+Conflation can be configured to automatically calculate the best search radius for the data. This is
+primarly done with linear data and is computed by determining tie points using rubbersheeting. See
+the `exports.calculateSearchRadius` function within `rules/River.js` as an example. More information on rubbersheeting is available in the User and Algorithms documentation. 
 
 ===== Search Radius Review
 
