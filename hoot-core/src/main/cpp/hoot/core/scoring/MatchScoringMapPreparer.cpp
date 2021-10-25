@@ -69,7 +69,7 @@ public:
   QString getClassName() const override { return ""; }
 };
 
-void MatchScoringMapPreparer::prepMap(OsmMapPtr map) const
+void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes) const
 {
   // If an element has a uuid, but no REF1/REF2 tag then create a REF tag with the uuid. Whether its
   // REF1 or REF2 is determined by the unknown status.
@@ -90,6 +90,18 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map) const
   AddUuidVisitor uuid("uuid");
   FilteredVisitor v(criterion, uuid);
   map->visitRw(v);
+
+  if (removeNodes)
+  {
+    // remove all REF1/REF2 tags from the nodes.
+    QStringList keys;
+    keys.append(MetadataTags::Ref1());
+    keys.append(MetadataTags::Ref2());
+    RemoveTagsVisitor removeRef(keys);
+    NodeCriterion nodeCrit;
+    FilteredVisitor removeRefV(nodeCrit, removeRef);
+    map->visitRw(removeRefV);
+  }
 }
 
 }
