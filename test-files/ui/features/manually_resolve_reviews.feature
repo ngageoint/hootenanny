@@ -1,7 +1,5 @@
 Feature: Manually resolve reviews feature
 
-  # TODO: This will be re-enabled after the problem is diagnosed on the testing server.
-
   Scenario: I can conflate the AllDataTypes data, manually resolve some reviews, and merge some POIs during the review process
     Given I am on Hootenanny
     And I resize the window
