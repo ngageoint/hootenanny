@@ -47,12 +47,11 @@ public:
   CriterionCountVisitor(const ElementCriterionPtr& pCrit);
   ~CriterionCountVisitor() override = default;
 
-  void addCriterion(const ElementCriterionPtr& pCrit) override
-  {
-    assert(_pCrit.get() == 0);
-    _pCrit = pCrit;
-  }
+  void addCriterion(const ElementCriterionPtr& pCrit) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   uint64_t getCount() const { return _count; }

@@ -63,7 +63,7 @@ public:
    */
   static bool waysShareEndNode(
     const ConstWayPtr& way1, const ConstWayPtr& way2, const bool sameDirection = true);
-  
+
 };
 
 }

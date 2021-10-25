@@ -38,7 +38,9 @@
 namespace hoot
 {
 
-/*
+/**
+ * @brief The NodesPerWayVisitor class calculates statistics on the number of nodes in ways.
+ *
  * Making this inherit from MultipleCriterionConsumerVisitor worked for some situations but caused
  * incorrect output when this was used with CalculateStats op, so implementing single crierion
  * support without inheritance. It appears the incorrect behavior has something to do with

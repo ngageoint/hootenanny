@@ -62,7 +62,6 @@ _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 
 QStringList NodeMatcher::getNetworkCriterionClassNames()
 {
-  // TODO: Should LinearCriterion be added here?
   QStringList critClasses;
   critClasses.append(HighwayCriterion::className());
   critClasses.append(RiverCriterion::className());
@@ -258,7 +257,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
 
   double d = n1->toCoordinate().distance(n2->toCoordinate());
 
-  // TODO: this isnt right; Talk to mike
+  // TODO: this isnt right
   double distanceScore = 1 - (Normal::phi(d, acc * 1.5) - 0.5) * 2.0;
   LOG_VART(nid1);
   LOG_VART(nid2);

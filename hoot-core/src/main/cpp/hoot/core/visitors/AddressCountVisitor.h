@@ -50,10 +50,16 @@ public:
   AddressCountVisitor();
   ~AddressCountVisitor() override = default;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   double getStat() const override { return _totalCount; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override

@@ -34,28 +34,25 @@ using namespace std;
 namespace hoot
 {
 
-PertyTestRunResult::PertyTestRunResult(const QString& referenceInput, const QString& outputDir,
-                                       const int testRunNum, const QList<double> simulationScores,
-                                       const double score, const double expectedScore,
-                                       const double scoreVariance, const double allowedScoreVariance,
-                                       const bool failOnBetterScore,
-                                       const QStringList& dynamicVariables,
-                                       const double dynamicVariableStartingValue,
-                                       const double dynamicVariableIncrement,
-                                       const double dynamicVariableValue)
-  : _referenceInput(referenceInput),
-    _outputDir(outputDir),
-    _testRunNum(testRunNum),
-    _score(score),
-    _simulationScores(simulationScores),
-    _expectedScore(expectedScore),
-    _scoreVariance(scoreVariance),
-    _allowedScoreVariance(allowedScoreVariance),
-    _failOnBetterScore(failOnBetterScore),
-    _dynamicVariables(dynamicVariables),
-    _dynamicVariableStartingValue(dynamicVariableStartingValue),
-    _dynamicVariableIncrement(dynamicVariableIncrement),
-    _dynamicVariableValue(dynamicVariableValue)
+PertyTestRunResult::PertyTestRunResult(
+  const QString& referenceInput, const QString& outputDir, const int testRunNum,
+  const QList<double> simulationScores, const double score, const double expectedScore,
+  const double scoreVariance, const double allowedScoreVariance, const bool failOnBetterScore,
+  const QStringList& dynamicVariables, const double dynamicVariableStartingValue,
+  const double dynamicVariableIncrement, const double dynamicVariableValue) :
+_referenceInput(referenceInput),
+_outputDir(outputDir),
+_testRunNum(testRunNum),
+_score(score),
+_simulationScores(simulationScores),
+_expectedScore(expectedScore),
+_scoreVariance(scoreVariance),
+_allowedScoreVariance(allowedScoreVariance),
+_failOnBetterScore(failOnBetterScore),
+_dynamicVariables(dynamicVariables),
+_dynamicVariableStartingValue(dynamicVariableStartingValue),
+_dynamicVariableIncrement(dynamicVariableIncrement),
+_dynamicVariableValue(dynamicVariableValue)
 {
 }
 

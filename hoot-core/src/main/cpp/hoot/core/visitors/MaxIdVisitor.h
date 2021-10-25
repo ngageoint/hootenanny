@@ -38,6 +38,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The MaxIdVisitor class finds the largest element ID value in a map (least negative).
+ */
 class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:

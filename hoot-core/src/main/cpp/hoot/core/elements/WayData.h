@@ -55,10 +55,9 @@ public:
   void clear() override;
 
   const std::vector<long>& getNodeIds() const { return _nodes; }
-
   std::vector<long>& getNodeIds() { return _nodes; }
-
   long getPid() const { return _pid; }
+
   void setPid(long pid) { _pid = pid; }
 
 private:

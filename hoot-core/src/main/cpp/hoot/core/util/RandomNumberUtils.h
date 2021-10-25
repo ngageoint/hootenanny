@@ -36,12 +36,12 @@ namespace hoot
   */
 class RandomNumberUtils
 {
-  public:
+public:
 
-    /**
-      Generates a seed to pass to a random number generator
-      */
-    static int generateSeed();
+  /**
+    Generates a seed to pass to a random number generator
+   */
+  static int generateSeed();
 };
 
 }

@@ -38,8 +38,6 @@ namespace hoot
  *
  * This is seen from time to time as a result of cut and replace, since we allow element references
  * point to missing elements to persist.
- *
- * @todo implement OperationStatus
  */
 class EmptyWayCriterion : public WayNodeCountCriterion
 {

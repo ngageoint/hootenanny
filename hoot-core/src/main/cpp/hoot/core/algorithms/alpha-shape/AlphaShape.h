@@ -119,7 +119,8 @@ private:
   bool _isTooLong(const double alpha, const Tgs::Edge& e) const;
 
   /**
-   * @brief _collectValidFaces Iterate all Delaunay Triangulation faces with the specified alpha value
+   * @brief _collectValidFaces Iterate all Delaunay Triangulation faces with the specified alpha
+   * value
    * @param alpha Alpha value used to collect faces
    * @param faces Vector of Delaunay Triangulation faces that conform to the specified alpha value
    * @param e Envelope containing all faces
@@ -129,7 +130,8 @@ private:
     const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
 
   /**
-   * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha shape
+   * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha
+   * shape
    * @param alpha Populates the return alpha value
    * @param faces Populates the vector of faces used to create the alpha shape
    * @param e Populates the envelope of the faces used in the alpha shape

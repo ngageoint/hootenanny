@@ -36,6 +36,10 @@
 namespace hoot
 {
 
+/**
+ * @brief The MembersPerRelationVisitor class finds statistics on the number of relations members in
+ * relations.
+ */
 class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
@@ -45,6 +49,9 @@ public:
   MembersPerRelationVisitor();
   ~MembersPerRelationVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getInitStatusMessage() const override

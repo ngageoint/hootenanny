@@ -47,16 +47,19 @@ public:
   CalculateAreaForStatsVisitor() : _total(0) { }
   ~CalculateAreaForStatsVisitor() override = default;
 
-  double getArea() const { return _total; }
-
   double getStat() const override { return getArea(); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   // We don't use this outside of stats, so hide it from the info API.
   QString getDescription() const override { return ""; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+
+  double getArea() const { return _total; }
 
 private:
 

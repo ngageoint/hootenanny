@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Removes invalid multiline string relation members
  *
- * These are sometimes produced as an artifact from cropping or conflation
+ * These are sometimes produced as an artifact from cropping or conflation.
  */
 class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
@@ -49,6 +49,9 @@ public:
   RemoveInvalidMultilineStringMembersVisitor();
   ~RemoveInvalidMultilineStringMembersVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override

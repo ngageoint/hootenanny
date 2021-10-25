@@ -50,7 +50,7 @@ public:
    *
    * @param node node to search for
    * @return the first way ID found that contains the node
-   * @todo move to WayUtils
+   * @todo move to WayUtils?
    */
   long getFirstOwningWayId(const ConstNodePtr& node) const;
 

@@ -97,8 +97,8 @@ OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
   {
     for (size_t ty = 0; ty < tiles[tx].size(); ty++)
     {
-      //  Only create the bounding tile if we want all of them or
-      //  if this is the randomly selected tile
+      // Only create the bounding tile if we want all of them or if this is the randomly selected
+      // tile.
       if (!selectSingleRandomTile ||
           (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
       {

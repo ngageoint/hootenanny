@@ -38,9 +38,11 @@ namespace hoot
 {
 
 /**
- * Reports references to missing elements in a given map. If removeMissing is set to true, then
- * all missing references are removed. The option also exists to either mark elements with missing
- * children as needing review or add a custom tag to the elements.
+ * Reports references to missing elements in a given map.
+ *
+ * If removeMissing is set to true, then all missing references are removed. The option also exists
+ * to either mark elements with missing children as needing review or add a custom tag to the
+ * elements.
  */
 class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
   public Configurable
@@ -54,10 +56,16 @@ public:
     const int maxReport = Log::getWarnMessageLimit());
   ~ReportMissingElementsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   void setOsmMap(OsmMap* map) override { _map = map; }
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override { return "Reporting missing elements..."; }

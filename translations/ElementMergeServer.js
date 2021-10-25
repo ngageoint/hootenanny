@@ -1,5 +1,6 @@
 /************************************************************************
-This is a nodejs integration with Hootenanny element merging logic.
+This is a nodejs integration with Hootenanny element merging logic. See 
+docs/developer/ElementMergeService.asciidoc
 ************************************************************************/
 var http = require('http');
 var url = require('url');
@@ -123,7 +124,7 @@ var postHandler = function(data)
 
   var map = new hoot.OsmMap();
   hoot.loadMapFromStringPreserveIdAndStatus(map, data);
-  var mergedMap = hoot.mergeElements(map);
+  var mergedMap = hoot.merge(map);
   var xml = hoot.OsmWriter.toString(mergedMap);
   return xml;
 }

@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Identifies exact duplicate elements
+ * Marks exact duplicate elements
  */
 class DuplicateElementMarker : public OsmMapOperation
 {

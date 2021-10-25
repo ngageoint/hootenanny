@@ -47,6 +47,9 @@ public:
   OneWayRoadStandardizer() = default;
   ~OneWayRoadStandardizer() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override

@@ -164,7 +164,6 @@ void MergerFactory::registerDefaultCreators()
 
       if (!args.empty())
       {
-        // TODO: Is this actually used on any MergerCreators?
         mc->setArguments(args);
       }
     }

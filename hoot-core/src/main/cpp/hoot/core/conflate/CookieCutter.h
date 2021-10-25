@@ -43,8 +43,9 @@ public:
 
   static QString className() { return "CookieCutter"; }
 
-  CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
-               bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
+  CookieCutter(
+    bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
+    bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
 
   /**
    * @brief cut uses an input map geometry to cut the shape out of another map.

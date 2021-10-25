@@ -7,7 +7,7 @@ When two features/elements are merged into a single feature/element the tags mus
 hoot info --tag-mergers
 ----- 
 
-The default way to set this configuration for many functions is through the `tag.merger.default` configuration option. Some older operations may not support configurable merging techniques. The default tag merger is: `OverwriteTag2Merger`. To specify a tag merger when conflating:
+The default way to set this configuration for many functions is through the `tag.merger.default` configuration option. The default tag merger (at the time of this writing) is: `OverwriteTag2Merger`. To specify a tag merger when conflating:
 -----
 hoot conflate -D tag.merger.default=<TagMergerClassName> input1.osm input2.osm output.osm
 -----
@@ -15,7 +15,7 @@ hoot conflate -D tag.merger.default=<TagMergerClassName> input1.osm input2.osm o
 [[Average-Tags]]
 *_Averaging Tag Merger_*
 
-Use an internal method to average the tags between two features. Implementation: `AverageTagMerger`
+Uses an internal method to average the tags between two features. Implementation: `AverageTagMerger`
 
 [[Building-Relation-Member-Tag-Merger]]
 *_Building Relation Member Tag Merger_*
@@ -25,7 +25,7 @@ Tag merging specific to buildings belonging to relations. Implementation: `Build
 [[Generalize-Tag-Merger]]
 *_Generalizing Tag Merger_*
 
-Use an internal method to generalize the tags between two features. For instance, generalizing between `highway=primary` and `highway=secondary` results in `highway=road` since road is the least general form that represents both primary and secondary. Implementation: `GeneralizeTagMerger`
+Uses an internal method to generalize the tags between two features. For instance, generalizing between `highway=primary` and `highway=secondary` results in `highway=road` since road is the least general form that represents both primary and secondary. Implementation: `GeneralizeTagMerger`
 
 [[Most-Specific-Tag-Merger]]
 *_Most Specific Tag Merger_*
@@ -129,7 +129,7 @@ Examples:
 [[Provenance-Aware-Overwrite-Tag-Merger]]
 *_Provenance Aware Overwriting Tag Merger_*
 
-This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.
+This tag merger assumes features in different input files have their provenance tracked with a tag having the key `hoot:source`.
 This tag merger will ensure that tag value is not overwritten for either feature being merged. Instead, the values from both
 features are concatenated together. Implementation `ProvenanceAwareOverwriteTagMerger`.
 

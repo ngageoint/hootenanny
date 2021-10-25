@@ -59,6 +59,9 @@ public:
   MapCropper();
   ~MapCropper() override = default;
 
+  /**
+   * @see OsmMapOperation
+   */
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf) override;

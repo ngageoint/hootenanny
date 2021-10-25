@@ -1868,8 +1868,6 @@ QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
 bool OsmSchema::explicitTypeMismatch(
   const Tags& tags1, const Tags& tags2, const double minTypeScore)
 {
-  // TODO: We may need to take category into account here as well.
-
   LOG_VART(tags1);
   LOG_VART(tags2);
 
@@ -1916,8 +1914,6 @@ bool OsmSchema::explicitTypeMismatch(
 
 bool OsmSchema::typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore)
 {
-  // TODO: We may need to take category into account here as well.
-
   LOG_VART(tags1);
   LOG_VART(tags2);
 

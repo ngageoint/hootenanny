@@ -92,11 +92,22 @@ private:
   QString _dateFormat;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
-  QStringList _getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                      const ConstElementPtr& element1,
-                                      const ConstElementPtr& element2);
-  QStringList _createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
-                                                   const ConstElementPtr& element2);
+
+  QStringList _getNonMatchDescription(
+    const ConstOsmMapPtr& map, const MatchType& type, const ConstElementPtr& element1,
+    const ConstElementPtr& element2);
+
+  /**
+   * @brief _createReviewIfSecondaryFeatureNewer generates a rewview if the second input element
+   * is newer than the first.
+   *
+   * Uses date tags to determine the age of the features.
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return a review description
+   */
+  QStringList _createReviewIfSecondaryFeatureNewer(
+    const ConstElementPtr& element1, const ConstElementPtr& element2);
 };
 
 }
