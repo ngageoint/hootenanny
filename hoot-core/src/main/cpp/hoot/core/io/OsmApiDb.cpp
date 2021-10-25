@@ -452,23 +452,6 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-QString OsmApiDb::extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type type) const
-{
-  QString tag = "";
-  int pos = -1;
-  if (type == ElementType::Node) pos = ApiDb::NODES_TAGS;
-  else if (type == ElementType::Way) pos = ApiDb::WAYS_TAGS;
-  else if (type == ElementType::Relation) pos = ApiDb::RELATIONS_TAGS;
-  else throw HootException("extractTagFromRow_OsmApi called with unknown Type");
-
-  // test for blank tag
-  QString val1 = row->value(pos).toString();
-  QString val2 = row->value(pos+1).toString();
-  if (val1 != "" || val2 != "") tag = "\"" + val1 + "\"=>\"" + val2 + "\"";
-
-  return tag;
-}
-
 long OsmApiDb::getNextId(const ElementType& elementType)
 {
   return _getIdFromSequence(elementType, "next");

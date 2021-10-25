@@ -506,6 +506,7 @@ QString Roundabout::toString() const
       .arg(_overrideStatus);
 }
 
+
 QString Roundabout::toDetailedString(OsmMapPtr map) const
 {
   QString str = toString();

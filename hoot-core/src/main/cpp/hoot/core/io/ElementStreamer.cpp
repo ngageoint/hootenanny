@@ -51,12 +51,6 @@ _translationScript(translationScript)
 }
 
 void ElementStreamer::stream(
-  const QString& input, const QString& out, const QStringList& convertOps, Progress progress)
-{
-  stream(QStringList(input), out, convertOps, progress);
-}
-
-void ElementStreamer::stream(
   const QStringList& inputs, const QString& out, const QStringList& convertOps, Progress progress)
 {
   QElapsedTimer timer;

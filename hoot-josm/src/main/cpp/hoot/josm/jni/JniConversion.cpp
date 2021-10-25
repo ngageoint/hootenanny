@@ -78,41 +78,6 @@ jobject JniConversion::toJavaStringList(JNIEnv* javaEnv, const QStringList& cppS
   return result;
 }
 
-QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnv, jobject javaStrList)
-{
-  LOG_TRACE("Converting from java string list...");
-
-  if (javaStrList == nullptr)
-  {
-    return QStringList();
-  }
-
-  // see related note about method mappings in fromJavaStringMap
-  jclass listClass = javaEnv->FindClass("java/util/List");
-  jmethodID listSizeMethod = javaEnv->GetMethodID(listClass, "size", "()I");
-  jmethodID listGetMethod = javaEnv->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
-
-  QStringList result;
-
-  jint len = javaEnv->CallIntMethod(javaStrList, listSizeMethod);
-  result.clear();
-  result.reserve(len);
-
-  for (jint i = 0; i < len; i++)
-  {
-    jobject javaStrObj =
-      javaEnv->CallObjectMethod(javaStrList, listGetMethod, i);
-    result.append(fromJavaString(javaEnv, (jstring)javaStrObj));
-    // If the list is large the strings won't get garbage collected until the end of the method,
-    // so let's free them up as we go to take it easy on the JVM.
-    javaEnv->DeleteLocalRef(javaStrObj);
-  }
-
-  javaEnv->DeleteLocalRef(listClass);
-
-  return result;
-}
-
 QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrSet)
 {
   QSet<QString> result;

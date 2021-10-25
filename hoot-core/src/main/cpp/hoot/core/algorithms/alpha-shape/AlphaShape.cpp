@@ -128,38 +128,6 @@ GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
   return result;
 }
 
-bool AlphaShape::_isBoundary(const double alpha, const Edge& e) const
-{
-  bool result = false;
-  if (_isTooLong(alpha, e) == false)
-  {
-    Edge leftCcw = e.getLeftNext();
-    Edge leftCw = e.getLeftPrevious();
-    bool leftOpen = false;
-
-    if (_isTooLong(alpha, leftCcw) || _isTooLong(alpha, leftCw))
-    {
-      leftOpen = true;
-    }
-
-    Edge rightCcw = e.getRightNext();
-    Edge rightCw = e.getRightPrevious();
-    bool rightOpen = false;
-
-    if (_isTooLong(alpha, rightCcw) || _isTooLong(alpha, rightCw))
-    {
-      rightOpen = true;
-    }
-
-    if ((rightOpen == true || leftOpen == true) && leftOpen != rightOpen)
-    {
-      result = true;
-    }
-  }
-
-  return result;
-}
-
 bool AlphaShape::_isInside(const double alpha, const Face& face) const
 {
   bool result = true;
@@ -423,21 +391,6 @@ GeometryPtr AlphaShape::toGeometry()
     }
     logWarnCount++;
   }
-
-  return result;
-}
-
-QString AlphaShape::toString() const
-{
-  QString result;
-  Edge start = _pDelauneyTriangles->getStartingEdge();
-  Edge e = start;
-
-  do
-  {
-    result += QString::fromStdString(e.toString());
-    e = e.getLeftNext();
-  } while (e != start);
 
   return result;
 }

@@ -87,52 +87,7 @@ public:
     case GeometricRelationship::Touches:
       return "Touches";
     default:
-      return QString("Unknown (%1)").arg(_type);
-    }
-  }
-
-  static Type fromString(QString typeString)
-  {
-    typeString = typeString.toLower().trimmed();
-    if (typeString == "contains")
-    {
-      return Contains;
-    }
-    else if (typeString == "covers")
-    {
-      return Covers;
-    }
-    else if (typeString == "crosses")
-    {
-      return Crosses;
-    }
-    else if (typeString == "disjointWith")
-    {
-      return DisjointWith;
-    }
-    else if (typeString == "equals")
-    {
-      return Equals;
-    }
-    else if (typeString == "intersects")
-    {
-      return Intersects;
-    }
-    else if (typeString == "isWithin")
-    {
-      return IsWithin;
-    }
-    else if (typeString == "overlaps")
-    {
-      return Overlaps;
-    }
-    else if (typeString == "touches")
-    {
-      return Touches;
-    }
-    else
-    {
-      throw IllegalArgumentException("Invalid geometric relationship type string: " + typeString);
+      throw IllegalArgumentException("Unknown type.");
     }
   }
 

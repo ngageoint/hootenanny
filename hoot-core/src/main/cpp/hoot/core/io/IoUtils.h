@@ -116,13 +116,6 @@ public:
    * @return a layer name
    */
   static void ogrPathAndLayerToLayer(QString& input);
-  /**
-   * Determines if an OGR input URL has the layer syntax: file;layer
-   *
-   * @param input the URL to examine
-   * @return true if the input URL has the layer syntax; false otherwise
-   */
-  static bool isOgrPathAndLayer(const QString& input);
 
   /**
    * Returns all file paths under a directory point to a supported input format
@@ -211,15 +204,6 @@ public:
    */
   static ElementInputStreamPtr getFilteredInputStream(
     ElementInputStreamPtr streamToFilter, const QStringList& ops);
-  /**
-   * Creates an input stream with a visitor in the loop
-   *
-   * @param input the data soruce to read
-   * @param visitorClassName the class name of the visitor to use
-   * @return an input stream
-   */
-  static std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
-    const QString& input, const QString& visitorClassName, const bool useDataSourceIds = false);
 
   /**
     Loads an OSM map into an OsmMap object
@@ -270,15 +254,15 @@ public:
   static void saveMap(const OsmMapPtr& map, const QString& path);
 
   /**
-   * Crops a map to a given bounds
-   *
-   * @param map the map to crop
-   * @param bounds the bounds to crop to
-   * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
-   * connected to a way within the bounds will be kept
-   */
-  static void cropToBounds(
-    OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays = false);
+    * Crops a map to a given bounds
+    *
+    * @param map the map to crop
+    * @param bounds the bounds to crop to
+    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
+    * connected to a way within the bounds will be kept
+    */
+   static void cropToBounds(
+     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays = false);
   /**
    * Crops a map to a given bounds
    *
@@ -304,14 +288,6 @@ public:
    * @param dirName name of the directory to write
    */
   static void writeOutputDir(const QString& dirName);
-  /**
-   * Determines if all specified URLs are supported readers implementing Boundable
-   *
-   * @param urls one or more input URLs
-   * @return true if all of the URLs point to file formats whose readers support the Boundable
-   * interface
-   */
-  static bool urlsAreBoundable(const QStringList& urls);
   /**
    * Creates an output URL based on an input URL that will not overwrite the input
    *

@@ -42,6 +42,7 @@ class ElementGeometryUtilsTest : public HootTestFixture
   CPPUNIT_TEST(calculateLengthTest);
   CPPUNIT_TEST(haveRelationshipTest);
   CPPUNIT_TEST(haveRelationshipNullInputTest);
+  CPPUNIT_TEST(geometricRelationshipToStringTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -126,14 +127,40 @@ public:
     try
     {
       ElementGeometryUtils::haveGeometricRelationship(
-        element1, element1, GeometricRelationship::Contains, map);
+        element1, element2, GeometricRelationship::Contains, map);
     }
-    catch (const HootException& e)
+    catch (const IllegalArgumentException& e)
     {
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
       QString("One of the input elements is null.").toStdString(), exceptionMsg.toStdString());
+  }
+
+  void geometricRelationshipToStringTest()
+  {
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::Contains).toString() == "Contains");
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::Covers).toString() == "Covers");
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::Crosses).toString() == "Crosses");
+    CPPUNIT_ASSERT(
+      GeometricRelationship(GeometricRelationship::DisjointWith).toString() == "DisjointWith");
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::Equals).toString() == "Equals");
+    CPPUNIT_ASSERT(
+      GeometricRelationship(GeometricRelationship::Intersects).toString() == "Intersects");
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::IsWithin).toString() == "IsWithin");
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::Overlaps).toString() == "Overlaps");
+    CPPUNIT_ASSERT(GeometricRelationship(GeometricRelationship::Touches).toString() == "Touches");
+
+    QString exceptionMsg;
+    try
+    {
+      GeometricRelationship(GeometricRelationship::Invalid).toString();
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("Unknown type.").toStdString(), exceptionMsg.toStdString());
   }
 };
 

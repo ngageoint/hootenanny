@@ -123,8 +123,6 @@ public:
   void setIsRange(bool isRange) { _isRange = isRange; }
   void setIsSubLetter(bool isSubLetter) { _isSubLetter = isSubLetter; }
 
-  QString getHouseNumber() const;
-
 private:
 
   QString _address;

@@ -233,14 +233,6 @@ int StringUtils::removePrefixes(const QString& prefix, QStringList& input)
   return numRemoved;
 }
 
-void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
-{
-  for (int i = 0; i < toRemove.size(); i++)
-  {
-    input.removeAll(toRemove.at(i));
-  }
-}
-
 void StringUtils::removeAllContaining(
   QStringList& input, const QString& text, Qt::CaseSensitivity caseSensitivity)
 {
@@ -362,14 +354,6 @@ QStringList StringUtils::splitOnAny(
   return QStringList();
 }
 
-void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove)
-{
-  for (int i = 0; i < keysToRemove.size(); i++)
-  {
-    input.remove(keysToRemove.at(i));
-  }
-}
-
 void StringUtils::replaceLastIndexOf(
   QString& input, const QString& strToReplace, const QString& replacementStr,
   Qt::CaseSensitivity caseSensitivity)
@@ -417,17 +401,6 @@ QString StringUtils::_splitAndRemoveAtIndex(
   }
   LOG_VART(input);
   return input.join(separator);
-}
-
-QString StringUtils::splitAndGetAtIndex(
-  const QString& input, const QRegExp& splitExp, const int index)
-{
-  QStringList tokens = input.split(splitExp);
-  if (index < tokens.size())
-  {
-    return tokens.at(index);
-  }
-  return "";
 }
 
 void StringUtils::reverse(QStringList& strList)

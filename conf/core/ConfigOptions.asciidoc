@@ -5121,13 +5121,6 @@ older manually matched input files.
 
 Adds more detail to manual match validation warning/error messages.
 
-=== score.matches.remove.nodes
-
-* Data Type: bool
-* Default Value: `false`
-
-Remove `REF` tags from nodes before match scoring when using the `score-matches` command.
-
 === score.matches.require.ref1
 
 * Data Type: bool

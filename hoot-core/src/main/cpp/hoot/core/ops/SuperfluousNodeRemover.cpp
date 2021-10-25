@@ -304,25 +304,6 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   return nodeRemover.getNumFeaturesAffected();
 }
 
-long SuperfluousNodeRemover::countSuperfluousNodes(
-  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
-  const std::shared_ptr<geos::geom::Geometry>& bounds)
-{
-  SuperfluousNodeRemover nodeCounter;
-  nodeCounter.setIgnoreInformationTags(ignoreInformationTags);
-  nodeCounter.setRemoveNodes(false);
-  if (bounds.get())
-  {
-    nodeCounter.setBounds(bounds);
-  }
-  QString msg = nodeCounter.getInitStatusMessage().replace("Removing", "Counting");
-  LOG_STATUS(msg);
-  nodeCounter.apply(map);
-  msg = nodeCounter.getCompletedStatusMessage().replace("Removed", "Counted");
-  LOG_DEBUG(msg);
-  return nodeCounter.getNumFeaturesAffected();
-}
-
 std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
   std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
   const std::shared_ptr<geos::geom::Geometry>& bounds)
