@@ -35,8 +35,6 @@ namespace hoot
 
 /**
  * Identifies ways with no length (only one node). Convenience wrapper around WayNodeCountCriterion.
- *
- * @todo implement OperationStatus
  */
 class ZeroLengthWayCriterion : public WayNodeCountCriterion
 {

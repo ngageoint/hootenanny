@@ -49,6 +49,9 @@ public:
 
   double getStat() const override { return getArea(); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Calculates feature area totals"; }

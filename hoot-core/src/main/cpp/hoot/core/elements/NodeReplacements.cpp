@@ -65,10 +65,9 @@ void NodeReplacements::_read(QString fn)
 
 void NodeReplacements::_read(istream& is)
 {
-  ////
   // NOTE: For optimization reasons ConflateMapper has internal knowledge of this format. If you
   // change this format please address that class as well.
-  ////
+
   int64_t ids[2];
   while (!is.eof())
   {
@@ -136,10 +135,9 @@ void NodeReplacements::write(QString fn)
 
 void NodeReplacements::_write(ostream& os)
 {
-  ////
   // NOTE: For optimization reasons ConflateMapper has internal knowledge of this format. If you
   // change this format please address that class as well.
-  ////
+
   int64_t ids[2];
   for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); ++it)
   {

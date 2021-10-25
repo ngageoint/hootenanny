@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * Various utilities for working with the schema. Helps keep OsmMap out of OsmSchema as a dependency.
+ * Various utilities for working with the schema. Helps keep OsmMap out of OsmSchema as a
+ * dependency.
  */
 class SchemaUtils
 {

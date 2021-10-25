@@ -49,10 +49,19 @@ public:
 
   QString permuteName(const QString& s);
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see RngConsumer
+   */
   void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getDescription() const override { return "Randomly modifies feature tags"; }

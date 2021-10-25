@@ -33,11 +33,21 @@
 namespace hoot
 {
 
+/**
+ * @brief The PoiSearchRadiusJs class configures the feature search radii used by POI conflation.
+ */
 class PoiSearchRadiusJs : public node::ObjectWrap
 {
 public:
 
   static void Init(v8::Local<v8::Object> target);
+
+  /**
+   * @brief getSearchRadii reads a POI search radius configuration file and configures the search
+   * radii in use by the POI Conflation script
+   * @param args no input arguments are passed
+   * @return a return argument is populated with a custom search radii data structure
+   */
   static void getSearchRadii(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:

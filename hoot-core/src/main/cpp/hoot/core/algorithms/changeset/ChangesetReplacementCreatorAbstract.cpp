@@ -650,8 +650,6 @@ void ChangesetReplacementCreatorAbstract::_clean(OsmMapPtr& map) const
 {
   LOG_STATUS("Cleaning map: " << map->getName() << "...");
 
-  // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
-  // IntersectionSplitter?
   MapCleaner().apply(map);
 
   MapProjector::projectToWgs84(map);  // cleaning works in planar
@@ -806,7 +804,6 @@ void ChangesetReplacementCreatorAbstract::_synchronizeIds(
   idSync.synchronize(mapBeingReplaced, replacementMap);
 
   // get rid of straggling nodes
-  // TODO: should we run _cleanup here instead and move it from its earlier call?
   SuperfluousNodeRemover orphanedNodeRemover;
   orphanedNodeRemover.apply(replacementMap);
   LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());

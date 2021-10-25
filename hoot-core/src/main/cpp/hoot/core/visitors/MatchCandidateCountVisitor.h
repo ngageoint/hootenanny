@@ -52,6 +52,9 @@ public:
   MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
   ~MatchCandidateCountVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   double getStat() const override { return _totalCandidateCount; }

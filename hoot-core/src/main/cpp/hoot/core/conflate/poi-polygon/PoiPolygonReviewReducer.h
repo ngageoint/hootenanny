@@ -61,7 +61,6 @@ class PoiPolygonReviewReducer : public Configurable
 
 public:
 
-  // maybe encapsulate all these params in a class...this is kind of nasty
   PoiPolygonReviewReducer(
     const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds, double distance,
     double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,

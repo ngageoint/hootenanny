@@ -36,8 +36,6 @@ namespace hoot
 
 /**
  * Sets the status on elements
- *
- * @todo implement OperationStatus
  */
 class StatusUpdateVisitor : public ElementVisitor, public Configurable
 {
@@ -45,12 +43,27 @@ public:
 
   static QString className() { return "StatusUpdateVisitor"; }
 
+  /**
+   * @brief StatusUpdateVisitor - Constructor
+   */
   StatusUpdateVisitor();
+  /**
+   * @brief StatusUpdateVisitor - Constructor
+   * @param status the status to apply to elements
+   * @param onlyUpdateIfStatusInvalid if true, will only update the status if it is already set to
+   * invalid
+   */
   StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);
   ~StatusUpdateVisitor() override = default;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getDescription() const override { return "Sets element statuses"; }
@@ -59,9 +72,7 @@ public:
 
 private:
 
-  // status to apply to elements
   Status _status;
-  // if true, will only update the status if it is already set to invalid
   bool _onlyUpdateIfStatusInvalid;
 };
 

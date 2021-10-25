@@ -47,6 +47,9 @@ public:
   ElementIdToTagValueMapper() = default;
   ~ElementIdToTagValueMapper() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getInitStatusMessage() const override { return "Mapping tag values..."; }

@@ -46,7 +46,7 @@ namespace hoot
  *    AddUuidVisitor)
  *  - The inputs were conflated and the result is passed in as the conflated object.
  *
- * See #2232 for some background.
+ * See Redmine #2232 for some background.
  */
 class MatchComparator
 {

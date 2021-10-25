@@ -41,6 +41,18 @@ class TagInfo
 {
 public:
 
+  /**
+   * @brief Constructor
+   * @param tagValuesPerKeyLimit the maximum number of tag values to return per key
+   * @param keys specific tag keys for which to return tag values only; if empty, then values are
+     returned for all tag keys
+   * @param keysOnly if true, only tag keys will be returned
+   * @param caseSensitive if true, tag comparisons are case sensitive
+   * @param exactKeyMatch if true, specified/feature tag keys need to match exactly for values to be
+   * written; otherwise they match if any part of the feature tag key is contained in the specified
+   * tag key
+   * @param delimitedTextOutputprints the output as a single delimited string instead of JSON
+   */
   TagInfo(
     const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
     const bool keysOnly = false, const bool caseSensitive = true, const bool exactKeyMatch = true,
@@ -58,24 +70,15 @@ private:
 
   using TagInfoHash = QHash<QString, QHash<QString, int>>;
 
-  // the maximum number of tag values to return per key
+  // see descriptions in constructor doc
+
   int _tagValuesPerKeyLimit;
 
-  // specific tag keys for which to return tag values only; if empty, then values are
-  // returned for all tag keys
   QStringList _keys;
 
-  // if true, only tag keys will be returned
   bool _keysOnly;
-
-  // if true, tag comparisons are case sensitive
   bool _caseSensitive;
-
-  // if true, specified/feature tag keys need to match exactly for values to be written; otherwise
-  // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
-
-  // prints the output as a single delimited string instead of JSON
   bool _delimitedTextOutput;
 
   int _taskStatusUpdateInterval;

@@ -42,6 +42,9 @@ public:
   AddBboxVisitor() = default;
   ~AddBboxVisitor() = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getDescription() const override

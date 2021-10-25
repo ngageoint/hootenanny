@@ -400,8 +400,6 @@ public:
     // Note the distortion of the Northern part of "North Hualapai Way" just outside of the
     // replacement bounds caused by a large movement of one of the road nodes between datasets.
     // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #3.
-    //
-    // TODO: The boundary relation, "Las Vegas" loses a member. Needs fixed.
 
     _testName = "droppedNodes1Test";
     _prepInput(
@@ -1321,7 +1319,7 @@ public:
     // total time: 54min16s
     // ~558k changes/min
     // diff between replacement: 6.3k
-    // orphaned nodes: 48 // TODO: work on this one
+    // orphaned nodes: 48
     // disconnected ways: 0
     // empty ways: 0
     // duplicate pairs: 408
@@ -1425,7 +1423,7 @@ private:
   QString _testName;
   QElapsedTimer _subTaskTimer;
   QString _replacementDataUrl;
-  // original size of the data to be replaced; TODO: remove this?
+  // original size of the data to be replaced
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,
@@ -1515,9 +1513,6 @@ private:
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
-    // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
-    // for this data.
-
     LOG_STATUS("Loading the data to replace db to: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
@@ -1572,9 +1567,6 @@ private:
     NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
-
-    // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
-    // for this data.
 
     LOG_STATUS("Loading the replacement data db to: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);

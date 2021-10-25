@@ -409,8 +409,7 @@ void LinearSnapMerger::_snapEnd(
   snapee->replaceNode(replacedNode->getId(), replacementNode->getId());
 
   // TODO: This is a hack for now, as one single test (highway-search-radius-1) has highway=road
-  // which makes no sense on a node. Want to think about it a little more before deciding to modify
-  // the test's input data.
+  // which makes no sense on a node. May need to modify the test's input data.
   const QStringList nodeKvpExcludeList("highway=road");
   // If the node we just replaced has info and the one we're replacing it with does not, let's copy
   // that info over to the replacement.

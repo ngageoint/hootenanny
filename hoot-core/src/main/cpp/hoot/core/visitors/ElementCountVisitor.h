@@ -48,6 +48,9 @@ public:
 
   double getStat() const override { return _count; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Counts the number of elements"; }

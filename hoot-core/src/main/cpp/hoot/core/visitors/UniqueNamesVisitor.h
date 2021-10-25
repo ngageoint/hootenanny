@@ -46,8 +46,14 @@ public:
   UniqueNamesVisitor() = default;
   ~UniqueNamesVisitor() override = default;
 
+  /**
+   * @see SingleStatistic
+   */
   double getStat() const override { return _names.size(); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Counts unique names"; }

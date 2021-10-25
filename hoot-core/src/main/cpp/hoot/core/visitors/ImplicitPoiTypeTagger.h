@@ -48,9 +48,7 @@ public:
 
   QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:

@@ -54,17 +54,20 @@ public:
    */
   void visit(const ElementPtr& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificFeatures(bool allow) { _allowTaggingSpecificFeatures = allow; }
   void setAddTopTagOnly(bool add) const { _ruleReader->setAddTopTagOnly(add); }
   void setAllowWordsInvolvedInMultipleRules(bool allow) const
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 protected:
 

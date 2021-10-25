@@ -61,12 +61,16 @@ public:
   TranslatedTagDifferencer();
   ~TranslatedTagDifferencer() override = default;
 
-  double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2) const override;
+  /**
+   * @see TagDifferencer
+   */
+  double diff(
+    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const override;
 
   void setConfiguration(const Settings& conf) override;
 
 private:
+
   QSet<QString> _ignoreList;
   QString _script;
   mutable std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
@@ -74,6 +78,7 @@ private:
   class Comparison
   {
   public:
+
     Comparison() : same(0), different(0) {}
     int same;
     int different;

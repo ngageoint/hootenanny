@@ -58,41 +58,32 @@ public:
 
   virtual void clear() { _tags.clear(); }
 
-  Meters getCircularError() const
-  { return _circularError >= 0 ? _circularError : _defaultCircularError; }
-
   bool hasCircularError() const { return _circularError >= 0; }
 
+  Meters getCircularError() const
+  { return _circularError >= 0 ? _circularError : _defaultCircularError; }
   long getId() const { return _id; }
-  void setId(long id) { _id = id; }
-
   long getChangeset() const { return _changeset; }
-  void setChangeset(long changeset) { _changeset = changeset; }
-
   Meters getRawCircularError() const { return _circularError; }
-
   long getVersion() const { return _version; }
-  void setVersion(long version) { _version = version; }
-
   quint64 getTimestamp() const { return _timestamp; }
-  void setTimestamp(quint64 timestamp) { _timestamp = timestamp; }
-
   QString getUser() const { return _user; }
-  void setUser(QString user) { _user = user; }
-
   long getUid() const { return _uid; }
-  void setUid(long uid) { _uid = uid; }
-
   const Tags& getTags() const { return _tags; }
   Tags& getTags() { return _tags; }
+  bool getVisible() const { return _visible; }
 
+
+  void setId(long id) { _id = id; }
+  void setChangeset(long changeset) { _changeset = changeset; }
+  void setVersion(long version) { _version = version; }
+  void setTimestamp(quint64 timestamp) { _timestamp = timestamp; }
+  void setUser(QString user) { _user = user; }
+  void setUid(long uid) { _uid = uid; }
   void setCircularError(Meters circularError) { _circularError = circularError; }
-
   void setTags(const Tags& tags) { _tags = tags; }
   void setTag(QString k, QString v) { _tags.insert(k, v); }
   void addTags(const Tags& tags) { _tags.add(tags); }
-
-  bool getVisible() const { return _visible; }
   void setVisible(bool visible) { _visible = visible; }
 
 protected:

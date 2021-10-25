@@ -142,8 +142,6 @@ public:
 
 protected:
 
-  // TODO: rename these input vars for clarity
-
   // path to the input with data being replaced; overrides use of _input1Map
   QString _input1;
   // cached data being replaced
@@ -246,8 +244,9 @@ protected:
    * Cut out of the reference map what you don't want, and if there is anything in the secondary
    * map, add that data in (not applicable in the cut only scenario).
    */
-  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
-                             const GeometryTypeCriterion::GeometryType& geometryType) const;
+  OsmMapPtr _getCookieCutMap(
+    OsmMapPtr doughMap, OsmMapPtr cutterMap,
+    const GeometryTypeCriterion::GeometryType& geometryType) const;
 
   /*
    * Excludes all features within the specified bounds from deletion during changeset derivation
@@ -255,17 +254,10 @@ protected:
   void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map) const;
 
   /*
-   * Final data cleanup after the changeset replacement maps have been generated to fix any errors
-   * introduced.
-   */
-  void _cleanup(OsmMapPtr& map) const;
-
-  /*
    * Replaces the IDs of elements in the replacment map that are identical with those in the map
    * being replaced with the IDs from the map being replaced.
    */
   void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap) const;
-
   /*
    * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
    * being replaced with the IDs from the maps being replaced.
@@ -278,6 +270,11 @@ protected:
    * its likely a subset of the cleaning ops could be run instead to be more efficient.
    */
   void _clean(OsmMapPtr& map) const;
+  /*
+   * Final data cleanup after the changeset replacement maps have been generated to fix any errors
+   * introduced.
+   */
+  void _cleanup(OsmMapPtr& map) const;
 };
 
 }

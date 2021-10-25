@@ -51,7 +51,7 @@ public:
 
   /**
    * Determines the runtime optimal maximum number of recursive calls allowed for finding the best
-   *  maximal subline match
+   * maximal subline match
    *
    * @param map map containing river data
    * @return a max recursion value

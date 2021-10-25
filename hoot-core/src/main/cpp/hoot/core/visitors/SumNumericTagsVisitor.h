@@ -48,7 +48,14 @@ public:
 
   static QString className() { return "SumNumericTagsVisitor"; }
 
+  /**
+   * @brief SumNumericTagsVisitor - Constructor
+   */
   SumNumericTagsVisitor();
+  /**
+   * @brief SumNumericTagsVisitor - Constructor
+   * @param keys keys of the tags whose values are to be summed
+   */
   explicit SumNumericTagsVisitor(const QStringList keys);
   ~SumNumericTagsVisitor() override = default;
 

@@ -43,12 +43,26 @@ public:
 
   static QString className() { return "TagRenameKeyVisitor"; }
 
+  /**
+   * @brief TagRenameKeyVisitor - Constructor
+   */
   TagRenameKeyVisitor() = default;
+  /**
+   * @brief TagRenameKeyVisitor - Constructor
+   * @param oldKey tag key to rename
+   * @param newKey tag key to rename with
+   */
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
   ~TagRenameKeyVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override { return "Renaming tag keys..."; }

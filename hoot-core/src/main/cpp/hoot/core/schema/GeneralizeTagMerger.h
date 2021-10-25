@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The GeneralizeTagMerger class merges tags by using generalizations of their tag values.
+ */
 class GeneralizeTagMerger : public TagMerger
 {
 public:
@@ -42,6 +45,9 @@ public:
   GeneralizeTagMerger() = default;
   ~GeneralizeTagMerger() override = default;
 
+  /**
+   * @see TagMerger
+   */
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   QString getDescription() const override
