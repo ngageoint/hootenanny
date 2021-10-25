@@ -2673,7 +2673,6 @@ mgcp = {
       }
 
       var str = JSON.stringify(tags,Object.keys(tags).sort());
-      print('JSON: ' + str);
 
       // Shapefiles can't handle fields > 254 chars
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors
