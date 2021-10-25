@@ -5,11 +5,13 @@ export JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165b
 export JDK_TAR=jdk-8u161-linux-x64.tar.gz
 export JDK_MD5=99051574a0d90871ed24a91a5d321ed2
 
+# Hoot deps library versions
 export GLPK_VERSION=4.64
 export LIBOAUTHCPP_VERSION=0.1.0
 export LIBPHONENUMBER_VERSION=8.12.27
 export NODE_VERSION=14.16.1
 export STXXL_VERSION=1.3.1
+export GOOGLE_CHROME_VERSION=91.0.4472.114
 
 # Geoint deps library versions
 export ARMADILLO_VERSION=8.600.1

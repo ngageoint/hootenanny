@@ -121,58 +121,6 @@ bool EdgeMatch::overlaps(const std::shared_ptr<const EdgeMatch>& other) const
   return false;
 }
 
-bool EdgeMatch::isVerySimilarTo(const std::shared_ptr<const EdgeMatch>& other) const
-{
-  QString this1 = getString1()->toString();
-  QString other1 = other->getString1()->toString();
-  QString this2 = getString2()->toString();
-  QString other2 = other->getString2()->toString();
-
-  // Portions can be slightly different sometimes
-  this1.replace(_portionReplaceRegEx, "");
-  other1.replace(_portionReplaceRegEx, "");
-  this2.replace(_portionReplaceRegEx, "");
-  other2.replace(_portionReplaceRegEx, "");
-
-  if (0 == this1.compare(other1))
-  {
-    if (0 == this2.compare(other2))
-    {
-      LOG_DEBUG("Matches very similar: " << this << "; " << other);
-      return true;
-    }
-    else
-    {
-      // Reverse other2
-      other->reverse();
-      other2 = other->getString2()->toString();
-      other->reverse(); // put it back the way it was
-      other2.replace(_portionReplaceRegEx, "");
-      if (0 == this2.compare(other2))
-      {
-        LOG_DEBUG("Matches very similar: " << this << "; " << other);
-        return true;
-      }
-    }
-  }
-  else if (0 == this2.compare(other2))
-  {
-    // Reverse other1
-    other->reverse();
-    other1 = other->getString1()->toString();
-    other->reverse(); // put it back the way it was
-    other1.replace(_portionReplaceRegEx, "");
-    if (0 == this1.compare(other1))
-    {
-      LOG_DEBUG("Matches very similar: " << this << "; " << other);
-      return true;
-    }
-  }
-
-  LOG_DEBUG("Matches not very similar: " << this << "; " << other);
-  return false;
-}
-
 QString EdgeMatch::getUid() const
 {
   QString hexStr;

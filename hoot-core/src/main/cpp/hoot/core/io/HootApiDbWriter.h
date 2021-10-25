@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -39,7 +38,7 @@
 namespace hoot
 {
 
-class HootApiDbWriter : public PartialOsmMapWriter, public Configurable, public OsmChangeWriter
+class HootApiDbWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
 
@@ -59,12 +58,6 @@ public:
   void writePartial(const ConstRelationPtr& r) override;
 
   void setConfiguration(const Settings &conf) override;
-
-  /**
-   * @see OsmChangeWriter
-   */
-  void writeChange(const Change& change) override;
-  void setElementPayloadFormat(const QString& /*format*/) override {}
 
   void deleteMap(const QString& urlStr);
 
@@ -108,10 +101,6 @@ protected:
   bool _remapIds;
 
   bool _includeDebug;
-
-  void _createElement(const ConstElementPtr& element);
-  void _modifyElement(const ConstElementPtr& element);
-  void _deleteElement(const ConstElementPtr& element);
 
   /**
    * Return the remapped ID for the specified element if it exists

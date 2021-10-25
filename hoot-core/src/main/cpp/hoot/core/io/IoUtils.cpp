@@ -62,23 +62,6 @@
 namespace hoot
 {
 
-bool IoUtils::urlsAreBoundable(const QStringList& urls)
-{
-  for (int i = 0; i < urls.size(); i++)
-  {
-    const QString url = urls.at(i);
-    std::shared_ptr<OsmMapReader> reader =
-      OsmMapReaderFactory::createReader(url, true, Status::Invalid);
-
-    std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
-    if (!boundable)
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();
@@ -181,11 +164,6 @@ void IoUtils::ogrPathAndLayerToLayer(QString& input)
   {
     input = "";
   }
-}
-
-bool IoUtils::isOgrPathAndLayer(const QString& input)
-{
-  return input.split(";").size() == 2;
 }
 
 QStringList IoUtils::getSupportedInputsRecursively(
@@ -547,17 +525,17 @@ void IoUtils::loadMaps(
   }
 }
 
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
+{
+  cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
+}
+
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
   // We could pass progress in here to get more granular write status feedback. Otherwise, this is
   // merely a wrapper.
   OsmMapWriterFactory::write(map, path);
-}
-
-void IoUtils::cropToBounds(
-  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
-{
-  cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
 void IoUtils::cropToBounds(
@@ -606,22 +584,6 @@ void IoUtils::cropToBounds(
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
   OsmMapWriterFactory::writeDebugMap(map, className(), "cropped-to-bounds");
-}
-
-std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
-  const QString& input, const QString& visitorClassName, const bool useDataSourceIds)
-{
-  std::shared_ptr<PartialOsmMapReader> reader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::createReader(input));
-  reader->setUseDataSourceIds(useDataSourceIds);
-  reader->open(input);
-  reader->initializePartial();
-
-  return
-    std::make_shared<ElementVisitorInputStream>(
-      std::dynamic_pointer_cast<ElementInputStream>(reader),
-      ElementVisitorPtr(Factory::getInstance().constructObject<ElementVisitor>(visitorClassName)));
 }
 
 bool IoUtils::isUrl(const QString& str)

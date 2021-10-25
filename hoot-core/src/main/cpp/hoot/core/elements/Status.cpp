@@ -35,26 +35,6 @@ using namespace std;
 namespace hoot
 {
 
-Status Status::fromInput(int i)
-{
-  Status result;
-
-  if (i < 0)
-  {
-    throw HootException("Invalid input offset.");
-  }
-  if (i <= 1)
-  {
-    result._type = i + 1;
-  }
-  else
-  {
-    result._type = i - 1 + EnumEnd;
-  }
-
-  return result;
-}
-
 int Status::getInput() const
 {
   int result;

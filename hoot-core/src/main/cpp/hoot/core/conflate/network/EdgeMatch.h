@@ -93,11 +93,6 @@ public:
   bool overlaps(const std::shared_ptr<const EdgeMatch>& other) const;
 
   /**
-   * Returns true if the matches have the same EdgeStrings, but possibly with different portions
-   */
-  bool isVerySimilarTo(const std::shared_ptr<const EdgeMatch>& other) const;
-
-  /**
    * Reverse both edge strings that make up this EdgeMatch.
    */
   void reverse() const { _edges1->reverse(); _edges2->reverse(); _resetHash(); }

@@ -83,8 +83,6 @@ protected:
 
   void _createEdge2Index();
 
-  void _createVertex2Index();
-
   Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env, Tgs::HilbertRTreePtr tree) const;
 };
 

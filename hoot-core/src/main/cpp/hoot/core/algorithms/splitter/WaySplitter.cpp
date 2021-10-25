@@ -88,30 +88,6 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl) const
   return result;
 }
 
-WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scraps) const
-{
-  vector<WayLocation> wls;
-  wls.push_back(subline.getStart());
-  wls.push_back(subline.getEnd());
-
-  assert(subline.isValid() && subline.getStart() != subline.getEnd());
-
-  vector<WayPtr> splits = createSplits(wls);
-
-  assert(splits[1].get() != 0);
-
-  if (splits[0].get())
-  {
-    scraps.push_back(splits[0]);
-  }
-  if (splits[2].get())
-  {
-    scraps.push_back(splits[2]);
-  }
-
-  return splits[1];
-}
-
 vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr way, const WayLocation& splitPoint)
 {
   WaySplitter s(map, way);

@@ -201,17 +201,6 @@ public:
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
-   * Returns the most specific feature type key, as identified by the schema, for all ways
-   * containing the specified node
-   *
-   * @param nodeId ID of the node to return containing way type keys for
-   * @param map map which owns the input node
-   * @return a unique collection of type key strings
-   */
-  static std::set<QString> getContainingWaysMostSpecificTypeKeys(
-    const long nodeId, const ConstOsmMapPtr& map);
-
-  /**
    * Determines if a specified node is contained by a way, given a list of way IDs
    *
    * @param nodeId the ID of the node to search for
@@ -257,16 +246,6 @@ public:
    * @return a collection of IDs
    */
   static std::vector<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
-
-  /**
-   * Determines the ways intersecting an input way
-   *
-   * @param wayId the ID of the way to find intersecting ways for
-   * @param map the const map containing the input and potentially intersecting ways
-   * @return a collection of const ways
-   */
-  static std::vector<ConstWayPtr> getIntersectingWaysConst(
-    const long wayId, const ConstOsmMapPtr& map);
 
   /**
    * Determines the IDs of ways intersecting an input way

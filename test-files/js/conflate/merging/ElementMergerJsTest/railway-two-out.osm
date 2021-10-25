@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.93508466921" minlon="-9.256771240879999" maxlat="38.94675310824" maxlon="-9.242660540879999"/>
+    <node visible="true" id="-98888768" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9466980456184686" lon="-9.2427429248773745"/>
+    <node visible="true" id="-98888767" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9357108184628871" lon="-9.2538203065474516"/>
+    <node visible="true" id="-98888718" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9467531082400029" lon="-9.2426605408799993"/>
+    <node visible="true" id="-98888717" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9466392185999979" lon="-9.2428309408799993"/>
+    <node visible="true" id="-98888716" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9465039309000076" lon="-9.2431353408800003"/>
+    <node visible="true" id="-98888715" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9451176569600079" lon="-9.2471255408800008"/>
+    <node visible="true" id="-98888714" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9449823692700008" lon="-9.2474073408800006"/>
+    <node visible="true" id="-98888713" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9448471815600001" lon="-9.2477342408800016"/>
+    <node visible="true" id="-98888712" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9446780969299979" lon="-9.2480385408799997"/>
+    <node visible="true" id="-98888711" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9444977133400059" lon="-9.2483541408800001"/>
+    <node visible="true" id="-98888710" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9442159389599993" lon="-9.2486923408799999"/>
+    <node visible="true" id="-98888709" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9440243563799910" lon="-9.2489290408800002"/>
+    <node visible="true" id="-98888708" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9438214748300098" lon="-9.2491432408800005"/>
+    <node visible="true" id="-98888707" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9435960953199967" lon="-9.2493686408800002"/>
+    <node visible="true" id="-98888706" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9433901140499970" lon="-9.2495778408800007"/>
+    <node visible="true" id="-98888705" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9431565352900009" lon="-9.2497857408800002"/>
+    <node visible="true" id="-98888704" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9429311557899993" lon="-9.2499322408799998"/>
+    <node visible="true" id="-98888703" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9426973770399911" lon="-9.2500948408799992"/>
+    <node visible="true" id="-98888702" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9424813966800016" lon="-9.2502148408800000"/>
+    <node visible="true" id="-98888701" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9421934228699982" lon="-9.2503228408799991"/>
+    <node visible="true" id="-98888700" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9419774425100016" lon="-9.2504188408800001"/>
+    <node visible="true" id="-98888699" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9381617894400023" lon="-9.2515588408799996"/>
+    <node visible="true" id="-98888698" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9375018494399967" lon="-9.2517388408799999"/>
+    <node visible="true" id="-98888697" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9372978679900044" lon="-9.2518228408799992"/>
+    <node visible="true" id="-98888696" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9370938865300005" lon="-9.2519548408799999"/>
+    <node visible="true" id="-98888695" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9369019039899982" lon="-9.2521108408800004"/>
+    <node visible="true" id="-98888694" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9366978225399976" lon="-9.2522788408800007"/>
+    <node visible="true" id="-98888693" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9364458454500024" lon="-9.2525308408800004"/>
+    <node visible="true" id="-98888692" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9362538629100001" lon="-9.2527708408800002"/>
+    <node visible="true" id="-98888691" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9360858781800019" lon="-9.2529868408800020"/>
+    <node visible="true" id="-98888690" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9359107941000033" lon="-9.2533558408800012"/>
+    <node visible="true" id="-98888689" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9357800059899972" lon="-9.2536790408799998"/>
+    <node visible="true" id="-98888688" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9356213204199975" lon="-9.2540030408800007"/>
+    <node visible="true" id="-98888687" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9355020312600004" lon="-9.2543651408799992"/>
+    <node visible="true" id="-98888686" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9354339374500071" lon="-9.2546492408799992"/>
+    <node visible="true" id="-98888685" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9350846692099992" lon="-9.2567712408799991">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Malveira"/>
+        <tag k="railway" v="station"/>
+        <tag k="source:datetime" v="2008-08-05T01:51:17.000Z"/>
+    </node>
+    <way visible="true" id="-98867091" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98888768"/>
+        <nd ref="-98888718"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-98867090" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98888685"/>
+        <nd ref="-98888686"/>
+        <nd ref="-98888687"/>
+        <nd ref="-98888688"/>
+        <nd ref="-98888767"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-98867085" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98888767"/>
+        <nd ref="-98888689"/>
+        <nd ref="-98888690"/>
+        <nd ref="-98888691"/>
+        <nd ref="-98888692"/>
+        <nd ref="-98888693"/>
+        <nd ref="-98888694"/>
+        <nd ref="-98888695"/>
+        <nd ref="-98888696"/>
+        <nd ref="-98888697"/>
+        <nd ref="-98888698"/>
+        <nd ref="-98888699"/>
+        <nd ref="-98888700"/>
+        <nd ref="-98888701"/>
+        <nd ref="-98888702"/>
+        <nd ref="-98888703"/>
+        <nd ref="-98888704"/>
+        <nd ref="-98888705"/>
+        <nd ref="-98888706"/>
+        <nd ref="-98888707"/>
+        <nd ref="-98888708"/>
+        <nd ref="-98888709"/>
+        <nd ref="-98888710"/>
+        <nd ref="-98888711"/>
+        <nd ref="-98888712"/>
+        <nd ref="-98888713"/>
+        <nd ref="-98888714"/>
+        <nd ref="-98888715"/>
+        <nd ref="-98888716"/>
+        <nd ref="-98888717"/>
+        <nd ref="-98888768"/>
+        <tag k="created_by" v="Potlatch 0.8a"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1668"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="name" v="Linha do Oeste"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:atc" v="no"/>
+        <tag k="railway:etcs" v="no"/>
+        <tag k="railway:lzb" v="no"/>
+        <tag k="railway:pzb" v="no"/>
+        <tag k="source:datetime" v="2008-08-05T01:55:41.000Z;2020-01-17T17:39:21Z"/>
+        <tag k="usage" v="main"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-98867090" role=""/>
+        <member type="way" ref="-98867091" role=""/>
+        <tag k="created_by" v="Potlatch 0.8a"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:merge:target" v="yes"/>
+        <tag k="hoot:multilinestring" v="yes"/>
+        <tag k="name" v="Linha do Oeste"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2008-08-05T01:55:41.000Z"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
+</osm>

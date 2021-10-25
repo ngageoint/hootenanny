@@ -575,27 +575,6 @@ bool MapCropper::_isWhollyInside(const Envelope& e) const
   return result;
 }
 
-bool MapCropper::_isWhollyInside(const Geometry& e) const
-{
-  bool result = false;
-  if (_invert)
-  {
-    result = !_bounds->intersects(&e);
-    LOG_TRACE(
-      "Wholly inside way check: inverted crop and the envelope intersects with the element=" <<
-      !result);
-  }
-  else
-  {
-    // If it isn't inverted, we need to do an expensive check.
-    result = _bounds->covers(&e);
-    LOG_TRACE(
-      "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
-  }
-  LOG_TRACE("Wholly inside way check result: " << result);
-  return result;
-}
-
 bool MapCropper::_isWhollyOutside(const Envelope& e) const
 {
   bool result = false;

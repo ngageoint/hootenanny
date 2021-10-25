@@ -30,7 +30,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/InternalIdReserver.h>
 #include <hoot/core/io/ServicesJobStatus.h>
-#include <hoot/core/io/SqlBulkDelete.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -818,41 +817,6 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   return true;
 }
 
-bool HootApiDb::insertNode(ConstNodePtr node, long version)
-{
-  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags(), version);
-}
-
-void HootApiDb::updateNode(ConstNodePtr node)
-{
-  return updateNode(node->getId(), node->getY(), node->getX(), node->getVersion(), node->getTags());
-}
-
-void HootApiDb::deleteNode(ConstNodePtr node)
-{
-  LOG_TRACE("Deleting node: " << node->getId() << "...");
-
-  const long mapId = _currMapId;
-  double start = Tgs::Time::getTime();
-
-  _checkLastMapId(mapId);
-
-  if (_nodeBulkDelete == nullptr)
-  {
-    _nodeBulkDelete = std::make_shared<SqlBulkDelete>(_db, getCurrentNodesTableName(mapId));
-  }
-  _nodeBulkDelete->deleteElement(node->getId());
-
-  _nodesDeleteElapsed += Tgs::Time::getTime() - start;
-
-  if (_nodeBulkDelete->getPendingCount() >= _nodesPerBulkDelete)
-  {
-    _nodeBulkDelete->flush();
-  }
-
-  LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
-}
-
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId, long version)
 {
   assignedId = _getNextRelationId();
@@ -1144,7 +1108,6 @@ void HootApiDb::_resetQueries()
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
-  _mapExistsByName.reset();
   _getMapIdByName.reset();
   _insertChangeSet2.reset();
   _numChangesets.reset();
@@ -1646,23 +1609,6 @@ bool HootApiDb::mapExists(const long id)
   return _mapExistsById->next();
 }
 
-bool HootApiDb::mapExists(const QString& name)
-{
-  if (_mapExistsByName == nullptr)
-  {
-    _mapExistsByName = std::make_shared<QSqlQuery>(_db);
-    _mapExistsByName->prepare("SELECT id FROM " + getMapsTableName() +
-                              " WHERE display_name = :mapName");
-  }
-  _mapExistsByName->bindValue(":mapName", name);
-  if (_mapExistsByName->exec() == false)
-  {
-    throw HootException(_mapExistsByName->lastError().text());
-  }
-
-  return _mapExistsByName->next();
-}
-
 long HootApiDb::getMapIdByName(const QString& name)
 {
   //assuming unique name here
@@ -1984,8 +1930,9 @@ QString HootApiDb::getSessionIdByUserId(const long userId)
   return sessionId;
 }
 
-QString HootApiDb::getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
-                                              const QString& accessTokenSecret)
+QString HootApiDb::getSessionIdByAccessTokens(
+  const QString& userName, const QString& accessToken,
+  const QString& accessTokenSecret)
 {
   QString sessionId = "";
 

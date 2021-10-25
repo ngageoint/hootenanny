@@ -47,8 +47,6 @@ public:
   static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isMemberOfRelationSatisfyingCriterion(
-    const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
