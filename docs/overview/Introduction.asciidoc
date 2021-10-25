@@ -20,7 +20,7 @@ multiple ad-hoc conflation techniques (automated and manual) which quickly becom
 labor intensive and stove-piped. As such, multiple conflation efforts occur in
 isolated projects by numerous users for specific purposes with varying workflows,
 rules, schemas, formats, and data quality. This type of approach creates inefficiencies
-and lacks standardization which is required for large scale organizational use,
+and lacks the standardization that is required for large scale organizational use,
 maintenance, and development activities.
 
 To this end, Hootenanny was developed to provide an open source standards based

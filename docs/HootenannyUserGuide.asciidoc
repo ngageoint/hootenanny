@@ -1,11 +1,14 @@
 
 = Hootenanny - User Guide
 
+:imagesdir: ./user
 include::install/InstallationHeader.asciidoc[]
 include::install/HootenannyInstall.asciidoc[]
+include::overview/OverviewHeader.asciidoc[]
+include::overview/Introduction.asciidoc[]
+include::overview/ExistingTechnology.asciidoc[]
+include::overview/History.asciidoc[]
 include::user/UserHeader.asciidoc[]
-:imagesdir: ./user
-include::user/History.asciidoc[]
 include::user/Introduction.asciidoc[]
 include::user/CommonUseCases.asciidoc[]
 include::user/Limitations.asciidoc[]
@@ -32,8 +35,6 @@ include::user/Hootenanny-id.asciidoc[]
 include::user/Support.asciidoc[]
 :imagesdir: ./algorithms
 include::algorithms/AlgorithmsHeader.asciidoc[]
-include::algorithms/Introduction.asciidoc[]
-include::algorithms/ExistingTechnology.asciidoc[]
 include::algorithms/ApproachesAndAssumptions.asciidoc[]
 include::algorithms/UnifyingConflation.asciidoc[]
 include::algorithms/DifferentialConflation.asciidoc[]
