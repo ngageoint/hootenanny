@@ -1,3 +1,6 @@
+
+// See docs/developer/ElementMergeService.asciidoc
+
 var assert = require('assert'),
     http = require('http'),
     xml2js = require('xml2js');
@@ -316,9 +319,7 @@ describe('ElementMergeServer', function () {
         assert.equal(response.statusCode, '400');
     });
 
-    // Testing good inputs here only. Bad inputs are thoroughly tested in the core. Not checking
-    // nodes in the polys here or overall element count, but its ok since we're testing all of
-    // that in the core.
+    // Testing good inputs here only. Bad inputs are thoroughly tested ElementMergerJsTest.
 
     it('merges two pois', function() {
         var request  = httpMocks.createRequest({

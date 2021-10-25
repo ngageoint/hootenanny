@@ -1,7 +1,8 @@
 /************************************************************************
 This is Node js implementation of Hoot Translation Server.
 The purpose of this module is to provide the hoot-ui fast way
-to translate feature tags between OSM and supported schemas.
+to translate feature tags between OSM and supported schemas. See 
+docs/developer/ElementTranslationService.asciidoc
 ************************************************************************/
 var http = require('http');
 var url = require('url');

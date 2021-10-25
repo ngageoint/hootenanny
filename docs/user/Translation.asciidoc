@@ -70,7 +70,7 @@ There are several functions that may be called by Hootenanny:
 [[Simple-Example]]
 *_Simple Example_*
 
-Below is about the simplest useful example that supports both `convert`. The following sections go into details on how these function are used.
+Below is about the simplest useful example that supports both `convert`. The following sections go into details on how these functions are used.
 ------
 // an optional initialize function that gets called once before any
 // translateAttribute calls.
@@ -275,10 +275,7 @@ In my notional example there are three columns with the following definitions:
 * `DIR` - The flow of traffic, either 1 for one way traffic, or 2 for
   bidirectional traffic.
 
-Hootenanny will call the translateToOsm method 3 times for this input. Each
-call will contain the attributes for a given row. In this case the parameters
-passed will be:
-
+Hootenanny will call the translateToOsm method 3 times for this input. Each call will contain the attributes for a given row. In this case the parameters passed will be:
 |===================================================================
 | _attrs_                                           | _layerName_
 | {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
@@ -474,7 +471,7 @@ function translateToOsm(attrs, layerName) {
 [[OSM-to-OGR-Translation]]
 ===== OSM to OGR Translation
 
-Using JavaScript translation files it is now possible to convert from OSM to more typical tabular geospatial formats such as Shapefile or FileGDB. In order to convert to these formats some information will likely be lost and these translation files define which attributes will be carried across and how they'll be put into tables/layers.
+Using JavaScript translation files it is now possible to convert from OSM to more typical tabular geospatial formats such as Shapefile or FileGDB. In order to convert to these formats some information will likely be lost, and these translation files define which attributes will be carried across and how they'll be put into tables/layers.
 
 The necessary functionality is accessed via two methods, `getDbSchema` and `translateToOsm` . Both methods are required.
 
@@ -576,7 +573,7 @@ The numeric data types support `minimum` and `maximum`. By default `minimum` and
 [[File-Formats]]
 ===== File Formats
 
-For the translation operations (and several others) Hootenanny utilizes the well known GDAL/OGR libraries. These libraries support a number of file formats including Shapefile, FileGDB, GeoJSON, PostGIS, etc. While not every format has been tested, many will work with Hootenanny without any modification. Others, such as FileGDB, may require a specially compiled version of GDAL. Please see the GDAL documentation and talk to your administrator for details.
+For the translation operations (and several others) Hootenanny utilizes the well known GDAL/OGR libraries. These libraries support a number of file formats including Shapefile, FileGDB, GeoJSON, PostGIS, etc. While not every format has been tested, many will work with Hootenanny without any modification. Others, such as FileGDB, may require a specially compiled version of GDAL. Please see the GDAL documentation for details.
 
 Below are a discussion of some special handling situations when reading and writing to specific formats.
 
@@ -629,10 +626,9 @@ In the simplest case a building is a way tagged with `building=yes`. However, wh
 [[Translating-Building-Parts]]
 ===== Translating Building Parts
 
-Some Shapefiles contain buildings that are mapped out as independent parts. Where each part refers to the roof type and height of a portion of the building. E.g. The Capital building might be mapped out as one large, low flat roof record and a second tall domed roof record. This provides for very rich data, but also a complex representation in OSM. Fortunately Hootenanny handles most of the heavy lifting for you.
+Some Shapefiles contain buildings that are mapped out as independent parts. Where each part refers to the roof type and height of a portion of the building. E.g. The Capital building might be mapped out as one large, low flat roof record and a second tall domed roof record. This provides for very rich data, but also a complex representation in OSM. Fortunately, Hootenanny handles most of the heavy lifting for you.
 
-To translate complex building parts simply translate them in the same way you would translate any other building. By default Hootenanny will then search through all the buildings and look for buildings that appear to be part of the same structure. If they're part of the same structure then a complex building will be created for you automatically. The complex buildings will take the form specified in the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[Simple 3D Buildings] specification. The following section gives a specific example.
-
+To translate complex building parts, simply translate them in the same way you would translate any other building. By default, Hootenanny will then search through all the buildings and look for those that appear to be part of the same structure. If they're part of the same structure, then a complex building will be created for you automatically. The complex buildings will take the form specified in the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[Simple 3D Buildings] specification. The following section gives a specific example.
 
 [[Complex-Building-Example]]
 *_Complex Building Example_*
@@ -663,7 +659,7 @@ Using an abbreviated OSM JSON representation the resulting OSM data would be:
 Hootenanny will automatically detect that the two 123 buildings are part of the same building. This is done by asking the following questions:
 
 * Do the two building share at least two consecutive nodes (share an edge) or does one building completely contain the other building?
-* Do the non-part specific attributes of buildings match very closesly? (E.g. Are the addresses the same? Are the names the same? Ignore any differences in height or roof shape.)
+* Do the non-part specific attributes of buildings match very closely? (E.g. Are the addresses the same? Are the names the same? Ignore any differences in height or roof shape.)
 
 If these two questions answer yes, then the building parts are grouped together. An arbitrary number of building parts may be grouped together in this way to create a larger building. Once the building parts are grouped some new elements are added to the map to represent the building parts as shown in the following OSM JSON snippet.
 
