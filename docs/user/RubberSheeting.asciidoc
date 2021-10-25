@@ -3,9 +3,9 @@
 === Rubber Sheeting
 
 An option that can be applied before conflating two datasets is to use rubbersheet them together. 
-Rubbersheeting uses linear intersections to determine high confidence intersection matches. The high 
-confidence matches are then considered to be tie points for determining feature transforms. 
-Rubbersheeting works very well to align two datasets when they are offset roughly by a constant 
+Rubber sheeting uses linear intersections to determine high confidence intersection matches. The 
+high confidence matches are then considered to be tie points for determining feature transforms. 
+Rubber sheeting works very well to align two datasets when they are offset roughly by a constant 
 amount. It is less effective when the offsets vary by wide margins. When this alignment is done 
 pre-conflation, the conflation algorithms then have an easier time of conflating input data. See the 
 Algorithms section, "Rubber Sheeting" for technical information on the process. This document 
