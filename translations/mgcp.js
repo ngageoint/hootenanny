@@ -2135,6 +2135,29 @@ mgcp = {
       if (mgcp.mgcpPostRules[i][0](tags)) mgcp.mgcpPostRules[i][1](tags,attrs);
     }
 
+    //Map alternate source date tags to SDV in order of precedence
+    //default in mgcp_rules is 'source:datetime'
+    if (! attrs.SDV || attrs.SDV == 'UNK')
+      attrs.SDV = tags['source:imagery:datetime']
+        || tags['source:imagery:earliestDate']
+        || tags['source:date']
+        || tags['source:geometry:date']
+        || '';
+
+    // Chop the milliseconds off the "source:datetime"
+    if (attrs.SDV)
+    {
+      attrs.SDV = translate.chopDateTime(attrs.SDV);
+    }
+
+    //Map alternate source tags to ZI001_SDP in order of precedence
+    //default in mgcp_rules is 'source'
+    if (! attrs.SDP || attrs.SDP == 'N_A')
+      attrs.SDP = tags['source:imagery']
+        || tags['source:description']
+        || tags['source:name']
+        || '';
+
     // Fix up SRT values so we comply with the spec. These values came from data files
     // Format is: orig:new
     srtFix = {
@@ -2145,26 +2168,45 @@ mgcp = {
 
     if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
-    //Map alternate source date tags to SDV in order of precedence
-    //default in mgcp_rules is 'source:datetime'
-    if (! attrs.SDV)
-      attrs.SDV = tags['source:imagery:datetime']
-        || tags['source:imagery:earliestDate']
-        || tags['source:date']
-        || tags['source:geometry:date']
-        || '';
-
-    //Map alternate source tags to ZI001_SDP in order of precedence
-    //default in mgcp_rules is 'source'
-    if (! attrs.SDP)
-      attrs.SDP = tags['source:imagery']
-        || tags['source:description']
-        || '';
-
-    // Chop the milliseconds off the "source:datetime"
-    if (attrs.SDV)
+    // Now, Add a SRT value if we don't have one
+    // NOTE: This will get moved to be a common function later
+    if ((! attrs.SRT || attrs.SRT == '0') && tags['source:imagery'])
     {
-      attrs.SDV = translate.chopDateTime(attrs.SDV);
+      // lowercase and wipe out spaces etc
+      var tValue = tags['source:imagery'].toString().toLowerCase();
+      tValue = tValue.replace(/\s/g, '');
+
+      print('tValue: ' + tValue);
+
+      switch (tValue)
+      {
+        case 'unknown':
+          break;
+
+        case 'maxar':
+        case 'digitalglobe':
+        case 'geoeye-1c.0.4mpansharpenedmultispectralimagery':
+        case 'ikonos-2c.1mpan-sharpenedmultispectralimagery':
+        case 'maxar;digitalglobe':
+        case 'unknown;digitalglobe':
+        case 'digitalglobe;unknown':
+        case 'planet':
+          attrs.SRT = '110'; // Very high resolution
+          break;
+
+        case 'cnes/spot':
+          attrs.SRT = '114'; // Medium Resolution
+          break;
+
+        case 'landsat':
+        case 'landsat_WMS':
+          attrs.SRT = '116'; // Low  Resolution
+          break;
+
+        default:
+          attrs.SRT = '30';  // Imagery of unspecified type and resolution
+          break;
+      }
     }
 
     // Fix Railway gauges
@@ -2619,7 +2661,6 @@ mgcp = {
       // Dump out what attributes we have converted before they get wiped out
       if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
-
       // We want to keep the hoot:id if present
       if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
 
@@ -2631,12 +2672,14 @@ mgcp = {
         if (i.indexOf('hoot:') !== -1) delete tags[i];
       }
 
+      var str = JSON.stringify(tags,Object.keys(tags).sort());
+      print('JSON: ' + str);
+
       // Shapefiles can't handle fields > 254 chars
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors
       // A nicer thing would be to arrange the tags until they fit neatly
       if (mgcp.configOut.OgrFormat == 'shp')
       {
-        var str = JSON.stringify(tags,Object.keys(tags).sort());
         // Throw a warning that text will get truncated.
         if (str.length > (mgcp.configOut.OgrTextFieldNumber * 253)) hoot.logWarn('o2s tags truncated to fit in available space.');
 
