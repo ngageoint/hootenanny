@@ -1,5 +1,6 @@
 /************************************************************************
-This is a nodejs integration with Hootenanny element merging logic.
+This is a nodejs integration with Hootenanny element merging logic. See 
+docs/developer/ElementMergeService.asciidoc
 ************************************************************************/
 var http = require('http');
 var url = require('url');

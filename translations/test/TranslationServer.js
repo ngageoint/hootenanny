@@ -1,3 +1,6 @@
+
+// See docs/developer/ElementTranslationService.asciidoc
+
 var assert = require('assert'),
     http = require('http'),
     xml2js = require('xml2js'),
