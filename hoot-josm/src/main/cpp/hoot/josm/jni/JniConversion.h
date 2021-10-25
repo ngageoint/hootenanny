@@ -74,15 +74,6 @@ public:
   static jobject toJavaStringList(JNIEnv* javaEnv, const QStringList& cppStrList);
 
   /**
-   * Converts a Java string list to a Qt string list
-   *
-   * @param javaEnv the associated JNI environment
-   * @param javaStrList the list to convert
-   * @return a Qt string list
-   */
-  static QStringList fromJavaStringList(JNIEnv* javaEnv, jobject javaStrList);
-
-  /**
    * Converts a Java string set to a Qt string set
    *
    * @param javaEnv the associated JNI environment

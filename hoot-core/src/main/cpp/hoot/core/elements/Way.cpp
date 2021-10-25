@@ -284,17 +284,6 @@ bool Way::hasNode(long nodeId) const
   return false;
 }
 
-bool Way::isOneWay() const
-{
-  bool result = false;
-  QString oneway = getTags()["oneway"].toLower();
-  if (getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
-  {
-    result = true;
-  }
-  return result;
-}
-
 bool Way::isSimpleLoop() const
 {
   if (getNodeCount() < 2)
@@ -351,11 +340,6 @@ void Way::removeNode(long id) const
   }
 
   nodes.resize(newCount);
-}
-
-bool Way::isFirstAndLastNode(const long nodeId) const
-{
-  return nodeId == getFirstNodeId() && nodeId == getLastNodeId();
 }
 
 bool Way::isEndNode(const long nodeId) const

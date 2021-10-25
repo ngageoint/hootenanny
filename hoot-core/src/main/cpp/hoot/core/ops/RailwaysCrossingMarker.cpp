@@ -161,8 +161,8 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
             LOG_TRACE(
               "Marking for review: " << way->getElementId() << " and " << neighborId << "...");
             reviewMarker.mark(
-              _map, way, neighbor,
-              "Crossing railways", MetadataTags::HootReviewCrossingRailways(), 1.0);
+              _map, way, neighbor, "Crossing railways", MetadataTags::HootReviewCrossingRailways(),
+              1.0);
             _markedRailways.insert(idStr1);
             _markedRailways.insert(idStr2);
             _numAffected++;

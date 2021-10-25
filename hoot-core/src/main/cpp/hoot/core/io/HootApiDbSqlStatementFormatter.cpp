@@ -221,47 +221,4 @@ QString HootApiDbSqlStatementFormatter::relationMemberToSqlString(const long rel
       .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr);
 }
 
-QString HootApiDbSqlStatementFormatter::changesetToSqlString(const long changesetId,
-                                                             const long changesetUserId,
-                                                             const long numChangesInChangeset,
-                                                             const geos::geom::Envelope& changesetBounds)
-{
-  Tags tags;
-  tags["bot"] = "yes";
-  tags["created_by"] = HOOT_PACKAGE_NAME;
-  return
-    _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)]
-      .arg(QString::number(changesetId))
-      .arg(QString::number(changesetUserId))
-      .arg(_dateString)
-      .arg(QString::number(changesetBounds.getMinY(), 'g', _precision))
-      .arg(QString::number(changesetBounds.getMaxX(), 'g', _precision))
-      .arg(QString::number(changesetBounds.getMinX(), 'g', _precision))
-      .arg(QString::number(changesetBounds.getMaxX(), 'g', _precision))
-      .arg(_dateString)
-      .arg(QString::number(numChangesInChangeset))
-      .arg(OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
-}
-
-QString HootApiDbSqlStatementFormatter::elementToSqlString(const ConstElementPtr& element,
-                                                                const long elementId,
-                                                                const long changesetId)
-{
-  switch (element->getElementType().getEnum())
-  {
-    case ElementType::Node:
-      return nodeToSqlString(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId, element->getVersion());
-
-    case ElementType::Way:
-      return wayToSqlString(elementId, changesetId, element->getTags(), element->getVersion());
-
-    case ElementType::Relation:
-      return relationToSqlString(elementId, changesetId, element->getTags(), element->getVersion());
-
-    default:
-      throw HootException("Unsupported element member type.");
-  }
-  return "";
-}
-
 }

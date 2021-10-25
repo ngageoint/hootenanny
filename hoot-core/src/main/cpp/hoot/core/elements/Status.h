@@ -53,12 +53,6 @@ public:
   bool operator==(Status t) const { return t._type == _type; }
   bool operator!=(Status t) const { return t._type != _type; }
 
-  /**
-   * @brief fromInput Create a status object from the zero-based input number
-   * @return Return Unknown1 for i=0, Unknown2 for i=1, Input003 for i=2, etc.
-   */
-  static Status fromInput(int i);
-
   Type getEnum() const { return _type; }
 
   /**

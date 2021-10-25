@@ -50,8 +50,11 @@ public:
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
   ~BuildingMerger() override = default;
 
-  void apply(const OsmMapPtr& map,
-             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  /**
+   * @see Merger
+   */
+  void apply(
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings
@@ -74,7 +77,7 @@ public:
    * @param map a map containing the buildings to be merged
    * @param mergeTargetId the ID of the building which all other buildings should be merged into
    */
-  static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
+  static void merge(OsmMapPtr map, const ElementId& mergeTargetId);
 
   /**
    * Adds multiple buildings to the same relation

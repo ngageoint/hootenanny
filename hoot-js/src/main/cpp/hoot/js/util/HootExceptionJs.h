@@ -74,7 +74,6 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)

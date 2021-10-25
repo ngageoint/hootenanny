@@ -65,11 +65,6 @@ public:
    * @brief see RelationMemberUtils::isMemberOfRelationWithType
    */
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
-  /**
-   * @brief see RelationMemberUtils::isMemberOfRelationWithType
-   */
-  static void isMemberOfRelationSatisfyingCriterion(
-    const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 

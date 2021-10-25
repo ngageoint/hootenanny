@@ -87,12 +87,6 @@ public:
   void insert(const std::vector<std::pair<double, double>>& points);
 
   /**
-   * @brief toString returns a string representation of the shape.
-   * @return a string
-   */
-  QString toString() const;
-
-  /**
    * @brief getLongestFaceEdge returns the length of the longest face edge used to create the shape.
    * @return a length
    */
@@ -119,15 +113,9 @@ private:
   GeometryPtr _convertFaceToPolygon(const Tgs::Face& face) const;
 
   /*
-   * Returns true if the face is on the boundary of the triangulation
-   */
-  bool _isBoundary(const double alpha, const Tgs::Edge& e) const;
-
-  /*
    * Returns true if the face is inside an alpha shape.
    */
   bool _isInside(const double alpha, const Tgs::Face& face) const;
-
   bool _isTooLong(const double alpha, const Tgs::Edge& e) const;
 
   /**

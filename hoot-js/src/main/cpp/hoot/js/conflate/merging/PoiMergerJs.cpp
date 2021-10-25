@@ -27,13 +27,11 @@
 #include "PoiMergerJs.h"
 
 // Hoot
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/conflate/merging/ScriptMerger.h>
 #include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/util/ConfPath.h>
+
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/conflate/merging/ScriptMerger.h>
 
 // std
 #include <utility>
@@ -43,7 +41,7 @@ using namespace v8;
 namespace hoot
 {
 
-void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
+void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
 {
   LOG_INFO("Merging POIs...");
 

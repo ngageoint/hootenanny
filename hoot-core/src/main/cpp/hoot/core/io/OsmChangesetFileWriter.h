@@ -38,8 +38,6 @@ namespace hoot
 
 /**
  * Interface for classes which write changesets to a file
- *
- * @todo There may be some redundancy with this and OsmChangeWriter.
  */
 class OsmChangesetFileWriter : public Configurable
 {

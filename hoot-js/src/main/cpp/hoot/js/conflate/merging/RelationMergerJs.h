@@ -42,7 +42,7 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
-  static void mergeRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void merge(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 

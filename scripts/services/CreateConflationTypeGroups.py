@@ -26,8 +26,7 @@ configOptions = json.loads("".join(open(parent).readlines()))
 groupDefaults = json.loads("".join(open(defaults).readlines()))
 
 optionTypesMap = {
-    'text': ['double', 'int', 'string', 'long'],
-    'combobox': ['list'],
+    'text': ['double', 'int', 'string', 'long', 'list'],
     'checkbox': ['bool']
 }
 
@@ -115,7 +114,7 @@ def createUiJSON(groups, options):
                                                     memberObject['value'] = categoryVal
                                                 else:
                                                     categoryVal = '*'
-                                               
+
                                                 if 'distance' in categoryObj:
                                                     categoryDefault = categoryObj['distance']
                                                     objKeys.append('distance')

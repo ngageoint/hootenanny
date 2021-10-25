@@ -67,39 +67,21 @@ public:
 
   const MatchHash& getAllMatches() const { return _matches; }
   MatchHash& getAllMatches() { return _matches; }
-
   QSet<ConstEdgeMatchPtr> getMatchesThatContain(ConstNetworkEdgePtr e) const;
-
   QSet<ConstEdgeMatchPtr> getMatchesThatTerminateAt(ConstNetworkVertexPtr v) const;
-
   /**
    * Returns all edges that contain v as an interior vertex (not at an extreme)
    */
   QSet<ConstEdgeMatchPtr> getMatchesWithInteriorVertex(ConstNetworkVertexPtr v) const;
-
   /**
    * Return all matches that overlap with e. This may include e.
    */
   QSet<ConstEdgeMatchPtr> getMatchesThatOverlap(ConstEdgeMatchPtr e) const;
-
-  /**
-   * Return all matches that overlap with str.
-   */
-  QSet<ConstEdgeMatchPtr> getMatchesThatOverlap(ConstEdgeStringPtr str) const;
-
   /**
    * Return all the edges that either start at v1/v2 or end at v1/v2.
    */
-  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(ConstNetworkVertexPtr v1,
-    ConstNetworkVertexPtr v2) const;
-
-  /**
-   * This is handy if you want to de-duplicate edge matches. The equivalent stored pointer will be
-   * returned if it exists.
-   *
-   * An exception is thrown if the match doesn't exist.
-   */
-  ConstEdgeMatchPtr getMatch(const ConstEdgeMatchPtr& em) const;
+  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(
+    ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
   /**
    * Return the score associated with an edge match.

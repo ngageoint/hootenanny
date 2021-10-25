@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-98888821' action='modify' visible='true' lat='38.93508466921' lon='-9.25677124088'>
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Malveira' />
+    <tag k='railway' v='station' />
+    <tag k='source:datetime' v='2008-08-05T01:51:17.000Z' />
+  </node>
+  <node id='-98888822' action='modify' visible='true' lat='38.93543393745' lon='-9.25464924088' />
+  <node id='-98888823' action='modify' visible='true' lat='38.93550203126' lon='-9.25436514088' />
+  <node id='-98888824' action='modify' visible='true' lat='38.93562132042' lon='-9.25400304088' />
+  <node id='-98888825' action='modify' visible='true' lat='38.93578000599' lon='-9.25367904088' />
+  <node id='-98888826' action='modify' visible='true' lat='38.9359107941' lon='-9.25335584088' />
+  <node id='-98888827' action='modify' visible='true' lat='38.93608587818' lon='-9.25298684088' />
+  <node id='-98888828' action='modify' visible='true' lat='38.93625386291' lon='-9.25277084088' />
+  <node id='-98888829' action='modify' visible='true' lat='38.93644584545' lon='-9.25253084088' />
+  <node id='-98888830' action='modify' visible='true' lat='38.93669782254' lon='-9.25227884088' />
+  <node id='-98888831' action='modify' visible='true' lat='38.93690190399' lon='-9.25211084088' />
+  <node id='-98888832' action='modify' visible='true' lat='38.93709388653' lon='-9.25195484088' />
+  <node id='-98888833' action='modify' visible='true' lat='38.93729786799' lon='-9.25182284088' />
+  <node id='-98888834' action='modify' visible='true' lat='38.93750184944' lon='-9.25173884088' />
+  <node id='-98888835' action='modify' visible='true' lat='38.93816178944' lon='-9.25155884088' />
+  <node id='-98888836' action='modify' visible='true' lat='38.94197744251' lon='-9.25041884088' />
+  <node id='-98888837' action='modify' visible='true' lat='38.94219342287' lon='-9.25032284088' />
+  <node id='-98888838' action='modify' visible='true' lat='38.94248139668' lon='-9.25021484088' />
+  <node id='-98888839' action='modify' visible='true' lat='38.94269737704' lon='-9.25009484088' />
+  <node id='-98888840' action='modify' visible='true' lat='38.94293115579' lon='-9.24993224088' />
+  <node id='-98888841' action='modify' visible='true' lat='38.94315653529' lon='-9.24978574088' />
+  <node id='-98888842' action='modify' visible='true' lat='38.94339011405' lon='-9.24957784088' />
+  <node id='-98888843' action='modify' visible='true' lat='38.94359609532' lon='-9.24936864088' />
+  <node id='-98888844' action='modify' visible='true' lat='38.94382147483' lon='-9.24914324088' />
+  <node id='-98888845' action='modify' visible='true' lat='38.94402435638' lon='-9.24892904088' />
+  <node id='-98888846' action='modify' visible='true' lat='38.94421593896' lon='-9.24869234088' />
+  <node id='-98888847' action='modify' visible='true' lat='38.94449771334' lon='-9.24835414088' />
+  <node id='-98888848' action='modify' visible='true' lat='38.94467809693' lon='-9.24803854088' />
+  <node id='-98888849' action='modify' visible='true' lat='38.94484718156' lon='-9.24773424088' />
+  <node id='-98888850' action='modify' visible='true' lat='38.94498236927' lon='-9.24740734088' />
+  <node id='-98888851' action='modify' visible='true' lat='38.94511765696' lon='-9.24712554088' />
+  <node id='-98888852' action='modify' visible='true' lat='38.9465039309' lon='-9.24313534088' />
+  <node id='-98888853' action='modify' visible='true' lat='38.9466392186' lon='-9.24283094088' />
+  <node id='-98888854' action='modify' visible='true' lat='38.94675310824' lon='-9.24266054088' />
+  <way id='-98867136' action='modify' visible='true'>
+    <nd ref='-98888821' />
+    <nd ref='-98888822' />
+    <nd ref='-98888823' />
+    <nd ref='-98888824' />
+    <nd ref='-98888825' />
+    <nd ref='-98888826' />
+    <nd ref='-98888827' />
+    <nd ref='-98888828' />
+    <nd ref='-98888829' />
+    <nd ref='-98888830' />
+    <nd ref='-98888831' />
+    <nd ref='-98888832' />
+    <nd ref='-98888833' />
+    <nd ref='-98888834' />
+    <nd ref='-98888835' />
+    <nd ref='-98888836' />
+    <nd ref='-98888837' />
+    <nd ref='-98888838' />
+    <nd ref='-98888839' />
+    <nd ref='-98888840' />
+    <nd ref='-98888841' />
+    <nd ref='-98888842' />
+    <nd ref='-98888843' />
+    <nd ref='-98888844' />
+    <nd ref='-98888845' />
+    <nd ref='-98888846' />
+    <nd ref='-98888847' />
+    <nd ref='-98888848' />
+    <nd ref='-98888849' />
+    <nd ref='-98888850' />
+    <nd ref='-98888851' />
+    <nd ref='-98888852' />
+    <nd ref='-98888853' />
+    <nd ref='-98888854' />
+    <tag k='created_by' v='Potlatch 0.8a' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:merge:target' v='yes' />
+    <tag k='name' v='Linha do Oeste' />
+    <tag k='railway' v='rail' />
+    <tag k='source:datetime' v='2008-08-05T01:55:41.000Z' />
+    <tag k="hoot:status" v="1"/>
+  </way>
+</osm>
