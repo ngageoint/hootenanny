@@ -45,8 +45,10 @@ namespace hoot
 
 /**
  * This class is used to build an index of input elements (which can be filtered by various
- * criteria, if need be). The envelope plus the search radius is created as the index box for each
- * element. This is more efficient than using the OsmMapIndex index.
+ * criteria, if need be).
+ *
+ * The envelope plus the search radius is created as the index box for each element. This is more
+ * efficient than using the OsmMapIndex index.
  */
 class ElementCriterion;
 
@@ -64,8 +66,14 @@ public:
     const std::function<Meters (const ConstElementPtr&)>& getSearchRadius, ConstOsmMapPtr pMap);
   ~SpatialIndexer() override = default;
 
+  /**
+   * @see ElementCriterionConsumer
+   */
   void addCriterion(const ElementCriterionPtr& e) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   void finalizeIndex() const;

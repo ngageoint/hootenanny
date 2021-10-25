@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Counts the number of elements.
+ * @brief The MinIdVisitor class finds the smallest element ID value in a map (most negative).
  */
 class MinIdVisitor : public ConstElementVisitor, public SingleStatistic
 {

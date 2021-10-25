@@ -7,7 +7,6 @@ hoot.Log.setLogLevel('warn');
 
 describe('RelationMemberUtilsJs', function() {
 
-    // TODO: move this method to a new MapUtilsJs test
     it('Should determine if a relation member is a member of a relation with a specific type', function() {
     
         var map = new hoot.OsmMap();

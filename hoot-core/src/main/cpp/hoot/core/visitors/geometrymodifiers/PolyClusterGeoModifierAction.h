@@ -41,6 +41,7 @@ namespace hoot
 
 /**
  * Replaces a cluster of polygons with a single polygon.
+ *
  * The purpose of this class is to simplify maps for printing by replacing a large amount of
  * buildings with a single built-up area polygon feature.
  *

@@ -46,6 +46,9 @@ public:
   explicit KeepTagsVisitor(const QStringList& keys);
   ~KeepTagsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getDescription() const override { return "Keeps tags by key"; }

@@ -76,8 +76,6 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
       QString("tile calculator."));
   }
 
-  // TODO: throw exception if no input data is Unknown1
-
   LOG_VARD(map->getNodeCount());
   if (map->getNodeCount() <= _maxNodesPerTile)
   {

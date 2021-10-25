@@ -212,7 +212,6 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType) const
       msg.prepend("Feature Extractors");
       ts << msg << endl;
     }
-    // TODO: would be nice to alphabetize these
     ts <<
       _getApiEntities<FeatureExtractor, FeatureExtractor>(
         FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
@@ -352,7 +351,6 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType) const
     msg += ":";
     msg.prepend("Criterion Consumers");
     ts << msg << endl;
-    // TODO: would be nice to alphabetize these
     ts <<
       _getApiEntities<OsmMapOperation, ElementCriterionConsumer>(
         OsmMapOperation::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);

@@ -48,6 +48,9 @@ public:
   FindIntersectionsVisitor() = default;
   ~FindIntersectionsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   void setOsmMap(OsmMap* map) override { _map = map; }

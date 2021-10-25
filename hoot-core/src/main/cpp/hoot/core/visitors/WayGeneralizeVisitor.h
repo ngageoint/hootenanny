@@ -54,6 +54,9 @@ public:
   WayGeneralizeVisitor();
   ~WayGeneralizeVisitor() override = default;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   /**

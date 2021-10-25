@@ -159,7 +159,7 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString& tagKey, QSt
     return;
   }
 
-  //If the tag key is already OSM, then no need to translate it.
+  // If the tag key is already OSM, then no need to translate it.
   // TODO: Should this also have use and/or building categories be added here?
   if (_getTagValueTokens("poi").contains(tagValue))
   {

@@ -74,7 +74,6 @@ public:
    * Utility method that allows for merging an unlimited number of buildings
    *
    * The map passed may or may not contain constituent elements (way nodes, relation members).
-   *
    * @param map a map containing the buildings to be merged
    * @param mergeTargetId the ID of the building which all other buildings should be merged into
    */
@@ -94,9 +93,7 @@ public:
     const bool preserveTypes = false);
 
   QString getDescription() const override { return "Merges buildings"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)

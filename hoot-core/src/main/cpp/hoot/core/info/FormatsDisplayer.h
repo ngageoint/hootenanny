@@ -47,12 +47,13 @@ public:
    * reading
    * @param displayOutputs if true, displays output formats
    * @param displayOutputsSupportingStreaming if true, displays streamable output formats
-   * @param displayOgrOnly TODO
+   * @param displayOgrOnly displays formats supported by OGR only
    * @return a string describing the requested formats
    */
-  static QString display(const bool displayInputs, const bool displayInputsSupportingStreaming,
-                         const bool displayInputsSupportingBounds, const bool displayOutputs,
-                         const bool displayOutputsSupportingStreaming, const bool displayOgrOnly);
+  static QString display(
+    const bool displayInputs, const bool displayInputsSupportingStreaming,
+    const bool displayInputsSupportingBounds, const bool displayOutputs,
+    const bool displayOutputsSupportingStreaming, const bool displayOgrOnly);
 
 private:
 

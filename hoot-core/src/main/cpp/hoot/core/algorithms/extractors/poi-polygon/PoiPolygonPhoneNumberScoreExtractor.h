@@ -51,6 +51,14 @@ public:
   PoiPolygonPhoneNumberScoreExtractor();
   ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
+  /**
+   * @brief extract returns a score from 0 to 1 representing the similarity of the phone numbers
+   * contained on two features.
+   * @param map map containing the features
+   * @param poi the first element to examine
+   * @param poly the second element to examine
+   * @return a score
+   */
   double extract(
     const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 

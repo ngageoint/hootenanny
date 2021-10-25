@@ -78,8 +78,6 @@ const QString ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME = "PointPolygon.js";
 
 /**
  * Searches the specified map for any match potentials.
- *
- * @todo move this to its own class file
  */
 class ScriptMatchVisitor : public ConstElementVisitor
 {

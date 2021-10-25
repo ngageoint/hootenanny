@@ -50,13 +50,13 @@ public:
   BuildingHeightVisitor();
   ~BuildingHeightVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
-
-  QString getDescription() const override { return "Calculates building height statistics"; }
 
   QString getInitStatusMessage() const override
   { return "Calculating building height statistics..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Calculated height statistics for " + QString::number(_numAffected) + " buildings"; }
 
@@ -71,7 +71,7 @@ public:
   }
 
   QString getName() const override { return className(); }
-
+  QString getDescription() const override { return "Calculates building height statistics"; }
   QString getClassName() const override { return className(); }
 
 private:

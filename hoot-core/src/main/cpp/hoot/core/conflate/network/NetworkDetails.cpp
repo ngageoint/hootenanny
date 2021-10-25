@@ -932,7 +932,6 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
   return result;
 }
 
-// TODO: can this be combined with the other isStringCandidates? Or call it?
 bool NetworkDetails::isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   bool result = false;

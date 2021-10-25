@@ -39,9 +39,10 @@
 namespace hoot
 {
 
-/*
- * Visitor that calculate specific measurements of a way element and adds them as tags
- * to the element.
+/**
+ * @brief The AddMeasurementTagsVisitor class is a Visitor that calculate specific measurements of a
+ * way element and adds them as tags to the element.
+ *
  * Currently supports:
  *  length and width of the aligned bounding box for:
  *    - any open and closed way
@@ -61,6 +62,9 @@ public:
 
   static QString className() { return "AddMeasurementTagsVisitor"; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override { return "Adding measurement tags..."; }

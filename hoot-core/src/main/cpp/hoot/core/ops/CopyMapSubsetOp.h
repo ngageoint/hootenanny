@@ -48,11 +48,40 @@ public:
 
   static QString className() { return "CopyMapSubsetOp"; }
 
+  /**
+   * @brief CopyMapSubsetOp Default constructor
+   */
   CopyMapSubsetOp();
+  /**
+   * @brief Constructor
+   * @param from map to copy from
+   * @param eids IDs of elements to copy
+   */
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
+  /**
+   * @brief Constructor
+   * @param from map to copy from
+   * @param wayIds IDs of ways to copy
+   */
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& wayIds);
+  /**
+   * @brief Constructor
+   * @param from map to copy from
+   * @param eid ID of element to copy
+   */
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
+  /**
+   * @brief Constructor
+   * @param from map to copy from
+   * @param eid1 ID of first element to copy
+   * @param eid2 ID of second element to copy
+   */
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
+  /**
+   * @brief Constructor
+   * @param from map to copy from
+   * @param crit criteria filter elements must pass to be copied
+   */
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
   ~CopyMapSubsetOp() override = default;
 

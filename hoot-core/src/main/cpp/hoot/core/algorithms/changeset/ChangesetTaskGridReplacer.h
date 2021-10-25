@@ -43,8 +43,8 @@ class ChangesetReplacement;
 class OsmApiDbSqlChangesetApplier;
 
 /**
- * @brief The ChangesetTaskGridReplacer class can replace data in an OSM API database across multiple
- * AOI's via changeset generation and application.
+ * @brief The ChangesetTaskGridReplacer class can replace data in an OSM API database across
+ * multiple AOI's via changeset generation and application.
  *
  * Its primarily meant as a testing harness to support ServiceChangesetReplacementGridTest. However,
  * in theory, with some tweaks it could be used in a production environment if desired. Any of the
@@ -91,7 +91,6 @@ private:
 
   // data being replaced; must be osmapidb://
   QString _dataToReplaceUrl;
-  // TODO: get rid of this; hacky
   int _originalDataSize;
   // replacement data; must be hootapidb://
   QString _replacementUrl;

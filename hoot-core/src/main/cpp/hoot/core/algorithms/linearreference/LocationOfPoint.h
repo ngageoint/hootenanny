@@ -90,8 +90,8 @@ public:
    */
   bool isGreater(int i, double segFrac, const WayLocation& loc) const;
 
-  static double segmentFraction(const geos::geom::LineSegment& seg,
-                                const geos::geom::Coordinate& inputPt);
+  static double segmentFraction(
+    const geos::geom::LineSegment& seg, const geos::geom::Coordinate& inputPt);
 
 private:
 

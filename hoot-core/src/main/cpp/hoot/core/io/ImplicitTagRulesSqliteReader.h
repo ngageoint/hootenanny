@@ -66,7 +66,7 @@ public:
    * words
    *
    * It also populates the words that matched (matchingWords) and determines if the
-   * input words were involved in multiple tag rules (wordsInvolvedInMultipleRule).  Words involved
+   * input words were involved in multiple tag rules (wordsInvolvedInMultipleRule). Words involved
    * in multiple tag rules will result in an empty tag set being returned if
    * _allowWordsInvolvedInMultipleRules is set to true.
    *
@@ -78,8 +78,8 @@ public:
    * @return a set of implicitly derived tags, if they exist, for the given input words; an empty
    * tag set otherwise
    */
-  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords,
-                       bool& wordsInvolvedInMultipleRules);
+  Tags getImplicitTags(
+    const QSet<QString>& words, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
 
   /**
    * Return a string containing relevant info about the rule database

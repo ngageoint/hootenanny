@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The NodesVisitor class can be used to filter nodes.
+ */
 class NodesVisitor : public ConstElementVisitor
 {
 public:
@@ -43,6 +46,9 @@ public:
   NodesVisitor(QList<ConstNodePtr>& n);
   ~NodesVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   QString getDescription() const override { return "Collects the nodes visited"; }

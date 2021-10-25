@@ -45,6 +45,9 @@ public:
   UniqueTagsVisitor() = default;
   ~UniqueTagsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Collects unique tags"; }
