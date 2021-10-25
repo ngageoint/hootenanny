@@ -43,7 +43,9 @@
 namespace hoot
 {
 
-/*
+/**
+ * @brief The InBoundsCriterion class determines if an element is within a specified bounds.
+ *
  * @todo genericize this to use GeometricRelationShip?
  */
 class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer,

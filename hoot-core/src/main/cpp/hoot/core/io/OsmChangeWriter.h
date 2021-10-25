@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Interface for writing OSM changes
  *
- * There may be some redundancy with this and OsmChangesetFileWriter.
+ * @todo There may be some redundancy with this and OsmChangesetFileWriter.
  */
 class OsmChangeWriter
 {

@@ -49,7 +49,7 @@ public:
    * @param tiles the collection of tiles to write
    * @param nodeCounts a collection of the number of node counts for each computed tile
    * @param outputPath the output file path
-   * @param selectSingleRandomTile
+   * @param selectSingleRandomTile writes a single randomly selected tile instead of all tiles
    * @param randomSeed optional random number generator seed
    * @todo collapse with OSM writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
@@ -65,7 +65,7 @@ public:
    * @param tiles the collection of tiles to write
    * @param nodeCounts a collection of the number of node counts for each computed tile
    * @param outputPath the output file path
-   * @param selectSingleRandomTile
+   * @param selectSingleRandomTile writes a single randomly selected tile instead of all tiles
    * @param randomSeed optional random number generator seed
    * @todo collapse with GeoJSON writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
@@ -83,7 +83,7 @@ private:
    * @param tiles the collection of tiles to write
    * @param nodeCounts a collection of the number of node counts for each computed tile
    * @param randomTileIndex index of the random tile to use
-   * @param selectSingleRandomTile
+   * @param selectSingleRandomTile selects a single randomly selected tile instead of all tiles
    */
   static OsmMapPtr _tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
     const std::vector<std::vector<long>>& nodeCounts,

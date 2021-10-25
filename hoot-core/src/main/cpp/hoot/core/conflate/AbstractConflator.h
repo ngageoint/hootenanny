@@ -73,7 +73,7 @@ public:
    * This method is likely only useful when testing.
    * @todo let's replace this with a friend dec in the class that needs to access the merger factory
    */
-  void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
+  //void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
   void setConflateScoreTagsFilter(const QStringList& filter);
 

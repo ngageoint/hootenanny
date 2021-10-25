@@ -142,8 +142,6 @@ public:
 
 protected:
 
-  // TODO: rename these input vars for clarity
-
   // path to the input with data being replaced; overrides use of _input1Map
   QString _input1;
   // cached data being replaced

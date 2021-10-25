@@ -44,8 +44,6 @@ namespace hoot
  *
  * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
  * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
- *
- * @todo implement OperationStatus
  */
 class ElementHashVisitor : public ElementOsmMapVisitor
 {

@@ -56,9 +56,7 @@ class MatchCreator;
  * is done this way rather than implementing a Singleton or using global static instances, since
  * conflate case tests are launched as multiple threads within the same process. Not using separate
  * instances of the cache which would result in a conflicted cache state if the cache was shared by
- * different threads (different elements with the same ID could have different info; @todo We may be
- * able to use thread_local storage for this purpose with static member vars and avoid using
- * separate instances).
+ * different threads (different elements with the same ID could have different info).
  *
  * The element property caches used within this class were determined on 9/30/18 running POI/Polygon
  * conflation against the regression test unifying-tests.child/somalia.child/somalia-test3.child and
@@ -73,6 +71,9 @@ class MatchCreator;
  *
  * WARNING: This class can get extremely memory hungry depending on how the cache size is
  * configured.
+ *
+ * @todo We may be able to use thread_local storage for this purpose with static member vars and
+ * avoid using separate instances
  */
 class ConflateInfoCache : public Configurable
 {

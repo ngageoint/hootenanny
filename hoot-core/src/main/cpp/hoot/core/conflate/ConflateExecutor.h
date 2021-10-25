@@ -84,8 +84,6 @@ private:
 
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
-  // TODO: its cleaner to create an AbstractConflator dynamically instead to handle both Diff and
-  // other types of conflate
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 

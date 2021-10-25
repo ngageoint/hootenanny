@@ -61,7 +61,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    *
-   * @todo implement EnvelopeProvider
+   * @todo implement EnvelopeProvider instead
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 

@@ -36,8 +36,6 @@ namespace hoot
 
 /**
  * Sets the status on elements
- *
- * @todo implement OperationStatus
  */
 class StatusUpdateVisitor : public ElementVisitor, public Configurable
 {

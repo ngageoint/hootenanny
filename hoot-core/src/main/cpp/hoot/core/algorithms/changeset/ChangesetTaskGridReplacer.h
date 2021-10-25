@@ -91,7 +91,6 @@ private:
 
   // data being replaced; must be osmapidb://
   QString _dataToReplaceUrl;
-  // TODO: get rid of this; hacky
   int _originalDataSize;
   // replacement data; must be hootapidb://
   QString _replacementUrl;
