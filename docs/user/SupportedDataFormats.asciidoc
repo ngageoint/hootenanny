@@ -59,7 +59,7 @@ box filter.
 * To use file geodatabases, the File Geodatabase module http://trac.osgeo.org/gdal/wiki/FileGDB[must be compiled into your version of GDAL to work].
 * A file geodatabase with files in a directory must have the top level directory named as *.gdb in order to be 
 recognized correctly.
-* A directory of shape files must have the top level directory named as *.shp in order to be recognized correctly.
+* A directory of shape files must have the top level directory named as `*.shp` in order to be recognized correctly.
 
 ===== Shape Files
 
@@ -86,7 +86,7 @@ The format of a Hootenanny API database URL is:
 hootapidb://<user name>:<password>@<host name>:<port>/<database name>/<database table>
 -----
 
-The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a 
+The Hootenanny API database format (`hootapidb://`) is a slightly optimized version of the OSM API database with a 
 different schema for use with conflation. The primary difference between the two is that the Hootenanny API database allows 
 for multiple feature layers with each one corresponding to a map stored in its own table. The public OSM API database 
 supports a single feature layer for the entire world. The Hootenanny API database format is meant for internal use 
@@ -94,7 +94,8 @@ by Hootenanny only.
 
 ==== OSM API Web Service
 
-Only changesets may be written to an OSM API Web Service (http://).
+Only changesets may be written to an OSM API Web Service (`http://`). The `changeset-derive` and 
+`changeset-apply` commands must be used.
 
 ==== Archive Files (Compressed or Uncompressed)
 

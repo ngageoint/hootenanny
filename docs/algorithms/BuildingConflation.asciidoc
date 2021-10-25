@@ -20,6 +20,6 @@ Obviously, combining n records into a single record requires that some attribute
 
 The approach described above generally provides good results. There is no getting around it, the approach will drop information during conflation in some situations. As new business rules are defined we expect to revisit the above attribute merging approach to create something that addresses specific user concerns and needs. Please create an issue at the https://github.com/ngageoint/hootenanny[Hootenanny GitHub page] if you have any specific needs or concerns that should be addressed.
 
-Building Conflation can further be customized with the building.* configuration options. See the "Configuration Options" section of User Guide 
+Building Conflation can further be customized with the `building.*` configuration options. See the "Configuration Options" section of User Guide 
 for more detail.
 

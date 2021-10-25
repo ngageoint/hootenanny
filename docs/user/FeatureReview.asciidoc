@@ -3,10 +3,9 @@
 === Feature Review
 
 During the conflation process if Hootenanny cannot determine with confidence the best way to
-conflate features, it will mark one or more features as needing a manual review by the user.  Below
-are listed the possible solutions where Hootenanny may request a manual review from a user.
+conflate features, it will mark one or more features as needing a manual review by the user.
 
-.*Feature Review Situations*
+.*Linear Feature Review Situations*
 [width="100%"]
 |======
 | *Needs Review Message* | *Possible Causes* | *Potential User Actions to Take*
@@ -16,4 +15,6 @@ are listed the possible solutions where Hootenanny may request a manual review f
 | Multiple overlapping way matches were found within one set of ways. | When attempting to conflate sublines from line inputs, multiple overlapping lines were found. | Review this feature manually, as it is too complex for Hootenanny to currently handle.
 | No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
 |======
+
+TODO: add review descriptions for other features types
 

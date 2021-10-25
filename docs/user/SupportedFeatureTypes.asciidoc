@@ -3,7 +3,7 @@
 
 ==== Roads
 
-<<hootuser, RoadConflation>>
+Hootenanny can conflate roads. See this for more information: <<hootuser, RoadConflation>>
 
 ===== Road Conflation Algorithms
 
@@ -17,8 +17,12 @@
 
 ===== Configuration
 
-Road Conflation can further be customized with the highway.* configuration options. See the "Configuration Options" section of User Guide
-for more detail.
+Road Conflation can further be customized with the `highway.*` configuration options. See the "Configuration Options" section of User Guide for more detail.
+
+[[Building-Conflation]]
+==== Buildings
+
+Hootenanny can conflate buildings. See this for more information: <<hootuser, BuildingConflation>>
 
 [[PoiToPoi]]
 ==== POIs
@@ -43,22 +47,16 @@ configuration options:
 
 For background on leveraging the Hootenanny JavaScript interface to call functions using Node.js, see <<HootJavaScriptOverview>>.
 
-[[Building-Conflation]]
-==== Buildings
-
-<<hootuser, BuildingConflation>>
-
 [[PoiToPolygonConflation]]
 ==== POI to Polygon
 
-Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
-the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
-<<hootuser, PoiToPolygonConflationAlgs>> for specific algorithm details.
+Hootenanny conflates POIs with both building and area polygons.  It uses the several criteria for 
+matching features. See <<hootuser, PoiToPolygonConflationAlgs>> for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ===== Configurable Options
 
-POI to Polygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of
+POI to Polygon Conflation can further be customized with the `poi.polygon.*` configuration options. See the "Configuration Options" section of
 User Guide for more detail.
 
 [[PoiToPolygonStatistics]]
@@ -84,10 +82,10 @@ If the following are true, you may want to tweak POI to Polygon conflation to ke
 
 In this situation you could run with the following option set:
 
-poi.polygon.keep.closest.matches.only=true - When a feature is matched to more than one other features, only the match with smallest distance between features is kept, despite the search radius
-poi.polygon.additional.search.distance=0 - This reduces the overall search radius, thus reducing reviews (possible also matches) and increasing
+`poi.polygon.keep.closest.matches.only=true` - When a feature is matched to more than one other features, only the match with smallest distance between features is kept, despite the search radius
+`poi.polygon.additional.search.distance=0` - This reduces the overall search radius, thus reducing reviews (possible also matches) and increasing
 runtime performance.
-poi.polygon.match.threshold=1 - This will prevent reviews from being presented completely.
+`poi.polygon.match.threshold=1` - This will prevent reviews from being presented completely.
 
 [[AreaToAreaConflation]]
 ==== Areas
