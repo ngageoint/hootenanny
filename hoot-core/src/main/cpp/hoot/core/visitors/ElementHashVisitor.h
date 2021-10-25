@@ -117,7 +117,7 @@ private:
   bool _collectHashes;
 
   // collected hash values mapped to element IDs
-  QMap<QString, ElementId> _hashesToElementIds; // TODO: make this QHash?
+  QMap<QString, ElementId> _hashesToElementIds;
   // collected element IDs mapped to hash values
   QMap<ElementId, QString> _elementIdsToHashes;
   // pairings of all duplicate elements found

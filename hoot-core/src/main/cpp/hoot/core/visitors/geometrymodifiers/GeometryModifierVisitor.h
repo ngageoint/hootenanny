@@ -53,7 +53,7 @@ public:
   GeometryModifierVisitor() = default;
   ~GeometryModifierVisitor() override = default;
 
-  // TODO: implement OsmMapConsumer
+  // TODO: implement OsmMapConsumer instead
   void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
   static QString className() { return "GeometryModifierVisitor"; }

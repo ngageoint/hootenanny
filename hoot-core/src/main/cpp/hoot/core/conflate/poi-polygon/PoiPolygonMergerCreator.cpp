@@ -292,7 +292,6 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
         {
           if (_allowCrossConflationMerging)
           {
-            // TODO: Do we need to handle Area Conflation here too?
             const bool oneIsPoiPolyMatch =
               m1->toString().contains("PoiPolygonMatch") ||
               m2->toString().contains("PoiPolygonMatch");

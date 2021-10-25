@@ -106,8 +106,8 @@ void MatchConflicts::calculateMatchConflicts(
     eidToMatchCount++;
     if (eidToMatchCount % 10 == 0)
     {
-      // TODO: would like this to be status, but it logs a separate line for each statement
-      // for some reason unfortunately.
+      // Would like this to be status, but it logs a separate line for each statement for some
+      // reason unfortunately.
       PROGRESS_INFO(
         "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " of " <<
         StringUtils::formatLargeNumber(eidToMatches.size()) << " elements. Found " <<

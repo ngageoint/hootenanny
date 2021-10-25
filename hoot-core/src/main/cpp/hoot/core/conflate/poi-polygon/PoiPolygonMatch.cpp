@@ -449,7 +449,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
-      // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText =
         "Match score automatically dropped by review reduction rule: " +
         reviewReducer.getTriggeredRuleDescription();
@@ -490,7 +489,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
     if (_explainText.isEmpty())
     {
-      // TODO: move this somewhere else?...or start values out at 0.0?
       if (_typeScore < 0.0)
       {
         _typeScore = 0.0;
