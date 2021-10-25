@@ -38,10 +38,11 @@ class ElementAttributeType;
 
 /**
  * Sets one or more element properties stored in XML attributes to an empty value, which will cause
- * them to be dropped when written to file output.  Only common OSM attributes may be removed
- * (see ElementAttributeType).  For some attributes to be removed in output (e.g. version,
- * timestamp) an additional setting may have to be set to break OSM compatibility
- * (e.g. see OsmXmlWriter::_includeCompatibilityTags).
+ * them to be dropped when written to file output.
+ *
+ * Only common OSM attributes may be removed (see ElementAttributeType).  For some attributes to be
+ * removed in output (e.g. version, timestamp) an additional setting may have to be set to break OSM
+ * compatibility (e.g. see OsmXmlWriter::_includeCompatibilityTags).
  */
 class RemoveAttributesVisitor : public ElementVisitor, public Configurable
 {
@@ -50,13 +51,30 @@ public:
 
   static QString className() { return "RemoveAttributesVisitor"; }
 
+  /**
+   * @brief RemoveAttributesVisitor - Constructor
+   */
   RemoveAttributesVisitor();
+  /**
+   * @brief RemoveAttributesVisitor - Constructor
+   * @param types the types of attributes to remove as strings
+   */
   explicit RemoveAttributesVisitor(const QStringList types);
+  /**
+   * @brief RemoveAttributesVisitor - Constructor
+   * @param types the types of attributes to remove as enumeration values
+   */
   explicit RemoveAttributesVisitor(const QList<ElementAttributeType>& types);
   ~RemoveAttributesVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings &conf) override;
 
   QString getDescription() const override

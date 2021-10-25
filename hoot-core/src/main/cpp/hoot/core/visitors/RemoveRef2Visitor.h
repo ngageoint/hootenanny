@@ -64,6 +64,9 @@ public:
   void setOsmMap(OsmMap* map) override;
   void setOsmMap(const OsmMap* /*map*/) override { assert(false); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;

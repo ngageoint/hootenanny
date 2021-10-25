@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The LongestTagVisitor class finds the largest tag value string in a map.
+ */
 class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
@@ -43,11 +46,18 @@ public:
   LongestTagVisitor();
   ~LongestTagVisitor() override = default;
 
+  /**
+   * @see SingleStatistic
+   */
   double getStat() const override { return _longestTag; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
-  QString getDescription() const override { return "Identifies the tag with the largest text size"; }
+  QString getDescription() const override
+  { return "Identifies the tag with the largest text size"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 

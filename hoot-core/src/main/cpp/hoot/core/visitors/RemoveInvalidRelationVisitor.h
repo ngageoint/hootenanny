@@ -53,6 +53,9 @@ public:
   RemoveInvalidRelationVisitor();
   ~RemoveInvalidRelationVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override

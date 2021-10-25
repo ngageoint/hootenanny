@@ -41,6 +41,10 @@ class Feature;
 class ScriptSchemaTranslator;
 class Schema;
 
+/**
+ * @brief The SchemaTranslatedTagCountVisitor class counts tags that can be translated with the
+ * configured schema.
+ */
 class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
@@ -56,6 +60,9 @@ public:
 
   void setOsmMap(const OsmMap* map) override { _map = map; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override

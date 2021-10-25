@@ -44,6 +44,9 @@ public:
 
   ~RemoveUnknownVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getCompletedStatusMessage() const override

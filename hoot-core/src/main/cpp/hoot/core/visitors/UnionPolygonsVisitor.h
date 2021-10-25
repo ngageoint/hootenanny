@@ -53,6 +53,9 @@ public:
 
   const std::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   QString getInitStatusMessage() const override
