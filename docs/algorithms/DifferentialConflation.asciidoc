@@ -1,7 +1,7 @@
 
 
 [[DifferentialConflation]]
-=== Differential Conflation
+==== Differential Conflation
 
 Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but 
 attempts a much simpler operation than "full" conflation. The idea is to allow a user to take two 

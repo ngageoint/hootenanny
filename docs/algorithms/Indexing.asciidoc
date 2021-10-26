@@ -3,3 +3,105 @@
 
 Hootenanny performs many filters such as "return all roads within 1km of road x". With large data sets, this can be quite costly. Hootenanny maintains a custom in-memory Hilbert R-Tree (I Kamel, 1993) of the location of both the ways and nodes. This dramatically improves performance on large data sets.
 
+[[fq-tree]]
+==== FQ-Tree/R-Tree Hybrid
+
+The PLACES POI conflation routine depends heavily on two predicates: "Are the
+names similar enough?" and "Are the two points close enough?". Given an input
+location efficiently finding all the nearby points is efficient and well studied
+using an R-Tree <<guttman1984>>, but locating all points within a specified
+distance that also have a specified string similarity becomes more complex.
+
+The FQ-Tree (fixed queries trees) <<baeza1994>> provides an efficient mechanism
+for identifying strings that are similar as long as the string distance function
+satisfies the triangle inequality. Fortunately, the string distance method used
+by PLACES (Levenshtein score) satisfies the triangle inequality. This makes the
+FQ-Tree suitable for indexing and querying out strings based on similarity.
+
+Unfortunately, used without modification you can either get the benefits of the
+R-Tree or the FQ-Tree, but not both at the same time. The following sections
+describe how the two indexes are combined to perform more efficient queries
+over POI data.
+
+===== Short Review
+
+The internals of the R-Tree and FQ-Tree are beyond the scope of this document,
+but the basic principal behind an R-Tree is that the data is broken up into
+different rectangular regions. These regions may or may not be overlapping. Each
+region represents a child node in the tree and is built recursively. To query
+the R-Tree the tree is traversed from the root down and only children that
+represent regions of interest are traversed. Hootenanny uses a derivative of the
+R-Tree called a Hilbert R-Tree. <<kamel1993>> This provides very fast build
+times and better query performance than the R-Tree.
+
+In an FQ-Tree each level in the tree breaks children out based on the distance
+from a key for that level. The key for a given level is determined randomly and
+the distance to the key from each element is calculated. The distance value
+determines the child node that a specific element will fall into. Using this
+method the tree is built recursively. To query all elements within distance X of
+a specific string all child nodes that meet the distance criteria are searched
+recursively until the set of matching children are found.
+
+===== A Hybrid Tree
+
+For POI conflation we need a tree that can answer both the string similarity and
+spatial queries. To accomplish this we simply alternate the type of tree at each
+level in the tree. For instance, the root of the tree may use R-Tree mechanics
+to assign bounding boxes to children. The second level in the tree may then use
+FQ-Tree mechanics to assign string similarity scores to divide the children.
+
+Using this approach we can now query for all POIs with a string distance < 3 to
+"Albuquerque" and within 10km of 35°06'39"N 106°36'36"W. A short example is
+provided below:
+
+1. At the root level determine which of the R-Tree bounding boxes intersect a
+   10km circle over 35°06'39"N 106°36'36"W. Recursively traverse those bounding
+   boxes.
+2. The second level contains FQ-Tree nodes, determine which of these nodes is
+   within a Levenshtein distance of 3 of "Albuquerque". Recursively traverse
+   those children.
+3. Continue on alternating between tree mechanisms until all the matching
+   children have been determined.
+
+The approach listed above works well, but spatial filters are more relevant at
+the root of the tree and string filters are more relevant toward the leaves of
+the tree. The following tunable parameters are exposed for improving
+performance:
+
+* bucketSize - The max number of data elements stored at a leaf node.
+* rChildCount - The max number of child nodes a RNode has.
+* rDepth - The depth that the RNodes will be populated.
+* fqDepth - The maximum depth that the FqNodes will be populated. fqDepth must
+  always be >= rDepth.
+
+When the levels are less than both rDepth and fqDepth the two tree types
+alternate between levels.
+
+This is a large number of tunable parameters and while the structure appears to
+be resilient to a wide range of parameters a little tweaking can go a long way.
+To determine the most efficient structure we employed simulated annealing and
+benchmarking to determine a structure that performs well using node only data
+set with 95k nodes and about 800k names (multiple names per node). The following
+default parameters were determined:
+
+* bucketSize = 1
+* rChildCount = 10
+* rDepth = 5
+* fqDepth = 27
+
+===== Results
+
+Using this approach provides about a 50 fold improvement in performance over a
+R-Tree alone. For our test region is provides an even more dramatic improvement
+over the FQ-Tree.
+
+===== Future Work
+
+* Investigate using Sort Tile Recursive (STR) for packing the R-Tree.
+  <<leutenegger1997>>
+* Investigate specifying a minimum level for the FQ-Tree as well as a maximum.
+  The FQ-Tree information is likely not as valuable as the bounding boxes at the
+  root of the tree.
+* Investigate using a spatial join rather than one query against the tree at a
+  time. <<brinkhoff1993>> or similar.
+  
