@@ -32,7 +32,6 @@ Configure.pri
 DbSchema.sql
 .deps/
 docs/*.epub
-docs/*.pdf
 docs/*-docinfo.xml
 docs/**/__*.png
 docs/.*

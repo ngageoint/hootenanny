@@ -9,6 +9,7 @@ The Element Translation Service:
 
 ===== API
 
+-----
 ___
 ## GET /version
 
@@ -311,4 +312,4 @@ ___
 ]
 ```
 ___
-
+-----

@@ -1,5 +1,5 @@
 
-=== Using Validation Checks to Improve Conflated Maps
+=== Validation Checks
 
 It is quite easy to produce conflated map output that initially seems accurate but upon further 
 examination has quality issues. https://josm.openstreetmap.de/[JOSM] has an extensive collection of 

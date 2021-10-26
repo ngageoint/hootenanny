@@ -1,6 +1,10 @@
 
 === Supported Feature Types
 
+This section describes the feature types Hootenanny can conflate. For more detailed information on
+each conflatable feature type, see the "Conflatable Feature Types" section in the Algorithms 
+documentation.
+
 ==== Roads
 
 Hootenanny can conflate roads. See this for more information: <<hootuser, RoadConflation>>

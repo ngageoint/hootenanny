@@ -80,7 +80,8 @@ macro.
 section headers are at appropriate levels in the hierarchy and that newlines have been placed in 
 appropriate places for the table of contents to format properly. If you've made changes to the 
 schema, you'll also need to manually re-generate the schema documentation (see the "Core Schema" 
-section under the "Documentation" section in the Developer Guide).
+section under the "Documentation" section in the Developer Guide). Make sure all generated 
+documentation files under source control have been committed as part of your changes.
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.

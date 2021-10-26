@@ -1,5 +1,5 @@
 
-=== Conflating a New Feature Type With Script Conflation
+=== Script Conflation Feature Type Support
 
 This document discusses in detail some of the processes involved with using generic conflation to
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for

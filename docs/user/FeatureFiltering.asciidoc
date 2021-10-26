@@ -1,6 +1,6 @@
 
 [[FeatureFiltering]]
-=== Feature Filtering During Conflation
+=== Feature Filtering
 
 Feature filtering is supported during conflation in order to allow for conflating a subset of the input features. 
 Feature filtering happens in two ways: 1) at the geometry/base feature type level and 2) and more granularly at the 

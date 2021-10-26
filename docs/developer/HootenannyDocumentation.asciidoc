@@ -6,6 +6,10 @@ guidelines are described below. Feature documentation is done with
 (https://asciidoc-py.github.io/)[AsciiDoc] (what you're reading now). In addition,
  (https://github.com/ngageoint/hootenanny/blob/master/README.md)[the main README file] contains a 
  documentation summary and will need to be updated from time to time.
+ 
+Documentation is checked into source control to allow for linking to it from the main README page. 
+Any time you make documentation changes, you must check the generated documentation files in as 
+well as the documentation source files.
 
 ==== Generating
 

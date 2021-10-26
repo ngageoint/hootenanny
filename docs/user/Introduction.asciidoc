@@ -1,39 +1,9 @@
 
-[[Introduction]]
-=== Detail Summary
-
-https://github.com/ngageoint/hootenanny/blob/master/docs/user/SummaryDetail.asciidoc[Detail Summary]
-
-=== Conflation Background
-
-[quote,Seth and Samal,Encyclopedia of GIS]
-_____
-In GIS, conflation is defined as the process of combining geographic information
-from overlapping sources so as to retain accurate data, minimize redundancy, and
-reconcile data conflicts.
-_____
-
-Check out the quick Hootenanny overview http://github.com/ngageoint/hootenanny#readme[here]. Also, 
-there is a brief (https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)[FAQ].
-
-Conflation within GIS can generally be grouped into several high level
-categories:
-
-* Vector to Vector (V2V) - Merges two vector data sets into a single output vector
-  data set.
-* Vector to Image (V2I) - Snaps a vector data set to an image and possibly performs
-  feature extraction.
-* Image to Vector (I2V) - Warps an image to a vector data set.
-* Image to Image (I2I) - Aligns two images.
-
-.Simple V2V Conflation
-image::images/SimpleConflation.png[]
+=== Conflation Workflow
 
 Hootenanny deals exclusively with vector to vector conflation. The following
 sections discuss when Hootenanny is an appropriate tool for conflation and
 general guidance in determining what strategy to employ when using Hootenanny.
-
-=== Conflation Workflow
 
 Hootenanny is a tool to help the user work through a conflation problem.
 Many aspects of the conflation workflow are automated or semi-automated to help
