@@ -25,49 +25,49 @@ Goals:
 
 For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md).
 
-[Latest Documentation](https://github.com/ngageoint/hootenanny/tree/master/docs/HootenannyUserGuide.pdf) (Also available as: part of the releast as `HootenannyUserGuide.pdf`, located in the `.tar.gz` installation file under the "docs" directory)
+[Latest Documentation](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf) (Also available as: part of the release as `HootenannyUserGuide.pdf`, located in the `.tar.gz` installation file under the "docs" directory)
 
 # Conflatable Feature Types
 
 Hootenanny has specifically tailored conflation algorithms available for the following data types:
-* Areas
-* Buildings
-* Points of Interest (POIs)
-* Power Lines
-* Railways
-* Rivers
-* Roads
+* [Areas](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#areas)
+* [Buildings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#buildings)
+* [Points of Interest (POIs)](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#pois)
+* [Power Lines](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#power-lines)
+* [Railways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#railways)
+* [Rivers](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#rivers)
+* [Roads](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#roads)
 
 Any feature whose type does not fit into the list above or has no type at all, will be conflated with 
-[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#generic-geometry), which uses a simpler approach than the type specific conflation algorithms.
+[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedFeatureTypes.asciidoc#generic-geometry-features), which uses a simpler approach than the type specific conflation algorithms.
 
 You can create your own custom conflation algorithms for additional feature types via [Javascript](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) or [C++](https://github.com/ngageoint/hootenanny/blob/master/hoot-core/src/main/cpp/hoot/core/conflate/matching/MatchCreator.h). 
 
-# [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/overview/Introduction.asciidoc) Workflows
+# [Conflation Workflows](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#conflation-workflows) 
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/overview/Introduction.asciidoc#conflation-strategies)** (**default**; aka Vertical Conflation) - _Keep the best of both maps while favoring the first_
+* **Reference Conflation** (**default**; aka Vertical Conflation) - _Keep the best of both maps while favoring the first_
   * Use this type of conflation when you want map output based on the best state of two maps while favoring the first one.
-* **[Average Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/overview/Introduction.asciidoc#average-conflation)** - _Keep an average of both maps_ 
+* **Average Conflation** - _Keep an average of both maps_ 
   * Use this type of conflation when you consider both input maps equal in quality and want a result that is an average of the two.
   * Currently, geometry averaging only applies to linear features but could be extended to point and polygon geometries. Point and polygon geometries are merged the same as in Reference Conflation. 
   * Average Conflation is currently not available from iD Editor.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/overview/Introduction.asciidoc#horizontal-conflation)** (aka Cookie Cutter Conflation) - _Completely replace a section_
+* **Horizontal Conflation** (aka Cookie Cutter Conflation) - _Completely replace a section_
   * Use this type of conflation if you have a specific region of your map that you would like to completely replace with a region from another map.
-* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features that do not conflict_
+* **Differential Conflation** - _Add new features that do not conflict_
   * Use this type of conflation when you want to fill holes in your map with data from another source without actually modifying any of the data in your map.
   * There is an option available (`--include-tags`) to additionally transfer tags to existing features in your map from matching features in another map where overlap occurs.
-* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
+* **Attribute Conflation** - _Transfer attributes over to existing geometries_
   * Use this type of conflation when one map's geometry is superior to that of a second map, but the attributes of the second map are superior to that of the first map.
   
-# [Attribute Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#translation)
+# [Attribute Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Translation.asciidoc)
 
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports the following schemas: 
 * Topographic Data Store (TDS) 
 * Multi-National Geospatial Co-Production Program (MGCP)
 * Geonames
 * OSM 
-* [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
+* [others](https://github.com/ngageoint/hootenanny/blob/master/translations)
 
 Users can define their own [custom schema translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
 
@@ -94,15 +94,12 @@ Although Hootenanny is configured by default to provide the best conflation resu
 
 # Web User Interface
 
-[Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
+[Hootenanny's web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
 
 # Web Services API
 
-Access to Hootenanny core capabilities are exposed through a 
-[web services API](https://github.com/ngageoint/hootenanny/tree/master/hoot-services/src/main/java/hoot/services/controllers) for those 
-wishing to develop their own conflation clients. The web services use 
-[OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
+Access to Hootenanny capabilities are exposed through a web services API for those wishing to develop their own conflation clients. The web services use [OAuth](https://github.com/ngageoint/hootenanny/blob/master/developer/HootenannySecurity.asciidoc) authentication.
 
 # [Command Line Interface](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc)
 
