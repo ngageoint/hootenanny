@@ -11,6 +11,9 @@ Documentation is checked into source control to allow for linking to it from the
 Any time you make documentation changes, you must check the generated documentation files in as 
 well as the documentation source files.
 
+NOTE: The documentation version for the file checked into source control won't match that created 
+during the release process. Some extra work will need to be done to make that happen.
+
 ==== Generating
 
 The AsciiDoc documentation is shared by all aspects of Hootenanny. Run either `make archive` or 

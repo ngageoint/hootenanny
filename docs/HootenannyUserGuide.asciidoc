@@ -37,7 +37,6 @@ include::algorithms/DataCleanup.asciidoc[]
 include::algorithms/UnifyingConflation.asciidoc[]
 include::algorithms/ScriptConflation.asciidoc[]
 include::algorithms/AlgorithmsWorkflowsHeader.asciidoc[]
-// TODO: add ref, horiz, average sections
 include::algorithms/DifferentialConflation.asciidoc[]
 include::algorithms/AttributeConflation.asciidoc[]
 include::algorithms/AlgorithmsFeatureTypesHeader.asciidoc[]

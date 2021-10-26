@@ -25,8 +25,7 @@ Goals:
 
 For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md).
 
-[Current Release Documentation](https://github.com/ngageoint/hootenanny/tree/master/docs/HootenannyUserGuide.pdf) (Also available as: `HootenannyUserGuide.pdf`, located in the `.tar.gz` installation 
-file under the "docs" directory)
+[Latest Documentation](https://github.com/ngageoint/hootenanny/tree/master/docs/HootenannyUserGuide.pdf) (Also available as: part of the releast as `HootenannyUserGuide.pdf`, located in the `.tar.gz` installation file under the "docs" directory)
 
 # Conflatable Feature Types
 

@@ -7,7 +7,7 @@ The Element Translation Service:
 * Provides available key/value information for translated schemas by feature type. (_a la_ taginfo).
 * Provides a search service for translated feature types.
 
-===== API
+==== API
 
 -----
 ___
@@ -313,3 +313,4 @@ ___
 ```
 ___
 -----
+

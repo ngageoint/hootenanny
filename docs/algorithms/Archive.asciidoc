@@ -1,18 +1,18 @@
 
 [[Archive]]
-==== Archive
+=== Archive
 
 This section archives documentation that no longer applies to the current state of the software for 
 historical reasons.
 
-===== Greedy Conflation Algorithm
+==== Greedy Conflation Algorithm
 
 NOTE: This documentation is part of the original Hootenanny implementation employing the Greedy 
 Conflation Algorithm for roads which is no longer in use.
 
 Conflation is loosely broken into two parts: feature matching and feature transformation (Linna Li, 2011). Feature matching refers to identifying features in two datasets that refer to the same entity in reality. Feature transformation refers to the manipulation of two matched features into a new, better feature. Each feature transformation has the potential to impact the list of remaining matches. In the following sections, we will present the "greedy" approach we use to search for a solution as well as the feature matching and transformation operations supported.
 
-*_Searching for a Better Map_*
+===== Searching for a Better Map
 
 The conflation process adopted by Hootenanny is to first identify all possible feature matches and assign a score from zero to one to each match. Higher scores are better. For every match there is a corresponding transformation that can be applied. The match/transformation combination is referred to as a manipulation. Hootenanny then uses a greedy search to apply the manipulations to the map until there are no longer any manipulations with a score above a set threshold.
 
@@ -40,12 +40,12 @@ image::images/image028.png[]
 
 Now that ways c-d and v-x have been replaced by way m-n, all manipulations involving either ways c-d or v-x are no longer relevant and can be dropped from the conflation list. The remaining red and green lines are considered to be unique to their respective datasets and are carried through to the final result.
 
-*_Manipulations_*
+===== Manipulations
 
 In the previous section, we explained how manipulations are applied during the conflation process. In this section, we describe the supported manipulations and how they are calculated. Hootenanny is designed in such a way that manipulations are not specific to roads. It would be trivial to expand on this concept to include other feature types such as buildings, points of interest and railroads. Ideas for additional manipulations can be found in <<ExplAdditionalManipulations>>.
 
 [[ExplManipulationsMergeWays]]
-*_Merge Ways_*
+===== Merge Ways
 
 By far the most frequently used manipulation with roads is merging two ways. The merge ways manipulation uses the similarity measures defined in <<ExplSimilarityMeasure>> to assign scores. When a match is applied, the attributes are merged using the process described in <<ExplAttributeScore>>. The geometries are merged by averaging the ways.  To average ways the following process is used:
 
@@ -53,12 +53,12 @@ By far the most frequently used manipulation with roads is merging two ways. The
 2. Assign a weight to each way based on accuracy
 3. Return the weighted average of the two geometries
 
-*_Remove Dangling Way_*
+===== Remove Dangling Way
 
 Sometimes small ways exist that do not actually connect any portion of the network as a result of previous MNS calculations or simply from poorly entered data. This pragmatic manipulation removes very short ways that do not connect two ways together. This manipulation does not have a significant impact on scoring but does impact aesthetics.
 
 [[ExplFourPassConflation]]
-===== Four Pass Conflation
+==== Four Pass Conflation
 
 NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been
 left here for references purposes only.
@@ -67,7 +67,7 @@ All Hootenanny desktop conflation operations assume that the operation can be co
 
 The following sections describe the process flow and a summary of each operation. It is assumed that the reader has a working knowledge of distributed systems and Hadoop. For specific details on how to execute these operations as well as software and hardware requirements, please reference the _Hootenanny User Documentation_ .
 
-*_Process Flow_*
+===== Process Flow
 
 Before processing can begin, both inputs must be translated and encoded as `.osm.pbf` files using the translation mechanisms described in previous sections. In the case of OpenStreetMap, an entire `.osm.pbf` planet file can be downloaded directly from http://www.openstreetmap.org[OpenStreetMap] without any modifications. Once translation has been completed, the files may be uploaded into HDFS using utilities provided with the Hadoop distribution. On completion, Hootenanny provides a utility to combine output Hadoop files into a single `.osm.pbf` file that can be used by any number of OSM utilities to import the data into PostGIS or another convenient geospatial format.
 1km
@@ -78,7 +78,7 @@ Before processing can begin, both inputs must be translated and encoded as `.osm
 
 image::images/image047.png[]
 
-*_File Format_*
+===== File Format
 
 The `.osm.pbf` file format (OpenStreetMap) is a binary format based on Google Protocol Buffers (Google Inc.). This format is a standard OpenStreetMap interchange format that combines efficient storage of data through delta encoding and table lookups and further compresses the data using zlib. The file is broken into independent "blobs" that are generally less than 16MB in size.
 
@@ -91,7 +91,7 @@ Hadoop generally breaks large files into blocks of 64MB for storage. Each of the
 
 In most Hadoop jobs, intermediate OSM primitives (ways and nodes) must be emitted between the map and reduce tasks. For these intermediate values, a modified `.osm.pbf` format is used to reduce the size of records that are shuffled.
 
-*_Join Ways to Nodes_*
+===== Join Ways to Nodes
 
 The focus of this operation is three fold:
 	1. Generate a bounding box for the way
@@ -103,12 +103,12 @@ The +.osm.pbf+ file stores nodes and ways independently. For this reason, ways m
 The final output is a directory full of `.osm.pbf` blobs, where all primitives are re-numbered, ways have been broken into sections smaller than ~1km, and bounding boxes have been assigned to all ways.
 
 [[ExplPaintTileDensity]]
-*_Paint Tile Density_*
+===== Paint Tile Density
 
 The density of nodes for both inputs will be used when determining tile boundaries. Calculating the node density is one of the fastest Hadoop operations and simply requires mapping each node in the input to an output pixel during the map stage, then summing the output pixels in the reduce stage. To improve efficiency, a hash map of pixels and counts is maintained in the map stage. The final output is a matrix of node counts in each pixel. The size of a pixel is tunable, but through experimentation 0.01 degree pixel size seems to be optimal. This provides for a large number of tiles that do not exceed the 2GB RAM task limit.
 
 [[ExplDeterminingTileBounds]]
-*_Determining Tile Bounds_*
+===== Determining Tile Bounds
 
 Tile boundaries are calculated such that the data is divided into approximately four equally sized portions at each stage while minimizing boundary overlap with complex regions. An approach similar to the building of a KD-Tree is used (Bentley, 1975). Because our input data sets are much larger than can be fit into RAM, we approximate this solution by first using Hadoop to create a raster that counts the number of nodes in each pixel (see <<ExplPaintTileDensity>>). The raster is then loaded into RAM and used for calculating all split points as below:
 
@@ -121,7 +121,7 @@ Through experimentation, we have found that 10e^6^ is a good number of max nodes
 
 Depending on the size of the input data, there may be scenarios where the data is too large to fit within a tile and a max node count of 10e^6^. If this is the case, either the pixel size must decreased or the amount of RAM available to each task in Hadoop increased. See <<ExplImproveDistrTiling>> for potential improvements.
 
-*_Conflation_*
+===== Conflation
 
 Four-pass conflation is a process to create seamless conflated data over arbitrarily large data sets. It is assumed that very large objects such as long roads and country boundaries can be broken into small pieces. As long as this assumption is valid, we hypothesize that this approach will work with all common geometry types.
 
@@ -145,15 +145,15 @@ There are several steps involved in four pass conflation:
 
 The output of this operation is a directory filled with conflated `.osm.pbf` blobs.
 
-*_Export_*
+===== Export
 
 The final output file is created by concatenating the output of the four-pass conflation and prepending an appropriate header. This output file can be used directly within many common OSM tools or ingested into PostGIS for use with common GIS tools.
 
-*_Impact of Tiling on Output_*
+===== Impact of Tiling on Output
 
 Initial experimentation with tiling on small data sets does not show a significant difference in the output with a sufficiently large overlap between tiles. Experimentation is required to determine the optimal value, but values as low as a kilometer give visually reasonable results. Very small values, such as 10 meters, show artifacts in the conflation process. More experimentation is necessary to quantify the impacts on the conflation output.
 
-*_Performance_*
+===== Performance
 
 The following table gives rough benchmarks for conflation:
 
@@ -170,7 +170,7 @@ The _Local Test_ was run between internal data and OSM data for Iraq. While the 
 The _Global Test_ was run between the OSM planet file and approximately six countries of internal data. The low execution time of 15 hours makes the execution of conflation on this scale feasible for weekly or even nightly conflation runs as data evolves and improves. A visual inspection shows results similar to the results found in the smaller test scenarios discussed previously.
 
 [[fq-tree]]
-===== FQ-Tree/R-Tree Hybrid
+==== FQ-Tree/R-Tree Hybrid
 
 The PLACES POI conflation routine (former Hootenanny POI conflation algorithm) depends heavily on two predicates: "Are the
 names similar enough?" and "Are the two points close enough?". Given an input
@@ -189,7 +189,7 @@ R-Tree or the FQ-Tree, but not both at the same time. The following sections
 describe how the two indexes are combined to perform more efficient queries
 over POI data.
 
-*_Short Review_*
+===== Short Review
 
 The internals of the R-Tree and FQ-Tree are beyond the scope of this document,
 but the basic principal behind an R-Tree is that the data is broken up into
@@ -208,7 +208,7 @@ method the tree is built recursively. To query all elements within distance X of
 a specific string all child nodes that meet the distance criteria are searched
 recursively until the set of matching children are found.
 
-*_A Hybrid Tree_*
+===== A Hybrid Tree
 
 For POI conflation we need a tree that can answer both the string similarity and
 spatial queries. To accomplish this we simply alternate the type of tree at each
@@ -255,13 +255,13 @@ default parameters were determined:
 * rDepth = 5
 * fqDepth = 27
 
-*_Results_*
+===== Results
 
 Using this approach provides about a 50 fold improvement in performance over a
 R-Tree alone. For our test region is provides an even more dramatic improvement
 over the FQ-Tree.
 
-*_Future Work_*
+===== Future Work
 
 * Investigate using Sort Tile Recursive (STR) for packing the R-Tree.
   <<leutenegger1997>>
