@@ -170,6 +170,7 @@ test-files/cases/**/validated-output-report
 test-files/cases/**/Output-validated.osm
 .bundle/
 vendor/
+docs/package-lock.json
 
 ###### hoot-services ignores
 hoot-services/.idea

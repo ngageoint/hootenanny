@@ -12,8 +12,8 @@ as 90-95% in the future.
 ===== Feature Definitions
 
 Area Conflation defines an area as non-building linear or polygonal feature whose tags support the 
-definitions of an area used by OpenStreetMap. Buildings are excluded in order to prevent match 
-overlap with Building Conflation.
+definitions of an area used by OpenStreetMap (`area=yes`). Buildings are excluded in order to 
+prevent match overlap with Building Conflation. Examples: parks, parking lots.
 
 ===== Matching
 

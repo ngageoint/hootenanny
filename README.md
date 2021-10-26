@@ -41,8 +41,6 @@ Hootenanny has specifically tailored conflation algorithms available for the fol
 Any feature whose type does not fit into the list above or has no type at all, will be conflated with 
 [Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#generic-geometry), which uses a simpler approach than the type specific conflation algorithms.
 
-[Feature Types Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#supported-feature-types)
-
 You can create your own custom conflation algorithms for additional feature types via [Javascript](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) or [C++](https://github.com/ngageoint/hootenanny/blob/master/hoot-core/src/main/cpp/hoot/core/conflate/matching/MatchCreator.h). 
 
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/overview/Introduction.asciidoc) Workflows
@@ -61,8 +59,6 @@ A conflation workflow defines the manner in which two maps are merged together. 
   * There is an option available (`--include-tags`) to additionally transfer tags to existing features in your map from matching features in another map where overlap occurs.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
   * Use this type of conflation when one map's geometry is superior to that of a second map, but the attributes of the second map are superior to that of the first map.
-  
-[Conflation Algorithms Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
   
 # [Attribute Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#translation)
 
@@ -84,11 +80,11 @@ Some examples:
 * [Conflate only restaurant buildings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings)
 * [Conflate only restaurant buildings with "Subway" in the name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings-with-subway-in-the-name)
 
-Hootenanny has several [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that may be used to perform feature filtering during conflation.
+Hootenanny has several [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that may be used to perform additional types of feature filtering during conflation.
 
 # [Feature Validation and Cleaning](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc)
 
-Hootenanny has limited data validation reporting of its own, and JOSM validation routines may also be invoked via Hootenanny during batch processing of data.
+Hootenanny has limited data validation reporting of its own, but JOSM validation routines may be invoked via Hootenanny during batch processing of data.
 
 Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. Some of them are invoked automatically during a conflation job, however, you may also [run them separately](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc). In addition to its own built-in cleaning operations, Hootenanny is also integrated with the auto-fix capabilities of [JOSM](https://josm.openstreetmap.de/). 
 
