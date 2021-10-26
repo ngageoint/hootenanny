@@ -118,7 +118,7 @@ Levenshtein distance (VI, 1966) to measure the closeness of feature names, then
 merging these similarities into the scores that characterize the geometric
 similarities.
 
-=== Use Cases
+=== Conflation Use Cases
 
 The following use cases highlight where automated conflation can improve
 efficiency and reduce cost.
@@ -160,7 +160,7 @@ conflation tool to conflate internal NGA data with OSM could be performed
 periodically over global data sets. This approach would begin to enable a
 recurrent temporal correction to NGA data.
 
-=== Need For A Conflation Tool
+=== Hootenanny Background
 
 Fast forward to 2012, more than 25 years after the Saalfeld quote, and automatically conflated data 
 sets were still not common place, with analysts routinely required to apply one-off manual techniques to
@@ -170,8 +170,6 @@ an inordinate amount of time to produce, and the techniques are very difficult
 to scale into larger areas. In the latter case, display techniques only benefit
 cartographic rendering and provide little to no value to analytic capabilities
 because the two datasets are not integrated into one.
-
-=== Hootenanny Background
 
 The purpose of this research is developing a fully automated conflation
 capability that scales to support big geographic datasets. The rationale is that
@@ -326,5 +324,5 @@ other mostly open source and mostly OpenStreetMap influenced software tools.
 
 === Redistribution
 
-[Redistribution](https://github.com/ngageoint/hootenanny/blob/master/docs/Redistribution.md)
+https://github.com/ngageoint/hootenanny/blob/master/docs/Redistribution.md[Redistribution info here]
 

@@ -116,7 +116,7 @@ more than one POI in the reference layer to merge
 * Merge the tags of all matching POIs in the secondary layer together with each other if there is 
 more than one POI in the secondary layer to merge
 * Merge the building tags for matching buildings from both layers together as described in
-https://github.com/ngageoint/hootenanny/files/595244/Hootenanny.-.Building.Conflation.2014-08-19.pptx 
+https://github.com/ngageoint/hootenanny/files/595244/Hootenanny.-.Building.Conflation.2014-08-19.pptx[these slides] on 
 slide 6; they’re averged together
 * Merge the building geometries for matching buildings from both layers together as described in 
 that slide; pick the most complex building geometry and if both are the same complexity then pick 
@@ -141,7 +141,7 @@ the text `poi.polygon`.
 ===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
-(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx[these slides] 
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 
@@ -186,6 +186,6 @@ acceptable.
 * more intelligent POI merging
 * model based classification
 
-For more information on POI to polygon conflation:
-https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
+For more information on POI to polygon conflation see
+https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx[these slides].
 

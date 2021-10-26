@@ -1,0 +1,38 @@
+
+=== Language Translation Service
+
+Hootenanny has an option to translate tags to English. It is disabled by default due to the extra installation steps required to stand up a translation service, which is described here. By default, the Joshua language translation service is not enabled with any languages.  To launch a Joshua translation service for a given language:
+
+1) Verify that you have enough extra memory on hand to support the new translation service deployments.  Translation services have been seen
+to take up as much as 9-10GB of memory under light load for the largest language packs.  The 'joshuaMaxMemory' configuration property in
+hoot-services/src/main/resources/hoot-services.conf.in allows for setting an upper limit on per service memory allocation.
+
+2) Download the version 2 language pack from http://cwiki.apache.org/confluence/display/JOSHUA/Language+Packs[here].
+
+3) Extract the file to a desired location.  Within the extracted root folder at a minimum you should see the folders: "model" and
+"target".  "model" contains the language translation model and "target" contains the executable Joshua jar.  There should also be in
+the root directory a script, "joshua" and a config file "joshua.config".  The script is used to run Joshua as an external process by
+the Hootenanny Translation Web Service
+
+4) Add or enable an entry for your translation service to hoot-services/src/main/resources/language-translation/joshuaServices.  The file is
+pre-configured with entries for all available version 2 language packs as of 9/14/2018, so you may not need to add a new entry unless the
+language pack was added more recently.  To activate an existing language pack entry, uncomment the associated line from the aforementioned
+configuration file.
+
+5) Stop the Hootenanny Tomcat server
+
+6) Rebuild and redeploy Hootenanny to Tomcat
+
+7) Start the Hootenanny Tomcat server for the Hootenanny Translation Web Service to redeploy all configured Joshua services.  This will take
+some time (at least a few minutes).  In the future, a less intrusive deployment scenario could involve running the Translation Web
+Service from a servlet separate from hoot-services.  That way a language service update would not interrupt the operation of the
+rest of hoot-services.
+
+8) For debugging purposes, you can check the Tomcat logs for errors looking for entries from 'JoshuaServicesInitializer'.
+
+9) You should be able to do a simple translation against the services you have launched (requires netcat installed):
+'bash -c "echo <text-to-translate> | nc localhost <port>"'
+
+10) See documentation in the Hootenanny User Guide for information about retrieving Hootenanny Translation Web Service metadata and performing
+translations.
+

@@ -7,8 +7,8 @@ section describes the process of making manual matches for that purpose.
 
 ===== Prerequisites
 
-* Launch a Hootenanny VM: https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md
-* Install JOSM on your Hootenanny VM.  It can be found here: http://josm.openstreetmap.de/  The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
+* Launch a Hootenanny VM
+* Install http://josm.openstreetmap.de[JOSM] on your Hootenanny VM.
 * Use the link:$$http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint$$[JOSM Paint style] `$HOOT_HOME/docs/styles/RefTodoHighlight.xml`
 
 ===== Test Data Preparation

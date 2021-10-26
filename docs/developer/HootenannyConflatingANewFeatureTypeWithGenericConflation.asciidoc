@@ -338,8 +338,7 @@ quick start.
 
 *_Install Weka_*
 
-Weka can be downloaded from here: http://www.cs.waikato.ac.nz/ml/weka/  Its available for both Windows
-and Linux.  Here is an example to launch it from Linux:
+http://www.cs.waikato.ac.nz/ml/wek[Weka] Here is an example to launch it from Linux:
 ---------
 nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 ---------

@@ -2,10 +2,13 @@
 = Hootenanny - User Guide
 
 :imagesdir: ./user
-include::install/InstallationHeader.asciidoc[]
-include::install/HootenannyInstall.asciidoc[]
 include::overview/OverviewHeader.asciidoc[]
 include::overview/Introduction.asciidoc[]
+include::install/InstallationHeader.asciidoc[]
+include::install/Environment.asciidoc[]
+include::install/RPM.asciidoc[]
+include::install/Vagrant.asciidoc[]
+include::install/LanguageTranslationService.asciidoc[]
 include::user/UserHeader.asciidoc[]
 include::user/Introduction.asciidoc[]
 include::user/SupportedFeatureTypes.asciidoc[]

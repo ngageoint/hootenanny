@@ -97,7 +97,7 @@ Conflation behavior may be modified.
 ===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
-(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx[these slides]
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 

@@ -44,9 +44,9 @@ consequence for now.  However, future efforts to multi-thread the 'hoot convert'
 
 ===== Translation Technologies
 
-====== Joshua
+*_Joshua_*
 
-The only translation technology in use at the time of this writing is Joshua (https://cwiki.apache.org/confluence/display/JOSHUA).  Joshua
+The only translation technology in use at the time of this writing is https://cwiki.apache.org/confluence/display/JOSHUA[Joshua].  Joshua
 was chosen as the initial translation app, since it is the only one found so far that provides language packs as a part of its distribution.
 So far, it supports translation to English for nearly 60 languages.  The language packs contain pre-trained models for many different
 languages.  The option still exists to train your own model, but since that can be very time consuming, the language packs give a nice
@@ -71,7 +71,7 @@ No real metrics have obtained yet on the accuracy of Joshua translation run from
 
 *_OpenNLP_*
 
-OpenNLP (https://opennlp.apache.org) provides language detection capabilities.
+https://opennlp.apache.org[OpenNLP] provides language detection capabilities.
 
 It loads a model into memory that must be downloaded separately from the Hootenanny repository as part of the build process.  If the model
 file is not present, OpenNLP language detection will throw an error.
@@ -81,7 +81,7 @@ openNlpLanguages configuration file for the list of supported languages.
 
 *_Tika_*
 
-Tika (https://tika.apache.org) provides language detection capabilities.
+https://tika.apache.org[Tika] provides language detection capabilities.
 
 It requires no additional model file.
 
