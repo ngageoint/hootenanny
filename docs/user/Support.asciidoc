@@ -19,3 +19,5 @@ availability from the command line interface (CLI) by one or more development cy
 conflation feature you wish to use that is mentioned in the CLI documentation but is not present 
 within the UI, let us know.
 
+[FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
+

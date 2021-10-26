@@ -1,5 +1,5 @@
 
-=== Validation Checks
+==== Validation Checks
 
 It is quite easy to produce conflated map output that initially seems accurate but upon further 
 examination has quality issues. https://josm.openstreetmap.de/[JOSM] has an extensive collection of 
@@ -25,7 +25,7 @@ exited program execution abnormally due to not being able to properly validate t
 provided (crashed). It does not refer to the number of validators which had validation errors. That 
 total can be inferred from the total number of unique validation error types that occurred.
 
-==== Generating Validation Reports
+===== Generating Validation Reports
 
 The Hootenanny/JOSM integration is a useful tool to detect undesirable changes to conflated output 
 caused by code changes before they make it to the production environment. The `validate` command 
@@ -41,7 +41,7 @@ hoot validate test-output/cmd/slow/AreaConflateStandaloneTest/Output.osm \
   --output test-output/cmd/slow/AreaConflateStandaloneTest/ValidatedOutput.osm
 -----
 
-==== JOSM Configuration
+===== JOSM Configuration
 
 The https://josm.openstreetmap.de/[JOSM] library version used in validation, and optionally also 
 in cleaning, may be customized. To configure it:

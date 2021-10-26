@@ -1,9 +1,9 @@
 
-=== Language Translation Design
+==== Language Translation Design
 
 This document describes some of the design decisions made when adding the to English tag translation capability to Hootenanny.
 
-==== Service
+===== Service
 
 Hootenanny to English language translation makes use of multiple open source tools which can translate spoken languages to English and
 also detect them.  The decision was made to only support translations to English as their is no current use case for translations to any
@@ -25,7 +25,7 @@ section below), the entire set of services must be restarted.  Eventually, the t
 separate from the rest of the Hootenanny web services.  This would allows it to be updated with new languages without the need to restart
 all of the web services.
 
-==== Client
+===== Client
 
 Access to language translation from Hootenanny core occurs as a visitor which acts as a web client to the translation web service.  It
 is currently implemented as a prototype within the hoot-rnd library.  The client verifies that the requested source languages are
@@ -42,9 +42,9 @@ It is obvious that making a separate web request for each translation when trans
 was to integrate translation capabilities into the 'hoot convert' pipeline and not to create a standalone capability, this is an unavoidable
 consequence for now.  However, future efforts to multi-thread the 'hoot convert' pipeline should be able to mitigate performance issues.
 
-==== Translation Technologies
+===== Translation Technologies
 
-===== Joshua
+====== Joshua
 
 The only translation technology in use at the time of this writing is Joshua (https://cwiki.apache.org/confluence/display/JOSHUA).  Joshua
 was chosen as the initial translation app, since it is the only one found so far that provides language packs as a part of its distribution.
@@ -67,9 +67,9 @@ packs.  The Hootenanny translation service only works with Joshua language packs
 
 No real metrics have obtained yet on the accuracy of Joshua translation run from Hootenanny.
 
-==== Detection Technologies
+===== Detection Technologies
 
-===== OpenNLP
+*_OpenNLP_*
 
 OpenNLP (https://opennlp.apache.org) provides language detection capabilities.
 
@@ -79,7 +79,7 @@ file is not present, OpenNLP language detection will throw an error.
 OpenNLP supports many languages (over 100 at the time of this writing), but its accuracy is a little suspect as observed so far.  See the
 openNlpLanguages configuration file for the list of supported languages.
 
-===== Tika
+*_Tika_*
 
 Tika (https://tika.apache.org) provides language detection capabilities.
 

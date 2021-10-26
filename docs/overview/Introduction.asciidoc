@@ -191,6 +191,9 @@ We have since matured the product into a stand-alone web-based application that 
 
 === Hootenanny Overview
 
+NOTE: You also may want to check out the quick Hootenanny overview 
+http://github.com/ngageoint/hootenanny#readme[here].
+
 Hootenanny is designed to facilitate automated and semi-automated conflation of
 critical Foundation GEOINT features in the topographic domain, namely roads (polylines),
 buildings (polygons), and points-of-interest (POIs) (points). While a number of
@@ -320,4 +323,8 @@ On September 1, 2014 Phase II began with the focus on enhancing the usability of
 Hootenanny has since transitioned into NGA's production environment as part of the NGA Open Mapping 
 Enclave (NOME) project. It exists as NOME's main geodata conflation tool and sits besides several
 other mostly open source and mostly OpenStreetMap influenced software tools.
+
+=== Redistribution
+
+[Redistribution](https://github.com/ngageoint/hootenanny/blob/master/docs/Redistribution.md)
 

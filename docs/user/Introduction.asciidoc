@@ -1,5 +1,5 @@
 
-=== Conflation Workflow
+=== Conflation Steps
 
 Hootenanny deals exclusively with vector to vector conflation. The following
 sections discuss when Hootenanny is an appropriate tool for conflation and
@@ -66,9 +66,9 @@ See also:
 * <<clean,clean command>>
 * <<MapCleanerTransforms, map.cleaner.transforms>>
 
-==== Conflation Strategies
+==== Conflation Workflows
 
-These are the conflation strategies supported by Hootenanny:
+These are the conflation workflows supported by Hootenanny:
 
 * Reference Conflation (aka Vertical Conflation) - Both data sets contain useful information and significant overlap.  Conflate the best
 geometry and tag parts of map B into map A.
