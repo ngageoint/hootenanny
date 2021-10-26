@@ -44,14 +44,27 @@ public:
 
   static QString className() { return "TagKeyCountVisitor"; }
 
+  /**
+   * @brief TagKeyCountVisitor - Constructor
+   */
   TagKeyCountVisitor();
+  /**
+   * @brief TagKeyCountVisitor - Constructor
+   * @param key single key to count
+   */
   TagKeyCountVisitor(const QString& key);
   ~TagKeyCountVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   double getStat() const override { return _keyCount; }
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }

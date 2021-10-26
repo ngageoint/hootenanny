@@ -60,6 +60,9 @@ public:
   static bool isComplete(const OsmMap* map, ElementId eid);
   bool isComplete() const { return _complete; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override

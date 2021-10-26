@@ -50,16 +50,18 @@ public:
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
-
-  QString getDescription() const override
-  { return "Translates selected tag values to English"; }
 
   QString getInitStatusMessage() const override
   { return "Translating tags to English..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -68,8 +70,9 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Translates selected tag values to English"; }
 
 protected:
 

@@ -50,6 +50,9 @@ public:
 
   double getStat() const override { return _reviews.size(); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   void clear();

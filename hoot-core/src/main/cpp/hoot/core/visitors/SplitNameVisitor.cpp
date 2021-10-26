@@ -36,8 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitNameVisitor)
 
-SplitNameVisitor::SplitNameVisitor()
-  : _maxSize(ConfigOptions().getMaxTagLength())
+SplitNameVisitor::SplitNameVisitor() :
+_maxSize(ConfigOptions().getMaxTagLength())
 {
 }
 

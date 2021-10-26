@@ -107,22 +107,19 @@ private:
   std::vector<NodePtr> _createdNodes;
 
   Meters _calculateIntervalLength();
-
   void _expandInterval(const WayLocation& loc);
+  bool _isOutsideInterval(int ia);
 
   /**
    * Returns the end node in the MNS.
    */
   ConstNodePtr _getEndNode();
-
   /**
    * Returns the start node in the MNS
    */
   ConstNodePtr _getStartNode();
 
   bool _isInBounds(const WayLocation& wl, const std::shared_ptr<geos::geom::LineString>& ls) const;
-
-  bool _isOutsideInterval(int ia);
 };
 
 }

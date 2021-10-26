@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Remove all empty review relations
+ * Removes all empty review relations
  *
  * This runs in conflate.pre.ops, among other places. Its debatablewhether input conflation data
  * should allow reviews at all, but maybe there are some uses cases for it. If we ever find that
@@ -50,6 +50,9 @@ public:
   RemoveInvalidReviewRelationsVisitor() = default;
   ~RemoveInvalidReviewRelationsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override

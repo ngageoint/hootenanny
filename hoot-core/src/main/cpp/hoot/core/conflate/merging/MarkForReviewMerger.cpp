@@ -37,28 +37,29 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, MarkForReviewMerger)
 
-MarkForReviewMerger::MarkForReviewMerger(const set<pair<ElementId, ElementId>>& pairs,
-                                         QString note, QString reviewType, double score) :
-  _pairs(pairs),
-  _note(note),
-  _reviewType(reviewType),
-  _score(score)
+MarkForReviewMerger::MarkForReviewMerger(
+  const set<pair<ElementId, ElementId>>& pairs, const QString& note, const QString& reviewType,
+  double score) :
+_pairs(pairs),
+_note(note),
+_reviewType(reviewType),
+_score(score)
 {
   LOG_VART(reviewType);
 }
 
-MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, QString note,
-                                         QString reviewType, double score) :
-  _eids(eids),
-  _note(note),
-  _reviewType(reviewType),
-  _score(score)
+MarkForReviewMerger::MarkForReviewMerger(
+  const set<ElementId>& eids, const QString& note, const QString& reviewType, double score) :
+_eids(eids),
+_note(note),
+_reviewType(reviewType),
+_score(score)
 {
   LOG_VART(reviewType);
 }
 
-void MarkForReviewMerger::apply(const OsmMapPtr& map,
-                                vector<pair<ElementId, ElementId>>& /*replaced*/)
+void MarkForReviewMerger::apply(
+  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
   assert(!(_eids.size() >=1 && _pairs.size() >= 1));
 

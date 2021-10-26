@@ -35,8 +35,9 @@ namespace hoot
 {
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first projected into meters.
+ * Sums the length of all the ways.
+ *
+ * The map projection is used so to get meters the map must be first projected into meters.
  */
 class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public NumericStatistic
 {
@@ -50,10 +51,15 @@ public:
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
   Meters getLengthOfWays() const { return _total; }
 
-  double getStat() const override { return getLengthOfWays(); }
-
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
+  /**
+   * @see SingleStatistic
+   */
+  double getStat() const override { return getLengthOfWays(); }
   long numWithStat() const override { return _numAffected; }
   double getMin() const override { return _smallest; }
   double getMax() const override { return _largest; }

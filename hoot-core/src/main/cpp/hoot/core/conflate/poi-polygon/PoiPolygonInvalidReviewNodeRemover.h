@@ -52,17 +52,17 @@ public:
   PoiPolygonInvalidReviewNodeRemover();
   ~PoiPolygonInvalidReviewNodeRemover() = default;
 
+  /**
+   * @see OsmMapOperation
+   */
   void apply(const std::shared_ptr<OsmMap>& map) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Removes all reviewable POI/Polygon POIs and their reviews that are invalid"; }
 
   QString getInitStatusMessage() const override { return "Removing invalid POIs from reviews..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return

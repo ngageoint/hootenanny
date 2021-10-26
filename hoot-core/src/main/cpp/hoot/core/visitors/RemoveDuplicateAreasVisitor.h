@@ -39,8 +39,9 @@ namespace hoot
 class TagDifferencer;
 
 /**
- * Locates area elements that are duplicates and removes one of the duplicates. An area is
- * considered a duplicate if:
+ * Locates area elements that are duplicates and removes one of the duplicates.
+ *
+ * An area is considered a duplicate if:
  *  - The status is the same (e.g. Unknown1 == Unknown1)
  *  - One element is not an ancestor of the other
  *  - The overlap of the two geometries is equal (with reasonable precision)
@@ -61,6 +62,9 @@ public:
   RemoveDuplicateAreasVisitor();
   ~RemoveDuplicateAreasVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override { return "Removing duplicate areas..."; }

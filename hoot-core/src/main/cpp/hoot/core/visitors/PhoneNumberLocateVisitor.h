@@ -39,7 +39,9 @@ namespace hoot
 
 /**
  * Writes tags to an element indicating the detected location associated with its phone number tags
- * using libphonenumber.  City level location is the most granular detection possible.
+ * using libphonenumber.
+ *
+ * City level location is the most granular detection possible.
  */
 class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
 {

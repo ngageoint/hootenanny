@@ -175,7 +175,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
 
-  MatchScoringMapPreparer().prepMap(combinedMap);
+  MatchScoringMapPreparer().prepMap(combinedMap, ConfigOptions().getScoreMatchesRemoveNodes());
   OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());

@@ -167,9 +167,9 @@ private:
   ElementPriorityQueue _getInitializedPriorityQueue(
     QList<std::shared_ptr<PartialOsmMapReader>>& readers) const;
 
-  void _mergeSortedElements(ElementPriorityQueue& priorityQueue,
-                            std::shared_ptr<PartialOsmMapWriter> writer,
-                            QList<std::shared_ptr<PartialOsmMapReader>> readers) const;
+  void _mergeSortedElements(
+    ElementPriorityQueue& priorityQueue, std::shared_ptr<PartialOsmMapWriter> writer,
+    QList<std::shared_ptr<PartialOsmMapReader>> readers) const;
 
   std::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
 

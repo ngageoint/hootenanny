@@ -44,8 +44,15 @@ public:
 
   static QString className() { return "ProvenanceAwareOverwriteTagMerger"; }
 
+  /**
+   * @brief Constructor
+   * @param swap swaps the direction the tags are merged
+   */
   ProvenanceAwareOverwriteTagMerger(bool swap = false);
 
+  /**
+   * @see TagMerger
+   */
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   QString getDescription() const override

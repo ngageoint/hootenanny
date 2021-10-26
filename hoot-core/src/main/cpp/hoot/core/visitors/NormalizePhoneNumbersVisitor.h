@@ -48,8 +48,14 @@ public:
   NormalizePhoneNumbersVisitor() = default;
   ~NormalizePhoneNumbersVisitor() override = default;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override { return "Normalizing phone numbers..."; }

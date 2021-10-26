@@ -54,8 +54,8 @@ public:
    *  be placed into a multilinestring relation. The relations tags will _not_ be populated with
    *  the subline way tags. Status and CE will be taken from the first matching subline.
    */
-  ElementPtr createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
-    const std::vector<bool>& reverse,
+  ElementPtr createSublines(
+    const OsmMapPtr& map, const WaySublineCollection& string, const std::vector<bool>& reverse,
     std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
       std::shared_ptr<GeometryToElementConverter::NodeFactory>()) const;
 
@@ -71,10 +71,11 @@ public:
    * @param scraps Contains all the bits that don't match the subline string. This element will be
    *  created and added to the map. If nothing matches or the line length is zero then @a scraps
    */
-  void split(const OsmMapPtr& map, const WaySublineCollection& string,
-             const std::vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-             std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
-               std::shared_ptr<GeometryToElementConverter::NodeFactory>()) const;
+  void split(
+    const OsmMapPtr& map, const WaySublineCollection& string, const std::vector<bool>& reverse,
+    ElementPtr& match, ElementPtr& scraps,
+    std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
+      std::shared_ptr<GeometryToElementConverter::NodeFactory>()) const;
   /**
    * @brief split splits a multi-line string at a given location, puts the matching subline into
    * @a match, and removes the pieces that do not match from the map.

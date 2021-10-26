@@ -170,7 +170,6 @@ private:
     int pixelSizeAutoReductionFactor = 10;
     QString bounds;
 
-    // TODO: implement random for uniform task grids as well?
     int randomSeed = -1;
     if (args.contains("--bounds"))
     {

@@ -33,7 +33,9 @@
 namespace hoot
 {
 
-/*
+/**
+ * @brief The OsmMapWriter class writes an OsmMap to a specified format.
+ *
  * @todo The debug map methods should be implemented across writers other than OsmXmlWriter.
  */
 class OsmMapWriter
@@ -73,16 +75,16 @@ public:
   virtual QString supportedFormats() const = 0;
 
   /**
-   * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is
-   * included in the output
-   */
-  void setIsDebugMap(const bool is_debug = false) { _debug = is_debug; }
-
-  /**
    * Gets flag indicating the writer is writing a debug map so that extra debugging metadata can
    * be included in each implementation of the output formats
    */
   bool getIsDebugMap() const { return _debug; }
+
+  /**
+   * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is
+   * included in the output
+   */
+  void setIsDebugMap(const bool is_debug = false) { _debug = is_debug; }
 
 private:
 

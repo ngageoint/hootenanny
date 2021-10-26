@@ -213,7 +213,7 @@ bool PoiPolygonSchema::isReligion(const ConstElementPtr& element)
          buildingVal == QLatin1String("church") ||
          buildingVal == QLatin1String("mosque") ||
          // TODO: this one is an alias of building=mosque, so we should be getting it from there
-         //instead
+         // instead.
          amenityVal == QLatin1String("mosque") ||
          buildingVal == QLatin1String("synagogue");
 }

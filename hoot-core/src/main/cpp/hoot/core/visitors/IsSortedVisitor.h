@@ -36,8 +36,10 @@ namespace hoot
 {
 
 /**
- * Determines if OSM elements are sorted by type, then ID.  Keeps track of the most recent element
- * parsed and returns a negative result as soon as one out of order element is found.
+ * Determines if OSM elements are sorted by type, then ID.
+ *
+ * Keeps track of the most recent element parsed and returns a negative result as soon as one out of
+ * order element is found.
  */
 class IsSortedVisitor : public ConstElementVisitor
 {
@@ -48,6 +50,9 @@ public:
   IsSortedVisitor();
   ~IsSortedVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getName() const override { return className(); }

@@ -62,7 +62,6 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-// TODO: implement Configurable to help simplify this
 OsmJsonReader::OsmJsonReader() :
 ParallelBoundedApiReader(false, true),
 _defaultStatus(Status::Invalid),
