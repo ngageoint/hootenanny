@@ -1,6 +1,12 @@
 
 === Documentation
 
+Documentation should be created for all code changes and feature additions. Code documentation 
+guidelines are described below. Feature documentation is done with 
+(https://asciidoc-py.github.io/)[AsciiDoc] (what you're reading now). In addition,
+ (https://github.com/ngageoint/hootenanny/blob/master/README.md)[the main README file] contains a 
+ documentation summary and will need to be updated from time to time.
+
 ==== Generating
 
 The AsciiDoc documentation is shared by all aspects of Hootenanny. Run either `make archive` or 
@@ -25,7 +31,12 @@ and use Title for the final level (that's as far as we've needed to go up to thi
 
 ==== Core
 
-===== API
+===== Command Line API
+
+Each command exposed by Hootenanny should have its own Asciidoc documentation file. See: 
+`docs/commands`.
+
+===== C++ API
 
 Class documentation is used to build displayable documentation with 
 (https://www.doxygen.nl/index.html)[doxygen].

@@ -21,8 +21,6 @@ Goals:
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# [Detail Summary](https://github.com/ngageoint/hootenanny/blob/master/docs/overview/DetailSummary.asciidoc)
-
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 
 For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md).
