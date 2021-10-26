@@ -1,18 +1,18 @@
 
 [[RailwayConflationAlgs]]
-=== Railway Conflation
+==== Railway Conflation
 
 The goal for the initial conflation of railways was that the number of correctly conflated features 
 plus the number of features marked for manual review would equal at least 80% of the overall 
 conflated features in each test dataset, with the plans of improving that correctness score as high 
 as 90-95% in the future.
 
-==== Feature Definitions
+===== Feature Definitions
 
 Railway Conflation defines a railway as a linear railway feature whose tags support the definitions 
 used by OpenStreetMap.
 
-==== Matching
+===== Matching
 
 Railway matching allows for a manually configured search radius when determining the maximum 
 distance between features to search during matching.
@@ -21,7 +21,7 @@ Matching is based off both tag and geometric attributes. For geometry matching, 
 Hausdorff Distance, and edge distance values are used for comparison. Their match thresholds were
 determined against test data using Weka. Tag matching looks at type tags on features only.
 
-===== One to Many Matching
+*_One To Many Matching_*
 
 Railway conflation has an alternate workflow that allows for transferring selected tags from single 
 rail features in secondary data to multiple rail features in reference data when the single 
@@ -33,12 +33,12 @@ involved in with other reference rail features. In the initial version of the al
 match limit was reached, no more matching would occur for the secondary feature. In practice with
 one to many matches this caused variability in the output, so the limit currently is not enforced.
 
-==== Merging
+===== Merging
 
 Default railway merging uses the standard Hootenanny merging process that is used for merging most
 linear features, including roads.
 
-===== One to Many Merging
+*_One To Many Merging_*
 
 In the one to many workflow, selected tags are transferred from one secondary feature to potentially 
 multiple reference features. No geometry merging is performed. The tags transferred are configurable
@@ -46,12 +46,12 @@ via the `railway.one.to.many.transfer.keys` configuration option where any tag i
 feature with key matching those in the option list value will be transferred to a matching reference 
 feature. The secondary feature is deleted from conflated output.
 
-==== Configurable Options
+===== Configurable Options
 
 See the descriptions for configuration options named `railway.*` for more information on how Railway 
 Conflation behavior may be modified.
 
-==== Test Results
+===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
 (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
@@ -80,12 +80,12 @@ Combined Correct = number of correct matches + number of unnecessary reviews
 The initial 80% conflation accuracy goal was nearly achieved, but since only one test dataset was 
 utilized success cannot be declared.
 
-===== One to Many
+*_One To Many_*
 
 No manual match data for the one to many workflow are available yet, so there are no test results to 
 report for the workflow.
 
-==== Future Work
+===== Future Work
 
 Railway Conflation needs to be trained on additional datasets to improve its quality.
 

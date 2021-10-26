@@ -1,8 +1,8 @@
 
 [[Add-NSG-TLM-Symbology-to-a-FileGeodatabase]]
-=== Add NSG TLM Symbology to a FileGeodatabase
+==== Add NSG TLM Symbology to a FileGeodatabase
 
-==== Overview
+===== Overview
 
 ESRI ArcMap can use Visual Representation rules to display symbology. Hootenanny is able to export Topographic Data Store (TDS) compliant data in a FileGeodatabase that is able to have default symbology applied to it. The command line procedure to create default symbology is as follows.
 
@@ -11,14 +11,14 @@ References:
 * http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations]
 * http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000[What are visual specifications]
 
-==== Requirements
+===== Requirements
 The main requirement is access to a copy of ESRI ArcGIS with the following:
 
 * ArcGIS Standard or ArcGIS Desktop license
 * Production Mapping Extension & license
 * Defense Mapping Extension & license
 
-==== Process
+===== Process
 
 Get an empty TDS template FileGeodatabase::
 * From the ArcGIS Defence Mapping Extension install location.

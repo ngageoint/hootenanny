@@ -1,8 +1,8 @@
 
 [[RiverConflation]]
-=== River Conflation
+==== River Conflation
 
-==== Overview
+===== Overview
 
 A variant of generic line conflation specific to conflating rivers (linear waterways) is available 
 within Hootenanny. A river conflation model was developed based on test scenarios using manually 
@@ -12,12 +12,12 @@ of features marked for manual review would equal at least 80% of the overall con
 each test dataset, with the plans of improving that correctness score as high as 90-95% in the 
 future.
 
-==== Feature Definitions
+===== Feature Definitions
 
 River Conflation defines a river as a linear body of water whose tags support the definitions used 
 by OpenStreetMap.
 
-==== Approach
+===== Approach
 
 The goal for the initial conflation of rivers was that the number of correctly conflated features 
 plus the number of features marked for manual review would equal at least 80% of the overall 
@@ -68,7 +68,7 @@ model against the datasets tested, but are worth mentioning: increasing the unne
 feature count to aid in decreasing the incorrectly conflated feature count and weighting matches 
 between extracted sublines closer in distance higher than those that were further apart.
 
-==== Matching
+===== Matching
 
 River matching allows for a manually configured or automatically calculated search radius when 
 determining the maximum distance between features to search during matching. Automatic search radius 
@@ -84,17 +84,17 @@ matcher used in most Hooteannny linear feature matching is used to match a pair 
 matching process exceeds a configurable number of iterations, the matching with that subline matcher 
 is canceled and a second, less complex and processing intensive subline matcher is employed.
 
-==== Merging
+===== Merging
 
 River merging uses the standard Hootenanny merging process that is used for merging most linear 
 features, including roads.
 
-==== Configurable Options
+===== Configurable Options
 
 See the descriptions for configuration options named `river.*` for more information on how River 
 Conflation behavior may be modified.
 
-==== Test Results
+===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
 (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
@@ -131,7 +131,7 @@ Matcher.
 
 Combined Correct = number of correct matches + number of unnecessary reviews
 
-==== Future Work
+===== Future Work
 
 * Improving the Frechet Distance Subline Matcher for the Mexico test or re-testing with the more 
 recently implemented dual subline matcher approach could possibly improve its score.

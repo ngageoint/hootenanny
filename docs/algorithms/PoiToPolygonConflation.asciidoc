@@ -1,13 +1,13 @@
 
 [[PoiToPolygonConflationAlgs]]
-=== POI to Polygon Conflation
+==== POI to Polygon Conflation
 
 The goal for the initial conflation of POI's to polygons was that the number of correctly conflated 
 features plus the number of features marked for manual review would equal at least 80% of the 
 overall conflated features in each test dataset, with the plans of improving that correctness score 
 as high as 90-95% in the future.
 
-==== Feature Definitions
+===== Feature Definitions
 
 POI to polygon conflation defines the following feature types:
 
@@ -18,7 +18,7 @@ definitions.
 either a populated name tag or any other tag which causes it to be classified as a POI or a building 
 by the Hootenanny schema definitions.
 
-==== Matching
+===== Matching
 
 POI to Polygon conflation in Hootenanny is an additive, rule based conflation which follows these rules:
 
@@ -68,7 +68,7 @@ Techniques that were experimented with but proved to add no benefit to the model
 * varying the match distance based on the feature type
 * using Weka to fine tune the factors and score thresholds used
 
-==== Merging
+===== Merging
 
 The first layer selected is the reference layer and the second, the secondary layer, same as in all 
 other hoot conflation types.  Which tags are kept is dependent on the selected tag merging strategy 
@@ -107,12 +107,12 @@ the first geometry
 layer reference tags take priority over secondary layer tags
 * Remove the POI geometries as they’ve been “merged” with the building geometries.
 
-==== Configurable Options
+===== Configurable Options
 
 See the User Guide Command Line Documentation section for all configuration options beginning with 
 the text `poi.polygon`.
 
-==== Test Results
+===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
 (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
@@ -154,7 +154,7 @@ Very good test scores were achieved for all test except that the Alexandria test
 of the larger conflation tests, the number of reviews may be larger than what some users would deem
 acceptable.
 
-==== Future Work
+===== Future Work
 
 * improve tag similarity calculation
 * more intelligent POI merging
