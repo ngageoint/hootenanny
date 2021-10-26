@@ -1,7 +1,14 @@
 
-=== History
+=== Hootenanny History
 
-Note that the some of the hyperlinks in this document only are navigable when the document is in PDF form.
+Fast forward to 2012, more than 25 years later, and automatically conflated data sets were still not common
+place, with analysts routinely required to apply one-off manual techniques to
+support a project or simply to use display techniques to make two overlapping
+datasets appear as one. In the first case the manually conflated data sets take
+an inordinate amount of time to produce, and the techniques are very difficult
+to scale into larger areas. In the latter case, display techniques only benefit
+cartographic rendering and provide little to no value to analytic capabilities
+because the two datasets are not integrated into one.
 
 Hootenanny was spawned out of the need for a fully automated conflation capability to support an effort to load a mix of national and city scale datasets. While ingesting customer data, it quickly became apparent that multiple data sets contained redundant data that was being rendered as duplicated geometries and exported in a similar fashion. Developing a set of automated/semi-automated conflation tools became a consistent discussion topic spawning the evolution of the Hootenanny. During the process, the need to support an array of customer specific data schemas in addition to OSM became quickly apparent which gave rise to another capability which was the ability to translate data between different product standard schemas such as the Multinational Geospatial Co-production Program (MGCP) TRD3&4, NSG Topographic Data Store (TDS) v4.0, v. 6.1, and OSM. We have since matured the product into a stand-alone web-based application that sits on top of an extensible set of core conflation algorithms and data translation tools which are accessed via both standards-based protocols such as the OGC's Web Feature Service, Node.js and REST services in addition to the standard Javascript development resources that can be leveraged for the D3.js based user interface environment.
 
@@ -11,5 +18,11 @@ Following discussions related to the Perty evaluation, funding was allocated thr
 
 ==== Phase II
 
-On September 1, 2014 Phase II began with the focus on enhancing the usability of Hootenanny, integrating with other systems and increasing the breadth of features that can be conflated.  One of the central goals of this phase was to release Hootenanny to the Open Source community.
+On September 1, 2014 Phase II began with the focus on enhancing the usability of Hootenanny, integrating with other systems and increasing the breadth of features that can be conflated. One of the central goals of this phase was to release Hootenanny to the Open Source community, which occurred in June 2015.
+
+==== Beyond Phase II To Present Day
+
+Hootenanny has since transitioned into NGA's production environment as part of the NGA Open Mapping 
+Enclave (NOME) project. It exists as NOME's main geodata conflation tool and sits besides several
+other mostly open source, mostly OpenStreetMap influenced software tools.
 
