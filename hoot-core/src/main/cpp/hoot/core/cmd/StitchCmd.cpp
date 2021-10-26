@@ -28,14 +28,7 @@
 // Hoot
 #include <hoot/core/algorithms/MapStitcher.h>
 #include <hoot/core/cmd/BaseCommand.h>
-//#include <hoot/core/geometry/GeometryUtils.h>
-//#include <hoot/core/io/DataConverter.h>
 #include <hoot/core/io/IoUtils.h>
-//#include <hoot/core/io/OsmMapReaderFactory.h>
-//#include <hoot/core/io/OsmMapWriterFactory.h>
-//#include <hoot/core/ops/MapCropper.h>
-//#include <hoot/core/util/ConfigOptions.h>
-//#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
@@ -58,7 +51,7 @@ public:
   StitchCmd() = default;
 
   QString getName() const override { return "stitch"; }
-  QString getDescription() const override { return "Stitches cropped maps together"; }
+  QString getDescription() const override { return "Stitches cropped maps back together"; }
 
   int runSimple(QStringList& args) override
   {
@@ -88,12 +81,11 @@ public:
     OsmMapPtr secondaryMap = std::make_shared<OsmMap>();
 
     //  Load in the two maps for the map stitcher
-    IoUtils::loadMap(baseMap, args[0], true, Status::Unknown1, "", -1, "JobSource", 1);
-    IoUtils::loadMap(secondaryMap, args[1], true, Status::Unknown2, "", -1, "JobSource", 2);
+    IoUtils::loadMap(baseMap, args[0], true, Status::Unknown1);
+    IoUtils::loadMap(secondaryMap, args[1], true, Status::Unknown2);
 
     //  Run the stitcher on the two maps
-    MapStitcher stitcher(baseMap);
-    stitcher.stitchMap(secondaryMap);
+    MapStitcher::stitchMaps(baseMap, secondaryMap);
 
     //  Save the output map
     IoUtils::saveMap(baseMap, output);
