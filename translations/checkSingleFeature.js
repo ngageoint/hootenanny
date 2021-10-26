@@ -44,8 +44,8 @@ hoot.Settings.set({"ogr.debug.dumptags":"true"});
 // Debug messages from feature validation
 hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
 
-// Set this to drop default/usless values
-// hoot.Settings.set({"reader.input.format":"OGR"});
+// Set this to false to  keep  default/usless values
+// hoot.Settings.set({"reader.drop.defaults":"true"});
 
 
 // ####################################################################################
