@@ -23,9 +23,7 @@ endef
 # See the "Core Schema" section under "Documentation" in the Developer Guide for more information.
 
 all: \
-  schema.asciidoc \
 	HootenannyUserGuide.pdf \
-	schema.png \
 	CoreAPI
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup properly.
