@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The UpdateWayParentVisitor class updates way parent ID's.
+ */
 class UpdateWayParentVisitor : public ElementVisitor
 {
 public:
@@ -43,6 +46,9 @@ public:
   UpdateWayParentVisitor(long oldParentId, long newParentId);
   ~UpdateWayParentVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getDescription() const override

@@ -42,12 +42,14 @@ public:
 
   MatchScoringMapPreparer() = default;
 
-  /**
+ /**
     Prepares a map for match scoring
 
     @param map the map to prepare
-    */
-  void prepMap(OsmMapPtr map) const;
+    @param removeNodes if true, removes all nodes from the map
+    @note score.matches.remove.nodes=true is only used in the regression tests at this time.
+  */
+  void prepMap(OsmMapPtr map, const bool removeNodes) const;
 };
 
 }

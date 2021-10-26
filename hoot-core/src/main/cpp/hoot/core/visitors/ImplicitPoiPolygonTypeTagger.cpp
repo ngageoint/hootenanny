@@ -56,7 +56,7 @@ bool ImplicitPoiPolygonTypeTagger::_visitElement(const ElementPtr& e)
 
 bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& e)
 {
-  //see comment in OsmSchema::isPoiPolygonPoly
+  // see comment in OsmSchema::isPoiPolygonPoly
   if (e->getTags().contains("highway"))
   {
     return false;
@@ -79,12 +79,12 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   LOG_VART(elementIsAGenericPoly);
   LOG_VART(_getNames(e->getTags()).size());
 
-  //always allow generic elements
+  // always allow generic elements
   if (elementIsAGenericPoly)
   {
     return true;
   }
-  //allowing specific elements is configurable
+  // allowing specific elements is configurable
   else if (elementIsASpecificPoly && _allowTaggingSpecificFeatures)
   {
     return true;

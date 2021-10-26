@@ -51,8 +51,14 @@ public:
   RemoveElementsVisitor(bool negateCriteria = false);
   ~RemoveElementsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   void setOsmMap(OsmMap* map) override;

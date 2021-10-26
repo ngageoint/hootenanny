@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The TransliterateNameVisitor class transliterates name tags to Latin characters.
+ */
 class TransliterateNameVisitor : public ElementVisitor
 {
 public:
@@ -42,6 +45,16 @@ public:
   TransliterateNameVisitor() = default;
   ~TransliterateNameVisitor() override = default;
 
+  /**
+   * @brief isLatin determines if a string is made up entire of Latin characters
+   * @param s the string to transliterate
+   * @return true if the input string is entirely made up of Latin characters; false otherwise
+   */
+  static bool isLatin(const QString& s);
+
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override { return "Transliterating names..."; }
@@ -51,8 +64,6 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Transliterates names"; }
-
-  static bool isLatin(const QString& s);
 };
 
 }

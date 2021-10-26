@@ -53,6 +53,9 @@ public:
   void setOsmMap(const OsmMap* /*map*/) const
   { throw NotImplementedException("Set Map with const is not supported"); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getInitStatusMessage() const override

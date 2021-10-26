@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The WaysVisitor class can be used to filter ways.
+ */
 class WaysVisitor : public ConstElementVisitor
 {
 public:
@@ -43,6 +46,9 @@ public:
   WaysVisitor(std::vector<ConstWayPtr>& w);
   ~WaysVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   /**

@@ -116,7 +116,7 @@ void MatchScorer::score(
       return;
     }
 
-    MatchScoringMapPreparer().prepMap(map);
+    MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
     maps.push_back(map);
   }
   LOG_VARD(maps.size());

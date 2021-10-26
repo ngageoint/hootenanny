@@ -92,7 +92,6 @@ public:
    * @param minCount the minmal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
-   * @todo move this to MapUtils?
    */
   template<class C>
   static bool containsSatisfyingElements(
@@ -126,7 +125,6 @@ public:
    * @param minCount the minimal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the elements meet the specified criterion the specified number of times
-   * @todo move this to MapUtils?
    */
   template<class C>
   static bool containsSatisfyingElements(

@@ -32,9 +32,9 @@ using namespace std;
 namespace hoot
 {
 
-UpdateWayParentVisitor::UpdateWayParentVisitor(long oldParentId, long newParentId)
-  : _oldParentId(oldParentId),
-    _newParentId(newParentId)
+UpdateWayParentVisitor::UpdateWayParentVisitor(long oldParentId, long newParentId) :
+_oldParentId(oldParentId),
+_newParentId(newParentId)
 {
 }
 

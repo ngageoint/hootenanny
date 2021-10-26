@@ -125,7 +125,6 @@ public:
     */
   static QList<std::shared_ptr<const Node>> coordsToNodes(
     const QList<geos::geom::Coordinate>& coords, const std::shared_ptr<const OsmMap>& map);
-
 };
 
 }

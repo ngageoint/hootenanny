@@ -50,8 +50,8 @@ _updatedRelationCtr(0)
 {
 }
 
-void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
-                                        const ElementType& elementType)
+void ElementIdSynchronizer::synchronize(
+  const OsmMapPtr& map1, const OsmMapPtr& map2, const ElementType& elementType)
 {
   _updatedNodeCtr = 0;
   _updatedWayCtr = 0;

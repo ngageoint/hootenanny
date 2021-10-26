@@ -50,11 +50,23 @@ public:
   RandomElementRemover();
   ~RandomElementRemover() override = default;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see RngConsumer
+   */
   void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& /*e*/) override { }
 
   QString getInitStatusMessage() const override

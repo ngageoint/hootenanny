@@ -58,15 +58,17 @@ public:
    */
   QString getLocationDescription(const QString& phoneNumber) const;
 
-  void setRegionCode(const QString& code);
-
   int getNumLocated() const { return _numLocated; }
+
+  void setRegionCode(const QString& code);
 
 private:
 
   // two digit location code required to validate phone numbers; see ConfigOptions
   QString _regionCode;
+
   i18n::phonenumbers::PhoneNumberOfflineGeocoder _geocoder;
+
   mutable int _numLocated;
 };
 

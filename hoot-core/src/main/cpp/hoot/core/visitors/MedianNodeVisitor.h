@@ -35,8 +35,9 @@ namespace hoot
 {
 
 /**
- * Calculates the median node. This is very inefficient and shouldn't be used on large maps. E.g.
- * O(n^2).
+ * Calculates the median node.
+ *
+ * This is very inefficient and shouldn't be used on large maps (O(n^2)).
  */
 class MedianNodeVisitor : public ConstElementVisitor
 {
@@ -47,6 +48,9 @@ public:
   MedianNodeVisitor() = default;
   ~MedianNodeVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   ConstNodePtr calculateMedianNode() const;

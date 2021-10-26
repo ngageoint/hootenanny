@@ -51,6 +51,9 @@ public:
 
   double getStat() const override { return _count; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   QString getDescription() const override

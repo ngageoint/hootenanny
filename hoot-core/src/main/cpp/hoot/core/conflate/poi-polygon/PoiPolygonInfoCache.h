@@ -90,8 +90,9 @@ public:
    * @param reviewDistanceThresholdDefault the configured default review distance
    * @return a review distance
    */
-  double getReviewDistance(const ConstElementPtr& element, const Tags& polyTags,
-                           const double reviewDistanceThresholdDefault);
+  double getReviewDistance(
+    const ConstElementPtr& element, const Tags& polyTags,
+    const double reviewDistanceThresholdDefault);
 
   /**
    * Clears the contents of the cache

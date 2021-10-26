@@ -41,9 +41,9 @@ namespace hoot
 /**
  * Removes all consecutive way nodes that are duplicates.
  *
- * This is kind of a bandaid for the issue discovered in #2066.  The source creating the
- * duplicated nodes appears to be in the conflation routines somewhere and should eventually be
- * found and fixed.
+ * This is kind of a bandaid for the issue discovered in #2066. The source creating the duplicated
+ * nodes appears to be in the conflation routines somewhere and should eventually be found and
+ * fixed.
  */
 class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumer,
   public ConflateInfoCacheConsumer
@@ -55,6 +55,9 @@ public:
   RemoveDuplicateWayNodesVisitor() = default;
   ~RemoveDuplicateWayNodesVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   /**

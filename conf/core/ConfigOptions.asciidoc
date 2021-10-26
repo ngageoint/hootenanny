@@ -4683,15 +4683,13 @@ by `RandomWayGeneralizer`.
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
 
-=== reader.input.format
+=== reader.drop.defaults
 
 * Data Type: string
-* Default Value: `OSM`
+* Default Value: `true`
 
-The type of data that the reader is reading. This is the reader version of `ogr.output.format`
-This is used to pass the input format (OSM or OGR) to translation scripts to
-enable format specific translations.
-The OGR Reader changes this to be 'OGR'. All of the other readers use the default value.
+This setting tells a translation to drop default values when converting from a translated schema to OSM.
+This means that attributes with values like "UNK", "NoInformation" etc will be dropped during the translation.
 
 === reader.http.bbox.max.download.size
 
@@ -5120,6 +5118,13 @@ older manually matched input files.
 * Default Value: `false`
 
 Adds more detail to manual match validation warning/error messages.
+
+=== score.matches.remove.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+Remove `REF` tags from nodes before match scoring when using the `score-matches` command.
 
 === score.matches.require.ref1
 

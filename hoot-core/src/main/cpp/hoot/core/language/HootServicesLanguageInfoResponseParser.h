@@ -50,8 +50,8 @@ public:
    * @param response the response to print
    * @return a display string
    */
-  static QString parseAvailableLanguagesResponse(const QString& type,
-                                                 const std::shared_ptr<boost::property_tree::ptree>& response);
+  static QString parseAvailableLanguagesResponse(
+    const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response);
 
   /**
    * Returns an available language apps response string
@@ -60,8 +60,8 @@ public:
    * @param response the response to print
    * @return a display string
    */
-  static QString parseAvailableAppsResponse(const QString& type,
-                                            const std::shared_ptr<boost::property_tree::ptree>& response);
+  static QString parseAvailableAppsResponse(
+    const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response);
 
   /**
    * Returns a mapping of ISO-6391-1 language codes to language names

@@ -1,8 +1,13 @@
-# Translation Server API
+
+=== Element Translation Service
+
+The Element Translation Service:
 * Translates OSM xml to/from supported schemas.
 * Provides full field information for selected feature types.
 * Provides available key/value information for translated schemas by feature type. (_a la_ taginfo).
 * Provides a search service for translated feature types.
+
+===== API
 
 ___
 ## GET /version
@@ -306,3 +311,4 @@ ___
 ]
 ```
 ___
+

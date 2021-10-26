@@ -44,9 +44,6 @@ class OsmMap;
 class Way;
 
 /**
- * G
- */
-/**
  * @brief The IntersectionSplitter class given a map, makes all intersections contain only way end
  * nodes.
  *

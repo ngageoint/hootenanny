@@ -59,6 +59,9 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override

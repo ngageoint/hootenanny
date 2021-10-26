@@ -54,8 +54,7 @@ namespace hoot
  * gets other features merged into it; this applies to all types of merging except poi/poly
  * 6) invalid feature combinations - merging doesn't allow input with more than one mergeable
  * feature type associated with different types of conflation; e.g. an input with both buildings
- * and POIs in it; TODO: These types of tests need to be completed for all feature types except
- * railways.
+ * and POIs in it.
  * 7) input features with a conflated status - A conflated status only causes problems with POI to
  * Poly and Building to Building conflation generally, however tests have been added for it for all
  * conflation types to be safe. The aforementioned types of conflation both use building merging,
@@ -68,6 +67,9 @@ namespace hoot
  *
  * @note The conflate output for the ref rails test doesn't cleanly merge the inputs, so it may be
  * worthwhile to pick a different input for it.
+ *
+ * @todo The invalid feature combination tests still need to be completed for all feature types
+ * except railways.
  */
 class ElementMergerJsTest : public HootTestFixture
 {
@@ -130,7 +132,7 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(railwayMergeTooFewRailwaysTest);
   CPPUNIT_TEST(railwayMergeMissingTargetTagTest);
   CPPUNIT_TEST(railwayMergeDuplicateTargetTagTest);
-  CPPUNIT_TEST(railwayMergeExtraNonRailwayTest); // TODO: fix
+  CPPUNIT_TEST(railwayMergeExtraNonRailwayTest);
   CPPUNIT_TEST(railwayInputWithConflatedStatusTest);
 
   // RAILWAY ONE TO MANY

@@ -34,8 +34,9 @@ namespace hoot
 {
 
 /**
- * @brief The TypesTagMerger class is an abstract base class for merging type tags. It can be
- * configured to preserve overlapping type tags.
+ * @brief The TypesTagMerger class is an abstract base class for merging type tags.
+ *
+ * It can be configured to preserve overlapping type tags.
  */
 class TypesTagMerger : public TagMerger
 {
@@ -46,8 +47,7 @@ public:
   static QString className() { return "TypesTagMerger"; }
 
   /**
-   * Constructor
-   *
+   * @brief Constructor
    * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
    * list will be not be preserved.
    */

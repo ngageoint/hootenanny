@@ -214,7 +214,6 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
   _schemaTagValues.clear();
   _wordsNotInSchema.clear();
 
-  // TODO: should the use and/or building categories be added here?
   const std::vector<SchemaVertex> tags =
     OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
   StringTokenizer tokenizer;

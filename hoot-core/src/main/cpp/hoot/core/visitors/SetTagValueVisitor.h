@@ -46,11 +46,36 @@ public:
 
   static QString className() { return "SetTagValueVisitor"; }
 
+  /**
+   * @brief SetTagValueVisitor - Constructor
+   */
   SetTagValueVisitor();
+  /**
+   * @brief SetTagValueVisitor - Constructor
+   * @param keys the keys of the tags to set
+   * @param values the values of the tags to set
+   * @param appendToExistingValue if true, will not overwrite existing keys and will append values
+   * to them
+   * @param criteriaClassNames optional criteria filter to apply to the elements whose tags are
+   * being modified
+   * @param overwriteExistingTag overwrites any tag with a matching key
+   * @param negateCriteria negates the criteria in criteriaClassNames
+   */
   SetTagValueVisitor(
     const QStringList& keys, const QStringList& values, bool appendToExistingValue = false,
     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
     const bool negateCriteria = false);
+  /**
+   * @brief SetTagValueVisitor - Constructor
+   * @param key the key of the tag to set
+   * @param value the value of the tag to set
+   * @param appendToExistingValue if true, will not overwrite existing keys and will append values
+   * to them
+   * @param criteriaClassNames optional criteria filter to apply to the elements whose tags are
+   * being modified
+   * @param overwriteExistingTag overwrites any tag with a matching key
+   * @param negateCriteria negates the criteria in criteriaClassNames
+   */
   SetTagValueVisitor(
     const QString& key, const QString& value, bool appendToExistingValue = false,
     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
@@ -59,8 +84,14 @@ public:
 
   bool isValid() const { return !_keys.isEmpty() && !_vals.isEmpty(); }
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override { return "Updating tags..."; }
@@ -74,9 +105,7 @@ public:
 private:
 
   QStringList _keys, _vals;
-  //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
-  //overwrites any tag with a matching key
   bool _overwriteExistingTag;
   // keys for tags containing CE data
   QStringList _circularErrorTagKeys;

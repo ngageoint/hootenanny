@@ -48,8 +48,9 @@ void PoiSearchRadiusJs::Init(Local<Object> exports)
   Local<Context> context = current->GetCurrentContext();
   Local<Object> thisObj = Object::New(current);
   exports->Set(context, toV8("PoiSearchRadius"), thisObj);
-  thisObj->Set(context, toV8("getSearchRadii"),
-               FunctionTemplate::New(current, getSearchRadii)->GetFunction(context).ToLocalChecked());
+  thisObj->Set(
+    context, toV8("getSearchRadii"),
+    FunctionTemplate::New(current, getSearchRadii)->GetFunction(context).ToLocalChecked());
 }
 
 bool PoiSearchRadiusJs::_searchRadiiOptionIsConfigFile(const QString data)

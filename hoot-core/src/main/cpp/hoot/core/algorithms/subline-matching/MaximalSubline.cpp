@@ -219,8 +219,7 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
 {
   LOG_TRACE("Discretizing point pairs...");
 
-  // TODO: this requires a more robust mechanism for generating point pairs - r2701 (need to port
-  // issue to github)
+  // TODO: this requires a more robust mechanism for generating point pairs - Redmine 2701
 
   LOG_TRACE("Calculating offset...");
 

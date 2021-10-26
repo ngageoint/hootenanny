@@ -44,8 +44,6 @@ namespace hoot
  *
  * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
  * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
- *
- * @todo implement OperationStatus
  */
 class ElementHashVisitor : public ElementOsmMapVisitor
 {
@@ -56,6 +54,9 @@ public:
   ElementHashVisitor();
   ~ElementHashVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   /**
@@ -116,7 +117,7 @@ private:
   bool _collectHashes;
 
   // collected hash values mapped to element IDs
-  QMap<QString, ElementId> _hashesToElementIds; // TODO: make this QHash?
+  QMap<QString, ElementId> _hashesToElementIds;
   // collected element IDs mapped to hash values
   QMap<ElementId, QString> _elementIdsToHashes;
   // pairings of all duplicate elements found
