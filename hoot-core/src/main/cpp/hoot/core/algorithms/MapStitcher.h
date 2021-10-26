@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MAP_STITCHER_H
@@ -60,7 +60,7 @@ public:
 
 protected:
 
-  Radians _getWayEndpointHeading(const OsmMapPtr& map, const WayPtr& way, long node_id);
+  Radians _getWayEndpointHeading(const OsmMapPtr& map, const WayPtr& way, long node_id) const;
 
   long _copyNodeToMap(const OsmMapPtr& dest_map, const NodePtr& node);
   void _copyWayToMap(const OsmMapPtr& source_map, const OsmMapPtr& dest_map, const WayPtr& way);
@@ -78,7 +78,7 @@ protected:
   void _joinWayPairs();
   void _findWayEndpoints(const OsmMapPtr& source_map, const WayPtr& source_way,
                          const OsmMapPtr& dest_map, const WayPtr& dest_way,
-                         int& source_way_node_pos, int& dest_way_node_pos);
+                         int& source_way_node_pos, int& dest_way_node_pos) const;
 
   OsmMapPtr _base_map;
 /*

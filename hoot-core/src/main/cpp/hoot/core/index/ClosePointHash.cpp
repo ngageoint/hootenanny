@@ -72,7 +72,7 @@ void ClosePointHash::updatePoint(double x, double y, long id)
   foreach (int64_t binIx, _idTobin[id])
   {
     vector<long>& v = _bins[binIx];
-    std::remove(v.begin(), v.end(), id);
+    v.erase(std::remove(v.begin(), v.end(), id));
   }
   //  Clear out the hashes for this ID
   _idTobin[id].clear();

@@ -39,11 +39,14 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
+//  Standard
 #include <cmath>
-using namespace std;
 
+//  Geos
 #include <geos/geom/Envelope.h>
+
 using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -52,10 +55,10 @@ MapStitcher::MapStitcher(const OsmMapPtr& base_map)
   : _base_map(base_map),
     _stitch_buffer_size(ConfigOptions().getMapStitcherThreshold() > 0 ?
                         ConfigOptions().getMapStitcherThreshold() :
-                        ConfigOptions().getMapStitcherThresholdDefaultValue()),
+                        ConfigOptions::getMapStitcherThresholdDefaultValue()),
     _node_buffer_threshold(ConfigOptions().getDuplicateNodeRemoverDistanceThreshold() > 0 ?
                            ConfigOptions().getDuplicateNodeRemoverDistanceThreshold() :
-                           ConfigOptions().getDuplicateNodeRemoverDistanceThresholdDefaultValue()),
+                           ConfigOptions::getDuplicateNodeRemoverDistanceThresholdDefaultValue()),
     _cph(_node_buffer_threshold)
 {
 }
@@ -158,7 +161,7 @@ void MapStitcher::stitchMap(const OsmMapPtr& map)
 
 Radians MapStitcher::_getWayEndpointHeading(const OsmMapPtr& map,
                                             const WayPtr& way,
-                                            long node_id)
+                                            long node_id) const
 {
   NodePtr p1;
   NodePtr p2;
@@ -171,7 +174,7 @@ Radians MapStitcher::_getWayEndpointHeading(const OsmMapPtr& map,
   }
   else if (way->getLastNodeId() == node_id)
   {
-    long first = way->getNodeId(way->getNodeCount() - 2);
+    long first = way->getNodeId(static_cast<int>(way->getNodeCount() - 2));
     p1 = map->getNode(first);
     p2 = map->getNode(node_id);
   }
@@ -261,21 +264,21 @@ void MapStitcher::_copyWayToMap(const OsmMapPtr& source_map,
       vector<long> waynodeUpdates;
       for (auto nodeId : waynodes)
       {
-        long id = nodeId;
+        long new_id = nodeId;
         //  If the nodes are the "same" in both maps, don't copy it
         NodePtr n = mapNodes.find(nodeId)->second;
         NodePtr baseNode = dest_map->getNode(nodeId);
         if (n && baseNode && baseNode->coordsMatch(*n))
         {
           //  Set the node ID for the way
-          waynodeUpdates.push_back(id);
+          waynodeUpdates.push_back(new_id);
         }
         else if (_updated_node_ids.find(nodeId) == _updated_node_ids.end())
         {
           NodePtr clonedNode = n->cloneSp();
-          id = _copyNodeToMap(dest_map, clonedNode);
+          new_id = _copyNodeToMap(dest_map, clonedNode);
           //  Set the node ID for the way
-          waynodeUpdates.push_back(id);
+          waynodeUpdates.push_back(new_id);
         }
       }
       _updated_way_ids[way_id] = id;
@@ -346,13 +349,13 @@ void MapStitcher::_copyRelationToMap(const OsmMapPtr& source_map, const OsmMapPt
       if (_mergeRelations(source_map, relation, dest_map, relations.find(id)->second))
         return;
       //  The relations couldn't be merged so copy it over with a new negative ID
-      new_id = dest_map->getIdGenerator().getInstance()->createRelationId();
+      new_id = dest_map->createNextRelationId();
       relation->setId(new_id);
     }
     else if (relation->getId() < 0)
     {
       //  Relation ID is negative, can be updated, get a new ID from the destination map
-      new_id = dest_map->getIdGenerator().getInstance()->createRelationId();
+      new_id = dest_map->createNextRelationId();
       relation->setId(new_id);
     }
     //  Record the updated relation ID
@@ -436,8 +439,8 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
   {
     //  Get the non-fake ID
     long baseNodeId = matches[0] != fakeNodeId ? matches[0] : matches[1];
-//TODO: LOG_DEBUG
-    LOG_STATUS("Stitching ways at base node (" << baseNodeId << ") and secondary node (" << stitchPoint->getId() << ")");
+
+    LOG_DEBUG("Stitching ways at base node (" << baseNodeId << ") and secondary node (" << stitchPoint->getId() << ")");
 
     NodePtr baseNode = dest_map->getNode(baseNodeId);
     //  Find all of the ways where this node is a member
@@ -597,8 +600,8 @@ void MapStitcher::_mergeWays(const OsmMapPtr& source_map,
   //  Set the nodes
   dest_way->setNodes(new_nodes);
   //  Merge the way tags
-  Tags& dest_tags = dest_way->getTags();
-  Tags& source_tags = source_way->getTags();
+  const Tags& dest_tags = dest_way->getTags();
+  const Tags& source_tags = source_way->getTags();
   dest_way->setTags(TagMergerFactory::mergeTags(dest_tags, source_tags, ElementType::Way));
   //  Update the way ID
   _updated_way_ids[source_way->getId()] = dest_way->getId();
@@ -638,7 +641,7 @@ void MapStitcher::_joinWayPairs()
 
 void MapStitcher::_findWayEndpoints(const OsmMapPtr& source_map, const WayPtr& source_way,
                                     const OsmMapPtr& dest_map, const WayPtr& dest_way,
-                                    int& source_way_node_pos, int& dest_way_node_pos)
+                                    int& source_way_node_pos, int& dest_way_node_pos) const
 {
   NodePtr source_first_node = source_map->getNode(source_way->getFirstNodeId());
   NodePtr source_last_node = source_map->getNode(source_way->getLastNodeId());
@@ -658,7 +661,7 @@ void MapStitcher::_findWayEndpoints(const OsmMapPtr& source_map, const WayPtr& s
             Distance::euclidean(*source_last_node.get(), *dest_first_node.get()) < _node_buffer_threshold))
   {
     //  Last source node matches first destination node
-    source_way_node_pos = source_way->getNodeCount() - 1;
+    source_way_node_pos = static_cast<int>(source_way->getNodeCount() - 1);
     dest_way_node_pos = 0;
   }
   else if (source_way->getFirstNodeId() == dest_way->getLastNodeId() ||
@@ -667,15 +670,15 @@ void MapStitcher::_findWayEndpoints(const OsmMapPtr& source_map, const WayPtr& s
   {
     //  First source node matches last destination node
     source_way_node_pos = 0;
-    dest_way_node_pos = dest_way->getNodeCount() - 1;
+    dest_way_node_pos = static_cast<int>(dest_way->getNodeCount() - 1);
   }
   else if (source_way->getLastNodeId() == dest_way->getLastNodeId() ||
            (source_last_node != nullptr && dest_last_node != nullptr &&
             Distance::euclidean(*source_last_node.get(), *dest_last_node.get()) < _node_buffer_threshold))
   {
     //  Last nodes in both ways are matches
-    source_way_node_pos = source_way->getNodeCount() - 1;
-    dest_way_node_pos = dest_way->getNodeCount() - 1;
+    source_way_node_pos = static_cast<int>(source_way->getNodeCount() - 1);
+    dest_way_node_pos = static_cast<int>(dest_way->getNodeCount() - 1);
   }
 }
 

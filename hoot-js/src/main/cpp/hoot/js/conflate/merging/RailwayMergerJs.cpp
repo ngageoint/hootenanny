@@ -27,12 +27,12 @@
 #include "RailwayMergerJs.h"
 
 // Hoot
-#include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/conflate/railway/RailwayOneToManySecondaryMatchElementRemover.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/util/ConfPath.h>
 
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/conflate/merging/ScriptMerger.h>
+#include <hoot/js/elements/OsmMapJs.h>
 
 // std
 #include <utility>
@@ -68,7 +68,7 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   RailwayCriterion crit;
 
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& way = it->second;
     LOG_VART(way->getId());
