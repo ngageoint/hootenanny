@@ -1,6 +1,6 @@
 
 [[ImplicitTypeTaggingAlg]]
-=== Implicit Type Tagging
+==== Implicit Type Tagging
 
 Hootenanny has the capability to derive type tag information automatically for features based solely 
 on the contents of their name tags. This capability can be used simply to add better tags to poorly 
@@ -10,7 +10,7 @@ Specifics on how to generate a new implicit tag rules database are described in 
 Implicit Tag Rules Database Generation" section of the Hootenanny Developer Guide.  This section 
 gives an overview of how the implicit tagging works and its current performance results.
 
-==== Approach
+===== Approach
 
 Hootenanny implements implicit feature tagging by parsing feature names from well known open source 
 data (OSM and GeoNames at the time of this writing), counting the number of times a particular name 
@@ -21,7 +21,7 @@ containing names matching those in the generated rules.  This is done with the g
 as many incorrectly added tags as possible but realizing that eliminating all incorrect tag 
 additions is likely impossible.
 
-===== Rule Generation
+*_Rule Generation_*
 
 For implicit tag rule generation there are two strategies: 1) auto-generate as many tagging rules 
 as possible and then manually ignore any bad ones or 2) auto-generate a modest amount of rules and 
@@ -41,7 +41,7 @@ vastly reduce the number of generated rules.  Over time, however, it became appa
 incorrect tags were being added without the restriction.  A future area of research could involve 
 trying to remove the restriction to achieve better tagging results.
 
-===== Rule Filtering/Customization
+*_Rule Filtering/Customization_*
 
 As mentioned in the previous section, the final step in the process of an implicit tag rules database 
 generation is that of filtering rules.  Hootenanny separates the logic to filter rules from that 
@@ -54,7 +54,7 @@ Part of the filtering includes the customization provided in the form of editabl
 customization files include files for ignore words/tags, adding specific rules, and are described in 
 the "Hootenanny Implicit Tag Rules Database Generation" section of the Hootenanny Developer Guide.
 
-===== Rule Generation Runtime Performance
+*_Rule Generation Runtime Performance_*
 
 Using OSM planet and GeoNames allCountries data acquired on 11/2/17 containing 36 million POIs 
 eligible for implicit tag extraction (40.8 GB compressed), using circa 2013 hardware, it takes ~5.5 
@@ -71,7 +71,7 @@ implicit tag rules database using the default configuration options.
 Note: As of 4/16/18, implicit tagging has been extended to parse more than just POIs from open 
 source data (also buildings, areas, etc.), so these times have likely increased as a result.
 
-===== Tagger Behavior
+*_Tagger Behavior_*
 
 The implicit feature tagger can be used to add tags to data once the implicit tag rules database 
 has been created. The tagger has some configuration options available which greatly influence its 
@@ -92,7 +92,7 @@ See the documentation on the configuration options for more information.
 Note that if the implicit tag rules generated with all data being first translated to English, then 
 the tagger must also be set up to translate all parsed data to English.
 
-===== Tagger Runtime Performance
+*_Tagger Runtime Performance_*
 
 Implicit tagging runtime performance is directly dependent on the number of rules in the rules 
 database. In the initial implicit tagging implementation, before adding the restriction that name 
@@ -104,7 +104,7 @@ noticeable bottleneck.  If for some reason, the minimum word/tag occurrence thre
 significantly lowered in the future, then implicit tagging of features may encounter a performance 
 bottleneck which could possibly be alleviated by further optimization of the tagging logic.
 
-===== False Tag Additions
+*_False Tag Additions_*
 
 The conclusion has been reached that it is pretty much impossible to not add some incorrect tags to 
 an input dataset when performing implicit feature tagging. With a lot of manual custom rule file 
@@ -113,9 +113,9 @@ and Unifying POI/Polygon regression tests was greatly reduced.  There is likely 
 to be done to reduce adding incorrect tags going forward.  The bottom line is that implicit feature 
 tagging should never be used with data where the addition of any incorrect tags cannot be tolerated.
 
-==== Results
+===== Results
 
-===== Unifying POI/Polygon Conflation
+*_Unifying POI/Polygon Conflation_*
 
 Applying implicit feature tagging to the data used by the Unifying POI/Polygon regression tests 
 resulted in moderate correct match increases, very slight incorrect match increases, and large 

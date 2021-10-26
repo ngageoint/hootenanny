@@ -1,42 +1,42 @@
 
 [[HootExplFutureWork]]
-=== Future Work
+==== Future Work
 
 NOTE: The list of tasks being worked within Hootenanny is constantly in flux.
 Please contact us with any specific questions about current or
 planned work.
 
 [[ExplNameComparison]]
-==== Name Comparison
+===== Name Comparison
 
 Language translation is well beyond the scope of this project, but many aspects of proper translation may be useful to properly perform name comparison. Fortunately, we do not need to address all aspects of translation such as tense and grammatical correctness. We simply need to establish if words are close enough. Here we may benefit from some simple approaches such as dictionary translation and reducing the weighting of very frequent words such as _street_ , _lane_ , and _bridge_ . We may also benefit from treating names as a bag of words in case ordering changes or less important names are dropped, such as "Paul Intemann Memorial Nature Trail" vs. "Intemann Trail." Using high confidence geometry matches within large data sets may provide a large corpus of names to use in creating supervised solutions.
 
-==== Data Currency
+===== Data Currency
 
 The OpenStreetMap schema currently supports a tag called `end_date` that specifies when a feature has gone out of service or been destroyed. FACC also supports a set of tags defining when a feature has gone away. While these tags are underused within datasets, it would be beneficial to use these tags to alleviate the assumptions made in <<ExplDataCurrency>>.
 
 [[ExplConfidenceValuesFeatures]]
-==== Confidence Values on Features
+===== Confidence Values on Features
 
 Garbage input is the source of most of the problems we have identified in Hootenanny output. While it would be nice to continue our assumption that all input data is good, it is not realistic. We would like to introduce a confidence value associated with every feature and potentially every tag. This confidence value can be populated as a fixed value for the input or derived at run time based on unusual traffic patterns, typical errors, or other red flags.
 
 [[ExplAdditionalManipulations]]
-==== Additional Manipulations
+===== Additional Manipulations
 
 While Hootenanny currently only handles linear transportation networks, it is designed in such a way that it can handle nearly any vector data type, such as point of interest, administrative boundaries or area objects. Not only can these feature types be handled, but it also opens up the potential to handle multiple geometry types for a given feature. For instance, joining high fidelity address information from a point file to high-resolution building polygons falls neatly within the manipulation structure.
 
 During the development of Hootenanny, we also worked with manipulations that identify likely divided highways and merge single-way divided highways with two one-way streets. The edge cases make this a non-trivial problem that requires further investigation. There are also a number of data sets that map roundabouts as regular four way intersections. A special manipulation that identifies these scenarios and conflates them properly would be more aesthetically pleasing.
 
-==== Imagery in Conflation
+===== Imagery in Conflation
 
 There is an existing body of knowledge around feature extraction and conflating imagery with vector data sets; see (CC Chen, 2006) and (P Doucette, 2004) for examples. At the beginning of the investigation, some time was spent exploring imagery and vector conflation. Due to data constraints, the effort was dropped. We would like to re-explore using raster data to improve the overall accuracy of the geometries and flag individual features within the data sets with confidence values to aid in discovering erroneous entries. The technology and techniques in Maxar's RoadMatcher vector-to-raster conflation could also be leveraged to improve overall performance. Possible raster data sources include multi-spectral imagery and high resolution elevation models.
 
 [[ExplImproveDistrTiling]]
-==== Improve Distributed Tiling
+===== Improve Distributed Tiling
 
 The current KD-tree-based tiling approach works well, but in some scenarios, a tile may be created that is too small, causing the algorithm to abort. An alternate technique using a depth-first or similar search technique may be able to produce a more optimal result and avoid unexpected errors.
 
-==== Handle Merging at the Antimeridian
+===== Handle Merging at the Antimeridian
 
 Currently, data that spans the Antimeridian (similar to the international dateline) is not merged properly. By reprojecting data that covers the Antimeridian, Hootenanny should be able to properly conflate the data and maintain the topology. This should require changes within the tiling code only and keep the general conflation code agnostic to such problems.
 

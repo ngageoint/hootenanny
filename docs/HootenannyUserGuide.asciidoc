@@ -49,7 +49,6 @@ include::algorithms/AlgorithmsWorkflowsHeader.asciidoc[]
 include::algorithms/DifferentialConflation.asciidoc[]
 include::algorithms/AttributeConflation.asciidoc[]
 include::algorithms/AlgorithmsFeatureTypesHeader.asciidoc[]
-// TODO: start changing headers here
 include::algorithms/RoadConflation.asciidoc[]
 include::algorithms/BuildingConflation.asciidoc[]
 include::algorithms/PoiToPoiConflation.asciidoc[]

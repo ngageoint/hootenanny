@@ -1,5 +1,5 @@
 
-=== String Matching
+==== String Matching
 
 Hootenanny has several string matchers. Some of them are described in this section. You can see a 
 complete list of them using:
@@ -8,7 +8,7 @@ hoot info --string-comparators
 -----
 
 [[skip-grams]]
-==== K-Skip Bi-gram Modeling
+===== K-Skip Bi-gram Modeling
 
 As an attempt to increase name matching in conflation over the current matching
 scheme, Levenshtein distance <<levenshtein1966>>, a modified *K-Skip Bi-gram*
@@ -54,7 +54,7 @@ or
 
 +s1 &cup; s2={ab, ac, ad, bc, bd, cd, ef, eg, eh, fg, fh, gh}+.
 
-===== Scoring
+*_Scoring_*
 
 The comparison and scoring of two k-skip-n-grams is set forth in the paper
 "Non-adjacent Digrams Improve Matching of Cross-Lingual Spelling Variants"
@@ -89,7 +89,7 @@ and thus
 \[ f(S,T) = \frac{3}{9} \approx 0.\overline{3} \]
 +++++++++++++++
 
-===== Testing
+*_Testing_*
 
 Using the above definitions and scoring algorithm, the +KskipBigramDistance+
 class was added to Hootenanny that implemented k-skip-n-grams.  Early unit
@@ -222,7 +222,7 @@ results skew considerably in favor of Levenshtein.
 Only +1.77%+ of the time did Skip-grams give a better result on training data
 than did Levenshtein.
 
-===== Results
+*_Results_*
 
 This information indicates that Levenshtein, when used in
 conjunction with `MeanWordSetDistance`, is far and away superior when
