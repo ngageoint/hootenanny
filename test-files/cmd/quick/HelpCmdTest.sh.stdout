@@ -29,6 +29,7 @@ Basic Commands:
   split                         Splits a map into tiles
   stat                          Calculates a single statistic for a map
   stats                         Calculates a pre-configured set of statistics for a map
+  stitch                        Stitches cropped maps together
   tag-compare                   Compares tags between two maps
   tag-distribution              Calculates the distribution of values for specified tags in a map
   tag-info                      Displays tag information for a map

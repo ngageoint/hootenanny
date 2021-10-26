@@ -3016,6 +3016,15 @@ where partial chunks of elements only may be present, or workflows where you are
 remote sourced data with missing element children, the default value may need to be changed. This
 option is not supported by all file based readers.
 
+=== map.stitcher.threshold
+
+* Data Type: double
+* Default Value: `3`
+
+Size, in meters, of the overlap buffer on either side of the intersection of maps where the maps
+are stitched.  All endpoints of ways in both maps inside this buffer are considered for the stitching
+process.
+
 === map.writer.schema
 
 * Data Type: string
