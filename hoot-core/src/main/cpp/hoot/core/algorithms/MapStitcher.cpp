@@ -411,7 +411,7 @@ void MapStitcher::_stitchWay(const OsmMapPtr& source_map,
 
 void MapStitcher::_stitchPoly(const OsmMapPtr& /*source_map*/,
                               const OsmMapPtr& /*dest_map*/,
-                              const WayPtr& poly)
+                              const WayPtr& /*poly*/)
 {
 /*
   //  See if the closed area is on a border and there is a corresponding closed area on the other side to merge with
