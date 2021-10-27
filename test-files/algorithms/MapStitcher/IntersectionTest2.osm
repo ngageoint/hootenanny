@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+  <bounds minlat="12.0010" minlon="43.0640" maxlat="12.0014" maxlon="43.0644"/>
+  <node id="-6" visible="true" lat="12.0010" lon="43.0640"><tag k="name" v="-6"/></node>
+  <node id="-7" visible="true" lat="12.0012" lon="43.0640"><tag k="name" v="-7"/></node>
+  <node id="-8" visible="true" lat="12.0014" lon="43.0640"><tag k="name" v="-8"/></node>
+  <node id="-9" visible="true" lat="12.0012" lon="43.0642"><tag k="name" v="-9"/></node>
+  <node id="-10" visible="true" lat="12.0014" lon="43.0644"><tag k="name" v="-10"/></node>
+  <way id="-3" visible="true">
+    <nd ref="-8" />
+    <nd ref="-7" />
+    <nd ref="-6" />
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="Way: -3"/>
+  </way>
+  <way id="-4" visible="true">
+    <nd ref="-6" />
+    <nd ref="-9" />
+    <nd ref="-10" />
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="Way: -4"/>
+  </way>
+</osm>

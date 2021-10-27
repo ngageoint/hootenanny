@@ -161,25 +161,31 @@ void MapStitcher::stitchMap(const OsmMapPtr& map)
 
 Radians MapStitcher::_getWayEndpointHeading(const OsmMapPtr& map,
                                             const WayPtr& way,
-                                            long node_id) const
+                                            long node_id,
+                                            bool towards_node_id) const
 {
   NodePtr p1;
   NodePtr p2;
   //  Get the two nodes (beginning or end) to calculate the heading
   if (way->getFirstNodeId() == node_id)
   {
+    //  Calculate the heading towards node_id
     long second = way->getNodeId(1);
-    p1 = map->getNode(node_id);
-    p2 = map->getNode(second);
+    p1 = map->getNode(second);
+    p2 = map->getNode(node_id);
   }
   else if (way->getLastNodeId() == node_id)
   {
+    //  Calculate the heading towards node_id
     long first = way->getNodeId(static_cast<int>(way->getNodeCount() - 2));
     p1 = map->getNode(first);
     p2 = map->getNode(node_id);
   }
   else
     return std::numeric_limits<Radians>::min();
+  //  Reverse the direction of the heading calculation if required
+  if (!towards_node_id)
+    p1.swap(p2);
   //  Calculate the heading
   return WayHeading::calculateHeading(geos::geom::Coordinate(p1->getX(), p1->getY()), geos::geom::Coordinate(p2->getX(), p2->getY()));
 }
@@ -407,12 +413,13 @@ void MapStitcher::_stitchPoly(const OsmMapPtr& /*source_map*/,
                               const OsmMapPtr& /*dest_map*/,
                               const WayPtr& poly)
 {
+/*
   //  See if the closed area is on a border and there is a corresponding closed area on the other side to merge with
   vector<long> border_ids;
   //  Find all IDs
   for (auto id : poly->getNodeIds())
     border_ids.emplace_back(id);
-
+*/
 }
 
 WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
@@ -448,6 +455,7 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
     const set<long>& possibleWays = nodeToWayMap->getWaysByNode(baseNodeId);
     //  Find the best fit for the way to stitch
     double maxScore = 0;
+    Radians minDelta = M_PI * 2;
     for (auto wayId : possibleWays)
     {
       double score = 0;
@@ -460,11 +468,15 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
         break;
       }
       //  Check the heading of both way endpoints
-      Radians heading1 = _getWayEndpointHeading(dest_map, w, baseNodeId);
-      Radians heading2 = _getWayEndpointHeading(source_map, way, stitchPoint->getId());
+      Radians heading1 = _getWayEndpointHeading(dest_map, w, baseNodeId, true);
+      Radians heading2 = _getWayEndpointHeading(source_map, way, stitchPoint->getId(), false);
       Radians delta = WayHeading::deltaMagnitude(heading1, heading2);
-      if (delta < M_PI_4)
+      if (delta < M_PI_4 / 4.0)
         score += 1.0;
+      else if (delta < M_PI_4 / 2.0)
+        score += 0.9;
+      else if (delta < M_PI_4)
+        score += 0.75;
       else if (delta < M_PI_2)
         score += 0.5;
       //  Check the tag values
@@ -476,9 +488,11 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
       score += scoreValue;
       score += TagComparator::getInstance().compareTags(baseTags,secondaryTags);
       //  Save the best match score
-      if (score >= maxScore)
+      if ((score == maxScore && delta < minDelta) ||
+           score > maxScore)
       {
         maxScore = score;
+        minDelta = delta;
         result = w;
       }
     }
@@ -504,7 +518,7 @@ void MapStitcher::_mergeWays(const OsmMapPtr& source_map,
   //  Prepend or append the source ways
   if (source_way_endpoint == -1 || dest_way_endpoint == -1)
   {
-    LOG_ERROR("This shouldn't happen");
+    LOG_ERROR("Merge ways couldn't find way matching way endpoints.");
     return;
   }
   else if (source_way_endpoint == 0 && dest_way_endpoint == 0)

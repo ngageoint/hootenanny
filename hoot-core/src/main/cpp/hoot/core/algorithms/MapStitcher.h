@@ -103,9 +103,11 @@ protected:
    * @param map Map containing the way
    * @param way Way used to calculate the heading
    * @param node_id Node ID in the way to calculate the heading from
+   * @param front_to_back True to calculate heading towards node_id endpoint
+   *                      False to calculate heading away from node_id endpoint
    * @return The heading in radians
    */
-  Radians _getWayEndpointHeading(const OsmMapPtr& map, const WayPtr& way, long node_id) const;
+  Radians _getWayEndpointHeading(const OsmMapPtr& map, const WayPtr& way, long node_id, bool towards_node_id) const;
 
   /**
    * @brief _copyNode/Way/RelationToMap Copy element from source map to destination without merging or joining

@@ -41,6 +41,8 @@ class MapStitcherTest : public HootTestFixture
   CPPUNIT_TEST(toyStitchMixedIdsTest);
   CPPUNIT_TEST(multipleDirectionTest);
   CPPUNIT_TEST(overAndBackTest);
+  CPPUNIT_TEST(polygonMergeTest);
+  CPPUNIT_TEST(intersectionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -88,6 +90,22 @@ public:
                    _inputPath + "OverAndBackTest2.osm", true,
                    _outputPath + "OverAndBackTest.osm",
                    _inputPath + "OverAndBackTest-Expected.osm");
+  }
+
+  void polygonMergeTest()
+  {
+//    _runStitchTest(_inputPath + "PolygonTest1.osm", true,
+//                   _inputPath + "PolygonTest2.osm", true,
+//                   _outputPath + "PolygonTest.osm",
+//                   _inputPath + "PolygonTest-Expected.osm");
+  }
+
+  void intersectionTest()
+  {
+    _runStitchTest(_inputPath + "IntersectionTest1.osm", true,
+                   _inputPath + "IntersectionTest2.osm", true,
+                   _outputPath + "IntersectionTest.osm",
+                   _inputPath + "IntersectionTest-Expected.osm");
   }
 
 private:
