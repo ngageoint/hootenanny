@@ -27,7 +27,7 @@ This documentation is also available as: part of the release package as `docs/Ho
 
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 
-For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [this](https://github.com/ngageoint/hootenanny/blob/master/docs/install/Vagrant.asciidoc).
+For installation from RPM, follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, follow [this](https://github.com/ngageoint/hootenanny/blob/master/docs/install/Vagrant.asciidoc).
 
 # Conflatable Feature Types
 

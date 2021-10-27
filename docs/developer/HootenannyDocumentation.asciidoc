@@ -117,6 +117,11 @@ static int MY_INT;
 static int MY_INT;
 ---- 
 
+===== Conflation Reviews
+
+If you use `ReviewMarker`, `MarkForReviewMerger`, or `NeedsReviewException` to flag a feature for 
+review during conflation, document that review in `docs/algorithms/FeatureReview.asciidoc`.
+
 ===== Schema
 
 The core schema documentation files are not currently being auto-generated. This is due to the fact 
