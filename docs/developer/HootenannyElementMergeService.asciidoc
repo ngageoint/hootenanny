@@ -25,7 +25,7 @@ request for polygon features or not, the caller is responsible for deleting thos
 features that belong to any parent features that were merged into other features.
 
 Railway One To Many merging additional notes:
-* The metadata tag: 'hoot:railway:one:to:many:match:secondary=yes' must remain present on 
+* The metadata tag: `hoot:railway:one:to:many:match:secondary=yes` must remain present on 
 secondary features involved in a one to many match in order for this type of merging to work 
 properly.
 * The merging process deletes the secondary way after merging. Since multiple one to many 
