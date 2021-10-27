@@ -1,6 +1,6 @@
 
 [[LanguageTranslation]]
-=== Language Translation
+==== Language Translation
 
 Hootenanny supports translating tag values to English. Translation is available only via the command 
 line (alternatively, you could write your own translation web client), you must have the Hootenanny 

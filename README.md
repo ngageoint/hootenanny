@@ -21,11 +21,13 @@ Goals:
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
+# [Documentation](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf)
+
+This documentation is also available as: part of the release package as `docs/HootenannyUserGuide.pdf`, located in `hootenanny-*.tar.gz`.
+
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 
 For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [this](https://github.com/ngageoint/hootenanny/blob/master/docs/install/Vagrant.asciidoc).
-
-[Latest Documentation](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf) (Also available as: part of the release as `HootenannyUserGuide.pdf`, located in the `.tar.gz` installation file under the "docs" directory)
 
 # Conflatable Feature Types
 
@@ -88,7 +90,7 @@ Although Hootenanny is configured by default to provide the best conflation resu
 
 Access to Hootenanny capabilities are exposed through a web services API for those wishing to develop their own conflation clients. The web services use [OAuth](https://github.com/ngageoint/hootenanny/blob/master/developer/HootenannySecurity.asciidoc) authentication.
 
-# [Command Line Interface](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc)
+# Command Line Interface
 
 Basic conflation example:
 
@@ -116,40 +118,7 @@ new hoot.UnifyingConflator().apply(map)
 hoot.saveMap(map, "output.osm");
 ```
 
-# Feature Summary
-
-In addition to [conflating map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/conflate.asciidoc), Hootenanny also provides these supporting capabilities that may aid conflation:
-* [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features implicitly based on their name (experimental)
-* [Align](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/align.asciidoc) the geometries of two maps more closely with each other
-* [Apply data transformation operations](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations) to a map
-* [Calculate the geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
-* [Clean map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc)
-* [Compare maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/diff.asciidoc) with each other
-* [Convert maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) between [different geodata formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
-* [Create a covering shape](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/alpha-shape.asciidoc) that minimally covers all features in a map
-* [Crop a map](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) to a geospatial extent
-* [De-duplicate or find duplicated features](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/de-duplicate.asciidoc) within maps (experimental)
-* [Derive changesets between maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) through the OpenStreetMap API
-* [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data (experimental)
-* [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#tag-info)
-* [Filter a subset of features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) before conflation based on tag content and schema relationships
-* [Find street intersections by name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#find-street-intersection-locations-in-a-map-by-street-name)
-* [Generate a task grid](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/task-grid.asciidoc)
-* Generate [pre-configured](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stats.asciidoc) or [custom](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stat.asciidoc) map statistics
-* [Grab a random section of data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop-random.asciidoc) from a map for testing against (experimental)
-* [Identify street intersection locations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#detect-road-intersections) in a map
-* [Locate phone numbers](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#add-admin-boundary-level-location-tags-associated-with-element-phone-numbers) geographically
-* [Replace or remove data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc#replacement-operation) completely within a bounding box via changeset and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) the changes through the OpenStreetMap API
-* [Perturb map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perturb.asciidoc) for testing purposes
-* [Plot node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/plot-node-density.asciidoc)
-* [Process map postal address data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#count-the-number-of-elements-with-valid-address-tags-in-a-map)
-* [Simplify ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#simplify-ways-in-a-map-by-removing-unnecessary-nodes-from-them) by removing unnecessary nodes
-* [Snap unconnected ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#snap-unconnected-roads-in-one-dataset-back-to-neighboring-roads-in-another-dataset) to neighboring ways
-* [Sort map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc)
-* [Split](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/split.asciidoc) a map into tiles
-* [Translate feature tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#translation) using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#TranslationAssistant)
-* [Translate feature tags to English](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) (experimental)
-* [Validate features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc)
+# [Additional Feature Summary](https://github.com/ngageoint/hootenanny/tree/master/docs/user/AdditionalFeatureSummary.asciidoc)
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
