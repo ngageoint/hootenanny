@@ -1,6 +1,6 @@
 
 [[ImplicitTypeTaggingUser]]
-=== Implicit Type Tagging
+==== Implicit Type Tagging
 
 Hootenanny has the capability to derive type tag information automatically for elements that do not 
 possess it based soley on the contents of their name tags. This capability can be used simply to add 

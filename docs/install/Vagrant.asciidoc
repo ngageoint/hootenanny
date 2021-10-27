@@ -3,11 +3,9 @@
 
 ==== Prerequisites
 
-https://www.vagrantup.com/downloads.html[Vagrant]
-
-https://www.virtualbox.org/wiki/Downloads[VirtualBox]
-
-https://git-scm.com/[git]
+* https://www.vagrantup.com/downloads.html[Vagrant]
+* https://www.virtualbox.org/wiki/Downloads[VirtualBox]
+* https://git-scm.com/[git]
 
 In some cases, you may have to install a newer version of Vagrant or VirtualBox than what is available in the public repositories for your host operating system in order to launch the virtual machine.
 
@@ -91,9 +89,9 @@ B) The compilation of C++ code is fairly slow with the default VirtualBox instan
 
 ==== Windows hints
 
-It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + https://github.com/mishamosher/CentOS-WSL[CentOS7 image] and https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md[RPM install]. It is somewhat easier, faster and light on PC requirements. However, at the moment, this version does not have JOSM validation integrations. Also, WebUI won't work, because WSL2 does not yet support systemd that is needed to start Hootenanny-services (also Postgre and Tomcat).
+It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + https://github.com/mishamosher/CentOS-WSL[CentOS7 image] and https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md[RPM install]. It is somewhat easier, faster and light on PC requirements. The WebUI won't work, because WSL2 does not yet support systemd that is needed to start Hootenanny-services (also Postgres and Tomcat).
 
-To install using Vagrant, first, make sure you have tools above. If you don't, then, if you have [Chocolatey](https://chocolatey.org/install), run in the elevated shell:
+To install using Vagrant, first, make sure you have tools above. If you don't, then, if you have https://chocolatey.org/install[Chocolatey], run in the elevated shell:
 
     cinst git vagrant virtualbox 
     
@@ -141,11 +139,11 @@ If you run into permission errors running the Tomcat deployment script, remove f
 
 ==== Faster C++ Compilation
 
-Running a Hootenanny C++ development environment on bare metal against CentOS is recommended for the best performance. However if you want to run it with Vagrant, the following describes a way to speed up the C++ compile time with a RAM disk:
+Running a Hootenanny `C++` development environment on bare metal against CentOS is recommended for the best performance. However if you want to run it with Vagrant, the following describes a way to speed up the `C++` compile time with a RAM disk:
 
 Add the something like the following line to your `Vagrantfile.Local`:
 
 `config.vm.provision "hoot-ramdisk", type: "shell", :privileged => false, :inline => "/home/vagrant/hoot/scripts/developer/MakeHootRamDisk.sh <size>", run: "always"`
 
-where `<size>` is the size in MB of the RAM disk. Then bring up the instance with Vagrant. This will cause the contents of the `hoot` directory to be copied over to `/ramdisk/hoot`. The initial copy time can take a minute or two, but you only pay that penalty when the instance is created. The necessary disk size may change over time and can get fairly large with use of `ccache`. This setup has not been tested successfully with the UI, only with the command line and web services.
+where `<size>` is the size in MB of the RAM disk. Then, bring up the instance with Vagrant. This will cause the contents of the `hoot` directory to be copied over to `/ramdisk/hoot`. The initial copy time can take a minute or two, but you only pay that penalty when the instance is created. The necessary disk size may change over time and can get fairly large with use of `ccache`. This setup has not been tested successfully with environments that make use the UI, only environments that use the command line and web services.
 

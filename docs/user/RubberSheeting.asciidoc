@@ -1,6 +1,6 @@
 
 [[RubberSheetingUser]]
-=== Rubber Sheeting
+==== Rubber Sheeting
 
 An option that can be applied before conflating two datasets is to use rubbersheet them together. 
 Rubber sheeting uses linear intersections to determine high confidence intersection matches. The 
