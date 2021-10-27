@@ -18,7 +18,7 @@ the user. Generally the workflow looks something like the following:
 
 The following sections go into the details of each of the above steps.
 
-==== Selecting Appropriate Data
+==== Select Appropriate Data
 
 Many factors play into which data is appropriate for conflation. Not all data is suitable for conflation. Below is a short list of examples of both appropriate and inappropriate conflation scenarios.
 
@@ -46,7 +46,7 @@ Appropriate data for conflation:
   local information that isn't available from imagery (e.g. street names). By
   conflating you get the complete coverage along with rich OSM attribution.
 
-==== Normalizing and Preparing Data
+==== Normalize and Prepare Data
 
 Before conflation can occur Hootenanny expects that all data is provided in a
 modified OSM schema and data model that is a superset of the
@@ -66,23 +66,35 @@ See also:
 * <<clean,clean command>>
 * <<MapCleanerTransforms, map.cleaner.transforms>>
 
-==== Conflation Workflows
+==== Select a Conflation Workflow
 
-These are the conflation workflows supported by Hootenanny:
+These are the conflation workflows supported by Hootenanny listed in their order of implementation:
 
-* Reference Conflation (aka Vertical Conflation) - Both data sets contain useful information and significant overlap.  Conflate the best
-geometry and tag parts of map B into map A.
-* Horizontal Conflation - There is a small amount of overlap between the two data sets.
-* Cookie Cutter & Horizontal Conflation - One data set is superior to the other in every way but does not cover the same region. The
-lesser data set will be cropped and the seams stitched back in using Horizontal Conflation.  Define a specific region in map A that should
-not be modified at all and stitch in data from map B around it.
-* Differential Conflation - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
-* Attribute Conflation - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
-* Average Conflation - Averages geometries together in the output.
+* **Average Conflation** - _Keep an average of both maps_ 
+  * Use this type of conflation when you consider both input maps equal in quality and want a result that is an average of the two (only works with linear features).
+* **Reference Conflation** (**default**; aka Vertical Conflation) - _Keep the best of both maps while favoring the first_
+  * Use this type of conflation when both data sets contain useful information and have significant overlap. You will get map output based on the best state of two maps while favoring the first one.
+  * Currently, geometry averaging only applies to linear features but could be extended to point and polygon geometries. Point and polygon geometries are merged the same as in Reference Conflation. 
+  * Average Conflation is currently not available from iD Editor.
+* **Cookie Cut Horizontal Conflation** - _Completely replace a section_
+  * Use this type of conflation if you have a specific region of your map that you would like to completely replace with a region from another map.
+* **Differential Conflation** - _Add new features that do not conflict_
+  * Use this type of conflation when you want to fill holes in your map with data from another source without actually modifying any of the data in your map.
+  * There is an option available (`--include-tags`) to additionally transfer tags to existing features in your map from matching features in another map where overlap occurs.
+* **Attribute Conflation** - _Transfer attributes over to existing geometries_
+  * Use this type of conflation when one map's geometry is superior to that of a second map, but the attributes of the second map are superior to that of the first map.
 
 See also:
 
 * _Unifying Conflation_, <<hootuser>>
+
+*_Average Conflation_*
+
+Average Conflation attempts to find a midway point between two features when conflating. Neither
+input is considered more important than the other (this was the original Hootenanny conflation 
+strategy). Both geometries and tag values are averaged together to create the conflated output.
+
+NOTE: Average Conflation is currently only supported for linear features.
 
 *_Reference Conflation_*
 
@@ -95,45 +107,33 @@ To use, pass `ReferenceConflation.conf` to the conflate command.
 
 e.g.
 --------
-hoot conflate -C ReferenceConflation.conf input1.osm input2.osm output.osm
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
 --------
 
 See also:
 
 * <<conflate,conflate command>>
-
-*_Average Conflation_*
-
-Average Conflation attempts to find a midway point between two features when conflating. Neither
-input is considered more important than the other (this was the original Hootenanny conflation 
-strategy). Both geometries and tag values are averaged together to create the conflated output.
-
-NOTE: Average Conflation is currently only supported for linear features.
 
 *_Horizontal Conflation_*
 
 .Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.
 image::images/HorizontalConflation.png[]
 
-Programmatically there is no difference between Reference and Horizontal conflation. The difference is solely conceptual.
+NOTE: Programmatically there is no difference between Reference and Horizontal conflation. The 
+difference is solely conceptual and there is no default setting in Hooteanny to run this base type 
+of conflation. Variants of Horizontal Conflation, like Cookie Cut Horizontal Conflation area 
+available to run however.
 
 [[UnsupportedHorizontalConflation]]
 .Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.
 image::images/NotHorizontalConflation.png[]
-
-To use, pass `HorizontalConflation.conf` to the conflate command (TODO: This should be verified. Its possible that `HorizontalConflation.conf` is only applicable for cookie cutting).
-
-e.g.
---------
-hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
---------
 
 See also:
 
 * <<conflate,conflate command>>
 
 [[CookieCutter]]
-*_Cookie Cutter & Horizontal_*
+*_Cookie Cut Horizontal Conflation_*
 
 [[CookieCutterImage]]
 .Cookie Cutter & Horizontal.  The left image depicts the overlap of a high quality, smaller area data set overlayed on a coarser regional data set that is typical for Reference/Horizontal Conflation.  The shaded area in the right image depicts the -1km buffer that is applied during the Cookie Cutter operation.
@@ -153,7 +153,7 @@ To use, pass `HorizontalConflation.conf` to the conflate command.
 
 e.g.
 --------
-hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
+hoot conflate -C HorizontalConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
 --------
 
 See also:
@@ -164,6 +164,15 @@ See also:
 * <<crop,crop command>>
 * <<hootuser, horizontal conflation example>>
 
+_Cut And Replace_
+
+There is a specifically tailored use of Cookie Cut Horizontal Conflation called the Cut And Replace 
+Workflow. This workflow completely replaces data in one dataset with data from another, handles 
+feature stitching at the replacement boundary, maintains feature ID provenance, and generates a 
+changeset to allow for replacing source data in an OSM API data store. More information on this 
+workflow may be found in the `changeset-derive` command documentation: 
+<<hootuser, changeset-derive>>
+
 *_Differential Conflation_*
 
 Differential Conflation derives an output that consists of new data from the second input not in the
@@ -173,7 +182,7 @@ To use, pass `DifferentialConflation.conf` to the conflate command with the `--d
 
 e.g.
 --------
-hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm --differential
+hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm --differential
 --------
 
 More details: <<hootuser, DifferentialConflation>>
@@ -188,10 +197,15 @@ To use, pass `AttributeConflation.conf` to the conflate command.
 
 e.g.
 --------
-hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
+hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
 --------
 
 More details: <<hootuser, AttributeConflation>>
+
+NOTE: In the examples above, you may substitue `-C NetworkAlgorithm.conf` for 
+`-C UnifyingAlgorithm.conf` when conflating roads in order to use the Network Roads conflation 
+algorithm instead of the Unifying Roads conflation algorithm (more information available in the 
+Algorithms section).
 
 ==== Review Conflated Results
 

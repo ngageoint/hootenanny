@@ -95,8 +95,8 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
   return false;
 }
 
-vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
-                                             const set<long>& wids, Meters delta)
+vector<Radians> NodeMatcher::calculateAngles(
+  const OsmMap* map, long nid, const set<long>& wids, Meters delta)
 {
   vector<Radians> result;
   result.reserve(wids.size());

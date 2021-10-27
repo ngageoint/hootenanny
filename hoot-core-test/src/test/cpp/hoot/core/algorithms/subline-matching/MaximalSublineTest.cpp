@@ -60,7 +60,8 @@ class MaximalSublineTest : public HootTestFixture
   CPPUNIT_TEST(runDiagonalOffsetTest);
   CPPUNIT_TEST(runJoinTest);
   CPPUNIT_TEST(runRealWorld3Test);
-  // See #5408
+  // TODO: fix me; This was a bad matching situation in river data (either haiti or san diego
+  // rivers).
   //CPPUNIT_TEST(runRealWorld4Test);
   CPPUNIT_TEST(runSmallLengthDiffTest);
   CPPUNIT_TEST(runToyTest);

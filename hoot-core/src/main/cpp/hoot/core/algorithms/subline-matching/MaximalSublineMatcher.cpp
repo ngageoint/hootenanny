@@ -57,7 +57,7 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
   std::shared_ptr<MaximalSubline::ThresholdMatchCriteria> threshold =
     std::make_shared<MaximalSubline::ThresholdMatchCriteria>(mrd, _maxRelevantAngle);
   // This should use _minSplitSize rather than mrd, but that causes some tests to fail. We should
-  // look into the problem and solve it. See redmine #6159.
+  // look into the problem and solve it. See #169.
   MaximalSubline ms(threshold, mrd);
   // See MaximalSubline::_maxRecursions
   LOG_VART(_maxRecursions);
