@@ -1,0 +1,66 @@
+
+[[Add-NSG-TLM-Symbology-to-a-FileGeodatabase]]
+==== Add NSG TLM Symbology to a FileGeodatabase
+
+===== Overview
+
+ESRI ArcMap can use Visual Representation rules to display symbology. Hootenanny is able to export Topographic Data Store (TDS) compliant data in a FileGeodatabase that is able to have default symbology applied to it. The command line procedure to create default symbology is as follows.
+
+References:
+
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations]
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000[What are visual specifications]
+
+===== Requirements
+The main requirement is access to a copy of ESRI ArcGIS with the following:
+
+* ArcGIS Standard or ArcGIS Desktop license
+* Production Mapping Extension & license
+* Defense Mapping Extension & license
+
+===== Process
+
+Get an empty TDS template FileGeodatabase::
+* From the ArcGIS Defence Mapping Extension install location.
++
+----
+C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS_4_0.zip
+----
+* Unpack this Zip file and copy the "LTDS_4_0.gdb" File GeoDatabase to your Hootenanny working directory.
+
+Run Hootenanny and add your data to the template File GeoDatabase::
+* Add the "Append Data" flag: `ogr.append.data`
+* Add the template File GeoDatabase to write to.
++
+----
+hoot convert -D schema.translation.script=GpsTrack -D ogr.append.data="true" your_data.osm LTDS_4_0.gdb
+----
+
+Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::
+* Place it in a convenient location
+
+Set the "Product Library" in ArcMap::
+http://resources.arcgis.com/en/help/main/10.2/index.html#//0103000001p0000000[Reference]
+* Copy `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Product Library\LTDS_4_0_Product_Library.zip` to where you saved the Hoot File GeoDatabase
+* Unzip `LTDS_4_0_Product_Library.zip` to get `LTDS_4_0_Product_Library.gdb`
+* Open ArcMap:
+** Click on `Customize->Production->Product Library`
+** Right Click on `Product Library`
+** Click on `Select Product Library`
+** Navigate to wherever you saved the `LTDS_4_0_Product_Library.gdb` and select it.
+
+
+Calculate the Visual Specifications::
+http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_Visual_Specifications/01090000001w000000/[Reference]
+* Open ArcCatalog
+* Run `Toolboxes->System Toolboxes->Production Mapping Toolbox->Symbology->Calculate Visual Specifications`:
+** *Input Features* Browse to where the Hootenanny File GeoDatabase is saved and select all of the features inside the `LTDS` feature dataset
+** *Visual Specification Workspace* Browse to and select `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Cartography\Symbology\LTDS_4_0_NSG_Visual_Specification.mdb`
+** Select `LTDS_NSG::50K` for 50K TLM symbology or `LTDS_100K::100K` for a 100K TLM symbology.
+** Click on `OK`
+** Wait for it to finish. It will take a while.
+
+View the Default Symbology::
+* Open ArcMap
+* Add the `LTDS_4_0.gdb` dataset
+

@@ -1,5 +1,5 @@
 
-=== Element Merge Service
+==== Element Merge Service
 
 The Element Merge Service provides feature merging capabilities over HTTP. The service is primarily 
 used to merge features during the conflation manual review process.
@@ -32,11 +32,11 @@ properly.
 reviews are being merged one at a time, then the secondary way being merged should not be 
 deleted on the client end until it is no longer involved in reviews.
 
-==== Examples
+===== Examples
 
 `POST /elementmerge`
 
-===== Example Body #1 - Merge two POIs
+*_Example Body #1 - Merge two POIs_*
 -----
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' upload='true' generator='hootenanny'>
@@ -55,7 +55,7 @@ deleted on the client end until it is no longer involved in reviews.
 </osm>
 -----
 
-===== Example Response #1 - Merge two POIs
+*_Example Response #1 - Merge two POIs_*
 -----
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
@@ -68,7 +68,7 @@ deleted on the client end until it is no longer involved in reviews.
 </osm>
 -----
 
-===== Example Body #2 - Merge two buildings with no child node data specified
+*_Example Body #2 - Merge two buildings with no child node data specified_*
 -----
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
@@ -95,7 +95,7 @@ deleted on the client end until it is no longer involved in reviews.
 </osm>
 -----
 
-===== Example Response #2 - Merge two buildings with no child node data specified
+*_Example Response #2 - Merge two buildings with no child node data specified_*
 -----
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
@@ -121,3 +121,4 @@ deleted on the client end until it is no longer involved in reviews.
 </osm>
 -----
 ___
+

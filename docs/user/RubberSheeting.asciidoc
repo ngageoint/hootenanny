@@ -2,14 +2,14 @@
 [[RubberSheetingUser]]
 === Rubber Sheeting
 
-An option while conflating two datasets is to use rubber sheeting. It uses linear intersections to 
-determine high confidence intersection matches. The high confidence matches are then considered to 
-be tie points for determining feature transforms. Rubber sheeting works very well to align two 
-datasets when they are offset roughly by a constant amount. It is less effective when the offsets 
-vary by wide margins. When this alignment is done pre-conflation, the conflation algorithms then
-have an easier time of conflating input data. See the Algorithms section, "Rubber Sheeting" for 
-technical information on the process. This document briefly describes configuration and details 
-pertaining to rubber sheeting.
+An option that can be applied before conflating two datasets is to use rubbersheet them together. 
+Rubber sheeting uses linear intersections to determine high confidence intersection matches. The 
+high confidence matches are then considered to be tie points for determining feature transforms. 
+Rubber sheeting works very well to align two datasets when they are offset roughly by a constant 
+amount. It is less effective when the offsets vary by wide margins. When this alignment is done 
+pre-conflation, the conflation algorithms then have an easier time of conflating input data. See the 
+Algorithms section, "Rubber Sheeting" for technical information on the process. This document 
+briefly describes configuration and details pertaining to rubber sheeting.
 
 Rubber sheeting is applied by default as a conflation pre-operation by being inserted into the
 configuration option, `conflate.pre.ops`. Which types of features are rubber sheeted is determined

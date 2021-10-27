@@ -1,0 +1,10 @@
+
+=== Environment
+
+* Hardware specs may vary. Hootenanny has been successfully installed on VMs. Some suggested specifications:
+	** At least 8GB of RAM, but you can certainly run small datasets on far less.
+	** Quad core or greater Intel x86 64bit compatible processor
+	** Developers may need more RAM to run the unit tests at higher levels of parallelization.
+* An installation of CentOS/RHEL 7 64bit with a working yum repository or access to downloadable installable RPM's.
+* A client machine with the Chrome (or Chromium) browser installed. Hootenanny is only supported in Chrome.
+

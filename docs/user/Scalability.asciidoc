@@ -1,6 +1,6 @@
 
 [[Scalability]]
-=== Scalability
+==== Scalability
 
 Hootenanny currently does not strive to conflate data at the global level. An earlier implementation 
 of Hootenanny supported a map-reduce architecture that was capable of global conflation for some 

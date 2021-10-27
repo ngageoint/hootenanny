@@ -1,5 +1,5 @@
 
-=== Hootenanny Tests
+=== Tests
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.
 Each employs a different testing technologies, which are described here. Before building Hootenanny 
@@ -654,7 +654,8 @@ npm test
 
 ==== Load Tests
 
-NOTE: The load tests have been inactive for awhile with no current plans to revive them.
+NOTE: The load tests have been inactive for awhile with no current plans to revive them. A detailed 
+description of them can be found in the "Services Scalability" section.
 
 The Load Tests test the scalability of the Hootenanny web services code and are run as part of the
 nightly tests in a private Maxar repository. These tests currently are not meant to be run
