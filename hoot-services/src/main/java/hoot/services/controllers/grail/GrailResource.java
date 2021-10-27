@@ -317,10 +317,6 @@ public class GrailResource {
             }
 
             grailCommandClass = deriveType.toLowerCase().startsWith("diff") ? RunDiffCommand.class : DeriveChangesetCommand.class;
-
-//            if (deriveType.toLowerCase().contains("w/tags")) {
-//                differentialParams.setApplyTags(true);
-//            }
         }
 
         // create output file
