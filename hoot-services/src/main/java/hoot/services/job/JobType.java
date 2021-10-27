@@ -44,7 +44,8 @@ public enum JobType {
     BULK_ADD,
     BULK_REPLACE,
     BULK_DIFFERENTIAL,
-    SYNC_WAIT;
+    SYNC_WAIT,
+    BULK_DIFFWTAGS;
 
     public static JobType fromInteger(int value) {
         if ((value >= 0) && (value < JobType.values().length)) {
