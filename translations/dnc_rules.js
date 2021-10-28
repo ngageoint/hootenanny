@@ -909,7 +909,7 @@ dnc.rules = {
     ['NS2','17','beacon:type:2','non-directional_radio_beacon_(ndb)'], // Non-Directional Radio Beacon (NDB)
     ['NS2','41','beacon:type:2','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
     ['NS2','45','beacon:type:2','radar_station'], // Radar Station
-    ['NS2','51','beacon:type:2','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+    ['NS2','51','beacon:type:2','radiobeacon_type_unknown'], // Radiobeacon, Type Unknown
     ['NS2','52','beacon:type:2','none'], // None
     ['NS2','53','beacon:type:2','qtg_station_(r)'], // QTG Station (R)
     ['NS2','54','beacon:type:2','ramark_(ramark)'], // Ramark (Ramark)
@@ -935,7 +935,7 @@ dnc.rules = {
     ['NST','33','beacon:type','radio_telegraph'], // Radio Telegraph
     ['NST','41','beacon:type','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
     ['NST','45','beacon:type','radar_station'], // Radar Station
-    ['NST','51','beacon:type','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+    ['NST','51','beacon:type','radiobeacon_type_unknown'], // Radiobeacon, Type Unknown
     ['NST','52','beacon:type','none'], // None
     ['NST','53','beacon:type','qtg_station_(r)'], // QTG Station (R)
     ['NST','54','beacon:type','ramark_(ramark)'], // Ramark (Ramark)
@@ -1061,7 +1061,7 @@ dnc.rules = {
     ['RTT','3','seamark:route','recommended_track_for_deep_draft_vessels'], // Recommended for deep draft vessels
     ['RTT','4','seamark:route','deep_water_route'], // Deep Water Route
     ['RTT','5','seamark:route','transit_route'], // Transit Route
-    ['RTT','11','seamark:route','two_way_route'], // Two Way Route
+    ['RTT','11','seamark:route','two-way_route'], // Two Way Route
     ['RTT','13','seamark:route','recommended_direction_of_traffic_flow'], // Recommended direction of traffic flow
 
 
@@ -1069,7 +1069,7 @@ dnc.rules = {
     ['SFC','1','sea_floor_category','unknown_obstruction'], // Unknown Obstruction - Not in FACC
     ['SFC','2','sea_floor_category','other'], // Other
     ['SFC','3','sea_floor_category','fish_haven'], // Fish Haven
-    ['SFC','4','sea_floor_category','Well'], // Well
+    ['SFC','4','sea_floor_category','well'], // Well
     ['SFC','5','sea_floor_category','submerged_production_platform'], // Submerged Production Platform
 
 
@@ -1129,14 +1129,14 @@ dnc.rules = {
 
 
     // SSR - Structure Shape of Roof
-    ['SSR','0','building:roof_shape','unknown'],
-    ['SSR','40','building:roof_shape','domed'],
-    ['SSR','41','building:roof_shape','flat'],
-    ['SSR','51','building:roof_shape','with_steeple'],
-    ['SSR','77','building:roof_shape','with_cupola'],
-    ['SSR','79','building:roof_shape','with_tower'],
-    ['SSR','80','building:roof_shape','with_minaret'],
-    ['SSR','999','building:roof_shape','other'],
+    ['SSR','0','roof:shape','unknown'],
+    ['SSR','40','roof:shape','domed'],
+    ['SSR','41','roof:shape','flat'],
+    ['SSR','51','roof:shape','with_steeple'],
+    ['SSR','77','roof:shape','with_cupola'],
+    ['SSR','79','roof:shape','with_tower'],
+    ['SSR','80','roof:shape','with_minaret'],
+    ['SSR','999','roof:shape','other'],
 
 
     // SST - Sound Signal Type
@@ -1207,8 +1207,8 @@ dnc.rules = {
     ['TMC','17','seamark:topmark:shape','broom_point_up'], // Broom Point Up
     ['TMC','18','seamark:topmark:shape','perch'], // Perch
     ['TMC','19','seamark:topmark:shape','diamond'], // Diamond
-    ['TMC','21','seamark:topmark:shape','cone,_point_up'], // Cone (Point Upwards)
-    ['TMC','22','seamark:topmark:shape','cone,_point_down'], // Cone (Point Downwards)
+    ['TMC','21','seamark:topmark:shape','cone_point_up'], // Cone (Point Upwards)
+    ['TMC','22','seamark:topmark:shape','cone_point_down'], // Cone (Point Downwards)
     ['TMC','23','seamark:topmark:shape','cross'], // Upright Cross
     ['TMC','25','seamark:topmark:shape','can_(open)'], // Can (Open)
     ['TMC','26','seamark:topmark:shape','can_(filled)'], // Can (Filled)
@@ -1217,7 +1217,7 @@ dnc.rules = {
     ['TMC','29','seamark:topmark:shape','can_over_ball_(open)'], // Can Over Ball (Open)
     ['TMC','30','seamark:topmark:shape','cross_over_ball_(filled)'], // Cross Over Ball (Filled)
     ['TMC','31','seamark:topmark:shape','diamond_over_ball_(filled)'], // Diamond Over Ball (Filled)
-    ['TMC','32','seamark:topmark:shape','double_cone,_points_apart_(open)'], // Double Cone, Points Apart (Open)
+    ['TMC','32','seamark:topmark:shape','double_cone_points_apart_(open)'], // Double Cone, Points Apart (Open)
     ['TMC','33','seamark:topmark:shape','none'], // None
 
 
