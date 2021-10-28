@@ -1,6 +1,20 @@
 
 [[PoiToPoiAlgs]]
-=== POI Conflation
+==== POI Conflation
+
+Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>>
+to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI
+datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
+<<hootuser>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootuser>>, _Unifying
+POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootuser, PoiToPoi>>
+
+For background on leveraging the Hootenanny JavaScript interface to call functions using Node.js, see <<HootJavaScriptOverview>>.
+
+There are a number of configurable distance thresholds that can be specified if
+you are comfortable making changes to JavaScript. Please see
+`$HOOT_HOME/rules/Poi.js` to modify the tables found in the script. Any
+changes made to `Poi.js` will apply to all jobs launched in the user
+interface as well as command line.
 
 The PLACES algorithm formerly supported in Hootenanny was designed specifically
 to handle GeoNames style data. In the case of GeoNames it is very fast, but
@@ -23,7 +37,7 @@ The following sections describe the POI to POI conflation design, the test setup
 and finally the test results.
 
 [[PoiToPoiDesign]]
-==== Design
+===== Design
 
 This section covers the POI to POI design by going into details about
 finding match candidates, labeling match candidates and merging matched
@@ -45,7 +59,7 @@ are:
 
 The following sections will detail each of the steps above.
 
-===== Filter Elements to Only POIs
+*_Filter Elements to Only POIs_*
 
 Hootenanny takes a fairly liberal view on what should be considered a POI. This
 overly optimistic approach may increase the number of unnecessary reviews but
@@ -75,7 +89,7 @@ Some examples of nodes that are not considered to be POIs are below:
 * Stop signs, stop lights, speed bumps.
 * Entrances to buildings.
 
-===== Find Match Candidates
+*_Find Match Candidates_*
 
 A match candidate is a pair of POIs that need to have a relationship assigned.
 If a pair of POIs are not considered a match candidate then they will never be
@@ -109,7 +123,7 @@ candidates. B and C have search radii that overlap, but B's search radius
 doesn't overlap the node C, neither does C's search radius overlap the node B.
 For this reason B & C are not match candidates.
 
-===== Label Based on Additive Scores
+*_Label Based on Additive Scores_*
 
 Establishing a relationship between two points is a simple additive score.
 Generally the score starts at zero and as evidence is found of a match the score
@@ -145,7 +159,7 @@ relationship:
 * If the score is between 0.5 and 1.9 the relationship is a review.
 * If the score is >= 1.9 the relationship is a match.
 
-===== Comparing POI Types
+*_Comparing POI Types_*
 
 Types are not always the same in the input data. One user may have an extraction
 guide that specifies a point should have the type of its primary use (e.g.
@@ -160,7 +174,7 @@ graph contains both `isA` and `similarTo` relationships. Details on how the
 graph works can be found in <<CalculatingEnumeratedScore,Calculating the
 Enumerated Score>>.
 
-===== Example Scores
+*_Example Scores_*
 
 The table below lists a handful of examples as well as the associated scores and
 relationships.
@@ -177,7 +191,7 @@ relationships.
 | name=Izbat Hawd an Nada, place=village | name=Izbat as Sab'in, place=populated | 0 Miss | None given by routine (Izbat is a common word so it is given a low weight when comparing names)
 |======
 
-===== Merging POIs
+*_Merging POIs_*
 
 After relationships have been determined the system then determines how to apply
 said relationships. The simplest cases are when a point is only involved in a
@@ -194,7 +208,7 @@ The first input is always used as the reference geometry.
 The tags are merged using the default tag merging routine. Unless otherwise
 specified the default tag merging routine is averaging.
 
-==== Test Setup
+===== Test Setup
 
 To evaluate the performance of automatically conflated results manually matched
 data is used. The manually matched data was translated into the OSM schema
@@ -261,7 +275,7 @@ mileage will vary. There can be a great deal of variance in input data sets. To
 get accuracy values over a new dataset a small test region should be evaluated
 to obtain values specific to your data set.
 
-==== Test Results
+===== Test Results
 
 The test results are presented in the tables below. Note that the tables below
 represent the categorization of relationships between POIs (not the number of
@@ -299,7 +313,7 @@ POI pair is relatively quick at about 12-20 seconds per review.
 |======
 
 [[PoiToPoiPoiFutureWork]]
-==== Future Work
+===== Future Work
 
 In this section we discuss some areas of possible improvement.
 

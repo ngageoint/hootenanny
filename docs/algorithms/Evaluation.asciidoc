@@ -10,7 +10,7 @@ The following sections describe how we evaluate the results using three differen
 
 ==== Location & Completeness Score
 
-The location and completeness score determines how closely two sets of geometries match. It is a combined score that drops if one data set is more complete than the other or if the geometries have significant differences in location or shape. We refer to the method as the _Shuey Method,_ as it was inspired by Senior Geospatial Scientist Chad Shuey. The routine is fairly resilient to minor perturbations but does not detect more complex problems such as missing intersections or one-way streets.  The images in <<ExplLocationCompletenessScore>> show some of the intermediate results for a simple example.
+The location and completeness score determines how closely two sets of geometries match. It is a combined score that drops if one data set is more complete than the other or if the geometries have significant differences in location or shape. We refer to the method as the _Shuey Method,_ as it was inspired by Geospatial Scientist, Chad Shuey. The routine is fairly resilient to minor perturbations but does not detect more complex problems such as missing intersections or one-way streets.  The images in <<ExplLocationCompletenessScore>> show some of the intermediate results for a simple example.
 
 [[ExplLocationCompletenessScore]]
 .Intermediate Steps of Location & Completeness Score

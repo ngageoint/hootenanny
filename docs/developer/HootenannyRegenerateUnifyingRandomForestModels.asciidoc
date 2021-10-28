@@ -1,6 +1,6 @@
 
 [[RegenerateRandomForestModels]]
-=== Regenerating Random Forest Models For Conflation
+==== Regenerating Conflation Models
 
 Random Forest models (.rf) are used in conflation for Road with the Unifying Algorithm and Building 
 Conflation only. Attribute Relation Files (.arff) are used to build the RF files. Note that several

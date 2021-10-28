@@ -16,14 +16,14 @@ define buildAsciidoc
 	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f pdf $<
 	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f text $<
 	asciidoc -a authorinitials=DG -a revnumber=$$REVNUMBER -a "revdate=$$REVDATE" -b html $<
-	@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
+	#@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
 endef
 
 # Note that we're not calling the schema documentation targets here, as it breaks an archive job. 
 # See the "Core Schema" section under "Documentation" in the Developer Guide for more information.
 
 all: \
-	Hootenanny\ -\ User\ Guide.pdf \
+	HootenannyUserGuide.pdf \
 	CoreAPI
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup properly.
@@ -74,7 +74,7 @@ tmp/RulesTemplate.asciidoc: tmp/rules-template-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-template-doxygen/xml/combine.xslt tmp/rules-template-doxygen/xml/index.xml > tmp/rules-template-doxygen/xml/combined.xml
 	xsltproc DoxygenToAsciiDoc.xslt tmp/rules-template-doxygen/xml/combined.xml > $@
 
-Hootenanny\ -\ User\ Guide.pdf: \
+HootenannyUserGuide.pdf: \
 	HootenannyUserGuide.asciidoc \
 	tmp/asciidoc-config \
 	../HOOT_VERSION_FILE \

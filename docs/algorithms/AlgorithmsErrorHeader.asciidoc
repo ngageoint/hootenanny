@@ -1,0 +1,5 @@
+
+=== Error
+
+This section describes sources of processing error inherent in Hootenanny conflation.
+
