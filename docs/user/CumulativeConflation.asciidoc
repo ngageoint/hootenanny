@@ -1,6 +1,6 @@
 
 [[CumulativeConflation]]
-=== Cumulative Conflation
+==== Cumulative Conflation
 
 The term Cumulative Conflation refers to a process by which more than two map inputs are conflated
 into a single output. Work in this area is currently experimental, and an example script which 

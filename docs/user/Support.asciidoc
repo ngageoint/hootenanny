@@ -2,6 +2,8 @@
 [[Support]]
 === Support
 
+https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions[FAQ]
+
 Don't hesitate to ask for help if features aren't conflating how you expect them to or if you're 
 experiencing difficulty while installing the software. We officially support installing RPMs to 
 CentOS and launching CentOS virtual machines via Vagrant/VirtualBox. For anything else you need to 
@@ -18,4 +20,5 @@ Also, the availability of new software features to the user interface may lag th
 availability from the command line interface (CLI) by one or more development cycles. If you find a 
 conflation feature you wish to use that is mentioned in the CLI documentation but is not present 
 within the UI, let us know.
+
 

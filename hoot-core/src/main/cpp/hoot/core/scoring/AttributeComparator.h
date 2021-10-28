@@ -28,6 +28,7 @@
 #ifndef ATTRIBUTECOMPARATOR_H
 #define ATTRIBUTECOMPARATOR_H
 
+// hoot
 #include <hoot/core/scoring/BaseComparator.h>
 
 namespace hoot

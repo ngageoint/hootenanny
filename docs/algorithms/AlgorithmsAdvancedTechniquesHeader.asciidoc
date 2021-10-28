@@ -1,0 +1,5 @@
+
+=== Advanced Techniques
+
+This section describes advanced techniques utilized during conflation by Hootenanny.
+

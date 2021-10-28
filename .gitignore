@@ -32,7 +32,6 @@ Configure.pri
 DbSchema.sql
 .deps/
 docs/*.epub
-docs/*.pdf
 docs/*-docinfo.xml
 docs/**/__*.png
 docs/.*
@@ -171,6 +170,7 @@ test-files/cases/**/validated-output-report
 test-files/cases/**/Output-validated.osm
 .bundle/
 vendor/
+docs/package-lock.json
 
 ###### hoot-services ignores
 hoot-services/.idea

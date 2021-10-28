@@ -1,34 +1,33 @@
 
 [[FeatureFiltering]]
-=== Feature Filtering During Conflation
+=== Feature Filtering
 
-Feature filtering is supported during conflation in order to conflate a subset of the input features. 
-Feature filtering happens in two ways: 1) at the geometry/base feature type level and 2) more granularly at the 
+Feature filtering is supported during conflation in order to allow for conflating a subset of the input features. 
+Feature filtering happens in two ways: 1) at the geometry/base feature type level and 2) and more granularly at the 
 tag/schema level.
 
 ==== By Geometry and Type
 
-Conflation at the geometry/base feature type level is controlled with matchers.  An example of this type of conflation 
-would be Road Conflation or POI Conflation.  Hootenanny has a specific geometric and attribute related definition of 
+Conflation at the geometry/base feature type level is controlled with matchers. An example of this type of conflation 
+would be Road Conflation or POI Conflation. Hootenanny has a specific geometric and attribute related definition of 
 what makes up a road or POI. For an overview of the different types of conflation available in Hootenanny see 
-the corresponding conflation related sections in this document, as well as the documentation for the `match.creators` configuration option.  By default, Hootenanny enables all types of conflation that it supports.  This ensures that 
-a conflation job results in as much data conflated as possible.  If you desire to perform certain types of conflation 
-only, you can adjust the `match.creators` and `merger.creators` configuration options accordingly.
+the corresponding conflation related sections in this document, as well as the documentation for the `match.creators` configuration option. By default, Hootenanny enables all types of conflation that it supports. This ensures that 
+a conflation job results in as much conflated output data as possible. If you desire to perform conflation on certain types of features only, you can adjust the `match.creators` and `merger.creators` configuration options accordingly.
 
 ==== By Attribute
 
 At a more granular level, Hootenanny allows for filtering out features during conflation via tag/schema 
-relationships.  Hootenanny supports specifying a JSON string or path to a file containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
+relationships. Hootenanny supports specifying a JSON string or path to a JSON file containing multiple logical AND/OR/NOT tag filters and allows for these filtering concepts:
 
-* Tag key/value string wildcard - basic tag string matching between features
-* Type tag similarity           - score how similar features are to each other only keep those at or above a 
+* *Tag Key/Value String Wildcard* - basic tag string matching between features
+* *Type Tag Similarity*           - score how similar features are to each other only keep those at or above a 
                                   certain similarity threshold
-* Aliases                       - include features that have tags that are aliases for other tags
-* Children/ancestors            - include features that are either children or ancestors of the features they are 
+* *Aliases*                       - include features that have tags that are aliases for other tags
+* *Children/Ancestors*            - include features that are either children or ancestors of the features they are 
                                   being compared to
-* Associations                  - include features that have associations with other features in ways that do not fall 
+* *Associations*                  - include features that have associations with other features in ways that do not fall 
                                   into one of the other matching types (catch all similarity capability)
-* Categories                    - include features that fall into a user defined category
+* *Categories*                    - include features that fall into a user defined category
 
 ==== Command Example
 

@@ -1,0 +1,233 @@
+
+==== String Matching
+
+Hootenanny has several string matchers. Some of them are described in this section. You can see a 
+complete list of them using:
+-----
+hoot info --string-comparators
+-----
+
+[[skip-grams]]
+===== K-Skip Bi-gram Modeling
+
+As an attempt to increase name matching in conflation over the current matching
+scheme, Levenshtein distance <<levenshtein1966>>, a modified *K-Skip Bi-gram*
+algorithm was created and tested.  The basis for this algorithm is the paper
+"A Closer Look at Skip-gram Modelling" by Guthrie, Allison, Liu, Guthrie, and
+Wilks <<guthrie2006>>.  Guthrie, et. al. apply skip-gram modeling to the
+modeling of languages as a whole by using n-grams of words, while Hootenanny
+only deals with small subsets of text, names, places, etc. and uses n-grams of
+letters of words.
+
+_"Skip-grams are a technique...whereby n-grams are formed but in addition to
+allowing adjacent sequences of [letters], we allow for tokens to be 'skipped'."_
+
+K-skip-n-grams are a set of n-grams (bi-grams, tri-grams, etc.) with +0+ to +k+
+tokens skipped between the resulting tokens in the n-gram.
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ w_{i_1}, w_{i_2}, \dots, w_{i_n} \ | \ \sum\limits_{i=0}^n i_j - i_{j-1} < k \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+For example the 2-skip-bi-gram (+k=2+, +n=2+) for the sequence of letters
++"abcde"+ results in
+
++{ab, ac, ad, bc, bd, be, cd, ce, de}+
+
+while the 2-skip-tri-gram (+k=2+, +n=3+) of the same sequence is
+
++{abc, abd, abe, acd, ace, ade, bcd, bce, bde, cde}+
+
+For multi-word application, the set of skip-grams is a union of all sets of
+skip-grams from each word.  For example, the set of 2-skip-bi-grams for the
+following sequence +"abcd efgh"+ is the union of both +s1="abcd"+ and
++s2="efgh"+
+
++s1={ab, ac, ad, bc, bd, cd}+
+
+and
+
++s2={ef, eg, eh, fg, fh, gh}+
+
+or
+
++s1 &cup; s2={ab, ac, ad, bc, bd, cd, ef, eg, eh, fg, fh, gh}+.
+
+*_Scoring_*
+
+The comparison and scoring of two k-skip-n-grams is set forth in the paper
+"Non-adjacent Digrams Improve Matching of Cross-Lingual Spelling Variants"
+by Keskustalo, Pirkola, Visala, Leppanen, and Jarvelin <<keskustalo2003>>.
+A simplified version of the scoring function follows:
+
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ f(S,T) = \frac{| DS(S) \ \cap \ DS(T)|}{|DS(S) \ \cup \ DS(T)|} \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+For example, if +S=word+ and +T=ward+ then the 2-skip-bi-gram score is
+
++DS(S)={wo, wr, wd, or, od, rd}+
+
+and
+
++DS(T)={wa, wr, wd, ar, ad, rd}+
+
+therefore
+
++DS(S) &cap; DS(T)={wr, wd, rd}+
+
+and
+
++DS(S) &cup; DS(T)={wo, wa, wr, wd, or, od, ar, ad, rd}+
+
+and thus
+
+[latexmath]
+++++++++++++++
+\[ f(S,T) = \frac{3}{9} \approx 0.\overline{3} \]
++++++++++++++++
+
+*_Testing_*
+
+Using the above definitions and scoring algorithm, the +KskipBigramDistance+
+class was added to Hootenanny that implemented k-skip-n-grams.  Early unit
+testing provided the following scoring values:
+
+.Early Unit Testing
+[width="100%",cols="5,5,2,2,3",options="header"]
+|=========================================================
+|*S* |*T* |*k* |*n* |*Score*
+|Main Street |West Main Street |2 |2 |0.7894
+|Main Street |West Main Street |3 |2 |0.8000
+|Main Street |Second Street |2 |2 |0.3461
+|Main Street |Second Street |3 |2 |0.3448
+|Kalorama Community Garden |Kalorama Park |2 |2 |0.3469
+|Kalorama Community Garden |Kalorama Park |3 |2 |0.3333
+|Kalorama Community Garden |Kalorama Recreation Center |2 |2 |0.2857
+|Kalorama Community Garden |Kalorama Recreation Center |3 |2 |0.3037
+|Kalorama Recreation Center |Kalorama Park |2 |2 |0.3333
+|Kalorama Recreation Center |Kalorama Park |3 |2 |0.3392
+|=========================================================
+
+The initial test results were encouraging, indicating that +Main Street+ and
++West Main Street+ were very similar while +Main Street+ and +Second Street+
+were not.  Also similar but not scoring well were the +Kalorama Community
+Garden+, +Park+, and +Recreation Center+.
+
+With these promising results, the +KskipBigramDistance+ class was tested
+as a +FeatureExtractor+ within the +BuildingRfClassifier+ framework,
+including using permutations of +MaxWordSetDistance+,
++MeanWordSetDistance+, and +ToEnglishTranslateStringDistance+.  Once the
+random forest model for building conflation was trained the model was tested
+against the model creation data sets, the output of Hootenanny is found below.
+
+.Previous Hootenanny output before adding k-skip-n-grams
+---------------------------------------------------------
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     7 |    13  |
+                  | match  |     2 |  1026 |     8  |
+                  | review |    85 |    62 |     9  |
+correct: 0.85396
+wrong: 0.0247525
+unnecessary reviews: 0.121287
+Score: -0.24505
+---------------------------------------------------------
+
+.Updated Hootenanny output after adding k-skip-n-grams
+---------------------------------------------------------
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |    12  |
+                  | match  |     2 |  1022 |     9  |
+                  | review |    84 |    70 |     9  |
+correct: 0.849259
+wrong: 0.023888
+unnecessary reviews: 0.126853
+Score: -0.246293
+---------------------------------------------------------
+
+These results were a little disconcerting, because adding in a new
+`FeatureExtractor` decreased the results.  Of concern are the +4+
+matches (+1026 - 1022+) that are known matches but now have become reviews also
+the percentage correct went down from +85.396%+ to +84.926%+ nearly +0.5%+
+difference.  Next is the number of expected matches that are now reviews is up
++8+ from +62+ to +70+.  There are some improvements as the number of expected
+misses that are now reviews is down by +1+ from +85+ to +84+ along with the
+number of expected matches that result in a miss are also down by +1+ from +7+
+to +6+.  These slight improvements don't counterbalance the negative impact on
+the match/match results for k-skip-n-grams to be used as and extractor in
+building conflation.  After further analysis it make sense that name matching
+would play such a small part in building conflation where building overlap,
+orientation, and edge distance play the major part in the matching algorithm.
+
+Because point of interest (POI) conflation is based more on name matching than
+building or highway matching, the next test was to apply k-skip-n-grams to name
+matching in POI conflation.  In order to test the k-skip-n-gram algorithm
+against the Levenshtein distance algorithm for POI name comparisons, four
+countries were selected from the http://download.geonames.org/export/dump/[Geonames]
+dataset.  The four countries used were United States, Argentina, Afghanistan,
+and Russia.  Each test file was first converted to OSM using the `convert`
+command and the `$HOOT_HOME/translations/GeoNames_to_OSM.js` translation script.  The
+resulting OSM file was then loaded into a `OsmMap` object.  Any nodes with
+only the `name` tag were ignored and then those with the `alt_name` tag had
+their alternate names compared one-by-one against the +name+ tag using both
+the `KskipBigramDistance` and `LevenshteinDistance` scoring
+algorithms.  In order to make a direct comparison the
+`Translator::translateStreet` method was called on all `name` tags (and
+`alt_name` tags) so that both algorithms could work on the same set of
+parameters.  The results are as follows:
+
+.Geonames Data Tests
+[width="100%",cols="1,1,1,1,1,1,1"]
+|=========================================================
+|*Country* |*Total* |*Equal* |*Better* |*Avg* |*Worse* |*Avg*
+|USA |240483 |11928 |67154 |0.1134 |161401 |-0.1422
+|Afghanistan |579272 |150395 |30749 |0.0061 |398128 |-0.1798
+|Argentina |24848 |12042 |3913 |0.0246 |8893 |-0.0629
+|Russia |1002664 |440173 |37789 |0.0044 |524702 |-0.1093
+7+a|- +total+ => total number of comparisons made
+- +equal+ => +Skip-grams==Levenshtein+
+- +better+ => +Skip-grams > Levenshtein+
+- +worse+ => +Skip-grams < Levenshtein+
+- +avg+ => average of the delta between the two values, i. e.
+latexmath:[$ avg = \sum\limits_{i=0}^n \frac { skipgram_i - levenshtein_i }{ n } $]
+|=========================================================
+
+In general Levenshtein gives better results in one order of magnitude more times
+than not.  The average delta in scores is considerably larger for Levenshtein
+indicating a larger improvement in score for more cases than using the
+k-skip-n-gram score.
+
+There are also times when Levenshtein returns a value of +0+ while skip-grams
+returns +1+.  This is in the case of reversed names, i. e. +Bandera County+ and
++County Bandera+ which is actually taken care of in the Hootenanny software by
+using the `MeanWordSetDistance` class wherever `LevenshteinDistance`
+is used.  So rerunning the the tests and applying the `MeanWordSetDistance`
+to both algorithms and following the same calculations on the USA data the
+results skew considerably in favor of Levenshtein.
+
+.Results before and after applying MeanWordSetDistance to Geonames data
+[width="100%",cols="4,3,3",options="header"]
+|=========================================================
+| |Before MeanWordSetDistance |After MeanWordSetDistance
+|Total POIs: |240483 |240483
+|POIs where Levenshtein +==+ Skip-grams |11928 |42005
+|POIs where Levenshtein +>+ Skip-grams |161401 |194201
+|POIs where Levenshtein +<+ Skip-grams |67154 |4277
+|=========================================================
+
+Only +1.77%+ of the time did Skip-grams give a better result on training data
+than did Levenshtein.
+
+*_Results_*
+
+This information indicates that Levenshtein, when used in
+conjunction with `MeanWordSetDistance`, is far and away superior when
+matching names for POI conflation than is the k-skip-n-gram algorithm.  Because
+of this finding, the k-skip-n-gram algorithm has been added to the source code
+repository of Hootenanny for future reference but it isn't being used anywhere
+at this time.
+

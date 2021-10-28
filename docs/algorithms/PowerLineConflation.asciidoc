@@ -1,8 +1,8 @@
 
 [[PowerLineConflation]]
-=== Power Line Conflation
+==== Power Line Conflation
 
-==== Overview
+===== Overview
 
 The goal for the initial conflation of power lines was that the number of correctly conflated 
 features plus the number of features marked for manual review would equal at least 80% of the 
@@ -12,12 +12,12 @@ matched features as possible in each dataset, while keeping datasets small enoug
 against them could be run in roughly ten minutes or less.  A rules based conflation model was 
 constructed that maximized the conflation output quality for all input datasets.
 
-==== Feature Definitions
+===== Feature Definitions
 
 Power Line Conflation defines a power line as a linear power line feature whose tags support the 
 definitions used by OpenStreetMap.
 
-==== Approach
+===== Approach
 
 .*Power Line Conflation Attempted Techniques*
 [width="100%"]
@@ -35,7 +35,7 @@ definitions used by OpenStreetMap.
 | voltage tag matching | yes | disambiguate matches using the voltage rating of the power line
 |======
 
-===== Subline Matching
+*_Subline Matching_*
 
 Due to the detail in some of the input datasets containing many small power line sections, Frechet 
 Distance based subline matching was the only available subline matcher that had reasonable runtime 
@@ -43,7 +43,7 @@ performance. At times, maximal subline matching could catch additional desirable
 that Frechet did not (most of which should be reviewed instead of matched).  However, when 
 attempting to combine the two within the model, results did not improve and runtime suffered.
 
-===== Rubber Sheeting
+*_Rubber Sheeting_*
 
 Initially, rubber sheeting resulted in runtime exceptions for some of the input data.  The cause for 
 this seems due to multiple ways sharing the same node, however the exact cause wasn't immediately 
@@ -51,7 +51,7 @@ obvious. Adding a configuration option to disable the error handling, turned on 
 situation resulted in an increased conflation score without having an adverse affect on any other 
 conflation.
 
-===== Tags
+*_Tags_*
 
 For the input data that contained them, voltage tags were very valuable when trying to disambiguate 
 matches in dense areas of power lines (especially near power stations).  Fortunately, a lot of the 
@@ -61,7 +61,7 @@ To a lesser degree, the location tag used in the OpenStreetMap power line mappin
 valuable. Since power lines can exist both above and under, it can be difficult to correctly 
 conflate underground power lines if they are not so labeled.
 
-==== Difficulties
+===== Difficulties
 
 The largest difficulty in conflating power lines was due to: 1) differing standards on mapping power 
 lines on towers, 2) data mapped incorrectly based off of aerial imagery, 3) power lines that start 
@@ -80,7 +80,7 @@ from aerial imagery appeared to incorrectly connect power line ways when compare
 specialized open source power line datasets coming from power companies (ENERGYDATA.INFO, 
 California State Government).
 
-==== Matching
+===== Matching
 
 Power Line matching allows for a manually configured or automatically calculated search radius when 
 determining the maximum distance between features to search during matching. Automatic search radius 
@@ -92,20 +92,20 @@ Their match thresholds were determined against test data using Weka. Additionall
 weighting is used to favor features that are closer together than those further apart. Tag matching 
 looks at the values of the `voltage` and `location` tags only.
 
-==== Merging
+===== Merging
 
 Power Line merging uses the standard Hootenanny merging process that is used for merging most linear 
 features, including roads.
 
-==== Configurable Options
+===== Configurable Options
 
 See the descriptions for configuration options named `power.line.*` for more information on how 
 Power Line Conflation behavior may be modified.
 
-==== Test Results
+===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
-(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx[these slides]
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 
