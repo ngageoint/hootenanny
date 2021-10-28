@@ -409,17 +409,12 @@ void MapStitcher::_stitchWay(const OsmMapPtr& source_map,
     _copyWayToMap(source_map, dest_map, way);
 }
 
-void MapStitcher::_stitchPoly(const OsmMapPtr& /*source_map*/,
-                              const OsmMapPtr& /*dest_map*/,
-                              const WayPtr& /*poly*/)
+void MapStitcher::_stitchPoly(const OsmMapPtr& source_map,
+                              const OsmMapPtr& dest_map,
+                              const WayPtr& poly)
 {
-/*
-  //  See if the closed area is on a border and there is a corresponding closed area on the other side to merge with
-  vector<long> border_ids;
-  //  Find all IDs
-  for (auto id : poly->getNodeIds())
-    border_ids.emplace_back(id);
-*/
+  LOG_WARN("Copying polygon way to stitched map.")
+  _copyWayToMap(source_map, dest_map, poly);
 }
 
 WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
@@ -427,19 +422,27 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
                                         const WayPtr& way,
                                         bool first)
 {
-  WayPtr result;
   //  Get the stitch point in the source to find in the destination
   NodePtr stitchPoint = source_map->getNode(first ? way->getFirstNodeId() : way->getLastNodeId());
+  return _findStitchPointWay(source_map, dest_map, way, stitchPoint);
+}
+
+WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
+                                        const OsmMapPtr& dest_map,
+                                        const WayPtr& way,
+                                        const NodePtr& node)
+{
+  WayPtr result;
   //  Use a fake node ID of 0 in the close point hash so that it won't affect any other node ID in the base map
   const int fakeNodeId = 0;
   //  Update the base close point hash with the stitch point node
-  _cph.updatePoint(stitchPoint->getX(), stitchPoint->getY(), fakeNodeId);
+  _cph.updatePoint(node->getX(), node->getY(), fakeNodeId);
   //  Get all of the points near by from the close point hash
   vector<long> matches = _cph.getMatchesFor(fakeNodeId);
   //  There should only be one match (plus the ID), if any
   if (matches.size() > 2)
   {
-    LOG_WARN("Multiple stitch points found, unable to stitch way (" << way->getId() << ") at node (" << stitchPoint->getId() << ")");
+    LOG_WARN("Multiple stitch points found, unable to stitch way (" << way->getId() << ") at node (" << node->getId() << ")");
     return result;
   }
   else if (matches.size() == 2) //  Found one point in the base to merge with for stitching
@@ -447,7 +450,7 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
     //  Get the non-fake ID
     long baseNodeId = matches[0] != fakeNodeId ? matches[0] : matches[1];
 
-    LOG_DEBUG("Stitching ways at base node (" << baseNodeId << ") and secondary node (" << stitchPoint->getId() << ")");
+    LOG_DEBUG("Stitching ways at base node (" << baseNodeId << ") and secondary node (" << node->getId() << ")");
 
     NodePtr baseNode = dest_map->getNode(baseNodeId);
     //  Find all of the ways where this node is a member
@@ -469,7 +472,7 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
       }
       //  Check the heading of both way endpoints
       Radians heading1 = _getWayEndpointHeading(dest_map, w, baseNodeId, true);
-      Radians heading2 = _getWayEndpointHeading(source_map, way, stitchPoint->getId(), false);
+      Radians heading2 = _getWayEndpointHeading(source_map, way, node->getId(), false);
       Radians delta = WayHeading::deltaMagnitude(heading1, heading2);
       if (delta < M_PI_4 / 4.0)
         score += 1.0;

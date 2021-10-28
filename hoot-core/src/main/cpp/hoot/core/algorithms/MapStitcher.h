@@ -155,6 +155,7 @@ protected:
    * @return Pointer to the corresponding stitch way
    */
   WayPtr _findStitchPointWay(const OsmMapPtr& source_map, const OsmMapPtr& dest_map, const WayPtr& way, bool first);
+  WayPtr _findStitchPointWay(const OsmMapPtr& source_map, const OsmMapPtr& dest_map, const WayPtr& way, const NodePtr& node);
 
   /**
    * @brief _joinWayPairs Join two ways in the base map, fixes the over and back issue
