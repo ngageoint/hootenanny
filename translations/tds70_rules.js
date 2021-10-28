@@ -261,7 +261,7 @@ tds70.rules = {
     // ['AMA','-999999',undefined,undefined], // No Information
     ['AMA','1','attraction','artificial_mountain'], // Artificial Mountain
     ['AMA','2','attraction','ferris_wheel'], // Ferris Wheel
-    ['AMA','3','attraction','roller-coaster'], // Roller-coaster
+    ['AMA','3','attraction','roller_coaster'], // Roller-coaster
     ['AMA','4','attraction','spherical'], // Spherical
     ['AMA','5','attraction','water_attraction'], // Water Attraction
     ['AMA','6','attraction','vertical_ride'], // Vertical Ride
@@ -2276,7 +2276,7 @@ tds70.rules = {
     ['RRC','24','railway','museum'], // Museum
     ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
-    ['RRC','999','railway','Other'], // Other
+    ['RRC','999','railway','other'], // Other
 
     // RRC2 - Railway Use [2]
     // RRC3 - Railway Use [3]
@@ -3042,7 +3042,7 @@ tds70.rules = {
     ['ZI004_RCG','33','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // Defence Acquisition and Logistics Organization (Denmark)
     ['ZI004_RCG','34','attribution','military_geographic_group_(estonia)'], // Military Geographic Group (Estonia)
     ['ZI004_RCG','35','attribution','topographic_service_(finland)'], // Topographic Service (Finland)
-    ['ZI004_RCG','36','attribution','bureau_geographie,_hydrographie,_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
+    ['ZI004_RCG','36','attribution','bureau_geographie_hydrographie_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
     ['ZI004_RCG','37','attribution','bundeswehr_geoinformation_office_(germany)'], // Bundeswehr Geoinformation Office (Germany)
     ['ZI004_RCG','38','attribution','hellenic_military_geographic_service_(greece)'], // Hellenic Military Geographic Service (Greece)
     ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
@@ -3092,7 +3092,7 @@ tds70.rules = {
     ['ZI004_RCG','83','attribution','servicio_geografico_militar_(guatemala)'], // Servicio Geografico Militar (Guatemala)
     ['ZI004_RCG','84','attribution','instituto_cartografico_militar_(dominican_republic)'], // Instituto Cartografico Militar (Dominican Republic)
     ['ZI004_RCG','85','attribution','instituto_nicaraguense_de_estudios_terretoriales_(nicaragua)'], // Instituto Nicaraguense de Estudios Terretoriales (Nicaragua)
-    ['ZI004_RCG','86','attribution','direccion_general_de_registros,_catastro,_y_geografia_(honduras)'], // Direccion General de Registros, Catastro, y Geografia (Honduras)
+    ['ZI004_RCG','86','attribution','direccion_general_de_registros_catastro_y_geografia_(honduras)'], // Direccion General de Registros, Catastro, y Geografia (Honduras)
     ['ZI004_RCG','87','attribution','instituto_geografico_militar_(ecuador)'], // Instituto Geografico Militar (Ecuador)
     ['ZI004_RCG','88','attribution','instituto_geografico_nacional_tommy_guardia_(panama)'], // Instituto Geografico Nacional "Tommy Guardia" (Panama)
     ['ZI004_RCG','89','attribution','instituto_geografico_nacional_(argentina)'], // Instituto Geografico Nacional (Argentina)

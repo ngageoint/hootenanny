@@ -409,7 +409,7 @@ mgcp.rules = {
 
     // FAC - Solid Maritime Construction
     // ['FAC','0',undefined,undefined], // Unknown
-    ['FAC','0','raw:FAC','unknown'], // Unknown
+    ['FAC','0','solid_construction','unknown'], // Unknown
     ['FAC','1000','solid_construction','no'], // Open
     ['FAC','1001','solid_construction','yes'], // Solid Face
 
@@ -527,7 +527,7 @@ mgcp.rules = {
     // FPT - Airfield Type
     // ['FPT','0',undefined,undefined], // Unknown
     ['FPT','0','aeroway:airfield:type','unknown'], // Unknown
-    ['FPT','1','aeroway:airfield:type','major_airfield'], // Major
+    ['FPT','1','aeroway:airfield:type','major'], // Major
     ['FPT','2','aeroway:airfield:type','minor_and_hard'], // Minor and Hard
     ['FPT','3','aeroway:airfield:type','minor_and_soft'], // Minor and Soft
     ['FPT','999','aeroway:airfield:type','other'], // Other
@@ -776,7 +776,7 @@ mgcp.rules = {
     // ['PPO','0',undefined,undefined],
     ['PPO','0','product','unknown'],
     ['PPO','1','product','aircraft'],
-    ['PPO','2','product','aluminum'],
+    ['PPO','2','product','aluminium'],
     ['PPO','3','product','ammunition'],
     ['PPO','4','product','asphalt'],
     ['PPO','9','product','bauxite'],
@@ -919,7 +919,7 @@ mgcp.rules = {
     ['RRC','15','railway','funicular'],
     ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'],
-    ['RRC','999','railway','Other'],
+    ['RRC','999','railway','other'],
 
     // RSA - Branch Railway Type
     // ['RSA','0',undefined,undefined],
@@ -936,7 +936,7 @@ mgcp.rules = {
     ['RST','5','surface','grass'], // DIGEST FACC from Data: Grass/Sod
     ['RST','6','surface','ground'], // DIGEST FACC from Data: Natural
     ['RST','8','surface','earth'], // Temporary - same as ground?
-    ['RST','999','surface','Other'],
+    ['RST','999','surface','other'],
 
     // RTA - Linear Feature Arrangement
     // ['RTA','0',undefined,undefined], // This also gets used by pipelines
@@ -982,7 +982,7 @@ mgcp.rules = {
 
     // SFS - Aerodrome Pavement Functional
     // ['SFS','0',undefined,undefined], // Unknown
-    ['SFS','0','aeroway:pavement_status','unknown'], // Unknown
+    ['SFS','0','aeroway:pavement:status','unknown'], // Unknown
     ['SFS','1','aeroway:pavement:status','fair'], // Fair
     ['SFS','3','aeroway:pavement:status','good'], // Good
     ['SFS','5','aeroway:pavement:status','poor'], // Poor
@@ -1203,7 +1203,7 @@ mgcp.rules = {
 
     // VEG - Vegetation Characteristic
     // ['VEG','0',undefined,undefined], // Unknown
-    ['VEG','0','raw:VEG','unknown'], // Unknown
+    ['VEG','0','vegetation:characteristic','unknown'], // Unknown
     ['VEG','50','swamp:vegetation:type','wood'], // Wood  - In MGCP Spec but no details about it
     ['VEG','51','swamp:vegetation:type','herb_and_brush'], // Herb and Brush
     ['VEG','75','swamp:vegetation:type','brush'], // Brush
@@ -1776,7 +1776,7 @@ mgcp.rules = {
     ['SRC_NAME','52','source:name','tactical_oceanographic_data_lv_0_(tod0)'], // Tactical Oceanographic Data Lv 0 (TOD0)
     ['SRC_NAME','53','source:name','tactical_oceanographic_data_lv_1_(tod1)'], // Tactical Oceanographic Data Lv 1 (TOD1)
     ['SRC_NAME','54','source:name','tactical_oceanographic_data_lv_2_(tod2)'], // Tactical Oceanographic Data Lv 2 (TOD2)
-    ['SRC_NAME','55','source:name','tactical_oceanographic_data_lv_2_(tod3)'], // Tactical Oceanographic Data Lv 3 (TOD3)
+    ['SRC_NAME','55','source:name','tactical_oceanographic_data_lv_3_(tod3)'], // Tactical Oceanographic Data Lv 3 (TOD3)
     ['SRC_NAME','56','source:name','tactical_oceanographic_data_lv_4_(tod4)'], // Tactical Oceanographic Data Lv 4 (TOD4)
     ['SRC_NAME','57','source:name','tactical_oceanographic_data_lv_5_(tod5)'], // Tactical Oceanographic Data Lv 5 (TOD5)
     ['SRC_NAME','58','source:name','topographic_line_map_(tlm)'], // Topographic Line Map (TLM)
@@ -1957,7 +1957,7 @@ mgcp.rules = {
     ['UPD_NAME','52','source:review_source:type','tactical_oceanographic_data_lv_0_(tod0)'], // Tactical Oceanographic Data Lv 0 (TOD0)
     ['UPD_NAME','53','source:review_source:type','tactical_oceanographic_data_lv_1_(tod1)'], // Tactical Oceanographic Data Lv 1 (TOD1)
     ['UPD_NAME','54','source:review_source:type','tactical_oceanographic_data_lv_2_(tod2)'], // Tactical Oceanographic Data Lv 2 (TOD2)
-    ['UPD_NAME','55','source:review_source:type','tactical_oceanographic_data_lv_2_(tod3)'], // Tactical Oceanographic Data Lv 3 (TOD3)
+    ['UPD_NAME','55','source:review_source:type','tactical_oceanographic_data_lv_3_(tod3)'], // Tactical Oceanographic Data Lv 3 (TOD3)
     ['UPD_NAME','56','source:review_source:type','tactical_oceanographic_data_lv_4_(tod4)'], // Tactical Oceanographic Data Lv 4 (TOD4)
     ['UPD_NAME','57','source:review_source:type','tactical_oceanographic_data_lv_5_(tod5)'], // Tactical Oceanographic Data Lv 5 (TOD5)
     ['UPD_NAME','58','source:review_source:type','topographic_line_map_(tlm)'], // Topographic Line Map (TLM)
@@ -2033,7 +2033,7 @@ mgcp.rules = {
     ['ZVAL_TYPE','3',undefined,undefined],
     ['ZVAL_TYPE','4','source:vertical_source:type','reflective_surface'],
     ['ZVAL_TYPE','5','source:vertical_source:type','stereoscopic_imagery'],
-    ['ZVAL_TYPE','6','source:vertical_source:type','tin'],
+    ['ZVAL_TYPE','6','source:vertical_source:type','tin_data'],
     ['ZVAL_TYPE','999','source:vertical_source:type','other'],
     ], // End one2oneIn
 

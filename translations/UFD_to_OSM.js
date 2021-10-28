@@ -422,8 +422,8 @@ ufd = {
     ['BFC','Yacht Club/Sailing Club','leisure','yacht_club'], // Yacht Club/Sailing Club
     ['BFC','56','amenity','pub'], // Public Inn
     ['BFC','Public Inn','amenity','pub'], // Public Inn
-    ['BFC','57','amenity','restaraunt'],
-    ['BFC','Restaraunt','amenity','restaraunt'],
+    ['BFC','57','amenity','restaurant'],
+    ['BFC','Restaraunt','amenity','restaurant'],
     ['BFC','58','use','observation'], // Observation
     ['BFC','Observation','use','observation'], // Observation
     ['BFC','59','use','research'],
@@ -1678,7 +1678,7 @@ ufd = {
     // ['PRO','0','product','unknown'], // Unknown
     ['PRO','0',undefined,undefined], // Unknown
     ['PRO','1','product','aircraft'], // Aircraft
-    ['PRO','2','product','aluminum'],
+    ['PRO','2','product','aluminium'],
     ['PRO','3','product','ammunition'],
     ['PRO','5','product','asphalt'], // Asphalt
     ['PRO','9','product','brick'], // Brick
@@ -1731,7 +1731,7 @@ ufd = {
     ['PRO','109','product','sugar'], // Sugar
     ['PRO','110','product','travertine'], // Travertine
     ['PRO','112','product','uranium'], // Uranium
-    ['PRO','113','product','vegetation_products'], // Vegetation Products
+    ['PRO','113','product','vegetation_product'], // Vegetation Products
     ['PRO','116','product','water'],
     ['PRO','117','product','wood'], // Wood
     ['PRO','118','product','zinc'], // Zinc
@@ -1807,7 +1807,7 @@ ufd = {
     ['PRO','Sugar','product','sugar'], // Sugar
     ['PRO','Travertine','product','travertine'], // Travertine
     ['PRO','Uranium','product','uranium'], // Uranium
-    ['PRO','Vegetation Products','product','vegetation_products'], // Vegetation Products
+    ['PRO','Vegetation Products','product','vegetation_product'], // Vegetation Products
     ['PRO','Water','product','water'],
     ['PRO','Wood','product','wood'], // Wood
     ['PRO','Zinc','product','zinc'], // Zinc
@@ -1989,7 +1989,7 @@ ufd = {
     ['RTP','1','reservoir:type','constructed_basin'], // Constructed Basin
     ['RTP','Constructed Basin','reservoir:type','constructed_basin'], // Constructed Basin
     ['RTP','2','reservoir:type','back-up_water/impounded_by_a_dam'], // Back-up Water/Impounded by a Dam
-    ['RTP','Back-up Water/Impounded by a Dam','reservoir:type','back-up_water/impounded_by_a_dam'], // Back-up Water/Impounded by a Dam
+    ['RTP','Back-up Water/Impounded by a Dam','reservoir:type','back-up_water_impounded_by_a_dam'], // Back-up Water/Impounded by a Dam
 
     // RTT - Route Intended Use
     ['RTT','0','highway','road'],
@@ -2263,11 +2263,11 @@ ufd = {
     ['SPEC_ID','7SC/010-MPO-10','source:extraction_specification','7sc/010-mpo-10'], // 7SC/010-MPO-10
     ['SPEC_ID','7SC/011-MPO-11','source:extraction_specification','7sc/011-mpo-11'], // 7SC/011-MPO-11
     ['SPEC_ID','DNC','source:extraction_specification','dnc'], // DNC
-    ['SPEC_ID','Mission Specific Data 1 (MSD1)','source:extraction_specification','mission_specific_data_1_(msd1)'], // Mission Specific Data 1 (MSD1)
-    ['SPEC_ID','Mission Specific Data 2 (MSD2)','source:extraction_specification','mission_specific_data_2_(msd2)'], // Mission Specific Data 2 (MSD2)
-    ['SPEC_ID','Mission Specific Data 3 (MSD3)','source:extraction_specification','mission_specific_data_3_(msd3)'], // Mission Specific Data 3 (MSD3)
-    ['SPEC_ID','Mission Specific Data 4 (MSD4)','source:extraction_specification','mission_specific_data_4_(msd4)'], // Mission Specific Data 4 (MSD4)
-    ['SPEC_ID','Mission Specific Data 5 (MSD5)','source:extraction_specification','mission_specific_data_5_(msd5)'], // Mission Specific Data 5 (MSD5)
+    ['SPEC_ID','Mission Specific Data 1 (MSD1)','source:extraction_specification','msd1'], // Mission Specific Data 1 (MSD1)
+    ['SPEC_ID','Mission Specific Data 2 (MSD2)','source:extraction_specification','msd2'], // Mission Specific Data 2 (MSD2)
+    ['SPEC_ID','Mission Specific Data 3 (MSD3)','source:extraction_specification','msd3'], // Mission Specific Data 3 (MSD3)
+    ['SPEC_ID','Mission Specific Data 4 (MSD4)','source:extraction_specification','msd4'], // Mission Specific Data 4 (MSD4)
+    ['SPEC_ID','Mission Specific Data 5 (MSD5)','source:extraction_specification','msd5'], // Mission Specific Data 5 (MSD5)
     ['SPEC_ID','Other','source:extraction_specification','other'], // Other
     ['SPEC_ID','UUU-DBCS','source:extraction_specification','uuu-dbcs'], // UUU-DBCS
 
@@ -2364,37 +2364,37 @@ ufd = {
     // SSR - Structure Shape of Roof
     ['SSR','0',undefined,undefined],
     ['SSR','Unknown',undefined,undefined],
-    ['SSR','6','building:roof_shape','conical'],
-    ['SSR','Conical/Peaked','building:roof_shape','conical'],
-    ['SSR','Conical/Peaked/NUN','building:roof_shape','conical'],
-    ['SSR','38','building:roof_shape','semi-cylindrical'],
-    ['SSR','Curved/Round (Quonset)','building:roof_shape','semi-cylindrical'],
-    ['SSR','40','building:roof_shape','domed'],
-    ['SSR','Dome','building:roof_shape','domed'],
-    ['SSR','41','building:roof_shape','flat'],
-    ['SSR','Flat','building:roof_shape','flat'],
-    ['SSR','42','building:roof_shape','pitched'],
-    ['SSR','Gable (Pitched)','building:roof_shape','pitched'],
-    ['SSR','47','building:roof_shape','sawtoothed'],
-    ['SSR','Sawtooth','building:roof_shape','sawtoothed'],
-    ['SSR','50','building:roof_shape','with_clerestory'],
-    ['SSR','With Monitor','building:roof_shape','with_clerestory'],
-    ['SSR','51','building:roof_shape','with_steeple'],
-    ['SSR','With Steeple','building:roof_shape','with_steeple'],
-    ['SSR','55','building:roof_shape','flat_with_clerestory'],
-    ['SSR','Flat with Monitor','building:roof_shape','flat_with_clerestory'],
-    ['SSR','64','building:roof_shape','pitched_with_clerestory'],
-    ['SSR','Gable with Monitor','building:roof_shape','pitched_with_clerestory'],
-    ['SSR','77','building:roof_shape','with_cupola'],
-    ['SSR','With Cupola','building:roof_shape','with_cupola'],
-    ['SSR','78','building:roof_shape','with_turret'],
-    ['SSR','With Turret','building:roof_shape','with_turret'],
-    ['SSR','79','building:roof_shape','with_tower'],
-    ['SSR','With Tower','building:roof_shape','with_tower'],
-    ['SSR','80','building:roof_shape','with_minaret'],
-    ['SSR','With Minaret','building:roof_shape','with_minaret'],
-    ['SSR','999','building:roof_shape','other'],
-    ['SSR','Other','building:roof_shape','other'],
+    ['SSR','6','roof:shape','conical'],
+    ['SSR','Conical/Peaked','roof:shape','conical'],
+    ['SSR','Conical/Peaked/NUN','roof:shape','conical'],
+    ['SSR','38','roof:shape','semi-cylindrical'],
+    ['SSR','Curved/Round (Quonset)','roof:shape','semi-cylindrical'],
+    ['SSR','40','roof:shape','domed'],
+    ['SSR','Dome','roof:shape','domed'],
+    ['SSR','41','roof:shape','flat'],
+    ['SSR','Flat','roof:shape','flat'],
+    ['SSR','42','roof:shape','pitched'],
+    ['SSR','Gable (Pitched)','roof:shape','pitched'],
+    ['SSR','47','roof:shape','sawtoothed'],
+    ['SSR','Sawtooth','roof:shape','sawtoothed'],
+    ['SSR','50','roof:shape','with_clerestory'],
+    ['SSR','With Monitor','roof:shape','with_clerestory'],
+    ['SSR','51','roof:shape','with_steeple'],
+    ['SSR','With Steeple','roof:shape','with_steeple'],
+    ['SSR','55','roof:shape','flat_with_clerestory'],
+    ['SSR','Flat with Monitor','roof:shape','flat_with_clerestory'],
+    ['SSR','64','roof:shape','pitched_with_clerestory'],
+    ['SSR','Gable with Monitor','roof:shape','pitched_with_clerestory'],
+    ['SSR','77','roof:shape','with_cupola'],
+    ['SSR','With Cupola','roof:shape','with_cupola'],
+    ['SSR','78','roof:shape','with_turret'],
+    ['SSR','With Turret','roof:shape','with_turret'],
+    ['SSR','79','roof:shape','with_tower'],
+    ['SSR','With Tower','roof:shape','with_tower'],
+    ['SSR','80','roof:shape','with_minaret'],
+    ['SSR','With Minaret','roof:shape','with_minaret'],
+    ['SSR','999','roof:shape','other'],
+    ['SSR','Other','roof:shape','other'],
 
     // SWC - Soil Wetness Condition
     // ['SWC','0','raw:SWC','unknown'], // Unknown
@@ -2908,10 +2908,10 @@ ufd = {
     ['WFT','0',undefined,undefined], // Unknown
     ['WFT','2','water_well:type','walled-in'], // Walled-in
     ['WFT','Walled-in','water_well:type','walled-in'], // Walled-in
-    ['WFT','3','water_well:type','artesian_well'], // Artesian Well
-    ['WFT','Artesian Well','water_well:type','artesian_well'], // Artesian Well
-    ['WFT','5','water_well:type','dug_or_drilled_well'], // Dug or Drilled Well
-    ['WFT','Dug or Drilled Well','water_well:type','dug_or_drilled_well'], // Dug or Drilled Well
+    ['WFT','3','water_well:type','artesian'], // Artesian Well
+    ['WFT','Artesian Well','water_well:type','artesian'], // Artesian Well
+    ['WFT','5','water_well:type','dug_or_drilled'], // Dug or Drilled Well
+    ['WFT','Dug or Drilled Well','water_well:type','dug_or_drilled'], // Dug or Drilled Well
     ['WFT','6','water_well:type','dug'], // Dug
     ['WFT','Dug','water_well:type','dug'], // Dug
     ['WFT','7','water_well:type','drilled'], // Drilled
@@ -2965,7 +2965,7 @@ ufd = {
     ['Z_VALUE_TYPE','Other','source:vertical_source:type','other'], // Other
     ['Z_VALUE_TYPE','Reflective surface derived','source:vertical_source:type','reflective_surface'], // Reflective surface derived
     ['Z_VALUE_TYPE','Stereo derived','source:vertical_source:type','stereoscopic_imagery'], // Stereo derived
-    ['Z_VALUE_TYPE','TIN derived','source:vertical_source:type','tin'], // TIN derived
+    ['Z_VALUE_TYPE','TIN derived','source:vertical_source:type','tin_data'], // TIN derived
     ['Z_VALUE_TYPE','Unknown','source:vertical_source:type','unknown_associated_attribute_information'], // Unknown  Associated Attribute Information
   ], // End one2one
   // ##### End of One2One Rules #####
