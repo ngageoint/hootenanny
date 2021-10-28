@@ -2653,6 +2653,14 @@ vs
 ...
 -----
 
+=== json.merge.nearby.nodes.convert
+
+* Data Type: bool
+* Default Value: `true`
+
+Insert, if not already specified, the `DuplicateNodeRemover` operation into the
+`convert.ops` list of operations for all JSON and GeoJSON inputs.
+
 === json.output.tasking.manager.aoi
 
 * Data Type: bool
