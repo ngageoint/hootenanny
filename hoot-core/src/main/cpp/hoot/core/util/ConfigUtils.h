@@ -101,15 +101,6 @@ public:
    * @param entryToRemove value of the list member from the configuration option to remove
    */
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
-
-  /**
-   * Inserts an entry into a list configuration option
-   *
-   * @param opName name of the configuration option being modified
-   * @param opEntry value of the configuration option entry to add
-   * @param index zero based index within the list configuration option to add the entry
-   */
-  static void insertListOpEntry(const QString& opName, const QString& opEntry, const int index);
 };
 
 }
