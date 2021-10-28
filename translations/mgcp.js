@@ -2282,11 +2282,14 @@ mgcp = {
       mgcp.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       mgcp.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       mgcp.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      mgcp.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
     }
+
+    // call each time becuase client override can update 'reader.drop.defaults' value
+    mgcp.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
+
 
     // Debug:
     if (mgcp.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
