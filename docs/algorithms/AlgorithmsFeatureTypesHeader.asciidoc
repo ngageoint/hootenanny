@@ -1,0 +1,6 @@
+
+=== Conflatable Feature Types
+
+This section conflation algorithms utilized by Hootenanny, organized by feature type. The feature 
+types are list in historical order of implementation.
+

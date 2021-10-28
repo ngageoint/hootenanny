@@ -89,6 +89,11 @@ private:
   int _logWarnCount;
 };
 
+VertexHausdorffDistance::VertexHausdorffDistance() :
+_distance(-1)
+{
+}
+
 VertexHausdorffDistance::VertexHausdorffDistance(const Geometry& g1, const Geometry& g2)
 {
   compute(g1, g2);

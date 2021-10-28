@@ -38,10 +38,12 @@ namespace hoot
 {
 
 /**
- * Performs random splitting of a map's ways in accordance with [1].  The probability that a given
- * way is split and the minimum allowable spacing between nodes on a split way are configurable in
- * in the Hootenanny configuration settings.  Relation multi-line strings are assumed to only
- * contain ways.  An exception will be thrown if they contain any other type of feature.
+ * Performs random splitting of a map's ways in accordance with [1].
+ *
+ * The probability that a given way is split and the minimum allowable spacing between nodes on a
+ * split way are configurable in in the Hootenanny configuration settings.  Relation multi-line
+ * strings are assumed to only contain ways.  An exception will be thrown if they contain any other
+ * type of feature.
  *
  * One difference between this implementation and that of the paper is that this implementation will
  * not randomly select a split point that violates the minimum node distance setting unless the way
@@ -65,6 +67,9 @@ public:
   RandomWaySplitter();
   ~RandomWaySplitter() override = default;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   /**

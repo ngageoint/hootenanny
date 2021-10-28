@@ -60,7 +60,6 @@ public:
   static ElementCriterionPtr constructCriterion(
     const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
     bool& isStreamable);
-
   /**
    * Constructs a criterion that is the combination of multiple criterion
    *
@@ -73,7 +72,6 @@ public:
    */
   static ElementCriterionPtr constructCriterion(
     const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
-
   /**
    * @brief combineCriterion combines multiple criterion into a single criteria
    * @param criteria individual criterion to combine
@@ -94,7 +92,6 @@ public:
    * @param minCount the minmal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
-   * @todo move this to MapUtils?
    */
   template<class C>
   static bool containsSatisfyingElements(
@@ -119,7 +116,6 @@ public:
     LOG_VART(count);
     return exactCount ? (count == minCount) : (count >= minCount);
   }
-
   /**
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
    * times. Only objects of type ElementCriterion are allowed, all others will return false
@@ -129,7 +125,6 @@ public:
    * @param minCount the minimal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the elements meet the specified criterion the specified number of times
-   * @todo move this to MapUtils?
    */
   template<class C>
   static bool containsSatisfyingElements(

@@ -53,7 +53,7 @@ public:
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
    * means one or both of the features have no names.
-   *
+   * @param map map containing the features
    * @param poi the first element to examine
    * @param poly the second element to examine
    * @return a name score

@@ -105,7 +105,7 @@ public:
    * The implementation details may change in the future.
    *
    * @return A newly allocated and copied Node shared pointer.
-   * @todo wrap this inside of clone()
+   * @todo wrap this inside of clone() and make it the default behavior?
    */
   std::shared_ptr<Node> cloneSp() const;
 

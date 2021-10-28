@@ -90,10 +90,10 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   Meters length1 = string1->calculateLength(map);
   Meters length2 = string2->calculateLength(map);
 
-  // TODO: These loops assume that equal portions of a line equal the same point on the line.
-  // Said another way, if you're 10% down line 1, then that is equivalent to 10% down line 2.
-  // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
-  // improve this matching. - see #3158
+  // TODO: These loops assume that equal portions of a line equal the same point on the line. Said
+  // another way, if you're 10% down line 1, then that is equivalent to 10% down line 2.
+  // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may improve
+  // this matching. - see #3158
 
   // Its not obvious why we would allow node/way match pairs here, but forcing way/way match pairs
   // does lead to worse snapping at some road intersections as was found while working on #3386.
@@ -176,16 +176,6 @@ QString NetworkMatch::toString() const
       .arg(getName())
       .arg(hoot::toString(_pairs))
       .arg(getScore());
-}
-
-bool NetworkMatch::isVerySimilarTo(const NetworkMatch* other) const
-{
-  return getEdgeMatch()->isVerySimilarTo(other->getEdgeMatch());
-}
-
-bool NetworkMatch::contains(const NetworkMatch* other) const
-{
-  return getEdgeMatch()->contains(other->getEdgeMatch());
 }
 
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const

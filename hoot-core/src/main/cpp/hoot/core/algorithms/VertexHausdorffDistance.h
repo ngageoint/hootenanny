@@ -61,7 +61,7 @@ class VertexHausdorffDistance
 {
 public:
 
-  VertexHausdorffDistance() { _distance = -1; }
+  VertexHausdorffDistance();
   VertexHausdorffDistance(const geos::geom::Geometry& g1, const geos::geom::Geometry& g2);
 
   void compute(const geos::geom::Geometry& g1, const geos::geom::Geometry& g2);

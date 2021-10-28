@@ -53,8 +53,10 @@ double HausdorffDistanceExtractor::distance(const OsmMap &map,
     return nullValue();
   }
 
-  return max(VertexHausdorffDistance(*g1, *g2).getDistance(),
-    VertexHausdorffDistance(*g2, *g1).getDistance());
+  return
+    max(
+      VertexHausdorffDistance(*g1, *g2).getDistance(),
+      VertexHausdorffDistance(*g2, *g1).getDistance());
 }
 
 }

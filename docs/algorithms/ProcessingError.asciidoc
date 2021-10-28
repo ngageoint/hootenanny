@@ -1,5 +1,5 @@
 
-=== Sources of Processing Error
+==== Sources of Processing Error
 
 This document explores some of the sources of errors while processing geospatial
 data in Hootenanny and quantifies those errors in specific test cases. Any large
@@ -7,7 +7,7 @@ and intentional changes that may occur as a result of destructive operations, su
 as snapping nodes together to create  intersections, averaging ways, or rubber
 sheeting data together are considered outside of the scope of this current effort.
 
-==== Sources of Small Geometry Changes
+===== Sources of Small Geometry Changes
 
 There are three primary sources of unintentional geometry errors. Firstly, all
 the numerical operations within Hootenanny use floating point double precision
@@ -32,9 +32,9 @@ within the user interface. A section at the end is reserved specifically for the
 user interface manipulations that occur and how they might impact geometry
 values.
 
-==== Copy Errors
+===== Copy Errors
 
-===== Test Setup
+*_Test Setup_*
 
 To test error a set of 1000 random points were generated over a bounding box
 approximately the size of the continental United States. The points were then
@@ -60,7 +60,7 @@ The distance values are also reported as approximately micrometers where a
 degree is roughly equated to 110km. Distortions near the poles make this an
 unreliable figure, but it puts the values into a relatable frame of reference.
 
-===== Test Transformations
+*_Test Transformations_*
 
 The following transformations were tested:
 
@@ -88,7 +88,7 @@ The following transformations were tested:
   differing results. There may also be settings in OGR’s GML implementation that
   reduce error, but they were not obvious in the documentation.
 
-===== Results
+*_Results_*
 
 The graph and tables below show a number of operations that can impact
 processing error in Hootenanny.
@@ -135,7 +135,7 @@ reduce to 155um by simply changing the default setting in the file format.
 Outside of the .osm.pbf file format the errors are down in the nanometer range,
 although there are still unintentional changes occurring in the data.
 
-===== Conclusions
+*_Conclusions*_
 
 Interactions with users will have to be done to determine if the very small
 changes observed are relevant to their data sets. There are a number of things
@@ -152,7 +152,7 @@ or a mechanism to lock the seams before the cleaning takes place. The
 distributed tile conflation within Hootenanny is not impacted by this
 phenomenon.
 
-==== Sources of Error in the User Interface
+===== Sources of Error in the User Interface
 
 Below is a small diagram describing critical pieces of the web services, core
 database and user interface portions of Hootenanny. For the sake of clarity some
@@ -229,3 +229,4 @@ the process of posting changesets.
 The posted changeset is processed by the web services and the values are stored as 64 bit double
 precision floating point values in the database as WGS84/EPSG:4326. The changeset is already in
 WGS84/EPSG:4326 so no addition change in projection is necessary.
+

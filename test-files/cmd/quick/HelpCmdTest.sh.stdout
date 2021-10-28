@@ -1,0 +1,75 @@
+
+For detailed command help type: hoot help (command name)
+
+Usage:
+
+hoot <command> [--logLevel] [--color] [-C configFile ] [-D optionName=optionValue] \
+  [-D optionName="<optionValueEntry 1>;<optionValueEntry 2>;..."] [args]
+
+Basic Commands:
+
+  align                         Brings two maps into alignment using rubbersheeting
+  alpha-shape                   Generates a shape that covers a set of features in a map
+  changeset-apply               Writes an OSM changeset to an OSM data store
+  changeset-derive              Creates a changeset representing the difference between two maps
+  clean                         Corrects erroneous map data
+  compare                       Compares maps using metrics
+  conflate                      Conflates two maps into a single map
+  convert                       Converts between map formats
+  count                         Counts the number of features in a map that meet specified criteria
+  crop                          Crops a map to a bounds
+  cut                           Cuts out a portion from a map
+  diff                          Calculates the difference between two maps or changesets
+  extent                        Calculates the bounds of a map
+  help                          Displays help documentation
+  info                          Displays information about capabilities
+  is-sorted                     Determines if a map is sorted to the OSM standard
+  schema                        Generates documentation for the schema in use
+  sort                          Sorts a map to the OSM standard
+  split                         Splits a map into tiles
+  stat                          Calculates a single statistic for a map
+  stats                         Calculates a pre-configured set of statistics for a map
+  tag-compare                   Compares tags between two maps
+  tag-distribution              Calculates the distribution of values for specified tags in a map
+  tag-info                      Displays tag information for a map
+  task-grid                     Creates a task grid covering a map
+  validate                      Checks maps for validation errors
+  version                       Displays version information
+
+Advanced Commands:
+
+  build-model                   Builds a random forest model to be used by conflation
+  crop-random                   Crops out a random section of a map (experimental)
+  db-delete                     Deletes a map from the Hootenanny Web Services database
+  db-list                       Lists maps in the Hootenanny Web Services database
+  de-duplicate                  Removes duplicate features within a single map or between two maps (experimental)
+  login                         Logs a user into the Hootenanny Web Services
+  logout                        Logs a user out of the Hootenanny Web Services
+  perturb                       Perturbs features in a map
+  plot-node-density             Creates a node density plot for a map
+  score-matches                 Scores conflation performance against a manually matched map
+  score-matches-diff            Compares conflate performance between score-matches outputs (experimental)
+  sync-element-ids              Copies IDs for identical elements from one map to another (experimental)
+  type-similarity               Calculates a similarity score between two type tags
+  type-tagger-rules             Creates rules for adding missing type tags to a map
+
+Log Levels:
+
+  --error
+  --warn
+  --status (default)
+  --info
+  --debug
+  --trace
+
+Miscellaneous:
+
+  --color                     Colorize the output logs using ANSI colors
+
+List Option Operations:
+
+  Append:  [-D optionName+=optionValue]
+  Prepend: [-D optionName++=optionValue]
+  Remove:  [-D optionName-=optionValue]
+  Replace: [-D optionName="[old optionValue 1]->[new optionValue 1];\
+                           [old optionValue 2]->[new optionValue 2]"...]

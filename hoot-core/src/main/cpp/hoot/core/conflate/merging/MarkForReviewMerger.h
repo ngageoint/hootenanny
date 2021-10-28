@@ -46,24 +46,23 @@ public:
   static QString className() { return "MarkForReviewMerger"; }
 
   MarkForReviewMerger() = default;
-  ~MarkForReviewMerger() = default;
-
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  MarkForReviewMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, QString note,
-                      QString reviewType, double score);
-
+  MarkForReviewMerger(
+    const std::set<std::pair<ElementId, ElementId>>& pairs, const QString& note,
+    const QString& reviewType, double score);
   /**
    * Review when a whole group of elements needs to be reviewed instead of specific pairs. This
    * will create a single review that contains all the specified elements.
    */
-  MarkForReviewMerger(const std::set<ElementId>& eids, QString note,
-                      QString reviewType, double score);
+  MarkForReviewMerger(
+    const std::set<ElementId>& eids, const QString& note, const QString& reviewType, double score);
+  ~MarkForReviewMerger() = default;
 
-  void apply(const OsmMapPtr& map,
-             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   std::set<ElementId> getImpactedElementIds() const override;
 
@@ -72,12 +71,9 @@ public:
   void replace(ElementId oldEid, ElementId newEid) override;
 
   QString toString() const override;
-
   QString getDescription() const override
   { return "Marks elements as needing review before merging"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

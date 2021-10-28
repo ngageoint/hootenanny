@@ -222,7 +222,6 @@ void ChangesetCutOnlyCreator::create(
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
   // conflicts.
-  // TODO: move this to inside the geometry pass loop?
   _progress->set(_getJobPercentComplete(), "Synchonizing element IDs...");
   _synchronizeIds(refMaps, conflatedMaps);
   _currentTask++;
@@ -378,7 +377,6 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   _progress->set(_getJobPercentComplete(), "Cleaning data...");
 
-  // TODO: remove this combining
   // Combine the cookie cut ref map back with the secondary map for cleaning purposes.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(
@@ -388,8 +386,6 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   // clean the data
 
-  // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
-  // "toReplace" and "replacement"
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {

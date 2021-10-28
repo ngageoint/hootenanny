@@ -13,17 +13,16 @@ such as:
 * "Is this way a linear or area geometry?"
 
 However, to answer such questions we must have knowledge of OSM's tags baked
-into Hootenanny. To provide this the tag information is stored in schema files
-found in a set of JSON files in `$HOOT_HOME/conf/schema/`. These files contains
+into Hootenanny. To provide this, the tag information is stored in schema files
+found in a set of JSON files in `$HOOT_HOME/conf/schema`. These files contain
 several pieces of information:
 
 * The text associated with the tag. E.g. `amenity=cinema`
 * `isA` and `similarTo` relationships with other tags.
 * The type of value stored in the tag (e.g. real number, enumerated text, etc.)
 * The geometries that might be associated with the tag.
-* The relative influence of the tag - though this is not being used much.
-* Any categories that the tag may be part of (e.g. POI, building,
-  transportation).
+* The relative influence of the tag (though this is not being used much).
+* Any categories that the tag may be part of (e.g. POI, building, or transportation).
 
 ==== File Format
 
@@ -134,13 +133,12 @@ relationships:
 image::images/HighwaySchema.jpg[]
 
 There are many more intricacies to the schema file format and how the internal
-structure is built. If you would like more information please post to the GitHub
-site.
+structure is built.
 
 ==== Compound Tags
 
 Before describing the details of what a _compound tag_ is within the context of
-a schema a list of the problems with the 2012 schema will be discussed.
+a schema, a list of the problems with the 2012 schema will be discussed.
 
 In some cases it makes sense only to create links in the schema if multiple
 criteria are met. For example, a `highway=bus_stop` has a high similarity to a
@@ -201,7 +199,7 @@ a train platform. E.g.
 },
 ----
 
-The compound tag concept allows us to define how tags can interact. This will require some significant changes in the way scoring interacts with the OsmSchema graph. For example, now when a similarity score is calculated for two sets of tags the tags are each evaluated individually and then aggregated to calculate the score. Unfortunately this will no longer work with compound tags as we will need to look at all the tags that are in a feature at one time to determine similarity. For instance when comparing these two features:
+The compound tag concept allows us to define how tags can interact. This will require some significant changes in the way scoring interacts with the OsmSchema graph. For example, now when a similarity score is calculated for two sets of tags the tags are each evaluated individually and then aggregated to calculate the score. Unfortunately, this will no longer work with compound tags as we will need to look at all the tags that are in a feature at one time to determine similarity. For instance when comparing these two features:
 
 Feature 1:
 * `public_transport=platform`

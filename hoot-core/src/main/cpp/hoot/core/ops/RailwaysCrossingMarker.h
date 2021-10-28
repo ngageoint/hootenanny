@@ -55,8 +55,6 @@ namespace hoot
  * crossing. If a `railway=subway` is crossing under another above ground rail, that is fine.
  * However, if it was crossing with another underground rail that should be detected by this
  * class...haven't actually seen that happen yet, though.
- *
- * @todo abstract RoadCrossingPolyMarker and this into a base class?
  */
 class RailwaysCrossingMarker : public ConstOsmMapOperation, public Configurable
 {

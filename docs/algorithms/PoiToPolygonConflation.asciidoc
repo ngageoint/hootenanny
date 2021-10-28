@@ -1,13 +1,13 @@
 
 [[PoiToPolygonConflationAlgs]]
-=== POI to Polygon Conflation
+==== POI to Polygon Conflation
 
 The goal for the initial conflation of POI's to polygons was that the number of correctly conflated 
 features plus the number of features marked for manual review would equal at least 80% of the 
 overall conflated features in each test dataset, with the plans of improving that correctness score 
 as high as 90-95% in the future.
 
-==== Feature Definitions
+===== Feature Definitions
 
 POI to polygon conflation defines the following feature types:
 
@@ -18,7 +18,25 @@ definitions.
 either a populated name tag or any other tag which causes it to be classified as a POI or a building 
 by the Hootenanny schema definitions.
 
-==== Matching
+===== Additional Use Cases
+
+*_Keep Closest Matches Only_*
+
+By default, POI to Polygon uses a fairly large search radius to try consider as many things possible that might need to be matched together.
+If the following are true, you may want to tweak POI to Polygon conflation to keep the closest distance matches only:
+
+1) You are fairly confident in your geometries across both layers.
+2) You have mostly generic type information on your features.
+3) You are trying to generate fewer reviews at the expense of possibly missing some matches.
+
+In this situation you could run with the following option set:
+
+`poi.polygon.keep.closest.matches.only=true` - When a feature is matched to more than one other features, only the match with smallest distance between features is kept, despite the search radius
+`poi.polygon.additional.search.distance=0` - This reduces the overall search radius, thus reducing reviews (possible also matches) and increasing
+runtime performance.
+`poi.polygon.match.threshold=1` - This will prevent reviews from being presented completely.
+
+===== Matching
 
 POI to Polygon conflation in Hootenanny is an additive, rule based conflation which follows these rules:
 
@@ -68,7 +86,7 @@ Techniques that were experimented with but proved to add no benefit to the model
 * varying the match distance based on the feature type
 * using Weka to fine tune the factors and score thresholds used
 
-==== Merging
+===== Merging
 
 The first layer selected is the reference layer and the second, the secondary layer, same as in all 
 other hoot conflation types.  Which tags are kept is dependent on the selected tag merging strategy 
@@ -98,7 +116,7 @@ more than one POI in the reference layer to merge
 * Merge the tags of all matching POIs in the secondary layer together with each other if there is 
 more than one POI in the secondary layer to merge
 * Merge the building tags for matching buildings from both layers together as described in
-https://github.com/ngageoint/hootenanny/files/595244/Hootenanny.-.Building.Conflation.2014-08-19.pptx 
+https://github.com/ngageoint/hootenanny/files/595244/Hootenanny.-.Building.Conflation.2014-08-19.pptx[these slides] on 
 slide 6; they’re averged together
 * Merge the building geometries for matching buildings from both layers together as described in 
 that slide; pick the most complex building geometry and if both are the same complexity then pick 
@@ -107,15 +125,23 @@ the first geometry
 layer reference tags take priority over secondary layer tags
 * Remove the POI geometries as they’ve been “merged” with the building geometries.
 
-==== Configurable Options
+===== Statistics
+
+Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User
+Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those
+conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other
+POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions
+section <<hootuser, Hootenanny - User Guide>> for POI and polygon definition details.
+
+===== Configurable Options
 
 See the User Guide Command Line Documentation section for all configuration options beginning with 
 the text `poi.polygon`.
 
-==== Test Results
+===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
-(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx[these slides] 
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 
@@ -154,12 +180,12 @@ Very good test scores were achieved for all test except that the Alexandria test
 of the larger conflation tests, the number of reviews may be larger than what some users would deem
 acceptable.
 
-==== Future Work
+===== Future Work
 
 * improve tag similarity calculation
 * more intelligent POI merging
 * model based classification
 
-For more information on POI to polygon conflation:
-https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
+For more information on POI to polygon conflation see
+https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx[these slides].
 

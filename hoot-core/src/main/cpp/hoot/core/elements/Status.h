@@ -53,19 +53,13 @@ public:
   bool operator==(Status t) const { return t._type == _type; }
   bool operator!=(Status t) const { return t._type != _type; }
 
-  /**
-   * @brief fromInput Create a status object from the zero-based input number
-   * @return Return Unknown1 for i=0, Unknown2 for i=1, Input003 for i=2, etc.
-   */
-  static Status fromInput(int i);
-
   Type getEnum() const { return _type; }
 
   /**
    * @brief getInput Unlike the enumeration names and strings, this returns the zero-based number
-   *   for the input.
+   * for the input.
    * @return The zero-based input for this status or throws an exception if this isn't an input.
-   *   E.g. Unknown1 returns 0, Unknown2 return 1, etc.
+   * E.g. Unknown1 returns 0, Unknown2 return 1, etc.
    */
   int getInput() const;
 
@@ -80,7 +74,6 @@ public:
    * @return Returns true if the status is one of any input value (multiary)
    */
   bool isInput() const { return _type == Unknown1 || _type == Unknown2 || _type > Conflated; }
-
   /**
    * @brief isUnknown Provided for backwards compatibility.
    * @return Returns true if the status is one of the first two inputs.

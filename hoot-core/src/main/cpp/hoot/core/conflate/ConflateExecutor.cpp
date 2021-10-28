@@ -148,7 +148,6 @@ void ConflateExecutor::_initConfig(const QString& output)
 void ConflateExecutor::_initTaskCount()
 {
   // The number of steps here must be updated as you add/remove job steps in the logic.
-  // TODO: describe how the total steps are derived
   _numTotalTasks = 5;
   if (_displayStats)
   {

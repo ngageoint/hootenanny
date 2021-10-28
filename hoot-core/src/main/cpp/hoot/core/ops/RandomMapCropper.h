@@ -48,8 +48,14 @@ public:
   RandomMapCropper();
   ~RandomMapCropper() override = default;
 
+  /**
+   * @see OsmMapOperation
+   */
   void apply(std::shared_ptr<OsmMap>& map) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override

@@ -1,21 +1,21 @@
 
 [[AreaToAreaConflationAlgs]]
-=== Area Conflation
+==== Area Conflation
 
-==== Overview
+===== Overview
 
 The goal for the initial conflation of areas was that the number of correctly conflated features 
 plus the number of features marked for manual review would equal at least 80% of the overall 
 conflated features in each test dataset, with the plans of improving that correctness score as high 
 as 90-95% in the future.
 
-==== Feature Definitions
+===== Feature Definitions
 
 Area Conflation defines an area as non-building linear or polygonal feature whose tags support the 
-definitions of an area used by OpenStreetMap. Buildings are excluded in order to prevent match 
-overlap with Building Conflation.
+definitions of an area used by OpenStreetMap (`area=yes`). Buildings are excluded in order to 
+prevent match overlap with Building Conflation. Examples: parks, parking lots.
 
-==== Matching
+===== Matching
 
 Area matching uses a manually configured search radius when determining the maximum distance between 
 features to search during matching.
@@ -26,20 +26,20 @@ thresholds were determined against test data using Weka. Tag matching looks at t
 only. Matching employs additional logic to help ensure a review is generated when a one to many 
 match occurs.
 
-==== Merging
+===== Merging
 
 Area merging uses a simple merging process where a geometry from only one of the features is kept 
 (conflation workflow dependent) and tags are merged based on the configured tag merging strategy.
 
-==== Configurable Options
+===== Configurable Options
 
 See the descriptions for configuration options named `area.*` for more information on how Area 
 Conflation behavior may be modified.
 
-==== Test Results
+===== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
-(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx[these slides] 
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 
@@ -64,7 +64,7 @@ Combined Correct = number of correct matches + number of unnecessary reviews
 An acceptable conflation accuracy was achieved, but since only one test dataset was utilized 
 success cannot be declared.
 
-==== Future Work
+===== Future Work
 
 Area Conflation has not been trained on enough datasets and needs to be trained on additional 
 datasets to improve its quality.

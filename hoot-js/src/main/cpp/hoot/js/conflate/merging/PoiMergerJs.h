@@ -29,16 +29,19 @@
 #define POIMERGERJS_H
 
 // Hoot
+#include <hoot/core/elements/OsmMap.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Merges POIs
+ * Merges POIs via script
+ *
+ * @todo There's a log of duplicated code in the *MergerJs classes. It should be consolidated.
  */
 class PoiMergerJs
 {
@@ -52,7 +55,7 @@ public:
    * @param mergeTargetId the ID of the area which all other POIs should be merged into
    * @param current the context this method should run under
    */
-  static void mergePois(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
+  static void merge(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
 };
 
 }

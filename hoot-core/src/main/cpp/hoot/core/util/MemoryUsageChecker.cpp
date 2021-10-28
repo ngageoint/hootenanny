@@ -36,11 +36,11 @@
 namespace hoot
 {
 
-MemoryUsageChecker::MemoryUsageChecker()
-  : _enabled(ConfigOptions().getMemoryUsageCheckerEnabled()),
-    _notificationThreshold(0.95),
-    _loggedPhysicalMemNotification(false),
-    _loggedVirtualMemNotification(false)
+MemoryUsageChecker::MemoryUsageChecker() :
+_enabled(ConfigOptions().getMemoryUsageCheckerEnabled()),
+_notificationThreshold(0.95),
+_loggedPhysicalMemNotification(false),
+_loggedVirtualMemNotification(false)
 {
   const int thresholdVal = ConfigOptions().getMemoryUsageCheckerThreshold();
   if (thresholdVal < 1 || thresholdVal > 100)

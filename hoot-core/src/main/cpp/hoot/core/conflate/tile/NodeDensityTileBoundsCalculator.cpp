@@ -76,8 +76,6 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
       QString("tile calculator."));
   }
 
-  // TODO: throw exception if no input data is Unknown1
-
   LOG_VARD(map->getNodeCount());
   if (map->getNodeCount() <= _maxNodesPerTile)
   {
@@ -463,50 +461,6 @@ void NodeDensityTileBoundsCalculator::_countNode(const std::shared_ptr<Node> &n)
       row[px] += 1.0;
     }
   }
-}
-
-double NodeDensityTileBoundsCalculator::_evaluateSplitPoint(const PixelBox& pb, const Pixel& p)
-{
-  // This function has two goals:
-  // * minimize the number of nodes intersected by a split
-  // * minimize the difference between quadrant counts, or ignore the quadrant counts if all
-  //   the quadrants are below _maxNodesPerTile
-  //
-  // Smaller scores are better.
-
-  double llSum = _sumPixels(PixelBox(pb.minX, p.x, pb.minY, p.y));
-  double ulSum = _sumPixels(PixelBox(pb.minX, p.x, p.y + 1, pb.maxY));
-  double lrSum = _sumPixels(PixelBox(p.x + 1, pb.maxX, pb.minY, p.y));
-  double urSum = _sumPixels(PixelBox(p.x + 1, pb.maxX, p.y + 1, pb.maxY));
-
-  double total = llSum + ulSum + lrSum + urSum;
-# ifdef DEBUG
-    assert(fabs(total - _sumPixels(pb)) < 0.1);
-# endif
-
-  double avg = total / 4.0;
-
-  double slop = fabs(llSum - avg) / avg;
-  slop += fabs(ulSum - avg) / avg;
-  slop += fabs(lrSum - avg) / avg;
-  slop += fabs(urSum - avg) / avg;
-  slop /= 4.0;
-
-  double slopMultiplier;
-  if (slop > _slop)
-  {
-    slopMultiplier = 2.0 + slop;
-  }
-  else
-  {
-    slopMultiplier = 1.0 + slop;
-  }
-
-  double intersects = 0.0;
-  intersects += _sumPixels(PixelBox(p.x, p.x, pb.minY, pb.maxY));
-  intersects += _sumPixels(PixelBox(pb.minX, pb.maxX, p.y, p.y));
-
-  return intersects * slopMultiplier;
 }
 
 void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat& r, QString output) const

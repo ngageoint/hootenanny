@@ -1,0 +1,6 @@
+
+[[fullinstall]]
+=== CentOS/RHEL RPM
+
+https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md[instructions]
+

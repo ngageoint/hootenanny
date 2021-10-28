@@ -39,6 +39,9 @@ namespace hoot
 
 class ReprojectCoordinateFilter;
 
+/**
+ * @brief The ProjectToGeographicVisitor class projects elements to a geographic coordinate system.
+ */
 class ProjectToGeographicVisitor : public ElementVisitor
 {
 public:
@@ -50,6 +53,9 @@ public:
 
   void initialize(const std::shared_ptr<OGRSpatialReference>& projection);
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getDescription() const override

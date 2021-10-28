@@ -349,7 +349,6 @@ void DiffConflator::_discardUnconflatableElements()
 void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
 {
   // Check map to make sure it contains only Unknown1 elements
-  // TODO: valid and conflated could be in here too, should we check for them as well?
   ElementCriterionPtr pStatusCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
   CriterionCountVisitor countVtor(pStatusCrit);
   map->visitRo(countVtor);
@@ -368,7 +367,6 @@ void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
 
   // We're storing this part off for potential use later on if any roads get snapped after
   // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
-  // TODO: Can we filter this down to whatever feature type the snapping is configured for?
   std::shared_ptr<NotCriterion> crit =
     std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::Ref2()));
   CopyMapSubsetOp mapCopier(map, crit);

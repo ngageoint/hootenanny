@@ -1,0 +1,222 @@
+
+==== OpenStreetMap API Database
+
+Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported 
+Hootenanny data output format. The OpenStreetMap Editing API database allows the fetching and saving of raw geo-data 
+for OpenStreetMap. The current supported API version is 0.6. More information about the database and API can be found https://wiki.openstreetmap.org/wiki/API.[here].
+
+Hootenanny supports reading and writing from the OpenStreetMap API database using its `convert` command. A description 
+of how to use Hootenanny's capability for writing to and reading from an OpenStreetMap Editing API Database is 
+described in this section.
+
+Postgres database tuning is very important to support large data ingests.  The Hootenanny default Postgres database 
+instance comes with moderate tuning, but you may need to perform additional tuning for your database. There is a limited amount of Postgres tuning information in the Developer documentation.
+
+===== Configuring a Connection
+
+If you want to make use of an OSM API Database from within the Hootenanny iD Editor UI, you must configure Hootenanny to 
+use your OSM API database (only one database at a time is supported). Hootenanny stores conflated data internally in a custom OSM API database (hootapidb://). Hootenanny also keeps a copy of a
+standard OSM API database for internal testing purposes. By default, Hootenanny is configured with an empty test OSM 
+API database. To conflate against your own OSM API database:
+
+* Create a custom OSM API database configuration file `$HOOT_HOME/conf/database/DatabaseConfigLocal.sh` by copying the file
+`$HOOT_HOME/conf/database/DatabaseConfigDefault.sh`
+* Fill in the following settings with your production OSM API database information:
+** database server name: `DB_HOST_OSMAPI`
+** database name: `DB_NAME_OSMAPI`
+** database port: `DB_PORT_OSMAPI`
+** database username for conflating data: `DB_USER_OSMAPI`
+** database password: `DB_PASSWORD_OSMAPI`
+
+Alternatively, if you want to disable OSM API database conflation completely, add the following line to your services local.conf file:
+--------
+osmApiDbEnabled=false
+--------
+
+===== Creating a Database
+
+If you do not already have an OSM API database available, you can run the following:
+----------------------------
+$HOOT_HOME/scripts/database/CleanAndInitializeOsmApiDb.sh
+----------------------------
+
+This will create an empty OSM API database with a single test user.  The test database has this URL:
+--------
+osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+--------
+
+===== Writing via Command Line
+
+Hootenanny's `hoot convert` command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port or cgimap).  The writer
+has two possible workflows: online and offline. The offline mode is meant for the fastest performance writing against offline
+databases (no other writers present), while the online mode sacrifices some performance but is safe for writing against online databases (other writers present).
+
+NOTE: The online workflow, while unit tested, has never been production tested. In most cases, you 
+should push your changes as changesets through an OpenStreetMap API web server instead. If you have 
+an enormous amount of data to push into a live environment, the online workflow can be tried at risk.
+
+Its easiest to demonstrate the two workflows with some examples:
+
+*_Use Case #1 (offline)_*
+
+Write to a SQL file or CSV files and handle all record ID updates outside of Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf myOsmDataOutput.sql
+-----------------
+
+Write directly to a database and handle all record ID updates outside of Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+Write directly to a database, handle all record ID updates outside of Hootenanny, and retain the SQL output file:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+*_Use Case #2 (offline)_*
+
+Write to a SQL file or CSV files and manually specify record starting IDs with Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 -D apidb.bulk.inserter.starting.node.id=10 -D apidb.bulk.inserter.starting.way.id=10 -D apidb.bulk.inserter.starting.relation.id=10 myOsmDataInput.osm.pbf myOsmDataOutput.sql
+-----------------
+
+Write directly to a database and manually specify record starting IDs with Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true -D apidb.bulk.inserter.starting.node.id=10 -D apidb.bulk.inserter.starting.way.id=10 -D apidb.bulk.inserter.starting.relation.id=10 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+Write directly to a database, manually specify record starting IDs with Hootenanny, and retain the SQL output file:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true -D apidb.bulk.inserter.starting.node.id=10 -D apidb.bulk.inserter.starting.way.id=10 -D apidb.bulk.inserter.starting.relation.id=10 -D apidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+*_Use Case #3 (online)_*
+
+Write to a SQL file and reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf myOsmDataOutput.sql
+-----------------
+
+Write directly to a database and reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+Write directly to a database, reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely, and retain the SQL output file:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+When `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true, the data write operation is completely
+record ID safe, meaning that it can be used while other concurrent users are writing to the target database without fear of
+record ID conflicts.
+
+If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with additional tweaks.  The configuration option, `max.elements.per.partial.map`, determines how many file lines are held in memory before they are flushed out to disk when generating the output files.  The default setting is fairly large, but you may be able to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the output file generation, however, and does nothing to increase the performance of the SQL execution against the target database (database tuning may help there).
+
+The configuration option, `osmapidb.bulk.inserter.disable.database.constraints.during.write`, allows for disabling 
+database constraints during writing. This may speed up data loads. Similarly, the configuration option, `apidb.bulk.inserter.disable.database.indexes.during.write`, allows for dropping database indexes during writing and 
+re-enabling them after writing is finished, which may also speed up data loads.  Both options should only be used 
+with databases that have been taken completely offline.
+
+The configuration option, `task.status.update.interval`, simply determines how often you see progress updates when 
+generating the output files. The default value is fairly large, but for very large amounts of data you may wish to 
+increase the value of this option to avoid too frequent of progress update messages.
+
+IMPORTANT: The configuration option, `changeset.user.id`, is required and must match a valid user ID in your OSM API database.  All writes you do with `hoot convert` will be associated with this user ID.
+
+IMPORTANT: OSM PBF (.osm.pbf) is currently the most efficient OSM source format for writing large amounts of data to an OSM API database, due to the fact the format was designed for optimal performance.
+
+See the User Guide descriptions of all settings prefixed with `apidb.bulk.inserter` or `osmapidb.bulk.inserter` for a 
+complete overview of the OSM API database writing options available.
+
+===== Reading a Database
+
+Reading from an OpenStreetMap Editing API database requires the use of Hootenanny's `convert` command and the following command arguments described here:
+------
+% Hootenanny 'convert' command: hoot convert [args] input output
+
+% Input source:
+a sample OpenStreetMap Edit API Database: osmapidb://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database input source may be supplied here.
+
+% Output destination:
+define an output osm file: /tmp/ToyTestA-out.osm
+
+% Command syntax example:
+
+hoot convert osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/ToyTestA-out.osm
+
+hoot convert -D bounds=-106.5100000,38.3000000,-106.4000000,38.5000000 osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/bboxOutput.osm
+------
+
+===== Validating Writes To a Database
+
+After writing to the OpenStreetMap Editing API Database, the data can be validated by performing the following steps:
+--------
+% Dump DB
+pg_dump -U hoot -h localhost -p 5432 osmapi_test -a > /tmp/ToyTestA-dump.sql
+% password=hoottest
+% Note: Assume ToyTestA.osm was written to the db previously
+% Note: Assume the arg -D services.db.writer.output.id.mapping=/tmp/idmaps.xml was used
+  when writing.
+
+% Install dependencies for the compare script
+sudo apt-get install libxml-simple-perl
+
+% Compare input with the dumped output
+time $HOOT_HOME/scripts/compareOsmXmlToOsmApiDbDump $HOOT_HOME/test-files/ToyTestA.osm /tmp/idmaps.xml /tmp/ToyTestA-dump.sql
+--------
+
+The sample output for validating the write operation using ToyTestA.osm should look something like this:
+--------
+OSM XML file: ./test-files/ToyTestA.osm
+PostgreSQL dump file: /tmp/ToyTestA-dump.sql
+
+Validating data: nodes
+current_nodes, current_node_tags:
+Matching number of nodes: PASS (36)
+Deep inspection of data integrity: PASS
+nodes, node_tags:
+Matching number of nodes: PASS (36)
+Deep inspection of data integrity: PASS
+
+Validating data: ways
+current_ways, current_way_tags, current_way_nodes:
+Matching number of ways: PASS (4)
+Deep inspection of data integrity: PASS
+ways, way_tags, way_nodes:
+Matching number of ways: PASS (4)
+Deep inspection of data integrity: PASS
+
+Validating relations: ways
+current_relations, current_relation_tags, current_relation_nodes:
+Matching number of relations: PASS (0)
+Deep inspection of data integrity: PASS
+relations, relation_tags, relation_nodes:
+Matching number of relations: PASS (0)
+Deep inspection of data integrity: PASS
+
+real 0m0.086s
+user 0m0.082s
+sys 0m0.004s
+--------
+
+===== Validating Reads From a Database
+
+After reading from the OpenStreetMap Editing API Database, the data can be validated by performing the following steps:
+------
+% Dump DB
+pg_dump -U hoot -h localhost -p 5432 osmapi_test -a > /tmp/ToyTestA-dump.sql
+% password=hoottest
+% Note: Assume ToyTestA.osm was written to the database previously
+
+% create new idmaps xml (idmaps2.xml) from the output data file
+./generateIdMapXmlFromOsm /tmp/ToyTestA-out.osm /tmp/idmaps2.xml
+% Note: Assume ToyTestA-out.osm was read from the db and written to file
+
+% compare the output with the database
+time scripts/compareOsmXmlToOsmApiDbDumpWriter /tmp/ToyTestA-out.osm /tmp/idmaps2.xml /tmp/ToyTestA-dump.sql
+------
+
+The reading validation output should be similar to the output for the writing validation.  If there is a mismatch, then contact the developer with the result so that the software can be checked for bugs.
+

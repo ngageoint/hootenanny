@@ -438,7 +438,9 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 {
   var fd = [];
 
-  // before you use this list update it with more relevant features in the additiveScore() function.
+  // Before you use this list, update it with more relevant features in the additiveScore()
+  // function.
+
   fd["soundex"] = soundexExtractor.extract(map, e1, e2);
   fd["mean"] = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
   fd["max"] = translateMaxWordSetLevenshtein_1_15.extract(map, e1, e2);

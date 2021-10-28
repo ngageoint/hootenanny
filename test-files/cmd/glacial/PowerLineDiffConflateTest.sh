@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# TODO: fix the orphaned power pole nodes in the output as part of #4465
+# TODO: fix the orphaned power pole nodes in the output
 
 IN_DIR=test-files/cmd/glacial/PowerLineDiffConflateTest
 IN_DIR_2=test-files/cmd/slow/PowerLineConflateTest

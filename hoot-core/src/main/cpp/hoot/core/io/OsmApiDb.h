@@ -76,17 +76,6 @@ public:
     */
   void deleteData() const;
 
-  /**
-   * Extracts tags from the extra lines returned in the selectAll for OsmApi data
-   *
-   * Input: apidb row in form with row[8]=k, row[9]=v
-   * Output: "k"=>"v"
-   *
-   * @note This gets the tags in a form that is the same as how selectAll returns them for Services
-   * .DB
-   */
-  QString extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type Type) const;
-
   std::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
   std::shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
   std::shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);

@@ -87,9 +87,9 @@ void ImplicitTagRulesSqliteReader::close()
   }
 }
 
-Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
-                                                   QSet<QString>& matchingWords,
-                                                   bool& wordsInvolvedInMultipleRules)
+Tags ImplicitTagRulesSqliteReader::getImplicitTags(
+  const QSet<QString>& words, QSet<QString>& matchingWords,
+  bool& wordsInvolvedInMultipleRules)
 {
   //This method can probably be sped up by combining some queries, but the sizes of the databases
   //being used so far have been small enough that performance has not yet been an issue.

@@ -3,8 +3,9 @@
 
 === Description
 
-The `optimize-network-conf` command runs a series of network road conflation tests to determine the best performing values 
-for a user specified group of configuration options.
+The `optimize-network-conf` command runs a series of network road conflation tests and uses 
+Simulated Annealing to determine the best performing values for a user specified group of 
+configuration options.
 
 * `testsDir`      - The root directory containing the tests to run. The directory must contain Hootenanny conflate case tests,
                     release regression tests, or PERTY regression tests.

@@ -1,0 +1,460 @@
+
+=== Conflation Steps
+
+Hootenanny deals exclusively with vector to vector conflation. The following
+sections discuss when Hootenanny is an appropriate tool for conflation and
+general guidance in determining what strategy to employ when using Hootenanny.
+
+Hootenanny is a tool to help the user work through a conflation problem.
+Many aspects of the conflation workflow are automated or semi-automated to help
+the user. Generally the workflow looks something like the following:
+
+. Determine what data is worth conflating
+. Normalize and prepare the input data for conflation
+. Conflate a pair of data sets at a time
+. Review conflated result
+. Repeat as necessary
+. Export the conflated data
+
+The following sections go into the details of each of the above steps.
+
+==== Select Appropriate Data
+
+Many factors play into which data is appropriate for conflation. Not all data is suitable for conflation. Below is a short list of examples of both appropriate and inappropriate conflation scenarios.
+
+Inappropriate data for conflation:
+
+* Conflating two extremely different data sets. For instance, conflating Rome
+  before the http://en.wikipedia.org/wiki/Great_Fire_of_Rome[Great Fire of Rome]
+  with modern Rome.
+* Data sets with dramatically different positional accuracy. For instance,
+  conflating 1:1,000,000 scale  http://en.wikipedia.org/wiki/Vector_map[VMAP0]
+  with city level NAVTEQ will not produce meaningful results.
+* Garbage data. It may seem obvious, but Garbage In, Garbage Out (GIGO) applies in
+  conflation just like any other system.
+* Pristine and complete data vs. poor data. If the pristine data is superior in
+  nearly every way conflating it with poor data will likely just introduce
+  errors.
+
+Appropriate data for conflation:
+
+* Both data sets provide significant complimentary benefit.
+* Conflating sparse country data with good positional accuracy with dense city
+  data.
+* Sparse <<OpenStreetMap,OpenStreetMap>> (OSM) with complete vector data
+  extracted from imagery. In some regions OSM provides sparse data with lots of
+  local information that isn't available from imagery (e.g. street names). By
+  conflating you get the complete coverage along with rich OSM attribution.
+
+==== Normalize and Prepare Data
+
+Before conflation can occur Hootenanny expects that all data is provided in a
+modified OSM schema and data model that is a superset of the
+http://wiki.openstreetmap.org/wiki/Map_Features[OSMschema]. The http://wiki.openstreetmap.org/wiki/Element[OSM data model] provides
+a connected topology that aids conflation of multiple "layers" at one time while
+the extendable OSM schema provides flexibility in handling many data types.
+
+Hootenanny provides a number of utilities for converting Shapefiles and other
+common formats into the OSM data model, as well as translating existing schemas
+into OSM. See the <<Translation,Translation>> section for further details.
+
+Hootenanny also provides some functions for automatically cleaning many bad data
+scenarios. Many of the operations are performed prior to conflation.
+
+See also:
+
+* <<clean,clean command>>
+* <<MapCleanerTransforms, map.cleaner.transforms>>
+
+==== Select a Conflation Workflow
+
+These are the conflation workflows supported by Hootenanny listed in their order of implementation:
+
+* **Average Conflation** - _Keep an average of both maps_ 
+** Use this type of conflation when you consider both input maps equal in quality and want a result that is an average of the two (only works with linear features).
+* **Reference Conflation** (**default**; aka Vertical Conflation) - _Keep the best of both maps while favoring the first_
+** Use this type of conflation when both data sets contain useful information and have significant overlap. You will get map output based on the best state of two maps while favoring the first one.
+** Currently, geometry averaging only applies to linear features but could be extended to point and polygon geometries. Point and polygon geometries are merged the same as in Reference Conflation. 
+** Average Conflation is currently not available from iD Editor.
+* **Cookie Cut Horizontal Conflation** - _Completely replace a section_
+** Use this type of conflation if you have a specific region of your map that you would like to completely replace with a region from another map.
+* **Differential Conflation** - _Add new features that do not conflict_
+** Use this type of conflation when you want to fill holes in your map with data from another source without actually modifying any of the data in your map.
+** There is an option available (`--include-tags`) to additionally transfer tags to existing features in your map from matching features in another map where overlap occurs.
+* **Attribute Conflation** - _Transfer attributes over to existing geometries_
+** Use this type of conflation when one map's geometry is superior to that of a second map, but the attributes of the second map are superior to that of the first map.
+
+See also:
+
+* _Unifying Conflation_, <<hootuser>>
+
+===== Average Conflation
+
+Average Conflation attempts to find a midway point between two features when conflating. Neither
+input is considered more important than the other (this was the original Hootenanny conflation 
+strategy). Both geometries and tag values are averaged together to create the conflated output.
+
+NOTE: Average Conflation is currently only supported for linear features.
+
+===== Reference Conflation
+
+.Vertical Conflation.  Red and blue boxes represent different data sets.  This is a good candidate for Reference Conflation because of the high degree of overlap between the two data sets.
+image::images/VerticalConflation.png[]
+
+Reference conflation is most applicable when both data sets provide value and there is significant overlap between the datasets. In this scenario many of the features will be evaluated for conflation and possibly merged or marked as needing review. The primary advantage to using this strategy is maintaining much of the information available in both datasets. Because a large amount of the data is being evaluated for conflation, it also increases the chances that errors will be introduced or unnecessary reviews may be generated. This is the default conflation strategy used by Hootenanny.
+
+To use, pass `ReferenceConflation.conf` to the conflate command. Example:
+--------
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
+--------
+
+See also:
+
+* <<conflate,conflate command>>
+
+===== Horizontal Conflation
+
+.Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.
+image::images/HorizontalConflation.png[]
+
+NOTE: Programmatically there is no difference between Reference and Horizontal conflation. The 
+difference is solely conceptual and there is no default setting in Hooteanny to run this base type 
+of conflation. Variants of Horizontal Conflation, like Cookie Cut Horizontal Conflation area 
+available to run however.
+
+[[UnsupportedHorizontalConflation]]
+.Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.
+image::images/NotHorizontalConflation.png[]
+
+See also:
+
+* <<conflate,conflate command>>
+
+[[CookieCutter]]
+===== Cookie Cut Horizontal Conflation
+
+[[CookieCutterImage]]
+.Cookie Cutter & Horizontal.  The left image depicts the overlap of a high quality, smaller area data set overlayed on a coarser regional data set that is typical for Reference/Horizontal Conflation.  The shaded area in the right image depicts the -1km buffer that is applied during the Cookie Cutter operation.
+image::images/CookieCutter.png[]
+
+The cookie cutter operation is designed for situations where two data sets contain significant overlap, but one data set is better in _every way_. A typical scenario that warrants this strategy is coarse country wide data that needs to be conflated with high quality city level data. When employing cookie cutter a polygon that approximates the bounds of the city will be removed from the coarse country data before conflation.
+
+[[horizontalconflate_Boulder1]]
+.Boulder, CO with Street centerlines (gray) and OpenStreetMap Highways (red).  Right image depicts alpha-shape (red polygon).  Street centerline data obtained from the link:$$https://www-static.bouldercolorado.gov/docs/opendata/Streets.zip$$[City of Boulder] and Highway data set downloaded from an OSM data provider.  The basemap shown here is OSM.
+image::images/hootid-horizconfl.png[]
+
+[[horizontalconflate_hootid]]
+.Process depicted in the Hootenanny User interface. The Horizontal & Cookie Cutter conflation performs an edge matching to merge the Street centerline data with the OSM data.  The resulting conflated dataset shown in bottom image (green).  Boulder, CO with DigitalGlobe Global Basemap (GBM).
+image::images/hootiD_horizontalconflation_boulder.png[scaledwidth="50%"]
+
+To use, pass `HorizontalConflation.conf` to the conflate command. Example:
+--------
+hoot conflate -C HorizontalConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
+--------
+
+See also:
+
+* <<alpha-shape,alpha-shape command>>
+* <<conflate,conflate command>>
+* <<cut,cut command>>
+* <<crop,crop command>>
+* <<hootuser, horizontal conflation example>>
+
+*_Cut And Replace_*
+
+There is a specifically tailored use of Cookie Cut Horizontal Conflation called the Cut And Replace 
+Workflow. This workflow completely replaces data in one dataset with data from another, handles 
+feature stitching at the replacement boundary, maintains feature ID provenance, and generates a 
+changeset to allow for replacing source data in an OSM API data store. More information on this 
+workflow may be found in the `changeset-derive` command documentation: 
+<<hootuser, changeset-derive>>
+
+===== Differential Conflation
+
+Differential Conflation derives an output that consists of new data from the second input not in the
+first input. A detailed explanation is provided in the related documentation under Algorithms.
+
+To use, pass `DifferentialConflation.conf` to the conflate command with the `--differential` option. Example:
+--------
+hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm --differential
+--------
+
+More details: <<hootuser, DifferentialConflation>>
+
+===== Attribute Conflation
+
+Attribute Conflation transfers tags only from the second input to the first while keeping the
+geometry of the first. A detailed explanation is provided in the related documentation under 
+Algorithms.
+
+To use, pass `AttributeConflation.conf` to the conflate command. Example:
+--------
+hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
+--------
+
+More details: <<hootuser, AttributeConflation>>
+
+NOTE: In the examples above, you may substitue `-C NetworkAlgorithm.conf` for 
+`-C UnifyingAlgorithm.conf` when conflating roads in order to use the Network Roads conflation 
+algorithm instead of the Unifying Roads conflation algorithm (more information available in the 
+Algorithms section).
+
+==== Review Conflated Results
+
+There are inevitably data scenarios that do not contain a clear solution when conflating. To handle this Hootenanny presents the user with _reviews_. These reviews are primarily the result of bad input data or ambiguous situations. During the conflation process Hootenanny will merge any features it considers to have a high confidence match and flag features for review if one of the aforementioned scenarios occurs.
+
+Each review flags one or more features. The features are marked using the tag, `hoot:review:needs=yes` and referenced using the <<UUID,uuid>> field. A `hoot:review:note` field is also populated with a brief description of why the features were flagged for review.
+
+===== Reviewing from the Command Line Interface
+
+After reviewable items are flagged with during the conflation process, users can then edit the resulting output file with an editor of their choosing to resolve the reviewable items. It is worth noting that this review process should occur before the data is exported as exporting the data using the `convert` command or similar will likely strip the review tags.
+
+In certain situations, the number of reviews received can be controlled by adjusting the review
+threshold configuration options. See the configuration options documentation for more detail. 
+
+See also:
+
+* <<conflate,conflate command>>
+* <<convert,convert command>>
+
+===== Reviewing from the Web Interface
+
+The web interface exposes reviewable items through an intuitive interface that guides the user through the review process. The user first resolves the review by making manual edits to the invovled features or, for some feature types, initiating a merge operation as a more automated solution. Then, the review is marked as resolved. For additional background on the review process within the user interface please refer to the Hootenanny User Interface Guide.
+
+==== Repeat Conflation Process
+
+In some cases there are more than two files that must be conflated. If this is the case the data must be conflated in a pairwise fashion. For instance if you are conflated three data sets, A, B & C, then the conflation may go as follows:
+
+.Pairwise Conflation Example
+
+[graphviz, images/__PairwiseConflation.png]
+---------------------------------------------------------------------
+digraph G
+{
+  rankdir = LR;
+  node [shape=ellipse,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
+  conflate1 [label = "Conflate 1",shape=record];
+  conflate2 [label = "Conflate 2",shape=record];
+  A -> conflate1;
+  B -> conflate1;
+  conflate1 -> AB;
+  AB -> conflate2;
+  C -> conflate2;
+  conflate2 -> ABC;
+}
+---------------------------------------------------------------------
+
+==== Export
+
+If you desire your data in an OSM compatible format then this step is
+unnecessary. However, if you would like to use the data in a more typical GIS
+format then an export step is required.
+
+Typically, Hootenanny conflates the data using one of three intermediate file
+formats:
+
+* `.osm` The standard OSM XML file format. This is easy to read and is usable my
+  many OSM tools, but can create very large files that are slow to parse.
+* `.osm.pbf` A relatively new OSM standard that uses Google Protocol Buffers
+  <<google2013>> to store the data in a compressed binary format. This format is
+  harder to read and supported by fewer OSM tools but is very fast and space
+  efficient.
+* Hootenanny Services Database - This is used by the Hootenanny services to
+  support the Web Interface. This is convenient for supporting multiple ad-hoc
+  requests for reading and writing to the data, but is neither very fast nor
+  very space efficient.
+
+Despite the potential for minor changes to data precision (see
+<<hootuser>>, _Sources of Processing Error_ for details), these formats maintain
+the full richness of the topology and tagging structure.
+
+Hootenanny also uses GDAL/OGR footnote:[http://www.gdal.org/] for reading and
+writing to a large number of common GIS formats. Using this interface, Hootenanny
+can either automatically generate a number of files for the common geometry
+types, or the user can specify an output schema and translation. See the _OSM to
+OGR Translation_ section for details.
+
+See also:
+
+* <<OSM-to-OGR-Translation,OSM to OGR Translation>>
+* <<File-Formats,File Formats>>
+* <<convert,convert command>>
+
+==== Example
+
+The following steps through an example of conflating data with Hootenanny.
+
+[[Conflate-Two-Shapefiles]]
+===== Conflate Two Shapefiles
+
+The following subsections describe how to do the following steps:
+
+. Prepare the input for translation
+
+. Translate the Shapefiles into .osm files
+
+. Conflate the Data
+
+. Convert the conflated .osm data back to Shapefile
+
+We'll be using files from the http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[US Census Tiger] data and http://dcgis.dc.gov[DC GIS]
+
+* ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip[Tiger Roads]
+* http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI[DC GIS Roads]
+
+
+*_Prepare the Shapefiles_*
+
+First, validate that your input shapefiles are both Line String (AKA Polyline) shapefiles. This is easily done with +ogrinfo+:
+
+------
+$ ogrinfo -so tl_2010_12009_roads.shp tl_2010_12009_roads
+INFO: Open of `tl_2010_12009_roads.shp'
+      using driver `ESRI Shapefile' successful.
+
+Layer name: tl_2010_12009_roads
+Geometry: Line String
+Feature Count: 17131
+Extent: (-80.967774, 27.822067) - (-80.448353, 28.791396)
+Layer SRS WKT:
+GEOGCS["GCS_North_American_1983",
+    DATUM["North_American_Datum_1983",
+        SPHEROID["GRS_1980",6378137,298.257222101]],
+    PRIMEM["Greenwich",0],
+    UNIT["Degree",0.017453292519943295]]
+STATEFP: String (2.0)
+COUNTYFP: String (3.0)
+LINEARID: String (22.0)
+FULLNAME: String (100.0)
+RTTYP: String (1.0)
+MTFCC: String (5.0)
+------
+
+*_Translate the Shapefiles_*
+
+Hootenanny provides a https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile, the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema, then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
+
+
+*_Crummy Translation_*
+
+The following translation code will always work for roads, but drops all the attribution on the input file.
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    return {'highway':'road'}
+------
+
+*_Better Translation_*
+
+The following translation will work well with the tiger data.
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    tags = {}
+    # 95% CE in meters
+    tags['accuracy'] = '10'
+    if 'FULLNAME' in attrs:
+        name = attrs['FULLNAME']
+        if name != 'NULL' and name != '':
+            tags['name'] = name
+    if 'MTFCC' in attrs:
+        mtfcc = attrs['MTFCC']
+        if mtfcc == 'S1100':
+            tags['highway'] = 'primary'
+        if mtfcc == 'S1200':
+            tags['highway'] = 'secondary'
+        if mtfcc == 'S1400':
+            tags['highway'] = 'unclassified'
+        if mtfcc == 'S1500':
+            tags['highway'] = 'track'
+            tags['surface'] = 'unpaved'
+        if mtfcc == 'S1630':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1640':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1710':
+            tags['highway'] = 'path'
+            tags['foot'] = 'designated'
+        if mtfcc == 'S1720':
+            tags['highway'] = 'steps'
+        if mtfcc == 'S1730':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1750':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1780':
+            tags['highway'] = 'service'
+            tags['service'] = 'parking_aisle'
+        if mtfcc == 'S1820':
+            tags['highway'] = 'path'
+            tags['bicycle'] = 'designated'
+        if mtfcc == 'S1830':
+            tags['highway'] = 'path'
+            tags['horse'] = 'designated'
+    return tags
+------
+
+To run the tiger translation put the above code in a file named `translations/TigerRoads.py` and run the following:
+------
+hoot convert -D schema.translation.script=TigerRoads tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm
+------
+
+The following translation will work OK with the DC data.
+
+[source,python]
+------
+#!/bin/python
+def translateToOsm(attrs, layerName):
+    if not attrs: return
+    tags = {}
+    # 95% CE in meters
+    tags['accuracy'] = '15'
+    name = ''
+    if 'REGISTERED' in attrs:
+        name = attrs['REGISTERED']
+    if 'STREETTYPE' in attrs:
+        name += attrs['STREETTYPE']
+    if name != '':
+        tags['name'] = name
+    if 'SEGMENTTYP' in attrs:
+        t = attrs['SEGMENTTYP']
+        if t == '1' or t == '3':
+            tags['highway'] = 'motorway'
+        else:
+            tags['highway'] = 'road'
+    # There is also a one way attribute in the data, but given the difficulty
+    # in determining which way it is often left out of the mapping.
+    return tags
+------
+
+To run the DC GIS translation put the above code in a file named `translations/DcRoads.py` and run the following:
+------
+hoot convert -D schema.translation.script=DcRoads tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm
+------
+
+*_Conflate the Data_*
+
+If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating:
+------
+hoot crop tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
+------
+
+All the hard work is done. Now we let the computer do the work. If you're using the whole DC data set, go get a cup of coffee.
+------
+hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
+------
+
+[[Convert-Back-to-Shapefile]]
+*_Convert Back to Shapefile_*
+
+Now we can convert the final result back into a Shapefile:
+------
+hoot convert -D shape.file.writer.cols="name;highway;surface;foot;horse;bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
+------
+

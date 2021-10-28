@@ -40,8 +40,8 @@ OverwriteTagMerger(swap)
 {
 }
 
-Tags ProvenanceAwareOverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2,
-                                                  ElementType et) const
+Tags ProvenanceAwareOverwriteTagMerger::mergeTags(
+  const Tags& t1, const Tags& t2, ElementType et) const
 {
   Tags tags = OverwriteTagMerger::mergeTags(t1, t2, et);
   QString sourceVal = "";

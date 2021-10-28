@@ -1,0 +1,5 @@
+
+=== Conflation Workflows
+
+This section describes in detail some of the conflation workflows used by Hootenanny.
+

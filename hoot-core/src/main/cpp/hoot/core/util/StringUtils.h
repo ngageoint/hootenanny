@@ -227,13 +227,6 @@ public:
   static bool bisectsAny(const QString& input, const QList<QRegExp>& compareList);
 
   /**
-   * Removes all strings in a specified list from another string list
-   *
-   * @param input the list to remove strings from
-   * @param toRemove the list of string to remove
-   */
-  static void removeAll(QStringList& input, const QStringList& toRemove);
-  /**
    * @brief removeAllContaining Removes all strings from a list containing a particular text
    * @param input the list to remove strings from
    * @param text the text to match in the list
@@ -266,13 +259,6 @@ public:
    * @return the number of prefixes removed
    */
   static int removePrefixes(const QString& prefix, QStringList& input);
-  /**
-   * Removes all map entries from input that are contained in a specified list
-   *
-   * @param input map to modify
-   * @param keysToRemove keys to remove from input map
-   */
-  static void removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove);
 
   /**
    * Replaces the last occurrence of a string with another string
@@ -285,6 +271,16 @@ public:
   static void replaceLastIndexOf(
     QString& input, const QString& strToReplace, const QString& replacementStr,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * @brief insertAfter inserts a specified string after another string in a list
+   * @param strList the list to modify
+   * @param strToInsertAfter the string to insert strToInsert after in the list
+   * @param strToInsert the string to insert after strToInsertAfter in the list
+   * @return true if the string was inserted; false otherwise
+   */
+  static bool insertAfter(
+    QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert);
 
   /**
    * Splits a string on the first matching token in a group of regular expressions and returns it
@@ -306,16 +302,6 @@ public:
    * @param index the index at which to remove from the split string parts
    */
   static void splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index);
-  /**
-   * Splits a string on a regular expression and returns the token found at the specified index
-   *
-   * @param input the string to retrieve from
-   * @param splitExp the regular expression to split the input string on
-   * @param index the index at which to return a split string parts
-   * @return the string at the requested index
-   */
-  static QString splitAndGetAtIndex(
-    const QString& input, const QRegExp& splitExp, const int index);
 
   /**
    * Reverses the ordering of a string list

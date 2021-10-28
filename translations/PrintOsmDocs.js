@@ -320,14 +320,14 @@ function dumpHtmlTags(tagList)
   // Start the HTML document
   print('<html>');
   print('<head>');
-  print('<title>Hootennanny OSM+ Tags</title>');
+  print('<title>Hootenanny OSM+ Tags</title>');
   print('</head>');
   print('<style>');
   print('table,th,td { border:1px solid black; border-collapse:collapse; padding-left:5px; padding-right:5px; }');
   print('caption { text-align:left; font-weight:bold;}');
   print('</style>');
   print('<body>');
-  print('<h2 align=center>Hootennanny OSM+ Tags</h2>');
+  print('<h2 align=center>Hootenanny OSM+ Tags</h2>');
   print('<p>Generated: ' + Date() + '</p>');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)

@@ -292,8 +292,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
 Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
 {
-  // TODO: need to explain how this tag merging differs from that done in buildBuilding and
-  // combineConstituentBuildingsIntoRelation
   Tags mergedTags;
   LOG_TRACE("e1 tags before merging and after built building tag merge: " << e1->getTags());
   LOG_TRACE("e2 tags before merging and after built building tag merge: " << e2->getTags());
@@ -667,7 +665,6 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   }
   if (!parentRelation->getTags().contains("building"))
   {
-    // TODO: not totally sure yet if this should be added for multipoly relation parts...
     parentRelation->getTags()["building"] = "yes";
   }
   relationTags = parentRelation->getTags();
@@ -779,7 +776,7 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
   }
 }
 
-void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
+void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
 {
   LOG_INFO("Merging buildings...");
 

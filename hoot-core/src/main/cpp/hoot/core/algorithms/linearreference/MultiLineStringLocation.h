@@ -52,8 +52,9 @@ public:
    * @param wayLocation the location along the way at @a wayIndex where the multi-line string
    *        location resides
    */
-  MultiLineStringLocation(ConstOsmMapPtr map, ConstRelationPtr relation, const int wayIndex,
-                          const WayLocation& wayLocation);
+  MultiLineStringLocation(
+    ConstOsmMapPtr map, ConstRelationPtr relation, const int wayIndex,
+    const WayLocation& wayLocation);
 
   /**
    * @brief getWaySublineString returns the collection of way sublines up to and including

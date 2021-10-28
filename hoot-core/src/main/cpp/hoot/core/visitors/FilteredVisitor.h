@@ -56,12 +56,14 @@ public:
   FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor);
   ~FilteredVisitor() override = default;
 
-  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
-                        const ConstOsmMapPtr& map);
-  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
-                        const ConstOsmMapPtr& map, const ElementPtr& element);
-  static double getStat(const ElementCriterion& criterion, ElementVisitor& visitor,
-                        const ConstOsmMapPtr& map, const ElementPtr& element);
+  static double getStat(
+    ElementCriterionPtr criterion, ElementVisitorPtr visitor, const ConstOsmMapPtr& map);
+  static double getStat(
+    ElementCriterionPtr criterion, ElementVisitorPtr visitor, const ConstOsmMapPtr& map,
+    const ElementPtr& element);
+  static double getStat(
+    const ElementCriterion& criterion, ElementVisitor& visitor, const ConstOsmMapPtr& map,
+    const ElementPtr& element);
 
   void addCriterion(const ElementCriterionPtr& e) override;
 
@@ -70,6 +72,9 @@ public:
   void setOsmMap(OsmMap* map) override;
   void setOsmMap(const OsmMap* map) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return ""; }

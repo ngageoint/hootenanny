@@ -34,8 +34,8 @@ namespace hoot
 {
 
 /**
- * Adds the username and user id as tags. If you want to limit the features that will be tagged then look
- * into FilteredVisitor.
+ * Adds the username and user id as tags. If you want to limit the features that will be tagged then
+ * look into FilteredVisitor.
  */
 class AddUserIdVisitor : public ElementVisitor
 {

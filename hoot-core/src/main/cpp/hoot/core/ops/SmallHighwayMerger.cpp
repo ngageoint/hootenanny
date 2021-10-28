@@ -144,7 +144,6 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
 
   HighwayCriterion highwayCrit(_map);
   // if either way is not a highway
-  // TODO: could we gain anything by opening this whole class up to other linear feature types?
   if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
     return;

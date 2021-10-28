@@ -515,7 +515,6 @@ private:
     return l;
   }
 
-  // TODO: move to OsmSchema and test
   void _dumpAsCsv(OsmSchema& schema, QString tag)
   {
     vector<SchemaVertex> surfaces = schema.getChildTagsAsVertices(tag);

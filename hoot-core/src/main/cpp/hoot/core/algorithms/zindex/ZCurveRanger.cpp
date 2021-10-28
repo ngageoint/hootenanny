@@ -188,29 +188,6 @@ vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
   return _condenseRanges(result);
 }
 
-bool ZCurveRanger::rangeCoversIdentity(const Range& r) const
-{
-  vector<long int> min;
-  min.reserve(_zv.getDimensions());
-
-  vector<long int> max;
-  max.reserve(_zv.getDimensions());
-
-  _zv.decompose(r.getMin(), min);
-  _zv.decompose(r.getMax(), max);
-
-  long int int1 = min[0];
-  long int int2 = max[0];
-
-  for (uint i = 1; i < min.size(); i++)
-  {
-    int1 = std::max(int1, min[i]);
-    int2 = std::min(int2, max[i]);
-  }
-
-  return int2 >= int1;
-}
-
 LongBox ZCurveRanger::_clipBox(const LongBox& box) const
 {
   LongBox result = *box.copy().get();

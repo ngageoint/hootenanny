@@ -56,6 +56,9 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override

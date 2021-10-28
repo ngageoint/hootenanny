@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A merger for Differential Conflation
+ * A linear merger for Differential Conflation
  *
  * There appears to be a potential bug when using this as a merger where hoot ms relations are
  * left in the output. Whether that happens or not is dependent upon the ordering or merges during

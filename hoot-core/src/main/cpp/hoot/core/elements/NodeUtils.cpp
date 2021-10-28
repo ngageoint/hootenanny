@@ -82,8 +82,9 @@ std::vector<std::shared_ptr<const Node>> NodeUtils::nodeIdsToNodes(
   return nodes;
 }
 
-bool NodeUtils::nodeCoordsMatch(std::vector<std::shared_ptr<const Node>> nodes1,
-                                std::vector<std::shared_ptr<const Node>> nodes2)
+bool NodeUtils::nodeCoordsMatch(
+  std::vector<std::shared_ptr<const Node>> nodes1,
+  std::vector<std::shared_ptr<const Node>> nodes2)
 {
   if (nodes1.size() != nodes2.size())
   {

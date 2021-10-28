@@ -46,6 +46,12 @@ _pCrit(pCrit)
 {
 }
 
+void CriterionCountVisitor::addCriterion(const ElementCriterionPtr& pCrit)
+{
+  assert(_pCrit.get() == 0);
+  _pCrit = pCrit;
+}
+
 void CriterionCountVisitor::visit(const ConstElementPtr& e)
 {
   assert(_pCrit);
