@@ -584,19 +584,31 @@ void ConflateExecutor::_writeStats(
 
 void ConflateExecutor::_writeChangesetStats()
 {
-  if (_outputChangesetStatsFile.isEmpty())
+  if (!_diffConflator.getUnifiedChangesetStats().isEmpty())
   {
-    // output to display
-    LOG_STATUS("Changeset Geometry Stats:\n" << _diffConflator.getGeometryChangesetStats());
-    if (_diffConflator.conflatingTags())
+    if (_outputChangesetStatsFile.isEmpty())
     {
-      LOG_STATUS("\nChangeset Tag Stats:\n" << _diffConflator.getTagChangesetStats() << "\n");
+      //  Output the unified stats to the log
+      LOG_STATUS("Changeset Unified Stats:\n" << _diffConflator.getUnifiedChangesetStats());
+    }
+    else
+    {
+      //  Output a single stats file with both geometry and tags change stats
+      FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
     }
   }
   else
   {
-    // output to file
-    if (_diffConflateSeparateOutput)
+    if (_outputChangesetStatsFile.isEmpty())
+    {
+      // output to display
+      LOG_STATUS("Changeset Geometry Stats:\n" << _diffConflator.getGeometryChangesetStats());
+      if (_diffConflator.conflatingTags())
+      {
+        LOG_STATUS("\nChangeset Tag Stats:\n" << _diffConflator.getTagChangesetStats() << "\n");
+      }
+    }
+    else
     {
       // output separate files for geometry and tag change stats
       FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getGeometryChangesetStats());
@@ -606,11 +618,6 @@ void ConflateExecutor::_writeChangesetStats()
         tagsOutFile.append(".tags.json");
         FileUtils::writeFully(tagsOutFile, _diffConflator.getTagChangesetStats());
       }
-    }
-    else
-    {
-      // output a single stats file with both geometry and tags change stats
-      FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
     }
   }
 }
