@@ -406,50 +406,7 @@ QMap<QString, QString> getAllowedOptions()
   }
   return options;
 }
-/*
-QMap<QString, QString> getAllowedOptions()
-{
-  // keep this list alphabetized
-  QMap<QString, QString> options;
-  options["--all"] = "Run all the tests";
-  options["--all-names"] = "Print the names of all the tests without running them";
-  options["--case-only"] = "Run the conflate case tests only";
-  options["--check-env"] = "Check the environment before and after the test is run, good for debugging";
-  options["--current"] = "Run the 'current' level tests";
-  options["--debug"] = "Show debug level log messages and above";
-  options["--diff"] = "Print a diff when a script test fails";
-  options["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
-  options["--error"] = "Show error log level messages and above";
-  options["--exclude=[regex]"] =
-    "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
-  options["--fatal"] = "Show fatal error log level messages only";
-  options["--glacial"] = "Run 'glacial' level tests and below";
-  options["--glacial-only"] = "Run the 'glacial' level tests only";
-  options["--include=[regex]"] =
-    "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
-  options["--info"] = "Show info log level messages and above";
-  options["--quick"] = "Run the 'quick' level' tests";
-  options["--quick-only"] = "Run the 'quick' level tests only";
-  options["--names"] = "Show the names of all the tests as they run";
-  options["--parallel [process count]"] =
-    "Run the specified tests in parallel with the specified number of processes";
-  options["--single [test name]"] = "Run only the test specified";
-  options["--slow"] = "Run the 'slow' level tests and above";
-  options["--slow-only"] = "Run the 'slow' level tests only";
-  options["--status"] = "Show status log level messages and above";
-  options["--suppress-failure-detail"] =
-    "Do not show test failure detailed messages; disables --diff for script tests";
-  options["--trace"] = "Show trace log level messages and above";
-  // Don't show this option if we're not configured to validate test output.
-  if (ConfigOptions().getTestValidationEnable())
-  {
-    options["--validated-only"] = "Run only tests where some or all of the output is validated";
-  }
-  options["--verbose"] = "Show verbose log level messages and above";
-  options["--warn"] = "Show warning log level messages and above";
-  return options;
-}
-*/
+
 QStringList getAllowedOptionNames()
 {
   QStringList optionNames;
