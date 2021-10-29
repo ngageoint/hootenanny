@@ -73,17 +73,17 @@ namespace hoot
 
 const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 
-ConflateExecutor::ConflateExecutor() :
-_isDiffConflate(false),
-_diffConflateSeparateOutput(false),
-_isAttributeConflate(false),
-_isAverageConflate(false),
-_displayStats(false),
-_displayChangesetStats(false),
-_filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
-_numTotalTasks(0),
-_currentTask(0),
-_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax())
+ConflateExecutor::ConflateExecutor()
+  : _isDiffConflate(false),
+    _diffConflateSeparateOutput(false),
+    _isAttributeConflate(false),
+    _isAverageConflate(false),
+    _displayStats(false),
+    _displayChangesetStats(false),
+    _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
+    _numTotalTasks(0),
+    _currentTask(0),
+    _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
@@ -112,25 +112,17 @@ void ConflateExecutor::_initConfig(const QString& output)
       "Attribute and Average Conflation configurations may not both be used at the same time.");
   }
   if (_isAttributeConflate)
-  {
     _updateConfigOptionsForAttributeConflation();
-  }
 
   if (_isDiffConflate)
-  {
     _updateConfigOptionsForDifferentialConflation();
-  }
   if (_isDiffConflate || _isAttributeConflate)
-  {
     _disableRoundaboutRemoval();
-  }
 
   // Note that we may need to eventually further restrict this to only data with relation having oob
   // members due to full hydration (would then need to move this code to after the data load).
   if (ConfigUtils::boundsOptionEnabled())
-  {
     _updateConfigOptionsForBounds();
-  }
 
   if (_filterOps)
   {
@@ -150,24 +142,16 @@ void ConflateExecutor::_initTaskCount()
   // The number of steps here must be updated as you add/remove job steps in the logic.
   _numTotalTasks = 5;
   if (_displayStats)
-  {
     _numTotalTasks += 3;
-  }
   if (_isDiffConflate)
-  {
     _numTotalTasks++;
-  }
 
   // Only add one task for each set of conflate ops, since OpExecutor will create its own task step
   // for each op internally.
   if (!ConfigOptions().getConflatePreOps().empty())
-  {
     _numTotalTasks++;
-  }
   if (!ConfigOptions().getConflatePostOps().empty())
-  {
     _numTotalTasks++;
-  }
   _currentTask = 1;
 }
 
@@ -197,30 +181,21 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
     "Conflating ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + " with ..." +
     FileUtils::toLogFormat(input2, _maxFilePrintLength);
   if (ConfigUtils::boundsOptionEnabled())
-  {
     msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(_maxFilePrintLength);
-  }
   msg +=
     " and writing the output to ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...";
   if (_isDiffConflate)
   {
     if (_diffConflator.conflatingTags())
-    {
       msg = msg.replace("Conflating", "Differentially conflating (tags only) ");
-    }
     else
-    {
       msg = msg.replace("Conflating", "Differentially conflating ");
-    }
   }
   else if (_isAttributeConflate)
-  {
     msg = msg.replace("Conflating", "Attribute conflating ");
-  }
   else if (_isAverageConflate)
-  {
     msg = msg.replace("Conflating", "Average conflating ");
-  }
+
   _progress->set(0.0, msg);
 
   _load(input1, input2, map, isChangesetOutput);
@@ -244,9 +219,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
 
   msg = "Conflating map with " + StringUtils::formatLargeNumber(map->size()) + " elements";
   if (ConfigUtils::boundsOptionEnabled())
-  {
     msg += " over bounds: " + ConfigUtils::getBoundsString().right(_maxFilePrintLength);
-  }
   msg += "...";
   LOG_STATUS(msg);
 
@@ -293,16 +266,12 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-load");
 
   if (!ConfigOptions().getConflatePreOps().empty())
-  {
     _runConflateOps(map, true);
-  }
 
   _runConflate(map);
 
   if (!ConfigOptions().getConflatePostOps().empty())
-  {
     _runConflateOps(map, false);
-  }
 
   // cleanup
 
@@ -349,13 +318,9 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   _stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
 
   if (_displayStats)
-  {
     _writeStats(map, input1Cso, input2Cso, output);
-  }
   if (_displayChangesetStats)
-  {
     _writeChangesetStats();
-  }
 
   _progress->set(
     1.0, Progress::JobState::Successful,
@@ -366,8 +331,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
     FileUtils::toLogFormat(output, _maxFilePrintLength));
 }
 
-void ConflateExecutor::_load(
-  const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut)
+void ConflateExecutor::_load(const QString& input1, const QString& input2,
+                             const OsmMapPtr& map, const bool isChangesetOut)
 {
   //  Loading order is important if datasource IDs 2 is true but 1 is not
   if (!ConfigOptions().getConflateUseDataSourceIds1() &&
@@ -404,9 +369,7 @@ void ConflateExecutor::_load(
     if (_isDiffConflate)
     {
       if (isChangesetOut)
-      {
         VersionUtils::checkVersionLessThanOneCountAndLogWarning(map);
-      }
 
       // Store original IDs for tag diff
       _progress->set(
@@ -437,9 +400,8 @@ void ConflateExecutor::_runConflate(OsmMapPtr& map)
         _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
     _diffConflator.apply(map);
     if (_diffConflator.conflatingTags())
-    {
       _pTagChanges = _diffConflator.getTagDiff();
-    }
+
     _stats.append(_diffConflator.getStats());
   }
   else
@@ -523,9 +485,7 @@ void ConflateExecutor::_writeOutput(
           ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
       }
       else
-      {
         statsFormat.setFormat(ChangesetStatsFormat::Text);
-      }
     }
     _diffConflator.writeChangeset(
       map, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
@@ -729,9 +689,7 @@ void ConflateExecutor::_setRubberSheetElementCriteria() const
     std::shared_ptr<WayNodeCriterion> wayNodeCrit =
       std::dynamic_pointer_cast<WayNodeCriterion>(crit);
     if (wayNodeCrit)
-    {
       continue;
-    }
 
     std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(
