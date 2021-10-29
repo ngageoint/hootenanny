@@ -1,5 +1,5 @@
 
-=== Building the Software
+=== Building
 
 Hootenanny uses a top level Makefile to control the building and testing of code from all three of its codebases: 
 Hootenanny Core (C++), Hootenanny Web Services (Java), and Hootenanny User Interface (Javascript).  Underneath, 

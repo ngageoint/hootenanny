@@ -1,0 +1,328 @@
+
+=== History
+
+[quote, Saalfeld, 1987]
+____________________________________________________________________
+_"Having more than one set of maps to conflate is only now being experienced by
+users outside of the Bureau of the Census. Digital files were very expensive to
+create and, as a result, were very expensive to buy; and users generally did not
+have, nor did they seek, access to more than one digital file of the same
+region."_
+____________________________________________________________________
+
+This quote comes from a report made when the Census Bureau was preparing for the
+1990 Census. At that time, the Census Bureau was researching and developing
+methods to merge data from the United Stated Geological Survey into the GBF/DIME
+to create what eventually became the TIGER database for the 1990 Census. The
+goal of the integration effort was to "consolidate their diverse source
+materials into a single coherent map" (<<saalfeld1987,Saalfeld 1987>>).
+
+==== NGA R&D Framework Paper 
+
+In 2009, the National Technology Alliance prepared a paper titled "Fusion in an
+R&D environment" (National Technology Alliance, 2009) for the NGA. This paper
+highlights:
+
+* A R&D roadmap for multi-source, multi-modal data fusion, a major component of
+  which is conflation of vector datasets. 
+* A functional analysis of conflation techniques
+* A comprehensive census of existing conflation tools
+
+National Technology Alliance suggests a need for "… a service-oriented
+architecture to call conflation functions from other data fusion software via
+open interfaces" (National Technology Alliance, 2009). Such services would
+enable conflation capabilities to be widely available in conjunction with common
+desktop Geographic Information Systems (GIS) applications.  With this potential
+comes an increased need for performance and scalability.    To support this
+requirement, large conflation jobs can be divided into smaller components and
+addressed and processed in parallel (Linna Li, 2011). Such an approach would
+lend itself well to modern cloud computing techniques that are designed to
+operate on discrete tasks in parallel.
+
+This paper provided valuable context and direction to this effort.
+
+=== Conflation Background
+
+[quote,Seth and Samal,Encyclopedia of GIS]
+_____
+In GIS, conflation is defined as the process of combining geographic information
+from overlapping sources so as to retain accurate data, minimize redundancy, and
+reconcile data conflicts.
+_____
+
+Conflation within GIS can generally be grouped into several high level
+categories:
+
+* Vector to Vector (V2V) - Merges two vector data sets into a single output vector
+  data set.
+* Vector to Image (V2I) - Snaps a vector data set to an image and possibly performs
+  feature extraction.
+* Image to Vector (I2V) - Warps an image to a vector data set.
+* Image to Image (I2I) - Aligns two images.
+
+.Simple V2V Conflation
+image::images/SimpleConflation.png[]
+
+There are three main forms of Conflation:
+
+* Raster-to-raster conflation – rectifies differences in georeferenced rasters
+* Raster-to-vector conflation – matches raster and vector data to improve the
+  georeferencing of the vector or raster data
+* Vector-to-vector conflation – matches vector-to-vector to improve the data in
+  one or both vector data sets
+
+Hootenanny is focused on vector-to-vector conflation.
+
+==== Conflation Implementation
+
+Vector conflation can be executed in two ways: fused and related.  From a
+conventional standpoint, the conflation of vector datasets is implemented by
+correlating one or more overlapping datasets to produce a unified database that
+contains the best available geometry and attributes (National Technology
+Alliance, 2009), (Linna Li, 2011).  The results of this method are typically
+easier to manage and can be used to produce better maps in a straightforward
+fashion, in addition to providing a better baseline for analytic functions such
+as routing and geocoding.  Edwards and Scott presented a concept that uses
+feature matching/correlation while maintaining a feature-level relationship
+between datasets, rather than merging the datasets into one (Edwards, 2002).
+Such an approach has a less destructive impact on the original data whereby the
+geometry and attributes are not merged, but instead the matching features
+between datasets are related to one another through a database relationship.
+
+==== Conflation Across Multiple Dimensions
+
+Geometry matching is closely associated with feature matching in the conflation
+process.  In this type of processing, features are considered similar based on
+proximity, orientation, or even topology.  In most cases, geometric processing
+provides a reasonable link between similar geographic features, but there are
+cases where geometry alone cannot distinguish between a railroad and a highway
+that run parallel to each other.  Given this possibility, Sehgal suggests
+implementing multi-dimensional feature matching, specifically combining
+geometric matching to feature attributes and names (Sehgal, 2006).
+
+==== Attributes/Semantics/Ontology
+
+Feature attributes and related semantic/ontological relationships can be used to
+correlate features between two datasets to extend geometry capabilities. 
+According to Adams et al (2010) "More recently the matching of the semantics of
+geospatial features has been identified as a key component of the conflation
+problem" (Adams Benjamin, 2010)In particular, this technique would help weed out
+possible matches that could link very different features to each other (i.e., a
+highway to a railroad).
+
+_Formal name variants_
+
+In cases where formal names exist for features, their similarities can be used
+to link features to each other. Linna Li, 2011 and Sehgal, 2006 suggest using
+Levenshtein distance (VI, 1966) to measure the closeness of feature names, then
+merging these similarities into the scores that characterize the geometric
+similarities.
+
+=== Conflation Use Cases
+
+The following use cases highlight where automated conflation can improve
+efficiency and reduce cost.
+
+==== Mission Specific Datasets (MSDS) Stored Locally on Analyst Workstations
+
+These data are a result of analysts compiling, storing, and using geospatial
+feature data stored locally. These data sets are usually considered "one-off,"
+since their usage is typically limited to a single use or user.  While these
+data may not be collected using an extraction specification such as FACC
+footnote:[Feature and Attribute Coding Catalogue] or NFDD footnote:[Feature
+Data Dictionary], they nonetheless could contain additional geometry and/or
+attribution that could enhance a global dataset.  Conflation tools could be used
+to streamline the integration process and reduce the cost for analysts to upload
+their MSDS into a "global view."
+
+==== Spotlight Updates
+
+These updates represent the integration of an enhanced dataset that is generally
+produced on a larger mapping scale.  Merging Urban Feature Data (UFD) with
+Foundation Feature Data (FFD) would be an example of this, where the conflation
+process would result in integrating high-resolution "urban scale" interurban
+features into moderate scale geospatial data. 
+
+==== Multi-source Integration
+
+Sometimes, analysts have many datasets of similar scale to choose from. When
+this is the case, the individual datasets may introduce unique features that
+collectively provide more complete attribution and geometry of features. A fully
+automated tool to accomplish this could provide another option when deciding how
+best to weigh the low cost of automated conflation versus the higher quality
+that is sometimes yielded by the manual process.
+
+==== Integrate Database Changesets
+
+Datasets such as OpenStreetMap (OSM) are constantly being edited, so maintaining
+internally modified copies is impractical. However, using a fully automated
+conflation tool to conflate internal NGA data with OSM could be performed
+periodically over global data sets. This approach would begin to enable a
+recurrent temporal correction to NGA data.
+
+=== Hootenanny Background
+
+Fast forward to 2012, more than 25 years after the Saalfeld quote, and automatically conflated data 
+sets were still not common place, with analysts routinely required to apply one-off manual techniques to
+support a project or simply to use display techniques to make two overlapping
+datasets appear as one. In the first case the manually conflated data sets take
+an inordinate amount of time to produce, and the techniques are very difficult
+to scale into larger areas. In the latter case, display techniques only benefit
+cartographic rendering and provide little to no value to analytic capabilities
+because the two datasets are not integrated into one.
+
+The purpose of this research is developing a fully automated conflation
+capability that scales to support big geographic datasets. The rationale is that
+such a conflation capability could create a consolidated data set that leverages
+feature content from diverse inputs without involving expensive manual conflation.
+While the quality of the output will not be the same as manually conflated data,
+the cost should be much lower and the quality good enough for many uses.
+
+Hootenanny was spawned out of the need for a fully automated conflation capability to support an effort to load a mix of national and city scale datasets. The rationale is that
+such a conflation capability could create a consolidated data set that leverages
+feature content from diverse inputs without involving expensive manual conflation. While the quality of the output will not be the same as manually conflated data,
+the cost should be much lower and the quality good enough for many uses. 
+
+While ingesting customer data, it quickly became apparent that multiple data sets contained redundant data that was being rendered as duplicated geometries and exported in a similar fashion. Developing a set of automated/semi-automated conflation tools became a consistent discussion topic spawning the evolution of the Hootenanny. During the process, the need to support an array of customer specific data schemas in addition to OSM became quickly apparent which gave rise to another capability which was the ability to translate data between different product standard schemas such as the Multinational Geospatial Co-production Program (MGCP) TRD3&4, NSG Topographic Data Store (TDS) v4.0, v. 6.1, and OSM. 
+
+We have since matured the product into a stand-alone web-based application that sits on top of an extensible set of core conflation algorithms and data translation tools, which are accessed via Node.js and REST services.
+
+=== Hootenanny Overview
+
+NOTE: You also may want to check out the quick Hootenanny overview 
+http://github.com/ngageoint/hootenanny#readme[here].
+
+Hootenanny is designed to facilitate automated and semi-automated conflation of
+critical Foundation GEOINT features in the topographic domain, namely roads (polylines),
+buildings (polygons), and points-of-interest (POIs) (points). While a number of
+small tools are built into the suite for file conversion and evaluation, the main
+function of Hootenanny is to take two input files and produce a single conflated
+output file.
+
+Conflation happens at the dataset level, where the user’s workflow determines the
+best reference dataset and source content, geometry and attributes, to transfer to
+the output map. The input data must be normalized to allow processing and matching
+of features and attributes from different schemas. Hootenanny internal processing
+leverages the key value pair structure of OpenStreetMap (OSM) for improved utility
+and applicability to broader user groups, e.g. normalized attributes can be used
+to aid in feature matching and OSM’s free tagging system allows the map to include
+an unlimited number of attributes describing each feature (OpenStreetMap/Map Features, 2015).
+
+Hootenanny is designed from the ground up to properly handle topology as well as
+a standard set of attributes and unique data model of the OpenStreetMap (OSM)
+data format. To accommodate these requirements, Hootenanny requires that all
+data be provided in the OSM format and schema. This provides many benefits to
+internal data structure and assumptions that can be made within algorithms.
+However, it also adds challenges to data preparation and conversion, which we
+discuss in <<HootExplFileConversion>>.
+
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring software options to get the best conflated output. For larger datasets, however, Hootenanny is a valuable tool that can be utilized standalone or as an inital step in conjunction with a crowd sourced https://tasks.hotosm.org/[mapping campaign] to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
+
+Further, we have limited the scope to pairwise conflation operations. More than
+two data sets can be merged by performing multiple pairwise operations; however,
+limiting the scope to deal with two data sets at a time dramatically reduces
+algorithmic complexity in some situations.
+
+No attempt has been made to accurately handle data that spans the anti-meridian
+(International Date Line) or data at the poles. An approach for handling the
+anti-meridian problem is proposed in <<HootExplFutureWork>>.
+
+[[HootConflationWorkflow]]
+==== Conflation Workflow
+
+The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflowDiagram>>
+and depicts the high-level steps necessary to conflate data and generate an output
+map in Hootenanny. It is important for the user to understand these functions as
+each have implications on the conflated results. The squares represent a specific
+conflation task, while the oval canisters represent a database function. The
+workflow is described as follows:
+
+[[HootConflationWorkflowDiagram]]
+.Hootenanny Conflation Workflow.
+image::images/hoot_general_workflow.png[]
+
+[[HootExplFileConversion]]
+==== File Conversion
+
+Before any data set is used by Hootenanny, it must be converted to the OSM
+format and schema. In the case of FACC data this means performing conversions
+such as:
+
+.*FACC to OSM Conversion*
+[width="40%"]
+|======
+| *FACC* | *OSM*
+| RST=1 | surface=paved
+| TUC=37 | highway=path, horse=designated
+| MCC=73 | surface=pebblestone
+|======
+
+FACC to OSM conversions can become quite complex depending on how the FACC
+specification was interpreted by the digitizer and on subtle interactions
+between FACC fields that impact one or more OSM tags. Despite this complexity,
+the OSM schema is rich enough to accommodate most FACC fields. In some cases,
+we've introduced new non-standard tags into the OSM schema to handle more
+obscure tags such as `building:shape=with_cupola` and some military specific
+tags.
+
+As part of Hootenanny, we have implemented a _shp2osm_ conversion tool that uses
+simple python scripts to convert tags while performing the file format
+conversion. This tool is based heavily on the work done in convert-ogr2osm.py (Ortega,
+2012) but fixes several bugs, improves performance, and provides intersection
+matching of nodes that are at nearly the same location.
+
+When conflation is complete, a similar process can be performed to export the
+data to other formats such as File Geodatabase with the FACC or NFDD schema.
+
+NOTE: Hootenanny allows users to append new non-standard tags to OSM schema in
+order to retain unique values from input data sets.
+
+==== Conflation
+
+Hootenanny provides both a web based User Interface and command line interface
+for performing data manipulations and conflation. While there are tunable
+parameters that can be set, all the conflation steps are fully automated.
+
+[[ExplDataCurrency]]
+==== Data Currency
+
+While merging two data sets that represent the same world is difficult, merging
+two data sets that represent the world at different times is significantly
+harder. This increase in complexity comes mainly from a lack of metadata
+describing when the feature was current and, more importantly, marking features
+as removed rather than removing them without notation. This is most easily
+described with an example:
+
+Given two data sets, A & B, if we do not know when the data sets were created,
+and Feature _x_ exists in A but does not exist in B, there are the following
+possibilities:
+
+1. B has incomplete data, and _x_ was not properly mapped
+2. A has extra erroneous data, and _x_ was not properly mapped
+3. _x_ was created after B was digitized
+4. _x_ was removed before B was digitized
+
+While any one of these scenarios could be true, incomplete data is by far the
+most common. For this reason, in almost all scenarios when we find an unmatched
+feature, we assume that the other data set is incomplete and keep the feature.
+
+=== Hootenanny Development
+
+==== Phase I
+
+Following discussions related to the Perty evaluation, funding was allocated through NGA's InnoVision to further the development of Hootenanny. This development funded the R&D necessary to take Hootenanny from a research tool to a demonstrable tool that could be used by users. The majority of the work centered around RESTful and OGC web services, modifying the iD UI for conflation, translation of additional data sets and increasing conflation performance and features.
+
+==== Phase II
+
+On September 1, 2014 Phase II began with the focus on enhancing the usability of Hootenanny, integrating with other systems and increasing the breadth of features that can be conflated. One of the central goals of this phase was to release Hootenanny to the Open Source community, which occurred in June 2015.
+
+==== Beyond Phase II To Present Day
+
+Hootenanny has since transitioned into NGA's production environment as part of the NGA Open Mapping 
+Enclave (NOME) project. It exists as NOME's main geodata conflation tool and sits besides several
+other mostly open source and mostly OpenStreetMap influenced software tools.
+
+=== Redistribution
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/Redistribution.md[Redistribution info here]
+

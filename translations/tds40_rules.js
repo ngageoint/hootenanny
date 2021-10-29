@@ -4369,6 +4369,14 @@ tds40.rules = {
   intList : [ 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'VST' ],
   // ##### End of intList#####
 
+  // List of attributes that can't have '0' as a value
+  noZeroList : ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'],
+  // ##### End of noZeroList #####
+
+  // Attribute values that are to be dropped since they are defaults or don't add value.
+  dropList : { '-999999.0':1,'-999999':1,'noinformation':1 },
+  // ##### End of dropList #####
+
   // ##### Start of Thematic Group Rules #####
   thematicGroupList : {
     'PGB230':'AeronauticPnt', // AircraftHangar

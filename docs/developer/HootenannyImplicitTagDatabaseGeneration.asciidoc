@@ -1,6 +1,6 @@
 
 [[ImplicitTagRulesDatabaseGeneration]]
-=== Implicit Tag Rules Database Generation
+==== Implicit Tag Rules Database Generation
 
 Hootenanny has the capability to derive type tag information automatically for elements based soley on the contents of their name tags.
 To do this tagging Hootenanny first parses global data, currently OSM and GeoNames, and generates a tag rules database.  The configured
@@ -9,27 +9,25 @@ with the goal of improving the tagging performance.  This document outlines the 
 implicit tagging command line documentation for additional details.  Furthermore, familiarize yourself with the implicit tagging
 configuration options by reading their descriptions (configuration options beginning with implicit.tagging.* and implicit.tagger.*).
 
-==== Acquire Input Data
+===== Acquire Input Data
 
 Download the latest OSM Planet (.osm.pbf) and GeoNames allCountries (.geonames) files.  Additional datasets can be also be used as inputs,
 if desired.
 
-==== Input Pre-filtering (optional)
+===== Input Pre-filtering (optional)
 
 If you will be repeatedly generating implicit tag raw rules files as part of raw rules generation code changes or rule experimentation,
 you should pre-filter your input datasets to data that is eligible to have implicit tags derived from it to save future processing time.
 The pre-filtered input datasets must be translated if in a format other than OSM.  A pre-filtering example:
-
 ---------------------------
 hoot convert -D convert.ops="TranslationVisitor;ImplicitTagEligiblePoiPolyCriterion" -D schema.translation.script="translations/GeoNames_to_OSM.js" allCountries.geonames allCountries-filtered.osm.pbf
 
 hoot convert -D convert.ops="ImplicitTagEligiblePoiPolyCriterion" planet.osm.pbf planet-filtered.osm.pbf
 ---------------------------
 
-==== Raw Rules Derivation
+===== Raw Rules Derivation
 
 Next, you need to generate a raw rules flat file from the input data.  Here is an example:
-
 ---------------------------
 hoot type-tagger-rules --create-raw "planet.osm.pbf;allCountries.geonames" "none;translations/GeoNames_to_OSM.js" \
 osm-geonames.implicitTagRules
@@ -37,22 +35,19 @@ osm-geonames.implicitTagRules
 
 If you already performed the optional pre-filtering and translation from the previous section, you can use this example to save processing
 time which bypasses filtering and translation:
-
 ---------------------------
 hoot type-tagger-rules --create-raw -D implicit.tagging.raw.rules.deriver.skip.filtering=true \
 "planet-filtered.osm.pbf;allCountries-filtered.geonames" "none;none" osm-geonames-poi.implicitTagRules
 ---------------------------
 
-==== Rules Database Derivation
+===== Rules Database Derivation
 
 Finally, you need to generate the implicit tag rules database.  An example:
-
 ---------------------------
 hoot type-tagger-rules --create-db osm-geonames-poi.implicitTagRules osm-geonames-poi-rules.sqlite
 ---------------------------
 
 You can check the results of a generated database with:
-
 -------------------------
 hoot type-tagger-rules --db-stats osm-geonames-poi.implicitTagRules
 -------------------------
@@ -62,7 +57,7 @@ Also, you can examine the output rules database in a Sqlite database viewer, suc
 Once rules have been generated, database derivation is then fairly quick, so you can tweak configuration parameters and regenerate
 databases many times with ease over the course of trying to improve a set of implicit tag rules.
 
-==== Customizing Database Generation Behavior
+===== Customizing Database Generation Behavior
 
 The following configuration options point to files which may be used to add customization to the behavior of the implicit tag rules:
 

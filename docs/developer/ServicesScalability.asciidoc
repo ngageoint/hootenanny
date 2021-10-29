@@ -1,11 +1,13 @@
 
-=== Services Scalability
+==== Services Scalability
+
+NOTE: The load testing described here was prototyped but never used for very long.
 
 NOTE: The following tests depict results with a specific server configuration, specific
 version numbers and specific hardware. These results should be analogous to
 other installations, but your mileage may vary.
 
-==== Load Testing Approach
+===== Load Testing Approach
 
 There are two different load testing approaches being employed in Hootenanny
 testing: node.js service level testing and Selenium based UI level testing. The
@@ -24,7 +26,7 @@ Many different approaches to load testing were evaluated before choosing node.js
 and Selenium. The specific tools evaluated and the evaluation outcomes can be
 provided upon request.
 
-===== UI Level Selenium Tests
+*_UI Level Selenium Tests_*
 
 Selenium provides a programming interface for many different browsers and
 enables stimulating and querying the browser in an automated fashion. This works
@@ -39,7 +41,7 @@ This approach has great promise with regards to automated functional tests and
 is part of our nightly test runs.
 
 [[SimulatedUser]]
-===== Simulated User
+*_Simulated User_*
 
 We use node.js scripts to simulate the load on the system from a typical user.
 To do this we must make certain assumptions about a user's activities. We also
@@ -88,7 +90,7 @@ before selecting another operation. To simulate multiple users we spawn one
 process for each user and they all operate independently until a specified
 amount of time has elapsed.
 
-==== Test Setup
+===== Test Setup
 
 The test is configured such that the server under test (server a) is being tested
 by node.js scripts running on another server (server b).
@@ -104,7 +106,7 @@ The database is cleared and services are restarted before every test run. The
 tests are run for 15 minutes and all operations that complete are reported. Any
 outstanding operations after 15 minutes are terminated and are not reported.
 
-==== Load Testing Results
+===== Load Testing Results
 
 [[LoadBenchmark]]
 .Load Benchmark on 3/16/2015
@@ -129,7 +131,7 @@ increases. There are some errors in translate that are currently being
 addressed, but otherwise significant errors are not introduced until
 approximately 75 simulated users.
 
-==== Improvements as a Result of Benchmarking
+===== Improvements as a Result of Benchmarking
 
 The benchmarking led to a number of marked improvements in both scalability and
 reliability.
@@ -153,7 +155,7 @@ The load benchmark graph shown (in <<LoadBenchmark>>) is being generated on
 a nightly basis and emailed out to appropriate parties so performance can be
 monitored over time.
 
-==== Future Work
+===== Future Work
 
 Options for future work are:
 
@@ -167,7 +169,7 @@ Options for future work are:
   test run can be completed in several hours, but running similar tests over
   several hours or days could be informative.
 
-===== Areas to Improve Hoot
+*_Areas to Improve Hoot_*
 
 The elapsed time for a translation operation can be improved significantly by
 avoiding the overhead of starting up translation scripts each time they are
@@ -196,7 +198,7 @@ improve overall throughput and reduce the elapsed time associated with several
 batch operations.
 
 [[StressTestFiles]]
-===== Stress Test Files
+*_Stress Test Files_*
 
 We investigated using a very dense 1' x 1' region over Boston as a stress test
 layer. Unfortunately this requires more than 40GB of RAM which made it a bit
@@ -219,7 +221,7 @@ DC roads conflation, the second is a 1' x 1' conflation of Gaalkacyo, Somalia.
 ** command line conflation time: 88.3sec
 ** .osm output file size: 41MB
 
-==== TIME-WAIT State
+===== TIME-WAIT State
 
 This can be an issue when connecting from the web services to the DB (not such
 an issue anymore) or when testing from one client that connects to the Tomcat

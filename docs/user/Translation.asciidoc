@@ -7,7 +7,7 @@ Shapefiles, to the OSM format and schema. There are two main supported formats
 for OSM data, `.osm` , an XML format, and `.osm.pbf` , a compressed binary
 format. Discussions of OSM format reference either of these two data formats.
 
-By far the most complex portion of the translation process is the converting the
+By far, the most complex portion of the translation process is the converting the
 Shapefile's schema to the OSM schema. In many cases a one to one mapping can be
 found due to the richness of the OSM schema, but finding the most appropriate mapping
 can be quite time consuming.  For example, one can spend days translating an obscure
@@ -21,7 +21,7 @@ files. For a more nuts and bolts discussion see the `convert` section.
 [[JavaScript-Translation]]
 ==== JavaScript Translation
 
-Hootenanny support translation files written in both Python and JavaScript (AKA
+Hootenanny supports translation files written in both Python and JavaScript (AKA
 ECMA Script). The JavaScript engine used by Hootenanny is the engine integrated
 with Qt. See the http://qt-project.org/doc/qt-4.7/ecmascript.html[Qt ECMA Script
 Documentation] for details on which operations are supported.

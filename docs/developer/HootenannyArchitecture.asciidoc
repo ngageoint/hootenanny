@@ -28,7 +28,6 @@ ditches).
 * Service oriented architecture (SOA) that leverages REST and Node.js services.
 * Web browser client built on MapBox iD editor.
 * Support various import/export formats (OpenStreetMap, Shapefiles, ESRI FGDB, GEONAMES).
-* Open Source Software available for download at https://github.com/ngageoint/hootenanny
 
 [[n-tier-webarch]]
 .Hootenanny N-Tier Architecture

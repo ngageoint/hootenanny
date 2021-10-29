@@ -21,6 +21,9 @@ if (typeof hoot === 'undefined') {
     hoot.Settings.set({"writer.include.circular.error.tags": "false"});
     // hoot.Settings.set({"ogr.debug.dumptags": "true"});
 
+    // Setting this here as a placeholder. The default is "true"
+    hoot.Settings.set({"reader.drop.defaults": "true"});
+
     //Tests should set hashseedzero to true for consistent results
     if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
 }
