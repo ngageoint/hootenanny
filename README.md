@@ -47,7 +47,7 @@ You can create your own custom conflation algorithms for additional feature type
 
 # Conflation Workflows
 
-A conflation workflow defines the manner in which two maps are merged together. Hootenanny has [these workflows](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#select-a-conflation-workflow) available.
+A conflation workflow defines the manner in which two maps are merged together. Hootenanny has [these workflows](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ConflationSteps.asciidoc#select-a-conflation-workflow) available.
   
 # [Attribute Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Translation.asciidoc)
 
