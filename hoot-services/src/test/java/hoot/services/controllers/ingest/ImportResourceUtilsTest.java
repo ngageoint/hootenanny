@@ -118,7 +118,7 @@ public class ImportResourceUtilsTest {
                 geojsonZipCnt, geonamesZipCnt, gpkgZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt, gpkgCnt);
         assertEquals(GEOJSON, classification);
 
-        geonamesCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = gpkgZipCnt = shpCnt = osmCnt = fgdbCnt = 0;
+        geonamesCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = gpkgZipCnt = shpCnt = osmCnt = fgdbCnt = geojsonCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geojsonZipCnt, geonamesZipCnt, gpkgZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt, gpkgCnt);
         assertEquals(GEONAMES, classification);
@@ -233,7 +233,7 @@ public class ImportResourceUtilsTest {
 
         Process p = Runtime.getRuntime().exec(command);
 
-        ImportResourceUtils.handleOSMZip(workDir, zipsToImport, filesToImport, fileNames);
+        ImportResourceUtils.handleNonOgrZip(workDir, zipsToImport, filesToImport, fileNames, "osm");
 
         assertNotNull(filesToImport);
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());

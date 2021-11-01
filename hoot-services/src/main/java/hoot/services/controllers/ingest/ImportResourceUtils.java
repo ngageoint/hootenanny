@@ -233,20 +233,20 @@ final class ImportResourceUtils {
         return stats;
     }
 
-    static void handleOSMZip(File workDir, List<File> zipsToImport, List<File> filesToImport, List<String> fileNames) {
+    static void handleNonOgrZip(File workDir, List<File> zipsToImport, List<File> filesToImport, List<String> fileNames, String type) {
         File zipFolder = new File(workDir, FilenameUtils.getBaseName(zipsToImport.get(0).getName()));
 
-        IOFileFilter fileFilter = FileFilterUtils.suffixFileFilter("osm");
-        Collection<File> osmFiles = FileUtils.listFiles(zipFolder, fileFilter, null);
+        IOFileFilter fileFilter = FileFilterUtils.suffixFileFilter(type);
+        Collection<File> files = FileUtils.listFiles(zipFolder, fileFilter, null);
 
         // reset
         zipsToImport.clear();
         filesToImport.clear();
         fileNames.clear();
 
-        for (File osmFile : osmFiles) {
-            filesToImport.add(osmFile);
-            fileNames.add(osmFile.getName());
+        for (File file : files) {
+            filesToImport.add(file);
+            fileNames.add(file.getName());
         }
     }
 
