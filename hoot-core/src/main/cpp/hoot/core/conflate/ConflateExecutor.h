@@ -30,9 +30,9 @@
 
 // Hoot
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/info/IoSingleStat.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
+#include <hoot/core/util/Progress.h>
 
 // Tgs
 #include <tgs/System/Timer.h>
@@ -131,8 +131,8 @@ private:
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
 
-  void _load(
-    const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut);
+  void _load(const QString& input1, const QString& input2,
+             const OsmMapPtr& map, const bool isChangesetOut);
 
   void _runConflate(OsmMapPtr& map);
 

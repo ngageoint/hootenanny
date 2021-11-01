@@ -1106,7 +1106,6 @@ void HootApiDb::_resetQueries()
   _selectMapNamesOwnedByCurrentUser.reset();
   _selectMembersForRelation.reset();
   _updateNode.reset();
-  _updateRelation.reset();
   _updateWay.reset();
   _getMapIdByName.reset();
   _insertChangeSet2.reset();
@@ -2064,40 +2063,6 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   _updateNode->finish();
 
   LOG_TRACE("Updated node: " << ElementId(ElementType::Node, id));
-}
-
-void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
-{
-  LOG_TRACE("Updating relation: " << id << "...");
-
-  const long mapId = _currMapId;
-  _flushBulkInserts();
-  _checkLastMapId(mapId);
-
-  if (_updateRelation == nullptr)
-  {
-    _updateRelation = std::make_shared<QSqlQuery>(_db);
-    _updateRelation->prepare(
-      "UPDATE " + getCurrentRelationsTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
-      _escapeTags(tags) + " WHERE id=:id");
-  }
-
-  _updateRelation->bindValue(":id", (qlonglong)id);
-  _updateRelation->bindValue(":changeset_id", (qlonglong)_currChangesetId);
-  _updateRelation->bindValue(":timestamp", DateTimeUtils::currentTimeAsString());
-  _updateRelation->bindValue(":version", (qlonglong)version);
-
-  if (_updateRelation->exec() == false)
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_updateWay->executedQuery()).
-        arg(_updateRelation->lastError().text());
-    throw HootException(err);
-  }
-
-  _updateRelation->finish();
-
-  LOG_TRACE("Updated relation: " << ElementId(ElementType::Relation, id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)

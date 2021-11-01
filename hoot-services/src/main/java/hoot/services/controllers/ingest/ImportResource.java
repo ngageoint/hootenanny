@@ -217,12 +217,18 @@ public class ImportResource {
                 throw new IllegalArgumentException("Hootennany does not support zip files containing multiple .osm data files.");
             }
 
-            if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
-                ImportResourceUtils.handleOSMZip(workDir, zipsToImport, filesToImport, fileNames);
+            if ((osmZipCnt == 1 || geojsonZipCnt > 0) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
+                String type = "osm";
+                osmCnt = osmZipCnt;
+
+                if (geojsonZipCnt > 0) {
+                    type = "geojson";
+                    geojsonCnt = geojsonZipCnt;
+                }
+                ImportResourceUtils.handleNonOgrZip(workDir, zipsToImport, filesToImport, fileNames, type);
 
                 // massage some variables to make it look like an osm file was uploaded
-                osmCnt = 1;
-                shpCnt = fgdbCnt = geonamesCnt = shpZipCnt = geonamesZipCnt = fgdbZipCnt = zipCnt = osmZipCnt = 0;
+                shpCnt = fgdbCnt = geonamesCnt = shpZipCnt = geonamesZipCnt = fgdbZipCnt = zipCnt = osmZipCnt = geojsonZipCnt = 0;
             }
 
             UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
