@@ -21,7 +21,9 @@ Goals:
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# [Documentation](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf)
+# Documentation
+
+[pdf](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf)
 
 This documentation is also available as: part of the release package as `docs/HootenannyUserGuide.pdf`, located in `hootenanny-*.tar.gz`.
 

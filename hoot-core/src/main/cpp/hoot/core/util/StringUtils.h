@@ -304,13 +304,6 @@ public:
   static void splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index);
 
   /**
-   * Reverses the ordering of a string list
-   *
-   * @param strList the list to reverse
-   */
-  static void reverse(QStringList& strList);
-
-  /**
    * Converts a set to a delimited string
    *
    * @param set the set to generate a string for

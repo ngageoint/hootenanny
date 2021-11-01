@@ -57,17 +57,6 @@ public:
     const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
-   * Determines if an element is a member of a relation
-   *
-   * @param map map owning the input element
-   * @param childId element ID of the input element
-   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
-   * @return true if the element is a member of a relation
-   */
-  static bool isMemberOfRelation(
-    const ConstOsmMapPtr& map, const ElementId& childId, const bool ignoreReviewRelations = false);
-
-  /**
    * Determines if an element is a member of a relation of a given type
    *
    * @param map map owning the input element
