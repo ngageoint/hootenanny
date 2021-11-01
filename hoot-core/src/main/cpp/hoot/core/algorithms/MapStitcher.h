@@ -137,14 +137,21 @@ protected:
   void _stitchPoly(const OsmMapPtr& source_map, const OsmMapPtr& dest_map, const WayPtr& poly);
 
   /**
-   * @brief _mergeWays/Relations Does the actual merging of two elements
-   * @param source_map Source map that contains the element to be merged
-   * @param source_way/relation
-   * @param dest_map Base map that gets the element to be merged
-   * @param dest_way/relation
+   * @brief _mergeWays Does the actual merging of two ways
+   * @param source_map Source map that contains the way to be merged
+   * @param source_way Source way to merge into destination
+   * @param dest_map Base map that gets the way to be merged
+   * @param dest_way Destination way to receive the merge
    */
   void _mergeWays(const OsmMapPtr& source_map, const WayPtr& source_way, const OsmMapPtr& dest_map, const WayPtr& dest_way);
-  bool _mergeRelations(const OsmMapPtr& source_map, const RelationPtr& source_relation, const OsmMapPtr& dest_map, const RelationPtr& dest_relation);
+
+  /**
+   * @brief _mergeRelations Does the actual merging of two relations, only merges relations that have the same positive ID
+   * @param source_relation Relation from source map to be merged in
+   * @param dest_relation Relation fromm destination map to receive the source relation's members
+   * @return True if a merge happened
+   */
+  bool _mergeRelations(const RelationPtr& source_relation, const RelationPtr& dest_relation);
 
   /**
    * @brief _findStitchPointWay Find a way from the destination map that will stitch with 'way' at selected endpoint

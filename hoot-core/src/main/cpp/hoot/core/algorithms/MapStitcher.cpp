@@ -343,7 +343,7 @@ void MapStitcher::_copyRelationToMap(const OsmMapPtr& source_map, const OsmMapPt
         return;
       }
     }
-    relation->setMembers(members);
+    relation->setMembers(new_members);
     //  Update the ID of the relation if necessary
     long id = relation->getId();
     long new_id = id;
@@ -352,7 +352,7 @@ void MapStitcher::_copyRelationToMap(const OsmMapPtr& source_map, const OsmMapPt
     if (relation->getId() > 0 && relations.find(id) != relations.end())
     {
       //  Merge them and return, if the merge was successful, quit
-      if (_mergeRelations(source_map, relation, dest_map, relations.find(id)->second))
+      if (_mergeRelations(relation, relations.find(id)->second))
         return;
       //  The relations couldn't be merged so copy it over with a new negative ID
       new_id = dest_map->createNextRelationId();
@@ -624,11 +624,22 @@ void MapStitcher::_mergeWays(const OsmMapPtr& source_map,
   _updated_way_ids[source_way->getId()] = dest_way->getId();
 }
 
-bool MapStitcher::_mergeRelations(const OsmMapPtr& /*source_map*/,
-                                  const RelationPtr& /*source_relation*/,
-                                  const OsmMapPtr& /*dest_map*/,
-                                  const RelationPtr& /*dest_relation*/)
+bool MapStitcher::_mergeRelations(const RelationPtr& source_relation, const RelationPtr& dest_relation)
 {
+  //  Both relations should have positive, matching IDs so that they can be merged
+  if (source_relation && dest_relation &&
+      source_relation->getId() == dest_relation->getId() &&
+      source_relation->getId() > 0)
+  {
+    //  Iterate all of the source members and add them if they aren't duplicates
+    const vector<RelationData::Entry>& source_members = source_relation->getMembers();
+    for (const auto& member : source_members)
+    {
+      if (!dest_relation->contains(member.getElementId()))
+        dest_relation->addElement(member.getRole(), member.getElementId());
+    }
+    return true;
+  }
   return false;
 }
 
