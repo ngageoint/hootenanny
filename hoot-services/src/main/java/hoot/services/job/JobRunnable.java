@@ -102,7 +102,7 @@ class JobRunnable implements Runnable {
 
             jobStatusManager.setCompleted(job.getJobId(), "FULLY PROCESSED");
 
-            ArrayList<JobType> uploadJobs = new ArrayList<>(Arrays.asList(JobType.UPLOAD_CHANGESET, JobType.BULK_ADD, JobType.BULK_DIFFERENTIAL, JobType.BULK_REPLACE));
+            ArrayList<JobType> uploadJobs = new ArrayList<>(Arrays.asList(JobType.UPLOAD_CHANGESET, JobType.BULK_ADD, JobType.BULK_DIFFERENTIAL, JobType.BULK_DIFFWTAGS, JobType.BULK_REPLACE));
             if(uploadJobs.contains(job.getJobType())){
                 String parentId = job.getTags().get("parentId");
                 DbUtils.setStale(parentId);

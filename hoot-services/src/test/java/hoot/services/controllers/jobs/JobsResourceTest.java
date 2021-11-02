@@ -173,7 +173,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(23, jobs.size());
+        Assert.assertEquals(27, jobs.size());
         Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
@@ -196,7 +196,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(23, jobs.size());
+        Assert.assertEquals(25, jobs.size());
         Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
