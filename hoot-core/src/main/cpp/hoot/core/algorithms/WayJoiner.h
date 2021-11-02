@@ -71,6 +71,11 @@ public:
 
   QString toString() const override { return ""; }
 
+  /**
+   * @brief joinWay Explicitly join two ways together
+   */
+  virtual void joinWay(const OsmMapPtr& map, const WayPtr& parent, const WayPtr& child);
+
 protected:
 
   /** Debugging flag to leave parent IDs intact for output */

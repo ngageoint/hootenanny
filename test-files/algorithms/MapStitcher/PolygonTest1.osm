@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+  <bounds minlat="12.0010" minlon="43.0632" maxlat="12.0012" maxlon="43.0637"/>
+  <node id="-1" visible="true" lat="12.0010" lon="43.0632"><tag k="name" v="-1"/></node>
+  <node id="-2" visible="true" lat="12.0012" lon="43.0632"><tag k="name" v="-2"/></node>
+  <node id="-3" visible="true" lat="12.0012" lon="43.0634"><tag k="name" v="-3"/></node>
+  <node id="-4" visible="true" lat="12.0010" lon="43.0634"><tag k="name" v="-4"/></node>
+  <node id="-9" visible="true" lat="12.0010" lon="43.0635"><tag k="name" v="-9"/></node>
+  <node id="-10" visible="true" lat="12.0012" lon="43.0635"><tag k="name" v="-10"/></node>
+  <node id="-11" visible="true" lat="12.0012" lon="43.0637"><tag k="name" v="-11"/></node>
+  <node id="-12" visible="true" lat="12.0010" lon="43.0637"><tag k="name" v="-12"/></node>
+  <way id="-1" visible="true">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <nd ref="-4" />
+    <nd ref="-1" />
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Test Building 1"/>
+  </way>
+  <way id="-3" visible="true">
+    <nd ref="-9" />
+    <nd ref="-12" />
+    <nd ref="-11" />
+    <nd ref="-10" />
+    <nd ref="-9" />
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Test Building 2"/>
+  </way>
+</osm>

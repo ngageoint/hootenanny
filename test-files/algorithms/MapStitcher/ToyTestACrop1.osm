@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.85405413708912" minlon="-104.9024316099691" maxlat="38.85495397290377" maxlon="-104.8998993"/>
+    <node visible="true" id="102" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542614503035750" lon="-104.8998993000000013">
+    <tag k="name" v="102"/></node>
+    <node visible="true" id="101" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549539729037718" lon="-104.8998993000000013">
+    <tag k="name" v="101"/></node>
+    <node visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540541370891219" lon="-104.9024316099690992"/>
+    <node visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541298962059614" lon="-104.9023065312240703"/>
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543319201230304" lon="-104.9017876860593788"/>
+    <node visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548207434768855" lon="-104.9008079025564655"/>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549289695954272" lon="-104.9005253172435630"/>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548514075605240" lon="-104.9005693264316363"/>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542599687747341" lon="-104.9005795104799432"/>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542471187715179" lon="-104.9010788637033329"/>
+    <node visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540851073630833" lon="-104.9014476647277121"/>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3"/>
+        <nd ref="4"/>
+        <nd ref="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="4"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <nd ref="3"/>
+        <nd ref="102"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="9"/>
+        <nd ref="8"/>
+        <nd ref="7"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="101"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

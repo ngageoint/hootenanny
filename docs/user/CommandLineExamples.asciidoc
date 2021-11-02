@@ -1692,6 +1692,12 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot split output.geojson input.osm output.osm
 -----
 
+==== Stitch two adjacent cropped maps into one combined map
+
+-----
+    hoot stitch input1.osm input2.osm output.osm
+-----
+
 ==== Copy element IDs from one map to another where identical elements are found between them:
 
 -----
