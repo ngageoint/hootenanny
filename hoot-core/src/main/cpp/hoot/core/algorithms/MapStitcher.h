@@ -151,7 +151,7 @@ protected:
    * @param dest_relation Relation fromm destination map to receive the source relation's members
    * @return True if a merge happened
    */
-  bool _mergeRelations(const RelationPtr& source_relation, const RelationPtr& dest_relation);
+  bool _mergeRelations(const RelationPtr& source_relation, const RelationPtr& dest_relation) const;
 
   /**
    * @brief _findStitchPointWay Find a way from the destination map that will stitch with 'way' at selected endpoint
@@ -167,7 +167,7 @@ protected:
   /**
    * @brief _joinWayPairs Join two ways in the base map, fixes the over and back issue
    */
-  void _joinWayPairs();
+  void _joinWayPairs() const;
 
   /**
    * @brief _findWayEndpoints Get the position (index) of the node endpoints of each of the two ways that match,

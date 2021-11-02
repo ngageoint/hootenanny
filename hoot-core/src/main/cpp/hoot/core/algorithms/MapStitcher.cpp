@@ -624,7 +624,7 @@ void MapStitcher::_mergeWays(const OsmMapPtr& source_map,
   _updated_way_ids[source_way->getId()] = dest_way->getId();
 }
 
-bool MapStitcher::_mergeRelations(const RelationPtr& source_relation, const RelationPtr& dest_relation)
+bool MapStitcher::_mergeRelations(const RelationPtr& source_relation, const RelationPtr& dest_relation) const
 {
   //  Both relations should have positive, matching IDs so that they can be merged
   if (source_relation && dest_relation &&
@@ -643,7 +643,7 @@ bool MapStitcher::_mergeRelations(const RelationPtr& source_relation, const Rela
   return false;
 }
 
-void MapStitcher::_joinWayPairs()
+void MapStitcher::_joinWayPairs() const
 {
   WayJoinerBasic joiner;
   for (auto it : _way_join_pairs)
