@@ -36,6 +36,7 @@ class StringUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(StringUtilsTest);
   CPPUNIT_TEST(runHasAlphabeticCharTest);
+  CPPUNIT_TEST(insertAfterTest);
   CPPUNIT_TEST(jsonParseTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -52,6 +53,19 @@ public:
     CPPUNIT_ASSERT(StringUtils::hasAlphabeticCharacter(" か しきあん"));
     CPPUNIT_ASSERT(!StringUtils::hasAlphabeticCharacter(""));
     CPPUNIT_ASSERT(!StringUtils::hasAlphabeticCharacter("  "));
+  }
+
+  void insertAfterTest()
+  {
+    // this should not
+    QStringList list("foo");
+    CPPUNIT_ASSERT(StringUtils::insertAfter(list, "foo", "bar"));
+    HOOT_STR_EQUALS(list, "[2]{foo, bar}");
+
+    // this should not insert bar a second time.
+    QStringList list2 = {"foo", "bar"};
+    CPPUNIT_ASSERT(!StringUtils::insertAfter(list2, "foo", "bar"));
+    HOOT_STR_EQUALS(list2, "[2]{foo, bar}");
   }
 
   void jsonParseTest()
