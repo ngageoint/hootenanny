@@ -123,13 +123,15 @@ public:
    * @param outMutex mutex for preserving output ordering to standard out
    * @param parallelJobs JobQueue object that contains a set of jobs that can all be run in
    * parallel
+   * @param casesJobs JobQueue object that contains a set of conflate cases that must be run last
    * @param serialJobs JobQueue object (nullptr for all threads but one) that contains a set of
    * all jobs that cannot be run in parallel but must be run serially
+   * @param serialCasesJobs JobQueue object (nullptr for all threads but one) that contains a set
+   * of conflate cases that must be run serially
    */
-  ProcessThread(
-    int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
-    bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
-    JobQueue* casesJobs, JobQueue* serialJobs = nullptr);
+  ProcessThread(int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
+                bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+                JobQueue* casesJobs, JobQueue* serialJobs, JobQueue* serialCasesJobs);
   virtual ~ProcessThread() = default;
 
   /**
@@ -186,6 +188,8 @@ private:
   JobQueue* _casesJobs;
   /** Pointer to job queue that contains only names of jobs that must be run serially */
   JobQueue* _serialJobs;
+  /** Pointer to job queue that contains only names of conflate case jobs that must be run serially */
+  JobQueue* _serialCasesJobs;
   /** Number of failed tests */
   int _failures;
   /** Shared pointer containing ownership of the process pointer from createProcess() */
@@ -217,17 +221,16 @@ public:
    * @param disableFailureRetries If true, tests will never be run a subsequent time after a
    * failure; useful for debugging
    */
-  ProcessPool(
-    int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff,
-    bool disableFailureRetries);
+  ProcessPool(int nproc, double waitTime, bool showTestName, bool suppressFailureDetail,
+              bool printDiff, bool disableFailureRetries);
   /** Destructor */
   ~ProcessPool();
 
-  enum JobType
+  enum JobType : int
   {
-    SerialJob,
-    ParallelJob,
-    ConflateJob
+    SerialJob   = 0x01,
+    ParallelJob = 0x02,
+    ConflateJob = 0x04
   };
 
   /**
@@ -270,6 +273,8 @@ private:
   JobQueue _parallelJobs;
   /** queue of conflate case jobs */
   JobQueue _caseJobs;
+  /** queue of serial conflate case jobs */
+  JobQueue _serialCaseJobs;
   /** mutex protecting standard out to keep all output for each single test together */
   QMutex _mutex;
   /** count of failed unit tests */
