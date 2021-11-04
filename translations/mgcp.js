@@ -2176,7 +2176,8 @@ mgcp = {
       var tValue = tags['source:imagery'].toString().toLowerCase();
       tValue = tValue.replace(/\s/g, '');
 
-      print('tValue: ' + tValue);
+      // Debug
+      // print('tValue: ' + tValue);
 
       switch (tValue)
       {
