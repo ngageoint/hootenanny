@@ -111,7 +111,7 @@ void SettingsJs::listContains(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Settings* settings = &conf();
+  const Settings* settings = &conf();
 
   const QString listOptionKey = str(args[0]->ToString(context).ToLocalChecked());
   const QString strToCheckFor = str(args[1]->ToString(context).ToLocalChecked());

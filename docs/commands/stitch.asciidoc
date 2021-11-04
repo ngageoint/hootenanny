@@ -1,0 +1,27 @@
+[[stitch]]
+== stitch
+
+=== Description
+
+The `stitch` command stitches two adjacent maps. 
+
+It reads in tile boundaries, uses them to process a map, and writes out multiple maps. One map is written for each tile in 
+the tile boundary containing only the elements that reside within that boundary. For elements that span multiple boundaries, 
+the geospatial envelope of the element is compared to all tiles it intersects and they are stored in the one that contains the 
+highest percentage of overlap.
+
+* `input1` - Input; may be any supported input format (e.g. .osm file).
+* `input2` - Input; may be any supported input format (e.g. .osm file).
+* `output` - Output; may be any suppported output format (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+hoot stitch (input1) (input2) (output)
+--------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#stitch-two-adjacent-cropped-maps-into-one-combined-map[Examples]
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#input[Supported Input Formats]

@@ -35,6 +35,9 @@ pipeline {
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
         string(name: 'HOOT_AWS_USE_TAG', defaultValue: 'jenkins')
         string(name: 'HOOT_AWS_GROUP_TAG', defaultValue: 'devops')
+        // Setting 'show_names' to '--names' will turn on the names of all unit tests to
+        // help debug any hanging or crashing unit tests
+        string(name: 'show_names', defaultValue: '')
     }
 
     environment {
@@ -156,7 +159,7 @@ pipeline {
                 // Unfortunately, the code coverage report generation slows down tests and results in a lot of "Waiting 
                 // for process to finish..." messages to be displayed that you wouldn't see otherwise. So, we may want
                 // to make a change that runs this as --error here or increase the wait time when generating the report.
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel ${params.show_names}'"
             }
         }
         stage("Translations Tests") {

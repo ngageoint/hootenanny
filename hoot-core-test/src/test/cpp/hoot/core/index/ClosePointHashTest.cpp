@@ -35,11 +35,12 @@
 // Standard
 #include <math.h>
 #include <sstream>
-using namespace std;
 
 // TGS
 #include <tgs/Statistics/Random.h>
 #include <tgs/StreamUtils.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -49,6 +50,7 @@ class ClosePointHashTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ClosePointHashTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runUpdateTest);
   CPPUNIT_TEST(runRandomTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -74,6 +76,29 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(false, cph.next());
     CPPUNIT_ASSERT_EQUAL(4, count);
+  }
+
+  void runUpdateTest()
+  {
+    ClosePointHash cph(1.0);
+
+    cph.addPoint(0.0, 0.0, 0);
+    cph.addPoint(0.0, 0.0, 1);
+    cph.addPoint(0.0, 0.0, 2);
+
+    cph.updatePoint(10.0, 10.0, 1);
+
+    vector<long> matches0 = cph.getMatchesFor(0);
+    CPPUNIT_ASSERT_EQUAL((size_t)2, matches0.size());
+    CPPUNIT_ASSERT_EQUAL(0L, matches0[0]);
+    CPPUNIT_ASSERT_EQUAL(2L, matches0[1]);
+    vector<long> matches1 = cph.getMatchesFor(1);
+    CPPUNIT_ASSERT_EQUAL((size_t)1, matches1.size());
+    CPPUNIT_ASSERT_EQUAL(1L, matches1[0]);
+    vector<long> matches2 = cph.getMatchesFor(2);
+    CPPUNIT_ASSERT_EQUAL((size_t)2, matches2.size());
+    CPPUNIT_ASSERT_EQUAL(0L, matches2[0]);
+    CPPUNIT_ASSERT_EQUAL(2L, matches2[1]);
   }
 
   void runRandomTest()

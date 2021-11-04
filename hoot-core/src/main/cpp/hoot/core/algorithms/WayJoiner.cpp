@@ -96,6 +96,13 @@ void WayJoiner::join(const OsmMapPtr& map)
   }
 }
 
+void WayJoiner::joinWay(const OsmMapPtr &map, const WayPtr &parent, const WayPtr &child)
+{
+  //  Save off the map and join the two ways
+  _map = map;
+  _joinWays(parent, child);
+}
+
 void WayJoiner::_joinParentChild()
 {
   LOG_INFO("\tJoining parent ways to children...");

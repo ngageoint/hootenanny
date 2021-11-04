@@ -29,11 +29,11 @@
 #define DUPLICATE_NODE_REMOVER_H
 
 // hoot
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {

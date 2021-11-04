@@ -30,21 +30,21 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/ElementTranslatorThread.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OgrWriter.h>
-#include <hoot/core/io/ElementTranslatorThread.h>
 #include <hoot/core/io/OgrWriterThread.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/schema/SchemaUtils.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/FileUtils.h>
@@ -63,10 +63,10 @@ const QString DataConverter::JOB_SOURCE = "Convert";
 
 int DataConverter::logWarnCount = 0;
 
-DataConverter::DataConverter() :
-_translateMultithreaded(false),
-_ogrFeatureReadLimit(0),
-_printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
+DataConverter::DataConverter()
+  : _translateMultithreaded(false),
+    _ogrFeatureReadLimit(0),
+    _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
@@ -87,11 +87,11 @@ void DataConverter::setConfiguration(const Settings& conf)
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());
+
   const QString translation = config.getSchemaTranslationScript();
   if (!translation.isEmpty())
-  {
     setTranslation(config.getSchemaTranslationScript());
-  }
+
   _translationDirection = config.getSchemaTranslationDirection().trimmed().toLower();
   _translateMultithreaded = config.getConvertTranslateMultithreaded();
 }
@@ -119,13 +119,9 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // Running the translator in a separate thread from the writer is an option for OGR, but the I/O
   // formats must be streamable.
   if (_translateMultithreaded && IoUtils::isSupportedOgrFormat(output, true) && isStreamable)
-  {
     _convertToOgrMT(inputs, output);
-  }
   else
-  {
     _convert(inputs, output);
-  }
 
   _progress.set(
     1.0, Progress::JobState::Successful,
@@ -151,38 +147,27 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(IoUtils::isSupportedOgrFormat(output));
 
   if (inputs.empty())
-  {
     throw HootException("No input(s) specified.");
-  }
 
   if (output.trimmed().isEmpty())
-  {
     throw HootException("No output specified.");
-  }
 
   // I don't think it would be possible for translation to work along with the export columns
   // specified, as you'd be first changing your column names with the translation and then trying
   // to export old column names.  If this isn't true, then we could remove this check and allow it.
   if (!_translationScript.isEmpty() && _shapeFileColumnsSpecified())
-  {
     throw HootException("Cannot specify both a translation and export columns.");
-  }
 
   // We may eventually be able to relax the restriction here of requiring the input be an OSM
   // format, but since cols were originally only used with osm2shp and there's no evidence of a need
   // for anything other than an OSM input whe converting to shape, let's keep this check here for
   // now.
   if (_shapeFileColumnsSpecified() && !output.toLower().endsWith(".shp"))
-  {
-    throw HootException(
-      "Columns may only be specified when converting to the shape file format.");
-  }
+    throw HootException("Columns may only be specified when converting to the shape file format.");
 
   // Feature read limit currently is only implemented for OGR inputs.
   if (_ogrFeatureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
-  {
     throw HootException("Read limit may only be specified when converting OGR inputs.");
-  }
 
   if (!IoUtils::isUrl(output))
   {
@@ -201,17 +186,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
 
   if (IoUtils::isSupportedOgrFormat(output, true))
-  {
     _setToOgrOptions(output);
-  }
   else if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
-  {
     _setFromOgrOptions(inputs);
-  }
   else if (!_translationScript.trimmed().isEmpty())
-  {
-    _handleNonOgrOutputTranslationOpts();
-  }
+    _handleNonOgrOutputTranslationOpts(inputs);
 
   // If the translation direction wasn't specified, try to guess it.
   if (!_translationScript.trimmed().isEmpty() && _translationDirection.isEmpty())
@@ -226,13 +205,9 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
   LOG_VARD(isStreamable);
   if (isStreamable)
-  {
     _convertStreamable(inputs, output);
-  }
   else
-  {
     _convertMemoryBound(inputs, output);
-  }
 }
 
 void DataConverter::_convertStreamable(const QStringList& inputs, const QString& output) const
@@ -259,9 +234,8 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
 {
   int numTasks = 2;
   if (!_convertOps.empty())
-  {
     numTasks++;
-  }
+
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
@@ -314,8 +288,7 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
   currentTask++;
 }
 
-void DataConverter::_exportToShapeWithCols(
-  const QString& output, const QStringList& cols, const OsmMapPtr& map) const
+void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map) const
 {
   LOG_DEBUG("_exportToShapeWithCols");
 
@@ -337,8 +310,7 @@ void DataConverter::_exportToShapeWithCols(
     " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-void DataConverter::_fillElementCacheMT(
-  const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const
+void DataConverter::_fillElementCacheMT(const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const
 {
   // Setup reader
   std::shared_ptr<OsmMapReader> reader =
@@ -394,9 +366,9 @@ void DataConverter::_convertToOgrMT(const QStringList& inputs, const QString& ou
          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
-  for (int i = 0; i < inputs.size(); i++)
+  for (const auto& file : inputs)//int i = 0; i < inputs.size(); i++)
   {
-    QString input = inputs.at(i).trimmed();
+    QString input = file.trimmed();
     LOG_DEBUG("Reading: " << input);
 
     // Read all elements from an input.
@@ -462,13 +434,9 @@ void DataConverter::_setFromOgrOptions(const QStringList& inputs)
     // Building outline updating needs to happen after building part merging, or we can end up with
     // role verification warnings in JOSM.
     if (!_convertOps.contains(BuildingPartMergeOp::className()))
-    {
       _convertOps.append(BuildingPartMergeOp::className());
-    }
     if (!_convertOps.contains(BuildingOutlineUpdateOp::className()))
-    {
       _convertOps.append(BuildingOutlineUpdateOp::className());
-    }
   }
 
   // We require that a translation be present when converting from OGR, since OgrReader is tightly
@@ -506,9 +474,7 @@ void DataConverter::_setToOgrOptions(const QString& output)
   // output file name and use it as the file extension.
   QString outputFormat = "";
   if (output.lastIndexOf(".") > -1)
-  {
     outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
-  }
   conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
 
   LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
@@ -519,13 +485,35 @@ void DataConverter::_setToOgrOptions(const QString& output)
   _convertOps.removeAll(SchemaTranslationVisitor::className());
 }
 
-void DataConverter::_handleNonOgrOutputTranslationOpts()
+void DataConverter::_handleNonOgrOutputTranslationOpts(const QStringList& inputs)
 {
   //a previous check was done to make sure both a translation and export cols weren't specified
   assert(!_shapeFileColumnsSpecified());
 
-  // For non OGR conversions, the translation must be passed in as an operator.
+  //  JSON and GeoJSON files do not share nodes between ways and/or relations so there are duplicates
+  if (ConfigOptions().getJsonMergeNearbyNodesConvert() &&
+      !_convertOps.contains(DuplicateNodeRemover::className()))
+  {
+    bool addRemover = false;
+    //  Check all files for JSON and GeoJSON file types
+    for (const auto& filepath : inputs)
+    {
+      QString path = filepath.toLower();
+      if (path.endsWith(".json") || path.endsWith(".geojson"))
+      {
+        addRemover = true;
+        break;
+      }
+    }
+    if (addRemover)
+    {
+      _convertOps.append(DuplicateNodeRemover::className());
+      // Also run dupe way node removal.
+      _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
+    }
+  }
 
+  // For non OGR conversions, the translation must be passed in as an operator.
   if (!_convertOps.contains(SchemaTranslationOp::className()) &&
       !_convertOps.contains(SchemaTranslationVisitor::className()))
   {

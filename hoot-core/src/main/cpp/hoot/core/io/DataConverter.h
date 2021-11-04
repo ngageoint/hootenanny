@@ -118,7 +118,7 @@ private:
   // sets OGR I/O options for
   void _setFromOgrOptions(const QStringList& inputs);
   void _setToOgrOptions(const QString& output);
-  void _handleNonOgrOutputTranslationOpts();
+  void _handleNonOgrOutputTranslationOpts(const QStringList& inputs);
   QString _outputFormatToTranslationDirection(const QString& output) const;
 
   // If specific columns were specified for export to a shape file, then this is called instaed of

@@ -403,12 +403,4 @@ QString StringUtils::_splitAndRemoveAtIndex(
   return input.join(separator);
 }
 
-void StringUtils::reverse(QStringList& strList)
-{
-  // sure there's a better qt way to do this...
-  std::list<QString> strStdList = strList.toStdList();
-  std::reverse(strStdList.begin(), strStdList.end());
-  strList = QStringList::fromStdList(strStdList);
-}
-
 }

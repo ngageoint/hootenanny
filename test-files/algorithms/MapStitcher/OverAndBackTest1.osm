@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+  <bounds minlat="12.0006" minlon="43.0636" maxlat="12.0010" maxlon="43.0666"/>
+  <node id="-4" visible="true" lat="12.0010" lon="43.0636"><tag k="name" v="-4"/></node>
+  <node id="-5" visible="true" lat="12.0008" lon="43.0638"><tag k="name" v="-5"/></node>
+  <node id="-6" visible="true" lat="12.0006" lon="43.0640"><tag k="name" v="-6"/></node>
+  <node id="-7" visible="true" lat="12.0008" lon="43.0642"><tag k="name" v="-7"/></node>
+  <node id="-8" visible="true" lat="12.0010" lon="43.0644"><tag k="name" v="-8"/></node>
+  <node id="-12" visible="true" lat="12.0006" lon="43.0650"><tag k="name" v="-12"/></node>
+  <node id="-13" visible="true" lat="12.0008" lon="43.0652"><tag k="name" v="-13"/></node>
+  <node id="-14" visible="true" lat="12.0010" lon="43.0654"><tag k="name" v="-14"/></node>
+  <node id="-20" visible="true" lat="12.0010" lon="43.0662"><tag k="name" v="-20"/></node>
+  <node id="-21" visible="true" lat="12.0008" lon="43.0664"><tag k="name" v="-21"/></node>
+  <node id="-22" visible="true" lat="12.0006" lon="43.0666"><tag k="name" v="-22"/></node>
+  <way id="-2" visible="true">
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <nd ref="-7" />
+    <nd ref="-8" />
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="Way: -2"/>
+  </way>
+  <way id="-4" visible="true">
+    <nd ref="-12" />
+    <nd ref="-13" />
+    <nd ref="-14" />
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="Way: -4"/>
+  </way>
+  <way id="-6" visible="true">
+    <nd ref="-20" />
+    <nd ref="-21" />
+    <nd ref="-22" />
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="Way: -6"/>
+  </way>
+</osm>
+
+
