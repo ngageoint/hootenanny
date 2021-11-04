@@ -375,7 +375,7 @@ bool StringUtils::insertAfter(
     return false;
   }
 
-  if (strList.at(beforeIndex + 1) != strToInsert)
+  if (beforeIndex == strList.count() - 1 || strList.at(beforeIndex + 1) != strToInsert)
   {
     strList.insert(beforeIndex + 1, strToInsert);
     return true;
