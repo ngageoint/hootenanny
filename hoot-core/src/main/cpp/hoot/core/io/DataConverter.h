@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ElementCache.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Progress.h>
 
 // Qt
@@ -99,36 +99,48 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output) const;
 
-  /*
+  /**
    * This method handles all non OGR output conversions.
    */
   void _convert(const QStringList& inputs, const QString& output);
-  /*
+  /**
    * streams I/O one feature at a time
    */
   void _convertStreamable(const QStringList& inputs, const QString& output) const;
-  /*
+  /**
    * reads entire input into memory before converting
    */
   void _convertMemoryBound(const QStringList& inputs, const QString& output);
-  // Runs the translator in a separate thread for a performance increase if certain pre-conditions
-  // are met.
+  /**
+   * Runs the translator in a separate thread for a performance increase if certain pre-conditions
+   * are met.
+   */
   void _convertToOgrMT(const QStringList& inputs, const QString& output);
 
-  // sets OGR I/O options for
+  /**
+   *  sets OGR I/O options for conversions to and from OGR formats
+   */
   void _setFromOgrOptions(const QStringList& inputs);
   void _setToOgrOptions(const QString& output);
-  void _handleNonOgrOutputTranslationOpts(const QStringList& inputs);
   QString _outputFormatToTranslationDirection(const QString& output) const;
+
+  /**
+   * Sets I/O options for conversions from non-OGR formats
+   */
+  void _handleNonOgrOutputTranslationOpts(const QStringList& inputs);
+
+  /**
+   * Add option operations to the options if they aren't already set
+   */
+  void _addMergeNearbyNodesOps();
+  void _addSimplifyBuildingsOps();
 
   // If specific columns were specified for export to a shape file, then this is called instaed of
   // using OgrWriter.
-  void _exportToShapeWithCols(
-    const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
+  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
   bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
 
-  void _fillElementCacheMT(
-    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
+  void _fillElementCacheMT(const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 };
 
 }
