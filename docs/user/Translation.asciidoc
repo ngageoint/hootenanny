@@ -681,9 +681,8 @@ The astute reader may notice that a new way was created during this process. The
 [[Disabling-Complex-Buildings]]
 *_Disabling Complex Buildings_*
 
-By default the when using the convert command to convert an OGR format to OSM `ogr2osm.simplify.complex.buildings` is enabled.  If you would like to disable the automatic construction of complex buildings from the individual parts then simply set `ogr2osm.simplify.complex.buildings` to false.  For example:
+By default the when using the convert command to convert an OGR format to OSM `non.osm.convert.simplify.complex.buildings` is enabled.  If you would like to disable the automatic construction of complex buildings from the individual parts then simply set `non.osm.convert.simplify.complex.buildings` to false.  For example:
 
 ------
-hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.complex.buildings=false MyInput.shp MyOutput.osm
+hoot convert -D schema.translation.script=MyTranslation -D non.osm.convert.simplify.complex.buildings=false MyInput.shp MyOutput.osm
 ------
-

@@ -68,7 +68,7 @@ public class ImportCommandTest {
         List<String> options = new LinkedList<>();
         //options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("ogr2osm.simplify.complex.buildings=true");
+        options.add("non.osm.convert.simplify.complex.buildings=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("schema.translation.script=" + translation);
@@ -177,7 +177,7 @@ public class ImportCommandTest {
 
         List<String> options = new LinkedList<>();
         //options.add("osm2ogr.ops=DecomposeBuildingRelationsVisitor");
-        options.add("hootapi.db.writer.overwrite.map=true");options.add("ogr2osm.simplify.complex.buildings=true");
+        options.add("hootapi.db.writer.overwrite.map=true");options.add("non.osm.convert.simplify.complex.buildings=true");
 
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
