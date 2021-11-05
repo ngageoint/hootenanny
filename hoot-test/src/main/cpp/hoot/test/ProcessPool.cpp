@@ -300,7 +300,7 @@ void ProcessPool::addJob(const QString& test, JobType job_type)
     _serialCaseJobs.push(test);
   else if (job_type == SerialJob)
     _serialJobs.push(test);
-  else if (job_type == ConflateJob)
+  else if (job_type == ConflateJob && !_serialCaseJobs.contains(test))
     _caseJobs.push(test);
 }
 
