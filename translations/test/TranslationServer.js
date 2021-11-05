@@ -1104,6 +1104,7 @@ describe('TranslationServer', function () {
         xml2js.parseString(osm, function(err, result) {
           assert.equal(result.osm.node[0].tag[0].$.k, 'building')
           assert.equal(result.osm.node[0].tag[0].$.v, 'yes')
+          assert.equal(result.osm.node[0].tag.length, 1)
         })
 
         var osm = server.handleInputs({
@@ -1119,6 +1120,7 @@ describe('TranslationServer', function () {
           assert.equal(result.osm.node[0].tag[0].$.v, 'UNK')
           assert.equal(result.osm.node[0].tag[1].$.k, 'building')
           assert.equal(result.osm.node[0].tag[1].$.v, 'yes')
+          assert.equal(result.osm.node[0].tag.length, 2)
         })
 
         var osm = server.handleInputs({
@@ -1132,6 +1134,7 @@ describe('TranslationServer', function () {
         xml2js.parseString(osm, function(err, result) {
           assert.equal(result.osm.node[0].tag[0].$.k, 'building')
           assert.equal(result.osm.node[0].tag[0].$.v, 'yes')
+          assert.equal(result.osm.node[0].tag.length, 1)
           done()
         })
       })
