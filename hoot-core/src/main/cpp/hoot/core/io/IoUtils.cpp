@@ -86,18 +86,18 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   if (QFileInfo(justPath).isDir())
   {
     return
-      justPath.toLower().endsWith(".gdb") ||
+      justPath.endsWith(".gdb", Qt::CaseInsensitive) ||
       FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
   // single input
   else
   {
     // The only zip file format we support are ones containing OGR inputs.
-    if (justPath.toLower().endsWith(".zip") ||
+    if (justPath.endsWith(".zip") ||
         // We only support this type of postgres URL for OGR inputs.
-        justPath.toLower().startsWith("pg:") ||
+        justPath.startsWith("pg:", Qt::CaseInsensitive) ||
         // Or, OGDI Vectors. Things like VPF (DNC, VMAP etc)
-        justPath.toLower().startsWith("gltp:"))
+        justPath.startsWith("gltp:", Qt::CaseInsensitive))
     {
       return true;
     }

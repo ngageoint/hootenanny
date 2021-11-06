@@ -164,7 +164,7 @@ public: \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
-  virtual std::shared_ptr<HootException> clone() const { return std::make_shared<Name>(*this); } \
+  std::shared_ptr<HootException> clone() const override { return std::make_shared<Name>(*this); } \
   QString getName() const override { return className(); } \
 };
 
@@ -177,7 +177,7 @@ public: \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
-  virtual std::shared_ptr<HootException> clone() const { return std::make_shared<Name>(*this); } \
+  std::shared_ptr<HootException> clone() const override { return std::make_shared<Name>(*this); } \
   QString getName() const override { return className(); } \
 };
 

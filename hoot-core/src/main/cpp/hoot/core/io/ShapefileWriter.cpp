@@ -161,7 +161,7 @@ void ShapefileWriter::_removeShapefile(const QString& path) const
 void ShapefileWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   QString tempPath = path;
-  if (tempPath.toLower().endsWith(".shp"))
+  if (tempPath.endsWith(".shp", Qt::CaseInsensitive))
   {
     tempPath.remove(tempPath.size() - 4, tempPath.size());
   }

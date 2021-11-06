@@ -1195,7 +1195,7 @@ bool OsmPbfReader::isSupported(const QString& urlStr) const
   return
     //there is actually some test data that ends in .pbf instead of .osm.pbf, so allowing that
     //extension too for now
-    input.exists() && (urlStr.toLower().endsWith(".osm.pbf") || urlStr.toLower().endsWith(".pbf"));
+    input.exists() && (urlStr.endsWith(".osm.pbf", Qt::CaseInsensitive) || urlStr.endsWith(".pbf", Qt::CaseInsensitive));
 }
 
 bool OsmPbfReader::isSorted(const QString& file)

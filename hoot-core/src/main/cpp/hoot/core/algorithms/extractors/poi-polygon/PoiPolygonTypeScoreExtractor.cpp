@@ -140,8 +140,8 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString& tagKey, QSt
   LOG_VART(tagValue);
 
   //don't care about urls
-  if (tagValue.toLower().startsWith("http://") ||
-      tagValue.toLower().startsWith("https://"))
+  if (tagValue.startsWith("http://", Qt::CaseInsensitive) ||
+      tagValue.startsWith("https://", Qt::CaseInsensitive))
   {
     return;
   }

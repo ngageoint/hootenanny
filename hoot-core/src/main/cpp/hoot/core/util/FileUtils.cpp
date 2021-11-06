@@ -185,7 +185,7 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
   const QStringList files = dir.entryList();
   for (int i = 0; i < files.size(); i++)
   {
-    if (files.at(i).toLower().endsWith(ext))
+    if (files.at(i).endsWith(ext, Qt::CaseInsensitive))
     {
       return true;
     }

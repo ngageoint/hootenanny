@@ -183,7 +183,7 @@ void OsmMapWriterFactory::writeDebugMap(
         StringUtils::matchesWildcard(callingClass, includeClassFilter))
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
-      if (!debugMapFileName.toLower().endsWith(".osm"))
+      if (!debugMapFileName.endsWith(".osm", Qt::CaseInsensitive))
       {
         throw IllegalArgumentException("Debug maps must be written to an .osm file.");
       }

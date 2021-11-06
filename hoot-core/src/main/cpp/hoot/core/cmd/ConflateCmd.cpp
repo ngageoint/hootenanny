@@ -56,7 +56,7 @@ int ConflateCmd::runSimple(QStringList& args)
     displayStats = true;
     const int statsIndex = args.indexOf("--stats");
     if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-        args[statsIndex + 1].toLower().endsWith(".json"))
+        args[statsIndex + 1].endsWith(".json", Qt::CaseInsensitive))
     {
       outputStatsFile = args[statsIndex + 1];
       args.removeAll(outputStatsFile);
