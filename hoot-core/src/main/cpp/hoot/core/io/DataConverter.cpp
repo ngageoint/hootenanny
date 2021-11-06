@@ -163,7 +163,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   //  format, but since cols were originally only used with osm2shp and there's no evidence of a need
   //  for anything other than an OSM input whe converting to shape, let's keep this check here for
   //  now.
-  if (_shapeFileColumnsSpecified() && !output.toLower().endsWith(".shp"))
+  if (_shapeFileColumnsSpecified() && !output.endsWith(".shp", Qt::CaseInsensitive))
     throw HootException("Columns may only be specified when converting to the shape file format.");
 
   //  Feature read limit currently is only implemented for OGR inputs.
@@ -275,7 +275,7 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
     (float)(currentTask - 1) / (float)numTasks,
     "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
   MapProjector::projectToWgs84(map);
-  if (output.toLower().endsWith(".shp") && _shapeFileColumnsSpecified())
+  if (output.endsWith(".shp", Qt::CaseInsensitive) && _shapeFileColumnsSpecified())
   {
     //  If the user specified cols, then we want to export them. This requires a separate logic
     //  path from the generic convert logic.

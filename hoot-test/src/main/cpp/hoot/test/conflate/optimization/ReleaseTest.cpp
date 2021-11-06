@@ -77,7 +77,7 @@ void ReleaseTest::_parseScore()
       {
         foundConflatedScoreLine = true;
       }
-      else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
+      else if (foundConflatedScoreLine && line.startsWith("overall", Qt::CaseInsensitive))
       {
         _score = line.split(" ")[1].trimmed().toDouble();
         LOG_VARD(_score);

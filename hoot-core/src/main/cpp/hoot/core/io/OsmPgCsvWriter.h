@@ -50,7 +50,7 @@ public:
    * @param url Filename ending in ".pgcsv"
    * @return
    */
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".pgcsv"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".pgcsv", Qt::CaseInsensitive); }
   /**
    * @brief supportedFormats
    * @return

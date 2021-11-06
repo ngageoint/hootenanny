@@ -309,7 +309,7 @@ private:
 
   void _validateOutput(const QString& output) const
   {
-    if (!output.toLower().endsWith(".geojson") && !output.toLower().endsWith(".osm"))
+    if (!output.endsWith(".geojson", Qt::CaseInsensitive) && !output.endsWith(".osm", Qt::CaseInsensitive))
     {
       throw IllegalArgumentException(
         "Invalid output file format: " + output + ". Only the GeoJSON (.geojson) and OSM " +

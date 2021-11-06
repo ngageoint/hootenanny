@@ -60,11 +60,11 @@ _tagQualityIssues(false)
 OsmMapPtr ChangesetTaskGridReplacer::replace(
   const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid)
 {
-  if (!toReplace.toLower().startsWith("osmapidb://"))
+  if (!toReplace.startsWith("osmapidb://", Qt::CaseInsensitive))
   {
     throw IllegalArgumentException("Data being replaced must be from an OSM API database.");
   }
-  if (!replacement.toLower().startsWith("hootapidb://"))
+  if (!replacement.startsWith("hootapidb://", Qt::CaseInsensitive))
   {
     throw IllegalArgumentException("Replacement data must be from a Hootenanny API database.");
   }
