@@ -26,8 +26,6 @@
  */
 #include "MemChangesetProvider.h"
 
-
-
 namespace hoot
 {
 
@@ -48,14 +46,21 @@ bool MemChangesetProvider::hasMoreChanges()
 
 Change MemChangesetProvider::readNextChange()
 {
-  Change nextChange = _changes.front();
-  _changes.pop_front();
+  Change nextChange = _changes.begin()->second;
+  _changes.erase(_changes.begin());
   return nextChange;
 }
 
 void MemChangesetProvider::addChange(const Change& newChange)
 {
-  _changes.push_back(newChange);
+  _changes[newChange.getElement()->getElementId()] = newChange;
+}
+
+void MemChangesetProvider::removeChange(const Change &change)
+{
+  auto position = _changes.find(change.getElement()->getElementId());
+  if (position != _changes.end())
+    _changes.erase(position);
 }
 
 int MemChangesetProvider::getNumChanges() const
@@ -63,19 +68,15 @@ int MemChangesetProvider::getNumChanges() const
   return static_cast<int>(_changes.size());
 }
 
-bool MemChangesetProvider::containsChange(ElementId eID)
+bool MemChangesetProvider::containsChange(ElementId eid)
 {
-  // "premature optimization is the root of all evil" - Donald Knuth
-  // Possibly use a hash or something here, if this is taking too much time
+  return _changes.find(eid) != _changes.end();
+}
 
-  for (std::list<Change>::iterator it = _changes.begin(); it != _changes.end(); ++it)
-  {
-    if (eID == it->getElement()->getElementId())
-    {
-      return true;
-    }
-  }
-  return false;
+const Change& MemChangesetProvider::getChange(ElementId eid)
+{
+  //  Requires that containsChange() is called first to ensure the element exists
+  return _changes[eid];
 }
 
 }

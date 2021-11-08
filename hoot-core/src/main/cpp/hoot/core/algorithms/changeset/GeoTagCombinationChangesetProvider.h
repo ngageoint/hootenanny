@@ -28,6 +28,7 @@
 #define GEO_TAG_COMBINATION_CHANGESET_PROVIDER_H
 
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
 
 #include <array>
 
@@ -67,16 +68,16 @@ public:
    */
   Change readNextChange() override;
 
-  void setGeoChangesetProvider(ChangesetProviderPtr geoChangeset)
-  { _changesets[0] = geoChangeset; }
-  void setTagChangesetProvider(ChangesetProviderPtr tagChangeset)
-  { _changesets[1] = tagChangeset; }
+  void setGeoChangesetProvider(const ChangesetProviderPtr& geoChangeset)
+  { _geoChangeset = geoChangeset; }
+  void setTagChangesetProvider(const MemChangesetProviderPtr& tagChangeset)
+  { _tagChangeset = tagChangeset; }
 
 private:
 
   std::shared_ptr<OGRSpatialReference> _projection;
-  std::array<ChangesetProviderPtr, 2> _changesets;
-  std::array<ChangePtr, 2> _nextChange;
+  ChangesetProviderPtr _geoChangeset;
+  MemChangesetProviderPtr _tagChangeset;
 };
 
 using GeoTagCombinationChangesetProviderPtr = std::shared_ptr<GeoTagCombinationChangesetProvider>;

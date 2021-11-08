@@ -43,60 +43,29 @@ std::shared_ptr<OGRSpatialReference> GeoTagCombinationChangesetProvider::getProj
 
 bool GeoTagCombinationChangesetProvider::hasMoreChanges()
 {
-  return (_changesets[0] != nullptr && _changesets[1] != nullptr) &&
-         (_changesets[0]->hasMoreChanges() || _nextChange[0] != nullptr ||
-          _changesets[1]->hasMoreChanges() || _nextChange[1] != nullptr);
+  return (_geoChangeset != nullptr && _geoChangeset->hasMoreChanges()) ||
+         (_tagChangeset != nullptr && _tagChangeset->hasMoreChanges());
 }
 
 Change GeoTagCombinationChangesetProvider::readNextChange()
 {
-  //  Get the next change from each changeset
-  if (_nextChange[0] == nullptr)
-    _nextChange[0] = (_changesets[0]->hasMoreChanges() ? ChangePtr(new Change(_changesets[0]->readNextChange())) : nullptr);
-  if (_nextChange[1] == nullptr)
-    _nextChange[1] = (_changesets[1]->hasMoreChanges() ? ChangePtr(new Change(_changesets[1]->readNextChange())) : nullptr);
-  //  Compare the element IDs
   Change result;
-  if (_nextChange[0] == nullptr && _nextChange[1] == nullptr)
-    throw hoot::IllegalArgumentException("Cannot read empty changeset elements.");
-  else if (_nextChange[0] != nullptr && _nextChange[1] == nullptr)
+  if (_geoChangeset->hasMoreChanges())
   {
-    //  Grab the next change and remove it
-    result = *_nextChange[0];
-    _nextChange[0] = nullptr;
-  }
-  else if (_nextChange[0] == nullptr && _nextChange[1] != nullptr)
-  {
-    //  Grab the next change and remove it
-    result = *_nextChange[1];
-    _nextChange[1] = nullptr;
-  }
-  else
-  {
-    ElementId geoId = _nextChange[0]->getElement()->getElementId();
-    ElementId tagId = _nextChange[1]->getElement()->getElementId();
-    if (geoId == tagId)
+    //  Get the next change from the geo changeset
+    result = _geoChangeset->readNextChange();
+    ElementId eid = result.getElement()->getElementId();
+    //  Check if the tag changeset has additional changes
+    if (_tagChangeset->containsChange(eid))
     {
-      //  Combine the two changes
-      result = *_nextChange[0];
-      result.combineChange(*_nextChange[1]);
-      //  Remove both changes from the next queue
-      _nextChange[0] = nullptr;
-      _nextChange[1] = nullptr;
-    }
-    else if (geoId < tagId)
-    {
-      //  Get the geo change next
-      result = *_nextChange[0];
-      _nextChange[0] = nullptr;
-    }
-    else
-    {
-      //  Get the tag change next
-      result = *_nextChange[1];
-      _nextChange[1] = nullptr;
+      //  Combine the two changes into one
+      Change tags = _tagChangeset->getChange(eid);
+      result.combineChange(tags);
+      _tagChangeset->removeChange(tags);
     }
   }
+  else if (_tagChangeset->hasMoreChanges())
+    result = _tagChangeset->readNextChange();
   return result;
 }
 
