@@ -46,7 +46,7 @@ public:
 
   explicit GeoTagCombinationChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
-  ~GeoTagCombinationChangesetProvider() = default;
+  ~GeoTagCombinationChangesetProvider() override = default;
 
   /**
    * @see ChangesetProvider
