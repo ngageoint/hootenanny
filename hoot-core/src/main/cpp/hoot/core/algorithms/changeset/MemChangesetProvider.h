@@ -48,27 +48,27 @@ public:
   ~MemChangesetProvider() = default;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   void close() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   bool hasMoreChanges() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   Change readNextChange() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   int getNumChanges() const override;
 

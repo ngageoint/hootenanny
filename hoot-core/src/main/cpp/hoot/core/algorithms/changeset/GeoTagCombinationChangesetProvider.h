@@ -24,57 +24,63 @@
  *
  * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef MULTIPLECHANGESETPROVIDER_H
-#define MULTIPLECHANGESETPROVIDER_H
+#ifndef GEO_TAG_COMBINATION_CHANGESET_PROVIDER_H
+#define GEO_TAG_COMBINATION_CHANGESET_PROVIDER_H
 
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+
+#include <array>
 
 namespace hoot
 {
 
 /**
- * @brief The MultipleChangesetProvider class is essentially a changeset provider container,
- * allowing multiple changeset providers to be chained together
+ * @brief The GeoTagCombinationChangesetProvider class is essentially a changeset provider container,
+ * combining a geometry changeset provider with a tag changeset provider
  */
-class MultipleChangesetProvider : public ChangesetProvider
+class GeoTagCombinationChangesetProvider : public ChangesetProvider
 {
 
 public:
 
-  explicit MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
+  explicit GeoTagCombinationChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
+  ~GeoTagCombinationChangesetProvider() = default;
 
-  ~MultipleChangesetProvider() = default;
-
+  /**
+   * @see ChangesetProvider
+   */
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   void close() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   bool hasMoreChanges() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   Change readNextChange() override;
 
-  void addChangesetProvider(ChangesetProviderPtr newChangeset);
-
-  size_t getNumChangesets() const;
+  void setGeoChangesetProvider(ChangesetProviderPtr geoChangeset)
+  { _changesets[0] = geoChangeset; }
+  void setTagChangesetProvider(ChangesetProviderPtr tagChangeset)
+  { _changesets[1] = tagChangeset; }
 
 private:
 
   std::shared_ptr<OGRSpatialReference> _projection;
-  std::list<ChangesetProviderPtr> _changesets;
+  std::array<ChangesetProviderPtr, 2> _changesets;
+  std::array<ChangePtr, 2> _nextChange;
 };
 
-using MultipleChangesetProviderPtr = std::shared_ptr<MultipleChangesetProvider>;
+using GeoTagCombinationChangesetProviderPtr = std::shared_ptr<GeoTagCombinationChangesetProvider>;
 
 }
 
-#endif // MULTIPLECHANGESETPROVIDER_H
+#endif // GEO_TAG_COMBINATION_CHANGESET_PROVIDER_H
