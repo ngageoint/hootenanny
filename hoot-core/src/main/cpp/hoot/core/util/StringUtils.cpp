@@ -375,7 +375,7 @@ bool StringUtils::insertAfter(
     return false;
   }
 
-  if (strList.at(beforeIndex + 1) != strToInsert)
+  if (beforeIndex == strList.count() - 1 || strList.at(beforeIndex + 1) != strToInsert)
   {
     strList.insert(beforeIndex + 1, strToInsert);
     return true;
@@ -401,14 +401,6 @@ QString StringUtils::_splitAndRemoveAtIndex(
   }
   LOG_VART(input);
   return input.join(separator);
-}
-
-void StringUtils::reverse(QStringList& strList)
-{
-  // sure there's a better qt way to do this...
-  std::list<QString> strStdList = strList.toStdList();
-  std::reverse(strStdList.begin(), strStdList.end());
-  strList = QStringList::fromStdList(strStdList);
 }
 
 }

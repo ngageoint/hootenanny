@@ -72,7 +72,7 @@ void TagAdvancedCriterion::setConfiguration(const Settings& s)
 void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrPath)
 {
   std::shared_ptr<boost::property_tree::ptree> propTree;
-  if (!filterJsonStringOrPath.toLower().endsWith(".json"))
+  if (!filterJsonStringOrPath.endsWith(".json", Qt::CaseInsensitive))
   {
     propTree = StringUtils::jsonStringToPropTree(filterJsonStringOrPath);
   }

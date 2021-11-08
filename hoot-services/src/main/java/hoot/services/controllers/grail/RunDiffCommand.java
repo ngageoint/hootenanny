@@ -89,7 +89,8 @@ class RunDiffCommand extends GrailCommand {
 
         String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf"
                 + (!algorithm.equals("") ? " -C ${ROAD_ALGORITHM}" : "")
-                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
+                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE}"
+                + (params.getApplyTags() ? " --include-tags" : "");
 
         super.configureCommand(command, substitutionMap, caller);
     }

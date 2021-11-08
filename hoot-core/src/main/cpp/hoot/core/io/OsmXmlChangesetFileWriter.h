@@ -80,7 +80,7 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  bool isSupported(const QString& output) const override { return output.endsWith(".osc"); }
+  bool isSupported(const QString& output) const override { return output.endsWith(".osc", Qt::CaseInsensitive); }
 
   void setConfiguration(const Settings &conf) override;
 

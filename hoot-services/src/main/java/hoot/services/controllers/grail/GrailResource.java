@@ -316,7 +316,7 @@ public class GrailResource {
                 input2 = getOverpassParams.getOutput();
             }
 
-            grailCommandClass = deriveType.toLowerCase().contains("differential") ? RunDiffCommand.class : DeriveChangesetCommand.class;
+            grailCommandClass = deriveType.toLowerCase().startsWith("diff") ? RunDiffCommand.class : DeriveChangesetCommand.class;
         }
 
         // create output file
@@ -349,15 +349,10 @@ public class GrailResource {
             } else if (deriveType.equals("Cut & Replace")) {
                 jobType = JobType.BULK_REPLACE;
             } else {
-                jobType = JobType.BULK_DIFFERENTIAL;
-
                 if (reqParams.getApplyTags()) {
-                    File tagDiffFile = new File(workDir, "diff.tags.osc");
-                    GrailParams pushTagsParams = new GrailParams(pushParams);
-                    pushTagsParams.setOutput(tagDiffFile.getAbsolutePath());
-
-                    ExternalCommand applyTagChange = grailCommandFactory.build(jobId, pushTagsParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
-                    workflow.add(applyTagChange);
+                    jobType = JobType.BULK_DIFFWTAGS;
+                } else {
+                    jobType = JobType.BULK_DIFFERENTIAL;
                 }
             }
 
@@ -478,7 +473,7 @@ public class GrailResource {
     /**
      * Retrieve statistics on the specified changeset
      *
-     * GET hoot-services/grail/changesetstats/{jobId}/{includeTags}
+     * GET hoot-services/grail/changesetstats/{jobId}
      *
      * @param jobDir
      *      Internally, this is the directory that the files are kept in.
@@ -494,7 +489,6 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response changesetStats(@Context HttpServletRequest request,
             @QueryParam("jobId") String jobDir,
-            @QueryParam("includeTags") Boolean includeTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -510,43 +504,28 @@ public class GrailResource {
         }
 
         try {
-            IOFileFilter fileFilter;
-            if (includeTags) {
-                fileFilter = new WildcardFileFilter("*.json");
-            } else {
-                fileFilter = new RegexFileFilter("^(?!.*\\.tags\\.).*json$");
-            }
+            JSONParser parser = new JSONParser();
+            String jsonDoc = FileUtils.readFileToString(FileUtils.getFile(workDir, "stats.json"), "UTF-8");
+            JSONObject statsJson = (JSONObject) parser.parse(jsonDoc);
 
-            List<File> statFilesList = (List<File>) FileUtils.listFiles(workDir, fileFilter, null);
+            // loop for the change type name
+            for (Object changeTypeKey: statsJson.keySet()) {
+                String changeTypeName = changeTypeKey.toString();
+                JSONArray valuesArray = (JSONArray) statsJson.get(changeTypeKey);
 
-            // loop through each stats file based on the fileFilter. Should at most be 2 files, normals stats and if requested the tags stats.
-            for (File currentOsc : statFilesList) {
-                JSONParser parser = new JSONParser();
-                String jsonDoc = FileUtils.readFileToString(currentOsc, "UTF-8");
-                JSONObject statsJson = (JSONObject) parser.parse(jsonDoc);
+                // loop for the element types
+                for (Object obj: valuesArray) {
+                    JSONObject valueObject = (JSONObject) obj;
+                    // will always be an object with single key -> value
+                    String elementTypeName = valueObject.keySet().iterator().next().toString();
+                    int elementTypeCount = Integer.parseInt(valueObject.values().iterator().next().toString());
 
-                // loop for the change type name
-                for (Object changeTypeKey: statsJson.keySet()) {
-                    String changeTypeName = changeTypeKey.toString();
-                    JSONArray valuesArray = (JSONArray) statsJson.get(changeTypeKey);
+                    String key = changeTypeName.toLowerCase() + "-" + elementTypeName.toLowerCase();
+                    int count = jobInfo.get(key) == null ? elementTypeCount : (int) jobInfo.get(key) + elementTypeCount;
 
-                    // loop for the element types
-                    for (Object obj: valuesArray) {
-                        JSONObject valueObject = (JSONObject) obj;
-                        // will always be an object with single key -> value
-                        String elementTypeName = valueObject.keySet().iterator().next().toString();
-                        int elementTypeCount = Integer.parseInt(valueObject.values().iterator().next().toString());
-
-                        String key = changeTypeName.toLowerCase() + "-" + elementTypeName.toLowerCase();
-                        int count = jobInfo.get(key) == null ? elementTypeCount : (int) jobInfo.get(key) + elementTypeCount;
-
-                        jobInfo.put(key, count);
-                    }
+                    jobInfo.put(key, count);
                 }
             }
-
-            File tagDiffFile = new File(workDir, "diff.tags.osc");
-            jobInfo.put("hasTags", tagDiffFile.exists());
         }
         catch (IOException exc) {
             throw new WebApplicationException(exc, Response.serverError().entity("Changeset file not found.").build());
@@ -633,21 +612,6 @@ public class GrailResource {
             else {
                 String msg = "Error during changeset push! Could not find osc file ";
                 throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
-            }
-
-            if (reqParams.getApplyTags()) {
-                File tagDiffFile = new File(workDir, "diff.tags.osc");
-
-                if (tagDiffFile.exists()) {
-                    params.setOutput(tagDiffFile.getAbsolutePath());
-
-                    ExternalCommand applyTagChange = grailCommandFactory.build(jobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
-                    workflow.add(applyTagChange);
-                }
-                else {
-                    String msg = "Error during changset push! Could not find osc tags file ";
-                    throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
-                }
             }
 
             if (changesetFile.exists()) {

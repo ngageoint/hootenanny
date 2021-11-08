@@ -73,7 +73,7 @@ bool OsmApiDbBulkInserter::isSupported(const QString& urlStr) const
   QUrl url(urlStr);
   //if we ever want any other writers that the convert command invokes to output sql, then
   //this will have to be made more specific
-  return urlStr.toLower().endsWith(".sql") || _database.isSupported(url);
+  return urlStr.endsWith(".sql", Qt::CaseInsensitive) || _database.isSupported(url);
 }
 
 void OsmApiDbBulkInserter::open(const QString& url)
@@ -194,7 +194,7 @@ void OsmApiDbBulkInserter::_verifyOutputCopySettings() const
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
     QFileInfo outputCopyLocationInfo(_outputFilesCopyLocation);
-    if (!outputCopyLocationInfo.completeSuffix().toLower().endsWith("sql"))
+    if (!outputCopyLocationInfo.completeSuffix().endsWith("sql", Qt::CaseInsensitive))
     {
       throw HootException(
         QString("Output file copy location should be set to a SQL file (.sql) when using the ") +
@@ -425,7 +425,7 @@ void OsmApiDbBulkInserter::finalizePartial()
 
 bool OsmApiDbBulkInserter::_destinationIsDatabase() const
 {
-  return _outputUrl.toLower().startsWith(MetadataTags::OsmApiDbScheme() + "://");
+  return _outputUrl.startsWith(MetadataTags::OsmApiDbScheme() + "://", Qt::CaseInsensitive);
 }
 
 void OsmApiDbBulkInserter::_writeDataToDbPsql()

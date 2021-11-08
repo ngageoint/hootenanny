@@ -164,21 +164,6 @@ void FileUtils::writeFully(const QString& path, const QString& text)
   outFile.close();
 }
 
-void FileUtils::appendLine(const QString& path, const QString& text)
-{
-  QFile file(path);
-  if (file.open(QFile::Append | QFile::Text))
-  {
-    QTextStream out(&file);
-    out << text << "\n";
-    file.close();
-  }
-  else
-  {
-    throw HootException("Unable to append text to file: " + path);
-  }
-}
-
 long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());
@@ -200,7 +185,7 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
   const QStringList files = dir.entryList();
   for (int i = 0; i < files.size(); i++)
   {
-    if (files.at(i).toLower().endsWith(ext))
+    if (files.at(i).endsWith(ext, Qt::CaseInsensitive))
     {
       return true;
     }

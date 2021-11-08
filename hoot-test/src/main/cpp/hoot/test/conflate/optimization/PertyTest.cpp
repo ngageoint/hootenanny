@@ -72,7 +72,7 @@ void PertyTest::_parseScore()
     {
       line = inStream.readLine();
       LOG_VART(line);
-      if (line.toLower().startsWith("test run score (averaged)"))
+      if (line.startsWith("test run score (averaged)", Qt::CaseInsensitive))
       {
         _score = line.split(":")[1].trimmed().toDouble();
         LOG_VARD(_score);

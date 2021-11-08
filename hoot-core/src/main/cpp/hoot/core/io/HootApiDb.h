@@ -247,8 +247,6 @@ public:
   void updateNode(
     const long id, const double lat, const double lon, const long version, const Tags& tags);
 
-  void updateRelation(const long id, const long version, const Tags& tags);
-
   void updateWay(const long id, const long version, const Tags& tags);
 
   long getChangesetId() const { return _currChangesetId; }
@@ -563,7 +561,6 @@ private:
   std::shared_ptr<QSqlQuery> _selectMapNamesOwnedByCurrentUser;
   std::shared_ptr<QSqlQuery> _selectMembersForRelation;
   std::shared_ptr<QSqlQuery> _updateNode;
-  std::shared_ptr<QSqlQuery> _updateRelation;
   std::shared_ptr<QSqlQuery> _updateWay;
   std::shared_ptr<QSqlQuery> _getMapIdByName;
   std::shared_ptr<QSqlQuery> _insertChangeSet2;

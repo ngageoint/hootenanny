@@ -62,7 +62,6 @@ QString JobQueue::pop()
     job = *_jobs.begin();
     _jobs.erase(_jobs.begin());
   }
-  //std::cout << "launched test: " << job.toStdString() << std::endl;
   _mutex.unlock();
   return job;
 }
@@ -81,23 +80,23 @@ QString JobQueue::toString() const
     hoot::StringUtils::setToString(_jobs);
 }
 
-ProcessThread::ProcessThread(
-  int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
-  bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
-  JobQueue* casesJobs, JobQueue* serialJobs) :
-_threadId(threadId),
-_maxThreads(maxThreads),
-_showTestName(showTestName),
-_suppressFailureDetail(suppressFailureDetail),
-_printDiff(printDiff),
-_disableFailureRetries(disableFailureRetries),
-_waitTime(waitTime),
-_outMutex(outMutex),
-_parallelJobs(parallelJobs),
-_casesJobs(casesJobs),
-_serialJobs(serialJobs),
-_failures(0),
-_proc()
+ProcessThread::ProcessThread(int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
+                             bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+                             JobQueue* casesJobs, JobQueue* serialJobs, JobQueue* serialCasesJobs)
+  : _threadId(threadId),
+    _maxThreads(maxThreads),
+    _showTestName(showTestName),
+    _suppressFailureDetail(suppressFailureDetail),
+    _printDiff(printDiff),
+    _disableFailureRetries(disableFailureRetries),
+    _waitTime(waitTime),
+    _outMutex(outMutex),
+    _parallelJobs(parallelJobs),
+    _casesJobs(casesJobs),
+    _serialJobs(serialJobs),
+    _serialCasesJobs(serialCasesJobs),
+    _failures(0),
+    _proc()
 {
 }
 
@@ -132,6 +131,7 @@ void ProcessThread::run()
   if (_serialJobs != nullptr)
   {
     processJobs(_serialJobs);
+    processJobs(_serialCasesJobs);
     //  Reset the process between queues
     resetProcess();
   }
@@ -156,8 +156,6 @@ void ProcessThread::processJobs(JobQueue* queue)
       //  Empty strings can be ignored
       if (test.isEmpty())
         continue;
-      //std::cout << "Running test: " << test.toStdString() << " from queue: "
-      //          << queue->getName().toStdString() << "..." << std::endl;
       _proc->write(QString("%1\n").arg(test).toLatin1());
       //  Read all of the output
       QString output;
@@ -237,23 +235,24 @@ void ProcessThread::processJobs(JobQueue* queue)
   }
 }
 
-ProcessPool::ProcessPool(
-  int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff,
-  bool disableFailureRetries) :
-_failed(0)
+ProcessPool::ProcessPool(int nproc, double waitTime, bool showTestName, bool suppressFailureDetail,
+                         bool printDiff, bool disableFailureRetries)
+  : _failed(0)
 {
   _parallelJobs.setName("parallel");
   _serialJobs.setName("serial");
   _caseJobs.setName("case");
+  _serialCaseJobs.setName("serial_case");
 
   for (int i = 0; i < nproc; ++i)
   {
     //  First process gets the serial jobs
     JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
+    JobQueue* serialCases = (i == 0) ? &_serialCaseJobs : nullptr;
     ProcessThreadPtr thread =
       std::make_shared<ProcessThread>(
         i, nproc, showTestName, suppressFailureDetail, printDiff, disableFailureRetries, waitTime,
-        &_mutex, &_parallelJobs, &_caseJobs, serial);
+        &_mutex, &_parallelJobs, &_caseJobs, serial, serialCases);
     _threads.push_back(thread);
   }
 }
@@ -270,46 +269,45 @@ ProcessPool::~ProcessPool()
 QString ProcessPool::jobQueueToString(const QString& name) const
 {
   if (name == "parallel")
-  {
     return _parallelJobs.toString();
-  }
   else if (name == "serial")
-  {
     return _serialJobs.toString();
-  }
   else if (name == "case")
-  {
     return _caseJobs.toString();
-  }
-  return "";
+  else if (name == "serial_case")
+    return _serialCaseJobs.toString();
+  else
+    return "";
 }
 
 void ProcessPool::startProcessing()
 {
-  for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  for (size_t i = 0; i < _threads.size(); ++i)
     _threads[i]->start();
 }
 
 void ProcessPool::wait()
 {
-  for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  for (size_t i = 0; i < _threads.size(); ++i)
     _threads[i]->wait();
 }
 
 void ProcessPool::addJob(const QString& test, JobType job_type)
 {
-  if (job_type == ParallelJob && !_serialJobs.contains(test) && !_caseJobs.contains(test))
+  if (job_type == ParallelJob && !_serialJobs.contains(test) && !_caseJobs.contains(test) && !_serialCaseJobs.contains(test))
     _parallelJobs.push(test);
+  else if (job_type == (SerialJob | ConflateJob))
+    _serialCaseJobs.push(test);
   else if (job_type == SerialJob)
     _serialJobs.push(test);
-  else if (job_type == ConflateJob)
+  else if (job_type == ConflateJob && !_serialCaseJobs.contains(test))
     _caseJobs.push(test);
 }
 
 int ProcessPool::getFailures()
 {
   int failures = 0;
-  for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  for (size_t i = 0; i < _threads.size(); ++i)
     failures += _threads[i]->getFailures();
   return failures;
 }

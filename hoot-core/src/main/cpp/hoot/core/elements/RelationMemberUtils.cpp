@@ -62,35 +62,6 @@ QString RelationMemberUtils::getRelationMembersDetailString(const ConstRelationP
   return str;
 }
 
-bool RelationMemberUtils::isMemberOfRelation(
-  const ConstOsmMapPtr& map, const ElementId& childId, const bool ignoreReviewRelations)
-{
-  const std::set<ElementId> parentIds = map->getParents(childId);
-  LOG_VART(parentIds.size());
-  for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
-  {
-    const ElementId parentId = *it;
-    if (parentId.getType() == ElementType::Relation)
-    {
-      if (!ignoreReviewRelations)
-      {
-        LOG_TRACE(childId << " member of relation: " << parentId);
-        return true;
-      }
-      else
-      {
-        ConstElementPtr parentElement = map->getElement(parentId);
-        if (parentElement && !parentElement->hasTag(MetadataTags::HootReviewNeeds()))
-        {
-          LOG_TRACE(childId << " member of relation: " << parentId);
-          return true;
-        }
-      }
-    }
-  }
-  return false;
-}
-
 bool RelationMemberUtils::isMemberOfRelationWithType(
   const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType)
 {
