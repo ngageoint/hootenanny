@@ -132,7 +132,7 @@ TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
 
   const std::vector<std::vector<geos::geom::Envelope>> rawTaskGrid = _boundsCalc.getTiles();
       const std::vector<std::vector<long>> nodeCounts = _boundsCalc.getNodeCounts();
-  if (_output.toLower().endsWith(".geojson"))
+  if (_output.endsWith(".geojson", Qt::CaseInsensitive))
   {
     NodeDensityTaskGridWriter::writeTilesToGeoJson(
       rawTaskGrid, nodeCounts, _output, map->getSource(), _writeRandomCellOnly, _randomSeed);

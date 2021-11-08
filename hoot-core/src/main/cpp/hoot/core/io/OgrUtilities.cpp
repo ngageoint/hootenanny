@@ -147,7 +147,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) 
     throw HootException("Error getting driver by name: " + QString(driverInfo._driverName));
 
   // If the user specifies a shapefile, then crop off the .shp and create a directory.
-  if (url.toLower().endsWith(".shp"))
+  if (url.endsWith(".shp", Qt::CaseInsensitive))
     source = url.mid(0, url.length() - 4);
 
   std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr));

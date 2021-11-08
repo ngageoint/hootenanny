@@ -138,11 +138,11 @@ private:
 
   void _writeOutput(const OsmMapPtr& map, const QString& path) const
   {
-    if (path.toLower().endsWith(".shp"))
+    if (path.endsWith(".shp", Qt::CaseInsensitive))
     {
       ShapefileWriter().writePolygons(map, path);
     }
-    else if (path.toLower().endsWith(".geojson"))
+    else if (path.endsWith(".geojson", Qt::CaseInsensitive))
     {
       OsmGeoJsonWriter writer;
       Settings s;

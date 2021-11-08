@@ -505,7 +505,7 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     {
       if (metadataAlwaysIgnore.contains(key))
         continue;
-      else if (!_includeDebugTags && key.toLower().startsWith("hoot:") &&
+      else if (!_includeDebugTags && key.startsWith("hoot:", Qt::CaseInsensitive) &&
                // There are some instances where we want to explicitly allow some metadata tags.
                !_metadataAllowKeys.contains(key))
         continue;

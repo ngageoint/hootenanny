@@ -75,7 +75,7 @@ public:
   void finalizePartial() override;
 
   void initializePartial() override;
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith("osm.pbf"); }
+  bool isSupported(const QString& url) const override { return url.endsWith("osm.pbf", Qt::CaseInsensitive); }
   void open(const QString& url) override;
   void close() override;
   QString supportedFormats() const override { return ".osm.pbf"; }

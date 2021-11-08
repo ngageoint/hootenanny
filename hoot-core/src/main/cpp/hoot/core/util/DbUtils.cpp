@@ -166,12 +166,12 @@ bool DbUtils::isDbUrl(const QString& url)
 
 bool DbUtils::isHootApiDbUrl(const QString& url)
 {
-  return url.toLower().startsWith(MetadataTags::HootApiDbScheme() + "://");
+  return url.startsWith(MetadataTags::HootApiDbScheme() + "://", Qt::CaseInsensitive);
 }
 
 bool DbUtils::isOsmApiDbUrl(const QString& url)
 {
-  return url.toLower().startsWith(MetadataTags::OsmApiDbScheme() + "://");
+  return url.startsWith(MetadataTags::OsmApiDbScheme() + "://", Qt::CaseInsensitive);
 }
 
 }

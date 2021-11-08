@@ -56,14 +56,14 @@ void PoiSearchRadiusJs::Init(Local<Object> exports)
 bool PoiSearchRadiusJs::_searchRadiiOptionIsConfigFile(const QString data)
 {
   return
-    data.toLower().endsWith(".json") && !data.trimmed().startsWith("{") &&
+    data.endsWith(".json", Qt::CaseInsensitive) && !data.trimmed().startsWith("{") &&
     !data.trimmed().endsWith("}");
 }
 
 bool PoiSearchRadiusJs::_searchRadiiOptionIsJsonString(const QString data)
 {
   return
-    !data.toLower().endsWith(".json") && data.trimmed().startsWith("{") &&
+    !data.endsWith(".json", Qt::CaseInsensitive) && data.trimmed().startsWith("{") &&
     data.trimmed().endsWith("}");
 }
 

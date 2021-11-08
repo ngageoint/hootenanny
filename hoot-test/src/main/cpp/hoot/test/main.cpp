@@ -126,7 +126,7 @@ public:
   {
   }
 
-  virtual void addFailure(const CppUnit::TestFailure& failure)
+  void addFailure(const CppUnit::TestFailure& failure) override
   {
     cout << endl << "Failure: " << failure.failedTest()->getName() << endl;
     if (!_suppressFailureDetail)
@@ -141,12 +141,12 @@ public:
     _success = false;
   }
 
-  virtual bool getSuccess()
+  bool getSuccess() const
   {
     return _success;
   }
 
-  virtual void endTest(CppUnit::Test* test)
+  void endTest(CppUnit::Test* test) override
   {
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
@@ -163,19 +163,19 @@ public:
 
   void showTestNames(bool show) { _showTestName = show; }
 
-  virtual void startSuite(CppUnit::Test* suite)
+  void startSuite(CppUnit::Test* suite) override
   {
     if (_showTestName)
       cout << "Starting " << suite->getName().data() << endl << flush;
   }
 
-  virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/)
+  void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/) override
   {
     if (_showElapsed)
       cout << endl << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
   }
 
-  double getTestTimeout() { return _testTimeout; }
+  double getTestTimeout() const { return _testTimeout; }
 
 private:
 
@@ -850,7 +850,7 @@ int main(int argc, char* argv[])
 
       //  Get a list of all conflate cases jobs that must be processed last.
       vector<TestPtr> conflateCases;
-      populateTests(CASE_TESTS, conflateCases, printDiff, suppressFailureDetail, true);
+      populateTests(CASE_ONLY, conflateCases, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vConflateCases;
       getTestVector(conflateCases, vConflateCases);
       vector<string> casesNames;
@@ -867,7 +867,13 @@ int main(int argc, char* argv[])
       for (const auto& name : serialNames)
       {
         if (nameCheck.find(name) != nameCheck.end())
-          pool.addJob(QString(name.c_str()), ProcessPool::SerialJob);
+        {
+          //  Insert the serial job or serial case job into the pool
+          ProcessPool::JobType t = ProcessPool::SerialJob;
+          if (casesSet.find(name) != casesSet.end())
+            t = static_cast<ProcessPool::JobType>(ProcessPool::SerialJob | ProcessPool::ConflateJob);
+          pool.addJob(QString(name.c_str()), t);
+        }
       }
       //  Add all of the remaining non-case jobs in the test suite.
       for (const auto& name : allNames)
