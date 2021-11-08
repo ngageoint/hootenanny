@@ -323,7 +323,7 @@ var postHandler = function(data) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
     var translation = data.transMap[data.transDir][data.translation];
-    var haveDropDefaults = haveDropDefaults = data.dropDefaults && (data.dropDefaults === "true" || data.dropDefaults === "false");
+    var haveDropDefaults = data.dropDefaults && (data.dropDefaults === "true" || data.dropDefaults === "false");
     var dropDefaultsInitial = null;
 
     if (haveDropDefaults) {
