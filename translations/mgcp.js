@@ -2176,7 +2176,8 @@ mgcp = {
       var tValue = tags['source:imagery'].toString().toLowerCase();
       tValue = tValue.replace(/\s/g, '');
 
-      print('tValue: ' + tValue);
+      // Debug
+      // print('tValue: ' + tValue);
 
       switch (tValue)
       {
@@ -2282,11 +2283,13 @@ mgcp = {
       mgcp.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       mgcp.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       mgcp.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      mgcp.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
     }
+
+    // Moved this so it gets checked for each call
+    mgcp.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
     // Debug:
     if (mgcp.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');

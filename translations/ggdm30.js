@@ -2657,11 +2657,13 @@ ggdm30 = {
       ggdm30.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       ggdm30.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       ggdm30.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      ggdm30.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes to OSM tags
       ggdm30.toChange = hoot.Settings.get('schema.translation.override');
     }
+
+    // Moved this so it gets checked for each call
+    ggdm30.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
     // Debug:
     if (ggdm30.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
