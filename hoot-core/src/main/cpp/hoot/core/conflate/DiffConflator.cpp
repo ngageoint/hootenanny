@@ -27,41 +27,41 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/GeoTagCombinationChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayLengthCriterion.h>
 #include <hoot/core/info/ElementCounter.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/visitors/RemoveTagsVisitor.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/ops/WayJoinerOp.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 #include <hoot/core/visitors/InvalidWayRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -73,23 +73,23 @@ int DiffConflator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
-DiffConflator::DiffConflator() :
-AbstractConflator(),
-_intraDatasetElementIdsPopulated(false),
-_removeLinearPartialMatchesAsWhole(false),
-_removeRiverPartialMatchesAsWhole(true),
-_numSnappedWays(0),
-_numUnconflatableElementsDiscarded(0)
+DiffConflator::DiffConflator()
+  : AbstractConflator(),
+    _intraDatasetElementIdsPopulated(false),
+    _removeLinearPartialMatchesAsWhole(false),
+    _removeRiverPartialMatchesAsWhole(true),
+    _numSnappedWays(0),
+    _numUnconflatableElementsDiscarded(0)
 {
 }
 
-DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
-AbstractConflator(matchThreshold),
-_intraDatasetElementIdsPopulated(false),
-_removeLinearPartialMatchesAsWhole(false),
-_removeRiverPartialMatchesAsWhole(true),
-_numSnappedWays(0),
-_numUnconflatableElementsDiscarded(0)
+DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold)
+  : AbstractConflator(matchThreshold),
+    _intraDatasetElementIdsPopulated(false),
+    _removeLinearPartialMatchesAsWhole(false),
+    _removeRiverPartialMatchesAsWhole(true),
+    _numSnappedWays(0),
+    _numUnconflatableElementsDiscarded(0)
 {
 }
 
@@ -124,25 +124,17 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Can't use _removeLinearMatchesPartially() here, b/c we haven't performed matching yet.
   QString msg = "Attempting to remove partially matched non-river linear features ";
   if (!_removeLinearPartialMatchesAsWhole)
-  {
     msg += "partially.";
-  }
   else
-  {
     msg += "completely.";
-  }
   LOG_INFO(msg);
   msg = msg.replace("non-river", "river");
   msg = msg.replace("partially.", "");
   msg = msg.replace("completely.", "");
   if (!_removeRiverPartialMatchesAsWhole)
-  {
     msg += "partially.";
-  }
   else
-  {
     msg += "completely.";
-  }
   LOG_INFO(msg);
 
   _reset();
@@ -158,9 +150,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // If we skip this part, then any unmatchable data will simply pass through to output, which can
   // be useful during debugging.
   if (ConfigOptions().getDifferentialRemoveUnconflatableData())
-  {
     _discardUnconflatableElements();
-  }
 
   MapProjector::projectToPlanar(_map); // will actually reproject here only if necessary
   _stats.append(SingleStat("Project to Planar Time (sec)", _timer.getElapsedAndRestart()));
@@ -170,11 +160,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   _intraDatasetMatchOnlyElementIds.clear();
   _intraDatasetElementIdsPopulated = false;
   _createMatches();
+  // Add score tags to all matches that have some score component.
   if (ConfigOptions().getWriterIncludeConflateScoreTags())
-  {
-    // Add score tags to all matches that have some score component.
     _addConflateScoreTags();
-  }
 
   _currentStep++;
 
@@ -211,9 +199,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
     QString message = "Dropping match conflicts";
     if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
-    {
       message += " and snapping roads";
-    }
+
     message += "...";
     _updateProgress(currentStep - 1, message);
 
@@ -251,22 +238,15 @@ void DiffConflator::apply(OsmMapPtr& map)
     // remove the reference data from the diff.
     const bool removeSnapped = ConfigOptions().getDifferentialRemoveReferenceSnappedData();
     if (ConfigOptions().getDifferentialRemoveReferenceData() || removeSnapped)
-    {
       _removeRefData(removeSnapped);
-    }
     // When removing partial linear matches partially, sometimes the diff can be a little too
     // granular. In that case, we allow filtering out some of the smaller secondary data.
     QStringList secondaryBaseCriteria = ConfigOptions().getDifferentialSecWayRemovalCriteria();
     StringUtils::removeEmptyStrings(secondaryBaseCriteria);
     if (!secondaryBaseCriteria.empty())
-    {
-      _cleanSecData(
-        secondaryBaseCriteria, ConfigOptions().getDifferentialSecWayRemovalLengthThreshold());
-    }
+      _cleanSecData(secondaryBaseCriteria, ConfigOptions().getDifferentialSecWayRemovalLengthThreshold());
     if (!ConfigOptions().getWriterIncludeDebugTags())
-    {
       _removeMetadataTags();
-    }
 
     _currentStep++;
   }
@@ -415,9 +395,8 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
   const bool removeRiverPartialMatchesAsWhole =
     ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
   if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "river")
-  {
     isMatchToRemovePartially = false;
-  }
+
   LOG_VART(isMatchToRemovePartially);
   return isMatchToRemovePartially;
 }
@@ -429,8 +408,7 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
   // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VARD(treatReviewsAsMatches);
-  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
-       ++mit)
+  for (auto mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
@@ -442,15 +420,10 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
       // to the group to be removed completely. Regarding reviews, *think* this is the correct way
       // to handle them. Feature reviews are generated for entire features only (is that true?), so
       // removing them completely makes sense over trying to remove them partially.
-      if (!_isMatchToRemovePartially(match) ||
-          (treatReviewsAsMatches && matchType == MatchType::Review))
-      {
+      if (!_isMatchToRemovePartially(match) || (treatReviewsAsMatches && matchType == MatchType::Review))
         _matchesToRemoveAsWhole.push_back(match);
-      }
       else
-      {
         _matchesToRemoveAsPartial.push_back(match);
-      }
     }
   }
   LOG_VART(_matchesToRemoveAsWhole);
@@ -460,14 +433,11 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
 int DiffConflator::_countMatchesToRemoveAsPartial() const
 {
   int numMatchesToRemovePartially = 0;
-  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
-       ++mit)
+  for (auto mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
     if (_isMatchToRemovePartially(match))
-    {
       numMatchesToRemovePartially++;
-    }
   }
   return numMatchesToRemovePartially;
 }
@@ -483,16 +453,14 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   // Go through and record any element's involved in an intra-dataset match, since we don't want
   // those types of matches from preventing an element from passing through to the diff output.
 
-  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
-       matchItr != matches.end(); ++matchItr)
+  for (auto matchItr = matches.begin(); matchItr != matches.end(); ++matchItr)
   {
     ConstMatchPtr match = *matchItr;
     if (match->getType() == MatchType::Match ||
         (allowReviews && match->getType() == MatchType::Review))
     {
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
-           pairItr != pairs.end(); ++pairItr)
+      for (auto pairItr = pairs.begin(); pairItr != pairs.end(); ++pairItr)
       {
         std::pair<ElementId, ElementId> pair = *pairItr;
         ConstElementPtr e1 = _map->getElement(pair.first);
@@ -511,16 +479,14 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   // Now, go back through and exclude any previously added that are also involved in an
   // inter-dataset match, since we don't want those in the diff output.
 
-  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
-       matchItr != matches.end(); ++matchItr)
+  for (auto matchItr = matches.begin(); matchItr != matches.end(); ++matchItr)
   {
     ConstMatchPtr match = *matchItr;
     if (match->getType() == MatchType::Match ||
         (allowReviews && match->getType() == MatchType::Review))
     {
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
-           pairItr != pairs.end(); ++pairItr)
+      for (auto pairItr = pairs.begin(); pairItr != pairs.end(); ++pairItr)
       {
         std::pair<ElementId, ElementId> pair = *pairItr;
         ConstElementPtr e1 = _map->getElement(pair.first);
@@ -608,13 +574,10 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   // processing them here. Otherwise, remove everything.
   std::vector<ConstMatchPtr> matchesToRemoveCompletely;
   if (_removeLinearMatchesPartially())
-  {
     matchesToRemoveCompletely = _matchesToRemoveAsWhole;
-  }
   else
-  {
     matchesToRemoveCompletely = _matches;
-  }
+
   LOG_VARD(matchesToRemoveCompletely.size());
   //LOG_VART(matchesToRemoveCompletely);
 
@@ -627,8 +590,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   }
 
   // Go through all the matches.
-  for (std::vector<ConstMatchPtr>::const_iterator mit = matchesToRemoveCompletely.begin();
-       mit != matchesToRemoveCompletely.end(); ++mit)
+  for (auto mit = matchesToRemoveCompletely.begin(); mit != matchesToRemoveCompletely.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
@@ -642,12 +604,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
       // Get the element IDs involved in the match and remove the elements involved in the match
       // completely.
       const std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
-             singleMatchPairs.begin();
-           pairItr != singleMatchPairs.end(); ++pairItr)
-      {
+      for (auto pairItr = singleMatchPairs.begin(); pairItr != singleMatchPairs.end(); ++pairItr)
         _removeMatchElementPairCompletely(match, *pairItr, status);
-      }
     }
   }
 
@@ -696,13 +654,9 @@ void DiffConflator::_removeMatchElementPairCompletely(
         "Removed entire element: " + e1->getElementId().toString() + " with status: " +
         e1->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
       if (_satisfiesCompleteElementRemovalCondition(e1, status, match))
-      {
         RecursiveElementRemover(e1->getElementId()).apply(_map);
-      }
       else
-      {
         msg = msg.replace("Removed", "Did not remove");
-      }
       LOG_TRACE(msg);
     }
   }
@@ -715,13 +669,9 @@ void DiffConflator::_removeMatchElementPairCompletely(
         "Removed entire element: " + e2->getElementId().toString() + " with status: " +
         e2->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
       if (_satisfiesCompleteElementRemovalCondition(e2, status, match))
-      {
         RecursiveElementRemover(e2->getElementId()).apply(_map);
-      }
       else
-      {
         msg = msg.replace("Removed", "Did not remove");
-      }
       LOG_TRACE(msg);
     }
   }
@@ -782,9 +732,7 @@ void DiffConflator::_removeRefData(const bool removeSnapped)
     removeCrit = std::make_shared<ChainCriterion>(refCrit, notSnappedCrit);
   }
   else
-  {
     removeCrit = refCrit;
-  }
 
   RemoveElementsVisitor removeRef1Visitor;
   removeRef1Visitor.setRecursive(true);
@@ -809,12 +757,10 @@ void DiffConflator::_calcAndStoreTagChanges()
 
   // Make sure we have a container for our changes.
   if (!_tagChanges)
-  {
     _tagChanges = std::make_shared<MemChangesetProvider>(_map->getProjection());
-  }
 
   int numMatchesProcessed = 0;
-  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (auto mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
     LOG_VART(match);
@@ -824,8 +770,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     // elements when we do this. We want to ignore elements created during map cleaning operations
     // (e.g. intersection splitting) because the map that the changeset operates on won't have those
     // elements.
-    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-         pit != pairs.end(); ++pit)
+    for (auto pit = pairs.begin(); pit != pairs.end(); ++pit)
     {
       // If it's a POI-Poly match the poi always comes first, even if it's from the secondary
       // dataset, so we can't always count on the first being the old element.
@@ -893,7 +838,7 @@ bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) 
   // Always ignore metadata tags and then allow additional tags to be ignored on a case by case
   // basis.
   const QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
-  for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
+  for (auto newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
     if (newTagKey != MetadataTags::Ref1() // Make sure not ref1
@@ -948,7 +893,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
       // Add nodes if needed to.
       std::vector<long> nIds = pWay->getNodeIds();
       LOG_VART(nIds);
-      for (std::vector<long>::iterator it = nIds.begin(); it != nIds.end(); ++it)
+      for (auto it = nIds.begin(); it != nIds.end(); ++it)
       {
         if (!map->containsNode(*it))
         {
@@ -1007,9 +952,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToTagChangedRef()
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
 {
   if (_numSnappedWays == 0)
-  {
     return _sortInputs(std::make_shared<OsmMap>(), map);
-  }
   else
   {
     // If any secondary ways were snapped back to reference ways, we need to generate a changeset
@@ -1064,9 +1007,7 @@ void DiffConflator::writeChangeset(
     // ChangesetStatsFormat::Unknown is the default format setting, and we'll assume no stats are
     // to be output if that's the requested format.
     if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
-    {
       _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
-    }
   }
   else if (separateOutput)
   {
@@ -1074,9 +1015,7 @@ void DiffConflator::writeChangeset(
     LOG_DEBUG("Writing separate changesets...");
     writer->write(output, geoChanges);
     if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
-    {
       _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
-    }
 
     QString outFileName = output;
     if (outFileName.endsWith(".osc"))
@@ -1093,23 +1032,19 @@ void DiffConflator::writeChangeset(
     LOG_VARD(outFileName);
     writer->write(outFileName, _tagChanges);
     if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
-    {
       _tagChangesetStats = writer->getStatsTable(changesetStatsFormat);
-    }
   }
   else
   {
     // write unified output
     LOG_DEBUG("Writing unified changesets...");
-    MultipleChangesetProviderPtr pChanges =
-      std::make_shared<MultipleChangesetProvider>(pResultMap->getProjection());
-    pChanges->addChangesetProvider(geoChanges);
-    pChanges->addChangesetProvider(_tagChanges);
+    GeoTagCombinationChangesetProviderPtr pChanges =
+      std::make_shared<GeoTagCombinationChangesetProvider>(pResultMap->getProjection());
+    pChanges->setGeoChangesetProvider(geoChanges);
+    pChanges->setTagChangesetProvider(_tagChanges);
     writer->write(output, pChanges);
     if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
-    {
       _unifiedChangesetStats = writer->getStatsTable(changesetStatsFormat);
-    }
   }
 }
 
@@ -1127,17 +1062,11 @@ unsigned int DiffConflator::getNumSteps() const
 {
   unsigned int numSteps = 4;
   if (!_conflateTags)
-  {
     numSteps--;
-  }
   if (!ConfigOptions().getConflateMatchOnly())
-  {
     numSteps--;
-  }
   if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole())
-  {
     numSteps--;
-  }
   return numSteps;
 }
 

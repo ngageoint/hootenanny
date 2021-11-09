@@ -54,6 +54,7 @@ public:
   Change();
   Change(ChangeType type, ConstElementPtr element);
   Change(ChangeType type, ConstElementPtr element, ConstElementPtr pe);
+  Change(const Change& change) = default;
 
   static QString changeTypeToString(const ChangeType changeType);
 
@@ -64,12 +65,16 @@ public:
   void clearElement() { _element.reset(); }
   ConstElementPtr getPreviousElement() const { return _previousElement; }
 
+  void combineChange(const Change& tag_change);
+
 private:
 
   ChangeType _type;
   ConstElementPtr _element;
   ConstElementPtr _previousElement;
 };
+
+using ChangePtr = std::shared_ptr<Change>;
 
 }
 

@@ -30,6 +30,9 @@
 // hoot
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 
+//  std
+#include <map>
+
 namespace hoot
 {
 
@@ -48,38 +51,60 @@ public:
   ~MemChangesetProvider() = default;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   void close() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   bool hasMoreChanges() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   Change readNextChange() override;
 
   /**
-   * @see ChangeSetProvider
+   * @see ChangesetProvider
    */
   int getNumChanges() const override;
 
+  /**
+   * @brief addChange Add a new change to the in-memory provider
+   * @param newChange New change information
+   */
   void addChange(const Change& newChange);
 
-  bool containsChange(ElementId eID);
+  /**
+   * @brief removeChange Remove an old change from the in-memory provider
+   * @param change Change information
+   */
+  void removeChange(const Change& change);
+
+  /**
+   * @brief containsChange Search the set of changes for the element ID in question
+   * @param eid Element ID to search for
+   * @return True if eid was found in the provider
+   */
+  bool containsChange(ElementId eid);
+
+  /**
+   * @brief getChange Get change information for the element ID in question
+   * @param eid Element ID to get info for
+   * @return Change information for the element ID
+   */
+  const Change& getChange(ElementId eid);
 
 private:
 
   std::shared_ptr<OGRSpatialReference> _projection;
-  std::list<Change> _changes;
+  std::map<ElementId, Change> _changes;
 };
 
 using MemChangesetProviderPtr = std::shared_ptr<MemChangesetProvider>;
