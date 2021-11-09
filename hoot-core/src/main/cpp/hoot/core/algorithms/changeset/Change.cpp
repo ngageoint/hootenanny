@@ -24,28 +24,27 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
+
 #include "Change.h"
-
-
 
 namespace hoot
 {
 
-Change::Change() :
-_type(Unknown)
+Change::Change()
+  : _type(Unknown)
 {
 }
 
-Change::Change(ChangeType type, ConstElementPtr element) :
-_type(type),
-_element(element)
+Change::Change(ChangeType type, ConstElementPtr element)
+  : _type(type),
+    _element(element)
 {
 }
 
-Change::Change(ChangeType type, ConstElementPtr element, ConstElementPtr reviousElement) :
-_type(type),
-_element(element),
-_previousElement(reviousElement)
+Change::Change(ChangeType type, ConstElementPtr element, ConstElementPtr reviousElement)
+  : _type(type),
+    _element(element),
+    _previousElement(reviousElement)
 {
 }
 
@@ -53,16 +52,16 @@ QString Change::changeTypeToString(const ChangeType changeType)
 {
   switch (changeType)
   {
-    case Create:
-      return "Create";
-    case Modify:
-      return "Modify";
-    case Delete:
-      return "Delete";
-    case Unknown:
-      return "Unknown";
-    default:
-      throw HootException("Invalid change type.");
+  case Create:
+    return "Create";
+  case Modify:
+    return "Modify";
+  case Delete:
+    return "Delete";
+  case Unknown:
+    return "Unknown";
+  default:
+    throw HootException("Invalid change type.");
   }
 }
 
@@ -70,10 +69,21 @@ QString Change::toString() const
 {
   QString str =  "Change type: " + changeTypeToString(_type);
   if (_element)
-  {
     str += ", ID: " + _element->getElementId().toString();
-  }
   return str;
+}
+
+void Change::combineChange(const Change& tag_change)
+{
+  //  Validate the two changes before attempting to combine them
+  if (_type != tag_change._type ||
+      _element == nullptr || tag_change._element == nullptr ||
+      _element->getElementId() != tag_change._element->getElementId())
+    return;
+  //  Combine this element of geometry and the tag changes
+  ElementPtr result = _element->clone();
+  result->setTags(tag_change.getElement()->getTags());
+  _element = result;
 }
 
 }

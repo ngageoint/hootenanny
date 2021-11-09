@@ -24,54 +24,49 @@
  *
  * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "MultipleChangesetProvider.h"
+#include "GeoTagCombinationChangesetProvider.h"
 
 
 
 namespace hoot
 {
 
-void MultipleChangesetProvider::close()
+void GeoTagCombinationChangesetProvider::close()
 {
   // nothing to do here
 }
 
-std::shared_ptr<OGRSpatialReference> MultipleChangesetProvider::getProjection() const
+std::shared_ptr<OGRSpatialReference> GeoTagCombinationChangesetProvider::getProjection() const
 {
   return _projection;
 }
 
-bool MultipleChangesetProvider::hasMoreChanges()
+bool GeoTagCombinationChangesetProvider::hasMoreChanges()
 {
-  if (_changesets.size() < 1)
-  {
-    return false;
-  }
-  else if (_changesets.front()->hasMoreChanges())
-  {
-    return true;
-  }
-  else
-  {
-    // Advance to next changeset and check
-    _changesets.pop_front();
-    return hasMoreChanges();
-  }
+  return (_geoChangeset != nullptr && _geoChangeset->hasMoreChanges()) ||
+         (_tagChangeset != nullptr && _tagChangeset->hasMoreChanges());
 }
 
-Change MultipleChangesetProvider::readNextChange()
+Change GeoTagCombinationChangesetProvider::readNextChange()
 {
-  return _changesets.front()->readNextChange();
-}
-
-void MultipleChangesetProvider::addChangesetProvider(ChangesetProviderPtr newChangeset)
-{
-  _changesets.push_back(newChangeset);
-}
-
-size_t MultipleChangesetProvider::getNumChangesets() const
-{
-  return _changesets.size();
+  Change result;
+  if (_geoChangeset->hasMoreChanges())
+  {
+    //  Get the next change from the geo changeset
+    result = _geoChangeset->readNextChange();
+    ElementId eid = result.getElement()->getElementId();
+    //  Check if the tag changeset has additional changes
+    if (_tagChangeset->containsChange(eid))
+    {
+      //  Combine the two changes into one
+      Change tags = _tagChangeset->getChange(eid);
+      result.combineChange(tags);
+      _tagChangeset->removeChange(tags);
+    }
+  }
+  else if (_tagChangeset->hasMoreChanges())
+    result = _tagChangeset->readNextChange();
+  return result;
 }
 
 }
