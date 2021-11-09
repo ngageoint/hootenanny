@@ -37,7 +37,7 @@ namespace hoot
 /**
  * A criterion that will match linear railways.
  *
- * @todo rename to LinearRailwayCriterion?
+ * @todo rename to LinearRailwayCriterion for consistency's sake?
  */
 class RailwayCriterion : public ConflatableElementCriterion
 {

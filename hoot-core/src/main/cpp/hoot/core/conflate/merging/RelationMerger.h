@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Merges like relations together
+ * Merges similar relations together
  *
  * When members within relations do not match between layers, we keep the non-matching members from
  * both layers and attempt to match and combine their containing relations. Since relations may have

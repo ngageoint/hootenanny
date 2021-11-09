@@ -58,8 +58,8 @@ bool RoadCrossingPolyRule::operator<(const RoadCrossingPolyRule& other) const
   return getName() < other.getName();
 }
 
-QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rulesFile,
-                                                            ConstOsmMapPtr map)
+QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(
+  const QString& rulesFile, ConstOsmMapPtr map)
 { 
   QFileInfo rulesFileInfo(rulesFile);
   if (!rulesFileInfo.exists())
@@ -98,8 +98,8 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
       throw IllegalArgumentException("A road crossing rule must have a name.");
     }
 
-    // each rule must have at least one criteria or tag filter and may have both; they define the
-    // polygons we search for around roads
+    // Each rule must have at least one criteria or tag filter and may have both. They define the
+    // polygons we search for around roads.
 
     boost::optional<std::string> polyCriteriaFilterProp =
       ruleProp.second.get_optional<std::string>("polyCriteriaFilter");
@@ -126,8 +126,8 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
         "or a polygon tag filter (polyTagFilter).");
     }
 
-    // allowed road tag filters are optional, and they define which roads we skip indexing per rule
-    // (exempt from being flagged for review)
+    // Allowed road tag filters are optional, and they define which roads we skip indexing per rule
+    // (exempt from being flagged for review).
 
     boost::optional<std::string> allowedRoadTagFilterProp =
       ruleProp.second.get_optional<std::string>("allowedRoadTagFilter");
@@ -226,8 +226,8 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
   }
 }
 
-ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& kvpStr,
-                                                                const QStringList& allowedKeys)
+ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(
+  const QString& kvpStr, const QStringList& allowedKeys)
 {
   LOG_VART(kvpStr);
   const QString kvpFormatErrMsg =
@@ -287,8 +287,7 @@ void RoadCrossingPolyRule::createIndex()
   // create an index for all roads and all polys that satisfy our crit within the default
   // search radius
 
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children - 368 - see #3054
+  // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see #3054
   _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
   // Only index elements that satisfy isMatchCandidate.

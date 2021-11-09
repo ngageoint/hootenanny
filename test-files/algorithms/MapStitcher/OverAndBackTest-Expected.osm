@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="12.0006" minlon="43.0632" maxlat="12.0014" maxlon="43.0666"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0006000000000004" lon="43.0666000000000011">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-22"/>
+    </node>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0007999999999999" lon="43.0664000000000016">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-21"/>
+    </node>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0009999999999994" lon="43.0662000000000020">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-20"/>
+    </node>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0012000000000008" lon="43.0660000000000025">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-18"/>
+    </node>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0014000000000003" lon="43.0658000000000030">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-17"/>
+    </node>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0012000000000008" lon="43.0656000000000034">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-16"/>
+    </node>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0009999999999994" lon="43.0653999999999968">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-14"/>
+    </node>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0007999999999999" lon="43.0651999999999973">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-13"/>
+    </node>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0006000000000004" lon="43.0649999999999977">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-12"/>
+    </node>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0014000000000003" lon="43.0647999999999982">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-11"/>
+    </node>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0012000000000008" lon="43.0645999999999987">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-10"/>
+    </node>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0009999999999994" lon="43.0643999999999991">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-8"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0007999999999999" lon="43.0641999999999996">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-7"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0006000000000004" lon="43.0640000000000001">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-6"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0007999999999999" lon="43.0638000000000005">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-5"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0009999999999994" lon="43.0636000000000010">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-4"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0012000000000008" lon="43.0634000000000015">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-2"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0014000000000003" lon="43.0632000000000019">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="-1"/>
+    </node>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-20"/>
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <tag k="alt_name" v="Way: -5;Way: -6"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="name" v="Way: -4"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <tag k="alt_name" v="Way: -1;Way: -3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="name" v="Way: -2"/>
+    </way>
+</osm>

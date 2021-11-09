@@ -722,7 +722,7 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
     consumer->setOsmMap(this);
   }
 
-  // make a copy so we can iterate through even if there are changes.
+  // Make a copy so we can iterate through even if there are changes.
   const NodeMap& allNodes = getNodes();
   int numVisited = 0;
   const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();

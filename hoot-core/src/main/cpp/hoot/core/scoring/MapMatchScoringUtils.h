@@ -37,18 +37,18 @@ class MatchComparator;
  */
 class MapMatchScoringUtils
 {
-  public:
+public:
 
-    MapMatchScoringUtils() = default;
+  MapMatchScoringUtils() = default;
 
-    /**
-      Returns a printable string with match scoring results
+  /**
+    Returns a printable string with match scoring results
 
-      @param matchComparator a match comparator populated during scoring of conflation results
-      @return a printable string with scoring results
-      */
-    static QString getMatchScoringString(const std::shared_ptr<const MatchComparator>& matchComparator);
-
+    @param matchComparator a match comparator populated during scoring of conflation results
+    @return a printable string with scoring results
+    */
+  static QString getMatchScoringString(
+    const std::shared_ptr<const MatchComparator>& matchComparator);
 };
 
 }

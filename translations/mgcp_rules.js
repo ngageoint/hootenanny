@@ -409,7 +409,7 @@ mgcp.rules = {
 
     // FAC - Solid Maritime Construction
     // ['FAC','0',undefined,undefined], // Unknown
-    ['FAC','0','raw:FAC','unknown'], // Unknown
+    ['FAC','0','solid_construction','unknown'], // Unknown
     ['FAC','1000','solid_construction','no'], // Open
     ['FAC','1001','solid_construction','yes'], // Solid Face
 
@@ -1203,7 +1203,7 @@ mgcp.rules = {
 
     // VEG - Vegetation Characteristic
     // ['VEG','0',undefined,undefined], // Unknown
-    ['VEG','0','raw:VEG','unknown'], // Unknown
+    ['VEG','0','vegetation:characteristic','unknown'], // Unknown
     ['VEG','50','swamp:vegetation:type','wood'], // Wood  - In MGCP Spec but no details about it
     ['VEG','51','swamp:vegetation:type','herb_and_brush'], // Herb and Brush
     ['VEG','75','swamp:vegetation:type','brush'], // Brush

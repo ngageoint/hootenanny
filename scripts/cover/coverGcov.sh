@@ -53,14 +53,6 @@ sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-js/src|g" *.gcov
 mv *.gcov $HOOT_HOME/gcov
 popd
 
-# hoot-rnd coverage
-pushd hoot-rnd
-gcov -o $HOOT_HOME/hoot-rnd/tmp/debug/ $HOOT_HOME/hoot-rnd/tmp/debug/*.gcda
-# fix path
-sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-rnd/src|g" *.gcov
-mv *.gcov $HOOT_HOME/gcov
-popd
-
 # hoot-josm coverage
 pushd hoot-josm
 gcov -o $HOOT_HOME/hoot-josm/tmp/debug/ $HOOT_HOME/hoot-josm/tmp/debug/*.gcda

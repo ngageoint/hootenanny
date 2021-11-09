@@ -81,6 +81,7 @@ else
          gdal \
          gdal-devel \
          gdal-python-tools \
+         google-chrome-stable \
          libgeotiff \
          libgeotiff-devel \
          liboauthcpp \
@@ -105,6 +106,7 @@ sudo yum install -y \
      gdal-$GDAL_VERSION \
      gdal-devel-$GDAL_VERSION \
      gdal-python-tools-$GDAL_VERSION \
+     google-chrome-stable-$GOOGLE_CHROME_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
@@ -128,6 +130,7 @@ sudo yum versionlock add \
      gdal-$GDAL_VERSION \
      gdal-devel-$GDAL_VERSION \
      gdal-python-tools-$GDAL_VERSION \
+     google-chrome-stable-$GOOGLE_CHROME_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
@@ -266,7 +269,6 @@ bundle install
 cd ~
 
 # Install Google Chrome and ChromeDriver.
-$HOOT_HOME/scripts/chrome/chrome-install.sh
 $HOOT_HOME/scripts/chrome/driver-install.sh
 
 # Configure PostgreSQL

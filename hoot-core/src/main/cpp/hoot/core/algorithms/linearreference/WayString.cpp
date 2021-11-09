@@ -79,7 +79,7 @@ void WayString::append(const WaySubline& subline)
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
           subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        // TODO: The intent of this class is being violated.  So either change this back to an
+        // TODO: The intent of this class is being violated. So either change this back to an
         // exception as part of the work to be done in #1312, or create a new class for the new
         // behavior.
 

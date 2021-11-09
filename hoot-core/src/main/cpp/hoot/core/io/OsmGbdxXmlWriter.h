@@ -49,7 +49,7 @@ public:
   OsmGbdxXmlWriter();
   ~OsmGbdxXmlWriter() override;
 
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".gxml"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".gxml", Qt::CaseInsensitive); }
   QString supportedFormats() const override { return ".gxml"; }
   void open(const QString& url) override;
   void close() override;

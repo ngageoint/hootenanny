@@ -565,17 +565,45 @@ tds40 = {
     }
   },
 
+
+  // Function to drop  default and usless values
+  // NOTE: This is also called to remove translated tag values
+  dropDefaults: function (feat)
+  {
+    for (var col in feat)
+    {
+      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+      // First, push to lowercase
+      var attrValue = feat[col].toString().toLowerCase();
+
+      // Get rid of the spaces in the text
+      attrValue = attrValue.replace(/\s/g, '');
+
+      // Wipe out the useless values
+      if (feat[col] == '' || feat[col] == ' ' || attrValue in tds40.rules.dropList || feat[col] in tds40.rules.dropList)
+      {
+        // debug: Comment this out to leave all of the No Info stuff in for testing
+        // print('Dropping: ' + col + ' = ' + feat[col]);
+        delete feat[col];
+        continue;
+      }
+    } // End col in attrs loop
+
+  }, // End dropDefaults
+
+
   // Clean up the attributes
   cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
     delete attrs.FCSUBTYPE;
     delete attrs.FCSubtype;
-    // List of data values to drop/ignore
-    var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
-    // List of attributes that can't have '0' as a value
-    var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+    // Switch to keep all of the default values. Mainly for the schema switcher
+    if (tds40.configIn.ReaderDropDefaults == 'true')
+    {
+      tds40.dropDefaults(attrs);
+    }
 
     // This is a handy loop. We use it to:
     // 1) Remove all of the "No Information" and -999999 fields
@@ -583,22 +611,8 @@ tds40 = {
     // 3) Swap some of the funky named attrs around
     for (var col in attrs)
     {
-      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
-      // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
-
-      // Get rid of the spaces in the text
-      attrValue = attrValue.replace(/\s/g, '');
-
-      // Wipe out the useless values
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
-      {
-        delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-        continue;
-      }
-
       // Remove attributes with '0' values if they can't be '0'
-      if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+      if (tds40.rules.noZeroList.indexOf(col) > -1 && attrs[col] == '0')
       {
         delete attrs[col];
         continue;
@@ -2396,16 +2410,17 @@ tds40 = {
         //default is 'source:datetime'
         if (!attrs.ZI001_SSD)
           attrs.ZI001_SSD = tags['source:imagery:datetime']
-                          || tags['source:date']
-                          || tags['source:geometry:date']
-                          || '';
+            || tags['source:imagery:earliestDate']
+            || tags['source:date']
+            || tags['source:geometry:date']
+            || '';
 
         //Map alternate source tags to ZI001_SSN in order of precedence
         //default is 'source'
         if (!attrs.ZI001_SSN)
           attrs.ZI001_SSN = tags['source:imagery']
-                          || tags['source:description']
-                          || '';
+            || tags['source:description']
+            || '';
         break;
 
     } // End switch F_CODE
@@ -2537,10 +2552,12 @@ tds40 = {
       tds40.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       tds40.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       tds40.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds40.configIn.ReaderInputFormat = hoot.Settings.get('reader.input.format');
       // Get any changes
       tds40.toChange = hoot.Settings.get('schema.translation.override');
     }
+
+    // Moved this so it gets checked for each call
+    tds40.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
     // Debug:
     if (tds40.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
@@ -2652,6 +2669,12 @@ tds40 = {
 
     // post processing
     tds40.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+
+    // If we are reading from an OGR source, drop all of the output tags with default values
+    if (tds40.configIn.ReaderDropDefaults == 'true')
+    {
+      tds40.dropDefaults(tags);
+    }
 
     // Debug: Add the FCODE to the tags
     if (tds40.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;

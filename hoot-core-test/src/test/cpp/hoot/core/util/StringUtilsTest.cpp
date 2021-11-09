@@ -36,6 +36,7 @@ class StringUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(StringUtilsTest);
   CPPUNIT_TEST(runHasAlphabeticCharTest);
+  CPPUNIT_TEST(insertAfterTest);
   CPPUNIT_TEST(jsonParseTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -54,11 +55,24 @@ public:
     CPPUNIT_ASSERT(!StringUtils::hasAlphabeticCharacter("  "));
   }
 
+  void insertAfterTest()
+  {
+    // this should not
+    QStringList list("foo");
+    CPPUNIT_ASSERT(StringUtils::insertAfter(list, "foo", "bar"));
+    HOOT_STR_EQUALS(list, "[2]{foo, bar}");
+
+    // this should not insert bar a second time.
+    QStringList list2 = {"foo", "bar"};
+    CPPUNIT_ASSERT(!StringUtils::insertAfter(list2, "foo", "bar"));
+    HOOT_STR_EQUALS(list2, "[2]{foo, bar}");
+  }
+
   void jsonParseTest()
   {
-    //The json string output from the prop tree will come back formatted with newlines and
-    //indenting, so leaving spaces between items here to match the output string after its
-    //simplified.
+    // The json string output from the prop tree will come back formatted with newlines and
+    // indenting, so leaving spaces between items here to match the output string after its
+    // simplified.
     const QString jsonInput =
       "{ \"apps\": [ { \"name\": \"TikaLanguageDetector\", \"description\": \"blah\", \"url\": \"https://tika.apache.org\" }, { \"name\": \"OpenNlpLanguageDetector\", \"description\": \"more blah\", \"url\": \"https://opennlp.apache.org\" } ] }";
     std::shared_ptr<boost::property_tree::ptree> propTree =

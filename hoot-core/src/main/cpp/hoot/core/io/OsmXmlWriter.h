@@ -50,7 +50,7 @@ public:
   OsmXmlWriter();
   ~OsmXmlWriter() override;
 
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".osm"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".osm", Qt::CaseInsensitive); }
   void open(const QString& url) override;
   void close() override;
   QString supportedFormats() const override { return ".osm"; }

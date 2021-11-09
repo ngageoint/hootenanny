@@ -43,12 +43,13 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/js/conflate/matching/ScriptMatch.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/elements/ElementJs.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+
+#include <hoot/js/conflate/matching/ScriptMatch.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/elements/ElementJs.h>
 
 // Qt
 #include <qnumeric.h>
@@ -77,8 +78,6 @@ const QString ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME = "PointPolygon.js";
 
 /**
  * Searches the specified map for any match potentials.
- *
- * @todo move this to its own class file
  */
 class ScriptMatchVisitor : public ConstElementVisitor
 {
@@ -262,8 +261,8 @@ public:
 
       if (result < minValue)
       {
-        throw IllegalArgumentException(QString("Expected %1 to be greater than %2.")
-                                       .arg(key).arg(minValue));
+        throw IllegalArgumentException(
+          QString("Expected %1 to be greater than %2.").arg(key).arg(minValue));
       }
     }
     return result;
@@ -414,8 +413,8 @@ public:
     {
       LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
 
-      // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368 - see #3054
+      // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see
+      // #3054
       _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
       // Only index elements that satisfy the isMatchCandidate. Previously we only indexed Unknown2,
@@ -577,7 +576,7 @@ public:
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          "\tProcessed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
           " match candidates / " << StringUtils::formatLargeNumber(_totalElementsToProcess) <<
           " total elements.");
       }
@@ -597,7 +596,7 @@ public:
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_STATUS(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
+        "\tProcessed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
        _timer.restart();
     }
@@ -652,7 +651,7 @@ public:
 
 private:
 
-  // don't hold on to the map.
+  // Don't hold on to the map.
   std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
 
@@ -700,6 +699,22 @@ private:
   set<ElementId> _empty;
 };
 
+ScriptMatchCreator::ScriptMatchCreator() :
+_railwayOneToManyMatchEnabled(false),
+_railwayOneToManyTransferAllKeys(false)
+{
+}
+
+void ScriptMatchCreator::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  _railwayOneToManyMatchEnabled = opts.getRailwayOneToManyMatch();
+  _railwayOneToManyIdentifyingKeys = opts.getRailwayOneToManyIdentifyingKeys();
+  _railwayOneToManyTransferKeys = opts.getRailwayOneToManyTransferKeys();
+  _railwayOneToManyTransferAllKeys = opts.getRailwayOneToManyTransferAllTags();
+}
+
 void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
 {
   _getCachedVisitor(map)->initSearchRadiusInfo();
@@ -728,42 +743,61 @@ void ScriptMatchCreator::setArguments(const QStringList& args)
   _description = className() + "," + args[0];
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
-  // Validate one to many rail matching config options based on the currently configured options and
-  // whether this match creator is dealing with rail matches or not.
-  setRunOneToManyRailMatching(
-    ConfigOptions().getRailwayOneToManyMatch(), _scriptInfo.getBaseFeatureType(),
-    ConfigOptions().getRailwayOneToManyIdentifyingKeys(),
-    ConfigOptions().getRailwayOneToManyTransferKeys());
+
+  setConfiguration(conf());
+  // Validate the configuration outside of setConfiguration, since it needs to be done each time a
+  // different conflate script is specified.
+  _validateConfig(_scriptInfo.getBaseFeatureType());
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
 }
 
-void ScriptMatchCreator::setRunOneToManyRailMatching(
-  const bool runMatching, const CreatorDescription::BaseFeatureType& baseFeatureType,
-  const QStringList& identifyingKeys, const QStringList& transferKeys) const
+void ScriptMatchCreator::_validateConfig(
+  const CreatorDescription::BaseFeatureType& baseFeatureType)
 {
-  if (runMatching && baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
+  ConfigOptions opts;
+
+  // Other feature types may also need settings validation.
+  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway &&
+      _railwayOneToManyMatchEnabled)
   {
-    QStringList identifyingKeysTemp = identifyingKeys;
-    StringUtils::removeEmptyStrings(identifyingKeysTemp);
-    if (identifyingKeysTemp.empty())
+    StringUtils::removeEmptyStrings(_railwayOneToManyIdentifyingKeys);
+    if (_railwayOneToManyIdentifyingKeys.empty())
     {
       throw IllegalArgumentException(
         "No railway one to many identifying keys specified in " +
         ConfigOptions::getRailwayOneToManyIdentifyingKeysKey() + ".");
     }
 
-    QStringList transferKeysTemp = transferKeys;
-    StringUtils::removeEmptyStrings(transferKeysTemp);
-    if (transferKeysTemp.empty())
+    if (!_railwayOneToManyTransferAllKeys)
     {
-      throw IllegalArgumentException(
-        "No railway one to many transfer tag keys specified in " +
-        ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey() + ".");
+      StringUtils::removeEmptyStrings(_railwayOneToManyTransferKeys);
+      if (_railwayOneToManyTransferKeys.empty())
+      {
+        throw IllegalArgumentException(
+          "No railway one to many transfer tag keys specified in " +
+          ConfigOptions::getRailwayOneToManyTransferKeysKey() + ".");
+      }
     }
 
     LOG_STATUS("Running railway one to many custom conflation workflow...");
+  }
+}
+
+void ScriptMatchCreator::_validatePluginConfig(
+  const CreatorDescription::BaseFeatureType& baseFeatureType, Local<Object> plugin) const
+{
+  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
+  {
+    const double railwayTypeMatchThreshold =
+      ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
+     if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
+     {
+       throw IllegalArgumentException(
+         "Railway type match threshold out of range: " +
+         QString::number(railwayTypeMatchThreshold) + ".");
+     }
   }
 }
 
@@ -921,8 +955,8 @@ void ScriptMatchCreator::createMatches(
     matchType = "PointPolygon";
   }
 
-  LOG_INFO(
-    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
+  LOG_STATUS(
+    "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     matchType << " match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
@@ -1029,8 +1063,8 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   Context::Scope context_scope(script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
   script->loadScript(path, "plugin");
-
   Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(script));
+
   Local<String> descriptionStr = String::NewFromUtf8(current, "description").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, descriptionStr).ToChecked())
   {
@@ -1041,17 +1075,22 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     throw IllegalArgumentException("No script description provided for: " + path);
   }
+
   Local<String> experimentalStr = String::NewFromUtf8(current, "experimental").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, experimentalStr).ToChecked())
   {
     Local<Value> value = ToLocal(&plugin)->Get(context, experimentalStr).ToLocalChecked();
     result.setExperimental(toCpp<bool>(value));
   }
+
+  CreatorDescription::BaseFeatureType baseFeatureType =
+    CreatorDescription::BaseFeatureType::Unknown;
   Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, featureTypeStr).ToChecked())
   {
     Local<Value> value = ToLocal(&plugin)->Get(context, featureTypeStr).ToLocalChecked();
-    result.setBaseFeatureType(CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value)));
+    baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+    result.setBaseFeatureType(baseFeatureType);
   }
   // A little kludgy, but we'll identify generic geometry Point/Polygon conflation by its script
   // name.
@@ -1059,6 +1098,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     throw IllegalArgumentException("No base feature type provided for: " + path);
   }
+
   Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, geometryTypeStr).ToChecked())
   {
@@ -1069,6 +1109,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     throw IllegalArgumentException("No geometry type provided for: " + path);
   }
+
   // The criteria parsed here describe which feature types a script conflates. Its used only for
   // determining which conflate ops to disable with SuperfluousConflateOpRemover and for some
   // scripts, also to determine how to cull features when performing rubbersheeting during search
@@ -1098,6 +1139,9 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   QFileInfo fi(path);
   result.setClassName(className() + "," + fi.fileName());
 
+  // config error handling that required plugin
+  _validatePluginConfig(baseFeatureType, ToLocal(&plugin));
+
   return result;
 }
 
@@ -1107,7 +1151,6 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
-
   return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 

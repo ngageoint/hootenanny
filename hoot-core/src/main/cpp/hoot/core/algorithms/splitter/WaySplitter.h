@@ -65,15 +65,6 @@ public:
   std::vector<WayPtr> createSplits(const std::vector<WayLocation>& wl) const;
 
   /**
-   * @brief createSubline given an input subline, breaks the way up into up to 3 pieces.
-   *
-   * @param subline to split
-   * @param populated with scraps from the split
-   * @return the way that covers the subline
-   */
-  WayPtr createSubline(const WaySubline& subline, std::vector<WayPtr>& scraps) const;
-
-  /**
    * @brief split given a split point on a way, breaks the way into two smaller ways.
    *
    * The old way will be removed from the source map and the two new ones will be added. No nodes

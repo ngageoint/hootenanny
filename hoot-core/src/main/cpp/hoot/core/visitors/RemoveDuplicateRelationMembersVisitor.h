@@ -49,6 +49,9 @@ public:
   RemoveDuplicateRelationMembersVisitor() = default;
   ~RemoveDuplicateRelationMembersVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override { return "Removing duplicate relation members..."; }

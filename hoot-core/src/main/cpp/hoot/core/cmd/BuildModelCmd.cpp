@@ -49,6 +49,7 @@ public:
   QString getName() const override { return "build-model"; }
   QString getDescription() const override
   { return "Builds a random forest model to be used by conflation"; }
+  QString getType() const override { return "advanced"; }
 
   int runSimple(QStringList& args) override
   {

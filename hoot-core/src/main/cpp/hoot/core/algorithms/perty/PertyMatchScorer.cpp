@@ -175,8 +175,6 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
 
-  // Not sure there is ever any reason to set score.matches.remove.nodes=true here, but leaving it '
-  // configurable for now.
   MatchScoringMapPreparer().prepMap(combinedMap, ConfigOptions().getScoreMatchesRemoveNodes());
   OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());

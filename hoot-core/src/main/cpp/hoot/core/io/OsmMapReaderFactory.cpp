@@ -121,9 +121,9 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
 
 QString OsmMapReaderFactory::getReaderName(const QString& url)
 {
-  LOG_VARD(url);
+  LOG_VART(url);
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
-  LOG_VARD(names.size());
+  LOG_VART(names.size());
   std::shared_ptr<OsmMapReader> reader;
   for (size_t i = 0; i < names.size(); i++)
   {
@@ -134,6 +134,7 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
     LOG_VART(reader->isSupported(url));
     if (reader->isSupported(url))
     {
+      LOG_TRACE("Supported reader: " << name << " for: " << url);
       return name;
     }
   }

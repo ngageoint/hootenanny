@@ -46,6 +46,9 @@ public:
   RemoveReviewUnknown2Visitor() = default;
   ~RemoveReviewUnknown2Visitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override

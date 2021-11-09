@@ -142,7 +142,6 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
   {
     keeper = element1;
     toRemove = element2;
-    // TODO: This is ignoring the contents of multilinestring relations.
     if (toRemove->getElementType() == ElementType::Way)
     {
       WayPtr wayWithTagsToRemove = std::dynamic_pointer_cast<Way>(toRemove);
@@ -150,7 +149,6 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
       removeSecondaryElement = false;
     }
   }
-  // TODO: Should pid's be getting set in these two cases as well?
   else if (element1->getStatus() == Status::Unknown1 || element1->getStatus() == Status::Conflated)
   {
     keeper = element1;
@@ -169,11 +167,6 @@ bool LinearTagOnlyMerger::_mergeWays(
 
   // Reverse the way if way to remove is one way and the two ways aren't in similar directions
   _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove);
-
-  // TODO: This is ignoring the contents of multilinestring relations.
-  // TODO: I think we need to bring information nodes from secondary ways here like we do in ref
-  // with LinearSnapMerger...not exactly sure why the call in _mergePair to LinearSnapMerger
-  // doesn't already do this.
 
   // merge the tags
   Tags mergedTags =
@@ -199,7 +192,6 @@ bool LinearTagOnlyMerger::_mergeWays(
   _map->getIdSwap()->add(
     elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   // mark element for replacement
-  // TODO: The multilinestring relations marked for replacement aren't being removed.
   if (removeSecondaryElement)
   {
     LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
@@ -220,7 +212,6 @@ bool LinearTagOnlyMerger::_conflictExists(
   }
 
   // don't try to merge streets with conflicting one way info
-  // TODO: This is ignoring the contents of multilinestring relations.
   if (HighwayUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
@@ -240,7 +231,6 @@ bool LinearTagOnlyMerger::_conflictExists(
 void LinearTagOnlyMerger::_handleOneWayStreetReversal(
   ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
 {
-  // TODO: This is ignoring the contents of multilinestring relations.
   OneWayCriterion isAOneWayStreet;
   if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
       elementWithTagsToRemove->getElementType() == ElementType::Way)

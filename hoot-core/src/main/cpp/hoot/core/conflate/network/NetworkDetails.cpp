@@ -82,33 +82,6 @@ Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
   return (el->getPortion()) * calculateLength(el->getEdge());
 }
 
-Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocationPtr el) const
-{
-  Meters d = calculateStringLocation(s, el);
-  Meters l = calculateLength(s);
-
-  if (d == numeric_limits<double>::max())
-  {
-    LOG_VART(s);
-    LOG_VART(el);
-    throw IllegalArgumentException("Edge location isn't close enough to s to provide a distance.");
-  }
-  else if (d < 0)
-  {
-    d = -d;
-  }
-  else if (d <= l)
-  {
-    d = 0.0;
-  }
-  else
-  {
-    d = d - l;
-  }
-
-  return d;
-}
-
 Radians NetworkDetails::calculateHeading(ConstEdgeLocationPtr el) const
 {
   WayLocation wl(_map, toWay(el->getEdge()), calculateDistance(el));
@@ -564,28 +537,6 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   }
 }
 
-double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
-{
-  assert(e1->getMembers().size() == 1);
-  assert(e2->getMembers().size() == 1);
-
-  ConstWayPtr w1 = std::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
-  ConstWayPtr w2 = std::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
-
-  double result;
-
-  if (isCandidateMatch(e1, e2) == false)
-  {
-    result = 0.0;
-  }
-  else
-  {
-    result = ProbabilityOfMatch::getInstance().expertProbability(_map, w1, w2);
-  }
-
-  return result;
-}
-
 double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const
 {
   double result;
@@ -905,16 +856,6 @@ const NetworkDetails::SublineCache NetworkDetails::_getSublineCache(ConstWayPtr 
   }
 }
 
-double NetworkDetails::getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
-{
-  double score = _getVertexMatcher()->scoreMatch(v1, v2);
-  if (score == 0.0 && isCandidateMatch(v1, v2))
-  {
-    score = 1.0;
-  }
-  return score;
-}
-
 LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
 {
   if (!_vertexMatcher)
@@ -962,14 +903,6 @@ bool NetworkDetails::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVert
   return _getVertexMatcher()->isCandidateMatch(v1, v2, *this);
 }
 
-bool NetworkDetails::isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-                                             ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
-{
-  double score = getPartialEdgeMatchScore(e1, e2);
-  score *= _getEdgeAngleScore(v1, v2, e1, e2);
-  return score >= ConfigOptions().getNetworkPartialMatchMinValidScore();
-}
-
 bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
   assert(e1->getMembers().size() == 1);
@@ -999,7 +932,6 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
   return result;
 }
 
-// TODO: can this be combined with the other isStringCandidates? Or call it?
 bool NetworkDetails::isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   bool result = false;
@@ -1054,27 +986,6 @@ bool NetworkDetails::isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgeP
   }
 
   return result;
-}
-
-bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePtr esl) const
-{
-  if (es->isStub() || esl->isZeroLength())
-  {
-    return false;
-  }
-
-  // calculate the nearest edge location on es to esl
-  ConstEdgeLocationPtr elString, elSubline;
-  calculateNearestLocation(es, esl, elString, elSubline);
-  LOG_VART(elString);
-  LOG_VART(elSubline);
-
-  if (!elString || !elSubline)
-  {
-    return false;
-  }
-
-  return true;
 }
 
 EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e) const

@@ -1,0 +1,12 @@
+Input: test-files/cases/reference/network/pap-005/Output.osm
+
+Found 15 validation errors in 441 features with JOSM.
+Highways errors: 1
+Sharp angles errors: 2
+Similarly named ways errors: 2
+Tag checker (MapCSS based) errors: 4
+Untagged, empty and one node ways errors: 6
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

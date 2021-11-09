@@ -1567,7 +1567,7 @@ OsmSchema& OsmSchema::getInstance()
     _theInstance.reset(new OsmSchema());
     _theInstance->loadDefault();
 
-    //write this out to a temp file instead of to the log due to its size
+    // Write this out to a temp file instead of to the log due to its size.
     if (Log::getInstance().getLevel() == Log::Trace)
     {
       const QString graphvizPath = "tmp/schema-graphviz";
@@ -1865,11 +1865,9 @@ QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
   return "";
 }
 
-bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
-                                     const double minTypeScore)
+bool OsmSchema::explicitTypeMismatch(
+  const Tags& tags1, const Tags& tags2, const double minTypeScore)
 {
-  // TODO: We may need to take category into account here as well.
-
   LOG_VART(tags1);
   LOG_VART(tags2);
 
@@ -1916,8 +1914,6 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
 
 bool OsmSchema::typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore)
 {
-  // TODO: We may need to take category into account here as well.
-
   LOG_VART(tags1);
   LOG_VART(tags2);
 

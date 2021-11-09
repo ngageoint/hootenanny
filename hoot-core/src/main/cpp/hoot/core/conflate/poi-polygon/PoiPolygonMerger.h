@@ -77,7 +77,6 @@ public:
    * Utility method for merging a single POI with a single polygon
    *
    * The map passed may or may not contain constituent elements (way nodes, relation members).
-
    * @param map a map containing the two features to merge
    * @return the ID of the element that was merged into
    */

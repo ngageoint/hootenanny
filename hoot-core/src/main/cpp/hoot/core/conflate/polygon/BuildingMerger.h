@@ -50,8 +50,11 @@ public:
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
   ~BuildingMerger() override = default;
 
-  void apply(const OsmMapPtr& map,
-             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  /**
+   * @see Merger
+   */
+  void apply(
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings
@@ -71,11 +74,10 @@ public:
    * Utility method that allows for merging an unlimited number of buildings
    *
    * The map passed may or may not contain constituent elements (way nodes, relation members).
-   *
    * @param map a map containing the buildings to be merged
    * @param mergeTargetId the ID of the building which all other buildings should be merged into
    */
-  static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
+  static void merge(OsmMapPtr map, const ElementId& mergeTargetId);
 
   /**
    * Adds multiple buildings to the same relation
@@ -91,9 +93,7 @@ public:
     const bool preserveTypes = false);
 
   QString getDescription() const override { return "Merges buildings"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)

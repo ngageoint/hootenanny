@@ -34,12 +34,6 @@ if [ -f $HOOT_HOME/hoot-js/Makefile ]; then
 else
   echo "hoot-js/Makefile doesn't exist yet!"
 fi
-#hoot-rnd/Makefile
-if [ -f $HOOT_HOME/hoot-rnd/Makefile ]; then
-  sed -i --regexp-extended 's|\$\(CXX\) -c( -include tmp/release/HootRnd)?|$(CXX) -c -include ../hoot-core/src/main/cpp/hoot/core/HootCoreStable.h|g' $HOOT_HOME/hoot-rnd/Makefile
-else
-  echo "hoot-rnd/Makefile doesn't exist yet!"
-fi
 #hoot-test/Makefile
 # none
 #tbs/Makefile

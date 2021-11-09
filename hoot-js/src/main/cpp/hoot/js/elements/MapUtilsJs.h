@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The MapUtilsJs class is a JS wrapper around the MapUtils class
+ */
 class MapUtilsJs : public HootBaseJs
 {
 public:
@@ -42,7 +45,15 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
+  /**
+   * @brief see MapUtils::getFirstElementWithTag
+   * @param args 0: map, 1: tag key, 2: tag value, 3 (optional): element type string
+   */
   static void getFirstElementWithTag(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * @brief see MapUtils::getFirstElementWithNote
+   * @param args 0: map, 1: note text, 2: (optional) element type string
+   */
   static void getFirstElementWithNote(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:

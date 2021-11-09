@@ -89,7 +89,7 @@ void AttributeValueCriterion::setConfiguration(const Settings& conf)
   _attributeType = ElementAttributeType::fromString(configOptions.getAttributeValueCriterionType());
   QString comparisonTypeStr =
     configOptions.getAttributeValueCriterionComparisonType().trimmed().toLower();
-  if (comparisonTypeStr.toLower().startsWith("text"))
+  if (comparisonTypeStr.startsWith("text", Qt::CaseInsensitive))
   {
     _comparisonType =
        TextComparisonType(

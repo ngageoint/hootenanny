@@ -51,6 +51,7 @@ public:
   QString getName() const override { return "db-delete"; }
   QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
+  QString getType() const override { return "advanced"; }
 
   int runSimple(QStringList& args) override
   {

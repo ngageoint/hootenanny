@@ -30,9 +30,9 @@
 
 // Hoot
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/info/IoSingleStat.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
+#include <hoot/core/util/Progress.h>
 
 // Tgs
 #include <tgs/System/Timer.h>
@@ -84,8 +84,6 @@ private:
 
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
-  // TODO: its cleaner to create an AbstractConflator dynamically instead to handle both Diff and
-  // other types of conflate
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 
@@ -111,7 +109,17 @@ private:
   Tgs::Timer _taskTimer;
 
   void _initConfig(const QString& output);
+  /**
+   * @brief _updateConfigOptionsForAttributeConflation makes some custom adjustments to config opts
+   * that must be done for Attribute Conflation.
+
+     There may be a way to eliminate some of these by adding more custom behavior to the UI.
+   */
   void _updateConfigOptionsForAttributeConflation() const;
+  /**
+   * @brief _updateConfigOptionsForDifferentialConflation makes some custom adjustments to config
+   * opts that must be done for Differential Conflation.
+   */
   void _updateConfigOptionsForDifferentialConflation() const;
   void _updateConfigOptionsForBounds() const;
   void _updateTranslationDirection(const QString& output) const;
@@ -123,8 +131,8 @@ private:
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
 
-  void _load(
-    const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut);
+  void _load(const QString& input1, const QString& input2,
+             const OsmMapPtr& map, const bool isChangesetOut);
 
   void _runConflate(OsmMapPtr& map);
 

@@ -68,8 +68,8 @@ public:
    *      from the parameter will be set as the spatial reference for the element converter
    * @note the default spatial reference used is WGS84
    */
-  ElementToGeometryConverter(const ConstElementProviderPtr& provider,
-                             const bool logWarningsForMissingElements = true);
+  ElementToGeometryConverter(
+    const ConstElementProviderPtr& provider, const bool logWarningsForMissingElements = true);
   ~ElementToGeometryConverter() = default;
 
   /**
@@ -89,11 +89,10 @@ public:
 
   std::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
-  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
-                                                            const bool statsFlag = false) const;
-  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
-                                                            bool throwError,
-                                                            const bool statsFlag = false) const;
+  std::shared_ptr<geos::geom::Geometry> convertToGeometry(
+    const ConstWayPtr& w, bool throwError, const bool statsFlag = false) const;
+  std::shared_ptr<geos::geom::Geometry> convertToGeometry(
+    const ConstRelationPtr& r, bool throwError, const bool statsFlag = false) const;
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
   std::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
   std::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;

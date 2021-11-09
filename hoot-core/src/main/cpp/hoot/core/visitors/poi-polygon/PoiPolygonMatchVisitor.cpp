@@ -187,7 +187,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_DEBUG(
-        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+        "\tProcessed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
         " match candidates / " << StringUtils::formatLargeNumber(_map->getNodeCount()) <<
         " nodes.");
     }
@@ -208,7 +208,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
     PROGRESS_STATUS(
-      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
+      "\tProcessed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
     _timer.restart();
   }

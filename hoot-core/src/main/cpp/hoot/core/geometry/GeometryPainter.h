@@ -36,19 +36,13 @@ class QRect;
 
 // OGR
 class OGREnvelope;
-class OGRGeometry;
-class OGRGeometryCollection;
 class OGRLinearRing;
-class OGRLineString;
-class OGRPoint;
-class OGRPolygon;
 
 namespace hoot
 {
 
 class OsmMap;
 class Way;
-class Element;
 class Node;
 
 /**
@@ -69,30 +63,15 @@ public:
   * the appropriate aspect ratio.
   */
   static QMatrix createMatrix(const QRect& window, const OGREnvelope& world);
-  /**
-   * Create a matrix for drawing to a painter in world coordinates. This matrix will maintain
-   * the appropriate aspect ratio.
-   */
-  static QMatrix createMatrix(const QRect& window, const OGREnvelope& world,
-    const OGRPoint& worldCenter);
 
-  static void drawElement(QPainter& pt, const OsmMap *map, const Element *e, const QMatrix &m);
-  static void drawGeometry(QPainter& pt, const OGRGeometry* geom, const QMatrix& m = QMatrix());
-  static void drawLineString(QPainter& pt, const OGRLineString* lineString,
-    const QMatrix& m = QMatrix());
-  static void drawGeometryCollection(QPainter& pt, const OGRGeometryCollection* collection,
-    const QMatrix& m = QMatrix());
   static void drawNode(QPainter& pt, const Node* e, const QMatrix& m);
-  static void drawOsmMap(QPainter& pt, const OsmMap* map, const QMatrix& m = QMatrix());
-  static void drawPolygon(QPainter& pt, const OGRPolygon* polygon, const QMatrix& m = QMatrix());
   static void drawPoint(QPainter& pt, double x, double y, const QMatrix& m = QMatrix());
-  static void drawPoint(QPainter& pt, const OGRPoint* point, const QMatrix& m = QMatrix());
   static void drawWay(QPainter& pt, const OsmMap* map, const Way* e, const QMatrix& m);
 
 private:
 
-  static void _convertRingToQPolygon(const OGRLinearRing* ring, QPolygonF& qp,
-    const QMatrix& m = QMatrix());
+  static void _convertRingToQPolygon(
+    const OGRLinearRing* ring, QPolygonF& qp, const QMatrix& m = QMatrix());
 };
 
 }

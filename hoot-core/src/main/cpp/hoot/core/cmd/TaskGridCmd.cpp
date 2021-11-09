@@ -170,7 +170,6 @@ private:
     int pixelSizeAutoReductionFactor = 10;
     QString bounds;
 
-    // TODO: implement random for uniform task grids as well?
     int randomSeed = -1;
     if (args.contains("--bounds"))
     {
@@ -310,7 +309,7 @@ private:
 
   void _validateOutput(const QString& output) const
   {
-    if (!output.toLower().endsWith(".geojson") && !output.toLower().endsWith(".osm"))
+    if (!output.endsWith(".geojson", Qt::CaseInsensitive) && !output.endsWith(".osm", Qt::CaseInsensitive))
     {
       throw IllegalArgumentException(
         "Invalid output file format: " + output + ". Only the GeoJSON (.geojson) and OSM " +

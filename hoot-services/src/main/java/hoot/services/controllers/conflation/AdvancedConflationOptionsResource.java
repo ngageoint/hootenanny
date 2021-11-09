@@ -69,6 +69,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -108,11 +109,11 @@ public class AdvancedConflationOptionsResource {
     }};
 
     private Map<String, String> matcherMap = new HashMap<String, String>(){{
-        put("GenericLines", "hoot::LinearCriterion");
-        put("PowerLines", "hoot::PowerLineCriterion");
-        put("Railways", "hoot::RailwayCriterion");
-        put("Rivers", "hoot::RiverCriterion");
-        put("Roads", "hoot::HighwayCriterion");
+        put("GenericLines", "LinearCriterion");
+        put("PowerLines", "PowerLineCriterion");
+        put("Railways", "RailwayCriterion");
+        put("Rivers", "RiverCriterion");
+        put("Roads", "HighwayCriterion");
     }};
 
     private static Map<String, Map<String, String>> confOptionsMap = null;
@@ -229,17 +230,24 @@ public class AdvancedConflationOptionsResource {
 
                     addMemberData(diffTemplate);
 
-                    //Add dropdown for road algorithm
-                    JSONObject roadObj = (JSONObject) hoot2Opts.stream().filter(config -> {
-                        return ((JSONObject) config).get("name").equals("Roads");
-                    }).findFirst().orElse(null);
-                    if (roadObj != null) {
-                        JSONArray roadOpts = (JSONArray) roadObj.get("members");
-                        JSONObject roadAlg = (JSONObject) roadOpts.stream().filter(config -> {
-                            return ((JSONObject) config).get("id").equals("RoadEngines");
+                    //Add select 'non-Differential' options here
+                    List<Pair<String, String>> groupMembers = new ArrayList<>();
+                    groupMembers.add(Pair.of("General", "TagMergerOverwriteExclude"));
+                    groupMembers.add(Pair.of("Roads", "RoadEngines"));
+
+                    groupMembers.stream().forEach(gm -> {
+                        JSONObject optionObj = (JSONObject) hoot2Opts.stream().filter(config -> {
+                            return ((JSONObject) config).get("name").equals(gm.getKey());
                         }).findFirst().orElse(null);
-                        diffTemplate.add(0, roadAlg);
-                    }
+                        if (optionObj != null) {
+                            JSONArray opts = (JSONArray) optionObj.get("members");
+                            JSONObject opt = (JSONObject) opts.stream().filter(config -> {
+                                return ((JSONObject) config).get("id").equals(gm.getValue());
+                            }).findFirst().orElse(null);
+                            diffTemplate.add(0, opt);
+                        }
+                    });
+
                 }
                 template = diffTemplate;
             }
@@ -283,6 +291,7 @@ public class AdvancedConflationOptionsResource {
         return Response.ok(template.toJSONString()).build();
     }
 
+    //maybe this could be moved to conflationTypeDefaults.json??
     private void addMemberData(JSONArray template) {
         for (Object memberObj : template) {
             JSONObject obj = (JSONObject) memberObj;

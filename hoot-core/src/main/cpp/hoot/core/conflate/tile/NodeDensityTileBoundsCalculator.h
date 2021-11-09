@@ -139,28 +139,21 @@ public:
   static QString tilesToString(const std::vector<std::vector<geos::geom::Envelope>>& tiles);
 
   std::vector<std::vector<geos::geom::Envelope>> getTiles() const { return _tiles; }
-
   int getTileCount() const { return _tileCount; }
-
   /**
    * Returns the node counts for each computed tile bounding box
    *
    * @return a grid of node counts
    */
   std::vector<std::vector<long>> getNodeCounts() const { return _nodeCounts; }
-
   long getMinNodeCountInOneTile() const { return _minNodeCountInOneTile; }
   long getMaxNodeCountInOneTile() const { return _maxNodeCountInOneTile; }
-
   double getPixelSize() const { return _pixelSize; }
-  void setPixelSize(double size) { _pixelSize = size; }
-
   /**
    * The entire tree will keep growing until all boxes are less than or equal to this number of
    * nodes.
    */
   long getMaxNodesPerTile() const { return _maxNodesPerTile; }
-  void setMaxNodesPerTile(long max) { _maxNodesPerTile = max; }
 
   /**
    * Set the slop. This is the percentage that the line can vary from center. A higher slop will
@@ -168,11 +161,12 @@ public:
    * be fine in most cases.
    */
   void setSlop(double slop) { _slop = slop; }
-
   void setPixelSizeRetryReductionFactor(int factor) { _pixelSizeRetryReductionFactor = factor; }
   void setMaxNumTries(int numTries) { _maxNumTries = numTries; }
   void setMaxTimePerAttempt(int seconds) { _maxTimePerAttempt = seconds; }
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
+  void setPixelSize(double size) { _pixelSize = size; }
+  void setMaxNodesPerTile(long max) { _maxNodesPerTile = max; }
 
 private:
 
@@ -223,8 +217,6 @@ private:
   int _calculateSplitY(const PixelBox& b);
 
   void _countNode(const std::shared_ptr<Node>& n);
-
-  double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 
   void _exportImage(cv::Mat& r, QString output) const;
   void _exportResult(const std::vector<PixelBox>& boxes, QString output);

@@ -117,7 +117,7 @@ void JavaEnvironment::_initVm()
   options[1].optionString = strdup(minMemorySizeStr.toStdString().c_str());
   LOG_VART(options[1].optionString);
 
-  const QString maxMemorySizeStr = "-Xms" + ConfigOptions().getJniMaxMemory();
+  const QString maxMemorySizeStr = "-Xmx" + ConfigOptions().getJniMaxMemory();
   options[2].optionString = strdup(maxMemorySizeStr.toStdString().c_str());
   LOG_VART(options[2].optionString);
 

@@ -32,22 +32,26 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
 #include <hoot/test/TestSetup.h>
+#include <hoot/test/validation/TestOutputValidator.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
-static const QString multiaryConflateClass = "MultiaryPoiConflateCmd";
-
-ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
-AbstractTest(d, confs)
+ConflateCaseTest::ConflateCaseTest(
+  QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff ) :
+AbstractTest(d, confs),
+_suppressFailureDetail(suppressFailureDetail),
+_printValidationReportDiff(printValidationReportDiff)
 {
 }
 
-void ConflateCaseTest::_runConflateCmd()
+void ConflateCaseTest::_runConflateCmd() const
 {
   if (QFileInfo(_d, "README.txt").exists() == false)
   {
@@ -56,13 +60,13 @@ void ConflateCaseTest::_runConflateCmd()
   QFileInfo in1(_d, "Input1.osm");
   if (in1.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Input1.osm in conflate case: " + _d.absolutePath());
   }
   QFileInfo in2(_d, "Input2.osm");
   if (in2.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
   }
 
@@ -104,78 +108,8 @@ void ConflateCaseTest::_runConflateCmd()
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
-  }
-
-  if (result != 0)
-  {
-    CPPUNIT_ASSERT_MESSAGE(
-      QString("Conflate command had nonzero exit status").toStdString(), false);
-  }
-
-  if (!TestUtils::compareMaps(expected.absoluteFilePath(), testOutput))
-  {
-    CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
-  }
-}
-
-void ConflateCaseTest::_runMultiaryConflateCmd()
-{
-  BaseCommandPtr cmd =
-    std::dynamic_pointer_cast<BaseCommand>(
-      Factory::getInstance().constructObject<Command>(multiaryConflateClass));
-
-  if (QFileInfo(_d, "README.txt").exists() == false)
-  {
-    LOG_WARN("Please create a meaningful README.txt in " + _d.path());
-  }
-  QList<QFileInfo> in;
-  bool stillLooking = true;
-
-  int i = 1;
-  while (stillLooking)
-  {
-    QFileInfo fi(_d, QString("Input%1.osm").arg(i++));
-    if (fi.exists())
-    {
-      in.append(fi);
-    }
-    else
-    {
-      stillLooking = false;
-    }
-  }
-
-  if (in.size() < 2)
-  {
-    throw IllegalArgumentException(
-      "Found fewer than two inputs in conflate case: " + _d.absolutePath());
-  }
-
-  QString testOutput = _d.absoluteFilePath("Output.osm");
-
-  QStringList args;
-  foreach (QFileInfo fi, in)
-  {
-    args << fi.absoluteFilePath();
-  }
-  args << testOutput;
-  int result = -1;
-  try
-  {
-    result = cmd->runSimple(args);
-  }
-  catch (const HootException& e)
-  {
-    CPPUNIT_ASSERT_MESSAGE(e.what(), false);
-  }
-
-  QFileInfo expected(_d, "Expected.osm");
-  if (expected.exists() == false)
-  {
-    throw IllegalArgumentException("Unable to find Expected.osm in conflate case: " +
-      _d.absolutePath());
   }
 
   if (result != 0)
@@ -201,10 +135,15 @@ void ConflateCaseTest::runTest()
   if (ConfigOptions().getTestCaseConflateCmd() == ConflateCmd::className())
   {
     _runConflateCmd();
-  }
-  else if (ConfigOptions().getTestCaseConflateCmd() == multiaryConflateClass)
-  {
-    _runMultiaryConflateCmd();
+
+    // Run validation on test output if configured for it.
+    LOG_VART(ConfigOptions().getTestValidationEnable());
+    if (ConfigOptions().getTestValidationEnable())
+    {
+      TestOutputValidator::validate(
+        _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
+        _suppressFailureDetail, _printValidationReportDiff);
+    }
   }
 }
 

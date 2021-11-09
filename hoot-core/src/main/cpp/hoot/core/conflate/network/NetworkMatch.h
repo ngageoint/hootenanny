@@ -102,10 +102,6 @@ public:
 
   MatchType getType() const override { return _threshold->getType(getClassification()); }
 
-  bool isVerySimilarTo(const NetworkMatch* other) const;
-
-  bool contains(const NetworkMatch* other) const;
-
   QString getDescription() const override
   { return "Matches roads with the Network Algorithm"; }
 

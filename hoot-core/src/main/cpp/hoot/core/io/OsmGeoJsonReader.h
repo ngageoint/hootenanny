@@ -174,6 +174,13 @@ private:
     const boost::property_tree::ptree& geometry) const;
 
   /**
+   * @brief _IsMultiPoly Checks a "Polygon" geometry if it is a vector of polygons or a single polygon
+   * @param geometry "Polygon" geometry
+   * @return True if there are multiple polygons in the geometry
+   */
+  bool _isMultiPoly(const boost::property_tree::ptree& geometry) const;
+
+  /**
    * @brief _parseBbox Parse the bounding box array in JSON format into Geos Envelope
    * @param bbox Tree of bounding box JSON array
    * @return Bounding box as a usable Envelope

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.12690801789" minlon="-76.69628620416" maxlat="39.12844565614" maxlon="-76.69586241512999"/>
+    <node visible="true" id="-102430" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1269080178900026" lon="-76.6959992077899955"/>
+    <node visible="true" id="-102429" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1274531654699942" lon="-76.6960769918599965"/>
+    <node visible="true" id="-102428" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1281252309100012" lon="-76.6962030556800016"/>
+    <node visible="true" id="-102427" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1284456561400020" lon="-76.6962862041600033"/>
+    <node visible="true" id="-102425" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1284394141099980" lon="-76.6962111023100022"/>
+    <node visible="true" id="-102424" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1280981819599987" lon="-76.6961333182500056"/>
+    <node visible="true" id="-102423" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1274885374900023" lon="-76.6960179832600062"/>
+    <node visible="true" id="-102422" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1269163407799994" lon="-76.6959241059399943"/>
+    <node visible="true" id="-102420" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1269184215099983" lon="-76.6958624151299944"/>
+    <node visible="true" id="-102419" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1274302776799985" lon="-76.6959482458200057"/>
+    <node visible="true" id="-102418" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1280211964299980" lon="-76.6960501697700181"/>
+    <node visible="true" id="-102417" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1284310913899986" lon="-76.6961306360399959"/>
+    <way visible="true" id="-101944" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102427"/>
+        <nd ref="-102428"/>
+        <nd ref="-102429"/>
+        <nd ref="-102430"/>
+        <tag k="arrangement" v="multiple"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="length" v="173.0"/>
+        <tag k="name" v="AwesomeRail"/>
+        <tag k="railway" v="rail"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2021-01-24 18:58:59"/>
+        <tag k="source:imagery:id" v="397a1b477b5a791a8ec7943edc6f9ce5"/>
+        <tag k="source:imagery:layerName" v="Maxar Basemap +Vivid"/>
+        <tag k="source:imagery:sensor" v="WV01"/>
+    </way>
+    <way visible="true" id="-101940" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102422"/>
+        <nd ref="-102423"/>
+        <nd ref="-102424"/>
+        <nd ref="-102425"/>
+        <tag k="arrangement" v="multiple"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="length" v="171.4"/>
+        <tag k="name" v="AwesomeRail"/>
+        <tag k="railway" v="rail"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2021-01-24 18:58:59"/>
+        <tag k="source:imagery:id" v="397a1b477b5a791a8ec7943edc6f9ce5"/>
+        <tag k="source:imagery:layerName" v="Maxar Basemap +Vivid"/>
+        <tag k="source:imagery:sensor" v="WV01"/>
+    </way>
+    <way visible="true" id="-101937" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102417"/>
+        <nd ref="-102418"/>
+        <nd ref="-102419"/>
+        <nd ref="-102420"/>
+        <tag k="arrangement" v="multiple"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="length" v="170.0"/>
+        <tag k="name" v="AwesomeRail"/>
+        <tag k="railway" v="rail"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2021-01-24 18:58:59"/>
+        <tag k="source:imagery:id" v="397a1b477b5a791a8ec7943edc6f9ce5"/>
+        <tag k="source:imagery:layerName" v="Maxar Basemap +Vivid"/>
+        <tag k="source:imagery:sensor" v="WV01"/>
+    </way>
+</osm>

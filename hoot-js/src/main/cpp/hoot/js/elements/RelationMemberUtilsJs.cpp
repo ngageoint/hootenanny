@@ -65,8 +65,6 @@ void RelationMemberUtilsJs::Init(Local<Object> exports)
            FunctionTemplate::New(current, getNumRelationMemberNodes)->GetFunction(context).ToLocalChecked());
   obj->Set(context, toV8("relationsHaveConnectedWayMembers"),
            FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction(context).ToLocalChecked());
-  obj->Set(context, toV8("isMemberOfRelationSatisfyingCriterion"),
-           FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction(context).ToLocalChecked());
 }
 
 void RelationMemberUtilsJs::isMemberOfRelationWithType(const FunctionCallbackInfo<Value>& args)
@@ -156,39 +154,6 @@ void RelationMemberUtilsJs::relationsHaveConnectedWayMembers(
       current,
         finder.haveConnectedWayMembers(
           map->getRelation(relationId1.getId()), map->getRelation(relationId2.getId()))));
-}
-
-void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
-  const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-  ElementId childId = toCpp<ElementId>(args[1]);
-  LOG_VART(childId);
-  QString critClassName = toCpp<QString>(args[2]);
-  LOG_VART(critClassName);
-
-  ElementCriterionPtr crit =
-    Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed());
-  if (!crit)
-  {
-    throw IllegalArgumentException(
-      "isMemberOfRelationSatisfyingCriterion: invalid criterion: " + critClassName.trimmed());
-  }
-  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-    std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
-  LOG_VART(mapConsumer.get());
-  if (mapConsumer)
-  {
-    mapConsumer->setOsmMap(map.get());
-  }
-
-  const bool isMember =
-    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(childId, *crit, map);
-
-  args.GetReturnValue().Set(Boolean::New(current, isMember));
 }
 
 }

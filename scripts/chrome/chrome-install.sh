@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# Chrome has out grown CentOS 7 and can't install the current stable anymore
+exit
+
 CHROME_BASE_URL=https://dl.google.com/linux/direct
 CHROME_DEB=google-chrome-stable_current_amd64.deb
 CHROME_DEB_URL=$CHROME_BASE_URL/$CHROME_DEB

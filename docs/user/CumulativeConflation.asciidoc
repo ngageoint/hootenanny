@@ -1,10 +1,9 @@
 
 [[CumulativeConflation]]
-== Cumulative Conflation
+==== Cumulative Conflation
 
-The term Cumulative Conflation refers to a process by which more than two map inputs can be conflated
-into a single output simultaneously. Work in this area is currently experimental, and an example 
-script which illustrates this concept and allows for conflating inputs in parallel can be found 
-https://github.com/ngageoint/hootenanny/blob/master/scripts/conflate/ConflateDirectory.sh[here]. 
-
+The term Cumulative Conflation refers to a process by which more than two map inputs are conflated
+into a single output. Work in this area is currently experimental, and an example script which 
+illustrates this concept and allows for conflating inputs in parallel can be found 
+https://github.com/ngageoint/hootenanny/blob/master/scripts/core/ConflateCumulative.sh[here]. 
 

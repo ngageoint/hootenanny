@@ -8,13 +8,15 @@ aspects.
 
 To list information about the available validators use the following options:
 
-* `--validators`      - Displays available JOSM validators for use in validation.
+* `--validators` - Displays available JOSM validators for use in validation.
                         
 To generate validation reports and/or mark data with validation errors use the following options:
 
 * `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
-                        if `--recursive` is specified.
-* `--report-output`   - Writes combined report output to a file instead of writing it to the display.
+                        if `--recursive` is specified. Files with "-validated" in the name will be 
+                        ignored, as these are considered to be output of a previous validation.
+* `--report-output`   - Writes combined report output to a file instead of writing it to the 
+                        display.
 * `--output`          - Optional single validated file output; may be any supported output format 
                         (e.g. .osm file). If specified, all inputs will be combined and elements 
                         with validation errors will be marked with tags in the output file. Required 
@@ -28,7 +30,7 @@ To generate validation reports and/or mark data with validation errors use the f
                         `input(s)` recursively. This parameter must be followed by either "*" to 
                         denote no filtering or one or more wildcard name filters. e.g. 
                         "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR 
-                        layer input syntax.                      
+                        layer input syntax.   
 
 === Usage
 

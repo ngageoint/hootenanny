@@ -106,8 +106,8 @@ void MatchConflicts::calculateMatchConflicts(
     eidToMatchCount++;
     if (eidToMatchCount % 10 == 0)
     {
-      // TODO: would like this to be status, but it logs a separate line for each statement
-      // for some reason unfortunately.
+      // Would like this to be status, but it logs a separate line for each statement for some
+      // reason unfortunately.
       PROGRESS_INFO(
         "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " of " <<
         StringUtils::formatLargeNumber(eidToMatches.size()) << " elements. Found " <<
@@ -131,7 +131,7 @@ void MatchConflicts::_calculateSubsetConflicts(
   LOG_VART(conflicts.size());
   LOG_VART(matchSet.size());
 
-  // search for all possible match pair conflicts within a set
+  // Search for all possible match pair conflicts within a set.
   for (size_t i = 0; i < matchSet.size(); i++)
   {
     size_t m1 = matchSet[i];
@@ -145,7 +145,7 @@ void MatchConflicts::_calculateSubsetConflicts(
            MergerFactory::getInstance().isConflicting(
              _map, matches[m2], matches[m1], idIndexedMatches)))
       {
-        // make sure we're consistent and put the smaller one first.
+        // Make sure we're consistent and put the smaller one first.
         if (m2 < m1)
         {
           swap(m1, m2);

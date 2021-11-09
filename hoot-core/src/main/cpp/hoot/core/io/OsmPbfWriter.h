@@ -75,7 +75,7 @@ public:
   void finalizePartial() override;
 
   void initializePartial() override;
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith("osm.pbf"); }
+  bool isSupported(const QString& url) const override { return url.endsWith("osm.pbf", Qt::CaseInsensitive); }
   void open(const QString& url) override;
   void close() override;
   QString supportedFormats() const override { return ".osm.pbf"; }
@@ -96,20 +96,6 @@ public:
 
   void write(const ConstOsmMapPtr& map, const QString& path);
   void write(const ConstOsmMapPtr& map, std::ostream* strm);
-
-  /**
-   * Writes the head out to the specified output stream. This is useful when manually composing
-   * a PBF out of various parts and pieces.
-   */
-  void writeHeader(std::ostream* strm, bool includeBounds = true, bool sorted = true);
-
-  /**
-   * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
-   * block will first be written as a network order uint32_t
-   */
-  void writePb(const ConstOsmMapPtr& map, std::ostream* strm);
-  void writePb(const OsmMapPtr& map, std::ostream* strm)
-  { writePb((const ConstOsmMapPtr)map, strm); }
 
   /**
    * Write a single node out as a PrimitiveBlock to the specified stream. The size of the primitive
@@ -147,11 +133,6 @@ public:
    * 0 is uncompressed. 1 is fastest. 9 is best compression.
    */
   void setCompressionLevel(int z) { _compressionLevel = z; }
-  /**
-   * Sets a value that should be added to nodes and ways before they're written out. This is
-   * handy when all values need to be renumbered to avoid conflicts.
-   */
-  void setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta);
   /**
    * Sets the granularity to 1 or higher. The granuarlity is in units of nanodegrees. The larger
    * the value the coarser the data stored, but potentially higher compression. The default of

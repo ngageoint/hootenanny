@@ -27,6 +27,7 @@
 #ifndef PROCESS_POOL_H
 #define PROCESS_POOL_H
 
+// Hoot
 #include <hoot/core/util/Log.h>
 
 //  Standard
@@ -54,7 +55,7 @@ class JobQueue
 public:
 
   /** Standard constructor */
-  JobQueue();
+  JobQueue() = default;
 
   /**
    * @brief basic empty method on queue class, thread-safe
@@ -80,6 +81,8 @@ public:
    * @param job - name of job to add to back of queue
    */
   void push(const QString& job);
+
+  QString toString() const;
 
   QString getName() const { return _name; }
 
@@ -120,13 +123,15 @@ public:
    * @param outMutex mutex for preserving output ordering to standard out
    * @param parallelJobs JobQueue object that contains a set of jobs that can all be run in
    * parallel
+   * @param casesJobs JobQueue object that contains a set of conflate cases that must be run last
    * @param serialJobs JobQueue object (nullptr for all threads but one) that contains a set of
    * all jobs that cannot be run in parallel but must be run serially
+   * @param serialCasesJobs JobQueue object (nullptr for all threads but one) that contains a set
+   * of conflate cases that must be run serially
    */
-  ProcessThread(
-    int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
-    bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
-    JobQueue* casesJobs, JobQueue* serialJobs = nullptr);
+  ProcessThread(int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
+                bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+                JobQueue* casesJobs, JobQueue* serialJobs, JobQueue* serialCasesJobs);
   virtual ~ProcessThread() = default;
 
   /**
@@ -138,7 +143,7 @@ public:
    * @brief getFailures accessor function of _failures count
    * @return return number of failed tests
    */
-  int getFailures();
+  int getFailures() const { return _failures; }
 
 private:
 
@@ -183,6 +188,8 @@ private:
   JobQueue* _casesJobs;
   /** Pointer to job queue that contains only names of jobs that must be run serially */
   JobQueue* _serialJobs;
+  /** Pointer to job queue that contains only names of conflate case jobs that must be run serially */
+  JobQueue* _serialCasesJobs;
   /** Number of failed tests */
   int _failures;
   /** Shared pointer containing ownership of the process pointer from createProcess() */
@@ -200,6 +207,7 @@ using ProcessThreadPtr = std::shared_ptr<ProcessThread>;
 class ProcessPool
 {
 public:
+
   /**
    * @brief ProcessPool constructor
    * @param nproc number of threads/processes to add to the pool
@@ -213,17 +221,16 @@ public:
    * @param disableFailureRetries If true, tests will never be run a subsequent time after a
    * failure; useful for debugging
    */
-  ProcessPool(
-    int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff,
-    bool disableFailureRetries);
+  ProcessPool(int nproc, double waitTime, bool showTestName, bool suppressFailureDetail,
+              bool printDiff, bool disableFailureRetries);
   /** Destructor */
   ~ProcessPool();
 
-  enum JobType
+  enum JobType : int
   {
-    SerialJob,
-    ParallelJob,
-    ConflateJob
+    SerialJob   = 0x01,
+    ParallelJob = 0x02,
+    ConflateJob = 0x04
   };
 
   /**
@@ -248,7 +255,16 @@ public:
    * @brief wait for all threads (and processes) to finish working
    */
   void wait();
+
+  /**
+   * @brief jobQueueToString prints the contents of a job queue
+   * @param name name of the job queue to print; valid values are: parallel, serial, or case
+   * @return a string
+   */
+  QString jobQueueToString(const QString& name) const;
+
 private:
+
   /** vector of n threads to do the processing */
   std::vector<ProcessThreadPtr> _threads;
   /** queue of jobs that must be run in serial */
@@ -257,6 +273,8 @@ private:
   JobQueue _parallelJobs;
   /** queue of conflate case jobs */
   JobQueue _caseJobs;
+  /** queue of serial conflate case jobs */
+  JobQueue _serialCaseJobs;
   /** mutex protecting standard out to keep all output for each single test together */
   QMutex _mutex;
   /** count of failed unit tests */

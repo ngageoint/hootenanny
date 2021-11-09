@@ -66,7 +66,6 @@ public:
   std::set<ElementId> findWayRelations(const geos::geom::Envelope& e) const;
 
   std::vector<long> findNodes(const geos::geom::Coordinate& from, Meters maxDistance) const;
-  std::vector<long> findNodes(const geos::geom::Envelope& e) const;
 
   long findNearestWay(geos::geom::Coordinate c) const;
 

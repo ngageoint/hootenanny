@@ -187,8 +187,6 @@ private:
 
   void _reproject(double& x, double& y);
 
-  const QString& _saveMemory(const QString& s);
-
   virtual void _translate(Tags&);
 
   void populateElementMap();
@@ -572,8 +570,16 @@ void OgrReader::finalizePartial()
 bool OgrReader::isSupported(const QString& url) const
 {
   LOG_VART(url);
+
+  if (url.endsWith(".osc") || url.endsWith(".osc.sql"))
+  {
+    return false;
+  }
+
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
+  LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath));
+  LOG_VART(IoUtils::isSupportedOgrFormat(url, true));
   return
     OgrUtilities::getInstance().isReasonableUrl(justPath) ||
     IoUtils::isSupportedOgrFormat(url, true);
@@ -1273,15 +1279,6 @@ void OgrReaderInternal::_reproject(double& x, double& y)
                                      "projection bounds?");
     }
   }
-}
-
-const QString& OgrReaderInternal::_saveMemory(const QString& s)
-{
-  if (!_strings.contains(s))
-  {
-    _strings[s] = s;
-  }
-  return _strings[s];
 }
 
 void OgrReaderInternal::_translate(Tags& t)

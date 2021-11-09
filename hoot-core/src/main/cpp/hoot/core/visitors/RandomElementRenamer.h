@@ -36,7 +36,9 @@ namespace hoot
 {
 
 /**
- * A simple random name changer. This is not part of the original PERTY paper.
+ * A simple random name changer.
+ *
+ * This is not part of the original PERTY paper.
  */
 class RandomElementRenamer : public ElementVisitor, public RngConsumer, public Configurable
 {
@@ -49,10 +51,19 @@ public:
 
   QString permuteName(const QString& s);
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @see RngConsumer
+   */
   void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override

@@ -46,7 +46,7 @@ void NetworkMatcher::_createEdge2Index()
 {
   LOG_DEBUG("Creating edge index...");
 
-  // No tuning was done, I just copied these settings from OsmMapIndex. 10 children = 368 bytes -
+  // No tuning was done, just copied these settings from OsmMapIndex. 10 children = 368 bytes -
   // see #3054
   _edge2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
@@ -92,35 +92,6 @@ IntersectionIterator NetworkMatcher::_createIterator(const Envelope& env, Hilber
   IntersectionIterator it(tree.get(), min, max);
 
   return it;
-}
-
-void NetworkMatcher::_createVertex2Index()
-{
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children = 368 bytes - see #3054
-  _vertex2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
-
-  std::vector<Box> boxes;
-  std::vector<int> fids;
-
-  const OsmNetwork::VertexMap& vm = _n2->getVertexMap();
-  for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
-  {
-    fids.push_back((int)_index2Vertex.size());
-    _index2Vertex.push_back(it.value());
-
-    Box b(2);
-    Meters searchRadius = _details->getSearchRadius(it.value());
-    Envelope env(_details->getEnvelope(it.value()));
-    env.expandBy(searchRadius);
-
-    b.setBounds(0, env.getMinX(), env.getMaxX());
-    b.setBounds(1, env.getMinY(), env.getMaxY());
-
-    boxes.push_back(b);
-  }
-
-  _vertex2Index->bulkInsert(boxes, fids);
 }
 
 }

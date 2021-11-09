@@ -66,7 +66,6 @@ public:
     if (e->getElementType() == _type || _type == ElementType::Unknown)
     {
       const Tags& tags = e->getTags();
-
       for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
       {
         _keys[it.key()]++;
@@ -162,7 +161,7 @@ void ShapefileWriter::_removeShapefile(const QString& path) const
 void ShapefileWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   QString tempPath = path;
-  if (tempPath.toLower().endsWith(".shp"))
+  if (tempPath.endsWith(".shp", Qt::CaseInsensitive))
   {
     tempPath.remove(tempPath.size() - 4, tempPath.size());
   }
@@ -218,9 +217,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
   for (int i = 0; i < columns.size(); i++)
   {
     OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
-
     oField.SetWidth(64);
-
     if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
@@ -433,9 +430,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
   for (int i = 0; i < columns.size(); i++)
   {
     OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
-
     oField.SetWidth(64);
-
     if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));

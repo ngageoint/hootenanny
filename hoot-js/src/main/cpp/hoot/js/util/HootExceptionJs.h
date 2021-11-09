@@ -41,7 +41,8 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
-  static v8::Local<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
+  static v8::Local<v8::Object> create(const HootException& e)
+  { return create(std::shared_ptr<HootException>(e.clone())); }
   static v8::Local<v8::Object> create(const std::shared_ptr<HootException>& e);
 
   std::shared_ptr<HootException> getException() const { return _e; }
@@ -73,7 +74,6 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)

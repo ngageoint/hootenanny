@@ -1,0 +1,97 @@
+
+[[ManualMultiaryConflation]]
+=== Manual Multiary Conflation
+
+To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human. The manual matching process for multiary conflation varies from the typical pairwise conflation. This section describes the manual multiary conflation process to generate training data.
+
+==== Prerequisites
+
+* Install JOSM on your PC.  It can be found here: http://josm.openstreetmap.de/  The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
+* Use the Highlight Todo "paint style":https://josm.openstreetmap.de/wiki/Styles : https://github.com/ngageoint/hootenanny/tree/develop/docs/styles/TrainingDataStyle.mapcss
+
+==== Test Data Preparation
+
+For some detailed background information that is generally relevant please see <<HootenannyManualConflation>>.
+
+===== Test Data Preparation Quick Start
+
+Put all of your data into an OSM format/schema.
+
+Then run this for each of your input files.
+
+----------------------------
+$HOOT_HOME/scripts/core/AddMultiaryTrainingTags.js <input.osm> <file number> <output.osm>
+----------------------------
+
+For example, if you have three Timbuktu files that are already translated into the OSM format/schem: "TimbuktuOsm.osm", "TimbuktuGeoNames.osm", "TimbuktuInternal.osm".
+
+----------------------------
+$HOOT_HOME/scripts/core/AddMultiaryTrainingTags.js TimbuktuOsm.osm 1 TimbuktuOsmKeyed.osm
+$HOOT_HOME/scripts/core/AddMultiaryTrainingTags.js TimbuktuGeoNames.osm 2 TimbuktuGeoNamesKeyed.osm
+$HOOT_HOME/scripts/core/AddMultiaryTrainingTags.js TimbuktuInternal.osm 3 TimbuktuInternalKeyed.osm
+----------------------------
+
+The ordering of the file numbers isn't terribly important, but generally the most reliable input should be first. This will add tags similar to this to node in the file:
+
+----------------------------
+ID=1-00171
+MATCH=todo
+REVIEW=none
+----------------------------
+
+The ID, `1-00171` is a number that is unique to these three files. The first section `1-` refers to the _file number_ that was specified on the command line (in this case, 1, 2 or 3). The following sections will describe how this information will be used.
+
+===== POI Matching Standards
+
+POI matching is the process of tagging nodes with information that explicitly states the matching relationship between POIs. What is a POI? This definition gets nasty and rather than play semantics police we call all point data representing semi-permanent locations a POI. Or in other words, anything OSM tags as a node. (E.g. stop signs, bridges, restaurants, cities, etc.)
+
+The possible relationships between two POIs are below. A pair of POIs should only have the most specific relationship (e.g. it should _never_ be review _and_ miss).
+
+* Match - The user is confident that the two POIs represent the same entity.
+* Miss - The user is confident that the two POIs do not represent the same entity.
+* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
+
+*_POI Match Tagging_*
+
+When manually matching data a single value will be assigned to all the elements that represent the same physical entity. The value given should be the lowest ID of any of the members in the cluster. E.g. if `1-000010`, `1-000023`, `2-000007` and `3-000abc` are all in the same cluster then all the associated `MATCH` tags should be assigned `1-000010` as the value. Lowest is determined by sorting first by input number, then the number inside the data set. E.g. `1-009999` is lower than `2-000000`.
+
+If an element doesn't match any other elements then the associated match should be changed to `MATCH=none`.
+
+For example, say we have three elements that we are confident represent the same entity.
+
+----------------------------
+ID=1-000131; MATCH=todo; REVIEW=none; building=restaurant; name=Joe's
+ID=2-000345; MATCH=todo; REVIEW=none; amenity=restaurant; name=Joe
+ID=3-000271; MATCH=todo; REVIEW=none; amenity=restaurant; name=Joe's Burgers
+----------------------------
+
+We need to update the MATCH tag with the lowest ID of the three matching records. In this case, the lowest ID is `1-000131`. So after updating the tags the new tags will be:
+
+----------------------------
+ID=1-000131; MATCH=1-000131; REVIEW=none; building=restaurant; name=Joe's
+ID=2-000345; MATCH=1-000131; REVIEW=none; amenity=restaurant; name=Joe
+ID=3-000271; MATCH=1-000131; REVIEW=none; amenity=restaurant; name=Joe's Burgers
+----------------------------
+
+By setting `MATCH=1-000131` in all three records the scoring software knows that the three records represent a single entity.
+
+In some cases an element requires more information than is available in the file (see below). In these ambiguous cases a human needs to review the data and it will be tagged with a `REVIEW=<ID>`. In this case, it is only necessary to tag the element with the larger ID with a review tag. For instance, if `1-000023` and `2-000071` should be reviewed, modify the element with ID `2-000071` to have the `REVIEW=1-000023` tag. If there are no clear matches for `2-000071` then set its match tag to `MATCH=none`, otherwise the match will be populated in the usual fashion.
+
+In some cases, an element should be reviewed against multiple other elements. If this is necessary, simply put multiple semi-colon delimited review numbers in the `REVIEW` key. E.g. `REVIEW=1-000023;2-000042`. A `MATCH` tag should never have multiple values.
+
+For example, if we have three records
+
+----------------------------
+ID=1-000111; MATCH=none; REVIEW=none; amenity=restaurant; name=Bill's Burgers
+ID=2-000079; MATCH=none; REVIEW=none; amenity=restaurant;
+ID=1-000835; MATCH=none; REVIEW=none; amenity=restaurant; name=Tim's Tacos
+----------------------------
+
+In this case it is clear that "Bill's Burgers" does not match "Tim's Tacos", but the second record doesn't have any name associated with it. In this case, we don't have enough information to confidently say the second record represents the same entity as either of the other records. Nor do we have enough information to say that it does not represent the same entity as either "Bill's Burgers" or "Tim's Tacos". So, to represent this we add review tags from the larger ID record to the smaller ID record. E.g.
+
+----------------------------
+ID=1-000111; MATCH=none; REVIEW=none; amenity=restaurant; name=Bill's Burgers
+ID=2-000079; MATCH=none; REVIEW=1-000111;1-000835; amenity=restaurant;
+ID=1-000835; MATCH=none; REVIEW=none; amenity=restaurant; name=Tim's Tacos
+----------------------------
+

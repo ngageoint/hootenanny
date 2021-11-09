@@ -1,14 +1,19 @@
 #!/bin/bash
 set -e
 
-mkdir -p $HOOT_HOME/tmp/
-mkdir -p test-output/cmd/slow/ConflateCmdTest
+IN_DIR=test-files/conflate/unified
+IN_DIR_2=test-files/cmd/slow/ConflateCmdTest
+OUT_DIR=test-output/cmd/slow/ConflateCmdTest
+mkdir -p $OUT_DIR
 
-export CONFLATE_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf"
+CONFIG="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf"
+source scripts/core/ScriptTestUtils.sh
 
-hoot conflate $CONFLATE_OPTS test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm test-output/cmd/slow/ConflateCmdTest/output.osm
-hoot diff -C Testing.conf test-output/cmd/slow/ConflateCmdTest/output.osm test-files/cmd/slow/ConflateCmdTest/output.osm || diff test-output/cmd/slow/ConflateCmdTest/output.osm test-files/cmd/slow/ConflateCmdTest/output.osm
+hoot conflate $CONFIG $IN_DIR/AllDataTypesA.osm $IN_DIR/AllDataTypesB.osm $OUT_DIR/output.osm
+hoot diff -C Testing.conf $OUT_DIR/output.osm $IN_DIR_2/output.osm || diff $OUT_DIR/output.osm $IN_DIR_2/output.osm
+validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
+  $OUT_DIR/output-validated.osm $IN_DIR_2/output-validation-report
 
 # Check to make sure we don't bomb out on empty files
-hoot conflate $CONFLATE_OPTS --warn test-files/Empty.osm test-files/Empty.osm tmp/ConflateCmdTest.osm
-hoot diff -C Testing.conf test-files/Empty.osm tmp/ConflateCmdTest.osm || cat tmp/ConflateCmdTest.osm
+hoot conflate $CONFIG --warn test-files/Empty.osm test-files/Empty.osm $OUT_DIR/empty-out.osm
+hoot diff -C Testing.conf test-files/Empty.osm $OUT_DIR/empty-out.osm || cat $OUT_DIR/empty-out.osm

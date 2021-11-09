@@ -1,0 +1,308 @@
+
+=== Conflation Scoring Techniques
+
+The following are some notes on some of the techniques that feed conflation scoring. Conflation 
+techniques vary by feature type and change over time, so not all techniques described my currently 
+be in use by Hootenanny.
+
+==== Maximal Nearest Subline
+
+The Maximal Nearest Subline (MNS) algorithm (VividSolutions, 2005) performs the following operation described below:
+____________________________________________________________________
+The Maximal Nearest Subline of A relative to B is the shortest subline of A which contains all the points of A which are the nearest points to the points in B. This effectively "trims" the ends of A which are not near to B.
+____________________________________________________________________
+
+Hootenanny has adopted a modified version of MNS that also limits the distance that is considered nearest as a function of the accuracy of the ways.
+ 
+==== Assign a Weight
+
+All accuracy values provided to Hootenanny assume a Gaussian distribution to the data and are provided at 2 Sigma, or approximately a 95% confidence interval. To convert accuracy to weights for both datasets we do the following:
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++
+\[ \sigma_1 = \frac { accuracy_1 }{ 2 } \]
+++++++++++++++++++++++++++++++++++++++++++
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++
+\[ \sigma_2 = \frac { accuracy_2 }{ 2 } \]
+++++++++++++++++++++++++++++++++++++++++++
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ w_1 = \frac { 1 - \sigma_1^2 }{ \sigma_1^2 + \sigma_2^2 } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ w_2 = \frac { 1 - \sigma_2^2 }{ \sigma_1^2 + \sigma_2^2 } \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+==== Averaging
+
+Averaging of linear features was a feature of the original Greedy Algorithm implementation of 
+Hootenanny. Later it was dropped and replaced with the concept of Reference Conflation. Later on,
+linear averaging was brought back into Hootenanny for experimental purposes.
+
+Building from the calculations from the previous section, the accuracy of the new way is calculated 
+as:
+
+.Weighted Average
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ accuracy_{new} = 2 \sqrt{ w_1^2 \times \sigma_1^2 + w_2^2 \times \sigma_2^2  } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+There are several possible interpretations of the "average" way. For our purposes, we would like the way that maintains the general shape of the two inputs, produces close to an exact average, and avoids unsightly perturbations. To accomplish this, we start by averaging the first two nodes, then march along the ways, averaging nodes together as we go. At the end, we average the final two nodes. The pseudo-code below describes the algorithm in more detail.
+
+----
+n1 = w1.nodes()
+n2 = w2.nodes()
+
+result.push(average(n1.pop(), n2.pop()))
+# while there is more than one point available in each line
+while n1.size() > 1 || n2.size() > 1:
+
+      # if we're almost out of n1 points
+      if (n1.size() == )
+            result.push(average(n2.pop(), w1))
+      # if we're almost out of n2 points
+      else if (n2.size() == ):
+            result.push(average(n1.pop(), w2))
+      else:
+            # grab the last result pushed
+            last = result.last()
+            nc1 = average(n1.top(), w2)
+            nc2 = average(n2.top(), w1)
+            # push the nc that is closest to the last result
+            if (nc1.distance(last) < nc2.distance(last)):
+                  result.push(nc1)
+                  n1.pop()
+            else:
+                  result.push(nc2)
+                  n2.pop()
+# push on the last point as the average of the last two nodes
+result.push(average(n1.pop(), n2.pop()))
+----
+
+This approach suffers from the loss of some details in the data set due to averaging, but in most real world cases it yields very good results.
+
+[[ExplSimilarityMeasure]]
+==== Similarity Measure
+
+The following sections describe how we score two features to determine a match. To calculate the final similarity measure, we take the product of all the scores. One exception to this is the attribution score. Through experimentation, we found the attribution score was having too much of an impact. To alleviate this, we reduce the impact on the final score by scaling the attribution score from 0.3 to 1.0.
+
+[[ExplDistanceScore]]
+==== Distance Score
+
+While Hausdorff distance is used by (VividSolutions, 2005) and (Linna Li, 2011), we found it was too reactive to outliers in our data. To accommodate this we do the following to calculate distance between ways:
+
+1. Calculate maximal nearest subline
+2. Calculate the mean distance between the two lines
+3. Calculate the probability of a match given the circular error of the two lines.
+
+The score is calculated as:
+
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++
+\[ \sigma = \sqrt{ \sigma_1^2 + \sigma_2^2 } \]
++++++++++++++++++++++++++++++++++++++++++++++++
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ s = 1 - ( \Phi ( \mu_{distance}, \sigma ) - 0.5) \times 2.0 \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+where the variables are as follows:
+
+* latexmath:[$ \sigma_1 $] & latexmath:[$ \sigma_2 $] - Standard deviation of the circular error of ways 1 & 2 respectively
+
+* latexmath:[$ \Phi $] - Per the Abramowitz & Stegun (1964) approximation for calculating latexmath:[$ \Phi $]
+
+* latexmath:[$ \mu_{distance} $] - The mean distance between the ways
+
+==== Parallel Score
+
+The parallel score assigns high scores to ways that are generally parallel, and lower scores as the two ways deviate away from parallel. This is most useful for short ways that may have a good distance score, but are at very different angles. See <<parallelscores>> for an example. To calculate the parallel score, we march along the two ways and calculate the cosine of the average absolute difference in the headings. This returns 1 for ways that are perfectly parallel and 0 for perpendicular ways.
+
+[[parallelscores]]
+.Example low and high scoring parallel scores
+
+image::images/image041.png[]
+
+[[ExplAttributeScore]]
+==== Attribute Score
+
+The attribute score determines how similar two features are based solely on tags. The score is a value from 0 to 1 and is calculated as the product of the _Name Score_ and the _Enumerated Score_ . The following sections describe how these two scores are calculated.
+
+==== Name Score
+
+Due to the global nature of OpenStreetMap, names can be provided in multiple scripts as well as various languages, not to mention various spellings and abbreviations. Consider the following examples:
+
+1. A road in Manitou Springs, CO:
+* Oak Place
+* OAK PL
+
+2. A road in Moscow:
+* *МКАД, 9-й километр*
+* Ring Road, 9thKilometer
+* Ring Road
+* *МКАД*
+
+3. A road in Indonesia:
+* Otto Iskandar Dinata
+* OTTO ISKANDARDINATA
+* OTTO ISKANDARDINATA (OLLSLA)
+
+From the above examples and many others within real world data sets, several things become clear:
+
+1. Names are not necessarily spelled the same way.
+2. Proper nouns are frequently spelled phonetically in another script (transliteration).
+3. Translations may occur in road names (e.g., *МКАД* is an acronym meaning Moscow Automobile Ring Road).
+4. While abbreviations are not common in OSM, they can be quite common in FACC data.
+5. Many FACC layers use uppercase names.
+6. A single feature may have multiple names.
+
+To address these problems, we have adopted an approach with similarities to Smart, et al. (Philip D. Smart, 2010), but for simplicity we have removed https://en.wikipedia.org/?title=Soundex[SoundEx], a phonetic algorithm for indexing names by sound, and added some additional checks to handle cases when there are multiple names on each feature.  The approach is broken into a three-step process:
+
+1. Normalize the road names into English.
+2. Create a matrix of distance scores.
+3. Combine a portion of the top scores into a final aggregate score.
+
+The following sections address each of these three steps in addition to mechanisms for merging name tags into an output set of names. Tag merging is used when merging two features into one new, more complete feature. In <<ExplNameComparison>> we will address some opportunities to improve on these approaches.
+
+===== Normalizing Names
+
+Comparing names is a non-trivial problem that deals with various scripts, local dialects, changes in word ordering, and misspellings. Through the process, we are not attempting to have a perfect solution but a solution that performs well enough in most cases. We have experimented with Hebrew, Arabic, and Russian names using the following steps:
+
+1. Translate common road words from the local language into English using a simple dictionary lookup (e.g., "переулок" is translated to "lane")
+2. Transliterate the name from the local script to Latin characters using ICU4C (International Components for Unicode).
+3. Use a variant of Levenshtein distance to calculate the difference between the normalized road names.
+
+In the case of street names, it is common in some languages to prepend the street type, e.g., улица Симоновский Вал (literally, Street Simonovsky Val). When normalizing street names, we will move any common street type names (Lane, Boulevard, Way, Street, etc.) from the beginning of the string to the end. In this example, this results in  Simonovskij Val Street.
+
+===== Calculating the Individual Name Scores
+
+Now that we have a function for normalizing the names, we can calculate the distance between two names using the following permutation on Levenshtein distance (VI, 1966):
+
+----
+ n1 = normalizeToEnglish(name1)
+ n2 = normalizeToEnglish(name2)
+ maxLen = max(name1.length, name2.length)
+ d = levenshteinDistance(name1, name2)
+ return 1.0 – (d / maxLen)
+----
+____________________________________________________________________
+_Levenshtein's distance, also known as edit distance, is defined as the minimum number of edits needed to transform one string into the other, with the allowable edit operations being insertion, deletion, or substitution of a single character._ footnote:[http://en.wikipedia.org/wiki/Levenshtein_distance]
+____________________________________________________________________
+
+.Example Levenshtein distance Scores:
+[width="75%"]
+|======
+| *Name 1* | *Name 2* | *Levenshtein Distance* | *Name Score*
+| Cat | Hat | 1 | 0.67
+| Cut | Hat | 2 | 0.33
+| Thomas | Tom | 3 | 0.5
+| Fish | Dog | 4 | 0.0
+| *улица Симоновский Вал* | Simonovsky Val Street | 2 | 0.91
+| JALAN TOL JAKARTA-CIKAMPEK | JAKARTA CIKAMPEK TOLLROAD | 19 | 0.27 footnote:[This comparison could benefit from treating the name as a "bag" of words rather than an ordered list]
+|======
+
+===== Aggregating Individual Name Scores
+
+When two features have multiple names, there are multiple ways the names can be compared and the score aggregated. For example:
+
+	* Feature 1: +name=O'Neill Street, alt_name=Pub Alley;Route 128+
+	* Feature 2: +name=O'NEILL ST, local_name=Pub Alley, alt_name=OLD MILL ST+
+
+In this scenario we can generate the following scores:
+[width="50%"]
+|======
+|  | O'Neill Street | Pub Alley | Route 128
+| O'NEILL ST | .71 | .2 | .1
+| Pub Alley | .21 | 1 | 0
+| OLD MILL ST | .43 | .27 | 0
+|======
+
+After some experimentation we average the top half of the scores using each name at most once:
+
+	* Pub Alley/Pub Alley – 1
+	* O'Neill Street/O'NEILL ST - .71
+
+In this case, the average is 0.86. Using this approach, we can generate a score from 0 to 1 given a set of names for any two features. This provides a reasonable metric and avoids counting extraneous names such as _Route 128_ or _OLD MILL ST_ that may be omitted from the respective data sets. While this works reasonably well in most cases, more experimentation and research is required to determine better approaches.
+
+===== Merging Names
+
+To merge names from two features into one new set of names, we treat the names as a set, where overlapping name values get appended to the `alt_name` tag. For fear of losing an important differentiation, we do not remove names unless there is an exact match. For example:
+
+		* Pre-Merge
+			- Feature 1: `name=O'Neill Street`, `alt_name=Pub Alley;Route 128`
+			- Feature 2: `name=O'NEILL ST`, `local_name=Pub Alley`
+		*  Post-Merge
+			- `name=O'Neill Street`, `local_name=Pub Alley`, `alt_name=O'NEILL ST;Route 128`
+
+[[CalculatingEnumeratedScore]]
+==== Calculating the Enumerated Score
+
+Enumerated tags are tags with predefined nominal values. This includes `surface=dirt` , `surface=paved`, and `highway=primary` . These tags have relationships that must be manually defined (<<HighwayTagRelate>>).
+
+[[HighwayTagRelate]]
+.Highway Tag Relationship
+
+image::images/image044.png[]
+
+To address this, we have created a configuration file that defines a directed graph of relationships between tags and supports the following relations:
+
+*  _isA_ - Defines a "is a" relationship. Such as `highway=primary`  _is a_  `highway=road`
+
+* _similarTo_ – Defines a "is similar to" relationship such as `highway=primary` is similar to `highway=secondary`. A _similarTo_ relationships also include a weight from 0 to 1, where 0 is completely dissimilar and 1 is exactly the same.
+
+<<HighwayTagRelate>> depicts the relationships between a subset of the road types along with their weights. A line ending with a circle represents _similarTo,_ and an arrow represents _isA_.
+
+Using the graph <<HighwayTagDistanceVal>>, we can calculate the "distance" between two nodes, where we define distance as the maximum product of the weights separating the two nodes. For example, the distance between `highway=motorway` and `highway=primary` is 0.8 * 0.8 or 0.64. <<HighwayTagDistanceVal>> shows all the distance values for <<HighwayTagRelate>>.
+
+[[HighwayTagDistanceVal]]
+.Highway Tag Distance Values
+[options="header"]
+|======
+|  | `highway = road` | `highway = motorway` | `highway = trunk` | `highway = motorway_link`
+| `highway=road` |  1 |  1 |  1 |  1
+| `highway = motorway` |  1 |  1 |  0.8 |  1
+| `highway=trunk` |  1 |  0.8 |  1 |  0.8
+| `highway = motorway_link` |  1 |  1 |  0.8 |  1
+| `highway=primary` |  1 |  0.64 |  0.8 |  0.64
+| `highway = trunk_link` |  1 |  0.8 |  1 |  0.72
+| `highway = secondary` |  1 |  0.512 |  0.64 |  0.512
+| `highway = primary_link` |  1 |  0.64 |  0.8 |  0.576
+| `highway = tertiary` |  1 |  0.4096 |  0.512 |  0.4096
+|======
+
+We have defined over 140 relationships within OSM tags and can use that to compare enumerated values between two features and generate a score from 0 to 1. From this graph, we can generate an _n_ x _m_ matrix of scores, where _n_ is the number of enumerated tags in feature 1, and _m_ is the number of enumerated tags in feature 2. For example:
+
+|======
+|  | `highway=primary` | `surface=paved`
+| `highway=secondary` | 0.8 | 0.0
+| `surface=asphault` | 0.0 | 1.0
+| `tunnel=yes` | 0.0 | 0.0
+|======
+
+We then take the product of the highest non-zero scores using each tag at most once. In this case, it is 0.8 * 1.0 or 0.8 for our final score. Using this approach, we can generate a score from 0 to 1 for a set of enumerated tags.
+
+==== Zipper Score
+
+The _zipper score_ gives a higher score for ways that are already joined at one end, and an even higher score for ways joined at both ends. Long roads that are made up of individual ways are more likely to get joined together like a zipper using this score.
+
+==== Length Score
+
+The _length score_ gives higher values to ways that are longer. This encourages longer ways to be merged earlier in the conflation process, and long ways that meet all the above criteria are more likely to be the same than are smaller ways. The length weight is given by:
+
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ length_{\mu} = \frac { length_1 + length_2 }{ 2 } \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ score = 0.2 + \frac { length_{\mu} }{ length_{\mu} + 20 } \times 0.8 \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The values 20, 0.2 and 0.8 were derived experimentally.
+

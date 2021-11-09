@@ -33,6 +33,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/conflate/AbstractConflator.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
 
 namespace hoot
 {
@@ -98,6 +99,12 @@ public:
   void apply(OsmMapPtr& map) override;
 
   /**
+   * @brief markInputElements uniquely mark input1 elements.
+   * @param map Map to add the changes to
+   */
+  void markInputElements(OsmMapPtr map) const;
+
+  /**
    * @brief storeOriginalMap Stores the original map.
    *
    * This is necessary for calculating the tag differential, and it's important to call this after
@@ -105,13 +112,6 @@ public:
    * @param map Map that should be holding only the original "Input1" elements
    */
   void storeOriginalMap(const OsmMapPtr& map);
-
-  /**
-   * @brief markInputElements uniquely mark input1 elements.
-   * @param map Map to add the changes to
-   */
-  void markInputElements(OsmMapPtr map) const;
-
   /**
    * @brief addChangesToMap adds the changes to a map, as regular elements.
    *
@@ -119,7 +119,7 @@ public:
    * @param map Map to add the changes to
    * @param pChanges Changeset provider
    */
-  void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const;
+  void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges);
 
   /**
    * @brief writeChangeset writes a changeset with just the data from the input map.
@@ -146,7 +146,6 @@ public:
   { return "Creates a map with features from the second input which are not in the first"; }
 
   void enableTags() { _conflateTags = true; }
-  bool conflatingTags() const { return _conflateTags;}
 
   /**
    * @brief getTagDiff returns the tag differential that was calculated during the conflation.
@@ -158,7 +157,7 @@ public:
    * @return A changeset provider that can be used with ChangesetWriter classes
    */
   MemChangesetProviderPtr getTagDiff() const { return _tagChanges; }
-
+  bool conflatingTags() const { return _conflateTags;}
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
@@ -196,6 +195,10 @@ private:
   std::vector<ConstMatchPtr> _matchesToRemoveAsPartial;
   std::vector<ConstMatchPtr> _matchesToRemoveAsWhole;
 
+  UnconnectedWaySnapper _linearFeatureSnapper;
+  QStringList _originalSnapWayStatuses;
+  QStringList _originalSnapToWayStatuses;
+
   long _numSnappedWays;
   long _numUnconflatableElementsDiscarded;
 
@@ -204,6 +207,8 @@ private:
   QString _unifiedChangesetStats;
 
   static int logWarnCount;
+
+  void _init();
 
   /*
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -241,7 +246,23 @@ private:
   std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2) const;
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map) const;
 
+  /**
+   * @brief _snapSecondaryLinearFeaturesBackToRef snaps secondary features that are part of the diff
+   * back to reference features before the reference features are dropped from the output.
+   * @return the number of ways snapped
+   */
   long _snapSecondaryLinearFeaturesBackToRef();
+  /**
+   * @brief _snapSecondaryLinearFeaturesBackToTagChangedRef snaps secondary features that are part
+   * of the diff back to reference features that had tag changes only applied to them (status=4)
+   * before the reference features are dropped from the output.
+   *
+   * This is necessary due to the fact that diff w/ tags may introduce different reference features
+   * into the diff after the snapping done with _snapSecondaryLinearFeaturesBackToRef if those
+   * reference features had tag changes.
+   * @return the number of ways snapped
+   */
+  long _snapSecondaryLinearFeaturesBackToTagChangedRef();
 
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);

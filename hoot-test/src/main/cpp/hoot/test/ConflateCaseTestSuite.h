@@ -41,7 +41,19 @@ class ConflateCaseTestSuite : public AbstractTestSuite
 
 public:
 
-  ConflateCaseTestSuite(const QString& dir, bool hideDisableTests = false);
+  /**
+   * @brief ConflateCaseTestSuite constructor
+   * @param dir top level directory for case tests
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param printValidationReportDiff @if true, for failing tests prints the difference between the
+   * baseline validation report and the test validation report output
+   * @param hideDisableTests if true, status messages for disabled tests are suppressed
+   * @param allowSerial if true, case tests under the serial directory are added to the tests to be
+   * run
+   */
+  ConflateCaseTestSuite(
+    const QString& dir, bool suppressFailureDetail = false, bool printValidationReportDiff = false,
+    bool hideDisableTests = false, bool allowSerial = false);
 
   /**
    * @see AbstractTestSuite
@@ -52,6 +64,9 @@ private:
 
   bool _hideDisableTests;
   int _numTests;
+  bool _suppressFailureDetail;
+  bool _printValidationReportDiff;
+  bool _allowSerial;
 };
 
 }

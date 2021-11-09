@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -37,6 +38,9 @@ using namespace std;
 namespace hoot
 {
 
+/**
+ * @brief The SchemaCmd class runs the schema command.
+ */
 class SchemaCmd : public BaseCommand
 {
 public:
@@ -46,31 +50,97 @@ public:
   SchemaCmd() = default;
 
   QString getName() const override { return "schema"; }
-  QString getDescription() const override { return "Displays the tag schema in use"; }
+  QString getDescription() const override
+  { return "Generates documentation for the schema in use"; }
 
   int runSimple(QStringList& args) override
   {
-    if (!args.empty())
+    if (args.empty())
     {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(
-        QString("%1 takes zero parameters. You provided %2: %3")
-          .arg(getName())
-          .arg(args.size())
-          .arg(args.join(",")));
-    }
+      if (!_getSupportedTextualFormats().contains(ConfigOptions().getTagPrintingFormat()))
+      {
+        throw IllegalArgumentException(
+          "Unsupported textual output format: " + ConfigOptions().getTagPrintingFormat() + ".");
+      }
 
-    LOG_STATUS("Printing schema...");
-    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        ConfigOptions().getTagPrintingScript());
-    if (!schemaPrinter)
+      std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+          ConfigOptions().getTagPrintingScript());
+      if (!schemaPrinter)
+      {
+        throw IllegalArgumentException(
+          "Unable to find schema printing script: " + ConfigOptions().getTagPrintingScript());
+      }
+    }
+    else if (args.size() == 1)
     {
-      throw IllegalArgumentException(
-        "Unable to find a valid translation format for: " + ConfigOptions().getTagPrintingScript());
+      QFileInfo outputFileInfo(args[0]);
+      const QString outputFormat = outputFileInfo.suffix().toLower();
+      if (_getSupportedImageFormats().contains(outputFormat))
+      {
+        _writeGraphImage(args[0]);
+      }
+      else
+      {
+        throw IllegalArgumentException("Unsupported image output format: " + outputFormat + ".");
+      }
+    }
+    else
+    {
+      if (args.size() > 1)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw IllegalArgumentException(
+          QString("%1 takes zero or one parameters. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
+      }
     }
 
     return 0;
+  }
+
+private:
+
+  void _writeGraphImage(const QString& outputPath) const
+  {
+    QFileInfo outputFileInfo(outputPath);
+    const QString outputFormat = outputFileInfo.suffix().toLower();
+    const QString dotFilePath = outputFileInfo.absoluteDir().absolutePath() + "/schema.dot";
+
+    const OsmSchema& uut = OsmSchema::getInstance();
+    QFile fp(dotFilePath);
+    fp.open(QFile::WriteOnly);
+    fp.write(uut.toGraphvizString().toUtf8());
+    fp.close();
+
+    QString cmd =
+      "neato -T" + outputFormat + " -Gsize=100,100\\! -GK=3 -Gratio=.5 -Gmindist=1";
+    cmd += " -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gdpi=100";
+    cmd += " -Goverlap=false -Elen=3 -o " + outputPath + " " + dotFilePath;
+    const int retval = system(cmd.toStdString().c_str());
+    if (retval != 0)
+    {
+      throw HootException("Failed creating schema graph image. Status: " + QString::number(retval));
+    }
+  }
+
+  QStringList _getSupportedTextualFormats() const
+  {
+    QStringList formats;
+    formats.append("asciidoc");
+    formats.append("csv");
+    formats.append("html");
+    return formats;
+  }
+
+  QStringList _getSupportedImageFormats() const
+  {
+    QStringList formats;
+    formats.append("png");
+    formats.append("svg");
+    return formats;
   }
 };
 

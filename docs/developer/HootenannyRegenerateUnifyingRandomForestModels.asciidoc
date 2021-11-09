@@ -1,6 +1,6 @@
 
 [[RegenerateRandomForestModels]]
-== Regenerating Random Forest Models For Conflation
+==== Regenerating Conflation Models
 
 Random Forest models (.rf) are used in conflation for Road with the Unifying Algorithm and Building 
 Conflation only. Attribute Relation Files (.arff) are used to build the RF files. Note that several
@@ -47,5 +47,4 @@ cp train-highway.child/tmp/HighwayModelAll.arff.bz2 $HOOT_HOME/conf/models/Highw
 After regenerating all ARFF files, build hoot and it will auto-detect that the ARFF files have 
 changed using a SHA1 hash. New RF files and their SHA1 hashes will be automatically regenerated. 
 Check the new RF and ARFF files into the hoot repository.
-
 

@@ -1,7 +1,7 @@
 
-== Web Services Database
+==== Web Services Database
 
-=== Liquibase
+===== Liquibase
 
 Liquibase is used to manage the schema, populate new databases and upgrade/rollback existing databases. Liquibase has some reasonable to poor documentation, but the important take-away is how to add new ChangeSet (AKA migrations). A ChangeSet (not to be confused with an OSM changeset) is a set of changes to be made to upgrade or downgrade the database from/to a version. For instance, a new version of code may require an additional table, so you'd create a ChangeSet to create the new table. The ChangeSets live in `hoot-services/src/main/resources/db/changelogs`. To create a new ChangeSet do the following:
 
@@ -15,25 +15,25 @@ Liquibase is used to manage the schema, populate new databases and upgrade/rollb
 * Update ServicesDb::expectedDbVersion in `$HOOT_HOME/hoot-core/src/main/cpp/hoot/core/io/ServicesDb.h` with the new database version, *only* if the context of the changeset is "default" or some other context meant to be run against the development environment with the unit tests.
 ** If the last changeset in the set of changesets is meant to run only in a non "default" context ("production", etc.) you will receive warnings from hoot that the "expected db version does not match the actual db version".  As a workaround to avoid this, ensure that the last changeset in the set of changesets always has a "default" context associated with it, even if this means re-ordering your non "default" context changesets to occur earlier in the changesets sequence.  e.g. I add a "production" context changeset meant to only be run in the production environment for the purposes of adding onsite specific data.  The changeset will not run in the development environment and hoot will work properly with no warnings.  In the production environment, a warning will be logged b/c the database version encountered will be one greater than the expected version.  So, swap versions between the newly added "production" context changeset and the most recent "default" context changeset as a workaround.
 
-=== Schema
+===== Schema
 
 The hoot-services database schema is very much influenced by the OSM database schema. It seemed to me (JRS) that the schema could be improved upon by using things like hstore. However, I'll trust that the OSM DB folks know what they're doing for now and we can make those modifications when we are more informed and benchmarks are reasonable.
 
 There is some information on the link:http://wiki.openstreetmap.org/wiki/Rails_port/Database_schema$$[OSM DB] on the OSM Wiki. We are not implementing the entire schema at this time because it is not required and we have made a few additions. I won't go into a detailed description of the schema as it will be out of date before I hit save, but below is a short summary of the main aspects.
 
-==== Users
+*_Users_*
 
 There is a very simple user table. I expect this will be changed in the future as our authentication mechanisms evolve.
 
-==== Maps
+*_Maps_*
 
 This is a concept outside of OSM. In the case of Hootenanny we must support multiple maps that can be displayed and conflated to create new maps. One possible approach is to create a set of tables for each map we create. While this may be a good path to explore in the future, creating a single set of tables that hold all the maps is simpler for now. Each of the main changeset and element tables contain a reference to the map that contains them.
 
-==== Change Sets
+*_Change Sets_*
 
 Similar to OSM changesets a changeset is created for each group of changes in the database. In the OSM world this enables history and rolling back changes. At this point history is not necessary so for our purposes it just lets you see who was the last to modify a set of attributes. A changeset is applicable to a single map.
 
-==== Elements
+*_Elements_*
 
 The OSM elements include nodes, ways and relations. Each of these element types have a set of tables that interrelate. In the normal OSM DB there are both current tables to represent the current map and historical tables to represent changes made over time. We are only implementing the current tables for now and may expand into historical data at some point in the future.
 

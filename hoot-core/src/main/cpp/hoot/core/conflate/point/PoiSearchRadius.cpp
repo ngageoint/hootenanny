@@ -38,10 +38,10 @@
 namespace hoot
 {
 
-PoiSearchRadius::PoiSearchRadius(QString key, QString val, int distance) :
-_key(key),
-_value(val),
-_distance(distance)
+PoiSearchRadius::PoiSearchRadius(QString key, QString val, int distance)
+  : _key(key),
+    _value(val),
+    _distance(distance)
 {
 }
 
@@ -50,7 +50,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
   LOG_DEBUG("Reading search radii from: " << jsonStringOrFile << "...");
 
   std::shared_ptr<boost::property_tree::ptree> propTree;
-  if (!jsonStringOrFile.toLower().endsWith(".json"))
+  if (!jsonStringOrFile.endsWith(".json", Qt::CaseInsensitive))
   {
     propTree = StringUtils::jsonStringToPropTree(jsonStringOrFile);
   }

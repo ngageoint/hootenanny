@@ -27,7 +27,6 @@
 #include "RelationMergerJs.h"
 
 // hoot
-
 #include <hoot/core/conflate/merging/RelationMerger.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -56,11 +55,12 @@ void RelationMergerJs::Init(Local<Object> exports)
   Local<Object> thisObj = Object::New(current);
   exports->Set(context, toV8("RelationMerger"), thisObj);
 
-  thisObj->Set(context, toV8("mergeRelations"),
-               FunctionTemplate::New(current, mergeRelations)->GetFunction(context).ToLocalChecked());
+  thisObj->Set(
+    context, toV8("merge"),
+    FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
 }
 
-void RelationMergerJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
+void RelationMergerJs::merge(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -68,11 +68,9 @@ void RelationMergerJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
   OsmMapPtr map = toCpp<OsmMapPtr>(args[0]);
   ElementId eid1 = toCpp<ElementId>(args[1]);
   ElementId eid2 = toCpp<ElementId>(args[2]);
-  //const bool mergeConflatableMembersOnly = toCpp<bool>(args[3]);
 
   RelationMerger merger;
   merger.setOsmMap(map.get());
-  //merger.setMergeConflatableMembersOnly(mergeConflatableMembersOnly);
   try
   {
     merger.merge(eid1, eid2);

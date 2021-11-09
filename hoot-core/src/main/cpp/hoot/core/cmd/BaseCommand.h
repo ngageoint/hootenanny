@@ -58,7 +58,7 @@ public:
    */
   virtual int runSimple(QStringList& args) = 0;
 
-  QStringList toQStringList(char* argv[], int argc) const;
+  static QStringList toQStringList(char* argv[], int argc);
 
 protected:
 

@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+# There's been some variability in test output here, so disabling for now.
+
+hoot help conflate
+

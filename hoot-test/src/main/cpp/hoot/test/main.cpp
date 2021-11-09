@@ -32,7 +32,6 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/version.h>
-using namespace geos::geom;
 
 // CPP Unit
 #include <cppunit/Exception.h>
@@ -49,52 +48,59 @@ using namespace geos::geom;
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <hoot/js/v8Engine.h>
 
+#include <hoot/test/ConflateCaseTestSuite.h>
 #include <hoot/test/ProcessPool.h>
 #include <hoot/test/ScriptTestSuite.h>
 #include <hoot/test/cmd/TestCommand.h>
-using namespace hoot;
 
 // Qt
 #include <QCoreApplication>
 #include <QDateTime>
+#include <QFileInfo>
 #include <QString>
 #include <QStringList>
 
 // Standard
 #include <iostream>
+#include <map>
 #include <unistd.h>
 #include <vector>
-using namespace std;
 
 // Tgs
 #include <tgs/System/Time.h>
+
+using namespace geos::geom;
+using namespace hoot;
+using namespace std;
 
 using TestPtr = std::shared_ptr<CppUnit::Test>;
 
 enum _TestType
 {
-  NONE          = 0x00,
-  CURRENT       = 0x01,
-  QUICK_ONLY    = 0x02,
-  QUICK         = CURRENT | QUICK_ONLY,
-  SERIAL        = 0x04,
-  CASE_ONLY     = 0x08,
-  SLOW_TESTS    = 0x10,
-  SLOW_ONLY     = SLOW_TESTS | SERIAL | CASE_ONLY,
-  SLOW          = SLOW_ONLY | QUICK,
-  GLACIAL_TESTS = 0x20,
-  GLACIAL_ONLY  = GLACIAL_TESTS | SERIAL,
-  GLACIAL       = GLACIAL_ONLY | SLOW
+  NONE           = 0x00,
+  CURRENT        = 0x01,
+  QUICK_ONLY     = 0x02,
+  QUICK          = CURRENT | QUICK_ONLY,
+  SERIAL         = 0x04,
+  CASE_TESTS     = 0x08,
+  CASE_ONLY      = CASE_TESTS | SERIAL,
+  VALIDATED_ONLY = 0x10,
+  SLOW_TESTS     = 0x20,
+  SLOW_ONLY      = SLOW_TESTS | SERIAL | CASE_ONLY,
+  SLOW           = SLOW_ONLY | QUICK,
+  GLACIAL_TESTS  = 0x40,
+  GLACIAL_ONLY   = GLACIAL_TESTS | SERIAL,
+  GLACIAL        = GLACIAL_ONLY | SLOW
 };
 
 enum _TimeOutValue
@@ -120,41 +126,35 @@ public:
   {
   }
 
-  virtual void addFailure(const CppUnit::TestFailure& failure)
+  void addFailure(const CppUnit::TestFailure& failure) override
   {
     cout << endl << "Failure: " << failure.failedTest()->getName() << endl;
     if (!_suppressFailureDetail)
     {
-      cout  << "  " << failure.sourceLine().fileName() << "(" <<
-        failure.sourceLine().lineNumber() << ") ";
+      cout << "  " << failure.sourceLine().fileName() << "("
+           << failure.sourceLine().lineNumber() << ") ";
       CppUnit::Exception* e = failure.thrownException();
       if (e != nullptr && QString::fromStdString(e->message().details()).trimmed() != "")
-      {
         cout << "  " << e->message().details();
-      }
     }
     cout.flush();
     _success = false;
   }
 
-  virtual bool getSuccess()
+  bool getSuccess() const
   {
     return _success;
   }
 
-  virtual void endTest(CppUnit::Test* test)
+  void endTest(CppUnit::Test* test) override
   {
-    //cout << "test completed: " << test->getName() << endl;
-
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
-    {
       cout << test->getName() << " - " << elapsed << endl;
-    }
     if (elapsed > _testTimeout && _testTimeout >= 0.0)
     {
-      cout << "Test " << test->getName().data() << " ran longer than expected -- " << elapsed <<
-              endl;
+      cout << "Test " << test->getName().data() << " ran longer than expected -- "
+           << elapsed << endl;
     }
     cout.flush();
 
@@ -163,24 +163,19 @@ public:
 
   void showTestNames(bool show) { _showTestName = show; }
 
-  virtual void startSuite(CppUnit::Test* suite)
+  void startSuite(CppUnit::Test* suite) override
   {
     if (_showTestName)
-    {
       cout << "Starting " << suite->getName().data() << endl << flush;
-    }
   }
 
-  virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/)
+  void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/) override
   {
     if (_showElapsed)
-    {
-      cout << endl;
-      cout << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
-    }
+      cout << endl << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
   }
 
-  double getTestTimeout() { return _testTimeout; }
+  double getTestTimeout() const { return _testTimeout; }
 
 private:
 
@@ -215,9 +210,9 @@ void getTestVector(CppUnit::Test* from, vector<CppUnit::Test*>& to)
 
 void getTestVector(const vector<TestPtr>& from, vector<CppUnit::Test*>& to)
 {
-  for (vector<TestPtr>::size_type i = 0; i < from.size(); ++i)
+  for (const auto& test : from)
   {
-    CppUnit::Test* child = from[i].get();
+    CppUnit::Test* child = test.get();
     if (dynamic_cast<CppUnit::TestComposite*>(child))
       getTestVector(child, to);
     else
@@ -225,15 +220,14 @@ void getTestVector(const vector<TestPtr>& from, vector<CppUnit::Test*>& to)
   }
 }
 
-void filterPattern(
-  const std::vector<CppUnit::Test*>& from, std::vector<CppUnit::Test*>& to, QString pattern,
-  bool includeOnMatch)
+void filterPattern(const std::vector<CppUnit::Test*>& from,
+                   std::vector<CppUnit::Test*>& to, QString pattern,
+                   bool includeOnMatch)
 {
   QRegExp regex(pattern);
 
-  for (size_t i = 0; i < from.size(); i++)
+  for (const auto& child : from)
   {
-    CppUnit::Test* child = from[i];
     QString name = QString::fromStdString(child->getName());
     if (regex.exactMatch(name) == includeOnMatch)
       to.push_back(child);
@@ -245,9 +239,9 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
   vector<CppUnit::Test*> vTestsToRun;
   bool filtered = false;
 
-  for (int i = 0; i < args.size(); i++)
+  for (const auto& arg : args)
   {
-    if (args[i].startsWith("--exclude="))
+    if (arg.startsWith("--exclude="))
     {
       if (vTestsToRun.size() > 0)
       {
@@ -255,16 +249,16 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
         vTests.swap(vTestsToRun);
         vTestsToRun.clear();
       }
-      int equalsPos = args[i].indexOf('=');
-      QString regex = args[i].mid(equalsPos + 1);
+      int equalsPos = arg.indexOf('=');
+      QString regex = arg.mid(equalsPos + 1);
       LOG_INFO("Excluding pattern: " << regex);
       filterPattern(vTests, vTestsToRun, regex, false);
       filtered = true;
     }
-    else if (args[i].startsWith("--include="))
+    else if (arg.startsWith("--include="))
     {
-      int equalsPos = args[i].indexOf('=');
-      QString regex = args[i].mid(equalsPos + 1);
+      int equalsPos = arg.indexOf('=');
+      QString regex = arg.mid(equalsPos + 1);
       LOG_INFO("Including only tests that match: " << regex);
       filterPattern(vTests, vTestsToRun, regex, true);
       filtered = true;
@@ -277,23 +271,18 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
 
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 {
-  //cout << t->getName() << endl;
   if (name == t->getName())
-  {
     return t;
-  }
 
   CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(t);
   if (suite != 0)
   {
     vector<CppUnit::Test*> children = suite->getTests();
-    for (size_t i = 0; i < children.size(); ++i)
+    for (auto child : children)
     {
-      CppUnit::Test* result = findTest(children[i], name);
+      CppUnit::Test* result = findTest(child, name);
       if (result != 0)
-      {
         return result;
-      }
     }
   }
 
@@ -302,77 +291,129 @@ CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 
 CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
 {
-  for (size_t i = 0; i < vTests.size(); i++)
+  for (const auto& test : vTests)
   {
-    //cout << vTests[i]->getName() << endl;
-    if (name == vTests[i]->getName())
-    {
-      return vTests[i].get();
-    }
-
+    if (name == test->getName())
+      return test.get();
     // Check to see if it's a suite of tests...
-    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i].get());
+    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(test.get());
     if (suite != 0)
     {
       vector<CppUnit::Test*> children = suite->getTests();
-      for (size_t j = 0; j < children.size(); ++j)
+      for (auto child : children)
       {
-        CppUnit::Test* result = findTest(children[j], name);
+        CppUnit::Test* result = findTest(child, name);
         if (result != 0)
-        {
           return result;
-        }
       }
     }
   }
-
   return nullptr;
 }
 
 void getNames(vector<string>& names, CppUnit::Test* t)
 {
   CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(t);
-  if (suite != 0)
+  if (suite != nullptr)
   {
     vector<CppUnit::Test*> children = suite->getTests();
-    for (size_t i = 0; i < children.size(); ++i)
-    {
-      getNames(names, children[i]);
-    }
+    for (auto child : children)
+      getNames(names, child);
   }
-  else
-  {
+  else if (t != nullptr)
     names.push_back(t->getName());
-  }
 }
 
 void getNames(vector<string>& names, const std::vector<CppUnit::Test*>& vTests)
 {
-  for (size_t i = 0; i < vTests.size(); i++)
-  {
-    // See if our test is really a suite
-    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i]);
-    if (suite != 0)
-    {
-      vector<CppUnit::Test*> children = suite->getTests();
-      for (size_t j = 0; j < children.size(); ++j)
-      {
-        getNames(names, children[j]);
-      }
-    }
-    else
-    {
-      names.push_back(vTests[i]->getName());
-    }
-  }
+  for (auto test : vTests)
+    getNames(names, test);
 }
 
 void printNames(const std::vector<CppUnit::Test*>& vTests)
 {
   vector<string> names;
   getNames(names, vTests);
-  for (vector<string>::iterator it = names.begin(); it != names.end(); ++it)
-    cout << *it << endl;
+  for (const auto& test : names)
+    cout << test << endl;
+}
+
+const QMap<QString, QMap<QString, QString>>& getAllOptions()
+{
+  static QMap<QString, QMap<QString, QString>> options;
+
+  if (options.size() == 0)
+  {
+    QMap<QString, QString> log_level;
+    log_level["--debug"] = "Show debug level log messages and above";
+    log_level["--error"] = "Show error log level messages and above";
+    log_level["--fatal"] = "Show fatal error log level messages only";
+    log_level["--info"] = "Show info log level messages and above";
+    log_level["--status"] = "Show status log level messages and above";
+    log_level["--trace"] = "Show trace log level messages and above";
+    log_level["--verbose"] = "Show verbose log level messages and above";
+    log_level["--warn"] = "Show warning log level messages and above";
+    options["Log Level"] = log_level;
+
+    QMap<QString, QString> test_list;
+    test_list["--all"] = "Run all the tests";
+    test_list["--case-only"] = "Run the conflate case tests only";
+    test_list["--current"] = "Run the 'current' level tests";
+    test_list["--glacial"] = "Run 'glacial' level tests and below";
+    test_list["--glacial-only"] = "Run the 'glacial' level tests only";
+    test_list["--quick"] = "Run the 'quick' level' tests";
+    test_list["--quick-only"] = "Run the 'quick' level tests only";
+    test_list["--slow"] = "Run the 'slow' level tests and above";
+    test_list["--slow-only"] = "Run the 'slow' level tests only";
+    // Don't show this option if we're not configured to validate test output.
+    if (ConfigOptions().getTestValidationEnable())
+    {
+      test_list["--validated-only"] = "Run only tests where some or all of the output is validated";
+    }
+    test_list["--single [test name]"] = "Run only the test specified";
+    test_list["--exclude=[regex]"] =
+      "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
+    test_list["--include=[regex]"] =
+      "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
+    options["Test List"] = test_list;
+
+    QMap<QString, QString> run_parallel;
+    run_parallel["--parallel [process count]"] =
+      "Run the specified tests in parallel with the specified number of processes";
+    options["Run in parallel"] = run_parallel;
+
+    QMap<QString, QString> advanced;
+    advanced["--all-names"] = "Print the names of all the tests without running them";
+    advanced["--check-env"] = "Check the environment before and after the test is run, good for debugging";
+    advanced["--diff"] = "Print a diff when a script test fails";
+    advanced["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
+    advanced["--names"] = "Show the names of all the tests as they run";
+    advanced["--suppress-failure-detail"] =
+      "Do not show test failure detailed messages; disables --diff for script tests";
+    options["Advanced"] = advanced;
+  }
+  return options;
+}
+
+QMap<QString, QString> getAllowedOptions()
+{
+  const QMap<QString, QMap<QString, QString>>& all_options = getAllOptions();
+  QMap<QString, QString> options;
+  for (const auto& category : all_options)
+  {
+    for (auto entry = category.begin(); entry != category.end(); ++entry)
+      options.insert(entry.key(), entry.value());
+  }
+  return options;
+}
+
+QStringList getAllowedOptionNames()
+{
+  QStringList optionNames;
+  const QMap<QString, QString> options = getAllowedOptions();
+  for (auto option = options.begin(); option != options.end(); ++option)
+    optionNames.append(option.key().split(QRegExp("\\s+|="))[0]);
+  return optionNames;
 }
 
 void setupTestingConfig(QStringList& args)
@@ -381,9 +422,15 @@ void setupTestingConfig(QStringList& args)
   conf().clear();
   ConfigOptions::populateDefaults(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-  Settings::parseCommonArguments(args);
-  //  We require that all tests use Testing.conf as a starting point and any conf values
-  //  specified by it may be overridden when necessary.
+  StringUtils::removeAllContaining(args, "hoottest");
+  LOG_VART(args);
+  // Settings doesn't recognize all HootTest specific options, so pass in a list from here to
+  // ignore. Don't worry about getAllowedOptionNames() returning the log level options to be
+  // ignored...the Settings class will parse them anyway.
+  Settings::parseCommonArguments(args, getAllowedOptionNames());
+  LOG_VART(args);
+  // We require that all tests use Testing.conf as a starting point and any conf values specified by
+  // it may be overridden when necessary.
   conf().loadJson(ConfPath::search("Testing.conf"));
 }
 
@@ -395,168 +442,131 @@ void runSingleTest(CppUnit::Test* pTest, QStringList& args, CppUnit::TextTestRes
   pTest->run(pResult);
 }
 
-void populateTests(
-  _TestType t, std::vector<TestPtr>& vTests, bool printDiff, bool suppressFailureDetail,
-  bool hideDisableTests = false)
+void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
+                   bool suppressFailureDetail, bool hideDisableTests = false)
 {
+  bool printValidationReportDiff = false;
+  if (ConfigOptions().getTestValidationEnable() && printDiff)
+    printValidationReportDiff = true;
+
   //  Add glacial tests if the bit flag is set
   if (t & GLACIAL_TESTS)
   {
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests,
-          suppressFailureDetail)));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, false));
     if (t & SERIAL)
     {
-      vTests.push_back(
-        TestPtr(
-          new ScriptTestSuite(
-            "test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests,
-            suppressFailureDetail)));
+      vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT,
+                                                         hideDisableTests, suppressFailureDetail, false));
     }
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
   }
-  //  Slow tests are included in SLOW and GLACIAL
-  //  Add slow tests if the bit flag is set
+  //  Slow tests are included in SLOW and GLACIAL; Add slow tests if the bit flag is set
   if (t & SLOW_TESTS)
   {
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests, suppressFailureDetail)));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/slow/", printDiff, SLOW_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, false));
     if (t & SERIAL)
     {
-      vTests.push_back(
-        TestPtr(
-          new ScriptTestSuite(
-            "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
-            suppressFailureDetail)));
+      vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT,
+                                                         hideDisableTests, suppressFailureDetail, false));
     }
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
   }
-  //  Quick tests are included in QUICK, SLOW, and GLACIAL
-  //  Add quick tests if the bit flag is set
+  //  Quick tests are included in QUICK, SLOW, and GLACIAL; Add quick tests if the bit flag is set
   if (t & QUICK_ONLY)
   {
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests, suppressFailureDetail)));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/quick/", printDiff, QUICK_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, false));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
   }
-  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
-  //  Add current tests if the bit flag is set
+  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL; Add current tests if the bit
+  //  flag is set
   if (t & CURRENT)
   {
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests,
-          suppressFailureDetail)));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/current/", printDiff, QUICK_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, false));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
   }
   //  Add serial tests if the bit flag is set
   if (t == SERIAL)
   {
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests,
-          suppressFailureDetail)));
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
-          suppressFailureDetail)));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, false));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, false));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases/serial", suppressFailureDetail,
+                                                             printValidationReportDiff, hideDisableTests, true));
   }
-  //  Test cases go last because of the way they change the environment
-  if (t & CASE_ONLY)
+  //  Test cases go last because of the way they change the environment.
+  if (t & CASE_TESTS)
   {
-    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", suppressFailureDetail,
+                                                             printValidationReportDiff, hideDisableTests));
+    if (t & SERIAL)
+    {
+      vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases/serial", suppressFailureDetail,
+                                                               printValidationReportDiff, hideDisableTests, true));
+    }
   }
-}
-
-QMap<QString, QString> getAllowedOptions()
-{
-  // keep this list alphabetized
-  QMap<QString, QString> options;
-  options["--all"] = "Run all the tests";
-  options["--all-names"] = "Print the names of all the tests without running them";
-  options["--case-only"] = "Run the conflate case tests only";
-  options["--check-env"] = "Check the environment before and after the test is run, good for debugging";
-  options["--current"] = "Run the 'current' level tests";
-  options["--debug"] = "Show debug level log messages and above";
-  options["--diff"] = "Print a diff when a script test fails";
-  options["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
-  options["--error"] = "Show error log level messages and above";
-  options["--exclude=[regex]"] =
-    "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
-  options["--fatal"] = "Show fatal error log level messages only";
-  options["--glacial"] = "Run 'glacial' level tests and below";
-  options["--glacial-only"] = "Run the 'glacial' level tests only";
-  options["--include=[regex]"] =
-    "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
-  options["--info"] = "Show info log level messages and above";
-  options["--quick"] = "Run the 'quick' level' tests";
-  options["--quick-only"] = "Run the 'quick' level tests only";
-  options["--names"] = "Show the names of all the tests as they run";
-  options["--parallel [process count]"] =
-    "Run the specified tests in parallel with the specified number of processes";
-  options["--single [test name]"] = "Run only the test specified";
-  options["--slow"] = "Run the 'slow' level tests and above";
-  options["--slow-only"] = "Run the 'slow' level tests only";
-  options["--status"] = "Show status log level messages and above";
-  options["--suppress-failure-detail"] =
-    "Do not show test failure detailed messages; disables --diff for script tests";
-  options["--trace"] = "Show trace log level messages and abov";
-  options["--verbose"] = "Show verbose log level messages and above";
-  options["--warn"] = "Show warning log level messages and above";
-  return options;
-}
-
-QStringList getAllowedOptionNames()
-{
-  QStringList optionNames;
-  const QMap<QString, QString> options = getAllowedOptions();
-  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  // If test output validation is enabled, then we want to enable only those tests that use it. At
+  // this time that includes all case tests (includes serial) and selected script tests from the
+  // slow and glacial suites (none of which happen to be serial tests). As script tests are
+  // updated to run output validation, this may need to be updated. Unfortunately, the displayed
+  // test count won't be accurate since ScriptTestSuite filters out tests that don't run validation.
+  // No need to check test.validation.enable here as the --validated-only command line option is
+  // suppressed from availability before this point if the option isn't enabled.
+  if (t == VALIDATED_ONLY)
   {
-    optionNames.append(it.key().split(QRegExp("\\s+|="))[0]);
+    const bool printValidationReportDiff = printDiff;
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/glacial/", printValidationReportDiff, GLACIAL_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, true));
+    vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/slow/", printValidationReportDiff, SLOW_WAIT,
+                                                       hideDisableTests, suppressFailureDetail, true));
+    // Run case tests last for the reason noted previously.
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", suppressFailureDetail,
+                                                             printValidationReportDiff, hideDisableTests));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases/serial", suppressFailureDetail,
+                                                             printValidationReportDiff, hideDisableTests, true));
   }
-  return optionNames;
 }
 
 int largestOptionNameSize()
 {
   int largest = 0;
   const QMap<QString, QString> options = getAllowedOptions();
-  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  for (auto it = options.begin(); it != options.end(); ++it)
   {
     if (it.key().size() > largest)
-    {
       largest = it.key().size();
-    }
   }
   return largest;
 }
 
 void usage(char* argv)
 {
-  cout << argv << " Usage:" << endl;
-  const QMap<QString, QString> options = getAllowedOptions();
+  QString commandName(argv);
+  QFileInfo commandInfo(commandName);
+  commandName = commandInfo.baseName();
+  cout << commandName << " Usage:" << endl << endl;
+  cout << commandName << " [log level] [test list] [--parallel] [advanced]" << endl << endl;
+  const QMap<QString, QMap<QString, QString>>& options = getAllOptions();
   const int largestSize = largestOptionNameSize();
-  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  for (auto category = options.begin(); category != options.end(); ++category)
   {
-    cout << "  " << it.key();
-    const int numSpaces = largestSize - it.key().size();
-    for (int i = 0; i < numSpaces; i++)
+    cout << category.key() << ":" << endl;
+    for (auto entry = category->begin(); entry != category->end(); ++entry)
     {
-      cout << " ";
+      cout << "  " << entry.key();
+      const int numSpaces = largestSize - entry.key().size();
+      for (int i = 0; i < numSpaces; i++)
+        cout << " ";
+      cout << " - " << entry.value() << endl;
     }
-    cout << " - " << it.value() << endl;
+    cout << endl;
   }
   cout << endl << "See the Hootenanny Developer Guide for more information." << endl;
 }
@@ -577,6 +587,8 @@ _TestType getTestType(const QStringList& args)
     return GLACIAL_ONLY;
   else if (args.contains("--case-only"))
     return CASE_ONLY;
+  else if (args.contains("--validated-only"))
+    return VALIDATED_ONLY;
   else // --all or --glacial
     return GLACIAL;
 }
@@ -584,9 +596,11 @@ _TestType getTestType(const QStringList& args)
 _TimeOutValue getTimeoutValue(_TestType type)
 {
   if (type & GLACIAL_ONLY)
-      return GLACIAL_WAIT;
+    return GLACIAL_WAIT;
   else if (type & SLOW_ONLY)
     return SLOW_WAIT;
+  else if (type == VALIDATED_ONLY)
+    return GLACIAL_WAIT;
   else
     return QUICK_WAIT;
 }
@@ -599,12 +613,41 @@ void reportFailedTests(int failedTests, int totalTests)
   cout << failedTests << " of " << totalTests << " tests failed" << endl;
 }
 
+void verifyValidationConfig()
+{
+  // Script tests require a dummy file written out so that they know its ok to run validation, since
+  // they can't do the compile time check.
+  const QString testValidationEnabledFile = "test-output/test-validation-enabled";
+  if (ConfigOptions().getTestValidationEnable())
+  {
+    if (!QFile::exists(testValidationEnabledFile))
+      FileUtils::writeFully(testValidationEnabledFile, "");
+  }
+  else
+  {
+    if (QFile::exists(testValidationEnabledFile) && !QFile::remove(testValidationEnabledFile))
+      throw TestConfigurationException("Unable to remove: " + testValidationEnabledFile);
+  }
+}
+
+std::shared_ptr<TestCommand> parseTestCommand(char* argv[])
+{
+  vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(TestCommand::className());
+  std::shared_ptr<TestCommand> command;
+  for (size_t i = 0; i < cmds.size(); i++)
+  {
+    command = Factory::getInstance().constructObject<TestCommand>(cmds[i]);
+    QString argName = command->getName();
+    if (QString(argv[1]) == argName)
+      break;
+    else
+      command.reset();
+  }
+  return command;
+}
+
 int main(int argc, char* argv[])
 {
-  // Set the Qt hash seed to 0 for consistent test results.
-  conf().set(ConfigOptions().getHashSeedZeroKey(), true);
-  qSetGlobalQHashSeed(0);
-
   if (argc == 1)
   {
     usage(argv[0]);
@@ -612,29 +655,19 @@ int main(int argc, char* argv[])
   }
   else
   {
+    // Set the Qt hash seed to 0 for consistent test results.
+    conf().set(ConfigOptions().getHashSeedZeroKey(), true);
+    qSetGlobalQHashSeed(0);
+
+    // Init hoot, as it handles loading any configured submodules.
     Hoot::getInstance();
     Log::getInstance().setLevel(Log::Warn);
 
     QCoreApplication app(argc, argv);
 
     // HootTest has some utility commands that don't actually run the tests. Check for those first
-    // before running the tests.
-    vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(TestCommand::className());
-    std::shared_ptr<TestCommand> command;
-    for (size_t i = 0; i < cmds.size(); i++)
-    {
-      command = Factory::getInstance().constructObject<TestCommand>(cmds[i]);
-      QString argName = command->getName();
-      if (QString(argv[1]) == argName)
-      {
-        break;
-      }
-      else
-      {
-        command.reset();
-      }
-    }
-
+    // before running the tests. Each command will set up its own config.
+    std::shared_ptr<TestCommand> command = parseTestCommand(argv);
     if (command != nullptr)
     {
       try
@@ -649,22 +682,21 @@ int main(int argc, char* argv[])
       }
     }
 
-    QStringList args;
-    for (int i = 1; i < argc; i++)
-    {
-      args << argv[i];
-    }
+    // Determine whether we validating any test output or not and set the environment up
+    // appropriately.
+    verifyValidationConfig();
+
+    QStringList args = BaseCommand::toQStringList(argv, argc);
+    LOG_VART(args);
 
     // This will run on a subsequent pass as part of --listen if --parallel was used.
     if (!args.contains("--parallel"))
-    {
       init();
-    }
 
     const QStringList allowedOptions = getAllowedOptionNames();
-    for (int i = 0; i < args.size(); i++)
+    for (auto it = args.begin(); it != args.end(); ++it)
     {
-      const QString arg = args.at(i).split("=")[0];
+      const QString arg = it->split("=")[0];
       if (arg.startsWith("--") && arg != "--listen" && !allowedOptions.contains(arg))
       {
         LOG_ERROR("Invalid HootTest option: " << arg);
@@ -687,7 +719,7 @@ int main(int argc, char* argv[])
       Log::getInstance().setLevel(Log::Error);
     }
 
-    // Print all names & exit without running anything
+    // Print all names & exit without running anything.
     if (args.contains("--all-names"))
     {
       populateTests(getTestType(args), vAllTests, printDiff, suppressFailureDetail);
@@ -698,7 +730,7 @@ int main(int argc, char* argv[])
       return 0;
     }
 
-    // Setup the environment checks if requested
+    // Setup the environment checks if requested.
     if (args.contains("--check-env"))
       HootTestFixture::setCompareEnv(true);
 
@@ -707,9 +739,8 @@ int main(int argc, char* argv[])
     {
       int i = args.indexOf("--single") + 1;
       if (i >= args.size())
-      {
         throw HootException("Expected a test name after --single.");
-      }
+
       QString testName = args[i];
 
       listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, -1);
@@ -794,7 +825,7 @@ int main(int argc, char* argv[])
       double start = Tgs::Time::getTime();
 
       int nproc = 1;
-      //  With no number after --parallel use the number of online processors
+      //  With no number after --parallel, use the number of online processors.
       int nprocs_available = sysconf(_SC_NPROCESSORS_ONLN);
       int i = args.indexOf("--parallel") + 1;
       if (i >= args.size())
@@ -817,7 +848,7 @@ int main(int argc, char* argv[])
       getNames(allNames, vTestsToRun);
       set<string> nameCheck(allNames.begin(), allNames.end());
 
-      //  Get a list of all conflate cases jobs that must be processed last
+      //  Get a list of all conflate cases jobs that must be processed last.
       vector<TestPtr> conflateCases;
       populateTests(CASE_ONLY, conflateCases, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vConflateCases;
@@ -826,24 +857,30 @@ int main(int argc, char* argv[])
       getNames(casesNames, vConflateCases);
       set<string> casesSet(casesNames.begin(), casesNames.end());
 
-      //  Add all of the jobs that must be done serially and are a part of the selected tests
+      //  Add all of the jobs that must be done serially and are a part of the selected tests.
       vector<TestPtr> serialTests;
       populateTests(SERIAL, serialTests, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vSerialTests;
       getTestVector(serialTests, vSerialTests);
       vector<string> serialNames;
       getNames(serialNames, vSerialTests);
-      for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
+      for (const auto& name : serialNames)
       {
-        if (nameCheck.find(*it) != nameCheck.end())
-          pool.addJob(QString(it->c_str()), ProcessPool::SerialJob);
+        if (nameCheck.find(name) != nameCheck.end())
+        {
+          //  Insert the serial job or serial case job into the pool
+          ProcessPool::JobType t = ProcessPool::SerialJob;
+          if (casesSet.find(name) != casesSet.end())
+            t = static_cast<ProcessPool::JobType>(ProcessPool::SerialJob | ProcessPool::ConflateJob);
+          pool.addJob(QString(name.c_str()), t);
+        }
       }
-      //  Add all of the remaining non-case jobs in the test suite
-      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
+      //  Add all of the remaining non-case jobs in the test suite.
+      for (const auto& name : allNames)
       {
-        //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's
-        pool.addJob(QString(it->c_str()),
-          (casesSet.find(*it) != casesSet.end()) ? ProcessPool::ConflateJob : ProcessPool::ParallelJob);
+        const QString testName = QString(name.c_str());
+        //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's.
+        pool.addJob(testName, (casesSet.find(name) != casesSet.end()) ? ProcessPool::ConflateJob : ProcessPool::ParallelJob);
       }
 
       pool.startProcessing();
@@ -861,7 +898,7 @@ int main(int argc, char* argv[])
       if (args.contains("--names"))
         listener->showTestNames(true);
 
-      //  Setup the testing configs
+      //  Setup the testing configs.
       setupTestingConfig(args);
 
       // set up listener

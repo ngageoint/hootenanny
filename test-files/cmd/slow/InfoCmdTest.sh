@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Note that not all options support the JSON format, so we only test those that do. Also, the JSON
+# itself isn't being validated since a single line is pulled out of it.
+
 # CONFIG OPTIONS
 # use a static config file, so this is not susceptible to config file changes
 CONFIG_FILE=test-files/cmd/quick/ConfigOptionsCmdTest/ConfigOptions.asciidoc
@@ -29,9 +32,13 @@ hoot info $CONFIG -D config.options.file=$CONFIG_FILE --config-options --option-
 # Since the list of a lot of these will constantly be changing, just going to grep out ones that are unlikely to change any time soon.
 
 # FEATURE EXTRACTORS
-echo "Listing all option names..."
+echo "Listing feature extractors..."
 echo ""
 hoot info $CONFIG --feature-extractors | grep "SampledAngleHistogramExtractor"
+echo ""
+echo "Listing feature extractors as json..."
+echo ""
+hoot info $CONFIG --feature-extractors --json | grep "SampledAngleHistogramExtractor"
 echo ""
 
 # FORMATS
@@ -112,6 +119,10 @@ echo "Listing a script matcher..."
 echo ""
 hoot info $CONFIG --matchers | grep "ScriptMatch"
 echo ""
+echo "Listing a matcher as json..."
+echo ""
+hoot info $CONFIG --matchers --json | grep "HighwayMatch"
+echo ""
 
 # MERGERS
 echo "Listing a merger..."
@@ -121,6 +132,10 @@ echo ""
 echo "Listing a script merger..."
 echo ""
 hoot info $CONFIG --mergers | grep "ScriptMerger"
+echo ""
+echo "Listing a merger as json..."
+echo ""
+hoot info $CONFIG --mergers --json | grep "PoiPolygonMerger"
 echo ""
 
 # OPERATORS
@@ -142,41 +157,57 @@ echo "Listing a tag merger..."
 echo ""
 hoot info $CONFIG --tag-mergers | grep "AverageTagMerger"
 echo ""
+echo "Listing a tag merger as json..."
+echo ""
+hoot info $CONFIG --tag-mergers --json | grep "AverageTagMerger"
+echo ""
 
 # CLEANING OPS
-echo "Listing cleaning operations..."
+echo "Listing a cleaning operation..."
 echo ""
 hoot info $CONFIG --cleaning-operations | grep "DuplicateWayRemover"
 echo ""
 
 # SUBLINE MATCHERS
-echo "Listing subline matchers..."
+echo "Listing a subline matcher..."
 echo ""
 hoot info $CONFIG --subline-matchers | grep "FrechetSublineMatcher"
 echo ""
+echo "Listing a subline matcher as json..."
+echo ""
+hoot info $CONFIG --subline-matchers --json | grep "FrechetSublineMatcher"
+echo ""
 
 # SUBLINE STRING MATCHERS
-echo "Listing subline string matchers..."
+echo "Listing a subline string matcher..."
 echo ""
 hoot info $CONFIG --subline-string-matchers | grep "MaximalSublineStringMatcher"
 echo ""
+echo "Listing a subline string matcher as json..."
+echo ""
+hoot info $CONFIG --subline-string-matchers --json | grep "MaximalSublineStringMatcher"
+echo ""
 
 # CONFLATE PRE OPS
-echo "Listing pre-conflation operations..."
+echo "Listing a pre-conflation operation..."
 echo ""
 hoot info $CONFIG --conflate-pre-operations | grep "MapCleaner"
 echo ""
 
 # CONFLATE POST OPS
-echo "Listing post-conflation operations..."
+echo "Listing a post-conflation operation..."
 echo ""
 hoot info $CONFIG --conflate-post-operations | grep "SuperfluousNodeRemover"
 echo ""
 
 # WAY JOINERS
-echo "Listing way joiners..."
+echo "Listing a way joiner..."
 echo ""
 hoot info $CONFIG --way-joiners | grep "WayJoinerAdvanced"
+echo ""
+echo "Listing a way joiner as json..."
+echo ""
+hoot info $CONFIG --way-joiners --json | grep "WayJoinerAdvanced"
 echo ""
 
 # WAY SNAP CRITERIA
@@ -190,43 +221,85 @@ hoot info $CONFIG -D match.creators="HighwayMatchCreator;ScriptMatchCreator,Rive
 echo ""
 
 # CONFLATABLE CRITERIA
-echo "Listing conflatable criteria..."
+echo "Listing a conflatable criterion..."
 echo ""
 hoot info $CONFIG --conflatable-criteria | grep "BuildingCriterion"
 echo ""
+echo "Listing a conflatable criterion as json..."
+echo ""
+hoot info $CONFIG --conflatable-criteria --json | grep "BuildingCriterion"
+echo ""
 
 # FILTERS (aka ElementCriterion)
-echo "Listing filters..."
+echo "Listing a filter..."
 echo ""
 hoot info $CONFIG --filters | grep "NonBuildingAreaCriterion"
 echo ""
+echo "Listing a filter as json..."
+echo ""
+hoot info $CONFIG --filters --json | grep "NonBuildingAreaCriterion"
+echo ""
 
 # CRITERION CONSUMERS
-echo "Listing criterion consumers..."
+echo "Listing a criterion consumer..."
 echo ""
 hoot info $CONFIG --criterion-consumers | grep "CopyMapSubsetOp"
 echo ""
 
 # STRING COMPARATORS
-echo "Listing string comparators..."
+echo "Listing a string comparator..."
 echo ""
 hoot info $CONFIG --string-comparators | grep "ExactStringDistance"
 echo ""
+echo "Listing a string comparator as json..."
+echo ""
+hoot info $CONFIG --string-comparators --json | grep "ExactStringDistance"
+echo ""
 
 # GEOMETRY TYPE CRITERIA
-echo "Listing geometry type criteria..."
+echo "Listing a geometry type criterion..."
 echo ""
 hoot info $CONFIG --geometry-type-criteria | grep "TunnelCriterion"
 echo ""
+echo "Listing a geometry type criterion as json..."
+echo ""
+hoot info $CONFIG --geometry-type-criteria --json | grep "TunnelCriterion"
+echo ""
 
 # VALUE AGGREGATORS
-echo "Listing value aggregators..."
+echo "Listing a value aggregator..."
 echo ""
 hoot info $CONFIG --value-aggregators | grep "MinAggregator"
 echo ""
+echo "Listing a value aggregator as json..."
+echo ""
+hoot info $CONFIG --value-aggregators --json | grep "MinAggregator"
+echo ""
 
 # VALIDATORS
-echo "Listing validators..."
+echo "Listing a validator..."
 echo ""
 hoot info $CONFIG --validators | grep "RoadCrossingPolyMarker"
+echo ""
+echo "Listing a validator as json..."
+echo ""
+hoot info $CONFIG --validators --json | grep "RoadCrossingPolyMarker"
+echo ""
+
+# LANGUAGES
+echo "Listing detectable languages..."
+echo ""
+hoot info $CONFIG -D language.info.provider=HootServicesLanguageInfoMockClient --languages --detectable
+echo ""
+echo "Listing translatable languages..."
+echo ""
+hoot info $CONFIG -D language.info.provider=HootServicesLanguageInfoMockClient --languages --translatable
+echo ""
+echo "Listing available language detectors..."
+echo ""
+hoot info $CONFIG -D language.info.provider=HootServicesLanguageInfoMockClient --languages --detectors
+echo ""
+echo "Listing available to English language translators..."
+echo ""
+hoot info $CONFIG -D language.info.provider=HootServicesLanguageInfoMockClient --languages --translators
 echo ""

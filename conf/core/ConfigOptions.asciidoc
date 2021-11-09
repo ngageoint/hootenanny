@@ -559,9 +559,9 @@ recognized during conflation.
 * Default Value: `false`
 
 If enabled, during building merging conflation will look for a "changed" building defined as a
-matched building pair where their Intersection over Union value is greater than zero but falls below
-the value specified in building.changed.review.iou.threshold. If the pair is classified as "changed"
-they will be marked for review.
+matched building pair where their Intersection Over Union value (IoU) is greater than zero but falls
+below the value specified in building.changed.review.iou.threshold. If the pair is classified as
+"changed" they will be marked for review.
 
 === building.changed.review.iou.threshold
 
@@ -612,7 +612,7 @@ The threshold at which a match is called a match for buildings. The valid range 
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === building.merge.many.to.many.matches
 
@@ -631,7 +631,7 @@ The threshold at which a miss is called a miss for buildings. The valid range is
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === building.part.merger.thread.count
 
@@ -667,7 +667,7 @@ The threshold at which a review is called a review for buildings. The valid rang
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === changeset.allow.deleting.reference.features
 
@@ -998,7 +998,7 @@ The default threshold at which a match is called a match. The valid range is (0.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === conflate.miss.threshold.default
 
@@ -1009,7 +1009,7 @@ The default threshold at which a miss is called a miss. The valid range is (0.0,
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === conflate.post.ops
 
@@ -1036,6 +1036,7 @@ See also:
 ** `RelationCircularRefRemover`
 ** `MultilineStringMergeRelationCollapser`
 ** `RoadCrossingPolyMarker`
+** `RailwaysCrossingMarker`
 ** `ApiTagTruncateVisitor`
 ** `AddHilbertReviewSortOrderOp`
 
@@ -1086,7 +1087,7 @@ other situations when the relationship is not clear. The valid range is (0.0, 1.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === conflate.rubber.sheet.element.criteria
 
@@ -1811,7 +1812,7 @@ The threshold at which a match is called a match for roads. The valid range is (
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === highway.matcher.heading.delta
 
@@ -1882,7 +1883,7 @@ The threshold at which a miss is called a miss for roads. The valid range is (0.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === highway.review.threshold
 
@@ -1893,7 +1894,7 @@ The threshold at which a review is called a review for roads. The valid range is
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === highway.subline.matcher
 
@@ -2538,6 +2539,7 @@ The default value was determined experimentally and may need tweaking per enviro
 ** `CrossingWays.SelfCrossing`
 ** `CrossingWays.Ways`
 ** `DirectionNodes`
+** `DuplicateNode`
 ** `DuplicateRelation`
 ** `DuplicateWay`
 ** `DuplicatedWayNodes`
@@ -2572,9 +2574,9 @@ The default value was determined experimentally and may need tweaking per enviro
 
 List of JOSM validator Java class names without namespace prefixes or file extensions (e.g.
 `DuplicatedWayNodes`) to use during validation or cleaning. With each JOSM upgrade a check needs to
-be made for new available validators by looking at the hardcoded list in the
-`OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118. See also:
-`hoot.validators`.
+be made for new available validators by comparing the hardcoded list in the
+`OsmValidator::CORE_TEST_CLASSES` member variable for the current version with the previous version.
+See also: `hoot.validators`.
 
 === json.format.hootenanny
 
@@ -3014,6 +3016,15 @@ where partial chunks of elements only may be present, or workflows where you are
 remote sourced data with missing element children, the default value may need to be changed. This
 option is not supported by all file based readers.
 
+=== map.stitcher.threshold
+
+* Data Type: double
+* Default Value: `3`
+
+Size, in meters, of the overlap buffer on either side of the intersection of maps where the maps
+are stitched.  All endpoints of ways in both maps inside this buffer are considered for the stitching
+process.
+
 === map.writer.schema
 
 * Data Type: string
@@ -3350,7 +3361,7 @@ range is (0.0, 1.0].
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === network.matcher
 
@@ -3385,7 +3396,7 @@ The threshold at which a network miss is called a miss. The valid range is (0.0,
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === network.optimization.iterations
 
@@ -3414,7 +3425,7 @@ other situations when the relationship is not clear. The valid range is (0.0, 1.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === network.subline.max.cache.size
 
@@ -3481,6 +3492,21 @@ ways for their nodes to be counted, otherwise the criterion will be ignored.
 If false, in order for a relation to be deemed not conflatable all of its members must also not be
 conflatable. If true, a relation can be deemed not conflatable even if any of its members are also
 conflatable.
+
+=== non.osm.convert.merge.nearby.nodes
+
+* Data Type: bool
+* Default Value: `true`
+
+Merges nearby nodes together when converting from a non-OSM format to OSM.
+
+=== non.osm.convert.simplify.complex.buildings
+
+* Data Type: bool
+* Default Value: `false`
+
+Implicitly merges certain individual building parts into a single part when converting from a non-OSM
+format to OSM.
 
 === offset.intersection.max
 
@@ -3770,21 +3796,6 @@ hoot convert \
   test-files/io/SampleTranslation.osm \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ----
-
-=== ogr2osm.merge.nearby.nodes
-
-* Data Type: bool
-* Default Value: `true`
-
-Merges nearby nodes together when converting from an OGR format to OSM.
-
-=== ogr2osm.simplify.complex.buildings
-
-* Data Type: bool
-* Default Value: `false`
-
-Implicitly merges certain individual building parts into a single part when converting from an OGR
-format to OSM.
 
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
@@ -4381,17 +4392,6 @@ for details on the JSON format.
 Automatically calculates the search radius to be used during conflation of power lines using rubber
 sheet tie point distances.
 
-=== power.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === power.line.matcher.distance.weight.coefficient
 
 * Data Type: double
@@ -4415,28 +4415,6 @@ The distance around a point on a power line to look when calculating the heading
 * Default Value: `155.0`
 
 Sets that maximum angle, in degrees, that is still considered a power line match.
-
-=== power.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== power.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === power.line.subline.matcher
 
@@ -4483,15 +4461,6 @@ The distance around a point on a railway to look when calculating the heading. S
 
 Sets that maximum angle, in degrees, that is still considered a railway match.
 
-=== railway.one.to.many.delete.secondary
-
-* Data Type: bool
-* Default Value: `true`
-
-If this is enabled, `railway.one.to.many.match` is enabled, and the conditions specified in
-`railway.one.to.many.match` are met, then matching secondary rail features will be deleted from
-conflated output.
-
 === railway.one.to.many.identifying.keys
 
 * Data Type: list
@@ -4517,6 +4486,15 @@ having a key matching that in `railway.one.to.many.identifying.keys`. Only tag m
 tags identified in `railway.one.to.many.transfer.keys` will be performed with no geometry merging,
 regardless of the conflation workflow in use.
 
+=== railway.one.to.many.transfer.all.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When this and `railway.one.to.many.match` are enabled, all tags from secondary rail features
+involved in a one to many match are transferred over to reference features. This overrides
+`railway.one.to.many.transfer.keys`.
+
 === railway.one.to.many.transfer.keys
 
 * Data Type: list
@@ -4540,7 +4518,34 @@ The way subline matcher to use when determining matching sublines.
 * Default Value: `0.8`
 
 Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
-to have similar tags.
+to have tags similar enough with another rail feature to be considered match.
+
+=== railways.crossing.marker.ignore.types
+
+* Data Type: list
+* Default Value:
+** `bridge=yes`
+** `railway=level_crossing`
+** `railway=subway`
+** `railway=tram`
+** `service=yard`
+** `tunnel=yes`
+
+List of tag key/value pairs that `RailwaysCrossingMarker` will ignore when marking railways which
+cross each other. Add to this list tags rail features possess where rail crossing is deemed
+acceptable.
+
+=== railways.crossing.marker.mark.intra.dataset.crossings
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, `RailwaysCrossingMarker` will skip marking any crossing railways for review that are from
+the same input dataset. Primarily meant to be utilized in conjunction with the `conflate` command.
+It is still possible when this option is disabled that portions of features originally from the same
+dataset may be marked for review due to the merging of features during conflation. If using
+`RailwaysCrossingMarker` with the `convert` command on a single dataset, this option should be
+enabled.
 
 === random.element.remover.probability
 
@@ -4687,15 +4692,13 @@ by `RandomWayGeneralizer`.
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
 
-=== reader.input.format
+=== reader.drop.defaults
 
 * Data Type: string
-* Default Value: `OSM`
+* Default Value: `true`
 
-The type of data that the reader is reading. This is the reader version of `ogr.output.format`
-This is used to pass the input format (OSM or OGR) to translation scripts to
-enable format specific translations.
-The OGR Reader changes this to be 'OGR'. All of the other readers use the default value.
+This setting tells a translation to drop default values when converting from a translated schema to OSM.
+This means that attributes with values like "UNK", "NoInformation" etc will be dropped during the translation.
 
 === reader.http.bbox.max.download.size
 
@@ -5142,16 +5145,6 @@ runtimes. When this is done, sometimes `REF1` features will be removed from the 
 this option allows for score-matches to run when there are missing `REF1` features. Warnings will be
 logged for any that are found.
 
-=== script.test.max.exec.time
-
-* Data Type: int
-* Default Value: `-1`
-
-For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
-If the script runs longer than the specified time, then it is forcefully stopped by the system. If
-the value is set to -1, then there is no time limit for script tests. This is useful when
-debugging tests which may hang on a remote build server.
-
 === search.radius.area
 
 * Data Type: double
@@ -5271,6 +5264,15 @@ the entire input dataset. See `search.radius.default`.
 
 List of keys for tags to be transferred by the `TagMergers` descending from
 `SelectiveOverwriteTagMerger`.
+
+=== selective.overwrite.tag.merger.keys.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of keys for tags not to be transferred by the `TagMergers` descending from
+`SelectiveOverwriteTagMerger`. Overrides `selective.overwrite.tag.merger.keys`.
 
 === set.tag.value.visitor.append.to.existing.value
 
@@ -5752,8 +5754,8 @@ merging logic under certain circumstances.
 * Data Type: string
 * Default Value: `asciidoc`
 
-Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html',
-'redmine' & 'asciidoc'.
+Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html', and
+'asciidoc'.
 
 === tag.printing.script
 
@@ -5824,7 +5826,8 @@ setting may have a negative impact on performance if set to a very low value.
 * Default Value: `ConflateCmd`
 
 Set the `conflate` command that should be used in a test case. This is only useful when writing
-test cases (`test-files/cases/`) and was originally added to support `MultiaryPoiConflateCmd`.
+test cases (`test-files/cases/`) and was originally added to support the now dormant Multiary
+Conflation capability.
 
 === test.case.conflate.differential
 
@@ -5851,6 +5854,23 @@ Enabling this always forces the orthographic projection when determining a prope
 In typical usage this will never be used (the automatically selected projection should always be at
 least as good). This is most useful if you want to get consistent results even if the list of
 potential projections change over time. Very handy in unit tests.
+
+=== test.script.max.exec.time
+
+* Data Type: int
+* Default Value: `-1`
+
+For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
+If the script runs longer than the specified time, then it is forcefully stopped by the system. If
+the value is set to -1, then there is no time limit for script tests. This is useful when
+debugging tests which may hang on a remote build server.
+
+=== test.validation.enable
+
+* Data Type: bool
+* Default Value: `true`
+
+Enables validation of test output for selected tests.
 
 === token.keep.non.words
 

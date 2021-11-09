@@ -107,19 +107,20 @@ public:
     LOG_STATUS(
       "Changeset applied in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
-    return 0;
+    return _success ? 0 : -1;
   }
 
 private:
 
   std::shared_ptr<Progress> _progress;
+  bool _success = true;
 
   void _writeXmlChangeset(
-    const bool showProgress, const bool showStats, const QStringList& args) const
+    const bool showProgress, const bool showStats, const QStringList& args)
   {
     //  Get the endpoint URL
-    const QString urlStr = args[args.size() - 1];
-    if (!urlStr.toLower().startsWith("http://") && !urlStr.toLower().startsWith("https://"))
+    const QString urlStr = args[args.size() - 1].toLower();
+    if (!urlStr.startsWith("http://") && !urlStr.startsWith("https://"))
     {
       throw IllegalArgumentException(
         QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
@@ -187,6 +188,7 @@ private:
       QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
       cout << "stats = (stat)\n" << statsMsg << endl;
     }
+    _success = !writer.failed();
   }
 
   void _writeSqlChangeset(const QStringList& args) const

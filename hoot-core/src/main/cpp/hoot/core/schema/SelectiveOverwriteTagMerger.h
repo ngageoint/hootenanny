@@ -34,8 +34,10 @@ namespace hoot
 {
 
 /**
- * @brief The SelectiveOverwriteTagMerger class will only transfer tags specified in a list from on
- * element to another.
+ * @brief The SelectiveOverwriteTagMerger class will transfer tags specified in a list from one
+ * element to another. If no tags are specified, then all tags are transferred and the behavior is
+ * the same as OverwriteTagMerger. Tags may also be excluded by key. Tag exclusions override
+ * inclusions.
  */
 class SelectiveOverwriteTagMerger : public TagMerger
 {
@@ -59,18 +61,23 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   void setTagKeys(const QStringList& tagKeys) { _tagKeys = tagKeys; }
+  void setTagExcludeKeys(const QStringList& tagKeys) { _tagKeysExclude = tagKeys; }
 
 private:
 
   bool _swap;
 
   // list that determines which tags are transferred
-  QStringList _tagKeys;
+  mutable QStringList _tagKeys;
+  // exclude list that overrides _tagKeys
+  QStringList _tagKeysExclude;
 };
 
 /**
- * @brief The SelectiveOverwriteTag2Merger class will only transfer tags specified in a list from
- * element 1 to element 2.
+ * @brief The SelectiveOverwriteTag2Merger class will transfer specified tags from element 1 to
+ * element 2.
+ *
+ * See base class documentation for further details.
  */
 class SelectiveOverwriteTag2Merger : public SelectiveOverwriteTagMerger
 {
@@ -88,8 +95,10 @@ public:
 };
 
 /**
- * @brief The SelectiveOverwriteTag1Merger class will only transfer tags specified in a list from
- * element 2 to element 1.
+ * @brief The SelectiveOverwriteTag1Merger class will transfer specified tags from element 2 to
+ * element 1.
+ *
+ * See base class documentation for further details.
  */
 class SelectiveOverwriteTag1Merger : public SelectiveOverwriteTagMerger
 {

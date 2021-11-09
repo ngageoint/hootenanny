@@ -65,7 +65,7 @@ public class ExternalCommandRunnerImplTest {
 
         List<String> hootOptions = new LinkedList<>();
         hootOptions.add("-D");
-        hootOptions.add("\"convert.ops=hoot::DecomposeBuildingRelationsVisitor\"");
+        hootOptions.add("\"convert.ops=DecomposeBuildingRelationsVisitor\"");
         hootOptions.add("-D");
         hootOptions.add("\"conflate.add.score.tags=yes\"");
         hootOptions.add("-D");
@@ -75,13 +75,13 @@ public class ExternalCommandRunnerImplTest {
         hootOptions.add("-D");
         hootOptions.add("api.db.email=test@test.com");
         hootOptions.add("-D");
-        hootOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
-                          "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
-                          "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                          "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
-                          "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
-                          "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
-                          "hoot::NoInformationElementRemover\"");
+        hootOptions.add("\"map.cleaner.transforms=ReprojectToPlanarOp;" +
+                          "DuplicateWayRemover;SuperfluousWayRemover;" +
+                          "IntersectionSplitter;UnlikelyIntersectionRemover;" +
+                          "DualHighwaySplitter;HighwayImpliedDividedMarker;" +
+                          "DuplicateNameRemover;SmallHighwayMerger;" +
+                          "RemoveEmptyAreasVisitor;RemoveDuplicateAreasVisitor;" +
+                          "NoInformationElementRemover\"");
 
         // String input1 = "osmapidb://hoot:hoottest@localhost:5432/osmapi test";
         String input1 = OSMAPI_DB_URL + " test";
@@ -130,8 +130,8 @@ public class ExternalCommandRunnerImplTest {
         String expected4 = "Converting match set 3 / 17 to a merger...\nConverting match set 4 / 17 to a merger...\nConverting match set 5 / 17 to a merger...\n";
         assertEquals(expected4, runner.obfuscateConsoleLog(test4));
 
-        String test5 = "17:48:57.817 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  83)  Applying operation: hoot::BuildingOutlineRemoveOp...\n";
-        String expected5 = " Applying operation: hoot::BuildingOutlineRemoveOp...\n";
+        String test5 = "17:48:57.817 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  83)  Applying operation: BuildingOutlineRemoveOp...\n";
+        String expected5 = " Applying operation: BuildingOutlineRemoveOp...\n";
         assertEquals(expected5, runner.obfuscateConsoleLog(test5));
 
     }

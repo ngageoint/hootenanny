@@ -53,7 +53,7 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".shp"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".shp", Qt::CaseInsensitive); }
   void open(const QString& url) override;
   /**
    * Will write out up to three files:

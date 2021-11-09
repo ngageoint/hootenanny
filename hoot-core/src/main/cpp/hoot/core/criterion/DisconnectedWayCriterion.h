@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * @todo implement OperationStatus
+ * @brief The DisconnectedWayCriterion class identifies ways that are disconnected from other ways.
  */
 class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {

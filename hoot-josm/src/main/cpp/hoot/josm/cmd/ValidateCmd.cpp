@@ -29,14 +29,19 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <hoot/josm/validation/MapValidator.h>
+
+// Qt
+#include <QElapsedTimer>
+#include <QDirIterator>
 
 namespace hoot
 {
 
 /*
- * @todo think there's still a but here with certain combinations of --report-output, --output,
+ * @todo think there's still problems here with certain combinations of --report-output, --output,
  * --separate-output, and --recursive
  */
 class ValidateCmd : public BaseCommand
@@ -51,7 +56,7 @@ public:
   QString getType() const override { return "josm"; }
   QString getDescription() const override { return "Checks maps for validation errors"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     bool showAvailableValidatorsOnly = false;
     if (args.contains("--validators"))
@@ -66,75 +71,95 @@ public:
     }
     else
     {
-      bool separateOutput = false;
-      if (args.contains("--separate-output"))
-      {
-        separateOutput = true;
-        args.removeAt(args.indexOf("--separate-output"));
-      }
-
-      QString output;
-      if (args.contains("--output"))
-      {
-        const int outputIndex = args.indexOf("--output");
-        output = args.at(outputIndex + 1).trimmed();
-        args.removeAt(outputIndex + 1);
-        args.removeAt(outputIndex);
-      }
-
-      if (separateOutput && !output.isEmpty())
-      {
-        throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
-      }
-
-      bool recursive = false;
-      const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
-      LOG_VARD(recursive);
-      LOG_VARD(inputFilters);
-
-      if (recursive && output.isEmpty())
-      {
-        throw IllegalArgumentException("--output must be specified with --recursive is specified.");
-      }
-
-      MapValidator validator;
-
-      bool reportOutput = false;
-      if (args.contains("--report-output"))
-      {
-        reportOutput = true;
-        const int outputIndex = args.indexOf("--report-output");
-        validator.setReportFile(args.at(outputIndex + 1).trimmed());
-        args.removeAt(outputIndex + 1);
-        args.removeAt(outputIndex);
-      }
-
-      if (args.size() < 1)
-      {
-        std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
-      }
-
-      // Everything left is an input.
-      QStringList inputs;
-      if (!recursive)
-      {
-        inputs = IoUtils::expandInputs(args);
-      }
-      else
-      {
-        inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-      }
-      LOG_VARD(inputs);
-
-      const QString validationSummary = validator.validate(inputs, output);
-      if (!reportOutput)
-      {
-        std::cout << validationSummary << std::endl;
-      }
+      _validate(args);
     }
 
     return 0;
+  }
+
+private:
+
+  void _validate(QStringList& args)
+  {
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
+    {
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
+    QString output;
+    if (args.contains("--output"))
+    {
+      const int outputIndex = args.indexOf("--output");
+      output = args.at(outputIndex + 1).trimmed();
+      args.removeAt(outputIndex + 1);
+      args.removeAt(outputIndex);
+    }
+
+    if (separateOutput && !output.isEmpty())
+    {
+      throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(recursive);
+    LOG_VARD(inputFilters);
+
+    if (recursive && !separateOutput && output.isEmpty())
+    {
+      throw IllegalArgumentException(
+        QString("--output must be specified when --recursive is specified and ") +
+        QString("--separate-output is not specified."));
+    }
+
+    MapValidator validator;
+
+    bool reportOutput = false;
+    if (args.contains("--report-output"))
+    {
+      reportOutput = true;
+      const int outputIndex = args.indexOf("--report-output");
+      validator.setReportPath(args.at(outputIndex + 1).trimmed());
+      args.removeAt(outputIndex + 1);
+      args.removeAt(outputIndex);
+    }
+
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(QString("%1 takes at least one parameter.").arg(getName()));
+    }
+
+    QElapsedTimer timer;
+    timer.start();
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = IoUtils::expandInputs(args);
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
+    // Even though we have the cleaning routine available with --cleanValidatedOutput, we're still
+    // going to clean out all previously validated files. Clearly will cause problems if anyone
+    // want to validate files with "-validated" in the name.
+    StringUtils::removeAllContaining(inputs, "-validated");
+    LOG_VARD(inputs);
+
+    const QString validationSummary = validator.validate(inputs, output);
+    if (!reportOutput)
+    {
+      std::cout << validationSummary << std::endl;
+    }
+
+    LOG_STATUS(
+      "Validate operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
   }
 };
 

@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The MultiVisitor class allows for iterating over multiple visitors.
+ */
 class MultiVisitor : public ElementVisitor
 {
 public:

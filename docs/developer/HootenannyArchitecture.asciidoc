@@ -1,13 +1,18 @@
 
-== Hootenanny Architecture
+=== Architecture
 
 Note that the some of the hyperlinks in this document only are navigable when the document is in PDF form.
 
-=== Identification
+==== Identification
 
-This document describes the architecture for Hootenanny.  It provides an overview of the principal software components and web services included in the software.  This document is not intended as an API guide to support integration but rather as a general reference for better understanding the web enabled environment that Hootenanny is deployed in.
+This document describes the architecture for Hootenanny. It provides an overview of the principal software components and web services included in the software. This document is not intended as an API guide to support integration but rather as a general reference for better understanding the web enabled environment that Hootenanny is deployed in.
 
-=== System Overview
+The purpose of this document is two-fold:
+
+* Provide a high level diagram and overview of all software components included in the Hootenanny web enabled environment including iD, Hootenanny Services, the Postgres DB and Hootenanny Core.
+* Describe and document publicly exposed REST and XML endpoints implemented with Hootenanny.
+
+==== System Overview
 
 Hootenanny is a suite of emerging non-proprietary tools to support fully-automated and semi-automated conflation of vector roads, buildings, and points of interest (POI) across multiple geographical scales. The Hootenanny platform includes a simple and intuitive web-based client and associated services designed to invoke core routines and algorithms that automate traditional manual conflation workflows in a highly efficient and optimized manner. The overarching goal is to deliver an enhanced thin-client interface that exposes Hootenanny’s scalable conflation processes and conforms to data steward workflows.
 
@@ -23,7 +28,6 @@ ditches).
 * Service oriented architecture (SOA) that leverages REST and Node.js services.
 * Web browser client built on MapBox iD editor.
 * Support various import/export formats (OpenStreetMap, Shapefiles, ESRI FGDB, GEONAMES).
-* Open Source Software available for download at https://github.com/ngageoint/hootenanny
 
 [[n-tier-webarch]]
 .Hootenanny N-Tier Architecture
@@ -31,22 +35,11 @@ image::images/n-tier-arch.png[]
 
 <<n-tier-webarch>> diagrams the n-tier architecture that supports the web enabled environment for Hootenanny Conflation. The web client is a customized version of the MapBox iD Editor that has been extended to handle conflation routines using REST service end points specifically tailored to meet the NSG user requirements. It is currently the only UI that can interact with the Hootenanny Web Services and core components. Conflation input data (FGDB, Shapefile, OSM, GEONAMES) can be imported into the system using the Hootenanny ETL and Translation services accessed via the Hootenanny User Interface (UI). Conflated data can be exported in the same file formats. The Hootenanny web services also contain REST end points but are not required to interact between the Hoot Core libraries and the RDBMS. The Hoot Core represents the algorithms and routines that handle the bulk of conflation operations. Both the Web Services and Hoot core interact with the PostgreSQL RDBMS for invoking SQL queries and updating conflated data. Hootenanny web services call node.js to interact with the Hootenanny core for translation and provide requested information to the Hootenanny UI.
 
-=== Document Overview
-
-The purpose of this document is two-fold:
-
-* Provide a high level diagram and overview of all software components included in the Hootenanny web enabled environment including iD, Hootenanny Services, the Postgres DB and Hootenanny Core.
-* Describe and document publicly exposed REST and XML endpoints implemented with Hootenanny.
-
-== Hootenanny Component Overview
-
-===  Web Enabled Architecture
-
 [[HootWebEnabledArchOverview]]
 .Hootenanny Web-enabled Architecture depicting the interaction between Hoot Core, DB, Web Services and the Web Client.
 image::images/web-enabled-arch.png[]
 
-==== Hootenanny Core
+==== Core Software
 
 Hootenanny is a software platform designed for expert users to perform fully automated and semi-automated conflation of two disparate data sets to create a single conflated output file. To achieve this successfully for a range of source input data types, Hootenanny relies on a core set of algorithms and functions that can be invoked using command line and web service end points.
 
@@ -60,7 +53,7 @@ Hootenanny leverages a PostgreSQL RDBMS architecture for storing, retrieving, an
 .Hootenanny schema depicting as a high level database design diagram grouped into functional categories.
 image::images/hootdbschema.png[]
 
-=== Hootenanny Web Services
+==== Web Services
 
 Hootenanny core functions and capabilities can be invoked using either REST, Node.js or typically in some combination.  Hootenanny Core Conflation tasks unrelated to the OSM API v0.6 include REST and Node.js services.  Hootenanny OSM Services, which consist of a subset of modified OSM API v0.6 calls contain REST and Node.js services end points.  The purpose of Node.js is to both a) interact with the Hootenanny core for handling processes such as translation and b) to provide information to the Hootenanny UI.
 
@@ -70,15 +63,13 @@ All service calls made from the Hootenanny UI to the each of the web services ar
 .Hootenanny Web Service Chain
 image::images/hoot-srv-chain.png[]
 
-=== iD Editor
+==== iD Editor
 
 Hootenanny deploys with an interactive web-based UI called iD Editor , which is a modified version of the MapBox iD Editor developed for the OpenStreetMap communities’ collaborative OSM data mapping effort . Its primary purpose here is to provide visualization and editing of source data leveraged in the conflation process and for visualization of the final conflated data outputs. It should be noted that the Hootenanny UI represents merely a customized version of the MapBox iD that has been modified to execute conflation operations and request map data via the web services described in this document.
 
-====  Hootenanny UI Architecture and Core Data Model
-
 The Hootenanny UI is deployed inside the Apache Tomcat servlet engine as a web application archive or .war file. It is primarily designed to interact with the OpenStreetMap core data model, which includes three basic data types: nodes, ways, and relations. Hootenanny implements a slightly modified OSM data schema that has been optimized for increased performance against large feature rich datasets and has been extended to support export to FGDB format based on TDS version 4.0/6.1.
 
-The iD editor is developed in JavaScript and can be easily customized for various open source applications like Hootenanny that leverage OSM data formats and architecture. The Hootenanny project maintains its own custom version of iD source code that has been modified to work with Hootenanny data and web services. The web interface supports the integration of a base map using Tile Map Service (TMS) protocols like OGC’s Web Map Tile Service (WMTS) or other OpenLayers TileCache implementations.  A complete step by step instruction guide can be found in the Hootenanny User Interface Guide, which can be downloaded by clicking on the _Hootenanny_ version link in the top left corner of the web application or from the link:$$https://github.com/ngageoint/hootenanny/releases/download/v0.2.17/Hootenanny.-.User.Interface.Guide.pdf$$[github release link].
+The iD editor is developed in JavaScript and can be easily customized for various open source applications like Hootenanny that leverage OSM data formats and architecture. The Hootenanny project maintains its own custom version of iD source code that has been modified to work with Hootenanny data and web services. The web interface supports the integration of a base map using Tile Map Service (TMS) protocols like OGC’s Web Map Tile Service (WMTS) or other OpenLayers TileCache implementations. A complete step by step instruction guide can be found in the Hootenanny User Guide, which can be downloaded by clicking on the _Hootenanny_ version link in the top left corner of the web application.
 
 [[HootUIGuidedownload]]
 .Accessing the Hootenanny User Interface Guide

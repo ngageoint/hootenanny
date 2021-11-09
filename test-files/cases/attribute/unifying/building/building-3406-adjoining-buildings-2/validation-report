@@ -1,0 +1,11 @@
+Input: test-files/cases/attribute/unifying/building/building-3406-adjoining-buildings-2/Output.osm
+
+Found 15 validation errors in 23 features with JOSM.
+Almost right angle buildings errors: 1
+Multipolygon errors: 3
+Tag checker errors: 8
+Tag checker (MapCSS based) errors: 3
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 2 features with Hootenanny.
+Total failing Hootenanny validators: 0

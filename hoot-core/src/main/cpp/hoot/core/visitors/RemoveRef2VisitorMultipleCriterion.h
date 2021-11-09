@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * If one specified criterion meets for REF1 and another also for REF2 elements, then the REF2 tag is
- * removed.
+ * If one specified criterion meets for REF1 and another also for REF2 elements, then the REF2 tag
+ * is removed.
  *
  * This class is re-entrant, but not thread safe.
  */
@@ -52,6 +52,9 @@ public:
 
   void addCriterion(const ElementCriterionPtr& e) override;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& e) override;
 
   bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;

@@ -1,6 +1,6 @@
 
 [[OptimizeNetworkAlgorithmSettings]]
-== Optimizing Network Algorithm Settings
+==== Optimizing Network Algorithm Settings
 
 Hootenanny includes a utility to determine the optimal configurable settings for the Network Road 
 Conflation Algorithm. This document describes the process involved in using it.
@@ -27,7 +27,6 @@ sets of conflate case or regression tests 3) pick a number of iterations we want
 command determine an optimal configuration for us.
 
 An example of a configuration file for `optimize-network-conf`:
-
 ------
 {
   "settings":
@@ -50,7 +49,6 @@ In this example file, we have defined two configuration options and a min/max ra
 configuration options must reside in `ConfigOptions.asciidoc` and be prefixed with "network.".
 
 An example of `optimize-network-conf` execution:
-
 -----
 HootTest optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
 -----

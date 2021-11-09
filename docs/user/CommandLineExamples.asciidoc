@@ -456,9 +456,10 @@ See the User Guide for more specific details on command usage. Most of these exa
 https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RailwayConflation.asciidoc#one-to-many-matching[detail]
 
 -----
-    # Conflate railways by transferring only the "name" tag from secondary to reference rail features.
+    # Conflate railways by transferring only the "name" tag from secondary features to reference 
+    # rail features whose number of tracks are specified by the the tag keys: "lines" and "lanes".
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D railway.one.to.many.match=true -D railway.one.to.many.identifying.keys="passenger_lines" \
+      -D railway.one.to.many.match=true -D railway.one.to.many.identifying.keys="lines;lanes" \
       -D railway.one.to.many.transfer.keys="name" input1.osm input2.osm output.osm
 -----
 
@@ -722,6 +723,12 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot info --config-options poi.polygon --option-names
 -----
 
+==== List all configuration option names and details containing "poi.polygon":
+
+-----
+    hoot info --config-options poi.polygon --option-details
+-----
+
 ==== List all available cleaning operations:
 
 -----
@@ -797,25 +804,25 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== List all language detectors:
 
 -----
-    hoot info-rnd --languages --detectors
+    hoot info --languages --detectors
 -----
 
 ==== List all language translators:
 
 -----
-    hoot info-rnd --languages --translators
+    hoot info --languages --translators
 -----
 
 ==== List all detectable languages:
 
 -----
-    hoot info-rnd --languages --detectable
+    hoot info --languages --detectable
 -----
 
 ==== List all translatable languages:
 
 -----
-    hoot info-rnd --languages --translatable
+    hoot info --languages --translatable
 -----
 
 ==== List all entities that can match features:
@@ -943,10 +950,16 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot type-similarity amenity=school landuse=residential
 -----
 
-==== Display the internal tag schema that Hootenanny uses:
+==== Write the internal tag schema that Hootenanny uses to a CSV file:
 
 -----
-    hoot schema
+    hoot schema -D tag.printing.format=csv > schema.csv
+-----
+
+==== Write the internal tag schema graph relations that Hootenanny uses to an image file:
+
+-----
+    hoot schema schema.svg
 -----
 
 === Statistics
@@ -1677,6 +1690,12 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot split output.geojson input.osm output.osm
+-----
+
+==== Stitch two adjacent cropped maps into one combined map
+
+-----
+    hoot stitch input1.osm input2.osm output.osm
 -----
 
 ==== Copy element IDs from one map to another where identical elements are found between them:

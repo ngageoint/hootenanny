@@ -86,11 +86,13 @@ void MergerFactory::createMergers(
   // also required additional error handling in ScriptMerger (see ScriptMerger::_applyMergePair).
   if (logWarnCount < Log::getWarnMessageLimit())
   {
-    LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
+    // Changing this to info since its leaked into the case tests, although its not causing them to
+    // fail. Opened #5082 to deal with.
+    LOG_INFO("Unable to create merger for the provided set of matches: " << matches);
   }
   else if (logWarnCount == Log::getWarnMessageLimit())
   {
-    LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    LOG_INFO(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
   }
   logWarnCount++;
 }
@@ -162,7 +164,6 @@ void MergerFactory::registerDefaultCreators()
 
       if (!args.empty())
       {
-        // TODO: Is this actually used on any MergerCreators?
         mc->setArguments(args);
       }
     }

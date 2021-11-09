@@ -1,34 +1,35 @@
 /**
- * This script conflates all linear features using Generic Conflation.
+ * This script conflates all generic linear features which don't fit into a specific type category.
  */
 
 "use strict";
 
-exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic lines";
 exports.experimental = false;
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-
-exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
-exports.typeThreshold = parseFloat(hoot.get("generic.line.type.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
-
+exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
 exports.matchCandidateCriterion = "LinearCriterion";
 
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// This is used only to determine type similarity and is independent of the other score thresholds.
+exports.typeThreshold = parseFloat(hoot.get("generic.line.type.threshold"));
+
+// geometry matchers
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a
 // custom value via empirical testing. This will not work if we ever end up needing to pass map in
 // here for this data type.

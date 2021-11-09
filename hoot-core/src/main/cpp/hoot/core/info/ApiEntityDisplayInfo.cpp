@@ -55,6 +55,12 @@
 //  Qt
 #include <QTextStream>
 
+// std
+#include <sstream>
+
+// Boost
+#include <boost/property_tree/json_parser.hpp>
+
 namespace hoot
 {
 
@@ -74,8 +80,18 @@ public:
   }
 };
 
-QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
+ApiEntityDisplayInfo::ApiEntityDisplayInfo() :
+_asJson(false)
 {
+}
+
+QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName) const
+{
+  if (_asJson)
+  {
+    throw IllegalArgumentException("JSON format not supported for operations information.");
+  }
+
   LOG_TRACE("getDisplayInfoOps: " << optName);
 
   const QString errorMsg = "Invalid config option name: " + optName;
@@ -145,15 +161,22 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
   return ts.readAll();
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
+QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType) const
 {
   // The log must be disabled for this to display things correctly. Disable it for debugging only.
   DisableLog dl;
   QString msg = "";
   QString buffer;
   QTextStream ts(&buffer);
+
   if (apiEntityType == "operators")
   {
+    if (_asJson)
+    {
+      throw IllegalArgumentException(
+        "JSON format not supported for complete operators list information.");
+    }
+
     msg += "; * = implements SingleStatistic, ** = NumericStatistic):";
     msg.prepend("Operators");
     ts << msg << endl;
@@ -167,38 +190,50 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
       _getApiEntities<ElementVisitor, ElementVisitor>(
         ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
   }
-  // All of this from here on down is pretty repetitive :-( Maybe we can make it better.
+  // All of this from here on down is pretty repetitive :-( Maybe we can make it cleaner.
   else if (apiEntityType == "filters")
   {
     // This is the criterion portion of --operators only.
-    msg += ":";
-    msg.prepend("Filters");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Filters");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<ElementCriterion, ElementCriterion>(
         ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "feature-extractors")
   {
-    msg += ":";
-    msg.prepend("Feature Extractors");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Feature Extractors");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<FeatureExtractor, FeatureExtractor>(
         FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "matchers")
   {
-    msg += ":";
-    msg.prepend("Matchers");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Matchers");
+      ts << msg << endl;
+    }
     ts << _getApiEntities<Match, Match>(Match::className(), "matcher", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "mergers")
   {
-    msg += ":";
-    msg.prepend("Mergers");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Mergers");
+      ts << msg << endl;
+    }
     ts << _getApiEntities<Merger, Merger>(Merger::className(), "merger", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "match-creators")
@@ -217,54 +252,73 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "tag-mergers")
   {
-    msg += ":";
-    msg.prepend("Tag Mergers");
-    ts << msg << endl;
+    // TODO
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Tag Mergers");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<TagMerger, TagMerger>(
         TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "string-comparators")
   {
-    msg += ":";
-    msg.prepend("String Comparators");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("String Comparators");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<StringDistance, StringDistance>(
         StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "subline-matchers")
   {
-    msg += ":";
-    msg.prepend("Subline Matchers");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Subline Matchers");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<SublineMatcher, SublineMatcher>(
         SublineMatcher::className(), "subline matcher", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "subline-string-matchers")
   {
-    msg += ":";
-    msg.prepend("Subline Matchers");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Subline Matchers");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<SublineStringMatcher, SublineStringMatcher>(
         SublineStringMatcher::className(), "subline string matcher", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "value-aggregators")
   {
-    msg += ":";
-    msg.prepend("Value Aggregators");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Value Aggregators");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<ValueAggregator, ValueAggregator>(
         ValueAggregator::className(), "value aggregator", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "way-joiners")
   {
-    msg += ":";
-    msg.prepend("Way Joiners");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Way Joiners");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<WayJoiner, WayJoiner>(
         WayJoiner::className(), "way joiner", false, MAX_NAME_SIZE - 10);
@@ -277,15 +331,23 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "conflatable-criteria")
   {
-    msg += ":";
-    msg.prepend("Conflatable Criteria");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Conflatable Criteria");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<ElementCriterion, ConflatableElementCriterion>(
         ElementCriterion::className(), "conflatable criteria", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "criterion-consumers")
   {
+    if (_asJson)
+    {
+      throw IllegalArgumentException("JSON format not supported for criterion consumers.");
+    }
+
     msg += ":";
     msg.prepend("Criterion Consumers");
     ts << msg << endl;
@@ -301,9 +363,12 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "geometry-type-criteria")
   {
-    msg += ":";
-    msg.prepend("Geometry Type Criteria");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Geometry Type Criteria");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<ElementCriterion, GeometryTypeCriterion>(
         ElementCriterion::className(), "geometry type criteria", false, MAX_NAME_SIZE - 10);
@@ -311,9 +376,12 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   else if (apiEntityType == "validators")
   {
     // We know that all validators must be map ops b/c validators need to look at entire maps.
-    msg += ":";
-    msg.prepend("Validators");
-    ts << msg << endl;
+    if (!_asJson)
+    {
+      msg += ":";
+      msg.prepend("Validators");
+      ts << msg << endl;
+    }
     ts <<
       _getApiEntities<OsmMapOperation, Validator>(
         OsmMapOperation::className(), "validator", false, MAX_NAME_SIZE - 10);
@@ -327,7 +395,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
   const bool displayType,
   // the size of the longest names plus a 3 space buffer; the value passed in
   // here by callers may have to be adjusted over time for some entity types
-  const int maxNameSize)
+  const int maxNameSize) const
 {
   LOG_VARD(apiEntityBaseClassName);
   std::vector<QString> classNames =
@@ -337,6 +405,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
   std::sort(classNames.begin(), classNames.end(), apiEntityNameComparator);
   QString buffer;
   QTextStream ts(&buffer);
+  boost::property_tree::ptree jsonChildren;
 
   for (size_t i = 0; i < classNames.size(); i++)
   {
@@ -366,55 +435,83 @@ QString ApiEntityDisplayInfo::_getApiEntities(
     LOG_VARD(apiEntityInfo->getDescription());
     if (!apiEntityInfo->getDescription().isEmpty())
     {
-      bool supportsSingleStat = false;
-      std::shared_ptr<SingleStatistic> singleStat =
-        std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
-      if (singleStat.get())
-      {
-        supportsSingleStat = true;
-      }
-
-      bool supportsNumericStat = false;
-      std::shared_ptr<NumericStatistic> numericStat =
-        std::dynamic_pointer_cast<NumericStatistic>(apiEntity);
-      if (numericStat.get())
-      {
-        supportsNumericStat = true;
-      }
-
+      QString lineBuffer;
+      QTextStream line(&lineBuffer);
       QString name = className.remove(MetadataTags::HootNamespacePrefix());
-      // append '*' to the names of visitors that support the SingleStatistic interface
-      if (supportsNumericStat)
+      const QString description = apiEntityInfo->getDescription();
+      if (!_asJson)
       {
-        name += "**";
+        bool supportsSingleStat = false;
+        std::shared_ptr<SingleStatistic> singleStat =
+          std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+        if (singleStat.get())
+        {
+          supportsSingleStat = true;
+        }
+
+        bool supportsNumericStat = false;
+        std::shared_ptr<NumericStatistic> numericStat =
+          std::dynamic_pointer_cast<NumericStatistic>(apiEntity);
+        if (numericStat.get())
+        {
+          supportsNumericStat = true;
+        }
+
+        // append '*' to the names of visitors that support the SingleStatistic interface
+        if (supportsNumericStat)
+        {
+          name += "**";
+        }
+        else if (supportsSingleStat)
+        {
+          name += "*";
+        }
+        const int indentAfterName = maxNameSize - name.size();
+        const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
+        line << "  " << name << QString(indentAfterName, ' ');
+        if (displayType)
+        {
+          line << apiEntityType << QString(indentAfterType, ' ');
+        }
+        line << description;
+
+        ts << line.readAll() << endl;
       }
-      else if (supportsSingleStat)
+      else
       {
-        name += "*";
+        boost::property_tree::ptree jsonChild;
+        jsonChild.put("name", name.toStdString());
+        jsonChild.put("description", description.toStdString());
+        jsonChildren.push_back(std::make_pair("", jsonChild));
       }
-      const int indentAfterName = maxNameSize - name.size();
-      const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
-      QString line_buffer;
-      QTextStream line(&line_buffer);
-      line << "  " << name << QString(indentAfterName, ' ');
-      if (displayType)
-      {
-        line << apiEntityType << QString(indentAfterType, ' ');
-      }
-      line << apiEntityInfo->getDescription();
-      LOG_VARD(line.readAll());
-      ts << line.readAll() << endl;
     }
   }
-  return ts.readAll();
+  if (!_asJson)
+  {
+    return ts.readAll();
+  }
+  else
+  {
+    boost::property_tree::ptree json;
+    json.add_child(apiEntityBaseClassName.toStdString(), jsonChildren);
+
+    std::stringstream strStrm;
+    boost::property_tree::json_parser::write_json(strStrm, json);
+    return QString::fromStdString(strStrm.str());
+  }
 }
 
 // match/merger creators have a more roundabout way to get at the description, so we'll create a new
 // display method for them
 template<typename ApiEntity>
 QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
-  const QString& apiEntityClassName)
+  const QString& apiEntityClassName) const
 {
+  if (_asJson)
+  {
+    throw IllegalArgumentException("JSON format not supported for match/merger creators.");
+  }
+
   // the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
 
@@ -461,7 +558,7 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
   return ts.readAll();
 }
 
-QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& className)
+QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& className) const
 {
   LOG_VARD(className);
   if (className == OsmMapOperation::className() ||
@@ -477,8 +574,13 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& classNam
   return "";
 }
 
-QString ApiEntityDisplayInfo::_getWaySnapCriteria()
+QString ApiEntityDisplayInfo::_getWaySnapCriteria() const
 {
+  if (_asJson)
+  {
+    throw IllegalArgumentException("JSON format not supported for way snap criteria.");
+  }
+
   QStringList filteredCritClassNames;
   const QStringList linearCritClassNames =
     ConflatableElementCriterion::getCriterionClassNamesByGeometryType(

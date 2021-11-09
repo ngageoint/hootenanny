@@ -13,5 +13,6 @@ mkdir -p $OUT_DIR
 CONFIG="--warn -C Testing.conf"
 
 # Note that we need to include all matchers here due to the feature richness of the input data.
-hoot conflate $CONFIG -D writer.include.debug.tags=true -D uuid.helper.repeatable=true $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output.osm
+hoot conflate $CONFIG -D writer.include.debug.tags=true -D uuid.helper.repeatable=true \
+  $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output.osm
 hoot diff $CONFIG $IN_DIR/output.osm $OUT_DIR/output.osm || diff $IN_DIR/output.osm $OUT_DIR/output.osm

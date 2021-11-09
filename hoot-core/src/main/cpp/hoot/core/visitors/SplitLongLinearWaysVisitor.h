@@ -39,6 +39,10 @@ namespace hoot
 class OsmMap;
 class Element;
 
+/**
+ * @brief The SplitLongLinearWaysVisitor class splits ways that are too long to be written to
+ * OpenStreetMap into smaller ones.
+ */
 class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
@@ -53,6 +57,9 @@ public:
   void setOsmMap(OsmMap* map) override { _map = map; }
   void setOsmMap(const OsmMap*) override { assert(false); }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override { return "Splitting ways..."; }

@@ -66,10 +66,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
-  /**
-   * Returns the distance from el to s.
-   */
-  Meters calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocationPtr el) const;
 
   Meters calculateLength(ConstNetworkEdgePtr e) const;
   Meters calculateLength(ConstEdgeSublinePtr e) const;
@@ -117,14 +113,8 @@ public:
   void calculateNearestLocation(ConstEdgeStringPtr string, ConstEdgeSublinePtr subline,
     ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
 
-  double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const;
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-  /**
-   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
-   * no match and larger scores are better.
-   */
-  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const override;
   geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const override;
@@ -140,19 +130,6 @@ public:
 
   bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
-  /**
-   * Starting at v1, v2, are e1 and e2 partial edge match candidates?
-   *
-   * E.g.
-   *
-   *     a----1---b
-   *       c----2---d
-   *
-   * isPartialCandidateMatch(a, c, 1, 2) == true
-   * isPartialCandidateMatch(a, d, 1, 2) == false
-   */
-  bool isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
   bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   /**
@@ -162,7 +139,6 @@ public:
    * generally add too much noise.
    */
   bool isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-  bool isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePtr esl) const;
 
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;

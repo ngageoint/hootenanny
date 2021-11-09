@@ -115,7 +115,7 @@ public class ElementMergeServiceResource extends NodejsService {
             // Make sure to wipe out previosuly running servers.
             stopServer(elementMergeServiceScript);
 
-            logger.info("Starting POI-To-POI Merge Service by running {} script", elementMergeServiceScript);
+            logger.info("Starting Element Merge Service by running {} script", elementMergeServiceScript);
 
             elementMergeServiceProcess = startServer(ELEMENT_MERGE_SERVER_PORT, ELEMENT_MERGE_SERVER_THREAD_COUNT, elementMergeServiceScript);
 

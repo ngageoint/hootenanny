@@ -36,8 +36,8 @@ namespace hoot
 /**
  * Returns a unique, ordered set of the element ids visited.
  *
- * @todo I think if ElementIdsVisitor gets converted over to work with sets of element IDs instead
- * of vectors, that maybe this class can go away.
+ * @todo Think that if ElementIdsVisitor gets converted over to work with sets of element IDs
+ * instead of vectors, then maybe this class can go away.
  */
 class UniqueElementIdVisitor : public ConstElementVisitor
 {
@@ -48,6 +48,9 @@ public:
   UniqueElementIdVisitor() = default;
   ~UniqueElementIdVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Returns the unique element IDs visited"; }

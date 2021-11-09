@@ -131,16 +131,6 @@ public:
 
   bool hasNode(long nodeId) const;
 
-  bool isOneWay() const;
-
-  /**
-   * Determines if a node ID represents the first and last node
-   *
-   * @param nodeId ID of the node to search for
-   * @return true if the node ID maps to the first and last node; false otherwise
-   */
-  bool isFirstAndLastNode(const long nodeId) const;
-
   /**
    * Determines if a node ID represents and end node
    *

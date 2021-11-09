@@ -1,34 +1,40 @@
 /**
- * This script conflates all points with all polygons using Generic Conflation.
+ * This script conflates all generic point/polygon pairs which don't fit into a specific type
+   category.
  */
 
 "use strict";
 
-exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic points with polygons";
 exports.experimental = false;
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-
-exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
-exports.typeThreshold = parseFloat(hoot.get("generic.point.polygon.type.threshold"));
-exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 // The baseFeatureType and geometryType aren't needed for Point/Polygon with stats due to it
 // conflating different geometry types. Logic has been added to ScriptMatchCreator to handle this,
 // in a custom fashion so they may remain empty.
-
+exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
 exports.matchCandidateCriterion = "PointCriterion;PolygonCriterion";
 
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// This is used only to determine type similarity and are independent of the other score thresholds.
+exports.typeThreshold = parseFloat(hoot.get("generic.point.polygon.type.threshold"));
+
+// geometry matchers
 var distanceExtractor = 
   new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });
+
+// used for debugging
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+// used for conflate provenance
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is

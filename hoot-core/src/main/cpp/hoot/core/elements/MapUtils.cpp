@@ -32,17 +32,19 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 namespace hoot
 {
 
-OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,
-                                 const bool copyChildren)
+OsmMapPtr MapUtils::getMapSubset(
+  const ConstOsmMapPtr& map, const ElementCriterionPtr& filter, const bool copyChildren)
 {
   CopyMapSubsetOp mapCopier(map, filter);
   mapCopier.setCopyChildren(copyChildren);
@@ -118,6 +120,31 @@ ElementPtr MapUtils::getFirstElementWithTag(
     }
   }
   return ElementPtr();
+}
+
+ConstElementPtr MapUtils::getFirstElementWithStatus(const ConstOsmMapPtr& map, const Status& status)
+{
+  StatusCriterion crit(status);
+  UniqueElementIdVisitor vis;
+  FilteredVisitor filteredVis(crit, vis);
+  map->visitRo(filteredVis);
+  const std::set<ElementId> elementIds = vis.getElementSet();
+
+  if (elementIds.empty())
+  {
+    return ElementPtr();
+  }
+  else
+  {
+    return map->getElement(*elementIds.begin());
+  }
+}
+
+int MapUtils::getNumReviews(const OsmMapPtr& map)
+{
+  CountUniqueReviewsVisitor vis;
+  map->visitRo(vis);
+  return (int)vis.getStat();
 }
 
 }

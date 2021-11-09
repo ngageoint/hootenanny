@@ -58,6 +58,11 @@ public:
   void addPoint(double x, double y, long id);
 
   /**
+   * New location of the point to add. Removes the old point hashes and adds new hashes.
+   */
+  void updatePoint(double x, double y, long id);
+
+  /**
    * Returns the ids of the current match during iteration. This may have more ids than actually
    * match.
    */
@@ -96,10 +101,13 @@ private:
   double _distance;
   std::vector<long>& _match;
 
-  HashMap<int64_t, std::vector<long>> _bins;
-  HashMap<int64_t, std::vector<long>>::const_iterator _it;
+  using HashToIds = HashMap<int64_t, std::vector<long>>;
+  using IdToHashes = HashMap<long, std::vector<int64_t>>;
 
-  HashMap<long, std::vector<int64_t>> _idTobin;
+  HashToIds _bins;
+  HashToIds::const_iterator _it;
+
+  IdToHashes _idTobin;
 
   int64_t _toBin(double x, double y) const;
 };

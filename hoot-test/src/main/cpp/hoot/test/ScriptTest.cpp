@@ -33,6 +33,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/LogColor.h>
 
+#include <hoot/josm/validation/MapValidator.h>
+
 // Qt
 #include <QCoreApplication>
 #include <QDir>
@@ -45,13 +47,13 @@ using namespace std;
 namespace hoot
 {
 
-ScriptTest::ScriptTest(const QString& script, bool printDiff, bool suppressFailureDetail,
-                       int waitToFinishTime)
-  : CppUnit::TestCase(script.toStdString()),
-    _printDiff(printDiff),
-    _suppressFailureDetail(suppressFailureDetail),
-    _script(script),
-    _waitToFinishTime(waitToFinishTime)
+ScriptTest::ScriptTest(
+  const QString& script, bool printDiff, bool suppressFailureDetail, int waitToFinishTime) :
+CppUnit::TestCase(script.toStdString()),
+_printDiff(printDiff),
+_suppressFailureDetail(suppressFailureDetail),
+_script(script),
+_waitToFinishTime(waitToFinishTime)
 {
 }
 
@@ -92,18 +94,20 @@ QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
   for (int i = 0; i < inLines.size(); i++)
   {
     bool keep = true;
-    if (inLines[i].contains(" STATUS ") || inLines[i].contains(" INFO ") ||
-        inLines[i].contains(" DEBUG ") || inLines[i].contains(" elapsed: ") ||
-        inLines[i].contains("Time (sec)"))
+    QString line = inLines[i];
+
+    if (line.contains(" STATUS ") || line.contains(" INFO ") ||
+        line.contains(" DEBUG ") || line.contains(" elapsed: ") ||
+        line.contains("Time (sec)"))
     {
       keep = false;
     }
 
     if (keep)
     {
-      inLines[i].replace(reWarn, "WARN - ");
-      inLines[i].replace(reError, "ERROR - ");
-      outLines.append(inLines[i]);
+      line.replace(reWarn, "WARN - ");
+      line.replace(reError, "ERROR - ");
+      outLines.append(line);
     }
   }
 
@@ -119,7 +123,7 @@ QString ScriptTest::_removeLogColoring(const QString& input) const
 
 void ScriptTest::runTest()
 {
-  // before we start remove any temporary files that we generated last time.
+  // Before we start, remove any temporary files that we generated last time.
   _removeFile(_script + ".stdout.failed");
   _removeFile(_script + ".stderr.failed");
   _removeFile(_script + ".stdout.failed.stripped");
@@ -140,19 +144,14 @@ void ScriptTest::runTest()
   {
     LOG_ERROR("STDOUT or STDERR doesn't exist for " + _script +
               "\n*************************\n"
-              "  This can be resolved by reviewing the output for correctness and then \n"
-              "  creating a new baseline. E.g.\n"
-              "  verify: \n"
+              "  This can be resolved by reviewing the output for correctness and then creating a new baseline.\n"
+              "  Verify the changes in the output are satisfactory: \n"
               "    less " + _script + ".stdout.first\n"
               "    less " + _script + ".stderr.first\n"
-              "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-              "  ### then it may be better to update that file. You'll have to look at\n"
-              "  ### the source files to be sure.\n"
-              "  Make a new baseline:\n"
+              "  Make a new baseline for the output:\n"
               "    mv " + _script + ".stdout.first " + _script + ".stdout\n"
               "    mv " + _script + ".stderr.first " + _script + ".stderr\n"
-              "*************************"
-              );
+              "*************************");
 
     _baseStderr = "<invalid/>";
     _baseStdout = "<invalid/>";
@@ -174,33 +173,28 @@ void ScriptTest::runTest()
     _writeFile(_script + ".stdout.failed.stripped", _removeIgnoredSubstrings(_stdout));
     _writeFile(_script + ".stdout.stripped", _removeIgnoredSubstrings(_baseStdout));
 
-    QString msg =
-      "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
-    if (_suppressFailureDetail)
+    if (!_suppressFailureDetail)
     {
-      LOG_ERROR(msg);
-    }
-    else if (_printDiff)
-    {
-      LOG_ERROR(msg);
-      _runDiff(_script + ".stdout.stripped", _script + ".stdout.failed.stripped");
-    }
-    else
-    {
-      msg += "\n"
-             "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then \n"
-             "  creating a new baseline. E.g.\n"
-             "  verify: \n"
-             "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
-             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-             "  ### then it may be better to update that file. You'll have to look at\n"
-             "  ### the source files to be sure.\n"
-             "  Make a new baseline:\n"
-             "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
-             "*************************";
-      LOG_ERROR(msg);
-    }
+      QString msg =
+        "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
+      if (_printDiff)
+      {
+        LOG_ERROR(msg);
+        _runDiff(_script + ".stdout.stripped", _script + ".stdout.failed.stripped");
+      }
+      else
+      {
+        msg += "\n"
+               "\n*************************\n"
+               "  This can be resolved by reviewing the output for correctness and then creating a new baseline.\n"
+               "  Verify the changes in the output are satisfactory: \n"
+               "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
+               "  Make a new baseline for the output:\n"
+               "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
+               "*************************";
+        LOG_ERROR(msg);
+      }
+    } 
 
     failed = true;
   }
@@ -211,32 +205,27 @@ void ScriptTest::runTest()
     _writeFile(_script + ".stderr.failed.stripped", _removeIgnoredSubstrings(_stderr));
     _writeFile(_script + ".stderr.stripped", _removeIgnoredSubstrings(_baseStderr));
 
-    QString msg =
-      "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
-    if (_suppressFailureDetail)
+    if (!_suppressFailureDetail)
     {
-      LOG_ERROR(msg);
-    }
-    else if (_printDiff)
-    {
-      LOG_ERROR(msg);
-      _runDiff(_script + ".stderr.stripped", _script + ".stderr.failed.stripped");
-    }
-    else
-    {
-      msg += "\n"
-             "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then \n"
-             "  creating a new baseline. E.g.\n"
-             "  verify: \n"
-             "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
-             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-             "  ### then it may be better to update that file. You'll have to look at\n"
-             "  ### the source files to be sure.\n"
-             "  Make a new baseline:\n"
-             "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
-             "*************************";
-      LOG_ERROR(msg);
+      QString msg =
+        "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
+      if (_printDiff)
+      {
+        LOG_ERROR(msg);
+        _runDiff(_script + ".stderr.stripped", _script + ".stderr.failed.stripped");
+      }
+      else
+      {
+        msg += "\n"
+               "\n*************************\n"
+               "  This can be resolved by reviewing the output for correctness and then creating a new baseline.\n"
+               "  Verify the changes in the output are satisfactory: \n"
+               "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
+               "  Make a new baseline for the output:\n"
+               "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
+               "*************************";
+        LOG_ERROR(msg);
+      }
     }
 
     failed = true;
@@ -255,10 +244,10 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 
   while (p.waitForStarted(500) == false)
   {
-    LOG_WARN("Waiting for process to start: " + _script);
+    LOG_WARN("Waiting for diff process to start for: " + _script);
   }
 
-  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
+  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
   bool scriptTimeOutSpecified = false;
   if (scriptTestTimeOutSeconds != -1)
   {
@@ -273,17 +262,19 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
   {
     if (first)
     {
-      // throw an endl in there so the dots in the test list don't look funny.
+      // Throw an endl in there so the dots in the test list don't look funny.
       cout << endl;
-      LOG_WARN("Waiting for process to finish: " + _script);
+      LOG_WARN("Waiting for diff process to finish for: " + _script);
       first = false;
     }
 
-    //if the process hangs this will allows us to get out
+    // If the process hangs, this will allow us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {
-      LOG_ERROR("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      LOG_ERROR(
+        "Forcefully ending diff command for: " << _script << " after " << timeElapsedSeconds <<
+        " seconds.");
       break;
     }
   }
@@ -296,8 +287,8 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 
 void ScriptTest::_runProcess()
 {
-  // TODO: It would be nice if we could specify Testing.conf here to avoid having to specify it
-  // in every test files (#3823).
+  // It would be nice if we could specify Testing.conf here to avoid having to specify it in every
+  // test file (#3823).
   QProcess p;
   p.start(_script, QProcess::ReadOnly);
 
@@ -306,7 +297,7 @@ void ScriptTest::_runProcess()
     LOG_WARN("Waiting for process to start: " + _script);
   }
 
-  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
+  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
   bool scriptTimeOutSpecified = false;
   if (scriptTestTimeOutSeconds != -1)
   {
@@ -321,13 +312,13 @@ void ScriptTest::_runProcess()
   {
     if (first && !scriptTimeOutSpecified)
     {
-      // throw an endl in there so the dots in the test list don't look funny.
+      // Throw an endl in there so the dots in the test list don't look funny.
       cout << endl;
       LOG_WARN("Waiting for process to finish: " + _script);
       first = false;
     }
 
-    //if the process hangs this will allows us to get out
+    // If the process hangs, this will allows us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {

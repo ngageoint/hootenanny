@@ -1,0 +1,8 @@
+Input: test-output/cmd/slow/ConflateCmdStatsTest/toy-roads-out.osm
+
+Found 4 validation errors in 41 features with JOSM.
+Tag checker (MapCSS based) errors: 4
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

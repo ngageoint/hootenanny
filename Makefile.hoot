@@ -11,8 +11,7 @@ SHELL=/bin/bash
 
 .PHONY: clean-ccache
 
-# If you're adding another schema file be sure and update the archive target
-# too.
+# If you're adding another schema file be sure and update the archive target too.
 # NOTE: This is the list that gets deleted in "make clean"
 SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js translations/tds70_schema.js translations/tds70_full_schema.js translations/etds70_rules.js translations/etds70_osm_rules.js
 
@@ -49,7 +48,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -f lib/*
 	rm -rf test-output/*
 	rm -rf tgs/libTgs.a
-	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/* hoot-js/tmp/debug/* hoot-test/tmp/debug/* tgs/tmp/debug/* hoot-cmd/tmp/debug/*
+	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-js/tmp/debug/* hoot-test/tmp/debug/* tgs/tmp/debug/* hoot-cmd/tmp/debug/*
 	rm -rf bin/*
 	rm -f translations/config.js
 	rm -f conf/core/ConfigOptions.json
@@ -431,8 +430,6 @@ archive: js-make services-docs docs
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
-	# Put the docs in their own compressed file
-	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
 	cp Makefile.in missing aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
@@ -481,12 +478,6 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-tmp/schema.dot: qt-make
-	HootTest --single hoot::OsmSchemaTest
-
-tmp/schema.png: tmp/schema.dot
-	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
-
 # Code Coverage
 
 IGNORED=/usr/\* \*test/cpp\* \*/local/\* \*/tmp/moc/\* \*core/proto\* /opt/\* \*8/\*
@@ -533,16 +524,6 @@ coverage/core/js/index.html:
 	lcov -r coverage/core/js/Js.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/js/JsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
 	genhtml coverage/core/js/JsTrimmed.info --output-directory coverage/core/js/ 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
 
-coverage/core/rnd/index.html:
-ifeq ($(BUILD_RND),rnd)
-	echo "Generating core rnd code coverage report..."
-	mkdir -p coverage/core/rnd
-	rm -f coverage/core/rnd/log
-	lcov --capture --ignore-errors source -d hoot-rnd/tmp/debug -b hoot-rnd/ --output-file coverage/core/rnd/Rnd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-	lcov -r coverage/core/rnd/Rnd.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/rnd/RndTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-endif
-
 coverage/core/josm/index.html:
 ifeq ($(BUILD_JOSM),josm)
 	echo "Generating core JOSM code coverage report..."
@@ -553,7 +534,7 @@ ifeq ($(BUILD_JOSM),josm)
 	genhtml coverage/core/josm/JosmTrimmed.info --output-directory coverage/core/josm/ 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
 endif
 
-core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html coverage/core/tgs/index.html coverage/core/cmd/index.html coverage/core/js/index.html coverage/core/rnd/index.html coverage/core/josm/index.html
+core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html coverage/core/tgs/index.html coverage/core/cmd/index.html coverage/core/js/index.html coverage/core/josm/index.html
 
 coverage: services-coverage ui-coverage core-coverage
 

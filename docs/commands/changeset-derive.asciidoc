@@ -134,7 +134,7 @@ Alternatively, when removing data without replacing it with new data (cut only w
 
 Currently, only rectangular bounding box or closed polygon shapes are supported for the bounds. Support for other geometries may be added going forward.
 
-===== Out of Bounds Connected Ways
+*_Out of Bounds Connected Ways_*
 
 When performing replacement, a method is required to protect the reference linear features that fall outside of the 
 replacement bounds from deletion in the output changeset. The method to protect the ways is to tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution or 

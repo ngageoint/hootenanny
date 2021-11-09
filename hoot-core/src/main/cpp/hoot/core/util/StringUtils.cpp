@@ -127,7 +127,7 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
   return jsonObj;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonArray(
   const QStringList& stringList)
 {
   std::shared_ptr<boost::property_tree::ptree> strArr =
@@ -176,6 +176,11 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
     }
   }
   return duplicateStrings;
+}
+
+bool StringUtils::hasDuplicates(const QStringList& input)
+{
+  return !getDuplicates(input).empty();
 }
 
 bool StringUtils::containsSubstring(
@@ -228,12 +233,19 @@ int StringUtils::removePrefixes(const QString& prefix, QStringList& input)
   return numRemoved;
 }
 
-void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
+void StringUtils::removeAllContaining(
+  QStringList& input, const QString& text, Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < toRemove.size(); i++)
+  QStringList toReturn;
+  for (int i = 0; i < input.size(); i++)
   {
-    input.removeAll(toRemove.at(i));
+    const QString inputStr = input.at(i);
+    if (!inputStr.contains(text, caseSensitivity))
+    {
+      toReturn.append(inputStr);
+    }
   }
+  input = toReturn;
 }
 
 void StringUtils::removeLastIndexOf(
@@ -342,14 +354,6 @@ QStringList StringUtils::splitOnAny(
   return QStringList();
 }
 
-void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove)
-{
-  for (int i = 0; i < keysToRemove.size(); i++)
-  {
-    input.remove(keysToRemove.at(i));
-  }
-}
-
 void StringUtils::replaceLastIndexOf(
   QString& input, const QString& strToReplace, const QString& replacementStr,
   Qt::CaseSensitivity caseSensitivity)
@@ -358,6 +362,27 @@ void StringUtils::replaceLastIndexOf(
   if (index != -1)
   {
     input = input.replace(index, strToReplace.size(), replacementStr);
+  }
+}
+
+bool StringUtils::insertAfter(
+  QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert)
+{
+  const int beforeIndex = strList.indexOf(QRegExp(strToInsertAfter));
+
+  if (beforeIndex == -1)
+  {
+    return false;
+  }
+
+  if (beforeIndex == strList.count() - 1 || strList.at(beforeIndex + 1) != strToInsert)
+  {
+    strList.insert(beforeIndex + 1, strToInsert);
+    return true;
+  }
+  else
+  {
+    return false;
   }
 }
 
@@ -376,25 +401,6 @@ QString StringUtils::_splitAndRemoveAtIndex(
   }
   LOG_VART(input);
   return input.join(separator);
-}
-
-QString StringUtils::splitAndGetAtIndex(
-  const QString& input, const QRegExp& splitExp, const int index)
-{
-  QStringList tokens = input.split(splitExp);
-  if (index < tokens.size())
-  {
-    return tokens.at(index);
-  }
-  return "";
-}
-
-void StringUtils::reverse(QStringList& strList)
-{
-  // sure there's a better qt way to do this...
-  std::list<QString> strStdList = strList.toStdList();
-  std::reverse(strStdList.begin(), strStdList.end());
-  strList = QStringList::fromStdList(strStdList);
 }
 
 }

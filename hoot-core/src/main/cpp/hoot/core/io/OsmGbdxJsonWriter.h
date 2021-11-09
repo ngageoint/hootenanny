@@ -64,7 +64,7 @@ public:
    * @param url Filename ending in ".gbdx"
    * @return
    */
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".gbdx"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".gbdx", Qt::CaseInsensitive); }
 
   QString supportedFormats() const override { return ".gdbx"; }
 

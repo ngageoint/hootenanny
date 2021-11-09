@@ -1,7 +1,7 @@
 
-== Coding Best Practices
+=== Coding Best Practices
 
-=== General
+==== General
 
 Some of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
 
@@ -29,12 +29,15 @@ classes.
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
 
-=== Core Specific
+==== Core Specific
 
 * If you're using a commonly used class from a 3rd party library and its already included in 
 `HootCoreStable.h`, then you don't need to add an include for it.
 * Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold
 logic needed to be executed by the command.
+* If a command you create is meant for more advanced developer facing usage or is experimental, you
+should have it return a type of "advanced" via its `getType` method. This will cause it to be shown
+in the list of advanced commands when command help is displayed.
 * Make use of configuration options via the `Configurable` interface to keep functionality 
 adapatable to a broad range of data inputs.
 * Avoid setting the configuration in a global manner with `conf().set(...)` when possible.
@@ -60,8 +63,6 @@ processed.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
 * Use `OsmMapReaderFactory`, `OsmMapWriterFactory`, and `IoUtils` for I/O purposes when applicable.
-* Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
-than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
 inheriting `OsmMapOperation`, `ElementVisitor`, `ElementCriterion`, etc.).
 * Make use of the `OperationStatus` interface and the `Progress` class to appropriately report 
@@ -75,11 +76,17 @@ geometry types a map operator (classes inheriting `OsmMapOperation`, `ElementVis
 * Create new exception types by deriving them from `HootException` with the `HOOT_DEFINE_EXCEPTION` 
 macro.
 * Refrain from use of `using namespace std;` and the like to avoid potential namespace collisions.
+* Run `make docs` to test your asciidoc documentation changes. Specifically, ensure that your 
+section headers are at appropriate levels in the hierarchy and that newlines have been placed in 
+appropriate places for the table of contents to format properly. If you've made changes to the 
+schema, you'll also need to manually re-generate the schema documentation (see the "Core Schema" 
+section under the "Documentation" section in the Developer Guide). Make sure all generated 
+documentation files under source control have been committed as part of your changes.
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
 
-== Cleaning Up Header Includes
+==== Cleaning Up Header Includes
 
 Maybe we work this into the build and/or find a better tool, but this is what has been tried so far:
 
@@ -91,5 +98,6 @@ cd $HOOT_HOME
 cppclean .
 -----
 
-Some hoot code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp files.
+Some Hootenanny code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp 
+files.
 

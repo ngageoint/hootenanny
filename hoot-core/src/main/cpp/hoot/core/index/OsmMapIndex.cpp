@@ -251,29 +251,6 @@ vector<long> OsmMapIndex::findNodes(const Coordinate& from, Meters maxDistance) 
   return result;
 }
 
-vector<long> OsmMapIndex::findNodes(const Envelope& e) const
-{
-  vector<long> result;
-
-  vector<double> min(2), max(2);
-  min[0] = e.getMinX();
-  min[1] = e.getMinY();
-  max[0] = e.getMaxX();
-  max[1] = e.getMaxY();
-  IntersectionIterator it(getNodeTree().get(), min, max);
-
-  while (it.next())
-  {
-    long nid = _mapToNodeId(it.getId());
-    if (_map.containsNode(nid))
-    {
-      result.push_back(nid);
-    }
-  }
-
-  return result;
-}
-
 vector<long> OsmMapIndex::findWayNeighbors(const ConstWayPtr &way, Meters buffer,
                                            bool addError) const
 {

@@ -49,7 +49,6 @@ public:
    * @return true if successful
    */
   static bool makeDir(const QString& path);
-
   /**
    * Delete a directory along with all of its contents.
    *
@@ -57,14 +56,22 @@ public:
    * @return true on success; false on error.
    */
   static void removeDir(const QString& dirName);
-
   /**
-   * Tokenize a file by line and remove the date from each line
+   * Determines if a directory contains a file with the specified extension
    *
-   * @param filePath file to read
-   * @return a list of file lines
+   * @param dir directory to examine
+   * @param extension file extension to search for
+   * @return returns true if the input directory contains at least one file with the specified
+   * extension; false otherwise
    */
-  static QStringList tokenizeOutputFileWithoutDates(const QString& filePath);
+  static bool dirContainsFileWithExtension(const QDir& dir, const QString& extension);
+  /**
+   * Determines if any path in a collection of paths are directories
+   *
+   * @param paths paths to examine
+   * @return true if any input path is a directory; false otherwise
+   */
+  static bool anyAreDirs(const QStringList& paths);
 
   /**
    * Reads an entire file to string
@@ -73,6 +80,21 @@ public:
    * @return a string
    */
   static QString readFully(const QString& path);
+  /**
+   * Reads file lines into a string list
+   *
+   * @param inputPath file to read
+   * @param toLowerCase if true, converts each line to lower case
+   * @return a list of strings
+   */
+  static QStringList readFileToLines(const QString& inputPath, const bool toLowerCase = false);
+  /**
+   * Returns the number of lines in a file
+   *
+   * @param file file to examine
+   * @return a line count
+   */
+  static long getNumberOfLinesInFile(const QString& file);
 
   /**
    * Writes an entire file to string.  Closes the file on success.
@@ -83,39 +105,12 @@ public:
   static void writeFully(const QString& path, const QString& text);
 
   /**
-   * Returns the number of lines in a file
+   * Tokenize a file by line and remove the date from each line
    *
-   * @param file file to examine
-   * @return a line count
+   * @param filePath file to read
+   * @return a list of file lines
    */
-  static long getNumberOfLinesInFile(const QString& file);
-
-  /**
-   * Determines if a directory contains a file with the specified extension
-   *
-   * @param dir directory to examine
-   * @param extension file extension to search for
-   * @return returns true if the input directory contains at least one file with the specified
-   * extension; false otherwise
-   */
-  static bool dirContainsFileWithExtension(const QDir& dir, const QString& extension);
-
-  /**
-   * Reads file lines into a string list
-   *
-   * @param inputPath file to read
-   * @param toLowerCase if true, converts each line to lower case
-   * @return a list of strings
-   */
-  static QStringList readFileToList(const QString& inputPath, const bool toLowerCase = false);
-
-  /**
-   * Determines if any path in a collection of paths are directories
-   *
-   * @param paths paths to examine
-   * @return true if any input path is a directory; false otherwise
-   */
-  static bool anyAreDirs(const QStringList& paths);
+  static QStringList tokenizeOutputFileWithoutDates(const QString& filePath);
 
   /**
    * Convert a URL (file path, database URL, or other resource location) to a loggable format

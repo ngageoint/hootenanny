@@ -1,7 +1,8 @@
 /************************************************************************
 This is Node js implementation of Hoot Translation Server.
 The purpose of this module is to provide the hoot-ui fast way
-to translate feature tags between OSM and supported schemas.
+to translate feature tags between OSM and supported schemas. See
+docs/developer/ElementTranslationService.asciidoc
 ************************************************************************/
 var http = require('http');
 var url = require('url');
@@ -19,6 +20,9 @@ if (typeof hoot === 'undefined') {
     hoot.Settings.set({"reader.add.source.datetime": "false"});
     hoot.Settings.set({"writer.include.circular.error.tags": "false"});
     // hoot.Settings.set({"ogr.debug.dumptags": "true"});
+
+    // Setting this here as a placeholder. The default is "true"
+    hoot.Settings.set({"reader.drop.defaults": "true"});
 
     //Tests should set hashseedzero to true for consistent results
     if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
@@ -319,6 +323,13 @@ var postHandler = function(data) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
     var translation = data.transMap[data.transDir][data.translation];
+    var haveDropDefaults = data.dropDefaults && (data.dropDefaults === "true" || data.dropDefaults === "false");
+    var dropDefaultsInitial = null;
+
+    if (haveDropDefaults) {
+        dropDefaultsInitial = hoot.Settings.get("reader.drop.defaults");
+        hoot.Settings.set({"reader.drop.defaults": data.dropDefaults});
+    }
 
     if (data.transDir === "toogr") {
         hoot.Settings.set({"map.writer.schema": data.translation});
@@ -329,8 +340,14 @@ var postHandler = function(data) {
     // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
     hoot.loadMapFromString(map, data.osm, true);
     translation.apply(map);
+
+    if (haveDropDefaults) {
+        hoot.Settings.set({"reader.drop.defaults": dropDefaultsInitial});
+    }
+
     return hoot.OsmWriter.toString(map);
 };
+
 
 // OSM to Translated Schema request handler
 var osm2ogr = function(params) {

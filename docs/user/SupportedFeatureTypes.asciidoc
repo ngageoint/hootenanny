@@ -1,0 +1,355 @@
+
+=== Supported Feature Types
+
+This section describes the feature types Hootenanny can conflate. The feature types are list in 
+historical order of implementation. For more detailed information on each conflatable feature type, 
+see the "Conflatable Feature Types" section in the Algorithms documentation.
+
+[[Road-Conflation]]
+==== Roads
+
+===== Configurable Conflation Files
+
+Road Conflation has no user configurable conflation files. All conflation changes must be made by 
+developers in C++.
+
+===== Configurable Options
+
+Road Conflation can further be customized with the `highway.*` configuration options.
+
+===== Usage
+
+Roads are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only roads, the matchers/mergers may be adjusted. An 
+example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="HighwayMatchCreator" -D merger.creators="HighwayMergerCreator" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only roads, the matchers/mergers in use may be adjusted from the "Advanced Options" 
+dialog after selecting input datasets and before conflation.
+
+[[Building-Conflation]]
+==== Buildings
+
+===== Configurable Conflation Files
+
+Building Conflation has no user configurable conflation files. All conflation changes must be made 
+by developers in C++.
+
+===== Configurable Options
+
+Building Conflation can further be customized with the `building.*` configuration options.
+
+===== Usage
+
+Buildings are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only buildings, the matchers/mergers may be adjusted. An 
+example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only buildings, the matchers/mergers in use may be adjusted from the "Advanced Options" 
+dialog after selecting input datasets and before conflation.
+
+[[PoiToPoi]]
+==== POIs
+
+===== Configurable Conflation Files
+
+.*POI Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `rules/Poi.js` | custom rule based conflation model
+| `conf/core/PoiSearchRadii.json` | search radius distances by feature type
+|======
+
+===== Configurable Options
+
+POI Conflation can further be customized with the `poi.*` configuration options.
+
+===== Usage
+
+POIs are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only buildings, the matchers/mergers may be adjusted. An 
+example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="ScriptMatchCreator" -D merger.creators="ScriptMergerCreator,Poi.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only POIs, the matchers/mergers in use may be adjusted from the "Advanced Options" 
+dialog after selecting input datasets and before conflation.
+
+[[PoiToPolygonConflation]]
+==== POI To Polygon
+
+===== Configurable Conflation Files
+
+POI To Polygon Conflation has no user configurable conflation files. All conflation changes must be 
+made by developers in C++.
+
+===== Configurable Options
+
+POI to Polygon Conflation can further be customized with the `poi.polygon.*` configuration options.
+
+===== Usage
+
+POI To Polygon conflation is performed by conflated by default. 
+
+*_Command Line Interface_*
+
+To perform only POI To Polygon Conflation, the matchers/mergers may be adjusted. An example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="PoiPolygonMatchCreator" -D merger.creators="PoiPolygonMergerCreator" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To perform only POI To Polygon Conflation, the matchers/mergers in use may be adjusted from the 
+"Advanced Options" dialog after selecting input datasets and before conflation.
+
+[[AreaToAreaConflation]]
+==== Areas
+
+===== Configurable Conflation Files
+
+.*Area Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `rules/Area.js` | custom rule based conflation model
+|======
+
+===== Configurable Options
+
+Area Conflation can further be customized with the `area.*` configuration options.
+
+===== Usage
+
+Areas are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only areas, the matchers/mergers may be adjusted. An example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="ScriptMatchCreator" -D merger.creators="ScriptMergerCreator,Area.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only areas, the matchers/mergers in use may be adjusted from the "Advanced Options" 
+dialog after selecting input datasets and before conflation.
+
+[[River-Conflation]]
+==== Rivers
+
+===== Configurable Conflation Files
+
+.*River Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/waterway.json` | attribute schema definitions
+| `rules/River.js` | custom rule based conflation model
+|======
+
+===== Configurable Options
+
+River Conflation can further be customized with the `river.*` configuration options.
+
+===== Usage
+
+Rivers are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only rivers, the matchers/mergers may be adjusted. An example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="ScriptMatchCreator" -D merger.creators="ScriptMergerCreator,River.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only rivers, the matchers/mergers in use may be adjusted from the "Advanced Options" 
+dialog after selecting input datasets and before conflation.
+
+[[Power-Line-Conflation]]
+==== Power Lines
+
+===== Configurable Conflation Files
+
+.*Power Line Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/power.json` | attribute schema definitions
+| `rules/PowerLine.js` | custom rule based conflation model
+|======
+
+===== Configurable Options
+
+Power Line Conflation can further be customized with the `power.line.*` configuration options.
+
+===== Usage
+
+Power lines are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only power lines, the matchers/mergers may be adjusted. An example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="ScriptMatchCreator" -D merger.creators="ScriptMergerCreator,PowerLine.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only power lines, the matchers/mergers in use may be adjusted from the 
+"Advanced Options" dialog after selecting input datasets and before conflation.
+
+[[RailwayConflation]]
+==== Railways
+
+===== Configurable Conflation Files
+
+.*Railway Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `rules/Railway.js` | custom rule based conflation model
+| `conf/schema/railway.json` | attribute schema definitions
+|======
+
+===== Configurable Options
+
+Railway Conflation can further be customized with the `railway.*` configuration options.
+
+===== Usage
+
+Railways are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only railways, the matchers/mergers may be adjusted. An example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="ScriptMatchCreator" -D merger.creators="ScriptMergerCreator,Railway.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+To conflate only railways, the matchers/mergers in use may be adjusted from the "Advanced Options" 
+dialog after selecting input datasets and before conflation.
+
+[[GenericGeometry]]
+==== Generic Geometry Features
+
+Hootenanny uses machine learning techniques, customizable scripts, and flexible configuration 
+options to develop algorithms that will yield good conflated output for a given type of data (roads, 
+buildings, etc.). If a type of map data is encountered for which Hootenanny has no specific 
+conflation algorithm available, that data will be conflated with Generic Geometry Conflation 
+scripts. This ensures that all data in an input map has a chance to be conflated. The scripts use 
+very simple techniques to attempt to conflate data.
+
+===== Configurable Conflation Files
+
+.*Railway Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `rules/Line.js` | rule based conflation model
+| `rules/Point.js` | rule based conflation model
+| `rules/Polygon.js` | rule based conflation model
+| `rules/PointPolygon.js` | rule based conflation model
+|======
+
+===== Configurable Options
+
+Generic Geometry Conflation can further be customized with the `generic.*` configuration options.
+
+===== Usage
+
+Generic Geometry Features are conflated by default. 
+
+*_Command Line Interface_*
+
+To conflate only generic geometry features, the matchers/mergers may be adjusted. An example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators="ScriptMatchCreator" -D merger.creators="ScriptMergerCreator,Point.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+The web user interface does not allow for conflating generic geometry feature by themselves.
+
+[[RelationConflation]]
+==== Relations
+
+Relations are conflated separately from node and way element types. Generally, this happens at the 
+end of the conflation process.
+
+===== Configurable Conflation Files
+
+.*Railway Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `rules/Relation.js` | rule based conflation model
+|======
+
+===== Configurable Options
+
+Generic Geometry Conflation can further be customized with the `relation.*` configuration options.
+
+===== Usage
+
+Relations are conflated by default.
+
+*_Command Line Interface_*
+
+Relations may not be conflated by themselves, but conflation of relations can be disabled. An 
+example:
+-----
+hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+  -D match.creators-="ScriptMatchCreator" -D merger.creators-="ScriptMergerCreator,Relation.js" \
+  input1.osm input2.osm output.osm
+-----
+
+*_Web User Interface_*
+
+The web user interface does not allow for conflating relations by themselves or disabling the 
+conflation of relations.
+

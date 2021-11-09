@@ -1,12 +1,11 @@
 
 [[Limitations]]
-== Limitations
+=== Limitations
 
-Hootenanny is only supported on 64bit platforms.
+* Hootenanny is only supported on 64bit platforms.
+* Not all ESRI geometry types are supported. Using ESRI "True Curve" geometries (parametric curves) will yield undefined results.
 
-Not all ESRI geometry types are supported. Using ESRI "True Curve" geometries (parametric curves) will give in undefined results.
-
-=== Projections
+==== Projections
 
 The big assumption in Hootenanny about projections is that the data _can_ be
 reprojected into WGS84. In other words, a single feature does not cross either
@@ -14,10 +13,9 @@ the poles or the anti-meridian. If the feature crosses in either of these two
 areas then the results are undefined. Hootenanny also does not support
 conflating across the anti-meridian or the poles -- in real terms this means
 that the seams are not guaranteed to match across either of these boundaries.
-See the _Selecting a Projection_ section in <<hootalgo>> for details.
+See the _Selecting a Projection_ section in <<hootuser>> for details.
 
-During the translation process the data is reprojected from its native projection (e.g. UTM, etc.) into WGS84 for storage in the OSM schema/format. If the data is already in WGS84 then no reprojection occurs. For some cleanup operations and all conflation operations the data must be projected into a planar projection. To accomplish this, Hootenanny reprojects the data internally into a custom projection based on the boundary of the data set being worked on. This should work well in most cases, but if you want to do very large regions you'll have to use the four pass conflation so that data is reprojected on a tile by tile basis. You will be presented with a warning if Hootenanny cannot find a suitable planar projection.
+During the translation process the data is reprojected from its native projection (e.g. UTM, etc.) into WGS84 for storage in the OSM schema/format. If the data is already in WGS84 then no reprojection occurs. For some cleanup operations and all conflation operations the data must be projected into a planar projection. To accomplish this, Hootenanny reprojects the data internally into a custom projection based on the boundary of the data set being worked on. This should work well in most cases, but if you want to do very large regions you'll have to use Four Pass Conflation, so that data is reprojected on a tile by tile basis (NOTE: Four Pass Conflation is part of the hoot-hadoop module and now dormant). You will be presented with a warning if Hootenanny cannot find a suitable planar projection.
 
 Before the data is written to disk it is reprojected back to WGS84. All Hootenanny output is in WGS84.
-
 

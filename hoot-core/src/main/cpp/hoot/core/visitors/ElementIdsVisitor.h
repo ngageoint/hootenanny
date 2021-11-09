@@ -52,6 +52,9 @@ public:
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
   ~ElementIdsVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   std::vector<long> getIds() const { return _elementIds; }
@@ -65,8 +68,8 @@ public:
    * @return a collection of numerical element IDs
    * @todo change this to take in ElementCriterionPtr instead?
    */
-  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
-                                        ElementCriterion* pCrit);
+  static std::vector<long> findElements(
+    const ConstOsmMapPtr& map, const ElementType& elementType, ElementCriterion* pCrit);
   /**
    * Retrieves the IDs of nodes satifying specified criteria and within a radius of a specified
    * location
@@ -78,8 +81,9 @@ public:
    * @return a collection of numerical node IDs
    * @todo change this to take in ElementCriterionPtr instead?
    */
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
-                                     const geos::geom::Coordinate& refCoord, Meters maxDistance);
+  static std::vector<long> findNodes(
+    const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
+    const geos::geom::Coordinate& refCoord, Meters maxDistance);
   /**
    * Retrieves the IDs of elements of a given type having a specified tag
    *
@@ -89,9 +93,9 @@ public:
    * @param value tag value
    * @return a collection of numerical element IDs
    */
-  static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
-                                             const ElementType& elementType, const QString& key,
-                                             const QString& value);
+  static std::vector<long> findElementsByTag(
+    const ConstOsmMapPtr& map, const ElementType& elementType, const QString& key,
+    const QString& value);
   /**
    * Retrieves the IDs of all ways owning a specified node
    *

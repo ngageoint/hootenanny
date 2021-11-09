@@ -1,0 +1,2 @@
+Place slow suite command tests (script tests) which need to run serially in this directory. 
+Generally, that includes command tests that make use of the single test OSM API database instance.

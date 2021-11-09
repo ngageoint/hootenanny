@@ -45,6 +45,7 @@ public:
   QString getName() const override { return "type-similarity"; }
   QString getDescription() const override
   { return "Calculates a similarity score between two type tags"; }
+  QString getType() const override { return "advanced"; }
 
   int runSimple(QStringList& args) override
   {

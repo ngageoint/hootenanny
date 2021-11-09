@@ -66,7 +66,7 @@ bool GeoNamesReader::isSupported(const QString& url) const
 {
   QString path = QDir().absoluteFilePath(url);
   QFile f(path);
-  bool result = path.toLower().endsWith(".geonames") && f.exists();
+  bool result = path.endsWith(".geonames", Qt::CaseInsensitive) && f.exists();
   return result;
 }
 

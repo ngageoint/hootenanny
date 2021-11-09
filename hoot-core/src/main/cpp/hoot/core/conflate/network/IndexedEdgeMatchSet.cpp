@@ -193,16 +193,6 @@ bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr& em) const
   return result;
 }
 
-ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr& em) const
-{
-  MatchHash::const_iterator it = _matches.find(em);
-  if (it == _matches.end())
-  {
-    throw HootException("The specified match was not found: " + em->toString());
-  }
-  return it.key();
-}
-
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatContain(ConstNetworkEdgePtr e) const
 {
   return _edgeToMatch[e];
@@ -220,16 +210,6 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatTerminateAt(ConstNetw
     {
       result.insert(em);
     }
-  }
-  return result;
-}
-
-QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStringPtr str) const
-{
-  QSet<ConstEdgeMatchPtr> result;
-  foreach (const EdgeString::EdgeEntry& ee, str->getAllEdges())
-  {
-    result.unite(getMatchesThatContain(ee.getEdge()));
   }
   return result;
 }

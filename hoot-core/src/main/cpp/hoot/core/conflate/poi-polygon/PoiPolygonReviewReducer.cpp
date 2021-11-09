@@ -441,8 +441,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   // do it if the poly has more than one address, like in many multi-use buildings.
   if (_addressParsingEnabled && !_addressMatch &&
       // We don't want to shoot ourselves and throw out a good review just b/c of an address
-      // mismatch when we have some other good evidence. TODO: should this be moved down to the if
-      // block that checks the address score?
+      // mismatch when we have some other good evidence.
       !(_distance == 0 && (_nameMatch || _typeMatch)))
   {
     const int numPoiAddresses = _infoCache->numAddresses(poi);

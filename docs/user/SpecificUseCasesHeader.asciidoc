@@ -1,0 +1,5 @@
+
+=== Specific Use Cases
+
+This section describes various specific use cases Hootenanny may be applied to.
+

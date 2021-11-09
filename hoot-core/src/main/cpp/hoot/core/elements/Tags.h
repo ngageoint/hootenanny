@@ -65,7 +65,6 @@ public:
 
   Tags() = default;
   Tags(const QString& key, const QString& value);
-  Tags(const QString& kvp);
   virtual ~Tags() = default;
 
   bool operator==(const Tags& other) const;
@@ -224,11 +223,6 @@ public:
   Meters readMeters(const QString& key) const;
 
   /**
-   * Remove all tags with empty strings as values.
-   */
-  int removeEmpty();
-
-  /**
    * Removes all metadata tags (hoot:* and those identified in the schema)
    *
    * @return the number of tags removed
@@ -258,13 +252,6 @@ public:
    * @return the number of tags removed
    */
   int removeKeys(const QList<QRegExp>& regexes);
-  /**
-   * Removes all tags with keys that contain the input substring
-   *
-   * @param tagKeySubstring a substring to match
-   * @return the number of tags removed
-   */
-  int removeByTagKeyContains(const QString& tagKeySubstring);
 
   /**
    * Removes all tags with keys that start with the input substring
@@ -347,6 +334,12 @@ public:
    */
   static QString kvpToVal(const QString& kvp);
   /**
+   * @brief kvpToParts Breaks a KVP string into its constituent parts
+   * @param kvp a KVP string of the form <key>=<value>
+   * @return a list of strings
+   */
+  static QStringList kvpToParts(const QString& kvp);
+  /**
    * Returns true if the tags have the specified kvp
    *
    * @param kvp kvp to search for; value wildcards are supported using '*'
@@ -367,6 +360,24 @@ public:
    * @return a kvp or an empty string if no matching kvp is found
    */
   QString getFirstMatchingKvp(const QStringList& kvps) const;
+  /**
+   * Converts a list of KVPs into tags
+   *
+   * @param kvps kvps to convert
+   * @return a set of tags
+   */
+  static Tags kvpListToTags(const QStringList& kvps);
+  /**
+   * Returns the tags as key/value pair strings
+   *
+   * @return a list of key/value pairs
+   */
+  QStringList toKvps() const;
+  /**
+   * @brief toKeys returns the tags as a list of key strings
+   * @return a list of key strings
+   */
+  QStringList toKeys() const;
 
   /**
    * Returns true if the tags have any key in the input list
@@ -375,7 +386,6 @@ public:
    * @return true if the tags contain at least one of the keys; false otherwise
    */
   bool hasAnyKey(const QStringList& keys) const;
-
   /**
    * Returns the first tag key found from an input list of keys
    *
@@ -383,21 +393,6 @@ public:
    * @return a non-empty string if any key in the list was found; otherwise an empty string
    */
   QString getFirstMatchingKey(const QStringList& keys) const;
-
-  /**
-   * Converts a list of KVPs into tags
-   *
-   * @param kvps kvps to convert
-   * @return a set of tags
-   */
-  static Tags kvpListToTags(const QStringList& kvps);
-
-  /**
-   * Returns the tags as key/value pair strings
-   *
-   * @return a list of key/value pairs
-   */
-  QStringList toKvps() const;
 
   /**
    * Converts a collection of schema vertices to tags
@@ -417,29 +412,12 @@ public:
    */
   static bool haveMatchingName(
     const Tags& tags1, const Tags& tags2, const bool strictNameMatch = false);
-
   /**
    * Determines whether a name exists in the set of tag
    *
    * @return true if at least one name exists; false otherwise
    */
   bool hasName() const;
-
-  /**
-   * Returns a string showing the difference between this set of tags and another
-   *
-   * @param other set of tags to compare these tags to
-   * @return a tag diff string
-   */
-  QString getDiffString(const Tags& other) const;
-
-  /**
-   * Determines if another set of tags intersects with this one
-   *
-   * @param other tags to compare against
-   * @return true if the tags being compared against have at least one tag in similar
-   */
-  bool intersects(const Tags& other) const;
 
   /**
    * Determines if two sets of tags contain a particular key/value pair

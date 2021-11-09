@@ -62,23 +62,6 @@
 namespace hoot
 {
 
-bool IoUtils::urlsAreBoundable(const QStringList& urls)
-{
-  for (int i = 0; i < urls.size(); i++)
-  {
-    const QString url = urls.at(i);
-    std::shared_ptr<OsmMapReader> reader =
-      OsmMapReaderFactory::createReader(url, true, Status::Invalid);
-
-    std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
-    if (!boundable)
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();
@@ -103,18 +86,18 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   if (QFileInfo(justPath).isDir())
   {
     return
-      justPath.toLower().endsWith(".gdb") ||
+      justPath.endsWith(".gdb", Qt::CaseInsensitive) ||
       FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
   // single input
   else
   {
     // The only zip file format we support are ones containing OGR inputs.
-    if (justPath.toLower().endsWith(".zip") ||
+    if (justPath.endsWith(".zip") ||
         // We only support this type of postgres URL for OGR inputs.
-        justPath.toLower().startsWith("pg:") ||
+        justPath.startsWith("pg:", Qt::CaseInsensitive) ||
         // Or, OGDI Vectors. Things like VPF (DNC, VMAP etc)
-        justPath.toLower().startsWith("gltp:"))
+        justPath.startsWith("gltp:", Qt::CaseInsensitive))
     {
       return true;
     }
@@ -181,11 +164,6 @@ void IoUtils::ogrPathAndLayerToLayer(QString& input)
   {
     input = "";
   }
-}
-
-bool IoUtils::isOgrPathAndLayer(const QString& input)
-{
-  return input.split(";").size() == 2;
 }
 
 QStringList IoUtils::getSupportedInputsRecursively(
@@ -515,9 +493,6 @@ void IoUtils::loadMap(
   // layers per input file or multiple files per directory.
   if (isSupportedOgrFormat(justPath, true))
   {
-    // Expanding this to have the exact OGR format is not needed
-    conf().set(ConfigOptions::getReaderInputFormatKey(), "OGR");
-
     OgrReader reader;
     reader.setConfiguration(conf());
     reader.setDefaultStatus(defaultStatus);
@@ -537,13 +512,23 @@ void IoUtils::loadMap(
 }
 
 void IoUtils::loadMaps(
-  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus)
+  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus,
+  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+  const int numTasks)
 {
   // TODO: it would be nice to allow this to take in Progress for updating
   for (int i = 0; i < paths.size(); i++)
   {
-    loadMap(map, paths.at(i), useFileId, defaultStatus);
+    loadMap(
+      map, paths.at(i), useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource,
+      numTasks);
   }
+}
+
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
+{
+  cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
@@ -551,12 +536,6 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
   // We could pass progress in here to get more granular write status feedback. Otherwise, this is
   // merely a wrapper.
   OsmMapWriterFactory::write(map, path);
-}
-
-void IoUtils::cropToBounds(
-  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
-{
-  cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
 void IoUtils::cropToBounds(
@@ -605,22 +584,6 @@ void IoUtils::cropToBounds(
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
   OsmMapWriterFactory::writeDebugMap(map, className(), "cropped-to-bounds");
-}
-
-std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
-  const QString& input, const QString& visitorClassName, const bool useDataSourceIds)
-{
-  std::shared_ptr<PartialOsmMapReader> reader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::createReader(input));
-  reader->setUseDataSourceIds(useDataSourceIds);
-  reader->open(input);
-  reader->initializePartial();
-
-  return
-    std::make_shared<ElementVisitorInputStream>(
-      std::dynamic_pointer_cast<ElementInputStream>(reader),
-      ElementVisitorPtr(Factory::getInstance().constructObject<ElementVisitor>(visitorClassName)));
 }
 
 bool IoUtils::isUrl(const QString& str)

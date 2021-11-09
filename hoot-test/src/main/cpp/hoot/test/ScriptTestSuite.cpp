@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -38,8 +39,9 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec,
-                                 bool hideDisableTests, bool suppressFailureDetail) :
+ScriptTestSuite::ScriptTestSuite(
+  QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests,
+  bool suppressFailureDetail, bool validatedOnly) :
 TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 {
   QDir d(ConfPath::getHootHome() + "/" + dir);
@@ -49,19 +51,12 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
   // if the web services are disabled, then ignore all script tests that start with Service
 # ifndef HOOT_HAVE_SERVICES
     ignorePrefix << "Service";
-    ignorePrefix << "RndService";
-# endif
-# ifndef HOOT_HAVE_RND
-    ignorePrefix << "Rnd";
-# endif
-# ifndef HOOT_HAVE_JOSM
-    ignorePrefix << "Josm";
 # endif
 
   for (int i = 0; i < files.size(); i++)
   {
     QFileInfo fi(d.absoluteFilePath(files[i]));
-    if (files[i].endsWith(".sh") && fi.isExecutable() == false )
+    if (files[i].endsWith(".sh") && fi.isExecutable() == false)
     {
       LOG_WARN("Found a .sh file that is not executable. Is that what you want?");
       LOG_WARN(".sh file: " << fi.absoluteFilePath());
@@ -81,14 +76,23 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
           ignore = true;
         }
       }
+      const QString path = d.absoluteFilePath(files[i]);
+      if (validatedOnly && !_scriptValidatesAnyOutput(path))
+      {
+        ignore = true;
+      }
 
       if (!ignore)
       {
-        QString path = d.absoluteFilePath(files[i]);
         addTest(new ScriptTest(path, printDiff, suppressFailureDetail, waitTimeSec * 1000));
       }
     }
   }
+}
+
+bool ScriptTestSuite::_scriptValidatesAnyOutput(const QString& scriptPath) const
+{
+  return FileUtils::readFully(scriptPath).contains("validateTestOutput");
 }
 
 }

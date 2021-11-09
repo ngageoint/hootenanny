@@ -50,8 +50,14 @@ public:
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
   ~AddAttributesVisitor() override = default;
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<Element>& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override { return "Adding attributes..."; }

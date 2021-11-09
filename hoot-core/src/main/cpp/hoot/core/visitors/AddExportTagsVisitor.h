@@ -67,6 +67,9 @@ public:
 
   static QString className() { return "AddExportTagsVisitor"; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const ElementPtr& pElement) override;
 
   /**

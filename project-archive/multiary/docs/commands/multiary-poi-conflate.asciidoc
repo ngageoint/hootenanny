@@ -1,0 +1,27 @@
+[[multiary-poi-conflate]]
+== multiary-poi-conflate
+
+=== Description
+
+The `multiary-poi-conflate` command (experimental) conflates two or more POI map sources into a 
+single map.
+
+* `inputs` - Two or more input files; may be any supported input format (e.g. .osm file).
+* `output` - Output; may be any supported output format (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+hoot multiary-poi-conflate (input1) (input2) [input3] ... (output)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot multiary-poi-conflate input1.osm input2.osm input3.osm output.osm
+--------------------------------------
+
+=== See Also
+
+* <<hootuser, ManualMultiaryConflation>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

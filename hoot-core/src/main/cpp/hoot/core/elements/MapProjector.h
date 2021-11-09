@@ -123,7 +123,6 @@ public:
    * a reasonable projection for small areas. Units are in meters.
    */
   static void projectToOrthographic(const std::shared_ptr<OsmMap>& map);
-
   static void projectToOrthographic(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env);
 
   /**
@@ -131,7 +130,6 @@ public:
    * Uses the envelope of the map to determine the projection.
    */
   static void projectToPlanar(const std::shared_ptr<OsmMap>& map);
-
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the provided envelope to determine the projection.
@@ -139,12 +137,6 @@ public:
   static void projectToPlanar(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env);
 
   static void projectToWgs84(const std::shared_ptr<OsmMap>& map);
-
-  /**
-   * Very slow convenience function.
-   */
-  static geos::geom::Coordinate projectFromWgs84(const geos::geom::Coordinate& c,
-                                                 const std::shared_ptr<OGRSpatialReference>& srs);
 
   /**
    * Very slow convenience function.

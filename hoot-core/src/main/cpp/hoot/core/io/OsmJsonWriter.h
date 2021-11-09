@@ -57,7 +57,7 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".json"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".json", Qt::CaseInsensitive); }
   void open(const QString& url) override;
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
   void write(const ConstOsmMapPtr& map) override;

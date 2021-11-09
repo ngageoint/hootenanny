@@ -155,11 +155,4 @@ void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryT
   conf().set(opName, opValue);
 }
 
-void ConfigUtils::insertListOpEntry(const QString& opName, const QString& opEntry, const int index)
-{
-  QStringList opValue = conf().getList(opName);
-  opValue.insert(index, opEntry);
-  conf().set(opName, opValue);
-}
-
 }

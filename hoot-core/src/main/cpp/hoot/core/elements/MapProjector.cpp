@@ -638,14 +638,6 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
   }
 }
 
-Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
-                                          const std::shared_ptr<OGRSpatialReference>& srs)
-{
-  LOG_TRACE("Projecting from WGS84...");
-  std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
-  return project(c, wgs84, srs);
-}
-
 bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
   const MapProjector::PlanarTestResult& p2)
 {

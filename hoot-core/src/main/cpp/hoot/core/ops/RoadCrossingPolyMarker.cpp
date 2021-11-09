@@ -53,6 +53,7 @@ _addValidationTags(false),
 _numRoads(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
+  setConfiguration(conf());
 }
 
 void RoadCrossingPolyMarker::setConfiguration(const Settings& conf)
@@ -76,7 +77,7 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
   ElementCriterionPtr crit = std::make_shared<ChainCriterion>(polyCrit, tagCrit);
   if (FilteredVisitor::getStat(crit, std::make_shared<ElementCountVisitor>(), _map) == 0)
   {
-    LOG_DEBUG("No polygons found in input map. Skipping marking roads for review.");
+    LOG_DEBUG("No polygons found in input map. Skipping marking roads crossing polygons.");
     return;
   }
 
@@ -100,8 +101,10 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
       {
         RoadCrossingPolyRule rule = *rulesItr;
 
-        // if we haven't already marked this road for review, its not in another review, and this
-        // it isn't allowed to cross the type of poly specified by the current rule
+        // If we haven't already marked this road for review, its not in another review, and it
+        // isn't allowed to cross the type of poly specified by the current rule... (actually, now
+        // not sure that skipping the road if its already involved in another review is the best
+        // behavior)
         if (!_markedRoads.contains(way->getElementId()) &&
             !ReviewMarker::isNeedsReview(_map, way) &&
             (!rule.getAllowedRoadTagFilter() || !rule.getAllowedRoadTagFilter()->isSatisfied(way)))
@@ -128,7 +131,7 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
                 ElementGeometryUtils::haveGeometricRelationship(
                   way, neighbor, GeometricRelationship::Crosses, _map))
             {
-              LOG_TRACE("Marking " << way->getElementId() << " for review...");
+              LOG_TRACE("Marking " << way->getElementId() << "...");
               LOG_VART(way);
               LOG_VART(rule.getPolyFilterString());
               LOG_VART(rule.getAllowedRoadTagFilterString());
@@ -160,8 +163,8 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
     if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "\tMarked " << StringUtils::formatLargeNumber(_numAffected) << " crossing roads for " <<
-        "review out of " << StringUtils::formatLargeNumber(_numRoads) << " total roads and " <<
+        "\tMarked " << StringUtils::formatLargeNumber(_numAffected) << " crossing roads out of " <<
+        StringUtils::formatLargeNumber(_numRoads) << " total roads and " <<
         StringUtils::formatLargeNumber(ways.size())  << " total ways.");
     }
   }
@@ -177,7 +180,8 @@ QStringList RoadCrossingPolyMarker::getCriteria() const
 
 QString RoadCrossingPolyMarker::getValidationErrorMessage() const
 {
-  return _numAffected == 0 ? "" : "Roads crossing polygons: " + QString::number(_numAffected);
+  return
+    _numAffected == 0 ? "" : "Roads crossing polygons errors: " + QString::number(_numAffected);
 }
 
 }

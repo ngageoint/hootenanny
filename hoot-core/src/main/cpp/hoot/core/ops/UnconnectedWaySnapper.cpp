@@ -997,9 +997,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWay(
 
     // This check of the calculated distance being less than the allowed snap distance should not
     // be necessary, but it is for now. For some reason, neighbors are occasionally being returned
-    // at longer distances away than expected.
-    // TODO: This may have been fixed with the addition of distance sorting in
-    // SpatialIndexer...check.
+    // at longer distances away than expected. This may have been fixed with the addition of
+    // distance sorting in SpatialIndexer.
     if (shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
     {
       // Do a check here to see if the coordinate we've selected to snap to on the way is very close
@@ -1138,7 +1137,8 @@ bool UnconnectedWaySnapper::_snapClosestWayEndpointToWay(
   return _snapUnconnectedWayEndNodeToWay(endpoint, connectTo, snappedToNode);
 }
 
-void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode) const
+void UnconnectedWaySnapper::_markSnappedWay(
+  const long idOfNodeBeingSnapped, const bool toWayNode) const
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);

@@ -1,7 +1,7 @@
 
 
 [[DifferentialConflation]]
-== Differential Conflation
+==== Differential Conflation
 
 Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but 
 attempts a much simpler operation than "full" conflation. The idea is to allow a user to take two 
@@ -25,23 +25,23 @@ So now we have all of the "new" geometry from the second input isolated as outpu
 were also new or updated tags on some of the elements in the second input? How can we capture those 
 new tags? If the `--include-tags` option is enabled, we simply go back through the matches derived 
 in the previous step, and compare the tags of the elements involved in the match. If the element 
-from the second input contains new tag keys, or tag values different from the first input element, 
-the tags are merged using an overwrite algorithm, where all key/value pairs are kept from the first 
+from the second input contains new tag keys or tag values different from the first input element, 
+the tags are merged using an overwriting algorithm. All key/value pairs are kept from the first 
 input, all key/value pairs from the second input are appended, and any keys that conflict are 
 assigned the value from the second input, as it is assumed that the second input contains updated 
 information. The merged tag set is applied to the *original* element geometry, and it is written out 
 as a changeset "modify" directive.
 
-When using Differential Conflation against linear features other than rivers with the Unifying Roads 
-Algorithm, by default it calculates the differential against partial linear feature matches rather 
-than whole matches. This generally generates a more granular differential. Differentials generated 
-with river data, however, do not seem to benefit from partial linear match removal the majority of 
-the time. There may, however, be situations when a less granular differential is desired, and the 
-default behavior for linear non-river features may be turned off by enabling the `differential.remove.linear.partial.matches.as.whole` configuration option (enable "Remove features 
+By default, when using Differential Conflation against linear features other than rivers with the 
+Unifying Roads Algorithm, it calculates the differential against partial linear feature matches 
+rather than whole matches. This generally generates a more granular differential. Differentials 
+generated with river data, however, do not seem to benefit from partial linear match removal the 
+majority of the time. There may, however, be situations when a less granular differential is 
+desired, and the default behavior for linear non-river features may be turned off by enabling the `differential.remove.linear.partial.matches.as.whole` configuration option (enable "Remove features 
 involved in linear partial matches completely" option in the UI). To control river partial matching 
 with Differential Conflation, use the `differential.remove.river.partial.matches.as.whole` ("Remove 
 rivers involved in river partial matches completely" option in the UI).
 
-
 Differential Conflation can further be customized by modifying the 
 `conf/core/DifferentialConflation.conf` configuration options file.
+

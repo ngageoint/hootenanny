@@ -72,9 +72,8 @@ void HootExceptionJs::Init(Local<Object> target)
     tpl->SetClassName(Local<String>::Cast(toV8(opNames[i])));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  toV8(HootException::className()));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(), toV8(HootException::className()));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(context, toV8(opName), ToLocal(&_constructor));
@@ -187,16 +186,6 @@ void HootExceptionJs::throwAsHootException(const TryCatch& tc)
           .arg(stack_trace_string));
     }
   }
-}
-
-void HootExceptionJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  std::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
-
-  args.GetReturnValue().Set(toV8(e->getWhat()));
 }
 
 }

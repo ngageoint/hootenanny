@@ -49,7 +49,7 @@ namespace hoot
 class MaximalSublineStringMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MaximalSublineStringMatcherTest);
-  CPPUNIT_TEST(evaluateMatchTest);
+  CPPUNIT_TEST(evaluateMatchTest); // TODO: fix me
   CPPUNIT_TEST(runFindMatchTest);
   CPPUNIT_TEST(runBackwardsPartialTest);
   CPPUNIT_TEST(runBackwardsPartial2Test);
@@ -380,9 +380,8 @@ public:
           uut._evaluateMatch(map, 10, toWayVector(map, "b1"), toWayVector(map, "b2"),
                              reversed1, reversed2);
 
-      // TODO: This test fails with the default subline matcher. The MaximalSublineMatcher
-      // performs better, but has other flaws.
-      // r2701 should resolve this (need to port issue to github)
+      // TODO: This test fails with the default subline matcher. The MaximalSublineMatcher performs
+      // better, but has other flaws. Redmine 2701 should resolve this.
 //      HOOT_STR_EQUALS("score: 80\n"
 //        "matches:\n"
 //        "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 0 fraction: 0.4\n"

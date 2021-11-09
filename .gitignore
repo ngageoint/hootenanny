@@ -32,9 +32,7 @@ Configure.pri
 DbSchema.sql
 .deps/
 docs/*.epub
-docs/*.pdf
 docs/*-docinfo.xml
-docs/*.png
 docs/**/__*.png
 docs/.*
 docs/*.html
@@ -59,7 +57,6 @@ gdb
 go
 hoot-cmd/Makefile
 hoot-js/Makefile
-hoot-rnd/Makefile
 hoot-test/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile
@@ -112,7 +109,7 @@ translations-local
 *.pro.user*
 progress/
 .scannerwork/
-schema.dot
+docs/schema.dot
 src/proto/*.pb.cc
 src/proto/*.pb.h
 stamp-h1
@@ -169,8 +166,11 @@ id_rsa.pub
 coverage/
 userfiles/
 test-files/cases/**/out
+test-files/cases/**/validated-output-report
+test-files/cases/**/Output-validated.osm
 .bundle/
 vendor/
+docs/package-lock.json
 
 ###### hoot-services ignores
 hoot-services/.idea

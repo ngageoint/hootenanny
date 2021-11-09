@@ -1,0 +1,58 @@
+
+[[HootInstallTuning]]
+=== Performance Tuning
+
+The following sections are optional sections to tune the performance of Hootenanny.
+
+==== Database
+
+The following information pertains to database tuning parameters in the postgresql.conf configuration file (/etc/postgresql/9.1/main/postgresql.conf)
+
+[[HootDBConnectionPool]]
+===== Configuring the Database Connection Pool
+
+The Hootenanny services database is pre-configured with a database connection pool during the build process. If you want to tweak the connection pool you experiment with the following:
+
+.edit properties in $TOMCAT8_HOME/webapps/hoot-services/WEB-INF/classes/db/db.properties
+.restart tomcat
+
+After making changes, you should be able to monitor the number of open Postgres connections while hoot is running using something like `ps aux | grep postgres: | wc -l` or use a `postgres` filter on processes with htop.
+
+==== Batch Jobs
+
+Hootenanny services execute some REST calls as low latency calls (e.g. retrieve
+the list of maps) and others as batch operations (e.g. conflate two maps). Batch
+operations typically use more compute and memory resources so they are queued up
+and only a fixed number can be executed at one time.
+
+The number of batch jobs available in the queue at one time is specified in the
+hoot-services configuration file,
+`$TOMCAT8_HOME/webapps/hoot-services/WEB-INF/classes/conf/local.conf` with the
+`internalJobThreadSize` configuration option. By default the value is 5. E.g.
+
+----
+internalJobThreadSize=5
+----
+
+Each batch operation generally uses a single thread, but they may use a lot of
+RAM. To prevent a single job from uses all available RAM a configuration option
+can be specified to limit the RAM available to core execution --
+`max.memory.usage`. Usage details and implications can be found in the
+Hootenanny User Guide.
+
+To enable `max.memory.usage` modify `$HOOT_HOME/conf/hoot.json` and add a
+the appropriate setting. E.g.
+
+----
+[...]
+  "max.memory.usage": "5GB",
+[...]
+----
+
+It is highly advised to customize one or both of the two settings above on
+servers with high load. For instance, if the server has 8 cores and 72GB of RAM
+an appropriate set of values may be `max.memory.usage=11GB` and
+`internalJobThreadSize=5`. This leaves 16GB of RAM available to the system with
+five jobs using 55GB of RAM and still 3 cores available to service other
+requests. 11GB of RAM will service a fairly large conflation job.
+

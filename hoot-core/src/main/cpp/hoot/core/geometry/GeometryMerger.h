@@ -53,9 +53,11 @@ public:
    * @brief mergeGeometries Merge a vector of geometries all into one single geometry
    * @param geometries Vector of geos::geom::Geometry pointers that are to be merged together
    * @param envelope Bounding envelope used for sorting geometries by distance
-   * @return Single geometry object that contains all geometries merged (geos::geom::Geometry::union)
+   * @return Single geometry object that contains all geometries merged
+   * (geos::geom::Geometry::union)
    */
-  GeometryPtr mergeGeometries(std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope);
+  GeometryPtr mergeGeometries(
+    std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope);
 
 private:
   /**
@@ -66,8 +68,8 @@ private:
   int _maxThreads;
   /** Atomic flag to tell all worker threads to terminate */
   std::atomic_bool _threadsWorking;
-  /** Each round of merging geometries causes a resync of threads waiting for more work, _finishedThreads
-   *  counts the number of threads waiting for the next round of work.
+  /** Each round of merging geometries causes a resync of threads waiting for more work,
+   * _finishedThreads counts the number of threads waiting for the next round of work.
    */
   std::atomic_int _finishedThreads;
   /** Condition variable that worker threads wait on between rounds */
@@ -78,7 +80,8 @@ private:
   std::stack<GeometryPair> _geometryStack;
   /** Mutex for geometry stack */
   std::mutex _geometryStackMutex;
-  /** Vector of merged geometries (results) that are then fed back into the merging algorithm in the next round */
+  /** Vector of merged geometries (results) that are then fed back into the merging algorithm in the
+   * next round */
   std::vector<GeometryPtr> _geometryReturn;
   /** Mutex for merged geometries */
   std::mutex _geometryReturnMutex;
@@ -87,11 +90,10 @@ private:
   /** Atomic counter for the number of geometries merged, used for reporting status */
   std::atomic_int _counter;
   /** Reporting interval from ConfigOptions
-   *  note: because of the increasing complexity of the geometries, this interval is divided by 10 when
-   *  the remaining count is less than this interval
+   *  note: because of the increasing complexity of the geometries, this interval is divided by 10
+   *  when the remaining count is less than this interval
    */
   int _updateInterval;
-
 };
 
 }

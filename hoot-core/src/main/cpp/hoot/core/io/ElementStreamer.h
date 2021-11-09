@@ -64,20 +64,6 @@ public:
     const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
     Progress progress = Progress());
 
-  /**
-   * Streams a data source from input to output.
-   *
-   * Associated readers/writers must implemented the partial map interfaces
-   *
-   * @param input data source
-   * @param out data destination
-   * @param convertOps a list of map ops/visitors to perform against the data during conversion
-   * @param progress optional for tracking I/O job progress
-   */
-  void stream(
-    const QString& input, const QString& out, const QStringList& convertOps = QStringList(),
-    Progress progress = Progress());
-
 private:
 
   QString _translationScript;

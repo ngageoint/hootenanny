@@ -1,0 +1,5 @@
+
+== Algorithms
+
+This section describes the algorithms used in Hootenanny.
+

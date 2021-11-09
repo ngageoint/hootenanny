@@ -61,6 +61,7 @@ public:
 
   QString getName() const override { return "perturb"; }
   QString getDescription() const override { return "Perturbs features in a map"; }
+  QString getType() const override { return "advanced"; }
 
   int runSimple(QStringList& args) override
   {

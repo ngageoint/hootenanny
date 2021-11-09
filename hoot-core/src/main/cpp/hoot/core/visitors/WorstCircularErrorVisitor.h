@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A visitor for finding the worst circular error among elements. Worst = greatest.
+ * A visitor for finding the worst circular error among elements (worst = greatest).
  */
 class WorstCircularErrorVisitor : public ConstElementVisitor, public SingleStatistic
 {
@@ -48,8 +48,14 @@ public:
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
   ~WorstCircularErrorVisitor() override = default;
 
+  /**
+   * @see SingleStatistic
+   */
   double getStat() const override { return _worst; }
 
+  /**
+   * @see ElementVisitor
+   */
   void visit(const std::shared_ptr<const Element>& e) override;
 
   QString getDescription() const override

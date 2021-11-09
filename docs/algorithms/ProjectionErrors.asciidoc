@@ -1,8 +1,6 @@
 
 [[SelectingAProjection]]
-== Selecting a Projection
-
-NOTE: Last updated 10/17/2014
+==== Selecting a Projection
 
 Most datasets provided by the NGA are provided in WGS84. This is a convenient
 coordinate system for the exchange of data because all data can then be
@@ -13,7 +11,7 @@ a planar projection before most computations are performed. This short paper
 discusses how Hootenanny chooses a projection and the errors that may be
 incurred as a result of choosing a specific projection.
 
-=== Projection Errors
+===== Projection Errors
 
 There is no best projection. In projecting on to a planar surface from a sphere
 some information will be distorted. Primarily this breaks down into the
@@ -31,7 +29,7 @@ wraps the globe such as Asia, Orthographic cannot be used due to the way the
 data wraps around the globe, but Albers Equal Area Conic projection performs
 admirably.
 
-=== Projection Error Test
+===== Projection Error Test
 
 The following test is designed to evaluate the amount of angular and distance
 error the projection introduces over a distance of 1000m. To do this an
@@ -61,11 +59,11 @@ NOTE: A map of the test cases should be inserted.
 | Medium Middle	| 0 to 10	| -5 to 5
 |======
 
-=== Projection Test Results
+===== Projection Test Results
 
 Below are a number of examples showing the error results with the Sinusoidal projection. After that a summary of all test cases is presented.
 
-==== Sinusoidal Results
+*_Sinusoidal Results_*
 
 Below the Sinusoidal test case is used as an example showing how the distance and angle errors manifest.
 
@@ -108,7 +106,7 @@ image::images/ProjectionErrorsSinusoidal5.png[]
 
 The desired star pattern is a point with equally spaced rays radiating out with 20deg spacing creating a half circle instead of an ellipse. The star patterns closer to 0 longitudes and latitudes look much more like a circle.
 
-=== Summary Test Results
+===== Summary Test Results
 
 [[ProjectionErrorsGraph1]]
 .Distance errors for various test cases. The expected results are 1km for each of the measured values. A value of zero is no error (perfect). The box plots show the minimum, Q1, median, Q3 and maximum error. AEAC is Alber’s Equal Area Conic)
@@ -122,7 +120,7 @@ image::images/ProjectionErrorsGraph2.png[]
 
 The above test case shows the angle error results for six different projections. Similar to the distance results there can be dramatic differences in angle error from one region to another. The Alber’s Equal Area Conic (AEAC) and Orthographic projections do not support all the test bounding boxes. When the bounding box is not supported the test results are omitted.
 
-=== Hootenanny Modifications
+===== Hootenanny Modifications
 
 As a result of the tests Hootenanny now runs an experiment at runtime to determine the best projection from a list of candidate projections. The candidate projections used are below :
 
@@ -167,5 +165,4 @@ endif::HasLatexMath[]
 The projection with the lowest score that also meets the threshold requirements is picked as the best. If none of the projections meet the threshold requirements then a prominent warning message is presented to the user .
 
 Running an experiment against all the above projections takes approximately 40ms on circa 2012 hardware (AMD FX-8150). Since a projection is generally selected once or twice per conflation run it is unlikely that this will add a significant cost to the overall runtime.
-
 

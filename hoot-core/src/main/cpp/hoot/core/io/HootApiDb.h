@@ -61,7 +61,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    *
-   * @todo implement EnvelopeProvider
+   * @todo implement EnvelopeProvider instead
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
@@ -87,11 +87,6 @@ public:
    * Returns true if the map with the specified ID exists in the services database
    */
   bool mapExists(const long id);
-
-  /**
-   * Returns true if any map with the specified name exists in the services database
-   */
-  bool mapExists(const QString& name);
 
   /**
    * Returns true if the changeset with the specified ID exists in the services database
@@ -187,7 +182,6 @@ public:
     const double lat, const double lon, const Tags &tags, long& assignedId, long version = 0);
   bool insertNode(
     const long id, const double lat, const double lon, const Tags &tags, long version = 0);
-  bool insertNode(ConstNodePtr node, long version = 0);
 
   bool insertWay(const Tags& tags, long& assignedId, long version = 0);
   bool insertWay( const long wayId, const Tags& tags, long version = 0);
@@ -252,10 +246,6 @@ public:
 
   void updateNode(
     const long id, const double lat, const double lon, const long version, const Tags& tags);
-  void updateNode(ConstNodePtr node);
-  void deleteNode(ConstNodePtr node);
-
-  void updateRelation(const long id, const long version, const Tags& tags);
 
   void updateWay(const long id, const long version, const Tags& tags);
 
@@ -571,9 +561,7 @@ private:
   std::shared_ptr<QSqlQuery> _selectMapNamesOwnedByCurrentUser;
   std::shared_ptr<QSqlQuery> _selectMembersForRelation;
   std::shared_ptr<QSqlQuery> _updateNode;
-  std::shared_ptr<QSqlQuery> _updateRelation;
   std::shared_ptr<QSqlQuery> _updateWay;
-  std::shared_ptr<QSqlQuery> _mapExistsByName;
   std::shared_ptr<QSqlQuery> _getMapIdByName;
   std::shared_ptr<QSqlQuery> _insertChangeSet2;
   std::shared_ptr<QSqlQuery> _numChangesets;

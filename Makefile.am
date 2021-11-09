@@ -164,9 +164,7 @@ install-other:
 	cd $$HOOT_HOME/hoot-core/src/main/cpp/; \
 	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
 	cd $$HOOT_HOME/hoot-js/src/main/cpp; \
-	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
-	cd $$HOOT_HOME/hoot-rnd/src/main/cpp/; \
-	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -);
 
 install-data-local: install-other
 

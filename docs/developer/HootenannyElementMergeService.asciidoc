@@ -1,0 +1,124 @@
+
+==== Element Merge Service
+
+The Element Merge Service provides feature merging capabilities over HTTP. The service is primarily 
+used to merge features during the conflation manual review process.
+
+It supports merging the following feature types:
+* one or more areas into one area
+* one or more buildings into one building
+* one or more POIs into one POI
+* one POI into one polygon
+* one railway into another railway
+
+The merger will select the appropriate feature merge type based on the elements contained in 
+the map passed into it. The 'hoot:status' tag must be present on the features being merged.
+The element being merged into must also have the "hoot:merge:target=yes" tag with the following 
+exceptions where the tag is not needed and ignored: 
+* POI/Polygon merging always merges the POI into the polygon. 
+* Railway merging where features are involved in a One To Many match always merges secondary 
+features into reference or previously conflated features (status=2 into status=1 or 3).
+
+Constituent elements (way nodes or relation members) are optional in the request for polygon 
+features. They are, however, required for linear features. Whether they are passed in with the 
+request for polygon features or not, the caller is responsible for deleting those constituent 
+features that belong to any parent features that were merged into other features.
+
+Railway One To Many merging additional notes:
+* The metadata tag: `hoot:railway:one:to:many:match:secondary=yes` must remain present on 
+secondary features involved in a one to many match in order for this type of merging to work 
+properly.
+* The merging process deletes the secondary way after merging. Since multiple one to many 
+reviews are being merged one at a time, then the secondary way being merged should not be 
+deleted on the client end until it is no longer involved in reviews.
+
+===== Examples
+
+`POST /elementmerge`
+
+*_Example Body #1 - Merge two POIs_*
+-----
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='hootenanny'>
+    <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>
+        <tag k='amenity' v='post_office' />
+        <tag k='error:circular' v='15' />
+        <tag k='hoot:status' v='1' />
+    </node>
+    <node id='-3200083' visible='true' lat='48.04854' lon='11.70194'>
+        <tag k='amenity' v='post_office' />
+        <tag k='error:circular' v='150' />
+        <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />
+        <tag k='hoot:status' v='2' />
+        <tag k="hoot:merge:target" v="yes"/>
+    </node>
+</osm>
+-----
+
+*_Example Response #1 - Merge two POIs_*
+-----
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0479399000000029" lon="11.7012813999999992">
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="POST, JÄGER-VON-FALL-STRASSE"/>
+        <tag k="amenity" v="post_office"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>
+-----
+
+*_Example Body #2 - Merge two buildings with no child node data specified_*
+-----
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+    <way id='-222330' action='modify' visible='true'>
+        <nd ref='-222258' />
+        <nd ref='-222256' />
+        <nd ref='-222254' />
+        <nd ref='-222252' />
+        <nd ref='-222264' />
+        <nd ref='-222258' />
+        <tag k='building' v='yes' />
+        <tag k='name' v='building 1' />
+        <tag k='hoot:merge:target' v='yes'/>
+    </way>\
+    <way id='-222332' action='modify' visible='true'>
+        <nd ref='-222264' />
+        <nd ref='-222262' />
+        <nd ref='-222260' /
+        <nd ref='-222258' />
+        <nd ref='-222264' />
+        <tag k='building' v='yes' />
+        <tag k='name' v='building 2' />
+    </way>
+</osm>
+-----
+
+*_Example Response #2 - Merge two buildings with no child node data specified_*
+-----
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.74025976923" minlon="-104.99544904472" maxlat="39.74068671108" maxlon="-104.99490314789"/>
+    <node visible="true" id="-222264" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7403925161399982" lon="-104.9954490447200044"/>
+    <node visible="true" id="-222258" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405109118200031" lon="-104.9952950738200030"/>
+    <node visible="true" id="-222256" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7406867110800022" lon="-104.9950687832500051"/>
+    <node visible="true" id="-222254" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405485831299998" lon="-104.9949031478899997"/>
+    <node visible="true" id="-222252" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7402597692300006" lon="-104.9952857422500045"/>
+    <way visible="true" id="-222330" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-222258"/>
+        <nd ref="-222256"/>
+        <nd ref="-222254"/>
+        <nd ref="-222252"/>
+        <nd ref="-222264"/>
+        <nd ref="-222258"/>
+        <tag k="alt_name" v="building 2"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="building 1"/>
+    </way>
+</osm>
+-----
+___
+

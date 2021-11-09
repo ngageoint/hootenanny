@@ -27,6 +27,9 @@
 
 #include "FileUtils.h"
 
+// Hoot
+#include <hoot/core/util/StringUtils.h>
+
 // Qt
 #include <QFileInfoList>
 #include <QHostAddress>
@@ -182,7 +185,7 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
   const QStringList files = dir.entryList();
   for (int i = 0; i < files.size(); i++)
   {
-    if (files.at(i).toLower().endsWith(ext))
+    if (files.at(i).endsWith(ext, Qt::CaseInsensitive))
     {
       return true;
     }
@@ -190,9 +193,9 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
   return false;
 }
 
-QStringList FileUtils::readFileToList(const QString& inputPath, const bool toLowerCase)
+QStringList FileUtils::readFileToLines(const QString& inputPath, const bool toLowerCase)
 {
-  LOG_VARD(inputPath);
+  LOG_VART(inputPath);
   QStringList outputList;
   if (!inputPath.trimmed().isEmpty())
   {

@@ -28,10 +28,10 @@
 
 // hoot
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/NeedsReviewCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/RailwayOneToManySourceCriterion.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -41,14 +41,12 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RailwayOneToManySecondaryMatchElementRemov
 
 RailwayOneToManySecondaryMatchElementRemover::RailwayOneToManySecondaryMatchElementRemover()
 {
-  ElementCriterionPtr elementCrit =
-    std::make_shared<ChainCriterion>(
-      std::make_shared<RailwayCriterion>(),
-      std::make_shared<StatusCriterion>(Status::Unknown2));
+  // We're looking to remove secondary railways with the many to one match identifying tag, but only
+  // if they aren't involved in a review.
   addCriterion(
     std::make_shared<ChainCriterion>(
-      elementCrit,
-      std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes")));
+      std::make_shared<RailwayOneToManySourceCriterion>(),
+      std::make_shared<NotCriterion>(std::make_shared<NeedsReviewCriterion>())));
   setRecursive(true);
   setRecursiveRemoveRefsFromParents(true);
 }
