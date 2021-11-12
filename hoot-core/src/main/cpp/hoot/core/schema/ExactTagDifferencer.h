@@ -48,8 +48,7 @@ public:
   /**
    * @see TagDifferencer
    */
-  double diff(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const override;
+  double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const override;
 };
 
 }

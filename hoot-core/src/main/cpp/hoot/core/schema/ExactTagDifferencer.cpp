@@ -27,23 +27,24 @@
 #include "ExactTagDifferencer.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(TagDifferencer, ExactTagDifferencer)
 
-double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstElementPtr& e1,
-  const ConstElementPtr& e2) const
+double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/,
+                                 const ConstElementPtr& e1,
+                                 const ConstElementPtr& e2) const
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
   QSet<QString> touched;
 
-  for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+  for (auto it = t1.begin(); it != t1.end(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
@@ -62,7 +63,7 @@ double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstEleme
   }
   LOG_VART(touched);
 
-  for (Tags::const_iterator it = t2.begin(); it != t2.end(); ++it)
+  for (auto it = t2.begin(); it != t2.end(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
@@ -73,17 +74,14 @@ double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstEleme
       if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false &&
           it.value() != t1.get(it.key()))
       {
-        LOG_TRACE(
-          "Returning exact tag difference on key: " << it.key() << " for " <<
-          e1->getElementId() << " and " << e2->getElementId() << "...");
+        LOG_TRACE("Returning exact tag difference on key: " << it.key() << " for " <<
+                  e1->getElementId() << " and " << e2->getElementId() << "...");
         return 1;
       }
     }
   }
-
-  LOG_TRACE(
-    "Returning exact tag match for " << e1->getElementId() << " and " << e2->getElementId() <<
-    "...");
+  LOG_TRACE("Returning exact tag match for " << e1->getElementId() << " and " <<
+            e2->getElementId() << "...");
   return 0;
 }
 

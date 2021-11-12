@@ -60,10 +60,10 @@ double calcDistanceSquared(const NodePtr& n1, const NodePtr& n2)
   return dx * dx + dy * dy;
 }
 
-DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold) :
-_ignoreStatus(false)
+DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold)
+  : _distance(distanceThreshold),
+    _ignoreStatus(false)
 {
-  _distance = distanceThreshold;
   if (_distance < 0.0)
   {
     // This default value was found experimentally with the building data from #3446 and #3495 and
@@ -94,21 +94,17 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     MapProjector::projectToPlanar(planar);
   }
   else
-  {
     planar = map;
-  }
 
   ClosePointHash cph(_distance);
 
   int startNodeCount = 0;
   const NodeMap& nodes = planar->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
     if (!n)
-    {
       continue;
-    }
 
     // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
     // we'll replace it with another node instead of removing it from the map.
@@ -133,22 +129,20 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   {
     const std::vector<long>& v = cph.getMatch();
 
-    for (size_t i = 0; i < v.size(); i++)
+    for (auto matchIdI : v)
     {
-      const long matchIdI = v[i];
+      if (!map->containsNode(matchIdI))
+        continue;
 
-      if (!map->containsNode(matchIdI)) continue;
-
-      for (size_t j = 0; j < v.size(); j++)
+      for (auto matchIdJ : v)
       {
         bool replace = false;
         double calcdDistanceSquared = -1.0;
-        const long matchIdJ = v[j];
 
         if (matchIdI != matchIdJ && map->containsNode(matchIdJ))
         {
-          const NodePtr& n1 = planar->getNode(matchIdI);
-          const NodePtr& n2 = planar->getNode(matchIdJ);
+          NodePtr n1 = planar->getNode(matchIdI);
+          NodePtr n2 = planar->getNode(matchIdJ);
           LOG_VART(n1);
           LOG_VART(n2);
 
@@ -178,9 +172,20 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               }
               LOG_VART(replace);
 
-              LOG_VART(tagDiff.diff(map, n1, n2));
-              if (replace && tagDiff.diff(map, n1, n2) != 0.0)
+              Tags tags1 = n1->getTags();
+              tags1.removeMetadata();
+              Tags tags2 = n2->getTags();
+              tags2.removeMetadata();
+              if (tags1.empty() || tags2.empty()) //  An empty node should always merge
               {
+                //  Keep the node that has tags, if any
+                if (!tags2.empty())
+                  std::swap(n1, n2);
+                replace = true;
+              }
+              else if (replace && tagDiff.diff(map, n1, n2) != 0.0)
+              {
+                LOG_VART(tagDiff.diff(map, n1, n2));
                 LOG_TRACE(
                   "Skipping merge for " << n1->getElementId() << " and " << n2->getElementId() <<
                   " due to tag diff.");
@@ -193,7 +198,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                 LOG_TRACE(
                   "Merging nodes: " << ElementId(ElementType::Node, matchIdJ) << " and " <<
                   ElementId(ElementType::Node, matchIdI) << "...");
-                map->replaceNode(matchIdJ, matchIdI);
+                map->replaceNode(n2->getId(), n1->getId());
                 _numAffected++;
               }
             }
@@ -210,9 +215,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               std::sqrt(calcdDistanceSquared));
           }
           else
-          {
             _logMergeResult(matchIdI, matchIdJ, map, replace);
-          }
         }
       }
     }
@@ -220,15 +223,15 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     processedCount++;
     if (processedCount % 10000 == 0)
     {
-      PROGRESS_INFO(
-        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " node groups from " <<
-        StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
+      PROGRESS_INFO("\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
+                    " node groups from " << StringUtils::formatLargeNumber(startNodeCount) <<
+                    " total nodes.");
     }
   }
 }
 
-bool DuplicateNodeRemover::_passesLogMergeFilter(
-  const long nodeId1, const long nodeId2, const OsmMapPtr& map) const
+bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,
+                                                 const OsmMapPtr& map) const
 {
   // can add various filtering criteria here for debugging purposes...
 
@@ -238,40 +241,32 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(
 
   std::set<ElementId> wayIdsOwning1;
   const std::set<long> waysOwning1 = WayUtils::getContainingWayIds(nodeId1, map);
-  for (std::set<long>::const_iterator it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
-  {
+  for (auto it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
     wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
-  }
+
   if (TagUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning1, map))
-  {
     return true;
-  }
 
   std::set<ElementId> wayIdsOwning2;
   const std::set<long> waysOwning2 = WayUtils::getContainingWayIds(nodeId2, map);
-  for (std::set<long>::const_iterator it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
-  {
+  for (auto it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
     wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
-  }
+
   if (TagUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning2, map))
-  {
     return true;
-  }
 
   return false;
 }
 
-void DuplicateNodeRemover::_logMergeResult(
-  const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
-  const double distance, const double calcdDistance) const
+void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId2,
+                                           const OsmMapPtr& map, const bool replaced,
+                                           const double distance, const double calcdDistance) const
 {
   if (_passesLogMergeFilter(nodeId1, nodeId2, map))
   {
     QString msg = "merging nodes: ";
     if (!replaced)
-    {
       msg.prepend("not ");
-    }
     msg += QString::number(nodeId1) + " and " + QString::number(nodeId2);
     if (calcdDistance != -1.0)
     {
@@ -291,8 +286,7 @@ void DuplicateNodeRemover::_logMergeResult(
   }
 }
 
-void DuplicateNodeRemover::removeNodes(
-  std::shared_ptr<OsmMap> map, Meters distanceThreshold, const bool ignoreStatus)
+void DuplicateNodeRemover::removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold, const bool ignoreStatus)
 {
   DuplicateNodeRemover dupeRemover(distanceThreshold);
   dupeRemover.setIgnoreStatus(ignoreStatus);
