@@ -66,8 +66,8 @@ public:
    * @param distanceThreshold the distance threshold under which nodes are considered duplicates
    * based on proximity
    */
-  static void removeNodes(
-    std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1, const bool ignoreStatus = false);
+  static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1,
+                          const bool ignoreStatus = false);
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
@@ -95,9 +95,8 @@ private:
   // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
-  void _logMergeResult(
-    const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
-    const double distance = -1.0, const double calcdDistance = -1.0) const;
+  void _logMergeResult(const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
+                       const double distance = -1.0, const double calcdDistance = -1.0) const;
   bool _passesLogMergeFilter(const long nodeId1, const long nodeId2, const OsmMapPtr& map) const;
 };
 
