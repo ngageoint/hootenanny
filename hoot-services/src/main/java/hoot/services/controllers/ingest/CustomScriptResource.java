@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
@@ -67,11 +68,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -123,9 +129,6 @@ public class CustomScriptResource {
         return getUploadDir().exists();
     }
 
-    public CustomScriptResource() {
-    }
-
     /**
      * Create or update user provided script into file.
      *
@@ -163,8 +166,8 @@ public class CustomScriptResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processSave(@Context HttpServletRequest request,
                                 String script,
-                                @QueryParam("SCRIPT_NAME") String scriptName,
-                                @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription,
+                                @QueryParam("scriptName") String scriptName,
+                                @QueryParam("scriptDescription") String scriptDescription,
                                 @QueryParam("folderId") Long folderId) {
         Users user = Users.fromRequest(request);
         JSONArray saveArr = new JSONArray();
@@ -251,7 +254,7 @@ public class CustomScriptResource {
 
             for (Object o : filesList) {
                 JSONObject cO = (JSONObject) o;
-                cO.put("displayPath", cO.get("NAME"));
+                cO.put("displayPath", cO.get("name"));
                 retList.add(cO);
             }
 
@@ -298,9 +301,9 @@ public class CustomScriptResource {
                     }
 
                     if (oScript != null) {
-                        JSONObject header = (JSONObject) oScript.get("HEADER");
-                        json.put("DESCRIPTION", header.get("DESCRIPTION"));
-                        json.put("CANEXPORT", header.get("CANEXPORT"));
+                        JSONObject header = normalizeHeader((JSONObject) oScript.get("HEADER"));
+                        json.put("description", header.get("description"));
+                        json.put("canExport", header.get("canExport"));
                     }
 
                     retList.add(json);
@@ -334,24 +337,24 @@ public class CustomScriptResource {
                     JSONArray defTranslations = (JSONArray) jsonParser.parse(reader);
                     for (Object defTranslation : defTranslations) {
                         JSONObject oTrans = (JSONObject) defTranslation;
-                        oTrans.put("DEFAULT", true);
-                        String desc = oTrans.get("DESCRIPTION").toString();
+                        oTrans.put("default", true);
+                        String desc = oTrans.get("description").toString();
                         if (desc.isEmpty()) {
-                            desc = oTrans.get("NAME").toString();
+                            desc = oTrans.get("name").toString();
                         }
-                        oTrans.put("DESCRIPTION", desc);
+                        oTrans.put("description", desc);
 
-                        Object oCanExport = oTrans.get("CANEXPORT");
+                        Object oCanExport = oTrans.get("canExport");
 
-                        // If the CANEXPORT is not available then try to determine
+                        // If the canExport is not available then try to determine
                         if (oCanExport == null) {
                             // Get the script
-                            if (oTrans.get("PATH") != null) {
-                                File fScript = new File(HOME_FOLDER + "/" + oTrans.get("PATH"));
+                            if (oTrans.get("path") != null) {
+                                File fScript = new File(HOME_FOLDER + "/" + oTrans.get("path"));
                                 if (fScript.exists()) {
                                     String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
                                     boolean canExport = validateExport(sScript);
-                                    oTrans.put("CANEXPORT", canExport);
+                                    oTrans.put("canExport", canExport);
                                 }
                             }
                         }
@@ -385,7 +388,7 @@ public class CustomScriptResource {
     /**
      * Returns the specified script.
      *
-     * GET hoot-services/ingest/customscript/getscript?SCRIPT_NAME=MyTest
+     * GET hoot-services/ingest/customscript/getscript?scriptName=MyTest
      *
      * // A non-standard extension to include additional js files within the
      * same dir // sub-tree. require("example")
@@ -413,7 +416,7 @@ public class CustomScriptResource {
     @GET
     @Path("/getscript")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getScript(@Context HttpServletRequest request,@QueryParam("SCRIPT_NAME") String identifier) {
+    public Response getScript(@Context HttpServletRequest request, @QueryParam("scriptName") String identifier) {
         Users user = Users.fromRequest(request);
         String script = "";
 
@@ -462,8 +465,9 @@ public class CustomScriptResource {
                             JSONObject oScript = getScriptObject(content);
 
                             if (oScript != null) {
-                                JSONObject header = (JSONObject) oScript.get("HEADER");
-                                if (header.get("NAME").toString().equalsIgnoreCase(identifier)) {
+                                JSONObject header = normalizeHeader((JSONObject) oScript.get("HEADER"));
+                                Object scriptName = header.get("name");
+                                if (scriptName.toString().equalsIgnoreCase(identifier)) {
                                     script = oScript.get("BODY").toString();
                                     break;
                                 }
@@ -533,7 +537,7 @@ public class CustomScriptResource {
             for (Object aDefList : defList) {
                 JSONObject item = (JSONObject) aDefList;
 
-                Object path = item.get("PATH");
+                Object path = item.get("path");
                 if ((path != null) && scriptPath.equals(path.toString())) {
                     pathValidated = true;
                     break;
@@ -545,8 +549,8 @@ public class CustomScriptResource {
                     break;
                 }
 
-                Object importPath = item.get("IMPORTPATH");
-                Object exportPath = item.get("EXPORTPATH");
+                Object importPath = item.get("importPath");
+                Object exportPath = item.get("exportPath");
                 if ((importPath != null) && scriptPath.equals(importPath.toString())) {
                     pathValidated = true;
                     scriptPath = importPath.toString();
@@ -579,7 +583,7 @@ public class CustomScriptResource {
     /**
      * Deletes the specified script.
      *
-     * GET hoot-services/ingest/customscript/deletescript?SCRIPT_INFO=My Test6
+     * GET hoot-services/ingest/customscript/deletescript?scriptInfo=My Test6
      *
      * //TODO: should be an HTTP DELETE
      *
@@ -590,7 +594,7 @@ public class CustomScriptResource {
     @GET
     @Path("/deletescript")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteScript(@Context HttpServletRequest request, @QueryParam("SCRIPT_INFO") String identifier) {
+    public Response deleteScript(@Context HttpServletRequest request, @QueryParam("scriptInfo") String identifier) {
         Users user = Users.fromRequest(request);
         JSONArray delArr = new JSONArray();
 
@@ -616,7 +620,7 @@ public class CustomScriptResource {
 
                 String content = FileUtils.readFileToString(translationFile, "UTF-8");
                 JSONObject oScript = getScriptObject(content);
-                delArr.add((JSONObject) oScript.get("HEADER"));
+                delArr.add(normalizeHeader((JSONObject) oScript.get("HEADER")));
 
                 translationFile.delete();
 
@@ -635,8 +639,9 @@ public class CustomScriptResource {
                     JSONObject oScript = getScriptObject(content);
 
                     if (oScript != null) {
-                        JSONObject header = (JSONObject) oScript.get("HEADER");
-                        if (header.get("NAME").toString().equalsIgnoreCase(identifier)) {
+                        JSONObject header = normalizeHeader((JSONObject) oScript.get("HEADER"));
+                        Object scriptName = header.get("name");
+                        if (scriptName.toString().equalsIgnoreCase(identifier)) {
                             delArr.add(header);
                             if (!file.delete()) {
                                 throw new IOException("Error deleting script: " + file.getAbsolutePath());
@@ -680,8 +685,8 @@ public class CustomScriptResource {
                 String content = FileUtils.readFileToString(file, "UTF-8");
                 JSONObject oScript = getScriptObject(content);
                 if (oScript != null) {
-                    JSONObject header = (JSONObject) oScript.get("HEADER");
-                    String foundScriptName = header.get("NAME").toString();
+                    JSONObject header = normalizeHeader((JSONObject) oScript.get("HEADER"));
+                    String foundScriptName = header.get("name").toString();
                     if (scriptNames.contains(foundScriptName)) {
                         scriptsDeleted.add(foundScriptName);
                         if (file.delete()) {
@@ -1089,7 +1094,7 @@ public class CustomScriptResource {
                 String body = content.substring(iHeader + HEADER_END.length());
 
                 JSONParser parser = new JSONParser();
-                JSONObject jHeader = (JSONObject) parser.parse(header);
+                JSONObject jHeader = normalizeHeader((JSONObject) parser.parse(header));
                 if (jHeader != null) {
                     script.put("HEADER", jHeader);
                     script.put("BODY", body);
@@ -1099,6 +1104,26 @@ public class CustomScriptResource {
         }
 
         return null;
+    }
+
+    // This is used so that the header for old translations can be lowercase like new translations
+    private static JSONObject normalizeHeader(JSONObject headerObj) {
+        if (headerObj.get("NAME") != null) {
+            headerObj.put("name", headerObj.get("NAME"));
+            headerObj.remove("NAME");
+        }
+
+        if (headerObj.get("DESCRIPTION") != null) {
+            headerObj.put("description", headerObj.get("DESCRIPTION"));
+            headerObj.remove("DESCRIPTION");
+        }
+
+        if (headerObj.get("CANEXPORT") != null) {
+            headerObj.put("canExport", headerObj.get("CANEXPORT"));
+            headerObj.remove("CANEXPORT");
+        }
+
+        return headerObj;
     }
 
     public static void scanTranslations() {
@@ -1171,9 +1196,9 @@ public class CustomScriptResource {
         }
 
         JSONObject oHeader = new JSONObject();
-        oHeader.put("NAME", name);
-        oHeader.put("DESCRIPTION", description);
-        oHeader.put("CANEXPORT", canExport);
+        oHeader.put("name", name);
+        oHeader.put("description", description);
+        oHeader.put("canExport", canExport);
 
         String header = HEADER_START;
         header += oHeader.toString();
