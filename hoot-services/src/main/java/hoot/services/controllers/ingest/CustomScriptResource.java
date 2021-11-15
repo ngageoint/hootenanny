@@ -364,15 +364,15 @@ public class CustomScriptResource {
                     if (!defTranslations.isEmpty()) {
                         for (Object oTrans : defTranslations) {
                             JSONObject jsTrans = (JSONObject) oTrans;
-                            if (jsTrans.get("FOUO_PATH") != null) {
+                            if (jsTrans.get("fouoPath") != null) {
                                 // See if FOUO folder exists
-                                File fouoPath = new File(HOME_FOLDER + "/" + jsTrans.get("FOUO_PATH"));
+                                File fouoPath = new File(HOME_FOLDER + "/" + jsTrans.get("fouoPath"));
                                 if (fouoPath.exists()) {
                                     filesList.add(jsTrans);
                                 }
                             }
                             else {
-                                // If there is no FOUO_PATH then assume it is
+                                // If there is no fouoPath then assume it is
                                 // not FOUO translation
                                 filesList.add(jsTrans);
                             }
@@ -543,7 +543,7 @@ public class CustomScriptResource {
                     break;
                 }
 
-                Object fouoPath = item.get("FOUO_PATH");
+                Object fouoPath = item.get("fouoPath");
                 if ((fouoPath != null) && scriptPath.equals(fouoPath.toString())) {
                     pathValidated = true;
                     break;
