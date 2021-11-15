@@ -697,12 +697,7 @@
     <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9125271906099996" lon="-75.4273000000000025"/>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4280720456600022"/>
     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4277689096499984"/>
-    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127427388600040" lon="-75.4273000000000025"/>
-    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4273629716900018"/>
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4273000000000025"/>
-    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124589870599991" lon="-75.4273000000000025"/>
-    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4277689096499984"/>
-    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4273000000000025"/>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9128000000000043" lon="-75.4329468526299962"/>
     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9128000000000043" lon="-75.4335187878999989"/>
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4278257476599947"/>
@@ -3065,24 +3060,24 @@
         <tag k="source:datetime" v="2019-03-29T10:14:30Z"/>
     </way>
     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-51"/>
+        <nd ref="-90"/>
         <nd ref="-561"/>
         <nd ref="-560"/>
-        <nd ref="-50"/>
+        <nd ref="-91"/>
         <nd ref="-49"/>
-        <nd ref="-51"/>
+        <nd ref="-90"/>
         <tag k="amenity" v="parking"/>
         <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-09-25T16:46:23Z"/>
     </way>
     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-48"/>
+        <nd ref="-4"/>
         <nd ref="-631"/>
         <nd ref="-559"/>
-        <nd ref="-47"/>
-        <nd ref="-46"/>
-        <nd ref="-48"/>
+        <nd ref="-52"/>
+        <nd ref="-49"/>
+        <nd ref="-4"/>
         <tag k="error:circular" v="15"/>
         <tag k="leisure" v="park"/>
         <tag k="name" v="Library Portico and Amphitheater Park"/>

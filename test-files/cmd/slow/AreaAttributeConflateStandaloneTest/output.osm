@@ -6751,7 +6751,6 @@
     <node visible="true" id="-4796" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999900" lon="-122.4282160849386401"/>
     <node visible="true" id="-4795" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4261300466491065"/>
     <node visible="true" id="-4794" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4196668711745559"/>
-    <node visible="true" id="-4793" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4185472345916850"/>
     <node visible="true" id="-4792" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999900" lon="-122.4091512101471864"/>
     <node visible="true" id="-4791" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999900" lon="-122.4124908841643702"/>
     <node visible="true" id="-4790" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658181318864195" lon="-122.4070999999999998"/>
@@ -16588,7 +16587,7 @@
         <nd ref="-5181"/>
         <nd ref="-5182"/>
         <nd ref="-5132"/>
-        <nd ref="-4793"/>
+        <nd ref="-4838"/>
         <nd ref="-4794"/>
         <tag k="REF1" v="008c89"/>
         <tag k="landuse" v="retail"/>
