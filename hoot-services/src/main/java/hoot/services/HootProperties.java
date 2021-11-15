@@ -141,6 +141,9 @@ public final class HootProperties {
     public static final String PRIVATE_OVERPASS_CERT_PATH;
     public static final String PRIVATE_OVERPASS_CERT_PHRASE;
 
+    public static final String OVERPASS_SYNC_TIMEOUT;
+    public static final String OVERPASS_SYNC_INTERVAL;
+
     public static final String GRAIL_RAILS_LABEL;
     public static final String GRAIL_OVERPASS_LABEL;
 
@@ -328,6 +331,11 @@ public final class HootProperties {
         PRIVATE_OVERPASS_URL = "${PRIVATE_OVERPASS_URL}";
         PRIVATE_OVERPASS_CERT_PATH = "${PRIVATE_OVERPASS_CERT_PATH}";
         PRIVATE_OVERPASS_CERT_PHRASE = "${PRIVATE_OVERPASS_CERT_PHRASE}";
+
+        // The timeout and polling interval to wait for changeset upload changes
+        // to propagate to Overpass
+        OVERPASS_SYNC_TIMEOUT = getProperty("overpassSyncTimeout");
+        OVERPASS_SYNC_INTERVAL = getProperty("overpassSyncInterval");
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";
