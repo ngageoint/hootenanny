@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59096056145541" minlon="-104.8070473857991" maxlat="39.59189850106468" maxlon="-104.8058031214695"/>
+    <node visible="true" id="-21128045" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5917678695682369" lon="-104.8066608840727696"/>
+    <node visible="true" id="-21128043" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5914711576245608" lon="-104.8066874362091028"/>
+    <node visible="true" id="-21128041" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5914386771047546" lon="-104.8069965303088082"/>
+    <node visible="true" id="-21128040" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5917260674373566" lon="-104.8070473857991374"/>
+    <node visible="true" id="-21128036" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5911643488569496" lon="-104.8058709287899717"/>
+    <node visible="true" id="-21128034" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5909605614554110" lon="-104.8058031214695376"/>
+    <node visible="true" id="-21128032" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5909631741181940" lon="-104.8062404786862061"/>
+    <node visible="true" id="-21128031" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5911460602684713" lon="-104.8062709919803979"/>
+    <node visible="true" id="-21128027" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5913550724204910" lon="-104.8062777727124342"/>
+    <node visible="true" id="-21128025" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5912610170301207" lon="-104.8059183939142542"/>
+    <node visible="true" id="-21128023" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5915248943297016" lon="-104.8058675384239393"/>
+    <node visible="true" id="-21128022" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5915353448951350" lon="-104.8062438690522384"/>
+    <node visible="true" id="-21128018" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918880505540258" lon="-104.8058777095220080"/>
+    <node visible="true" id="-21128016" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5916816526456614" lon="-104.8058641480579070"/>
+    <node visible="true" id="-21128013" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5916576244285636" lon="-104.8062067543027354"/>
+    <node visible="true" id="-21128012" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918305727172637" lon="-104.8062370883201879"/>
+    <node visible="true" id="-21127944" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918985010646765" lon="-104.8061964039279133"/>
+    <node visible="true" id="-21127942" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5911094830770551" lon="-104.8062303075881090"/>
+    <node visible="true" id="-21127940" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5911042577624173" lon="-104.8066235900464847"/>
+    <node visible="true" id="-21127939" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918723747851047" lon="-104.8065964671183394"/>
+    <way visible="true" id="-21128042" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21128040"/>
+        <nd ref="-21128041"/>
+        <nd ref="-21128043"/>
+        <nd ref="-21128045"/>
+        <nd ref="-21128040"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
+    </way>
+    <way visible="true" id="-21128033" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21128031"/>
+        <nd ref="-21128032"/>
+        <nd ref="-21128034"/>
+        <nd ref="-21128036"/>
+        <nd ref="-21128031"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
+    </way>
+    <way visible="true" id="-21128024" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21128022"/>
+        <nd ref="-21128023"/>
+        <nd ref="-21128025"/>
+        <nd ref="-21128027"/>
+        <nd ref="-21128022"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
+    </way>
+    <way visible="true" id="-21128014" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21128012"/>
+        <nd ref="-21128013"/>
+        <nd ref="-21128016"/>
+        <nd ref="-21128018"/>
+        <nd ref="-21128012"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
+    </way>
+    <way visible="true" id="-21127941" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21127939"/>
+        <nd ref="-21127940"/>
+        <nd ref="-21127942"/>
+        <nd ref="-21128013"/>
+        <nd ref="-21127944"/>
+        <nd ref="-21127939"/>
+        <tag k="REF1" v="Convoluted No Match 1"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Convoluted Example"/>
+    </way>
+</osm>
