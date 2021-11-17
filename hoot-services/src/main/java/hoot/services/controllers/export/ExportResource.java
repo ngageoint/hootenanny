@@ -287,7 +287,7 @@ public class ExportResource {
     /**
      * To retrieve the output from job make GET request.
      *
-     * GET hoot-services/job/export/[job id from export job]?outputname=[file to download if not job id]&ext=[file extension if not zip]
+     * GET hoot-services/job/export/[job id from export job]?outputname=[file to download]&ext=[file extension if not zip]
      *
      * @param jobId
      *            job id
@@ -310,7 +310,10 @@ public class ExportResource {
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
             File exportFile = getExportFile(jobId, outputname, fileExt);
-
+            String outFileName = jobId;
+            if (! StringUtils.isBlank(outputname)) {
+                outFileName = outputname;
+            }
             ResponseBuilder responseBuilder;
             //Do some zipping if fileExt is not zip
             if (!fileExt.equalsIgnoreCase("zip")) {
@@ -337,7 +340,7 @@ public class ExportResource {
             } else {
                 responseBuilder = Response.ok(exportFile);
             }
-            responseBuilder.header("Content-Disposition", "attachment; filename="+ jobId + ".zip");
+            responseBuilder.header("Content-Disposition", "attachment; filename="+ outFileName + ".zip");
             response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
