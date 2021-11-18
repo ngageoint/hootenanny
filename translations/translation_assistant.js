@@ -5,6 +5,8 @@ if (typeof hoot !== 'undefined') {
     hoot.require('etds61_osm')
     hoot.require('etds70_osm')
     hoot.require('emgcp_osm')
+
+    hoot.Settings.set({"writer.include.circular.error.tags": "false"});
 }
 
 
@@ -112,6 +114,8 @@ translation_assistant = {
                 }
             }
         }
+
+
 
         // If necessary, convert from English TDS to OSM+
         // Raw tag, TDS/GGDM, MGCP or specified
