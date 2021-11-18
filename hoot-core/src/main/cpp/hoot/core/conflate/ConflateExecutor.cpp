@@ -145,7 +145,6 @@ void ConflateExecutor::_initTaskCount()
     _numTotalTasks += 3;
   if (_isDiffConflate)
     _numTotalTasks++;
-
   // Only add one task for each set of conflate ops, since OpExecutor will create its own task step
   // for each op internally.
   if (!ConfigOptions().getConflatePreOps().empty())
@@ -177,13 +176,11 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
     IoUtils::writeOutputDir(output);
   }
 
-  QString msg =
-    "Conflating ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + " with ..." +
-    FileUtils::toLogFormat(input2, _maxFilePrintLength);
+  QString msg = "Conflating ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + " with ..." +
+                FileUtils::toLogFormat(input2, _maxFilePrintLength);
   if (ConfigUtils::boundsOptionEnabled())
     msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(_maxFilePrintLength);
-  msg +=
-    " and writing the output to ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...";
+  msg += " and writing the output to ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...";
   if (_isDiffConflate)
   {
     if (_diffConflator.conflatingTags())
@@ -204,9 +201,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   // be getting the best conflate results in case types could be added to the input.
   if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
   {
-    msg =
-      "No elements in the input map have a recognizable schema type. Generic conflation "
-      "routines will be used.";
+    msg = "No elements in the input map have a recognizable schema type. Generic conflation "
+          "routines will be used.";
     if (ConfigOptions().getLogWarningsForCompletelyUntypedInputMaps())
     {
       LOG_WARN(msg);
@@ -464,13 +460,19 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
-void ConflateExecutor::_writeOutput(
-  const OsmMapPtr& map, const QString& output, const bool isChangesetOutput)
+void ConflateExecutor::_writeOutput(const OsmMapPtr& map, const QString& output,
+                                    const bool isChangesetOutput)
 {
   // Figure out what to write
-  _progress->set(
-    _getJobPercentComplete(_currentTask - 1),
-    "Writing conflated output: ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...");
+  _progress->set(_getJobPercentComplete(_currentTask - 1),
+                 "Writing conflated output: ..." +
+                 FileUtils::toLogFormat(output, _maxFilePrintLength) + "...");
+  if (_isDiffConflate && _diffConflator.conflatingTags())
+  {
+    // Add tag changes to our map
+    _diffConflator.addChangesToMap(map, _pTagChanges);
+    _currentTask++;
+  }
   if (_isDiffConflate && isChangesetOutput)
   {
     // Get the changeset stats output format from the changeset stats file extension, or if no
@@ -487,27 +489,20 @@ void ConflateExecutor::_writeOutput(
       else
         statsFormat.setFormat(ChangesetStatsFormat::Text);
     }
-    _diffConflator.writeChangeset(
-      map, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
+    _diffConflator.writeChangeset(map, output, _diffConflateSeparateOutput,
+                                  statsFormat, _osmApiDbUrl);
   }
   else
   {
     // Write a map
-    if (_isDiffConflate && _diffConflator.conflatingTags())
-    {
-      // Add tag changes to our map
-      _diffConflator.addChangesToMap(map, _pTagChanges);
-      _currentTask++;
-    }
     IoUtils::saveMap(map, output);
     OsmMapWriterFactory::writeDebugMap(map, className(), "after-conflate-output-write");
   }
   _currentTask++;
 }
 
-void ConflateExecutor::_writeStats(
-  const OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
-  const QString& outputFileName)
+void ConflateExecutor::_writeStats(const OsmMapPtr& map, const CalculateStatsOp& input1Cso,
+                                   const CalculateStatsOp& input2Cso, const QString& outputFileName)
 {
   _progress->set(
     _getJobPercentComplete(_currentTask - 1),
@@ -610,10 +605,10 @@ void ConflateExecutor::_disableRoundaboutRemoval() const
   // If the work for #3442 is done, then we could handle this removal in AttributeConflation.conf
   // add DifferentialConflation.conf instead of doing it here.
 
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePreOpsKey(), RemoveRoundabouts::className());
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), ReplaceRoundabouts::className());
+  ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePreOpsKey(),
+                                 RemoveRoundabouts::className());
+  ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(),
+                                 ReplaceRoundabouts::className());
 }
 
 void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
@@ -622,10 +617,10 @@ void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
   // We'll also leave in review relations for match debugging purposes.
   if (ConfigOptions().getConflateMatchOnly())
   {
-    ConfigUtils::removeListOpEntry(
-      ConfigOptions::getConflatePostOpsKey(), RemoveElementsVisitor::className());
-    ConfigUtils::removeListOpEntry(
-      ConfigOptions::getConflatePostOpsKey(), RemoveUnknown2Visitor::className());
+    ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(),
+                                   RemoveElementsVisitor::className());
+    ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(),
+                                   RemoveUnknown2Visitor::className());
   }
 
   // This swaps the logic that removes all reviews with the logic that removes them based on score
@@ -634,10 +629,10 @@ void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
   {
     QStringList removeElementsCriteria =
       conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
-    removeElementsCriteria.replaceInStrings(
-      ReviewRelationCriterion::className(), ReviewScoreCriterion::className());
-    conf().set(
-      ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
+    removeElementsCriteria.replaceInStrings(ReviewRelationCriterion::className(),
+                                            ReviewScoreCriterion::className());
+    conf().set(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
+               removeElementsCriteria);
   }
 }
 
@@ -647,10 +642,10 @@ void ConflateExecutor::_updateConfigOptionsForDifferentialConflation() const
   // config instead with custom syntax (#3442).
 
   // These don't seem to make a lot of sense for diff conflate.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyMarker::className());
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), RailwaysCrossingMarker::className());
+  ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(),
+                                 RoadCrossingPolyMarker::className());
+  ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(),
+                                 RailwaysCrossingMarker::className());
 }
 
 void ConflateExecutor::_updateConfigOptionsForBounds() const
