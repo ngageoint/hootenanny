@@ -467,12 +467,6 @@ void ConflateExecutor::_writeOutput(const OsmMapPtr& map, const QString& output,
   _progress->set(_getJobPercentComplete(_currentTask - 1),
                  "Writing conflated output: ..." +
                  FileUtils::toLogFormat(output, _maxFilePrintLength) + "...");
-  if (_isDiffConflate && _diffConflator.conflatingTags())
-  {
-    // Add tag changes to our map
-    _diffConflator.addChangesToMap(map, _pTagChanges);
-    _currentTask++;
-  }
   if (_isDiffConflate && isChangesetOutput)
   {
     // Get the changeset stats output format from the changeset stats file extension, or if no
@@ -489,11 +483,23 @@ void ConflateExecutor::_writeOutput(const OsmMapPtr& map, const QString& output,
       else
         statsFormat.setFormat(ChangesetStatsFormat::Text);
     }
+    //  Merge in the tag changes if they aren't in supposed to be in a separate output
+    if (!_diffConflateSeparateOutput && _diffConflator.conflatingTags())
+    {
+      _diffConflator.addChangesToMap(map, _pTagChanges);
+      _currentTask++;
+    }
     _diffConflator.writeChangeset(map, output, _diffConflateSeparateOutput,
                                   statsFormat, _osmApiDbUrl);
   }
   else
   {
+    if (_isDiffConflate && _diffConflator.conflatingTags())
+    {
+      // Add tag changes to our map
+      _diffConflator.addChangesToMap(map, _pTagChanges);
+      _currentTask++;
+    }
     // Write a map
     IoUtils::saveMap(map, output);
     OsmMapWriterFactory::writeDebugMap(map, className(), "after-conflate-output-write");
