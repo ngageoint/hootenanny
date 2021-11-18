@@ -145,7 +145,7 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   string str = QString::fromUtf8(qb.constData()).toStdString();
   stringstream ss(str);
   std::shared_ptr<DataFrame> df = std::make_shared<DataFrame>();
-  df->import(ss);
+  df->importFrame(ss);
   _df = df;
 
   // read from child class.

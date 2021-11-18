@@ -285,14 +285,14 @@ namespace Tgs
     *
     * @param fileStream the input file stream
     */
-    void import(std::istream & fileStream);
+    void importFrame(std::istream & fileStream);
 
     /**
     *  Import the data frame
     *
     * @param e a QDomElement containing the contents of tag <DataFrame> from an XML file
     */
-    void import(const QDomElement & e);
+    void importFrame(const QDomElement & e);
 
     /**
     *  Checks to see if the data vectors belonging to the set of indices
