@@ -394,7 +394,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
 
   // We need the two inputs separated for changeset derivation, so split them back out by status.
   LOG_DEBUG("Separating maps by status...");
-  progress.set((_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
+  progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
   RemoveUnknown1Visitor remove1Vis;
   RemoveUnknown2Visitor remove2Vis;
   map1 = std::make_shared<OsmMap>(fullMap);
@@ -538,7 +538,7 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
   }
 
   // Truncate tags over max tag length characters to push into OSM API.
-  progress.set((_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
+  progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
   ApiTagTruncateVisitor truncateTags;
   map1->visitRw(truncateTags);
   if (!_singleInput)
@@ -552,7 +552,7 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
 ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QString& input,
                                                                      Progress progress)
 {
-  progress.set((_currentTaskNum - 1) / (float)_numTotalTasks,
+  progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks,
                "Sorting input elements ..." + FileUtils::toLogFormat(input, 25) + "...");
 
   ElementInputStreamPtr sortedElements;
