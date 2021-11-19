@@ -498,7 +498,7 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 
     _rf = std::make_shared<BuildingRfClassifier>();
     QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
-    _rf->import(docRoot);
+    _rf->importTree(docRoot);
   }
 
   return _rf;
