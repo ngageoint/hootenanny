@@ -44,6 +44,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.utils.DbUtils;
 
@@ -60,8 +61,8 @@ class WaitOverpassUpdate extends GrailCommand {
     private final String jobId;
     private final GrailParams params;
     private final Class<?> caller;
-    private final int TIMEOUT_TIME = 300000;
-    private final int SLEEP_TIME = 30000;
+    private final int TIMEOUT_TIME = Integer.parseInt(HootProperties.OVERPASS_SYNC_TIMEOUT);
+    private final int SLEEP_TIME = Integer.parseInt(HootProperties.OVERPASS_SYNC_INTERVAL);
 
     WaitOverpassUpdate(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);

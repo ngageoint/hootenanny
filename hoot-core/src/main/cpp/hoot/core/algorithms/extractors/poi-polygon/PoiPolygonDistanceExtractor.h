@@ -65,7 +65,7 @@ public:
 
 private:
 
-  PoiPolygonInfoCachePtr _infoCache;
+  mutable PoiPolygonInfoCachePtr _infoCache;
 };
 
 }

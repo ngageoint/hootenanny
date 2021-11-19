@@ -488,7 +488,7 @@ namespace Tgs
           else if (tag == "DATAFRAME")
           {
             _data->clear();
-            _data->import(e);
+            _data->importFrame(e);
           }
 
           if (!parseOk)

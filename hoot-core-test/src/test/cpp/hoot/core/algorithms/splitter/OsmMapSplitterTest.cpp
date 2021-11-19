@@ -39,6 +39,7 @@ class OsmMapSplitterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(OsmMapSplitterTest);
   CPPUNIT_TEST(runTestSmall);
   CPPUNIT_TEST(runTestBoston);
+  CPPUNIT_TEST(runTestOutside);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -96,6 +97,27 @@ public:
                      _outputPath + "OsmMapSplitterTestOutput_Boston-00002.osm");
     HOOT_FILE_EQUALS( _inputPath + "OsmMapSplitterTestOutput_Boston-00003.osm",
                      _outputPath + "OsmMapSplitterTestOutput_Boston-00003.osm");
+  }
+
+  void runTestOutside()
+  {
+    //  Load in the tile map
+    OsmMapPtr tiles = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(tiles, _inputPath + "OsmMapSplitterTestTiles_ToyTest_Outside.geojson");
+    //  Load in the map to split
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyBuildingsTestA.osm");
+
+    OsmMapSplitter splitter(map, tiles);
+    splitter.apply();
+
+    splitter.writeMaps(_outputPath + "OsmMapSplitterTestOutput_ToyTest_Outside.osm");
+
+    HOOT_FILE_EQUALS( _inputPath + "OsmMapSplitterTestOutput_ToyTest_Outside.osm",
+                     _outputPath + "OsmMapSplitterTestOutput_ToyTest_Outside.osm");
+    HOOT_FILE_EQUALS( _inputPath + "OsmMapSplitterTestOutput_ToyTest_Outside-00001.osm",
+                     _outputPath + "OsmMapSplitterTestOutput_ToyTest_Outside-00001.osm");
+
   }
 };
 

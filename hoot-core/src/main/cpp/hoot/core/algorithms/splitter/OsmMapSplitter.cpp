@@ -62,7 +62,7 @@ void OsmMapSplitter::apply()
   timer.start();
   //  First build up the tile map
   const WayMap& tiles = _tiles->getWays();
-  for (WayMap::const_iterator tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
+  for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
   {
     _tileEnvelopes.push_back(tile_it->second->getEnvelopeInternal(_tiles));
     _tileMaps.push_back(std::make_shared<OsmMap>(_map->getProjection()));
@@ -70,17 +70,17 @@ void OsmMapSplitter::apply()
   //  Iterate all of the elements in the map and copy them to the corresponding map by envelope
   //  Start with relations
   const RelationMap& relations = _map->getRelations();
-  for (RelationMap::const_iterator relation_it = relations.begin(); relation_it != relations.end(); ++relation_it)
+  for (auto relation_it = relations.begin(); relation_it != relations.end(); ++relation_it)
     _placeElementInMap(relation_it->second);
 
   //  Then ways that haven't already been copied
   const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator way_it = ways.begin(); way_it != ways.end(); ++way_it)
+  for (auto way_it = ways.begin(); way_it != ways.end(); ++way_it)
     _placeElementInMap(way_it->second);
 
   //  Finally nodes that haven't already been copied
   const NodeMap& nodes = _map->getNodes();
-  for (NodeMap::const_iterator node_it = nodes.begin(); node_it != nodes.end(); ++node_it)
+  for (auto node_it = nodes.begin(); node_it != nodes.end(); ++node_it)
     _placeElementInMap(node_it->second);
 
   LOG_INFO(
@@ -125,15 +125,26 @@ void OsmMapSplitter::_placeElementInMap(const ElementPtr& element)
       }
     }
   }
-  //  This should never happen, all elements should intersect with at least one envelope, if not more
+  //  When an element doesn't intersect any tile, find the closest one
   if (maxEnvelopeIndex < 0)
   {
-    QString error = "Error: " + element->getElementId().toString() + " does not intersect any tile bounds.";
-    LOG_ERROR(error);
-    throw HootException(error);
+    LOG_DEBUG(element->getElementId().toString() << " does not intersect any tile bounds.");
+    //  Use the first envelope as the default
+    double min_distance = env.distanceSquared(_tileEnvelopes[0]);
+    maxEnvelopeIndex = 0;
+    //  Iterate all of the remaining tiles looking for the min distance between the element and tile
+    for (long tile_index = 1; tile_index < (long)_tileEnvelopes.size(); ++tile_index)
+    {
+      double distance = env.distanceSquared(_tileEnvelopes[tile_index]);
+      if (min_distance > distance)
+      {
+        min_distance = distance;
+        maxEnvelopeIndex = tile_index;
+      }
+    }
   }
-  //  Copy the relation (and all of its children) to the destination map
   OsmMapPtr tile = _tileMaps[maxEnvelopeIndex];
+  //  Copy the element (and any related sub-elements) to the selected map
   CopyMapSubsetOp op(_map, element->getElementId());
   op.apply(tile);
   //  Update the list of elements already copied to maps

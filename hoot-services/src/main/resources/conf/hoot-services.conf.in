@@ -113,6 +113,10 @@ grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
 # Grail pull connected ways overpass query file
 grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.oql
 
+# Overpass sync polling interval and timeout
+overpassSyncTimeout=300000
+overpassSyncInterval=30000
+
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
 
