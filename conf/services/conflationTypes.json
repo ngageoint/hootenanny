@@ -10,7 +10,7 @@
             "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
             "tag.merger.default": "The default way of merging tags",
             "tag.merger.overwrite.exclude": "Tag keys to skip when overwriting",
-            "selective.overwrite.tag.merger.keys": "List of keys for tags to be transferred by the TagMergers descending from SelectiveOverwriteTagMerger"
+            "selective.overwrite.tag.merger.keys": "Tag keys to selectively transfer"
         }
     },
     "Areas": {
