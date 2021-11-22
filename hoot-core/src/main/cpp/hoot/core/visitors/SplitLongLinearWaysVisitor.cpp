@@ -177,7 +177,7 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
   }
 
   //  Update any relations
-  if (replacements.size() > 0)
+  if (!replacements.empty())
     _map->replace(way, replacements);
 
   _numAffected++;

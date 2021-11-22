@@ -2070,8 +2070,8 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
       QString buffer;
       QTextStream ts(&buffer);
       ts.setCodec("UTF-8");
-      for (auto it = missingNodes.begin(); it != missingNodes.end(); ++it)
-        ts << _nodes[type][*it]->toString(0, type);
+      for (auto node_id : missingNodes)
+        ts << _nodes[type][node_id]->toString(0, type);
       buffer.chop(1);
       buffer.replace("\n", "\n>");
       LOG_WARN("Missing nodes: " << getString(type) << " - " << missingNodes << "\n>" << buffer);
@@ -2104,8 +2104,8 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
       QString buffer;
       QTextStream ts(&buffer);
       ts.setCodec("UTF-8");
-      for (auto it = missingWays.begin(); it != missingWays.end(); ++it)
-        ts << _ways[type][*it]->toString(0, type);
+      for (auto wayId : missingWays)
+        ts << _ways[type][wayId]->toString(0, type);
       buffer.chop(1);
       buffer.replace("\n", "\n>");
       LOG_WARN("Missing ways: " << getString(type) << " - " << missingWays << "\n>" << buffer);
@@ -2138,8 +2138,8 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
       QString buffer;
       QTextStream ts(&buffer);
       ts.setCodec("UTF-8");
-      for (auto it = missingRelations.begin(); it != missingRelations.end(); ++it)
-        ts << _relations[type][*it]->toString(0, type);
+      for (auto relationId : missingRelations)
+        ts << _relations[type][relationId]->toString(0, type);
       buffer.chop(1);
       buffer.replace("\n", "\n>");
       LOG_WARN("Missing relations: " << getString(type) << " - " << missingRelations << "\n>" << buffer);
