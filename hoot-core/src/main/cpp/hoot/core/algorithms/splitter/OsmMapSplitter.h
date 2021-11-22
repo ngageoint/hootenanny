@@ -32,20 +32,14 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
 
-//  Geos
-
-
-//  Std
-
-
-
 namespace hoot
 {
 
 /**
  * @brief The OsmMapSplitter class splits a map up into multiple maps based on preprocessed tile
  * boundaries.  Elements that span tiles will only be assigned to one tile output map so that they
- * aren't duplicated in conflation campaigns.
+ * aren't duplicated in conflation campaigns.  In the case that an element doesn't fall within any
+ * tile bounds, it is inserted into the closest tile.
  */
 class OsmMapSplitter : public Configurable
 {
@@ -60,6 +54,7 @@ public:
   /**
    * @brief writeMaps Write all maps to disk with only their corresponding elements
    * @param filename Base filename for all files in the format:
+   *   output.osm
    *   output-00001.osm
    *   ...
    *   output-0000n.osm

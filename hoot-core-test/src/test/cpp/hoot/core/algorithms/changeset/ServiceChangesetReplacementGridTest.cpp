@@ -51,17 +51,6 @@
 
 namespace hoot
 {
-
-static const QString USER_EMAIL = "ServiceChangesetReplacementGridTest@hoottestcpp.org";
-static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
-// enables diff conflate to calculate the difference between the final replaced data and the
-// original data used for replacementk
-static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = false;
-// If true, unconflatable data for certain tests is output to its own file.
-static const bool WRITE_NON_CONFLATABLE = false;
-// allows for bypassing the metric asserts so you can view their values for update purposes
-static const bool DISPLAY_METRICS_ONLY = false;
-
 /*
  * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
  * cells. By removing the processes of input data retrieval and changeset application via API from
@@ -97,20 +86,28 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
-
-  //CPPUNIT_TEST(github4216UniformTest);
-  //CPPUNIT_TEST(northVegasLargeUniformTest);
-  //CPPUNIT_TEST(auditionTest);
+//  CPPUNIT_TEST(github4216UniformTest);
+//  CPPUNIT_TEST(northVegasLargeUniformTest);
+//  CPPUNIT_TEST(auditionTest);
 
   CPPUNIT_TEST_SUITE_END();
 
+  const QString USER_EMAIL = "ServiceChangesetReplacementGridTest@hoottestcpp.org";
+  const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
+  // enables diff conflate to calculate the difference between the final replaced data and the
+  // original data used for replacementk
+  const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = false;
+  // If true, unconflatable data for certain tests is output to its own file.
+  const bool WRITE_NON_CONFLATABLE = false;
+  // allows for bypassing the metric asserts so you can view their values for update purposes
+  const bool DISPLAY_METRICS_ONLY = false;
+
 public:
 
-  ServiceChangesetReplacementGridTest() :
-  HootTestFixture(
-    "test-files/algorithms/changeset/ServiceChangesetReplacementGridTest",
-    "test-output/algorithms/changeset/ServiceChangesetReplacementGridTest"),
-  _originalDataSize(0)
+  ServiceChangesetReplacementGridTest()
+    : HootTestFixture("test-files/algorithms/changeset/ServiceChangesetReplacementGridTest",
+                      "test-output/algorithms/changeset/ServiceChangesetReplacementGridTest"),
+      _originalDataSize(0)
   {
     setResetType(ResetEnvironment);
   }
@@ -136,12 +133,10 @@ public:
     // the upper right node to drop out and mangle the poly.
 
     _testName = "badPolyIdSync1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -201,12 +196,10 @@ public:
     // right section to be truncated.
 
     _testName = "badPolyIdSync2Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -265,12 +258,10 @@ public:
     // refers to two service roads in the middle right section of the map.
 
     _testName = "deadEndRoadSnapTest";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -331,12 +322,10 @@ public:
     // different.
 
     _testName = "differingTypes1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -402,12 +391,10 @@ public:
     // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #3.
 
     _testName = "droppedNodes1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -475,12 +462,10 @@ public:
     DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -542,12 +527,10 @@ public:
     // "Santa Barbara Drive".
 
     _testName = "orphanedNodes1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -608,12 +591,10 @@ public:
     // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #1.
 
     _testName = "orphanedNodes2Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -700,12 +681,10 @@ public:
     DisableLog dl;
 
     _testName = "outOfSpecMixedRelations1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -767,13 +746,11 @@ public:
     // a strict interpretation of the AOI boundaries.
 
     _testName = "poi1Test";
-    _prepInput(
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-      "-122.43384,37.76069,-122.42742,37.76869",
-      _outputPath);
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",
+               "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+               "-122.43384,37.76069,-122.42742,37.76869",
+               _outputPath);
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -836,12 +813,10 @@ public:
     // occurs, unless the workflow is cut only, this test could possibly be removed.
 
     _testName = "refFilteredToEmpty1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -908,12 +883,10 @@ public:
     // some of what appear to be the same roads across input datasets.
 
     _testName = "refSinglePoint1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -975,12 +948,10 @@ public:
     // references.
 
     _testName = "relationCrop1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -1041,12 +1012,10 @@ public:
     // This tests replacement of water features.
 
     _testName = "riverbank1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -1089,8 +1058,8 @@ public:
       CPPUNIT_ASSERT_EQUAL(94, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(3855L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(281L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(64L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(279L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(66L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(655L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(24L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(36L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
@@ -1118,12 +1087,10 @@ public:
      */
 
     _testName = "roundabouts1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -1190,12 +1157,10 @@ public:
      */
 
     _testName = "secFilteredToEmpty1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
+               _inputPath + "/" + _testName + "-Input2.osm",
+               "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -1279,9 +1244,10 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.1260,36.1525,-115.0246,36.2227", outDir);
+    _prepInput(rootDir + "/combined-data/NOMEData.osm",
+               rootDir + "/combined-data/OSMData.osm",
+               "-115.1260,36.1525,-115.0246,36.2227",
+               outDir);
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
@@ -1336,16 +1302,14 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm",
-      rootDir + "/combined-data/OSMData.osm",
-      "");
+    _prepInput(rootDir + "/combined-data/NOMEData.osm",
+               rootDir + "/combined-data/OSMData.osm",
+               "");
     // for cell subset debugging
-//    _prepInput(
-//      rootDir + "/combined-data/NOMEData.osm",
-//      rootDir + "/combined-data/OSMData.osm",
-//      "-115.1704,36.1514,-115.1117,36.1923",
-//      outDir);
+//    _prepInput(rootDir + "/combined-data/NOMEData.osm",
+//               rootDir + "/combined-data/OSMData.osm",
+//               "-115.1704,36.1514,-115.1117,36.1923",
+//               outDir);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -1456,9 +1420,8 @@ private:
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
-  void _loadDataToReplaceDb(
-    const QString& input, const QString& cropBounds = "", const QString& cropOut = "",
-    const bool clearDb = true)
+  void _loadDataToReplaceDb(const QString& input, const QString& cropBounds = "",
+                            const QString& cropOut = "", const bool clearDb = true)
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
@@ -1522,8 +1485,8 @@ private:
     _subTaskTimer.restart();
   }
 
-  void _loadReplacementDataDb(
-    const QString& input, const QString& cropBounds = "", const QString& cropOut = "")
+  void _loadReplacementDataDb(const QString& input, const QString& cropBounds = "",
+                              const QString& cropOut = "")
   {
     // TODO: Can this be converted over to use the bulk inserter?
 
@@ -1595,8 +1558,7 @@ private:
     _subTaskTimer.restart();
   }
 
-  void _writeDiffBetweenReplacedAndReplacement(
-    const geos::geom::Envelope& bounds, QString& output)
+  void _writeDiffBetweenReplacedAndReplacement(const geos::geom::Envelope& bounds, QString& output)
   {
     // Calculate a diff between the data we just replaced and the original replacement data to
     // aid in finding any errors during the replacement process. We only want to calculate the

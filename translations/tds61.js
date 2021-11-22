@@ -2690,11 +2690,13 @@ tds61 = {
       tds61.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       tds61.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       tds61.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds61.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
       // Get any changes
       tds61.toChange = hoot.Settings.get('schema.translation.override');
     }
+
+    // Moved this so it gets checked for each call
+    tds61.configIn.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');
 
     // Debug:
     if (tds61.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');

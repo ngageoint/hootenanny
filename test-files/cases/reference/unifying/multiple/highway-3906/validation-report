@@ -1,10 +1,10 @@
 Input: test-files/cases/reference/unifying/multiple/highway-3906/Output.osm
 
-Found 261 validation errors in 1,158 features with JOSM.
+Found 257 validation errors in 1,153 features with JOSM.
 Almost right angle buildings errors: 23
 Crossing boundaries errors: 8
 Crossing ways errors: 21
-Duplicated nodes errors: 160
+Duplicated nodes errors: 156
 Duplicated ways errors: 4
 Multipolygon errors: 8
 Relation checker errors: 9

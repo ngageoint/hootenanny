@@ -33,6 +33,7 @@
 #include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -44,12 +45,12 @@ _infoCache(infoCache)
 {
 }
 
-double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstElementPtr& poi,
+double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
                                             const ConstElementPtr& poly) const
 {
   if (!_infoCache)
   {
-    throw HootException("No cache passed to extractor.");
+    _infoCache = make_shared<PoiPolygonInfoCache>(map.shared_from_this());
   }
 
   LOG_VART(poi->getElementId());

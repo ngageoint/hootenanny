@@ -1,0 +1,5 @@
+{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-104.81, 39.591, -104.8, 39.595],"source":"ToyBuildingsTestA.osm","features": [
+{"type":"Feature","properties":{"task":"1","node_count":"13"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-104.807047, 39.5909359],[-104.807047, 39.5915359],[-104.805147, 39.5915359],[-104.805147, 39.5909359],[-104.807047, 39.5909359]]]]}},
+{"type":"Feature","properties":{"task":"4","node_count":"23"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-104.805147, 39.5918359],[-104.805147, 39.5945359],[-104.803647, 39.5945359],[-104.803647, 39.5918359],[-104.805147, 39.5918359]]]]}}]
+}
+

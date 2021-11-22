@@ -60,7 +60,7 @@ public:
   virtual std::map<QString, double> getFeatures(
     const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2) const;
 
-  void import(const QDomElement& docRoot);
+  void importTree(const QDomElement& docRoot);
 
 protected:
 

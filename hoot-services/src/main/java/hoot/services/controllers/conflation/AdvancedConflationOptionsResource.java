@@ -40,6 +40,7 @@ import static hoot.services.HootProperties.REF_OVERRIDE_PATH;
 import static hoot.services.HootProperties.TEMPLATE_PATH;
 
 import hoot.services.command.CommandResult;
+import hoot.services.controllers.info.HootTagMergers;
 import hoot.services.controllers.info.HootWaySnapCriteria;
 
 import java.io.BufferedReader;
@@ -212,9 +213,11 @@ public class AdvancedConflationOptionsResource {
                     for (Object memberObj : hoot2Template) {
                         JSONObject obj = (JSONObject) memberObj;
                         if (obj.get("name") != null && obj.get("name").equals("Differential")) {
-                            addMemberData((JSONArray) obj.get("members"));
+                            addDifferentialMemberData((JSONArray) obj.get("members"));
                         }
-
+                        if (obj.get("name") != null && obj.get("name").equals("General")) {
+                            addGeneralMemberData((JSONArray) obj.get("members"));
+                        }
                     }
                 }
                 template = hoot2Template;
@@ -228,10 +231,11 @@ public class AdvancedConflationOptionsResource {
                             }).findFirst().orElse(null);
                     diffTemplate = (JSONArray) diffOpts.get("members");
 
-                    addMemberData(diffTemplate);
+                    addDifferentialMemberData(diffTemplate);
 
                     //Add select 'non-Differential' options here
                     List<Pair<String, String>> groupMembers = new ArrayList<>();
+                    groupMembers.add(Pair.of("General", "SelectiveOverwriteTagMergerKeys"));
                     groupMembers.add(Pair.of("General", "TagMergerOverwriteExclude"));
                     groupMembers.add(Pair.of("Roads", "RoadEngines"));
 
@@ -247,6 +251,13 @@ public class AdvancedConflationOptionsResource {
                             diffTemplate.add(0, opt);
                         }
                     });
+                    JSONObject genOpts = (JSONObject) hoot2Opts.stream().filter(config -> {
+                        return ((JSONObject)config).get("name").equals("General");
+                    }).findFirst().orElse(null);
+                    JSONArray genTemplate = (JSONArray) genOpts.get("members");
+                    JSONArray members = addGeneralMemberData(genTemplate);
+                    diffTemplate.addAll(1, members);
+
 
                 }
                 template = diffTemplate;
@@ -292,7 +303,7 @@ public class AdvancedConflationOptionsResource {
     }
 
     //maybe this could be moved to conflationTypeDefaults.json??
-    private void addMemberData(JSONArray template) {
+    private void addDifferentialMemberData(JSONArray template) {
         for (Object memberObj : template) {
             JSONObject obj = (JSONObject) memberObj;
 
@@ -318,6 +329,39 @@ public class AdvancedConflationOptionsResource {
                 obj.put("matcherMap", matcherMap);
             }
         }
+    }
+
+    private JSONArray addGeneralMemberData(JSONArray template) {
+        JSONArray members = new JSONArray();
+        for (Object memberObj : template) {
+            JSONObject obj = (JSONObject) memberObj;
+
+            // add list of options for Tag Mergers
+            if (obj.get("id") != null &&
+                    obj.get("id").equals("TagMergerDefault")) {
+                HootTagMergers hootCriteriaCommand = new HootTagMergers(this.getClass());
+                CommandResult commandResult = hootCriteriaCommand.execute();
+                String output = commandResult.getStdout().replace("\n", "");
+
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject;
+                try {
+                    jsonObject = (JSONObject) jsonParser.parse(output);
+                    JSONArray data = (JSONArray) jsonObject.get("TagMerger");
+
+                    obj.replace("input", "combobox");
+                    obj.put("data", data);
+                    obj.put("itemKey", "description");
+                    obj.put("valueKey", "name");
+                    members.add(obj);
+                }
+                catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return members;
     }
 
     private void getOverrides(Boolean doForce) throws IOException, ParseException {

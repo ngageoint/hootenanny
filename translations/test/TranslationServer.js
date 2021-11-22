@@ -1093,8 +1093,52 @@ describe('TranslationServer', function () {
         assert.equal(response.statusCode, '200');
         done();
       });
-    });
+      it('drop default tags by default', function(done) {
+        var osm = server.handleInputs({
+            translation: 'MGCP',
+            method: 'POST',
+            path: '/translateFrom',
+            osm: "<osm version='0.6' generator='JOSM'><node id='-161534' lat='38.9078407955' lon='-77.03267545044'><tag k='FCODE' v='AL015' /> <tag k='CCN' v='UNK' /></node></osm>"
+        });
 
+        xml2js.parseString(osm, function(err, result) {
+          assert.equal(result.osm.node[0].tag[0].$.k, 'building')
+          assert.equal(result.osm.node[0].tag[0].$.v, 'yes')
+          assert.equal(result.osm.node[0].tag.length, 1)
+        })
+
+        var osm = server.handleInputs({
+          translation: 'MGCP',
+          method: 'POST',
+          path: '/translateFrom',
+          dropDefaults: 'false',
+          osm: "<osm version='0.6' generator='JOSM'><node id='-161533' lat='38.9078407955' lon='-77.03267545044'><tag k='FCODE' v='AL015' /> <tag k='CCN' v='UNK' /></node></osm>"
+        });
+
+        xml2js.parseString(osm, function(err, result) {
+          assert.equal(result.osm.node[0].tag[0].$.k, 'source:copyright')
+          assert.equal(result.osm.node[0].tag[0].$.v, 'UNK')
+          assert.equal(result.osm.node[0].tag[1].$.k, 'building')
+          assert.equal(result.osm.node[0].tag[1].$.v, 'yes')
+          assert.equal(result.osm.node[0].tag.length, 2)
+        })
+
+        var osm = server.handleInputs({
+          translation: 'MGCP',
+          method: 'POST',
+          path: '/translateFrom',
+          dropDefaults: 'true',
+          osm: "<osm version='0.6' generator='JOSM'><node id='-161534' lat='38.9078407955' lon='-77.03267545044'><tag k='FCODE' v='AL015' /> <tag k='CCN' v='UNK' /></node></osm>"
+        });
+
+        xml2js.parseString(osm, function(err, result) {
+          assert.equal(result.osm.node[0].tag[0].$.k, 'building')
+          assert.equal(result.osm.node[0].tag[0].$.v, 'yes')
+          assert.equal(result.osm.node[0].tag.length, 1)
+          done()
+        })
+      })
+    });
     describe('supportedGeometries', function() {
         it ('replies supported geometries for provided feature code', function() {
             var baseParams = {

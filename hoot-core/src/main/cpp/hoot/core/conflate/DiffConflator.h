@@ -129,11 +129,10 @@ public:
    * @param changesetStatsFormat changeset statistics format
    * @param osmApiDbUrl specifies the target OSM API database, if SQL changeset output is specified
    */
-  void writeChangeset(
-    OsmMapPtr pResultMap, const QString& output, bool separateOutput,
-    const ChangesetStatsFormat& changesetStatsFormat =
-      ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
-    const QString& osmApiDbUrl = "");
+  void writeChangeset(OsmMapPtr pResultMap, const QString& output, bool separateOutput,
+                      const ChangesetStatsFormat& changesetStatsFormat =
+                        ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
+                      const QString& osmApiDbUrl = "");
 
   /**
    * @see ProgressReporter
@@ -264,8 +263,7 @@ private:
    */
   long _snapSecondaryLinearFeaturesBackToTagChangedRef();
 
-  QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
-    const std::vector<ConstMatchPtr>& matches);
+  QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(const std::vector<ConstMatchPtr>& matches);
 
   /**
    * @brief _removeRefData removes reference data from the differential output.
@@ -279,21 +277,21 @@ private:
    * @param maxSize only ways up to this size are removed
    */
   void _cleanSecData(const QStringList& baseCriteria, const double maxSize) const;
-  /*
+  /**
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed
    */
   bool _satisfiesCompleteElementRemovalCondition(
     const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
-  /*
+  /**
    * Removes match elements from a match completely regardless of whether only part of their
    * geometry is involved in a match (if linear).
    */
   void _removeMatchElementsCompletely(const Status& status);
-  void _removeMatchElementPairCompletely(
-    const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
-    const Status& status) const;
-  /*
+  void _removeMatchElementPairCompletely(const ConstMatchPtr& match,
+                                         const std::pair<ElementId, ElementId>& elementPair,
+                                         const Status& status) const;
+  /**
    * Removes only the geometric portions of linear match elements that were involved in a match.
    */
   void _removePartialSecondaryMatchElements();

@@ -459,7 +459,6 @@
     <node visible="true" id="-4595" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697999999999965" lon="-122.4299288867496500"/>
     <node visible="true" id="-4594" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7698000000000036" lon="-122.4296337361170544"/>
     <node visible="true" id="-4593" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999900" lon="-122.4170642507021256"/>
-    <node visible="true" id="-4592" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4185472345916850"/>
     <node visible="true" id="-4591" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4159422099637169"/>
     <node visible="true" id="-4590" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4159909739131109"/>
     <node visible="true" id="-4589" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7603999999999971" lon="-122.4071417097888315"/>
@@ -8021,13 +8020,13 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-760" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4592"/>
+        <nd ref="-4637"/>
         <nd ref="-4298"/>
         <nd ref="-4299"/>
         <nd ref="-4300"/>
         <nd ref="-4301"/>
         <nd ref="-4593"/>
-        <nd ref="-4592"/>
+        <nd ref="-4637"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-759" timestamp="1970-01-01T00:00:00Z" version="1">

@@ -133,13 +133,13 @@ namespace Tgs
     *
     * @param fileStream the stream to import the data
     */
-    void import(std::istream& fileStream);
+    void importTree(std::istream& fileStream);
 
     /**
      * @brief import imports a tree
      * @param e the XML DOM element containing the tree
      */
-    void import(const QDomElement& e);
+    void importTree(const QDomElement& e);
 
     /**
     * Builds a tree 

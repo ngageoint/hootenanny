@@ -326,6 +326,117 @@
         <node id="-316" version="0" lat="8.6351058292400005" lon="28.1414032697700023" timestamp=""/>
         <node id="-317" version="0" lat="8.6351374155700000" lon="28.1399416268099998" timestamp=""/>
         <node id="-318" version="0" lat="8.6362192457500004" lon="28.1399416268099998" timestamp=""/>
+        <node id="-319" version="0" lat="8.6559338142400009" lon="28.1482629035300000" timestamp=""/>
+        <node id="-320" version="0" lat="8.6554498396799993" lon="28.1484674916899991" timestamp=""/>
+        <node id="-321" version="0" lat="8.6552331344599995" lon="28.1479194876799994" timestamp=""/>
+        <node id="-322" version="0" lat="8.6557387797899992" lon="28.1477441263899983" timestamp=""/>
+        <node id="-323" version="0" lat="8.6915819319000001" lon="28.1245758336599998" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-324" version="0" lat="8.6873156635199997" lon="28.1255540830999990" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-325" version="0" lat="8.6832484424899992" lon="28.1261582959999998" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-326" version="0" lat="8.6782141288200005" lon="28.1255253110599988" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-327" version="0" lat="8.6742890238499992" lon="28.1246621497900016" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-328" version="0" lat="8.6668392018499993" lon="28.1221248053100012" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-329" version="0" lat="8.6590211045299998" lon="28.1225623096900001" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-330" version="0" lat="8.6530375180999997" lon="28.1265260956600009" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-331" version="0" lat="8.6513133326599991" lon="28.1346988518900005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-332" version="0" lat="8.6431220827399997" lon="28.1390397276100011" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-333" version="0" lat="8.6310248270500001" lon="28.1392783473900003" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-334" version="0" lat="8.6194185963399992" lon="28.1355955259499986" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-335" version="0" lat="8.6094050913100002" lon="28.1303014701199992" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-336" version="0" lat="8.6021223757400005" lon="28.1332937625399992" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-337" version="0" lat="8.5975706073999998" lon="28.1349049969300005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-338" version="0" lat="8.6572800356100004" lon="28.1504056830600007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-339" version="0" lat="8.6539379619000005" lon="28.1607298173300009" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-340" version="0" lat="8.6500694930600002" lon="28.1660238731600003" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-341" version="0" lat="8.6415694511200005" lon="28.1761706970900008" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-342" version="0" lat="8.6388520063699996" lon="28.1841315442100004" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-343" version="0" lat="8.6400568009800001" lon="28.1927243286199989" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-344" version="0" lat="8.6450631802700002" lon="28.1996296188299986" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-345" version="0" lat="8.6477939045800003" lon="28.2033124402800013" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-346" version="0" lat="8.6421656301100001" lon="28.0805594519999993" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-347" version="0" lat="8.6381225002700006" lon="28.0900656808799987" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-348" version="0" lat="8.6434548526599997" lon="28.1019261865499992" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-349" version="0" lat="8.6485568086699995" lon="28.1116473647499987" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-350" version="0" lat="8.6478860741899997" lon="28.1253875182100010" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-351" version="0" lat="8.6571659947999997" lon="28.1233978870900003" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-352" version="0" lat="8.6580548366500008" lon="28.1227467104999995" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-353" version="0" lat="8.6557248901400001" lon="28.1237482663700007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-354" version="0" lat="8.6548850601700007" lon="28.1244027484300005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-355" version="0" lat="8.6542053520400000" lon="28.1249051791000007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-356" version="0" lat="8.6519799529199997" lon="28.1290303993500004" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-357" version="0" lat="8.6468297864500006" lon="28.1375056114499991" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-358" version="0" lat="8.6391959076700005" lon="28.1396475527300005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-359" version="0" lat="8.6351762946499999" lon="28.1397268838899990" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-360" version="0" lat="8.6332089562499998" lon="28.1397731604000008" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-361" version="0" lat="8.6491404604800000" lon="28.1301982878899999" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-362" version="0" lat="8.6482231829099998" lon="28.1279867528200000" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-363" version="0" lat="8.6474943854300008" lon="28.1228392142899999" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-364" version="0" lat="8.6481477901300003" lon="28.1196807863300009" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-365" version="0" lat="8.6485247538600003" lon="28.1169100125000000" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-366" version="0" lat="8.6485938638400004" lon="28.1167066529500005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-367" version="0" lat="8.6478399361400005" lon="28.1103453121300007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-368" version="0" lat="8.6472996203499992" lon="28.1094937440199999" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-369" version="0" lat="8.6468598278600002" lon="28.1088709554100014" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-370" version="0" lat="8.6463195106799997" lon="28.1083244266299985" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-371" version="0" lat="8.6456786683600004" lon="28.1077016380200000" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-372" version="0" lat="8.6451886117299992" lon="28.1072694989799992" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-373" version="0" lat="8.6445477674899998" lon="28.1064941907099985" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-374" version="0" lat="8.6432535100999992" lon="28.1001264948899987" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-375" version="0" lat="8.6437561348600003" lon="28.1050325439600002" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-376" version="0" lat="8.6433791663499999" lon="28.1033802476400005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-377" version="0" lat="8.6425875312699993" lon="28.0986553156700012" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-378" version="0" lat="8.6413812269899992" lon="28.0966598501199982" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-379" version="0" lat="8.6398482097400002" lon="28.0948041942499991" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-380" version="0" lat="8.6387675544900002" lon="28.0924401395200007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-381" version="0" lat="8.6384157125800005" lon="28.0877628699400006" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-382" version="0" lat="8.6395466318400000" lon="28.0850937758800008" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-383" version="0" lat="8.6527404392299996" lon="28.1381451976900010" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-384" version="0" lat="8.6536200099599991" lon="28.1403948626800009" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-385" version="0" lat="8.6545875353900001" lon="28.1427207874899992" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-386" version="0" lat="8.6552786234599992" lon="28.1447543829599987" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-387" version="0" lat="8.6560702318700002" lon="28.1470675978100004" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-388" version="0" lat="8.6566607957899997" lon="28.1487198941300001" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-389" version="0" lat="8.6578670511299993" lon="28.1521007465999986" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-390" version="0" lat="8.6580555281800002" lon="28.1528506349300010" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-391" version="0" lat="8.6580680933099998" lon="28.1539818224099996" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-392" version="0" lat="8.6578796162699998" lon="28.1549096503399987" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-393" version="0" lat="8.6572639239400004" lon="28.1563712970799997" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-394" version="0" lat="8.6563843617299998" lon="28.1576931341400005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-395" version="0" lat="8.6554168409199992" lon="28.1589895512499986" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-396" version="0" lat="8.6490587851700003" lon="28.1670730932399991" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-397" version="0" lat="8.6517729090600000" lon="28.1641752196999988" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-398" version="0" lat="8.6469980484200004" lon="28.1690812687700003" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-399" version="0" lat="8.6445100707300000" lon="28.1712673838900010" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-400" version="0" lat="8.6424493090999999" lon="28.1734280790800007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-401" version="0" lat="8.6419466826000004" lon="28.1748261759700007" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-402" version="0" lat="8.6411424788200009" lon="28.1780545087699998" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-403" version="0" lat="8.6407529419899998" lon="28.1798466147800006" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-404" version="0" lat="8.6401560702599998" lon="28.1813781663699991" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-405" version="0" lat="8.6394398229499991" lon="28.1828016832000010" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-406" version="0" lat="8.6385350875500002" lon="28.1854707772499999" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-407" version="0" lat="8.6386230480300004" lon="28.1868561641600017" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-408" version="0" lat="8.6389686068600007" lon="28.1880636114699996" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-409" version="0" lat="8.6395215003400008" lon="28.1892329288699983" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-410" version="0" lat="8.6399298870500001" lon="28.1906373807400001" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-411" version="0" lat="8.6400806758699993" lon="28.1917304382999987" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-412" version="0" lat="8.6401183730700009" lon="28.1935543192400004" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-413" version="0" lat="8.6404011019299993" lon="28.1945965369199989" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-414" version="0" lat="8.6408220533900000" lon="28.1952892303799985" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-415" version="0" lat="8.6415382980800004" lon="28.1961598634399984" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-416" version="0" lat="8.6422419757500002" lon="28.1968525568900006" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-417" version="0" lat="8.6429016723800007" lon="28.1974499255600008" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-418" version="0" lat="8.6434922569400001" lon="28.1981616839800004" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-419" version="0" lat="8.6440514265899999" lon="28.1986637278600014" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-420" version="0" lat="8.6445666158600005" lon="28.1991212868400005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-421" version="0" lat="8.6455153162199991" lon="28.2001317295900016" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-422" version="0" lat="8.6460242207199993" lon="28.2009324578000005" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-423" version="0" lat="8.6463572072500003" lon="28.2016251512600000" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-424" version="0" lat="8.6465959521299993" lon="28.2022415848900003" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-425" version="0" lat="8.6471237034200001" lon="28.2028389535499997" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-426" version="0" lat="8.6545262723400000" lon="28.1438514745399999" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-427" version="0" lat="8.6536942364799998" lon="28.1441155115299999" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-428" version="0" lat="8.6539715819699996" lon="28.1448581155699991" timestamp="2018-06-11T16:49:01Z"/>
+        <node id="-429" version="0" lat="8.6547709884100001" lon="28.1445775762699988" timestamp="2018-06-11T16:49:01Z"/>
         <way id="-1" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-5"/>
             <nd ref="-4"/>
@@ -820,46 +931,44 @@
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
         </way>
-    </create>
-    <modify>
-        <way id="-39773" version="1" timestamp="">
-            <nd ref="-39771"/>
-            <nd ref="-39772"/>
-            <nd ref="-39774"/>
-            <nd ref="-39776"/>
-            <nd ref="-39771"/>
+        <way id="-24" version="0" timestamp="">
+            <nd ref="-322"/>
+            <nd ref="-321"/>
+            <nd ref="-320"/>
+            <nd ref="-319"/>
+            <nd ref="-322"/>
             <tag k="name" v="New Name"/>
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
             <tag k="alt_name" v="Old Name"/>
             <tag k="building" v="yes"/>
         </way>
-        <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="1"/>
-            <nd ref="2"/>
-            <nd ref="3"/>
-            <nd ref="4"/>
-            <nd ref="5"/>
-            <nd ref="6"/>
-            <nd ref="7"/>
-            <nd ref="30"/>
-            <nd ref="29"/>
-            <nd ref="31"/>
-            <nd ref="32"/>
-            <nd ref="33"/>
-            <nd ref="8"/>
-            <nd ref="34"/>
-            <nd ref="9"/>
-            <nd ref="35"/>
-            <nd ref="10"/>
-            <nd ref="36"/>
-            <nd ref="37"/>
-            <nd ref="38"/>
-            <nd ref="11"/>
-            <nd ref="12"/>
-            <nd ref="13"/>
-            <nd ref="14"/>
-            <nd ref="15"/>
+        <way id="-25" version="0" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="-323"/>
+            <nd ref="-324"/>
+            <nd ref="-325"/>
+            <nd ref="-326"/>
+            <nd ref="-327"/>
+            <nd ref="-328"/>
+            <nd ref="-329"/>
+            <nd ref="-352"/>
+            <nd ref="-351"/>
+            <nd ref="-353"/>
+            <nd ref="-354"/>
+            <nd ref="-355"/>
+            <nd ref="-330"/>
+            <nd ref="-356"/>
+            <nd ref="-331"/>
+            <nd ref="-357"/>
+            <nd ref="-332"/>
+            <nd ref="-358"/>
+            <nd ref="-359"/>
+            <nd ref="-360"/>
+            <nd ref="-333"/>
+            <nd ref="-334"/>
+            <nd ref="-335"/>
+            <nd ref="-336"/>
+            <nd ref="-337"/>
             <tag k="source" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -870,59 +979,59 @@
             <tag k="surface" v="paved"/>
             <tag k="attribution" v="osm"/>
         </way>
-        <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="9"/>
-            <nd ref="61"/>
-            <nd ref="62"/>
-            <nd ref="63"/>
-            <nd ref="64"/>
-            <nd ref="65"/>
-            <nd ref="66"/>
-            <nd ref="16"/>
-            <nd ref="67"/>
-            <nd ref="68"/>
-            <nd ref="69"/>
-            <nd ref="70"/>
-            <nd ref="71"/>
-            <nd ref="72"/>
-            <nd ref="73"/>
-            <nd ref="17"/>
-            <nd ref="75"/>
-            <nd ref="18"/>
-            <nd ref="74"/>
-            <nd ref="76"/>
-            <nd ref="77"/>
-            <nd ref="78"/>
-            <nd ref="79"/>
-            <nd ref="19"/>
-            <nd ref="80"/>
-            <nd ref="81"/>
-            <nd ref="82"/>
-            <nd ref="83"/>
-            <nd ref="20"/>
-            <nd ref="84"/>
-            <nd ref="85"/>
-            <nd ref="86"/>
-            <nd ref="87"/>
-            <nd ref="88"/>
-            <nd ref="89"/>
-            <nd ref="21"/>
-            <nd ref="90"/>
-            <nd ref="91"/>
-            <nd ref="92"/>
-            <nd ref="93"/>
-            <nd ref="94"/>
-            <nd ref="95"/>
-            <nd ref="96"/>
-            <nd ref="97"/>
-            <nd ref="98"/>
-            <nd ref="22"/>
-            <nd ref="99"/>
-            <nd ref="100"/>
-            <nd ref="101"/>
-            <nd ref="102"/>
-            <nd ref="103"/>
-            <nd ref="23"/>
+        <way id="-26" version="0" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="-331"/>
+            <nd ref="-383"/>
+            <nd ref="-384"/>
+            <nd ref="-385"/>
+            <nd ref="-386"/>
+            <nd ref="-387"/>
+            <nd ref="-388"/>
+            <nd ref="-338"/>
+            <nd ref="-389"/>
+            <nd ref="-390"/>
+            <nd ref="-391"/>
+            <nd ref="-392"/>
+            <nd ref="-393"/>
+            <nd ref="-394"/>
+            <nd ref="-395"/>
+            <nd ref="-339"/>
+            <nd ref="-397"/>
+            <nd ref="-340"/>
+            <nd ref="-396"/>
+            <nd ref="-398"/>
+            <nd ref="-399"/>
+            <nd ref="-400"/>
+            <nd ref="-401"/>
+            <nd ref="-341"/>
+            <nd ref="-402"/>
+            <nd ref="-403"/>
+            <nd ref="-404"/>
+            <nd ref="-405"/>
+            <nd ref="-342"/>
+            <nd ref="-406"/>
+            <nd ref="-407"/>
+            <nd ref="-408"/>
+            <nd ref="-409"/>
+            <nd ref="-410"/>
+            <nd ref="-411"/>
+            <nd ref="-343"/>
+            <nd ref="-412"/>
+            <nd ref="-413"/>
+            <nd ref="-414"/>
+            <nd ref="-415"/>
+            <nd ref="-416"/>
+            <nd ref="-417"/>
+            <nd ref="-418"/>
+            <nd ref="-419"/>
+            <nd ref="-420"/>
+            <nd ref="-344"/>
+            <nd ref="-421"/>
+            <nd ref="-422"/>
+            <nd ref="-423"/>
+            <nd ref="-424"/>
+            <nd ref="-425"/>
+            <nd ref="-345"/>
             <tag k="source" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -933,35 +1042,35 @@
             <tag k="surface" v="cobblestone"/>
             <tag k="attribution" v="osm"/>
         </way>
-        <way id="3" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="24"/>
-            <nd ref="60"/>
-            <nd ref="59"/>
-            <nd ref="25"/>
-            <nd ref="58"/>
-            <nd ref="57"/>
-            <nd ref="56"/>
-            <nd ref="55"/>
-            <nd ref="52"/>
-            <nd ref="26"/>
-            <nd ref="54"/>
-            <nd ref="53"/>
-            <nd ref="51"/>
-            <nd ref="50"/>
-            <nd ref="49"/>
-            <nd ref="48"/>
-            <nd ref="47"/>
-            <nd ref="46"/>
-            <nd ref="45"/>
-            <nd ref="27"/>
-            <nd ref="44"/>
-            <nd ref="43"/>
-            <nd ref="42"/>
-            <nd ref="41"/>
-            <nd ref="28"/>
-            <nd ref="40"/>
-            <nd ref="39"/>
-            <nd ref="9"/>
+        <way id="-27" version="0" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="-346"/>
+            <nd ref="-382"/>
+            <nd ref="-381"/>
+            <nd ref="-347"/>
+            <nd ref="-380"/>
+            <nd ref="-379"/>
+            <nd ref="-378"/>
+            <nd ref="-377"/>
+            <nd ref="-374"/>
+            <nd ref="-348"/>
+            <nd ref="-376"/>
+            <nd ref="-375"/>
+            <nd ref="-373"/>
+            <nd ref="-372"/>
+            <nd ref="-371"/>
+            <nd ref="-370"/>
+            <nd ref="-369"/>
+            <nd ref="-368"/>
+            <nd ref="-367"/>
+            <nd ref="-349"/>
+            <nd ref="-366"/>
+            <nd ref="-365"/>
+            <nd ref="-364"/>
+            <nd ref="-363"/>
+            <nd ref="-350"/>
+            <nd ref="-362"/>
+            <nd ref="-361"/>
+            <nd ref="-331"/>
             <tag k="source" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -972,12 +1081,12 @@
             <tag k="surface" v="cobblestone"/>
             <tag k="attribution" v="osm"/>
         </way>
-        <way id="5" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="108"/>
-            <nd ref="109"/>
-            <nd ref="110"/>
-            <nd ref="111"/>
-            <nd ref="108"/>
+        <way id="-28" version="0" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="-426"/>
+            <nd ref="-427"/>
+            <nd ref="-428"/>
+            <nd ref="-429"/>
+            <nd ref="-426"/>
             <tag k="source" v="Unknown;osm"/>
             <tag k="amenity" v="fuel"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -987,5 +1096,5 @@
             <tag k="source:datetime" v="2018-06-11T16:49:01Z"/>
             <tag k="attribution" v="osm"/>
         </way>
-    </modify>
+    </create>
 </osmChange>

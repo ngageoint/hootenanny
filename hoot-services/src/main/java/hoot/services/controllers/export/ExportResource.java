@@ -32,7 +32,12 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 import static hoot.services.models.db.QMaps.maps;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -58,9 +65,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -278,16 +287,15 @@ public class ExportResource {
     /**
      * To retrieve the output from job make GET request.
      *
-     * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&ext=[file extension override from zip]
+     * GET hoot-services/job/export/[job id from export job]?outputname=[file to download]&ext=[file extension if not zip]
      *
      * @param jobId
      *            job id
      * @param outputname
-     *            parameter overrides the output file name with the user defined
-     *            name. If not specified then defaults to job id as name.
+     *            the output file name to be downloaded if not the job id
      * @param ext
-     *            parameter overrides the file extension of the file being
-     *            downloaded
+     *            the file extension of the file being zipped and
+     *            downloaded (if not an existing zip file)
      *
      * @return Octet stream
      */
@@ -302,15 +310,37 @@ public class ExportResource {
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
             File exportFile = getExportFile(jobId, outputname, fileExt);
-
             String outFileName = jobId;
             if (! StringUtils.isBlank(outputname)) {
                 outFileName = outputname;
             }
-
-            ResponseBuilder responseBuilder = Response.ok(exportFile);
-            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
-
+            ResponseBuilder responseBuilder;
+            //Do some zipping if fileExt is not zip
+            if (!fileExt.equalsIgnoreCase("zip")) {
+                StreamingOutput stream = new StreamingOutput() {
+                    @Override
+                    public void write(OutputStream output) throws IOException {
+                        try {
+                            ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(output));
+                            zip.putNextEntry(new ZipEntry(exportFile.getName()));
+                            FileInputStream fis = new FileInputStream(exportFile);
+                            IOUtils.copy(fis, zip);
+                            zip.closeEntry();
+                            fis.close();
+                            zip.close();
+                        } finally {
+                            if( output != null ) {
+                                output.flush();
+                                output.close();
+                            }
+                        }
+                    }
+                };
+                responseBuilder = Response.ok(stream);
+            } else {
+                responseBuilder = Response.ok(exportFile);
+            }
+            responseBuilder.header("Content-Disposition", "attachment; filename="+ outFileName + ".zip");
             response = responseBuilder.build();
         }
         catch (WebApplicationException e) {

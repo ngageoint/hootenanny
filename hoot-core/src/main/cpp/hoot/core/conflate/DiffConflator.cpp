@@ -306,9 +306,8 @@ void DiffConflator::_cleanSecData(const QStringList& baseCriteria, const double 
   _map->visitRw(cleaner);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-cleaning-sec-elements");
 
-  LOG_DEBUG(
-    "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
-    " secondary ways...");
+  LOG_DEBUG("Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
+            " secondary ways...");
 }
 
 void DiffConflator::_discardUnconflatableElements()
@@ -321,9 +320,8 @@ void DiffConflator::_discardUnconflatableElements()
     SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-non-conflatable");
   _numUnconflatableElementsDiscarded = (int)(mapSizeBefore - _map->size());
-  LOG_INFO(
-    "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
-    " unconflatable elements.");
+  LOG_INFO("Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
+           " unconflatable elements.");
 }
 
 void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
@@ -356,6 +354,17 @@ void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
 
 std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, OsmMapPtr map2) const
 {
+  //  Make sure that both maps are in a geographic projection
+  if (!map1->getProjection()->IsGeographic())
+  {
+    LOG_TRACE("map1 is not geographic, reprojecting");
+    MapProjector::projectToWgs84(map1);
+  }
+  if (!map2->getProjection()->IsGeographic())
+  {
+    LOG_TRACE("map2 is not geographic, reprojecting");
+    MapProjector::projectToWgs84(map2);
+  }
   // Conflation requires all data to be in memory, so no point in adding support for the
   // ExternalMergeElementSorter here.
   InMemoryElementSorterPtr sorted1 = std::make_shared<InMemoryElementSorter>(map1);
@@ -382,9 +391,9 @@ bool DiffConflator::_removeLinearMatchesPartially() const
   LOG_VART(SuperfluousConflateOpRemover::linearMatcherPresent());
   const int numMatchesToRemoveAsPartial = _countMatchesToRemoveAsPartial();
   LOG_VART(_countMatchesToRemoveAsPartial());
-  return
-    !_removeLinearPartialMatchesAsWhole && SuperfluousConflateOpRemover::linearMatcherPresent() &&
-    numMatchesToRemoveAsPartial > 0;
+  return !_removeLinearPartialMatchesAsWhole &&
+          SuperfluousConflateOpRemover::linearMatcherPresent() &&
+          numMatchesToRemoveAsPartial > 0;
 }
 
 bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
@@ -442,8 +451,7 @@ int DiffConflator::_countMatchesToRemoveAsPartial() const
   return numMatchesToRemovePartially;
 }
 
-QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
-  const std::vector<ConstMatchPtr>& matches)
+QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(const std::vector<ConstMatchPtr>& matches)
 {
   QSet<ElementId> elementIds;
 
@@ -609,15 +617,13 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
     }
   }
 
-  LOG_TRACE(
-    "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
-    " match elements completely with status: " << status.toString() << "...");
-  OsmMapWriterFactory::writeDebugMap(
-    _map, className(), "after-removing-" + status.toString() + "-matches");
+  LOG_TRACE("\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
+            " match elements completely with status: " << status.toString() << "...");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-" + status.toString() + "-matches");
 }
 
-bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
-  const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const
+bool DiffConflator::_satisfiesCompleteElementRemovalCondition(const ConstElementPtr& element, const Status& status,
+                                                              const ConstMatchPtr& match) const
 {
   ElementCriterionPtr notSnappedCrit =
     std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
@@ -632,9 +638,9 @@ bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
      _intraDatasetMatchOnlyElementIds.contains(element->getElementId()));
 }
 
-void DiffConflator::_removeMatchElementPairCompletely(
-  const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
-  const Status& status) const
+void DiffConflator::_removeMatchElementPairCompletely(const ConstMatchPtr& match,
+                                                      const std::pair<ElementId, ElementId>& elementPair,
+                                                      const Status& status) const
 {
   LOG_TRACE(
     "Removing match element pair completely: " << elementPair << " for elements with status: " <<
@@ -650,9 +656,8 @@ void DiffConflator::_removeMatchElementPairCompletely(
     ElementPtr e1 = _map->getElement(elementPair.first);
     if (e1)
     {
-      QString msg =
-        "Removed entire element: " + e1->getElementId().toString() + " with status: " +
-        e1->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
+      QString msg = "Removed entire element: " + e1->getElementId().toString() + " with status: " +
+                    e1->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
       if (_satisfiesCompleteElementRemovalCondition(e1, status, match))
         RecursiveElementRemover(e1->getElementId()).apply(_map);
       else
@@ -665,9 +670,8 @@ void DiffConflator::_removeMatchElementPairCompletely(
     ElementPtr e2 = _map->getElement(elementPair.second);
     if (e2)
     {
-      QString msg =
-        "Removed entire element: " + e2->getElementId().toString() + " with status: " +
-        e2->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
+      QString msg = "Removed entire element: " + e2->getElementId().toString() + " with status: " +
+                    e2->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
       if (_satisfiesCompleteElementRemovalCondition(e2, status, match))
         RecursiveElementRemover(e2->getElementId()).apply(_map);
       else
@@ -742,9 +746,8 @@ void DiffConflator::_removeRefData(const bool removeSnapped)
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-ref-elements");
 
-  LOG_DEBUG(
-    "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
-    " reference elements...");
+  LOG_DEBUG("Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
+            " reference elements...");
 }
 
 void DiffConflator::_calcAndStoreTagChanges()
@@ -820,14 +823,12 @@ void DiffConflator::_calcAndStoreTagChanges()
     numMatchesProcessed++;
     if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
-      PROGRESS_INFO(
-        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " of " <<
-        StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
+      PROGRESS_INFO("\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " of " <<
+                    StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
-  LOG_STATUS(
-    "Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
-    " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  LOG_STATUS("Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
+             " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-storing-tag-changes");
   MemoryUsageChecker::getInstance().check();
@@ -841,11 +842,11 @@ bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) 
   for (auto newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
-    if (newTagKey != MetadataTags::Ref1() // Make sure not ref1
-        && !OsmSchema::getInstance().isMetaData(newTagIt.key(), newTagIt.value()) // not a metadata tag
-        && !ignoreList.contains(newTagKey, Qt::CaseInsensitive) // Not in our ignore list
-        && (!oldTags.contains(newTagIt.key()) // It's a new tag
-            || oldTags[newTagIt.key()] != newTagIt.value())) // Or it has a different value
+    if (newTagKey != MetadataTags::Ref1() && // Make sure not ref1
+        !OsmSchema::getInstance().isMetaData(newTagIt.key(), newTagIt.value()) && // not a metadata tag
+        !ignoreList.contains(newTagKey, Qt::CaseInsensitive) &&// Not in our ignore list
+        (!oldTags.contains(newTagIt.key()) || // It's a new tag
+          oldTags[newTagIt.key()] != newTagIt.value())) // Or it has a different value
     {
       return true;
     }
@@ -966,9 +967,8 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
   }
 }
 
-void DiffConflator::writeChangeset(
-  OsmMapPtr pResultMap, const QString& output, bool separateOutput,
-  const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
+void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, bool separateOutput,
+                                   const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
   LOG_DEBUG("Writing changeset: " << output << "...");
 
