@@ -3,14 +3,16 @@
         "members": {
             "add.review.tags.to.features": "Add review tags to individual features",
             "circular.error.default.value": "Default accuracy (CE) for data without accuracy tags",
+            "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
             "duplicate.way.remover.strict.tag.matching": "Duplicate Way Removal strict tag matching",
             "review.score.criterion.max.threshold": "Maximum review score; 0.0 to 1.0",
             "review.score.criterion.min.threshold": "Minimum review score; 0.0 to 1.0",
             "highway.corner.splitter.rounded.split": "Round corners when splitting roads",
-            "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
             "tag.merger.default": "The default way of merging tags",
             "tag.merger.overwrite.exclude": "Tag keys to skip when overwriting",
-            "selective.overwrite.tag.merger.keys": "Tag keys to selectively transfer"
+            "selective.overwrite.tag.merger.keys": "Tag keys to selectively transfer",
+            "conflate.use.data.source.ids.1": "Preserve element ids from the Reference layer during conflation",
+            "conflate.use.data.source.ids.2": "Preserve element ids from the Secondary layer during conflation"
         }
     },
     "Areas": {
