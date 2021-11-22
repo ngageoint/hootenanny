@@ -619,7 +619,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::import(std::istream & fileStream)
+  void DataFrame::importFrame(std::istream & fileStream)
   {
     try
     {
@@ -628,7 +628,7 @@ namespace Tgs
       QDomDocument modelDoc("XML");
       modelDoc.setContent(QString::fromStdString(stdString));
       QDomElement elem = modelDoc.documentElement();
-      import(elem);
+      importFrame(elem);
     }
     catch(const Exception & e)
     {
@@ -636,7 +636,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::import(const QDomElement & e)
+  void DataFrame::importFrame(const QDomElement & e)
   {
     try
     {

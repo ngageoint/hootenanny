@@ -271,7 +271,7 @@ namespace Tgs
 
 
 
-  void RandomTree::import(std::istream & fileStream)
+  void RandomTree::importTree(std::istream & fileStream)
   {
     try
     {
@@ -301,7 +301,7 @@ namespace Tgs
 
   }
 
-  void RandomTree::import(const QDomElement& e)
+  void RandomTree::importTree(const QDomElement& e)
   {
     try
     {

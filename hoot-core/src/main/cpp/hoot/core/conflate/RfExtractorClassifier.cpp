@@ -103,7 +103,7 @@ map<QString, double> RfExtractorClassifier::getFeatures(
   return result;
 }
 
-void RfExtractorClassifier::import(const QDomElement& docRoot)
+void RfExtractorClassifier::importTree(const QDomElement& docRoot)
 {
   _getExtractors();
 

@@ -100,15 +100,15 @@ void PythonSchemaTranslator::_init()
   Py_Initialize();
 
   const char* data = moduleName.toLatin1().data();
-  PyObject* module = PyImport_ImportModule(data);
+  PyObject* python_module = PyImport_ImportModule(data);
 
-  if (module == nullptr)
+  if (python_module == nullptr)
   {
     PyErr_Print();
     throw HootException("Error loading module " + _scriptPath);
   }
 
-  _translateFunction = PyObject_GetAttrString(module, "translateToOsm");
+  _translateFunction = PyObject_GetAttrString(python_module, "translateToOsm");
   if (_translateFunction == nullptr)
   {
     throw HootException("Error retrieving 'translateToOsm'");
@@ -117,7 +117,7 @@ void PythonSchemaTranslator::_init()
   {
     throw HootException("Error: 'translateToOsm' isn't callable");
   }
-  Py_DECREF(module);
+  Py_DECREF(python_module);
 }
 
 bool PythonSchemaTranslator::isValidScript()

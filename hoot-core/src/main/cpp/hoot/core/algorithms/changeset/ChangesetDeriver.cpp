@@ -35,13 +35,13 @@
 namespace hoot
 {
 
-ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to) :
-_from(from),
-_to(to),
-_numFromElementsParsed(0),
-_numToElementsParsed(0),
-_allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to)
+  : _from(from),
+    _to(to),
+    _numFromElementsParsed(0),
+    _numToElementsParsed(0),
+    _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures()),
+    _metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
   LOG_VART(_from.get());
   LOG_VART(_to.get());
@@ -81,9 +81,8 @@ void ChangesetDeriver::close()
 bool ChangesetDeriver::hasMoreChanges()
 {
   if (!_next.getElement().get())
-  {
     _next = _nextChange();
-  }
+
   return _next.getElement().get();
 }
 
@@ -178,13 +177,10 @@ Change ChangesetDeriver::_nextChange()
     }
 
     if (_from->hasMoreElements())
-    {
       _fromE = _from->readNextElement();
-    }
     else
-    {
       _fromE.reset();
-    }
+
     if (_fromE)
     {
       _numFromElementsParsed++;
@@ -216,13 +212,10 @@ Change ChangesetDeriver::_nextChange()
       }
 
       if (_to->hasMoreElements())
-      {
         _toE = _to->readNextElement();
-      }
       else
-      {
         _toE.reset();
-      }
+
       if (_toE)
       { 
         _numToElementsParsed++;
@@ -230,13 +223,10 @@ Change ChangesetDeriver::_nextChange()
       }
 
       if (_from->hasMoreElements())
-      {
         _fromE = _from->readNextElement();
-      }
       else
-      {
         _fromE.reset();
-      }
+
       if (_fromE)
       {
         _numFromElementsParsed++;
@@ -264,13 +254,10 @@ Change ChangesetDeriver::_nextChange()
       result = Change(Change::Create, _toE);
 
       if (_to->hasMoreElements())
-      {
         _toE = _to->readNextElement();
-      }
       else
-      {
         _toE.reset();
-      }
+
       if (_toE)
       {
         _numToElementsParsed++;
@@ -304,13 +291,10 @@ Change ChangesetDeriver::_nextChange()
       }
 
       if (_from->hasMoreElements())
-      {
         _fromE = _from->readNextElement();
-      }
       else
-      {
         _fromE.reset();
-      }
+
       if (_fromE)
       {
         _numFromElementsParsed++;
@@ -335,13 +319,10 @@ Change ChangesetDeriver::_nextChange()
       result = Change(Change::Modify, _toE, _fromE);
 
       if (_to->hasMoreElements())
-      {
         _toE = _to->readNextElement();
-      }
       else
-      {
         _toE.reset();
-      }
+
       if (_toE)
       {
         _numToElementsParsed++;
@@ -349,13 +330,10 @@ Change ChangesetDeriver::_nextChange()
       }
 
       if (_from->hasMoreElements())
-      {
         _fromE = _from->readNextElement();
-      }
       else
-      {
         _fromE.reset();
-      }
+
       if (_fromE)
       {
         _numFromElementsParsed++;
@@ -390,13 +368,10 @@ Change ChangesetDeriver::_nextChange()
       }
 
       if (_from->hasMoreElements())
-      {
         _fromE = _from->readNextElement();
-      }
       else
-      {
         _fromE.reset();
-      }
+
       if (_fromE)
       {
         _numFromElementsParsed++;
@@ -417,13 +392,10 @@ Change ChangesetDeriver::_nextChange()
       result = Change(Change::Create, _toE);
 
       if (_to->hasMoreElements())
-      {
         _toE = _to->readNextElement();
-      }
       else
-      {
         _toE.reset();
-      }
+
       if (_toE)
       {
         _numToElementsParsed++;
@@ -439,9 +411,7 @@ Change ChangesetDeriver::_nextChange()
 Change ChangesetDeriver::readNextChange()
 {
   if (!_next.getElement())
-  {
     _next = _nextChange();
-  }
 
   Change result = _next;
   _changesByType[result.getType()]++;
