@@ -90,7 +90,7 @@ public:
    * @brief getTagCount
    * @return Number of tags in this element
    */
-  int getTagCount() const { return _tags.size(); }
+  int getTagCount() const { return static_cast<int>(_tags.size()); }
   /**
    * @brief id Get the element ID
    * @return Element ID

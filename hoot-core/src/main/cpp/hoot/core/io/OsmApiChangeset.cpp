@@ -297,8 +297,8 @@ void XmlChangeset::splitLongWays(long maxWayNodes)
         ChangesetWayPtr newWay = std::make_shared<ChangesetWay>(*way);
         newWay->changeId(getNextWayId());
         //  Remove maxWayNodes from the original and add them to this way
-        way->removeNodes(maxWayNodes);
-        newWay->removeNodes(0, maxWayNodes - 1);
+        way->removeNodes(static_cast<int>(maxWayNodes));
+        newWay->removeNodes(0, static_cast<int>(maxWayNodes - 1));
         //  Update any relations that this way is a part of
         updateRelationsForWaySplit(way->id(), newWay->id());
         //  Save the new way
@@ -1202,20 +1202,17 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
         }
       }
     }
-    else if (member.isRelation())
+    else if (member.isRelation() && id != relation->id())
     {
       //  Don't recount circular referenced relations
-      if (id != relation->id())
+      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
       {
-        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        if (!changeset || changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
         {
-          if (!changeset || changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
-          {
-            ChangesetRelation* r = nullptr;
-            if (_allRelations.find(id) != _allRelations.end())
-              r = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
-            count += getObjectCount(changeset, r, elements, countSent);
-          }
+          ChangesetRelation* r = nullptr;
+          if (_allRelations.find(id) != _allRelations.end())
+            r = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
+          count += getObjectCount(changeset, r, elements, countSent);
         }
       }
     }
@@ -1401,11 +1398,9 @@ bool XmlChangeset::writeErrorFile()
   if (errorChangeset.isEmpty())
     return false;
   //  Lock the mutex for writing
-  _errorMutex.lock();
+  std::lock_guard<std::mutex> locker(_errorMutex);
   //  Write out the file
   FileUtils::writeFully(_errorPathname, errorChangeset);
-  //  Unlock the mutex
-  _errorMutex.unlock();
   return true;
 }
 
@@ -1693,11 +1688,8 @@ void XmlChangeset::updateLastElement(LastElementInfo& last)
   //  Update the ID if it is negative
   ElementType::Type type = last._id.getType().getEnum();
   long id  = last._id.getId();
-  if (id < 0)
-  {
-    if (_idMap.containsId(type, id))
-      last._id = ElementId(type, _idMap.getId(type, id));
-  }
+  if (id < 0 && _idMap.containsId(type, id))
+    last._id = ElementId(type, _idMap.getId(type, id));
   //  Get the current version
   switch(type)
   {
