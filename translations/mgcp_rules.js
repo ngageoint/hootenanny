@@ -57,7 +57,7 @@ mgcp.rules = {
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
     ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
     ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
-    ['F_CODE','AT060','cable:type','communication'], // Communication Line - NFDD AT005
+    ['F_CODE','AT060','communication','line'], // Communication Line - NFDD AT005
     ['F_CODE','BB041','man_made','breakwater'], // Breakwater - NFDD BB081
     ['F_CODE','BB043','man_made','groyne'], // Groin - NFDD BB081
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081

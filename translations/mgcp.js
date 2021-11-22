@@ -767,7 +767,7 @@ mgcp = {
       ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
       ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
       ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
-      ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
+      // ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
       ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
       ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
@@ -775,7 +775,6 @@ mgcp = {
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
       // ["t.public_transport == 'station'","t.bus = 'yes'"],
-      ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
       ["t.water && !(t.natural)","t.natural = 'water'"],
@@ -885,7 +884,6 @@ mgcp = {
       }
       break;
 
-
     case 'AF030': // Cooling Tower
       if (!tags['tower:type']) tags['tower:type'] = 'cooling';
       break;
@@ -985,8 +983,28 @@ mgcp = {
     //     break;
 
     case 'AP030': // Trail
-        if (tags.highway == 'yes') tags.highway = 'road';
-        break;
+      if (tags.highway == 'yes') tags.highway = 'road';
+      break;
+
+    case 'AT042': // Pylon
+      // We need to deconflict various tower types
+      switch (tags['cable:type'])
+      {
+        case 'unknown': // Just keep 'pylon=yes'
+        case 'other':
+          break;
+
+        case 'power':
+          delete tags['cable:type']; // fall through
+        case 'transmission':
+          delete tags.pylon;
+          tags.power = 'tower';
+          break;
+
+        case 'communication':
+          break;
+      }
+      break; // End AT042
 
     case 'AQ075': // Ice Route
       if (!tags.highway) tags.highway = 'road';
@@ -1255,7 +1273,6 @@ mgcp = {
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
       // ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
-      ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
       ["t.resource","t.product = t.resource; delete t.resource"],
       ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
@@ -1274,6 +1291,14 @@ mgcp = {
     for (var i = 0, rLen = mgcp.mgcpPreRules.length; i < rLen; i++)
     {
       if (mgcp.mgcpPreRules[i][0](tags)) mgcp.mgcpPreRules[i][1](tags,attrs);
+    }
+
+    // Deconflict towers
+    if (tags.power == 'tower')
+    {
+      delete tags.power;
+      tags.pylon = 'yes';
+      if (!tags['cable:type']) tags['cable:type'] = 'power';
     }
 
     // Sort out landuse
