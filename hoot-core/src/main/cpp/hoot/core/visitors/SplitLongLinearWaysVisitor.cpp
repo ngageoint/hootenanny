@@ -48,17 +48,22 @@ int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 
-SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
-_maxNodesPerWay(0)
+SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor()
+  : _maxNodesPerWay(0)
 {
   // Find out if user set our configuration value at cmdline or if we should use default
   ConfigOptions configOptions;
-  _maxNodesPerWay = configOptions.getWayMaxNodesPerWay();
+  setMaxNumberOfNodes(configOptions.getWayMaxNodesPerWay());
+}
 
+void SplitLongLinearWaysVisitor::setMaxNumberOfNodes(unsigned int maxNodesPerWay)
+{
+  _maxNodesPerWay = maxNodesPerWay;
   if (_maxNodesPerWay < 2)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
+      ConfigOptions configOptions;
       LOG_WARN("Invalid value for config value " << configOptions.getWayMaxNodesPerWayKey() <<
                ": " << _maxNodesPerWay << ", ignoring...");
     }
@@ -73,13 +78,12 @@ _maxNodesPerWay(0)
   LOG_DEBUG("Max nodes per way set to " << getMaxNumberOfNodes() );
 }
 
+
 void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
 {
   // If not a way, ignore
   if (element->getElementType() != ElementType::Way)
-  {
     return;
-  }
 
   // Convert to a Way
   WayPtr way = std::dynamic_pointer_cast<Way>(element);
@@ -91,24 +95,6 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
     return;
   }
 
-  bool printInfo = false;
-  if (way->getNodeCount() > getMaxNumberOfNodes())
-  {
-    LOG_TRACE("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
-    printInfo = true;
-  }
-
-  // Ensure we're a linear way -- heuristic is reported to be mostly accurate
-  if (LinearCriterion().isSatisfied(way) == false)
-  {
-    if (printInfo == true)
-    {
-      LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
-        " is not linear, ignoring");
-    }
-    return;
-  }
-
   // Does way exceed max number of nodes?
   if (way->getNodeCount() <= getMaxNumberOfNodes())
   {
@@ -117,12 +103,23 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
       " max of " << getMaxNumberOfNodes() << ", ignoring");
     return;
   }
+  LOG_TRACE("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
+
+  // Ensure we're a linear way -- heuristic is reported to be mostly accurate
+  if (LinearCriterion().isSatisfied(way) == false)
+  {
+    LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
+      " is not linear, ignoring");
+    return;
+  }
 
   LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
     " has " << way->getNodeCount() << " nodes which is greater thank"
     " max of " << getMaxNumberOfNodes() << ", splitting this way!");
 
   unsigned int nodesRemaining = way->getNodeCount();
+
+  QList<ElementPtr> replacements;
 
   unsigned int masterNodeIndex = 0;
   while (nodesRemaining > 0)
@@ -137,15 +134,16 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
       break;
     }
 
-    // Create a new way
+    //  Create a new way
     long way_id = way->getId();
     if (masterNodeIndex > 0)
       way_id = _map->createNextWayId();
     WayPtr newWay = std::make_shared<Way>(Status::Unknown1, way_id, way->getRawCircularError());
     newWay->setPid(way->getPid());
-    LOG_TRACE(
-      "Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime <<
-      " nodes");
+    newWay->setTags(way->getTags());
+    replacements.append(newWay);
+    LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime <<
+              " nodes");
     for (unsigned int i = 0; i < nodesThisTime; ++i)
     {
       if (i == 0)
@@ -160,26 +158,27 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
           "Adding last node to way " << newWay->getId() << " with master index " <<
           (masterNodeIndex + i));
       }
-
       newWay->addNode(way->getNodeId(masterNodeIndex + i));
     }
 
-    // Add new way to the map
+    //  Add new way to the map
     _map->addWay(newWay);
 
-    // If we copied less than max nodes, that means we're done
+    //  If we copied less than max nodes, that means we're done
     if (nodesThisTime < getMaxNumberOfNodes())
-    {
       break;
-    }
     else
     {
-      // Figure out where to start next time -- note the minus one as last node in current way
-      //    has to be first node in next way to ensure continuity from the original way
+      //  Figure out where to start next time -- note the minus one as last node in current way
+      //  has to be first node in next way to ensure continuity from the original way
       nodesRemaining -= (nodesThisTime - 1);
       masterNodeIndex += (nodesThisTime - 1);
     }
   }
+
+  //  Update any relations
+  if (replacements.size() > 0)
+    _map->replace(way, replacements);
 
   _numAffected++;
 }

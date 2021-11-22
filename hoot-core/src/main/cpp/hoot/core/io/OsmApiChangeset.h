@@ -29,18 +29,12 @@
 #define OSM_API_CHANGESET_H
 
 //  Qt
-
-
 #include <QTextStream>
-
 #include <QXmlStreamReader>
 
 //  Standard
 #include <array>
-
 #include <mutex>
-
-
 
 //  Hoot
 #include <hoot/core/elements/ElementId.h>
@@ -518,11 +512,17 @@ private:
   bool fixChangesetDeletePreconditionFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
                                              long element_id, ElementType::Type element_type,
                                              const std::vector<long>& member_ids, ElementType::Type member_type);
+  /**
+   * @brief updateRelationsForWaySplit Update any relations to include both parts of the split way
+   * @param old_id Current way ID
+   * @param new_id New way ID to add into relations
+   */
+  void updateRelationsForWaySplit(long old_id, long new_id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
-  /** Sorted map of all ways, original node ID and a pointer to the element object */
+  /** Sorted map of all ways, original way ID and a pointer to the element object */
   ChangesetElementMap _allWays;
-  /** Sorted map of all relations, original node ID and a pointer to the element object */
+  /** Sorted map of all relations, original relation ID and a pointer to the element object */
   ChangesetElementMap _allRelations;
   /** Three element (create/modify/delete) vector of node IDs */
   ChangesetTypeMap _nodes;

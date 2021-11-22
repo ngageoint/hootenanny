@@ -72,6 +72,7 @@ public:
   { return "Splits ways containing a number of nodes above a specified threshold"; }
 
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
+  void setMaxNumberOfNodes(unsigned int maxNodesPerWay);
 
 private:
 

@@ -42,6 +42,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
+  CPPUNIT_TEST(runXmlChangesetSplitWayInRelationTest);
   CPPUNIT_TEST(runXmlChangesetErrorFixTest);
   CPPUNIT_TEST(runXmlChangesetSplitDeleteTest);
   CPPUNIT_TEST(runXmlChangesetModifyAndDeleteTest);
@@ -186,6 +187,23 @@ public:
     changeset.calculateChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runXmlChangesetSplitWayInRelationTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "RelationSplitTest.osc");
+    //  Split the ways to a max of 4 nodes per way
+    changeset.splitLongWays(4);
+
+    QString expectedText = FileUtils::readFully(_inputPath + "ChangesetSplitWayRelationExpected.osc");
+
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
+    changeset.calculateChangeset(info);
+
+    QString test = changeset.getChangesetString(info, 1);
+
+    HOOT_STR_EQUALS(expectedText, test);
   }
 
   void runXmlChangesetErrorFixTest()
@@ -334,6 +352,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiChangesetTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiChangesetElementTest, "current");
 
 }
