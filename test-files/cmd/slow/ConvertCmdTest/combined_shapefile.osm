@@ -1324,7 +1324,7 @@
         <nd ref="-100"/>
         <nd ref="-101"/>
         <nd ref="-102"/>
-        <tag k="demolished:railway" v="Other"/>
+        <tag k="demolished:railway" v="other"/>
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="gauge" v="4000"/>

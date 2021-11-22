@@ -142,6 +142,7 @@ mgcp.rules = {
     ['F_CODE','BB190','man_made','pier'], // From OSM
     ['F_CODE','BB190','man_made','quay'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BH080','water','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
