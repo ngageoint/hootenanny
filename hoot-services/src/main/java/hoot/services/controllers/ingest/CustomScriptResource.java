@@ -520,7 +520,7 @@ public class CustomScriptResource {
     @GET
     @Path("/getdefaultscript")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getDefaultScript(@QueryParam("SCRIPT_PATH") String scriptPath) {
+    public Response getDefaultScript(@QueryParam("scriptPath") String scriptPath) {
         String script = "";
         try {
             List<String> configFiles = new ArrayList<>();
