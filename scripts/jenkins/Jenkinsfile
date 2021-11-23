@@ -185,6 +185,7 @@ pipeline {
                 }
             }
             steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
                 sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
                 archiveArtifacts artifacts: '**/coverage.tar.gz'
