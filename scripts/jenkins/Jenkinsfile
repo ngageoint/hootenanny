@@ -18,14 +18,12 @@ pipeline {
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         // Generating a core test coverage report slows down the core tests quite a bit, so turning
-        // it off by default. This must be set the same as Core_coverage. Tried to couple this to
-        // Core_coverage to avoid an extra parameter but was unsuccessful.
-        booleanParam(name: 'Configure_coverage', defaultValue: false)
+        // it off by default.
+        booleanParam(name: 'Coverage', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Translations_tests', defaultValue: true)
-        booleanParam(name: 'Core_coverage', defaultValue: false)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
@@ -124,7 +122,15 @@ pipeline {
             }
         }
         stage("Configure Coverage") {
-            when { expression { return params.Configure_coverage } }
+            when {
+                anyOf {
+                    expression { return params.Coverage }
+                    allOf {
+                        triggeredBy 'TimerTrigger'
+                        branch 'master'
+                    }
+                }
+            }
             steps {
                 // Allow test coverage to be generated.
                 sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
@@ -169,8 +175,17 @@ pipeline {
             }
         }
         stage("Core Coverage") {
-            when { expression { return params.Core_coverage } }
+            when {
+                anyOf {
+                    expression { return params.Coverage }
+                    allOf {
+                        triggeredBy 'TimerTrigger'
+                        branch 'master'
+                    }
+                }
+            }
             steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
                 sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
                 archiveArtifacts artifacts: '**/coverage.tar.gz'
