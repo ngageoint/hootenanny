@@ -10,6 +10,7 @@ CONFIG="--warn -C Testing.conf"
 source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C AttributeConflation.conf \
+  -D conflate.use.data.source.ids.1="false" -D conflate.use.data.source.ids.2="true" \
   -D "match.creators=ScriptMatchCreator,River.js" -D "merger.creators=ScriptMergerCreator" \
   -D writer.include.debug.tags=true $IN_DIR_2/Haiti_CNIGS_Rivers_REF1-cropped-2.osm \
   $IN_DIR_2/Haiti_osm_waterway_ss_REF2-cropped-2.osm $OUT_DIR/output.osm
@@ -17,4 +18,3 @@ hoot diff $CONFIG $IN_DIR/output.osm $OUT_DIR/output.osm || diff $IN_DIR/output.
 
 validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
   $OUT_DIR/output-validated.osm $IN_DIR/output-validation-report
-

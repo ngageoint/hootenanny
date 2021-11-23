@@ -12,6 +12,7 @@ mkdir -p $OUT_DIR
 CONFIG="--warn -C Testing.conf"
 
 hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C AttributeConflation.conf \
+  -D conflate.use.data.source.ids.1="false" -D conflate.use.data.source.ids.2="true" \
   -D uuid.helper.repeatable=true -D writer.include.debug.tags=true \
   -D match.creators="HighwayMatchCreator" -D merger.creators="HighwayMergerCreator" \
   -D conflate.match.only=true test-files/ToyTestA.osm test-files/ToyTestB.osm $OUT_DIR/output.osm
