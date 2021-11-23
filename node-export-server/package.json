@@ -16,6 +16,6 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "mocha"
+    "test": "NO_SERVER=true mocha"
   }
 }
