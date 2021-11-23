@@ -722,18 +722,38 @@ mgcp = {
         // case 'tabernacle':
         // case 'temple':
       } // End switch
-
-      if (tags['tower:type'] == 'minaret')
-      {
-        tags.religion = 'muslim';
-      }
-
-      if (tags.with_minaret == 'yes')
-      {
-        tags.religion = 'muslim';
-        tags.building = 'mosque';
-      }
     } // End HWT
+
+    // A bit crude but it helps the case where we drop the religion tag on export
+    switch (tags.denomination)
+    {
+      case undefined:
+        break;
+
+    case 'roman_catholic':
+    case 'orthodox':
+    case 'protestant':
+    case 'chaldean_catholic':
+    case 'nestorian': // Not sure about this
+      tags.religion = 'christian';
+      break;
+
+    case 'shia':
+    case 'sunni':
+      tags.religion = 'muslim';
+      break;
+    } // End switch
+
+    if (tags['tower:type'] == 'minaret')
+    {
+      tags.religion = 'muslim';
+    }
+
+    if (tags.with_minaret == 'yes')
+    {
+      tags.religion = 'muslim';
+      tags.building = 'mosque';
+    }
 
     // Add the LayerName to the source
     if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();

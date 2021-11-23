@@ -1221,10 +1221,11 @@ tds70 = {
     // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
     // Denominations without religions - from ZI037_REL which has some denominations as religions
-    if (tags.denomination)
+    switch (tags.denomination)
     {
-      switch (tags.denomination)
-      {
+      case undefined:
+        break;
+
       case 'roman_catholic':
       case 'orthodox':
       case 'protestant':
@@ -1238,7 +1239,6 @@ tds70 = {
         tags.religion = 'muslim';
         break;
       } // End switch
-    }
 
     // Religious buildings: Church, Pagoda, Temple etc
     if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')

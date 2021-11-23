@@ -44,7 +44,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["FFN"], "931");
         assert.equal(tags["SDP"], "Tdh");
         assert.equal(tags["FCODE"], "AL015");
-        assert.equal(tags["OSMTAGS"],"{\"denomination\":\"protestant\",\"religion\":\"christian\",\"source:date\":\"03/10/2014\"}");
+        assert.equal(tags["OSMTAGS"],"{\"denomination\":\"protestant\",\"source:date\":\"03/10/2014\"}");
 
         var osm_xml = server.handleInputs({
             osm: mgcp_xml,
@@ -64,10 +64,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["amenity"], "place_of_worship");
         assert.equal(tags["name"], "Eglise de Dieu vocationnelle");
         assert.equal(tags["source"], "Tdh");
-
-        //These tags should also be preserved
-        //However, no "HWT" attribute (House of Worship Type) causes the "religion" tag to get dropped.
-        //assert.equal(tags["religion"], "christian");
+        assert.equal(tags["religion"], "christian");
         assert.equal(tags["denomination"], "protestant");
         assert.equal(tags["source:date"], "03/10/2014");
 
