@@ -67,11 +67,11 @@ ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* id
     _idMap(idMap),
     _status(ChangesetElement::Available)
 {
-  for (QXmlStreamAttributes::const_iterator it = object.second.begin(); it != object.second.end(); ++it)
+  for (const auto& attribute : object.second)
   {
     //  Ignore the changeset attribute because it will be replaced later even if it does exist
-    if (it->name().compare(QString("changeset")) != 0)
-      _object.push_back(std::make_pair(it->name().toString(), it->value().toString()));
+    if (attribute.name().compare(QString("changeset")) != 0)
+      _object.push_back(std::make_pair(attribute.name().toString(), attribute.value().toString()));
   }
 }
 
@@ -82,12 +82,12 @@ void ChangesetElement::addTag(const XmlObject& tag)
   {
     QString key;
     QString value;
-    for (QXmlStreamAttributes::const_iterator it = tag.second.begin(); it != tag.second.end(); ++it)
+    for (const auto& t : tag.second)
     {
-      if (it->name() == "k")
-        key = it->value().toString();
-      else if (it->name() == "v")
-        value = it->value().toString();
+      if (t.name() == "k")
+        key = t.value().toString();
+      else if (t.name() == "v")
+        value = t.value().toString();
     }
     if (key != "" && value != "")
       _tags.push_back(std::make_pair(key, value));
@@ -115,9 +115,9 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
   //  Setting the codec to UTF-8 is the special sauce for foreign characters
   ts.setCodec("UTF-8");
   bool hasChangeset = false;
-  for (ElementAttributes::const_iterator it = attributes.begin(); it != attributes.end(); ++it)
+  for (const auto& attribute : attributes)
   {
-    QString name = it->first;
+    QString name = attribute.first;
     if (name == "action")
       continue;
     ts << name << "=\"";
@@ -138,7 +138,7 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
         ts << _version;
     }
     else
-      ts << it->second;
+      ts << attribute.second;
     ts << "\" ";
   }
   //  Add the changeset attribute if the original data didn't include it
@@ -171,7 +171,6 @@ QString ChangesetElement::toTagString(const ElementTag& tag) const
   QString value(tag.second);
   //  Tag values of max length need to be truncated
   QString newValue(ApiTagTruncateVisitor::truncateTag(key, value));
-
   //  Make sure to XML encode the value
   ts << "\t\t\t<tag k=\"" << escapeString(key) << "\" v=\"";
   if (newValue != "")
@@ -208,11 +207,11 @@ bool ChangesetElement::diffAttributes(const ElementAttributes& attributes, QText
   if (_object.size() != attributes.size())
   {
     ts1 << "< attribute count = " << _object.size() << "\n";
-    for (size_t index = 0; index < _object.size(); ++index)
-      ts1 << "< " << _object[index].first << " = " << _object[index].second << "\n";
+    for (const auto& attribute : _object)
+      ts1 << "< " << attribute.first << " = " << attribute.second << "\n";
     ts2 << "> attribute count = " << attributes.size() << "\n";
-    for (size_t index = 0; index < attributes.size(); ++index)
-      ts2 << "> " << attributes[index].first << " = " << attributes[index].second << "\n";
+    for (const auto& attribute : attributes)
+      ts2 << "> " << attribute.first << " = " << attribute.second << "\n";
     success = false;
   }
   else
@@ -246,11 +245,11 @@ bool ChangesetElement::diffTags(const ElementTags& tags,  QTextStream& ts1, QTex
   if (_tags.size() != tags.size())
   {
     ts1 << "< tag count = " << _tags.size() << "\n";
-    for (size_t index = 0; index < _tags.size(); ++index)
-      ts1 << "< " << _tags[index].first << " = " << _tags[index].second << "\n";
+    for (const auto& tag : _tags)
+      ts1 << "< " << tag.first << " = " << tag.second << "\n";
     ts2 << "> tag count = " << tags.size() << "\n";
-    for (size_t index = 0; index < tags.size(); ++index)
-      ts2 << "> " << tags[index].first << " = " << tags[index].second << "\n";
+    for (const auto& tag : tags)
+      ts2 << "> " << tag.first << " = " << tag.second << "\n";
     success = false;
   }
   else
@@ -291,8 +290,8 @@ QString ChangesetNode::toString(long changesetId, ChangesetType type) const
   if (_tags.size() > 0)
   {
     ts << ">\n";
-    for (ElementTags::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
-      ts << toTagString(*it);
+    for (const auto& tag : _tags)
+      ts << toTagString(tag);
     ts << "\t\t</node>\n";
   }
   else
@@ -344,13 +343,10 @@ QString ChangesetWay::toString(long changesetId, ChangesetType type) const
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
   ts << "\t\t<way " << ChangesetElement::toString(_object, changesetId, type) << ">\n";
-  for (QVector<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-    ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getId(ElementType::Node, *it) : *it) << "\"/>\n";
-  if (_tags.size() > 0)
-  {
-    for (ElementTags::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
-      ts << toTagString(*it);
-  }
+  for (const auto& node : _nodes)
+    ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getId(ElementType::Node, node) : node) << "\"/>\n";
+  for (const auto& tag : _tags)
+    ts << toTagString(tag);
   ts << "\t\t</way>\n";
   return ts.readAll();
 }
@@ -371,11 +367,11 @@ bool ChangesetWay::diff(const ChangesetWay& way, QString& diffOutput) const
   if (_nodes.size() != way._nodes.size())
   {
     ts1 << "< node count = " << _nodes.size() << "\n";
-    for (int index = 0; index < _nodes.size(); ++index)
-      ts1 << "< " << _nodes[index] << "\n";
+    for (auto node_id : _nodes)
+      ts1 << "< " << node_id << "\n";
     ts2 << "> node count = " << way._nodes.size() << "\n";
-    for (int index = 0; index < way._nodes.size(); ++index)
-      ts2 << "> " << way._nodes[index] << "\n";
+    for (auto node_id : way._nodes)
+      ts2 << "> " << node_id << "\n";
     success = false;
   }
   else
@@ -387,12 +383,12 @@ bool ChangesetWay::diff(const ChangesetWay& way, QString& diffOutput) const
       if (_nodes[index] != way._nodes[index] && _nodes[index] != way._idMap->getId(ElementType::Node, way._nodes[index]))
       {
         ts1 << "< nodes = ";
-        for (QVector<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-          ts1 << *it << " ";
+        for (auto node_id : _nodes)
+          ts1 << node_id << " ";
         ts1 << "\n";
         ts2 << "> nodes = ";
-        for (QVector<long>::const_iterator it = way._nodes.begin(); it != way._nodes.end(); ++it)
-          ts2 << *it << " ";
+        for (auto node_id : way._nodes)
+          ts2 << node_id << " ";
         ts2 << "\n";
         success = false;
         break;
@@ -419,23 +415,23 @@ ChangesetRelation::ChangesetRelation(const XmlObject& relation, ElementIdToIdMap
 bool ChangesetRelation::hasMember(ElementType::Type type, long id) const
 {
   //  Iterate all of the members
-  for (QList<ChangesetRelationMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
+  for (const auto& member : _members)
   {
     switch (type)
     {
     case ElementType::Node:
       //  Node matches node, and ID matches ID
-      if (it->isNode() && it->getRef() == id)
+      if (member.isNode() && member.getRef() == id)
         return true;
       break;
     case ElementType::Way:
       //  Way matches way, and ID matches ID
-      if (it->isWay() && it->getRef() == id)
+      if (member.isWay() && member.getRef() == id)
         return true;
       break;
     case ElementType::Relation:
       //  Relation matches relation, and ID matches ID
-      if (it->isRelation() && it->getRef() == id)
+      if (member.isRelation() && member.getRef() == id)
         return true;
       break;
     default:
@@ -451,13 +447,10 @@ QString ChangesetRelation::toString(long changesetId, ChangesetType type) const
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
   ts << "\t\t<relation " << ChangesetElement::toString(_object, changesetId, type) << ">\n";
-  for (QList<ChangesetRelationMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
-    ts << it->toString();
-  if (_tags.size() > 0)
-  {
-    for (ElementTags::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
-      ts << toTagString(*it);
-  }
+  for (const auto& member : _members)
+    ts << member.toString();
+  for (const auto& tag : _tags)
+    ts << toTagString(tag);
   ts << "\t\t</relation>\n";
   return ts.readAll();
 }
@@ -500,10 +493,33 @@ bool ChangesetRelation::diff(const ChangesetRelation& relation, QString& diffOut
   return success;
 }
 
+void ChangesetRelation::splitMember(ElementType::Type type, long id, long new_id)
+{
+  for (int i = 0; i < _members.size(); ++i)
+  {
+    const ChangesetRelationMember& member = _members[i];
+    if (member.getType() == type && member.getRef() == id)
+    {
+      ChangesetRelationMember new_member(member.getType(), new_id, member.getRole(), _idMap);
+      _members.insert(i + 1, new_member);
+      return;
+    }
+  }
+}
+
 ChangesetRelationMember::ChangesetRelationMember(const QXmlStreamAttributes& member, ElementIdToIdMap* idMap)
   : _type(ElementType::fromString(member.value("type").toString().toLower())),
     _ref(member.value("ref").toString().toLong()),
     _role(member.value("role").toString()),
+    _idMap(idMap)
+{
+}
+
+ChangesetRelationMember::ChangesetRelationMember(ElementType::Type type, long ref, const QString& role,
+                                                 ElementIdToIdMap* idMap)
+  : _type(type),
+    _ref(ref),
+    _role(role),
     _idMap(idMap)
 {
 }
