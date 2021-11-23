@@ -32,12 +32,8 @@
 #include <hoot/core/elements/ElementType.h>
 
 //  Qt
-
-
 #include <QPair>
-
 #include <QTextStream>
-
 #include <QXmlStreamReader>
 
 //  Standard
@@ -94,7 +90,7 @@ public:
    * @brief getTagCount
    * @return Number of tags in this element
    */
-  int getTagCount() const { return _tags.size(); }
+  int getTagCount() const { return static_cast<int>(_tags.size()); }
   /**
    * @brief id Get the element ID
    * @return Element ID
@@ -299,6 +295,14 @@ public:
    */
   ChangesetRelationMember(const QXmlStreamAttributes& member, ElementIdToIdMap* idMap);
   /**
+   * @brief ChangesetRelationMember constructor
+   * @param type Member type
+   * @param ref Member ref (ID)
+   * @param role Member role
+   * @param idMap ID to ID Map for updated IDs
+   */
+  ChangesetRelationMember(ElementType::Type type, long ref, const QString& role, ElementIdToIdMap* idMap);
+  /**
    * @brief isNode/Way/Relation
    * @return true if relation member is node/way/relation
    */
@@ -399,6 +403,13 @@ public:
    * @return True if they are equivalent
    */
   bool diff(const ChangesetRelation& relation, QString& diffOutput) const;
+  /**
+   * @brief splitMember Copy a member, update the ID, and insert right after the original
+   * @param type Element type of the original element
+   * @param id ID of the original element
+   * @param new_id ID of the new copied element
+   */
+  void splitMember(ElementType::Type type, long id, long new_id);
 
 private:
   /** List of relation members */

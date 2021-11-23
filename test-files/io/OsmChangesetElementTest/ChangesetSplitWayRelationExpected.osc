@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<node visible="true" id="-1" version="1" lat="0.00009" lon="0.00015" changeset="1"/>
+		<node visible="true" id="-2" version="1" lat="0.00018" lon="0.00000" changeset="1"/>
+		<node visible="true" id="-3" version="1" lat="0.00009" lon="-0.00015" changeset="1"/>
+		<node visible="true" id="-4" version="1" lat="-0.00009" lon="-0.00015" changeset="1"/>
+		<node visible="true" id="-5" version="1" lat="-0.00018" lon="0.00000" changeset="1"/>
+		<node visible="true" id="-6" version="1" lat="-0.00009" lon="0.00015" changeset="1"/>
+		<node visible="true" id="-11" version="1" lat="0.00006" lon="0.00010" changeset="1"/>
+		<node visible="true" id="-12" version="1" lat="0.00012" lon="0.00000" changeset="1"/>
+		<node visible="true" id="-13" version="1" lat="0.00006" lon="-0.00010" changeset="1"/>
+		<node visible="true" id="-14" version="1" lat="-0.00006" lon="-0.00010" changeset="1"/>
+		<node visible="true" id="-15" version="1" lat="-0.00012" lon="0.00000" changeset="1"/>
+		<node visible="true" id="-16" version="1" lat="-0.00006" lon="0.00010" changeset="1"/>
+		<way visible="true" id="-1" version="1" changeset="1">
+			<nd ref="-1"/>
+			<nd ref="-2"/>
+			<nd ref="-3"/>
+			<nd ref="-4"/>
+		</way>
+		<way visible="true" id="-2" version="1" changeset="1">
+			<nd ref="-11"/>
+			<nd ref="-12"/>
+			<nd ref="-13"/>
+			<nd ref="-14"/>
+		</way>
+		<way visible="true" id="-3" version="1" changeset="1">
+			<nd ref="-4"/>
+			<nd ref="-5"/>
+			<nd ref="-6"/>
+			<nd ref="-1"/>
+		</way>
+		<way visible="true" id="-4" version="1" changeset="1">
+			<nd ref="-14"/>
+			<nd ref="-15"/>
+			<nd ref="-16"/>
+			<nd ref="-11"/>
+		</way>
+		<relation visible="true" id="-1" timestamp="2016-04-11T14:26:36Z" version="1" changeset="1">
+			<member type="way" ref="-1" role="outer"/>
+			<member type="way" ref="-3" role="outer"/>
+			<member type="way" ref="-2" role="inner"/>
+			<member type="way" ref="-4" role="inner"/>
+			<tag k="type" v="multipolygon"/>
+			<tag k="building" v="yes"/>
+		</relation>
+	</create>
+</osmChange>
