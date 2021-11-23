@@ -1,6 +1,6 @@
 var assert = require('assert'),
     xml2js = require('xml2js'),
-    DOMParser = new require('xmldom').DOMParser
+    DOMParser = new require('@xmldom/xmldom').DOMParser
     parser = new DOMParser();
 
 var server = require('../TranslationServer.js');
@@ -80,4 +80,3 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
         });
     });
 });
-

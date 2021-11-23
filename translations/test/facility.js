@@ -1,6 +1,6 @@
 var assert = require('assert'),
     osmtogeojson = require('osmtogeojson'),
-    DOMParser = new require('xmldom').DOMParser,
+    DOMParser = new require('@xmldom/xmldom').DOMParser,
     parser = new DOMParser();
 
 var server = require('../TranslationServer.js');
@@ -84,4 +84,3 @@ describe('TranslationServer', function () {
         });
     });
 });
-
