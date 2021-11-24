@@ -31,7 +31,7 @@ function writeExportFile(req, done) {
     //Write payload to file
     var input = 'export_' + fileNameHash;
     // we know overpass can give us json or osm, otherwise we expect osm format.
-    var fileExtension = req.params.datasource.toLowerCase() === 'overpass' ? '' : '.osm';
+    var fileExtension = req.params.datasource.toLowerCase() === 'overpass' ? '' : 'osm';
 
     req.on('data', function(chunk) {
         if (fileExtension === '') { // if overpass, figure out file type to guide reader in hoot command
@@ -607,9 +607,12 @@ function doExport(req, res, hash, input) {
 }
 
 /* Run the server. */
-var server = app.listen(config.settings.port, function() {
-    console.log("Listening on port " + config.settings.port);
-});
+var server;
+if (!process.env['NO_SERVER']) {
+    server = app.listen(config.settings.port, function() {
+        console.log("Listening on port " + config.settings.port);
+    });
+}
 
 //http://glynnbird.tumblr.com/post/54739664725/graceful-server-shutdown-with-nodejs-and-express
 //this function is called when you want the server to die gracefully

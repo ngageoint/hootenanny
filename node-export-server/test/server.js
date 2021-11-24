@@ -3,7 +3,8 @@ var server = require("../server.js");
 var fs = require('fs');
 var path = require('path');
 
-describe("RenderDb Export Server", function() {
+describe("Node Export Server", function() {
+
     describe("Validate BBOX", function() {
         it("fails for empty string", function() {
             var bbox = '';
@@ -73,7 +74,7 @@ describe("RenderDb Export Server", function() {
                 })
             })
         });
-        it("takes posted osm xml data from non-overpass source and makes it a .osm file", function() {
+        it("takes posted osm xml data from non-overpass source and makes it a .osm file", function(done) {
             var osmFile = path.join(__dirname, 'test_overpass.osm')
             var mockXMLRequest = fs.createReadStream(osmFile);
             mockXMLRequest.params = {
