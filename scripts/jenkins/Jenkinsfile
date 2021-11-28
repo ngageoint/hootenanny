@@ -168,75 +168,89 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel ${params.show_names}'"
             }
         }
-        stage("Translations Tests") {
-            when { expression { return params.Services_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
-            }
-        }
-        stage("Core Coverage") {
-            when {
-                anyOf {
-                    expression { return params.Coverage }
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
+        stage("Translation/Services Tests") {
+            parallel {
+                stage("Translations Tests") {
+                    when { expression { return params.Services_tests } }
+                    steps {
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
+                    }
+                }
+                stage("Services Tests") {
+                    when { expression { return params.Services_tests } }
+                    steps {
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
                     }
                 }
             }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
-                sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
-                archiveArtifacts artifacts: '**/coverage.tar.gz'
-            }
         }
-        stage("Services Tests") {
-            when { expression { return params.Services_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
-            }
-        }
-        stage("UI Hoot 1 Tests") {
-            when { expression { return params.UI_hoot1_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
-            }
-        }
-        stage("UI Hoot 2 Tests") {
-            when { expression { return params.UI_hoot2_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
-            }
-        }
-        stage("Sonar") {
-            when {
-                anyOf {
-                    expression { return params.Sonar }
-                    changeRequest()
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
+        stage("UI Tests/Core Coverage/Sonar") {
+            parallel {
+                stage("UI Tests") {
+                    stages {
+                        stage("UI Hoot 1 Tests") {
+                            when { expression { return params.UI_hoot1_tests } }
+                            steps {
+                                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+                            }
+                        }
+                        stage("UI Hoot 2 Tests") {
+                            when { expression { return params.UI_hoot2_tests } }
+                            steps {
+                                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
+                            }
+                        }
                     }
                 }
-            }
-            steps{
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
-                        JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
-                        mvn sonar:sonar \
-                        -Dsonar.host.url=https://sonarcloud.io \
-                        -Dsonar.organization=hootenanny \
-                        -Dsonar.login=${env.SONAR_CLOUD_KEY} \
-                        -Dsonar.projectKey=hoot-services \
-                        -Dsonar.branch.name=${env.BRANCH_NAME}'"
+                stage("Core Coverage") {
+                    when {
+                        anyOf {
+                            expression { return params.Coverage }
+                            allOf {
+                                triggeredBy 'TimerTrigger'
+                                branch 'master'
+                            }
+                        }
+                    }
+                    steps {
+                        sh "sleep 10s"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
+                        sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
+                        archiveArtifacts artifacts: '**/coverage.tar.gz'
+                    }
+                }
+                stage("Sonar") {
+                    when {
+                        anyOf {
+                            expression { return params.Sonar }
+                            changeRequest()
+                            allOf {
+                                triggeredBy 'TimerTrigger'
+                                branch 'master'
+                            }
+                        }
+                    }
+                    steps {
+                        sh "sleep 20s"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
+                            JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+                            mvn sonar:sonar \
+                            -Dsonar.host.url=https://sonarcloud.io \
+                            -Dsonar.organization=hootenanny \
+                            -Dsonar.login=${env.SONAR_CLOUD_KEY} \
+                            -Dsonar.projectKey=hoot-services \
+                            -Dsonar.branch.name=${env.BRANCH_NAME}'"
 
-                script {
-                    if (env.BRANCH_NAME.startsWith("PR-")) {
-                        // PR scan will use github plugin
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
-                    }
-                    else {
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
+                        script {
+                            if (env.BRANCH_NAME.startsWith("PR-")) {
+                                // PR scan will use github plugin
+                                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
+                            }
+                            else {
+                                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
+                            }
+                        }
                     }
                 }
             }
