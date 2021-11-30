@@ -44,14 +44,11 @@ QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
   const int hours = duration % 24;
   const int days = duration / 24;
   if ((hours == 0) && (days == 0))
-  {
     return res.sprintf("%02d:%02d", minutes, seconds);
-  }
-  if (days == 0)
-  {
+  else if (days == 0)
     return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
-  }
-  return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
+  else
+    return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
 }
 
 QString StringUtils::formatLargeNumber(const unsigned long number)
@@ -64,9 +61,7 @@ bool StringUtils::hasAlphabeticCharacter(const QString& input)
   for (int i = 0; i < input.length(); i++)
   {
     if (input.at(i).isLetter())
-    {
       return true;
-    }
   }
   return false;
 }
@@ -76,9 +71,7 @@ bool StringUtils::hasDigit(const QString& input)
   for (int i = 0; i < input.length(); i++)
   {
     if (input.at(i).isDigit())
-    {
       return true;
-    }
   }
   return false;
 }
@@ -89,9 +82,7 @@ bool StringUtils::isAlphaNumeric(const QString& input)
   {
     const QChar character = input.at(i);
     if (!character.isLetterOrNumber())
-    {
       return false;
-    }
   }
   return true;
 }
@@ -103,15 +94,12 @@ bool StringUtils::isNumber(const QString& input)
   return isNumber;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
-  const QString& jsonStr)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(const QString& jsonStr)
 {
   LOG_VART(jsonStr);
   std::stringstream strStrm(jsonStr.toUtf8().constData(), std::ios::in);
   if (!strStrm.good())
-  {
     throw HootException(QString("Error reading from reply string:\n%1").arg(jsonStr));
-  }
   std::shared_ptr<boost::property_tree::ptree> jsonObj =
     std::make_shared<boost::property_tree::ptree>();
   try
@@ -127,8 +115,7 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
   return jsonObj;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonArray(
-  const QStringList& stringList)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonArray(const QStringList& stringList)
 {
   std::shared_ptr<boost::property_tree::ptree> strArr =
     std::make_shared<boost::property_tree::ptree>();
@@ -139,6 +126,28 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonArray(
     strArr->push_back(std::make_pair("", str));
   }
   return strArr;
+}
+
+void StringUtils::scrubQuotes(QString& jsonStr)
+{
+  // We allow the use of single quotes, for ease of coding
+  // test strings into c++. Single quotes within string literals
+  // should be escaped as \'
+  // Detect if they are using single quotes or doubles
+  //  "features" is GEOJSON while "elements" comes from overpass
+  if (jsonStr.indexOf("\"features\"", Qt::CaseInsensitive) > -1 ||
+      jsonStr.indexOf("\"elements\"", Qt::CaseInsensitive) > -1)
+    return; // No need to scrub
+  else
+  {
+    // Convert single quotes to double quotes
+    // First change escaped singles
+    jsonStr.replace("\\'", "\"\"\"");
+    // Replace singles with doubles
+    jsonStr.replace("'", "\"");
+    // Revert escaped singles
+    jsonStr.replace("\"\"\"", "'");
+  }
 }
 
 QString StringUtils::padFrontOfNumberStringWithZeroes(const int number, const int padSize)
@@ -152,9 +161,7 @@ void StringUtils::removeEmptyStrings(QStringList& strings)
   for (int i = 0; i < strings.size(); i++)
   {
     if (!strings.at(i).trimmed().isEmpty())
-    {
       output.append(strings.at(i));
-    }
   }
   strings = output;
 }
@@ -167,13 +174,9 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   {
     const QString str = input.at(i);
     if (uniqueStrings.contains(str))
-    {
       duplicateStrings.insert(str);
-    }
     else
-    {
       uniqueStrings.insert(str);
-    }
   }
   return duplicateStrings;
 }
@@ -183,34 +186,30 @@ bool StringUtils::hasDuplicates(const QStringList& input)
   return !getDuplicates(input).empty();
 }
 
-bool StringUtils::containsSubstring(
-  const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsSubstring(const QStringList& input, const QString& substring,
+                                    Qt::CaseSensitivity caseSensitivity)
 {
   return !input.filter(substring, caseSensitivity).empty();
 }
 
-bool StringUtils::containsSubstrings(
-  const QStringList& input, const QStringList& substrings, Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
+                                     Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < substrings.size(); i++)
   {
     if (!input.filter(substrings.at(i), caseSensitivity).empty())
-    {
       return true;
-    }
   }
   return false;
 }
 
-int StringUtils::indexOfSubstring(
-  const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
+int StringUtils::indexOfSubstring(const QStringList& input, const QString& substring,
+                                  Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < input.size(); i++)
   {
     if (input.at(i).contains(substring, caseSensitivity))
-    {
       return i;
-    }
   }
   return -1;
 }
@@ -233,43 +232,37 @@ int StringUtils::removePrefixes(const QString& prefix, QStringList& input)
   return numRemoved;
 }
 
-void StringUtils::removeAllContaining(
-  QStringList& input, const QString& text, Qt::CaseSensitivity caseSensitivity)
+void StringUtils::removeAllContaining(QStringList& input, const QString& text,
+                                      Qt::CaseSensitivity caseSensitivity)
 {
   QStringList toReturn;
   for (int i = 0; i < input.size(); i++)
   {
     const QString inputStr = input.at(i);
     if (!inputStr.contains(text, caseSensitivity))
-    {
       toReturn.append(inputStr);
-    }
   }
   input = toReturn;
 }
 
-void StringUtils::removeLastIndexOf(
-  QString& input, const QStringList& toRemove, Qt::CaseSensitivity caseSensitivity)
+void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
+                                    Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toRemove.size(); i++)
   {
     const int index = input.lastIndexOf(toRemove.at(i), -1, caseSensitivity);
     if (index != -1)
-    {
       input = input.remove(index, toRemove.at(i).length()).trimmed();
-    }
   }
 }
 
-bool StringUtils::containsAny(
-  const QStringList& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare,
+                              Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
     if (input.contains(toCompare.at(i), caseSensitivity))
-    {
       return true;
-    }
   }
   return false;
 }
@@ -280,49 +273,41 @@ bool StringUtils::matchesWildcard(const QString& str, const QStringList& wildcar
   {
     QRegExp regex(wildcards.at(i), Qt::CaseInsensitive, QRegExp::Wildcard);
     if (regex.exactMatch(str))
-    {
       return true;
-    }
   }
   return false;
 }
 
-bool StringUtils::endsWithAny(
-  const QString& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare,
+                              Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
     if (input.endsWith(toCompare.at(i), caseSensitivity))
-    {
       return true;
-    }
   }
   return false;
 }
 
-bool StringUtils::endsWithAny(
-  const QStringList& inputs, const QString& compareStr, Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::endsWithAny(const QStringList& inputs, const QString& compareStr,
+                              Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < inputs.size(); i++)
   {
     if (inputs.at(i).endsWith(compareStr, caseSensitivity))
-    {
       return true;
-    }
   }
   return false;
 }
 
-QString StringUtils::endsWithAnyAsStr(
-  const QString& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
+QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& toCompare,
+                                      Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
     const QString toCompareStr = toCompare.at(i);
     if (input.endsWith(toCompareStr, caseSensitivity))
-    {
       return toCompareStr;
-    }
   }
   return "";
 }
@@ -332,48 +317,37 @@ bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompa
   for (int i = 0; i < toCompare.size(); i++)
   {
     if (input.split(toCompare.at(i), QString::SkipEmptyParts).size() == 2)
-    {
       return true;
-    }
   }
   return false;
 }
 
-QStringList StringUtils::splitOnAny(
-  const QString& input, const QList<QRegExp>& tokenList, const int numOutputTokens)
+QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
+                                    const int numOutputTokens)
 {
   for (int i = 0; i < tokenList.size(); i++)
   {
-    const QStringList inputParts =
-      input.split(tokenList.at(i), QString::SkipEmptyParts);
+    const QStringList inputParts = input.split(tokenList.at(i), QString::SkipEmptyParts);
     if (inputParts.size() == numOutputTokens)
-    {
       return inputParts;
-    }
   }
   return QStringList();
 }
 
-void StringUtils::replaceLastIndexOf(
-  QString& input, const QString& strToReplace, const QString& replacementStr,
-  Qt::CaseSensitivity caseSensitivity)
+void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace, const QString& replacementStr,
+                                     Qt::CaseSensitivity caseSensitivity)
 {
   const int index = input.lastIndexOf(strToReplace, -1, caseSensitivity);
   if (index != -1)
-  {
     input = input.replace(index, strToReplace.size(), replacementStr);
-  }
 }
 
-bool StringUtils::insertAfter(
-  QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert)
+bool StringUtils::insertAfter(QStringList& strList, const QString& strToInsertAfter, const QString& strToInsert)
 {
   const int beforeIndex = strList.indexOf(QRegExp(strToInsertAfter));
 
   if (beforeIndex == -1)
-  {
     return false;
-  }
 
   if (beforeIndex == strList.count() - 1 || strList.at(beforeIndex + 1) != strToInsert)
   {
@@ -381,9 +355,7 @@ bool StringUtils::insertAfter(
     return true;
   }
   else
-  {
     return false;
-  }
 }
 
 void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
@@ -392,13 +364,10 @@ void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp,
   input = StringUtils::_splitAndRemoveAtIndex(tokens, index, " ");
 }
 
-QString StringUtils::_splitAndRemoveAtIndex(
-  QStringList& input, const int index, const QString& separator)
+QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index, const QString& separator)
 {
   if (!input.empty() && index < input.size())
-  {
     input.removeAt(index);
-  }
   LOG_VART(input);
   return input.join(separator);
 }

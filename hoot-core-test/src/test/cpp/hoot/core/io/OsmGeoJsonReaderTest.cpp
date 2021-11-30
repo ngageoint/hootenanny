@@ -26,8 +26,8 @@
  */
 
 // geos
-#include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
+#include <geos/io/WKTReader.h>
 
 // Hoot
 #include <hoot/core/TestUtils.h>
@@ -57,7 +57,8 @@ class OsmGeoJsonReaderTest : public HootTestFixture
 
 public:
 
-  OsmGeoJsonReaderTest() : HootTestFixture("test-files/io/GeoJson/", "test-output/io/GeoJson/")
+  OsmGeoJsonReaderTest()
+    : HootTestFixture("test-files/io/GeoJson/", "test-output/io/GeoJson/")
   {
   }
 

@@ -43,9 +43,9 @@
 #include <boost/tokenizer.hpp>
 
 // Qt
-#include <QTextStream>
-#include <QTextCodec>
 #include <QRegExp>
+#include <QTextCodec>
+#include <QTextStream>
 
 // Standard
 #include <fstream>
@@ -92,18 +92,11 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
   _map->appendSource(_url);
   if (_isFile)
   {
-    QTextStream instream(&_file);
-    _results.append(instream.readAll());
+    _loadJSON(_file);
+    _parseGeoJson();
   }
   else
     _readFromHttp();
-  //  Process all of the result strings.
-  for (int i = 0; i < _results.size(); ++i)
-  {
-    // This will throw a hoot exception if JSON is invalid.
-    _loadJSON(_results[i]);
-    _parseGeoJson();
-  }
 }
 
 void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
@@ -116,15 +109,11 @@ void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& m
 
 OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
 {
-  QFile infile(path);
-  if (!infile.open(QFile::ReadOnly | QFile::Text))
-  {
+  ifstream infile(path.toStdString());
+  if (!infile.is_open())
     throw HootException("Unable to read GeoJSON file: " + path);
-  }
 
-  QTextStream instream(&infile);
-  QString jsonStr = instream.readAll();
-  _loadJSON(jsonStr);
+  _loadJSON(infile);
   _map = std::make_shared<OsmMap>();
   _parseGeoJson();
   return _map;
@@ -134,13 +123,9 @@ void OsmGeoJsonReader::_parseGeoJson()
 {
   _generator = QString::fromStdString(_propTree.get("generator", string("")));
   if (_propTree.not_found() != _propTree.find("bbox"))
-  {
-    /*Envelope env = */_parseBbox(_propTree.get_child("bbox"));
-  }
+    _parseBbox(_propTree.get_child("bbox"));
   if (_propTree.not_found() != _propTree.find(MetadataTags::Source().toStdString()))
-  {
     _map->replaceSource(QString(_propTree.get_child(MetadataTags::Source().toStdString()).data().c_str()));
-  }
 
   // The GeoJSON spec doesn't support the crs prop anymore and expects all data to be in WGS84.
   // This is here for backward compatibility with older data.
@@ -151,14 +136,11 @@ void OsmGeoJsonReader::_parseGeoJson()
   {
     // Iterate through all of our features, adding them to the map
     pt::ptree features = _propTree.get_child("features");
-    for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
+    for (auto featureIt = features.begin(); featureIt != features.end(); ++featureIt)
         _parseGeoJsonFeature(featureIt->second);
   }
-  else
-  {
-    // Single Feature
+  else  // Single Feature
     _parseGeoJsonFeature(_propTree);
-  }
 }
 
 void OsmGeoJsonReader::_parseCoordSys()
@@ -401,11 +383,9 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   //  Add nodes
   for (vector<Coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
   {
+    //  Don't create another node to close the polygon, just use the first one
     if (isPoly && (it + 1) == coords.end())
-    {
-      //  Don't create another node to close the polygon, just use the first one
       way->addNode(way->getNodeId(0));
-    }
     else
     {
       long node_id = _map->createNextNodeId();
@@ -478,9 +458,10 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
     string roles_values = properties.get("roles", "");
     if (roles_values.compare("") != 0)
     {
-      using _tokenizer = boost::tokenizer<boost::char_separator<char>>;
-      _tokenizer tokens(roles_values, boost::char_separator<char>(";", nullptr, boost::keep_empty_tokens));
-      for (_tokenizer::iterator it = tokens.begin(); it != tokens.end(); ++it)
+      using _separator = boost::char_separator<char>;
+      using _tokenizer = boost::tokenizer<_separator>;
+      _tokenizer tokens(roles_values, _separator(";", nullptr, boost::keep_empty_tokens));
+      for (auto it = tokens.begin(); it != tokens.end(); ++it)
         _roles.push(*it);
     }
     else
@@ -499,7 +480,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
            polys = 0,
            linestrings = 0,
            other = 0;
-      for (pt::ptree::const_iterator it = geometries.begin(); it != geometries.end(); ++it)
+      for (auto it = geometries.begin(); it != geometries.end(); ++it)
       {
         pt::ptree geo = it->second;
         string type = geo.get("type", "");
@@ -614,12 +595,12 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   }
 }
 
-void OsmGeoJsonReader::_parseMultiPointGeometry(
-  const boost::property_tree::ptree& geometry, const RelationPtr& relation) const
+void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry,
+                                                const RelationPtr& relation) const
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
   vector<JsonCoordinates>::const_iterator multi = multigeo.begin();
-  for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
+  for (auto coord = multi->begin(); coord != multi->end(); ++coord)
   {
     long node_id = _map->createNextNodeId();
     double lat = coord[0].y;
@@ -632,15 +613,15 @@ void OsmGeoJsonReader::_parseMultiPointGeometry(
   }
 }
 
-void OsmGeoJsonReader::_parseMultiLineGeometry(
-  const boost::property_tree::ptree& geometry, const RelationPtr& relation) const
+void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree& geometry,
+                                               const RelationPtr& relation) const
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
-  for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
+  for (auto multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
     WayPtr way = std::make_shared<Way>(_defaultStatus, way_id, _defaultCircErr);
-    for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
+    for (auto coord = multi->begin(); coord != multi->end(); ++coord)
     {
       long node_id = _map->createNextNodeId();
       double lat = coord[0].y;
@@ -656,23 +637,21 @@ void OsmGeoJsonReader::_parseMultiLineGeometry(
   }
 }
 
-void OsmGeoJsonReader::_parseMultiPolygonGeometry(
-  const boost::property_tree::ptree& geometry, const RelationPtr& relation) const
+void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
+                                                  const RelationPtr& relation) const
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
   bool is_polygon = geometry.get("type", "") == "Polygon";
   int position = 0;
-  for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
+  for (auto multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
     WayPtr way = std::make_shared<Way>(_defaultStatus, way_id, _defaultCircErr);
-    for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
+    for (auto coord = multi->begin(); coord != multi->end(); ++coord)
     {
+      //  Don't create another node to close the polygon, just use the first one.
       if ((coord + 1) == multi->end())
-      {
-        //  Don't create another node to close the polygon, just use the first one.
         way->addNode(way->getNodeId(0));
-      }
       else
       {
         long node_id = _map->createNextNodeId();
@@ -727,9 +706,9 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry) cons
   else if (type == "Polygon")
   {
     pt::ptree coordinates = geometry.get_child("coordinates");
-    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
     {
-      for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+      for (auto array = it->second.begin(); array != it->second.end(); ++array)
       {
         std::shared_ptr<Coordinate> pCoord = _readCoordinate(array->second);
         if (pCoord)
@@ -753,7 +732,7 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   if (type == "MultiPoint")
   {
     //  MultiPoint is a single array of coordinates (array)
-    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates point;
       std::shared_ptr<Coordinate> pCoord = _readCoordinate(it->second);
@@ -764,10 +743,10 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   }
   else if (type == "MultiLineString")
   {
-    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates line;
-      for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+      for (auto array = it->second.begin(); array != it->second.end(); ++array)
       {
         std::shared_ptr<Coordinate> pCoord = _readCoordinate(array->second);
         if (pCoord)
@@ -778,12 +757,12 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   }
   else if (type == "MultiPolygon")
   {
-    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates polygon;
-      for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+      for (auto array = it->second.begin(); array != it->second.end(); ++array)
       {
-        for (pt::ptree::const_iterator poly = array->second.begin(); poly != array->second.end(); ++poly)
+        for (auto poly = array->second.begin(); poly != array->second.end(); ++poly)
         {
           std::shared_ptr<Coordinate> pCoord = _readCoordinate(poly->second);
           if (pCoord)
@@ -795,10 +774,10 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   }
   else if (type == "Polygon")
   {
-    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates polygon;
-      for (pt::ptree::const_iterator poly = it->second.begin(); poly != it->second.end(); ++poly)
+      for (auto poly = it->second.begin(); poly != it->second.end(); ++poly)
       {
         std::shared_ptr<Coordinate> pCoord = _readCoordinate(poly->second);
         if (pCoord)
@@ -818,10 +797,10 @@ bool OsmGeoJsonReader::_isMultiPoly(const boost::property_tree::ptree& geometry)
 {
   int poly_count = 0;
   pt::ptree coordinates = geometry.get_child("coordinates");
-  for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+  for (auto it = coordinates.begin(); it != coordinates.end(); ++it)
   {
     int coordinate_count = 0;
-    for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+    for (auto array = it->second.begin(); array != it->second.end(); ++array)
     {
       std::shared_ptr<Coordinate> pCoord = _readCoordinate(array->second);
       if (pCoord)
@@ -841,7 +820,7 @@ void OsmGeoJsonReader::_addTags(const pt::ptree& item, const ElementPtr& element
     OsmJsonReader::_addTags(item, element);
   else
   {
-    for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
+    for (auto tagIt = item.begin(); tagIt != item.end(); ++tagIt)
     {
       QString key = QString::fromStdString(tagIt->first).trimmed();
       //LOG_VART(key);
@@ -865,7 +844,7 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree& item)
   stringstream ss;
   bool isObject = false;
   bool isArray = true;
-  for (pt::ptree::const_iterator it = item.begin(); it != item.end(); ++it)
+  for (auto it = item.begin(); it != item.end(); ++it)
   {
     if (it != item.begin())
       ss << ",";

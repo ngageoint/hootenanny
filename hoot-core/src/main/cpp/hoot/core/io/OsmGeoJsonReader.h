@@ -38,9 +38,9 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -48,11 +48,11 @@ namespace hoot
 using JsonCoordinates = std::vector<geos::geom::Coordinate>;
 
 /**
- * This class is intended to create an OsmMap from a given GeoJSON string.
+ * This class is intended to create an OsmMap from a given GeoJSON string. The input string must be
+ * well-formed GeoJSON, including double quoted strings.
  *
- * The input string must be well-formed GeoJSON.  Also, be aware that this
- * class doesn't do anything clever to handle large datasets - it simply keeps
- * everything in memory. Be careful if you want to use it with large datasets.
+ * Also, be aware that this class can stream large datasets into an OsmMap so there is only one copy
+ * of everything in memory. Be careful if you want to use it with large datasets.
  */
 class OsmGeoJsonReader : public OsmJsonReader
 {
@@ -90,8 +90,7 @@ public:
   void loadFromString(const QString& jsonStr, const OsmMapPtr& map) override;
 
   /**
-   * @brief loadFromFile - Reads the whole file as a string, passes it
-   *        to loadFromString()
+   * @brief loadFromFile - streams GeoJSON from file into OsmMap
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
@@ -159,19 +158,15 @@ private:
    * @param geometry Tree of multi-geometry in JSON format
    * @param relation OSM relation to represent the multi-geometry that all elements are added to
    */
-  void _parseMultiPointGeometry(
-    const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
-  void _parseMultiLineGeometry(
-    const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
-  void _parseMultiPolygonGeometry(
-    const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
+  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
+  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
+  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
   /**
    * @brief _parseMultiGeometry Parse "Multi" geometry object into a vector of vectors of coordiantes
    * @param geometry Three of "multi" geometry in JSON format
    * @return Vector of vectors of coordinates
    */
-  std::vector<JsonCoordinates> _parseMultiGeometry(
-    const boost::property_tree::ptree& geometry) const;
+  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _IsMultiPoly Checks a "Polygon" geometry if it is a vector of polygons or a single polygon
@@ -201,8 +196,7 @@ private:
    */
   std::string _parseSubTags(const boost::property_tree::ptree &item);
 
-  std::shared_ptr<geos::geom::Coordinate> _readCoordinate(
-    const boost::property_tree::ptree& coordsIt) const;
+  std::shared_ptr<geos::geom::Coordinate> _readCoordinate(const boost::property_tree::ptree& coordsIt) const;
 
   /*
    * For use with older data not necessarily in WGS84.
