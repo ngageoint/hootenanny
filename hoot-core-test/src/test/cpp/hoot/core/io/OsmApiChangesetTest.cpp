@@ -139,15 +139,15 @@ public:
     changeset.calculateChangeset(info);
 
     QString update =
-        "<diffResult generator=\"OpenStreetMap Server\" version=\"0.6\">\n"
-        "  <node old_id=\"-1\" new_id=\"1\" new_version=\"1\"/>\n"
-        "  <node old_id=\"-2\" new_id=\"2\" new_version=\"1\"/>\n"
-        "  <node old_id=\"-32\" new_id=\"32\" new_version=\"1\"/>\n"
-        "  <node old_id=\"-7\" new_id=\"7\" new_version=\"1\"/>\n"
-        "  <node old_id=\"-8\" new_id=\"8\" new_version=\"1\"/>\n"
-        "  <node old_id=\"-33\" new_id=\"33\" new_version=\"1\"/>\n"
-        "  <way old_id=\"-1\" new_id=\"1\" new_version=\"1\"/>\n"
-        "  <way old_id=\"-2\" new_id=\"2\" new_version=\"1\"/>\n"
+        "<diffResult generator='OpenStreetMap Server' version='0.6'>\n"
+        "  <node old_id='-1' new_id='1' new_version='1'/>\n"
+        "  <node old_id='-2' new_id='2' new_version='1'/>\n"
+        "  <node old_id='-32' new_id='32' new_version='1'/>\n"
+        "  <node old_id='-7' new_id='7' new_version='1'/>\n"
+        "  <node old_id='-8' new_id='8' new_version='1'/>\n"
+        "  <node old_id='-33' new_id='33' new_version='1'/>\n"
+        "  <way old_id='-1' new_id='1' new_version='1'/>\n"
+        "  <way old_id='-2' new_id='2' new_version='1'/>\n"
         "</diffResult>";
 
     changeset.updateChangeset(update);
