@@ -195,10 +195,21 @@ private:
    * @return JSON string of sub-tags
    */
   std::string _parseSubTags(const boost::property_tree::ptree &item);
-
+  /**
+   * @brief _parseOtherTags Some data contains other tags in the following format:
+   *        "other_tags": "\"height\"=>\"12.15\",\"source:ingest:datetime\"=>\"2021-08-19T20:02:34.358Z\""
+   * @param element Element to add the tags to
+   * @param tags String of tags in the above format
+   */
+  void _parseOtherTags(const ElementPtr& element, const QString& tags) const;
+  /**
+   * @brief _readCoordinate Convert property_tree coordinates to geos coordinates
+   * @param coordsIt property_tree coordinates
+   * @return geos coordinates
+   */
   std::shared_ptr<geos::geom::Coordinate> _readCoordinate(const boost::property_tree::ptree& coordsIt) const;
 
-  /*
+  /**
    * For use with older data not necessarily in WGS84.
    */
   void _parseCoordSys();

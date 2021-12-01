@@ -417,10 +417,8 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
     originalIdMap = _relationIdMap;
   }
 
-  for (auto relationIdItr = relationIdsWithChildrenNotPresent.begin();
-       relationIdItr != relationIdsWithChildrenNotPresent.end(); ++relationIdItr)
+  for (auto relationId : relationIdsWithChildrenNotPresent)
   {
-    const long relationId = *relationIdItr;
     LOG_VART(relationId);
     RelationPtr relation = _map->getRelation(relationId);
     LOG_VART(relation.get());
@@ -434,10 +432,8 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
       else if (childElementType == ElementType::Relation)
         childIdsNotPresentAtLoad = _relationIdsToRelationMemberIdsNotPresent.values(relationId);
 
-      for (auto memberIdItr = childIdsNotPresentAtLoad.begin();
-           memberIdItr != childIdsNotPresentAtLoad.end(); ++memberIdItr)
+      for (auto memberId : childIdsNotPresentAtLoad)
       {
-        const long memberId = *memberIdItr;
         LOG_VART(memberId);
         ElementId idToReplace = ElementId(childElementType, memberId);
         LOG_VART(idToReplace);

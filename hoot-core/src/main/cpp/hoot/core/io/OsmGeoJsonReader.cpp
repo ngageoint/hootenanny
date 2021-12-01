@@ -833,7 +833,11 @@ void OsmGeoJsonReader::_addTags(const pt::ptree& item, const ElementPtr& element
           value = QString::fromStdString(_parseSubTags(tagIt->second)).trimmed();
         else
           value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
-        element->setTag(key, value);
+        //  Some data may include 'other_tags' that can be parsed into tags also
+        if (key.compare("other_tags", Qt::CaseInsensitive) == 0)
+          _parseOtherTags(element, value);
+        else if (value.compare("null", Qt::CaseInsensitive) != 0)  //  Don't include tags with a 'null' value
+          element->setTag(key, value);
       }
     }
   }
@@ -866,6 +870,25 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree& item)
     return "[" + ss.str() + "]";
   else
     return ss.str();
+}
+
+void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString& tags) const
+{
+  QString tag_string = tags;
+  //  Remove the beginning and ending double quotes
+  if (tag_string.startsWith("\""))
+    tag_string.remove(0, 1);
+  if (tag_string.endsWith("\""))
+    tag_string.remove(tag_string.length() - 1, 1);
+  //  Split the pairs by comma separated quotes
+  QStringList pairs = tag_string.split("\",\"");
+  for (const auto& tag : pairs)
+  {
+    //  Each tag looks like `key\"=>\"value` at this point, parse them
+    QStringList key_value = tag.split("\"=>\"");
+    if (key_value.size() == 2)
+      element->setTag(key_value[0], key_value[1]);
+  }
 }
 
 std::shared_ptr<Coordinate> OsmGeoJsonReader::_readCoordinate(const pt::ptree& coordsIt) const
