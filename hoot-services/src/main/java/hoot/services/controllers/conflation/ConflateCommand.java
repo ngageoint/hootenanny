@@ -115,7 +115,6 @@ class ConflateCommand extends ExternalCommand {
         this.conflateParams = params;
 
         List<String> options = new LinkedList<>();
-        options.add("writer.include.conflate.score.tags=false");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("writer.text.status=true");
         options.add("job.id=" + jobId);
@@ -126,12 +125,13 @@ class ConflateCommand extends ExternalCommand {
         }
 
         String input1Type = params.getInputType1();
-        String input1 = input1Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput1()) : params.getInput1();
+        String input1 = input1Type.equalsIgnoreCase("DB") ? HOOTAPI_DB_URL + "/" + params.getInput1() : params.getInput1();
 
         String input2Type = params.getInputType2();
-        String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
+        String input2 = input2Type.equalsIgnoreCase("DB") ? HOOTAPI_DB_URL + "/" + params.getInput2() : params.getInput2();
 
-        String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
+        String outputType = params.getOutputType();
+        String output = outputType.equalsIgnoreCase("") ? params.getOutputName() : HOOTAPI_DB_URL + "/" + params.getOutputName();
 
         String stats = "";
         if (params.getCollectStats()) {

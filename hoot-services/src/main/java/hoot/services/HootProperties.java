@@ -147,6 +147,8 @@ public final class HootProperties {
     public static final String GRAIL_RAILS_LABEL;
     public static final String GRAIL_OVERPASS_LABEL;
 
+    public static final Boolean DIFFERENTIAL_CHANGESET_TWOSTEP;
+
     public static final String RAILSPORT_PUSH_URL;
     public static final String RAILSPORT_PULL_URL;
     public static final String RAILSPORT_CAPABILITIES_URL;
@@ -336,6 +338,8 @@ public final class HootProperties {
         // to propagate to Overpass
         OVERPASS_SYNC_TIMEOUT = getProperty("overpassSyncTimeout");
         OVERPASS_SYNC_INTERVAL = getProperty("overpassSyncInterval");
+
+        DIFFERENTIAL_CHANGESET_TWOSTEP = Boolean.valueOf(getProperty("diffChangesetTwoStep"));
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";

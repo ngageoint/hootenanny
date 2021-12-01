@@ -40,6 +40,8 @@ import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.replaceSensitiveData;
+import static hoot.services.HootProperties.DIFFERENTIAL_CHANGESET_TWOSTEP;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -108,6 +110,8 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.conflation.ConflateCommandFactory;
+import hoot.services.controllers.conflation.ConflateParams;
 import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
@@ -153,6 +157,9 @@ public class GrailResource {
 
     @Autowired
     private RemoveFilesCommandFactory removeFilesCommandFactory;
+
+    @Autowired
+    private ConflateCommandFactory conflateCommandFactory;
 
     public GrailResource() {}
 
@@ -316,7 +323,29 @@ public class GrailResource {
                 input2 = getOverpassParams.getOutput();
             }
 
-            grailCommandClass = deriveType.toLowerCase().startsWith("diff") ? RunDiffCommand.class : DeriveChangesetCommand.class;
+            //check for one (conflate -> osc) or two step (conflate -> osm -> derive changeset -> osc) preference
+            if (DIFFERENTIAL_CHANGESET_TWOSTEP) {
+                String outputOsm = new File(workDir, "diff.osm").getAbsolutePath();
+                ConflateParams conflateParams = new ConflateParams();
+                conflateParams.setConflationCommand(deriveType.toLowerCase().contains("tags") ? "differential-tags" : "differential");
+                conflateParams.setConflationType("Differential");
+                conflateParams.setHoot2(true);
+                conflateParams.setHoot2AdvOptions(reqParams.getAdvancedOptions());
+                conflateParams.setCollectStats(false);
+                conflateParams.setBounds(reqParams.getBounds());
+                conflateParams.setInput1(input1);
+                conflateParams.setInputType1("");
+                conflateParams.setInput2(input2);
+                conflateParams.setInputType2("");
+                conflateParams.setOutputName(outputOsm);
+                conflateParams.setOutputType("");
+                ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, conflateParams, debugLevel, this.getClass());
+                workflow.add(conflateCommand);
+                input2 = outputOsm;
+                grailCommandClass = DeriveChangesetCommand.class;
+            } else {
+                grailCommandClass = deriveType.toLowerCase().startsWith("diff") ? RunDiffCommand.class : DeriveChangesetCommand.class;
+            }
         }
 
         // create output file

@@ -117,6 +117,9 @@ grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.oql
 overpassSyncTimeout=300000
 overpassSyncInterval=30000
 
+# Differential changeset two-step
+diffChangesetTwoStep=false
+
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
 
