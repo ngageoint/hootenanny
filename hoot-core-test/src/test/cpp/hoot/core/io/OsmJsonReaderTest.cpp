@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -43,8 +44,7 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(wayTest);
   CPPUNIT_TEST(relationTest);
   CPPUNIT_TEST(urlTest);
-  CPPUNIT_TEST(scrubQuoteTest);
-  CPPUNIT_TEST(scrubBigIntsTest);
+  CPPUNIT_TEST(bigIntsReadTest);
   CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST(runBoundsTest);
   CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
@@ -54,8 +54,8 @@ class OsmJsonReaderTest : public HootTestFixture
 
 public:
 
-  OsmJsonReaderTest() :
-  HootTestFixture("test-files/io/OsmJsonReaderTest/", "test-output/io/OsmJsonReaderTest/")
+  OsmJsonReaderTest()
+    : HootTestFixture("test-files/io/OsmJsonReaderTest/", "test-output/io/OsmJsonReaderTest/")
   {
     setResetType(ResetConfigs);
   }
@@ -100,6 +100,8 @@ public:
      " }                                     \n"
      "]                                      \n"
      "}                                      \n";
+    //  Convert single quoted C++ string to valid JSON string
+    StringUtils::scrubQuotes(testJsonStr);
 
     OsmJsonReader uut;
     OsmMapPtr pMap = std::make_shared<OsmMap>();
@@ -273,6 +275,8 @@ public:
       " }                                      \n"
       " ]                                      \n"
       "}                                       \n";
+    //  Convert single quoted C++ string to valid JSON string
+    StringUtils::scrubQuotes(testJsonStr);
 
     OsmJsonReader uut;
     OsmMapPtr pMap = std::make_shared<OsmMap>();
@@ -389,183 +393,59 @@ public:
     // Not failure == success
   }
 
-  void scrubQuoteTest()
+  void bigIntsReadTest()
   {
-    QString singleQuoteTest =
-        "{\n"
-        " 'version': 0.6,\n"
-        " 'generator': 'Overpass API',\n"
-        " 'osm3s': {\n"
-        "   'timestamp_osm_base': 'date',\n"
-        "   'copyright': 'blah blah blah'\n"
-        " },\n"
-        " 'elements': [\n"
-        " {\n"
-        "   'type': 'node',\n"
-        "   'id': -1,\n"
-        "   'lat': 0,\n"
-        "   'lon': 0\n"
-        " }]\n"
-        "}";
-    QString doubleQuoteTest =
-        "{\n"
-        " \"version\": 0.6,\n"
-        " \"generator\": \"Overpass API\",\n"
-        " \"osm3s\": {\n"
-        "   \"timestamp_osm_base\": \"date\",\n"
-        "   \"copyright\": \"blah blah blah\"\n"
-        " },\n"
-        " \"elements\": [\n"
-        " {\n"
-        "   \"type\": \"node\",\n"
-        "   \"id\": -1,\n"
-        "   \"lat\": 0,\n"
-        "   \"lon\": 0\n"
-        " }]\n"
-        "}";
-    OsmJsonReader::scrubQuotes(singleQuoteTest);
-    HOOT_STR_EQUALS(doubleQuoteTest, singleQuoteTest);
+    //  Boost 1.41 property tree json parser had trouble with integers bigger than 2^31.
+    //  As of 1.53.0 this is no longer a problem.  Test to make sure it is working normally.
+    QString testJsonStr =
+     "{                                      \n"
+     " 'version': 0.6,                       \n"
+     " 'generator': 'Overpass API',          \n"
+     " 'osm3s': {                            \n"
+     "   'timestamp_osm_base': 'date',       \n"
+     "   'copyright': 'c 1999'               \n"
+     " },                                    \n"
+     " 'elements': [                         \n"
+     " {                                     \n"
+     "   'type': 'node',                     \n"
+     "   'id': 2222222222,                   \n"
+     "   'lat': 2.0,                         \n"
+     "   'lon': -3.0                         \n"
+     " },                                    \n"
+     " {                                     \n"
+     "   'type': 'node',                     \n"
+     "   'id': 2222222223,                   \n"
+     "   'lat': 3.0,                         \n"
+     "   'lon': -3.0,                        \n"
+     "   'timestamp': '2010-01-01T00:00:00Z',\n"
+     "   'version': 4,                       \n"
+     "   'changeset': 5,                     \n"
+     "   'user': 'somebody',                 \n"
+     "   'uid': 6                            \n"
+     " },                                    \n"
+     " {                                     \n"
+     "   'type': 'node',                     \n"
+     "   'id': 2222222224,                   \n"
+     "   'lat': 4.0,                         \n"
+     "   'lon': -3.0,                        \n"
+     "   'tags': {                           \n"
+     "     'highway': 'bus_stop',            \n"
+     "     'name': 'Mike\\'s Street'         \n"
+     "   }                                   \n"
+     " }                                     \n"
+     "]                                      \n"
+     "}                                      \n";
+    //  Convert single quoted C++ string to valid JSON string
+    StringUtils::scrubQuotes(testJsonStr);
 
-    QString overpassOriginal =
-    "{\n"
-    "  \"version\": 0.6,\n"
-    "  \"generator\": \"Overpass API\",\n"
-    "  \"osm3s\": {\n"
-    "    \"timestamp_osm_base\": \"some date\",\n"
-    "    \"copyright\": \"copyright\"\n"
-    "  },\n"
-    "  \"elements\": [\n"
-    "{\n"
-    "  \"type\": \"node\",\n"
-    "  \"id\": 824816086,\n"
-    "  \"lat\": 18.5396277,\n"
-    "  \"lon\": -72.5293447,\n"
-    "  \"timestamp\": \"date\",\n"
-    "  \"version\": 2,\n"
-    "  \"changeset\": 2,\n"
-    "  \"tags\": {\n"
-    "    \"amenity\": \"school\",\n"
-    "    \"name\": \"La Prairie d'Yslande\",\n"
-    "    \"operational_status\": \"open\",\n"
-    "    \"operational_status_quality\": \"confirmed\",\n"
-    "    \"school_district\": \"Gressier\",\n"
-    "    \"school_type\": \"kindergarten\",\n"
-    "    \"source\": \"CNIGS/OIM/FOCS\"\n"
-    "  }\n"
-    "}\n"
-    "  ]\n"
-    "}";
+    OsmJsonReader uut;
+    OsmMapPtr pMap = std::make_shared<OsmMap>();
+    uut.loadFromString(testJsonStr, pMap);
 
-    const QString overpassCorrect(overpassOriginal);
-    OsmJsonReader::scrubQuotes(overpassOriginal);
-    HOOT_STR_EQUALS(overpassCorrect, overpassOriginal);
-  }
-
-  void scrubBigIntsTest()
-  {
-    QString bigIntTest =
-        "{\n"
-        " \"test1\": 1.123456789,\n"
-        " \"test2\": 2222222222,\n"
-        " \"test3\": \"3333333333\",\n"
-        " \"test4\": -4444444444,\n"
-        " \"test5\": \"-5555555555\",\n"
-        " \"test6\": \"This is text with a big int 1111111111 right in the middle, don't break this.\"\n"
-        "}";
-    QString bigIntCorrect =
-        "{\n"
-        " \"test1\": 1.123456789,\n"
-        " \"test2\": \"2222222222\",\n"
-        " \"test3\": \"3333333333\",\n"
-        " \"test4\": \"-4444444444\",\n"
-        " \"test5\": \"-5555555555\",\n"
-        " \"test6\": \"This is text with a big int 1111111111 right in the middle, don't break this.\"\n"
-        "}";
-    OsmJsonReader::scrubBigInts(bigIntTest);
-    HOOT_STR_EQUALS(bigIntCorrect, bigIntTest);
-
-    QString bigIntMultiline =
-    "{\n"
-    "  \"version\": 0.6,\n"
-    "  \"generator\": \"Overpass API\",\n"
-    "  \"osm3s\": {\n"
-    "    \"timestamp_osm_base\": \"2017-07-14T15:12:03Z\",\n"
-    "    \"copyright\": \"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.\"\n"
-    "  },\n"
-    "  \"elements\": [\n"
-    "    {\n"
-    "      \"type\": \"way\",\n"
-    "      \"id\": \"10575627\",\n"
-    "      \"nodes\": [\n"
-    "        91356553,\n"
-    "        91711357,\n"
-    "        3886528792,\n"
-    "        3886528800,\n"
-    "        91711634\n"
-    "      ],\n"
-    "      \"tags\": {\n"
-    "        \"highway\": \"tertiary\",\n"
-    "        \"maxspeed\": \"55 mph\",\n"
-    "        \"name\": \"Orcutt Road\",\n"
-    "        \"source:maxspeed\": \"Survey\",\n"
-    "        \"tiger:cfcc\": \"A41\",\n"
-    "        \"tiger:county\": \"San Luis Obispo, CA\",\n"
-    "        \"tiger:name_base\": \"Orcutt\",\n"
-    "        \"tiger:name_type\": \"Rd\",\n"
-    "        \"tiger:reviewed\": \"yes\"\n"
-    "      }\n"
-    "    }\n"
-    "  ]\n"
-    "}";
-    QString bigIntMultilineCorrect =
-    "{\n"
-    "  \"version\": 0.6,\n"
-    "  \"generator\": \"Overpass API\",\n"
-    "  \"osm3s\": {\n"
-    "    \"timestamp_osm_base\": \"2017-07-14T15:12:03Z\",\n"
-    "    \"copyright\": \"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.\"\n"
-    "  },\n"
-    "  \"elements\": [\n"
-    "    {\n"
-    "      \"type\": \"way\",\n"
-    "      \"id\": \"10575627\",\n"
-    "      \"nodes\": [\n"
-    "        \"91356553\",\n"
-    "        \"91711357\",\n"
-    "        \"3886528792\",\n"
-    "        \"3886528800\",\n"
-    "        \"91711634\"\n"
-    "      ],\n"
-    "      \"tags\": {\n"
-    "        \"highway\": \"tertiary\",\n"
-    "        \"maxspeed\": \"55 mph\",\n"
-    "        \"name\": \"Orcutt Road\",\n"
-    "        \"source:maxspeed\": \"Survey\",\n"
-    "        \"tiger:cfcc\": \"A41\",\n"
-    "        \"tiger:county\": \"San Luis Obispo, CA\",\n"
-    "        \"tiger:name_base\": \"Orcutt\",\n"
-    "        \"tiger:name_type\": \"Rd\",\n"
-    "        \"tiger:reviewed\": \"yes\"\n"
-    "      }\n"
-    "    }\n"
-    "  ]\n"
-    "}";
-
-    OsmJsonReader::scrubBigInts(bigIntMultiline);
-    HOOT_STR_EQUALS(bigIntMultilineCorrect, bigIntMultiline);
-
-    // One of the regex's to clean big ints originally had a leading semicolon in it (see related
-    // note in OsmJsonReader::scrubBigInts), which would add double quotes to the text below within
-    // a single json value and break it. Haven't encountered any data instances to be cleaned so far
-    // that would require the semicolon to be in the regex, so removed it. If any instances do exist,
-    // then we need to rethink that regex to correctly parse this.
-    QString bigIntEmbedded =
-      "{\n"
-      " \"fixme\": \"DUPLICATE [Facebook:1477777628952292, Facebook:1477777665618955]\"\n"
-      "}";
-    const QString bigIntEmbeddedCorrect(bigIntEmbedded);
-    OsmJsonReader::scrubBigInts(bigIntEmbedded);
-    HOOT_STR_EQUALS(bigIntEmbeddedCorrect, bigIntEmbedded);
+    CPPUNIT_ASSERT_EQUAL(3L, pMap->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2222222222L, pMap->getNode(2222222222)->getId());
+    CPPUNIT_ASSERT_EQUAL(2222222223L, pMap->getNode(2222222223)->getId());
+    CPPUNIT_ASSERT_EQUAL(2222222224L, pMap->getNode(2222222224)->getId());
   }
 
   void isSupportedTest()
@@ -575,20 +455,19 @@ public:
 
     CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
     CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
-    // If the url is of the correct scheme and matches the host, we use it.
+    //  If the url is of the correct scheme and matches the host, we use it.
     CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
     CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));
-    // wrong scheme
+    //  wrong scheme
     CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
-    // If the url doesn't match with our configured Overpass host, skip it.
+    //  If the url doesn't match with our configured Overpass host, skip it.
     CPPUNIT_ASSERT(!uut.isSupported("http://blah"));
     CPPUNIT_ASSERT(!uut.isSupported("https://blah"));
   }
 
   void runBoundsTest()
   {
-    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
-
+    //  See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
     OsmJsonReader uut;
     uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -602,8 +481,8 @@ public:
 
   void runBoundsLeaveConnectedOobWaysTest()
   {
-    // This will leave any ways in the output which are outside of the bounds but are directly
-    // connected to ways which cross the bounds.
+    //  This will leave any ways in the output which are outside of the bounds but are directly
+    //  connected to ways which cross the bounds.
 
     const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
 
@@ -611,7 +490,7 @@ public:
     uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
 
-    // set cropping up for strict bounds handling
+    //  Set cropping up for strict bounds handling
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
     conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
 
@@ -626,8 +505,7 @@ public:
 
   void elementTypeUnorderedTest()
   {
-    // This should load the elements even though child elements come after their parents.
-
+    //  This should load the elements even though child elements come after their parents.
     QString testFileName;
     OsmJsonReader uut;
     OsmMapPtr map;
@@ -642,8 +520,7 @@ public:
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
-    // same as above except we create our own element ids this time
-
+    //  Same as above except we create our own element ids this time
     TestUtils::resetBasic();
     testFileName = "elementTypeUnorderedTest2.osm";
     uut.setUseDataSourceIds(false);
@@ -657,11 +534,11 @@ public:
 
   void elementTypeUnorderedMissingTest()
   {
-    // There is one node referenced by a way that doesn't exist in the file (id=2442180398). That
-    // node should not be present in the output way.
+    //  There is one node referenced by a way that doesn't exist in the file (id=2442180398). That
+    //  node should not be present in the output way.
 
-    // The default behavior is to log missing elements as warnings, and we don't want to see that in
-    // this test;
+    //  The default behavior is to log missing elements as warnings, and we don't want to see that in
+    //  this test;
     DisableLog dl;
 
     QString outputFile;
@@ -678,8 +555,7 @@ public:
     OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
 
-    // same as above except we create our own element ids this time
-
+    //  Same as above except we create our own element ids this time
     TestUtils::resetBasic();
     outputFile = "elementTypeUnorderedMissingTest2.osm";
     uut.setUseDataSourceIds(false);
@@ -690,6 +566,7 @@ public:
     OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
   }
+
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmJsonReaderTest, "slow");

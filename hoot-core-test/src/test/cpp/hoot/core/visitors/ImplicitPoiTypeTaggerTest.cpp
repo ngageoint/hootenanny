@@ -27,9 +27,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 
 namespace hoot
@@ -50,18 +51,16 @@ class ImplicitPoiTypeTaggerTest : public HootTestFixture
 
 public:
 
-  ImplicitPoiTypeTaggerTest() :
-  HootTestFixture(
-    "test-files/visitors/ImplicitPoiTypeTaggerTest/",
-    "test-output/visitors/ImplicitPoiTypeTaggerTest/")
+  ImplicitPoiTypeTaggerTest()
+    : HootTestFixture("test-files/visitors/ImplicitPoiTypeTaggerTest/",
+                      "test-output/visitors/ImplicitPoiTypeTaggerTest/")
   {
   }
 
   void runBasicTest()
   {
-    //regenerate the db file
-    const QString databaseOutFile =
-      _outputPath + "ImplicitPoiTypeTaggerTest-runBasicTest-rules.sqlite";
+    //  Regenerate the db file
+    const QString databaseOutFile = _outputPath + "ImplicitPoiTypeTaggerTest-runBasicTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(_inputPath + "runBasicTest-ruleWordParts");
@@ -90,11 +89,13 @@ public:
       "   'tags': { 'name': 'alwhdt' } }\n"
       "]                                      \n"
       "}                                      \n");
+    //  Convert single quoted C++ string to valid JSON string
+    StringUtils::scrubQuotes(testJsonStr);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(testJsonStr, map);
 
-    // the JSON parser doesn't handle exotic characters
+    //  The JSON parser doesn't handle exotic characters
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 
     ImplicitPoiTypeTagger uut(databaseOutFile);
@@ -158,7 +159,7 @@ public:
 
   void runDuplicateTagKeyTest()
   {
-    //regenerate the db file
+    //  Regenerate the db file
     const QString databaseOutFile =
       _outputPath + "ImplicitPoiTypeTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
@@ -168,9 +169,9 @@ public:
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0);
-    //Even though this node has school in the name and could likely be a school, since it already
-    //is tagged at a bank, we don't want to risk introducing a false positive tag...so don't add
-    //amenity=school to it.
+    //  Even though this node has school in the name and could likely be a school, since it already
+    //  is tagged at a bank, we don't want to risk introducing a false positive tag...so don't add
+    //  amenity=school to it.
     node->getTags()["name"] = "school";
     node->getTags()["amenity"] = "bank";
     map->addNode(node);
@@ -185,18 +186,15 @@ public:
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("school").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("bank").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("school").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("bank").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(!map->getNode(1)->getTags().contains("hoot:implicitTags:tagsAdded"));
   }
 
   void runLessSpecificImplicitTagTest()
   {
-    //regenerate the db file
-    const QString databaseOutFile =
-      _outputPath + "ImplicitPoiTypeTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
+    //  Regenerate the db file
+    const QString databaseOutFile = _outputPath + "ImplicitPoiTypeTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(_inputPath + "runLessSpecificImplicitTagTest-ruleWordParts");
@@ -204,8 +202,8 @@ public:
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0);
-    //This node has a more specific amenity tag than the one in the rules file, so the node should
-    //keep the amenity tag it starts with.
+    //  This node has a more specific amenity tag than the one in the rules file, so the node should
+    //  keep the amenity tag it starts with.
     node->getTags()["name"] = "hall";
     node->getTags()["amenity"] = "public_hall";
     map->addNode(node);
@@ -220,18 +218,15 @@ public:
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(!map->getNode(1)->getTags().contains("hoot:implicitTags:tagsAdded"));
   }
 
   void runMoreSpecificImplicitTagTest()
   {
-    //regenerate the db file
-    const QString databaseOutFile =
-      _outputPath + "ImplicitPoiTypeTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+    //  Regenerate the db file
+    const QString databaseOutFile = _outputPath + "ImplicitPoiTypeTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(_inputPath + "runMoreSpecificImplicitTagTest-ruleWordParts");
@@ -239,8 +234,8 @@ public:
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0);
-    //The amenity tag referenced in the rules file is more specific than the one this node has, so
-    //the node's amenity tag should be replaced by the one in the rules file.
+    //  The amenity tag referenced in the rules file is more specific than the one this node has, so
+    //  the node's amenity tag should be replaced by the one in the rules file.
     node->getTags()["name"] = "hall";
     node->getTags()["amenity"] = "hall";
     map->addNode(node);
@@ -256,10 +251,8 @@ public:
     LOG_VART(map->getNode(1)->getTags());
 
     CPPUNIT_ASSERT_EQUAL(3, map->getNode(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(map->getNode(1)->getTags().contains("hoot:implicitTags:tagsAdded"));
   }
 };

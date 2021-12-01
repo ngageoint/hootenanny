@@ -40,6 +40,7 @@
 #include <QUrl>
 
 // Standard
+#include <fstream>
 #include <mutex>
 
 // Boost
@@ -56,56 +57,12 @@ namespace hoot
  * Element type ordering (element children before parents) is not guaranteed with JSON, as it is
  * with XML.
  *
- * The input string must be well-formed JSON, with the exception that it can be coded using single
- * quotes, rather than double quotes... which makes things a lot cleaner if you are hand-jamming the
- * JSON string into c++ code. If you are using single quotes, you may escape apostrophes with a
- * backslash.
+ * The input string must be well-formed JSON. StringUtils::scrubQuotes() can convert hand-jammed
+ * JSON string into c++ code using single quotes. If you are using single quotes, you must escape
+ * apostrophes with a double backslash.
  *
- * Consider this example:
- *
- * QString testJsonStr =
- *   "{                                      \n"
- *   " 'version': 0.6,                       \n"
- *   " 'generator': 'Overpass API',          \n"
- *   " 'osm3s': {                            \n"
- *   "   'timestamp_osm_base': 'date',       \n"
- *   "   'copyright': 'c 1999'               \n"
- *   " },                                    \n"
- *   " 'elements': [                         \n"
- *   " {                                     \n"
- *   "   'type': 'node',                     \n"
- *   "   'id': -1,                           \n"
- *   "   'lat': 2.0,                         \n"
- *   "   'lon': -3.0                         \n"
- *   " },                                    \n"
- *   " {                                     \n"
- *   "   'type': 'node',                     \n"
- *   "   'id': -2,                           \n"
- *   "   'lat': 3.0,                         \n"
- *   "   'lon': -3.0,                        \n"
- *   "   'timestamp': '2010-01-01T00:00:00Z',\n"
- *   "   'version': 4,                       \n"
- *   "   'changeset': 5,                     \n"
- *   "   'user': 'somebody',                 \n"
- *   "   'uid': 6                            \n"
- *   " },                                    \n"
- *   " {                                     \n"
- *   "   'type': 'node',                     \n"
- *   "   'id': -3,                           \n"
- *   "   'lat': 4.0,                         \n"
- *   "   'lon': -3.0,                        \n"
- *   "   'tags': {                           \n"
- *   "     'highway': 'bus_stop',            \n"
- *   "     'name': 'Mike\\'s Street'        \n"
- *   "   }                                   \n"
- *   " }                                     \n"
- *   "]                                      \n"
- *   "}                                      \n";
- *
- * It's all-or-nothing, though for the quotes - don't mix and match singles and doubles!
- *
- * Also, be aware that this class doesn't do anything clever to handle large datasets - it simply
- * keeps everything in memory. Be careful if you want to use it with large datasets.
+ * Also, be aware that this class can stream large datasets into an OsmMap so there is only one copy
+ * of everything in memory. Be careful if you want to use it with large datasets.
  */
 class OsmJsonReader : public OsmMapReader, public Boundable, private ParallelBoundedApiReader
 {
@@ -185,21 +142,6 @@ public:
    */
   virtual OsmMapPtr loadFromFile(const QString& path);
 
-  /**
-   * @brief scrubQuotes Converts single quotes to double quotes, and escaped
-   *         apostrophes to regular apostrophes
-   * @param jsonStr proper JSON string
-   */
-  static void scrubQuotes(QString &jsonStr);
-
-  /**
-   * @brief scrubBigInts Ensures that we have quotes around big integers.
-   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
-   *        json parser in boost 1.41
-   * @param jsonStr string upon which we operate
-   */
-  static void scrubBigInts(QString &jsonStr);
-
   QString supportedFormats() const override { return ".json"; }
 
   /**
@@ -250,21 +192,24 @@ protected:
   QString _generator;
 
   bool _isFile;
-  QFile _file;
+  std::ifstream _file;
 
   OsmMapPtr _map;
 
   long _numRead;
   long _statusUpdateInterval;
 
-  /** List of JSON strings, one for each HTTP response */
-  QStringList _results;
-
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
    */
   void _loadJSON(const QString& jsonStr);
+
+  /**
+   * @brief _loadJSON Loads JSON into a boost property tree
+   * @param in_stream Stream to read the JSON from
+   */
+  void _loadJSON(std::istream& in_stream);
 
   /**
    * @brief _addTags Reads tags from the given ptree, and adds them to the
@@ -276,8 +221,8 @@ protected:
                 ElementPtr pElement) const;
 
   /**
-   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
-   *   spawns a thread pool to query bounding boxes
+   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON and parses the results,
+   *   could also spawn a thread pool to query bounding boxes
    */
   void _readFromHttp();
 
