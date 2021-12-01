@@ -37,8 +37,10 @@ class OsmApiChangesetTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiChangesetTest);
   CPPUNIT_TEST(runXmlChangesetTest);
+  CPPUNIT_TEST(runXmlChangesetTest2);
   CPPUNIT_TEST(runNonAsciiXmlChangesetTest);
   CPPUNIT_TEST(runXmlChangesetJoinTest);
+  CPPUNIT_TEST(runXmlChangesetJoinTest2);
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
@@ -47,6 +49,8 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetSplitDeleteTest);
   CPPUNIT_TEST(runXmlChangesetModifyAndDeleteTest);
   CPPUNIT_TEST(runChangesetInfoLastElement);
+  CPPUNIT_TEST(runXmlChangesetFixChangesetTest);
+  CPPUNIT_TEST(runXmlChangesetCalculateChangeset);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -63,6 +67,19 @@ public:
     changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
 
     QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangeset1.osc");
+
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
+    changeset.calculateChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runXmlChangesetTest2()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/ToyTestA.osm");
+
+    QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangesetFromOsm.osc");
 
     ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
@@ -88,6 +105,22 @@ public:
     XmlChangeset changeset;
     changeset.loadChangeset("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc");
     changeset.loadChangeset("test-files/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc");
+
+    QString expectedText = FileUtils::readFully(_inputPath + "ChangesetMergeExpected.osc");
+
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
+    changeset.calculateChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runXmlChangesetJoinTest2()
+  {
+    QList<QString> changesets;
+    changesets.push_back(FileUtils::readFully("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"));
+    changesets.push_back(FileUtils::readFully("test-files/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"));
+
+    XmlChangeset changeset(changesets);
 
     QString expectedText = FileUtils::readFully(_inputPath + "ChangesetMergeExpected.osc");
 
@@ -348,6 +381,55 @@ public:
     CPPUNIT_ASSERT_EQUAL(1L, last._id.getId());
     CPPUNIT_ASSERT_EQUAL(ElementType::Way, last._id.getType().getEnum());
     CPPUNIT_ASSERT_EQUAL(ChangesetType::TypeDelete, last._type);
+  }
+
+  void runXmlChangesetFixChangesetTest()
+  {
+    QString changesetFix =
+    "<?xml version='1.0' encoding='UTF-8'?>"
+    "<osm version='0.6' generator='hootenanny'>"
+    "    <node id='1' version='2' lat='38.8549321261880536' lon='-104.8979050333482093' timestamp=''/>"
+    "    <node id='2' version='2' lat='38.8549524185660573' lon='-104.8987388916486054' timestamp=''/>"
+    "    <way id='2' version='2' timestamp=''>"
+    "        <nd ref='33'/>"
+    "        <nd ref='8'/>"
+    "        <nd ref='7'/>"
+    "        <tag k='note' v='Updated Note 3'/>"
+    "        <tag k='highway' v='primary'/>"
+    "    </way>"
+    "    <way id='4' version='2' timestamp=''>"
+    "        <nd ref='35'/>"
+    "        <nd ref='34'/>"
+    "        <nd ref='33'/>"
+    "        <nd ref='30'/>"
+    "        <tag k='note' v='Updated Note 3'/>"
+    "        <tag k='highway' v='primary'/>"
+    "    </way>"
+    "</osm>";
+
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "ToyTestAChangesetPositive.osc");
+    changeset.fixChangeset(changesetFix);
+
+    QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangesetFix.osc");
+
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
+    changeset.calculateChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runXmlChangesetCalculateChangeset()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
+
+    QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangeset1.osc");
+
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
+    changeset.calculateRemainingChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
   }
 };
 

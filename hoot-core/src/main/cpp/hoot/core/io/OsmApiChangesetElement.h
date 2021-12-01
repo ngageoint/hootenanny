@@ -77,8 +77,9 @@ public:
   /**
    * @brief addTag  Add a tag to the element
    * @param tag XML tag with key and value attributes
+   * @return true if the tag was added
    */
-  void addTag(const XmlObject& tag);
+  bool addTag(const XmlObject& tag);
   /**
    * @brief getTagK/V
    * @param index
@@ -86,6 +87,12 @@ public:
    */
   QString getTagKey(int index) const;
   QString getTagValue(int index) const;
+  /**
+   * @brief setTag Set a tag that already exists and adds it if it doesn't
+   * @param tag XML tag with key and value attributes
+   * @return true if tag was added or updated
+   */
+  bool setTag(const XmlObject& tag);
   /**
    * @brief getTagCount
    * @return Number of tags in this element

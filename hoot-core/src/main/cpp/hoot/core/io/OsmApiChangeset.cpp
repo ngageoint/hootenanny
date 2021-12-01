@@ -875,7 +875,7 @@ bool XmlChangeset::addRelations(const ChangesetInfoPtr& changeset, ChangesetType
 {
   bool added = false;
   //  Iterate all of the ways of "type" in the changeset
-  for (ChangesetElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
+  for (auto it = _relations[type].begin(); it != _relations[type].end(); ++it)
   {
     //  Add relations up until the max changeset
     if (changeset->size() < (size_t)_maxPushSize)
@@ -1729,20 +1729,14 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap
         //  Change was made
         success = true;
       }
-      //  Update the tags if they are missing
-      for (int i = 0; i < element->getTagCount(); ++i)
-      {
-        QString key = element->getTagKey(i);
-        if (tags.contains(key))
-          tags.remove(key);
-      }
-      //  Add in any tags that are missing
+      //  Update tags or add in any tags that are missing
       for (QMap<QString, QString>::iterator it = tags.begin(); it != tags.end(); ++it)
       {
         QXmlStreamAttributes attributes;
         attributes.append("", "k", it.key());
         attributes.append("", "v", it.value());
-        element->addTag(XmlObject("tag", attributes));
+        //  setTag will update or add the tag
+        element->setTag(XmlObject("tag", attributes));
       }
     }
   }
@@ -1851,15 +1845,15 @@ void XmlChangeset::failNode(long id, bool beforeSend)
     if (_nodeIdsToWays.find(id) != _nodeIdsToWays.end())
     {
       const set<long>& parents = _nodeIdsToWays[id];
-      for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-        failWay(*it, beforeSend);
+      for (auto wayId : parents)
+        failWay(wayId, beforeSend);
     }
     //  Fail parent relations
     if (_nodeIdsToRelations.find(id) != _nodeIdsToRelations.end())
     {
       const set<long>& parents = _nodeIdsToRelations[id];
-      for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-        failRelation(*it, beforeSend);
+      for (auto relationId : parents)
+        failRelation(relationId, beforeSend);
     }
   }
 }
@@ -1884,8 +1878,8 @@ void XmlChangeset::failWay(long id, bool beforeSend)
       _wayIdsToRelations.find(id) != _wayIdsToRelations.end())
   {
     const set<long>& parents = _wayIdsToRelations[id];
-    for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-      failRelation(*it, beforeSend);
+    for (auto relationId : parents)
+      failRelation(relationId, beforeSend);
   }
 }
 
@@ -1909,8 +1903,8 @@ void XmlChangeset::failRelation(long id, bool beforeSend)
       _relationIdsToRelations.find(id) != _relationIdsToRelations.end())
   {
     const set<long>& parents = _relationIdsToRelations[id];
-    for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-      failRelation(*it, beforeSend);
+    for (auto relationId : parents)
+      failRelation(relationId, beforeSend);
   }
   LOG_TRACE("Failed relation (" << id << ")");
 }
