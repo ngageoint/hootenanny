@@ -29,6 +29,7 @@
 
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 namespace hoot
 {
@@ -41,7 +42,7 @@ class PartialOsmMapWriter : public OsmMapWriter, public ElementOutputStream
 {
 public:
 
-  PartialOsmMapWriter() = default;
+  PartialOsmMapWriter();
   virtual ~PartialOsmMapWriter() = default;
 
   virtual void initializePartial() { }
@@ -71,6 +72,26 @@ public:
   virtual void writePartial(const ConstRelationPtr& r) = 0;
 
   void writeElement(ElementPtr& element) override;
+
+  /**
+   * These tags can be included to allow Osmosis to read the files. There is no useful
+   * information in the tags.
+   */
+  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds(includeIds); }
+  void setIncludeHootInfo(bool includeInfo) { _addExportTagsVisitor.setIncludeHootInfo(includeInfo); }
+  void setIncludePid(bool includePid) { _includePid = includePid; }
+  bool getSortSourceImageryTag() const { return _sortSourceImageryTag; }
+  void setSortSourceImageryTag(bool sort) { _sortSourceImageryTag = sort; }
+
+protected:
+
+  bool _includeDebug;
+  bool _includePid;
+  bool _sortSourceImageryTag;
+  AddExportTagsVisitor _addExportTagsVisitor;
+
+  Tags _getElementTags(const ConstElementPtr& element);
+
 };
 
 }

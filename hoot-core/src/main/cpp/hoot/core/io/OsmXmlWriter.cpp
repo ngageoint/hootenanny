@@ -55,19 +55,16 @@ int OsmXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
-OsmXmlWriter::OsmXmlWriter() :
-_formatXml(ConfigOptions().getWriterXmlFormat()),
-_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-_includePointInWays(false),
-_includeCompatibilityTags(true),
-_includePid(false),
-_sortTags(ConfigOptions().getWriterSortTagsByKey()),
-_osmSchema(ConfigOptions().getMapWriterSchema()),
-_precision(ConfigOptions().getWriterPrecision()),
-_encodingErrorCount(0),
-_numWritten(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-_sortSourceImageryTag(ConfigOptions().getWriterSortTagsImagerySource())
+OsmXmlWriter::OsmXmlWriter()
+  : _formatXml(ConfigOptions().getWriterXmlFormat()),
+    _includePointInWays(false),
+    _includeCompatibilityTags(true),
+    _sortTags(ConfigOptions().getWriterSortTagsByKey()),
+    _osmSchema(ConfigOptions().getMapWriterSchema()),
+    _precision(ConfigOptions().getWriterPrecision()),
+    _encodingErrorCount(0),
+    _numWritten(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
 }
 
@@ -120,9 +117,7 @@ void OsmXmlWriter::open(const QString& url)
   f->setFileName(url);
   _fp = f;
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
-  {
     throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
-  }
 
   _initWriter();
 
@@ -155,9 +150,8 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
   std::shared_ptr<QBuffer> buf = std::make_shared<QBuffer>();
   writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
-  {
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));
-  }
+
   writer.write(map);
   return QString::fromUtf8(buf->data(), buf->size());
 }
@@ -183,9 +177,7 @@ void OsmXmlWriter::_initWriter()
   _writer->setCodec("UTF-8");
 
   if (_formatXml)
-  {
     _writer->setAutoFormatting(true);
-  }
 
   _writer->writeStartDocument();
 
@@ -203,16 +195,12 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 void OsmXmlWriter::write(const ConstOsmMapPtr& map)
 {
   if (!_fp.get() || _fp->isWritable() == false)
-  {
     throw HootException("Please open the file before attempting to write.");
-  }
 
   //Some code paths don't call the open method before invoking this write method, so make sure the
   //writer has been initialized.
   if (!_writer.get())
-  {
     _initWriter();
-  }
 
   //  Debug maps get a bunch of debug settings setup here
   LOG_VART(getIsDebugMap());
@@ -224,9 +212,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
 
   int epsg = map->getProjection()->GetEPSGGeogCS();
   if (epsg > -1)
-  {
     _writer->writeAttribute("srs", QString("+epsg:%1").arg(epsg));
-  }
   else
   {
     char *wkt;
@@ -236,9 +222,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   }
 
   if (_osmSchema != "")
-  {
     _writer->writeAttribute("schema", _osmSchema);
-  }
 
   //  Osmosis chokes on the bounds being written at the end of the file, so write it first
   const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
@@ -258,9 +242,8 @@ void OsmXmlWriter::_writeMetadata(const Element* e) const
     _writer->writeAttribute("timestamp", DateTimeUtils::toTimeString(e->getTimestamp()));
     long version = e->getVersion();
     if (version == ElementData::VERSION_EMPTY)
-    {
       version = 1;
-    }
+
     _writer->writeAttribute("version", QString::number(version));
   }
   else
@@ -268,78 +251,32 @@ void OsmXmlWriter::_writeMetadata(const Element* e) const
     // This comparison seems to be still unequal when I set an element's timestamp to
     // ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
-    {
       _writer->writeAttribute("timestamp", DateTimeUtils::toTimeString(e->getTimestamp()));
-    }
     if (e->getVersion() != ElementData::VERSION_EMPTY)
-    {
       _writer->writeAttribute("version", QString::number(e->getVersion()));
-    }
   }
-  if (e->getChangeset() != ElementData::CHANGESET_EMPTY &&
-      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset.
-  {
+  //  Negative IDs are considered "new" elements and shouldn't have a changeset.
+  if (e->getChangeset() != ElementData::CHANGESET_EMPTY && e->getId() > 0)
     _writer->writeAttribute("changeset", QString::number(e->getChangeset()));
-  }
   if (e->getUser() != ElementData::USER_EMPTY)
-  {
     _writer->writeAttribute("user", e->getUser());
-  }
   if (e->getUid() != ElementData::UID_EMPTY)
-  {
     _writer->writeAttribute("uid", QString::number(e->getUid()));
-  }
 }
 
 void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 {
-  //  Tag order is important here, current tags first and then add export tags
-  Tags tags = element->getTags();
-  //  Rather than cloning the element, get the export tags from the visitor
-  tags.add(_addExportTagsVisitor.getExportTags(element));
-
-  const ElementType type = element->getElementType();
-  assert(type != ElementType::Unknown);
-
-  if (type == ElementType::Relation)
-  {
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-    if (relation->getType() != "")
-      tags.insert("type", removeInvalidCharacters(relation->getType()));
-  }
-
-  if (type == ElementType::Way)
-  {
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-    //  Output the PID as a tag if desired for debugging purposes
-    if (_includePid && way->hasPid())
-      tags.insert(MetadataTags::HootSplitParentId(), QString("%1").arg(way->getPid()));
-    //  Output the node count tag if desired for debugging purposes
-    if (_includeDebug)
-      tags.insert(MetadataTags::HootWayNodeCount(), QString("%1").arg(way->getNodeCount()));
-  }
+  //  Get the tags to write
+  Tags tags = _getElementTags(element);
 
   //  Sort the keys for output
   QList<QString> keys = tags.keys();
   if (_sortTags)
     keys.sort();
 
-  //  Sort the `source:imagery` value for output
-  if (_sortSourceImageryTag && keys.contains(MetadataTags::SourceImagery()))
-  {
-    QString v = tags.get(MetadataTags::SourceImagery());
-    if (v.contains(";"))
-    {
-      QStringList values = v.split(";");
-      values.sort();
-      tags.set(MetadataTags::SourceImagery(), values.join(";"));
-    }
-  }
-
   //  Write out the tags with their key/value pairs
-  for (QList<QString>::iterator it = keys.begin(); it != keys.end(); ++it)
+  for (const auto& key : keys)
   {
-    QString key = *it;
     QString val = tags.get(key).trimmed();
     if (!val.isEmpty())
     {
@@ -357,10 +294,8 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
 {
   QList<long> nids;
   const NodeMap& nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
-  {
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
     nids.append(it->first);
-  }
 
   // Sort the values to give consistent results.
   if (nids.size() > 100000)
@@ -368,20 +303,16 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
     LOG_INFO("Sorting nodes...");
   }
   qSort(nids.begin(), nids.end(), qLess<long>());
-  for (int i = 0; i < nids.size(); i++)
-  {
-    writePartial(map->getNode(nids[i]));
-  }
+  for (auto nid : nids)
+    writePartial(map->getNode(nid));
 }
 
 void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
 {
   QList<long> wids;
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
+  for (auto it = ways.begin(); it != ways.end(); ++it)
     wids.append(it->first);
-  }
 
   // sort the values to give consistent results.
   if (wids.size() > 100000)
@@ -389,18 +320,14 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
     LOG_INFO("Sorting ways...");
   }
   qSort(wids.begin(), wids.end(), qLess<long>());
-  for (int i = 0; i < wids.size(); i++)
+  for (auto wid : wids)
   {
     //I'm not really sure how to reconcile the duplicated code between these two versions of
     //partial way writing.
     if (_includePointInWays)
-    {
-      _writePartialIncludePoints(map->getWay(wids[i]), map);
-    }
+      _writePartialIncludePoints(map->getWay(wid), map);
     else
-    {
-      writePartial(map->getWay(wids[i]));
-    }
+      writePartial(map->getWay(wid));
   }
 }
 
@@ -408,10 +335,8 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
 {
   QList<long> rids;
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
+  for (auto it = relations.begin(); it != relations.end(); ++it)
     rids.append(it->first);
-  }
 
   // sort the values to give consistent results.
   if (rids.size() > 100000)
@@ -419,10 +344,8 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
     LOG_INFO("Sorting relations...");
   }
   qSort(rids.begin(), rids.end(), qLess<long>());
-  for (int i = 0; i < rids.size(); i++)
-  {
-    writePartial(map->getRelation(rids[i]));
-  }
+  for (auto rid : rids)
+    writePartial(map->getRelation(rid));
 }
 
 void OsmXmlWriter::_writeBounds(const Envelope& bounds) const
@@ -476,11 +399,10 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   _writeMetadata(w.get());
 
-  for (size_t j = 0; j < w->getNodeCount(); j++)
+  for (auto nid : w->getNodeIds())
   {
     _writer->writeStartElement("nd");
-    _writer->writeAttribute("ref", QString::number(w->getNodeId(j)));
-    const long nid = w->getNodeId(j);
+    _writer->writeAttribute("ref", QString::number(nid));
     if (_includePointInWays)
     {
       ConstNodePtr n = map->getNode(nid);
@@ -492,10 +414,10 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   const Tags& tags = w->getTags();
 
-  for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    QString key = tit.key();
-    QString val = tit.value().trimmed();
+    QString key = it.key();
+    QString val = it.value().trimmed();
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
@@ -513,9 +435,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   LOG_TRACE("Writing " << w->getElementId() << "...");
 
   if (_includePointInWays)
-  {
     throw HootException("Adding points to way output is not supported in streaming output.");
-  }
 
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
@@ -523,10 +443,10 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
   _writeMetadata(w.get());
 
-  for (size_t j = 0; j < w->getNodeCount(); j++)
+  for (auto nid : w->getNodeIds())
   {
     _writer->writeStartElement("nd");
-    _writer->writeAttribute("ref", QString::number(w->getNodeId(j)));
+    _writer->writeAttribute("ref", QString::number(nid));
     _writer->writeEndElement();
   }
 
@@ -553,13 +473,12 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _writeMetadata(r.get());
 
   const vector<RelationData::Entry>& members = r->getMembers();
-  for (size_t j = 0; j < members.size(); j++)
+  for (const auto& member : members)
   {
-    const RelationData::Entry& e = members[j];
     _writer->writeStartElement("member");
-    _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
-    _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.getRole()));
+    _writer->writeAttribute("type", _typeName(member.getElementId().getType()));
+    _writer->writeAttribute("ref", QString::number(member.getElementId().getId()));
+    _writer->writeAttribute("role", removeInvalidCharacters(member.getRole()));
     _writer->writeEndElement();
   }
 
@@ -585,7 +504,7 @@ void OsmXmlWriter::_overrideDebugSettings()
   // include circular error, text status and debug
   _addExportTagsVisitor.overrideDebugSettings();
   //  Include parent ID tag
-  _includePid = true;
+  setIncludePid(true);
   //  Sort the tags by key
   _sortTags = true;
 }

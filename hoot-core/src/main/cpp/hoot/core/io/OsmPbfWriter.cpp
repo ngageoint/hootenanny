@@ -75,8 +75,8 @@ public:
   PrimitiveBlock primitiveBlock;
 };
 
-OsmPbfWriter::OsmPbfWriter() :
-_d(std::make_shared<OsmPbfWriterData>())
+OsmPbfWriter::OsmPbfWriter()
+  : _d(std::make_shared<OsmPbfWriterData>())
 {
   _dn = nullptr;
   _lonOffset = 0.0;
@@ -134,9 +134,8 @@ int OsmPbfWriter::_convertString(const QString& s)
 char* OsmPbfWriter::_getBuffer(size_t size)
 {
   if (_buffer.size() < size)
-  {
     _buffer.resize(size);
-  }
+
   // is this safe? question me in case of crash.
   return (char*)_buffer.data();
 }
@@ -145,9 +144,7 @@ void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
 {
   // make sure we have enough room for deflation plus a little head room.
   if (_deflateBuffer.size() < rawSize + 1024)
-  {
     _deflateBuffer.resize(rawSize + 1024);
-  }
 
   z_stream strm;
   strm.zalloc = Z_NULL;
@@ -161,15 +158,11 @@ void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
 
   int result = deflate(&strm, Z_FINISH);
   if (result != Z_STREAM_END)
-  {
     throw HootException(QString("Error deflating zlib stream. %1").arg(result));
-  }
 
   result = deflateEnd(&strm);
   if (result != Z_OK)
-  {
     throw HootException(QString("Error freeing deflate stream. %1").arg(result));
-  }
 
   _deflateSize = strm.total_out;
 }
@@ -190,9 +183,8 @@ void OsmPbfWriter::_initBlob()
   _d->primitiveBlock.Clear();
   // if the granularity isn't the default.
   if (_granularity != 100)
-  {
     _d->primitiveBlock.set_granularity(_granularity);
-  }
+
   _d->primitiveBlock.mutable_stringtable()->add_s("");
   _lastId = 0;
   _lastLon = 0;
@@ -224,9 +216,8 @@ void OsmPbfWriter::_open(const QString& url)
   LOG_TRACE("Opening url: " << url);
   _openStream = std::make_shared<std::fstream>(url.toUtf8().constData(), ios::out | ios::binary);
   if (_openStream->good() == false)
-  {
     throw HootException(QString("Error opening for writing: %1").arg(url));
-  }
+
   _out = _openStream.get();
   _needToCloseInput = true;
 }
@@ -244,9 +235,8 @@ void OsmPbfWriter::close()
   {
     LOG_DEBUG("Closing PBF writer...");
     if (_openStream.get())
-    {
       _openStream->close();
-    }
+
     _needToCloseInput = false;
   }
 }
@@ -300,9 +290,7 @@ void OsmPbfWriter::write(const ConstOsmMapPtr& map, const QString& path)
   fstream output(path.toUtf8().constData(), ios::out | ios::binary);
 
   if (output.good() == false)
-  {
     throw HootException(QString("Error opening for writing: %1").arg(path));
-  }
 
   write(map, &output);
 }
@@ -373,14 +361,13 @@ void OsmPbfWriter::_writeMap()
   const NodeMap& nodes = _map->getNodes();
   vector<long> nids;
   nids.reserve(nodes.size());
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
-  {
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
     nids.push_back((it->second)->getId());
-  }
+
   sort(nids.begin(), nids.end());
-  for (size_t i = 0; i < nids.size(); i++)
+  for (auto nid : nids)
   {
-    const ConstNodePtr& n = _map->getNode(nids[i]);
+    const ConstNodePtr& n = _map->getNode(nid);
     _writeNodeDense(n);
 
     if (_enablePbFlushing && _tick % 100000 == 0 &&
@@ -395,22 +382,19 @@ void OsmPbfWriter::_writeMap()
   vector<long> wids;
   wids.reserve(ways.size());
 
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    const std::shared_ptr<const hoot::Way>& w = it->second;
-    wids.push_back(w->getId());
-  }
+  for (auto it = ways.begin(); it != ways.end(); ++it)
+    wids.push_back(it->second->getId());
+
   sort(wids.begin(), wids.end());
 
-  for (size_t i = 0; i < wids.size(); i++)
+  for (auto wid : wids)
   {
-    const std::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
+    const std::shared_ptr<const hoot::Way>& w = _map->getWay(wid);
     _writeWay(w);
 
     if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
-    {
       _writePrimitiveBlock();
-    }
+
     _tick++;
   }
 
@@ -419,22 +403,19 @@ void OsmPbfWriter::_writeMap()
   vector<long> rids;
   rids.reserve(relations.size());
 
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    const ConstRelationPtr& r = it->second;
-    rids.push_back(r->getId());
-  }
+  for (auto it = relations.begin(); it != relations.end(); ++it)
+    rids.push_back(it->second->getId());
+
   sort(rids.begin(), rids.end());
 
-  for (size_t i = 0; i < rids.size(); i++)
+  for (auto rid : rids)
   {
-    const ConstRelationPtr& r = _map->getRelation(rids[i]);
+    const ConstRelationPtr& r = _map->getRelation(rid);
     _writeRelation(r);
 
     if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
-    {
       _writePrimitiveBlock();
-    }
+
     _tick++;
   }
 }
@@ -446,12 +427,9 @@ void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 
   _elementsWritten++;
   if (_pg == nullptr)
-  {
     _pg = _d->primitiveBlock.add_primitivegroup();
-  }
 
-  ::google::protobuf::RepeatedPtrField< ::hoot::pb::Node >* nodes =
-    _pg->mutable_nodes();
+  google::protobuf::RepeatedPtrField<hoot::pb::Node>* nodes = _pg->mutable_nodes();
 
   _dirty = true;
 
@@ -461,35 +439,15 @@ void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
   newNode->set_lon(_convertLon(n->getX()));
   newNode->set_lat(_convertLat(n->getY()));
 
-  const Tags& tags = n->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  Tags tags = _getElementTags(n);
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString& key = it.key();
     const QString& value = it.value();
-    int kid = _convertString(key);
-    int vid = _convertString(value);
     if (!value.isEmpty())
     {
-      newNode->add_keys(kid);
-      newNode->add_vals(vid);
-    }
-  }
-
-  // if there are tags on the node then record the CE. CE isn't used as part of a way
-  // at this point. Instead the way records the CE for the entire way. No need to waste disk.
-  if (n->getTags().getNonDebugCount() > 0)
-  {
-    int kid = _convertString(MetadataTags::ErrorCircular());
-    int vid = _convertString(QString::number(n->getCircularError()));
-    newNode->add_keys(kid);
-    newNode->add_vals(vid);
-
-    if (n->getStatus() != Status::Invalid)
-    {
-      kid = _convertString(MetadataTags::HootStatus());
-      vid = _convertString(QString::number(n->getStatus().getEnum()));
-      newNode->add_keys(kid);
-      newNode->add_vals(vid);
+      newNode->add_keys(_convertString(key));
+      newNode->add_vals(_convertString(value));
     }
   }
 }
@@ -503,9 +461,7 @@ void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
 
   _elementsWritten++;
   if (_dn == nullptr)
-  {
     _dn = _d->primitiveBlock.add_primitivegroup()->mutable_dense();
-  }
 
   _dirty = true;
 
@@ -527,38 +483,17 @@ void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
   // are encoded in alternating <keyid> <valid>. We use a single stringid of 0 to delimit when the
   // tags of a node ends and the tags of the next node begin. The storage pattern is:
   // ((<keyid> <valid>)* '0' )*
-  const Tags& tags = n->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  Tags tags = _getElementTags(n);
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString& key = it.key();
     const QString& value = it.value().trimmed();
-    int kid = _convertString(key);
-    int vid = _convertString(value);
     if (!value.isEmpty())
     {
-      _dn->add_keys_vals(kid);
-      _dn->add_keys_vals(vid);
+      _dn->add_keys_vals(_convertString(key));
+      _dn->add_keys_vals(_convertString(value));
     }
   }
-
-  // if there are tags on the node then record the CE. CE isn't used as part of a way
-  // at this point. Instead the way records the CE for the entire way. No need to waste disk.
-  if (n->getTags().getNonDebugCount() > 0)
-  {
-    int kid = _convertString(MetadataTags::ErrorCircular());
-    int vid = _convertString(QString::number(n->getCircularError()));
-    _dn->add_keys_vals(kid);
-    _dn->add_keys_vals(vid);
-
-    if (n->getStatus() != Status::Invalid)
-    {
-      kid = _convertString(MetadataTags::HootStatus());
-      vid = _convertString(QString::number(n->getStatus().getEnum()));
-      _dn->add_keys_vals(kid);
-      _dn->add_keys_vals(vid);
-    }
-  }
-
   _dn->add_keys_vals(0);
 }
 
@@ -582,27 +517,20 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
     _d->headerBlock.mutable_bbox()->set_top(env.MaxY);
   }
   else
-  {
     _d->headerBlock.clear_bbox();
-  }
 
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_OSM_SCHEMA_V06);
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_DENSE_NODES);
 
   LOG_VART(sorted);
   if (sorted)
-  {
     _d->headerBlock.mutable_optional_features()->Add()->assign(PBF_SORT_TYPE_THEN_ID);
-  }
+
   LOG_VART(_includeVersion);
   if (_includeVersion)
-  {
     _d->headerBlock.mutable_writingprogram()->assign(HOOT_FULL_VERSION);
-  }
   else
-  {
     _d->headerBlock.mutable_writingprogram()->assign(HOOT_NAME);
-  }
 
   int size = (uint32_t)_d->headerBlock.ByteSizeLong();
   LOG_VART(size);
@@ -622,9 +550,8 @@ void OsmPbfWriter::writePartial(const ConstNodePtr& n)
   _writeNodeDense(n);
 
   if (_enablePbFlushing && _tick % 100000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
-  {
     _writePrimitiveBlock();
-  }
+
   _tick++;
 }
 
@@ -633,9 +560,8 @@ void OsmPbfWriter::writePartial(const ConstWayPtr& w)
   _writeWay(w);
 
   if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
-  {
     _writePrimitiveBlock();
-  }
+
   _tick++;
 }
 
@@ -644,9 +570,8 @@ void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
   _writeRelation(r);
 
   if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
-  {
     _writePrimitiveBlock();
-  }
+
   _tick++;
 }
 
@@ -671,9 +596,7 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
   _elementsWritten++;
 
   if (_pg == nullptr)
-  {
     _pg = _d->primitiveBlock.add_primitivegroup();
-  }
 
   pb::Relation* pbr = _pg->add_relations();
 
@@ -686,51 +609,30 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
   // x_1, x_2-x_1, x_3-x_2, ...).
   long lastId = 0;
   const vector<RelationData::Entry>& entries = r->getMembers();
-  for (size_t i = 0; i < entries.size(); i++)
+  for (const auto& entry : entries)
   {
-    long id = entries[i].getElementId().getId() + _nodeIdDelta;
+    long id = entry.getElementId().getId() + _nodeIdDelta;
     pbr->add_memids(id - lastId);
     lastId = id + _nodeIdDelta;
     pbr->add_types((hoot::pb::Relation_MemberType)
-                   _toRelationMemberType(entries[i].getElementId().getType()));
-    pbr->add_roles_sid(_convertString(entries[i].getRole()));
+                   _toRelationMemberType(entry.getElementId().getType()));
+    pbr->add_roles_sid(_convertString(entry.getRole()));
   }
 
   // From http://wiki.openstreetmap.org/wiki/PBF_Format#Ways_and_Relations
   // Tags are encoded as two parallel arrays, one array of string-id's of the keys, and the other
   // of string-id's of the values.
-  const Tags& tags = r->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  Tags tags = _getElementTags(r);
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString& key = it.key();
     const QString& value = it.value().trimmed();
-    //LOG_VART(key);
-    //LOG_VART(value);
     if (!value.isEmpty())
     {
       pbr->add_keys(_convertString(key));
       pbr->add_vals(_convertString(value));
     }
   }
-  int kid = _convertString(MetadataTags::ErrorCircular());
-  int vid = _convertString(QString::number(r->getCircularError()));
-  pbr->add_keys(kid);
-  pbr->add_vals(vid);
-
-  if (r->getStatus() != Status::Invalid)
-  {
-    kid = _convertString(MetadataTags::HootStatus());
-    vid = _convertString(QString::number(r->getStatus().getEnum()));
-    pbr->add_keys(kid);
-    pbr->add_vals(vid);
-  }
-
-  //don't see anywhere in the pbf spec to store a relation type, so adding it to the tags
-  kid = _convertString(MetadataTags::RelationType());
-  vid = _convertString(r->getType());
-  pbr->add_keys(kid);
-  pbr->add_vals(vid);
-
   _dirty = true;
 }
 
@@ -744,9 +646,7 @@ void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
   _elementsWritten++;
 
   if (_pg == nullptr)
-  {
     _pg = _d->primitiveBlock.add_primitivegroup();
-  }
 
   pb::Way* pbw = _pg->add_ways();
 
@@ -770,17 +670,17 @@ void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
   // x_1, x_2-x_1, x_3-x_2, ...).
   long lastId = 0;
   const std::vector<long>& ids = w->getNodeIds();
-  for (size_t i = 0; i < ids.size(); i++)
+  for (auto id : ids)
   {
-    pbw->add_refs(ids[i] + _nodeIdDelta - lastId);
-    lastId = ids[i] + _nodeIdDelta;
+    pbw->add_refs(id + _nodeIdDelta - lastId);
+    lastId = id + _nodeIdDelta;
   }
 
   // From http://wiki.openstreetmap.org/wiki/PBF_Format#Ways_and_Relations
   // Tags are encoded as two parallel arrays, one array of string-id's of the keys, and the other
   // of string-id's of the values.
-  const Tags& tags = w->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  Tags tags = _getElementTags(w);
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString& key = it.key();
     const QString& value = it.value().trimmed();
@@ -790,21 +690,7 @@ void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
       pbw->add_vals(_convertString(value));
     }
   }
-  int kid = _convertString(MetadataTags::ErrorCircular());
-  int vid = _convertString(QString::number(w->getCircularError()));
-  pbw->add_keys(kid);
-  pbw->add_vals(vid);
-
-  if (w->getStatus() != Status::Invalid)
-  {
-    kid = _convertString(MetadataTags::HootStatus());
-    vid = _convertString(QString::number(w->getStatus().getEnum()));
-    pbw->add_keys(kid);
-    pbw->add_vals(vid);
-  }
-
   _dirty = true;
-
 }
 
 }
