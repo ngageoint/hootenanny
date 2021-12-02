@@ -131,7 +131,7 @@ class ConflateCommand extends ExternalCommand {
         String input2 = input2Type.equalsIgnoreCase("DB") ? HOOTAPI_DB_URL + "/" + params.getInput2() : params.getInput2();
 
         String outputType = params.getOutputType();
-        String output = outputType.equalsIgnoreCase("") ? params.getOutputName() : HOOTAPI_DB_URL + "/" + params.getOutputName();
+        String output = "".equalsIgnoreCase(outputType) ? params.getOutputName() : HOOTAPI_DB_URL + "/" + params.getOutputName();
 
         String stats = "";
         if (params.getCollectStats()) {
