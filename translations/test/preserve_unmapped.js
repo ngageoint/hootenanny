@@ -4,7 +4,7 @@ var assert = require('assert'),
     fs = require('fs'),
     httpMocks = require('node-mocks-http'),
     osmtogeojson = require('osmtogeojson'),
-    DOMParser = new require('xmldom').DOMParser
+    DOMParser = new require('@xmldom/xmldom').DOMParser
     parser = new DOMParser();
 
 var server = require('../TranslationServer.js');
@@ -71,4 +71,3 @@ describe('TranslationServer', function () {
     });
 
 });
-

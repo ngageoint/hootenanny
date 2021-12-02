@@ -49,6 +49,7 @@
 // Standard
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <thread>
 #include <unistd.h>
 
@@ -62,20 +63,20 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-OsmJsonReader::OsmJsonReader() :
-ParallelBoundedApiReader(false, true),
-_defaultStatus(Status::Invalid),
-_useDataSourceIds(true),
-_defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
-_isFile(false),
-_numRead(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
-_isWeb(false),
-_keepImmediatelyConnectedWaysOutsideBounds(
-  ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
-_addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
-_logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
+OsmJsonReader::OsmJsonReader()
+  : ParallelBoundedApiReader(false, true),
+    _defaultStatus(Status::Invalid),
+    _useDataSourceIds(true),
+    _defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
+    _isFile(false),
+    _numRead(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+    _circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
+    _isWeb(false),
+    _keepImmediatelyConnectedWaysOutsideBounds(
+      ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
+    _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
+    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {
 }
 
@@ -133,29 +134,24 @@ void OsmJsonReader::open(const QString& url)
     {
       QString filename = isRelativeUrl ? _sourceUrl.toString() : _sourceUrl.toLocalFile();
       _isFile = true;
-      _file.setFileName(filename);
-      _file.open(QFile::ReadOnly | QFile::Text);
+      _file.open(filename.toStdString().c_str());
+      if (!_file.is_open())
+        throw std::runtime_error("Unable to open JSON file");
     }
     else
-    {
       _isWeb = true;
-    }
     LOG_VARD(_isFile);
     LOG_VARD(_isWeb);
   }
   catch (const std::exception& ex)
   {
-    ostringstream oss;
-    oss << "Exception opening URL (" << url << "): " << ex.what();
-    throw HootException(QString("Exception opening URL (%1): %2").arg(url).arg(ex.what()));
+    throw HootException(QString("Exception opening URL (%1): %2").arg(url, ex.what()));
   }
 }
 
 void OsmJsonReader::_reset()
 {
   _propTree.clear();
-  _results.clear();
-
   _resetIds();
 }
 
@@ -205,32 +201,22 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   _map->appendSource(_url);
   if (_isFile)
   {
-    QTextStream instream(&_file);
-    _results.append(instream.readAll());
+    _loadJSON(_file);
+    _parseOverpassJson();
   }
   else
     _readFromHttp();
-  //  Process all of the result strings
-  for (int i = 0; i < _results.size(); ++i)
-  {
-    // This will throw a hoot exception if JSON is invalid
-    _loadJSON(_results[i]);
-    _parseOverpassJson();
-  }
+
   LOG_VARD(_map->getElementCount());
 
   // See related note in OsmXmlReader::read.
   if (_bounds.get())
   {
     if (!_isFile)
-    {
-      IoUtils::cropToBounds(
-        _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
-    }
+      IoUtils::cropToBounds(_map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
     else
-    {
       IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-    }
+
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
@@ -248,54 +234,47 @@ void OsmJsonReader::_readToMap()
         _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
     }
     else
-    {
       IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-    }
+
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
 
-void OsmJsonReader::_loadJSON(const QString& jsonStr)
+void OsmJsonReader::_loadJSON(std::istream &in_stream)
 {
-  QString json(jsonStr);
-  // Clear out anything that might be hanging around
-  _propTree.clear();
-
-  LOG_TRACE("JSON before cleaning: " << jsonStr.left(100));
-
-  // Handle single or double quotes
-  scrubQuotes(json);
-
-  // Handle IDs
-  scrubBigInts(json);
-
-  LOG_TRACE("JSON after cleaning: " << jsonStr.left(100));
-
-  // Convert string to stringstream
-  stringstream ss(json.toUtf8().constData(), ios::in);
-
-  if (!ss.good())
-  {
-    throw HootException(QString("Error reading from JSON string:\n%1").arg(jsonStr));
-  }
+  if (!in_stream.good())
+    throw HootException("Error reading from JSON stream.\n");
 
   try
   {
-    pt::read_json(ss, _propTree);
+    pt::read_json(in_stream, _propTree);
   }
   catch (const pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
 
-    LOG_DEBUG(json);
-    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
+    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason, line));
   }
   catch (const std::exception& e)
   {
     QString reason = e.what();
     throw HootException("Error parsing JSON " + reason);
   }
+}
+
+void OsmJsonReader::_loadJSON(const QString& jsonStr)
+{
+  // Clear out anything that might be hanging around
+  _propTree.clear();
+
+  // Convert string to stringstream
+  stringstream ss(jsonStr.toUtf8().constData(), ios::in);
+
+  if (!ss.good())
+    throw HootException(QString("Error reading from JSON string:\n%1").arg(jsonStr));
+
+  _loadJSON(ss);
 }
 
 bool OsmJsonReader::isValidJson(const QString& jsonStr)
@@ -329,15 +308,11 @@ OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree& tree)
 
 OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
 {
-  QFile infile(path);
-  if (!infile.open(QFile::ReadOnly | QFile::Text))
-  {
+  ifstream infile(path.toStdString());
+  if (!infile.is_open())
     throw HootException("Unable to read JSON file: " + path);
-  }
 
-  QTextStream instream(&infile);
-  QString jsonStr = instream.readAll();
-  _loadJSON(jsonStr);
+  _loadJSON(infile);
   _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
@@ -369,24 +344,16 @@ void OsmJsonReader::_parseOverpassJson()
 
   // Make a map, and iterate through all of our elements, adding them
   pt::ptree elements = _propTree.get_child("elements");
-  for (pt::ptree::const_iterator elementIt = elements.begin(); elementIt != elements.end();
-       ++elementIt)
+  for (auto elementIt = elements.begin(); elementIt != elements.end(); ++elementIt)
   {
     // Type can be node, way, or relation
     string typeStr = elementIt->second.get("type", string("--"));
-
     if ("node" == typeStr)
-    {
       _parseOverpassNode(elementIt->second);
-    }
     else if ("way" == typeStr)
-    {
       _parseOverpassWay(elementIt->second);
-    }
     else if ("relation" == typeStr)
-    {
       _parseOverpassRelation(elementIt->second);
-    }
     else
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -401,13 +368,11 @@ void OsmJsonReader::_parseOverpassJson()
     }
   }
 
+  // Go back through all child refs and update their IDs with what we remapped them to in case we
+  // parsed their parents before the children the refs point to. If we loaded the original element
+  // IDs, then this step isn't needed and gets skipped.
   if (!_useDataSourceIds)
-  {
-    // Go back through all child refs and update their IDs with what we remapped them to in case we
-    // parsed their parents before the children the refs point to. If we loaded the original element
-    // IDs, then this step isn't needed and gets skipped.
     _updateChildRefs();
-  }
 
   if (!_addChildRefsWhenMissing)
   {
@@ -416,13 +381,9 @@ void OsmJsonReader::_parseOverpassJson()
     // actually existed in the input.
     Log::WarningLevel logLevel;
     if (_logWarningsForMissingElements)
-    {
       logLevel = Log::Warn;
-    }
     else
-    {
       logLevel = Log::Debug;
-    }
     RemoveMissingElementsVisitor visitor(logLevel);
     LOG_INFO("\t" << visitor.getInitStatusMessage());
     _map->visitRw(visitor);
@@ -456,10 +417,8 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
     originalIdMap = _relationIdMap;
   }
 
-  for (QList<long>::const_iterator relationIdItr = relationIdsWithChildrenNotPresent.begin();
-       relationIdItr != relationIdsWithChildrenNotPresent.end(); ++relationIdItr)
+  for (auto relationId : relationIdsWithChildrenNotPresent)
   {
-    const long relationId = *relationIdItr;
     LOG_VART(relationId);
     RelationPtr relation = _map->getRelation(relationId);
     LOG_VART(relation.get());
@@ -467,22 +426,14 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
     {
       QList<long> childIdsNotPresentAtLoad;
       if (childElementType == ElementType::Node)
-      {
         childIdsNotPresentAtLoad = _relationIdsToNodeMemberIdsNotPresent.values(relationId);
-      }
       else if (childElementType == ElementType::Way)
-      {
         childIdsNotPresentAtLoad = _relationIdsToWayMemberIdsNotPresent.values(relationId);
-      }
       else if (childElementType == ElementType::Relation)
-      {
         childIdsNotPresentAtLoad = _relationIdsToRelationMemberIdsNotPresent.values(relationId);
-      }
 
-      for (QList<long>::const_iterator memberIdItr = childIdsNotPresentAtLoad.begin();
-           memberIdItr != childIdsNotPresentAtLoad.end(); ++memberIdItr)
+      for (auto memberId : childIdsNotPresentAtLoad)
       {
-        const long memberId = *memberIdItr;
         LOG_VART(memberId);
         ElementId idToReplace = ElementId(childElementType, memberId);
         LOG_VART(idToReplace);
@@ -490,7 +441,7 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
         LOG_VART(relation->contains(idToReplace));
         if (relation->getElementId() != idToReplace && relation->contains(idToReplace))
         {
-          QHash<long, long>::const_iterator remappedMemberIdItr = originalIdMap.find(memberId);
+          auto remappedMemberIdItr = originalIdMap.find(memberId);
           LOG_VART(remappedMemberIdItr.value());
           if (remappedMemberIdItr != originalIdMap.end() && remappedMemberIdItr.value() != memberId)
           {
@@ -508,7 +459,7 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
 void OsmJsonReader::_updateWayChildRefs()
 {
   const QList<long> wayIdsWithWayNodesNotPresent = _wayIdsToWayNodeIdsNotPresent.keys();
-  for (QList<long>::const_iterator wayIdItr = wayIdsWithWayNodesNotPresent.begin();
+  for (auto wayIdItr = wayIdsWithWayNodesNotPresent.begin();
        wayIdItr != wayIdsWithWayNodesNotPresent.end(); ++wayIdItr)
   {
     const long wayId = *wayIdItr;
@@ -519,14 +470,14 @@ void OsmJsonReader::_updateWayChildRefs()
     if (way)
     {
       const QList<long> wayNodeIdsNotPresentAtLoad = _wayIdsToWayNodeIdsNotPresent.values(wayId);
-      for (QList<long>::const_iterator wayNodeIdItr = wayNodeIdsNotPresentAtLoad.begin();
+      for (auto wayNodeIdItr = wayNodeIdsNotPresentAtLoad.begin();
            wayNodeIdItr != wayNodeIdsNotPresentAtLoad.end(); ++wayNodeIdItr)
       {
         const long wayNodeId = *wayNodeIdItr;
         LOG_VART(wayNodeId);
         if (way->containsNodeId(wayNodeId))
         {
-          QHash<long, long>::const_iterator remappedNodeIdItr = _nodeIdMap.find(wayNodeId);
+          auto remappedNodeIdItr = _nodeIdMap.find(wayNodeId);
           LOG_VART(remappedNodeIdItr.value());
           if (remappedNodeIdItr != _nodeIdMap.end() && remappedNodeIdItr.value() != wayNodeId)
           {
@@ -729,16 +680,14 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
       {
         // If we're not using source element IDs, check to see if we've already mapped this node ID
         // to a new ID. If so, we'll use that ID instead.
-        QHash<long, long>::const_iterator wayNodeIdItr = _nodeIdMap.find(wayNodeId);
+        auto wayNodeIdItr = _nodeIdMap.find(wayNodeId);
         if (wayNodeIdItr != _nodeIdMap.end())
         {
           wayNodeIdToUse = wayNodeIdItr.value();
           LOG_TRACE("Retrieved mapped way node ID: " << wayNodeIdToUse << " for ID: " << wayNodeId);
         }
         else
-        {
           _wayIdsToWayNodeIdsNotPresent.insertMulti(newId, wayNodeIdToUse);
-        }
       }
 
       LOG_TRACE("Adding way node: " << wayNodeIdToUse << "...");
@@ -856,38 +805,32 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       {
         if (!_useDataSourceIds)
         {
-          QHash<long, long>::const_iterator nodeMemberIdItr = _nodeIdMap.find(refId);
+          auto nodeMemberIdItr = _nodeIdMap.find(refId);
           if (nodeMemberIdItr != _nodeIdMap.end())
           {
             refIdToUse = nodeMemberIdItr.value();
             LOG_TRACE("Retrieved mapped node member ID: " << refIdToUse << " for ID: " << refId);
           }
           else
-          {
             _relationIdsToNodeMemberIdsNotPresent.insertMulti(newId, refIdToUse);
-          }
         }
       }
       else if (typeStr == "way")
       {
         if (!_useDataSourceIds)
         {
-          QHash<long, long>::const_iterator wayMemberIdItr = _wayIdMap.find(refId);
+          auto wayMemberIdItr = _wayIdMap.find(refId);
           if (wayMemberIdItr != _wayIdMap.end())
           {
             refIdToUse = wayMemberIdItr.value();
             LOG_TRACE("Retrieved mapped way member ID: " << refIdToUse << " for ID: " << refId);
           }
           else
-          {
             _relationIdsToWayMemberIdsNotPresent.insertMulti(newId, refIdToUse);
-          }
         }
       }
       else if (typeStr == "relation")
-      {
         refIdToUse = _getRelationId(refId);
-      }
       else
       {
         if (logWarnCount < Log::getWarnMessageLimit())
@@ -948,9 +891,7 @@ long OsmJsonReader::_getRelationId(long fileId)
       _relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
     }
     else
-    {
       newId = _relationIdMap[fileId];
-    }
   }
   return newId;
 }
@@ -961,7 +902,7 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, ElementPtr
   if (item.not_found() != item.find("tags"))
   {
     pt::ptree tags = item.get_child("tags");
-    for (pt::ptree::const_iterator tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
+    for (auto tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
     {
       const QString key = QString::fromStdString(tagIt->first).trimmed();
       const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
@@ -970,49 +911,11 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, ElementPtr
       // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
       // will be used. We're not expecting elements to have more than one CE tag.
       if (_circularErrorTagKeys.contains(key))
-      {
         pElement->setCircularError(Meters(value.toInt()));
-      }
       else if (!value.isEmpty())
-      {
         pElement->setTag(key, value);
-      }
     }
   }
-}
-
-void OsmJsonReader::scrubQuotes(QString& jsonStr)
-{
-  // We allow the use of single quotes, for ease of coding
-  // test strings into c++. Single quotes within string literals
-  // should be escaped as \'
-  // Detect if they are using single quotes or doubles
-  //  "features" is GEOJSON while "elements" comes from overpass
-  if (jsonStr.indexOf("\"features\"", Qt::CaseInsensitive) > -1 ||
-      jsonStr.indexOf("\"elements\"", Qt::CaseInsensitive) > -1)
-    return; // No need to scrub
-  else
-  {
-    // Convert single quotes to double quotes
-    // First change escaped singles
-    jsonStr.replace("\\'", "\"\"\"");
-    // Replace singles with doubles
-    jsonStr.replace("'", "\"");
-    // Revert escaped singles
-    jsonStr.replace("\"\"\"", "'");
-  }
-}
-
-void OsmJsonReader::scrubBigInts(QString& jsonStr)
-{
-  // Boost 1.41 property tree json parser has trouble with
-  // integers bigger than 2^31. So we put quotes around big
-  // numbers, and that makes it all better
-  QRegExp rx1("(\"[^\"]+\"\\s*:\\s*)(-?\\d{8,})");
-  jsonStr.replace(rx1, "\\1\"\\2\"");
-  // see related note in OsmJsonReaderTest::scrubBigIntsTest about changes made to this regex
-  QRegExp rx2("([\\[,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
-  jsonStr.replace(rx2, "\\1\"\\2\"\\3");
 }
 
 void OsmJsonReader::_readFromHttp()
@@ -1049,7 +952,10 @@ void OsmJsonReader::_readFromHttp()
     QString jsonResult;
     //  Get one JSON string at a time
     if (getSingleResult(jsonResult))
-      _results.append(jsonResult);
+    {
+      _loadJSON(jsonResult);
+      _parseOverpassJson();
+    }
     else
       _sleep();
   }

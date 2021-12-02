@@ -16,13 +16,12 @@
         <nd ref="-8"/>
         <nd ref="-5"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
-        <tag k="error:circular" v="15"/>
         <tag k="access" v="{&quot;groups&quot;:[],&quot;users&quot;:[]}"/>
         <tag k="attributes" v="{&quot;item_date&quot;:&quot;2017-10-09T23:45:12.345Z&quot;,&quot;category_id&quot;:&quot;654321&quot;,&quot;asset_id&quot;:&quot;123ABC&quot;}"/>
         <tag k="building" v="yes"/>
-        <tag k="type" v="way"/>
-        <tag k="name" v="Bad Pair"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
+        <tag k="type" v="way"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
@@ -31,14 +30,12 @@
         <nd ref="-4"/>
         <nd ref="-1"/>
         <tag k="REF1" v="Panera"/>
-        <tag k="error:circular" v="15"/>
         <tag k="access" v="{&quot;groups&quot;:[],&quot;users&quot;:[]}"/>
         <tag k="attributes" v="{&quot;item_date&quot;:&quot;2017-10-09T12:34:56.789Z&quot;,&quot;category_id&quot;:&quot;123456&quot;,&quot;asset_id&quot;:&quot;ABC123&quot;}"/>
-        <tag k="alt_name" v="null"/>
         <tag k="building" v="yes"/>
-        <tag k="type" v="way"/>
-        <tag k="name" v="Panera Bread"/>
-        <tag k="item_type" v="[&quot;building&quot;,&quot;restaurant&quot;]"/>
         <tag k="error:circular" v="15"/>
+        <tag k="item_type" v="[&quot;building&quot;,&quot;restaurant&quot;]"/>
+        <tag k="name" v="Panera Bread"/>
+        <tag k="type" v="way"/>
     </way>
 </osm>

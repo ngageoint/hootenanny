@@ -25,7 +25,7 @@ always:
 # builds everything
 build: core ui-build
 
-# This is a bit of misnomer, as it builds core and services. It should be modified to build core and 
+# This is a bit of misnomer, as it builds core and services. It should be modified to build core and
 # the services db only.
 core: makedirs js-make qt-make services-build model-build conf/dictionary/words.sqlite osmapidb \
 	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin
@@ -91,7 +91,7 @@ ifneq (, $(shell command -v ccache))
 endif
 
 check: test
-test: build services-test-all translations-test
+test: build services-test-all translations-test node-export-test
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
 docs: always HOOT_VERSION_FILE services-docs
@@ -101,12 +101,12 @@ docs: always HOOT_VERSION_FILE services-docs
 test-quick: build
 	bin/HootTest $(HOOT_TEST_DIFF) --quick --parallel
 
-test-all-core: services-test-all translations-test
+test-all-core: services-test-all translations-test node-export-test
 	# Don't run services tests at the same time as glacial -- that may stomp
 	# on each other's DB changes.
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
-test-all-no-core: services-test-all translations-test
+test-all-no-core: services-test-all translations-test node-export-test
 	$(MAKE) ui-test ui2x-test
 
 test-all: test-all-no-core
@@ -118,11 +118,10 @@ licenses:
 	scripts/copyright/UpdateAllCopyrightHeaders.sh
 
 translations-test: build
-ifneq ($(shell which mocha),)
 	cd translations; npm install && npm test
-else
-	@echo Skipping mocha tests
-endif
+
+node-export-test: build
+	cd node-export-server; npm install && npm test
 
 # Prepend HOOT_ to all config variables.
 hoot-core/src/main/cpp/hoot/core/HootConfig.h: config.h
@@ -281,7 +280,7 @@ endif
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) translations/config.js
 
-# The older .arff files don't have the precision to recreate the exact model. That is a task for 
+# The older .arff files don't have the precision to recreate the exact model. That is a task for
 # another time.
 ARFFS=$(wildcard conf/models/*.arff.bz2)
 RF_MODELS=$(ARFFS:.arff.bz2=.rf)
@@ -499,7 +498,7 @@ coverage/core/tbs/index.html:
 	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
 	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
-	
+
 coverage/core/tgs/index.html:
 	echo "Generating core tgs code coverage report..."
 	mkdir -p coverage/core/tgs
@@ -507,7 +506,7 @@ coverage/core/tgs/index.html:
 	lcov --capture --ignore-errors source -d tgs/tmp/debug -b tgs/ --output-file coverage/core/tgs/Tgs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tgs/log
 	lcov -r coverage/core/tgs/Tgs.info $(IGNORED) -o coverage/core/tgs/TgsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tgs/log
 	genhtml coverage/core/tgs/TgsTrimmed.info --output-directory coverage/core/tgs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/tgs/log
-	
+
 coverage/core/cmd/index.html:
 	echo "Generating cmd code coverage report..."
 	mkdir -p coverage/core/cmd
@@ -515,7 +514,7 @@ coverage/core/cmd/index.html:
 	lcov --capture --ignore-errors source -d hoot-cmd/tmp/debug -b hoot-cmd/ --output-file coverage/core/cmd/Cmd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/cmd/log
 	lcov -r coverage/core/cmd/Cmd.info $(IGNORED) \*tgs/src\* \*hoot-core/src\* \*hoot-js/src\* -o coverage/core/cmd/CmdTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/cmd/log
 	genhtml coverage/core/cmd/CmdTrimmed.info --output-directory coverage/core/cmd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/cmd/log
-	
+
 coverage/core/js/index.html:
 	echo "Generating core js code coverage report..."
 	mkdir -p coverage/core/js

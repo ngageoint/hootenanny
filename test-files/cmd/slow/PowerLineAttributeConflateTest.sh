@@ -11,6 +11,7 @@ CONFIG="--warn -C Testing.conf"
 source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C AttributeConflation.conf \
+  -D conflate.use.data.source.ids.1="false" -D conflate.use.data.source.ids.2="true" \
   -D uuid.helper.repeatable=true -D match.creators="ScriptMatchCreator,PowerLine.js" \
   -D merger.creators="ScriptMergerCreator" $IN_DIR_2/power-line-1.osm $IN_DIR_2/power-line-2.osm \
   $OUT_DIR/output.osm

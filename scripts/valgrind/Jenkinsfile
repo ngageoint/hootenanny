@@ -75,7 +75,7 @@ pipeline {
         stage("Valgrind Tests") {
             when { expression { return params.Valgrind_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(( \$(nproc) / 2 ))'"
             }
         }
     }
