@@ -33,6 +33,7 @@
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 //  Version must be included last
@@ -80,18 +81,18 @@ _d(std::make_shared<OsmPbfWriterData>())
   _dn = nullptr;
   _lonOffset = 0.0;
   _latOffset = 0.0;
-  _granularity = 100;
+  _granularity = ConfigOptions().getPbfWriterGranularity();
   // Throw a warning if the blob is bigger than this.
   _maxBlobTarget = 32 * 1024 * 1024;
   // If the blob is larger than this then serialize it.
   _minBlobTarget = 15 * 1024 * 1024;
-  _enablePbFlushing = true;
+  _enablePbFlushing = ConfigOptions().getPbfWriterFlushOutput();
   _elementsWritten = 0;
   _nodeIdDelta = 0;
   _relationIdDelta = 0;
   _wayIdDelta = 0;
-  _compressionLevel = -1;
-  _includeVersion = true;
+  _compressionLevel = ConfigOptions().getPbfWriterCompressionLevel();
+  _includeVersion = ConfigOptions().getPbfWriterIncludeVersion();
   _needToCloseInput = false;
 
   GOOGLE_PROTOBUF_VERIFY_VERSION;
