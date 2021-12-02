@@ -81,7 +81,7 @@ _d(std::make_shared<OsmPbfWriterData>())
   _dn = nullptr;
   _lonOffset = 0.0;
   _latOffset = 0.0;
-  _granularity = 100;
+  _granularity = ConfigOptions().getPbfWriterGranularity();
   // Throw a warning if the blob is bigger than this.
   _maxBlobTarget = 32 * 1024 * 1024;
   // If the blob is larger than this then serialize it.
