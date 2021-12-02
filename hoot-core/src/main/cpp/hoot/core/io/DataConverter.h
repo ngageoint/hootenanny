@@ -127,7 +127,7 @@ private:
   /**
    * Sets I/O options for conversions from non-OGR formats
    */
-  void _handleNonOgrOutputTranslationOpts(const QStringList& inputs);
+  void _handleNonOgrOutputTranslationOpts();
 
   /**
    * Add option operations to the options if they aren't already set
