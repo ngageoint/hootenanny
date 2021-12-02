@@ -32,12 +32,13 @@ import hoot.services.models.db.Users;
 
 
 @Component
+public
 class ConflateCommandFactory {
 
-    ConflateCommand build(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) {
+    public ConflateCommand build(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) {
         return new ConflateCommand(jobId, params, debugLevel, caller, user);
     }
-    ConflateCommand build(String jobId, ConflateParams params, String debugLevel, Class<?> caller) {
+    public ConflateCommand build(String jobId, ConflateParams params, String debugLevel, Class<?> caller) {
         return build(jobId, params, debugLevel, caller, null);
     }
 }

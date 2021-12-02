@@ -56,6 +56,9 @@ public class ConflateParams {
     @JsonProperty("OUTPUT_NAME")
     private String outputName;
 
+    @JsonProperty("OUTPUT_TYPE")
+    private String outputType;
+
     @JsonProperty("OUTPUT_FOLDER")
     private Long outputFolder;
 
@@ -143,6 +146,14 @@ public class ConflateParams {
 
     public void setOutputName(String outputName) {
         this.outputName = outputName;
+    }
+
+    public String getOutputType() {
+        return outputType;
+    }
+
+    public void setOutputType(String outputType) {
+        this.outputType = outputType;
     }
 
     public Long getOutputFolder() {
