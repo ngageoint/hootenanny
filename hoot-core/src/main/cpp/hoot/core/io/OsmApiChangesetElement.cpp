@@ -75,7 +75,7 @@ ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* id
   }
 }
 
-void ChangesetElement::addTag(const XmlObject& tag)
+bool ChangesetElement::addTag(const XmlObject& tag)
 {
   //  Make sure that the object is in fact a tag before adding it
   if (tag.first == "tag")
@@ -90,8 +90,44 @@ void ChangesetElement::addTag(const XmlObject& tag)
         value = t.value().toString();
     }
     if (key != "" && value != "")
+    {
       _tags.push_back(std::make_pair(key, value));
+      return true;
+    }
   }
+  return false;
+}
+
+bool ChangesetElement::setTag(const XmlObject& tag)
+{
+  //  Make sure that the object is in fact a tag before adding it
+  if (tag.first == "tag")
+  {
+    QString key;
+    QString value;
+    for (const auto& t : tag.second)
+    {
+      if (t.name() == "k")
+        key = t.value().toString();
+      else if (t.name() == "v")
+        value = t.value().toString();
+    }
+    if (key != "" && value != "")
+    {
+      //  Iterate all of the tags to find the one to update
+      for (auto& t : _tags)
+      {
+        if (t.first == key)
+        {
+          t.second = value;
+          return true;
+        }
+      }
+      //  If the tag doesn't exist add it
+      return addTag(tag);
+    }
+  }
+  return false;
 }
 
 QString ChangesetElement::getTagKey(int index) const
