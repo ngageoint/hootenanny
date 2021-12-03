@@ -227,7 +227,7 @@ RUN $SUDO yum -y install \
 
 RUN $SUDO alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt5 500
 
-ENV PATH=$PATH:$HOOT_HOME\bin
+ENV PATH=$PATH:$HOOT_HOME/bin
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 ENV GDAL_DATA=/usr/share/gdal
 
@@ -248,24 +248,8 @@ RUN $SUDO mv /opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/bin/sudo \
 
 # Configure PostgreSQL
 RUN echo "### Configuring PostgreSQL..."
-
-#RUN $HOOT_HOME/scripts/database/ConfigurePostgresql.sh
 RUN echo "Adding PostgreSQL $POSTGRESQL_VERSION path vars to profile..."
 RUN echo "export PATH=\$PATH:/usr/pgsql-$POSTGRESQL_VERSION/bin" >> ~/.bashrc
-
-#RUN sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" \
-#           /usr/pgsql-$POSTGRESQL_VERSION/bin/postgresql-$POSTGRESQL_VERSION-setup initdb
-ENV DB_NAME=hoot
-ENV DB_USER=hoot
-ENV DB_PASSWORD=hoottest
-ENV DB_HOST=localhost
-ENV DB_PORT=5432
-
-ENV DB_NAME_OSMAPI=osmapi_test
-ENV DB_USER_OSMAPI=hoot
-ENV DB_PASSWORD_OSMAPI=hoottest
-ENV DB_HOST_OSMAPI=localhost
-ENV DB_PORT_OSMAPI=5432
 
 ARG PG_HOME=/usr/pgsql-$POSTGRESQL_VERSION
 
@@ -278,36 +262,70 @@ RUN $SUDO -u postgres $PG_HOME/bin/initdb $PGDATA
 
 ARG PG_HB_CONF=/var/lib/pgsql/$POSTGRESQL_VERSION/data/pg_hba.conf
 RUN $SUDO -u postgres cp $PG_HB_CONF $PG_HB_CONF.orig
-#RUN $SUDO echo "host    all            hoot            127.0.0.1/32            md5" >> $PG_HB_CONF
-#RUN $SUDO echo "host    all            hoot            ::1/128                 md5" >> $PG_HB_CONF
+RUN $SUDO -u postgres sed -i "1ihost    all            hoot            127.0.0.1/32            md5" $PG_HB_CONF
+RUN $SUDO -u postgres sed -i "1ihost    all            hoot            ::1/128                 md5" $PG_HB_CONF
 
 ARG POSTGRES_CONF=/var/lib/pgsql/$POSTGRESQL_VERSION/data/postgresql.conf
 RUN $SUDO -u postgres cp $POSTGRES_CONF $POSTGRES_CONF.orig
-#RUN $SUDO sed -i s/^max_connections/\#max_connections/ $POSTGRES_CONF
-#RUN $SUDO sed -i s/^shared_buffers/\#shared_buffers/ $POSTGRES_CONF
+RUN $SUDO sed -i s/^max_connections/\#max_connections/ $POSTGRES_CONF
+RUN $SUDO sed -i s/^shared_buffers/\#shared_buffers/ $POSTGRES_CONF
 
-# FIXME
-#RUN $SUDO -u postgres bash -c "cat >> $POSTGRES_CONF" <<EOT
-##--------------
-## Hoot Settings
-##--------------
-#max_connections = 1000
-#shared_buffers = 1024MB
-#max_files_per_process = 1000
-#work_mem = 16MB
-#maintenance_work_mem = 256MB
-##checkpoint_segments = 20
-#autovacuum = off
-#EOT
+RUN echo "##--------------" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "## Hoot Settings" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "##--------------" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "max_connections = 1000" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "shared_buffers = 1024MB" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "max_files_per_process = 1000" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "work_mem = 16MB" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "maintenance_work_mem = 256MB" | $SUDO -u postgres tee -a $POSTGRES_CONF
+RUN echo "autovacuum = off" | $SUDO -u postgres tee -a $POSTGRES_CONF
 
-RUN echo "$SUDO -u postgres $PG_HOME/bin/pg_ctl restart -D $PGDATA -s -o '-p $DB_PORT' -w -t 300" >> ~/restart-postgres.sh
+RUN echo "$SUDO -u postgres $PG_HOME/bin/pg_ctl restart -D $PGDATA -s -o '-p 5432' -w -t 300" >> ~/restart-postgres.sh
 RUN chmod +x ~/restart-postgres.sh
 
+# Install Tomcat 8
+RUN echo "### Installing Tomcat8..."
+ARG TOMCAT_HOME=/usr/share/tomcat8
+ARG TOMCAT_LOGS=/var/log/tomcat8
+ARG TOMCAT_CONFIG=/etc/tomcat8
+
+RUN echo "######## Begin ${TOMCAT_NAME} installation ########"
+# Install Tomcat from our package in Hootenanny's dependency repo.
+RUN $SUDO yum install -y tomcat8
+
+# Modify the invoking user to be a part of the tomcat group, so it
+# can write same directories as the tomcat service user.
+RUN $SUDO usermod -a -G tomcat $HOOT_USER
+
+ARG HOOT_CONF=${TOMCAT_CONFIG}/conf.d/hoot.conf
+RUN echo "export GDAL_DATA=/usr/share/gdal" >> $HOOT_CONF
+RUN echo "export HOOT_HOME=$HOOT_HOME" >> $HOOT_CONF
+RUN echo "export HOOT_WORKING_NAME=hootenanny" >> $HOOT_CONF
+RUN echo "export JAVA_HOME=$JAVA_HOME" >> $HOOT_CONF
+RUN echo "export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:$JAVA_HOME/jre/lib/amd64/server:${HOOT_HOME}/lib" >> $HOOT_CONF
+RUN echo "export PATH=${PATH}" >> $HOOT_CONF
+
+RUN echo "Adding Tomcat context path for tile images..."
+RUN $SUDO sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/userfiles\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG}/server.xml
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+RUN rm -rf $HOOT_HOME/userfiles/tmp
+
+# This is defensive!
+# We do this so that Tomcat doesnt. If it does, it screws the permissions up
+RUN mkdir -p $HOOT_HOME/userfiles/tmp
+
+
+# Update bash config
 RUN echo "source /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable" >> ~/.bashrc
 RUN echo "alias cls='clear'" >> ~/.bashrc
 RUN echo "alias la='ls -la'" >> ~/.bashrc
 RUN echo "PS1='\w\$ '" >> ~/.bashrc
+# RUN echo "export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
 
-RUN printf "\n\n*** PLEASE RUN /home/$HOOT_USER/restart-postgres.sh\n and $HOOT_HOME/scripts/database/SetupHootDb.sh to setup the HOOT database!***\n\n\n"
+
+
+RUN printf "\n\n*** PLEASE RUN /home/$HOOT_USER/restart-postgres.sh\n     AND $HOOT_HOME/scripts/database/SetupHootDb.sh" \
+    "TO SETUP THE HOOT DATABASE! ***\n\n\n"
 
 
