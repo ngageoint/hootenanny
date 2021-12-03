@@ -33,6 +33,13 @@
 namespace hoot
 {
 
+PartialOsmMapWriter::PartialOsmMapWriter()
+  : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _includePid(false),
+    _sortSourceImageryTag(ConfigOptions().getWriterSortTagsImagerySource())
+{
+}
+
 void PartialOsmMapWriter::write(const ConstOsmMapPtr& map)
 {
   writePartial(map);
@@ -81,6 +88,48 @@ void PartialOsmMapWriter::writePartial(const ConstElementPtr& e)
 void PartialOsmMapWriter::writeElement(ElementPtr& element)
 {
   writePartial(element);
+}
+
+Tags PartialOsmMapWriter::_getElementTags(const ConstElementPtr& element)
+{
+  //  Tag order is important here, current tags first and then add export tags
+  Tags tags = element->getTags();
+  //  Rather than cloning the element, get the export tags from the visitor
+  tags.add(_addExportTagsVisitor.getExportTags(element));
+
+  const ElementType type = element->getElementType();
+  assert(type != ElementType::Unknown);
+
+  if (type == ElementType::Relation)
+  {
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
+    if (relation->getType() != "")
+      tags.insert("type", relation->getType());
+  }
+
+  if (type == ElementType::Way)
+  {
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+    //  Output the PID as a tag if desired for debugging purposes
+    if (_includePid && way->hasPid())
+      tags.insert(MetadataTags::HootSplitParentId(), QString("%1").arg(way->getPid()));
+    //  Output the node count tag if desired for debugging purposes
+    if (_includeDebug)
+      tags.insert(MetadataTags::HootWayNodeCount(), QString("%1").arg(way->getNodeCount()));
+  }
+
+  //  Sort the `source:imagery` value for output
+  if (_sortSourceImageryTag && tags.contains(MetadataTags::SourceImagery()))
+  {
+    QString v = tags.get(MetadataTags::SourceImagery());
+    if (v.contains(";"))
+    {
+      QStringList values = v.split(";");
+      values.sort();
+      tags.set(MetadataTags::SourceImagery(), values.join(";"));
+    }
+  }
+  return tags;
 }
 
 }

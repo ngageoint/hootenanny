@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
 #include <QXmlDefaultHandler>
@@ -84,16 +83,8 @@ public:
 
   bool getFormatXml() const { return _formatXml; }
 
-  /**
-   * These tags can be included to allow Osmosis to read the files. There is no useful
-   * information in the tags.
-   */
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
-  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds(includeIds); }
-  void setIncludeHootInfo(bool includeInfo)
-  { _addExportTagsVisitor.setIncludeHootInfo(includeInfo); }
-  void setIncludePid(bool includePid) { _includePid = includePid; }
   /**
    * Includes the x/y location of the node with the nd element. This is not standard for OSM
    * and can cause inconsistencies if it isn't updated properly when the file is rewritten, however
@@ -103,19 +94,14 @@ public:
   void setPrecision(int p) { _precision = p; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
-  bool getSortSourceImageryTag() const { return _sortSourceImageryTag; }
-  void setSortSourceImageryTag(bool sort) { _sortSourceImageryTag = sort; }
-
 private:
 
   static int logWarnCount;
 
   bool _formatXml;
 
-  bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
-  bool _includePid;
 
   bool _sortTags;
   QString _osmSchema;
@@ -130,8 +116,6 @@ private:
 
   int _numWritten;
   int _statusUpdateInterval;
-  AddExportTagsVisitor _addExportTagsVisitor;
-  bool _sortSourceImageryTag;
 
   static QString _typeName(ElementType e);
 
