@@ -323,28 +323,32 @@ public class GrailResource {
                 input2 = getOverpassParams.getOutput();
             }
 
-            //check for one (conflate -> osc) or two step (conflate -> osm -> derive changeset -> osc) preference
-            if (DIFFERENTIAL_CHANGESET_TWOSTEP) {
-                String outputOsm = new File(workDir, "diff.osm").getAbsolutePath();
-                ConflateParams conflateParams = new ConflateParams();
-                conflateParams.setConflationCommand(deriveType.toLowerCase().contains("tags") ? "differential-tags" : "differential");
-                conflateParams.setConflationType("Differential");
-                conflateParams.setHoot2(true);
-                conflateParams.setHoot2AdvOptions(reqParams.getAdvancedOptions());
-                conflateParams.setCollectStats(false);
-                conflateParams.setBounds(reqParams.getBounds());
-                conflateParams.setInput1(input1);
-                conflateParams.setInputType1("");
-                conflateParams.setInput2(input2);
-                conflateParams.setInputType2("");
-                conflateParams.setOutputName(outputOsm);
-                conflateParams.setOutputType("");
-                ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, conflateParams, debugLevel, this.getClass());
-                workflow.add(conflateCommand);
-                input2 = outputOsm;
-                grailCommandClass = DeriveChangesetCommand.class;
+            if (deriveType.toLowerCase().startsWith("diff")) {
+                //check for one (conflate -> osc) or two step (conflate -> osm -> derive changeset -> osc) preference
+                if (DIFFERENTIAL_CHANGESET_TWOSTEP) {
+                    String outputOsm = new File(workDir, "diff.osm").getAbsolutePath();
+                    ConflateParams conflateParams = new ConflateParams();
+                    conflateParams.setConflationCommand(deriveType.toLowerCase().contains("tags") ? "differential-tags" : "differential");
+                    conflateParams.setConflationType("Differential");
+                    conflateParams.setHoot2(true);
+                    conflateParams.setHoot2AdvOptions(reqParams.getAdvancedOptions());
+                    conflateParams.setCollectStats(false);
+                    conflateParams.setBounds(reqParams.getBounds());
+                    conflateParams.setInput1(input1);
+                    conflateParams.setInputType1("");
+                    conflateParams.setInput2(input2);
+                    conflateParams.setInputType2("");
+                    conflateParams.setOutputName(outputOsm);
+                    conflateParams.setOutputType("");
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, conflateParams, debugLevel, this.getClass());
+                    workflow.add(conflateCommand);
+                    input2 = outputOsm;
+                    grailCommandClass = DeriveChangesetCommand.class;
+                } else {
+                    grailCommandClass = RunDiffCommand.class;
+                }
             } else {
-                grailCommandClass = deriveType.toLowerCase().startsWith("diff") ? RunDiffCommand.class : DeriveChangesetCommand.class;
+                grailCommandClass = DeriveChangesetCommand.class;
             }
         }
 
