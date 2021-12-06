@@ -63,10 +63,10 @@ private:
   int _maxCacheSize;
 
   void _calculateTDistribution(const cv::Mat &matches, int start, int end,
-    tbs::TDistribution& t);
+                               tbs::TDistribution& t);
 
   double _findSplit(const tbs::TDistribution& t1, const tbs::TDistribution& t2, const cv::Mat& matches,
-    int start, int stop) const;
+                    int start, int stop) const;
 
   /**
    * Verify that the caller provided meaningful ranges. Throws an exception on failure.

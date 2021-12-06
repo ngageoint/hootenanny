@@ -45,16 +45,17 @@ using namespace std;
 namespace hoot
 {
 
-bool sort_sublines(const frechet_subline& i, const frechet_subline& j) { return i.first > j.first; }
+bool sort_sublines(const frechet_subline& i, const frechet_subline& j)
+{ return i.first > j.first; }
 
-FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &way1, const ConstWayPtr &way2, Radians maxAngle)
-  : _matrix(boost::extents[way1->getNodeCount()][way2->getNodeCount()]), _maxAngle(maxAngle)
+FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &way1,
+                                 const ConstWayPtr &way2, Radians maxAngle)
+  : _matrix(boost::extents[way1->getNodeCount()][way2->getNodeCount()]),
+    _maxAngle(maxAngle)
 {
   //  Copy the map and two ways
   _map = std::make_shared<OsmMap>();
-  CopyMapSubsetOp(map,
-               way1->getElementId(),
-               way2->getElementId()).apply(_map);
+  CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(_map);
   _w1 = _map->getWay(way1->getId());
   _w2 = _map->getWay(way2->getId());
   //  Convert both ways to line strings
@@ -64,7 +65,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   LocationOfPoint locatorWay2(_map, _w2);
   for (size_t i = 0; i < _w1->getNodeCount(); i++)
   {
-    Coordinate pointOnWay1 = _map->getNode(_w1->getNodeId(i))->toCoordinate();
+    Coordinate pointOnWay1 = _map->getNode(_w1->getNodeId(static_cast<int>(i)))->toCoordinate();
     WayLocation nearestPointOnWay2 = locatorWay2.locate(pointOnWay1);
     //  Save off the nearest point on way2 and the distance to it
     _locations_w1.push_back(nearestPointOnWay2);
@@ -74,7 +75,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   LocationOfPoint locatorWay1(_map, _w1);
   for (size_t i = 0; i < _w2->getNodeCount(); i++)
   {
-    Coordinate pointOnWay2 = _map->getNode(_w2->getNodeId(i))->toCoordinate();
+    Coordinate pointOnWay2 = _map->getNode(_w2->getNodeId(static_cast<int>(i)))->toCoordinate();
     WayLocation nearestPointOnWay1 = locatorWay1.locate(pointOnWay2);
     //  Save off the nearest point on way1 and the distance to it
     _locations_w2.push_back(nearestPointOnWay1);
@@ -86,8 +87,8 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
 
 frechet_matrix FrechetDistance::calculateMatrix() const
 {
-  int rows = _ls1->getNumPoints();
-  int cols = _ls2->getNumPoints();
+  int rows = static_cast<int>(_ls1->getNumPoints());
+  int cols = static_cast<int>(_ls2->getNumPoints());
   if (rows < 1 || cols < 1)
     throw HootException("FrechetDistance::calculateMatrix - ways not valid sizes");
   frechet_matrix frechet(boost::extents[rows][cols]);
@@ -256,8 +257,8 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
 vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
 {
   vector<frechet_subline> results;
-  int rows = _ls1->getNumPoints();
-  int cols = _ls2->getNumPoints();
+  int rows = static_cast<int>(_ls1->getNumPoints());
+  int cols = static_cast<int>(_ls2->getNumPoints());
   if (rows < 1 || cols < 1)
     throw HootException("FrechetDistance::_calculate - Invalid matrix size");
   //  Get the uninformed Frechet distance as the max

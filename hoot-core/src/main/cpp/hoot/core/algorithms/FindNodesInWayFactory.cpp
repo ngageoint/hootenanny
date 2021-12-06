@@ -49,8 +49,8 @@ void FindNodesInWayFactory::addWay(const ConstWayPtr& w)
   _nodesToSearch.insert(nids.begin(), nids.end());
 }
 
-NodePtr FindNodesInWayFactory::createNode(
-  const OsmMapPtr& map, const Coordinate& c, Status s, double circularError)
+NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map, const Coordinate& c,
+                                          Status s, double circularError)
 {
   LOG_TRACE(
     "Creating node with coord: " << c << ", status: " << s << ", and CE: " << circularError <<
@@ -59,9 +59,8 @@ NodePtr FindNodesInWayFactory::createNode(
   long result = std::numeric_limits<long>::max();
 
   LOG_VART(_nodesToSearch.size());
-  for (set<long>::const_iterator it = _nodesToSearch.begin(); it != _nodesToSearch.end(); ++it)
+  for (auto nid : _nodesToSearch)
   {
-    long nid = *it;
     LOG_VART(nid);
     ConstNodePtr n = map->getNode(nid);
     if (n && n->toCoordinate() == c)

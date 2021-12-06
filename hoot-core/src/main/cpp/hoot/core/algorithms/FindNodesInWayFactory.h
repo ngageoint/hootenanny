@@ -50,8 +50,8 @@ public:
 
   void addWay(const ConstWayPtr& w);
 
-  NodePtr createNode(
-    const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s, double circularError) override;
+  NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
+                     Status s, double circularError) override;
 
 private:
 

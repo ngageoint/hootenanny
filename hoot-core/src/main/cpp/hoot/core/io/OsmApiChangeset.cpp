@@ -747,9 +747,8 @@ bool XmlChangeset::addWay(const ChangesetInfoPtr& changeset, ChangesetType type,
 bool XmlChangeset::addParentWays(const ChangesetInfoPtr& changeset, const set<long>& way_ids)
 {
   bool sendable = true;
-  for (auto it = way_ids.begin(); it != way_ids.end(); ++it)
+  for (auto wayId : way_ids)
   {
-    long wayId = *it;
     //  The relation is either a modify or a delete, add it to the changeset
     if (_ways[ChangesetType::TypeModify].find(wayId) != _ways[ChangesetType::TypeModify].end())
     {
@@ -2551,6 +2550,47 @@ void XmlChangeset::updateRelationsForWaySplit(long old_id, long new_id)
       }
     }
   }
+}
+
+bool XmlChangeset::validateElement(ChangesetType c_type, ElementType::Type e_type, long id, QString element)
+{
+  QString current;
+  if (e_type == ElementType::Node && _allNodes.find(id) != _allNodes.end())
+    current = _allNodes[id]->toString(0, c_type);
+  else if (e_type == ElementType::Way && _allWays.find(id) != _allWays.end())
+    current = _allWays[id]->toString(0, c_type);
+  else if (e_type == ElementType::Relation && _allRelations.find(id) != _allRelations.end())
+    current = _allRelations[id]->toString(0, c_type);
+  else
+    return false;
+  //  Remove <?xml> line
+  QRegularExpression xml("<\\?xml(.*?)>");
+  element.replace(xml, "");
+  current.replace(xml, "");
+  //  Remove <osm> and </osm> lines
+  QRegularExpression osm("</?osm(.*?)>");
+  element.replace(osm, "");
+  current.replace(osm, "");
+  //  Remove changeset="x"
+  //  Remove user="x"
+  //  Remove uid="x"
+  //  Remove timestamp="x"
+  //  Remove visible="true"
+  QRegularExpression attributes(" (changeset|user|uid|timestamp|visible)=\".*?\"");
+  element.replace(attributes, "");
+  current.replace(attributes, "");
+  //  Remove all new lines and tabs
+  QRegularExpression linesTabs("\r|\n|\t");
+  element.replace(linesTabs, "");
+  current.replace(linesTabs, "");
+  //  Remove all space-tabs
+  QRegularExpression spaceTabs(" +<");
+  element.replace(spaceTabs, "<");
+  current.replace(spaceTabs, "<");
+  LOG_VART(current);
+  LOG_VART(element);
+  //  Check if the two modified elements are now equal
+  return element == current;
 }
 
 ChangesetInfo::ChangesetInfo()

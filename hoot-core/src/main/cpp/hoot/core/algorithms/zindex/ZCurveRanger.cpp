@@ -39,11 +39,6 @@ using namespace std;
 namespace hoot
 {
 
-struct range_sort
-{
-  bool operator() (const Range& i, const Range& j) const { return (i < j);}
-} range_object;
-
 ZCurveRanger::ZCurveRanger(const ZValue& zv)
   : _slop(5), //  completely arbitrary.
     _zv(zv)
@@ -77,9 +72,7 @@ vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(const std::shared_ptr<Lo
    // if there aren't any good splits
    vector<std::shared_ptr<LongBox>> result;
    if (splitPoint == -1)
-   {
      result.push_back(box->copy());
-   }
    else
    {
      result.reserve(2);
@@ -111,21 +104,15 @@ vector<std::shared_ptr<LongBox>> ZCurveRanger::decomposeBox(const std::shared_pt
 
   // if there is only one child we're done.
   if (children.size() == 1)
-  {
     result.push_back(children[0]);
-  }
-  // if we've decomposed enough (eh' stinky!)
-  else if (level <= 0)
-  {
+  else if (level <= 0)  // if we've decomposed enough (eh' stinky!)
     result = children;
-  }
-  // if we've still got some decomposition to do
-  else
+  else  // if we've still got some decomposition to do
   {
     for (uint i = 0; i < children.size(); i++)
     {
       vector<std::shared_ptr<LongBox>> aChildren = decomposeBox(children[i], level - 1);
-      result.insert(result.end(),aChildren.begin(),aChildren.end());
+      result.insert(result.end(), aChildren.begin(), aChildren.end());
     }
   }
 
@@ -142,18 +129,15 @@ int ZCurveRanger::getMaxBitColumn(long int v)
   }
 
   if (column >= 100)
-  {
     throw HootException("MaxBitColumn >= 100!");
-  }
+
   return column;
 }
 
 long int ZCurveRanger::getSplitValue(long int v1, long int v2)
 {
   if ((v2 - v1) < 1)
-  {
     return -1;
-  }
 
   long int d = v1 ^ v2;
 
@@ -161,9 +145,8 @@ long int ZCurveRanger::getSplitValue(long int v1, long int v2)
 
   long mask = 0;
   for (int i = 0; i < maxBit; i++)
-  {
     mask = (mask << 1) | 1;
-  }
+
   mask = ~mask;
   return v2 & mask;
 }
@@ -181,9 +164,7 @@ vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
   vector<Range> result;
   result.reserve(boxes.size());
   for (uint i = 0; i < boxes.size(); i++)
-  {
     result.push_back(_toRange(boxes[i]));
-  }
 
   return _condenseRanges(result);
 }
@@ -202,20 +183,18 @@ LongBox ZCurveRanger::_clipBox(const LongBox& box) const
 
 vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r) const
 {
-  std::sort(r.begin(), r.end(), range_object);
+  std::sort(r.begin(), r.end(),
+            [](const Range& i, const Range& j) -> bool
+            { return (i < j); });
 
   vector<Range> result;
   result.push_back(r[0]);
   for (uint i = 1; i < r.size(); i++)
   {
     if ((r[i].getMin() - result[result.size() - 1].getMax()) <= _slop)
-    {
       result[(result.size() - 1)].set(result[(result.size() - 1)].getMin(), r[i].getMax());
-    }
     else
-    {
       result.push_back(r[i]);
-    }
   }
   return result;
 }
@@ -227,18 +206,14 @@ Range ZCurveRanger::_toRange(const std::shared_ptr<LongBox>& box) const
   for (int i = 0; i < _zv.getDimensions(); i++)
   {
     if (i < (int)box->getMin().size())
-    {
       scratch.push_back(box->getMin()[i]);
-    }
   }
   long int min = _zv.calculate(scratch);
 
   for (int i = 0; i < _zv.getDimensions(); i++)
   {
     if (i < (int)box->getMax().size())
-    {
       scratch[i] = box->getMax()[i];
-    }
   }
 
   Range result(min, _zv.calculate(scratch));

@@ -29,7 +29,6 @@
 
 //  Hootenanny
 #include <hoot/core/util/HootNetworkUtils.h>
-
 #include <hoot/core/util/OsmApiUtils.h>
 
 namespace hoot
@@ -453,6 +452,29 @@ bool TimeoutTestServer::respond(HttpConnectionPtr &connection)
   return false;
 }
 
+bool ChangesetValidateUploadTestServer::respond(HttpConnectionPtr& connection)
+{
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request
+  parse_request(connection);
+  //  Determine the response message's HTTP response
+  HttpResponsePtr response;
+  //  Reply with the node information
+  if (_headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(1).toStdString()) != std::string::npos)
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::VALIDATE_NODE_RESPONSE);
+  else
+  {
+    //  Respond with a 404 error
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
+}
+
 /** OsmApiSampleRequestResponse values */
 const char* OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE =
     "<?xml version='1.0' encoding='UTF-8'?>\n"
@@ -701,4 +723,14 @@ const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE
     "  <node old_id='4'/>\n"
     "  <node old_id='5'/>\n"
     "</diffResult>";
+const char* OsmApiSampleRequestResponse::VALIDATE_NODE_RESPONSE =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    "<osm version=\"0.6\" generator=\"OpenStreetMap Server\">\n"
+    "  <node id=\"1\" visible=\"true\" version=\"26\" lat=\"42.7957187\" lon=\"13.5690032\">\n"
+    "    <tag k=\"man_made\" v=\"mast\"/>\n"
+    "    <tag k=\"name\" v=\"Monte Piselli - Radio Subasio 105.5 MHz\"/>\n"
+    "    <tag k=\"tower:construction\" v=\"guyed_lattice\"/>\n"
+    "    <tag k=\"tower:type\" v=\"communication\"/>\n"
+    "  </node>\n"
+    "</osm>";
 }
