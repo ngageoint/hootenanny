@@ -191,7 +191,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   else if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
     _setFromOgrOptions(inputs);
   else if (!_translationScript.trimmed().isEmpty())
-    _handleNonOgrOutputTranslationOpts(inputs);
+    _handleNonOgrOutputTranslationOpts();
 
   //  If the translation direction wasn't specified, try to guess it.
   if (!_translationScript.trimmed().isEmpty() && _translationDirection.isEmpty())
@@ -254,6 +254,24 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
       _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
   }
   currentTask++;
+  //  JSON and GeoJSON files do not share nodes between ways and/or relations so there are duplicates
+  bool jsonType = false;
+  //  Check all files for JSON and GeoJSON file types
+  for (const auto& filepath : inputs)
+  {
+    QString path = filepath.toLower();
+    if (path.endsWith(".json") || path.endsWith(".geojson"))
+    {
+      jsonType = true;
+      break;
+    }
+  }
+  //  Add the ops if they are set in the settings
+  if (jsonType)
+  {
+    _addMergeNearbyNodesOps();
+    _addSimplifyBuildingsOps();
+  }
 
   if (!_convertOps.empty())
   {
@@ -465,29 +483,10 @@ void DataConverter::_setToOgrOptions(const QString& output)
   _convertOps.removeAll(SchemaTranslationVisitor::className());
 }
 
-void DataConverter::_handleNonOgrOutputTranslationOpts(const QStringList& inputs)
+void DataConverter::_handleNonOgrOutputTranslationOpts()
 {
   //  A previous check was done to make sure both a translation and export cols weren't specified
   assert(!_shapeFileColumnsSpecified());
-
-  //  JSON and GeoJSON files do not share nodes between ways and/or relations so there are duplicates
-  bool jsonType = false;
-  //  Check all files for JSON and GeoJSON file types
-  for (const auto& filepath : inputs)
-  {
-    QString path = filepath.toLower();
-    if (path.endsWith(".json") || path.endsWith(".geojson"))
-    {
-      jsonType = true;
-      break;
-    }
-  }
-  //  Add the ops if they are set in the settings
-  if (jsonType)
-  {
-    _addMergeNearbyNodesOps();
-    _addSimplifyBuildingsOps();
-  }
 
   //  For non OGR conversions, the translation must be passed in as an operator.
   if (!_convertOps.contains(SchemaTranslationOp::className()) &&

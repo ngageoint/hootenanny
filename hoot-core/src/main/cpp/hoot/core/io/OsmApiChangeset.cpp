@@ -31,13 +31,11 @@
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-
 #include <hoot/core/util/StringUtils.h>
 
 //  Standard
 #include <algorithm>
 #include <stack>
-
 
 //  Qt
 #include <QRegularExpression>
@@ -666,9 +664,9 @@ bool XmlChangeset::canMoveNode(const ChangesetInfoPtr& source, const ChangesetIn
     if (_nodeIdsToRelations.find(node->id()) != _nodeIdsToRelations.end())
     {
       set<long> relationIds = _nodeIdsToRelations[node->id()];
-      for (set<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
+      for (auto relationId : relationIds)
       {
-        if (!destination->contains(ElementType::Relation, *it))
+        if (!destination->contains(ElementType::Relation, relationId))
           return false;
       }
     }
@@ -676,9 +674,9 @@ bool XmlChangeset::canMoveNode(const ChangesetInfoPtr& source, const ChangesetIn
     if (_nodeIdsToWays.find(node->id()) != _nodeIdsToWays.end())
     {
       set<long> wayIds = _nodeIdsToWays[node->id()];
-      for (set<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+      for (auto wayId : wayIds)
       {
-        if (!destination->contains(ElementType::Way, *it))
+        if (!destination->contains(ElementType::Way, wayId))
           return false;
       }
     }
@@ -827,10 +825,10 @@ bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPt
             if (wayIds.size() > 1)
             {
               //  Iterate all of the parent ways looking for a valid (non-error) way
-              for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+              for (auto wayId : wayIds)
               {
                 //  Ignore this way (hasn't been errored out yet) and look for a valid way
-                if (*it != way->id() && way->getStatus() != ChangesetElement::ElementStatus::Failed)
+                if (wayId != way->id() && way->getStatus() != ChangesetElement::ElementStatus::Failed)
                   allowMove = false;
               }
             }
@@ -856,9 +854,9 @@ bool XmlChangeset::canMoveWay(const ChangesetInfoPtr& source, const ChangesetInf
     if (_wayIdsToRelations.find(way->id()) != _wayIdsToRelations.end())
     {
       set<long> relations = _wayIdsToRelations[way->id()];
-      for (set<long>::iterator it = relations.begin(); it != relations.end(); ++it)
+      for (auto relationId : relations)
       {
-        if (!destination->contains(ElementType::Way, *it))
+        if (!destination->contains(ElementType::Way, relationId))
           return false;
       }
     }
@@ -875,7 +873,7 @@ bool XmlChangeset::addRelations(const ChangesetInfoPtr& changeset, ChangesetType
 {
   bool added = false;
   //  Iterate all of the ways of "type" in the changeset
-  for (ChangesetElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
+  for (auto it = _relations[type].begin(); it != _relations[type].end(); ++it)
   {
     //  Add relations up until the max changeset
     if (changeset->size() < (size_t)_maxPushSize)
@@ -1070,9 +1068,9 @@ bool XmlChangeset::canMoveRelation(const ChangesetInfoPtr& source, const Changes
     if (_relationIdsToRelations.find(relation->id()) != _relationIdsToRelations.end())
     {
       set<long> relations = _relationIdsToRelations[relation->id()];
-      for (auto it = relations.begin(); it != relations.end(); ++it)
+      for (auto relationId : relations)
       {
-        if (!destination->contains(ElementType::Relation, *it))
+        if (!destination->contains(ElementType::Relation, relationId))
           return false;
       }
     }
@@ -1529,15 +1527,15 @@ void XmlChangeset::updateFailedChangeset(const ChangesetInfoPtr& changeset, bool
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
     //  Set the relation's status to failed
-    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
+    for (auto it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
          it != changeset->end(ElementType::Relation, (ChangesetType)current_type); ++it)
       failRelation(*it);
     //  Set the way's status to failed
-    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
+    for (auto it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
          it != changeset->end(ElementType::Way, (ChangesetType)current_type); ++it)
       failWay(*it);
     //  Set the node's status to failed
-    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
+    for (auto it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
          it != changeset->end(ElementType::Node, (ChangesetType)current_type); ++it)
       failNode(*it);
   }
@@ -1729,20 +1727,14 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap
         //  Change was made
         success = true;
       }
-      //  Update the tags if they are missing
-      for (int i = 0; i < element->getTagCount(); ++i)
-      {
-        QString key = element->getTagKey(i);
-        if (tags.contains(key))
-          tags.remove(key);
-      }
-      //  Add in any tags that are missing
-      for (QMap<QString, QString>::iterator it = tags.begin(); it != tags.end(); ++it)
+      //  Update tags or add in any tags that are missing
+      for (auto it = tags.begin(); it != tags.end(); ++it)
       {
         QXmlStreamAttributes attributes;
         attributes.append("", "k", it.key());
         attributes.append("", "v", it.value());
-        element->addTag(XmlObject("tag", attributes));
+        //  setTag will update or add the tag
+        element->setTag(XmlObject("tag", attributes));
       }
     }
   }
@@ -1851,15 +1843,15 @@ void XmlChangeset::failNode(long id, bool beforeSend)
     if (_nodeIdsToWays.find(id) != _nodeIdsToWays.end())
     {
       const set<long>& parents = _nodeIdsToWays[id];
-      for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-        failWay(*it, beforeSend);
+      for (auto wayId : parents)
+        failWay(wayId, beforeSend);
     }
     //  Fail parent relations
     if (_nodeIdsToRelations.find(id) != _nodeIdsToRelations.end())
     {
       const set<long>& parents = _nodeIdsToRelations[id];
-      for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-        failRelation(*it, beforeSend);
+      for (auto relationId : parents)
+        failRelation(relationId, beforeSend);
     }
   }
 }
@@ -1884,8 +1876,8 @@ void XmlChangeset::failWay(long id, bool beforeSend)
       _wayIdsToRelations.find(id) != _wayIdsToRelations.end())
   {
     const set<long>& parents = _wayIdsToRelations[id];
-    for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-      failRelation(*it, beforeSend);
+    for (auto relationId : parents)
+      failRelation(relationId, beforeSend);
   }
 }
 
@@ -1909,8 +1901,8 @@ void XmlChangeset::failRelation(long id, bool beforeSend)
       _relationIdsToRelations.find(id) != _relationIdsToRelations.end())
   {
     const set<long>& parents = _relationIdsToRelations[id];
-    for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
-      failRelation(*it, beforeSend);
+    for (auto relationId : parents)
+      failRelation(relationId, beforeSend);
   }
   LOG_TRACE("Failed relation (" << id << ")");
 }
@@ -2256,6 +2248,7 @@ void XmlChangeset::insertElement(const ChangesetElementPtr& element, ChangesetTy
   if (type == ChangesetType::TypeDelete && elementMap[ChangesetType::TypeModify].find(element->id()) != elementMap[ChangesetType::TypeModify].end())
   {
     //  Ignore the delete because the modify already exists
+    return;
   }
   else if (type == ChangesetType::TypeModify && elementMap[ChangesetType::TypeDelete].find(element->id()) != elementMap[ChangesetType::TypeDelete].end())
   {

@@ -3860,6 +3860,37 @@ Add a tag with the bounding box for each element
 Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
 GeoJSON web sources.
 
+=== pbf.writer.compression.level
+
+* Data Type: int
+* Default Value: `-1`
+
+The compression level to use when writing an OSM PBF. Valid values are -1 to 9. -1 is "default" or equivalent to about 7.
+0 is uncompressed. 1 is fastest. 9 is best compression.
+
+=== pbf.writer.flush.output
+
+* Data Type: bool
+* Default Value: `true`
+
+When `true`, the OSM PBF writer will regularly flush the output.
+
+=== pbf.writer.granularity
+
+* Data Type: int
+* Default Value: `100`
+
+The granularity of the written OSM PBF. The granuarlity is in units of nanodegrees. The larger the value the coarser the data
+stored, but potentially higher compression. The default of 100nm introduces about 8.5mm of error on average and 15.5mm of
+error maximum with 2000 random points.
+
+=== pbf.writer.include.version
+
+* Data Type: bool
+* Default Value: `true`
+
+Removes the version number from the output when writing OSM PBF. This is only useful for unit testing.
+
 === perty.csm.D
 
 * Data Type: double

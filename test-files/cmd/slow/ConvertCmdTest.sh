@@ -31,7 +31,7 @@ echo "Dir with no filter to single OSM..."
 echo ""
 # The input dir has duplicated files. Set to not load data source IDs to load in the duplicated 
 # elements. The output should have duplicated features in it.
-hoot convert $LOG_LEVEL $CONFIG -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-1.osm --recursive "*"
+hoot convert $LOG_LEVEL $CONFIG -D non.osm.convert.merge.nearby.nodes=false -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-1.osm --recursive "*"
 hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/recursive-out-1.osm $OUTPUT_DIR/recursive-out-1.osm
 
 echo ""
