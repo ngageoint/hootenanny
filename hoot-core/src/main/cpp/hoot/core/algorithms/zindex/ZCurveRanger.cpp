@@ -184,7 +184,7 @@ LongBox ZCurveRanger::_clipBox(const LongBox& box) const
 vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r) const
 {
   std::sort(r.begin(), r.end(),
-            [](const Range& i, const Range& j) -> bool
+            [](const Range& i, const Range& j)
             { return (i < j); });
 
   vector<Range> result;

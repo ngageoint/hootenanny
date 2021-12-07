@@ -503,6 +503,36 @@ void XmlChangeset::updateChangeset(const QString& changes)
   }
 }
 
+void XmlChangeset::updateChangeset(const ChangesetInfoPtr& changeset)
+{
+  for (int changesetType = ChangesetType::TypeCreate; changesetType < ChangesetType::TypeMax; ++changesetType)
+  {
+    ChangesetType changeset_type = static_cast<ChangesetType>(changesetType);
+    for (int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
+    {
+      ElementType::Type element_type = static_cast<ElementType::Type>(elementType);
+      for (auto element = changeset->begin(element_type, changeset_type);
+           element != changeset->end(element_type, changeset_type); ++element)
+      {
+        switch(element_type)
+        {
+        case ElementType::Node:
+          updateElement(_nodes, *element, changeset_type);
+          break;
+        case ElementType::Way:
+          updateElement(_ways, *element, changeset_type);
+          break;
+        case ElementType::Relation:
+          updateElement(_relations, *element, changeset_type);
+          break;
+        default:
+          LOG_ERROR("Unknown element type in changeset.")
+        }
+      }
+    }
+  }
+}
+
 bool XmlChangeset::fixChangeset(const QString& update)
 {
   /* <osm>
@@ -1657,8 +1687,7 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
     changeset_type = ChangesetType::TypeModify;
   //  Find the element by the old ID
   ChangesetElementMap& type = map[changeset_type];
-  ChangesetElementMap::iterator position = type.find(old_id);
-  if (position != type.end())
+  if (type.find(old_id) != type.end())
   {
     ChangesetElementPtr element = type[old_id];
     //  Finalize the element
@@ -1674,6 +1703,27 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
   else
   {
     LOG_ERROR("Element cannot be updated. ID " << old_id);
+  }
+}
+
+void XmlChangeset::updateElement(ChangesetTypeMap &map, long id, ChangesetType changeset_type)
+{
+  if (id == 0)
+    return;
+  ChangesetElementMap& type = map[changeset_type];
+  if (type.find(id) != type.end())
+  {
+    ChangesetElementPtr element = type[id];
+    //  Finalize the element
+    element->setStatus(ChangesetElement::Finalized);
+    //  Update the version if necessary
+    if (changeset_type == ChangesetType::TypeModify)
+      element->setVersion(element->getVersion() + 1);
+    _processedCount++;
+  }
+  else
+  {
+    LOG_ERROR("Element cannot be updated. ID " << id);
   }
 }
 
@@ -1714,8 +1764,7 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap
   //  Find the affected element
   for (int type = 0; type < ChangesetType::TypeMax; ++type)
   {
-    ChangesetElementMap::iterator position = map[type].find(id);
-    if (position != map[type].end())
+    if (map[type].find(id) != map[type].end())
     {
       //  Found the element, now update it
       ChangesetElementPtr element = map[type][id];
@@ -2039,7 +2088,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
     for (auto it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
     {
       const ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
-      ChangesetElementMap::const_iterator found = changeset._nodes[type].find(node->id());
+      auto found = changeset._nodes[type].find(node->id());
       if (found != changeset._nodes[type].end())
       {
         //  Compare the two nodes
@@ -2073,7 +2122,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
     for (auto it = _ways[type].begin(); it != _ways[type].end(); ++it)
     {
       const ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
-      ChangesetElementMap::const_iterator found = changeset._ways[type].find(way->id());
+      auto found = changeset._ways[type].find(way->id());
       if (found != changeset._ways[type].end())
       {
         //  Compare the two ways
@@ -2107,7 +2156,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
     for (auto it = _relations[changeset_type].begin(); it != _relations[changeset_type].end(); ++it)
     {
       const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
-      ChangesetElementMap::const_iterator found = changeset._relations[changeset_type].find(relation->id());
+      auto found = changeset._relations[changeset_type].find(relation->id());
       if (found != changeset._relations[changeset_type].end())
       {
         //  Compare the two ways
