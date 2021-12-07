@@ -293,6 +293,7 @@ mgcp.rules = {
     ['BOT','12','bridge:movable','retractable'],
     ['BOT','13',undefined,undefined], // In data but not in any spec!
     ['BOT','17','bridge:movable','no'],
+    ['BOT','998','bridge:movable','not_applicable'],
 
     // BSC - Bridge Structure
     // ['BSC','0',undefined,undefined], // Unknown
@@ -328,6 +329,7 @@ mgcp.rules = {
     ['CAB','2','cable:type','power'], // Power Line
     ['CAB','6','cable:type','transmission'], // Transmission Line
     ['CAB','8','cable:type','communication'], // Communication Line
+    ['CAB','998','cable:type','not_applicable'],
     ['CAB','999','cable:type','other'], // Other
 
     // CAT - Cableway Type
@@ -338,6 +340,7 @@ mgcp.rules = {
     ['CAT','6','cableway:type','gondola_lift'], // Gondola Lift
     ['CAT','8','cableway:type','industrial_ropeway'], // Industrial Ropeway
     ['CAT','9','cableway:type','material_tramway'], // Material Tramway
+    ['CAT','998','cableway:type','not_applicable'],
     ['CAT','999','cableway:type','other'], // Other
 
     // CCT - Cover Closure Type
@@ -609,6 +612,7 @@ mgcp.rules = {
     ['HWT','16','building','temple'],
     ['HWT','20','building','synagogue'],
     ['HWT','21','building','stupa'],
+    ['HWT','998','building:religious','not_applicable'],
     ['HWT','999','building:religious','other'], // To avoid conflicts
 
     // HYP - Hydrologic Persistance
@@ -617,6 +621,7 @@ mgcp.rules = {
     ['HYP','1','intermittent','no'], // Perennial
     ['HYP','2','intermittent','yes'],
     ['HYP','4','intermittent','dry'],
+    ['HYP','998','intermittent','not_applicable'],
 
     // LFA - Aeronautical Light Function
     // ['LFA','0',undefined,undefined], // Unknown
@@ -681,6 +686,7 @@ mgcp.rules = {
     ['MCC','258','material','snow'], // From SMC
     ['MCC','269','material','limestone'], // From SMC
     ['MCC','274','material','sod'], // From SMC
+    ['MCC','998','material','not_applicable'],
     ['MCC','999','material','other'],
 
     // MES - Median Present
@@ -889,7 +895,8 @@ mgcp.rules = {
     ['RGC','1','gauge:type','broad'],
     ['RGC','2','gauge:type','narrow'],
     ['RGC','3','gauge:type','standard'],
-    ['RGC','6','railway','monorail'], // Gauge = 0.5?
+    // ['RGC','6','railway','monorail'], // Gauge = 0.5?
+    ['RGC','6','railway:track','monorail'], // moved to "railway=monorail" in pre/post processing
 
     // RIR - Railway in Road
     // ['RIR','0',undefined,undefined],
@@ -961,6 +968,7 @@ mgcp.rules = {
     ['SCC','10','water:type','salt'],
     ['SCC','11','water:type','fresh'], // Fresh
     ['SCC','12','water:type','brackish'], // Brackish
+    ['SCC','998','water:type','not_applicable'],
     ['SCC','999','water:type','other'],
 
     // SDT - Sand Dune Type
@@ -987,6 +995,7 @@ mgcp.rules = {
     ['SFS','1','aeroway:pavement:status','fair'], // Fair
     ['SFS','3','aeroway:pavement:status','good'], // Good
     ['SFS','5','aeroway:pavement:status','poor'], // Poor
+    ['SFS','998','aeroway:pavement:status','not_applicable'],
 
     // SLT - Shoreline Type
     // ['SLT','0',undefined,undefined], // Unknown
@@ -1005,7 +1014,7 @@ mgcp.rules = {
     ['SRT','0','source:name','unknown'],
     ['SRT','1','source:name','arc_digitized_raster_graphic_(adrg)'], // Arc Digitized Raster Graphic (ADRG)
     ['SRT','2','source:name','automated_aeronautical_facilities_information_file_(aafif)'], //  Automated Aeronautical Facilities Information File (AAFIF)
-    ['SRT','3','source:name','chum'], // CHUM
+    ['SRT','3','source:name','chart_update_manual_(chum)'], // CHUM
     ['SRT','4','source:name','city_graphic'], // City Graphic
     ['SRT','5','source:name','combat_chart'], // Combat Chart
     ['SRT','6','source:name','compressed_arc_digitized_raster_graphic_(cadrg)'], // Compressed Arc Digitized Raster Graphic (CADRG)
@@ -1024,8 +1033,8 @@ mgcp.rules = {
     ['SRT','25','source:name','geonames'], // GeoNames
     ['SRT','26','source:name','gps_field_collected_open_source'], // GPS Field Collected Open Source
     ['SRT','27','source:name','image_city_map_(icm)'], // Image City Map (ICM)
-    ['SRT','29','source:name','imagery_(ntm)'], // Imagery (NTM)
-    ['SRT','30','source:name','imagery_(other)'], // Imagery (Other)
+    ['SRT','29','source:name','ntm_imagery'], // Imagery (NTM)
+    ['SRT','30','source:name','imagery'], // Imagery (Other)
     ['SRT','31','source:name','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
     ['SRT','32','source:name','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
     ['SRT','34','source:name','joint_operational_graphic_(jog)'], // Joint Operational Graphic (JOG)
@@ -1077,6 +1086,7 @@ mgcp.rules = {
     ['SRT','121','source:name','routing_data'],
     ['SRT','996','source:name','multiple'], // Multiple
     ['SRT','997','source:name','unpopulated'],
+    ['SRT','998','source:name','not_applicable'],
     ['SRT','999','source:name','other'],
 
     // SSC - Structure Shape
@@ -1171,6 +1181,7 @@ mgcp.rules = {
     ['TRS','10','transport:type','pipeline'],
     ['TRS','12','transport:type','railway'],
     ['TRS','13','transport:type','road'],
+    ['TRS','998','transport:type','not_applicable'],
     ['TRS','999','transport:type','other'],
 
     // TTC - Tower Type
@@ -1260,6 +1271,7 @@ mgcp.rules = {
     ['WLE','3','hydrographic_vertical_position','always_submerged'], // Always Submerged
     ['WLE','4','hydrographic_vertical_position','covers_and_uncovers'], // Covers and Uncovers
     ['WLE','8','hydrographic_vertical_position','floating'], // Floating
+    ['WLE','998','hydrographic_vertical_position','not_applicable'], // Other
     ['WLE','999','hydrographic_vertical_position','other'], // Other
 
     // WST - Watercourse Sink Type: No OSM even close
@@ -1267,6 +1279,7 @@ mgcp.rules = {
     ['WST','0','water:sink:type','unknown'],
     ['WST','1','water:sink:type','dissipating'],
     ['WST','2','water:sink:type','disappearing'],
+    ['WST','998','water:sink:type','not_applicable'],
     ['WST','999','water:sink:type','other'],
 
     // WTC - Road Weather Restriction
@@ -1728,13 +1741,13 @@ mgcp.rules = {
     ['SRC_NAME','0',undefined,undefined],
     ['SRC_NAME','1','source:name','arc_digitized_raster_graphic_(adrg)'], // Arc Digitized Raster Graphic (ADRG)
     ['SRC_NAME','2','source:name','automated_aeronautical_facilities_information_file_(aafif)'], //  Automated Aeronautical Facilities Information File (AAFIF)
-    ['SRC_NAME','3','source:name','chum'], // CHUM
+    ['SRC_NAME','3','source:name','chart_update_manual_(chum)'], // CHUM
     ['SRC_NAME','4','source:name','city_graphic'], // City Graphic
     ['SRC_NAME','5','source:name','combat_chart'], // Combat Chart
     ['SRC_NAME','6','source:name','compressed_arc_digitized_raster_graphic_(cadrg)'], // Compressed Arc Digitized Raster Graphic (CADRG)
     ['SRC_NAME','7','source:name','controlled_imagery_base_1_(cib1)'], // Controlled Imagery Base 1 (CIB1)
     ['SRC_NAME','8','source:name','controlled_imagery_base_5_(cib5)'], // Controlled Imagery Base 5 (CIB5)
-    ['SRC_NAME','9','source:name','quickbird'], // From DFDD
+    ['SRC_NAME','9','source:name','quickbird_imagery'], // From DFDD
     ['SRC_NAME','10','source:name','digital_nautical_chart_(dnc)'], // Digital Nautical Chart (DNC)
     ['SRC_NAME','11','source:name','digital_print_file_(dpf)'], // Digital Print File (DPF)
     ['SRC_NAME','12','source:name','digital_terrain_elevation_data_1_(dted1)'], // Digital Terrain Elevation Data 1 (DTED1)
@@ -1752,9 +1765,9 @@ mgcp.rules = {
     ['SRC_NAME','25','source:name','geonames'], // GeoNames
     ['SRC_NAME','26','source:name','gps_field_collected_open_source'], // GPS Field Collected Open Source
     ['SRC_NAME','27','source:name','image_city_map_(icm)'], // Image City Map (ICM)
-    ['SRC_NAME','28','source:name','imagery_(ikonos)'], // Imagery (IKONOS)
-    ['SRC_NAME','29','source:name','imagery_(ntm)'], // Imagery (NTM)
-    ['SRC_NAME','30','source:name','imagery_(other)'], // Imagery (Other)
+    ['SRC_NAME','28','source:name','ikonos_imagery'], // Imagery (IKONOS)
+    ['SRC_NAME','29','source:name','ntm_imagery'], // Imagery (NTM)
+    ['SRC_NAME','30','source:name','imagery'], // Imagery (Other)
     ['SRC_NAME','31','source:name','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
     ['SRC_NAME','32','source:name','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
     ['SRC_NAME','33','source:name','international_boundaries'],
@@ -1909,13 +1922,13 @@ mgcp.rules = {
     ['UPD_NAME','0',undefined,undefined],
     ['UPD_NAME','1','source:review_source:type','arc_digitized_raster_graphic_(adrg)'], // Arc Digitized Raster Graphic (ADRG)
     ['UPD_NAME','2','source:review_source:type','automated_aeronautical_facilities_information_file_(aafif)'], //  Automated Aeronautical Facilities Information File (AAFIF)
-    ['UPD_NAME','3','source:review_source:type','chum'], // CHUM
+    ['UPD_NAME','3','source:review_source:type','chart_update_manual_(chum)'], // CHUM
     ['UPD_NAME','4','source:review_source:type','city_graphic'], // City Graphic
     ['UPD_NAME','5','source:review_source:type','combat_chart'], // Combat Chart
     ['UPD_NAME','6','source:review_source:type','compressed_arc_digitized_raster_graphic_(cadrg)'], // Compressed Arc Digitized Raster Graphic (CADRG)
     ['UPD_NAME','7','source:review_source:type','controlled_imagery_base_1_(cib1)'], // Controlled Imagery Base 1 (CIB1)
     ['UPD_NAME','8','source:review_source:type','controlled_imagery_base_5_(cib5)'], // Controlled Imagery Base 5 (CIB5)
-    ['UPD_NAME','9','source:review_source:type','quickbird'], // From DFDD
+    ['UPD_NAME','9','source:review_source:type','quickbird_imagery'], // From DFDD
     ['UPD_NAME','10','source:review_source:type','digital_nautical_chart_(dnc)'], // Digital Nautical Chart (DNC)
     ['UPD_NAME','11','source:review_source:type','digital_print_file_(dpf)'], // Digital Print File (DPF)
     ['UPD_NAME','12','source:review_source:type','digital_terrain_elevation_data_1_(dted1)'], // Digital Terrain Elevation Data 1 (DTED1)
@@ -1933,9 +1946,9 @@ mgcp.rules = {
     ['UPD_NAME','25','source:review_source:type','geonames'], // GeoNames
     ['UPD_NAME','26','source:review_source:type','gps_field_collected_open_source'], // GPS Field Collected Open Source
     ['UPD_NAME','27','source:review_source:type','image_city_map_(icm)'], // Image City Map (ICM)
-    ['UPD_NAME','28','source:review_source:type','imagery_(ikonos)'], // Imagery (IKONOS)
-    ['UPD_NAME','29','source:review_source:type','imagery_(ntm)'], // Imagery (NTM)
-    ['UPD_NAME','30','source:review_source:type','imagery_(other)'], // Imagery (Other)
+    ['UPD_NAME','28','source:review_source:type','ikonos_imagery'], // Imagery (IKONOS)
+    ['UPD_NAME','29','source:review_source:type','ntm_imagery'], // Imagery (NTM)
+    ['UPD_NAME','30','source:review_source:type','imagery'], // Imagery (Other)
     ['UPD_NAME','31','source:review_source:type','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
     ['UPD_NAME','32','source:review_source:type','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
     ['UPD_NAME','33','source:review_source:type','international_boundaries'],

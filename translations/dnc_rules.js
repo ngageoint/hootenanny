@@ -1044,7 +1044,7 @@ dnc.rules = {
     // RRC - Railway Use
     ['RRC','0','railway','rail'], // Unknown
     ['RRC','2','railway','carline'], // Carline
-    ['RRC','3','railway','monorail'], // Carline
+    ['RRC','3','railway','monorail'], // Monorail
     ['RRC','8','railway','logging'], // Logging
     ['RRC','13','railway','marine_railway'], // Marine Railway
     ['RRC','14','railway','tram'], // Tramway

@@ -685,7 +685,7 @@ mgcp = {
     // #####
     if (attrs.HWT && attrs.HWT !== '0' && attrs.HWT !== '998')
     {
-      tags.amenity = 'place_of_worship';
+      if (attrs.HWT !== '7') tags.amenity = 'place_of_worship';
 
       switch (tags.building)
       {
@@ -994,7 +994,12 @@ mgcp = {
       break;
 
     case 'AN010':
-      if (attrs.RGC == '6' && attrs.RRC == '0') tags.railway = 'monorail';
+      if (tags['railway:track'] == 'monorail')
+      {
+        if (tags.railway !== 'rail') tags['railway:type'] = tags.railway; // Redundant tags
+        tags.railway = 'monorail';
+        delete tags['railway:track'];
+      }
       break;
 
     // case 'AP010': // Track
@@ -1858,6 +1863,20 @@ mgcp = {
       }
     }
 
+    // Monorails are a special case
+    if (tags.railway == 'monorail')
+    {
+      tags['railway:track'] = 'monorail';
+      tags.railway = 'rail';
+
+      if (tags['railway:type'])
+      {
+        tags.railway = tags['railway:type'];
+        delete tags['railway:type']
+      }
+    }
+
+
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
 
@@ -2006,7 +2025,7 @@ mgcp = {
         // AL015 doesn't use the religion tag
         delete attrs.REL;
 
-        if (attrs.HWT && ! tags.amenity && ! attrs.FFN)
+        if (attrs.HWT && attrs.HWT !== '7' && !tags.amenity && !attrs.FFN)
         {
           attrs.FFN = '931';
         }

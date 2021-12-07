@@ -2484,7 +2484,7 @@ tds61.rules = {
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'], // Long-haul
     ['RRC','999','railway','other'], // Other
 
@@ -3270,34 +3270,34 @@ tds61.rules = {
 
     // ZI001_SRT - Source Information : Source Type
     // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
-    ['ZI001_SRT','other','source:non_spatial_source:type','other'], // Other
-    ['ZI001_SRT','commercial','source:non_spatial_source:type','commercial_data'], // Commercial Data
-    ['ZI001_SRT','deLormeDigitalAtlasEarth','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
-    ['ZI001_SRT','gpsBasedFieldCollect','source:non_spatial_source:type','gps'], // GPS
-    ['ZI001_SRT','ikonosImagery','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
-    ['ZI001_SRT','imageryUnspecified','source:non_spatial_source:type','imagery'], // Imagery
-    ['ZI001_SRT','militaryMapData','source:non_spatial_source:type','military_map_data'], // Military Map Data
-    ['ZI001_SRT','navteqData','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
-    ['ZI001_SRT','ngaAutoAirFacInfoFile','source:non_spatial_source:type','aafif'], // AAFIF
-    ['ZI001_SRT','ngaControlledImageBase1','source:non_spatial_source:type','cib1'], // CIB1
-    ['ZI001_SRT','ngaDigitalAirFltInfoFile','source:non_spatial_source:type','dafif'], // DAFIF
-    ['ZI001_SRT','ngaDigitalNauticalChart','source:non_spatial_source:type','dnc'], // DNC
-    ['ZI001_SRT','ngaDigitalVertObstruction','source:non_spatial_source:type','dvof'], // DVOF
-    ['ZI001_SRT','ngaFoundationFeatureData','source:non_spatial_source:type','ffd'], // FFD
-    ['ZI001_SRT','ngaGeoNames','source:non_spatial_source:type','geonames'], // GeoNames
-    ['ZI001_SRT','ngaInterimTerrainData','source:non_spatial_source:type','itd'], // ITD
-    ['ZI001_SRT','ngaInterimVectorData','source:non_spatial_source:type','ivd'], // IVD
-    ['ZI001_SRT','ngaStereoAirfieldCollect','source:non_spatial_source:type','sac'], // SAC
-    ['ZI001_SRT','ngaUrbanVectorMap','source:non_spatial_source:type','uvmap'], // UVMap
-    ['ZI001_SRT','ngaVectorInterimTerrain','source:non_spatial_source:type','vitd'], // VITD
-    ['ZI001_SRT','ngaVectorMap2','source:non_spatial_source:type','vmap_2'], // VMap 2
-    ['ZI001_SRT','nonMilitaryMap','source:non_spatial_source:type','non-military_map'], // Non-military Map
-    ['ZI001_SRT','openSource','source:non_spatial_source:type','open_source_information'], // Open Source Information
-    ['ZI001_SRT','operationsData','source:non_spatial_source:type','operations_data'], // Operations Data
-    ['ZI001_SRT','quickBirdImagery','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
-    ['ZI001_SRT','tomTomData','source:non_spatial_source:type','tomtom_data'], // TomTom Data
-    ['ZI001_SRT','usModernizedIntegratedDB','source:non_spatial_source:type','midb'], // MIDB
-    ['ZI001_SRT','usNtmImagery','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
+    ['ZI001_SRT','other','source:name','other'], // Other
+    ['ZI001_SRT','commercial','source:name','commercial_data'], // Commercial Data
+    ['ZI001_SRT','deLormeDigitalAtlasEarth','source:name','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+    ['ZI001_SRT','gpsBasedFieldCollect','source:name','gps_field_collected_open_source'], // GPS
+    ['ZI001_SRT','ikonosImagery','source:name','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_SRT','imageryUnspecified','source:name','imagery'], // Imagery
+    ['ZI001_SRT','militaryMapData','source:name','military_map_data'], // Military Map Data
+    ['ZI001_SRT','navteqData','source:name','navteq_data'], // NAVTEQ Data
+    ['ZI001_SRT','ngaAutoAirFacInfoFile','source:name','automated_aeronautical_facilities_information_file_(aafif)'], // AAFIF
+    ['ZI001_SRT','ngaControlledImageBase1','source:name','controlled_imagery_base_1_(cib1)'], // CIB1
+    ['ZI001_SRT','ngaDigitalAirFltInfoFile','source:name','digital_aeronautical_flight_information_file_(dafif)'], // DAFIF
+    ['ZI001_SRT','ngaDigitalNauticalChart','source:name','digital_nautical_chart_(dnc)'], // DNC
+    ['ZI001_SRT','ngaDigitalVertObstruction','source:name','digital_vertical_obstruction_file_(dvof)'], // DVOF
+    ['ZI001_SRT','ngaFoundationFeatureData','source:name','foundation_feature_data_(ffd)'], // FFD
+    ['ZI001_SRT','ngaGeoNames','source:name','geonames'], // GeoNames
+    ['ZI001_SRT','ngaInterimTerrainData','source:name','interim_terrain_data_(itd)'], // ITD
+    ['ZI001_SRT','ngaInterimVectorData','source:name','interim_vector_data_(ivd)'], // IVD
+    ['ZI001_SRT','ngaStereoAirfieldCollect','source:name','stereo_airfield_collection_(sac)'], // SAC
+    ['ZI001_SRT','ngaUrbanVectorMap','source:name','urban_vector_map_(uvmap)'], // UVMap
+    ['ZI001_SRT','ngaVectorInterimTerrain','source:name','vector_interim_terrain_data_(vitd)'], // VITD
+    ['ZI001_SRT','ngaVectorMap2','source:name','vector_map_lv2_(vmap2)'], // VMap 2
+    ['ZI001_SRT','nonMilitaryMap','source:name','non-military_map'], // Non-military Map
+    ['ZI001_SRT','openSource','source:name','open_source_information'], // Open Source Information
+    ['ZI001_SRT','operationsData','source:name','operations_data'], // Operations Data
+    ['ZI001_SRT','quickBirdImagery','source:name','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_SRT','tomTomData','source:name','tomtom_data'], // TomTom Data
+    ['ZI001_SRT','usModernizedIntegratedDB','source:name','modernized_integrated_data_base_(midb)'], // MIDB
+    ['ZI001_SRT','usNtmImagery','source:name','ntm_imagery'], // NTM Imagery
 
     // ZI001_VSC - Source Information : Vertical Source Category
     // ['ZI001_VSC','noInformation',undefined,undefined], // No Information
@@ -3895,7 +3895,7 @@ tds61.rules = {
   one2oneIn : [
     // To account for an "error" in the TDSv61 sample GDB
     ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
-    ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
+    ['ZI001_SRT','NTM Imagery','source:name','ntm_imagery'],
 
     // ['ZI016_ROC','-999999',undefined,undefined], // No Information
     ['ZI016_ROC','1','surface','ground'], // Unimproved
@@ -4049,6 +4049,37 @@ tds61.rules = {
     // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
 
     ['VCM','2','material:vertical','aluminum'], // Aluminum
+
+    // ZI001_SRT - Source Information : Source Type
+    // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
+    ['ZI001_SRT','other','source:non_spatial_source:type','other'], // Other
+    ['ZI001_SRT','commercial','source:non_spatial_source:type','commercial_data'], // Commercial Data
+    ['ZI001_SRT','deLormeDigitalAtlasEarth','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+    ['ZI001_SRT','gpsBasedFieldCollect','source:non_spatial_source:type','gps'], // GPS
+    ['ZI001_SRT','ikonosImagery','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_SRT','imageryUnspecified','source:non_spatial_source:type','imagery'], // Imagery
+    ['ZI001_SRT','militaryMapData','source:non_spatial_source:type','military_map_data'], // Military Map Data
+    ['ZI001_SRT','navteqData','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
+    ['ZI001_SRT','ngaAutoAirFacInfoFile','source:non_spatial_source:type','aafif'], // AAFIF
+    ['ZI001_SRT','ngaControlledImageBase1','source:non_spatial_source:type','cib1'], // CIB1
+    ['ZI001_SRT','ngaDigitalAirFltInfoFile','source:non_spatial_source:type','dafif'], // DAFIF
+    ['ZI001_SRT','ngaDigitalNauticalChart','source:non_spatial_source:type','dnc'], // DNC
+    ['ZI001_SRT','ngaDigitalVertObstruction','source:non_spatial_source:type','dvof'], // DVOF
+    ['ZI001_SRT','ngaFoundationFeatureData','source:non_spatial_source:type','ffd'], // FFD
+    ['ZI001_SRT','ngaGeoNames','source:non_spatial_source:type','geonames'], // GeoNames
+    ['ZI001_SRT','ngaInterimTerrainData','source:non_spatial_source:type','itd'], // ITD
+    ['ZI001_SRT','ngaInterimVectorData','source:non_spatial_source:type','ivd'], // IVD
+    ['ZI001_SRT','ngaStereoAirfieldCollect','source:non_spatial_source:type','sac'], // SAC
+    ['ZI001_SRT','ngaUrbanVectorMap','source:non_spatial_source:type','uvmap'], // UVMap
+    ['ZI001_SRT','ngaVectorInterimTerrain','source:non_spatial_source:type','vitd'], // VITD
+    ['ZI001_SRT','ngaVectorMap2','source:non_spatial_source:type','vmap_2'], // VMap 2
+    ['ZI001_SRT','nonMilitaryMap','source:non_spatial_source:type','non-military_map'], // Non-military Map
+    ['ZI001_SRT','openSource','source:non_spatial_source:type','open_source_information'], // Open Source Information
+    ['ZI001_SRT','operationsData','source:non_spatial_source:type','operations_data'], // Operations Data
+    ['ZI001_SRT','quickBirdImagery','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_SRT','tomTomData','source:non_spatial_source:type','tomtom_data'], // TomTom Data
+    ['ZI001_SRT','usModernizedIntegratedDB','source:non_spatial_source:type','midb'], // MIDB
+    ['ZI001_SRT','usNtmImagery','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
 
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
     ['ZI014_PPO','2','product','aluminum'], // Aluminum

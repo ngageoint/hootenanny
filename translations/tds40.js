@@ -2215,6 +2215,19 @@ tds40 = {
       }
     }
 
+    // Monorails are a special case
+    if (tags.railway == 'monorail')
+    {
+      tags['gauge:type'] = 'monorail';
+      tags.railway = 'rail';
+
+      if (tags['railway:type'])
+      {
+        tags.railway = tags['railway:type'];
+        delete tags['railway:type']
+      }
+    }
+
   }, // End applyToOgrPreProcessing
 
   // #####################################################################################################

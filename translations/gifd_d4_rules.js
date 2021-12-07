@@ -3089,7 +3089,7 @@ gifd.rules = {
     ['ORIGINATING_SOURCE','Arc Digitized Raster Graphic (ADRG)','source:name','arc_digitized_raster_graphic_(adrg)'], // Arc Digitized Raster Graphic (ADRG)
     ['ORIGINATING_SOURCE','Automated Aeronautical Facilities Information File (AAFIF)','source:name','automated_aeronautical_facilities_information_file_(aafif)'], // Automated Aeronautical Facilities Information File (AAFIF)
     ['ORIGINATING_SOURCE','Boundaries (International Boundaries Database)','source:name','boundaries_(international_boundaries_database)'], // Boundaries (International Boundaries Database)
-    ['ORIGINATING_SOURCE','CHUM','source:name','chum'], // CHUM
+    ['ORIGINATING_SOURCE','CHUM','source:name','chart_update_manual_(chum)'], // CHUM
     ['ORIGINATING_SOURCE','City Graphic','source:name','city_graphic'], // City Graphic
     ['ORIGINATING_SOURCE','Combat Chart','source:name','combat_chart'], // Combat Chart
     ['ORIGINATING_SOURCE','Compressed Arc Digitized Raster Graphic (CADRG)','source:name','compressed_arc_digitized_raster_graphic_(cadrg)'], // Compressed Arc Digitized Raster Graphic (CADRG)
@@ -3114,9 +3114,9 @@ gifd.rules = {
     ['ORIGINATING_SOURCE','GeoCover/LandCover','source:name','geocover/landcover'], // GeoCover/LandCover
     ['ORIGINATING_SOURCE','GeoNames','source:name','geonames'], // GeoNames
     ['ORIGINATING_SOURCE','Image City Map (ICM)','source:name','image_city_map_(icm)'], // Image City Map (ICM)
-    ['ORIGINATING_SOURCE','Imagery (IKONOS)','source:name','imagery_(ikonos)'], // Imagery (IKONOS)
-    ['ORIGINATING_SOURCE','Imagery (NTM)','source:name','imagery_(ntm)'], // Imagery (NTM)
-    ['ORIGINATING_SOURCE','Imagery (Other)','source:name','imagery_(other)'], // Imagery (Other)
+    ['ORIGINATING_SOURCE','Imagery (IKONOS)','source:name','ikonos_imagery'], // Imagery (IKONOS)
+    ['ORIGINATING_SOURCE','Imagery (NTM)','source:name','ntm_imagery'], // Imagery (NTM)
+    ['ORIGINATING_SOURCE','Imagery (Other)','source:name','imagery'], // Imagery (Other)
     ['ORIGINATING_SOURCE','Interim Terrain Data (ITD)','source:name','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
     ['ORIGINATING_SOURCE','Interim Vector Data (IVD)','source:name','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
     ['ORIGINATING_SOURCE','Joint Operational Graphic (JOG)','source:name','joint_operational_graphic_(jog)'], // Joint Operational Graphic (JOG)

@@ -1913,7 +1913,7 @@ ufd = {
     ['RRC','-32768',undefined,undefined], // Null
     ['RRC','-999999',undefined,undefined],
     ['RRC','0','railway','rail'],
-    ['RRC','2','railway','carline'],
+    ['RRC','2','railway','carline'],  // Carline
     ['RRC','3','railway','monorail'],
     ['RRC','6','railway','subway'],
     ['RRC','8','railway','logging'],
@@ -1925,7 +1925,7 @@ ufd = {
     ['RRC','18','usage','main'], // Main Line/Branch Line
     ['RRC','21','railway:in_road','yes'], // Railroad in Road
     ['RRC','31','railway','magnetic_levitation'], // Magnetic Levitation
-    ['RRC','32','automated_transit_system','yes'],
+    ['RRC','32','railway:type','automated_transit_system'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','other'],
     ['RRC','Unknown','railway','rail'],
@@ -1936,7 +1936,7 @@ ufd = {
     ['RRC','Rapid Transit Route - Rail','rapid_transit','yes'],
     ['RRC','Tram','railway','tram'],
     ['RRC','Funicular','railway','funicular'],
-    ['RRC','Main Line','railway','rail'],
+    ['RRC','Main Line','usage','main'],
     ['RRC','Branch Line','usage','branch'], // Branch Line
     ['RRC','Main Line/Branch Line','usage','main'], // Main Line/Branch Line
     ['RRC','Railroad in Road','railway:in_road','yes'], // Railroad in Road
