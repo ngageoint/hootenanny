@@ -39,14 +39,14 @@ using namespace tbs;
 namespace hoot
 {
 
-ExpectationIntersection::ExpectationIntersection(const int maxCacheSize) :
-_maxIterations(100),
-_maxCacheSize(maxCacheSize)
+ExpectationIntersection::ExpectationIntersection(const int maxCacheSize)
+  : _maxIterations(100),
+    _maxCacheSize(maxCacheSize)
 {
 }
 
 double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistribution& t2,
-  const Mat &matches, int start, int stop) const
+                                           const Mat &matches, int start, int stop) const
 {
   vector<double> p1(matches.rows);
   double sum2 = 0.0;
@@ -107,15 +107,12 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   vector<double> splits(ranges.rows - 1);
 
   if (splits.empty())
-  {
     return splits;
-  }
 
   // initialize the splits to something reasonable.
   for (int i = 0; i < ranges.rows - 1; i++)
-  {
     splits[i] = (double)(ranges.at<int>(i, 1) + ranges.at<int>(i + 1, 0)) / 2.0;
-  }
+
   LOG_TRACE(splits);
 
   int iteration = 0;
@@ -132,8 +129,8 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
     const int maxCacheSize = ConfigOptions().getExpectationIntersectionMaxCacheSize();
     for (size_t i = 0; i < splits.size(); i++)
     {
-      pdfs[i].initialize(matches.rowRange(nextStart, splits[i]), maxCacheSize);
-      nextStart = splits[i];
+      pdfs[i].initialize(matches.rowRange(nextStart, static_cast<int>(splits[i])), maxCacheSize);
+      nextStart = static_cast<int>(splits[i]);
     }
     pdfs[pdfs.size() - 1].initialize(matches.rowRange(nextStart, matches.rows - 1));
 
@@ -147,17 +144,17 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
     {
       // the valid range for the split is the upper bound of the lower range and the lower bound
       // of the upper range. E.g. if you have ranges 0-17 and 1-49, then the valid range is 1-17.
-      double split = _findSplit(pdfs[i], pdfs[i + 1], matches, ranges.at<int>(i + 1, 0),
-        ranges.at<int>(i, 1));
+      double split = _findSplit(pdfs[i], pdfs[i + 1], matches,
+                                ranges.at<int>(static_cast<int>(i + 1), 0),
+                                ranges.at<int>(static_cast<int>(i), 1));
       splits[i] = split;
-      splitsInt[i] = (int)split;
+      splitsInt[i] = static_cast<int>(split);
     }
 
     // check to see if this split is a repeat.
     if (visitedSplits.find(splitsInt) != visitedSplits.end())
-    {
       done = true;
-    }
+
     visitedSplits.insert(splitsInt);
     iteration++;
   }
@@ -171,9 +168,7 @@ void ExpectationIntersection::_validateRanges(int rowCount, const Mat& ranges) c
 {
   assert(ranges.at<int>(0, 0) == 0);
   if (ranges.at<int>(ranges.rows - 1, 1) != rowCount - 1)
-  {
     throw InternalErrorException();
-  }
 
   // verify that the ranges at least touch, but do not have a complete overlap.
   for (int i = 1; i < ranges.rows; i++)
@@ -182,6 +177,5 @@ void ExpectationIntersection::_validateRanges(int rowCount, const Mat& ranges) c
     assert(ranges.at<int>(i - 1, 1) < ranges.at<int>(i, 1));
   }
 }
-
 
 }

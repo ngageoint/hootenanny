@@ -46,10 +46,6 @@
 #include <queue>
 #include <thread>
 
-//  Qt
-
-
-
 namespace hoot
 {
 
@@ -254,6 +250,22 @@ private:
    */
   QString _getElement(HootNetworkRequestPtr request, const QString& endpoint) const;
   /**
+   * @brief _hasNode/Way/Relation Perform HTTP GET request to OSM API to check the existence of the node/way/relation by ID
+   * @param request Network request object initialized with OSM API URL
+   * @param id ID of node/way/relation to query from database
+   * @return true if the element exists (HTTP 200 SUCCESS means the element exists, HTTP 404 NOT FOUND means it doesn't)
+   */
+  bool _hasNode(HootNetworkRequestPtr request, long id) const;
+  bool _hasWay(HootNetworkRequestPtr request, long id) const;
+  bool _hasRelation(HootNetworkRequestPtr request, long id) const;
+  /**
+   * @brief _hasElement Perform HTTP GET request to OSM API to check the existence of the current element by ID
+   * @param request Network request object initialized with OSM API URL
+   * @param endpoint Filled out API_PATH_GET_ELEMENT string with node/way/relation and ID
+   * @return true if the element exists (HTTP 200 SUCCESS means the element exists, HTTP 404 NOT FOUND means it doesn't)
+   */
+  bool _hasElement(HootNetworkRequestPtr request, const QString& endpoint) const;
+  /**
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
    *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
    *  if necessary
@@ -372,6 +384,13 @@ private:
    * @return LastElementInfo object completely filled out
    */
   LastElementInfo _extractLastElement(const ChangesetInfoPtr& workInfo);
+  /**
+   * @brief _validateUpload Checks with the API to see if the changeset was, in fact, uploaded
+   * @param request Network request object initialized with OSM API URL
+   * @param workInfo Changeset information to validate
+   * @return true if the changeset was uploaded but the server still returned an HTTP 503 error
+   */
+  bool _validateUpload(const HootNetworkRequestPtr& request, const ChangesetInfoPtr& workInfo);
   /** Vector of statuses for each running thread */
   std::vector<ThreadStatus> _threadStatus;
   /** Mutex protecting status vector */

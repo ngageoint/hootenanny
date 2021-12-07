@@ -278,6 +278,8 @@ public:
    */
   void updateLastElement(LastElementInfo& last);
 
+  bool validateElement(ChangesetType c_type, ElementType::Type e_type, long id, QString element);
+
 private:
   /**
    * @brief loadChangesetFile Load changeset file, can be called multiple times on changeset that are split across files

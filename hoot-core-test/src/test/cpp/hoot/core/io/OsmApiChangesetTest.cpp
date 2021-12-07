@@ -51,6 +51,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetInfoLastElement);
   CPPUNIT_TEST(runXmlChangesetFixChangesetTest);
   CPPUNIT_TEST(runXmlChangesetCalculateChangeset);
+  CPPUNIT_TEST(runValidateElement);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -333,11 +334,11 @@ public:
     ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     for (ChangesetType type = ChangesetType::TypeCreate; type != ChangesetType::TypeMax; type = static_cast<ChangesetType>(type + 1))
     {
-      for (ChangesetElementMap::iterator it = changeset._nodes[type].begin(); it != changeset._nodes[type].end(); ++it)
+      for (auto it = changeset._nodes[type].begin(); it != changeset._nodes[type].end(); ++it)
         info->add(ElementType::Node, type, it->first);
-      for (ChangesetElementMap::iterator it = changeset._ways[type].begin(); it != changeset._ways[type].end(); ++it)
+      for (auto it = changeset._ways[type].begin(); it != changeset._ways[type].end(); ++it)
         info->add(ElementType::Way, type, it->first);
-      for (ChangesetElementMap::iterator it = changeset._relations[type].begin(); it != changeset._relations[type].end(); ++it)
+      for (auto it = changeset._relations[type].begin(); it != changeset._relations[type].end(); ++it)
         info->add(ElementType::Relation, type, it->first);
     }
     //  Compare the changeset XML
@@ -430,6 +431,56 @@ public:
     changeset.calculateRemainingChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runValidateElement()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "ToyTestAChangesetPositive.osc");
+
+    QString nodeTest = "<osm version=\"0.6\" generator=\"CGImap 0.8.6\" copyright=\"OpenStreetMap and contributors\" "
+                       "attribution=\"http://www.openstreetmap.org/copyright\" "
+                       "license=\"http://opendatacommons.org/licenses/odbl/1-0/\">\n"
+                       "\t\t<node id=\"3\" visible=\"true\" version=\"1\" lat=\"38.8540541370891077\" lon=\"-104.9024316099691276\" "
+                       "timestamp=\"\" changeset=\"1\" user=\"test\" uid=\"1\"/>\n"
+                       "</osm>";
+    CPPUNIT_ASSERT(changeset.validateElement(ChangesetType::TypeModify, ElementType::Node, 3, nodeTest));
+
+    QString wayTest = "<osm version=\"0.6\" generator=\"CGImap 0.8.6\" copyright=\"OpenStreetMap and contributors\" "
+                      "attribution=\"http://www.openstreetmap.org/copyright\" license=\"http://opendatacommons.org/licenses/odbl/1-0/\">\n"
+                      "\t\t<way id=\"2\" visible=\"true\" version=\"1\" timestamp=\"\" changeset=\"1\" user=\"test\" uid=\"1\">\n"
+                      "\t\t\t<nd ref=\"33\"/>\n"
+                      "\t\t\t<nd ref=\"8\"/>\n"
+                      "\t\t\t<nd ref=\"7\"/>\n"
+                      "\t\t\t<tag k=\"note\" v=\"3\"/>\n"
+                      "\t\t\t<tag k=\"highway\" v=\"road\"/>\n"
+                      "\t\t</way>"
+                      "</osm>";
+    CPPUNIT_ASSERT(changeset.validateElement(ChangesetType::TypeModify, ElementType::Way, 2, wayTest));
+
+    //  This test string has an extra tag that will cause it to fail
+    QString nodeTestFail = "<osm version=\"0.6\" generator=\"CGImap 0.8.6\" copyright=\"OpenStreetMap and contributors\" "
+                           "attribution=\"http://www.openstreetmap.org/copyright\" "
+                           "license=\"http://opendatacommons.org/licenses/odbl/1-0/\">\n"
+                           "\t\t<node id=\"3\" visible=\"true\" version=\"1\" lat=\"38.8540541370891077\" lon=\"-104.9024316099691276\" "
+                           "timestamp=\"\" changeset=\"1\" user=\"test\" uid=\"1\">\n"
+                           "\t\t\t<tag k=\"note\" v=\"3\"/>\n"
+                           "\t\t</node>\n"
+                           "</osm>";
+    CPPUNIT_ASSERT(!changeset.validateElement(ChangesetType::TypeModify, ElementType::Node, 3, nodeTestFail));
+
+    //  This test string has a different version that will cause it to fail
+    QString wayTestFail = "<osm version=\"0.6\" generator=\"CGImap 0.8.6\" copyright=\"OpenStreetMap and contributors\" "
+                          "attribution=\"http://www.openstreetmap.org/copyright\" license=\"http://opendatacommons.org/licenses/odbl/1-0/\">\n"
+                          "\t\t<way id=\"2\" visible=\"true\" version=\"1000\" timestamp=\"\" changeset=\"1\" user=\"test\" uid=\"1\">\n"
+                          "\t\t\t\t<nd ref=\"33\"/>\n"
+                          "\t\t\t\t<nd ref=\"8\"/>\n"
+                          "\t\t\t\t<nd ref=\"7\"/>\n"
+                          "\t\t\t\t<tag k=\"note\" v=\"3\"/>\n"
+                          "\t\t\t\t<tag k=\"highway\" v=\"road\"/>\n"
+                          "\t\t</way>\n"
+                          "</osm>";
+    CPPUNIT_ASSERT(!changeset.validateElement(ChangesetType::TypeModify, ElementType::Way, 2, wayTestFail));
   }
 };
 
