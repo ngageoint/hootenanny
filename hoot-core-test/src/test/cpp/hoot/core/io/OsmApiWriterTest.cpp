@@ -54,6 +54,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
   CPPUNIT_TEST(runPermissionsTest);
+  CPPUNIT_TEST(runValidateUploadTest);
 #ifdef RUN_LOCAL_TEST_SERVER
   CPPUNIT_TEST(runRetryConflictsTest);
   CPPUNIT_TEST(runVersionConflictResolutionTest);
@@ -100,6 +101,7 @@ public:
   const int PORT_ELEMENT_GONE =     9809;
   const int PORT_DELETE_SPLIT =     9810;
   const int PORT_TIMEOUT =          9811;
+  const int PORT_VALIDATE =         9812;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -738,6 +740,61 @@ public:
     CPPUNIT_ASSERT_EQUAL(-1 * (int)QNetworkReply::TimeoutError, status);
     HOOT_STR_EQUALS(QString("HTTP Request to %1 timed-out.").arg(osm.toString(QUrl::RemoveUserInfo)), error);
     HOOT_STR_EQUALS("", response.toStdString());
+#endif
+  }
+
+  void runValidateUploadTest()
+  {
+    QUrl osm;
+#ifdef RUN_LOCAL_TEST_SERVER
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_VALIDATE));
+    ChangesetValidateUploadTestServer server(PORT_VALIDATE);
+    server.start();
+#else
+    osm.setUrl(OSM_API_URL);
+#endif
+
+    //  This changeset is partially ficticious, NODE ID 1 is currently this value and no modifcation will
+    //  happen.  WAY ID 1 doesn't exist and is made up for testing purposes
+    const QString change =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<osmChange version=\"0.6\">"
+        "<modify>"
+        "<node id=\"1\" visible=\"true\" version=\"26\" lat=\"42.7957187\" lon=\"13.5690032\">"
+        "<tag k=\"man_made\" v=\"mast\"/>"
+        "<tag k=\"name\" v=\"Monte Piselli - Radio Subasio 105.5 MHz\"/>"
+        "<tag k=\"tower:construction\" v=\"guyed_lattice\"/>"
+        "<tag k=\"tower:type\" v=\"communication\"/>"
+        "</node>"
+        "</modify>"
+        "<delete>"
+        "<way id=\"1\" visible=\"true\" version=\"1\">"
+        "<nd ref=\"2\"/>"
+        "<nd ref=\"3\"/>"
+        "<nd ref=\"4\"/>"
+        "<tag k=\"highway\" v=\"residential\"/>"
+        "<tag k=\"name\" v=\"Hendrix Park Drive\"/>"
+        "</way>"
+        "</delete>"
+        "</osm>";
+
+    HootNetworkRequestPtr request = std::make_shared<HootNetworkRequest>();
+    OsmApiWriter writer(osm, change);
+    writer._changeset.loadChangeset(writer._changesets[0]);
+    ChangesetInfoPtr changeset = std::make_shared<ChangesetInfo>();
+
+    //  Validate that the node is correct
+    changeset->add(ElementType::Node, ChangesetType::TypeModify, 1);
+    CPPUNIT_ASSERT(writer._validateUpload(request, changeset));
+
+    changeset->clear();
+
+    //  Validate that the way doesn't exist
+    changeset->add(ElementType::Way, ChangesetType::TypeDelete, 1);
+    CPPUNIT_ASSERT(!writer._validateUpload(request, changeset));
+
+#ifdef RUN_LOCAL_TEST_SERVER
+    server.shutdown();
 #endif
   }
 

@@ -145,11 +145,11 @@ bool OsmApiWriter::apply()
   bool success = true;
   //  Load all of the changesets into memory
   _changeset.setMaxPushSize(_maxPushSize);
-  for (int i = 0; i < _changesets.size(); ++i)
+  for (const auto& changeset : _changesets)
   {
-    LOG_INFO("Loading changeset: " << _changesets[i]);
-    _changeset.loadChangeset(_changesets[i]);
-    _stats.append(SingleStat(QString("Changeset (%1) Load Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
+    LOG_INFO("Loading changeset: " << changeset);
+    _changeset.loadChangeset(changeset);
+    _stats.append(SingleStat(QString("Changeset (%1) Load Time (sec)").arg(changeset), timer.getElapsedAndRestart()));
   }
   //  Split any ways that need splitting
   _changeset.splitLongWays(_capabilities.getWayNodes());
@@ -556,19 +556,23 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           }
           break;
         case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:
-          _pushChangesets(workInfo);
-          //  Multiple changeset failures
-          changeset_failures++;
-          if (changeset_failures >= 3)
+          if (!_validateUpload(request, workInfo))
           {
-            //  Set the thread status to failed and report the error message in the main thread
-            _updateThreadStatus(index, ThreadStatus::Failed);
-            stop_thread = true;
-          }
-          else
-          {
-            //  Sleep between 30 and 60 seconds to allow the database server to recover
-            _yield(30 * 1000, 60 * 1000);
+            //  Push the changeset back on the queue if it wasn't uploaded successfully
+            _pushChangesets(workInfo);
+            //  Multiple changeset failures
+            changeset_failures++;
+            if (changeset_failures >= 3)
+            {
+              //  Set the thread status to failed and report the error message in the main thread
+              _updateThreadStatus(index, ThreadStatus::Failed);
+              stop_thread = true;
+            }
+            else
+            {
+              //  Sleep between 30 and 60 seconds to allow the database server to recover
+              _yield(30 * 1000, 60 * 1000);
+            }
           }
           break;
         }
@@ -1103,6 +1107,51 @@ QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& 
   return "";
 }
 
+bool OsmApiWriter::_hasNode(HootNetworkRequestPtr request, long id) const
+{
+  //  Check for a valid ID to query against
+  if (id < 1)
+    return false;
+  //  Get the way by ID
+  return _hasElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
+}
+
+bool OsmApiWriter::_hasWay(HootNetworkRequestPtr request, long id) const
+{
+  //  Check for a valid ID to query against
+  if (id < 1)
+    return false;
+  //  Get the way by ID
+  return _hasElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
+}
+
+bool OsmApiWriter::_hasRelation(HootNetworkRequestPtr request, long id) const
+{
+  //  Check for a valid ID to query against
+  if (id < 1)
+    return false;
+  //  Get the way by ID
+  return _hasElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("relation").arg(id));
+}
+
+bool OsmApiWriter::_hasElement(HootNetworkRequestPtr request, const QString& endpoint) const
+{
+  //  Don't follow an uninitialized URL or empty endpoint
+  if (endpoint == OsmApiEndpoints::API_PATH_GET_ELEMENT || endpoint == "")
+    return false;
+  try
+  {
+    QUrl get = _url;
+    get.setPath(endpoint);
+    request->networkRequest(get, _timeout);
+    return request->getHttpStatus() == HttpResponseCode::HTTP_OK;
+  }
+  catch (const HootException& ex)
+  {
+  }
+  return false;
+}
+
 HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentication) const
 {
   HootNetworkRequestPtr request;
@@ -1134,10 +1183,10 @@ bool OsmApiWriter::_threadsAreIdle()
   bool response = true;
   //  Lock the thread status mutex only once
   _threadStatusMutex.lock();
-  for (vector<ThreadStatus>::iterator it = _threadStatus.begin(); it != _threadStatus.end(); ++it)
+  for (auto status : _threadStatus)
   {
     //  It only takes one thread working to return false
-    if (*it == ThreadStatus::Working)
+    if (status == ThreadStatus::Working)
     {
       response = false;
       break;
@@ -1240,10 +1289,10 @@ void OsmApiWriter::_updateThreadStatus(int thread_index, ThreadStatus status)
 bool OsmApiWriter::_allThreadsFailed()
 {
   std::lock_guard<std::mutex> lock(_threadStatusMutex);
-  for (size_t i = 0; i < _threadStatus.size(); ++i)
+  for (auto status : _threadStatus)
   {
     //  Short circuit the loop if a thread isn't in the failed state
-    if (_threadStatus[i] != ThreadStatus::Failed)
+    if (status != ThreadStatus::Failed)
       return false;
   }
   //  All threads are in the failed state
@@ -1253,10 +1302,10 @@ bool OsmApiWriter::_allThreadsFailed()
 bool OsmApiWriter::_hasFailedThread()
 {
   std::lock_guard<std::mutex> lock(_threadStatusMutex);
-  for (size_t i = 0; i < _threadStatus.size(); ++i)
+  for (auto status : _threadStatus)
   {
     //  Short circuit the loop if a thread is in the failed state
-    if (_threadStatus[i] == ThreadStatus::Failed)
+    if (status == ThreadStatus::Failed)
       return true;
   }
   //  All threads are in the non-failed state
@@ -1317,6 +1366,67 @@ LastElementInfo OsmApiWriter::_extractLastElement(const ChangesetInfoPtr& workIn
   //  Update the structure with positive ID for create and version of element
   _changeset.updateLastElement(last);
   return last;
+}
+
+bool OsmApiWriter::_validateUpload(const HootNetworkRequestPtr& request, const ChangesetInfoPtr& workInfo)
+{
+  //  Can only work on changesets of size 1
+  if (workInfo->size() != 1)
+    return false;
+  //  Creates cannot be fixed with this method, skip them here
+  for (int changesetType = ChangesetType::TypeModify; changesetType < ChangesetType::TypeMax; ++changesetType)
+  {
+    ChangesetType c_type = static_cast<ChangesetType>(changesetType);
+    for (int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
+    {
+      ElementType::Type e_type = static_cast<ElementType::Type>(elementType);
+      ChangesetInfo::iterator element = workInfo->begin(e_type, c_type);
+      if (element != workInfo->end(e_type, c_type))
+      {
+        long id = *element;
+        QString current = "";
+        if (changesetType == ChangesetType::TypeModify)
+        {
+          //  Get the element from the OSM API
+          switch(e_type)
+          {
+          case ElementType::Node:
+            current = _getNode(request, id);
+            break;
+          case ElementType::Way:
+            current = _getWay(request, id);
+            break;
+          case ElementType::Relation:
+            current = _getRelation(request, id);
+            break;
+          default:
+            continue;
+          }
+          //  Validate the changeset element
+          return _changeset.validateElement(c_type, e_type, id, current);
+        }
+        else  //  ChangesetType::TypeDelete
+        {
+          //  Check for the existence of the element from the OSM API
+          switch(e_type)
+          {
+          case ElementType::Node:
+            return _hasNode(request, id);
+            break;
+          case ElementType::Way:
+            return _hasWay(request, id);
+            break;
+          case ElementType::Relation:
+            return _hasRelation(request, id);
+            break;
+          default:
+            continue;
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 }

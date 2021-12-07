@@ -228,7 +228,10 @@ public:
 
 inline QuadEdge::QuadEdge()
 {
-  e[0].num = 0, e[1].num = 1, e[2].num = 2, e[3].num = 3;
+  e[0].num = 0;
+  e[1].num = 1;
+  e[2].num = 2;
+  e[3].num = 3;
   e[0].next = &(e[0]);
   e[1].next = &(e[3]);
   e[2].next = &(e[2]);

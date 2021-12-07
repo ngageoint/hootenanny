@@ -251,6 +251,23 @@ protected:
   bool respond(HttpConnectionPtr &connection) override;
 };
 
+class ChangesetValidateUploadTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ChangesetValidateUploadTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a failed delete and then keep the changeset split deletes
+   *  together.
+   *  Requests, in order:
+   *   - Node Get - responds with HTTP 200
+   *   - Way Get - responds with HTTP 404
+   */
+  bool respond(HttpConnectionPtr &connection) override;
+};
+
 class OsmApiSampleRequestResponse
 {
 public:
@@ -293,6 +310,8 @@ public:
   static const char* SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_1;
   static const char* SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_2;
   static const char* SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_3;
+  /** Sample element GET response from '/api/0.6/node/1' for upload validation */
+  static const char* VALIDATE_NODE_RESPONSE;
 };
 
 }
