@@ -27,7 +27,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.679Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:name" v="imagery"/>
         <tag k="uuid" v="{1c214fc8-c843-44b0-b6f4-cdd8649bc5a0}"/>
         <tag k="width" v="4"/>
         <tag k="width:minimum_traveled_way" v="4"/>
@@ -48,7 +48,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.679Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:name" v="imagery"/>
         <tag k="surface" v="paved"/>
         <tag k="uuid" v="{1b54f920-9fd6-4247-9e4b-8081f12d8125}"/>
         <tag k="width" v="4"/>
@@ -70,7 +70,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.678Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:name" v="imagery"/>
         <tag k="surface" v="earth"/>
         <tag k="uuid" v="{1b39a7bf-7ac1-4ec8-b7ad-6c2db72e7cb4}"/>
         <tag k="width" v="4"/>
@@ -90,7 +90,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.678Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:name" v="imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="uuid" v="{1a9f676d-5ffa-4776-9712-2fa11078036e}"/>
         <tag k="width" v="4"/>
@@ -111,7 +111,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.677Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:name" v="imagery"/>
         <tag k="surface" v="paved"/>
         <tag k="uuid" v="{19ee9b5c-6011-4093-a2a7-a304d62381db}"/>
         <tag k="width" v="4"/>
@@ -131,7 +131,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.676Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:name" v="imagery"/>
         <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
         <tag k="width" v="4"/>
         <tag k="width:minimum_traveled_way" v="4"/>

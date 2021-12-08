@@ -137,6 +137,9 @@ public:
   inline static QString HootScoreReviewThreshold()      { return "hoot:score:review:threshold"; }
   inline static QString HootScoreUuid()                 { return "hoot:score:uuid"; }
 
+  // Used when adding the elements timestamp as a tag
+  inline static QString HootTimestamp()                 { return "hoot:timestamp"; }
+
   inline static QString HootUserName()                  { return "hoot:user_name"; }
   inline static QString HootUserId()                    { return "hoot:user_id"; }
 

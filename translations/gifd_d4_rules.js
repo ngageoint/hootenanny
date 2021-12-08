@@ -668,13 +668,13 @@ gifd.rules = {
     // ALE_EVAL_METHOD_CD - Absolute Linear Error Evaluation Method
     ['ALE_EVAL_METHOD_CD','ACA','source:accuracy:linear:evaluation','geodetic_survey_control_-_adequate_sample'], // Geodetic Survey Control - adequate sample
     ['ALE_EVAL_METHOD_CD','ACS','source:accuracy:linear:evaluation','geodetic_survey_control_-_small_sample'], // Geodetic Survey Control - small sample
-    ['ALE_EVAL_METHOD_CD','AHA','source:accuracy:linear:evaluation','photogrammetric_(old_stats,_unable_to_convert_to_ana_due_to_significant_bias)'], // Photogrammetric (old stats, unable to convert to ANA due to significant bias)
+    ['ALE_EVAL_METHOD_CD','AHA','source:accuracy:linear:evaluation','photogrammetric_(old_stats_unable_to_convert_to_ana_due_to_significant_bias)'], // Photogrammetric (old stats, unable to convert to ANA due to significant bias)
     ['ALE_EVAL_METHOD_CD','ANA','source:accuracy:linear:evaluation','photogrammetric_control_(gdasii)_-_adequate_sample'], // Photogrammetric Control (GDASII) - adequate sample
     ['ALE_EVAL_METHOD_CD','ANS','source:accuracy:linear:evaluation','photogrammetric_control_(gdasii)_-_small_sample'], // Photogrammetric Control (GDASII) - small sample
-    ['ALE_EVAL_METHOD_CD','APA','source:accuracy:linear:evaluation','photogrammetric_control_(iec,_fpe,_npf)_-_adequate_sample'], // Photogrammetric Control (IEC, FPE, NPF) - adequate sample
-    ['ALE_EVAL_METHOD_CD','APS','source:accuracy:linear:evaluation','photogrammetric_control_(iec,_fpe,_npf)_-_small_sample'], // Photogrammetric Control (IEC, FPE, NPF) - small sample
+    ['ALE_EVAL_METHOD_CD','APA','source:accuracy:linear:evaluation','photogrammetric_control_(iec_fpe_npf)_-_adequate_sample'], // Photogrammetric Control (IEC, FPE, NPF) - adequate sample
+    ['ALE_EVAL_METHOD_CD','APS','source:accuracy:linear:evaluation','photogrammetric_control_(iec_fpe_npf)_-_small_sample'], // Photogrammetric Control (IEC, FPE, NPF) - small sample
     ['ALE_EVAL_METHOD_CD','AXB','source:accuracy:linear:evaluation','extrapolation'], // Extrapolation
-    ['ALE_EVAL_METHOD_CD','AZD','source:accuracy:linear:evaluation','unable_to_perform_metric_evaluation,_other_than_ezm,_ezg,_azf,_and_aze_(assumed_adequate)'], // Unable to perform metric evaluation, other than EZM, EZG, AZF, and AZE (assumed adequate)
+    ['ALE_EVAL_METHOD_CD','AZD','source:accuracy:linear:evaluation','unable_to_perform_metric_evaluation_other_than_ezm_ezg_azf_and_aze_(assumed_adequate)'], // Unable to perform metric evaluation, other than EZM, EZG, AZF, and AZE (assumed adequate)
     ['ALE_EVAL_METHOD_CD','AZE','source:accuracy:linear:evaluation','insufficient_control_presently_available_to_perform_metric_evaluation_(assumed_adequate)'], // Insufficient control presently available to perform metric evaluation (assumed adequate)
     ['ALE_EVAL_METHOD_CD','AZF','source:accuracy:linear:evaluation','insufficient_identifiable_map_features_for_metric_evaluation_(assumed_adequate)'], // Insufficient identifiable map features for metric evaluation (assumed adequate)
     ['ALE_EVAL_METHOD_CD','BMD','source:accuracy:linear:evaluation','error_budget_evaluation_(production_data)'], // Error Budget Evaluation (Production Data)
@@ -685,7 +685,7 @@ gifd.rules = {
     ['ALE_EVAL_METHOD_CD','EZD','source:accuracy:linear:evaluation','estimate_based_on_analyst_familiarity'], // Estimate based on analyst familiarity
     ['ALE_EVAL_METHOD_CD','EZG','source:accuracy:linear:evaluation','insufficient_graticule_for_metric_evaluation_(assumed_limited)'], // Insufficient graticule for metric evaluation (assumed limited)
     ['ALE_EVAL_METHOD_CD','EZM','source:accuracy:linear:evaluation','scale_too_small_(<1:300,000)_to_perform_metric_evaluation_on_gdas_systems_(assumed_adequate)'], // Scale too small (<1:300,000) to perform metric evaluation on GDAS systems (assumed adequate)
-    ['ALE_EVAL_METHOD_CD','EZZ','source:accuracy:linear:evaluation','digital_product,_no_evaluation_method_available'], // Digital Product, no evaluation method available
+    ['ALE_EVAL_METHOD_CD','EZZ','source:accuracy:linear:evaluation','digital_product_no_evaluation_method_available'], // Digital Product, no evaluation method available
     ['ALE_EVAL_METHOD_CD','FZD','source:accuracy:linear:evaluation','evaluation_deferred_(no_measurement)'], // Evaluation deferred (no measurement)
 
     // APT - Airfield Type
@@ -763,7 +763,7 @@ gifd.rules = {
     ['AUA','15','airspace:type','military_aerodrome_traffic_zone_(maiz)'], // Military Aerodrome Traffic Zone (MAIZ)
     ['AUA','16','airspace:type','military_common_area_control_(mcac)'], // Military Common Area Control (MCAC)
     ['AUA','17','airspace:type','military_climb_corridor_(mcc)'], // Military Climb Corridor (MCC)
-    ['AUA','18','airspace:type','military_flying_area_(canada,_mfa)'], // Military Flying Area (Canada, MFA)
+    ['AUA','18','airspace:type','military_flying_area_(canada_mfa)'], // Military Flying Area (Canada, MFA)
     ['AUA','19','airspace:type','mid-canada_identification_zone_(midiz)'], // Mid-Canada Identification Zone (MIDIZ)
     ['AUA','20','airspace:type','military_operations_area_(moa)'], // Military Operations Area (MOA)
     ['AUA','21','airspace:type','military_terminal_control_area_(mtca)'], // Military Terminal Control Area (MTCA)
@@ -910,8 +910,8 @@ gifd.rules = {
     ['B01','6','raw:B01','f_-_buried_and_semi-buried_tanks.'], // F - Buried and Semi-buried Tanks.
     ['B01','7','raw:B01','d_-_railroad_tank_car.'], // D - Railroad Tank Car.
     ['B01','8','raw:B01','p_-_truck.'], // P - Truck.
-    ['B01','9','raw:B01','m_-_barrels,_drums,_or_cans.'], // M - Barrels, Drums, or Cans.
-    ['B01','10','raw:B01','j_-_buried,_semi-buried,_and_aboveground_tanks.'], // J - Buried, Semi-buried, and Aboveground Tanks.
+    ['B01','9','raw:B01','m_-_barrels_drums_or_cans.'], // M - Barrels, Drums, or Cans.
+    ['B01','10','raw:B01','j_-_buried_semi-buried_and_aboveground_tanks.'], // J - Buried, Semi-buried, and Aboveground Tanks.
 
     // BAC - Built-Up Area Classification
     // ['BAC','0','building:density','unknown'], // Unknown
@@ -1126,7 +1126,7 @@ gifd.rules = {
     ['BSP','4','bridge:structure','plate_girder_moveable_as_vertical_lift'], // Plate girder moveable as vertical lift
     ['BSP','5','bridge:structure','plate_girder_moveable_as_draw_bridge'], // Plate girder moveable as draw bridge
     ['BSP','6','bridge:structure','plate_girder_moveable_as_bascule'], // Plate girder moveable as bascule
-    ['BSP','7','bridge:structure','stringer,_beam'], // Stringer, beam
+    ['BSP','7','bridge:structure','stringer_beam'], // Stringer, beam
     ['BSP','8','bridge:structure','stringer_moveable_as_vertical_lift'], // Stringer, moveable as vertical lift
     ['BSP','9','bridge:structure','stringer_moveable_as_draw_bridge'], // Stringer, moveable as draw bridge
     ['BSP','10','bridge:structure','slab'], // Slab
@@ -1446,7 +1446,7 @@ gifd.rules = {
     ['CSM','1','material:characteristic','broken'], // Broken
     ['CSM','2','material:characteristic','coarse'], // Coarse
     ['CSM','3','material:characteristic','decayed'], // Decayed
-    ['CSM','4','material:characteristic','fine,_minute_particles'], // Fine, Minute Particles
+    ['CSM','4','material:characteristic','fine_minute_particles'], // Fine, Minute Particles
     ['CSM','5','material:characteristic','gritty'], // Gritty
     ['CSM','6','material:characteristic','hard'], // Hard
     ['CSM','7','material:characteristic','rotten'], // Rotten
@@ -1661,7 +1661,7 @@ gifd.rules = {
     // FHC - Harbor Facility Classification
     // ['FHC','0','harbour:use','undefined'], // Undefined
     ['FHC','0',undefined,undefined], // Undefined
-    ['FHC','1','harbour:use','ro-ro_terminal_(roll_on,_roll_off)'], // Ro-Ro terminal (Roll on, Roll off)
+    ['FHC','1','harbour:use','ro-ro_terminal_(roll_on_roll_off)'], // Ro-Ro terminal (Roll on, Roll off)
     ['FHC','2','harbour:use','timber_yard'], // Timber yard
     ['FHC','3','harbour:use','ferry_terminal'], // Ferry Terminal
     ['FHC','4','harbour:use','fishing_harbor'], // Fishing Harbor
@@ -1956,8 +1956,8 @@ gifd.rules = {
 
     // HTC - Hull Integrity Test Site Characteristics
     ['HTC','0','raw:HTC','unknown'], // Unknown
-    ['HTC','501','raw:HTC','smooth,_hard_bottom'], // Smooth, hard bottom
-    ['HTC','502','raw:HTC','rough,_hard_bottom'], // Rough, hard bottom
+    ['HTC','501','raw:HTC','smooth_hard_bottom'], // Smooth, hard bottom
+    ['HTC','502','raw:HTC','rough_hard_bottom'], // Rough, hard bottom
     ['HTC','503','raw:HTC','rock_and_ledges_greater_than_2_m_in_height'], // Rock and ledges greater than 2 m in height
     ['HTC','504','raw:HTC','rock_and_ledges_less_than_or_equal_to_2_m_in_height'], // Rock and ledges less than or equal to 2 m in height
     ['HTC','505','raw:HTC','feature_0.6_m_or_greater_in_height'], // Feature 0.6 m or greater in height
@@ -2942,7 +2942,7 @@ gifd.rules = {
     ['NS2','40','seamark:radio_station:category:2','radio_beacon'], // Radio Beacon
     ['NS2','41','seamark:radio_station:category:2','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
     ['NS2','45','seamark:radio_station:category:2','radar_station'], // Radar Station
-    ['NS2','51','seamark:radio_station:category:2','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+    ['NS2','51','seamark:radio_station:category:2','radiobeacon_type_unknown'], // Radiobeacon, Type Unknown
     ['NS2','52','seamark:radio_station:category:2','none'], // None
     ['NS2','53','seamark:radio_station:category:2','qtg_station_(r)'], // QTG Station (R)
     ['NS2','54','seamark:radio_station:category:2','ramark_(ramark)'], // Ramark (Ramark)
@@ -2986,7 +2986,7 @@ gifd.rules = {
     ['NST','42','seamark:radio_station:category','visual_flight_rules_test_signal_maker'], // Visual Flight Rules (VFR) Test Signal Maker
     ['NST','45','seamark:radio_station:category','radar_station'], // Radar Station
     ['NST','46','seamark:radio_station:category','aeronautical_radio_range'], // Aeronautical Radio Range
-    ['NST','51','seamark:radio_station:category','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+    ['NST','51','seamark:radio_station:category','radiobeacon_type_unknown'], // Radiobeacon, Type Unknown
     ['NST','52','seamark:radio_station:category','none'], // None
     ['NST','53','seamark:radio_station:category','qtg_station_(r)'], // QTG Station (R)
     ['NST','54','seamark:radio_station:category','ramark_(ramark)'], // Ramark (Ramark)
@@ -3044,8 +3044,8 @@ gifd.rules = {
 
     // OOC - Overhead Obstruction Category
     ['OOC','0','raw:OOC','unknown'], // Unknown
-    ['OOC','1','raw:OOC','viaduct,_frame_construction'], // Viaduct, frame construction
-    ['OOC','2','raw:OOC','viaduct,_arc_construction'], // Viaduct, arc construction
+    ['OOC','1','raw:OOC','viaduct_frame_construction'], // Viaduct, frame construction
+    ['OOC','2','raw:OOC','viaduct_arc_construction'], // Viaduct, arc construction
     ['OOC','3','raw:OOC','roof'], // Roof
     ['OOC','4','raw:OOC','powerline_of_railway'], // Powerline of railway
     ['OOC','5','raw:OOC','high-tension_powerline'], // High-Tension powerline
@@ -3061,7 +3061,7 @@ gifd.rules = {
     ['OPC','5','offshore_construction','single_anchor_leg_mooring_(salm)'], // Single anchor leg mooring (SALM)
     ['OPC','6','offshore_construction','mooring_tower'], // Mooring Tower
     ['OPC','7','offshore_construction','artificial_island'], // Artificial Island
-    ['OPC','8','offshore_construction','floating_production,_storage_and_off-loading_vessel_(fpso)'], // Floating production, storage and off-loading vessel (FPSO)
+    ['OPC','8','offshore_construction','floating_production_storage_and_off-loading_vessel_(fpso)'], // Floating production, storage and off-loading vessel (FPSO)
     ['OPC','9','offshore_construction','accommodation_platform'], // Accommodation Platform
     ['OPC','10','offshore_construction','navigation_aid_support'], // Navigation Aid Support
     ['OPC','999','offshore_construction','other'], // Other
@@ -3089,7 +3089,7 @@ gifd.rules = {
     ['ORIGINATING_SOURCE','Arc Digitized Raster Graphic (ADRG)','source:name','arc_digitized_raster_graphic_(adrg)'], // Arc Digitized Raster Graphic (ADRG)
     ['ORIGINATING_SOURCE','Automated Aeronautical Facilities Information File (AAFIF)','source:name','automated_aeronautical_facilities_information_file_(aafif)'], // Automated Aeronautical Facilities Information File (AAFIF)
     ['ORIGINATING_SOURCE','Boundaries (International Boundaries Database)','source:name','boundaries_(international_boundaries_database)'], // Boundaries (International Boundaries Database)
-    ['ORIGINATING_SOURCE','CHUM','source:name','chum'], // CHUM
+    ['ORIGINATING_SOURCE','CHUM','source:name','chart_update_manual_(chum)'], // CHUM
     ['ORIGINATING_SOURCE','City Graphic','source:name','city_graphic'], // City Graphic
     ['ORIGINATING_SOURCE','Combat Chart','source:name','combat_chart'], // Combat Chart
     ['ORIGINATING_SOURCE','Compressed Arc Digitized Raster Graphic (CADRG)','source:name','compressed_arc_digitized_raster_graphic_(cadrg)'], // Compressed Arc Digitized Raster Graphic (CADRG)
@@ -3114,9 +3114,9 @@ gifd.rules = {
     ['ORIGINATING_SOURCE','GeoCover/LandCover','source:name','geocover/landcover'], // GeoCover/LandCover
     ['ORIGINATING_SOURCE','GeoNames','source:name','geonames'], // GeoNames
     ['ORIGINATING_SOURCE','Image City Map (ICM)','source:name','image_city_map_(icm)'], // Image City Map (ICM)
-    ['ORIGINATING_SOURCE','Imagery (IKONOS)','source:name','imagery_(ikonos)'], // Imagery (IKONOS)
-    ['ORIGINATING_SOURCE','Imagery (NTM)','source:name','imagery_(ntm)'], // Imagery (NTM)
-    ['ORIGINATING_SOURCE','Imagery (Other)','source:name','imagery_(other)'], // Imagery (Other)
+    ['ORIGINATING_SOURCE','Imagery (IKONOS)','source:name','ikonos_imagery'], // Imagery (IKONOS)
+    ['ORIGINATING_SOURCE','Imagery (NTM)','source:name','ntm_imagery'], // Imagery (NTM)
+    ['ORIGINATING_SOURCE','Imagery (Other)','source:name','imagery'], // Imagery (Other)
     ['ORIGINATING_SOURCE','Interim Terrain Data (ITD)','source:name','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
     ['ORIGINATING_SOURCE','Interim Vector Data (IVD)','source:name','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
     ['ORIGINATING_SOURCE','Joint Operational Graphic (JOG)','source:name','joint_operational_graphic_(jog)'], // Joint Operational Graphic (JOG)
@@ -3284,7 +3284,7 @@ gifd.rules = {
 
     // PRC - Periodic Restriction Category
     ['PRC','0','raw:PRC','unknown'], // Unknown
-    ['PRC','1','raw:PRC','perennially_open,_not_subject_to_ice'], // Perennially Open, Not Subject to Ice
+    ['PRC','1','raw:PRC','perennially_open_not_subject_to_ice'], // Perennially Open, Not Subject to Ice
     ['PRC','2','raw:PRC','subject_to_ice'], // Subject to Ice
     ['PRC','3','raw:PRC','permanent_ice'], // Permanent Ice
     ['PRC','4','raw:PRC','seasonal_limit_-_jan.'], // Seasonal limit - Jan.
@@ -3395,15 +3395,15 @@ gifd.rules = {
     ['PRO','999','product','other'], // Other
 
     // PRT - Power Line Category
-    ['PRT','1','raw:PRT','aa_-_feature_is_metal_construction,_height_>_149'], // Aa - Feature Is Metal Construction, Height > 149
-    ['PRT','2','raw:PRT','ab_-_feature_is_metal_construction,_height_100-149.'], // Ab - Feature Is Metal Construction, Height 100-149.
-    ['PRT','3','raw:PRT','ac_-feature_is_metal_construction,_height_<_100.'], // Ac -Feature Is Metal Construction, Height < 100.
-    ['PRT','4','raw:PRT','ba_-feature_is_concrete_construction,_height_>_149.'], // Ba -Feature Is Concrete Construction, Height > 149.
-    ['PRT','5','raw:PRT','bb_-_feature_is_concrete_construction,_height_100-149.'], // Bb - Feature Is Concrete Construction, Height 100-149.
-    ['PRT','6','raw:PRT','bc_-feature_is_concrete_construction,_height_<_100.'], // Bc -Feature Is Concrete Construction, Height < 100.
-    ['PRT','7','raw:PRT','ca_-feature_is_wood_construction,_height_>_149.'], // Ca -Feature Is Wood Construction, Height > 149.
-    ['PRT','8','raw:PRT','cb_-feature_is_wood_construction,_height_100-_149.'], // Cb -Feature Is Wood Construction, Height 100- 149.
-    ['PRT','9','raw:PRT','cc_-_feature_is_wood_construction,_height_<_100.'], // Cc - Feature Is Wood Construction, Height < 100.
+    ['PRT','1','raw:PRT','aa_-_feature_is_metal_construction_height_>_149'], // Aa - Feature Is Metal Construction, Height > 149
+    ['PRT','2','raw:PRT','ab_-_feature_is_metal_construction_height_100-149.'], // Ab - Feature Is Metal Construction, Height 100-149.
+    ['PRT','3','raw:PRT','ac_-feature_is_metal_construction_height_<_100.'], // Ac -Feature Is Metal Construction, Height < 100.
+    ['PRT','4','raw:PRT','ba_-feature_is_concrete_construction_height_>_149.'], // Ba -Feature Is Concrete Construction, Height > 149.
+    ['PRT','5','raw:PRT','bb_-_feature_is_concrete_construction_height_100-149.'], // Bb - Feature Is Concrete Construction, Height 100-149.
+    ['PRT','6','raw:PRT','bc_-feature_is_concrete_construction_height_<_100.'], // Bc -Feature Is Concrete Construction, Height < 100.
+    ['PRT','7','raw:PRT','ca_-feature_is_wood_construction_height_>_149.'], // Ca -Feature Is Wood Construction, Height > 149.
+    ['PRT','8','raw:PRT','cb_-feature_is_wood_construction_height_100-_149.'], // Cb -Feature Is Wood Construction, Height 100- 149.
+    ['PRT','9','raw:PRT','cc_-_feature_is_wood_construction_height_<_100.'], // Cc - Feature Is Wood Construction, Height < 100.
 
     // PSC - Physical Surface Characteristics
     ['PSC','0','physical:characteristic','unknown'], // Unknown
@@ -3493,9 +3493,9 @@ gifd.rules = {
 
     // RCC - Radio Class Code
     ['RCC','0','raw:RCC','unknown'], // Unknown
-    ['RCC','1','raw:RCC','non-directional_radio_beacon_(homing),_power_50_to_less_than_2000_watts'], // Non-directional radio beacon (homing), power 50 to less than 2000 watts
-    ['RCC','2','raw:RCC','normal_anticipated_interference-free_service,_40nm_up_to_18,000_feet'], // Normal anticipated interference-free service, 40NM up to 18,000 feet
-    ['RCC','3','raw:RCC','normal_anticipated_interference-free_service,_25nm_up_to_12,000_feet'], // Normal anticipated interference-free service, 25NM up to 12,000 feet
+    ['RCC','1','raw:RCC','non-directional_radio_beacon_(homing)_power_50_to_less_than_2000_watts'], // Non-directional radio beacon (homing), power 50 to less than 2000 watts
+    ['RCC','2','raw:RCC','normal_anticipated_interference-free_service_40nm_up_to_18,000_feet'], // Normal anticipated interference-free service, 40NM up to 18,000 feet
+    ['RCC','3','raw:RCC','normal_anticipated_interference-free_service_25nm_up_to_12,000_feet'], // Normal anticipated interference-free service, 25NM up to 12,000 feet
 
     // RCL - Runway Centerline Lights
     ['RCL','0','raw:RCL','unknown'], // Unknown
@@ -3949,7 +3949,7 @@ gifd.rules = {
     ['SMC','203','surface','herbaceous_vegetation'], // Herbaceous Vegetation
     ['SMC','204','surface','treed_vegetation'], // Treed Vegetation
     ['SMC','250','surface','composite_-_50_%_or_more_of_the_runway_length_is_permanent'], // Composite - 50 % or more of the runway length is permanent
-    ['SMC','251','surface','pem_-_part_concrete,_part_asphalt_or_part_bitumen_bound_macadam'], // PEM - part concrete, part asphalt or part bitumen bound macadam
+    ['SMC','251','surface','pem_-_part_concrete_part_asphalt_or_part_bitumen_bound_macadam'], // PEM - part concrete, part asphalt or part bitumen bound macadam
     ['SMC','252','surface','paved'], // Permanent - hard surface type unknown
     ['SMC','253','surface','bituminous'], // Bituminous - tar or asphalt mixed in place, oiled
     ['SMC','254','surface','composite_soft_-_less_than_50%_of_the_runway_length_is_permanent'], // Composite Soft - less than 50% of the runway length is permanent
@@ -3973,7 +3973,7 @@ gifd.rules = {
     ['SND','13','sounding:type','normal'], // Normal (IHO)
     ['SND','14','sounding:type','hairline'], // Hairline (IHO)
     ['SND','93','sounding:type','doubtful'], // Doubtful Sounding
-    ['SND','96','sounding:type','least_depth_unknown,_safe_clearance_at_value_shown'], // Least depth unknown, safe clearance at value shown
+    ['SND','96','sounding:type','least_depth_unknown_safe_clearance_at_value_shown'], // Least depth unknown, safe clearance at value shown
     ['SND','997',undefined,undefined], // Unpopulated
     ['SND','999','raw:SND','other'], // Other
 
@@ -4098,23 +4098,23 @@ gifd.rules = {
     ['SRD','40','raw:SRD','sand_dunes/high'], // Sand dunes/high
     ['SRD','41','raw:SRD','active_sand_dunes'], // Active sand dunes
     ['SRD','42','raw:SRD','stabilized_sand_dunes'], // Stabilized sand dunes
-    ['SRD','43','raw:SRD','highly_distorted_area,_sharp_rocky_ridges'], // Highly distorted area, sharp rocky ridges
+    ['SRD','43','raw:SRD','highly_distorted_area_sharp_rocky_ridges'], // Highly distorted area, sharp rocky ridges
     ['SRD','51','raw:SRD','stony_soil_cut_by_numerous_gullies'], // Stony soil cut by numerous gullies
     ['SRD','52','raw:SRD','moderately_dissected_terrain'], // Moderately dissected terrain
     ['SRD','53','raw:SRD','moderately_dissected_terrain_with_scattered_rock_outcrops'], // Moderately dissected terrain with scattered rock outcrops
     ['SRD','54','raw:SRD','dissected_floodplain'], // Dissected floodplain
     ['SRD','55','raw:SRD','highly_dissected_terrain'], // Highly dissected terrain
     ['SRD','56','raw:SRD','area_with_deep_erosional_gullies'], // Area with deep erosional gullies
-    ['SRD','57','raw:SRD','steep,_rugged,_dissected_terrain_with_narrow_gullies'], // Steep, rugged, dissected terrain with narrow gullies
+    ['SRD','57','raw:SRD','steep_rugged_dissected_terrain_with_narrow_gullies'], // Steep, rugged, dissected terrain with narrow gullies
     ['SRD','58','raw:SRD','karst_areas_of_numerous_sinkholes_and_solution_valleys'], // Karst areas of numerous sinkholes and solution valleys
     ['SRD','59','raw:SRD','karst_area_of_numerous_sinkholes'], // Karst area of numerous sinkholes
     ['SRD','60','raw:SRD','karst/hummocky_terrain_covered_with_large_conical_hills'], // Karst/hummocky terrain covered with large conical hills
-    ['SRD','61','raw:SRD','karst/hummocky_terrain_covered_with_low,_broad-based_mounds'], // Karst/hummocky terrain covered with low, broad-based mounds
+    ['SRD','61','raw:SRD','karst/hummocky_terrain_covered_with_low_broad-based_mounds'], // Karst/hummocky terrain covered with low, broad-based mounds
     ['SRD','62','raw:SRD','arroyo/wadi/wash'], // Arroyo/wadi/wash
     ['SRD','63','raw:SRD','playa/dry_lake'], // Playa/dry lake
     ['SRD','64','raw:SRD','area_of_numerous_meander_scars_and/or_oxbow_lakes'], // Area of numerous meander scars and/or oxbow lakes
     ['SRD','65','raw:SRD','solifluction_lobes_and_frost_scars'], // Solifluction lobes and frost scars
-    ['SRD','66','raw:SRD','hummocky_ground,_areas_of_frost_heaving'], // Hummocky ground, areas of frost heaving
+    ['SRD','66','raw:SRD','hummocky_ground_areas_of_frost_heaving'], // Hummocky ground, areas of frost heaving
     ['SRD','67','raw:SRD','area_of_frost_polygons'], // Area of frost polygons
     ['SRD','68','raw:SRD','area_containing_sabkhas'], // Area containing sabkhas
     ['SRD','69','raw:SRD','area_of_numerous_small_lakes_and_ponds'], // Area of numerous small lakes and ponds
@@ -4139,7 +4139,7 @@ gifd.rules = {
 
     // SSC - Structure Shape Category
     ['SSC','0','shape','unknown'], // Unknown
-    ['SSC','1','shape','barrel,_ton'], // Barrel, Ton
+    ['SSC','1','shape','barrel_ton'], // Barrel, Ton
     ['SSC','2','shape','blimp'], // Blimp
     ['SSC','4','shape','bullet'], // Bullet
     ['SSC','6','shape','conical/peaked/nun'], // Conical/Peaked/NUN
@@ -4183,7 +4183,7 @@ gifd.rules = {
     ['SSC','107','shape','tower'], // Tower
     ['SSC','108','shape','scanner'], // Scanner
     ['SSC','109','shape','obelisk'], // Obelisk
-    ['SSC','110','shape','radome,_tower_mounted'], // Radome, Tower Mounted
+    ['SSC','110','shape','radome_tower_mounted'], // Radome, Tower Mounted
     ['SSC','997',undefined,undefined], // Unpopulated
     ['SSC','999','shape','other'], // Other
 
@@ -4426,8 +4426,8 @@ gifd.rules = {
     ['TMC','18','seamark:topmark:shape','perch'], // Perch
     ['TMC','19','seamark:topmark:shape','diamond'], // Diamond
     ['TMC','20','seamark:topmark:shape','broom_point_down'], // Broom Point Down
-    ['TMC','21','seamark:topmark:shape','cone,_point_up'], // Cone (Point Upwards)
-    ['TMC','22','seamark:topmark:shape','cone,_point_down'], // Cone (Point Downwards)
+    ['TMC','21','seamark:topmark:shape','cone_point_up'], // Cone (Point Upwards)
+    ['TMC','22','seamark:topmark:shape','cone_point_down'], // Cone (Point Downwards)
     ['TMC','23','seamark:topmark:shape','cross'], // Upright Cross
     ['TMC','24','seamark:topmark:shape','optical_reflector'], // Optical Reflector
     ['TMC','25','seamark:topmark:shape','can_(open)'], // Can (Open)
@@ -4437,7 +4437,7 @@ gifd.rules = {
     ['TMC','29','seamark:topmark:shape','can_over_ball_(open)'], // Can Over Ball (Open)
     ['TMC','30','seamark:topmark:shape','cross_over_ball_(filled)'], // Cross Over Ball (Filled)
     ['TMC','31','seamark:topmark:shape','diamond_over_ball_(filled)'], // Diamond Over Ball (Filled)
-    ['TMC','32','seamark:topmark:shape','double_cone,_points_apart_(open)'], // Double Cone, Points Apart (Open)
+    ['TMC','32','seamark:topmark:shape','double_cone_points_apart_(open)'], // Double Cone, Points Apart (Open)
     ['TMC','33','seamark:topmark:shape','none'], // None
     ['TMC','35','seamark:topmark:shape','t_shape'], // T Shape
     ['TMC','36','seamark:topmark:shape','cross_over_ball_(open)'], // Cross Over Ball (Open)
@@ -4893,7 +4893,7 @@ gifd.rules = {
     ['VEG','5','vegetation:type','agriculture_with_scattered_forests_or_rows_of_trees'], // Agriculture with scattered forests or rows of trees
     ['VEG','6','vegetation:type','cranberry'], // Cranberry
     ['VEG','7','vegetation:type','peat'], // Peat
-    ['VEG','8','vegetation:type','pasture,_meadow,_steppe'], // Pasture, meadow, steppe
+    ['VEG','8','vegetation:type','pasture_meadow_steppe'], // Pasture, meadow, steppe
     ['VEG','9','vegetation:type','grassland_with_scattered_trees'], // Grassland with scattered trees
     ['VEG','11','vegetation:type','casuarina'], // Casuarina
     ['VEG','12','vegetation:type','coniferous'], // Coniferous
@@ -5046,8 +5046,8 @@ gifd.rules = {
     ['WKT','10','raw:WKT','subchaser'], // Subchaser
     ['WKT','11','raw:WKT','coaster'], // Coaster
     ['WKT','12','raw:WKT','cruiser'], // Cruiser
-    ['WKT','13','raw:WKT','ship_debris_(plates,_misc._metal)'], // Ship Debris (plates, misc. metal)
-    ['WKT','14','raw:WKT','destroyer,_destroyer_escort,_corvette'], // Destroyer, Destroyer Escort, Corvette
+    ['WKT','13','raw:WKT','ship_debris_(plates_misc._metal)'], // Ship Debris (plates, misc. metal)
+    ['WKT','14','raw:WKT','destroyer_destroyer_escort_corvette'], // Destroyer, Destroyer Escort, Corvette
     ['WKT','15','raw:WKT','dredge'], // Dredge
     ['WKT','16','raw:WKT','drill_vessel_or_drill_rig'], // Drill Vessel or Drill Rig
     ['WKT','17','raw:WKT','explosives'], // Explosives
@@ -5057,15 +5057,15 @@ gifd.rules = {
     ['WKT','21','raw:WKT','frigate'], // Frigate
     ['WKT','22','raw:WKT','gunboat'], // Gunboat
     ['WKT','23','raw:WKT','hospital_ship'], // Hospital Ship
-    ['WKT','24','raw:WKT','hydrographic_survey,_air_cushion,_hydrofoil'], // Hydrographic Survey, Air Cushion, Hydrofoil
+    ['WKT','24','raw:WKT','hydrographic_survey_air_cushion_hydrofoil'], // Hydrographic Survey, Air Cushion, Hydrofoil
     ['WKT','25','raw:WKT','junk'], // Junk
     ['WKT','26','raw:WKT','lash_vessel'], // Lash Vessel
-    ['WKT','27','raw:WKT','landing_craft,_infantry_(lci)'], // Landing Craft, Infantry (LCI)
-    ['WKT','28','raw:WKT','gas_carrier,_natural_petroleum'], // Gas Carrier, Natural Petroleum
-    ['WKT','29','raw:WKT','landing_ship,_infantry_(lsi)'], // Landing Ship, Infantry (LSI)
-    ['WKT','30','raw:WKT','landing_ship,_tank_(lst)'], // Landing Ship, Tank (LST)
+    ['WKT','27','raw:WKT','landing_craft_infantry_(lci)'], // Landing Craft, Infantry (LCI)
+    ['WKT','28','raw:WKT','gas_carrier_natural_petroleum'], // Gas Carrier, Natural Petroleum
+    ['WKT','29','raw:WKT','landing_ship_infantry_(lsi)'], // Landing Ship, Infantry (LSI)
+    ['WKT','30','raw:WKT','landing_ship_tank_(lst)'], // Landing Ship, Tank (LST)
     ['WKT','31','raw:WKT','lightship'], // Lightship
-    ['WKT','32','raw:WKT','minesweeper,_minelayer'], // Minesweeper, Minelayer
+    ['WKT','32','raw:WKT','minesweeper_minelayer'], // Minesweeper, Minelayer
     ['WKT','33','raw:WKT','net_tender'], // Net Tender
     ['WKT','34','raw:WKT','bulk_carrier'], // Bulk Carrier
     ['WKT','35','raw:WKT','obstruction'], // Obstruction
@@ -5074,12 +5074,12 @@ gifd.rules = {
     ['WKT','38','raw:WKT','pinnacle_rock'], // Pinnacle Rock
     ['WKT','39','raw:WKT','roll_on_-_roll_off'], // Roll On - Roll Off
     ['WKT','40','raw:WKT','sailing_ship'], // Sailing Ship
-    ['WKT','41','raw:WKT','sea_bee,_lash_barge'], // Sea Bee, Lash Barge
+    ['WKT','41','raw:WKT','sea_bee_lash_barge'], // Sea Bee, Lash Barge
     ['WKT','42','raw:WKT','submarine_float'], // Submarine Float
     ['WKT','43','raw:WKT','submarine'], // Submarine
     ['WKT','44','raw:WKT','survey_vessel'], // Survey Vessel
     ['WKT','45','raw:WKT','tanker'], // Tanker
-    ['WKT','46','raw:WKT','tender,_submarine,_airplane,_oil_rig'], // Tender, Submarine, Airplane, Oil Rig
+    ['WKT','46','raw:WKT','tender_submarine_airplane_oil_rig'], // Tender, Submarine, Airplane, Oil Rig
     ['WKT','47','raw:WKT','target'], // Target
     ['WKT','48','raw:WKT','torpedo_boat'], // Torpedo Boat
     ['WKT','49','raw:WKT','transport'], // Transport
@@ -5111,7 +5111,7 @@ gifd.rules = {
     ['WSR','8','raw:WSR','report_sonar_verified'], // Report SONAR verified
     ['WSR','9','raw:WSR','report_mad_verified'], // Report MAD verified
     ['WSR','10','raw:WSR','japanese_naval_and_merchant_losses_during_ww_ii_by_all_causes_navexos_p-468'], // Japanese Naval and Merchant Losses during WW II By All Causes NAVEXOS P-468
-    ['WSR','11','raw:WSR','us_losses_-_director,_fleet_operations'], // US Losses - Director, Fleet Operations
+    ['WSR','11','raw:WSR','us_losses_-_director_fleet_operations'], // US Losses - Director, Fleet Operations
     ['WSR','12','raw:WSR','h.o._files'], // H.O. Files
     ['WSR','13','raw:WSR','comnavpac'], // COMNAVPAC
     ['WSR','14','raw:WSR','comnavfe'], // COMNAVFE
@@ -5120,14 +5120,14 @@ gifd.rules = {
     ['WSR','17','raw:WSR','lloyds_and_marine_underwriters_reports'], // Lloyds and Marine Underwriters Reports
     ['WSR','18','raw:WSR','the_imperial_japanese_navy_in_ww_ii'], // The Imperial Japanese Navy in WW II
     ['WSR','19','raw:WSR','u.s._navy_at_war_1941-1945'], // U.S. Navy at War 1941-1945
-    ['WSR','20','raw:WSR','german,_japanese,_and_italian_submarine_losses_in_ww_ii'], // German, Japanese, and Italian Submarine Losses in WW II
+    ['WSR','20','raw:WSR','german_japanese_and_italian_submarine_losses_in_ww_ii'], // German, Japanese, and Italian Submarine Losses in WW II
     ['WSR','21','raw:WSR','swedish_merchant_losses_1914-1920'], // Swedish Merchant Losses 1914-1920
     ['WSR','22','raw:WSR','h.o._wreck_information_list_and_supplement_dated_10_mar_1945_and_30_sep_1946'], // H.O. Wreck Information List and Supplement dated 10 MAR 1945 and 30 SEP 1946
     ['WSR','23','raw:WSR','american_ship_casualties_of_ww_i'], // American Ship Casualties of WW I
     ['WSR','24','raw:WSR','u.s._coast_guard_and_geodetic_survey_records'], // U.S. Coast Guard and Geodetic Survey Records
     ['WSR','25','raw:WSR','tenth_fleet_records_(op-374)'], // Tenth Fleet Records (OP-374)
     ['WSR','26','raw:WSR','naval_losses_of_all_nations_9/3/39_-_8/15/45'], // Naval Losses of All Nations 9/3/39 - 8/15/45
-    ['WSR','27','raw:WSR','italian_naval_and_merchant_losses,_ww_ii'], // Italian Naval and Merchant Losses, WW II
+    ['WSR','27','raw:WSR','italian_naval_and_merchant_losses_ww_ii'], // Italian Naval and Merchant Losses, WW II
     ['WSR','28','raw:WSR','list_of_danish_war_losses_1914_-_1918'], // List of Danish War Losses 1914 - 1918
     ['WSR','29','raw:WSR','british_merchant_vessels_captured_or_destroyed_by_enemy_action_1914_-_1918'], // British Merchant Vessels Captured or Destroyed by Enemy Action 1914 - 1918
     ['WSR','30','raw:WSR','abstracts_of_losses_1914_-_1918'], // Abstracts of Losses 1914 - 1918
@@ -5141,7 +5141,7 @@ gifd.rules = {
     ['WSR','38','raw:WSR','maritime_declarations_for_norwegian_ships_for_war_losses_1914_-_1918'], // Maritime Declarations for Norwegian Ships for War Losses 1914 - 1918
     ['WSR','39','raw:WSR','reports_of_known_wrecks_by_u.s._coast_guard_districts_1950'], // Reports of Known Wrecks by U.S. Coast Guard Districts 1950
     ['WSR','40','raw:WSR','france_-_naval_and_merchant_losses_during_ww_i'], // France - Naval and Merchant Losses during WW I
-    ['WSR','41','raw:WSR','sonar_reports_and_mad_reports,_u.s._navy'], // Sonar Reports and MAD Reports, U.S. Navy
+    ['WSR','41','raw:WSR','sonar_reports_and_mad_reports_u.s._navy'], // Sonar Reports and MAD Reports, U.S. Navy
     ['WSR','42','raw:WSR','maritime_commission_also_oni_list_ww_i'], // Maritime Commission also ONI List WW I
     ['WSR','43','raw:WSR','smaling_soforklaringer_-_danish_ship_war_losses_1914_-_1918'], // Smaling Soforklaringer - Danish Ship War Losses 1914 - 1918
     ['WSR','44','raw:WSR','merchant_vessels_of_the_u.s._lost_(commerce_department)'], // Merchant Vessels of the U.S. Lost (Commerce Department)
@@ -5149,11 +5149,11 @@ gifd.rules = {
     ['WSR','46','raw:WSR','ship_visit_reports'], // Ship Visit Reports
     ['WSR','47','raw:WSR','spanish_hydrographic_office'], // Spanish Hydrographic Office
     ['WSR','48','raw:WSR','british_admiralty_wreck_charts_1921'], // British Admiralty Wreck Charts 1921
-    ['WSR','49','raw:WSR','swedish_board_of_shipping_and_navigation,_hydrographic_dept.'], // Swedish Board of Shipping and Navigation, Hydrographic Dept.
-    ['WSR','50','raw:WSR','british_admiralty_wreck_charts,_1961'], // British Admiralty Wreck Charts, 1961
+    ['WSR','49','raw:WSR','swedish_board_of_shipping_and_navigation_hydrographic_dept.'], // Swedish Board of Shipping and Navigation, Hydrographic Dept.
+    ['WSR','50','raw:WSR','british_admiralty_wreck_charts_1961'], // British Admiralty Wreck Charts, 1961
     ['WSR','51','raw:WSR','portugal_hydrographic_office'], // Portugal Hydrographic Office
     ['WSR','52','raw:WSR','italian_navy_survey'], // Italian Navy Survey
-    ['WSR','53','raw:WSR','state_of_shipping_casualties_(resulting_in_total_loss_in_st._lawrence_river_and_gulf,_on_the_atlantic_coast_from_1896_up_to_date)'], // State of Shipping Casualties (Resulting in total loss in St. Lawrence River and Gulf, on the Atlantic Coast from 1896 up to date)
+    ['WSR','53','raw:WSR','state_of_shipping_casualties_(resulting_in_total_loss_in_st._lawrence_river_and_gulf_on_the_atlantic_coast_from_1896_up_to_date)'], // State of Shipping Casualties (Resulting in total loss in St. Lawrence River and Gulf, on the Atlantic Coast from 1896 up to date)
     ['WSR','54','raw:WSR','italian_naval_surveys_charts_and_lists'], // Italian Naval Surveys Charts and Lists
     ['WSR','55','raw:WSR','oni'], // ONI
     ['WSR','57','raw:WSR','r.c.n._wreck_list_(rcn_pub._272)'], // R.C.N. Wreck List (RCN Pub. 272)

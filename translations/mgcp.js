@@ -685,7 +685,7 @@ mgcp = {
     // #####
     if (attrs.HWT && attrs.HWT !== '0' && attrs.HWT !== '998')
     {
-      tags.amenity = 'place_of_worship';
+      if (attrs.HWT !== '7') tags.amenity = 'place_of_worship';
 
       switch (tags.building)
       {
@@ -722,12 +722,38 @@ mgcp = {
         // case 'tabernacle':
         // case 'temple':
       } // End switch
-
-      if (tags['tower:type'] == 'minaret')
-      {
-        tags.religion = 'muslim';
-      }
     } // End HWT
+
+    // A bit crude but it helps the case where we drop the religion tag on export
+    switch (tags.denomination)
+    {
+      case undefined:
+        break;
+
+    case 'roman_catholic':
+    case 'orthodox':
+    case 'protestant':
+    case 'chaldean_catholic':
+    case 'nestorian': // Not sure about this
+      tags.religion = 'christian';
+      break;
+
+    case 'shia':
+    case 'sunni':
+      tags.religion = 'muslim';
+      break;
+    } // End switch
+
+    if (tags['tower:type'] == 'minaret')
+    {
+      tags.religion = 'muslim';
+    }
+
+    if (tags.with_minaret == 'yes')
+    {
+      tags.religion = 'muslim';
+      tags.building = 'mosque';
+    }
 
     // Add the LayerName to the source
     if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();
@@ -761,7 +787,7 @@ mgcp = {
       ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
       ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
       ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
-      ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
+      // ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
       ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
       ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
@@ -769,7 +795,6 @@ mgcp = {
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
       // ["t.public_transport == 'station'","t.bus = 'yes'"],
-      ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
       ["t.water && !(t.natural)","t.natural = 'water'"],
@@ -879,7 +904,6 @@ mgcp = {
       }
       break;
 
-
     case 'AF030': // Cooling Tower
       if (!tags['tower:type']) tags['tower:type'] = 'cooling';
       break;
@@ -970,7 +994,12 @@ mgcp = {
       break;
 
     case 'AN010':
-      if (attrs.RGC == '6' && attrs.RRC == '0') tags.railway = 'monorail';
+      if (tags['railway:track'] == 'monorail')
+      {
+        if (tags.railway !== 'rail') tags['railway:type'] = tags.railway; // Redundant tags
+        tags.railway = 'monorail';
+        delete tags['railway:track'];
+      }
       break;
 
     // case 'AP010': // Track
@@ -979,8 +1008,28 @@ mgcp = {
     //     break;
 
     case 'AP030': // Trail
-        if (tags.highway == 'yes') tags.highway = 'road';
-        break;
+      if (tags.highway == 'yes') tags.highway = 'road';
+      break;
+
+    case 'AT042': // Pylon
+      // We need to deconflict various tower types
+      switch (tags['cable:type'])
+      {
+        case 'unknown': // Just keep 'pylon=yes'
+        case 'other':
+          break;
+
+        case 'power':
+          delete tags['cable:type']; // fall through
+        case 'transmission':
+          delete tags.pylon;
+          tags.power = 'tower';
+          break;
+
+        case 'communication':
+          break;
+      }
+      break; // End AT042
 
     case 'AQ075': // Ice Route
       if (!tags.highway) tags.highway = 'road';
@@ -1249,7 +1298,6 @@ mgcp = {
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
       // ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
-      ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
       ["t.resource","t.product = t.resource; delete t.resource"],
       ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
@@ -1268,6 +1316,14 @@ mgcp = {
     for (var i = 0, rLen = mgcp.mgcpPreRules.length; i < rLen; i++)
     {
       if (mgcp.mgcpPreRules[i][0](tags)) mgcp.mgcpPreRules[i][1](tags,attrs);
+    }
+
+    // Deconflict towers
+    if (tags.power == 'tower')
+    {
+      delete tags.power;
+      tags.pylon = 'yes';
+      if (!tags['cable:type']) tags['cable:type'] = 'power';
     }
 
     // Sort out landuse
@@ -1807,6 +1863,20 @@ mgcp = {
       }
     }
 
+    // Monorails are a special case
+    if (tags.railway == 'monorail')
+    {
+      tags['railway:track'] = 'monorail';
+      tags.railway = 'rail';
+
+      if (tags['railway:type'])
+      {
+        tags.railway = tags['railway:type'];
+        delete tags['railway:type']
+      }
+    }
+
+
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
 
@@ -1952,7 +2022,10 @@ mgcp = {
         // Unknown House of Worship
         if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
 
-        if (attrs.HWT && ! tags.amenity && ! attrs.FFN)
+        // AL015 doesn't use the religion tag
+        delete attrs.REL;
+
+        if (attrs.HWT && attrs.HWT !== '7' && !tags.amenity && !attrs.FFN)
         {
           attrs.FFN = '931';
         }

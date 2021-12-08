@@ -524,7 +524,7 @@ ggdm30.rules = {
     // ['AMA','-999999',undefined,undefined], // No Information
     ['AMA','1','attraction','artificial_mountain'], // Artificial Mountain
     ['AMA','2','attraction','ferris_wheel'], // Ferris Wheel
-    ['AMA','3','attraction','roller-coaster'], // Roller-coaster
+    ['AMA','3','attraction','roller_coaster'], // Roller-coaster
     ['AMA','4','attraction','spherical'], // Spherical
     ['AMA','5','attraction','water_attraction'], // Water Attraction
     ['AMA','6','attraction','vertical_ride'], // Vertical Ride
@@ -922,9 +922,9 @@ ggdm30.rules = {
     ['BET','60','seamark:beacon','reduced_wake'], // Reduced Wake
     ['BET','61','seamark:beacon','speed_limit'], // Speed Limit
     ['BET','62','seamark:beacon','stop'], // Stop
-    ['BET','63','seamark:beacon','sound_ship"s_siren'], // Sound Ship"s Siren
+    ['BET','63','seamark:beacon','sound_ships_siren'], // Sound Ships Siren
     ['BET','64','seamark:beacon','restricted_vertical_clearance'], // Restricted Vertical Clearance
-    ['BET','65','seamark:beacon','maximum_vessel"s_draught'], // Maximum Vessel"s Draught
+    ['BET','65','seamark:beacon','maximum_vessels_draught'], // Maximum Vessels Draught
     ['BET','66','seamark:beacon','restricted_horizontal_clearance'], // Restricted Horizontal Clearance
     ['BET','67','seamark:beacon','strong_current_warning'], // Strong Current Warning
     ['BET','68','seamark:beacon','berthing_permitted'], // Berthing Permitted
@@ -1245,7 +1245,7 @@ ggdm30.rules = {
     ['BUT','99','seamark:buoy:type','installation'], // Installation
     ['BUT','100','seamark:buoy:type','accelerometer'], // Accelerometer
     ['BUT','101','seamark:buoy:type','wavemeter'], // Wavemeter
-    ['BUT','102','seamark:buoy:type','navigation,_communication_and_control_buoy_(nccb)'], // Navigation, communication and control buoy (NCCB)
+    ['BUT','102','seamark:buoy:type','navigation_communication_and_control_buoy_(nccb)'], // Navigation, communication and control buoy (NCCB)
     ['BUT','103','seamark:buoy:type','ice_buoy'], // Ice Buoy
     ['BUT','104','seamark:buoy:type','firing_danger_area'], // Firing Danger Area
     ['BUT','105','seamark:buoy:type','target'], // Target
@@ -1266,9 +1266,9 @@ ggdm30.rules = {
     ['BUT','120','seamark:buoy:type','reduced_wake'], // Reduced Wake
     ['BUT','121','seamark:buoy:type','speed_limit'], // Speed Limit
     ['BUT','122','seamark:buoy:type','stop'], // Stop
-    ['BUT','123','seamark:buoy:type','sound_ship"s_siren'], // Sound Ship"s Siren
+    ['BUT','123','seamark:buoy:type','sound_ships_siren'], // Sound Ships Siren
     ['BUT','124','seamark:buoy:type','restricted_vertical_clearance'], // Restricted Vertical Clearance
-    ['BUT','125','seamark:buoy:type','maximum_vessel"s_draft'], // Maximum Vessel"s Draft
+    ['BUT','125','seamark:buoy:type','maximum_vessels_draft'], // Maximum Vessels Draft
     ['BUT','126','seamark:buoy:type','restricted_horizontal_clearance'], // Restricted Horizontal Clearance
     ['BUT','127','seamark:buoy:type','strong_current_warning'], // Strong Current Warning
     ['BUT','128','seamark:buoy:type','berthing_permitted'], // Berthing Permitted
@@ -2635,13 +2635,13 @@ ggdm30.rules = {
     ['HZD','34','source:datum:geodetic','montserrat_island_astro_1958'], // Montserrat Island Astro 1958
     ['HZD','35','source:datum:geodetic','astro_station_1952_(marcus_island)'], // Astro Station 1952 (Marcus Island)
     ['HZD','36','source:datum:geodetic','astro_beacon_e_(iwo_jima_island)'], // Astro Beacon 'E' (Iwo Jima Island)
-    ['HZD','37','source:datum:geodetic','average_terrestrial_system_1977,_new_brunswick'], // Average Terrestrial System 1977, New Brunswick
+    ['HZD','37','source:datum:geodetic','average_terrestrial_system_1977_new_brunswick'], // Average Terrestrial System 1977, New Brunswick
     ['HZD','38','source:datum:geodetic','australian_geod._1966_(australia_and_tasmania_island)'], // Australian Geod. 1966 (Australia and Tasmania Island)
     ['HZD','39','source:datum:geodetic','australian_geod._1984_(australia_and_tasmania_island)'], // Australian Geod. 1984 (Australia and Tasmania Island)
-    ['HZD','40','source:datum:geodetic','djakarta_(batavia)_(sumatra_island,_indonesia)'], // Djakarta (Batavia) (Sumatra Island, Indonesia)
-    ['HZD','41','source:datum:geodetic','djakarta_(batavia)_(sumatra_island,_indonesia)_with_zero_meridian_djakarta'], // Djakarta (Batavia) (Sumatra Island, Indonesia) with Zero Meridian Djakarta
+    ['HZD','40','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)'], // Djakarta (Batavia) (Sumatra Island, Indonesia)
+    ['HZD','41','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)_with_zero_meridian_djakarta'], // Djakarta (Batavia) (Sumatra Island, Indonesia) with Zero Meridian Djakarta
     ['HZD','42','source:datum:geodetic','bekaa_base_south_end_(lebanon)'], // Bekaa Base South End (Lebanon)
-    ['HZD','43','source:datum:geodetic','belgium_1950_system_(lommel_signal,_belgium)'], // Belgium 1950 System (Lommel Signal, Belgium)
+    ['HZD','43','source:datum:geodetic','belgium_1950_system_(lommel_signal_belgium)'], // Belgium 1950 System (Lommel Signal, Belgium)
     ['HZD','44','source:datum:geodetic','bermuda_1957_(bermuda_islands)'], // Bermuda 1957 (Bermuda Islands)
     ['HZD','45','source:datum:geodetic','bissau_(guinea-bissau)'], // Bissau (Guinea-Bissau)
     ['HZD','46','source:datum:geodetic','modified_bjz54_(china)'], // Modified BJZ54 (China)
@@ -2650,26 +2650,26 @@ ggdm30.rules = {
     ['HZD','49','source:datum:geodetic','bogota_observatory_(colombia)_with_zero_meridian_bogota'], // Bogota Observatory (Colombia) with Zero Meridian Bogota
     ['HZD','50','source:datum:geodetic','bern_1898_(switzerland)'], // Bern 1898 (Switzerland)
     ['HZD','51','source:datum:geodetic','bern_1898_(switzerland)_with_zero_meridian_bern'], // Bern 1898 (Switzerland) with Zero Meridian Bern
-    ['HZD','52','source:datum:geodetic','bukit_rimpah_(bangka_and_belitung_islands,_indonesia)'], // Bukit Rimpah (Bangka and Belitung Islands, Indonesia)
+    ['HZD','52','source:datum:geodetic','bukit_rimpah_(bangka_and_belitung_islands_indonesia)'], // Bukit Rimpah (Bangka and Belitung Islands, Indonesia)
     ['HZD','53','source:datum:geodetic','cape_canaveral_(mean_value)'], // Cape Canaveral (mean value)
     ['HZD','54','source:datum:geodetic','campo_inchauspe_(argentina)'], // Campo Inchauspe (Argentina)
-    ['HZD','55','source:datum:geodetic','camacupa_base_sw_end_(campo_de_aviacao,_angola)'], // Camacupa Base SW End (Campo De Aviacao, Angola)
+    ['HZD','55','source:datum:geodetic','camacupa_base_sw_end_(campo_de_aviacao_angola)'], // Camacupa Base SW End (Campo De Aviacao, Angola)
     ['HZD','56','source:datum:geodetic','canton_astro_1966_(phoenix_islands)'], // Canton Astro 1966 (Phoenix Islands)
     ['HZD','57','source:datum:geodetic','cape_(south_africa)'], // Cape (South Africa)
-    ['HZD','58','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area,_antarctica)'], // Camp Area Astro (Camp McMurdo Area, Antarctica)
+    ['HZD','58','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area_antarctica)'], // Camp Area Astro (Camp McMurdo Area, Antarctica)
     ['HZD','59','source:datum:geodetic','s-jtsk'], // S-JTSK
     ['HZD','60','source:datum:geodetic','carthage_(tunisia)'], // Carthage (Tunisia)
     ['HZD','61','source:datum:geodetic','compensation_geodetique_du_quebec_1977'], // Compensation Geodetique du Quebec 1977
-    ['HZD','62','source:datum:geodetic','chatham_1971_(chatham_island,_new_zealand)'], // Chatham 1971 (Chatham Island, New Zealand)
+    ['HZD','62','source:datum:geodetic','chatham_1971_(chatham_island_new_zealand)'], // Chatham 1971 (Chatham Island, New Zealand)
     ['HZD','63','source:datum:geodetic','chua_astro_(paraguay)'], // Chua Astro (Paraguay)
     ['HZD','64','source:datum:geodetic','corrego_alegre_(brazil)'], // Corrego Alegre (Brazil)
     ['HZD','65','source:datum:geodetic','conakry_pyramid_of_the_service_geographique_(guinea)'], // Conakry Pyramid of the Service Geographique (Guinea)
     ['HZD','66','source:datum:geodetic','guyana_csg67'], // Guyana CSG67
     ['HZD','67','source:datum:geodetic','dabola_(guinea)'], // Dabola (Guinea)
-    ['HZD','68','source:datum:geodetic','dcs-3_lighthouse,_saint_lucia,_lesser_antilles'], // DCS-3 Lighthouse, Saint Lucia, Lesser Antilles
-    ['HZD','69','source:datum:geodetic','deception_island,_antarctica'], // Deception Island, Antarctica
+    ['HZD','68','source:datum:geodetic','dcs-3_lighthouse_saint_lucia_lesser_antilles'], // DCS-3 Lighthouse, Saint Lucia, Lesser Antilles
+    ['HZD','69','source:datum:geodetic','deception_island_antarctica'], // Deception Island, Antarctica
     ['HZD','70','source:datum:geodetic','gux_1_astro_(guadacanal_island)'], // GUX 1 Astro (Guadacanal Island)
-    ['HZD','71','source:datum:geodetic','dominica_astro_m-12,_dominica,_lesser_antilles'], // Dominica Astro M-12, Dominica, Lesser Antilles
+    ['HZD','71','source:datum:geodetic','dominica_astro_m-12_dominica_lesser_antilles'], // Dominica Astro M-12, Dominica, Lesser Antilles
     ['HZD','72','source:datum:geodetic','easter_island_1967_(easter_island)'], // Easter Island 1967 (Easter Island)
     ['HZD','73','source:datum:geodetic','wake-eniwetok_1960_(marshall_islands)'], // Wake-Eniwetok 1960 (Marshall Islands)
     ['HZD','75','source:datum:geodetic','european_1950_(western_europe)'], // European 1950 (Western Europe)
@@ -2678,35 +2678,35 @@ ggdm30.rules = {
     ['HZD','78','source:datum:geodetic','european_1950_(portugal_and_spain)'], // European 1950 (Portugal and Spain)
     ['HZD','79','source:datum:geodetic','european_1950_(cyprus)'], // European 1950 (Cyprus)
     ['HZD','80','source:datum:geodetic','european_1950_(egypt)'], // European 1950 (Egypt)
-    ['HZD','81','source:datum:geodetic','european_1950_(england,_channel_islands,_scotland,_and_shetland_islands)'], // European 1950 (England, Channel Islands, Scotland, and Shetland Islands)
+    ['HZD','81','source:datum:geodetic','european_1950_(england_channel_islands_scotland_and_shetland_islands)'], // European 1950 (England, Channel Islands, Scotland, and Shetland Islands)
     ['HZD','82','source:datum:geodetic','european_1950_(iran)'], // European 1950 (Iran)
     ['HZD','83','source:datum:geodetic','european_1950_(sardinia)'], // European 1950 (Sardinia)
     ['HZD','84','source:datum:geodetic','european_1950_(sicily)'], // European 1950 (Sicily)
     ['HZD','85','source:datum:geodetic','european_1950_(british_isles)'], // European 1950 (British Isles)
     ['HZD','86','source:datum:geodetic','european_1950_(malta)'], // European 1950 (Malta)
     ['HZD','87','source:datum:geodetic','european_1950_(mean_value)'], // European 1950 (mean value)
-    ['HZD','88','source:datum:geodetic','european_1950_(iraq,_israel,_jordan,_kuwait,_lebanon,_saudi_arabia,_and_syria)'], // European 1950 (Iraq, Israel, Jordan, Kuwait, Lebanon, Saudi Arabia, and Syria)
+    ['HZD','88','source:datum:geodetic','european_1950_(iraq_israel_jordan_kuwait_lebanon_saudi_arabia_and_syria)'], // European 1950 (Iraq, Israel, Jordan, Kuwait, Lebanon, Saudi Arabia, and Syria)
     ['HZD','89','source:datum:geodetic','european_1950_(tunisia)'], // European 1950 (Tunisia)
     ['HZD','90','source:datum:geodetic','european_1979_(mean_value)'], // European 1979 (mean value)
     ['HZD','91','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // European Terrestrial Reference System 1989 (ETRS89)
     ['HZD','92','source:datum:geodetic','oman_(oman)'], // Oman (Oman)
-    ['HZD','93','source:datum:geodetic','observatorio_meteorologico_1939_(corvo_and_flores_islands,_azores)'], // Observatorio Meteorologico 1939 (Corvo and Flores Islands, Azores)
-    ['HZD','94','source:datum:geodetic','fort_thomas_1955_(nevis,_st_kitts,_leeward_islands)'], // Fort Thomas 1955 (Nevis, St Kitts, Leeward Islands)
-    ['HZD','95','source:datum:geodetic','gan_1970_(addu_atoll,_republic_of_maldives)'], // Gan 1970 (Addu Atoll, Republic of Maldives)
+    ['HZD','93','source:datum:geodetic','observatorio_meteorologico_1939_(corvo_and_flores_islands_azores)'], // Observatorio Meteorologico 1939 (Corvo and Flores Islands, Azores)
+    ['HZD','94','source:datum:geodetic','fort_thomas_1955_(nevis_st_kitts_leeward_islands)'], // Fort Thomas 1955 (Nevis, St Kitts, Leeward Islands)
+    ['HZD','95','source:datum:geodetic','gan_1970_(addu_atoll_republic_of_maldives)'], // Gan 1970 (Addu Atoll, Republic of Maldives)
     ['HZD','96','source:datum:geodetic','gandajika_base_(zaire)'], // Gandajika Base (Zaire)
     ['HZD','97','source:datum:geodetic','geocentric_datum_of_australia_(gda)'], // Geocentric Datum of Australia (GDA)
     ['HZD','98','source:datum:geodetic','gdz80_(china)'], // GDZ80 (China)
     ['HZD','99','source:datum:geodetic','geodetic_datum_1949_(new_zealand)'], // Geodetic Datum 1949 (New Zealand)
-    ['HZD','100','source:datum:geodetic','dos_1968_(gizo_island,_new_georgia_islands)'], // DOS 1968 (Gizo Island, New Georgia Islands)
-    ['HZD','101','source:datum:geodetic','graciosa_base_sw_(faial,_graciosa,_pico,_sao_jorge,_and_terceira_island,_azores)'], // Graciosa Base SW (Faial, Graciosa, Pico, Sao Jorge, and Terceira Island, Azores)
-    ['HZD','102','source:datum:geodetic','greek_datum,_greece'], // Greek Datum, Greece
+    ['HZD','100','source:datum:geodetic','dos_1968_(gizo_island_new_georgia_islands)'], // DOS 1968 (Gizo Island, New Georgia Islands)
+    ['HZD','101','source:datum:geodetic','graciosa_base_sw_(faial_graciosa_pico_sao_jorge_and_terceira_island_azores)'], // Graciosa Base SW (Faial, Graciosa, Pico, Sao Jorge, and Terceira Island, Azores)
+    ['HZD','102','source:datum:geodetic','greek_datum_greece'], // Greek Datum, Greece
     ['HZD','103','source:datum:geodetic','greek_geodetic_reference_system_1987_(ggrs_87)'], // Greek Geodetic Reference System 1987 (GGRS 87)
-    ['HZD','104','source:datum:geodetic','gunong_segara_(kalimantan_island,_indonesia)'], // Gunong Segara (Kalimantan Island, Indonesia)
+    ['HZD','104','source:datum:geodetic','gunong_segara_(kalimantan_island_indonesia)'], // Gunong Segara (Kalimantan Island, Indonesia)
     ['HZD','105','source:datum:geodetic','gunong_serindung'], // Gunong Serindung
     ['HZD','106','source:datum:geodetic','guam_1963'], // Guam 1963
     ['HZD','107','source:datum:geodetic','herat_north_(afganistan)'], // Herat North (Afganistan)
     ['HZD','108','source:datum:geodetic','hermannskogel'], // Hermannskogel
-    ['HZD','109','source:datum:geodetic','provisional_south_chilean_1963_(or_hito_xviii_1963)_(s._chile,_53_degrees_south)'], // Provisional South Chilean 1963 (or Hito XVIII 1963) (S. Chile, 53 degrees South)
+    ['HZD','109','source:datum:geodetic','provisional_south_chilean_1963_(or_hito_xviii_1963)_(s._chile_53_degrees_south)'], // Provisional South Chilean 1963 (or Hito XVIII 1963) (S. Chile, 53 degrees South)
     ['HZD','110','source:datum:geodetic','hjorsey_1955_(iceland)'], // Hjorsey 1955 (Iceland)
     ['HZD','111','source:datum:geodetic','hong_kong_1963_(hong_kong)'], // Hong Kong 1963 (Hong Kong)
     ['HZD','112','source:datum:geodetic','hong_kong_1929'], // Hong Kong 1929
@@ -2729,41 +2729,41 @@ ggdm30.rules = {
     ['HZD','133','source:datum:geodetic','kalianpur_(india)'], // Kalianpur (India)
     ['HZD','134','source:datum:geodetic','kandawala_(sri_lanka)'], // Kandawala (Sri Lanka)
     ['HZD','135','source:datum:geodetic','kertau_1948_(or_revised_kertau)_(west_malaysia_and_singapore)'], // Kertau 1948 (or Revised Kertau) (West Malaysia and Singapore)
-    ['HZD','136','source:datum:geodetic','kcs_2,_sierra_leone'], // KCS 2, Sierra Leone
+    ['HZD','136','source:datum:geodetic','kcs_2_sierra_leone'], // KCS 2, Sierra Leone
     ['HZD','137','source:datum:geodetic','kerguelen_island_1949_(kerguelen_island)'], // Kerguelen Island 1949 (Kerguelen Island)
     ['HZD','138','source:datum:geodetic','korean_geodetic_system_1995_(south_korea)'], // Korean Geodetic System 1995 (South Korea)
-    ['HZD','139','source:datum:geodetic','kkj_(or_kartastokoordinaattijarjestelma),_finland'], // KKJ (or Kartastokoordinaattijarjestelma), Finland
+    ['HZD','139','source:datum:geodetic','kkj_(or_kartastokoordinaattijarjestelma)_finland'], // KKJ (or Kartastokoordinaattijarjestelma), Finland
     ['HZD','140','source:datum:geodetic','kusaie_astro_1951'], // Kusaie Astro 1951
     ['HZD','141','source:datum:geodetic','kuwait_oil_company_(k28)'], // Kuwait Oil Company (K28)
     ['HZD','142','source:datum:geodetic','l.c._5_astro_1961_(cayman_brac_island)'], // L.C. 5 Astro 1961 (Cayman Brac Island)
     ['HZD','143','source:datum:geodetic','leigon_(ghana)'], // Leigon (Ghana)
     ['HZD','144','source:datum:geodetic','liberia_1964_(liberia)'], // Liberia 1964 (Liberia)
-    ['HZD','145','source:datum:geodetic','lisbon_(castelo_di_sao_jorge),_portugal'], // Lisbon (Castelo di Sao Jorge), Portugal
+    ['HZD','145','source:datum:geodetic','lisbon_(castelo_di_sao_jorge)_portugal'], // Lisbon (Castelo di Sao Jorge), Portugal
     ['HZD','146','source:datum:geodetic','local_astro'], // Local Astro
     ['HZD','147','source:datum:geodetic','loma_quintana_(venezuela)'], // Loma Quintana (Venezuela)
     ['HZD','149','source:datum:geodetic','luzon_(philipines_except_mindanao_island)'], // Luzon (Philipines except Mindanao Island)
     ['HZD','150','source:datum:geodetic','luzon_(mindanao_island)'], // Luzon (Mindanao Island)
     ['HZD','151','source:datum:geodetic','marco_astro_(salvage_islands)'], // Marco Astro (Salvage Islands)
     ['HZD','152','source:datum:geodetic','martinique_fort-desaix'], // Martinique Fort-Desaix
-    ['HZD','153','source:datum:geodetic','massawa_(eritrea,_ethiopia)'], // Massawa (Eritrea, Ethiopia)
+    ['HZD','153','source:datum:geodetic','massawa_(eritrea_ethiopia)'], // Massawa (Eritrea, Ethiopia)
     ['HZD','154','source:datum:geodetic','manokwari_(west_irian)'], // Manokwari (West Irian)
     ['HZD','155','source:datum:geodetic','mayotte_combani'], // Mayotte Combani
-    ['HZD','156','source:datum:geodetic','mount_dillon,_tobago'], // Mount Dillon, Tobago
+    ['HZD','156','source:datum:geodetic','mount_dillon_tobago'], // Mount Dillon, Tobago
     ['HZD','157','source:datum:geodetic','merchich_(morocco)'], // Merchich (Morocco)
     ['HZD','158','source:datum:geodetic','midway_astro_1961_(midway_island)'], // Midway Astro 1961 (Midway Island)
     ['HZD','159','source:datum:geodetic','mahe_1971_(mahe_island)'], // Mahe 1971 (Mahe Island)
     ['HZD','161','source:datum:geodetic','minna_(cameroon)'], // Minna (Cameroon)
     ['HZD','162','source:datum:geodetic','minna_(nigeria)'], // Minna (Nigeria)
-    ['HZD','163','source:datum:geodetic','rome_1940_(or_monte_mario_1940),_italy'], // Rome 1940 (or Monte Mario 1940), Italy
-    ['HZD','164','source:datum:geodetic','rome_1940_(or_monte_mario_1940),_italy,_with_zero_meridian_rome'], // Rome 1940 (or Monte Mario 1940), Italy, with Zero Meridian Rome
+    ['HZD','163','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy'], // Rome 1940 (or Monte Mario 1940), Italy
+    ['HZD','164','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy_with_zero_meridian_rome'], // Rome 1940 (or Monte Mario 1940), Italy, with Zero Meridian Rome
     ['HZD','165','source:datum:geodetic','montjong_lowe'], // Montjong Lowe
     ['HZD','166','source:datum:geodetic','mporaloko_(gabon)'], // M'Poraloko (Gabon)
-    ['HZD','167','source:datum:geodetic','viti_levu_1916_(viti_levu_island,_fiji_islands)'], // Viti Levu 1916 (Viti Levu Island, Fiji Islands)
-    ['HZD','169','source:datum:geodetic','nahrwan_(masirah_island,_oman)'], // Nahrwan (Masirah Island, Oman)
+    ['HZD','167','source:datum:geodetic','viti_levu_1916_(viti_levu_island_fiji_islands)'], // Viti Levu 1916 (Viti Levu Island, Fiji Islands)
+    ['HZD','169','source:datum:geodetic','nahrwan_(masirah_island_oman)'], // Nahrwan (Masirah Island, Oman)
     ['HZD','170','source:datum:geodetic','nahrwan_(united_arab_emirates)'], // Nahrwan (United Arab Emirates)
     ['HZD','171','source:datum:geodetic','nahrwan_(saudi_arabia)'], // Nahrwan (Saudi Arabia)
-    ['HZD','172','source:datum:geodetic','naparima_(bwi,_trinidad_and_tobago)'], // Naparima (BWI, Trinidad and Tobago)
-    ['HZD','174','source:datum:geodetic','north_american_1983_(alaska,_excluding_aleutian_islands)'], // North American 1983 (Alaska, excluding Aleutian Islands)
+    ['HZD','172','source:datum:geodetic','naparima_(bwi_trinidad_and_tobago)'], // Naparima (BWI, Trinidad and Tobago)
+    ['HZD','174','source:datum:geodetic','north_american_1983_(alaska_excluding_aleutian_islands)'], // North American 1983 (Alaska, excluding Aleutian Islands)
     ['HZD','175','source:datum:geodetic','north_american_1983_(canada)'], // North American 1983 (Canada)
     ['HZD','176','source:datum:geodetic','north_american_1983_(conus)'], // North American 1983 (CONUS)
     ['HZD','177','source:datum:geodetic','north_american_1983_(mexico_and_central_america))'], // North American 1983 (Mexico and Central America))
@@ -2775,7 +2775,7 @@ ggdm30.rules = {
     ['HZD','184','source:datum:geodetic','north_american_1927_(alaska)'], // North American 1927 (Alaska)
     ['HZD','185','source:datum:geodetic','north_american_1927_(canada_mean)'], // North American 1927 (Canada mean)
     ['HZD','186','source:datum:geodetic','north_american_1927_(alberta_and_british_columbia)'], // North American 1927 (Alberta and British Columbia)
-    ['HZD','187','source:datum:geodetic','north_american_1927_(newfoundland,_new_brunswick,_nova_scotia_and_quebec)'], // North American 1927 (Newfoundland, New Brunswick, Nova Scotia and Quebec)
+    ['HZD','187','source:datum:geodetic','north_american_1927_(newfoundland_new_brunswick_nova_scotia_and_quebec)'], // North American 1927 (Newfoundland, New Brunswick, Nova Scotia and Quebec)
     ['HZD','188','source:datum:geodetic','north_american_1927_(manitoba_and_ontario)'], // North American 1927 (Manitoba and Ontario)
     ['HZD','189','source:datum:geodetic','north_american_1927_(northwest_territories_and_saskatchewan)'], // North American 1927 (Northwest Territories and Saskatchewan)
     ['HZD','190','source:datum:geodetic','north_american_1927_(yukon)'], // North American 1927 (Yukon)
@@ -2783,20 +2783,20 @@ ggdm30.rules = {
     ['HZD','192','source:datum:geodetic','north_american_1927_(central_america)'], // North American 1927 (Central America)
     ['HZD','193','source:datum:geodetic','north_american_1927_(canal_zone)'], // North American 1927 (Canal Zone)
     ['HZD','194','source:datum:geodetic','north_american_1927_(caribbean)'], // North American 1927 (Caribbean)
-    ['HZD','195','source:datum:geodetic','north_american_1927_(bahamas,_except_san_salvador_island)'], // North American 1927 (Bahamas, except San Salvador Island)
+    ['HZD','195','source:datum:geodetic','north_american_1927_(bahamas_except_san_salvador_island)'], // North American 1927 (Bahamas, except San Salvador Island)
     ['HZD','196','source:datum:geodetic','north_american_1927_(san_salvador_island)'], // North American 1927 (San Salvador Island)
     ['HZD','197','source:datum:geodetic','north_american_1927_(cuba)'], // North American 1927 (Cuba)
-    ['HZD','198','source:datum:geodetic','north_american_1927_(hayes_peninsula,_greenland)'], // North American 1927 (Hayes Peninsula, Greenland)
+    ['HZD','198','source:datum:geodetic','north_american_1927_(hayes_peninsula_greenland)'], // North American 1927 (Hayes Peninsula, Greenland)
     ['HZD','199','source:datum:geodetic','north_american_1927_(aleutian_islands_east_of_180_degrees_west)'], // North American 1927 (Aleutian Islands East of 180 degrees West)
     ['HZD','200','source:datum:geodetic','north_american_1927_(aleutian_islands_west_of_180_degrees_west)'], // North American 1927 (Aleutian Islands West of 180 degrees West)
     ['HZD','201','source:datum:geodetic','revised_nahrwan'], // Revised Nahrwan
     ['HZD','202','source:datum:geodetic','new_french_or_nouvelle_triangulation_francaise_(ntf)_with_zero_meridian_paris'], // New French or Nouvelle Triangulation Francaise (NTF) with Zero Meridian Paris
     ['HZD','204','source:datum:geodetic','north_sahara_1959'], // North Sahara 1959
-    ['HZD','205','source:datum:geodetic','ocotopeque,_guatemala'], // Ocotopeque, Guatemala
+    ['HZD','205','source:datum:geodetic','ocotopeque_guatemala'], // Ocotopeque, Guatemala
     ['HZD','206','source:datum:geodetic','belgium_1972_(observatoire_duccle)'], // Belgium 1972 (Observatoire d'Uccle)
     ['HZD','207','source:datum:geodetic','old_egyptian_(egypt)'], // Old Egyptian (Egypt)
     ['HZD','209','source:datum:geodetic','ordnance_survey_g.b._1936_(england)'], // Ordnance Survey G.B. 1936 (England)
-    ['HZD','210','source:datum:geodetic','ordnance_survey_g.b._1936_(england,_isle_of_man,_and_wales)'], // Ordnance Survey G.B. 1936 (England, Isle of Man, and Wales)
+    ['HZD','210','source:datum:geodetic','ordnance_survey_g.b._1936_(england_isle_of_man_and_wales)'], // Ordnance Survey G.B. 1936 (England, Isle of Man, and Wales)
     ['HZD','211','source:datum:geodetic','ordnance_survey_g.b._1936_(scotland_and_shetland_islands)'], // Ordnance Survey G.B. 1936 (Scotland and Shetland Islands)
     ['HZD','212','source:datum:geodetic','ordnance_survey_g.b._1936_(wales)'], // Ordnance Survey G.B. 1936 (Wales)
     ['HZD','213','source:datum:geodetic','ordnance_survey_g.b._1936_(mean_value)'], // Ordnance Survey G.B. 1936 (mean value)
@@ -2805,10 +2805,10 @@ ggdm30.rules = {
     ['HZD','217','source:datum:geodetic','old_hawaiian_(maui)'], // Old Hawaiian (Maui)
     ['HZD','218','source:datum:geodetic','old_hawaiian_(oahu)'], // Old Hawaiian (Oahu)
     ['HZD','219','source:datum:geodetic','old_hawaiian_(mean_value)'], // Old Hawaiian (mean value)
-    ['HZD','220','source:datum:geodetic','oslo_observatory_(old),_norway'], // Oslo Observatory (Old), Norway
-    ['HZD','221','source:datum:geodetic','padang_base_west_end_(sumatra,_indonesia)'], // Padang Base West End (Sumatra, Indonesia)
-    ['HZD','222','source:datum:geodetic','padang_base_west_end_(sumatra,_indonesia)_with_zero_meridian_djakarta'], // Padang Base West End (Sumatra, Indonesia) with Zero Meridian Djakarta
-    ['HZD','223','source:datum:geodetic','palestine_1928_(israel,_jordan)'], // Palestine 1928 (Israel, Jordan)
+    ['HZD','220','source:datum:geodetic','oslo_observatory_(old)_norway'], // Oslo Observatory (Old), Norway
+    ['HZD','221','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)'], // Padang Base West End (Sumatra, Indonesia)
+    ['HZD','222','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)_with_zero_meridian_djakarta'], // Padang Base West End (Sumatra, Indonesia) with Zero Meridian Djakarta
+    ['HZD','223','source:datum:geodetic','palestine_1928_(israel_jordan)'], // Palestine 1928 (Israel, Jordan)
     ['HZD','224','source:datum:geodetic','potsdam_or_helmertturm_(germany)'], // Potsdam or Helmertturm (Germany)
     ['HZD','225','source:datum:geodetic','ayabelle_lighthouse_(djibouti)'], // Ayabelle Lighthouse (Djibouti)
     ['HZD','226','source:datum:geodetic','pitcairn_astro_1967_(pitcairn_island)'], // Pitcairn Astro 1967 (Pitcairn Island)
@@ -2829,10 +2829,10 @@ ggdm30.rules = {
     ['HZD','242','source:datum:geodetic','puerto_rico_(puerto_rico_and_virgin_islands)'], // Puerto Rico (Puerto Rico and Virgin Islands)
     ['HZD','243','source:datum:geodetic','qatar_national_(qatar)'], // Qatar National (Qatar)
     ['HZD','244','source:datum:geodetic','qornoq_(south_greenland)'], // Qornoq (South Greenland)
-    ['HZD','245','source:datum:geodetic','rauenberg_(berlin,_germany)'], // Rauenberg (Berlin, Germany)
-    ['HZD','246','source:datum:geodetic','reconnaissance_triangulation,_morocco'], // Reconnaissance Triangulation, Morocco
+    ['HZD','245','source:datum:geodetic','rauenberg_(berlin_germany)'], // Rauenberg (Berlin, Germany)
+    ['HZD','246','source:datum:geodetic','reconnaissance_triangulation_morocco'], // Reconnaissance Triangulation, Morocco
     ['HZD','247','source:datum:geodetic','reunion_1947'], // Reunion 1947
-    ['HZD','248','source:datum:geodetic','rt90,_stockholm,_sweden'], // RT90, Stockholm, Sweden
+    ['HZD','248','source:datum:geodetic','rt90_stockholm_sweden'], // RT90, Stockholm, Sweden
     ['HZD','249','source:datum:geodetic','santo_(dos)_1965_(espirito_santo_island)'], // Santo (DOS) 1965 (Espirito Santo Island)
     ['HZD','250','source:datum:geodetic','south_african_(south_africa)'], // South African (South Africa)
     ['HZD','251','source:datum:geodetic','sainte_anne_i_1984_(guadeloupe)'], // Sainte Anne I 1984 (Guadeloupe)
@@ -2845,11 +2845,11 @@ ggdm30.rules = {
     ['HZD','259','source:datum:geodetic','south_american_1969_(guyana)'], // South American 1969 (Guyana)
     ['HZD','260','source:datum:geodetic','south_american_1969_(paraguay)'], // South American 1969 (Paraguay)
     ['HZD','261','source:datum:geodetic','south_american_1969_(peru)'], // South American 1969 (Peru)
-    ['HZD','262','source:datum:geodetic','south_american_1969_(baltra,_galapagos_islands)'], // South American 1969 (Baltra, Galapagos Islands)
+    ['HZD','262','source:datum:geodetic','south_american_1969_(baltra_galapagos_islands)'], // South American 1969 (Baltra, Galapagos Islands)
     ['HZD','263','source:datum:geodetic','south_american_1969_(trinidad_and_tobago)'], // South American 1969 (Trinidad and Tobago)
     ['HZD','264','source:datum:geodetic','south_american_1969_(venezuela)'], // South American 1969 (Venezuela)
     ['HZD','265','source:datum:geodetic','south_american_1969_(mean_value)'], // South American 1969 (mean value)
-    ['HZD','266','source:datum:geodetic','sao_braz_(sao_miguel,_santa_maria_islands,_azores)'], // Sao Braz (Sao Miguel, Santa Maria Islands, Azores)
+    ['HZD','266','source:datum:geodetic','sao_braz_(sao_miguel_santa_maria_islands_azores)'], // Sao Braz (Sao Miguel, Santa Maria Islands, Azores)
     ['HZD','267','source:datum:geodetic','sapper_hill_1943_(east_falkland_islands)'], // Sapper Hill 1943 (East Falkland Islands)
     ['HZD','268','source:datum:geodetic','schwarzeck_(namibia)'], // Schwarzeck (Namibia)
     ['HZD','269','source:datum:geodetic','soviet_geodetic_system_1985'], // Soviet Geodetic System 1985
@@ -2857,12 +2857,12 @@ ggdm30.rules = {
     ['HZD','271','source:datum:geodetic','selvagem_grande_1938_(salvage_islands)'], // Selvagem Grande 1938 (Salvage Islands)
     ['HZD','272','source:datum:geodetic','astro_dos_71/4_(st._helena_island)'], // Astro DOS 71/4 (St. Helena Island)
     ['HZD','273','source:datum:geodetic','sierra_leone_1960'], // Sierra Leone 1960
-    ['HZD','274','source:datum:geodetic','south_asia_(southeast_asia,_singapore)'], // South Asia (Southeast Asia, Singapore)
+    ['HZD','274','source:datum:geodetic','south_asia_(southeast_asia_singapore)'], // South Asia (Southeast Asia, Singapore)
     ['HZD','276','source:datum:geodetic','st._pierre_et_miquelon_1950'], // St. Pierre et Miquelon 1950
     ['HZD','277','source:datum:geodetic','stockholm_1938_(sweden)'], // Stockholm 1938 (Sweden)
-    ['HZD','278','source:datum:geodetic','sydney_observatory,_new_south_wales,_australia'], // Sydney Observatory, New South Wales, Australia
+    ['HZD','278','source:datum:geodetic','sydney_observatory_new_south_wales_australia'], // Sydney Observatory, New South Wales, Australia
     ['HZD','279','source:datum:geodetic','tananarive_observatory_1925'], // Tananarive Observatory 1925
-    ['HZD','280','source:datum:geodetic','tananarive_observatory_1925,_with_zero_meridian_paris'], // Tananarive Observatory 1925, with Zero Meridian Paris
+    ['HZD','280','source:datum:geodetic','tananarive_observatory_1925_with_zero_meridian_paris'], // Tananarive Observatory 1925, with Zero Meridian Paris
     ['HZD','281','source:datum:geodetic','tristan_astro_1968_(tristan_da_cunha)'], // Tristan Astro 1968 (Tristan da Cunha)
     ['HZD','282','source:datum:geodetic','timbalai_1948_(brunei_and_east_malaysia_-_sarawak_and_sabah)'], // Timbalai 1948 (Brunei and East Malaysia - Sarawak and Sabah)
     ['HZD','283','source:datum:geodetic','timbalai_1968'], // Timbalai 1968
@@ -2871,11 +2871,11 @@ ggdm30.rules = {
     ['HZD','287','source:datum:geodetic','tokyo_(okinawa)'], // Tokyo (Okinawa)
     ['HZD','288','source:datum:geodetic','tokyo_(mean_value)'], // Tokyo (mean value)
     ['HZD','289','source:datum:geodetic','trinidad_1903'], // Trinidad 1903
-    ['HZD','290','source:datum:geodetic','astro_tern_island_1961_(tern_island,_hawaii)'], // Astro Tern Island 1961 (Tern Island, Hawaii)
+    ['HZD','290','source:datum:geodetic','astro_tern_island_1961_(tern_island_hawaii)'], // Astro Tern Island 1961 (Tern Island, Hawaii)
     ['HZD','292','source:datum:geodetic','voirol_1875'], // Voirol 1875
     ['HZD','293','source:datum:geodetic','voirol_1875_with_zero_meridian_paris'], // Voirol 1875 with Zero Meridian Paris
-    ['HZD','294','source:datum:geodetic','voirol_1960,_algeria'], // Voirol 1960, Algeria
-    ['HZD','295','source:datum:geodetic','voirol_1960,_algeria,_with_zero_meridian_paris'], // Voirol 1960, Algeria, with Zero Meridian Paris
+    ['HZD','294','source:datum:geodetic','voirol_1960_algeria'], // Voirol 1960, Algeria
+    ['HZD','295','source:datum:geodetic','voirol_1960_algeria_with_zero_meridian_paris'], // Voirol 1960, Algeria, with Zero Meridian Paris
     ['HZD','296','source:datum:geodetic','wake_island_astro_1952'], // Wake Island Astro 1952
     ['HZD','297','source:datum:geodetic','world_geodetic_system_1960'], // World Geodetic System 1960
     ['HZD','298','source:datum:geodetic','world_geodetic_system_1966'], // World Geodetic System 1966
@@ -3407,7 +3407,7 @@ ggdm30.rules = {
     ['MFY','2','health_facility:type','long-term_acute_care'], // Long-term Acute Care
     ['MFY','3','health_facility:type','chemical_dependency'], // Chemical Dependency
     ['MFY','4','health_facility:type','chronic_disease'], // Chronic Disease
-    ['MFY','5','health_facility:type','eye,_ear,_nose_and_throat'], // Eye, Ear, Nose and Throat
+    ['MFY','5','health_facility:type','eye_ear_nose_and_throat'], // Eye, Ear, Nose and Throat
     ['MFY','6','health_facility:type','intellectual_disablement_care'], // Intellectual Disablement Care
     ['MFY','7','health_facility:type','obstetrics_and_gynaecology'], // Obstetrics and Gynaecology
     ['MFY','8','health_facility:type','orthopaedics'], // Orthopaedics
@@ -3419,7 +3419,7 @@ ggdm30.rules = {
     ['MFY','14','health_facility:type','unit_within_institution_for_the_intellectually_disabled'], // Unit within Institution for the Intellectually Disabled
     ['MFY','15','health_facility:type','pediatric_medical_and_surgical'], // Pediatric Medical and Surgical
     ['MFY','16','health_facility:type','paediatric_chronic_disease'], // Paediatric Chronic Disease
-    ['MFY','17','health_facility:type','paediatric_eye,_ear,_nose_and_throat'], // Paediatric Eye, Ear, Nose and Throat
+    ['MFY','17','health_facility:type','paediatric_eye_ear_nose_and_throat'], // Paediatric Eye, Ear, Nose and Throat
     ['MFY','18','health_facility:type','paediatric_orthopaedic'], // Paediatric Orthopaedic
     ['MFY','19','health_facility:type','pediatric_psychiatric'], // Pediatric Psychiatric
     ['MFY','20','health_facility:type','paediatric_rehabilitation'], // Paediatric Rehabilitation
@@ -3961,16 +3961,16 @@ ggdm30.rules = {
 
     // RAY - Racing Type
     // ['RAY','-999999',undefined,undefined], // No Information
-    ['RAY','1','racing:type','bicycle'], // Bicycle
-    ['RAY','2','racing:type','camel'], // Camel
-    ['RAY','3','racing:type','greyhound'], // Greyhound
-    ['RAY','4','racing:type','harness'], // Harness
-    ['RAY','5','racing:type','horse'], // Horse
-    ['RAY','6','racing:type','ice_skate'], // Ice Skate
-    ['RAY','7','racing:type','motor_vehicle'], // Motor Vehicle
-    ['RAY','8','racing:type','roller_skate'], // Roller Skate
-    ['RAY','9','racing:type','track_and_field'], // Track and Field
-    ['RAY','999','racing:type','other'], // Other
+    ['RAY','1','race:type','bicycle'], // Bicycle
+    ['RAY','2','race:type','camel'], // Camel
+    ['RAY','3','race:type','greyhound'], // Greyhound
+    ['RAY','4','race:type','harness'], // Harness
+    ['RAY','5','race:type','horse'], // Horse
+    ['RAY','6','race:type','ice_skate'], // Ice Skate
+    ['RAY','7','race:type','motor_vehicle'], // Motor Vehicle
+    ['RAY','8','race:type','roller_skate'], // Roller Skate
+    ['RAY','9','race:type','track_and_field'], // Track and Field
+    ['RAY','999','race:type','other'], // Other
 
     // RCG - Resource Content Originator - See ZI004_RCG
 
@@ -4070,9 +4070,9 @@ ggdm30.rules = {
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'], // Long-haul
-    ['RRC','999','railway','Other'], // Other
+    ['RRC','999','railway','other'], // Other
 
     // RRC2 - Railway Use [2]
     // RRC3 - Railway Use [3]
@@ -5328,34 +5328,34 @@ ggdm30.rules = {
 
     // ZI001_SRT - Source : Source Type
     // ['ZI001_SRT','-999999',undefined,undefined], // No Information
-    ['ZI001_SRT','2','source:non_spatial_source:type','aafif'], // AAFIF
-    ['ZI001_SRT','7','source:non_spatial_source:type','cib1'], // CIB1
-    ['ZI001_SRT','9','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
-    ['ZI001_SRT','10','source:non_spatial_source:type','dnc'], // DNC
-    ['ZI001_SRT','21','source:non_spatial_source:type','dvof'], // DVOF
-    ['ZI001_SRT','22','source:non_spatial_source:type','ffd'], // FFD
-    ['ZI001_SRT','25','source:non_spatial_source:type','geonames'], // GeoNames
-    ['ZI001_SRT','26','source:non_spatial_source:type','gps'], // GPS
-    ['ZI001_SRT','28','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
-    ['ZI001_SRT','29','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
-    ['ZI001_SRT','30','source:non_spatial_source:type','imagery'], // Imagery
-    ['ZI001_SRT','31','source:non_spatial_source:type','itd'], // ITD
-    ['ZI001_SRT','32','source:non_spatial_source:type','ivd'], // IVD
-    ['ZI001_SRT','43','source:non_spatial_source:type','midb'], // MIDB
-    ['ZI001_SRT','60','source:non_spatial_source:type','uvmap'], // UVMap
-    ['ZI001_SRT','61','source:non_spatial_source:type','vitd'], // VITD
-    ['ZI001_SRT','64','source:non_spatial_source:type','vmap_2'], // VMap 2
-    ['ZI001_SRT','108','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
-    ['ZI001_SRT','159','source:non_spatial_source:type','commercial_data'], // Commercial Data
-    ['ZI001_SRT','160','source:non_spatial_source:type','open_source_information'], // Open Source Information
-    ['ZI001_SRT','165','source:non_spatial_source:type','dafif'], // DAFIF
-    ['ZI001_SRT','166','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
-    ['ZI001_SRT','167','source:non_spatial_source:type','military_map_data'], // Military Map Data
-    ['ZI001_SRT','168','source:non_spatial_source:type','non-military_map'], // Non-military Map
-    ['ZI001_SRT','169','source:non_spatial_source:type','operations_data'], // Operations Data
-    ['ZI001_SRT','170','source:non_spatial_source:type','sac'], // SAC
-    ['ZI001_SRT','171','source:non_spatial_source:type','tomtom_data'], // TomTom Data
-    ['ZI001_SRT','999','source:non_spatial_source:type','other'], // Other
+    ['ZI001_SRT','2','source:name','automated_aeronautical_facilities_information_file_(aafif)'], // AAFIF
+    ['ZI001_SRT','7','source:name','controlled_imagery_base_1_(cib1)'], // CIB1
+    ['ZI001_SRT','9','source:name','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_SRT','10','source:name','digital_nautical_chart_(dnc)'], // DNC
+    ['ZI001_SRT','21','source:name','digital_vertical_obstruction_file_(dvof)'], // DVOF
+    ['ZI001_SRT','22','source:name','foundation_feature_data_(ffd)'], // FFD
+    ['ZI001_SRT','25','source:name','geonames'], // GeoNames
+    ['ZI001_SRT','26','source:name','gps_field_collected_open_source'], // GPS
+    ['ZI001_SRT','28','source:name','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_SRT','29','source:name','ntm_imagery'], // NTM Imagery
+    ['ZI001_SRT','30','source:name','imagery'], // Imagery
+    ['ZI001_SRT','31','source:name','interim_terrain_data_(itd)'], // ITD
+    ['ZI001_SRT','32','source:name','interim_vector_data_(ivd)'], // IVD
+    ['ZI001_SRT','43','source:name','modernized_integrated_data_base_(midb)'], // MIDB
+    ['ZI001_SRT','60','source:name','urban_vector_map_(uvmap)'], // UVMap
+    ['ZI001_SRT','61','source:name','vector_interim_terrain_data_(vitd)'], // VITD
+    ['ZI001_SRT','64','source:name','vector_map_lv2_(vmap2)'], // VMap 2
+    ['ZI001_SRT','108','source:name','navteq_data'], // NAVTEQ Data
+    ['ZI001_SRT','159','source:name','commercial_data'], // Commercial Data
+    ['ZI001_SRT','160','source:name','open_source_information'], // Open Source Information
+    ['ZI001_SRT','165','source:name','digital_aeronautical_flight_information_file_(dafif)'], // DAFIF
+    ['ZI001_SRT','166','source:name','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+    ['ZI001_SRT','167','source:name','military_map_data'], // Military Map Data
+    ['ZI001_SRT','168','source:name','non-military_map'], // Non-military Map
+    ['ZI001_SRT','169','source:name','operations_data'], // Operations Data
+    ['ZI001_SRT','170','source:name','stereo_airfield_collection_(sac)'], // SAC
+    ['ZI001_SRT','171','source:name','tomtom_data'], // TomTom Data
+    ['ZI001_SRT','999','source:name','other'], // Other
 
     // ZI001_VSC - Source : Vertical Source Category
     // ['ZI001_VSC','-999999',undefined,undefined], // No Information
@@ -5759,7 +5759,7 @@ ggdm30.rules = {
     ['ZI016_ROC','8','surface','concrete'], // Concrete
     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
-    ['ZI016_ROC','11','surface','cobble-stone'], // Cobble-stone
+    ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
     ['ZI016_ROC','12','surface','brick'], // Brick
     ['ZI016_ROC','13','surface','metal'], // Metal
     ['ZI016_ROC','14','surface','wood'], // Wood
@@ -6303,9 +6303,41 @@ ggdm30.rules = {
 
     ['VCM','2','material:vertical','aluminum'], // Aluminum
 
+    // ZI001_SRT - Source : Source Type - Old translation
+    // ['ZI001_SRT','-999999',undefined,undefined], // No Information
+    ['ZI001_SRT','2','source:non_spatial_source:type','aafif'], // AAFIF
+    ['ZI001_SRT','7','source:non_spatial_source:type','cib1'], // CIB1
+    ['ZI001_SRT','9','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_SRT','10','source:non_spatial_source:type','dnc'], // DNC
+    ['ZI001_SRT','21','source:non_spatial_source:type','dvof'], // DVOF
+    ['ZI001_SRT','22','source:non_spatial_source:type','ffd'], // FFD
+    ['ZI001_SRT','25','source:non_spatial_source:type','geonames'], // GeoNames
+    ['ZI001_SRT','26','source:non_spatial_source:type','gps'], // GPS
+    ['ZI001_SRT','28','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_SRT','29','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
+    ['ZI001_SRT','30','source:non_spatial_source:type','imagery'], // Imagery
+    ['ZI001_SRT','31','source:non_spatial_source:type','itd'], // ITD
+    ['ZI001_SRT','32','source:non_spatial_source:type','ivd'], // IVD
+    ['ZI001_SRT','43','source:non_spatial_source:type','midb'], // MIDB
+    ['ZI001_SRT','60','source:non_spatial_source:type','uvmap'], // UVMap
+    ['ZI001_SRT','61','source:non_spatial_source:type','vitd'], // VITD
+    ['ZI001_SRT','64','source:non_spatial_source:type','vmap_2'], // VMap 2
+    ['ZI001_SRT','108','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
+    ['ZI001_SRT','159','source:non_spatial_source:type','commercial_data'], // Commercial Data
+    ['ZI001_SRT','160','source:non_spatial_source:type','open_source_information'], // Open Source Information
+    ['ZI001_SRT','165','source:non_spatial_source:type','dafif'], // DAFIF
+    ['ZI001_SRT','166','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+    ['ZI001_SRT','167','source:non_spatial_source:type','military_map_data'], // Military Map Data
+    ['ZI001_SRT','168','source:non_spatial_source:type','non-military_map'], // Non-military Map
+    ['ZI001_SRT','169','source:non_spatial_source:type','operations_data'], // Operations Data
+    ['ZI001_SRT','170','source:non_spatial_source:type','sac'], // SAC
+    ['ZI001_SRT','171','source:non_spatial_source:type','tomtom_data'], // TomTom Data
+    ['ZI001_SRT','999','source:non_spatial_source:type','other'], // Other
+
+
     ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
     ['ZI004_RCG','28','attribution','australian_geospatial-intelligence_organization_(australia)'], // Australian Geospatial-Intelligence Organization (Australia)
-    ['ZI004_RCG','36','attribution','bureau_geographie,_hydrographie,_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
+    ['ZI004_RCG','36','attribution','bureau_geographie_hydrographie_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
     ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
     ['ZI004_RCG','45','attribution','geoint_new_zealand_(new_zealand)'], // GEOINT New Zealand (New Zealand)
 

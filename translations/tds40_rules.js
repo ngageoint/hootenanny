@@ -285,7 +285,7 @@ tds40.rules = {
     // ['AMA','-999999',undefined,undefined], // No Information
     ['AMA','1','attraction','artificial_mountain'], // Artificial Mountain
     ['AMA','2','attraction','ferris_wheel'], // Ferris Wheel
-    ['AMA','3','attraction','roller-coaster'], // Roller-coaster
+    ['AMA','3','attraction','roller_coaster'], // Roller-coaster
     ['AMA','4','attraction','spherical'], // Spherical
     ['AMA','5','attraction','water_attraction'], // Water Attraction
     ['AMA','6','attraction','vertical_ride'], // Vertical Ride
@@ -349,8 +349,8 @@ tds40.rules = {
 
     // AQTC - Aquifer Thickness (interval closure)
     ['AQTC','2','aquifer:thickness:closure','open_interval'], // Open Interval
-    ['AQTC','3','aquifer:thickness:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['AQTC','3','aquifer:thickness:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['AQTC','5','aquifer:thickness:closure','closed_interval'], // Closed Interval
     ['AQTC','6','aquifer:thickness:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['AQTC','7','aquifer:thickness:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -444,8 +444,8 @@ tds40.rules = {
 
     // AYRC - Aquifer Yield Rating (interval closure)
     ['AYRC','2','aquifer:yield:closure','open_interval'], // Open Interval
-    ['AYRC','3','aquifer:yield:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['AYRC','3','aquifer:yield:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['AYRC','5','aquifer:yield:closure','closed_interval'], // Closed Interval
     ['AYRC','6','aquifer:yield:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['AYRC','7','aquifer:yield:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -631,8 +631,8 @@ tds40.rules = {
 
     // BPWSAC - Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (interval closure)
     ['BPWSAC','2','waterway:bank1:slope:closure','open_interval'], // Open Interval
-    ['BPWSAC','3','waterway:bank1:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['BPWSAC','3','waterway:bank1:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['BPWSAC','5','waterway:bank1:slope:closure','closed_interval'], // Closed Interval
     ['BPWSAC','6','waterway:bank1:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['BPWSAC','7','waterway:bank1:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -829,7 +829,7 @@ tds40.rules = {
     ['CON','13','constriction:type','cut'], // Cut
     ['CON','14','constriction:type','dam'], // Dam
     ['CON','15','constriction:type','embankment'], // Embankment
-    ['CON','16','constriction:type','entrance_and/or_exit'], // Entrance and/or Exit
+    ['CON','16','constriction:type','entrance_andor_exit'], // Entrance and/or Exit
     ['CON','17','constriction:type','fence'], // Fence
     ['CON','18','constriction:type','fire_hydrant'], // Fire Hydrant
     ['CON','19','constriction:type','ford'], // Ford
@@ -955,8 +955,8 @@ tds40.rules = {
 
     // DMBC - Undergrowth Density (interval closure)
     ['DMBC','2','undergrowth:density:closure','open_interval'], // Open Interval
-    ['DMBC','3','undergrowth:density:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['DMBC','3','undergrowth:density:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['DMBC','5','undergrowth:density:closure','closed_interval'], // Closed Interval
     ['DMBC','6','undergrowth:density:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['DMBC','7','undergrowth:density:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -970,8 +970,8 @@ tds40.rules = {
 
     // DPAC - Aquifer Depth (interval closure)
     ['DPAC','2','aquifer:depth:closure','open_interval'], // Open Interval
-    ['DPAC','3','aquifer:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['DPAC','3','aquifer:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['DPAC','5','aquifer:depth:closure','closed_interval'], // Closed Interval
     ['DPAC','6','aquifer:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['DPAC','7','aquifer:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1042,7 +1042,7 @@ tds40.rules = {
     ['ETS','jogAirGround','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
     ['ETS','jogRadar','source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
     ['ETS','localTdsEg','source:extraction_specification','ltds-eg'], // LTDS-EG
-    ['ETS','mgcpTrd','source:extraction_specification','mgcp-trd'], // MGCP TRD
+    ['ETS','mgcpTrd','source:extraction_specification','mgcp_trd'], // MGCP TRD
     ['ETS','msd1','source:extraction_specification','msd1'], // MSD1
     ['ETS','msd2','source:extraction_specification','msd2'], // MSD2
     ['ETS','msd3','source:extraction_specification','msd3'], // MSD3
@@ -2406,7 +2406,7 @@ tds40.rules = {
     ['RRC','24','railway','museum'], // Museum
     ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
-    ['RRC','999','railway','Other'], // Other
+    ['RRC','999','railway','other'], // Other
 
     // RSA - Branch Railway Type
     // ['RSA','-999999',undefined,undefined], // No Information
@@ -2464,8 +2464,8 @@ tds40.rules = {
 
     // SDCC - Soil Depth (interval closure)
     ['SDCC','2','soil:depth:closure','open_interval'], // Open Interval
-    ['SDCC','3','soil:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['SDCC','4','soil:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['SDCC','3','soil:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['SDCC','4','soil:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['SDCC','5','soil:depth:closure','closed_interval'], // Closed Interval
     ['SDCC','6','soil:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['SDCC','7','soil:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2474,8 +2474,8 @@ tds40.rules = {
 
     // SDSC - Stem Diameter (interval closure)
     ['SDSC','2','tree:diameter:closure','open_interval'], // Open Interval
-    ['SDSC','3','tree:diameter:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['SDSC','4','tree:diameter:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['SDSC','3','tree:diameter:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['SDSC','4','tree:diameter:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['SDSC','5','tree:diameter:closure','closed_interval'], // Closed Interval
     ['SDSC','6','tree:diameter:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['SDSC','7','tree:diameter:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2821,8 +2821,8 @@ tds40.rules = {
 
     // TSCC - Tree Spacing (interval closure)
     ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
-    ['TSCC','3','tree:spacing:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['TSCC','4','tree:spacing:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['TSCC','3','tree:spacing:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['TSCC','4','tree:spacing:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['TSCC','5','tree:spacing:closure','closed_interval'], // Closed Interval
     ['TSCC','6','tree:spacing:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['TSCC','7','tree:spacing:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -3149,46 +3149,46 @@ tds40.rules = {
     // ['YWQ','999','YWQ','other'], // Other
 
     // ZI001_NSP - Source Information : Non-spatial Source Type
-    ['ZI001_NSP','ngaAutoAirFacInfoFile','source:non_spatial_source:type','aafif'], // AAFIF
-    ['ZI001_NSP','ngaControlledImageBase1','source:non_spatial_source:type','cib1'], // CIB 1
-    ['ZI001_NSP','commercialData','source:non_spatial_source:type','commercial_data'], // Commercial Data
-    ['ZI001_NSP','ngaDigitalAirFltInfoFile','source:non_spatial_source:type','dafif'], // DAFIF
-    ['ZI001_NSP','digitalGlobeImagery','source:non_spatial_source:type','digitalglobe_imagery'], // DigitalGlobe Imagery
-    ['ZI001_NSP','ngaDigitalNauticalChart','source:non_spatial_source:type','dnc'], // DNC
-    ['ZI001_NSP','ngaDigitalVertObstruction','source:non_spatial_source:type','dvof'], // DVOF
-    ['ZI001_NSP','ngaFoundationFeatureData','source:non_spatial_source:type','ffd'], // FFD
-    ['ZI001_NSP','ngaGeoNames','source:non_spatial_source:type','geonames'], // GeoNames
-    ['ZI001_NSP','gpsBasedFieldCollect','source:non_spatial_source:type','gps'], // GPS
-    ['ZI001_NSP','ikonosImagery','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
-    ['ZI001_NSP','imageryUnspecified','source:non_spatial_source:type','imagery'], // Imagery
-    ['ZI001_NSP','ngaInterimTerrainData','source:non_spatial_source:type','itd'], // ITD
-    ['ZI001_NSP','ngaInterimVectorData','source:non_spatial_source:type','ivd'], // IVD
-    ['ZI001_NSP','landsatImagery','source:non_spatial_source:type','landsat_imagery'], // Landsat Imagery
-    ['ZI001_NSP','usModernizedIntegratedDB','source:non_spatial_source:type','midb'], // MIDB
-    ['ZI001_NSP','militaryMapData','source:non_spatial_source:type','military_map_data'], // Map Data
-    ['ZI001_NSP','nonMilitaryMap','source:non_spatial_source:type','non-military_map'], // Non-military Map
-    ['ZI001_NSP','usNtmImagery','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
-    ['ZI001_NSP','openSourceInfo','source:non_spatial_source:type','open_source_information'], // Open Source Information
-    ['ZI001_NSP','operationsData','source:non_spatial_source:type','operations_data'], // Operations Data
-    ['ZI001_NSP','orbimageImagery','source:non_spatial_source:type','orbimage_imagery'], // ORBIMAGE Imagery
-    ['ZI001_NSP','quickBirdImagery','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
-    ['ZI001_NSP','ngaStereoAirfieldCollect','source:non_spatial_source:type','sac'], // SAC
-    ['ZI001_NSP','ngaUrbanVectorMap','source:non_spatial_source:type','uvmap'], // UVMap
-    ['ZI001_NSP','ngaVectorInterimTerrain','source:non_spatial_source:type','vitd'], // VITD
-    ['ZI001_NSP','ngaVectorMap2','source:non_spatial_source:type','vmap2'], // VMap 2
-    ['ZI001_NSP','other','source:non_spatial_source:type','other'], // Other
+    ['ZI001_NSP','ngaAutoAirFacInfoFile','source:name','automated_aeronautical_facilities_information_file_(aafif)'], // AAFIF
+    ['ZI001_NSP','ngaControlledImageBase1','source:name','controlled_imagery_base_1_(cib1)'], // CIB 1
+    ['ZI001_NSP','commercialData','source:name','commercial_data'], // Commercial Data
+    ['ZI001_NSP','ngaDigitalAirFltInfoFile','source:name','digital_aeronautical_flight_information_file_(dafif)'], // DAFIF
+    ['ZI001_NSP','digitalGlobeImagery','source:name','digitalglobe_imagery'], // DigitalGlobe Imagery
+    ['ZI001_NSP','ngaDigitalNauticalChart','source:name','digital_nautical_chart_(dnc)'], // DNC
+    ['ZI001_NSP','ngaDigitalVertObstruction','source:name','digital_vertical_obstruction_file_(dvof)'], // DVOF
+    ['ZI001_NSP','ngaFoundationFeatureData','source:name','foundation_feature_data_(ffd)'], // FFD
+    ['ZI001_NSP','ngaGeoNames','source:name','geonames'], // GeoNames
+    ['ZI001_NSP','gpsBasedFieldCollect','source:name','gps_field_collected_open_source'], // GPS
+    ['ZI001_NSP','ikonosImagery','source:name','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_NSP','imageryUnspecified','source:name','imagery'], // Imagery
+    ['ZI001_NSP','ngaInterimTerrainData','source:name','interim_terrain_data_(itd)'], // ITD
+    ['ZI001_NSP','ngaInterimVectorData','source:name','interim_vector_data_(ivd)'], // IVD
+    ['ZI001_NSP','landsatImagery','source:name','landsat_imagery'], // Landsat Imagery
+    ['ZI001_NSP','usModernizedIntegratedDB','source:name','modernized_integrated_data_base_(midb)'], // MIDB
+    ['ZI001_NSP','militaryMapData','source:name','military_map_data'], // Map Data
+    ['ZI001_NSP','nonMilitaryMap','source:name','non-military_map'], // Non-military Map
+    ['ZI001_NSP','usNtmImagery','source:name','ntm_imagery'], // NTM Imagery
+    ['ZI001_NSP','openSourceInfo','source:name','open_source_information'], // Open Source Information
+    ['ZI001_NSP','operationsData','source:name','operations_data'], // Operations Data
+    ['ZI001_NSP','orbimageImagery','source:name','orbimage_imagery'], // ORBIMAGE Imagery
+    ['ZI001_NSP','quickBirdImagery','source:name','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_NSP','ngaStereoAirfieldCollect','source:name','stereo_airfield_collection_(sac)'], // SAC
+    ['ZI001_NSP','ngaUrbanVectorMap','source:name','urban_vector_map_(uvmap)'], // UVMap
+    ['ZI001_NSP','ngaVectorInterimTerrain','source:name','vector_interim_terrain_data_(vitd)'], // VITD
+    ['ZI001_NSP','ngaVectorMap2','source:name','vector_map_lv2_(vmap2)'], // VMap 2
+    ['ZI001_NSP','other','source:name','other'], // Other
 
     // ZI001_SSY - Source Information : Spatial Source Type
-    ['ZI001_SSY','ngaControlledImageBase1','source:spatial_source:type','cib1'], // CIB 1
+    ['ZI001_SSY','ngaControlledImageBase1','source:spatial_source:type','controlled_imagery_base_1_(cib1)'], // CIB 1
     ['ZI001_SSY','digitalGlobeImagery','source:spatial_source:type','digitalglobe_imagery'], // DigitalGlobe Imagery
-    ['ZI001_SSY','ngaDigitalNauticalChart','source:spatial_source:type','dnc'], // DNC
-    ['ZI001_SSY','ngaFoundationFeatureData','source:spatial_source:type','ffd'], // FFD
+    ['ZI001_SSY','ngaDigitalNauticalChart','source:spatial_source:type','digital_nautical_chart_(dnc)'], // DNC
+    ['ZI001_SSY','ngaFoundationFeatureData','source:spatial_source:type','foundation_feature_data_(ffd)'], // FFD
     ['ZI001_SSY','geoEye1','source:spatial_source:type','geoeye1_imagery'], // GeoEye 1 Imagery
-    ['ZI001_SSY','gpsBasedFieldCollect','source:spatial_source:type','gps'], // GPS
+    ['ZI001_SSY','gpsBasedFieldCollect','source:spatial_source:type','gps_field_collected_open_source'], // GPS
     ['ZI001_SSY','ikonosImagery','source:spatial_source:type','ikonos_imagery'], // Ikonos Imagery
     ['ZI001_SSY','imageryUnspecified','source:spatial_source:type','imagery'], // Imagery
-    ['ZI001_SSY','ngaInterimTerrainData','source:spatial_source:type','itd'], // ITD
-    ['ZI001_SSY','usModernizedIntegratedDB','source:spatial_source:type','midb'], // MIDB
+    ['ZI001_SSY','ngaInterimTerrainData','source:spatial_source:type','interim_terrain_data_(itd)'], // ITD
+    ['ZI001_SSY','usModernizedIntegratedDB','source:spatial_source:type','modernized_integrated_data_base_(midb)'], // MIDB
     ['ZI001_SSY','usNtmImagery','source:spatial_source:type','ntm_imagery'], // NTM Imagery
     ['ZI001_SSY','operationsData','source:spatial_source:type','operations_data'], // Operations Data
     ['ZI001_SSY','orbimageImagery','source:spatial_source:type','orbimage_imagery'], // ORBIMAGE Imagery
@@ -3479,7 +3479,7 @@ tds40.rules = {
     ['ZI016_ROC','4','surface','gravel'], // Aggregate
     ['ZI016_ROC','5','surface','macadam'], // Macadam
     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
-    ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
+    ['ZI016_ROC','7','surface','rigid_pavement'], // Rigid Pavement
     ['ZI016_ROC','8','surface','concrete'], // Concrete
     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete

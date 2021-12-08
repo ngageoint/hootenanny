@@ -1211,10 +1211,11 @@ tds40 = {
     } // End switch condifion
 
     // Denominations without religions - from ZI037_REL which has some denominations as religions
-    if (tags.denomination)
+    switch (tags.denomination)
     {
-      switch (tags.denomination)
-      {
+      case undefined:
+        break;
+
       case 'roman_catholic':
       case 'orthodox':
       case 'protestant':
@@ -1227,8 +1228,7 @@ tds40 = {
       case 'sunni':
         tags.religion = 'muslim';
         break;
-      } // End switch
-    }
+    } // End switch
 
     // Religious buildings: Church, Pagoda, Temple etc
     if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')
@@ -2212,6 +2212,19 @@ tds40 = {
       {
         tags.product = tags.resource;
         delete tags.resource;
+      }
+    }
+
+    // Monorails are a special case
+    if (tags.railway == 'monorail')
+    {
+      tags['gauge:type'] = 'monorail';
+      tags.railway = 'rail';
+
+      if (tags['railway:type'])
+      {
+        tags.railway = tags['railway:type'];
+        delete tags['railway:type']
       }
     }
 
