@@ -574,6 +574,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
               _yield(30 * 1000, 60 * 1000);
             }
           }
+          else  //  Upload was validated, update the changeset
+            _changeset.updateChangeset(workInfo);
           break;
         }
       }
@@ -1001,7 +1003,7 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
     for (int changesetType = ChangesetType::TypeModify; changesetType < ChangesetType::TypeMax; ++changesetType)
     {
       ChangesetType type = static_cast<ChangesetType>(changesetType);
-      ChangesetInfo::iterator element = changeset->begin(element_type, type);
+      auto element = changeset->begin(element_type, type);
       if (element != changeset->end(element_type, type))
       {
         QString update = "";
@@ -1038,7 +1040,7 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
     for (int changesetType = ChangesetType::TypeModify; changesetType < ChangesetType::TypeMax; ++changesetType)
     {
       ChangesetType c_type = static_cast<ChangesetType>(changesetType);
-      ChangesetInfo::iterator element = changeset->begin(e_type, c_type);
+      auto element = changeset->begin(e_type, c_type);
       if (element != changeset->end(e_type, c_type))
       {
         long id = *element;
@@ -1148,6 +1150,7 @@ bool OsmApiWriter::_hasElement(HootNetworkRequestPtr request, const QString& end
   }
   catch (const HootException& ex)
   {
+    LOG_TRACE(ex.getWhat());
   }
   return false;
 }
@@ -1380,7 +1383,7 @@ bool OsmApiWriter::_validateUpload(const HootNetworkRequestPtr& request, const C
     for (int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
     {
       ElementType::Type e_type = static_cast<ElementType::Type>(elementType);
-      ChangesetInfo::iterator element = workInfo->begin(e_type, c_type);
+      auto element = workInfo->begin(e_type, c_type);
       if (element != workInfo->end(e_type, c_type))
       {
         long id = *element;

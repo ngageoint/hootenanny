@@ -42,6 +42,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetJoinTest);
   CPPUNIT_TEST(runXmlChangesetJoinTest2);
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
+  CPPUNIT_TEST(runXmlChangesetUpdateTest2);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
   CPPUNIT_TEST(runXmlChangesetSplitWayInRelationTest);
@@ -156,6 +157,21 @@ public:
     QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangeset2.osc");
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 2));
+  }
+
+  void runXmlChangesetUpdateTest2()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "ToyTestAChangesetPositive.osc");
+
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
+    changeset.calculateChangeset(info);
+
+    changeset.updateChangeset(info);
+
+    CPPUNIT_ASSERT_EQUAL(0L, changeset._failedCount);
+    CPPUNIT_ASSERT_EQUAL(40L, changeset._sentCount);
+    CPPUNIT_ASSERT_EQUAL(40L, changeset._processedCount);
   }
 
   void runXmlChangesetSplitTest()

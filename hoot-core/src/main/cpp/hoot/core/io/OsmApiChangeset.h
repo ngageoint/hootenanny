@@ -101,6 +101,11 @@ public:
    */
   void updateChangeset(const QString& changes);
   /**
+   * @brief updateChangeset Update the changeset after part of the changeset is uploaded and verified but no response was generated
+   * @param changes - Changeset info object that was sent to the OSM API, processed successfully, but a response wasn't received
+   */
+  void updateChangeset(const ChangesetInfoPtr& changeset);
+  /**
    * @brief fixChangeset Update the underlying element to fix changeset upload errors
    * @param update - OSM XML from OSM API to fix changeset errors
    * @return True if a change was made to fix the changeset
@@ -314,6 +319,13 @@ private:
    * @param version New version of the element
    */
   void updateElement(ChangesetTypeMap& map, long old_id, long new_id, long version);
+  /**
+   * @brief updateElement Update the element version and status
+   * @param map Map of elements (nodes/ways/relations)
+   * @param id ID of the element to update
+   * @param changeset_type Changeset section type (create/modify/delete)
+   */
+  void updateElement(ChangesetTypeMap& map, long id, ChangesetType changeset_type);
   /**
    * @brief fixElement Fix the element with ID by updating the version of the element and merge
    *     the set of tags
