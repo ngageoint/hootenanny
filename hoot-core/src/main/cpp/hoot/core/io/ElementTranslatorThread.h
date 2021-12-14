@@ -35,7 +35,9 @@
 // Qt
 #include <QQueue>
 #include <QThread>
-#include <QMutex>
+
+// std
+#include <mutex>
 
 namespace hoot
 {
@@ -46,16 +48,14 @@ class ElementTranslatorThread : public QThread
 
 public:
 
+  ElementTranslatorThread(std::mutex& initMutex, std::mutex& translationMutex);
+
   void run() override;  
 
   void setTranslation(const QString& translation) { _translation = translation; }
-  void setElementQueue(QQueue<ElementPtr>* queue) { _pElementQ = queue; }
-  void setTransFeaturesQueueMutex(QMutex* mutex) { _pTransFeaturesQMutex = mutex; }
-  void setInitMutex(QMutex* mutex) { _pInitMutex = mutex; }
-  void setTransFeaturesQueue(
-    QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-      std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* queue)
-  { _pTransFeaturesQ = queue; }
+  void setElementQueue(QQueue<ElementPtr>* queue) { _pElementQueue = queue; }
+  void setTransFeaturesQueue(QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>, TranslatedFeatureVector>>* queue)
+  { _pTransFeaturesQueue = queue; }
   void setFinishedTranslating(bool* finished) { _pFinishedTranslating = finished; }
   void setElementCache(const ElementCachePtr& cache) { _pElementCache = cache; }
   void setConversionOps(const QList<ElementVisitorPtr>& ops) { _conversionOps = ops; }
@@ -63,11 +63,10 @@ public:
 private:
 
   QString _translation;
-  QQueue<ElementPtr>* _pElementQ;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
+  QQueue<ElementPtr>* _pElementQueue;
+  std::mutex& _initMutex;
+  std::mutex& _transFeaturesQueueMutex;
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>, TranslatedFeatureVector>>* _pTransFeaturesQueue;
   bool* _pFinishedTranslating;
   ElementCachePtr _pElementCache;
   QList<ElementVisitorPtr> _conversionOps;
