@@ -50,7 +50,7 @@ public class HootServicesJerseyTestAbstract extends JerseyTest {
 
         // 2) add SLF4JBridgeHandler to j.u.l's root logger, should be done once
         // during the initialization phase of your application
-        SLF4JBridgeHandler.install();
+        //SLF4JBridgeHandler.install();
 
         System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "test");
         applicationContext = new AnnotationConfigApplicationContext(HootServicesSpringTestConfig.class);
