@@ -48,15 +48,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbWriter)
 
-HootApiDbWriter::HootApiDbWriter() :
-_nodesWritten(0),
-_waysWritten(0),
-_relationsWritten(0),
-_remapIds(true),
-_includeIds(false),
-_jobId(-1),
-_preserveVersionOnInsert(false),
-_open(false)
+HootApiDbWriter::HootApiDbWriter()
+  : _nodesWritten(0),
+    _waysWritten(0),
+    _relationsWritten(0),
+    _remapIds(true),
+    _includeIds(false),
+    _jobId(-1),
+    _preserveVersionOnInsert(false),
+    _open(false)
 {
   setConfiguration(conf());
 }
@@ -171,14 +171,11 @@ QString HootApiDbWriter::_getMapNameFromUrl(const QString& urlStr) const
 long HootApiDbWriter::_openDb(const QString& urlStr)
 {
   if (!isSupported(urlStr))
-  {
     throw HootException("An unsupported URL was passed into HootApiDbWriter: " + urlStr);
-  }
+
   if (_userEmail.isEmpty())
-  {
     throw HootException("Please set the user's email address via the '" +
                         ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
-  }
 
   // URL must have name in it
   QUrl url(urlStr);
@@ -190,13 +187,10 @@ long HootApiDbWriter::_openDb(const QString& urlStr)
 
   // create the user before we have a transaction so we can make sure the user gets added
   if (_createUserIfNotFound)
-  {
     _hootdb.setUserId(_hootdb.getOrCreateUser(_userEmail, _userEmail));
-  }
   else
-  {
     _hootdb.setUserId(_hootdb.getUserId(_userEmail, true));
-  }
+
   LOG_VARD(_hootdb.getCurrentUserId());
 
   // start the transaction. We'll close it when finalizePartial is called.
@@ -230,9 +224,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   LOG_TRACE("Getting remapped ID for element ID: " << eid << "...");
 
   if (_remapIds == false)
-  {
     return eid.getId();
-  }
 
   long retVal = -1;
 
@@ -249,14 +241,10 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       retVal = _hootdb.reserveElementId(ElementType::Node);
       _nodeRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
-      {
         _sourceNodeIds.insert(eid.getId());
-      }
       LOG_VART(retVal);
     }
-
     break;
-
   case ElementType::Way:
     if (_wayRemap.count(eid.getId()) == 1)
     {
@@ -268,14 +256,10 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       retVal = _hootdb.reserveElementId(ElementType::Way);
       _wayRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
-      {
         _sourceWayIds.insert(eid.getId());
-      }
       LOG_VART(retVal);
     }
-
     break;
-
   case ElementType::Relation:
     if (_relationRemap.count(eid.getId()) == 1)
     {
@@ -287,18 +271,13 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       retVal = _hootdb.reserveElementId(ElementType::Relation);
       _relationRemap[eid.getId()] = retVal;
       if ( _outputMappingFile.length() > 0 )
-      {
         _sourceRelationIds.insert(eid.getId());
-      }
       LOG_VART(retVal);
     }
-
     break;
-
   default:
     LOG_ERROR("Tried to create or remap ID for invalid type");
     throw NotImplementedException();
-
     break;
   }
 
@@ -318,14 +297,10 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
     //    did not successfully create a mapping for when importing nodes,
     //    we can't continue
     if (_nodeRemap.count(nids[i]) == 1)
-    {
       result[i] = _nodeRemap.at(nids[i]);
-    }
     else
-    {
       throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
         + QString(" but it did not exist in mapping table")));
-    }
   }
 
   return result;
@@ -370,29 +345,19 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
     LOG_VART(nodeId);
 
     if (alreadyThere)
-    {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, tags);
-    }
     else if (_preserveVersionOnInsert && n->getVersion() > 0)
-    {
       _hootdb.insertNode(nodeId, n->getY(), n->getX(), tags, n->getVersion());
-    }
     else
-    {
       _hootdb.insertNode(nodeId, n->getY(), n->getX(), tags);
-    }
   }
   else
   {
     LOG_VART(n->getId());
     if (_preserveVersionOnInsert && n->getVersion() > 0)
-    {
       _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags, n->getVersion());
-    }
     else
-    {
       _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags);
-    }
   }
 
   LOG_VART(n->getVersion());
@@ -416,39 +381,25 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
     wayId = _getRemappedElementId(w->getElementId());
 
     if (alreadyThere)
-    {
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
-    }
     else if (_preserveVersionOnInsert && w->getVersion() > 0)
-    {
       _hootdb.insertWay(wayId, tags, w->getVersion());
-    }
     else
-    {
       _hootdb.insertWay(wayId, tags);
-    }
   }
   else
   {
     wayId = w->getId();
     if (_preserveVersionOnInsert && w->getVersion() > 0)
-    {
       _hootdb.insertWay(w->getId(), tags, w->getVersion());
-    }
     else
-    {
       _hootdb.insertWay(w->getId(), tags);
-    }
   }
 
   if (_remapIds == true)
-  {
     _hootdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
-  }
   else
-  {
     _hootdb.insertWayNodes(wayId, w->getNodeIds());
-  }
 
   _countChange();
 
@@ -465,14 +416,11 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
   _addElementTags(r, tags);
 
   if (!r->getType().isEmpty())
-  {
     tags["type"] = r->getType();
-  }
 
   if (_remapIds)
   {
     relationId = _getRemappedElementId(r->getElementId());
-
     _hootdb.insertRelation(relationId, tags);
   }
   else if (_preserveVersionOnInsert && r->getVersion() > 0)

@@ -228,7 +228,7 @@ double GraphComparator::compareMaps()
 void GraphComparator::_graphCompareThreadFunc()
 {
   //  Lock the mutex before checking the contents of the work queue
-  _workQueueMutex.lock();
+  std::unique_lock<std::mutex> work_queue_lock(_workQueueMutex);
   while (!_workQueue.empty())
   {
     //  Grab the work info to process
@@ -237,12 +237,11 @@ void GraphComparator::_graphCompareThreadFunc()
     const size_t workRemaining = _workQueue.size();
     if (workRemaining % 5 == 0)
     {
-      _logMutex.lock();
+      std::lock_guard<std::mutex> log_lock(_logMutex);
       PROGRESS_STATUS("Remaining iterations: " << _workQueue.size());
-      _logMutex.unlock();
     }
     //  Make sure to unlock the queue
-    _workQueueMutex.unlock();
+    work_queue_lock.unlock();
 
     double maxGraphCost = 0.0;
     RandomPtr random = std::make_shared<Random>(info.index);
@@ -282,15 +281,16 @@ void GraphComparator::_graphCompareThreadFunc()
     image1.release();
     image2.release();
     //  Lock the results mutex before writing to it
-    _resultsMutex.lock();
-    _results[info.index] = error;
-    _resultsMutex.unlock();
+    {
+      std::lock_guard<std::mutex> results_lock(_resultsMutex);
+      _results[info.index] = error;
+    }
 
     //  Lock the mutex to check the contents
-    _workQueueMutex.lock();
+    work_queue_lock.lock();
   }
   //  Work queue is empty, unlock the mutex and exit the thread
-  _workQueueMutex.unlock();
+  work_queue_lock.unlock();
 }
 
 void GraphComparator::_exportGraphImage(

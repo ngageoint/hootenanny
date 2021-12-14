@@ -84,16 +84,18 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     sort(geometries.begin(), geometries.end(), compare);
     LOG_TRACE("Remaining geometries: " << geometries.size());
     //  Reserve the correct amount of space in the thread return vector
-    _geometryReturnMutex.lock();
-    _geometryReturn.resize(0);
-    _geometryReturn.reserve(geometries.size() / 2 + 1);
-    _geometryReturnMutex.unlock();
+    {
+      std::lock_guard<std::mutex> geometry_return_lock(_geometryReturnMutex);
+      _geometryReturn.resize(0);
+      _geometryReturn.reserve(geometries.size() / 2 + 1);
+    }
     //  Create the stack of work
-    _geometryStackMutex.lock();
-    _geometryStack.empty();
-    for (size_t i = 0; i < geometries.size() - 1; i += 2)
-      _geometryStack.emplace(geometries[i], geometries[i + 1]);
-    _geometryStackMutex.unlock();
+    {
+      std::lock_guard<std::mutex> geometry_stack_lock(_geometryStackMutex);
+      _geometryStack.empty();
+      for (size_t i = 0; i < geometries.size() - 1; i += 2)
+        _geometryStack.emplace(geometries[i], geometries[i + 1]);
+    }
     //  Reset finished threads to zero each round of merges
     _finishedThreads = 0;
     //  Tell the threads to start working
@@ -139,13 +141,14 @@ void GeometryMerger::mergeGeometryThread()
   {
     //  Lock the mutex and try to get a geometry pair to union
     GeometryPair pair;
-    _geometryStackMutex.lock();
-    if (!_geometryStack.empty())
     {
-      pair = _geometryStack.top();
-      _geometryStack.pop();
+      std::lock_guard<std::mutex> geometry_stack_lock(_geometryStackMutex);
+      if (!_geometryStack.empty())
+      {
+        pair = _geometryStack.top();
+        _geometryStack.pop();
+      }
     }
-    _geometryStackMutex.unlock();
     //  Make sure that there was something taken off of the queue
     if (pair.first && pair.second)
     {
@@ -186,9 +189,10 @@ void GeometryMerger::mergeGeometryThread()
         }
       }
       //  Push the geometry onto the return vector safely
-      _geometryReturnMutex.lock();
-      _geometryReturn.push_back(g);
-      _geometryReturnMutex.unlock();
+      {
+        std::lock_guard<std::mutex> geometry_return_lock(_geometryReturnMutex);
+        _geometryReturn.push_back(g);
+      }
       //  Increment the counter
       ++_counter;
       if (_counter % _updateInterval == 0)
