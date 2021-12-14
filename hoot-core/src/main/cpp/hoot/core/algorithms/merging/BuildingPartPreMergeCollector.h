@@ -38,10 +38,12 @@
 // Qt
 #include <QRunnable>
 #include <QQueue>
-#include <QMutex>
 
 // geos
 #include <geos/geom/Geometry.h>
+
+// std
+#include <mutex>
 
 namespace hoot
 {
@@ -88,7 +90,7 @@ class BuildingPartPreMergeCollector : public QRunnable
 
 public:
 
-  BuildingPartPreMergeCollector();
+  BuildingPartPreMergeCollector(std::mutex& inputMutex, std::mutex& outputMutex, std::mutex& schemaMutex);
   ~BuildingPartPreMergeCollector() = default;
 
   /**
@@ -105,30 +107,27 @@ public:
   void setBuildingPartGroupsOutput(Tgs::DisjointSetMap<ElementPtr>* groups)
   { _buildingPartGroupsOutput = groups; }
 
-  void setBuildingPartInputMutex(QMutex* mutex) { _buildingPartInputMutex = mutex; }
   void setStartingInputSize(int size) { _startingInputSize = size; }
-  void setHootSchemaMutex(QMutex* mutex) { _hootSchemaMutex = mutex; }
-  void setBuildingPartOutputMutex(QMutex* mutex) { _buildingPartOutputMutex = mutex; }
 
 private:
 
   // input data to be grouped
   QQueue<BuildingPartRelationship>* _buildingPartsInput;
   int _startingInputSize;
+  // protects the input data
+  std::mutex& _buildingPartInputMutex;
   // Output building part data that can be merged; accessing this as a shared pointer slows down
   // processing by ~60%, so will keep it as a raw pointer.
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroupsOutput;
+  // protects the output data
+  std::mutex& _buildingPartOutputMutex;
 
   ConstOsmMapPtr _map;
 
   std::shared_ptr<ElementToGeometryConverter> _elementToGeomeryConverter;
 
-  // protects the input data
-  QMutex* _buildingPartInputMutex;
   // protects access to OsmSchema, which is not thread safe
-  QMutex* _hootSchemaMutex;
-  // protects the output data
-  QMutex* _buildingPartOutputMutex;
+  std::mutex& _hootSchemaMutex;
 
   QString _id;
   int _numGeometriesCleaned;

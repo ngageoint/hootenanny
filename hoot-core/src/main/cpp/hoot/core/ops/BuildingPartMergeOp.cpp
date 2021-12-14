@@ -41,7 +41,6 @@
 // Qt
 #include <QThreadPool>
 #include <QQueue>
-#include <QMutex>
 
 namespace hoot
 {
@@ -253,9 +252,9 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
 {
   QQueue<BuildingPartRelationship> buildingPartsInput = _getBuildingPartPreProcessingInput();
 
-  QMutex buildingPartsInputMutex;
-  QMutex hootSchemaMutex;
-  QMutex buildingPartGroupsOutputMutex;
+  std::mutex buildingPartsInputMutex;
+  std::mutex buildingPartGroupsOutputMutex;
+  std::mutex hootSchemaMutex;
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
@@ -263,16 +262,14 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   for (int i = 0; i < _threadCount; i++)
   {
     // The thread pool takes ownership of this task.
-    BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
+    BuildingPartPreMergeCollector* buildingPartCollectTask =
+        new BuildingPartPreMergeCollector(buildingPartsInputMutex, buildingPartGroupsOutputMutex, hootSchemaMutex);
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
     buildingPartCollectTask->setStartingInputSize(buildingPartsInput.size());
     // Passing the groups into the threads as a shared pointer slows down processing by ~60% (not
     // sure why), so will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     buildingPartCollectTask->setMap(_map);
-    buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);
-    buildingPartCollectTask->setHootSchemaMutex(&hootSchemaMutex);
-    buildingPartCollectTask->setBuildingPartOutputMutex(&buildingPartGroupsOutputMutex);
     threadPool.start(buildingPartCollectTask);
   }
   LOG_VART(threadPool.activeThreadCount());
