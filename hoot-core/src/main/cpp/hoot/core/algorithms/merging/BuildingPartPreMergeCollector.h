@@ -61,13 +61,12 @@ struct BuildingPartRelationship
     Neighbor
   };
 
-  BuildingPartRelationship(
-    const ElementPtr& building, const std::shared_ptr<geos::geom::Geometry>& buildingGeom,
-    const WayPtr& buildingPartNeighbor, BuildingPartRelationshipType relationshipType) :
-  building(building),
-  buildingGeom(buildingGeom),
-  buildingPartNeighbor(buildingPartNeighbor),
-  relationshipType(relationshipType)
+  BuildingPartRelationship(const ElementPtr& building, const std::shared_ptr<geos::geom::Geometry>& buildingGeom,
+                           const WayPtr& buildingPartNeighbor, BuildingPartRelationshipType relationshipType)
+    : building(building),
+      buildingGeom(buildingGeom),
+      buildingPartNeighbor(buildingPartNeighbor),
+      relationshipType(relationshipType)
   {
   }
 
@@ -141,9 +140,8 @@ private:
   std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
 
   void _processBuildingPart(const BuildingPartRelationship& buildingPartRelationship);
-  void _addContainedBuildingPartToGroup(
-    ElementPtr building, std::shared_ptr<geos::geom::Geometry> buildingGeom,
-    WayPtr buildingPartNeighbor);
+  void _addContainedBuildingPartToGroup(ElementPtr building, std::shared_ptr<geos::geom::Geometry> buildingGeom,
+                                        WayPtr buildingPartNeighbor);
 
   /*
    * groups a building part with a building so they can later be merged together
