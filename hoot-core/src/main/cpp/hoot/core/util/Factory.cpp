@@ -39,11 +39,9 @@ namespace hoot
 
 boost::any Factory::constructObject(const QString& name)
 {
-  QMutexLocker locker(&_mutex);
+  std::unique_lock<std::mutex> locker(_mutex);
   if (_creators.find(name) == _creators.end())
-  {
     throw HootException("Could not find object to construct. (" + name + ")");
-  }
   std::shared_ptr<ObjectCreator> c = _creators[name];
   locker.unlock();
 
@@ -59,18 +57,15 @@ Factory& Factory::getInstance()
 
 vector<QString> Factory::getObjectNamesByBase(const QString& baseName)
 {
-  QMutexLocker locker(&_mutex);
+  std::lock_guard<std::mutex> locker(_mutex);
   vector<QString> result;
 
   LOG_VART(baseName);
-  for (std::map<QString, std::shared_ptr<ObjectCreator>>::const_iterator it = _creators.begin();
-       it != _creators.end(); ++it)
+  for (auto it = _creators.begin(); it != _creators.end(); ++it)
   {
     std::shared_ptr<ObjectCreator> c = it->second;
     if (c->getBaseName() == baseName)
-    {
       result.push_back(c->getName());
-    }
   }
   return result;
 }
@@ -82,7 +77,7 @@ bool Factory::hasClass(const QString& name) const
 
 void Factory::registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass)
 {
-  QMutexLocker locker(&_mutex);
+  std::lock_guard<std::mutex> locker(_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())
   {
     throw HootException(
@@ -96,9 +91,7 @@ void Factory::registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool bas
     _creators[oc->getName()] = oc;
   }
   else
-  {
     throw HootException("A class got registered multiple times. " + oc->getName());
-  }
 }
 
 }
