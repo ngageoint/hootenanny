@@ -319,7 +319,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   {
     ChangesetInfoPtr workInfo;
     //  Try to get something off of the work queue
-    int queueSize = 0;
+    size_t queueSize = 0;
     {
       std::lock_guard<std::mutex> work_queue_lock(_workQueueMutex);
       queueSize = _workQueue.size();
