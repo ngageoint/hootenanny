@@ -42,7 +42,7 @@
         <querydsl.version>4.4.0</querydsl.version>
         <reflections.version>0.9.12</reflections.version>
         <rhino.version>1.7.13</rhino.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <slf4j.version>1.7.32</slf4j.version>
         <smiley-http-proxy-servlet.version>1.12</smiley-http-proxy-servlet.version>
         <spring.version>5.2.13.RELEASE</spring.version>
         <spring.security.version>5.2.11.RELEASE</spring.security.version>
@@ -272,7 +272,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.6.201602180812</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
