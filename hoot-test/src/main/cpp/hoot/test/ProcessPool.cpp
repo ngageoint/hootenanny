@@ -28,7 +28,6 @@
 
 // Hoot
 #include <hoot/core/util/StringUtils.h>
-
 #include <hoot/js/v8Engine.h>
 
 // std
@@ -38,23 +37,19 @@ using namespace std;
 
 bool JobQueue::empty()
 {
-  _mutex.lock();
-  bool e = _jobs.empty();
-  _mutex.unlock();
-  return e;
+  std::lock_guard<std::mutex> locker(_mutex);
+  return _jobs.empty();
 }
 
 bool JobQueue::contains(const QString& job)
 {
-  _mutex.lock();
-  bool c = _jobs.find(job) != _jobs.end();
-  _mutex.unlock();
-  return c;
+  std::lock_guard<std::mutex> locker(_mutex);
+  return _jobs.find(job) != _jobs.end();
 }
 
 QString JobQueue::pop()
 {
-  _mutex.lock();
+  std::lock_guard<std::mutex> locker(_mutex);
   QString job;
   //  Don't try to erase a job from an empty queue.
   if (!_jobs.empty())
@@ -62,26 +57,23 @@ QString JobQueue::pop()
     job = *_jobs.begin();
     _jobs.erase(_jobs.begin());
   }
-  _mutex.unlock();
   return job;
 }
 
 void JobQueue::push(const QString& job)
 {
-  _mutex.lock();
+  std::lock_guard<std::mutex> locker(_mutex);
   _jobs.insert(job);
-  _mutex.unlock();
 }
 
 QString JobQueue::toString() const
 {
-  return
-    "Name: " + _name + "; Size: " + QString::number(_jobs.size()) + "; Jobs: " +
-    hoot::StringUtils::setToString(_jobs);
+  return "Name: " + _name + "; Size: " + QString::number(_jobs.size()) + "; Jobs: " +
+          hoot::StringUtils::setToString(_jobs);
 }
 
 ProcessThread::ProcessThread(int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
-                             bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+                             bool disableFailureRetries, double waitTime, std::mutex* outMutex, JobQueue* parallelJobs,
                              JobQueue* casesJobs, JobQueue* serialJobs, JobQueue* serialCasesJobs)
   : _threadId(threadId),
     _maxThreads(maxThreads),
@@ -119,9 +111,8 @@ QProcess* ProcessThread::createProcess()
   QString suppressFailureDetail = (_suppressFailureDetail ? "--suppress-failure-detail" : "");
   QString diff = (_printDiff ? "--diff" : "");
 
-  proc->start(
-    QString("HootTest %1 %2 %3 --listen %4")
-      .arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
+  proc->start(QString("HootTest %1 %2 %3 --listen %4")
+              .arg(names, suppressFailureDetail, diff).arg((int)_waitTime));
   return proc;
 }
 
@@ -176,10 +167,9 @@ void ProcessThread::processJobs(JobQueue* queue)
           }
           else
           {
+            std::lock_guard<std::mutex> locker(*_outMutex);
             working = false;
-            _outMutex->lock();
             cout << test.toStdString() << " failed to execute, exiting thread." << endl;
-            _outMutex->unlock();
           }
           break;
         }
@@ -225,10 +215,12 @@ void ProcessThread::processJobs(JobQueue* queue)
       output = output.replace("\n\n\n", "\n").replace("\n\n", "\n");
       if (_showTestName)
         output = QString("(%1) %2").arg(_threadId, (_maxThreads < 10) ? 1 : 2).arg(output);
-      _outMutex->lock();
-      cout << output.toStdString();
-      cout.flush();
-      _outMutex->unlock();
+      //  Lock the output mutex before using cout
+      {
+        std::lock_guard<std::mutex> output_locker(*_outMutex);
+        cout << output.toStdString();
+        cout.flush();
+      }
     }
     else
       working = false;
