@@ -36,11 +36,11 @@
 #include <hoot/core/schema/MetadataTags.h>
 
 // Qt
-#include <QMutex>
 #include <QString>
 
 // Standard
 #include <map>
+#include <mutex>
 #include <vector>
 
 namespace hoot
@@ -68,8 +68,8 @@ class ObjectCreatorTemplate : public ObjectCreator
 {
 public:
 
-  ObjectCreatorTemplate(QString baseName, QString name) :
-  _name(name), _baseName(baseName)
+  ObjectCreatorTemplate(QString baseName, QString name)
+    : _name(name), _baseName(baseName)
   {
   }
   virtual ~ObjectCreatorTemplate() = default;
@@ -123,15 +123,11 @@ public:
   template<class ExpectedBase>
   bool hasBase(const QString& name)
   {
-    QMutexLocker locker(&_mutex);
+    std::lock_guard<std::mutex> locker(_mutex);
     if (_creators.find(name) == _creators.end())
-    {
       throw HootException("Could not find object to construct. (" + name + ")");
-    }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
-    {
       return false;
-    }
     return true;
   }
   bool hasClass(const QString& name) const;
@@ -142,23 +138,18 @@ public:
   template<class ExpectedBase>
   void checkClass(const QString& name)
   {
-    QMutexLocker locker(&_mutex);
+    std::lock_guard<std::mutex> locker(_mutex);
     if (_creators.find(name) == _creators.end())
-    {
       throw HootException("Could not find object to construct. (" + name + ")");
-    }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
-    {
-      throw HootException(
-        "Class (" + name + ") does not have a base class of " + ExpectedBase::className());
-    }
+      throw HootException("Class (" + name + ") does not have a base class of " + ExpectedBase::className());
   }
 
   std::vector<QString> getObjectNamesByBase(const QString& baseName);
 
 private:
 
-  QMutex _mutex;
+  std::mutex _mutex;
 
   std::map<QString, std::shared_ptr<ObjectCreator>> _creators;
 

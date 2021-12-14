@@ -65,7 +65,6 @@ public:
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
-  void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
   void setTextStatus(bool textStatus) { _textStatus = textStatus; }
   void setIncludeCircularError(bool includeCircularError)
   { _includeCircularError = includeCircularError; }
@@ -99,8 +98,6 @@ protected:
   unsigned long _relationsWritten;
 
   bool _remapIds;
-
-  bool _includeDebug;
 
   /**
    * Return the remapped ID for the specified element if it exists

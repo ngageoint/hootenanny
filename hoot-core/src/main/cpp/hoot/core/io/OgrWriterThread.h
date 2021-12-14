@@ -33,7 +33,9 @@
 // Qt
 #include <QQueue>
 #include <QThread>
-#include <QMutex>
+
+// std
+#include <mutex>
 
 namespace hoot
 {
@@ -44,26 +46,23 @@ class OgrWriterThread : public QThread
 
 public:
 
+  OgrWriterThread(std::mutex& initMutex, std::mutex& translationMutex);
+
   void run() override;
 
   void setTranslation(const QString& translation) { _translation = translation; }
   void setOutput(const QString& output) { _output = output; }
-  void setTransFeaturesQueueMutex(QMutex* mutex) { _pTransFeaturesQMutex = mutex; }
-  void setInitMutex(QMutex* mutex) { _pInitMutex = mutex; }
-  void setTransFeaturesQueue(
-    QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-      std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* queue)
-  { _pTransFeaturesQ = queue; }
+  void setTransFeaturesQueue(QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>, TranslatedFeatureVector>>* queue)
+  { _pTransFeaturesQueue = queue; }
   void setFinishedTranslating(bool* finished) { _pFinishedTranslating = finished; }
 
 private:
 
   QString _translation;
   QString _output;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
+  std::mutex& _transFeaturesQueueMutex;
+  std::mutex& _initMutex;
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>, TranslatedFeatureVector>>* _pTransFeaturesQueue;
   bool* _pFinishedTranslating;
 };
 

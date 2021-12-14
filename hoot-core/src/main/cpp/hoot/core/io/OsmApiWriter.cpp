@@ -176,9 +176,11 @@ bool OsmApiWriter::apply()
   while (_changeset.hasElementsToSend())
   {
     //  Check the size of the work queue, don't overwork the work queue
-    _workQueueMutex.lock();
-    int queueSize = (int)_workQueue.size();
-    _workQueueMutex.unlock();
+    int queueSize = 0;
+    {
+      std::lock_guard<std::mutex> work_queue_lock(_workQueueMutex);
+      queueSize = (int)_workQueue.size();
+    }
     //  If all threads have failed, fail the rest of the changeset and exit
     if (_allThreadsFailed())
     {
@@ -196,9 +198,11 @@ bool OsmApiWriter::apply()
       //  Divide up the changes into atomic changesets
       ChangesetInfoPtr changeset_info = std::make_shared<ChangesetInfo>();
       //  Repeat divide until all changes have been committed
-      _changesetMutex.lock();
-      bool newChangeset = _changeset.calculateChangeset(changeset_info);
-      _changesetMutex.unlock();
+      bool newChangeset = false;
+      {
+        std::lock_guard<std::mutex> changeset_lock(_changesetMutex);
+        newChangeset = _changeset.calculateChangeset(changeset_info);
+      }
       //  Add the new work to the queue if there is any
       if (newChangeset)
       {
@@ -213,9 +217,10 @@ bool OsmApiWriter::apply()
         //  "ready to send" in a changeset and send it OR move everything to the error state
 
         //  Option #1: Get all of the remaining elements as a single changeset
-        //_changesetMutex.lock();
-        //_changeset.calculateRemainingChangeset(changeset_info);
-        //_changesetMutex.unlock();
+        //{
+        //  std::lock_guard<std::mutex> changeset_lock(_changesetMutex);
+        //  _changeset.calculateRemainingChangeset(changeset_info);
+        //}
         //  Push that changeset
         //_pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
@@ -223,9 +228,10 @@ bool OsmApiWriter::apply()
 
         LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
         //  Option #2: Move everything to the error state and exit
-        _changesetMutex.lock();
-        _changeset.failRemainingChangeset();
-        _changesetMutex.unlock();
+        {
+          std::lock_guard<std::mutex> changeset_lock(_changesetMutex);
+          _changeset.failRemainingChangeset();
+        }
         _failed = true;
         //  Let the threads know that the remaining changeset has failed
         _threadsCanExit = true;
@@ -313,14 +319,16 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   {
     ChangesetInfoPtr workInfo;
     //  Try to get something off of the work queue
-    _workQueueMutex.lock();
-    int queueSize = _workQueue.size();
-    if (!_workQueue.empty())
+    int queueSize = 0;
     {
-      workInfo = _workQueue.front();
-      _workQueue.pop();
+      std::lock_guard<std::mutex> work_queue_lock(_workQueueMutex);
+      queueSize = _workQueue.size();
+      if (!_workQueue.empty())
+      {
+        workInfo = _workQueue.front();
+        _workQueue.pop();
+      }
     }
-    _workQueueMutex.unlock();
 
     if (workInfo)
     {
@@ -388,9 +396,10 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  Display the upload response in TRACE mode
         LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << info->response);
         //  Update the changeset with the response
-        _changesetMutex.lock();
-        _changeset.updateChangeset(info->response);
-        _changesetMutex.unlock();
+        {
+          std::lock_guard<std::mutex> changeset_lock(_changesetMutex);
+          _changeset.updateChangeset(info->response);
+        }
         //  Update the size of the current changeset that is open
         changesetSize += workInfo->size();
         //  Get the last element from this changeset chunk
@@ -606,7 +615,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           //  This is a bad state where the producer thread says all elements are sent and
           //  waits for all threads to join but the changeset isn't "done".
           //  Set the status to idle and start idle timer
-          _threadStatusMutex.lock();
+          std::lock_guard<std::mutex> thread_status_lock(_threadStatusMutex);
           if (_threadStatus[index] != ThreadStatus::Idle)
           {
             _threadStatus[index] = ThreadStatus::Idle;
@@ -618,7 +627,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             _closeChangeset(request, id, last);
             id = -1;
           }
-          _threadStatusMutex.unlock();
         }
       }
       else
@@ -893,8 +901,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
       LOG_WARN("Changeset conflict: " << responseXml);
       break;
     case HttpResponseCode::HTTP_OK:
+    {
       //  Changeset closed successfully
-      _changesetCountMutex.lock();
+      std::lock_guard<std::mutex> changeset_count_lock(_changesetCountMutex);
       _changesetCount++;
       //  Keep track of the last element information
       if (last.isValid())
@@ -902,8 +911,8 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
         _lastElement = last;
         last = LastElementInfo();
       }
-      _changesetCountMutex.unlock();
       break;
+    }
     default:
       request->logConnectionError();
       break;
@@ -1185,7 +1194,7 @@ bool OsmApiWriter::_threadsAreIdle()
 {
   bool response = true;
   //  Lock the thread status mutex only once
-  _threadStatusMutex.lock();
+  std::lock_guard<std::mutex> thread_status_lock(_threadStatusMutex);
   for (auto status : _threadStatus)
   {
     //  It only takes one thread working to return false
@@ -1195,17 +1204,17 @@ bool OsmApiWriter::_threadsAreIdle()
       break;
     }
   }
-  //  Unlock the thread status mutex
-  _threadStatusMutex.unlock();
   return response;
 }
 
 bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response)
 {
   //  Try to split the changeset in half
-  _changesetMutex.lock();
-  ChangesetInfoPtr split = _changeset.splitChangeset(workInfo, response);
-  _changesetMutex.unlock();
+  ChangesetInfoPtr split;
+  {
+    std::lock_guard<std::mutex> changeset_lock(_changesetMutex);
+    split = _changeset.splitChangeset(workInfo, response);
+  }
   if (split->size() > 0)
   {
     //  Fail the split changeset if the error flag is set

@@ -35,6 +35,14 @@
 namespace hoot
 {
 
+OgrWriterThread::OgrWriterThread(std::mutex& initMutex, std::mutex& translationMutex)
+  : _transFeaturesQueueMutex(translationMutex),
+    _initMutex(initMutex),
+    _pTransFeaturesQueue(nullptr),
+    _pFinishedTranslating(nullptr)
+{
+}
+
 void OgrWriterThread::run()
 {
   // Messing with these parameters did not improve performance:
@@ -49,13 +57,12 @@ void OgrWriterThread::run()
   v8::Locker v8Lock(threadIsolate);
 
   bool done = false;
-  std::pair<std::shared_ptr<geos::geom::Geometry>,
-    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>> feature;
+  std::pair<std::shared_ptr<geos::geom::Geometry>, TranslatedFeatureVector> feature;
 
   // Setup writer
   std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
-    QMutexLocker lock(_pInitMutex);
+    std::lock_guard<std::mutex> lock(_initMutex);
     ogrWriter = std::make_shared<OgrWriter>();
     ogrWriter->setSchemaTranslationScript(_translation);
     ogrWriter->open(_output);
@@ -67,30 +74,22 @@ void OgrWriterThread::run()
 
     // Get element
     { // Mutex Scope
-      QMutexLocker lock(_pTransFeaturesQMutex);
-      if (_pTransFeaturesQ->isEmpty())
+      std::lock_guard<std::mutex> lock(_transFeaturesQueueMutex);
+      if (_pTransFeaturesQueue->isEmpty())
       {
         doSleep = true;
         if (*_pFinishedTranslating)
-        {
           done = true;
-        }
       }
       else
-      {
-        feature = _pTransFeaturesQ->dequeue();
-      }
+        feature = _pTransFeaturesQueue->dequeue();
     }
 
     // Write element or sleep
     if (doSleep)
-    {
       msleep(100);
-    }
     else
-    {
       ogrWriter->writeTranslatedFeature(feature.first, feature.second);
-    }
   }
   ogrWriter->close();
 }

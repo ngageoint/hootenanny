@@ -32,8 +32,8 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 
-// Qt
-#include <QMutex>
+// std
+#include <mutex>
 
 namespace hoot
 {
@@ -86,7 +86,7 @@ private:
   OsmMap* _map;
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;
-  static QMutex _mutex;
+  static std::mutex _mutex;
 
   bool _hasRef2Tag(ElementPtr e) const;
   void _checkAndDeleteRef2(ElementPtr e, QString ref);

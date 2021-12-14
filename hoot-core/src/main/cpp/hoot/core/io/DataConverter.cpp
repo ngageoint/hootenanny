@@ -375,13 +375,13 @@ void DataConverter::_convertToOgrMT(const QStringList& inputs, const QString& ou
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
       ConfigOptions().getElementCacheSizeRelation());
-  QMutex initMutex;
-  QMutex transFeaturesMutex;
+  std::mutex initMutex;
+  std::mutex transFeaturesMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
-  for (const auto& file : inputs)//int i = 0; i < inputs.size(); i++)
+  for (const auto& file : inputs)
   {
     QString input = file.trimmed();
     LOG_DEBUG("Reading: " << input);
@@ -398,11 +398,9 @@ void DataConverter::_convertToOgrMT(const QStringList& inputs, const QString& ou
   //  parallel.
 
   // Setup & start translator thread.
-  ElementTranslatorThread transThread;
+  ElementTranslatorThread transThread(initMutex, transFeaturesMutex);
   transThread.setTranslation(_translationScript);
   transThread.setElementQueue(&elementQ);
-  transThread.setTransFeaturesQueueMutex(&transFeaturesMutex);
-  transThread.setInitMutex(&initMutex);
   transThread.setTransFeaturesQueue(&transFeaturesQ);
   transThread.setFinishedTranslating(&finishedTranslating);
   transThread.setElementCache(pElementCache);
@@ -411,11 +409,9 @@ void DataConverter::_convertToOgrMT(const QStringList& inputs, const QString& ou
   LOG_STATUS("Translation thread started...");
 
   //  Setup & start our writer thread.
-  OgrWriterThread writerThread;
+  OgrWriterThread writerThread(initMutex, transFeaturesMutex);
   writerThread.setTranslation(_translationScript);
   writerThread.setOutput(output);
-  writerThread.setTransFeaturesQueueMutex(&transFeaturesMutex);
-  writerThread.setInitMutex(&initMutex);
   writerThread.setTransFeaturesQueue(&transFeaturesQ);
   writerThread.setFinishedTranslating(&finishedTranslating);
   writerThread.start();

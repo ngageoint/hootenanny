@@ -35,6 +35,15 @@
 namespace hoot
 {
 
+ElementTranslatorThread::ElementTranslatorThread(std::mutex& initMutex, std::mutex& translationMutex)
+  : _pElementQueue(nullptr),
+    _initMutex(initMutex),
+    _transFeaturesQueueMutex(translationMutex),
+    _pTransFeaturesQueue(nullptr),
+    _pFinishedTranslating(nullptr)
+{
+}
+
 void ElementTranslatorThread::run()
 {
   //  Create an isolate for the thread
@@ -49,7 +58,7 @@ void ElementTranslatorThread::run()
   { // Mutex Scope
     // We use this init mutex as a bandaid. Hoot uses a lot of problematic Singletons that cause
     // issues when you try to multithread stuff.
-    QMutexLocker lock(_pInitMutex);
+    std::lock_guard<std::mutex> lock(_initMutex);
     ogrWriter = std::make_shared<OgrWriter>();
     ogrWriter->setSchemaTranslationScript(_translation);
     ogrWriter->initTranslator();
@@ -58,30 +67,27 @@ void ElementTranslatorThread::run()
 
   ElementPtr pNewElement;
   ElementProviderPtr cacheProvider(_pElementCache);
-  while (!_pElementQ->empty())
+  while (!_pElementQueue->empty())
   {
-    pNewElement = _pElementQ->dequeue();
+    pNewElement = _pElementQueue->dequeue();
 
     // Run any convert ops present.
     foreach (ElementVisitorPtr op, _conversionOps)
-    {
       op->visit(pNewElement);
-    }
 
     std::shared_ptr<geos::geom::Geometry> g;
     std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
     ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);  
 
     { // Mutex Scope
-      QMutexLocker lock(_pTransFeaturesQMutex);
-      _pTransFeaturesQ->enqueue(
-        std::pair<std::shared_ptr<geos::geom::Geometry>,
-        std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>(g, tf));
+      std::lock_guard<std::mutex> lock(_transFeaturesQueueMutex);
+      _pTransFeaturesQueue->enqueue(
+        std::pair<std::shared_ptr<geos::geom::Geometry>, TranslatedFeatureVector>(g, tf));
     }
   }
 
   { // Mutex Scope
-    QMutexLocker lock(_pTransFeaturesQMutex);
+    std::lock_guard<std::mutex> lock(_transFeaturesQueueMutex);
     *_pFinishedTranslating = true;
   }
 }

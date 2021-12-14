@@ -31,8 +31,8 @@
 // hoot
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/StrictChecking.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
@@ -85,14 +85,12 @@ public:
    * @param g Geometry output
    * @param tf Vector of translated features output
    */
-  void translateToFeatures(
-    const ElementProviderPtr& provider, const ConstElementPtr& e,
-    std::shared_ptr<geos::geom::Geometry>& g,
-    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf) const;
+  void translateToFeatures(const ElementProviderPtr& provider, const ConstElementPtr& e,
+                           std::shared_ptr<geos::geom::Geometry>& g,
+                           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf) const;
 
-  void writeTranslatedFeature(
-    const std::shared_ptr<geos::geom::Geometry>& g,
-    const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
+  void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
+                              const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
 
   void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
   void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
@@ -120,7 +118,6 @@ private:
   StrictChecking _strictChecking;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
-  AddExportTagsVisitor _addExportTagsVisitor;
 
   // contains relations that weren't written on a first pass b/c they contained relations as a
   // member which had not yet been written
@@ -131,12 +128,10 @@ private:
   int _numWritten;
   int _statusUpdateInterval;
 
-  void _addFeature(
-    OGRLayer* layer, const std::shared_ptr<Feature>& f,
-    const std::shared_ptr<geos::geom::Geometry>& g) const;
-  void _addFeatureToLayer(
-    OGRLayer* layer, const std::shared_ptr<Feature>& f, const geos::geom::Geometry* g,
-    OGRFeature* poFeature) const;
+  void _addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
+                   const std::shared_ptr<geos::geom::Geometry>& g) const;
+  void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f, const geos::geom::Geometry* g,
+                          OGRFeature* poFeature) const;
   void _createLayer(const std::shared_ptr<const Layer>& layer);
   OGRLayer* _getLayer(const QString& layerName);
   OGRLayer* _getLayerByName(const QString& layerName);

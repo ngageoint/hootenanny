@@ -49,22 +49,16 @@ void PartialOsmMapWriter::write(const ConstOsmMapPtr& map)
 void PartialOsmMapWriter::writePartial(const ConstOsmMapPtr& map)
 {
   const NodeMap& nm = map->getNodes();
-  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
-  {
+  for (auto it = nm.begin(); it != nm.end(); ++it)
     writePartial((ConstNodePtr)it->second);
-  }
 
   const WayMap& wm = map->getWays();
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
-  {
+  for (auto it = wm.begin(); it != wm.end(); ++it)
     writePartial((ConstWayPtr)it->second);
-  }
 
   const RelationMap& rm = map->getRelations();
-  for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
-  {
+  for (auto it = rm.begin(); it != rm.end(); ++it)
     writePartial((ConstRelationPtr)it->second);
-  }
 }
 
 void PartialOsmMapWriter::writePartial(const ConstElementPtr& e)
