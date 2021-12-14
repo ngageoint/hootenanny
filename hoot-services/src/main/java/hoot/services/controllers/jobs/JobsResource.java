@@ -96,7 +96,7 @@ public class JobsResource {
         try {
             return jobsStatusesManager.getJobsHistory(user, sort, offset, limit, type, status, groupJobId);
         } catch (IllegalArgumentException iae) {
-            logger.error(iae.getMessage(), iae);
+            logger.error(iae.getMessage());
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
     }
