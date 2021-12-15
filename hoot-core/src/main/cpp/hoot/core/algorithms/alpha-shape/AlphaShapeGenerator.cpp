@@ -183,16 +183,18 @@ void AlphaShapeGenerator::_coverStragglersWorker()
   while (_working || stack_size > 0)
   {
     //  Get the top node off of the stack
-    _nodesMutex.lock();
     NodePtr node;
-    stack_size = _nodes.size();
-    if (stack_size > 0)
     {
-      node = _nodes.top();
-      _nodes.pop();
-      --stack_size;
+      //  Lock the mutex
+      std::lock_guard<std::mutex> nodes_lock(_nodesMutex);
+      stack_size = _nodes.size();
+      if (stack_size > 0)
+      {
+        node = _nodes.top();
+        _nodes.pop();
+        --stack_size;
+      }
     }
-    _nodesMutex.unlock();
     //  Where the node is valid check ::contains()
     if (node)
     {
@@ -206,9 +208,8 @@ void AlphaShapeGenerator::_coverStragglersWorker()
         LOG_TRACE(
           "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
         point = point->buffer(_buffer);
-        _stragglersMutex.lock();
+        std::lock_guard<std::mutex> stragglers_lock(_stragglersMutex);
         _stragglers.push_back(point);
-        _stragglersMutex.unlock();
       }
     }
     else

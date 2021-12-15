@@ -72,6 +72,7 @@ public:
 
 using ScriptToOgrSchemaTranslatorPtr = std::shared_ptr<ScriptToOgrSchemaTranslator>;
 using ConstScriptToOgrSchemaTranslatorPtr = std::shared_ptr<const ScriptToOgrSchemaTranslator>;
+using TranslatedFeatureVector = std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>;
 
 }
 

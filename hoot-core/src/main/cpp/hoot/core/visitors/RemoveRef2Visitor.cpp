@@ -41,7 +41,7 @@ int RemoveRef2Visitor::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2Visitor)
 
 QStringList RemoveRef2Visitor::_ref2Keys;
-QMutex RemoveRef2Visitor::_mutex;
+std::mutex RemoveRef2Visitor::_mutex;
 
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
@@ -76,8 +76,7 @@ private:
 RemoveRef2Visitor::RemoveRef2Visitor()
 {
   // make sure we're re-entrant.
-  QMutexLocker ml(&_mutex);
-
+  std::lock_guard<std::mutex> ml(_mutex);
   if (_ref2Keys.empty())
   {
     _ref2Keys << MetadataTags::Ref2();
@@ -91,9 +90,8 @@ RemoveRef2Visitor::RemoveRef2Visitor()
 void RemoveRef2Visitor::addCriterion(const ElementCriterionPtr& e)
 {
   if (_criterion)
-  {
     throw IllegalArgumentException("Expected only a single criterion in RemoveRef2Visitor.");
-  }
+
   _criterion = e;
 }
 
@@ -109,9 +107,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     // if it isn't a valid ref, carry on.
     if (r == "todo" || r == "none" || r.isEmpty())
-    {
       continue;
-    }
 
     ElementId eid = _ref1ToEid[r];
 
@@ -131,9 +127,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       logWarnCount++;
       refs.removeAll(r);
       if (refs.empty() && key == MetadataTags::Ref2())
-      {
         refs.append("none");
-      }
     }
     else
     {
@@ -144,21 +138,15 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
         // remove the specified REF2 from the appropriate REF2 field.
         refs.removeAll(r);
         if (refs.empty() && key == MetadataTags::Ref2())
-        {
           refs.append("none");
-        }
       }
     }
   }
 
   if (!refs.empty())
-  {
     e->getTags().setList(key, refs);
-  }
   else
-  {
     e->getTags().remove(key);
-  }
 }
 
 bool RemoveRef2Visitor::_hasRef2Tag(ElementPtr e) const
@@ -169,9 +157,7 @@ bool RemoveRef2Visitor::_hasRef2Tag(ElementPtr e) const
     {
       QString v = e->getTags().get(_ref2Keys[i]);
       if (!v.isEmpty() && v != "none")
-      {
         return true;
-      }
     }
   }
 
@@ -191,19 +177,15 @@ void RemoveRef2Visitor::setOsmMap(OsmMap* map)
 void RemoveRef2Visitor::visit(const ElementPtr& e)
 {
   if (!_criterion)
-  {
-    throw IllegalArgumentException("You must specify a criterion before calling "
-                                   "RemoveRef2Visitor.");
-  }
+    throw IllegalArgumentException("You must specify a criterion before calling RemoveRef2Visitor.");
 
   // if e has a REF2 and meets the criterion
   if (_hasRef2Tag(e) && ref2CriterionSatisfied(e))
   {
     // go through each REF2 and evaluate for deletion
     for (int i = 0; i < _ref2Keys.size(); i++)
-    {
       _checkAndDeleteRef2(e, _ref2Keys[i]);
-    }
+
     _numProcessed++;
   }
 }

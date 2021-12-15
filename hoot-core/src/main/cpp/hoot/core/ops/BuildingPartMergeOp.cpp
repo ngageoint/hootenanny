@@ -41,7 +41,6 @@
 // Qt
 #include <QThreadPool>
 #include <QQueue>
-#include <QMutex>
 
 namespace hoot
 {
@@ -50,11 +49,11 @@ int BuildingPartMergeOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
-BuildingPartMergeOp::BuildingPartMergeOp(bool preserveTypes) :
-_totalBuildingGroupsProcessed(0),
-_numBuildingGroupsMerged(0),
-_threadCount(1),
-_preserveTypes(preserveTypes)
+BuildingPartMergeOp::BuildingPartMergeOp(bool preserveTypes)
+  : _totalBuildingGroupsProcessed(0),
+    _numBuildingGroupsMerged(0),
+    _threadCount(1),
+    _preserveTypes(preserveTypes)
 {
 }
 
@@ -64,9 +63,8 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
 
   _threadCount = confOpts.getBuildingPartMergerThreadCount();
   if (_threadCount < 1)
-  {
     _threadCount = QThread::idealThreadCount();
-  }
+
   LOG_VARD(_threadCount);
 }
 
@@ -107,7 +105,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
   int numProcessed = 0;
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(way);
@@ -117,8 +115,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
       const std::vector<long>& intersectIds =
         _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
-      for (std::vector<long>::const_iterator intersection_it = intersectIds.begin(); intersection_it != intersectIds.end();
-           ++intersection_it)
+      for (auto intersection_it = intersectIds.begin(); intersection_it != intersectIds.end(); ++intersection_it)
       {
         WayPtr neighbor = _map->getWay(*intersection_it);
         // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
@@ -133,7 +130,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
 
       const std::set<long>& neighborIds = _calculateNeighbors(way, way->getTags());
       LOG_VART(neighborIds.size());
-      for (std::set<long>::const_iterator neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end(); ++neighbor_it)
+      for (auto neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end(); ++neighbor_it)
       {
         WayPtr neighbor = _map->getWay(*neighbor_it);
         // have already checked building status for neighbor in _calculateNeighbors
@@ -164,7 +161,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
   const RelationMap& relations = _map->getRelations();
   LOG_VARD(relations.size());
   int numProcessed = 0;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
 
@@ -175,8 +172,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
       const std::vector<long>& intersectIds =
         _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
-      for (std::vector<long>::const_iterator intersection_it = intersectIds.begin(); intersection_it != intersectIds.end();
-           ++intersection_it)
+      for (auto intersection_it = intersectIds.begin(); intersection_it != intersectIds.end(); ++intersection_it)
       {
         WayPtr neighbor = _map->getWay(*intersection_it);
         // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
@@ -199,8 +195,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
         {
           WayPtr member = _map->getWay(memberElementId.getId());
           const std::set<long> neighborIds = _calculateNeighbors(member, relation->getTags());
-          for (std::set<long>::const_iterator neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end();
-               ++neighbor_it)
+          for (auto neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end(); ++neighbor_it)
           {
             WayPtr neighbor = _map->getWay(*neighbor_it);
             // have already checked building status for neighbor in _calculateNeighbors
@@ -257,9 +252,9 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
 {
   QQueue<BuildingPartRelationship> buildingPartsInput = _getBuildingPartPreProcessingInput();
 
-  QMutex buildingPartsInputMutex;
-  QMutex hootSchemaMutex;
-  QMutex buildingPartGroupsOutputMutex;
+  std::mutex buildingPartsInputMutex;
+  std::mutex buildingPartGroupsOutputMutex;
+  std::mutex hootSchemaMutex;
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
@@ -267,16 +262,14 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   for (int i = 0; i < _threadCount; i++)
   {
     // The thread pool takes ownership of this task.
-    BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
+    BuildingPartPreMergeCollector* buildingPartCollectTask =
+        new BuildingPartPreMergeCollector(buildingPartsInputMutex, buildingPartGroupsOutputMutex, hootSchemaMutex);
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
     buildingPartCollectTask->setStartingInputSize(buildingPartsInput.size());
     // Passing the groups into the threads as a shared pointer slows down processing by ~60% (not
     // sure why), so will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     buildingPartCollectTask->setMap(_map);
-    buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);
-    buildingPartCollectTask->setHootSchemaMutex(&hootSchemaMutex);
-    buildingPartCollectTask->setBuildingPartOutputMutex(&buildingPartGroupsOutputMutex);
     threadPool.start(buildingPartCollectTask);
   }
   LOG_VART(threadPool.activeThreadCount());
@@ -292,8 +285,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
 {
   // go through each of the grouped buildings
   const Tgs::DisjointSetMap<ElementPtr>::AllGroups& groups = _buildingPartGroups.getAllGroups();
-  for (Tgs::DisjointSetMap<ElementPtr>::AllGroups::const_iterator it = groups.begin();
-       it != groups.end(); it++)
+  for (auto it = groups.begin(); it != groups.end(); it++)
   {
     // combine the group of building parts into a relation.
     std::vector<ElementPtr> parts = it->second;
@@ -331,7 +323,7 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
       _map->getIndex().getNodeToWayMap()->getWaysByNode(way->getNodeId(i));
 
     // go through each of the neighboring ways
-    for (std::set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
+    for (auto it = ways.begin(); it != ways.end(); ++it)
     {
       const long wayId = *it;
 
@@ -359,8 +351,7 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2) const
   // remove all the building tags that are building:part=yes specific.
   const QSet<QString> buildingPartTagNames =
     BuildingRelationMemberTagMerger::getBuildingPartTagNames();
-  for (QSet<QString>::const_iterator it = buildingPartTagNames.begin();
-       it != buildingPartTagNames.end(); ++it)
+  for (auto it = buildingPartTagNames.begin(); it != buildingPartTagNames.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);
@@ -386,8 +377,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const ConstWayPtr& way, const long
   return false;
 }
 
-std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
-  const ConstElementPtr& element) const
+std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(const ConstElementPtr& element) const
 {
   // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
   if (_buildingCrit.isSatisfied(element))
@@ -409,4 +399,5 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   }
   return std::shared_ptr<geos::geom::Geometry>();
 }
+
 }

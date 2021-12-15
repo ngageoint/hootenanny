@@ -82,6 +82,7 @@ public:
   void setIncludePid(bool includePid) { _includePid = includePid; }
   bool getSortSourceImageryTag() const { return _sortSourceImageryTag; }
   void setSortSourceImageryTag(bool sort) { _sortSourceImageryTag = sort; }
+  void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
 
 protected:
 

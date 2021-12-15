@@ -29,11 +29,11 @@
 #define OSM_API_WRITER_H
 
 //  hoot
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/OsmApiCapabilites.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
-#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 

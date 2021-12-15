@@ -32,12 +32,12 @@
 
 //  Standard
 #include <memory>
+#include <mutex>
 #include <set>
 #include <vector>
 
 //  QT
 #include <QString>
-#include <QMutex>
 #include <QProcess>
 #include <QThread>
 #include <QWaitCondition>
@@ -91,7 +91,7 @@ public:
 private:
 
   /** Mutex for locking _jobs */
-  QMutex _mutex;
+  std::mutex _mutex;
   /** std::set of job names to be processed */
   std::set<QString> _jobs;
   // job queue name
@@ -130,7 +130,7 @@ public:
    * of conflate cases that must be run serially
    */
   ProcessThread(int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
-                bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+                bool disableFailureRetries, double waitTime, std::mutex* outMutex, JobQueue* parallelJobs,
                 JobQueue* casesJobs, JobQueue* serialJobs, JobQueue* serialCasesJobs);
   virtual ~ProcessThread() = default;
 
@@ -181,7 +181,7 @@ private:
   /** Time (in seconds) to wait before reporting a tests is "taking too long" */
   double _waitTime;
   /** Mutex guarding standard out so that output messages aren't scrambled */
-  QMutex* _outMutex;
+  std::mutex* _outMutex;
   /** Pointer to shared job queue that contains names of jobs that can all be run in parallel */
   JobQueue* _parallelJobs;
   /** Pointer to shared job queue that contains only names of conflate case jobs */
@@ -276,7 +276,7 @@ private:
   /** queue of serial conflate case jobs */
   JobQueue _serialCaseJobs;
   /** mutex protecting standard out to keep all output for each single test together */
-  QMutex _mutex;
+  std::mutex _mutex;
   /** count of failed unit tests */
   int _failed;
 };

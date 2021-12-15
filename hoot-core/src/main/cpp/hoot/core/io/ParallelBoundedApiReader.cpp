@@ -85,17 +85,14 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
   for (int i = 0; i < lon_div; ++i)
   {
     double lon = envelope.getMinX() + _coordGridSize * i;
+    double lon2 = std::min(lon + _coordGridSize, envelope.getMaxX());
     for (int j = 0; j < lat_div; ++j)
     {
       double lat = envelope.getMinY() + _coordGridSize * j;
-      _bboxMutex.lock();
+      double lat2 = std::min(lat + _coordGridSize, envelope.getMaxY());
       //  Start at the upper right corner and create boxes left to right, top to bottom
-      _bboxes.emplace(
-        lon,
-        std::min(lon + _coordGridSize, envelope.getMaxX()),
-        lat,
-        std::min(lat + _coordGridSize, envelope.getMaxY()));
-      _bboxMutex.unlock();
+      std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+      _bboxes.emplace(lon, lon2, lat, lat2);
     }
   }
   //  Start up the processing threads
@@ -106,13 +103,17 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
 bool ParallelBoundedApiReader::isComplete()
 {
   //  Get the total number of envelopes
-  _bboxMutex.lock();
-  int envelopes = _totalEnvelopes;
-  _bboxMutex.unlock();
+  int envelopes = 0;
+  {
+    std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+    envelopes = _totalEnvelopes;
+  }
   //  Get the total number of results
-  _resultsMutex.lock();
-  int results = _totalResults;
-  _resultsMutex.unlock();
+  int results = 0;
+  {
+    std::lock_guard<std::mutex> results_lock(_resultsMutex);
+    results = _totalResults;
+  }
   //  Done means there is one result for each envelope
   return envelopes == results && results > 0;
 }
@@ -120,22 +121,23 @@ bool ParallelBoundedApiReader::isComplete()
 bool ParallelBoundedApiReader::getSingleResult(QString& result)
 {
   bool success = true;
+  std::lock_guard<std::mutex> results_lock(_resultsMutex);
   //  takeFirst() pops the first element and returns it
-  _resultsMutex.lock();
   if (!_resultsList.empty())
     result = _resultsList.takeFirst();
   else
     success = false;
-  _resultsMutex.unlock();
   //  Return the result found
   return success;
 }
 
 bool ParallelBoundedApiReader::hasMoreResults()
 {
-  _resultsMutex.lock();
-  bool more = !_resultsList.empty();
-  _resultsMutex.unlock();
+  bool more = false;
+  {
+    std::lock_guard<std::mutex> results_lock(_resultsMutex);
+    more = !_resultsList.empty();
+  }
   bool done = isComplete();
   //  There are more results when the queue contains results
   //  or the threads are still processing envelopes
@@ -172,13 +174,14 @@ void ParallelBoundedApiReader::_process()
     //  Try to grab the next envelope on the queue
     geos::geom::Envelope envelope;
     envelope.setToNull();
-    _bboxMutex.lock();
-    if (!_bboxes.empty())
     {
-      envelope = _bboxes.front();
-      _bboxes.pop();
+      std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+      if (!_bboxes.empty())
+      {
+        envelope = _bboxes.front();
+        _bboxes.pop();
+      }
     }
-    _bboxMutex.unlock();
     //  Make sure that we got a valid envelope
     if (!envelope.isNull())
     {
@@ -209,10 +212,11 @@ void ParallelBoundedApiReader::_process()
       {
       case HttpResponseCode::HTTP_OK:
         //  Store the result and increment the number of results received
-        _resultsMutex.lock();
-        _resultsList.append(result);
-        _totalResults++;
-        _resultsMutex.unlock();
+        {
+          std::lock_guard<std::mutex> results_lock(_resultsMutex);
+          _resultsList.append(result);
+          _totalResults++;
+        }
         //  Write out a "debug map" for each result that comes in
         writeDebugMap(result, "bounded-reader-result");
         break;
@@ -226,7 +230,7 @@ void ParallelBoundedApiReader::_process()
           double lat1 = envelope.getMinY();
           double lat2 = envelope.getMinY() + envelope.getHeight() / 2.0f;
           double lat3 = envelope.getMaxY();
-          _bboxMutex.lock();
+          std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
           //  Split the boxes into quads and push them onto the queue
           _bboxes.emplace(lon1, lon2, lat1, lat2);
           _bboxes.emplace(lon2, lon3, lat1, lat2);
@@ -234,22 +238,23 @@ void ParallelBoundedApiReader::_process()
           _bboxes.emplace(lon2, lon3, lat2, lat3);
           //  Increment by three because 1 turned into 4, i.e. 3 more were added
           _totalEnvelopes += 3;
-          _bboxMutex.unlock();
         }
         break;
       case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:
+      {
         //  Bandwidth for downloads has been exceeded, fail immediately
-        _errorMutex.lock();
+        std::lock_guard<std::mutex> error_lock(_errorMutex);
         LOG_ERROR(request.getErrorString());
         _fatalError = true;
-        _errorMutex.unlock();
         break;
+      }
       default:
-        _errorMutex.lock();
+      {
+        std::lock_guard<std::mutex> error_lock(_errorMutex);
         request.logConnectionError();
         _fatalError = true;
-        _errorMutex.unlock();
         break;
+      }
       }
     }
     else
@@ -275,11 +280,13 @@ void ParallelBoundedApiReader::writeDebugMap(const QString& data, const QString&
     case DataType::GeoJson:   ext = "geojson";  break;
     }
     //  Get the unique file number and increment it
-    _filenumberMutex.lock();
-    const QString filenumber = StringUtils::padFrontOfNumberStringWithZeroes(_filenumber++, 3);
-    _filenumberMutex.unlock();
+    QString filenumber;
+    {
+      std::lock_guard<std::mutex> filenumber_lock(_filenumberMutex);
+      filenumber = StringUtils::padFrontOfNumberStringWithZeroes(_filenumber++, 3);
+    }
     //  Write out the text to a uniquely named file
-    FileUtils::writeFully(QString("tmp/%1-%2.%3").arg(name).arg(filenumber).arg(ext), data);
+    FileUtils::writeFully(QString("tmp/%1-%2.%3").arg(name, filenumber, ext), data);
   }
 }
 
