@@ -278,10 +278,11 @@ void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const Co
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
 
     Tags t = e->getTags();
-    for (auto it = t.begin(); it != t.end(); ++it)
+    QStringList keys = t.keys();
+    for (const auto& key : keys)
     {
-      if (t[it.key()] == "")
-        t.remove(it.key());
+      if (t[key] == "")
+        t.remove(key);
     }
 
     tf = _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
