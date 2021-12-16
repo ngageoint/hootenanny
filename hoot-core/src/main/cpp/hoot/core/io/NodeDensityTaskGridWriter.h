@@ -54,10 +54,9 @@ public:
    * @todo collapse with OSM writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
    */
-  static void writeTilesToGeoJson(
-    const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-    const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-    const QString& fileSource = "", const bool selectSingleRandomTile = false, int randomSeed = -1);
+  static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+                                  const QString& fileSource = "", const bool selectSingleRandomTile = false, int randomSeed = -1);
 
   /**
    * Writes boundary tiles to an OSM output file
@@ -70,10 +69,9 @@ public:
    * @todo collapse with GeoJSON writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
    */
-  static void writeTilesToOsm(
-    const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-    const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-    const bool selectSingleRandomTile = false, int randomSeed = -1);
+  static void writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                              const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+                              const bool selectSingleRandomTile = false, int randomSeed = -1);
 
 private:
 
@@ -86,8 +84,8 @@ private:
    * @param selectSingleRandomTile selects a single randomly selected tile instead of all tiles
    */
   static OsmMapPtr _tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-    const std::vector<std::vector<long>>& nodeCounts,
-    int randomTileIndex, const bool selectSingleRandomTile = false);
+                                  const std::vector<std::vector<long>>& nodeCounts,
+                                  int randomTileIndex, const bool selectSingleRandomTile = false);
 };
 
 }

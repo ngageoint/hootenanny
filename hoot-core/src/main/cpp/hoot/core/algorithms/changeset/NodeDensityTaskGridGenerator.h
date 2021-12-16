@@ -28,9 +28,9 @@
 #define NODE_DENSITY_TASK_GRID_GENERATOR_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 #include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QElapsedTimer>

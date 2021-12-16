@@ -29,11 +29,11 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/scoring/MatchComparator.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
@@ -72,8 +72,7 @@ public:
     reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
 
     // introduce a false positive in the test data.
-    vector<long> wids =
-      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Cheddar's Casual Cafe");
+    vector<long> wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Cheddar's Casual Cafe");
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Bad " + MetadataTags::Ref1();
 
     // introduce a false negative in the test data.
