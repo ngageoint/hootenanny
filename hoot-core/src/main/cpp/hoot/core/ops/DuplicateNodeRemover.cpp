@@ -146,7 +146,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
           LOG_VART(n1);
           LOG_VART(n2);
 
-          if ((n1->getStatus() == n2->getStatus()) || _ignoreStatus)
+          if ((n1 != nullptr && n2 != nullptr) && (n1->getStatus() == n2->getStatus() || _ignoreStatus))
           {
             calcdDistanceSquared = calcDistanceSquared(n1, n2);
             LOG_VART(distanceSquared);
