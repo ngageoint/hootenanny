@@ -13,7 +13,7 @@ else
     rm -f gcov/*
 fi
 
-GCOV_SCAN_PATHS = ( "hoot-core" "tbs" "tgs" "hoot-cmd" "hoot-js" "hoot-josm" )
+GCOV_SCAN_PATHS=("hoot-core" "tbs" "tgs" "hoot-cmd" "hoot-js" "hoot-josm")
 
 for GCOV_PATH in ${GCOV_SCAN_PATHS[@]}; do
     pushd $GCOV_PATH
