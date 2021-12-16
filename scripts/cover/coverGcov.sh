@@ -18,7 +18,7 @@ GCOV_SCAN_PATHS=("hoot-core" "tbs" "tgs" "hoot-cmd" "hoot-js" "hoot-josm")
 for GCOV_PATH in ${GCOV_SCAN_PATHS[@]}; do
     pushd $GCOV_PATH
     # Create coverage
-    gcov --quiet -o $HOOT_HOME/$GCOV_PATH/tmp/debug/ $HOOT_HOME/$GCOV_PATH/tmp/debug/*.gcda
+    gcov -o $HOOT_HOME/$GCOV_PATH/tmp/debug/ $HOOT_HOME/$GCOV_PATH/tmp/debug/*.gcda
     # Fix path
     sed -i "s|0:Source:src|0:Source:$HOOT_HOME/$GCOV_PATH/src|g" *.gcov
     mv *.gcov $HOOT_HOME/gcov
