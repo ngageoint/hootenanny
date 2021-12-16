@@ -59,9 +59,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
 
   std::shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapsFilename())
-  {
     writer = Factory::getInstance().constructObject<OsmMapWriter>(writerOverride);
-  }
 
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
@@ -87,15 +85,11 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
       LOG_DEBUG("Using output writer: " << names[i]);
     }
     else
-    {
       writer.reset();
-    }
   }
 
   if (!writer)
-  {
     throw HootException("A valid writer could not be found for the URL: " + url);
-  }
 
   return writer;
 }
@@ -106,28 +100,24 @@ QString OsmMapWriterFactory::getWriterName(const QString& url)
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   LOG_VARD(names.size());
   std::shared_ptr<OsmMapWriter> writer;
-  for (size_t i = 0; i < names.size(); i++)
+  for (const auto& name : names)
   {
-    const QString name = names[i];
     LOG_VART(name);
     writer = Factory::getInstance().constructObject<OsmMapWriter>(name);
     if (writer->isSupported(url))
-    {
       return name;
-    }
   }
   return "";
 }
 
-void OsmMapWriterFactory::write(
-  const std::shared_ptr<OsmMap>& map, const QString& url, const bool silent, const bool is_debug)
+void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QString& url,
+                                const bool silent, const bool is_debug)
 {
   bool skipEmptyMap = map->isEmpty() && ConfigOptions().getMapWriterSkipEmpty();
 
   if (!silent)
   {
-    LOG_INFO(
-      (skipEmptyMap ? "Map is empty. Not writing to " : "Writing map to ") << url << "...");
+    LOG_INFO((skipEmptyMap ? "Map is empty. Not writing to " : "Writing map to ") << url << "...");
   }
 
   if (!skipEmptyMap)
@@ -144,22 +134,18 @@ void OsmMapWriterFactory::write(
     writer->open(url);
     // We could pass a progress in here to get more granular write status feedback.
     writer->write(map);
-    LOG_INFO(
-      "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-      " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    LOG_INFO("Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+             " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 }
 
-void OsmMapWriterFactory::writeDebugMap(
-  const ConstOsmMapPtr& map, const QString& callingClass, const QString& title,
-  NetworkMatcherPtr matcher)
+void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString& callingClass,
+                                        const QString& title, NetworkMatcherPtr matcher)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
     if (callingClass.trimmed().isEmpty())
-    {
       throw IllegalArgumentException("Empty calling class.");
-    }
 
     // If anything was added to the exclude filter and this class was explicitly excluded, we'll
     // skip writing out the map.
@@ -167,11 +153,8 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), excludeClassFilter);
     StringUtils::removeEmptyStrings(excludeClassFilter);
     LOG_VART(excludeClassFilter);
-    if (!excludeClassFilter.isEmpty() &&
-        StringUtils::matchesWildcard(callingClass, excludeClassFilter))
-    {
+    if (!excludeClassFilter.isEmpty() && StringUtils::matchesWildcard(callingClass, excludeClassFilter))
       return;
-    }
 
     // If nothing was added to the include list, everything is allowed to write map files.
     // Otherwise, only allow this class to write a file if it has been added to the include list.
@@ -184,36 +167,24 @@ void OsmMapWriterFactory::writeDebugMap(
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
       if (!debugMapFileName.endsWith(".osm", Qt::CaseInsensitive))
-      {
         throw IllegalArgumentException("Debug maps must be written to an .osm file.");
-      }
 
       LOG_VART(StringUtils::formatLargeNumber(map->getElementCount()));
       LOG_VART(StringUtils::formatLargeNumber(map->getNodeCount()));
       LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
       LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
 
-      const QString fileNumberStr =
-        StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
+      const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
       if (!title.isEmpty())
-      {
-        debugMapFileName =
-          debugMapFileName.replace(
-            ".osm", "-" + fileNumberStr + "-" + callingClass + "-" + title + ".osm");
-      }
+        debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + callingClass + "-" + title + ".osm");
       else
-      {
-        debugMapFileName =
-          debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + callingClass + ".osm");
-      }
+        debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + callingClass + ".osm");
+
       LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
       OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
       if (matcher)
-      {
-        DebugNetworkMapCreator()
-          .addDebugElements(copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
-      }
+        DebugNetworkMapCreator().addDebugElements(copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
 
       MapProjector::projectToWgs84(copy);
       if (ConfigOptions().getDebugMapsRemoveMissingElements())
@@ -231,10 +202,9 @@ void OsmMapWriterFactory::writeDebugMap(
   }
 }
 
-void OsmMapWriterFactory::writeDebugMap(
-  const std::shared_ptr<geos::geom::Geometry>& geometry,
-  std::shared_ptr<OGRSpatialReference> spatRef, const QString& callingClass, const QString& title,
-  NetworkMatcherPtr matcher)
+void OsmMapWriterFactory::writeDebugMap(const std::shared_ptr<geos::geom::Geometry>& geometry,
+                                        std::shared_ptr<OGRSpatialReference> spatRef, const QString& callingClass,
+                                        const QString& title, NetworkMatcherPtr matcher)
 {
   OsmMapPtr map = std::make_shared<OsmMap>(spatRef);
   // add the resulting alpha shape for debugging.
