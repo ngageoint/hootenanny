@@ -28,21 +28,20 @@
 #include "NodeDensityTaskGridWriter.h"
 
 // hoot
+#include <hoot/core/conflate/tile/TileUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/conflate/tile/TileUtils.h>
 #include <hoot/core/util/PositiveIdGenerator.h>
 
 namespace hoot
 {
 
-void NodeDensityTaskGridWriter::writeTilesToGeoJson(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-  const QString& fileSource, const bool selectSingleRandomTile, int randomSeed)
+void NodeDensityTaskGridWriter::writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                                    const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+                                                    const QString& fileSource, const bool selectSingleRandomTile, int randomSeed)
 {
   LOG_VARD(outputPath);
 
@@ -50,8 +49,7 @@ void NodeDensityTaskGridWriter::writeTilesToGeoJson(
   if (selectSingleRandomTile)
     randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
 
-  OsmMapPtr boundaryMap =
-    _tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
+  OsmMapPtr boundaryMap = _tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
   boundaryMap->appendSource(fileSource);
 
   OsmGeoJsonWriter writer;
@@ -77,17 +75,15 @@ void NodeDensityTaskGridWriter::writeTilesToOsm(
   if (selectSingleRandomTile)
     randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
 
-  OsmMapPtr boundaryMap =
-    _tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
+  OsmMapPtr boundaryMap = _tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
 
   OsmMapWriterFactory::write(boundaryMap, outputPath);
   OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
-OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-  const std::vector<std::vector<long>>& nodeCounts, int randomTileIndex,
-  const bool selectSingleRandomTile)
+OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                                    const std::vector<std::vector<long>>& nodeCounts, int randomTileIndex,
+                                                    const bool selectSingleRandomTile)
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   // This ensures the ways stay in the same order as the task IDs when the map is written out.
@@ -99,8 +95,7 @@ OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
     {
       // Only create the bounding tile if we want all of them or if this is the randomly selected
       // tile.
-      if (!selectSingleRandomTile ||
-          (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
+      if (!selectSingleRandomTile || (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
       {
         //  Create the way in the map
         const geos::geom::Envelope env = tiles[tx][ty];

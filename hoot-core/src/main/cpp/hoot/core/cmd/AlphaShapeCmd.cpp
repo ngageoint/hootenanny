@@ -31,13 +31,13 @@
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -139,9 +139,7 @@ private:
   void _writeOutput(const OsmMapPtr& map, const QString& path) const
   {
     if (path.endsWith(".shp", Qt::CaseInsensitive))
-    {
       ShapefileWriter().writePolygons(map, path);
-    }
     else if (path.endsWith(".geojson", Qt::CaseInsensitive))
     {
       OsmGeoJsonWriter writer;
@@ -153,9 +151,7 @@ private:
       writer.write(map);
     }
     else
-    {
       IoUtils::saveMap(map, path);
-    }
   }
 };
 

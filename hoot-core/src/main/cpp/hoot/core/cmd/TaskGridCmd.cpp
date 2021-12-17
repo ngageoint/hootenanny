@@ -57,15 +57,9 @@ public:
   {
     LOG_VARD(args);
     if (args.contains("--uniform") && args.contains("--node-density"))
-    {
-      throw IllegalArgumentException(
-        "Only one of --uniform or --node-density may be specified for " + getName());
-    }
+      throw IllegalArgumentException("Only one of --uniform or --node-density may be specified for " + getName());
     else if (!args.contains("--uniform") && !args.contains("--node-density"))
-    {
-      throw IllegalArgumentException(
-        "At least one of --uniform or --node-density must be specified for " + getName());
-    }
+      throw IllegalArgumentException("At least one of --uniform or --node-density must be specified for " + getName());
 
     bool isUniformGrid = false;
     if (args.contains("--uniform"))
@@ -74,21 +68,15 @@ public:
       args.removeAt(args.indexOf("--uniform"));
     }
     else if (args.contains("--node-density"))
-    {
       args.removeAt(args.indexOf("--node-density"));
-    }
 
     QElapsedTimer timer;
     timer.start();
 
     if (!isUniformGrid)
-    {
       _processNodeDensityGrid(args);
-    }
     else
-    {
       _processUniformGrid(args);
-    }
 
     LOG_STATUS(
       "Task grid generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
@@ -103,8 +91,7 @@ private:
     if (args.size() < 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(
-        QString("%1 takes at least three parameters with the --uniform option.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes at least three parameters with the --uniform option.").arg(getName()));
     }
     LOG_VARD(args);
 
@@ -133,13 +120,9 @@ private:
     QString bounds;
     QStringList inputs;
     if (args.size() == 1 && GeometryUtils::isEnvelopeString(args[0]))
-    {
       bounds = args[0];
-    }
     else
-    {
       inputs = IoUtils::expandInputs(args);
-    }
 
     if (!bounds.trimmed().isEmpty())
     {
@@ -147,7 +130,7 @@ private:
         "Generating uniform task grid over " << bounds << " and writing output to ..." <<
         output << "...");
       /*TaskGrid taskGrid =*/
-        UniformTaskGridGenerator(bounds, gridDimensionSize, output).generateTaskGrid();
+      UniformTaskGridGenerator(bounds, gridDimensionSize, output).generateTaskGrid();
     }
     else
     {
@@ -155,7 +138,7 @@ private:
         "Generating uniform task grid for " << inputs.size() <<
         " inputs and writing output to ..." << output << "...");
       /*TaskGrid taskGrid =*/
-        UniformTaskGridGenerator(inputs, gridDimensionSize, output).generateTaskGrid();
+      UniformTaskGridGenerator(inputs, gridDimensionSize, output).generateTaskGrid();
     }
   }
 
@@ -186,10 +169,8 @@ private:
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       maxNodesPerCell = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || maxNodesPerCell < 1)
-      {
-        throw IllegalArgumentException(
-          "Invalid maximum node count per cell value: " + optionStrVal);
-      }
+        throw IllegalArgumentException("Invalid maximum node count per cell value: " + optionStrVal);
+
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
@@ -201,9 +182,8 @@ private:
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       pixelSize = optionStrVal.toDouble(&parseSuccess);
       if (!parseSuccess || pixelSize <= 0.0)
-      {
         throw IllegalArgumentException("Invalid pixel size value: " + optionStrVal);
-      }
+
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
@@ -215,9 +195,8 @@ private:
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       maxAttempts = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || maxAttempts < 1)
-      {
         throw IllegalArgumentException("Invalid maximum attempts value: " + optionStrVal);
-      }
+
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
@@ -229,9 +208,8 @@ private:
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       maxTimePerAttempt = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || maxTimePerAttempt < -1)
-      {
         throw IllegalArgumentException("Invalid maximum time per attempt value: " + optionStrVal);
-      }
+
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
@@ -243,10 +221,8 @@ private:
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       pixelSizeAutoReductionFactor = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || pixelSizeAutoReductionFactor < 1)
-      {
-        throw IllegalArgumentException(
-          "Invalid pixel size automatic reduction factor value: " + optionStrVal);
-      }
+        throw IllegalArgumentException("Invalid pixel size automatic reduction factor value: " + optionStrVal);
+
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
@@ -261,16 +237,13 @@ private:
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       randomSeed = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || randomSeed < -1)
-      {
         throw IllegalArgumentException("Invalid random seed value: " + optionStrVal);
-      }
+
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
     if (args.contains("--random"))
-    {
       args.removeAt(args.indexOf("--random"));
-    }
     LOG_VARD(randomSeed);
 
     if (args.size() < 2)
@@ -292,9 +265,8 @@ private:
     // Everything left is an input.
     const QStringList inputs = IoUtils::expandInputs(args);
 
-    LOG_STATUS(
-      "Generating node density based task grid for " << inputs.size() << " inputs and " <<
-      "writing output to ..." << output << "...");
+    LOG_STATUS("Generating node density based task grid for " << inputs.size() << " inputs and " <<
+               "writing output to ..." << output << "...");
 
     NodeDensityTaskGridGenerator taskGridGen(inputs, maxNodesPerCell, bounds, output);
     taskGridGen.setReadInputFullThenCrop(false); //??

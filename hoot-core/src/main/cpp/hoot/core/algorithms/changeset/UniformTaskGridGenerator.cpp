@@ -37,32 +37,28 @@
 namespace hoot
 {
 
-UniformTaskGridGenerator::UniformTaskGridGenerator(
-  const QString& bounds, const int gridDimensionSize, const QString& output) :
-_bounds(bounds),
-_gridDimensionSize(gridDimensionSize),
-_output(output)
+UniformTaskGridGenerator::UniformTaskGridGenerator(const QString& bounds, const int gridDimensionSize, const QString& output)
+  : _bounds(bounds),
+    _gridDimensionSize(gridDimensionSize),
+    _output(output)
 {
 }
 
-UniformTaskGridGenerator::UniformTaskGridGenerator(
- const QStringList& inputs, const int gridDimensionSize, const QString& output) :
-_gridDimensionSize(gridDimensionSize),
-_output(output)
+UniformTaskGridGenerator::UniformTaskGridGenerator(const QStringList& inputs, const int gridDimensionSize, const QString& output)
+  : _gridDimensionSize(gridDimensionSize),
+    _output(output)
 {
   OsmMapPtr map = std::make_shared<OsmMap>();
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    IoUtils::loadMap(map, inputs.at(i), true, Status::Invalid);
-  }
+  for (const auto& input : inputs)
+    IoUtils::loadMap(map, input, true, Status::Invalid);
+
   _bounds = GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
 }
 
 TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 {
-  LOG_INFO(
-    "Creating uniform task grid with " << _gridDimensionSize << "x" << _gridDimensionSize <<
-    " cells across bounds: " << _bounds << "...");
+  LOG_INFO("Creating uniform task grid with " << _gridDimensionSize << "x" << _gridDimensionSize <<
+           " cells across bounds: " << _bounds << "...");
 
   TaskGrid taskGrid;
 
@@ -111,8 +107,10 @@ TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 
   if (!_output.trimmed().isEmpty())
   {
-    // write out task grid to file; There are some differences between how geojson files are written
-    // by this class and NodeDensityTaskGridGenerator that may have to be dealt with at some point.
+    //  Output the correct GeoJSON format for running the `hoot split` command
+    conf().set(ConfigOptions::getJsonOutputTaskingManagerAoiKey(), true);
+    //  Write out task grid to file; There are some differences between how geojson files are written
+    //  by this class and NodeDensityTaskGridGenerator that may have to be dealt with at some point.
     OsmMapWriterFactory::write(GeometryUtils::createMapFromBoundsCollection(boundaries), _output);
   }
 
