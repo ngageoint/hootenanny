@@ -74,6 +74,19 @@ Object.keys(objs).forEach(s => {
     var subGroupCodeElements = {};
     var presets = builder.create('presets');
 
+    //Build up a list of FCODEs with both Area & Line geoms
+    var fcodesGeoms = {};
+    objs[s].schema.forEach(i => {
+        if (fcodesGeoms[i.fcode]) {
+            fcodesGeoms[i.fcode].push(i.geom);
+        } else {
+            fcodesGeoms[i.fcode] = [i.geom];
+        }
+    });
+    var ambiguousFcodes = Object.entries(fcodesGeoms).filter(([k, v]) => {
+        return v.includes('Area') && v.includes('Line');
+    }).map(([k, v]) => k);
+
     objs[s].schema.forEach(i => {
         const itemKey = i.desc + ' - ' + i.geom;
 
@@ -195,6 +208,16 @@ Object.keys(objs).forEach(s => {
         usedGroups.add(code.charAt(0)); //Group
 
         it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
+
+        //if fcode allows both line and area
+        if (ambiguousFcodes.includes(items[i].fcode)) {
+            //add explicit area=yes/no to OSMTAGS
+            //{"area":"yes"}
+            //because otherwise a closedway will be ambiguous in this case
+            //How to ensure we don't overwrite existing OSMTAGS when this preset is applied?
+            var val = (items[i].geom === 'Area') ? '{\"area\":\"yes\"}' : '{\"area\":\"no\"}';
+            it.ele('key', {key: 'OSMTAGS', value: val});
+        }
 
         items[i].columns.forEach((col, j) => {
             if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
