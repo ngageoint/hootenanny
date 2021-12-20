@@ -340,7 +340,7 @@ public class GrailResource {
                     conflateParams.setInputType2("");
                     conflateParams.setOutputName(outputOsm);
                     conflateParams.setOutputType("");
-                    ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, conflateParams, debugLevel, this.getClass());
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, conflateParams, debugLevel, this.getClass(), user);
                     workflow.add(conflateCommand);
                     input2 = outputOsm;
                     grailCommandClass = DeriveChangesetCommand.class;
