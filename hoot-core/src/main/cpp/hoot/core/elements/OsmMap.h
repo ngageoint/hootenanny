@@ -173,6 +173,7 @@ public:
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   void visitNodesRo(ConstElementVisitor& visitor) const;
+  void visitNodesRw(ElementVisitor& visitor);
 
   int numNodesAppended() const { return _numNodesAppended; }
   int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
