@@ -47,20 +47,17 @@ public:
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
    */
-  void averageTags(
-    const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false,
-    bool caseSensitive = true);
+  void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false,
+                   bool caseSensitive = true);
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
    */
-  void averageTags(
-    const Tags& t1, double w1, const Tags& t2, double w2, Tags& result,
-    bool keepAllUnknownTags = false, bool caseSensitive = true);
+  void averageTags(const Tags& t1, double w1, const Tags& t2, double w2, Tags& result,
+                   bool keepAllUnknownTags = false, bool caseSensitive = true);
 
   void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight) const;
-  void compareNames(
-    const Tags& t1, const Tags& t2, double& score, double& weight, bool strict = false) const;
+  void compareNames(const Tags& t1, const Tags& t2, double& score, double& weight, bool strict = false) const;
   double compareTags(const Tags& t1, const Tags& t2, bool strict = false) const;
   /**
    * Compares all non-name text tags and puts the score in score and weight in weight.
@@ -75,8 +72,7 @@ public:
    * - Tags that share an ancestor are promoted to the first common ancestor.
    * - If there are no conflicting tags, the tag is kept.
    */
-  Tags generalize(
-    Tags t1, Tags t2, bool overwriteUnrecognizedTags = false, bool caseSensitive = true);
+  Tags generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags = false, bool caseSensitive = true);
 
   /**
    * @brief mergeNames - This merges "names" tags, so the name tag in t1 gets
@@ -89,9 +85,8 @@ public:
    * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    * @param caseSensitive True for case sensitive merge names
    */
-  void mergeNames(
-    Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
-    bool caseSensitive = true) const;
+  void mergeNames(Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
+                  bool caseSensitive = true) const;
   /**
    * Merge tags of type text
    *
@@ -101,9 +96,8 @@ public:
    * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    * @param caseSensitive True for case sensitive merge names
    */
-  void mergeText(
-    Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
-    bool caseSensitive = true) const;
+  void mergeText(Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
+                 bool caseSensitive = true) const;
 
   /**
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
@@ -115,9 +109,8 @@ public:
    * @param caseSensitive True for case sensitive merge names
    * @return merged tags
    */
-  Tags overwriteMerge(
-    Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
-    const QStringList& accumulateValuesTagKeys = QStringList(), bool caseSensitive = true);
+  Tags overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
+                      const QStringList& accumulateValuesTagKeys = QStringList(), bool caseSensitive = true);
   /**
    * Replace all tags in t2 with those from t1
    *
@@ -127,9 +120,8 @@ public:
    * @param caseSensitive True for case sensitive merge names
    * @return merged tags
    */
-  Tags replaceMerge(
-    const Tags& t1, const Tags& t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
-    bool caseSensitive = true);
+  Tags replaceMerge(const Tags& t1, const Tags& t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
+                    bool caseSensitive = true);
 
   /**
    * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
@@ -169,9 +161,8 @@ private:
    * Write t2 tags to result, then write t1 tags. If there are conflicts then the t1 tags will
    * overwrite the t2 values. t1 & t2 will be cleared when this is done.
    */
-  void _overwriteRemainingTags(
-    Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
-    const QStringList& accumulateValuesTagKeys = QStringList(), bool caseSensitive = true) const;
+  void _overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
+                               const QStringList& accumulateValuesTagKeys = QStringList(), bool caseSensitive = true) const;
   void _overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const;
 
   /**
