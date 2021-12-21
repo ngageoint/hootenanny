@@ -49,8 +49,8 @@ class NodeDensityTileBoundsCalculatorTest : public HootTestFixture
 
 public:
 
-  NodeDensityTileBoundsCalculatorTest() :
-  HootTestFixture("test-files/conflate/tile/", "test-output/conflate/tile/")
+  NodeDensityTileBoundsCalculatorTest()
+    : HootTestFixture("test-files/conflate/tile/", "test-output/conflate/tile/")
   {
   }
 
@@ -110,9 +110,7 @@ public:
     for (size_t tx = 0; tx < e.size(); tx++)
     {
       for (size_t ty = 0; ty < e[tx].size(); ty++)
-      {
         addEnvelope(bounds, e[tx][ty], tx, ty);
-      }
     }
 
     OsmXmlWriter writer;

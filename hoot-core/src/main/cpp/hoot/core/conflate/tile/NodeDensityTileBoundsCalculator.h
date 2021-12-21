@@ -63,8 +63,7 @@ public:
   {
     public:
 
-      TileCalcException(QString message) :
-      HootException(message)
+      TileCalcException(QString message) : HootException(message)
       {
       }
   };
@@ -82,7 +81,7 @@ public:
     int x;
     int y;
 
-    Pixel(int x, int y) { this->x = x; this->y = y; }
+    Pixel(int x, int y) : x(x), y(y) { }
 
     Pixel() = default;
   };
@@ -100,19 +99,19 @@ public:
     int maxY;
 
     PixelBox()
+      : minX(-1),
+        minY(-1),
+        maxX(-1),
+        maxY(-1)
     {
-      minX = -1;
-      maxX = -1;
-      minY = -1;
-      maxY = -1;
     }
 
     PixelBox(int minX, int maxX, int minY, int maxY)
+      : minX(minX),
+        minY(minY),
+        maxX(maxX),
+        maxY(maxY)
     {
-      this->minX = minX;
-      this->maxX = maxX;
-      this->minY = minY;
-      this->maxY = maxY;
     }
 
     PixelBox getColumnBox(int col) const { return PixelBox(col, col, minY, maxY); }
@@ -175,7 +174,9 @@ private:
   // used for white box testing.
   friend class NodeDensityTileBoundsCalculatorTest;
 
-  cv::Mat _r1, _r2, _min;
+  cv::Mat _r1;
+  cv::Mat _r2;
+  cv::Mat _min;
 
   double _pixelSize;
   OGREnvelope _envelope;
@@ -223,8 +224,8 @@ private:
 
   bool _isDone(std::vector<PixelBox>& boxes);
 
-  long _sumPixels(const PixelBox& pb, cv::Mat& r) const;
-  long _sumPixels(const PixelBox& pb);
+  long _sumPixels(const PixelBox& pb, const cv::Mat& r) const;
+  long _sumPixels(const PixelBox& pb) const;
 
   geos::geom::Envelope _toEnvelope(const PixelBox& pb) const;
 
