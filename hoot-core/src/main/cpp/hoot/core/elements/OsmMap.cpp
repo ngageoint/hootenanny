@@ -945,9 +945,9 @@ QString OsmMap::getSource() const
 void OsmMap::appendSource(const QString& url)
 {
   QStringList urls = url.split(";");
-  for (const auto& url : urls)
+  for (const auto& u : urls)
   {
-    QUrl src(url);
+    QUrl src(u);
     QString source;
     if (src.scheme() == "")
       source = QFileInfo(src.toString()).fileName();
