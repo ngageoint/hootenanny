@@ -196,9 +196,8 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score, doubl
     }
   }
 
-  for (const auto& tv : v2)//size_t i = 0; i < v2.size(); ++i)
+  for (const auto& tv : v2)
   {
-//    const SchemaVertex* tv = &v2[i];
     if (tv.getValueType() == Enumeration)
     {
       if (tv.getValue() == "*")
@@ -566,7 +565,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result, const QStringLi
 
   // add all the altNames that don't exist in nonAltNames
   QStringList l;
-  for (const auto& name : altNames)// it = altNames.begin(); it != altNames.end(); ++it)
+  for (const auto& name : altNames)
   {
     if (nonAltNames.find(name) == nonAltNames.end())
       l.append(name);
@@ -605,7 +604,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result, const QStringLis
       // exclude list
       const Qt::CaseSensitivity caseSensitivity =
         caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-      for (const auto& value : values1)//int i = 0; i < values1.size(); i++)
+      for (const auto& value : values1)
       {
         //LOG_VART(values1[i]);
         if (value.isEmpty() == false &&
@@ -616,7 +615,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result, const QStringLis
           //LOG_VART(result);
         }
       }
-      for (const auto& value : values2)//int i = 0; i < values2.size(); i++)
+      for (const auto& value : values2)
       {
         //LOG_VART(values2[i]);
         if (value.isEmpty() == false)

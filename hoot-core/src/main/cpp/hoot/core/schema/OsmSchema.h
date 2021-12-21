@@ -92,45 +92,25 @@ struct OsmSchemaCategory
   static OsmSchemaCategory fromString(const QString& s)
   {
     if (s == "poi")
-    {
       return Poi;
-    }
     else if (s == "building")
-    {
       return Building;
-    }
     else if (s == "transportation")
-    {
       return Transportation;
-    }
     else if (s == "use")
-    {
       return Use;
-    }
     else if (s == "name")
-    {
       return Name;
-    }
     else if (s == "pseudoname")
-    {
       return PseudoName;
-    }
     else if (s == "multiuse")
-    {
       return Multiuse;
-    }
     else if (s == "combination")
-    {
       return Combination;
-    }
     else if (s == "")
-    {
       return Empty;
-    }
     else
-    {
       throw IllegalArgumentException("Unknown category. " + s);
-    }
   }
 
   static OsmSchemaCategory fromStringList(const QStringList& s);
@@ -160,37 +140,21 @@ struct OsmSchemaCategory
     QStringList result;
 
     if (_type & Poi)
-    {
       result << "poi";
-    }
     if (_type & Building)
-    {
       result << "building";
-    }
     if (_type & Transportation)
-    {
       result << "transportation";
-    }
     if (_type & Use)
-    {
       result << "use";
-    }
     if (_type & Name)
-    {
       result << "name";
-    }
     if (_type & PseudoName)
-    {
       result << "pseudoname";
-    }
     if (_type & Multiuse)
-    {
       result << "multiuse";
-    }
     if (_type & Combination)
-    {
       result << "combination";
-    }
 
     return result;
   }
@@ -202,12 +166,12 @@ private:
 
 inline OsmSchemaCategory operator&(const OsmSchemaCategory& t1, const OsmSchemaCategory& t2)
 {
-  return OsmSchemaCategory((OsmSchemaCategory::Type)(t1.getEnum() & t2.getEnum()));
+  return OsmSchemaCategory(static_cast<OsmSchemaCategory::Type>(t1.getEnum() & t2.getEnum()));
 }
 
 inline OsmSchemaCategory operator|(const OsmSchemaCategory& t1, const OsmSchemaCategory& t2)
 {
-  return OsmSchemaCategory((OsmSchemaCategory::Type)(t1.getEnum() | t2.getEnum()));
+  return OsmSchemaCategory(static_cast<OsmSchemaCategory::Type>(t1.getEnum() | t2.getEnum()));
 }
 
 // explicitly put these types in their own name scope. Use with OsmGeometries::Node, etc.
@@ -233,8 +197,8 @@ struct TagEdge
 public:
 
   TagEdge()
+    : show(true)
   {
-    show = true;
   }
 
   enum EdgeType type;
@@ -268,14 +232,12 @@ public:
 
   void addAssociatedWith(const QString& name1, const QString& name2) const;
   void addIsA(const QString& name1, const QString& name2) const;
-  void addSimilarTo(
-    const QString& name1, const QString& name2, double weight, bool oneway = false) const;
+  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false) const;
 
   void update() const;
   void updateOrCreateVertex(const SchemaVertex& tv) const;
 
-  QString average(
-    const QString& kvp1, double w1, const QString& kvp2, double w2, double& best) const;
+  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best) const;
   QString average(const QString& kvp1, const QString& kvp2, double& best) const;
 
   /**

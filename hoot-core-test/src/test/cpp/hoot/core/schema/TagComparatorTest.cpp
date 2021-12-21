@@ -691,12 +691,10 @@ public:
 
     TextTable::Data data;
 
-    for (const auto& t1 : buses)// (size_t i = 0; i < buses.size(); i++)
+    for (const auto& t1 : buses)
     {
-      for (const auto& t2 : railways)// (size_t j = 0; j < railways.size(); j++)
+      for (const auto& t2 : railways)
       {
-//        Tags t1 = buses[i];
-//        Tags t2 = railways[j];
         QString s1 = toString(t1).trimmed();
         QString s2 = toString(t2).trimmed();
         data[s1][s2] = uut.compareTags(t1, t2);
@@ -705,12 +703,10 @@ public:
       }
     }
 
-    for (const auto& t1 : buses)// (size_t i = 0; i < buses.size(); i++)
+    for (const auto& t1 : buses)
     {
-      for (const auto& t2 : buses)// (size_t j = 0; j < buses.size(); j++)
+      for (const auto& t2 : buses)
       {
-//        Tags t1 = buses[i];
-//        Tags t2 = buses[j];
         QString s1 = toString(t1).trimmed();
         QString s2 = toString(t2).trimmed();
         data[s1][s2] = uut.compareTags(t1, t2);
@@ -718,13 +714,11 @@ public:
       }
     }
 
-    for (const auto& t1 : railways)// (size_t i = 0; i < railways.size(); i++)
+    for (const auto& t1 : railways)
     {
-      for (const auto& t2 : railways)// (size_t j = 0; j < railways.size(); j++)
+      for (const auto& t2 : railways)
       {
-//        Tags t1 = railways[i];
-//        Tags t2 = railways[j];
-        QString s1 = toString(t1).trimmed();
+       QString s1 = toString(t1).trimmed();
         QString s2 = toString(t2).trimmed();
         data[s1][s2] = uut.compareTags(t1, t2);
         //LOG_VAR(uut.compareTags(buses[i], railways[i]));

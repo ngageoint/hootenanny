@@ -523,11 +523,9 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
   }
 
   pt.setPen(QPen(QColor(0, 0, 255, 100)));
-  for (const auto& b : boxes)//size_t i = 0; i < boxes.size(); i++)
+  for (const auto& b : boxes)
   {
-//    const PixelBox& b = boxes[i];
     pt.drawRect(b.minX, _r1.rows - b.maxY - 1, b.maxX - b.minX, b.maxY - b.minY);
-
     _checkForTimeout();
   }
 
@@ -541,12 +539,10 @@ bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
   bool smallEnough = true;
   bool minSize = false;
 
-  for (const auto& b : boxes)//size_t i = 0; i < boxes.size(); i++)
+  for (const auto& b : boxes)
   {
-//    const PixelBox& b = boxes[i];
     if (b.getWidth() == 1 || b.getHeight() == 1)
       minSize = true;
-
     if (_sumPixels(b) > _maxNodesPerTile)
       smallEnough = false;
   }
