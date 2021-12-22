@@ -196,11 +196,11 @@ bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, cons
 
   bool found = false;
 
-  for (const auto& eid : s)//set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
+  for (const auto& eid : s)
   {
     QString ref1 = in->getElement(eid)->getTags()[MetadataTags::Ref1()];
     QString ref2 = in->getElement(eid)->getTags()[MetadataTags::Ref2()];
-    for (const auto& value : interesting)//int i = 0; i < interesting.size(); i++)
+    for (const auto& value : interesting)
     {
       if (ref1.contains(value) || ref2.contains(value))
         found = true;
@@ -386,13 +386,13 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
 
   // go through all the reviews in the conflated map
   set<ReviewMarker::ReviewUid> ruuid = ReviewMarker::getReviewUids(conflated);
-  for (const auto& r : ruuid)//set<ReviewMarker::ReviewUid>::iterator it = ruuid.begin(); it != ruuid.end(); ++it)
+  for (const auto& r : ruuid)
   {
     set<QString> u1;
     set<QString> u2;
 
     set<ElementId> eids = ReviewMarker::getReviewElements(conflated, r);
-    for (const auto& p : eids)//set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); ++eid)
+    for (const auto& p : eids)
     {
       ConstElementPtr element = conflated->getElement(p);
       if (!element.get())
@@ -434,10 +434,10 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
     }
 
     // create a match between all the combinations of ref1 uuid to ref2 uuid
-    for (const auto& ref1 : u1)//set<QString>::const_iterator iit = u1.begin(); iit != u1.end(); ++iit)
+    for (const auto& ref1 : u1)
     {
-      for (const auto& ref2 : u2)//set<QString>::const_iterator jt = u2.begin(); jt != u2.end(); ++jt)
-        _actual.emplace(ref1, ref2);//.insert(UuidPair(*iit, *jt));
+      for (const auto& ref2 : u2)
+        _actual.emplace(ref1, ref2);
     }
   }
 
