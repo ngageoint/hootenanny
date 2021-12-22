@@ -28,8 +28,9 @@
 #define MATCHCOMPARATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -133,7 +134,8 @@ private:
   /**
    * Confusion matrix with [actual][expected]
    */
-  std::vector<std::vector<int>> _confusion;
+  static const int CONFUSION_SIZE = 3;
+  std::array<std::array<int, CONFUSION_SIZE>, CONFUSION_SIZE> _confusion;
 
   /**
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
@@ -154,7 +156,7 @@ private:
                       std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const;
 
   bool _debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
-    const ConstOsmMapPtr& conflated) const;
+                 const ConstOsmMapPtr& conflated) const;
 
   void _findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated);
   void _findExpectedMatches(const ConstOsmMapPtr& in);
@@ -168,6 +170,7 @@ private:
   void _tagWrong(const OsmMapPtr &map, const QString &uuid);
   void _tagTestOutcome(const OsmMapPtr& map, const QString& uuid, const QString& expected,
                        const QString& actual);
+  void _tagVisitor(const OsmMapPtr& map, const QString& uuid, SetTagValueVisitor* v1, SetTagValueVisitor* v2 = nullptr);
   void _setElementWrongCounts(const ConstOsmMapPtr& map);
   void _setElementWrongCount(const ConstOsmMapPtr& map, const ElementType::Type& elementType);
 };

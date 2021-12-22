@@ -30,18 +30,17 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagContainsCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/UniqueTagValuesVisitor.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 
 using namespace std;
 
@@ -72,15 +71,11 @@ public:
   {
     QStringList refs;
     if (e->getTags().contains(_ref))
-    {
       e->getTags().readValues(_ref, refs);
-    }
 
     // #5891 the MatchScoringMapPreparer should have removed all todos
     if (refs.contains("todo"))
-    {
       throw HootException("Unexpected todo found in " + _ref);
-    }
     refs.removeAll("none");
 
     QString uuid = e->getTags()["uuid"];
@@ -91,13 +86,10 @@ public:
       throw HootException("uuid must be provided on all REF* features.");
     }
 
-    for (int i = 0; i < refs.size(); i++)
+    for (const auto& r : refs)
     {
-      QString r = refs[i].trimmed();
       if (r.isEmpty() == false)
-      {
         _ref2Uuid[r].insert(uuid);
-      }
     }
   }
 
@@ -127,9 +119,7 @@ public:
   {
     QString uuid;
     if (e->getTags().contains("uuid"))
-    {
       uuid = e->getTags().get("uuid");
-    }
 
     if (!uuid.isEmpty())
     {
@@ -139,10 +129,8 @@ public:
       //with the uuid's of the merged items.  So, add map entries for all the uuid parts, if it
       //contains multiple features.
       const QStringList uuidParts = uuid.split(";");
-      for (int i = 0; i < uuidParts.size(); i++)
-      {
-        _uuidToEid.insert(uuidParts.at(i), e->getElementId());
-      }
+      for (const auto& part : uuidParts)
+        _uuidToEid.insert(part, e->getElementId());
     }
   }
 
@@ -152,16 +140,15 @@ private:
   MatchComparator::UuidToEid _uuidToEid;
 };
 
-MatchComparator::MatchComparator() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+MatchComparator::MatchComparator()
+  : _tagErrors(true),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
-  _tagErrors = true;
-
-  _confusion.resize(3);
-
-  for (size_t i = 0; i < 3; i++)
+  //  Initialize the confustion matrix
+  for (size_t i = 0; i < CONFUSION_SIZE; ++i)
   {
-    _confusion[i].resize(3, 0);
+    for (size_t j = 0; j < CONFUSION_SIZE; ++j)
+      _confusion[i][j] = 0;
   }
 }
 
@@ -173,18 +160,11 @@ void MatchComparator::_addWrong(const Tags& t1, const Tags& t2)
   QString s2 = c2.toString();
 
   if (s1.isEmpty())
-  {
     s1 = "<no category>";
-  }
   if (s2.isEmpty())
-  {
     s2 = "<no category>";
-  }
-
   if (s2 < s1)
-  {
     swap(s1, s2);
-  }
 
   _wrongBreakdown[s1][s2] = _wrongBreakdown[s1][s2].toInt() + 1;
 }
@@ -203,7 +183,7 @@ void MatchComparator::_clearCache()
 }
 
 bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
-  const ConstOsmMapPtr& /*conflated*/) const
+                                const ConstOsmMapPtr& /*conflated*/) const
 {
   TagContainsCriterion tcf("uuid", uuid1);
   tcf.addPair("uuid", uuid2);
@@ -216,16 +196,14 @@ bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, cons
 
   bool found = false;
 
-  for (set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
+  for (const auto& eid : s)//set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
   {
-    QString ref1 = in->getElement(*it)->getTags()[MetadataTags::Ref1()];
-    QString ref2 = in->getElement(*it)->getTags()[MetadataTags::Ref2()];
-    for (int i = 0; i < interesting.size(); i++)
+    QString ref1 = in->getElement(eid)->getTags()[MetadataTags::Ref1()];
+    QString ref2 = in->getElement(eid)->getTags()[MetadataTags::Ref2()];
+    for (const auto& value : interesting)//int i = 0; i < interesting.size(); i++)
     {
-      if (ref1.contains(interesting[i]) || ref2.contains(interesting[i]))
-      {
+      if (ref1.contains(value) || ref2.contains(value))
         found = true;
-      }
     }
   }
 
@@ -238,7 +216,6 @@ bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, cons
       LOG_INFO(in->getElement(*it)->getTags().toString());
     }
   }
-
   return found;
 }
 
@@ -262,7 +239,7 @@ double MatchComparator::getPertyScore() const
     insert_iterator<std::set<UuidPair>>(intersection, intersection.begin()));
   LOG_VARD(intersection.size());
   LOG_VART(intersection);
-  const double pertyScore = (double)intersection.size() / (double)_expected.size();
+  const double pertyScore = static_cast<double>(intersection.size()) / static_cast<double>(_expected.size());
   LOG_VARD(pertyScore);
   return pertyScore;
 }
@@ -287,77 +264,53 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
   allPairs.insert(_expected.begin(), _expected.end());
 
   long numPairsParsed = 0;
-  for (set<UuidPair>::const_iterator it = allPairs.begin(); it != allPairs.end(); ++it)
+  for (const auto& m : allPairs)
   {
     int expectedIndex;
     int actualIndex;
 
-    const UuidPair& m = *it;
-
-    // if this is an expected match
+    //  expected match
     if (_expectedMatchGroups.findT(m.first) == _expectedMatchGroups.findT(m.second))
-    {
       expectedIndex = MatchType::Match;
-    }
-    // if this is an expected review
-    else if (_expectedReviewGroups.findT(m.first) == _expectedReviewGroups.findT(m.second))
-    {
+    else if (_expectedReviewGroups.findT(m.first) == _expectedReviewGroups.findT(m.second)) //  expected review
       expectedIndex = MatchType::Review;
-    }
     else
-    {
       expectedIndex = MatchType::Miss;
-    }
 
     // if this is an actual match
     if (_actualMatchGroups.findT(m.first) == _actualMatchGroups.findT(m.second))
-    {
       actualIndex = MatchType::Match;
-    }
-    // if this is an actual review
-    else if (_isNeedsReview(m.first, m.second, conflated))
-    {
+    else if (_isNeedsReview(m.first, m.second, conflated))  //  actual review
       actualIndex = MatchType::Review;
-    }
     else
-    {
       actualIndex = MatchType::Miss;
-    }
 
     if (actualIndex != expectedIndex)
     {
       if (actualIndex != MatchType::Review)
       {
         QList<ElementId> eid1s =  _actualUuidToEid.values(m.first);
-        for (int eidIndex = 0; eidIndex < eid1s.size(); eidIndex++)
+        for (const auto& eid1 : eid1s)
         {
-          ElementId eid1 = eid1s.at(eidIndex);
           // sometimes elements are removed during conflation. If they were supposed to be matched,
           // then mark it as an error.
           if (!eid1.isNull())
-          {
             _tagWrong(conflated, m.first);
-          }
         }
 
         QList<ElementId> eid2s =  _actualUuidToEid.values(m.second);
-        for (int eidIndex = 0; eidIndex < eid2s.size(); eidIndex++)
+        for (const auto& eid2 : eid2s)
         {
-          ElementId eid2 = eid2s.at(eidIndex);
           // sometimes elements are removed during conflation. If they were supposed to be matched,
           // then mark it as an error.
           if (!eid2.isNull())
-          {
             _tagWrong(conflated, m.second);
-          }
         }
 
-        for (int eid1Index = 0; eid1Index < eid1s.size(); eid1Index++)
+        for (const auto& eid1 : eid1s)
         {
-          ElementId eid1 = eid1s.at(eid1Index);
-          for (int eid2Index = 0; eid2Index < eid2s.size(); eid2Index++)
+          for (const auto& eid2 : eid2s)
           {
-            ElementId eid2 = eid2s.at(eid2Index);
             if (!eid1.isNull() && !eid2.isNull())
             {
               ElementPtr e1 = conflated->getElement(eid1);
@@ -368,8 +321,8 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
         }
       }
 
-      _tagError(conflated, it->first, "1");
-      _tagError(conflated, it->second, "2");
+      _tagError(conflated, m.first, "1");
+      _tagError(conflated, m.second, "2");
 
       //The info from these tags can be misleading if you are conflating the same data type twice
       //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
@@ -377,10 +330,8 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       //of them.
       const MatchType expectedMatchType(expectedIndex);
       const MatchType actualMatchType(actualIndex);
-      _tagTestOutcome(
-        conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
-      _tagTestOutcome(
-        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(conflated, m.first, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(conflated, m.second, expectedMatchType.toString(), actualMatchType.toString());
     }
 
     _confusion[actualIndex][expectedIndex]++;
@@ -396,26 +347,26 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
   _tp = _confusion[MatchType::Match][MatchType::Match];
   _fn = _confusion[MatchType::Miss][MatchType::Match] +
-      _confusion[MatchType::Review][MatchType::Match];
+        _confusion[MatchType::Review][MatchType::Match];
   _fp = _confusion[MatchType::Match][MatchType::Miss] +
-      _confusion[MatchType::Match][MatchType::Review];
+        _confusion[MatchType::Match][MatchType::Review];
 
   LOG_VAR(_wrongBreakdown);
   LOG_VAR(TextTable(_wrongBreakdown).toWikiString());
 
-  return double(_tp) / double(_tp + _fn + _fp);
+  return static_cast<double>(_tp) / static_cast<double>(_tp + _fn + _fp);
 }
 
 void MatchComparator::_createMatches(const set<QString>& uuids1, const set<QString>& uuids2,
-  set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const
+                                     set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const
 {
   // create a match between all the combinations of ref1 uuid to ref2 uuid
-  for (set<QString>::const_iterator u1 = uuids1.begin(); u1 != uuids1.end(); ++u1)
+  for (const auto& u1 : uuids1)
   {
-    for (set<QString>::const_iterator u2 = uuids2.begin(); u2 != uuids2.end(); ++u2)
+    for (const auto& u2 : uuids2)
     {
-      matches.insert(UuidPair(*u1, *u2));
-      groups.joinT(*u1, *u2);
+      matches.emplace(u1, u2);
+      groups.joinT(u1, u2);
     }
   }
   LOG_VART(matches.size());
@@ -435,15 +386,14 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
 
   // go through all the reviews in the conflated map
   set<ReviewMarker::ReviewUid> ruuid = ReviewMarker::getReviewUids(conflated);
-  for (set<ReviewMarker::ReviewUid>::iterator it = ruuid.begin(); it != ruuid.end(); ++it)
+  for (const auto& r : ruuid)//set<ReviewMarker::ReviewUid>::iterator it = ruuid.begin(); it != ruuid.end(); ++it)
   {
     set<QString> u1;
     set<QString> u2;
 
-    set<ElementId> eids = ReviewMarker::getReviewElements(conflated, *it);
-    for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); ++eid)
+    set<ElementId> eids = ReviewMarker::getReviewElements(conflated, r);
+    for (const auto& p : eids)//set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); ++eid)
     {
-      ElementId p = *eid;
       ConstElementPtr element = conflated->getElement(p);
       if (!element.get())
       {
@@ -474,30 +424,20 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       }
 
       if (conflated->getElement(p)->getStatus() == Status::Unknown1)
-      {
         u1.insert(uuidStr);
-      }
       else if (conflated->getElement(p)->getStatus() == Status::Unknown2)
-      {
         u2.insert(uuidStr);
-      }
       else if (u1.empty() && !u2.empty())
-      {
         u1.insert(uuidStr);
-      }
       else
-      {
         u2.insert(uuidStr);
-      }
     }
 
     // create a match between all the combinations of ref1 uuid to ref2 uuid
-    for (set<QString>::const_iterator iit = u1.begin(); iit != u1.end(); ++iit)
+    for (const auto& ref1 : u1)//set<QString>::const_iterator iit = u1.begin(); iit != u1.end(); ++iit)
     {
-      for (set<QString>::const_iterator jt = u2.begin(); jt != u2.end(); ++jt)
-      {
-        _actual.insert(UuidPair(*iit, *jt));
-      }
+      for (const auto& ref2 : u2)//set<QString>::const_iterator jt = u2.begin(); jt != u2.end(); ++jt)
+        _actual.emplace(ref1, ref2);//.insert(UuidPair(*iit, *jt));
     }
   }
 
@@ -516,29 +456,29 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   in->visitRo(fvIn2);
   LOG_TRACE("in2Uuids size: " << in2Uuids.size());
 
-  for (set<QString>::const_iterator it = cUuids.begin(); it != cUuids.end(); ++it)
+  for (const auto& value : cUuids)
   {
-    QStringList cList = Tags::split(*it);
+    QStringList cList = Tags::split(value);
     set<QString> u1;
     set<QString> u2;
 
-    for (int i = 0; i < cList.size(); i++)
+    for (const auto& c_value : cList)
     {
       // split the uids into two groups.
-      if (in1Uuids.find(cList[i]) != in1Uuids.end())
+      if (in1Uuids.find(c_value) != in1Uuids.end())
       {
-        u1.insert(cList[i]);
-        LOG_TRACE("Inserted " << cList[i] << " into u1.");
+        u1.insert(c_value);
+        LOG_TRACE("Inserted " << c_value << " into u1.");
       }
-      else if (in2Uuids.find(cList[i]) != in2Uuids.end())
+      else if (in2Uuids.find(c_value) != in2Uuids.end())
       {
-        u2.insert(cList[i]);
-        LOG_TRACE("Inserted " << cList[i] << " into u2.");
+        u2.insert(c_value);
+        LOG_TRACE("Inserted " << c_value << " into u2.");
       }
       else
       {
-        LOG_TRACE("Missing UUID: " << cList[i]);
-        throw HootException("Conflated uuid was not found in either input: " + cList[i]);
+        LOG_TRACE("Missing UUID: " << c_value);
+        throw HootException("Conflated uuid was not found in either input: " + c_value);
       }
     }
     // create a match between all the combinations of ref1 uuid to ref2 uuid
@@ -562,11 +502,10 @@ void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
   in->visitRo(review);
 
   // go through all the ref1 uuids
-  for (GetRefUuidVisitor::RefToUuid::const_iterator it = ref1.getRefToUuid().begin();
-         it != ref1.getRefToUuid().end(); ++it)
+  for (auto it = ref1.getRefToUuid().begin(); it != ref1.getRefToUuid().end(); ++it)
   {
     // match the ref1 to ref2 uuids
-    GetRefUuidVisitor::RefToUuid::const_iterator jt = ref2.getRefToUuid().find(it->first);
+    auto jt = ref2.getRefToUuid().find(it->first);
     if (jt != ref2.getRefToUuid().end())
     {
       const set<QString>& ref1Uuids = it->second;
@@ -576,7 +515,7 @@ void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     }
 
     // match the ref1 to review uuids
-    GetRefUuidVisitor::RefToUuid::const_iterator kt = review.getRefToUuid().find(it->first);
+    auto kt = review.getRefToUuid().find(it->first);
     if (kt != review.getRefToUuid().end())
     {
       const set<QString>& ref1Uuids = it->second;
@@ -592,33 +531,31 @@ void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
 double MatchComparator::getPercentCorrect() const
 {
   return double(_confusion[MatchType::Match][MatchType::Match] +
-    _confusion[MatchType::Miss][MatchType::Miss] +
-    _confusion[MatchType::Review][MatchType::Review]) / double(getTotalCount());
+                _confusion[MatchType::Miss][MatchType::Miss] +
+                _confusion[MatchType::Review][MatchType::Review]) / static_cast<double>(getTotalCount());
 }
 
 double MatchComparator::getPercentWrong() const
 {
   return double(_confusion[MatchType::Match][MatchType::Miss] +
-    _confusion[MatchType::Match][MatchType::Review] +
-    _confusion[MatchType::Miss][MatchType::Match] +
-    _confusion[MatchType::Miss][MatchType::Review]) / double(getTotalCount());
+                _confusion[MatchType::Match][MatchType::Review] +
+                _confusion[MatchType::Miss][MatchType::Match] +
+                _confusion[MatchType::Miss][MatchType::Review]) / static_cast<double>(getTotalCount());
 }
 
 double MatchComparator::getPercentUnnecessaryReview() const
 {
   return double(_confusion[MatchType::Review][MatchType::Match] +
-    _confusion[MatchType::Review][MatchType::Miss]) / double(getTotalCount());
+                _confusion[MatchType::Review][MatchType::Miss]) / static_cast<double>(getTotalCount());
 }
 
 int MatchComparator::getTotalCount() const
 {
   int result = 0;
-  for (size_t i = 0; i < _confusion.size(); i++)
+  for (size_t i = 0; i < CONFUSION_SIZE; ++i)
   {
-    for (size_t j = 0; j < _confusion[i].size(); j++)
-    {
+    for (size_t j = 0; j < CONFUSION_SIZE; ++j)
       result += _confusion[i][j];
-    }
   }
   return result;
 }
@@ -630,12 +567,10 @@ bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
 
   bool result = false;
-  for (int eid1Index = 0; eid1Index < eid1s.size(); eid1Index++)
+  for (const auto& eid1 : eid1s)
   {
-    ElementId eid1 = eid1s.at(eid1Index);
-    for (int eid2Index = 0; eid2Index < eid2s.size(); eid2Index++)
+    for (const auto& eid2 : eid2s)
     {
-      ElementId eid2 = eid2s.at(eid2Index);
       if (eid1.isNull() || eid2.isNull())
       {
         // So far this message is ok, change from LOG_INFO to LOG_DEBUG.
@@ -643,12 +578,8 @@ bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
         LOG_DEBUG("No actual element exists.");
         return false;
       }
-
-      if (ReviewMarker::isNeedsReview(conflated, conflated->getElement(eid1),
-                                      conflated->getElement(eid2)))
-      {
+      if (ReviewMarker::isNeedsReview(conflated, conflated->getElement(eid1), conflated->getElement(eid2)))
         result = true;
-      }
     }
   }
   return result;
@@ -659,44 +590,34 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString& uuid,
 {
   SetTagValueVisitor stv1(MetadataTags::HootExpected(), expected);
   SetTagValueVisitor stv2(MetadataTags::HootActual(), actual);
-  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
-       it != _actualUuidToEid.end(); ++it)
-  {
-    if (it.key().contains(uuid))
-    {
-      std::shared_ptr<Element> eid = map->getElement(it.value());
-      stv1.visit(eid);
-      stv2.visit(eid);
-    }
-  }
+  _tagVisitor(map, uuid, &stv1, &stv2);
 }
 
 void MatchComparator::_tagError(const OsmMapPtr& map, const QString& uuid, const QString& value)
 {
   // If the uuid contains the first uuid, set mismatch.
   SetTagValueVisitor stv(MetadataTags::HootMismatch(), value);
-  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
-       it != _actualUuidToEid.end(); ++it)
-  {
-    if (it.key().contains(uuid))
-    {
-      std::shared_ptr<Element> eid = map->getElement(it.value());
-      stv.visit(eid);
-    }
-  }
+  _tagVisitor(map, uuid, &stv);
 }
 
 void MatchComparator::_tagWrong(const OsmMapPtr& map, const QString &uuid)
 {
   // If the uuid contains the first uuid, set wrong.
   SetTagValueVisitor stv(MetadataTags::HootWrong(), "1");
-  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
-       it != _actualUuidToEid.end(); ++it)
+  _tagVisitor(map, uuid, &stv);
+}
+
+void MatchComparator::_tagVisitor(const OsmMapPtr& map, const QString& uuid, SetTagValueVisitor* v1, SetTagValueVisitor* v2)
+{
+  for (auto it = _actualUuidToEid.begin(); it != _actualUuidToEid.end(); ++it)
   {
     if (it.key().contains(uuid))
     {
-      std::shared_ptr<Element> eid = map->getElement(it.value());
-      stv.visit(eid);
+      ElementPtr element = map->getElement(it.value());
+      if (v1 != nullptr)
+        v1->visit(element);
+      if (v2 != nullptr)
+        v2->visit(element);
     }
   }
 }
@@ -712,12 +633,12 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
                                             const ElementType::Type& elementType)
 {
   _elementWrongCounts[elementType] =
-    (int)FilteredVisitor::getStat(
+    static_cast<int>(FilteredVisitor::getStat(
       std::make_shared<ChainCriterion>(
         std::make_shared<ElementTypeCriterion>(elementType),
         std::make_shared<TagKeyCriterion>(MetadataTags::HootWrong())),
       std::make_shared<ElementCountVisitor>(),
-      map);
+      map));
 }
 
 QString MatchComparator::toString() const
@@ -737,13 +658,9 @@ QString MatchComparator::toString() const
     for (size_t j = 0; j < 3; j++)
     {
       if (i == 0 && j == 0)
-      {
         result += QString(" |   -  ");
-      }
       else
-      {
         result += QString(" |%1").arg(_confusion[i][j], 6, 10);
-      }
     }
     result += "  |\n";
   }
@@ -758,21 +675,19 @@ QString MatchComparator::toString() const
   result += QString("  nodes: %1\n").arg(_elementWrongCounts[ElementType::Node]);
   result += QString("  ways: %1\n").arg(_elementWrongCounts[ElementType::Way]);
   result += QString("  relations: %1\n").arg(_elementWrongCounts[ElementType::Relation]);
-  const int totalCorrect =
-    _confusion[MatchType::Match][MatchType::Match] +
-    _confusion[MatchType::Review][MatchType::Review];
+  const int totalCorrect = _confusion[MatchType::Match][MatchType::Match] +
+                           _confusion[MatchType::Review][MatchType::Review];
   result += QString("correct match count: %1\n").arg(totalCorrect);
   result += QString("wrong match count: %1\n")
               .arg(_confusion[MatchType::Miss][MatchType::Match] +
                    _confusion[MatchType::Miss][MatchType::Review] +
                    _confusion[MatchType::Match][MatchType::Miss] +
                    _confusion[MatchType::Match][MatchType::Review]);
-  const int totalUnnecessaryReviews =
-    _confusion[MatchType::Review][MatchType::Miss] +
-    _confusion[MatchType::Review][MatchType::Match];
+  const int totalUnnecessaryReviews = _confusion[MatchType::Review][MatchType::Miss] +
+                                      _confusion[MatchType::Review][MatchType::Match];
   result += QString("unnecessary review count: %1\n").arg(totalUnnecessaryReviews);
   result += QString("ratio of unnecessary reviews to correct matches: %1\n")
-    .arg((double)totalUnnecessaryReviews / (double)totalCorrect);
+    .arg(static_cast<double>(totalUnnecessaryReviews) / static_cast<double>(totalCorrect));
 
   return result;
 }
