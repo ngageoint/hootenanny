@@ -296,7 +296,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
   _exportResult(boxes, "tmp/result.png");
 }
 
-int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b) const
 {
   double total = static_cast<double>(_sumPixels(b));
   LOG_VART(total);
@@ -356,7 +356,7 @@ int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b)
   return best;
 }
 
-int NodeDensityTileBoundsCalculator::_calculateSplitY(const PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitY(const PixelBox& b) const
 {
   double total = static_cast<double>(_sumPixels(b));
   LOG_VART(total);
@@ -532,7 +532,7 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
   qImage.save(output);
 }
 
-bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
+bool NodeDensityTileBoundsCalculator::_isDone(const std::vector<PixelBox>& boxes) const
 {
   LOG_VART(boxes.size());
 

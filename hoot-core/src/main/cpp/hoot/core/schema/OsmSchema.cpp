@@ -152,7 +152,7 @@ public:
 
   SimilarToOnly() : _graph(nullptr) { }
 
-  SimilarToOnly(TagGraph& graph) : _graph(&graph) { }
+  SimilarToOnly(const TagGraph& graph) : _graph(&graph) { }
 
   bool operator()(const EdgeId& edge_id) const
   {
@@ -162,23 +162,23 @@ public:
 
 private:
 
-  TagGraph* _graph;
+  const TagGraph* _graph;
 };
 
 class VertexNameComparator
 {
 public:
 
-  VertexNameComparator(const TagGraph& graph) : _graph(graph) { }
+  VertexNameComparator(const TagGraph& graph) : _graph(&graph) { }
 
   bool operator() (VertexId v1, VertexId v2) const
   {
-    return _graph[v1].getName() < _graph[v2].getName();
+    return (*_graph)[v1].getName() < (*_graph)[v2].getName();
   }
 
 private:
 
-  const TagGraph _graph;
+  const TagGraph* _graph;
 };
 
 OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList& s)
