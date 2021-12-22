@@ -27,10 +27,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/scoring/TextTable.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;
 
@@ -62,113 +62,6 @@ public:
     TagComparator& uut = TagComparator::getInstance();
 
     {
-        Tags t1;
-        t1["highway"] = "trunk";
-        t1["name"] = "Midland Expressway";
-        t1["name:en"] = "Midland Expressway";
-        t1["ref"] = "US 24";
-        t1["oneway"] = "yes";
-        t1["lanes"] = "2";
-        t1["uuid"] = "foo";
-
-        Tags t2;
-        t2["highway"] = "secondary";
-        t2["name"] = "Midland Expy";
-        t2["name:en"] = "Midland Expressway";
-        t2["name:he"] = "מידלנד המהיר";
-        t2["ref"] = "24";
-        t2["oneway"] = "true";
-        t2["bridge"] = "yes";
-        t2["uuid"] = "bar";
-
-        Tags expected;
-        expected["highway"] = "primary";
-        expected["name"] = "Midland Expressway";
-        expected["name:en"] = "Midland Expressway";
-        expected["ref"] = "US 24";
-        expected["oneway"] = "yes";
-        expected["lanes"] = "2";
-        expected["alt_name"] = "24;Midland Expy";
-        expected["name:he"] = "מידלנד המהיר";
-        expected["bridge"] = "yes";
-        expected["uuid"] = "foo;bar";
-
-        Tags avg;
-        uut.averageTags(t1, t2, avg);
-        compareTags(expected, avg);
-    }
-
-    {
-        Tags t1;
-        t1["highway"] = "trunk";
-        t1["name"] = "Midland Expressway";
-        t1["name:en"] = "Midland Expressway";
-        t1["ref"] = "US 24";
-        t1["oneway"] = "yes";
-        t1["lanes"] = "2";
-
-        Tags t2;
-        t2["highway"] = "primary";
-        t2["name"] = "Midland Expy";
-        t2["name:en"] = "Midland Expy";
-        t2["ref"] = "24";
-        t2["oneway"] = "true";
-
-        Tags expected;
-        expected["highway"] = "trunk";
-        expected["name"] = "Midland Expressway";
-        expected["name:en"] = "Midland Expressway";
-        expected["ref"] = "US 24";
-        expected["oneway"] = "yes";
-        expected["lanes"] = "2";
-        expected["alt_name"] = "24;Midland Expy";
-
-        Tags avg;
-        uut.averageTags(t1, t2, avg);
-        compareTags(expected, avg);
-    }
-
-    {
-        Tags t1;
-        t1["highway"] = "road";
-        t1["surface"] = "paved";
-
-        Tags t2;
-        t2["highway"] = "primary";
-        t2["surface"] = "asphalt";
-
-        Tags expected;
-        expected["highway"] = "primary";
-        expected["surface"] = "asphalt";
-
-        Tags avg;
-        uut.averageTags(t1, t2, avg);
-        //LOG_WARN("average: \n" << avg.toString());
-        compareTags(expected, avg);
-    }
-
-    {
-        Tags t1;
-        t1["note"] = "b;a;c;c";
-
-        Tags t2;
-        t2["note"] = "a;b;d";
-
-        Tags expected;
-        expected["note"] = "b;a;c;d";
-
-        Tags avg;
-        uut.averageTags(t1, t2, avg);
-        //LOG_WARN("average: \n" << avg.toString());
-        compareTags(expected, avg);
-    }
-  }
-
-  void averageCaseSensitiveTest()
-  {
-    TagComparator& uut = TagComparator::getInstance();
-
-    {
       Tags t1;
       t1["highway"] = "trunk";
       t1["name"] = "Midland Expressway";
@@ -181,59 +74,13 @@ public:
       Tags t2;
       t2["highway"] = "secondary";
       t2["name"] = "Midland Expy";
-      t2["name:en"] = "MIDLAND EXPRESSWAY";
+      t2["name:en"] = "Midland Expressway";
       t2["name:he"] = "מידלנד המהיר";
       t2["ref"] = "24";
       t2["oneway"] = "true";
       t2["bridge"] = "yes";
       t2["uuid"] = "bar";
 
-      //With case sensitivity on, the two name:en tags are considered different from one another.
-      //So, the all caps name goes into alt_name.
-      Tags expected;
-      expected["highway"] = "primary";
-      expected["name"] = "Midland Expressway";
-      expected["name:en"] = "Midland Expressway";
-      expected["ref"] = "US 24";
-      expected["oneway"] = "yes";
-      expected["lanes"] = "2";
-      expected["alt_name"] = "24;MIDLAND EXPRESSWAY;Midland Expy";
-      expected["name:he"] = "מידלנד המהיר";
-      expected["bridge"] = "yes";
-      expected["uuid"] = "foo;bar";
-
-      Tags avg;
-      uut.averageTags(t1, t2, avg);
-      compareTags(expected, avg);
-    }
-  }
-
-  void averageCaseInsensitiveTest()
-  {
-    TagComparator& uut = TagComparator::getInstance();
-
-    {
-      Tags t1;
-      t1["highway"] = "trunk";
-      t1["name"] = "Midland Expressway";
-      t1["name:en"] = "Midland Expressway";
-      t1["ref"] = "US 24";
-      t1["oneway"] = "yes";
-      t1["lanes"] = "2";
-      t1["uuid"] = "foo";
-
-      Tags t2;
-      t2["highway"] = "secondary";
-      t2["name"] = "Midland Expy";
-      t2["name:en"] = "MIDLAND EXPRESSWAY";
-      t2["name:he"] = "מידלנד המהיר";
-      t2["ref"] = "24";
-      t2["oneway"] = "true";
-      t2["bridge"] = "yes";
-      t2["uuid"] = "bar";
-
-      //With case sensitivity off, the two name:en tags are considered the same.  So, the camel
-      //cased one is chosen and the other does not go into alt_name.
       Tags expected;
       expected["highway"] = "primary";
       expected["name"] = "Midland Expressway";
@@ -247,9 +94,156 @@ public:
       expected["uuid"] = "foo;bar";
 
       Tags avg;
-      uut.averageTags(t1, t2, avg, false, false);
+      uut.averageTags(t1, t2, avg);
       compareTags(expected, avg);
-     }
+    }
+
+    {
+      Tags t1;
+      t1["highway"] = "trunk";
+      t1["name"] = "Midland Expressway";
+      t1["name:en"] = "Midland Expressway";
+      t1["ref"] = "US 24";
+      t1["oneway"] = "yes";
+      t1["lanes"] = "2";
+
+      Tags t2;
+      t2["highway"] = "primary";
+      t2["name"] = "Midland Expy";
+      t2["name:en"] = "Midland Expy";
+      t2["ref"] = "24";
+      t2["oneway"] = "true";
+
+      Tags expected;
+      expected["highway"] = "trunk";
+      expected["name"] = "Midland Expressway";
+      expected["name:en"] = "Midland Expressway";
+      expected["ref"] = "US 24";
+      expected["oneway"] = "yes";
+      expected["lanes"] = "2";
+      expected["alt_name"] = "24;Midland Expy";
+
+      Tags avg;
+      uut.averageTags(t1, t2, avg);
+      compareTags(expected, avg);
+    }
+
+    {
+      Tags t1;
+      t1["highway"] = "road";
+      t1["surface"] = "paved";
+
+      Tags t2;
+      t2["highway"] = "primary";
+      t2["surface"] = "asphalt";
+
+      Tags expected;
+      expected["highway"] = "primary";
+      expected["surface"] = "asphalt";
+
+      Tags avg;
+      uut.averageTags(t1, t2, avg);
+      //LOG_WARN("average: \n" << avg.toString());
+      compareTags(expected, avg);
+    }
+
+    {
+      Tags t1;
+      t1["note"] = "b;a;c;c";
+
+      Tags t2;
+      t2["note"] = "a;b;d";
+
+      Tags expected;
+      expected["note"] = "b;a;c;d";
+
+      Tags avg;
+      uut.averageTags(t1, t2, avg);
+      //LOG_WARN("average: \n" << avg.toString());
+      compareTags(expected, avg);
+    }
+  }
+
+  void averageCaseSensitiveTest()
+  {
+    TagComparator& uut = TagComparator::getInstance();
+    Tags t1;
+    t1["highway"] = "trunk";
+    t1["name"] = "Midland Expressway";
+    t1["name:en"] = "Midland Expressway";
+    t1["ref"] = "US 24";
+    t1["oneway"] = "yes";
+    t1["lanes"] = "2";
+    t1["uuid"] = "foo";
+
+    Tags t2;
+    t2["highway"] = "secondary";
+    t2["name"] = "Midland Expy";
+    t2["name:en"] = "MIDLAND EXPRESSWAY";
+    t2["name:he"] = "מידלנד המהיר";
+    t2["ref"] = "24";
+    t2["oneway"] = "true";
+    t2["bridge"] = "yes";
+    t2["uuid"] = "bar";
+
+    //With case sensitivity on, the two name:en tags are considered different from one another.
+    //So, the all caps name goes into alt_name.
+    Tags expected;
+    expected["highway"] = "primary";
+    expected["name"] = "Midland Expressway";
+    expected["name:en"] = "Midland Expressway";
+    expected["ref"] = "US 24";
+    expected["oneway"] = "yes";
+    expected["lanes"] = "2";
+    expected["alt_name"] = "24;MIDLAND EXPRESSWAY;Midland Expy";
+    expected["name:he"] = "מידלנד המהיר";
+    expected["bridge"] = "yes";
+    expected["uuid"] = "foo;bar";
+
+    Tags avg;
+    uut.averageTags(t1, t2, avg);
+    compareTags(expected, avg);
+  }
+
+  void averageCaseInsensitiveTest()
+  {
+    TagComparator& uut = TagComparator::getInstance();
+    Tags t1;
+    t1["highway"] = "trunk";
+    t1["name"] = "Midland Expressway";
+    t1["name:en"] = "Midland Expressway";
+    t1["ref"] = "US 24";
+    t1["oneway"] = "yes";
+    t1["lanes"] = "2";
+    t1["uuid"] = "foo";
+
+    Tags t2;
+    t2["highway"] = "secondary";
+    t2["name"] = "Midland Expy";
+    t2["name:en"] = "MIDLAND EXPRESSWAY";
+    t2["name:he"] = "מידלנד המהיר";
+    t2["ref"] = "24";
+    t2["oneway"] = "true";
+    t2["bridge"] = "yes";
+    t2["uuid"] = "bar";
+
+    //With case sensitivity off, the two name:en tags are considered the same.  So, the camel
+    //cased one is chosen and the other does not go into alt_name.
+    Tags expected;
+    expected["highway"] = "primary";
+    expected["name"] = "Midland Expressway";
+    expected["name:en"] = "Midland Expressway";
+    expected["ref"] = "US 24";
+    expected["oneway"] = "yes";
+    expected["lanes"] = "2";
+    expected["alt_name"] = "24;Midland Expy";
+    expected["name:he"] = "מידלנד המהיר";
+    expected["bridge"] = "yes";
+    expected["uuid"] = "foo;bar";
+
+    Tags avg;
+    uut.averageTags(t1, t2, avg, false, false);
+    compareTags(expected, avg);
   }
 
   void buildingTest()
@@ -304,7 +298,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
     }
 
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+    for (auto it = t1.begin(); it != t1.end(); ++it)
     {
       if (t1[it.key()] != t2[it.key()])
       {
@@ -490,125 +484,6 @@ public:
     TagComparator& uut = TagComparator::getInstance();
 
     {
-        Tags t1;
-        t1["name"] = "foo";
-        t1["lala"] = "1;2";
-        t1["building"] = "yes";
-        t1["uid"] = "123";
-
-        Tags t2;
-        t2["name"] = "bar";
-        t2["lala"] = "2;1";
-        t2["building"] = "yes";
-        t2["uid"] = "456";
-
-        Tags expected;
-        expected["name"] = "foo";
-        expected["alt_name"] = "bar";
-        expected["lala"] = "1;2";
-        expected["uid"] = "123;456";
-        expected["building"] = "yes";
-
-        Tags gen = uut.generalize(t1, t2);
-        compareTags(expected, gen);
-    }
-
-    {
-        Tags t1;
-        t1["highway"] = "trunk";
-        t1["name"] = "Midland Expressway";
-        t1["name:en"] = "Midland Expressway";
-        t1["ref"] = "US 24";
-        t1["oneway"] = "yes";
-        t1["lanes"] = "2";
-
-        Tags t2;
-        t2["highway"] = "secondary";
-        t2["name"] = "Midland Expy";
-        t2["name:en"] = "Midland Expressway";
-        t2["name:he"] = "מידלנד המהיר";
-        t2["ref"] = "24";
-        t2["oneway"] = "true";
-        t2["bridge"] = "yes";
-
-        Tags expected;
-        expected["highway"] = "road";
-        expected["name"] = "Midland Expressway";
-        expected["name:en"] = "Midland Expressway";
-        expected["ref"] = "US 24";
-        expected["oneway"] = "yes";
-        expected["lanes"] = "2";
-        expected["alt_name"] = "24;Midland Expy";
-        expected["name:he"] = "מידלנד המהיר";
-        expected["bridge"] = "yes";
-
-        Tags gen = uut.generalize(t1, t2);
-        compareTags(expected, gen);
-    }
-
-    {
-        Tags t1;
-        t1["highway"] = "road";
-        t1["surface"] = "paved";
-
-        Tags t2;
-        t2["highway"] = "primary";
-        t2["surface"] = "asphalt";
-
-        Tags expected;
-        expected["highway"] = "road";
-        expected["surface"] = "paved";
-
-        Tags gen = uut.generalize(t1, t2);
-        compareTags(expected, gen);
-    }
-
-    {
-        Tags t1;
-        t1["building"] = "residential";
-        t1[MetadataTags::Ref1()] = "foo";
-
-        Tags t2;
-        t2["building"] = "no";
-        t2[MetadataTags::Ref1()] = "bar";
-
-        Tags expected;
-        expected[MetadataTags::Ref1()] = "foo;bar";
-
-        Tags gen = uut.generalize(t1, t2);
-        compareTags(expected, gen);
-    }
-
-    {
-        Tags t1;
-        t1["name"] = "foo";
-        t1["alt_name"] = "baz";
-        t1["name:en"] = "enfoo";
-        t1["note"] = "foo";
-
-        Tags t2;
-        t2["name"] = "bar";
-        t2["alt_name"] = "qux;quux";
-        t2["name:en"] = "enbar";
-        t2["note"] = "bar";
-
-        Tags expected;
-        // building is dropped due to conflict
-        expected["name"] = "foo";
-        expected["alt_name"] = "bar;baz;enbar;quux;qux";
-        expected["name:en"] = "enfoo";
-        expected["note"] = "foo;bar";
-
-        Tags gen = uut.generalize(t1, t2);
-        compareTags(expected, gen);
-    }
-  }
-
-  void generalizeCaseSensitiveTest()
-  {
-    TagComparator& uut = TagComparator::getInstance();
-
-    {
       Tags t1;
       t1["name"] = "foo";
       t1["lala"] = "1;2";
@@ -616,16 +491,14 @@ public:
       t1["uid"] = "123";
 
       Tags t2;
-      t2["name"] = "FOO";
+      t2["name"] = "bar";
       t2["lala"] = "2;1";
       t2["building"] = "yes";
       t2["uid"] = "456";
 
-      //With case sensitivity on, the two name tags are considered different from one another.
-      //So, the all caps name goes into alt_name.
       Tags expected;
       expected["name"] = "foo";
-      expected["alt_name"] = "FOO";
+      expected["alt_name"] = "bar";
       expected["lala"] = "1;2";
       expected["uid"] = "123;456";
       expected["building"] = "yes";
@@ -633,36 +506,151 @@ public:
       Tags gen = uut.generalize(t1, t2);
       compareTags(expected, gen);
     }
+
+    {
+      Tags t1;
+      t1["highway"] = "trunk";
+      t1["name"] = "Midland Expressway";
+      t1["name:en"] = "Midland Expressway";
+      t1["ref"] = "US 24";
+      t1["oneway"] = "yes";
+      t1["lanes"] = "2";
+
+      Tags t2;
+      t2["highway"] = "secondary";
+      t2["name"] = "Midland Expy";
+      t2["name:en"] = "Midland Expressway";
+      t2["name:he"] = "מידלנד המהיר";
+      t2["ref"] = "24";
+      t2["oneway"] = "true";
+      t2["bridge"] = "yes";
+
+      Tags expected;
+      expected["highway"] = "road";
+      expected["name"] = "Midland Expressway";
+      expected["name:en"] = "Midland Expressway";
+      expected["ref"] = "US 24";
+      expected["oneway"] = "yes";
+      expected["lanes"] = "2";
+      expected["alt_name"] = "24;Midland Expy";
+      expected["name:he"] = "מידלנד המהיר";
+      expected["bridge"] = "yes";
+
+      Tags gen = uut.generalize(t1, t2);
+      compareTags(expected, gen);
+    }
+
+    {
+      Tags t1;
+      t1["highway"] = "road";
+      t1["surface"] = "paved";
+
+      Tags t2;
+      t2["highway"] = "primary";
+      t2["surface"] = "asphalt";
+
+      Tags expected;
+      expected["highway"] = "road";
+      expected["surface"] = "paved";
+
+      Tags gen = uut.generalize(t1, t2);
+      compareTags(expected, gen);
+    }
+
+    {
+      Tags t1;
+      t1["building"] = "residential";
+      t1[MetadataTags::Ref1()] = "foo";
+
+      Tags t2;
+      t2["building"] = "no";
+      t2[MetadataTags::Ref1()] = "bar";
+
+      Tags expected;
+      expected[MetadataTags::Ref1()] = "foo;bar";
+
+      Tags gen = uut.generalize(t1, t2);
+      compareTags(expected, gen);
+    }
+
+    {
+      Tags t1;
+      t1["name"] = "foo";
+      t1["alt_name"] = "baz";
+      t1["name:en"] = "enfoo";
+      t1["note"] = "foo";
+
+      Tags t2;
+      t2["name"] = "bar";
+      t2["alt_name"] = "qux;quux";
+      t2["name:en"] = "enbar";
+      t2["note"] = "bar";
+
+      Tags expected;
+      // building is dropped due to conflict
+      expected["name"] = "foo";
+      expected["alt_name"] = "bar;baz;enbar;quux;qux";
+      expected["name:en"] = "enfoo";
+      expected["note"] = "foo;bar";
+
+      Tags gen = uut.generalize(t1, t2);
+      compareTags(expected, gen);
+    }
+  }
+
+  void generalizeCaseSensitiveTest()
+  {
+    TagComparator& uut = TagComparator::getInstance();
+    Tags t1;
+    t1["name"] = "foo";
+    t1["lala"] = "1;2";
+    t1["building"] = "yes";
+    t1["uid"] = "123";
+
+    Tags t2;
+    t2["name"] = "FOO";
+    t2["lala"] = "2;1";
+    t2["building"] = "yes";
+    t2["uid"] = "456";
+
+    //With case sensitivity on, the two name tags are considered different from one another.
+    //So, the all caps name goes into alt_name.
+    Tags expected;
+    expected["name"] = "foo";
+    expected["alt_name"] = "FOO";
+    expected["lala"] = "1;2";
+    expected["uid"] = "123;456";
+    expected["building"] = "yes";
+
+    Tags gen = uut.generalize(t1, t2);
+    compareTags(expected, gen);
   }
 
   void generalizeCaseInsensitiveTest()
   {
     TagComparator& uut = TagComparator::getInstance();
+    Tags t1;
+    t1["name"] = "foo";
+    t1["lala"] = "1;2";
+    t1["building"] = "yes";
+    t1["uid"] = "123";
 
-    {
-      Tags t1;
-      t1["name"] = "foo";
-      t1["lala"] = "1;2";
-      t1["building"] = "yes";
-      t1["uid"] = "123";
+    Tags t2;
+    t2["name"] = "FOO";
+    t2["lala"] = "2;1";
+    t2["building"] = "yes";
+    t2["uid"] = "456";
 
-      Tags t2;
-      t2["name"] = "FOO";
-      t2["lala"] = "2;1";
-      t2["building"] = "yes";
-      t2["uid"] = "456";
+    //With case sensitivity off, the two name tags are considered different from each other.  So,
+    //the lower cased one is chosen and the other does not go into alt_name.
+    Tags expected;
+    expected["name"] = "foo";
+    expected["lala"] = "1;2";
+    expected["uid"] = "123;456";
+    expected["building"] = "yes";
 
-      //With case sensitivity off, the two name tags are considered different from each other.  So,
-      //the lower cased one is chosen and the other does not go into alt_name.
-      Tags expected;
-      expected["name"] = "foo";
-      expected["lala"] = "1;2";
-      expected["uid"] = "123;456";
-      expected["building"] = "yes";
-
-      Tags gen = uut.generalize(t1, t2, false, false);
-      compareTags(expected, gen);
-    }
+    Tags gen = uut.generalize(t1, t2, false, false);
+    compareTags(expected, gen);
   }
 
   /**
@@ -703,12 +691,10 @@ public:
 
     TextTable::Data data;
 
-    for (size_t i = 0; i < buses.size(); i++)
+    for (const auto& t1 : buses)
     {
-      for (size_t j = 0; j < railways.size(); j++)
+      for (const auto& t2 : railways)
       {
-        Tags t1 = buses[i];
-        Tags t2 = railways[j];
         QString s1 = toString(t1).trimmed();
         QString s2 = toString(t2).trimmed();
         data[s1][s2] = uut.compareTags(t1, t2);
@@ -717,12 +703,10 @@ public:
       }
     }
 
-    for (size_t i = 0; i < buses.size(); i++)
+    for (const auto& t1 : buses)
     {
-      for (size_t j = 0; j < buses.size(); j++)
+      for (const auto& t2 : buses)
       {
-        Tags t1 = buses[i];
-        Tags t2 = buses[j];
         QString s1 = toString(t1).trimmed();
         QString s2 = toString(t2).trimmed();
         data[s1][s2] = uut.compareTags(t1, t2);
@@ -730,13 +714,11 @@ public:
       }
     }
 
-    for (size_t i = 0; i < railways.size(); i++)
+    for (const auto& t1 : railways)
     {
-      for (size_t j = 0; j < railways.size(); j++)
+      for (const auto& t2 : railways)
       {
-        Tags t1 = railways[i];
-        Tags t2 = railways[j];
-        QString s1 = toString(t1).trimmed();
+       QString s1 = toString(t1).trimmed();
         QString s2 = toString(t2).trimmed();
         data[s1][s2] = uut.compareTags(t1, t2);
         //LOG_VAR(uut.compareTags(buses[i], railways[i]));

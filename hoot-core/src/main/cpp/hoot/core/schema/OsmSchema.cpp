@@ -29,8 +29,8 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/filtered_graph.hpp>
-#include <boost/graph/graph_utility.hpp>
 #include <boost/graph/graph_traits.hpp>
+#include <boost/graph/graph_utility.hpp>
 #include <boost/graph/properties.hpp>
 #if HOOT_HAVE_BOOST_PROPERTY_MAP_PROPERTY_MAP_HPP
 # include <boost/property_map/property_map.hpp>
@@ -90,11 +90,11 @@ const SchemaVertex empty;
 struct AverageKey
 {
   AverageKey(VertexId vid1, double w1, VertexId vid2, double w2)
+    : vid1(vid1),
+      w1(w1),
+      vid2(vid2),
+      w2(w2)
   {
-    this->vid1 = vid1;
-    this->w1 = w1;
-    this->vid2 = vid2;
-    this->w2 = w2;
   }
 
   VertexId vid1;
@@ -137,9 +137,9 @@ struct AverageResult
   AverageResult() = default;
 
   AverageResult(VertexId vid, double score)
+    : vid(vid),
+      score(score)
   {
-    this->vid = vid;
-    this->score = score;
   }
 
   VertexId vid;
@@ -152,7 +152,7 @@ public:
 
   SimilarToOnly() : _graph(nullptr) { }
 
-  SimilarToOnly(TagGraph& graph) : _graph(&graph) { }
+  SimilarToOnly(const TagGraph& graph) : _graph(&graph) { }
 
   bool operator()(const EdgeId& edge_id) const
   {
@@ -162,32 +162,30 @@ public:
 
 private:
 
-  TagGraph* _graph;
+  const TagGraph* _graph;
 };
 
 class VertexNameComparator
 {
 public:
 
-  VertexNameComparator(const TagGraph& graph) : _graph(graph) { }
+  VertexNameComparator(const TagGraph& graph) : _graph(&graph) { }
 
   bool operator() (VertexId v1, VertexId v2) const
   {
-    return _graph[v1].getName() < _graph[v2].getName();
+    return (*_graph)[v1].getName() < (*_graph)[v2].getName();
   }
 
 private:
 
-  const TagGraph _graph;
+  const TagGraph* _graph;
 };
 
 OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList& s)
 {
   OsmSchemaCategory result;
-  for (int i = 0; i < s.size(); i++)
-  {
-    result = fromString(s[i]) | result;
-  }
+  for (const auto& str : s)
+    result = fromString(str) | result;
 
   return result;
 }
@@ -220,10 +218,10 @@ class OsmSchemaData
 {
 public:
 
-  OsmSchemaData() :
-  _logWarnCount(0)
+  OsmSchemaData()
+    : _isACost(1.0),
+      _logWarnCount(0)
   {
-    _isACost = 1.0;
   }
 
   EdgeId addIsA(QString name1, QString name2)
@@ -244,7 +242,7 @@ public:
   }
 
   pair<EdgeId, EdgeId> addSimilarTo(QString name1, QString name2, double weight,
-    bool oneway = false)
+                                    bool oneway = false)
   {
     TagEdge similarTo;
     similarTo.similarToWeight = weight;
@@ -257,9 +255,8 @@ public:
     EdgeId e1 = add_edge(vid1, vid2, similarTo, _graph).first;
     EdgeId e2;
     if (oneway == false)
-    {
       e2 = add_edge(vid2, vid1, similarTo, _graph).first;
-    }
+
     return pair<EdgeId, EdgeId>(e1, e2);
   }
 
@@ -289,13 +286,9 @@ public:
       result = kvp1;
     }
     else if (kvpNormalized2.endsWith("*"))
-    {
       result = kvp1;
-    }
     else if (kvpNormalized1.endsWith("*"))
-    {
       result = kvp2;
-    }
     else
     {
       VertexId vid1 = _name2Vertex[kvpNormalized1];
@@ -434,9 +427,7 @@ public:
   {
     VertexId vid;
     if (_name2Vertex.contains(str))
-    {
       vid = _name2Vertex[str];
-    }
     else
     {
       SchemaVertex v;
@@ -454,12 +445,8 @@ public:
     vector<SchemaVertex> result;
 
     result.reserve(_name2Vertex.size());
-    for (QHash<QString, VertexId>::const_iterator it = _name2Vertex.begin();
-      it != _name2Vertex.end(); ++it)
-    {
+    for (auto it = _name2Vertex.begin(); it != _name2Vertex.end(); ++it)
       result.push_back(_graph[it.value()]);
-    }
-
     return result;
   }
 
@@ -467,11 +454,8 @@ public:
   {
     QSet<QString> result;
     result.reserve(_name2Vertex.size());
-    for (QHash<QString, VertexId>::const_iterator it = _name2Vertex.begin();
-      it != _name2Vertex.end(); ++it)
-    {
+    for (auto it = _name2Vertex.begin(); it != _name2Vertex.end(); ++it)
       result.insert(it.key());
-    }
     return result;
   }
 
@@ -482,10 +466,8 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
-    {
-      result.push_back(_graph[*it]);
-    }
+    for (const auto& id : vids)
+      result.push_back(_graph[id]);
 
     return result;
   }
@@ -497,20 +479,16 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
-    {
-      result.push_back(_graph[*it]);
-    }
-
+    for (const auto& id : vids)
+      result.push_back(_graph[id]);
     return result;
   }
 
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
   {
     if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp2))
-    {
       return empty;
-    }
+
     VertexId v1 = _name2Vertex[kvp1];
     VertexId v2 = _name2Vertex[kvp2];
     VertexId v1Ancestor = v1;
@@ -518,12 +496,9 @@ public:
     while (_isValid(v1Ancestor))
     {
       if (v1Ancestor == v2 || _isAncestor(v2, v1Ancestor))
-      {
         return _graph[v1Ancestor];
-      }
       v1Ancestor = _getParent(v1Ancestor);
     }
-
     return empty;
   }
 
@@ -538,14 +513,9 @@ public:
     QString result;
     int index = kvp.indexOf('=');
     if (index == -1)
-    {
       result = kvp;
-    }
     else
-    {
       result = kvp.left(index);
-    }
-
     return result;
   }
 
@@ -556,11 +526,8 @@ public:
     vector<VertexId> vids = _getVertexIds(tags);
 
     // go through each compound vertex found and evaluate it for match against tags.
-    for (size_t i = 0; i < vids.size(); ++i)
-    {
-      result.push_back(_graph[vids[i]]);
-    }
-
+    for (const auto& id : vids)
+      result.emplace_back(_graph[id]);
     return result;
   }
 
@@ -583,16 +550,13 @@ public:
       {
         const vector<pair<VertexId, double>>& similars = _vertexToScoresCache[id1];
 
-        for (size_t i = 0; i < similars.size(); i++)
+        for (const auto& similar : similars)
         {
-          if (similars[i].second >= minimumScore)
-          {
-            result.push_back(_graph[similars[i].first]);
-          }
+          if (similar.second >= minimumScore)
+            result.push_back(_graph[similar.first]);
         }
       }
     }
-
     return result;
   }
 
@@ -605,11 +569,8 @@ public:
     {
       const SchemaVertex& tv = _graph[*vi];
       if (OsmSchemaCategory::fromStringList(tv.getCategories()).contains(c))
-      {
         result.push_back(tv);
-      }
     }
-
     return result;
   }
 
@@ -625,11 +586,8 @@ public:
       LOG_VART(v);
       LOG_VART(v.getType());
       if (v.getType() == SchemaVertex::Tag)
-      {
         return v;
-      }
     }
-
     return empty;
   }
 
@@ -641,11 +599,8 @@ public:
     vids = _removeAncestorVertices(vids);
 
     // go through each compound vertex found and evaluate it for match against tags.
-    for (size_t i = 0; i < vids.size(); ++i)
-    {
-      result.push_back(_graph[vids[i]]);
-    }
-
+    for (const auto& id : vids)
+      result.push_back(_graph[id]);
     return result;
   }
 
@@ -668,9 +623,7 @@ public:
         _isAncestorCache[key] = result;
       }
       else
-      {
         result = it->second;
-      }
     }
     return result;
   }
@@ -685,10 +638,7 @@ public:
   {
     QString result = _normalizeEnumeratedKvp(kvp);
     if (result.isEmpty())
-    {
       result = _normalizeEnumeratedKvp(kvp.toLower());
-    }
-
     return result;
   }
 
@@ -696,10 +646,7 @@ public:
   {
     QString result = _normalizeKvp(kvp);
     if (result.isEmpty())
-    {
       result = _normalizeKvp(kvp.toLower());
-    }
-
     return result;
   }
 
@@ -728,13 +675,9 @@ public:
       pair<VertexId, VertexId> key(id1, id2);
 
       if (_cachedScores.find(key) != _cachedScores.end())
-      {
         result = _cachedScores[key];
-      }
       else
-      {
         result = 0.0;
-      }
       LOG_VART(result);
 
       if (id1 == id2 && kvp1 != kvp2)
@@ -742,18 +685,12 @@ public:
         // if this is a enumerated wild card match, but the values are different then use the
         // mismatch score. E.g. addr:housenumber=12 vs. addr:housenumber=56
         if (kvpn1.endsWith("=*"))
-        {
           result = getTagVertex(kvpn1).getMismatchScore();
-        }
-        // if this is an alias match
-        else
-        {
+        else  // if this is an alias match
           result = 1.0;
-        }
       }
       LOG_VART(result);
     }
-
     return result;
   }
 
@@ -764,11 +701,8 @@ public:
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       if (_graph[*ei].type == IsA)
-      {
         _graph[*ei].similarToWeight = cost;
-      }
     }
-
     _processed.clear();
     _cachedScores.clear();
     _cachedAverages.clear();
@@ -783,31 +717,22 @@ public:
 
     result += "digraph structs {\n";
 
-    QList<VertexId> orderedVertexes;
-    QMap<size_t, VertexId> vertexIndex;
+    vector<VertexId> orderedVertices;
 
     boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
-    {
-      orderedVertexes.push_back(*vi);
-    }
-
+      orderedVertices.push_back(*vi);
     VertexNameComparator vnc(_graph);
-    qSort(orderedVertexes.begin(), orderedVertexes.end(), vnc);
-
-    for (int i = 0; i < orderedVertexes.size(); i++)
+    sort(orderedVertices.begin(), orderedVertices.end(), vnc);
+    for (const auto& vid : orderedVertices)
     {
-      VertexId vid = orderedVertexes[i];
       QString label = _graph[vid].getName();
       QString vStr = QString("\"%1\"").arg(label);
-      vertexIndex[vid] = i;
 
       label = label.replace("{", "\\}").replace("}", "\\}");
       if (_graph[vid].getChildWeight() > 0)
-      {
         label = QString("%1\\nchildWeight = %2").arg(label).arg(_graph[vid].getChildWeight());
-      }
-      result += QString("  %1 [shape=record,label=\"%2\"];\n").arg(vStr).arg(label);
+      result += QString("  %1 [shape=record,label=\"%2\"];\n").arg(vStr, label);
     }
 
     result += "\n";
@@ -822,15 +747,10 @@ public:
       VertexId trg = target(*ei, _graph);
 
       if (_graph[trg].getName() == _graph[src].getName())
-      {
-        throw IllegalArgumentException("Unexpected vertices with the same name. " +
-          _graph[src].getName());
-      }
+        throw IllegalArgumentException("Unexpected vertices with the same name. " + _graph[src].getName());
 
       if (_graph[trg].getName() < _graph[src].getName())
-      {
         swap(src, trg);
-      }
 
       pair<VertexId, VertexId> p(src, trg);
 
@@ -842,7 +762,7 @@ public:
         // only show is a relationships for legit tags. No need w/ things like "amenity" or "poi",
         // it just clutters the graph.
         if (_graph[*ei].type == IsA &&
-          (_graph[src].getName().contains("=") && _graph[trg].getName().contains("=")))
+           (_graph[src].getName().contains("=") && _graph[trg].getName().contains("=")))
         {
           orderedEdges.push_back(
             QString("\"%1\" -> \"%2\" [arrowhead=normal,color=blue2,weight=1,label=\"%3\"];\n").
@@ -1019,9 +939,7 @@ private:
       // cache the score between vd and vi in another structure that is more efficient for other
       // query types.
       if (d[*vi] > 0.0)
-      {
         _vertexToScoresCache[vd].push_back(pair<VertexId, double>(*vi, d[*vi]));
-      }
     }
   }
 
@@ -1073,31 +991,24 @@ private:
 
     HashMap<VertexId, VertexId>::const_iterator it = _parents.find(child);
     if (it != _parents.end())
-    {
       result = it->second;
-    }
-
     return result;
   }
 
   vector<VertexId> _getVertexIds(const Tags& tags) const
   {
     vector<VertexId> result;
-
     set<VertexId> compoundTags;
 
     // go through each of the tags and look for the tag vertex.
     for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
       QString n = normalizeKvp(OsmSchema::toKvp(it.key(), it.value()));
-
       // find each compound vertex linked from a tag vertex and put into a set.
       if (_name2Vertex.contains(n))
       {
         VertexId vid = _name2Vertex[n];
-
         _findPotentialCompoundTags(vid, compoundTags);
-
         result.push_back(vid);
       }
     }
@@ -1106,15 +1017,10 @@ private:
     for (set<VertexId>::const_iterator it = compoundTags.begin(); it != compoundTags.end(); ++it)
     {
       VertexId compoundTagId = *it;
-
       const SchemaVertex& sv = _graph[compoundTagId];
-
       if (sv.isCompoundMatch(tags))
-      {
         result.push_back(compoundTagId);
-      }
     }
-
     return result;
   }
 
@@ -1124,19 +1030,12 @@ private:
   bool _isAncestor(VertexId child, VertexId ancestor) const
   {
     VertexId parent = _getParent(child);
-
     if (_isValid(parent) == false)
-    {
       return false;
-    }
     else if (parent == ancestor)
-    {
       return true;
-    }
     else
-    {
       return _isAncestor(parent, ancestor);
-    }
   }
 
   bool _isValid(VertexId vid) const
@@ -1148,20 +1047,14 @@ private:
   {
     static QString equalStar = "=*";
     if (_name2Vertex.contains(kvp))
-    {
       return kvp;
-    }
     else
     {
       QString newKvp = getKey(kvp) + equalStar;
       if (_name2Vertex.contains(newKvp))
-      {
         return newKvp;
-      }
       else
-      {
         return QString();
-      }
     }
   }
 
@@ -1169,30 +1062,21 @@ private:
   {
     QString key = getKey(kvp);
     if (_name2Vertex.contains(kvp))
-    {
       return kvp;
-    }
     else if (_name2Vertex.contains(key + "=*"))
-    {
       return getKey(kvp) + "=*";
-    }
     else if (_name2Vertex.contains(key))
     {
       const SchemaVertex& v = _graph[_name2Vertex[key]];
       if (v.getValueType() == Text || v.getValueType() == Int)
-      {
         return key;
-      }
       else
-      {
         return QString();
-      }
     }
     else
     {
       // check to see if any of the regular expressions match
-      for (QList<pair<QRegExp, VertexId>>::const_iterator it = _regexKeys.begin();
-           it != _regexKeys.end(); ++it)
+      for (auto it = _regexKeys.begin(); it != _regexKeys.end(); ++it)
       {
         const QRegExp& re = it->first;
         if (re.exactMatch(key))
@@ -1201,7 +1085,6 @@ private:
           return _graph[vid].getKey();
         }
       }
-
       return QString();
     }
   }
@@ -1215,9 +1098,9 @@ private:
       {
         set<VertexId> children;
         _getChildTags(*vi, children);
-        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); ++it)
+        for (const auto& id : children)
         {
-          pair<EdgeId, EdgeId> p = addSimilarTo(_graph[*it].getName(), _graph[*vi].getName(),
+          pair<EdgeId, EdgeId> p = addSimilarTo(_graph[id].getName(), _graph[*vi].getName(),
                                                 _graph[*vi].getChildWeight());
           _graph[p.first].show = false;
           _graph[p.second].show = false;
@@ -1246,17 +1129,11 @@ private:
       for (size_t j = 0; j < vid.size() && aAncestor == false; ++j)
       {
         if (i != j && _isAncestor(vid[j], vid[i]))
-        {
           aAncestor = true;
-        }
       }
-
       if (!aAncestor)
-      {
         result.push_back(vid[i]);
-      }
     }
-
     return result;
   }
 
@@ -1268,31 +1145,19 @@ private:
     {
       _updateInheritance(parent);
       const SchemaVertex& parentTv = _graph[parent];
-
       if (childTv.getGeometries() == 0)
-      {
         childTv.setGeometries(parentTv.getGeometries());
-      }
       if (childTv.getInfluence() == -1.0)
-      {
         childTv.setInfluence(parentTv.getInfluence());
-      }
       if (childTv.getValueType() == Unknown)
-      {
         childTv.setValueType(parentTv.getValueType());
-      }
       if (childTv.getMismatchScore() == -1.0)
-      {
         childTv.setMismatchScore(parentTv.getMismatchScore());
-      }
       // add any categories that are assigned to the parent to the child.
-      for (int i = 0; i < parentTv.getCategories().size(); i++)
+      for (const auto& c : parentTv.getCategories())
       {
-        QString c = parentTv.getCategories()[i];
         if (childTv.getCategories().contains(c) == false)
-        {
           childTv.addCategory(c);
-        }
       }
     }
     else
@@ -1333,9 +1198,7 @@ private:
     if (v.getName().startsWith("regex?"))
     {
       if (v.getType() == SchemaVertex::Compound)
-      {
         throw HootException("Compound tags can not have regex names.");
-      }
       QRegExp re(v.getName().mid(6));
       _regexKeys.append(pair<QRegExp, VertexId>(re, vid));
     }
@@ -1344,30 +1207,26 @@ private:
     if (v.getType() == SchemaVertex::Compound)
     {
       SchemaVertex::CompoundRuleList rules = v.getCompoundRules();
-      for (int i = 0; i < rules.size(); ++i)
+      for (const auto& r : rules)
       {
-        SchemaVertex::CompoundRule r = rules[i];
-        for (int j = 0; j < r.size(); ++j)
+        for (const auto& p : r)
         {
-          KeyValuePairPtr p = r[j];
           if (_name2CompoundVertex.contains(p->getName(), vid) == false)
-          {
             _name2CompoundVertex.insert(p->getName(), vid);
-          }
         }
       }
     }
 
     // add in the list of aliases.
-    for (int i = 0; i < v.getAliases().size(); i++)
+    for (const auto& alias : v.getAliases())
     {
-      if (_name2Vertex.contains(v.getAliases()[i]))
+      if (_name2Vertex.contains(alias))
       {
         throw HootException(QString("Alias is being used multiple times. Please only reference an "
           "alias once or use the base tag. (offending tag: %1, offending alias: %2)").
-          arg(v.getName()).arg(v.getAliases()[i]));
+          arg(v.getName(), alias));
       }
-      _name2Vertex[v.getAliases()[i]] = vid;
+      _name2Vertex[alias] = vid;
     }
 
     return vid;
@@ -1376,8 +1235,8 @@ private:
 
 std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 
-OsmSchema::OsmSchema() :
-_d(std::make_shared<OsmSchemaData>())
+OsmSchema::OsmSchema()
+  : _d(std::make_shared<OsmSchemaData>())
 {
 }
 
@@ -1391,8 +1250,7 @@ void OsmSchema::addIsA(const QString& name1, const QString& name2) const
   _d->addIsA(name1, name2);
 }
 
-void OsmSchema::addSimilarTo(
-  const QString& name1, const QString& name2, double weight, bool oneway) const
+void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway) const
 {
   _d->addSimilarTo(name1, name2, weight, oneway);
 }
@@ -1421,9 +1279,7 @@ vector<SchemaVertex> OsmSchema::getAllTags() const
 QSet<QString> OsmSchema::getAllTagKeys()
 {
   if (_allTagKeysCache.isEmpty())
-  {
     _allTagKeysCache = _d->getAllTagKeys();
-  }
   return _allTagKeysCache;
 }
 
@@ -1432,17 +1288,13 @@ QSet<QString> OsmSchema::getAllTypeKeys()
   if (_allTypeKeysCache.isEmpty())
   {  
     QSet<QString> allTypeKeysCacheTemp = _d->getAllTagKeys();
-    for (QSet<QString>::const_iterator typeKeyItr = allTypeKeysCacheTemp.constBegin();
-         typeKeyItr != allTypeKeysCacheTemp.constEnd(); ++typeKeyItr)
+    for (const auto& typeKey : allTypeKeysCacheTemp)
     {
-      const QString typeKey = *typeKeyItr;
       // All we care about for type comparison are tags of schema type "tag". We definitely don't
       // care about metadata tags, but its possible we may care about some text or numeric tags
       // at some point.
       if (!isMetaData(typeKey, "") && !isTextTag(typeKey) && !isNumericTag(typeKey))
-      {
         _allTypeKeysCache.insert(typeKey);
-      }
     }
     //LOG_VART(_allTypeKeysCache);
   }
@@ -1457,22 +1309,18 @@ bool OsmSchema::hasTagKey(const QString& key)
 Tags OsmSchema::getAssociatedTags(const Tags& tags)
 {
   Tags tagsToReturn;
-  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
-       ++inputTagItr)
+  for (auto inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd(); ++inputTagItr)
   {
     const Tags childTags =
       Tags::schemaVerticesToTags(
         getAssociatedTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
-    for (Tags::const_iterator childTagItr = childTags.constBegin();
-         childTagItr != childTags.constEnd(); ++childTagItr)
+    for (auto childTagItr = childTags.constBegin(); childTagItr != childTags.constEnd(); ++childTagItr)
     {
       QString val = childTagItr.value().trimmed();
       // Associated tags are just returned as keys, so this is being added to the value to alleviate
       // callers that expect non-empty values.
       if (val.isEmpty())
-      {
         val = "*";
-      }
       tagsToReturn.appendValue(childTagItr.key(), val);
     }
   }
@@ -1489,15 +1337,12 @@ OsmSchemaCategory OsmSchema::getCategories(const Tags& t) const
   OsmSchemaCategory result;
 
   // if at least one tag has the specified category then return true
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  for (auto it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = getTagVertex(toKvp(it.key(), it.value()));
-    for (int i = 0; i < tv.getCategories().size(); i++)
-    {
-      result = result | OsmSchemaCategory::fromString(tv.getCategories()[i]);
-    }
+    for (const auto& category : tv.getCategories())
+      result = result | OsmSchemaCategory::fromString(category);
   }
-
   return result;
 }
 
@@ -1509,13 +1354,9 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& k, const QString& v) c
 OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
 {
   OsmSchemaCategory result;
-
   const SchemaVertex& tv = getTagVertex(kvp);
-  for (int i = 0; i < tv.getCategories().size(); i++)
-  {
-    result = result | OsmSchemaCategory::fromString(tv.getCategories()[i]);
-  }
-
+  for (const auto& category : tv.getCategories())
+    result = result | OsmSchemaCategory::fromString(category);
   return result;
 }
 
@@ -1527,17 +1368,13 @@ vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name) cons
 Tags OsmSchema::getChildTags(const Tags& tags)
 {
   Tags tagsToReturn;
-  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
-       ++inputTagItr)
+  for (auto inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd(); ++inputTagItr)
   {
     const Tags childTags =
       Tags::schemaVerticesToTags(
         getChildTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
-    for (Tags::const_iterator childTagItr = childTags.constBegin();
-         childTagItr != childTags.constEnd(); ++childTagItr)
-    {
+    for (auto childTagItr = childTags.constBegin(); childTagItr != childTags.constEnd(); ++childTagItr)
       tagsToReturn.appendValue(childTagItr.key(), childTagItr.value());
-    }
   }
   return tagsToReturn;
 }
@@ -1546,12 +1383,8 @@ Tags OsmSchema::getAliasTags(const Tags& tags)
 {
   Tags tagsToReturn;
   const std::vector<SchemaVertex> schemaVertices = _d->getSchemaVertices(tags);
-  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
-       itr != schemaVertices.end(); ++itr)
-  {
-    SchemaVertex vertex = *itr;
+  for (const auto& vertex : schemaVertices)
     tagsToReturn.add(Tags::kvpListToTags(vertex.getAliases()));
-  }
   return tagsToReturn;
 }
 
@@ -1606,9 +1439,7 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
 vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore) const
 {
   if (minimumScore <= 0)
-  {
     throw IllegalArgumentException("minimumScore must be > 0");
-  }
   return _d->getSimilarTags(name, minimumScore);
 }
 
@@ -1616,12 +1447,8 @@ Tags OsmSchema::getSimilarTags(const QString& name, double minimumScore)
 {
   Tags tags;
   const vector<SchemaVertex> vertices = _d->getSimilarTags(name, minimumScore);
-  for (std::vector<SchemaVertex>::const_iterator itr = vertices.begin();
-       itr != vertices.end(); ++itr)
-  {
-    SchemaVertex vertex = *itr;
+  for (const auto& vertex : vertices)
     tags.appendValue(vertex.getKey(), vertex.getValue());
-  }
   return tags;
 }
 
@@ -1649,7 +1476,7 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
 {
   bool result = false;
   // if at least one tag has the specified category then return true
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  for (auto it = t.constBegin(); it != t.constEnd(); ++it)
   {
     // ignore empty values.
     if (it.value().isEmpty() == false)
@@ -1671,8 +1498,7 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
 
 bool OsmSchema::hasCategory(const QString& kvp, const QString& category) const
 {
-  const SchemaVertex& tv = getTagVertex(kvp);
-  return tv.getCategories().contains(category);
+  return getTagVertex(kvp).getCategories().contains(category);
 }
 
 bool OsmSchema::hasCategory(const Tags& t, const OsmSchemaCategory& category) const
@@ -1693,17 +1519,15 @@ bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp) co
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList) const
 {
   //LOG_VART(tagList.size());
-  for (int i = 0; i < tagList.size(); i++)
+  for (const auto& tag : tagList)
   {
-    QStringList tagParts = tagList.at(i).split("=");
+    QStringList tagParts = tag.split("=");
     const QString key = tagParts[0];
     //LOG_VART(key);
     const QString value = tagParts[1];
     //LOG_VART(value);
     if ((value == "*" && tags.contains(key)) || (tags.get(key).toLower() == value))
-    {
       return true;
-    }
   }
   return false;
 }
@@ -1716,7 +1540,7 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
     return false;
   int usableTags = 0;
   OsmGeometries::Type value = OsmGeometries::All;
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  for (auto it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
     //  Unknown vertex types aren't usable tags
@@ -1747,14 +1571,9 @@ bool OsmSchema::isList(const QString& /*key*/, const QString& value) const
 bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 {
   if (key.startsWith(MetadataTags::HootTagPrefix()))
-  {
     return true;
-  }
-
   if (_metadataKey.contains(key))
-  {
     return _metadataKey[key];
-  }
   else
   {
     // for now all metadata tags are text so they're referenced by the key only. If that changes
@@ -1801,7 +1620,7 @@ double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2) const
 double OsmSchema::score(const QString& kvp, const Tags& tags) const
 {
   double maxScore = 0.0;
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
     const QString key = tagItr.key().trimmed();
     const QString value = tagItr.value().trimmed();
@@ -1813,9 +1632,7 @@ double OsmSchema::score(const QString& kvp, const Tags& tags) const
       kvp2.append(value);
       const double scoreVal = score(kvp, kvp2);
       if (scoreVal > maxScore)
-      {
         maxScore = scoreVal;
-      }
     }
   }
   return maxScore;
@@ -1823,9 +1640,8 @@ double OsmSchema::score(const QString& kvp, const Tags& tags) const
 
 bool OsmSchema::isGeneric(const Tags& tags)
 {
-  return
-    !hasMoreThanOneType(tags) &&
-    StringUtils::containsAny(tags.toKvps(), getGenericKvps().toList());
+  return !hasMoreThanOneType(tags) &&
+          StringUtils::containsAny(tags.toKvps(), getGenericKvps().toList());
 }
 
 bool OsmSchema::isGenericKvp(const QString& kvp) const
@@ -1849,24 +1665,20 @@ QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
 {
   QStringList keys = tags.keys();
   keys.sort();
-  for (int i = 0; i < keys.size(); i++)
+  for (const auto& key : keys)
   {
-    const QString key = keys.at(i);
     const QString val = tags[key];
     if (!val.trimmed().isEmpty())
     {
       const QString kvp = toKvp(key, val);
       if (isTypeKey(key) && (allowGeneric || !isGenericKvp(kvp)))
-      {
         return kvp;
-      }
     }
   }
   return "";
 }
 
-bool OsmSchema::explicitTypeMismatch(
-  const Tags& tags1, const Tags& tags2, const double minTypeScore)
+bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore)
 {
   LOG_VART(tags1);
   LOG_VART(tags2);
@@ -1907,7 +1719,6 @@ bool OsmSchema::explicitTypeMismatch(
       }
     }
   }
-
   LOG_VART(featuresHaveExplicitTypeMismatch);
   return featuresHaveExplicitTypeMismatch;
 }
@@ -1938,7 +1749,7 @@ bool OsmSchema::typeMismatch(const Tags& tags1, const Tags& tags2, const double 
 
 bool OsmSchema::hasType(const Tags& tags)
 {
-  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  for (auto tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
   {
     LOG_VART(tagsItr.key());
     LOG_VART(isTypeKey(tagsItr.key()));
@@ -1956,7 +1767,7 @@ QString OsmSchema::mostSpecificType(const Tags& tags)
 {
   QString mostSpecificType;
   bool currentMostSpecificTypeIsCombo = false;
-  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  for (auto tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
   {
     const QString key = tagsItr.key();
     const QString val = tagsItr.value();
@@ -1986,7 +1797,7 @@ QString OsmSchema::mostSpecificType(const Tags& tags)
 bool OsmSchema::hasMoreThanOneType(const Tags& tags)
 {
   int count = 0;
-  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  for (auto tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
   {
     LOG_VART(tagsItr.key());
     LOG_VART(isTypeKey(tagsItr.key()));
@@ -1994,9 +1805,7 @@ bool OsmSchema::hasMoreThanOneType(const Tags& tags)
     {
       count++;
       if (count > 1)
-      {
         return true;
-      }
     }
   }
   return false;
@@ -2006,7 +1815,7 @@ double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2, const bool ig
 {  
   double maxScore = 0.0;
 
-  for (Tags::const_iterator tags1Itr = tags1.begin(); tags1Itr != tags1.end(); ++tags1Itr)
+  for (auto tags1Itr = tags1.begin(); tags1Itr != tags1.end(); ++tags1Itr)
   {
     const QString key1 = tags1Itr.key().trimmed();
     const QString val1 = tags1Itr.value().trimmed();
@@ -2027,7 +1836,7 @@ double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2, const bool ig
 
       if (!isMetaData(key1, val1) && (isTypeKey(key1) || isTypeKey(kvp1)))
       {
-        for (Tags::const_iterator tags2Itr = tags2.begin(); tags2Itr != tags2.end(); ++tags2Itr)
+        for (auto tags2Itr = tags2.begin(); tags2Itr != tags2.end(); ++tags2Itr)
         {
           const QString key2 = tags2Itr.key().trimmed();
           const QString val2 = tags2Itr.value().trimmed();
@@ -2042,18 +1851,14 @@ double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2, const bool ig
             LOG_VART(isTypeKey(key2));
 
             if (ignoreGenericTypes && getGenericKvps().contains(kvp2))
-            {
               continue;
-            }
 
             if (!isMetaData(key2, val2) && (isTypeKey(key2) || isTypeKey(kvp2)))
             {
               const double calculatedScore = score(kvp1, kvp2);
               LOG_VART(calculatedScore);
               if (calculatedScore > maxScore)
-              {
                 maxScore = calculatedScore;
-              }
             }
           }
         }
@@ -2088,13 +1893,9 @@ QString OsmSchema::toGraphvizString() const
 QString OsmSchema::toKvp(const QString& key, const QString& value)
 {
   if (value.isEmpty())
-  {
     return key;
-  }
   else
-  {
     return key % "=" % value;
-  }
 }
 
 void OsmSchema::update() const
@@ -2110,17 +1911,11 @@ void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv) const
 QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2) const
 {
   if (isAncestor(kvp1, kvp2))
-  {
     return kvp2;
-  }
   else if (isAncestor(kvp2, kvp1))
-  {
     return kvp1;
-  }
   else
-  {
     return kvp1;
-  }
 }
 
 }
