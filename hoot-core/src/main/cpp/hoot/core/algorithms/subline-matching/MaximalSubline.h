@@ -31,8 +31,8 @@
 #include <geos/geom/LineSegment.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/Sparse2dMatrix.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Units.h>
@@ -41,6 +41,8 @@ namespace hoot
 {
 class WayLocation;
 class WaySublineMatch;
+
+using PointPairVector = std::vector<std::pair<WayLocation, WayLocation>>;
 
 /**
  * @brief The MaximalSubline class given a set of limitations on defining whether or not two points
@@ -85,8 +87,7 @@ public:
      * @brief maximalNearestSubline crops the line segments a and b down to their maximal nearest
      * sublines relative to each other.
      */
-    virtual void maximalNearestSubline(
-      geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
+    virtual void maximalNearestSubline(geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
 
     virtual void setWays(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
     { _map = map; _w1 = w1; _w2 = w2; }
@@ -152,9 +153,9 @@ public:
    * it is that higher is better, but you cannot directly compare scores for different sets of
    * ways. (it is likely length dependent).
    */
-  std::vector<WaySublineMatch> findAllMatches(
-    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr &w2, double &bestScore,
-    bool snapIntersections = true);
+  std::vector<WaySublineMatch> findAllMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
+                                              const ConstWayPtr &w2, double &bestScore,
+                                              bool snapIntersections = true);
 
   /**
    * @brief findMaximalSubline given two ways, finds the highest scoring subline that exists in both
@@ -167,9 +168,8 @@ public:
    *  vector will be resized as needed.
    * @return 0.0 if there are no common sublines, otherwise the score of the best subline.
    */
-  double findMaximalSubline(
-    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
-    std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2) const;
+  double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                            std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2) const;
 
   int getBestMatchesRecursionCount() const { return _findBestMatchesRecursionCount; }
 
@@ -201,24 +201,24 @@ private:
    * @param index The index of the first node in the line segment to look at.
    */
   WayLocation _calculateEndWayLocation(const ConstOsmMapPtr &map, const ConstWayPtr& a,
-    const ConstWayPtr& b, int indexA, int indexB) const;
+                                       const ConstWayPtr& b, int indexA, int indexB) const;
   /**
    * Determines the start of the way location in way a. The way location will start in the line
    * segment specified by index.
    * @param index The index of the first node in the line segment to look at.
    */
   WayLocation _calculateStartWayLocation(const ConstOsmMapPtr& map, const ConstWayPtr& a,
-    const ConstWayPtr& b, int indexA, int indexB) const;
+                                         const ConstWayPtr& b, int indexA, int indexB) const;
   void _calculateSublineScores(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, Sparse2dMatrix &scores) const;
+                               const ConstWayPtr& w2, Sparse2dMatrix &scores) const;
 
-  std::vector<std::pair<WayLocation, WayLocation>> _discretizePointPairs(const ConstOsmMapPtr &map,
-    const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches) const;
+  PointPairVector _discretizePointPairs(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                                        std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix) const;
+                                                  const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix) const;
   std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix, double& bestScore);
+                                                const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix, double& bestScore);
   double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates,
                                    std::vector<bool>& keepers, size_t offset);
   /**
@@ -249,21 +249,18 @@ private:
   bool _checkForSortedSecondSubline(const std::vector<WaySublineMatch>& rawSublineMatches) const;
   bool _rawSublinesTooSmall(const std::vector<WaySublineMatch>& rawSublineMatches) const;
   cv::Mat _createConstraintMatrix(const std::vector<int>& starts, const std::vector<int>& ends,
-                                  const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
-                                  std::vector<int>& matchIndexes) const;
+                                  const PointPairVector& pairs, std::vector<int>& matchIndexes) const;
   void _calculateSnapStarts(const WaySublineMatch& rawSublineMatch, const int matchIndex,
-                            const std::vector<double>& splits,
-                            const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
+                            const std::vector<double>& splits, const PointPairVector& pairs,
                             const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                             WayLocation& w1Start, WayLocation& w2Start) const;
-  void _calculateSnapEnds(const int matchIndex, const std::vector<double>& splits,
-                          const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
+  void _calculateSnapEnds(const int matchIndex, const std::vector<double>& splits, const PointPairVector& pairs,
                           const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                           WayLocation& w1End, WayLocation& w2End) const;
   void _calculatePointPairMatches(const double way1CircularError, const double way2CircularError,
                                   const std::vector<WaySublineMatch>& rawSublineMatches,
-                                  const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
-                                  cv::Mat& m, std::vector<int>& starts, std::vector<int>& ends) const;
+                                  const PointPairVector& pairs, cv::Mat& m, std::vector<int>& starts,
+                                  std::vector<int>& ends) const;
 };
 
 }

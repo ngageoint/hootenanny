@@ -30,7 +30,6 @@
 // tgs
 #include <tgs/HashMap.h>
 
-
 namespace hoot
 {
 
