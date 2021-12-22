@@ -222,7 +222,7 @@ PointPairVector MaximalSubline::_discretizePointPairs(const ConstOsmMapPtr& map,
   Meters w1Length = ls1->getLength();
   Meters w2Length = ls2->getLength();
 
-  const int count = min((w1Length - w1Offset) / _spacing, (w2Length - w2Offset) / _spacing) + 1;
+  const int count = static_cast<int>(min((w1Length - w1Offset) / _spacing, (w2Length - w2Offset) / _spacing) + 1);
   LOG_VART(count);
 
   PointPairVector result(count);
@@ -624,7 +624,7 @@ cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const
     // user and move on. It is likely they aren't a good match anyways.
     if (starts[i] == numeric_limits<int>::max())
       throw HootException("A solid set of point pair matches could not be found.");
-    matchIndexes[i] = finalStarts.size();
+    matchIndexes[i] = static_cast<int>(finalStarts.size());
     finalStarts.push_back(starts[i]);
     finalEnds.push_back(ends[i]);
 
@@ -635,7 +635,7 @@ cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const
     }
   }
 
-  int last = ends.size() - 1;
+  size_t last = ends.size() - 1;
   if ((size_t)ends[last] != pairs.size() - 1)
   {
     finalStarts.push_back(ends[last] - (ends[last] - starts[last]) / 3);
@@ -645,8 +645,8 @@ cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const
   LOG_TRACE("finalStarts: " << finalStarts);
   LOG_TRACE("finalEnds: " << finalEnds);
 
-  Mat ranges(finalStarts.size(), 2, CV_32S);
-  for (size_t i = 0; i < finalStarts.size(); i++)
+  Mat ranges(static_cast<int>(finalStarts.size()), 2, CV_32S);
+  for (int i = 0; i < static_cast<int>(finalStarts.size()); i++)
   {
     ranges.at<int>(i, 0) = finalStarts[i];
     ranges.at<int>(i, 1) = finalEnds[i];
@@ -670,7 +670,7 @@ void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch
   }
   else
   {
-    int wi = (int)splits[matchIndex - 1];
+    int wi = static_cast<int>(splits[matchIndex - 1]);
     LOG_TRACE("start split: " << wi);
     double r = splits[matchIndex - 1] - wi;
     Meters offset1 = pairs[wi].first.calculateDistanceOnWay() * r +
@@ -704,9 +704,9 @@ void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<doubl
                                         WayLocation& w2End) const
 {
   // convert the end split location into a WayLocation
-  if (matchIndex < (int)splits.size())
+  if (matchIndex < static_cast<int>(splits.size()))
   {
-    int wi = (int)splits[matchIndex];
+    int wi = static_cast<int>(splits[matchIndex]);
     double r = splits[matchIndex] - wi;
     Meters offset1 = pairs[wi].first.calculateDistanceOnWay() * r +
                      pairs[wi + 1].first.calculateDistanceOnWay() * (1 - r);
@@ -743,7 +743,7 @@ void MaximalSubline::_calculatePointPairMatches(const double way1CircularError, 
 
   size_t currentSubline = 0;
 
-  for (size_t i = 0; i < pairs.size(); i++)
+  for (int i = 0; i < static_cast<int>(pairs.size()); i++)
   {
     WayLocation wl1 = pairs[i].first;
     WayLocation wl2 = pairs[i].second;
@@ -825,7 +825,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
 
   vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
   vector<int> ends(rawSublineMatches.size(), 0);
-  cv::Mat m(pairs.size(), 2, CV_64F);
+  cv::Mat m(static_cast<int>(pairs.size()), 2, CV_64F);
   _calculatePointPairMatches(w1->getCircularError(), w2->getCircularError(), rawSublineMatches, pairs, m, starts, ends);
 
   // This maps finalStarts indexes to the rawSublineMatches indexes. E.g. rawSublineMatches[i] maps
@@ -927,7 +927,7 @@ void MaximalSubline::_snapToTerminal(WayLocation& wl, bool startOfLines, double 
     if (startOfLines) // snap to the beginning
       wl = WayLocation(wl.getMap(), wl.getWay(), 0, 0.0);
     else  // if we're at the end of the line snap to the end
-      wl = WayLocation(wl.getMap(), wl.getWay(), wl.getWay()->getNodeCount(), 0.0);
+      wl = WayLocation(wl.getMap(), wl.getWay(), static_cast<int>(wl.getWay()->getNodeCount()), 0.0);
   }
 }
 
