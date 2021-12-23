@@ -262,8 +262,7 @@ QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(co
                                                                               const QString& matchTypeStr) const
 {
   LOG_DEBUG("Indexing " << StringUtils::formatLargeNumber(matches.size()) << " " << matchTypeStr <<
-            " matches...");
-  const bool processPois = matchTypeStr == "POI";
+            " matches..."); const bool processPois = matchTypeStr == "POI";
   QMultiMap<ElementId, ConstMatchPtr> matchesById;
 
   for (const auto& match : matches)

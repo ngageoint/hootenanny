@@ -3073,7 +3073,7 @@ Used in the calculation of the match parallel score, cos (delta) ^ match.paralle
 
 === max.elements.per.partial.map
 
-* Data Type: double
+* Data Type: long
 * Default Value: `100000`
 
 Maximum number of elements that will be read into memory at one time during a partial OSM map

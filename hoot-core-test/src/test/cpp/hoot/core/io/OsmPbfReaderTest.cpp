@@ -26,15 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/schema/MetadataTags.h>
 using namespace hoot::pb;
 
 // zip
@@ -117,9 +117,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1111l, v[11].blobSize);
 
     for (size_t i = 0; i < v.size(); i++)
-    {
       uut.parseBlob(v[i], input, map);
-    }
 
     // sanity check that it actually read the data.
     CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
@@ -169,9 +167,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getWay(43)->getNodeCount());
     long nodeIds[] = {1, 3, 5, 7, 11};
     for (int i = 0; i < 5; i++)
-    {
       CPPUNIT_ASSERT_EQUAL(nodeIds[i], map->getWay(42)->getNodeId(i));
-    }
   }
 
   void runReadNodeTest()
@@ -273,9 +269,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
     long nodeIds[] = {1, 3, 5, 7, 11};
     for (int i = 0; i < 5; i++)
-    {
       CPPUNIT_ASSERT_EQUAL(nodeIds[i], map->getWay(42)->getNodeId(i));
-    }
   }
 
   void runToyTest()
