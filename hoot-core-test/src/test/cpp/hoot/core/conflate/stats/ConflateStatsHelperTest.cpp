@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStat.h>
 
 namespace hoot
@@ -98,10 +98,8 @@ public:
     uut2.updateStats(statsToUpdate, 1);
 
     CPPUNIT_ASSERT_EQUAL(7, statsToUpdate.size());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Some Stat 1").toStdString(), statsToUpdate.at(0).name.toStdString());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Some Stat 2").toStdString(), statsToUpdate.at(6).name.toStdString());
+    HOOT_STR_EQUALS("Some Stat 1", statsToUpdate.at(0).name);
+    HOOT_STR_EQUALS("Some Stat 2", statsToUpdate.at(6).name);
   }
 };
 
