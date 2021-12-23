@@ -296,7 +296,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
   _exportResult(boxes, "tmp/result.png");
 }
 
-int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b) const
 {
   double total = static_cast<double>(_sumPixels(b));
   LOG_VART(total);
@@ -356,7 +356,7 @@ int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b)
   return best;
 }
 
-int NodeDensityTileBoundsCalculator::_calculateSplitY(const PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitY(const PixelBox& b) const
 {
   double total = static_cast<double>(_sumPixels(b));
   LOG_VART(total);
@@ -523,30 +523,26 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
   }
 
   pt.setPen(QPen(QColor(0, 0, 255, 100)));
-  for (const auto& b : boxes)//size_t i = 0; i < boxes.size(); i++)
+  for (const auto& b : boxes)
   {
-//    const PixelBox& b = boxes[i];
     pt.drawRect(b.minX, _r1.rows - b.maxY - 1, b.maxX - b.minX, b.maxY - b.minY);
-
     _checkForTimeout();
   }
 
   qImage.save(output);
 }
 
-bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
+bool NodeDensityTileBoundsCalculator::_isDone(const std::vector<PixelBox>& boxes) const
 {
   LOG_VART(boxes.size());
 
   bool smallEnough = true;
   bool minSize = false;
 
-  for (const auto& b : boxes)//size_t i = 0; i < boxes.size(); i++)
+  for (const auto& b : boxes)
   {
-//    const PixelBox& b = boxes[i];
     if (b.getWidth() == 1 || b.getHeight() == 1)
       minSize = true;
-
     if (_sumPixels(b) > _maxNodesPerTile)
       smallEnough = false;
   }

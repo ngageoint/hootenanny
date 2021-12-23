@@ -255,7 +255,8 @@ bool OsmApiWriter::apply()
     //  Show the progress
     if (_showProgress)
     {
-      float percent_complete = _changeset.getProcessedCount() / (float)total;
+      float percent_complete = static_cast<float>(_changeset.getProcessedCount()) /
+                               static_cast<float>(total);
       //  Actual progress is calculated and once it passes the next increment it is reported
       if (percent_complete >= progress + increment)
       {
@@ -414,7 +415,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         }
         //  When the changeset is nearing the 10k max (or the specified max), close the changeset
         //  otherwise keep it open and go again
-        else if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
+        else if (changesetSize > _maxChangesetSize - static_cast<int>(static_cast<double>(_maxPushSize) * 1.5))
         {
           //  Close the changeset
           _closeChangeset(request, id, last);
@@ -548,10 +549,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             _yield();
           }
           break;
-        default:
-          //  This is a big problem, report it and try again
-          request->logConnectionError();
-          //  Fall through
         case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
         case HttpResponseCode::HTTP_UNAUTHORIZED:
           //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
@@ -585,6 +582,19 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           }
           else  //  Upload was validated, update the changeset
             _changeset.updateChangeset(workInfo);
+          break;
+        default:
+          //  This is a big problem, report it and try again
+          request->logConnectionError();
+          //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
+          workInfo->retryFailure();
+          if (workInfo->canRetryFailure())
+            _pushChangesets(workInfo);
+          else
+          {
+            _changeset.updateFailedChangeset(workInfo, true);
+            _failed = true;
+          }
           break;
         }
       }

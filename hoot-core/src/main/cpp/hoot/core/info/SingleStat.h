@@ -39,6 +39,9 @@ public:
 
   SingleStat() = default;
   SingleStat(const QString& n, double v) : name(n), value(v) { }
+  /* Templatized constructor */
+  template<class T>
+  SingleStat(const QString& n, T v) : name(n), value(static_cast<double>(v)) { }
 
   QString toString() const
   {

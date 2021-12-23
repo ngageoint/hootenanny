@@ -214,15 +214,15 @@ private:
 
   void _calculateMin();
 
-  int _calculateSplitX(const PixelBox& b);
-  int _calculateSplitY(const PixelBox& b);
+  int _calculateSplitX(const PixelBox& b) const;
+  int _calculateSplitY(const PixelBox& b) const;
 
   void _countNode(const std::shared_ptr<Node>& n);
 
   void _exportImage(cv::Mat& r, QString output) const;
   void _exportResult(const std::vector<PixelBox>& boxes, QString output);
 
-  bool _isDone(std::vector<PixelBox>& boxes);
+  bool _isDone(const std::vector<PixelBox>& boxes) const;
 
   long _sumPixels(const PixelBox& pb, const cv::Mat& r) const;
   long _sumPixels(const PixelBox& pb) const;
