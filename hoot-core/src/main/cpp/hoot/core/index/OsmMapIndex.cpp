@@ -38,20 +38,20 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/KnnWayIterator.h>
-#include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Validate.h>
 
 // Qt
 #include <QTime>
 
 // Standard
-#include <limits>
 #include <algorithm>
+#include <limits>
 
 // TGS
+#include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RStarTreePrinter.h>
-#include <tgs/RStarTree/IntersectionIterator.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -60,10 +60,10 @@ using namespace Tgs;
 namespace hoot
 {
 
-OsmMapIndex::OsmMapIndex(const OsmMap& map) :
-_map(map)
+OsmMapIndex::OsmMapIndex(const OsmMap& map)
+  : _map(map),
+    _indexSlush(0.0)
 {
-  _indexSlush = 0.0;
 }
 
 void OsmMapIndex::addWay(ConstWayPtr w)
@@ -111,7 +111,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   Box b(2);
   int count = 0;
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it, ++count)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it, ++count)
   {
     ConstNodePtr n = it->second;
 
@@ -137,8 +137,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   _nodeTree->bulkInsert(boxes, ids);
 
-  LOG_INFO(
-    "\tNode R-Tree index built. Time elapsed: " << StringUtils::millisecondsToDhms(t.elapsed()));
+  LOG_INFO("\tNode R-Tree index built. Time elapsed: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 void OsmMapIndex::_buildWayTree() const
@@ -162,7 +161,7 @@ void OsmMapIndex::_buildWayTree() const
 
   Box b(2);
   int count = 0;
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it, ++count)
+  for (auto it = ways.begin(); it != ways.end(); ++it, ++count)
   {
     ConstWayPtr w = it->second;
 
@@ -198,14 +197,14 @@ void OsmMapIndex::_buildWayTree() const
 
 int OsmMapIndex::_createTreeNid(long nid) const
 {
-  int result = _treeIdToNid.size();
+  int result = static_cast<int>(_treeIdToNid.size());
   _treeIdToNid.push_back(nid);
   return result;
 }
 
 int OsmMapIndex::_createTreeWid(long wid) const
 {
-  int result = _treeIdToWid.size();
+  int result = static_cast<int>(_treeIdToWid.size());
   _treeIdToWid.push_back(wid);
   return result;
 }
@@ -217,17 +216,14 @@ set<ElementId> OsmMapIndex::findWayRelations(const Envelope& e) const
   const ElementToRelationMap& e2r = *getElementToRelationMap();
 
   vector<long> wids = findWays(e);
-  for (size_t i = 0; i < wids.size(); i++)
+  for (auto way_id : wids)
   {
-    result.insert(ElementId(ElementType::Way, wids[i]));
-    const set<long>& relations = e2r.getRelationByElement(ElementId::way(wids[i]));
+    result.insert(ElementId(ElementType::Way, way_id));
+    const set<long>& relations = e2r.getRelationByElement(ElementId::way(way_id));
 
-    for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
-    {
-      result.insert(ElementId(ElementType::Relation, *it));
-    }
+    for (auto relation_id : relations)
+      result.insert(ElementId(ElementType::Relation, relation_id));
   }
-
   return result;
 }
 
@@ -243,11 +239,8 @@ vector<long> OsmMapIndex::findNodes(const Coordinate& from, Meters maxDistance) 
   {
     // sometimes the index has more nodes than actually exist.
     if (_map.containsNode(_mapToNodeId(it.getId())))
-    {
       result.push_back(_mapToNodeId(it.getId()));
-    }
   }
-
   return result;
 }
 
@@ -263,9 +256,7 @@ vector<long> OsmMapIndex::findWayNeighbors(const ConstWayPtr &way, Meters buffer
     long wid = _mapToWayId(it.getId());
     // if this way isn't pending removal.
     if (_map.containsWay(wid))
-    {
       result.push_back(wid);
-    }
   }
 
   LOG_TRACE("findWayNeighbors result size: " << result.size());
@@ -283,8 +274,8 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
     ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(way);
 
   // go through all other ways
-  for (WayMap::const_iterator it = _map.getWays().begin();
-    it != _map.getWays().end(); ++it)
+  const WayMap& ways = _map.getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     long nId = it->first;
     ConstWayPtr n = it->second;
@@ -293,14 +284,10 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
       std::shared_ptr<LineString> ls2 =
         ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = ls1->distance(ls2.get());
-
       if (d < buffer)
-      {
         result.push_back(nId);
-      }
     }
   }
-
   return result;
 }
 
@@ -313,8 +300,8 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
 
   // go through all other ways
-  for (WayMap::const_iterator it = _map.getWays().begin();
-    it != _map.getWays().end(); ++it)
+  const WayMap& ways = _map.getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     long nId = it->first;
     ConstWayPtr n = it->second;
@@ -323,7 +310,6 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
       std::shared_ptr<LineString> ls2 =
         ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
-
       if (d < bestDistance)
       {
         result = nId;
@@ -342,8 +328,8 @@ std::vector<long> OsmMapIndex::findWayNeighbors(const Coordinate& from, Meters b
   std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(from));
 
   // go through all other ways
-  for (WayMap::const_iterator it = _map.getWays().begin();
-    it != _map.getWays().end(); ++it)
+  const WayMap& ways = _map.getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     long nId = it->first;
     ConstWayPtr n = it->second;
@@ -352,11 +338,8 @@ std::vector<long> OsmMapIndex::findWayNeighbors(const Coordinate& from, Meters b
       std::shared_ptr<LineString> ls2 =
         ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
-
       if (d < buffer)
-      {
         result.push_back(nId);
-      }
     }
   }
   return result;
@@ -372,17 +355,13 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
   max[0] = e.getMaxX();
   max[1] = e.getMaxY();
   IntersectionIterator it(getWayTree().get(), min, max);
-
   while (it.next())
   {
     const long wid = _mapToWayId(it.getId());
     // if this way isn't pending removal
     if (_map.containsWay(wid))
-    {
       result.push_back(wid);
-    }
   }
-
   return result;
 }
 
@@ -393,10 +372,8 @@ const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMa
     _elementToRelationMap = std::make_shared<ElementToRelationMap>();
 
     const RelationMap& relations = _map.getRelations();
-    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-    {
+    for (auto it = relations.begin(); it != relations.end(); ++it)
       _elementToRelationMap->addRelation(_map, it->second);
-    }
     VALIDATE(validate());
   }
   return _elementToRelationMap;
@@ -415,18 +392,13 @@ std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 std::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
 {
   if (_nodeTree == nullptr)
-  {
     _buildNodeTree();
-  }
 
   const OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
-  for (set<long>::const_iterator it = _pendingNodeInsert.begin(); it != _pendingNodeInsert.end();
-       ++it)
+  for (auto node_id : _pendingNodeInsert)
   {
-    if (_map.containsNode(*it))
-    {
-      t->_insertNode(*it);
-    }
+    if (_map.containsNode(node_id))
+      t->_insertNode(node_id);
   }
   _pendingNodeInsert.clear();
 
@@ -440,33 +412,29 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   if (eid.getType() == ElementType::Node)
   {
     const set<long>& ways = getNodeToWayMap()->getWaysByNode(eid.getId());
-    for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
-    {
-      result.insert(ElementId::way(*it));
-    }
+    for (auto way_id : ways)
+      result.insert(ElementId::way(way_id));
   }
 
   const set<long>& ancestors = getElementToRelationMap()->getRelationByElement(eid);
   LOG_VART(ancestors.size());
   LOG_VART(_map.size());
-  for (set<long>::const_iterator it = ancestors.begin(); it != ancestors.end(); ++it)
+  for (auto relation_id : ancestors)
   {
-    LOG_VART(*it);
-    if (!_map.containsRelation(*it))
+    LOG_VART(relation_id);
+    if (!_map.containsRelation(relation_id))
     {
       LOG_INFO("Child element: " << eid);
-      LOG_INFO("Missing relation: " << *it);
+      LOG_INFO("Missing relation: " << relation_id);
       LOG_INFO("Child element: " << _map.getElement(eid)->toString());
       continue;
     }
     // the map should contain all the relations returned by the index.
-    assert(_map.containsRelation(*it));
-    const ConstRelationPtr& r = _map.getRelation(*it);
+    assert(_map.containsRelation(relation_id));
+    const ConstRelationPtr& r = _map.getRelation(relation_id);
     LOG_VART(r.get())
     if (r && r->contains(eid))
-    {
       result.insert(r->getElementId());
-    }
   }
 
   LOG_VART(result);
@@ -476,18 +444,13 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
 std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
 {
   if (_wayTree == nullptr)
-  {
     _buildWayTree();
-  }
 
   const OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
-  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end();
-       ++it)
+  for (auto way_id : _pendingWayInsert)
   {
-    if (_map.containsWay(*it))
-    {
-      t->_insertWay(*it);
-    }
+    if (_map.containsWay(way_id))
+      t->_insertWay(way_id);
   }
   _pendingWayInsert.clear();
 
@@ -539,29 +502,20 @@ void OsmMapIndex::preGeometryChange(Element* e)
 
     // if the relation itself is being changed, then add it to the pending list.
     if (e->getElementType() == ElementType::Relation)
-    {
       _pendingRelationChange.insert(e->getId());
-    }
 
     // remove all the relations that are being impacted.
-    for (set<long>::iterator it = _pendingRelationChange.begin();
-      it != _pendingRelationChange.end(); ++it)
-    {
-      _elementToRelationMap->removeRelation(_map, _map.getRelation(*it));
-    }
+    for (auto relation_id : _pendingRelationChange)
+      _elementToRelationMap->removeRelation(_map, _map.getRelation(relation_id));
   }
   if (e->getElementType() == ElementType::Way)
-  {
     removeWay(_map.getWay(e->getId()));
-  }
 }
 
 void OsmMapIndex::postGeometryChange(Element* e)
 {
   if (e->getElementType() == ElementType::Way)
-  {
     addWay(_map.getWay(e->getId()));
-  }
   if (_nodeToWayMap != nullptr)
   {
     VALIDATE(_nodeToWayMap->validate(_map));
@@ -569,11 +523,8 @@ void OsmMapIndex::postGeometryChange(Element* e)
   if (_elementToRelationMap != nullptr)
   {
     // add all the relations that were impacted back into the index.
-    for (set<long>::iterator it = _pendingRelationChange.begin();
-         it != _pendingRelationChange.end(); ++it)
-    {
-      _elementToRelationMap->addRelation(_map, _map.getRelation(*it));
-    }
+    for (auto relation_id : _pendingRelationChange)
+      _elementToRelationMap->addRelation(_map, _map.getRelation(relation_id));
     _pendingRelationChange.clear();
     VALIDATE(_elementToRelationMap->validate(_map));
   }
@@ -581,7 +532,7 @@ void OsmMapIndex::postGeometryChange(Element* e)
 
 void OsmMapIndex::removeNode(ConstNodePtr n)
 {
-  if (_nodeTree && n)
+  if (_nodeTree && n != nullptr)
   {
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());
@@ -598,9 +549,7 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
 void OsmMapIndex::removeRelation(const ConstRelationPtr& r) const
 {
   if (_elementToRelationMap != nullptr)
-  {
     _elementToRelationMap->removeRelation(_map, r);
-  }
 }
 
 void OsmMapIndex::removeWay(ConstWayPtr w)
@@ -637,13 +586,9 @@ bool OsmMapIndex::validate() const
 {
   bool result = true;
   if (_nodeToWayMap != nullptr)
-  {
     result &= _nodeToWayMap->validate(_map);
-  }
   if (_elementToRelationMap != nullptr)
-  {
     result &= _elementToRelationMap->validate(_map);
-  }
   if (result == false)
   {
     LOG_WARN("OsmMapIndex is invalid.");

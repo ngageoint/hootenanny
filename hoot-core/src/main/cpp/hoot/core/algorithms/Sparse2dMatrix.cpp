@@ -26,8 +26,6 @@
  */
 #include "Sparse2dMatrix.h"
 
-
-
 namespace hoot
 {
 
@@ -35,24 +33,18 @@ QString Sparse2dMatrix::toString() const
 {
   QStringList sl;
 
-  for (HashMap<CellId, double>::const_iterator it = begin(); it != end(); ++it)
-  {
+  for (auto it = begin(); it != end(); ++it)
     sl << QString("(%1, %2): %3").arg(it->first.row()).arg(it->first.col()).arg(it->second);
-  }
   return "{ " + sl.join("\n") + " }";
 }
 
 double Sparse2dMatrix::get(const CellId& cid) const
 {
-  const_iterator it = _map.find(cid);
+  auto it = _map.find(cid);
   if (it != _map.end())
-  {
     return it->second;
-  }
   else
-  {
     return 0.0;
-  }
 }
 
 }

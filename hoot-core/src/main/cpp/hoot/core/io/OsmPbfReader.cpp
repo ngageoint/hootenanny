@@ -30,9 +30,9 @@
 #include <arpa/inet.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
@@ -119,9 +119,7 @@ void OsmPbfReader::_init(bool useFileId)
 OsmPbfReader::~OsmPbfReader()
 {
   if (_needToCloseInput == true)
-  {
     close();
-  }
 }
 
 void OsmPbfReader::setConfiguration(const Settings &conf)
@@ -134,38 +132,29 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
 }
 
-void OsmPbfReader::_addTag(
-  const std::shared_ptr<Element>& e, const QString& key, const QString& value) const
+void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key, const QString& value) const
 {
   QString k = key.trimmed();
   QString v = value.trimmed();
 
   if (v.isEmpty())
-  {
     return;
-  }
 
   if (k == MetadataTags::HootStatus())
   {
     if (_useFileStatus)
-    {
       e->setStatus(_parseStatus(v));
-    }
     else
-    {
       e->setStatus(_status);
-    }
   }
-  // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
-  // will be used. We're not expecting elements to have more than one CE tag.
   else if (_circularErrorTagKeys.contains(k))
   {
+    // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+    // will be used. We're not expecting elements to have more than one CE tag.
     bool ok;
     Meters circularError = v.toDouble(&ok);
     if (circularError > 0 && ok)
-    {
       e->setCircularError(circularError);
-    }
     else
     {
       bool isBad = false;
@@ -175,13 +164,9 @@ void OsmPbfReader::_addTag(
       {
         circularError = t1.getLength(k).value();
         if (circularError > 0)
-        {
           e->setCircularError(circularError);
-        }
         else
-        {
           isBad = true;
-        }
       }
       catch (const HootException&)
       {
@@ -209,23 +194,19 @@ void OsmPbfReader::_addTag(
     // pass
   }
   else if (k == MetadataTags::RelationType() && e->getElementType() == ElementType::Relation)
-  {
     (std::dynamic_pointer_cast<Relation>(e))->setType(v);
-  }
   else if (v != "")
-  {
     e->setTag(k, v);
-  }
 }
 
 double OsmPbfReader::_convertLon(long lon) const
 {
-  return .000000001 * (_lonOffset + (_granularity * lon));
+  return .000000001 * static_cast<double>(_lonOffset + (_granularity * lon));
 }
 
 double OsmPbfReader::_convertLat(long lat) const
 {
-  return .000000001 * (_latOffset + (_granularity * lat));
+  return .000000001 * static_cast<double>(_latOffset + (_granularity * lat));
 }
 
 ElementId OsmPbfReader::_convertToElementId(long id, int memberType) const
@@ -254,22 +235,17 @@ long OsmPbfReader::_createRelationId(long fromFile)
   long id = fromFile;
   long newId;
   if (_useFileId)
-  {
     newId = id;
-  }
   else
   {
     if (_relationIdMap.contains(fromFile))
-    {
       newId = _relationIdMap[fromFile];
-    }
     else
     {
       newId = _map->createNextRelationId();
       _relationIdMap.insert(fromFile, newId);
     }
   }
-
   return newId;
 }
 
@@ -278,33 +254,26 @@ long OsmPbfReader::_createWayId(long fromFile)
   long id = fromFile;
   long newId;
   if (_useFileId)
-  {
     newId = id;
-  }
   else
   {
     if (_wayIdMap.contains(fromFile))
-    {
       newId = _wayIdMap[fromFile];
-    }
     else
     {
       newId = _map->createNextWayId();
       _wayIdMap.insert(fromFile, newId);
     }
   }
-
   return newId;
 }
 
 char* OsmPbfReader::_getBuffer(size_t size)
 {
   if (_buffer.size() < size)
-  {
     _buffer.resize(size);
-  }
   // is this safe? question me in case of crash.
-  return (char*)_buffer.data();
+  return const_cast<char*>(_buffer.data());
 }
 
 long OsmPbfReader::_getNodeId(long fromFile)
@@ -315,9 +284,7 @@ long OsmPbfReader::_getNodeId(long fromFile)
     if (_permissive == false && _typeThenId == false)
     {
       if (_nodeIdMap.contains(fromFile))
-      {
         newId = _nodeIdMap[fromFile];
-      }
       else
       {
         newId = fromFile;
@@ -325,52 +292,42 @@ long OsmPbfReader::_getNodeId(long fromFile)
       }
     }
     else
-    {
       newId = fromFile;
-    }
   }
   else
   {
     if (_nodeIdMap.contains(fromFile))
-    {
       newId = _nodeIdMap[fromFile];
-    }
     else
     {
       newId = _map->createNextNodeId();
       _nodeIdMap.insert(fromFile, newId);
     }
   }
-
   return newId;
 }
 
 const char* OsmPbfReader::_inflate(const string& compressed, size_t rawSize)
 {
   if (_inflated.size() < rawSize)
-  {
     _inflated.resize(rawSize);
-  }
 
   z_stream strm;
   strm.zalloc = Z_NULL;
   strm.zfree = Z_NULL;
   strm.opaque = Z_NULL;
   if (inflateInit(&strm) != Z_OK)
-  {
     throw HootException(QString("Error initializing zlib stream."));
-  }
-  strm.next_in = (Bytef*)compressed.data();
-  strm.avail_in = compressed.size();
-  strm.avail_out = rawSize;
-  strm.next_out = (Bytef*)_inflated.data();
+
+  strm.next_in = reinterpret_cast<unsigned char*>(const_cast<char*>(compressed.data()));
+  strm.avail_in = static_cast<unsigned int>(compressed.size());
+  strm.avail_out = static_cast<unsigned int>(rawSize);
+  strm.next_out = reinterpret_cast<unsigned char*>(const_cast<char*>(_inflated.data()));
   int result = inflate(&strm, Z_NO_FLUSH);
   inflateEnd(&strm);
 
   if (result < Z_OK)
-  {
     throw HootException(QString("Error inflating zlib stream. %1").arg(result));
-  }
 
   return _inflated.data();
 }
@@ -392,15 +349,13 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   }
 
   if (_denseNodeTmp.size() != size)
-  {
     _denseNodeTmp.resize(size);
-  }
 
   // the file uses delta encoding
   long lon = 0;
   long lat = 0;
   long id = 0;
-  for (size_t i = 0; i < size; i++)
+  for (int i = 0; i < static_cast<int>(size); i++)
   {
     id += dn.id().Get(i);
     lon += dn.lon().Get(i);
@@ -457,7 +412,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   {
     const DenseInfo& di = dn.denseinfo();
     int timestampSize = di.timestamp_size();
-    if ((size_t)timestampSize != size)
+    if (timestampSize != static_cast<int>(size))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -468,7 +423,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      timestampSize = std::min<int>(size, timestampSize);
+      timestampSize = std::min(static_cast<int>(size), timestampSize);
     }
 
     if (_addSourceDateTime)
@@ -477,7 +432,6 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       for (int i = 0; i < timestampSize; i++)
       {
         timestamp += di.timestamp().Get(i) * _dateGranularity;
-
         if (timestamp != 0 && _denseNodeTmp[i]->getTags().hasInformationTag())
         {
           // same time, but friendly to earlier Qt version
@@ -488,7 +442,6 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       }
     }
   }
-
 }
 
 void OsmPbfReader::_loadDenseNodes()
@@ -569,14 +522,11 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
 void OsmPbfReader::_loadNodes()
 {
   const PrimitiveBlock& pb = _d->primitiveBlock;
-
   for (int i = 0; i < pb.primitivegroup().size(); i++)
   {
     const PrimitiveGroup& pg = pb.primitivegroup().Get(i);
     for (int j = 0; j < pg.nodes().size(); j++)
-    {
       _loadNode(pg.nodes().Get(j));
-    }
   }
 }
 
@@ -596,8 +546,7 @@ void OsmPbfReader::_loadOsmData()
   _loadRelations();
 }
 
-vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(
-  std::shared_ptr<istream> strm)
+vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(std::shared_ptr<istream> strm)
 {
   vector<BlobLocation> result;
 
@@ -675,10 +624,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     mid += r.memids().Get(i);
     int type = r.types().Get(i);
     QString role;
-    if ((size_t)sid < _strings.size() && sid >= 0)
-    {
+    if (sid < static_cast<int>(_strings.size()) && sid >= 0)
       role = _strings[sid];
-    }
     else
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -693,11 +640,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     }
 
     ElementId eid = _convertToElementId(mid, type);
-
     if (eid.getType() != ElementType::Unknown)
-    {
       newRelation->addElement(role, eid);
-    }
   }
 
   if (r.keys().size() != r.vals().size())
@@ -776,9 +720,7 @@ void OsmPbfReader::_loadRelations()
   {
     const PrimitiveGroup& pg = pb.primitivegroup().Get(i);
     for (int j = 0; j < pg.relations().size(); j++)
-    {
       _loadRelation(pg.relations().Get(j));
-    }
   }
 }
 
@@ -789,10 +731,7 @@ void OsmPbfReader::_loadStrings()
   const StringTable& st = _d->primitiveBlock.stringtable();
   _strings.resize(st.s_size() + 1);
   for (int i = 0; i < st.s_size(); i++)
-  {
-    QString str = QString::fromUtf8(st.s().Get(i).data());
-    _strings[i] = str;
-  }
+    _strings[i] = QString::fromUtf8(st.s().Get(i).data());
 }
 
 void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
@@ -914,33 +853,26 @@ void OsmPbfReader::_loadWays()
   {
     const PrimitiveGroup& pg = pb.primitivegroup().Get(i);
     for (int j = 0; j < pg.ways().size(); j++)
-    {
       _loadWay(pg.ways().Get(j));
-    }
   }
 }
 
-void OsmPbfReader::parseBlob(
-  const BlobLocation& bl, std::shared_ptr<istream> strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(const BlobLocation& bl, std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void OsmPbfReader::parseBlob(
-  long headerOffset, std::shared_ptr<istream> strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(long headerOffset, std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
 
   if (strm->good() == false)
-  {
     throw HootException("The stream passed in is not \"good\".");
-  }
 
   if (strm->tellg() != headerOffset)
-  {
     strm->seekg(headerOffset, ios_base::beg);
-  }
+
   _parseBlobHeader();
   // Did we hit OSM header?
   if (_d->blobHeader.type() == PBF_OSM_DATA)
@@ -958,8 +890,7 @@ void OsmPbfReader::_parseBlob()
   if (_in->gcount() != size)
   {
     throw HootException(QString("Did not read the expected number of bytes from blob. "
-                                "(%1 instead of %2)").
-                        arg(_in->gcount()).arg(size));
+                                "(%1 instead of %2)").arg(_in->gcount()).arg(size));
   }
   _d->blob.Clear();
   _d->blob.ParseFromArray(_buffer.data(), size);
@@ -969,16 +900,13 @@ void OsmPbfReader::_parseBlobHeader()
 {
   uint32_t size = _readUInt32();
   if (_in->eof())
-  {
     return;
-  }
 
   _in->read(_getBuffer(size), size);
   if (_in->gcount() != size)
   {
     throw HootException(QString("Did not read the expected number of bytes from blob header. "
-                                "(%1 instead of %2)").
-                        arg(_in->gcount()).arg(size));
+                                "(%1 instead of %2)").arg(_in->gcount()).arg(size));
   }
   _d->blobHeader.Clear();
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
@@ -993,8 +921,7 @@ void OsmPbfReader::parseElements(std::shared_ptr<istream> strm, const OsmMapPtr&
   if (strm->gcount() != size)
   {
     throw HootException(QString("Did not read the expected number of bytes from stream. "
-                                "(%1 instead of %2)").
-                        arg(strm->gcount()).arg(size));
+                                "(%1 instead of %2)").arg(strm->gcount()).arg(size));
   }
 
   _d->primitiveBlock.Clear();
@@ -1018,9 +945,7 @@ int OsmPbfReader::_parseInt(const QString& s) const
   int result = s.toInt(&ok);
 
   if (ok == false)
-  {
-      throw HootException("Error parsing int: " + s);
-  }
+    throw HootException("Error parsing int: " + s);
 
   return result;
 }
@@ -1031,7 +956,7 @@ void OsmPbfReader::_parseOsmData()
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
 
   _d->primitiveBlock.Clear();
-  _d->primitiveBlock.ParseFromArray(inflated, size);
+  _d->primitiveBlock.ParseFromArray(inflated, static_cast<int>(size));
 
   _loadOsmData();
 }
@@ -1042,21 +967,16 @@ void OsmPbfReader::_parseOsmHeader()
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
 
   _d->headerBlock.Clear();
-  if (!_d->headerBlock.ParseFromArray(inflated, size))
-  {
+  if (!_d->headerBlock.ParseFromArray(inflated, static_cast<int>(size)))
     throw IoException("Error reading headerBlock.");
-  }
 
   int optionalFeatureSize = _d->headerBlock.optional_features_size();
   for (int i = 0; i < optionalFeatureSize; i++)
   {
     std::string typeThenId = _d->headerBlock.optional_features(i);
     if (typeThenId == PBF_SORT_TYPE_THEN_ID)
-    {
       _typeThenId = true;
-    }
   }
-
   _osmHeaderRead = true;
 }
 
@@ -1065,14 +985,9 @@ uint32_t OsmPbfReader::_readUInt32() const
   uint32_t buf = 0xFFFFFFFF;
   _in->read((char*)&buf, 4);
   if (_in->gcount() == 0 && _in->eof())
-  {
     return 0xFFFFFFFF;
-  }
   if (_in->gcount() != 4)
-  {
-    throw HootException(QString("Did not read the expected number of bytes. %1 instead of 4").
-                        arg(_in->gcount()));
-  }
+    throw HootException(QString("Did not read the expected number of bytes. %1 instead of 4").arg(_in->gcount()));
   return ntohl(buf);
 }
 
@@ -1082,9 +997,7 @@ Status OsmPbfReader::_parseStatus(const QString& s) const
 
   result = _parseInt(s);
   if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
-  {
     throw HootException(QObject::tr("Invalid status value: %1").arg(s));
-  }
 
   return result;
 }
@@ -1132,9 +1045,7 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 {
   map->appendSource(path);
   if (_status == Status::Invalid)
-  {
     _useFileStatus = true;
-  }
 
   QFileInfo fi(path);
   if (fi.isDir())
@@ -1144,14 +1055,10 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
     filter << "*.pbf";
     QFileInfoList files = d.entryInfoList(filter, QDir::Files, QDir::Name);
     for (int i = 0; i < files.size(); i++)
-    {
       _readFile(files.at(i).filePath(), map);
-    }
   }
   else
-  {
     _readFile(path, map);
-  }
 
   ReportMissingElementsVisitor v(true);
   map->visitRw(v);
@@ -1162,9 +1069,7 @@ void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
   std::shared_ptr<fstream> input =
     std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
   if (input->good() == false)
-  {
     throw HootException(QString("Error reading %1").arg(path));
-  }
   parse(input, map);
 }
 
@@ -1173,9 +1078,7 @@ void OsmPbfReader::read(const OsmMapPtr& map)
   assert(map.get());
   map->appendSource(_url);
   if (_status == Status::Invalid)
-  {
     _useFileStatus = true;
-  }
 
   parse(_in, map);
 
@@ -1187,28 +1090,21 @@ bool OsmPbfReader::isSupported(const QString& urlStr) const
 {
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())
-  {
     return false;
-  }
 
   QFile input(urlStr);
-  return
-    //there is actually some test data that ends in .pbf instead of .osm.pbf, so allowing that
-    //extension too for now
-    input.exists() && (urlStr.endsWith(".osm.pbf", Qt::CaseInsensitive) || urlStr.endsWith(".pbf", Qt::CaseInsensitive));
+  //there is actually some test data that ends in .pbf instead of .osm.pbf, so allowing that
+  //extension too for now
+  return input.exists() && (urlStr.endsWith(".osm.pbf", Qt::CaseInsensitive) || urlStr.endsWith(".pbf", Qt::CaseInsensitive));
 }
 
 bool OsmPbfReader::isSorted(const QString& file)
 {
   _init(false);
   if (isSupported(file))
-  {
     open(file);
-  }
   else
-  {
     throw HootException("An invalid file format was specified: " + file + ".");
-  }
 
   // read blob header
   _parseBlobHeader();
@@ -1264,33 +1160,19 @@ bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
   if (!_in)
-  {
     return false;
-  }
-  //see if we've read all the blobs
-  else if (_blobIndex < (int)_blobs.size())
-  {
+  else if (_blobIndex < (int)_blobs.size()) //  see if we've read all the blobs
     return true;
-  }
-  //see if we've iterated through all of the elements
-  else
-  {
-    if (_partialNodesRead < int(_map->getNodes().size()) ||
-        _partialWaysRead < int(_map->getWays().size()) ||
-        _partialRelationsRead < int(_map->getRelations().size()))
-    {
-      return true;
-    }
-  }
-  return false;
+
+  return (_partialNodesRead < static_cast<int>(_map->getNodes().size()) ||
+          _partialWaysRead < static_cast<int>(_map->getWays().size()) ||
+          _partialRelationsRead < static_cast<int>(_map->getRelations().size()));
 }
 
 std::shared_ptr<Element> OsmPbfReader::readNextElement()
 {
   if (!hasMoreElements())
-  {
     throw HootException("No more elements available to read for the map.");
-  }
 
   //if this is the first time through, or we've run out of an element buffer to read from
   if (!_firstPartialReadCompleted ||
@@ -1383,12 +1265,10 @@ void OsmPbfReader::close()
 {
   finalizePartial();
 
+  // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as
+  // part of its contract
   if (_needToCloseInput == true)
-  {
-    // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as
-    // part of its contract
     _needToCloseInput = false;
-  }
 
   // Either path, drop our pointer to the stream
   _in.reset();
@@ -1397,8 +1277,7 @@ void OsmPbfReader::close()
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
   if (_addSourceDateTime &&
-      // Make sure we actually have attributes.
-      t.getInformationCount() > 0 &&
+      t.getInformationCount() > 0 &&  // Make sure we actually have attributes.
       info.has_timestamp())
   {
     long timestamp = info.timestamp() * _dateGranularity;

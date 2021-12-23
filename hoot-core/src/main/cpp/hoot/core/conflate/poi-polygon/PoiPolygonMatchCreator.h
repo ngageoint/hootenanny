@@ -30,12 +30,14 @@
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 namespace hoot
 {
+
+using MatchMap = QMap<ElementId, QList<ConstMatchPtr>>;
 
 class PoiPolygonMatchCreator : public MatchCreator
 {
@@ -88,45 +90,40 @@ private:
    * For any 2:1 matches/reviews, will only keep the match with the smallest distance between
    * matched features; returns the number of matches removed
    */
-  int _retainClosestDistanceMatchesOnly(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const;
+  int _retainClosestDistanceMatchesOnly(std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const;
   /*
    * Called by _retainClosestDistanceMatchesOnly; 2:1 POI to poly and 2:1 polyl to POI matches are
    * processed separately; returns the number of matches removed
    */
-  int _retainClosestDistanceMatchesOnlyByType(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const;
+  int _retainClosestDistanceMatchesOnlyByType(std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map,
+                                              const bool processPois) const;
 
   /*
    * Organizes matches with key=element's ID and value=match its associated with; one
    * element may be involved in more than one match
    */
-  QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(
-    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr) const;
+  QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(const std::vector<ConstMatchPtr>& matches,
+                                                        const QString& matchTypeStr) const;
 
   /*
    * Finds all instances where an element is involved in more than one match; returns a collection
    * with the element's ID and all the matches its involved with; one element may be involved in
    * more than one math
    */
-  QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
-    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr) const;
+  MatchMap _getOverlappingMatches(const QMultiMap<ElementId, ConstMatchPtr>& matchesById,
+                                  const QString& matchTypeStr) const;
 
   /*
    * Cycles through each overlapping match and keeps only the single match associated with each
    * element that has the shortest distance between POI and polygon
    */
-  std::vector<ConstMatchPtr> _filterOutNonClosestMatches(
-    const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
-    const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-    const QString& matchTypeStr) const;
+  std::vector<ConstMatchPtr> _filterOutNonClosestMatches(const MatchMap& overlappingMatches,
+                                                         const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
+                                                         const QString& matchTypeStr) const;
 
   // debugging only methods
-  bool _containsMatch(
-    const ElementId& elementId1, const ElementId& elementId2,
-    const std::vector<ConstMatchPtr>& matches) const;
-  int _numMatchesContainingElement(const ElementId& elementId,
-                                   const std::vector<ConstMatchPtr>& matches) const;
+  bool _containsMatch(const ElementId& elementId1, const ElementId& elementId2, const std::vector<ConstMatchPtr>& matches) const;
+  int _numMatchesContainingElement(const ElementId& elementId, const std::vector<ConstMatchPtr>& matches) const;
 };
 
 }
