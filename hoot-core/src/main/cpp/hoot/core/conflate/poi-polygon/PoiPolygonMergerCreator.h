@@ -28,11 +28,11 @@
 #define POIPOLYGONMERGERCREATOR_H
 
 // hoot
+#include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/matching/MatchGraph.h>
 
 namespace hoot
 {
@@ -55,13 +55,12 @@ public:
    * appended. If there is more than one match and at least one is a PoiPolygonMatch then a
    * MarkForReviewMerger is created.
    */
-  bool createMergers(
-    const MatchSet& matches,  std::vector<MergerPtr>& mergers) const override;
+  bool createMergers(const MatchSet& matches,  std::vector<MergerPtr>& mergers) const override;
 
   std::vector<CreatorDescription> getAllCreators() const override;
 
   bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   void setOsmMap(const OsmMap* map) override { _map = map; }
 
@@ -74,9 +73,8 @@ public:
    * @param matchNameFilter the types of matches to be considered overlapping with POI/Polygon
    * matches
    */
-  static void convertSharedMatchesToReviews(
-    MatchSetVector& matchSets, std::vector<MergerPtr>& mergers,
-    const QStringList& matchNameFilter);
+  static void convertSharedMatchesToReviews(MatchSetVector& matchSets, std::vector<MergerPtr>& mergers,
+                                            const QStringList& matchNameFilter);
 
   void setAllowCrossConflationMerging(bool allow) { _allowCrossConflationMerging = allow; }
 
