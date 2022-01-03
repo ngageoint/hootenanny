@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATECASETEST_H
 #define CONFLATECASETEST_H
@@ -50,9 +50,8 @@ public:
    * @param printValidationReportDiff if true, for failing tests prints the difference between the
    * baseline validation report and the test validation report output
    */
-  ConflateCaseTest(
-    QDir d, QStringList confs, bool suppressFailureDetail = false,
-    bool printValidationReportDiff = false);
+  ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail = false,
+                   bool printValidationReportDiff = false);
 
   /**
    * @see AbstractTest

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPTTESTSUITE_H
 #define SCRIPTTESTSUITE_H
@@ -51,9 +51,8 @@ public:
    * @param suppressFailureDetail if true, detailed test failure information is not displayed
    * @param validatedOnly if true, only script tests which validate any output will be run
    */
-  ScriptTestSuite(
-    QString dir, bool printDiff, double waitTime, bool hideDisableTests,
-    bool suppressFailureDetail, bool validatedOnly);
+  ScriptTestSuite(QString dir, bool printDiff, double waitTime, bool hideDisableTests,
+                  bool suppressFailureDetail, bool validatedOnly);
 
 private:
 
