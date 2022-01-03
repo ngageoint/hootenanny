@@ -38,10 +38,10 @@ namespace hoot
 
 ConflateStatsHelper::ConflateStatsHelper(const QList<SingleStat> input1Stats,
                                          const QList<SingleStat> input2Stats,
-                                         const QList<SingleStat> outputStats) :
-_input1Stats(input1Stats),
-_input2Stats(input2Stats),
-_outputStats(outputStats)
+                                         const QList<SingleStat> outputStats)
+  : _input1Stats(input1Stats),
+    _input2Stats(input2Stats),
+    _outputStats(outputStats)
 {
 }
 
@@ -53,9 +53,7 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate) const
 void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long insertIndex) const
 {
   if (insertIndex > statsToUpdate.size())
-  {
     throw HootException("Invalid stats list index.");
-  }
 
   const double numInputFeaturesTotal =
     getSingleStat("Total Features", _input1Stats) +
@@ -68,12 +66,12 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long ins
     const double differenceBetweenTotalInputFeaturesAndTotalOutputFeatures =
       numTotalFeaturesInOutput - numInputFeaturesTotal;
     statsToUpdate.insert(
-      insertIndex++,
+      static_cast<int>(insertIndex++),
       SingleStat(
         "Difference Between Total Features in Output and Total Features in Inputs",
         differenceBetweenTotalInputFeaturesAndTotalOutputFeatures));
     statsToUpdate.insert(
-      insertIndex++,
+      static_cast<int>(insertIndex++),
       SingleStat(
         "Percentage Difference Between Total Features in Output and Total Features in Inputs",
         (differenceBetweenTotalInputFeaturesAndTotalOutputFeatures / numInputFeaturesTotal) * 100.0));
@@ -105,17 +103,17 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
     getSingleStat("Total Unmatched Features From Map 2", _outputStats);
   const double numConflatedFeatures = getSingleStat("Total Conflated Features", _outputStats);
   statsToUpdate.insert(
-    insertIndex++,
+    static_cast<int>(insertIndex++),
     SingleStat(
       "Percentage of Number of Total Map 1 Features Matched With Map 2 Features",
       (numConflatedFeatures / numMap1Features) * 100.0));
   statsToUpdate.insert(
-    insertIndex++,
+    static_cast<int>(insertIndex++),
     SingleStat(
       "Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features",
       (numMap1UnconflatedFeatures / numMap1Features) * 100.0));
   statsToUpdate.insert(
-    insertIndex++,
+    static_cast<int>(insertIndex++),
     SingleStat(
       "Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features",
       (numMap2UnconflatedFeatures / numMap2Features) * 100.0));
@@ -149,19 +147,19 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
         const double conflatedLength =
           getSingleStat("Meters of Conflated " + featureType + "s", _outputStats);
         statsToUpdate.insert(
-          insertIndex++,
+          static_cast<int>(insertIndex++),
           SingleStat(
             "Percentage of Length of Map 1 " + featureType + "s Matched With Map 2 " + featureType +
               "s",
             (conflatedLength / map1TotalLength) * 100.0));
         statsToUpdate.insert(
-          insertIndex++,
+          static_cast<int>(insertIndex++),
           SingleStat(
             "Percentage of Length of Map 1 " + featureType  + "s Not Matched With Map 2 " +
               featureType + "s",
             (map1LengthUnconflated / map1TotalLength) * 100.0));
         statsToUpdate.insert(
-          insertIndex++,
+          static_cast<int>(insertIndex++),
           SingleStat(
             "Percentage of Length of Map 2 " + featureType  + "s Not Matched With Map 1 " +
               featureType + "s",
@@ -187,19 +185,19 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
         const double conflatedArea =
           getSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats);
         statsToUpdate.insert(
-          insertIndex++,
+          static_cast<int>(insertIndex++),
           SingleStat(
             "Percentage of Area of Map 1 " + featureType + "s Matched With Map 2 " + featureType +
               "s",
             (conflatedArea / map1TotalArea) * 100.0));
         statsToUpdate.insert(
-          insertIndex++,
+          static_cast<int>(insertIndex++),
           SingleStat(
             "Percentage of Area of Map 1 " + featureType  + "s Not Matched With Map 2 " +
               featureType + "s",
             (map1AreaUnconflated / map1TotalArea) * 100.0));
         statsToUpdate.insert(
-          insertIndex++,
+          static_cast<int>(insertIndex++),
           SingleStat(
             "Percentage of Area of Map 2 " + featureType  + "s Not Matched With Map 1 " +
               featureType + "s",
@@ -211,24 +209,20 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
 
 bool ConflateStatsHelper::hasSingleStat(const QString& statName, const QList<SingleStat> stats)
 {
-  for (int i = 0; i < stats.size(); i++)
+  for (const auto& stat : stats)
   {
-    if (stats[i].name == statName)
-    {
+    if (stat.name == statName)
       return true;
-    }
   }
   return false;
 }
 
 double ConflateStatsHelper::getSingleStat(const QString& statName, const QList<SingleStat> stats)
 {
-  for (int i = 0; i < stats.size(); i++)
+  for (const auto& stat : stats)
   {
-    if (stats[i].name == statName)
-    {
-      return stats[i].value;
-    }
+    if (stat.name == statName)
+      return stat.value;
   }
   throw InternalErrorException("Could not find the specified stat: " + statName);
 }

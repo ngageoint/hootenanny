@@ -69,14 +69,14 @@ public:
     reader.read(_inputPath + "ToyTestB.osm", map2);
 
     const WayMap& w1 = map->getWays();
-    for (WayMap::const_iterator it = w1.begin(); it != w1.end(); ++it)
+    for (auto it = w1.begin(); it != w1.end(); ++it)
     {
       WayPtr w = map->getWay(it->second->getId());
       w->setTag("highway", "road");
     }
 
     const WayMap& w2 = map2->getWays();
-    for (WayMap::const_iterator it = w2.begin(); it != w2.end(); ++it)
+    for (auto it = w2.begin(); it != w2.end(); ++it)
     {
       WayPtr w = map2->getWay(it->second->getId());
       w->setTag("highway", "road");

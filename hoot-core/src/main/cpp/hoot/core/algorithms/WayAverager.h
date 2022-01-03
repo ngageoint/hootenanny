@@ -71,8 +71,7 @@ public:
    * @param w2 the second way to be averaged
    * @return the averaged way
    */
-  static WayPtr replaceWaysWithAveragedWay(
-    const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
+  static WayPtr replaceWaysWithAveragedWay(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
    * @brief getMaxMovement1 returns the maximum distance that w1 moved.
@@ -115,15 +114,14 @@ private:
    * Moves the node with id n half way to the specified line string. The input node id is returned
    * for convenience.
    */
-  long _moveToLine(
-    long ni, double nWeight, const geos::geom::LineString* ls, double lWeight, int w1OrW2);
+  long _moveToLine(long ni, double nWeight, const geos::geom::LineString* ls, double lWeight, int w1OrW2);
 
   /**
    * Returns the coordinate if you were to move the node with id n halfway toward the specified
    * line string.
    */
-  geos::geom::Coordinate _moveToLineAsCoordinate(
-    long n, double nWeight, const geos::geom::LineString* ls, double lWeight) const;
+  geos::geom::Coordinate _moveToLineAsCoordinate(long n, double nWeight, const geos::geom::LineString* ls,
+                                                 double lWeight) const;
 };
 
 }

@@ -63,21 +63,21 @@ using namespace Tgs;
 namespace hoot
 {
 
-GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
-BaseComparator(map1, map2),
-_iterations(100),
-_median(0.0),
-_mean(0.0),
-_ci(-1.0),
-_s(-1.0),
-_debugImages(false),
-_maxThreads(1)
+GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2)
+  : BaseComparator(map1, map2),
+    _iterations(100),
+    _median(0.0),
+    _mean(0.0),
+    _ci(-1.0),
+    _s(-1.0),
+    _debugImages(false),
+    _maxThreads(1)
 {
-  _init();
+  _initialize();
 }
 
-cv::Mat GraphComparator::_calculateCostDistance(
-  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random) const
+cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, double& maxGraphCost,
+                                                const RandomPtr& random) const
 {
   // Make a copy of the map so we can manipulate it.
   map = std::make_shared<OsmMap>(map);
@@ -133,16 +133,14 @@ void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random
   ProbablePathCalculator ppc(random);
   ppc.setRandomNoise(0.0);
   ppc.setRandomPatches(0.0, 1);
-  vector<float> friction(_width * _height, 5.0 * _pixelSize);
+  vector<float> friction(_width * _height, static_cast<float>(5.0 * _pixelSize));
   Image<float> cost(_width, _height);
 
   for (int y = 0; y < _height; y++)
   {
     const float* row = mat.ptr<float>(y);
     for (int x = 0; x < _width; x++)
-    {
       cost.pixel(x, y) = row[x];
-    }
   }
 
   ppc.setFriction(_height, _width, friction);
@@ -152,9 +150,7 @@ void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random
   {
     float* row = mat.ptr<float>(y);
     for (int x = 0; x < _width; x++)
-    {
       row[x] = cost.pixel(x, y);
-    }
   }
 }
 
@@ -176,12 +172,12 @@ double GraphComparator::compareMaps()
     WorkInfo info;
     info.index = i;
     // generate a random source point
-    info.coord.x =
-      Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
-        _projectedBounds.MinX;
-    info.coord.y =
-      Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
-        _projectedBounds.MinY;
+    info.coord.x = Random::instance()->generateUniform() *
+      (_projectedBounds.MaxX - _projectedBounds.MinX) +
+      _projectedBounds.MinX;
+    info.coord.y = Random::instance()->generateUniform() *
+      (_projectedBounds.MaxY - _projectedBounds.MinY) +
+      _projectedBounds.MinY;
     // pick one map as the reference map
     if (Random::instance()->coinToss())
       info.referenceMap = _mapP1;
@@ -193,7 +189,7 @@ double GraphComparator::compareMaps()
   //  Start up all of the threads
   LOG_STATUS("Starting " << _maxThreads << " graph comparison thread(s)...");
   for (int i = 0; i < _maxThreads; ++i)
-    _threadPool.push_back(thread(&GraphComparator::_graphCompareThreadFunc, this));
+    _threadPool.emplace_back(&GraphComparator::_graphCompareThreadFunc, this);
   //  Wait for the threads to finish working
   for (int i = 0; i < _maxThreads; ++i)
     _threadPool[i].join();
@@ -218,7 +214,7 @@ double GraphComparator::compareMaps()
   for (int i = 0; i < _iterations; ++i)
     v += (scores[i] - _mean) * (scores[i] - _mean);
   //  Calculate the sampled standard deviation
-  _s = sqrt(v / (scores.size() - 1));
+  _s = sqrt(v / (scores.size() - 1.0));
   //  Calculate the confidence interval
   _ci = zalpha * _s / sqrt(scores.size());
 
@@ -268,12 +264,9 @@ void GraphComparator::_graphCompareThreadFunc()
         diffData[j] = fabs(image1Data[j] - image2Data[j]);
 
       FileUtils::makeDir("test-output/route-image");
-      QString s1 =
-        QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
-      QString s2 =
-        QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
-      QString sdiff =
-        QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
+      QString s1 = QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
+      QString s2 = QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
+      QString sdiff = QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
       _saveImage(image1, s1, maxGraphCost * 3);
       _saveImage(image2, s2, maxGraphCost * 3);
       _saveImage(diff, sdiff, maxGraphCost * 3);
@@ -293,20 +286,19 @@ void GraphComparator::_graphCompareThreadFunc()
   work_queue_lock.unlock();
 }
 
-void GraphComparator::_exportGraphImage(
-  OsmMapPtr map, const ShortestPath& sp, const QString& path,
-  const geos::geom::Coordinate& coord) const
+void GraphComparator::_exportGraphImage(OsmMapPtr map, const ShortestPath& sp, const QString& path,
+                                        const geos::geom::Coordinate& coord) const
 {
   const NodeMap& nodes = map->getNodes();
 
   double maxCost = 1e-100;
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     double cost = sp.getNodeCost(it->first);
     maxCost = std::max(cost, maxCost);
   }
 
-  cout << _width << " x " << _height << endl;
+  LOG_DEBUG(_width << " x " << _height);
 
   QImage image(_width, _height, QImage::Format_ARGB32);
   QPainter pt(&image);
@@ -324,26 +316,22 @@ void GraphComparator::_exportGraphImage(
   pen.setWidth(3);
   QColor c;
 
-  cout << "max cost: " << maxCost << endl;
+  LOG_DEBUG("max cost: " << maxCost);
 
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     double cost = sp.getNodeCost(it->first);
     if (cost == 0)
-    {
       c.setRgb(0, 255, 0);
-    }
     if (cost < 0)
-    {
       c.setRgb(0, 0, 255);
-    }
     else
     {
-      int v = (int)((cost / maxCost) * 255.0);
+      int v = static_cast<int>((cost / maxCost) * 255.0);
       c.setRgb(255, v, 0);
     }
 
-    cout << "cost: " << cost << endl;
+    LOG_DEBUG("cost: " << cost);
 
     pen.setColor(c);
     pt.setPen(pen);
@@ -353,7 +341,7 @@ void GraphComparator::_exportGraphImage(
   image.save(path);
 }
 
-void GraphComparator::_init()
+void GraphComparator::_initialize()
 {
   // Make sure the intersections only lay on end nodes.
   IntersectionSplitter::splitIntersections(_mapP1);
@@ -361,9 +349,8 @@ void GraphComparator::_init()
   _debugImages = false;
 }
 
-cv::Mat GraphComparator::_paintGraph(
-  const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
-  double& maxGraphCost) const
+cv::Mat GraphComparator::_paintGraph(const ConstOsmMapPtr& map, const DirectedGraph& graph,
+                                     const ShortestPath& sp, double& maxGraphCost) const
 {
   LOG_TRACE("Painting graph...");
 
@@ -375,20 +362,17 @@ cv::Mat GraphComparator::_paintGraph(
   {
     float* row = mat.ptr<float>(y);
     for (int x = 0; x < _width; x++)
-    {
       row[x] = -1.0;
-    }
   }
 
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr w = it->second;
     LOG_VART(w.get());
     LOG_VART(w->getNodeIds().size());
     if (w->getNodeIds().empty())
-    {
       continue;
-    }
+
     double cost = sp.getNodeCost(w->getNodeIds()[0]);
     LOG_VART(cost);
     if (cost >= 0)
@@ -407,9 +391,8 @@ cv::Mat GraphComparator::_paintGraph(
   return mat;
 }
 
-void GraphComparator::_paintWay(
-  cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
-  double startCost, double endCost) const
+void GraphComparator::_paintWay(cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
+                                double startCost, double endCost) const
 {
   LocationOfPoint lop(map, way);
   double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
@@ -419,18 +402,14 @@ void GraphComparator::_paintWay(
     double cost = std::min(startCost + v * friction, endCost + (length - v) * friction);
     Coordinate c = lop.locate(v);
 
-    int x = (c.x - _projectedBounds.MinX) / _pixelSize;
-    int y = _height - (c.y - _projectedBounds.MinY) / _pixelSize;
+    int x = static_cast<int>((c.x - _projectedBounds.MinX) / _pixelSize);
+    int y = static_cast<int>(_height - (c.y - _projectedBounds.MinY) / _pixelSize);
 
     float* row = mat.ptr<float>(y);
     if (row[x] >= 0.0)
-    {
-      row[x] = std::min((float)cost, row[x]);
-    }
+      row[x] = std::min(static_cast<float>(cost), row[x]);
     else
-    {
-      row[x] = cost;
-    }
+      row[x] = static_cast<float>(cost);
   }
 }
 

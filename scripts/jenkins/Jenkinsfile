@@ -35,7 +35,7 @@ pipeline {
         string(name: 'HOOT_AWS_GROUP_TAG', defaultValue: 'devops')
         // Setting 'show_names' to '--names' will turn on the names of all unit tests to
         // help debug any hanging or crashing unit tests
-        string(name: 'show_names', defaultValue: '')
+        string(name: 'show_names', defaultValue: '--names')
     }
 
     environment {
