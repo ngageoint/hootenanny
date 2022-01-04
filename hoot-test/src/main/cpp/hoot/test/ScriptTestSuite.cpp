@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptTestSuite.h"
 
@@ -39,10 +39,9 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(
-  QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests,
-  bool suppressFailureDetail, bool validatedOnly) :
-TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
+ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests,
+                                 bool suppressFailureDetail, bool validatedOnly)
+  : TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 {
   QDir d(ConfPath::getHootHome() + "/" + dir);
   QStringList files = d.entryList(QDir::Files, QDir::Name);
@@ -53,21 +52,21 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
     ignorePrefix << "Service";
 # endif
 
-  for (int i = 0; i < files.size(); i++)
+  for (const auto& file : files)
   {
-    QFileInfo fi(d.absoluteFilePath(files[i]));
-    if (files[i].endsWith(".sh") && fi.isExecutable() == false)
+    QFileInfo fi(d.absoluteFilePath(file));
+    if (file.endsWith(".sh") && fi.isExecutable() == false)
     {
       LOG_WARN("Found a .sh file that is not executable. Is that what you want?");
       LOG_WARN(".sh file: " << fi.absoluteFilePath());
     }
 
-    if (files[i].endsWith(".off") == false && fi.isExecutable())
+    if (file.endsWith(".off") == false && fi.isExecutable())
     {
       bool ignore = false;
-      for (int j = 0; j < ignorePrefix.size(); j++)
+      for (const auto& prefix : ignorePrefix)
       {
-        if (fi.baseName().startsWith(ignorePrefix[j]))
+        if (fi.baseName().startsWith(prefix))
         {
           if (!hideDisableTests)
           {
@@ -76,16 +75,12 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
           ignore = true;
         }
       }
-      const QString path = d.absoluteFilePath(files[i]);
+      const QString path = d.absoluteFilePath(file);
       if (validatedOnly && !_scriptValidatesAnyOutput(path))
-      {
         ignore = true;
-      }
 
       if (!ignore)
-      {
         addTest(new ScriptTest(path, printDiff, suppressFailureDetail, waitTimeSec * 1000));
-      }
     }
   }
 }

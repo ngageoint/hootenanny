@@ -5889,7 +5889,7 @@ potential projections change over time. Very handy in unit tests.
 === test.script.max.exec.time
 
 * Data Type: int
-* Default Value: `-1`
+* Default Value: `900`
 
 For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
 If the script runs longer than the specified time, then it is forcefully stopped by the system. If

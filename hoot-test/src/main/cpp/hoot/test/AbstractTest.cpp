@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AbstractTest.h"
 
@@ -32,10 +32,10 @@
 namespace hoot
 {
 
-AbstractTest::AbstractTest(QDir d, QStringList confs) :
-  CppUnit::TestCase(d.absolutePath().toStdString()),
-  _d(d),
-  _confs(confs)
+AbstractTest::AbstractTest(QDir d, QStringList confs)
+  : CppUnit::TestCase(d.absolutePath().toStdString()),
+    _d(d),
+    _confs(confs)
 {
   LOG_DEBUG("Registering test: " << d.absolutePath());
 }

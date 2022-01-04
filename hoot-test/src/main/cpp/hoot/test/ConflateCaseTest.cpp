@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConflateCaseTest.h"
 
@@ -43,11 +43,10 @@
 namespace hoot
 {
 
-ConflateCaseTest::ConflateCaseTest(
-  QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff ) :
-AbstractTest(d, confs),
-_suppressFailureDetail(suppressFailureDetail),
-_printValidationReportDiff(printValidationReportDiff)
+ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff)
+  : AbstractTest(d, confs),
+    _suppressFailureDetail(suppressFailureDetail),
+    _printValidationReportDiff(printValidationReportDiff)
 {
 }
 
@@ -114,13 +113,12 @@ void ConflateCaseTest::_runConflateCmd() const
 
   if (result != 0)
   {
-    CPPUNIT_ASSERT_MESSAGE(
-      QString("Conflate command had nonzero exit status").toStdString(), false);
+    CPPUNIT_ASSERT_MESSAGE("Conflate command had nonzero exit status", false);
   }
 
   if (!TestUtils::compareMaps(expected.absoluteFilePath(), testOutput))
   {
-    CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
+    CPPUNIT_ASSERT_MESSAGE("Maps do not match", false);
   }
 }
 
@@ -140,9 +138,9 @@ void ConflateCaseTest::runTest()
     LOG_VART(ConfigOptions().getTestValidationEnable());
     if (ConfigOptions().getTestValidationEnable())
     {
-      TestOutputValidator::validate(
-        _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
-        _suppressFailureDetail, _printValidationReportDiff);
+      TestOutputValidator::validate(_d.dirName(), _d.absolutePath() + "/Output.osm",
+                                    _d.absolutePath() + "/validation-report",
+                                    _suppressFailureDetail, _printValidationReportDiff);
     }
   }
 }

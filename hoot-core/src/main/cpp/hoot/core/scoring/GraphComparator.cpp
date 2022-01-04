@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "GraphComparator.h"
@@ -214,7 +214,7 @@ double GraphComparator::compareMaps()
   for (int i = 0; i < _iterations; ++i)
     v += (scores[i] - _mean) * (scores[i] - _mean);
   //  Calculate the sampled standard deviation
-  _s = sqrt(v / (scores.size() - 1.0));
+  _s = sqrt(v / static_cast<double>(scores.size() - 1));
   //  Calculate the confidence interval
   _ci = zalpha * _s / sqrt(scores.size());
 
