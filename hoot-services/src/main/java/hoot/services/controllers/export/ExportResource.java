@@ -251,7 +251,11 @@ public class ExportResource {
                 workflow.add(zipCommand);
             }
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT));
+            //Record output name in job status tag so output can be retrieved from job panel
+            Map<String, Object> jobStatusTags = new HashMap<>();
+            jobStatusTags.put("outputname", outputName);
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT, jobStatusTags));
         }
         catch (WebApplicationException wae) {
             logger.error(wae.getMessage(), wae);
