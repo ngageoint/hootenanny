@@ -414,17 +414,17 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         std::make_shared<NoInformationCriterion>(), std::make_shared<FeatureCountVisitor>(),
         "No Information Feature Count");
     _addStat("Untagged Features", untaggedFeatureCount);
-    long unconflatableFeatureCount = -1.0;
+    double unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
-      unconflatableFeatureCount = fmax((featureCount - untaggedFeatureCount - conflatableFeatureCount), (long)0);
+      unconflatableFeatureCount = fmax((featureCount - untaggedFeatureCount - conflatableFeatureCount), 0.0);
     else  // This stat has no meaning on a conflated output map (see total feature conflatable stat comment).
       unconflatableFeatureCount = 0.0;
 
     _addStat("Total Unconflatable Features", unconflatableFeatureCount);
     _addStat("Percentage of Total Features Unconflatable",
-             ((double)unconflatableFeatureCount / featureCount) * 100.0);
+             (unconflatableFeatureCount / featureCount) * 100.0);
 
-    _addStat("Match Creators", matchCreators.size());
+    _addStat("Match Creators", static_cast<double>(matchCreators.size()));
 
     const QMap<QString, long> matchCandidateCountsByMatchCreator =
       boost::any_cast<QMap<QString, long>>(matchCandidateCountsData);
@@ -441,7 +441,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
       {
-        conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
+        conflatableFeatureCountForFeatureType = static_cast<double>(matchCandidateCountsByMatchCreator[matchCreatorName]);
         LOG_VARD(conflatableFeatureCountForFeatureType);
       }
 
@@ -543,9 +543,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       // This stat could be made generic, but since the ones following it cannot currently we'll
       // leave it non-generic so it shows up next to them in the list.
       _addStat("Translated Populated Tag Percent", tcv.getStat());
-      _addStat("Translated Populated Tags", tcv.getPopulatedCount());
-      _addStat("Translated Default Tags", tcv.getDefaultCount());
-      _addStat("Translated Null Tags", tcv.getNullCount());
+      _addStat("Translated Populated Tags", static_cast<double>(tcv.getPopulatedCount()));
+      _addStat("Translated Default Tags", static_cast<double>(tcv.getDefaultCount()));
+      _addStat("Translated Null Tags", static_cast<double>(tcv.getNullCount()));
     }
     else
     {
@@ -908,7 +908,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   {
     // We need to add any pois that may have been merged into polygons by poi/poly into the
     // conflated feature count for this feature type.
-    conflatedFeatureCount += poisMergedIntoPolys;
+    conflatedFeatureCount += static_cast<double>(poisMergedIntoPolys);
     LOG_VARD(conflatedFeatureCount);
   }
 
@@ -960,11 +960,11 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   {
     // We need to subtract any pois that may have been merged into polygons by poi/poly from the
     // unconflated feature count for this feature type.
-    totalUnconflatedFeatureCount -= poisMergedIntoPolys;
+    totalUnconflatedFeatureCount -= static_cast<double>(poisMergedIntoPolys);
     LOG_VARD(totalUnconflatedFeatureCount);
-    unconflatedFeatureCountMap1 -= poisMergedIntoPolysFromMap1;
+    unconflatedFeatureCountMap1 -= static_cast<double>(poisMergedIntoPolysFromMap1);
     LOG_VARD(unconflatedFeatureCountMap1);
-    unconflatedFeatureCountMap2 -= poisMergedIntoPolysFromMap2;
+    unconflatedFeatureCountMap2 -= static_cast<double>(poisMergedIntoPolysFromMap2);
     LOG_VARD(unconflatedFeatureCountMap2);
   }
   _addStat(QString("Unmatched %1s").arg(description), totalUnconflatedFeatureCount);
