@@ -29,9 +29,9 @@
 #define RANDOM_MAP_CROPPER_H
 
 // Hoot
+#include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
 
 namespace hoot
 {
@@ -61,9 +61,7 @@ public:
   QString getInitStatusMessage() const override
   { return _cropper.getInitStatusMessage(); }
   QString getCompletedStatusMessage() const override
-  {
-    return _cropper.getCompletedStatusMessage();
-  }
+  { return _cropper.getCompletedStatusMessage(); }
 
   QString getDescription() const override
   { return "Crops a random tile out of a map of a specified node size (experimental)"; }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TILE_UTILS_H
@@ -45,8 +45,7 @@ public:
    * @param randomSeed optional random number generator seed
    * @return an index
    */
-  static int getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                int randomSeed);
+  static int getRandomTileIndex(const std::vector<geos::geom::Envelope>& tiles, int randomSeed);
 
   /**
    * Retrieves a random boundary tile from a collection of tiles
@@ -55,8 +54,7 @@ public:
    * @param randomSeed optional random number generator seed
    * @return a random tile selected from the computed tiles
    */
-  static geos::geom::Envelope getRandomTile(
-    const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
+  static geos::geom::Envelope getRandomTile(const std::vector<geos::geom::Envelope>& tiles, int randomSeed);
 };
 
 }
