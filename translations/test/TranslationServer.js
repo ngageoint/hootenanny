@@ -227,15 +227,17 @@ describe('TranslationServer', function () {
 
         it('should handle traslateTo TDSv61 POST with OSM Json payload', function() {
             var output = server.handleInputs({
-                osm: '{ "version":"0.6","generator":"CGImap 0.8.6 (1471352 spike-06.openstreetmap.org)", "copyright":"OpenStreetMap and contributors","attribution":"http://www.openstreetmap.org/copyright", "license":"http://opendatacommons.org/licenses/odbl/1-0/", "elements":[ {"type":"node","id":1831881213,"lat":54.0900666,"lon":12.2539381,"version":1, "user":"lafkor", "uid":"75625", "visible":"true", "timestamp":"2012-07-20T09:43:19Z", "tags": {"name":"Neu Broderstorf","traffic_sign":"city_limit"}} ] }',
+                osm: '{"version":"0.6","generator":"CGImap 0.8.6 (1471352 spike-06.openstreetmap.org)", "copyright":"OpenStreetMap and contributors","attribution":"http://www.openstreetmap.org/copyright", "license":"http://opendatacommons.org/licenses/odbl/1-0/", "elements":[ {"type":"node","id":1831881213,"lat":54.0900666,"lon":12.2539381,"version":1, "user":"lafkor", "uid":"75625", "visible":"true", "timestamp":"2012-07-20T09:43:19Z", "tags": {"building": "yes"}} ]}',
                 method: 'POST',
                 translation: 'TDSv70',
                 path: '/translateTo'
             })
 
             var xml = parser.parseFromString(output);
-            console.log(xml)
-            assert.equal(true,true);
+            var gj = osmtogeojson(xml);
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv70");
+            var tags = gj.features[0].properties;
+            assert.equal(tags["F_CODE"], "AL013");
         })
 
         it('should handle translateTo TDSv70 POST', function() {
