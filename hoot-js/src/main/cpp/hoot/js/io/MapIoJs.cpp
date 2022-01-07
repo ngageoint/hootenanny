@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -105,18 +106,29 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
   OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   QString mapXml = toCpp<QString>(args[1]);
 
-  OsmXmlReader reader;
+  bool jsonReader = args.Length() >= 4 && (toCpp<bool>(args[3]));
+
+  std::shared_ptr<OsmMapReader> reader =
+    std::dynamic_pointer_cast<OsmMapReader>(
+      Factory::getInstance().constructObject<OsmMapReader>(
+          jsonReader ? "OsmJsonReader" : "OsmXmlReader"));
+
   if (args.Length() >= 3)
   {
-    reader.setUseDataSourceIds(toCpp<bool>(args[2]));
+    reader->setUseDataSourceIds(toCpp<bool>(args[2]));
   }
-  Status status = Status::Invalid;
-  if (args.Length() >= 4)
-  {
-    status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
-    reader.setDefaultStatus(status);
-  }
-  reader.readFromString(mapXml, map->getMap());
+//   Status status = Status::Invalid;
+//   if (args.Length() >= 4)
+//   {
+//     status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
+//     reader->setDefaultStatus(status);
+//   }
+
+  if (jsonReader)
+    std::dynamic_pointer_cast<OsmJsonReader>(reader)->loadFromString(mapXml, map->getMap());
+  else
+    std::dynamic_pointer_cast<OsmXmlReader>(reader)->readFromString(mapXml, map->getMap());
+
 
   args.GetReturnValue().SetUndefined();
 }

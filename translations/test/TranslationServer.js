@@ -225,6 +225,19 @@ describe('TranslationServer', function () {
             assert.equal(tags["UFI"], "bfd3f222-8e04-4ddc-b201-476099761302");
         }).timeout(3000);
 
+        it('should handle traslateTo TDSv61 POST with OSM Json payload', function() {
+            var output = server.handleInputs({
+                osm: '{ "version":"0.6","generator":"CGImap 0.8.6 (1471352 spike-06.openstreetmap.org)", "copyright":"OpenStreetMap and contributors","attribution":"http://www.openstreetmap.org/copyright", "license":"http://opendatacommons.org/licenses/odbl/1-0/", "elements":[ {"type":"node","id":1831881213,"lat":54.0900666,"lon":12.2539381,"version":1, "user":"lafkor", "uid":"75625", "visible":"true", "timestamp":"2012-07-20T09:43:19Z", "tags": {"name":"Neu Broderstorf","traffic_sign":"city_limit"}} ] }',
+                method: 'POST',
+                translation: 'TDSv70',
+                path: '/translateTo'
+            })
+
+            var xml = parser.parseFromString(output);
+            console.log(xml)
+            assert.equal(true,true);
+        })
+
         it('should handle translateTo TDSv70 POST', function() {
             var output = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
