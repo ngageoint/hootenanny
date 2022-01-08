@@ -26,12 +26,13 @@
  */
 package hoot.services.controllers.info;
 
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -53,7 +54,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
 
         // BuildingKeepMoreComplexGeometryWhenAutoMerging is one of the settings that Attribute Conflation customizes. That's unlikely to change.
         String jsonStr = responseData.readEntity(String.class);
-         assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
+        assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
     }
 
     @Ignore
@@ -67,7 +68,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
                     .get();
 
         String jsonStr = responseData.readEntity(String.class);
-         assertThat(jsonStr, CoreMatchers.containsString("Roads"));
+        assertThat(jsonStr, CoreMatchers.containsString("Roads"));
     }
 
     @Test
