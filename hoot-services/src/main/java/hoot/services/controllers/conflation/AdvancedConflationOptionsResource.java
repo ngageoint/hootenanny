@@ -243,7 +243,7 @@ public class AdvancedConflationOptionsResource {
             // Force option should only be used to update options list by administrator
             Boolean doForce = Boolean.valueOf(isForce);
 
-//            getOverrides(doForce);
+            getOverrides(doForce);
 
             if ((doc == null) || doForce) {
                 doc = new JSONObject();
