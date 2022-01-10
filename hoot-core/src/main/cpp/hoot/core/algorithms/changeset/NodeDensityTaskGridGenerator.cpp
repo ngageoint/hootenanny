@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NodeDensityTaskGridGenerator.h"
 
@@ -52,7 +52,6 @@ NodeDensityTaskGridGenerator::NodeDensityTaskGridGenerator(const QStringList& in
   _boundsCalc.setMaxNumTries(3);
   _boundsCalc.setMaxTimePerAttempt(300);
   _boundsCalc.setPixelSizeRetryReductionFactor(10);
-  _boundsCalc.setSlop(0.1);
 }
 
 TaskGrid NodeDensityTaskGridGenerator::generateTaskGrid()
@@ -117,36 +116,25 @@ TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
 
   _boundsCalc.calculateTiles(map);
 
-  const std::vector<std::vector<geos::geom::Envelope>> rawTaskGrid = _boundsCalc.getTiles();
-  const std::vector<std::vector<long>> nodeCounts = _boundsCalc.getNodeCounts();
+  const std::vector<geos::geom::Envelope> rawTaskGrid = _boundsCalc.getTiles();
+  const std::vector<long> nodeCounts = _boundsCalc.getNodeCounts();
   if (_output.endsWith(".geojson", Qt::CaseInsensitive))
-  {
-    NodeDensityTaskGridWriter::writeTilesToGeoJson(rawTaskGrid, nodeCounts, _output, map->getSource(),
-                                                   _writeRandomCellOnly, _randomSeed);
-  }
+    NodeDensityTaskGridWriter::writeTilesToGeoJson(rawTaskGrid, nodeCounts, _output, map->getSource(), _writeRandomCellOnly, _randomSeed);
   else
-  {
-    NodeDensityTaskGridWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _output, _writeRandomCellOnly,
-                                               _randomSeed);
-  }
+    NodeDensityTaskGridWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _output, _writeRandomCellOnly, _randomSeed);
   map.reset();
 
   // flatten the collection; use a list to maintain order
   TaskGrid taskGrid;
-  int cellCtr = 1;
-  for (size_t tx = 0; tx < rawTaskGrid.size(); tx++)
+  for (size_t idx = 0; idx < rawTaskGrid.size(); idx++)
   {
-    for (size_t ty = 0; ty < rawTaskGrid[tx].size(); ty++)
-    {
-      TaskGrid::TaskGridCell taskGridCell;
-      taskGridCell.id = cellCtr;
-      taskGridCell.replacementNodeCount = nodeCounts[tx][ty];
-      taskGridCell.bounds = rawTaskGrid[tx][ty];
-      taskGrid.addCell(taskGridCell);
-      cellCtr++;
-    }
+    TaskGrid::TaskGridCell taskGridCell;
+    taskGridCell.id = idx + 1;
+    taskGridCell.replacementNodeCount = nodeCounts[idx];
+    taskGridCell.bounds = rawTaskGrid[idx];
+    taskGrid.addCell(taskGridCell);
   }
-  assert(_boundsCalc.getTileCount() == taskGrid.size());
+  assert(_boundsCalc.getTileCount() == static_cast<size_t>(taskGrid.size()));
 
   LOG_STATUS("Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) <<
              " task grid cells in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");

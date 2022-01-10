@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CALCULATESTATSOP_H
 #define CALCULATESTATSOP_H
@@ -30,12 +30,12 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/info/StatData.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -56,8 +56,7 @@ public:
   static QString className() { return "CalculateStatsOp"; }
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
-  CalculateStatsOp(
-    ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
+  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
   ~CalculateStatsOp() override = default;
 
   double getSingleStat(const QString& n) const;
@@ -96,10 +95,10 @@ private:
   // ConflateExecutor and SuperfluousConflateOpRemover
   QSet<QString> _filter;
 
-  std::shared_ptr<ScriptSchemaTranslator> _schemaTranslator;
+  ScriptSchemaTranslatorPtr _schemaTranslator;
 
-  QHash<QString, std::shared_ptr<ElementCriterion>> _criterionCache;
-  QHash<QString, std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
+  QHash<QString, ElementCriterionPtr> _criterionCache;
+  QHash<QString, ConstElementVisitorPtr> _appliedVisitorCache;
 
   QList<StatData> _quickStatData;
   QList<StatData> _slowStatData;
@@ -126,11 +125,10 @@ private:
   int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
   void _interpretStatData(const std::shared_ptr<const OsmMap>& constMap, const StatData& d);
   double _getRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
-  void _generateFeatureStats(
-    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
-    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
-    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
-    const long poisMergedIntoPolysFromMap2);
+  void _generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+                             const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+                             const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+                             const long poisMergedIntoPolysFromMap2);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -139,29 +137,22 @@ private:
    * @param [out] featureType base feature type for the found matchCreator
    * @return ptr to match creator, if found, otherwise std::shared_ptr to null
    */
-  std::shared_ptr<MatchCreator> _getMatchCreator(
-    const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
-    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType) const;
-  static bool _matchDescriptorCompare(
-    const CreatorDescription& m1, const CreatorDescription& m2);
+  MatchCreatorPtr _getMatchCreator(const std::vector<MatchCreatorPtr>& matchCreators, const QString &matchCreatorName,
+                                   CreatorDescription::BaseFeatureType& featureType) const;
+  static bool _matchDescriptorCompare(const CreatorDescription& m1, const CreatorDescription& m2);
 
-  double _applyVisitor(
-    const FilteredVisitor& v, const QString& statName,
-    StatData::StatCall call = StatData::StatCall::Stat);
-  double _applyVisitor(
-    const FilteredVisitor& v, boost::any& visitorData, const QString& statName,
-    StatData::StatCall call = StatData::StatCall::Stat);
-  double _applyVisitor(
-    const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,
-    StatData::StatCall call = StatData::StatCall::Stat);
-  double _applyVisitor(
-    const std::shared_ptr<ElementCriterion> pCrit, std::shared_ptr<ConstElementVisitor> pVis,
-    const QString& statName, StatData::StatCall call = StatData::StatCall::Stat);
-  void _applyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
+  double _applyVisitor(const FilteredVisitor& v, const QString& statName,
+                       StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(const FilteredVisitor& v, boost::any& visitorData, const QString& statName,
+                       StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,
+                       StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(const ElementCriterionPtr& pCrit, ConstElementVisitorPtr pVis,
+                       const QString& statName, StatData::StatCall call = StatData::StatCall::Stat);
+  void _applyVisitor(ConstElementVisitorPtr v, const QString& statName);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
-  double _getApplyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
-  ConstElementVisitorPtr _getElementVisitorForFeatureType(
-    const CreatorDescription::BaseFeatureType& featureType) const;
+  double _getApplyVisitor(ConstElementVisitorPtr v, const QString& statName);
+  ConstElementVisitorPtr _getElementVisitorForFeatureType(const CreatorDescription::BaseFeatureType& featureType) const;
 };
 
 }
