@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -149,15 +149,12 @@ class ConflateCommand extends ExternalCommand {
         // Detect Differential Conflation
         String conflationCommand = params.getConflationCommand();
         String diffTags = "";
-        String differential = "";
         if (conflationCommand != null && conflationCommand.contains("differential-tags")){
           conflationCommand = "conflate";
-          differential = "--differential";
-          diffTags = "--include-tags";
+          options.add("conflate.differential.include.tags=true");
         }
         else if (conflationCommand != null && conflationCommand.contains("differential")){
           conflationCommand = "conflate";
-          differential = "--differential";
         }
 
         if (params.getAdvancedOptions() != null && !params.getAdvancedOptions().isEmpty()) { // hoot 1
@@ -280,13 +277,11 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("INPUT1", input1);
         substitutionMap.put("INPUT2", input2);
         substitutionMap.put("OUTPUT", output);
-        substitutionMap.put("DIFFERENTIAL", differential);
-        substitutionMap.put("DIFF_TAGS", diffTags);
         substitutionMap.put("STATS", stats);
 
         String command;
         if (params.getHoot2() == null) { // hoot1
-            command = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
         } else {
 
             if (conflationType != null) {
