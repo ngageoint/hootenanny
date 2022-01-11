@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RANDOM_MAP_CROPPER_H
 #define RANDOM_MAP_CROPPER_H
 
 // Hoot
+#include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
 
 namespace hoot
 {
@@ -61,9 +61,7 @@ public:
   QString getInitStatusMessage() const override
   { return _cropper.getInitStatusMessage(); }
   QString getCompletedStatusMessage() const override
-  {
-    return _cropper.getCompletedStatusMessage();
-  }
+  { return _cropper.getCompletedStatusMessage(); }
 
   QString getDescription() const override
   { return "Crops a random tile out of a map of a specified node size (experimental)"; }

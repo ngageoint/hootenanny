@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeDensityTaskGridWriter.h"
@@ -39,8 +39,8 @@
 namespace hoot
 {
 
-void NodeDensityTaskGridWriter::writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                                    const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+void NodeDensityTaskGridWriter::writeTilesToGeoJson(const std::vector<geos::geom::Envelope>& tiles,
+                                                    const std::vector<long>& nodeCounts, const QString& outputPath,
                                                     const QString& fileSource, const bool selectSingleRandomTile, int randomSeed)
 {
   LOG_VARD(outputPath);
@@ -64,10 +64,9 @@ void NodeDensityTaskGridWriter::writeTilesToGeoJson(const std::vector<std::vecto
   OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
-void NodeDensityTaskGridWriter::writeTilesToOsm(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-  const bool selectSingleRandomTile, int randomSeed)
+void NodeDensityTaskGridWriter::writeTilesToOsm(const std::vector<geos::geom::Envelope>& tiles,
+                                                const std::vector<long>& nodeCounts, const QString& outputPath,
+                                                const bool selectSingleRandomTile, int randomSeed)
 {
   LOG_VARD(outputPath);
 
@@ -81,34 +80,30 @@ void NodeDensityTaskGridWriter::writeTilesToOsm(
   OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
-OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                                    const std::vector<std::vector<long>>& nodeCounts, int randomTileIndex,
+OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(const std::vector<geos::geom::Envelope>& tiles,
+                                                    const std::vector<long>& nodeCounts, int randomTileIndex,
                                                     const bool selectSingleRandomTile)
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   // This ensures the ways stay in the same order as the task IDs when the map is written out.
   boundaryMap->setIdGenerator(std::make_shared<PositiveIdGenerator>());
   int bboxCtr = 1;
-  for (size_t tx = 0; tx < tiles.size(); tx++)
+  for (const auto& env : tiles)
   {
-    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+    // Only create the bounding tile if we want all of them or if this is the randomly selected
+    // tile.
+    if (!selectSingleRandomTile || (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
     {
-      // Only create the bounding tile if we want all of them or if this is the randomly selected
-      // tile.
-      if (!selectSingleRandomTile || (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
-      {
-        //  Create the way in the map
-        const geos::geom::Envelope env = tiles[tx][ty];
-        ElementId eid = GeometryUtils::createBoundsInMap(boundaryMap, env);
-        //  Update the tags on the bounding rectangle
-        WayPtr bbox = boundaryMap->getWay(eid.getId());
-        LOG_VART(bbox->getElementId());
-        bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
-        LOG_VART(bboxCtr);
-        bbox->setTag("task", QString::number(bboxCtr));
-      }
-      bboxCtr++;
+      //  Create the way in the map
+      ElementId eid = GeometryUtils::createBoundsInMap(boundaryMap, env);
+      //  Update the tags on the bounding rectangle
+      WayPtr bbox = boundaryMap->getWay(eid.getId());
+      LOG_VART(bbox->getElementId());
+      bbox->setTag("node_count", QString::number(nodeCounts[bboxCtr - 1]));
+      LOG_VART(bboxCtr);
+      bbox->setTag("task", QString::number(bboxCtr));
     }
+    bboxCtr++;
   }
   return boundaryMap;
 }

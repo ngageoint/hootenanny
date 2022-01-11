@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NODE_DENSITY_TASK_GRID_WRITER_H
@@ -54,8 +54,8 @@ public:
    * @todo collapse with OSM writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
    */
-  static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+  static void writeTilesToGeoJson(const std::vector<geos::geom::Envelope>& tiles,
+                                  const std::vector<long>& nodeCounts, const QString& outputPath,
                                   const QString& fileSource = "", const bool selectSingleRandomTile = false, int randomSeed = -1);
 
   /**
@@ -69,8 +69,8 @@ public:
    * @todo collapse with GeoJSON writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
    */
-  static void writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                              const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+  static void writeTilesToOsm(const std::vector<geos::geom::Envelope>& tiles,
+                              const std::vector<long>& nodeCounts, const QString& outputPath,
                               const bool selectSingleRandomTile = false, int randomSeed = -1);
 
 private:
@@ -83,8 +83,8 @@ private:
    * @param randomTileIndex index of the random tile to use
    * @param selectSingleRandomTile selects a single randomly selected tile instead of all tiles
    */
-  static OsmMapPtr _tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                  const std::vector<std::vector<long>>& nodeCounts,
+  static OsmMapPtr _tilesToOsmMap(const std::vector<geos::geom::Envelope>& tiles,
+                                  const std::vector<long>& nodeCounts,
                                   int randomTileIndex, const bool selectSingleRandomTile = false);
 };
 

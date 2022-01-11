@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -34,10 +34,10 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
@@ -58,17 +58,17 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, CalculateStatsOp)
 
-CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput) :
-  _mapName(mapName),
-  _quick(false),
-  _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
-  _currentStatCalcIndex(1),
-  _totalStatCalcs(0),
-  // Unknown does not get us a usable element criterion, so skip it.
-  _featureTypesToSkip(QStringList("unknown")),
-  _numInterpresetStatDataCalls(0),
-  _numInterpretStatVisCacheHits(0),
-  _numGenerateFeatureStatCalls(0)
+CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput)
+  : _mapName(mapName),
+    _quick(false),
+    _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
+    _currentStatCalcIndex(1),
+    _totalStatCalcs(0),
+    // Unknown does not get us a usable element criterion, so skip it.
+    _featureTypesToSkip(QStringList("unknown")),
+    _numInterpresetStatDataCalls(0),
+    _numInterpretStatVisCacheHits(0),
+    _numGenerateFeatureStatCalls(0)
 {
   setConfiguration(conf());
   _initConflatableFeatureCounts();
@@ -76,17 +76,17 @@ CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutp
 }
 
 CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName,
-                                   bool inputIsConflatedMapOutput) :
-  _criterion(criterion),
-  _mapName(mapName),
-  _quick(false),
-  _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
-  _currentStatCalcIndex(1),
-  _totalStatCalcs(0),
-  _featureTypesToSkip(QStringList("unknown")),
-  _numInterpresetStatDataCalls(0),
-  _numInterpretStatVisCacheHits(0),
-  _numGenerateFeatureStatCalls(0)
+                                   bool inputIsConflatedMapOutput)
+  : _criterion(criterion),
+    _mapName(mapName),
+    _quick(false),
+    _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
+    _currentStatCalcIndex(1),
+    _totalStatCalcs(0),
+    _featureTypesToSkip(QStringList("unknown")),
+    _numInterpresetStatDataCalls(0),
+    _numInterpretStatVisCacheHits(0),
+    _numGenerateFeatureStatCalls(0)
 {
   setConfiguration(conf());
   _initConflatableFeatureCounts();
@@ -110,27 +110,29 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
   QList<StatData>* pCurr = nullptr;
   QHash<QString, StatData::StatCall> enumLookup(
   {
-    {"stat", StatData::StatCall::Stat},
-    {"min", StatData::StatCall::Min},
-    {"max", StatData::StatCall::Max},
-    {"average", StatData::StatCall::Average},
-    {"infocount", StatData::StatCall::InfoCount},
-    {"infomin", StatData::StatCall::InfoMin},
-    {"infomax", StatData::StatCall::InfoMax},
-    {"infoaverage", StatData::StatCall::InfoAverage},
-    {"infodiff", StatData::StatCall::InfoDiff}
+    { "stat", StatData::StatCall::Stat },
+    { "min", StatData::StatCall::Min },
+    { "max", StatData::StatCall::Max },
+    { "average", StatData::StatCall::Average },
+    { "infocount", StatData::StatCall::InfoCount },
+    { "infomin", StatData::StatCall::InfoMin },
+    { "infomax", StatData::StatCall::InfoMax },
+    { "infoaverage", StatData::StatCall::InfoAverage },
+    { "infodiff", StatData::StatCall::InfoDiff }
   });
 
   foreach (bpt::ptree::value_type listType, propPtree)
   {
-    if (listType.first == "#") continue; // skip comments
-    else if (listType.first == "quick") pCurr = &_quickStatData;
-    else if (listType.first == "slow") pCurr = &_slowStatData;
+    if (listType.first == "#")
+      continue; // skip comments
+    else if (listType.first == "quick")
+      pCurr = &_quickStatData;
+    else if (listType.first == "slow")
+      pCurr = &_slowStatData;
     else
     {
-      throw HootException(
-        "Invalid stats data list name '" + listType.first + "' in " + _statsFileName.toStdString() +
-        ". Allowed: 'quick' or 'slow'.");
+      throw HootException("Invalid stats data list name '" + listType.first + "' in " + _statsFileName.toStdString() +
+                          ". Allowed: 'quick' or 'slow'.");
     }
 
     foreach (bpt::ptree::value_type entry, listType.second)
@@ -142,47 +144,38 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
         const QString key = QString::fromStdString(data.first).toLower().trimmed();
         const QString val = QString::fromStdString(data.second.data()).trimmed();
 
-        if (key == "name") newStatData.setName(val);
-        else if (key == "visitor") newStatData.setVisitor(val);
-        else if (key == "criterion") newStatData.setCriterion(val);
-        else if (key == "filtercriterion") newStatData.setFilterCriterion(val);
+        if (key == "name")
+          newStatData.setName(val);
+        else if (key == "visitor")
+          newStatData.setVisitor(val);
+        else if (key == "criterion")
+          newStatData.setCriterion(val);
+        else if (key == "filtercriterion")
+          newStatData.setFilterCriterion(val);
         else if (key == "statcall")
         {
           QString enumVal = val.toLower();
           if (enumLookup.contains(enumVal))
-          {
             newStatData.setStatCall(enumLookup[enumVal]);
-          }
           else
-          {
-            throw HootException(
-              "Invalid stats data field '" + val.toStdString() + "' in " +
-              _statsFileName.toStdString());
-          }
+            throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + _statsFileName.toStdString());
         }
         else
-        {
-          throw HootException(
-            "Invalid stats data field '" + val.toStdString() + "' in " +
-            _statsFileName.toStdString());
-        }
+          throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + _statsFileName.toStdString());
       }
-
       pCurr->append(newStatData);
     }
   }
 }
 
-shared_ptr<MatchCreator> CalculateStatsOp::_getMatchCreator(
-  const vector<shared_ptr<MatchCreator>>& matchCreators, const QString& matchCreatorName,
-  CreatorDescription::BaseFeatureType& featureType) const
+MatchCreatorPtr CalculateStatsOp::_getMatchCreator(const vector<MatchCreatorPtr>& matchCreators,
+                                                   const QString& matchCreatorName,
+                                                   CreatorDescription::BaseFeatureType& featureType) const
 {
-  for (vector<shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
-       matchIt != matchCreators.end(); ++matchIt)
+  for (auto matchIt = matchCreators.begin(); matchIt != matchCreators.end(); ++matchIt)
   {
     vector<CreatorDescription> desc = (*matchIt)->getAllCreators();
-    for (vector<CreatorDescription>::const_iterator descIt = desc.begin();
-         descIt != desc.end(); ++descIt)
+    for (auto descIt = desc.begin(); descIt != desc.end(); ++descIt)
     {
       QString testName = descIt->getClassName();
       LOG_VART(testName);
@@ -194,12 +187,12 @@ shared_ptr<MatchCreator> CalculateStatsOp::_getMatchCreator(
       }
     }
   }
-  return shared_ptr<MatchCreator>(); // empty if not found
+  return MatchCreatorPtr(); // empty if not found
 }
 
 void CalculateStatsOp::_initConflatableFeatureCounts()
 {
-  for (CreatorDescription::BaseFeatureType ft = CreatorDescription::POI;
+  for (auto ft = CreatorDescription::POI;
        ft < CreatorDescription::Unknown;
        ft = CreatorDescription::BaseFeatureType(ft + 1))
   {
@@ -210,12 +203,10 @@ void CalculateStatsOp::_initConflatableFeatureCounts()
 int CalculateStatsOp::_getNumStatsPassingFilter(const QList<StatData>& stats) const
 {
   int numPassingFilter = 0;
-  for (QList<StatData>::const_iterator it = stats.begin(); it != stats.end(); ++it)
+  for (const auto& stat : stats)//QList<StatData>::const_iterator it = stats.begin(); it != stats.end(); ++it)
   {
-    if (_statPassesFilter(*it))
-    {
+    if (_statPassesFilter(stat))
       numPassingFilter++;
-    }
   }
   return numPassingFilter;
 }
@@ -253,11 +244,9 @@ void CalculateStatsOp::_initStatCalc()
     // the number of calls to _applyVisitor outside of a loop and always called
     numSlowStatCalcs += 8;
 
+    // the number of calls to _applyVisitor made during translated tag calc
     if (ConfigOptions().getStatsTranslateScript() != "")
-    {
-      // the number of calls to _applyVisitor made during translated tag calc
       numSlowStatCalcs += 4;
-    }
 
     LOG_VARD(_inputIsConflatedMapOutput);
     if (_filter.isEmpty() ||
@@ -267,19 +256,16 @@ void CalculateStatsOp::_initStatCalc()
       // extra calls to _applyVisitor made for poi/poly only and for all types of maps
       numSlowStatCalcs += 3;
 
+      // extra calls to _applyVisitor made for poi/poly only and only for input maps
       if (!_inputIsConflatedMapOutput)
-      {
-        // extra calls to _applyVisitor made for poi/poly only and only for input maps
         numSlowStatCalcs += 2;
-      }
     }
 
     LOG_VARD(MatchFactory::getInstance().getCreators().size());
     // extra calls to _applyVisitor made for each feature type by _generateFeatureStats
     int numCallsToGenerateFeatureStats = 0;
     int numSizeCalcs = 0;
-    for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
-           _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
+    for (auto it = _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
     {
       CreatorDescription::BaseFeatureType featureType = it.key();
       const QString featureTypeStr = CreatorDescription::baseFeatureTypeToString(featureType);
@@ -291,11 +277,8 @@ void CalculateStatsOp::_initStatCalc()
 
         const CreatorDescription::FeatureCalcType calcType =
           CreatorDescription::getFeatureCalcType(featureType);
-        if (calcType == CreatorDescription::CalcTypeArea ||
-            calcType == CreatorDescription::CalcTypeLength)
-        {
+        if (calcType == CreatorDescription::CalcTypeArea || calcType == CreatorDescription::CalcTypeLength)
           numSizeCalcs += 4;
-        }
       }
     }
     LOG_VARD(numCallsToGenerateFeatureStats);
@@ -326,13 +309,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   QString logMsg = "Performing " + QString::number(_totalStatCalcs) + " map statistic calculations";
   if (!_mapName.isEmpty())
-  {
     logMsg += " for " + _mapName;
-  }
   else if (!map->getName().isEmpty())
-  {
     logMsg += " for " + map->getName();
-  }
   logMsg += "...";
   LOG_STATUS(logMsg);
 
@@ -340,8 +319,14 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   _constMap = map;
 
-  for (StatData d : _quickStatData) _interpretStatData(_constMap, d);
-  if (!_quick) for (StatData d : _slowStatData) _interpretStatData(_constMap, d);
+  for (const auto& d : _quickStatData)
+    _interpretStatData(_constMap, d);
+
+  if (!_quick)
+  {
+    for (const auto& d : _slowStatData)
+      _interpretStatData(_constMap, d);
+  }
 
   if (!_quick)
   {
@@ -349,8 +334,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     // needed to calculate derivative stats. In order to prevent calculating them more than once,
     // they haven't been moved to the generic stats.
 
-    const double featureCount =
-      _getApplyVisitor(std::make_shared<FeatureCountVisitor>(), "Total Features");
+    const double featureCount = _getApplyVisitor(std::make_shared<FeatureCountVisitor>(), "Total Features");
     _addStat("Total Features", featureCount);
 
     double conflatedFeatureCount =
@@ -368,10 +352,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     // command pass in a variable stating whether the map is input/output, like the conflate command
     // does.
     if (conflatedFeatureCount > 0)
-    {
       _inputIsConflatedMapOutput = true;
-    }
-    vector<shared_ptr<MatchCreator>> matchCreators = MatchFactory::getInstance().getCreators();
+
+    vector<MatchCreatorPtr> matchCreators = MatchFactory::getInstance().getCreators();
     boost::any matchCandidateCountsData;
     double conflatableFeatureCount =
       _applyVisitor(
@@ -411,12 +394,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       conflatedFeatureCount += poisMergedIntoPolys;
     }
 
+    // The conflatable stat has no meaning on a conflated output map, since everything in the
+    // output is either conflated, passed through, marked for review, or left unconflated.
     if (_inputIsConflatedMapOutput)
-    {
-      // The conflatable stat has no meaning on a conflated output map, since everything in the
-      // output is either conflated, passed through, marked for review, or left unconflated.
       conflatableFeatureCount = 0.0;
-    }
     _addStat("Total Conflatable Features", conflatableFeatureCount);
     _addStat("Percentage of Total Features Conflatable",
              (conflatableFeatureCount / featureCount) * 100.0);
@@ -433,42 +414,34 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         std::make_shared<NoInformationCriterion>(), std::make_shared<FeatureCountVisitor>(),
         "No Information Feature Count");
     _addStat("Untagged Features", untaggedFeatureCount);
-    long unconflatableFeatureCount = -1.0;
+    double unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
-    {
-      unconflatableFeatureCount =
-        fmax((featureCount - untaggedFeatureCount - conflatableFeatureCount), (long)0);
-    }
-    else
-    {
-      // This stat has no meaning on a conflated output map (see total feature conflatable stat
-      // comment).
+      unconflatableFeatureCount = fmax((featureCount - untaggedFeatureCount - conflatableFeatureCount), 0.0);
+    else  // This stat has no meaning on a conflated output map (see total feature conflatable stat comment).
       unconflatableFeatureCount = 0.0;
-    }
+
     _addStat("Total Unconflatable Features", unconflatableFeatureCount);
     _addStat("Percentage of Total Features Unconflatable",
-             ((double)unconflatableFeatureCount / featureCount) * 100.0);
+             (unconflatableFeatureCount / featureCount) * 100.0);
 
-    _addStat("Match Creators", matchCreators.size());
+    _addStat("Match Creators", static_cast<double>(matchCreators.size()));
 
     const QMap<QString, long> matchCandidateCountsByMatchCreator =
       boost::any_cast<QMap<QString, long>>(matchCandidateCountsData);
     LOG_VARD(matchCandidateCountsByMatchCreator.size());
     LOG_VARD(matchCandidateCountsByMatchCreator);
-    for (QMap<QString, long >::const_iterator iterator = matchCandidateCountsByMatchCreator.begin();
-         iterator != matchCandidateCountsByMatchCreator.end(); ++iterator)
+    for (auto it = matchCandidateCountsByMatchCreator.begin(); it != matchCandidateCountsByMatchCreator.end(); ++it)
     {
-      const QString matchCreatorName = iterator.key();
+      const QString matchCreatorName = it.key();
       LOG_VARD(matchCreatorName);
       CreatorDescription::BaseFeatureType featureType = CreatorDescription::Unknown;
       /*shared_ptr<MatchCreator> matchCreator =*/
-        _getMatchCreator(matchCreators, iterator.key(), featureType);
+      _getMatchCreator(matchCreators, it.key(), featureType);
 
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
       {
-        conflatableFeatureCountForFeatureType =
-          matchCandidateCountsByMatchCreator[matchCreatorName];
+        conflatableFeatureCountForFeatureType = static_cast<double>(matchCandidateCountsByMatchCreator[matchCreatorName]);
         LOG_VARD(conflatableFeatureCountForFeatureType);
       }
 
@@ -537,8 +510,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _addStat("Percentage of Total Features Unmatched From Map 2",
              (unconflatedFeatureCountFromMap2 / featureCount) * 100.0);
 
-    for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
-           _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
+    for (auto it = _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
     {
       CreatorDescription::BaseFeatureType featureType = it.key();
       const QString featureTypeStr = CreatorDescription::baseFeatureTypeToString(featureType);
@@ -546,11 +518,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           (_filter.isEmpty() ||
            _filter.contains(CreatorDescription::getElementCriterionName(featureType))))
       {
-        _generateFeatureStats(
-          featureType, (float)it.value(), CreatorDescription::getFeatureCalcType(featureType),
-          CreatorDescription::getElementCriterion(featureType, map),
-          (long)poisMergedIntoPolys, (long)poisMergedIntoPolysFromMap1,
-          (long)poisMergedIntoPolysFromMap2);
+        _generateFeatureStats(featureType, static_cast<float>(it.value()),
+                              CreatorDescription::getFeatureCalcType(featureType),
+                              CreatorDescription::getElementCriterion(featureType, map),
+                              static_cast<long>(poisMergedIntoPolys),
+                              static_cast<long>(poisMergedIntoPolysFromMap1),
+                              static_cast<long>(poisMergedIntoPolysFromMap2));
       }
     }
 
@@ -570,9 +543,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       // This stat could be made generic, but since the ones following it cannot currently we'll
       // leave it non-generic so it shows up next to them in the list.
       _addStat("Translated Populated Tag Percent", tcv.getStat());
-      _addStat("Translated Populated Tags", tcv.getPopulatedCount());
-      _addStat("Translated Default Tags", tcv.getDefaultCount());
-      _addStat("Translated Null Tags", tcv.getNullCount());
+      _addStat("Translated Populated Tags", static_cast<double>(tcv.getPopulatedCount()));
+      _addStat("Translated Default Tags", static_cast<double>(tcv.getDefaultCount()));
+      _addStat("Translated Null Tags", static_cast<double>(tcv.getNullCount()));
     }
     else
     {
@@ -582,9 +555,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   logMsg = QString::number(_totalStatCalcs) + " map statistics calculated";
   if (!_mapName.isEmpty())
-  {
     logMsg += " for " + _mapName;
-  }
   logMsg += ".";
   LOG_DEBUG(logMsg);
 
@@ -600,21 +571,17 @@ void CalculateStatsOp::_addStat(const QString& name, double value)
 
 bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
 {
-  return
-    _filter.isEmpty() || statData.getFilterCriterion().isEmpty() ||
-    _filter.contains(statData.getFilterCriterion());
+  return _filter.isEmpty() || statData.getFilterCriterion().isEmpty() ||
+         _filter.contains(statData.getFilterCriterion());
 }
 
-void CalculateStatsOp::_interpretStatData(
-  const shared_ptr<const OsmMap>& constMap, const StatData& d)
+void CalculateStatsOp::_interpretStatData(const shared_ptr<const OsmMap>& constMap, const StatData& d)
 {
   // Check against the applied filter to see whether this stat should be generated.
   LOG_VART(_filter);
   LOG_VART(d.getFilterCriterion());
   if (!_statPassesFilter(d))
-  {
     return;
-  }
 
   // Don't collect translation related stats if no translation script has been specified.
   if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className() &&
@@ -623,14 +590,12 @@ void CalculateStatsOp::_interpretStatData(
     return;
   }
 
-  shared_ptr<ElementCriterion> pCrit;
+  ElementCriterionPtr pCrit;
 
   if (d.getCriterion().length() > 0)
   {
     if (_criterionCache.contains(d.getCriterion()))
-    {
       pCrit = _criterionCache[d.getCriterion()];
-    }
     else
     {
       try
@@ -639,7 +604,8 @@ void CalculateStatsOp::_interpretStatData(
         pCrit = Factory::getInstance().constructObject<ElementCriterion>(d.getCriterion());
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
-        if (pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
+        if (pMapConsumer)
+          pMapConsumer->setOsmMap(constMap.get());
       }
       catch (...)
       {
@@ -660,7 +626,7 @@ void CalculateStatsOp::_interpretStatData(
     {
       // if a criterion is specified, we apply a FilteredVisitor
       // this is not cached as there is only one value and it's unlikely to be repeated
-      shared_ptr<ConstElementVisitor> pCriterionVisitor;
+      ConstElementVisitorPtr pCriterionVisitor;
 
       try
       {
@@ -691,8 +657,7 @@ void CalculateStatsOp::_interpretStatData(
         translatedVis->setTranslator(_schemaTranslator);
       }
 
-      FilteredVisitor filteredVisitor =
-        FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
+      FilteredVisitor filteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
       val = _applyVisitor(filteredVisitor, d.getName(), d.getStatCall());
       _numInterpresetStatDataCalls++;
     }
@@ -718,7 +683,7 @@ void CalculateStatsOp::_interpretStatData(
         try
         {
           pVisitor =
-            std::static_pointer_cast<ConstElementVisitor >(
+            std::static_pointer_cast<ConstElementVisitor>(
               Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
         }
         catch (...)
@@ -741,8 +706,7 @@ void CalculateStatsOp::_interpretStatData(
   }
 }
 
-double CalculateStatsOp::_getRequestedStatValue(
-  const ElementVisitor* pVisitor, StatData::StatCall call) const
+double CalculateStatsOp::_getRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const
 {
   if (call == StatData::StatCall::Stat)
   {
@@ -752,53 +716,49 @@ double CalculateStatsOp::_getRequestedStatValue(
 
   const NumericStatistic* ns = dynamic_cast<const NumericStatistic*>(pVisitor);
 
-  if (!ns) return 0;
+  if (!ns)
+    return 0;
 
   switch (call)
   {
-    case StatData::StatCall::Stat: return ns->getStat();
-    case StatData::StatCall::Min: return ns->getMin();
-    case StatData::StatCall::Max: return ns->getMax();
-    case StatData::StatCall::Average: return ns->getAverage();
-    case StatData::StatCall::InfoCount: return (double)ns->getInformationCount();
-    case StatData::StatCall::InfoMin: return (double)ns->getInformationMin();
-    case StatData::StatCall::InfoMax: return (double)ns->getInformationMax();
+    case StatData::StatCall::Stat:        return ns->getStat();
+    case StatData::StatCall::Min:         return ns->getMin();
+    case StatData::StatCall::Max:         return ns->getMax();
+    case StatData::StatCall::Average:     return ns->getAverage();
+    case StatData::StatCall::InfoCount:   return static_cast<double>(ns->getInformationCount());
+    case StatData::StatCall::InfoMin:     return static_cast<double>(ns->getInformationMin());
+    case StatData::StatCall::InfoMax:     return static_cast<double>(ns->getInformationMax());
     case StatData::StatCall::InfoAverage: return ns->getInformationAverage();
-    case StatData::StatCall::InfoDiff: return (double)ns->getInformationCountDiff();
-    default: return 0;
+    case StatData::StatCall::InfoDiff:    return static_cast<double>(ns->getInformationCountDiff());
+    default:                              return 0;
   }
 }
 
-bool CalculateStatsOp::_matchDescriptorCompare(
-  const CreatorDescription& m1, const CreatorDescription& m2)
+bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1, const CreatorDescription& m2)
 {
   return m1.getClassName() > m2.getClassName();
 }
 
-double CalculateStatsOp::_applyVisitor(
-  const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,
-  StatData::StatCall call)
+double CalculateStatsOp::_applyVisitor(const ElementCriterion& pCrit, ElementVisitor& pVis,
+                                       const QString& statName, StatData::StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
 }
 
-double CalculateStatsOp::_applyVisitor(
-  const std::shared_ptr<ElementCriterion> pCrit, std::shared_ptr<ConstElementVisitor> pVis,
-  const QString& statName, StatData::StatCall call)
+double CalculateStatsOp::_applyVisitor(const ElementCriterionPtr& pCrit, ConstElementVisitorPtr pVis,
+                                       const QString& statName, StatData::StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
 }
 
-double CalculateStatsOp::_applyVisitor(
-  const FilteredVisitor& v, const QString& statName, StatData::StatCall call)
+double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, const QString& statName, StatData::StatCall call)
 {
   boost::any emptyVisitorData;
   return _applyVisitor(v, emptyVisitorData, statName, call);
 }
 
-double CalculateStatsOp::_applyVisitor(
-  const FilteredVisitor& v, boost::any& visitorData, const QString& statName,
-  StatData::StatCall call)
+double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData, const QString& statName,
+                                       StatData::StatCall call)
 {
   LOG_STATUS(
     "Calculating statistic: " << statName << " (" << _currentStatCalcIndex << "/" <<
@@ -823,16 +783,13 @@ double CalculateStatsOp::_applyVisitor(
 
   const DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
   if (dataProducer != nullptr)
-  {
     visitorData = dataProducer->getData();
-  }
 
   _currentStatCalcIndex++;
   return _getRequestedStatValue(&childVisitor, call);
 }
 
-void CalculateStatsOp::_applyVisitor(
-  std::shared_ptr<ConstElementVisitor> v, const QString& statName)
+void CalculateStatsOp::_applyVisitor(ConstElementVisitorPtr v, const QString& statName)
 {
   LOG_STATUS(
     "Calculating statistic: " << statName << " (" << _currentStatCalcIndex << "/" <<
@@ -866,38 +823,32 @@ void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& stat
   _currentStatCalcIndex++;
 }
 
-double CalculateStatsOp::_getApplyVisitor(
-  std::shared_ptr<ConstElementVisitor> v, const QString& statName)
+double CalculateStatsOp::_getApplyVisitor(ConstElementVisitorPtr v, const QString& statName)
 {
   _applyVisitor(v, statName);
   std::shared_ptr<SingleStatistic> ss = std::dynamic_pointer_cast<SingleStatistic>(v);
   if (!ss)
-  {
     throw HootException(v->getName() + " does not implement SingleStatistic.");
-  }
+
   return ss->getStat();
 }
 
 double CalculateStatsOp::getSingleStat(const QString& n) const
 {
-  for (int i = 0; i < _stats.size(); i++)
+  for (const auto& stat : _stats)
   {
-    if (_stats[i].name == n)
-    {
-      return _stats[i].value;
-    }
+    if (stat.name == n)
+      return stat.value;
   }
   throw InternalErrorException("Could not find the specified stat: " + n);
 }
 
 bool CalculateStatsOp::hasSingleStat(const QString& n) const
 {
-  for (int i = 0; i < _stats.size(); i++)
+  for (const auto& stat : _stats)
   {
-    if (_stats[i].name == n)
-    {
+    if (stat.name == n)
       return true;
-    }
   }
   return false;
 }
@@ -907,34 +858,25 @@ long CalculateStatsOp::indexOfSingleStat(const QString& n) const
   for (int i = 0; i < _stats.size(); i++)
   {
     if (_stats[i].name == n)
-    {
       return i;
-    }
   }
   return -1;
 }
 
-ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
-  const CreatorDescription::BaseFeatureType& featureType) const
+ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(const CreatorDescription::BaseFeatureType& featureType) const
 {
-  if (featureType == CreatorDescription::PoiPolygonPOI ||
-      featureType == CreatorDescription::Polygon)
-  {
-    // Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
-    // be considered for conflation.
+  // Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
+  // be considered for conflation.
+  if (featureType == CreatorDescription::PoiPolygonPOI || featureType == CreatorDescription::Polygon)
     return std::make_shared<ElementCountVisitor>();
-  }
   else
-  {
     return std::make_shared<FeatureCountVisitor>();
-  }
 }
 
-void CalculateStatsOp::_generateFeatureStats(
-  const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
-  const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
-  const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
-  const long poisMergedIntoPolysFromMap2)
+void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+                                             const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+                                             const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+                                             const long poisMergedIntoPolysFromMap2)
 {
   LOG_VARD(criterion->className());
   LOG_VARD(poisMergedIntoPolys);
@@ -944,9 +886,7 @@ void CalculateStatsOp::_generateFeatureStats(
 
   ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(criterion.get());
   if (mapConsumer != nullptr)
-  {
     mapConsumer->setOsmMap(_constMap.get());
-  }
 
   double totalFeatures = 0.0;
   totalFeatures =
@@ -968,7 +908,7 @@ void CalculateStatsOp::_generateFeatureStats(
   {
     // We need to add any pois that may have been merged into polygons by poi/poly into the
     // conflated feature count for this feature type.
-    conflatedFeatureCount += poisMergedIntoPolys;
+    conflatedFeatureCount += static_cast<double>(poisMergedIntoPolys);
     LOG_VARD(conflatedFeatureCount);
   }
 
@@ -1020,11 +960,11 @@ void CalculateStatsOp::_generateFeatureStats(
   {
     // We need to subtract any pois that may have been merged into polygons by poi/poly from the
     // unconflated feature count for this feature type.
-    totalUnconflatedFeatureCount -= poisMergedIntoPolys;
+    totalUnconflatedFeatureCount -= static_cast<double>(poisMergedIntoPolys);
     LOG_VARD(totalUnconflatedFeatureCount);
-    unconflatedFeatureCountMap1 -= poisMergedIntoPolysFromMap1;
+    unconflatedFeatureCountMap1 -= static_cast<double>(poisMergedIntoPolysFromMap1);
     LOG_VARD(unconflatedFeatureCountMap1);
-    unconflatedFeatureCountMap2 -= poisMergedIntoPolysFromMap2;
+    unconflatedFeatureCountMap2 -= static_cast<double>(poisMergedIntoPolysFromMap2);
     LOG_VARD(unconflatedFeatureCountMap2);
   }
   _addStat(QString("Unmatched %1s").arg(description), totalUnconflatedFeatureCount);
@@ -1094,48 +1034,37 @@ void CalculateStatsOp::_generateFeatureStats(
 
   double percentageOfTotalFeaturesConflated = 0.0;
   if (totalFeatures > 0.0)
-  {
-    percentageOfTotalFeaturesConflated =
-      (conflatedFeatureCount / totalFeatures) * 100.0;
-  }
+    percentageOfTotalFeaturesConflated = (conflatedFeatureCount / totalFeatures) * 100.0;
+
   LOG_VARD(percentageOfTotalFeaturesConflated);
-  _addStat(
-    QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
+  _addStat(QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
   double percentageOfTotalFeaturesMarkedForReview = 0.0;
   if (totalFeatures > 0.0)
-  {
-    percentageOfTotalFeaturesMarkedForReview =
-      (featuresMarkedForReview / totalFeatures) * 100.0;
-  }
+    percentageOfTotalFeaturesMarkedForReview = (featuresMarkedForReview / totalFeatures) * 100.0;
+
   _addStat(
     QString("Percentage of %1s Marked for Review").arg(description),
     percentageOfTotalFeaturesMarkedForReview);
   double percentageOfMap1FeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
-  {
-    percentageOfMap1FeaturesUnconflated =
-      (unconflatedFeatureCountMap1 / totalFeatures) * 100.0;
-  }
+    percentageOfMap1FeaturesUnconflated = (unconflatedFeatureCountMap1 / totalFeatures) * 100.0;
+
   LOG_VARD(percentageOfMap1FeaturesUnconflated);
   _addStat(
     QString("Percentage of Unmatched %1s From Map 1").arg(description),
     percentageOfMap1FeaturesUnconflated);
   double percentageOfMap2FeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
-  {
-    percentageOfMap2FeaturesUnconflated =
-      (unconflatedFeatureCountMap2 / totalFeatures) * 100.0;
-  }
+    percentageOfMap2FeaturesUnconflated = (unconflatedFeatureCountMap2 / totalFeatures) * 100.0;
+
   LOG_VARD(percentageOfMap2FeaturesUnconflated);
   _addStat(
     QString("Percentage of Unmatched %1s From Map 2").arg(description),
     percentageOfMap2FeaturesUnconflated);
   double percentageOfTotalFeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
-  {
-    percentageOfTotalFeaturesUnconflated =
-      (totalUnconflatedFeatureCount / totalFeatures) * 100.0;
-  }
+    percentageOfTotalFeaturesUnconflated = (totalUnconflatedFeatureCount / totalFeatures) * 100.0;
+
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
   _addStat(
     QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
