@@ -11,6 +11,8 @@ CONFIG="-C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf"
 # remove partial match elements in a partial fashion at this time, so change the default setting to 
 # avoid a warning.
 GENERAL_OPTS="-D differential.remove.linear.partial.matches.as.whole=true"
+INCLUDE_TAGS="-D conflate.differential.include.tags=true"
+SEPARATE_OUTPUT="-D conflate.differential.tags.separate.output=true"
 source scripts/core/ScriptTestUtils.sh
 
 # Run differential conflation to produce a map output
@@ -18,7 +20,7 @@ echo ""
 echo "Running diff..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
-  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output.osm --differential
+  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output.osm
 if [ -f "test-output/test-validation-enabled" ]; then
   hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output.osm \
     --report-output $OUTPUT_DIR/output-validation-report --output $OUTPUT_DIR/output-validated.osm
@@ -33,32 +35,32 @@ validateTestOutput $OUTPUT_DIR/output.osm \
 echo ""
 echo "Running diff changeset with tags..."
 echo ""
-hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS  \
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS $INCLUDE_TAGS \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output_unified.osc --differential --include-tags --changeset-stats $OUTPUT_DIR/output_unified_changeset_stats.json
+ $OUTPUT_DIR/output_unified.osc --changeset-stats $OUTPUT_DIR/output_unified_changeset_stats.json
 # Check command line display of stats
-hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS  \
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS $INCLUDE_TAGS \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output_unified.osc --differential --include-tags --changeset-stats
+ $OUTPUT_DIR/output_unified.osc --changeset-stats
 
 # Run changeset w/tags to produce a unified map (osm) output
 echo ""
 echo "Running diff with tags..."
 echo ""
-hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
- $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output_unified.osm --differential --include-tags
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS $INCLUDE_TAGS \
+ $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output_unified.osm
 
 # Run changeset w/tags to produce separate outputs for geometry and tags
 echo ""
 echo "Running diff changeset with tags, separate outputs..."
 echo ""
-hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output.osc --differential --include-tags --changeset-stats $OUTPUT_DIR/output_changeset_stats.json --separate-output
+ $OUTPUT_DIR/output.osc --changeset-stats $OUTPUT_DIR/output_changeset_stats.json
 # Check command line display of stats
-hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output.osc --differential --include-tags --changeset-stats --separate-output
+ $OUTPUT_DIR/output.osc --changeset-stats
 
 echo ""
 echo "Checking differential output..."
@@ -155,18 +157,18 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
- $OUTPUT_DIR/snapped-output.osm --differential
+ $OUTPUT_DIR/snapped-output.osm
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm || \
   diff $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm
 
 echo ""
 echo "Checking conflation with road snapping and w/ tags..."
 echo ""
-hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS $INCLUDE_TAGS \
  -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
- $OUTPUT_DIR/snapped-with-tags-output.osm --differential --include-tags
+ $OUTPUT_DIR/snapped-with-tags-output.osm
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-tags-output.osm $INPUT_DIR/snapped-with-tags-output.osm || \
   diff $OUTPUT_DIR/snapped-with-tags-output.osm $INPUT_DIR/snapped-with-tags-output.osm
 
@@ -178,7 +180,7 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  -D differential.remove.reference.data=false \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
- $OUTPUT_DIR/snapped-with-ref-output.osm --differential
+ $OUTPUT_DIR/snapped-with-ref-output.osm
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-ref-output.osm \
   $INPUT_DIR/snapped-with-ref-output.osm || \
   diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
@@ -201,7 +203,7 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  -D differential.remove.reference.snapped.data=true \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
- $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm --differential
+ $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm \
   $INPUT_DIR/snapped-with-all-ref-removed-output.osm || \
   diff $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm $INPUT_DIR/snapped-with-all-ref-removed-output.osm
@@ -213,6 +215,6 @@ echo ""
 # retaining wall from the second dataset, which hoot is unable to conflate, will pass through to output.
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D differential.remove.unconflatable.data=false $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output-keep-unconflatable.osm --differential
+ $OUTPUT_DIR/output-keep-unconflatable.osm
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/output-keep-unconflatable.osm $INPUT_DIR/output-keep-unconflatable.osm || \
      diff $OUTPUT_DIR/output-keep-unconflatable.osm $INPUT_DIR/output-keep-unconflatable.osm

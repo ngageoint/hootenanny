@@ -25,12 +25,12 @@ fi
 if [[ "$7" == "false" ]]; then
   INCLUDE_TAGS=
 else
-  INCLUDE_TAGS=--include-tags
+  INCLUDE_TAGS="-D conflate.differential.include.tags=true"
 fi
 if [[ "$8" == "false" ]]; then
   SEPARATE_OUTPUT=
 else
-  SEPARATE_OUTPUT=--separate-output
+  SEPARATE_OUTPUT="-D conflate.differential.tags.separate.output=true"
 fi
 ALG_CONFIG=$9
 # This is a bit of a hack, but just trying to reduce test runtime here.
@@ -128,16 +128,16 @@ if [ "$NUM_STEPS" == "2" ]; then
   echo ""
   echo "Running conflation as part of a two step process..."
   echo ""
-  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --write-bounds
   if [ "$DEBUG" == "true" ]; then
-    hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+    hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc --write-bounds
   fi
 else
   # Run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
   echo ""
   echo "Running conflation as part of a three step process..."
   echo ""
-  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osm --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osm --write-bounds
   # Generate a changeset between the original ref data and the diff calculated in the previous step
   echo ""
   echo "Running changeset derivation as part of a three step process..."
