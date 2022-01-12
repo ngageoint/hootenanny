@@ -751,21 +751,23 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
   return true;
 }
 
-bool OsmXmlReader::_setElementCircularError(const Tags& tags, const QString& key)
+bool OsmXmlReader::_setElementCircularError(const Tags& tags, const QString& key) const
 {
+  bool result = false;
   try
   {
     Meters circularError = tags.getLength(key).value();
     if (circularError > 0)
     {
       _element->setCircularError(circularError);
-      return true;
+      result = true;
     }
   }
-  catch (const HootException&)
+  catch (const HootException& e)
   {
+    LOG_TRACE("Set circular error failed: " + e.getWhat());
   }
-  return false;
+  return result;
 }
 
 bool OsmXmlReader::endElement(const QString& /* namespaceURI */,

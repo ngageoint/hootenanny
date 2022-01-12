@@ -195,7 +195,7 @@ private:
   double _parseDouble(const QString& s) const;
   long _parseLong(const QString& s) const;
 
-  bool _setElementCircularError(const Tags& tags, const QString& key);
+  bool _setElementCircularError(const Tags& tags, const QString& key) const;
 
   const QString& _saveMemory(const QString& s);
 
