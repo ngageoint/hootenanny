@@ -291,7 +291,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 
 -----
     hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm \
-      output.osm --differential
+      output.osm
 -----
 
 ==== Conflate only tags from a second map into a first map without changing the first map's geometry (Attribute Conflation):
@@ -345,7 +345,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 
 -----
     hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf --include-tags \
-      input1.osm input2.osm output.osm --differential
+      input1.osm input2.osm output.osm
 -----
 
 ==== Conflate over a bounding box (not supported by all input formats):
@@ -448,7 +448,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
       -D conflate.post.ops+="ResolveReviewsOp" \
-      input1.osm input2.osm output.osm --differential
+      input1.osm input2.osm output.osm
 -----
 
 ==== Conflate railways with the One To Many Railway Conflation Workflow:

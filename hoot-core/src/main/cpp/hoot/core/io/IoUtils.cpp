@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "IoUtils.h"
 
 // Hoot
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
@@ -78,9 +78,7 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   const QString justPath = input.split(";")[0];
 
   if (!allowDir && QFileInfo(justPath).isDir())
-  {
     return false;
-  }
 
   // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(justPath).isDir())
@@ -114,9 +112,8 @@ bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool al
   if (inputs.empty())
     return false;
 
-  for (int i = 0; i < inputs.size(); i++)
+  for (const auto& input : inputs)
   {
-    const QString input = inputs.at(i);
     if (isSupportedOgrFormat(input, allowDir))
       return true;
   }
@@ -128,9 +125,8 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   if (inputs.empty())
     return false;
 
-  for (int i = 0; i < inputs.size(); i++)
+  for (const auto& input : inputs)
   {
-    const QString input = inputs.at(i);
     if (!isSupportedOgrFormat(input, allowDir))
       return false;
   }
@@ -140,9 +136,8 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
 void IoUtils::ogrPathsAndLayersToPaths(QStringList& inputs)
 {
   QStringList modifiedInputs;
-  for (int i = 0; i < inputs.size(); i++)
+  for (auto input : inputs)
   {
-    QString input = inputs.at(i);
     ogrPathAndLayerToPath(input);
     modifiedInputs.append(input);
   }
@@ -157,23 +152,18 @@ void IoUtils::ogrPathAndLayerToPath(QString& input)
 void IoUtils::ogrPathAndLayerToLayer(QString& input)
 {
   if (input.contains(";"))
-  {
     input = input.split(";")[1];
-  }
   else
-  {
     input = "";
-  }
 }
 
-QStringList IoUtils::getSupportedInputsRecursively(
-  const QStringList& topLevelPaths, const QStringList& nameFilters)
+QStringList IoUtils::getSupportedInputsRecursively(const QStringList& topLevelPaths,
+                                                   const QStringList& nameFilters)
 {
   QStringList validInputs;
-  for (int i = 0; i < topLevelPaths.size(); i++)
+  for (const auto& path : topLevelPaths)
   {
     // If its a file and not a dir, go ahead and add it if its supported.
-    const QString path = topLevelPaths.at(i);
     if (!QFileInfo(path).isDir())
     {
       if ((nameFilters.isEmpty() || StringUtils::matchesWildcard(path, nameFilters)) &&
@@ -189,9 +179,7 @@ QStringList IoUtils::getSupportedInputsRecursively(
       {
         const QString input = itr.next();
         if (isSupportedInputFormat(input))
-        {
           validInputs.append(input);
-        }
       }
     }
   }
@@ -203,13 +191,13 @@ QStringList IoUtils::getSupportedInputsRecursively(
 QStringList IoUtils::expandInputs(const QStringList& inputs)
 {
   QStringList validInputs;
-  for (int i = 0; i < inputs.size(); ++i)
+  for (const auto& input : inputs)
   {
     //  Get the list of all files in the container, if the file is a container
-    QStringList files = OgrUtilities::getInstance().getValidFilesInContainer(inputs[i]);
+    QStringList files = OgrUtilities::getInstance().getValidFilesInContainer(input);
     //  `files` is empty if the file isn't a container file so add the filename
     if (files.isEmpty())
-      files.append(inputs[i]);
+      files.append(input);
     //  Append all files to the list of valid inputs
     validInputs.append(files);
   }
@@ -231,9 +219,8 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
 {
   QString writerName = ConfigOptions().getMapFactoryWriter();
   if (writerName.trimmed().isEmpty())
-  {
     writerName = OsmMapWriterFactory::getWriterName(output);
-  }
+
   LOG_VART(writerName);
   LOG_VART(isStreamableInput(input));
   LOG_VART(isStreamableOutput(output));
@@ -254,12 +241,12 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
 
 bool IoUtils::areStreamableIo(const QStringList& inputs, const QString& output)
 {
-  for (int i = 0; i < inputs.size(); i++)
+  for (const auto& input : inputs)
   {
-    if (!isStreamableIo(inputs.at(i), output))
+    if (!isStreamableIo(input, output))
     {
       LOG_INFO(
-        "Unable to stream I/O due to input: ..." << FileUtils::toLogFormat(inputs.at(i), 25) <<
+        "Unable to stream I/O due to input: ..." << FileUtils::toLogFormat(input, 25) <<
         " and/or output: ..." << FileUtils::toLogFormat(output, 25) <<
         ". Loading entire map...");
       return false;
@@ -270,14 +257,14 @@ bool IoUtils::areStreamableIo(const QStringList& inputs, const QString& output)
 
 bool IoUtils::areStreamableInputs(const QStringList& inputs, const bool logUnstreamable)
 {
-  for (int i = 0; i < inputs.size(); i++)
+  for (const auto& input : inputs)
   {
-    if (!isStreamableInput(inputs.at(i)))
+    if (!isStreamableInput(input))
     {
       if (logUnstreamable)
       {
         LOG_INFO(
-          "Unable to stream inputs due to input: " << inputs.at(i).right(25) <<
+          "Unable to stream inputs due to input: " << input.right(25) <<
           ". Loading entire map into memory...");
       }
       return false;
@@ -294,9 +281,8 @@ bool IoUtils::isStreamableInput(const QString& url)
   std::shared_ptr<ElementInputStream> eis =
     std::dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
-  {
     result = true;
-  }
+
   return result;
 }
 
@@ -307,9 +293,8 @@ bool IoUtils::isStreamableOutput(const QString& url)
   std::shared_ptr<ElementOutputStream> streamWriter =
     std::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
-  {
     result = true;
-  }
+
   return result;
 }
 
@@ -317,7 +302,7 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
 {
   LOG_VARD(ops);
   // add visitor/criterion operations if any of the convert ops are visitors.
-  foreach (QString opName, ops)
+  for (const auto& opName : ops)
   {
     if (!opName.trimmed().isEmpty())
     {
@@ -375,7 +360,7 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
 
   QList<ElementVisitorPtr> opsToReturn;
   // add visitor/criterion operations if any of the convert ops are visitors.
-  foreach (QString opName, ops)
+  for (const auto& opName : ops)
   {
     if (!opName.trimmed().isEmpty())
     {
@@ -393,9 +378,8 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
         ElementVisitorPtr vis =
           Factory::getInstance().constructObject<ElementVisitor>(opName);
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
-        {
           throw IllegalArgumentException(osmMapConsumerErrorMsg);
-        }
+
         opsToReturn.append(vis);
       }
       else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
@@ -403,9 +387,8 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
         ConstElementVisitorPtr vis =
           Factory::getInstance().constructObject<ConstElementVisitor>(opName);
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
-        {
           throw IllegalArgumentException(osmMapConsumerErrorMsg);
-        }
+
         opsToReturn.append(vis);
       }
     }
@@ -414,17 +397,15 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
   return opsToReturn;
 }
 
-ElementInputStreamPtr IoUtils::getFilteredInputStream(
-  ElementInputStreamPtr streamToFilter, const QStringList& ops)
+ElementInputStreamPtr IoUtils::getFilteredInputStream(ElementInputStreamPtr streamToFilter,
+                                                      const QStringList& ops)
 {
   if (ops.empty())
-  {
     return streamToFilter;
-  }
 
   ConfigUtils::checkForDuplicateElementCorrectionMismatch(ops);
 
-  foreach (QString opName, ops)
+  for (const auto& opName : ops)
   {
     LOG_VARD(opName);
     if (!opName.trimmed().isEmpty())
@@ -439,14 +420,11 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
 
         std::shared_ptr<Configurable> critConfig;
         if (criterion.get())
-        {
           critConfig = std::dynamic_pointer_cast<Configurable>(criterion);
-        }
+
         LOG_VART(critConfig.get());
         if (critConfig.get())
-        {
           critConfig->setConfiguration(conf());
-        }
 
         streamToFilter = std::make_shared<ElementCriterionInputStream>(streamToFilter, criterion);
       }
@@ -457,14 +435,11 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
 
         std::shared_ptr<Configurable> visConfig;
         if (visitor.get())
-        {
           visConfig = std::dynamic_pointer_cast<Configurable>(visitor);
-        }
+
         LOG_VART(visConfig.get());
         if (visConfig.get())
-        {
           visConfig->setConfiguration(conf());
-        }
 
         streamToFilter = std::make_shared<ElementVisitorInputStream>(streamToFilter, visitor);
       }
@@ -479,10 +454,9 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
   return streamToFilter;
 }
 
-void IoUtils::loadMap(
-  const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus,
-  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
-  const int numTasks)
+void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus,
+                      const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+                      const int numTasks)
 {
   const QStringList pathLayer = path.split(";");
   const QString justPath = pathLayer[0];
@@ -497,9 +471,8 @@ void IoUtils::loadMap(
     reader.setConfiguration(conf());
     reader.setDefaultStatus(defaultStatus);
     if (ogrFeatureLimit > 0)
-    {
       reader.setLimit(ogrFeatureLimit);
-    }
+
     reader.setSchemaTranslationScript(translationScript);
     // This reader closes itself.
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
@@ -511,22 +484,20 @@ void IoUtils::loadMap(
   }
 }
 
-void IoUtils::loadMaps(
-  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus,
-  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
-  const int numTasks)
+void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus,
+                       const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+                       const int numTasks)
 {
   // TODO: it would be nice to allow this to take in Progress for updating
-  for (int i = 0; i < paths.size(); i++)
+  for (const auto& path : paths)
   {
-    loadMap(
-      map, paths.at(i), useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource,
-      numTasks);
+    loadMap(map, path, useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource,
+            numTasks);
   }
 }
 
-void IoUtils::cropToBounds(
-  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
+                           const bool keepConnectedOobWays)
 {
   cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
@@ -538,9 +509,8 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(
-  OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-  const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+                           const bool keepConnectedOobWays)
 {
   LOG_INFO(
     "Applying bounds filtering to input data: ..." <<
@@ -599,9 +569,7 @@ void IoUtils::writeOutputDir(const QString& dirName)
   const bool outputDirSuccess = FileUtils::makeDir(outputInfo.dir().absolutePath());
   LOG_VART(outputDirSuccess);
   if (!outputDirSuccess)
-  {
     throw IllegalArgumentException("Unable to create output path for: " + dirName);
-  }
 }
 
 QString IoUtils::getOutputUrlFromInput(
@@ -629,9 +597,7 @@ QString IoUtils::getOutputUrlFromInput(
   QString existingBaseName;
   QString existingExtension;
   if (DbUtils::isHootApiDbUrl(inputUrl))
-  {
     existingBaseName = HootApiDb::getTableName(inputUrl);
-  }
   else
   {
     QFileInfo urlInfo(inputUrl);

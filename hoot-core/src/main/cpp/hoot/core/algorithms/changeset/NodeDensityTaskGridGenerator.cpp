@@ -129,8 +129,8 @@ TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
   for (size_t idx = 0; idx < rawTaskGrid.size(); idx++)
   {
     TaskGrid::TaskGridCell taskGridCell;
-    taskGridCell.id = idx + 1;
-    taskGridCell.replacementNodeCount = nodeCounts[idx];
+    taskGridCell.id = static_cast<int>(idx + 1);
+    taskGridCell.replacementNodeCount = static_cast<int>(nodeCounts[idx]);
     taskGridCell.bounds = rawTaskGrid[idx];
     taskGrid.addCell(taskGridCell);
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "BaseCommand.h"
@@ -83,9 +83,8 @@ QStringList BaseCommand::toQStringList(char* argv[], int argc)
 {
   QStringList result;
   for (int i = 0; i < argc; i++)
-  {
     result << argv[i];
-  }
+
   return result;
 }
 
@@ -106,9 +105,8 @@ QStringList BaseCommand::_parseRecursiveInputParameter(QStringList& args, bool& 
     const QString filter = args.at(recursiveIndex + 1).trimmed();
     // "*" denotes no filtering
     if (filter != "*")
-    {
       inputFilters = filter.split(";");
-    }
+
     args.removeAt(recursiveIndex + 1);
     args.removeAt(recursiveIndex);
   }

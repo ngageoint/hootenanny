@@ -174,9 +174,9 @@ workflow may be found in the `changeset-derive` command documentation:
 Differential Conflation derives an output that consists of new data from the second input not in the
 first input. A detailed explanation is provided in the related documentation under Algorithms.
 
-To use, pass `DifferentialConflation.conf` to the conflate command with the `--differential` option. Example:
+To use, pass `DifferentialConflation.conf` to the conflate command. Example:
 --------
-hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm --differential
+hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
 --------
 
 More details: <<hootuser, DifferentialConflation>>

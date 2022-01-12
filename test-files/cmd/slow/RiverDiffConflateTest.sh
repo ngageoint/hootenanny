@@ -17,7 +17,7 @@ source scripts/core/ScriptTestUtils.sh
 # remove partial matches partially
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=false \
   $IN_DIR_2/Haiti_CNIGS_Rivers_REF1-cropped-2.osm $IN_DIR_2/Haiti_osm_waterway_ss_REF2-cropped-2.osm \
-  $OUT_DIR/output-partial.osm --differential
+  $OUT_DIR/output-partial.osm
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm || \
   diff $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm
 validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validation-report \
@@ -26,7 +26,7 @@ validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validatio
 # remove partial matches completely
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=true \
   $IN_DIR_2/Haiti_CNIGS_Rivers_REF1-cropped-2.osm $IN_DIR_2/Haiti_osm_waterway_ss_REF2-cropped-2.osm \
-  $OUT_DIR/output-complete.osm --differential
+  $OUT_DIR/output-complete.osm
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm || \
   diff $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm
 validateTestOutput $OUT_DIR/output-complete.osm $OUT_DIR/output-complete-validation-report \

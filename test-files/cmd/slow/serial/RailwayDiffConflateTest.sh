@@ -17,7 +17,7 @@ source scripts/core/ScriptTestUtils.sh
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false \
   -D conflate.pre.ops++=ReplaceTagVisitor -D replace.tag.visitor.match.tag="railway=Other" \
   -D replace.tag.visitor.replace.tag="railway=rail" $IN_DIR_2/RR_Ref1_ManuallyMatched.osm \
-  $IN_DIR_2/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-partial.osm --differential
+  $IN_DIR_2/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-partial.osm
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm || \
   diff $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm
 validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validation-report \
@@ -27,7 +27,7 @@ validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validatio
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=true \
   -D conflate.pre.ops++=ReplaceTagVisitor -D replace.tag.visitor.match.tag="railway=Other" \
   -D replace.tag.visitor.replace.tag="railway=rail" $IN_DIR_2/RR_Ref1_ManuallyMatched.osm \
-  $IN_DIR_2/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-complete.osm --differential
+  $IN_DIR_2/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-complete.osm
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm || \
   diff $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm
 validateTestOutput $OUT_DIR/output-complete.osm $OUT_DIR/output-complete-validation-report \

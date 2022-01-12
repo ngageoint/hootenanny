@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ConflateCmd.h"
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/ConflateExecutor.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 using namespace Tgs;
@@ -71,7 +71,7 @@ int ConflateCmd::runSimple(QStringList& args)
   bool isDiffConflate = false;
   bool diffConflateEnableTags = false;
 
-  if (args.contains("--differential"))
+  if (ConfigOptions().getConflateDifferential())
   {
     // Setting these diff specific properties here on ConflateExecutor feels a little kludgy. This
     // may need some refactoring.
@@ -94,30 +94,26 @@ int ConflateCmd::runSimple(QStringList& args)
     conflator.setIsDiffConflate(true);
     conflator.setDiffRemoveLinearPartialMatchesAsWhole(removeDiffLinearPartialMatchesAsWhole);
     conflator.setDiffRemoveRiverPartialMatchesAsWhole(removeDiffRiverPartialMatchesAsWhole);
-    args.removeAt(args.indexOf("--differential"));
 
-    if (args.contains("--include-tags"))
+    if (ConfigOptions().getConflateDifferentialIncludeTags())
     {
       diffConflateEnableTags = true;
       conflator.setDiffConflateEnableTags(diffConflateEnableTags);
-      args.removeAt(args.indexOf("--include-tags"));
-    }
+   }
   }
   LOG_VARD(isDiffConflate);
 
   // Check for separate output files (for geometry & tags)
   bool separateOutput = false;
-  if (args.contains("--separate-output"))
+  if (ConfigOptions().getConflateDifferentialTagsSeparateOutput())
   {
     const QString errorMsg =
-      QString("--separate-output is only valid when combiend with the --differential and ") +
-      QString("--include-tags options.");
+      QString("conflate.differential.tags.separate.output is only valid when combined with the conflate.differential and ") +
+      QString("conflate.differential.include.tags options.");
     if (!isDiffConflate || !diffConflateEnableTags)
-    {
       throw IllegalArgumentException(errorMsg);
-    }
+
     separateOutput = true;
-    args.removeAt(args.indexOf("--separate-output"));
   }
   LOG_VARD(separateOutput);
   conflator.setDiffConflateSeparateOutput(separateOutput);
@@ -129,7 +125,7 @@ int ConflateCmd::runSimple(QStringList& args)
     if (!isDiffConflate)
     {
       throw IllegalArgumentException(
-        "--changeset-stats is only valid when combined with the --differential option.");
+        "--changeset-stats is only valid when combined with the conflate.differential option.");
     }
     else
     {
@@ -146,13 +142,9 @@ int ConflateCmd::runSimple(QStringList& args)
         outputChangesetStatsFile = args[statsIndex + 1];
         QFileInfo changesetStatsInfo(outputChangesetStatsFile);
         if (!ChangesetStatsFormat::isValidFileOutputFormat(changesetStatsInfo.completeSuffix()))
-        {
           outputChangesetStatsFile = "";
-        }
         else
-        {
           args.removeAll(outputChangesetStatsFile);
-        }
       }
       args.removeAll("--changeset-stats");
     }
