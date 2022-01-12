@@ -314,7 +314,7 @@ class ConflateCommand extends ExternalCommand {
             command = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL}"
                     + (conflationType != null ? " -C ${CONFLATION_TYPE}" : "")
                     + (conflationAlgorithm != null ? " -C ${CONFLATION_ALGORITHM}" : "")
-                    + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+                    + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
         }
 
         super.configureCommand(command, substitutionMap, caller);
