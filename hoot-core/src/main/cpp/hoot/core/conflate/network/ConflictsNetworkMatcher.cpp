@@ -321,8 +321,8 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
 
     if (Log::getInstance().getLevel() <= Log::Trace)
     {
-      foreach (ConstEdgeMatchPtr aSupport, support) LOG_VART(aSupport);
-      foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VART(aConflict);
+      for (const auto& aConflict : qAsConst(conflict)) LOG_VART(aConflict);
+      for (const auto& aSupport : qAsConst(support)) LOG_VART(aSupport);
     }
 
     _scores[em] = 1.0;
@@ -396,7 +396,7 @@ QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTerminatio
   {
     LOG_VART(v1);
     LOG_VART(v2);
-    foreach (ConstEdgeMatchPtr e, result - m)
+    for (const auto& e : result - m)
     {
       LOG_VART(e);
     }
