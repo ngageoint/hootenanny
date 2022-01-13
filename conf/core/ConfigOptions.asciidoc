@@ -917,6 +917,28 @@ this list is empty, no circular error will be parsed from input features and a t
 
 Path to this file. Only modified during the testing of the `info` command.
 
+=== conflate.differential
+
+* Data Type: bool
+* Default Value: `false`
+
+Enable differential conflation through a setting instead of a command line option
+
+=== conflate.differential.include.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+Includes a check for modified tags when the `conflation.differential` option is enabled
+
+=== conflate.differential.tags.separate.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Writes separate output files for geometry and tag changes. Valid only when the
+`conflate.differential` and `conflate.differential.include.tags` options are used.
+
 === conflate.element.criterion
 
 * Data Type: string
@@ -5865,15 +5887,15 @@ Conflation capability.
 * Data Type: bool
 * Default Value: `false`
 
-When activated, this runs the conflate case test conflate command with the `--differential` option.
+When activated, this runs the conflate case test conflate command with the `conflate.differential` option.
 
 === test.case.conflate.differential.include.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-When activated, this runs the conflate case test conflate command with both the `--differential`
-and `--include-tags` options (setting this to true automatically sets
+When activated, this runs the conflate case test conflate command with both the `conflate.differential`
+and `conflate.differential.include.tags` options (setting this to true automatically sets
 `test.case.conflate.differential` to true).
 
 === test.force.orthographic.projection

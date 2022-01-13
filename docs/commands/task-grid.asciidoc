@@ -3,7 +3,7 @@
 
 === Description
 
-The `task-grid` command generates a grid consisting of rectangle shaped bounding boxes that can be used for dividing work to 
+The `task-grid` command generates a grid consisting of rectangular shaped bounding boxes that can be used for dividing work to
 be performed on a map.
 
 === Uniform Grid
@@ -26,7 +26,7 @@ hoot task-grid (input1.osm) [input2.osm...] | (bounds) (output) (gridDimensionSi
 
 === Node Density Grid
 
-If the `--node-density` option is specified, a task grid consisting of irregular rectangle shaped bounding boxes that 
+If the `--node-density` option is specified, a task grid consisting of square or near square shaped bounding boxes that
 contain roughly equal distributions of node data from the specified input(s) is generated. The following options may be used 
 with `--node-density`:
 

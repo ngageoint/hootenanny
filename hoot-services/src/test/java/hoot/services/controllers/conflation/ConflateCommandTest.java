@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -86,7 +86,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -385,7 +385,7 @@ public class ConflateCommandTest {
         String debugLevel = "error";
         ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        String expectedCommand = "hoot.bin conflate --error -C DifferentialConflation.conf -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --differential --stats";
+        String expectedCommand = "hoot.bin conflate --error -C DifferentialConflation.conf -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --stats";
         CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
         assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
 
@@ -411,7 +411,7 @@ public class ConflateCommandTest {
         String debugLevel = "error";
         ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        String expectedCommand = "hoot.bin conflate --error -C DifferentialConflation.conf -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --differential --include-tags";
+        String expectedCommand = "hoot.bin conflate --error -C DifferentialConflation.conf -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com -D conflate.differential.include.tags=true hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
         CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
         assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
 

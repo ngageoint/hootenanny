@@ -21,8 +21,10 @@ LOG_LEVEL=--warn
 # not a lot of efficiency will be gained by reducing the matchers.
 echo "Running diff changeset with tags, separate outputs..."
 hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
- -D differential.remove.linear.partial.matches.as.whole=true $INPUT_DIR/Input1.osm $INPUT_DIR/Input2.osm \
- $OUTPUT_DIR/output.osc --differential --include-tags --separate-output
+ -D differential.remove.linear.partial.matches.as.whole=true \
+ -D conflate.differential.include.tags=true \
+ -D conflate.differential.tags.separate.output=true \
+ $INPUT_DIR/Input1.osm $INPUT_DIR/Input2.osm $OUTPUT_DIR/output.osc
 
 # Check tag output
 echo "Checking tag diff"

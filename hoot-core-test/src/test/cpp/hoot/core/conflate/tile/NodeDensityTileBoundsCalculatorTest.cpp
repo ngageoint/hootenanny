@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -54,21 +54,13 @@ public:
   {
   }
 
-  void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
+  void addEnvelope(OsmMapPtr map, const Envelope& e, int id)
   {
     WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10.0);
-    NodePtr n1 =
-      std::make_shared<Node>(
-        Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0);
-    NodePtr n2 =
-      std::make_shared<Node>(
-        Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0);
-    NodePtr n3 =
-      std::make_shared<Node>(
-        Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0);
-    NodePtr n4 =
-      std::make_shared<Node>(
-        Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0);
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0);
+    NodePtr n4 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0);
 
     map->addNode(n1);
     map->addNode(n2);
@@ -80,8 +72,7 @@ public:
     w->addNode(n4->getId());
     w->addNode(n3->getId());
     w->addNode(n1->getId());
-    w->setTag("tx", QString("%1").arg(tx));
-    w->setTag("ty", QString("%1").arg(ty));
+    w->setTag("id", QString("%1").arg(id));
 
     map->addWay(w);
   }
@@ -98,20 +89,17 @@ public:
     NodeDensityTileBoundsCalculator uut;
     uut.setPixelSize(0.1 / 360.0);
     uut.setMaxNodesPerTile(1000);
-    uut.setSlop(0.1);
     uut.setMaxNumTries(1);
     uut._renderImage(map);
 
     uut._calculateTiles();
-    vector<vector<Envelope>> e = uut.getTiles();
+    vector<Envelope> e = uut.getTiles();
 
     OsmMapPtr bounds = std::make_shared<OsmMap>();
 
-    for (size_t tx = 0; tx < e.size(); tx++)
-    {
-      for (size_t ty = 0; ty < e[tx].size(); ty++)
-        addEnvelope(bounds, e[tx][ty], tx, ty);
-    }
+    int id = 0;
+    for (const auto& envelope : e)
+      addEnvelope(bounds, envelope, id++);
 
     OsmXmlWriter writer;
     writer.write(bounds, _outputPath + "TileBounds.osm");

@@ -291,7 +291,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 
 -----
     hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm \
-      output.osm --differential
+      output.osm
 -----
 
 ==== Conflate only tags from a second map into a first map without changing the first map's geometry (Attribute Conflation):
@@ -345,7 +345,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 
 -----
     hoot conflate -C DifferentialConflation.conf -C UnifyingAlgorithm.conf --include-tags \
-      input1.osm input2.osm output.osm --differential
+      input1.osm input2.osm output.osm
 -----
 
 ==== Conflate over a bounding box (not supported by all input formats):
@@ -448,7 +448,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
       -D conflate.post.ops+="ResolveReviewsOp" \
-      input1.osm input2.osm output.osm --differential
+      input1.osm input2.osm output.osm
 -----
 
 ==== Conflate railways with the One To Many Railway Conflation Workflow:
@@ -1704,25 +1704,25 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot sync-element-ids input1.osm input2.osm output.osm
 -----
 
-==== Generate a grid with regular shaped cells across an entire map:
+==== Generate a grid with uniform shaped cells across an entire map:
 
 -----
     hoot task-grid input1.osm input2.osm output.geojson --uniform
 -----
 
-==== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for an entire map:
+==== Generate a grid with regular shaped cells that will fit at most 1000 nodes each for an entire map:
 
 -----
     hoot task-grid input1.osm input2.osm output.geojson --maxNodesPerCell 1000 --node-density
 -----
 
-==== Generate a grid with regular shaped cells across a subset of a map:
+==== Generate a grid with uniform shaped cells across a subset of a map:
 
 -----
     hoot task-grid "-71.4698,42.4866,-71.4657,42.4902" output.geojson --uniform
 -----
 
-==== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for a subset of a map:
+==== Generate a grid with regular shaped cells that will fit at most 1000 nodes each for a subset of a map:
 
 -----
     hoot task-grid input1.osm input2.osm output.geojson \
