@@ -41,20 +41,18 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
   "Please review the length of the review for overly aggressive merges and manually merge features "
   "using input data/imagery. There may also be one or more zero length ways at intersections.";
 
-void WayMatchStringSplitter::applySplits(OsmMapPtr map,
-  vector<pair<ElementId, ElementId>> &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
+void WayMatchStringSplitter::applySplits(OsmMapPtr map, ElementPairVector& replaced,
+                                         SublineMappingList mappings) const
 {
   LOG_TRACE("Applying way splits...");
   _splitWay(WayNumber::Way1, map, replaced, mappings);
   _splitWay(WayNumber::Way2, map, replaced, mappings);
 }
 
-QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitter::_buildWayIndex(
-  WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
+WaySublineMap WayMatchStringSplitter::_buildWayIndex(WayNumber wn, OsmMapPtr map, SublineMappingList mappings) const
 {
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> result;
-  foreach (WayMatchStringMerger::SublineMappingPtr sm, mappings)
+  WaySublineMap result;
+  for (const auto& sm : qAsConst(mappings))
   {
     const ElementId startElementId = sm->getStart(wn).getWay()->getElementId();
     WayPtr way = map->getWay(startElementId);
@@ -63,34 +61,31 @@ QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitte
       LOG_TRACE(startElementId << " not found.");
     }
     else
-    {
       result.insert(way, sm);
-    }
   }
   return result;
 }
 
 void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
-                                       vector<pair<ElementId, ElementId>> &replaced,
-                                       QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
+                                       ElementPairVector& replaced,
+                                       SublineMappingList mappings) const
 {
   LOG_TRACE(QString("Splitting way %1...").arg((int)wn));
 
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
-    _buildWayIndex(wn, map, mappings);
+  WaySublineMap wayMapping = _buildWayIndex(wn, map, mappings);
 
   // Split each way in the subline mapping.
-  foreach (WayPtr way, wayMapping.uniqueKeys())
+  for (const auto& way : wayMapping.uniqueKeys())
   {
     LOG_VART(way->getElementId());
     LOG_VART(way->getStatus());
 
-    QList<WayMatchStringMerger::SublineMappingPtr> sm = wayMapping.values(way);
+    SublineMappingList sm = wayMapping.values(way);
     qStableSort(sm.begin(), sm.end(), WayMatchStringMerger::SublineMappingLessThan(wn));
 
     // if there is only one entry in sm and it spans the whole way, don't split anything.
     if (sm.size() == 1 && sm[0]->getStart(wn).isExtreme(WayLocation::SLOPPY_EPSILON) &&
-      sm[0]->getEnd(wn).isExtreme(WayLocation::SLOPPY_EPSILON))
+        sm[0]->getEnd(wn).isExtreme(WayLocation::SLOPPY_EPSILON))
     {
       LOG_TRACE(
         QString("Skipping splitting way %1 due to single entry in subline spanning the entire way...").arg((int)wn));

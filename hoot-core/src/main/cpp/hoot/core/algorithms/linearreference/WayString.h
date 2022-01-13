@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSTRING_H
 #define WAYSTRING_H
 
 // Hoot
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -58,8 +58,7 @@ public:
   const WaySubline& back() const { return _sublines.back(); }
 
   Meters calculateDistanceOnString(const WayLocation &l) const;
-  WayLocation calculateLocationFromStart(
-    Meters distance, ElementId preferredEid = ElementId()) const;
+  WayLocation calculateLocationFromStart(Meters distance, ElementId preferredEid = ElementId()) const;
 
   Meters calculateLength() const;
 
