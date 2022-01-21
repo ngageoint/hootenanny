@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.85292901852" minlon="-104.90285854516" maxlat="38.85547896322" maxlon="-104.8959223334"/>
+    <node visible="true" id="1" version="1" lat="38.8553583054300020" lon="-104.9009940831700050"/>
+    <node visible="true" id="2" version="1" lat="38.8553904808600024" lon="-104.8999404813900043"/>
+    <node visible="true" id="3" version="1" lat="38.8554789632200013" lon="-104.8980243722599965"/>
+    <node visible="true" id="4" version="1" lat="38.8553542834999988" lon="-104.8966608875900022"/>
+    <node visible="true" id="5" version="1" lat="38.8548877381199986" lon="-104.8959223333999944"/>
+    <node visible="true" id="6" version="1" lat="38.8539747482199971" lon="-104.8965782521599976"/>
+    <node visible="true" id="7" version="1" lat="38.8529290185200011" lon="-104.8999869638199982"/>
+    <node visible="true" id="8" version="1" lat="38.8539586601900027" lon="-104.8999921285300019"/>
+    <node visible="true" id="9" version="1" lat="38.8543286840199968" lon="-104.8994291746400052"/>
+    <node visible="true" id="10" version="1" lat="38.8544815193899993" lon="-104.9002038818299951"/>
+    <node visible="true" id="11" version="1" lat="38.8550526381299974" lon="-104.9002348701200020"/>
+    <node visible="true" id="12" version="1" lat="38.8551009014800002" lon="-104.9006996944399930"/>
+    <node visible="true" id="13" version="1" lat="38.8547590354099981" lon="-104.9007100238700048"/>
+    <node visible="true" id="14" version="1" lat="38.8536690749700000" lon="-104.9022181205399988"/>
+    <node visible="true" id="15" version="1" lat="38.8541718263300027" lon="-104.9028585451600009"/>
+    <way visible="true" id="1" version="1">
+        <nd ref="1"/>
+        <nd ref="15"/>
+        <nd ref="14"/>
+        <nd ref="13"/>
+        <nd ref="12"/>
+        <nd ref="11"/>
+        <nd ref="10"/>
+        <nd ref="9"/>
+        <nd ref="8"/>
+        <nd ref="7"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="4"/>
+        <nd ref="3"/>
+        <nd ref="2"/>
+        <nd ref="1"/>
+    </way>
+</osm>

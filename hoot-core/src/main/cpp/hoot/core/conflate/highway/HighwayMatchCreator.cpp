@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMatchCreator.h"
 
@@ -37,8 +37,8 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
-#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
@@ -76,38 +76,36 @@ class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  HighwayMatchVisitor(
-    const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
-    ElementCriterionPtr filter = ElementCriterionPtr()) :
-  _map(map),
-  _result(result),
-  _filter(filter)
+  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
+                      ElementCriterionPtr filter = ElementCriterionPtr())
+  : _map(map),
+    _result(result),
+    _filter(filter)
   {
   }
 
-  HighwayMatchVisitor(
-    const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
-    std::shared_ptr<HighwayClassifier> classifier,
-    std::shared_ptr<HighwayClassifier> medianClassifier,
-    std::shared_ptr<SublineStringMatcher> sublineMatcher, ConstMatchThresholdPtr threshold,
-    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
-    ElementCriterionPtr filter = ElementCriterionPtr()):
-  _map(map),
-  _result(result),
-  _classifier(classifier),
-  _medianClassifier(medianClassifier),
-  _sublineMatcher(sublineMatcher),
-  _threshold(threshold),
-  _neighborCountMax(-1),
-  _neighborCountSum(0),
-  _elementsEvaluated(0),
-  _searchRadius(ConfigOptions().getSearchRadiusHighway()),
-  _tagAncestorDiff(tagAncestorDiff),
-  _filter(filter),
-  _numElementsVisited(0),
-  _numMatchCandidatesVisited(0),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-  _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval())
+  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
+                      std::shared_ptr<HighwayClassifier> classifier,
+                      std::shared_ptr<HighwayClassifier> medianClassifier,
+                      std::shared_ptr<SublineStringMatcher> sublineMatcher, ConstMatchThresholdPtr threshold,
+                      std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
+                      ElementCriterionPtr filter = ElementCriterionPtr())
+  : _map(map),
+    _result(result),
+    _classifier(classifier),
+    _medianClassifier(medianClassifier),
+    _sublineMatcher(sublineMatcher),
+    _threshold(threshold),
+    _neighborCountMax(-1),
+    _neighborCountSum(0),
+    _elementsEvaluated(0),
+    _searchRadius(ConfigOptions().getSearchRadiusHighway()),
+    _tagAncestorDiff(tagAncestorDiff),
+    _filter(filter),
+    _numElementsVisited(0),
+    _numMatchCandidatesVisited(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval())
   {
   }
 
@@ -132,11 +130,11 @@ public:
     int neighborCount = 0;
 
     const bool medianMatchEnabled = _medianClassifier.get();
-    for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    for (const auto& elementId : neighbors)
     {
-      if (elementBeingMatched != *it)
+      if (elementBeingMatched != elementId)
       {
-        const std::shared_ptr<const Element>& neighbor = _map->getElement(*it);
+        const std::shared_ptr<const Element>& neighbor = _map->getElement(elementId);
 
         std::shared_ptr<HighwayClassifier> classifier;
 
@@ -153,14 +151,10 @@ public:
           medianTagFound = !kvp.isEmpty();
           LOG_VART(medianTagFound);
           if (medianTagFound)
-          {
             classifier = _medianClassifier;
-          }
         }
         if (!medianTagFound)
-        {
           classifier = _classifier;
-        }
 
         // Score each candidate.
         std::shared_ptr<HighwayMatch> match =
@@ -177,10 +171,12 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  static std::shared_ptr<HighwayMatch> createMatch(
-    const ConstOsmMapPtr& map, std::shared_ptr<HighwayClassifier> classifier,
-    std::shared_ptr<SublineStringMatcher> sublineMatcher, ConstMatchThresholdPtr threshold,
-    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff, ConstElementPtr e1, ConstElementPtr e2)
+  static std::shared_ptr<HighwayMatch> createMatch(const ConstOsmMapPtr& map,
+                                                   std::shared_ptr<HighwayClassifier> classifier,
+                                                   std::shared_ptr<SublineStringMatcher> sublineMatcher,
+                                                   ConstMatchThresholdPtr threshold,
+                                                   std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
+                                                   ConstElementPtr e1, ConstElementPtr e2)
   {
     std::shared_ptr<HighwayMatch> result;
 
@@ -213,12 +209,9 @@ public:
             classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
         // if we're confident this is a miss
         if (result->getType() == MatchType::Miss)
-        {
           result.reset();
-        }
       }
     }
-
     return result;
   }
 
@@ -226,13 +219,9 @@ public:
   {
     Meters searchRadius;
     if (_searchRadius >= 0)
-    {
       searchRadius = _searchRadius;
-    }
     else
-    {
       searchRadius = e->getCircularError();
-    }
     LOG_VART(searchRadius);
     return searchRadius;
   }
@@ -242,7 +231,6 @@ public:
     if (e->getStatus() == Status::Unknown1 && isMatchCandidate(e))
     {
       checkForMatch(e);
-
       _numMatchCandidatesVisited++;
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
@@ -253,7 +241,6 @@ public:
           " elements.");
       }
     }
-
     _numElementsVisited++;
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
@@ -263,9 +250,7 @@ public:
         " elements.");
     }
     if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
-    {
       MemoryUsageChecker::getInstance().check();
-    }
   }
 
   bool isMatchCandidate(ConstElementPtr element) const
@@ -346,13 +331,13 @@ private:
   int _memoryCheckUpdateInterval;
 };
 
-HighwayMatchCreator::HighwayMatchCreator() :
-_classifier(
-  Factory::getInstance().constructObject<HighwayClassifier>(
-    ConfigOptions().getConflateMatchHighwayClassifier())),
-_sublineMatcher(
-  SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
-_tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
+HighwayMatchCreator::HighwayMatchCreator()
+  : _classifier(
+      Factory::getInstance().constructObject<HighwayClassifier>(
+        ConfigOptions().getConflateMatchHighwayClassifier())),
+    _sublineMatcher(
+      SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
+    _tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
 {
   // Enable/disable road median matching and validate associated configuration options.
   setRunMedianMatching(
@@ -361,8 +346,8 @@ _tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
     ConfigOptions().getHighwayMedianToDualHighwayTransferKeys());
 }
 
-void HighwayMatchCreator::setRunMedianMatching(
-  const bool runMatching, const QStringList& identifyingTags, const QStringList& transferKeys)
+void HighwayMatchCreator::setRunMedianMatching(const bool runMatching, const QStringList& identifyingTags,
+                                               const QStringList& transferKeys)
 {
   if (runMatching)
   {
@@ -406,8 +391,8 @@ MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId e
       map->getElement(eid1), map->getElement(eid2));
 }
 
-void HighwayMatchCreator::createMatches(
-  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
+void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                                        ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
   timer.start();
@@ -418,24 +403,19 @@ void HighwayMatchCreator::createMatches(
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusHighway();
   if (searchRadius < 0)
-  {
     searchRadiusStr = "within a feature dependent search radius";
-  }
   else
-  {
-    searchRadiusStr =
-      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
-  }
+    searchRadiusStr = "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
+
   LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
-  const int matchesSizeBefore = matches.size();
+  const int matchesSizeBefore = static_cast<int>(matches.size());
 
-  HighwayMatchVisitor v(
-    map, matches, _classifier, _medianClassifier, _sublineMatcher, threshold, _tagAncestorDiff,
-    _filter);
+  HighwayMatchVisitor v(map, matches, _classifier, _medianClassifier, _sublineMatcher, threshold,
+                        _tagAncestorDiff, _filter);
   map->visitWaysRo(v);
   map->visitRelationsRo(v);
-  const int matchesSizeAfter = matches.size();
+  const int matchesSizeAfter = static_cast<int>(matches.size());
 
   LOG_STATUS(
     "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
@@ -467,7 +447,8 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
   {
     _matchThreshold =
       std::make_shared<MatchThreshold>(
-        ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
+        ConfigOptions().getHighwayMatchThreshold(),
+        ConfigOptions().getHighwayMissThreshold(),
         ConfigOptions().getHighwayReviewThreshold());
   }
   return _matchThreshold;
