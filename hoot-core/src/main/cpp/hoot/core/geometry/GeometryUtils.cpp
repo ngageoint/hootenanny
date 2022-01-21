@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryUtils.h"
@@ -37,13 +37,14 @@
 #include <geos/util/IllegalArgumentException.h>
 
 // hoot
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Float.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Units.h>
+#include <hoot/core/util/Float.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Units.h>
 
 // Standard
 #include <stdint.h>
@@ -67,8 +68,7 @@ union DoubleCast
 
 double GeometryUtils::MEAN_EARTH_RADIUS = 6371009;
 
-Coordinate GeometryUtils::calculateDestination(
-  const Coordinate& start, Degrees bearing, Meters d)
+Coordinate GeometryUtils::calculateDestination(const Coordinate& start, Degrees bearing, Meters d)
 {
   Radians theta = toRadians(bearing);
   Radians lambda1 = toRadians(start.x);
@@ -77,7 +77,7 @@ Coordinate GeometryUtils::calculateDestination(
 
   Radians phi2 = asin(sin(phi1) * cos(d / R) + cos(phi1) * sin(d / R) * cos(theta));
   Radians lambda2 = lambda1 + atan2(sin(theta) * sin(d / R) * cos(phi1),
-    cos(d / R) - sin(phi1) * sin(phi2));
+                                    cos(d / R) - sin(phi1) * sin(phi2));
 
   Coordinate result;
   result.x = toDegrees(lambda2);
@@ -89,9 +89,7 @@ Coordinate GeometryUtils::calculateDestination(
 double GeometryUtils::haversine(const Coordinate &c1, const Coordinate &c2)
 {
   if (c1 == c2)
-  {
     return 0.0;
-  }
 
   // use long double instead of double. With GCC this gives 128 bit double and can discern down
   // to about 2mm at the equator using haversine. Using a regular double only gives ~9cm.
@@ -100,15 +98,15 @@ double GeometryUtils::haversine(const Coordinate &c1, const Coordinate &c2)
   Float128 c2LatAsRadians = (Float128)c2.y / 180.0 * M_PI;
   Float128 c2LngAsRadians = (Float128)c2.x / 180.0 * M_PI;
 
-  Float128 v = cosl(c1LatAsRadians) * cosl(c2LatAsRadians)
-      * cosl(c1LngAsRadians - c2LngAsRadians) + sinl(c1LatAsRadians)
-      * sinl(c2LatAsRadians);
+  Float128 v = cosl(static_cast<long double>(c1LatAsRadians)) *
+               cosl(static_cast<long double>(c2LatAsRadians)) *
+               cosl(static_cast<long double>(c1LngAsRadians - c2LngAsRadians)) + sinl(static_cast<long double>(c1LatAsRadians)) *
+               sinl(static_cast<long double>(c2LatAsRadians));
   if (v > 1.0)
-  {
     v = 1.0;
-  }
-  Float128 dsigma = acosl(v);
-  return dsigma * MEAN_EARTH_RADIUS;
+
+  Float128 dsigma = acosl(static_cast<long double>(v));
+  return static_cast<double>(dsigma) * MEAN_EARTH_RADIUS;
 }
 
 bool GeometryUtils::highPrecisionHaversine()
@@ -197,16 +195,13 @@ Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
   if (boundsStr.trimmed().isEmpty())
-  {
     return Envelope();
-  }
 
   const QString errorMsg = "Invalid envelope string: " + boundsStr;
   const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
   if (!boundsRegEx.exactMatch(boundsStr))
-  {
     throw IllegalArgumentException(errorMsg);
-  }
+
   const QStringList boundsParts = boundsStr.split(",");
   assert(boundsParts.size() == 4);
   if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
@@ -224,9 +219,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
 {
   LOG_VART(env.isNull());
   if (env.isNull())
-  {
     return std::shared_ptr<geos::geom::Polygon>();
-  }
 
   CoordinateSequence* coordSeq =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2).release();
@@ -241,8 +234,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
   // GeometryFactory takes ownership of these input parameters.
-  std::shared_ptr<Polygon> poly(
-    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  std::shared_ptr<Polygon> poly(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
   LOG_VART(poly->isValid());
   return poly;
 }
@@ -257,22 +249,17 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 
   LOG_VART(str);
   if (str.trimmed().isEmpty())
-  {
     return std::shared_ptr<Polygon>();
-  }
 
   QStringList coords = str.split(";");
   LOG_VART(coords.size());
   if (coords.size() < 3)
-  {
     throw IllegalArgumentException("Polygon string must have at least three points: " + str);
-  }
 
   LOG_VART(coords.at(0) != coords.at(coords.size() - 1));
   if (coords.at(0) != coords.at(coords.size() - 1))
-  {
     coords.append(coords.at(0));
-  }
+
   LOG_VART(coords);
 
   CoordinateSequence* coordSeq =
@@ -282,20 +269,17 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
     const QString coordStr = coords.at(i);
     const QStringList coordStrs = coordStr.split(",");
     if (coordStrs.size() != 2)
-    {
       throw IllegalArgumentException("Invalid polygon coordinate string: " + coordStr);
-    }
+
     bool ok = false;
     const double x = coordStrs.at(0).toDouble(&ok);
     if (!ok)
-    {
       throw IllegalArgumentException("Invalid polygon x coordinate value: " + coordStrs.at(0));
-    }
+
     const double y = coordStrs.at(1).toDouble(&ok);
     if (!ok)
-    {
       throw IllegalArgumentException("Invalid polygon y coordinate value: " + coordStrs.at(1));
-    }
+
     coordSeq->setAt(geos::geom::Coordinate(x, y), i);
   }
   LOG_VART(coordSeq->size());
@@ -305,8 +289,7 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
   // GeometryFactory takes ownership of these input parameters.
-  return std::shared_ptr<Polygon>(
-    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  return std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 }
 
 QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
@@ -322,9 +305,8 @@ QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);
-    str +=
-      QString::number(coord.x, 'g', precision) + "," + QString::number(coord.y, 'g', precision) +
-      ";";
+    str += QString::number(coord.x, 'g', precision) + "," +
+           QString::number(coord.y, 'g', precision) + ";";
   }
   str.chop(1);
   return str;
@@ -332,16 +314,22 @@ QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 
 std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromString(const QString& str)
 {
+  bool isEnvelope = false;
+  return boundsFromString(str, isEnvelope);
+}
+
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromString(const QString& str, bool& isEnvelope)
+{
   LOG_VART(str);
-  if (isEnvelopeString(str))
-  {
+  isEnvelope = isEnvelopeString(str);
+  if (isEnvelope)
     return envelopeToPolygon(envelopeFromString(str));
-  }
   else
   {
-    return polygonFromString(str);
+    std::shared_ptr<geos::geom::Polygon> poly = polygonFromString(str);
+    isEnvelope = (poly ? poly->isRectangle() : false);
+    return poly;
   }
-  return std::shared_ptr<geos::geom::Polygon>();
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
@@ -415,9 +403,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
     result = validateGeometry(tmp.get());
   }
   else if (p->getArea() == 0.0)
-  {
     result = GeometryFactory::getDefaultInstance()->createEmptyGeometry().release();
-  }
   else
   {
     const LineString* oldShell = p->getExteriorRing();
@@ -437,15 +423,12 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 
         // keep any holes with three or more points.
         if (lr->getNumPoints() >= 3)
-        {
           holes->push_back(validateLinearRing(lr));
-        }
       }
       else
       {
         LOG_TRACE("Why isn't it a linear ring?");
         throw HootException("Interior ring is not a linear ring...");
-//        holes->push_back(validateGeometry(ls));
       }
     }
 
@@ -467,8 +450,7 @@ OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
   const QMap<int, geos::geom::Envelope>& boundsCollection)
 {
   OsmMapPtr boundariesMap = std::make_shared<OsmMap>();
-  for (QMap<int, geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
-       boundsItr != boundsCollection.end(); ++boundsItr)
+  for (auto boundsItr = boundsCollection.begin(); boundsItr != boundsCollection.end(); ++boundsItr)
   {
     const ElementId boundaryWayId = createBoundsInMap(boundariesMap, boundsItr.value());
     boundariesMap->getWay(boundaryWayId.getId())->getTags()["id"] =
@@ -537,7 +519,7 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
   OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, input);
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     ConstWayPtr way = wayItr->second;
     int id = -1;
@@ -546,14 +528,10 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
     {
       id = way->getTags().get("id").toInt(&ok);
       if (!ok)
-      {
         throw IllegalArgumentException("Invalid bounds file: way features have no \"id\" tag.");
-      }
     }
     else
-    {
       id = Tgs::Random::instance()->generateInt(1000);
-    }
     boundsById[id] = way->getEnvelopeInternal(map);
   }
   return boundsById;
@@ -561,27 +539,49 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
 
 std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QString& input)
 {
+  bool isEnvelope = false;
+  return readBoundsFromFile(input, isEnvelope);
+}
+
+std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QString& input, bool& isEnvelope)
+{
   OsmMapPtr map = std::make_shared<OsmMap>();
   LOG_INFO("Loading map bounds from ..." << FileUtils::toLogFormat(input, 50) << "...");
   OsmMapReaderFactory::read(map, input);
-  const NodeMap nodes = map->getNodes();
-  double min_x =  180.0,
-         max_x = -180.0,
-         min_y =  90.0,
-         max_y = -90.0;
-  //  No nodes should return an empty pointer
-  if (nodes.empty())
-    return nullptr;
-  //  Iterate all nodes and find the min/max x/y
-  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
+  //  If there is one way in the map, assume it is a polygon and convert it
+  if (map->getWayCount() == 1)
   {
-    ConstNodePtr node = nodeItr->second;
-    min_x = std::min(min_x, node->getX());
-    max_x = std::max(max_x, node->getX());
-    min_y = std::min(min_y, node->getY());
-    max_y = std::max(max_y, node->getY());
+    //  Convert the way to a polygon
+    WayPtr way = map->getWays().begin()->second;
+    ElementToGeometryConverter ec(map);
+    std::shared_ptr<Polygon> bounds = ec.convertToPolygon(way);
+    //  Check if the bounds is a rectangle or not
+    isEnvelope = bounds->isRectangle();
+    //  Return the conversion to polygon
+    return bounds;
   }
-  return GeometryUtils::envelopeToPolygon(geos::geom::Envelope(min_x, max_x, min_y, max_y));
+  else
+  {
+    isEnvelope = true;
+    const NodeMap nodes = map->getNodes();
+    double min_x =  180.0,
+           max_x = -180.0,
+           min_y =  90.0,
+           max_y = -90.0;
+    //  No nodes should return an empty pointer
+    if (nodes.empty())
+      return nullptr;
+    //  Iterate all nodes and find the min/max x/y
+    for (auto nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
+    {
+      ConstNodePtr node = nodeItr->second;
+      min_x = std::min(min_x, node->getX());
+      max_x = std::max(max_x, node->getX());
+      min_y = std::min(min_y, node->getY());
+      max_y = std::max(max_y, node->getY());
+    }
+    return GeometryUtils::envelopeToPolygon(geos::geom::Envelope(min_x, max_x, min_y, max_y));
+  }
 }
 
 QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)

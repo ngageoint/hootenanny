@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
@@ -63,8 +63,7 @@ public:
    *
    * Taken from http://www.movable-type.co.uk/scripts/latlong.html
    */
-  static geos::geom::Coordinate calculateDestination(
-    const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
+  static geos::geom::Coordinate calculateDestination(const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
 
   /**
    * Returns the distance between two coordinates using the haversine formula and a mean earth
@@ -155,10 +154,12 @@ public:
    * support other geometries if needed.
    *
    * @param str the string to parse
+   * @param isEnvelope (output) true for envelope bounds string, false for polygon
    * @return a valid polygon if the input string is a valid envelope or polygon string; a null
    * object otherwise
    */
   static std::shared_ptr<geos::geom::Polygon> boundsFromString(const QString& str);
+  static std::shared_ptr<geos::geom::Polygon> boundsFromString(const QString& str, bool& isEnvelope);
 
   /**
    * Converts a polygon string to an envelope string
@@ -205,8 +206,7 @@ public:
    * @param boundsCollection a collection of bounding boxes keyed by ID
    * @return a bounding box map
    */
-  static OsmMapPtr createMapFromBoundsCollection(
-    const QMap<int, geos::geom::Envelope>& boundsCollection);
+  static OsmMapPtr createMapFromBoundsCollection(const QMap<int, geos::geom::Envelope>& boundsCollection);
 
   /**
    * Creates a bounding rectangle within the specified map
@@ -251,6 +251,7 @@ public:
    * @return an envelope representing the bounds of the file
    */
   static std::shared_ptr<geos::geom::Geometry> readBoundsFromFile(const QString& input);
+  static std::shared_ptr<geos::geom::Geometry> readBoundsFromFile(const QString& input, bool& isEnvelope);
 
 };
 

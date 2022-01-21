@@ -126,9 +126,9 @@ Radians MapProjector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p
   return theta1 - theta2;
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OGREnvelope& env)
+OGRSpatialReferencePtr MapProjector::createAeacProjection(const OGREnvelope& env)
 {
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  OGRSpatialReferencePtr srs(new OGRSpatialReference());
   srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   double height = env.MaxY - env.MinY;
   double stdP1 = env.MinY + height * .25;
@@ -137,21 +137,17 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OG
   double y = (env.MinY + env.MaxY) / 2.0;
 
   if (env.MinX == env.MaxX || env.MinY == env.MaxY)
-  {
     throw HootException("Min and max bounds values cannot be the same.");
-  }
 
   if (srs->SetACEA(stdP1, stdP2, y, x, 0, 0) != OGRERR_NONE)
-  {
     throw HootException("Error creating Albers equal area conic projection.");
-  }
+
   return srs;
 }
 
-vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjections(
-  const OGREnvelope& env) const
+vector<OGRSpatialReferencePtr> MapProjector::createAllPlanarProjections(const OGREnvelope& env) const
 {
-  vector<std::shared_ptr<OGRSpatialReference>> result;
+  vector<OGRSpatialReferencePtr> result;
 
   double centerLat = (env.MaxY + env.MinY) / 2.0;
   double centerLon = (env.MaxX + env.MinX) / 2.0;
@@ -166,79 +162,79 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     try { result.push_back(createAeacProjection(env)); } catch (const HootException&) { }
     try { result.push_back(createSinusoidalProjection(env)); } catch (const HootException&) { }
 
-    std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    OGRSpatialReferencePtr mollweide(new OGRSpatialReference());
     mollweide->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (mollweide->SetFromUserInput("ESRI:54009") == OGRERR_NONE)
       result.push_back(mollweide);
 
-    std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    OGRSpatialReferencePtr eckertVI(new OGRSpatialReference());
     eckertVI->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (eckertVI->SetFromUserInput("ESRI:53010") == OGRERR_NONE)
       result.push_back(eckertVI);
 
-    std::shared_ptr<OGRSpatialReference> sphereBonne(new OGRSpatialReference());
+    OGRSpatialReferencePtr sphereBonne(new OGRSpatialReference());
     sphereBonne->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (sphereBonne->SetFromUserInput("ESRI:53024") == OGRERR_NONE)
       result.push_back(sphereBonne);
 
-    std::shared_ptr<OGRSpatialReference> customMercator(new OGRSpatialReference());
+    OGRSpatialReferencePtr customMercator(new OGRSpatialReference());
     customMercator->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customMercator->SetMercator(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customMercator);
 
-    std::shared_ptr<OGRSpatialReference> customBonne(new OGRSpatialReference());
+    OGRSpatialReferencePtr customBonne(new OGRSpatialReference());
     customBonne->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customBonne->SetBonne(M_PI_2, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customBonne);
 
     // Lambert azimuthal equal-area projection
-    std::shared_ptr<OGRSpatialReference> customLaea(new OGRSpatialReference());
+    OGRSpatialReferencePtr customLaea(new OGRSpatialReference());
     customLaea->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customLaea->SetLAEA(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customLaea);
 
-    std::shared_ptr<OGRSpatialReference> customLcc1sp(new OGRSpatialReference());
+    OGRSpatialReferencePtr customLcc1sp(new OGRSpatialReference());
     customLcc1sp->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customLcc1sp->SetLCC1SP(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customLcc1sp);
 
-    std::shared_ptr<OGRSpatialReference> customRobinson(new OGRSpatialReference());
+    OGRSpatialReferencePtr customRobinson(new OGRSpatialReference());
     customRobinson->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customRobinson->SetRobinson(centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customRobinson);
 
     // custom transverse mercator
-    std::shared_ptr<OGRSpatialReference> customTm(new OGRSpatialReference());
+    OGRSpatialReferencePtr customTm(new OGRSpatialReference());
     customTm->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customTm->SetTM(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customTm);
 
     // Polyconic
-    std::shared_ptr<OGRSpatialReference> customPolyconic(new OGRSpatialReference());
+    OGRSpatialReferencePtr customPolyconic(new OGRSpatialReference());
     customPolyconic->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customPolyconic->SetPolyconic(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customPolyconic);
 
     // Two Point Equidistant
-    std::shared_ptr<OGRSpatialReference> customTped(new OGRSpatialReference());
+    OGRSpatialReferencePtr customTped(new OGRSpatialReference());
     customTped->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customTped->SetTPED(stdP1, centerLon, stdP2, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customTped);
 
     // Equidistant Conic
-    std::shared_ptr<OGRSpatialReference> customEc(new OGRSpatialReference());
+    OGRSpatialReferencePtr customEc(new OGRSpatialReference());
     customEc->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customEc->SetEC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customEc);
 
     // Azimuthal Equidistant
-    std::shared_ptr<OGRSpatialReference> customAe(new OGRSpatialReference());
+    OGRSpatialReferencePtr customAe(new OGRSpatialReference());
     customAe->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customAe->SetAE(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customAe);
 
     // Lambert Convformal Conic
-    std::shared_ptr<OGRSpatialReference> customLcc(new OGRSpatialReference());
+    OGRSpatialReferencePtr customLcc(new OGRSpatialReference());
     customLcc->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (customLcc->SetLCC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
       result.push_back(customLcc);
@@ -247,27 +243,25 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
   return result;
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OGREnvelope& env)
+OGRSpatialReferencePtr MapProjector::createOrthographic(const OGREnvelope& env)
 {
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
   return createOrthographic(x, y);
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, double y)
+OGRSpatialReferencePtr MapProjector::createOrthographic(double x, double y)
 {
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  OGRSpatialReferencePtr srs(new OGRSpatialReference());
   srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
-  {
     throw HootException("Error creating orthographic projection.");
-  }
   return srs;
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(
-  const OGREnvelope& env, Radians maxAngleError, Meters maxDistanceError, Meters testDistance,
-  bool warnOnFail) const
+OGRSpatialReferencePtr MapProjector::createPlanarProjection(const OGREnvelope& env, Radians maxAngleError,
+                                                            Meters maxDistanceError, Meters testDistance,
+                                                            bool warnOnFail) const
 {
   LOG_TRACE("Selecting best planar projection...");
 
@@ -279,33 +273,30 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(
   if (env.MaxX == env.MinX || env.MaxY == env.MinY)
     return createOrthographic(env);
 
-  vector<std::shared_ptr<OGRSpatialReference>> projs = createAllPlanarProjections(env);
+  vector<OGRSpatialReferencePtr> projs = createAllPlanarProjections(env);
   LOG_VART(projs.size());
 
-  QString deg = QChar(0x00B0);
+  const QString deg = QChar(0x00B0);
 
   if (projs.empty())
-  {
     throw HootException("No candidate planar projections are available.");
-  }
 
   vector<PlanarTestResult> testResults;
   vector<PlanarTestResult> passingResults;
 
-  for (size_t i = 0; i < projs.size(); ++i)
+  size_t index = 0;
+  for (const auto& projection : projs)
   {
     PlanarTestResult tr;
-    tr.i = i;
-    if (_evaluateProjection(env, projs[i], testDistance, tr.distanceError, tr.angleError))
+    tr.i = index;
+    if (_evaluateProjection(env, projection, testDistance, tr.distanceError, tr.angleError))
     {
       // create a score that is weighted by the user's threshold values.
       tr.score = tr.distanceError / maxDistanceError + tr.angleError / maxAngleError;
       LOG_VART(tr.score);
       testResults.push_back(tr);
       if (tr.distanceError <= maxDistanceError && tr.angleError <= maxAngleError)
-      {
         passingResults.push_back(tr);
-      }
     }
     else
     {
@@ -315,6 +306,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(
       testResults.push_back(tr);
     }
     LOG_TRACE("dis: " << tr.distanceError << "m angle: " << toDegrees(tr.angleError) << deg);
+    index++;
   }
 
   //  |<---                       80 cols                                         -->|
@@ -329,18 +321,16 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(
   LOG_VART(testResults.size());
   if (!passingResults.empty())
   {
-    bestIndex = _findBestScore(passingResults);
+    bestIndex = static_cast<int>(_findBestScore(passingResults));
     LOG_VART(bestIndex);
     LOG_VART(toWkt(projs[bestIndex]));
   }
   else if (warnOnFail == false)
-  {
     level = Log::Warn;
-  }
   else if (!testResults.empty())
   {
     LOG_WARN(errorMessage);
-    bestIndex = _findBestScore(testResults);
+    bestIndex = static_cast<int>(_findBestScore(testResults));
     LOG_VART(bestIndex);
     level = Log::Info;
   }
@@ -353,19 +343,16 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(
   LOG_LEVEL(level, "Projection: " << toWkt(projs[bestIndex]));
 
   if (bestIndex == -1)
-  {
     throw HootException(errorMessage);
-  }
 
   LOG_VART(toWkt(projs[bestIndex].get()));
   return projs[bestIndex];
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(
-const OGREnvelope& env)
+OGRSpatialReferencePtr MapProjector::createSinusoidalProjection(const OGREnvelope& env)
 {
   double centerLon = (env.MaxX + env.MinX) / 2.0;
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  OGRSpatialReferencePtr srs(new OGRSpatialReference());
   srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (srs->SetSinusoidal(centerLon, 0.0, 0.0) != OGRERR_NONE)
   {
@@ -374,37 +361,30 @@ const OGREnvelope& env)
   return srs;
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
+OGRSpatialReferencePtr MapProjector::createWgs84Projection()
 {
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  OGRSpatialReferencePtr srs(new OGRSpatialReference());
   srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (srs->importFromEPSG(4326) != OGRERR_NONE)
-  {
     throw HootException("Error creating EPSG:4326 projection.");
-  }
   return srs;
 }
 
-bool MapProjector::_evaluateProjection(
-  const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
-  Meters& maxDistanceError, Radians& maxAngleError) const
+bool MapProjector::_evaluateProjection(const OGREnvelope& env, const OGRSpatialReferencePtr& srs,
+                                       Meters testDistance, Meters& maxDistanceError,
+                                       Radians& maxAngleError) const
 {
   // Disable CPL error messages. They will be re-enabled when the DisableCplErrors object is
   // destructed.
   DisableCplErrors disableErrors;
-  std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
+  OGRSpatialReferencePtr wgs84 = MapProjector::createWgs84Projection();
 
-  std::shared_ptr<OGRCoordinateTransformation> t(
-    OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
+  std::shared_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
   if (t.get() == nullptr)
-  {
     return false;
-  }
 
   if (env.MaxX == env.MinX || env.MaxY == env.MinY)
-  {
     throw HootException("Cannot evaluate a projection with an envelope of zero area.");
-  }
 
   double width = env.MaxX - env.MinX;
   double height = env.MaxY - env.MinY;
@@ -426,20 +406,20 @@ bool MapProjector::_evaluateProjection(
     {
       Coordinate c1(x, y);
       Coordinate p1 = c1;
-      success &= t->Transform(1, &p1.x, &p1.y);
+      success = t->Transform(1, &p1.x, &p1.y) && success;
 
       if (!success)
         return false;
 
       Coordinate upc = GeometryUtils::calculateDestination(c1, 0.0, testDistance);
       Coordinate up = upc;
-      success &= t->Transform(1, &up.x, &up.y);
+      success = t->Transform(1, &up.x, &up.y) && success;
 
       for (double bearing = 0.0; bearing < 360.0; bearing += 20.0)
       {
         Coordinate c2 = GeometryUtils::calculateDestination(c1, bearing, testDistance);
         Coordinate p2 = c2;
-        success &= t->Transform(1, &p2.x, &p2.y);
+        success = t->Transform(1, &p2.x, &p2.y) && success;
 
         if (e->contains(c2))
         {
@@ -465,7 +445,7 @@ bool MapProjector::_evaluateProjection(
 }
 
 bool MapProjector::_distanceLessThan(const MapProjector::PlanarTestResult& p1,
-  const MapProjector::PlanarTestResult& p2)
+                                     const MapProjector::PlanarTestResult& p2)
 {
   return p1.distanceError < p2.distanceError;
 }
@@ -483,15 +463,13 @@ bool MapProjector::isGeographic(const ConstElementProviderPtr& provider)
 }
 
 Coordinate MapProjector::project(const Coordinate& c,
-                                 const std::shared_ptr<OGRSpatialReference>& srs1,
-                                 const std::shared_ptr<OGRSpatialReference>& srs2)
+                                 const OGRSpatialReferencePtr& srs1,
+                                 const OGRSpatialReferencePtr& srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
   if (t == nullptr)
-  {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
-  }
 
   LOG_TRACE("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs2) << "...");
 
@@ -506,23 +484,21 @@ Coordinate MapProjector::project(const Coordinate& c,
 }
 
 void MapProjector::project(const std::shared_ptr<OsmMap>& map,
-                           const std::shared_ptr<OGRSpatialReference>& ref)
+                           const OGRSpatialReferencePtr& ref)
 {
   LOG_TRACE("Reprojecting map to: " << toWkt(ref) << "...");
 
-  std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
+  OGRSpatialReferencePtr sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
 
   if (t == nullptr)
-  {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
-  }
 
   ReprojectCoordinateFilter rcf(t);
 
   int count = 0;
   const NodeMap& nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     Node* n = it->second.get();
     Coordinate c = n->toCoordinate();
@@ -563,28 +539,27 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
 }
 
 void MapProjector::project(const std::shared_ptr<Geometry>& g,
-  const std::shared_ptr<OGRSpatialReference>& srs1,
-  const std::shared_ptr<OGRSpatialReference>& srs2)
+                           const OGRSpatialReferencePtr& srs1,
+                           const OGRSpatialReferencePtr& srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
   if (t == nullptr)
-  {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
-  }
 
   LOG_TRACE("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs1) << "...");
 
   ReprojectCoordinateFilter filter(t);
   g->apply_rw(&filter);
+  //  NOTE: It is very important that the geometry is marked as changed after if it reprojected
+  g->geometryChanged();
 
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
 void MapProjector::projectToAeac(const std::shared_ptr<OsmMap>& map)
 {
-  std::shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
-    CalculateMapBoundsVisitor::getBounds(map));
+  OGRSpatialReferencePtr srs = getInstance().createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
   project(map, srs);
 }
 
@@ -598,14 +573,12 @@ void MapProjector::projectToOrthographic(const std::shared_ptr<OsmMap>& map, con
 {
   LOG_TRACE("Projecting to orthographic...");
   MapProjector proj;
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  OGRSpatialReferencePtr srs(new OGRSpatialReference());
   srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
-  {
     throw HootException("Error creating orthographic projection.");
-  }
   proj.project(map, srs);
 }
 
@@ -633,13 +606,13 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
   if (isGeographic(map) == false)
   {
     MapProjector proj;
-    std::shared_ptr<OGRSpatialReference> srs = MapProjector::createWgs84Projection();
+    OGRSpatialReferencePtr srs = MapProjector::createWgs84Projection();
     proj.project(map, srs);
   }
 }
 
 bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
-  const MapProjector::PlanarTestResult& p2)
+                                  const MapProjector::PlanarTestResult& p2)
 {
   return p1.score < p2.score;
 }
