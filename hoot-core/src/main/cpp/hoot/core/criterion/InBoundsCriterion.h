@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IN_BOUNDS_CRITERION_H
 #define IN_BOUNDS_CRITERION_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/Configurable.h>
 
 // GEOS
 #include <geos/geom/Geometry.h>
