@@ -35,7 +35,6 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Boost
-#include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 namespace hoot
@@ -43,18 +42,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagAdvancedCriterion)
 
-TagAdvancedCriterion::TagAdvancedCriterion() :
+TagAdvancedCriterion::TagAdvancedCriterion()
 // not seeing a need to use anything other than case-insensitive here, but can make it
 // configurable if needed
-_keyMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
-_valueMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard))
+  : _keyMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
+    _valueMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
   setConfiguration(conf());
 }
 
-TagAdvancedCriterion::TagAdvancedCriterion(const QString& filterJsonStringOrPath) :
-_keyMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
-_valueMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard))
+TagAdvancedCriterion::TagAdvancedCriterion(const QString& filterJsonStringOrPath)
+  : _keyMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
+    _valueMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
   _parseFilterString(filterJsonStringOrPath);
 }
@@ -64,18 +63,14 @@ void TagAdvancedCriterion::setConfiguration(const Settings& s)
   // TODO: rename, since this crit isn't specific to conflation
   const QString tagFilter = ConfigOptions(s).getConflateTagFilter();
   if (!tagFilter.trimmed().isEmpty())
-  {
     _parseFilterString(tagFilter);
-  }
 }
 
 void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrPath)
 {
   std::shared_ptr<boost::property_tree::ptree> propTree;
   if (!filterJsonStringOrPath.endsWith(".json", Qt::CaseInsensitive))
-  {
     propTree = StringUtils::jsonStringToPropTree(filterJsonStringOrPath);
-  }
   else
   {
     propTree = std::make_shared<boost::property_tree::ptree>();
@@ -87,8 +82,7 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
     {
       throw HootException(
         QString("Error parsing JSON: %1 (line %2)")
-          .arg(QString::fromStdString(e.message()))
-          .arg(QString::number(e.line())));
+          .arg(QString::fromStdString(e.message()), QString::number(e.line())));
     }
     catch (const std::exception& e)
     {
@@ -109,8 +103,8 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
   }
 }
 
-void TagAdvancedCriterion::_loadTagFilters(
-  const QString& tagFilterType, const std::shared_ptr<boost::property_tree::ptree>& propTree)
+void TagAdvancedCriterion::_loadTagFilters(const QString& tagFilterType,
+                                           const std::shared_ptr<boost::property_tree::ptree>& propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 
@@ -119,8 +113,7 @@ void TagAdvancedCriterion::_loadTagFilters(
     propTree->get_child_optional(tagFilterType.toStdString());
   if (tagFilterChild)
   {
-    for (const boost::property_tree::ptree::value_type& tagFilterPart :
-         propTree->get_child(tagFilterType.toStdString()))
+    for (auto& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
     {
       TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);
       LOG_VART(tagFilter);
@@ -140,14 +133,10 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
   // We don't support kvp wildcards when we're looking for aux style matches.  So if the filter
   // specifies a wildcard, we'll simply remove it.
   if (filterKey != "*")
-  {
     filterKey = filterKey.remove("*");
-  }
   QString filterVal = filter.getValue();
   if (filterVal != "*")
-  {
     filterVal = filterVal.remove("*");
-  }
   filterTags.appendValue(filterKey, filterVal);
 
   // Here we finding a set of tags as defined by the type of match we are looking for, then for
@@ -156,26 +145,16 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
 
   Tags tags;
   if (matchType.toLower() == "alias")
-  {
     tags = OsmSchema::getInstance().getAliasTags(filterTags);
-  }
   else if (matchType.toLower() == "similar")
-  {
-    tags =
-      OsmSchema::getInstance().getSimilarTags(
-        filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
-  }
+    tags = OsmSchema::getInstance().getSimilarTags(filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
   else if (matchType.toLower() == "child")
-  {
     tags = OsmSchema::getInstance().getChildTags(filterTags);
-  }
   else if (matchType.toLower() == "ancestor")
   {
-    for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end();
-         ++tagItr)
+    for (auto tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
     {
-      if (OsmSchema::getInstance().isAncestor(
-            filterKey + "=" + filterVal, tagItr.key() + "=" + tagItr.value()))
+      if (OsmSchema::getInstance().isAncestor(filterKey + "=" + filterVal, tagItr.key() + "=" + tagItr.value()))
       {
         LOG_TRACE("Found " << matchType << " match.");
         return true;
@@ -184,9 +163,7 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
     return false;
   }
   else if (matchType.toLower() == "association")
-  {
     tags = OsmSchema::getInstance().getAssociatedTags(filterTags);
-  }
   else if (matchType.toLower() == "category")
   {
     if (OsmSchema::getInstance().hasCategory(e->getTags(), filter.getCategory().toString()))
@@ -197,19 +174,18 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
     return false;
   }
   else
-  {
     throw IllegalArgumentException("Invalid aux tag match type: " + matchType);
-  }
+
   LOG_VART(tags);
 
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
     const QString tagKey = tagItr.key();
     const QString tagValue = tagItr.value();
     const QStringList tagValues = tagValue.split(";");
-    for (int i = 0; i < tagValues.length(); i++)
+    for (const auto& value : tagValues)
     {
-      const QString splitValue = tagValues.at(i).trimmed().toLower();
+      const QString splitValue = value.trimmed().toLower();
       if (!splitValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, splitValue), e->getTags()))
       {
         LOG_TRACE("Found " << matchType << " match.");
@@ -245,40 +221,28 @@ bool TagAdvancedCriterion::_elementPassesTagFilter(const ConstElementPtr& e,
 
     LOG_VART(filter.getAllowAliases());
     if (!foundFilterMatch && filter.getAllowAliases())
-    {
       foundFilterMatch = _hasAuxMatch(e, filter, "alias");
-    }
 
     LOG_VART(filter.getSimilarityThreshold());
     if (!foundFilterMatch && filter.getSimilarityThreshold() != -1.0)
-    {
       foundFilterMatch = _hasAuxMatch(e, filter, "similar");
-    }
 
     LOG_VART(filter.getAllowChildren());
     if (!foundFilterMatch && filter.getAllowChildren())
-    {
       foundFilterMatch = _hasAuxMatch(e, filter, "child");
-    }
 
     LOG_VART(filter.getAllowAncestors());
     if (!foundFilterMatch && filter.getAllowAncestors())
-    {
       foundFilterMatch = _hasAuxMatch(e, filter, "ancestor");
-    }
 
     LOG_VART(filter.getAllowAssociations());
     if (!foundFilterMatch && filter.getAllowAssociations())
-    {
       foundFilterMatch = _hasAuxMatch(e, filter, "association");
-    }
   }
 
   LOG_VART(filter.getCategory());
   if (!foundFilterMatch && filter.getCategory() != OsmSchemaCategory::Empty)
-  {
     foundFilterMatch = _hasAuxMatch(e, filter, "category");
-  }
 
   return foundFilterMatch;
 }
@@ -322,7 +286,7 @@ bool TagAdvancedCriterion::_filterMatchesAnyTag(const TagFilter& filter, const T
     _keyMatcher->setPattern(filter.getKey());
     _valueMatcher->setPattern(filter.getValue());
 
-    for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+    for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
       LOG_VART(tagItr.key());
       if (keyMatched || (!keyMatched && _keyMatcher->exactMatch(tagItr.key())))
@@ -418,18 +382,11 @@ bool TagAdvancedCriterion::_elementPassesShouldTagFilters(const ConstElementPtr&
 bool TagAdvancedCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_elementPassesMustTagFilters(e))
-  {
     return false;
-  }
   if (!_elementPassesMustNotTagFilters(e))
-  {
     return false;
-  }
   if (!_elementPassesShouldTagFilters(e))
-  {
     return false;
-  }
-
   LOG_TRACE("Tag filtering passed all criteria.");
   return true;
 }
