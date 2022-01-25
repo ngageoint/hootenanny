@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATETESTSETTINGSOPTIMIZER_H
 #define CONFLATETESTSETTINGSOPTIMIZER_H
@@ -56,9 +56,8 @@ public:
    * ranges
    * @param outputFile file path which to write the optimization summary to
    */
-  void runOptimization(
-    std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
-    const QString& testSettingsFile, const QString& outputFile);
+  void runOptimization(std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
+                       const QString& testSettingsFile, const QString& outputFile);
 
 private:
 
@@ -72,9 +71,9 @@ private:
   /*
    * Writes a summary of the optimization results to file
    */
-  void _writeOutput(
-    const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
-    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString& outputFile);
+  void _writeOutput(const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
+                    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations,
+                    const QString& outputFile);
 };
 
 }

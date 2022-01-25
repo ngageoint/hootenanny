@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGESTRING_H
 #define EDGESTRING_H
@@ -251,10 +251,8 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2);
 inline uint qHash(const ConstEdgeStringPtr& es)
 {
   uint result = 0;
-  foreach (const EdgeString::EdgeEntry& e, es->getAllEdges())
-  {
+  for (const auto& e : es->getAllEdges())
     result ^= qHash(e.getSubline());
-  }
 
   return result;
 }

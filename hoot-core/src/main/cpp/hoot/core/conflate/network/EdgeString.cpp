@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "EdgeString.h"
-
-
 
 namespace hoot
 {
@@ -38,13 +36,9 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
   bool result = false;
 
   if (es1.get() == es2.get())
-  {
     result = true;
-  }
   else if (es1->getAllEdges().size() != es2->getAllEdges().size())
-  {
     result = false;
-  }
   else
   {
     result = true;
@@ -87,9 +81,7 @@ void EdgeString::addFirstEdge(const ConstEdgeSublinePtr& subline)
 void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 {
   if (_edges.empty())
-  {
     addFirstEdge(e);
-  }
   else
   {
     assert(isStub() == false);
@@ -106,9 +98,7 @@ void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
       toPortion = 0.0;
     }
     else
-    {
       throw HootException("Error attempting to append an edge that isn't connected.");
-    }
 
     _edges.append(std::make_shared<const EdgeSubline>(e, fromPortion, toPortion));
   }
@@ -118,9 +108,7 @@ void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 {
   if (_edges.empty())
-  {
     addFirstEdge(subline);
-  }
   else
   {
     assert(isStub() == false);
@@ -162,12 +150,8 @@ void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) const
 {
   Meters result = 0.0;
-
-  foreach (const EdgeEntry& ee, _edges)
-  {
+  for (const auto& ee : qAsConst(_edges))
     result += ee.getSubline()->calculateLength(provider);
-  }
-
   return result;
 }
 
@@ -180,71 +164,61 @@ std::shared_ptr<EdgeString> EdgeString::clone() const
 
 bool EdgeString::contains(const std::shared_ptr<const EdgeString>& other) const
 {
-  foreach (const EdgeEntry& ee, other->_edges)
+  for (const auto& ee : qAsConst(other->_edges))
   {
     if (contains(ee.getSubline()) == false)
-    {
       return false;
-    }
   }
   return true;
 }
 
 bool EdgeString::contains(const ConstNetworkEdgePtr& e) const
 {
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    if (_edges[i].getEdge() == e)
-    {
+    if (edge.getEdge() == e)
       return true;
-    }
   }
   return false;
 }
 
 bool EdgeString::contains(const ConstEdgeSublinePtr& e) const
 {
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    if (_edges[i].getSubline()->contains(e))
-    {
+    if (edge.getSubline()->contains(e))
       return true;
-    }
   }
   return false;
 }
 
 bool EdgeString::contains(const ConstNetworkVertexPtr& v) const
 {
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    if (_edges[i].getSubline()->contains(v))
-    {
+    if (edge.getSubline()->contains(v))
       return true;
-    }
   }
   return false;
 }
 
 bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
 {
-  foreach (const EdgeEntry& ee, _edges)
+  for (const auto& ee : qAsConst(_edges))
   {
     if (ee.getSubline()->intersects(el))
-    {
       return true;
-    }
   }
   return false;
 }
 
 bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
 {
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    if (other->overlaps(_edges[i].getSubline()))
+    if (other->overlaps(edge.getSubline()))
     {
-      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
+      LOG_TRACE("Overlaps; this edge: " << edge.getSubline() << " other edge: " << other);
       return true;
     }
   }
@@ -258,11 +232,11 @@ bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
 
 bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
 {
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    if (_edges[i].getSubline()->overlaps(es))
+    if (edge.getSubline()->overlaps(es))
     {
-      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
+      LOG_TRACE("Overlaps; this subline: " << edge.getSubline() << " other subline: " << es);
       return true;
     }
   }
@@ -277,14 +251,11 @@ bool EdgeString::containsInteriorVertex(const ConstNetworkVertexPtr& v) const
 ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(const ConstOsmMapPtr& map, Meters offset) const
 {
   Meters d = 0.0;
-  foreach (EdgeEntry ee, _edges)
+  for (const auto& ee : qAsConst(_edges))
   {
     d += ee.getEdge()->calculateLength(map);
-
     if (d >= offset)
-    {
       return ee.getEdge();
-    }
   }
   return getLastEdge();
 }
@@ -292,10 +263,8 @@ ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(const ConstOsmMapPtr& map, Meter
 QSet<ConstNetworkEdgePtr> EdgeString::getEdgeSet() const
 {
   QSet<ConstNetworkEdgePtr> result;
-  foreach (const EdgeEntry& ee, _edges)
-  {
+  for (const auto& ee : qAsConst(_edges))
     result.insert(ee.getEdge());
-  }
   return result;
 }
 
@@ -315,12 +284,10 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(const ConstElementProviderP
   Meters d = 0.0;
 
   if (offset <= 0)
-  {
     return getFrom();
-  }
 
   LOG_VART(offset);
-  foreach (EdgeEntry ee, _edges)
+  for (const auto& ee : qAsConst(_edges))
   {
     Meters length = ee.getSubline()->calculateLength(map);
     LOG_VART(length);
@@ -329,15 +296,10 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(const ConstElementProviderP
     if (d + length >= offset)
     {
       if (ee.getSubline()->isBackwards())
-      {
         return ee.getSubline()->getStart()->move(map, -(offset - d));
-      }
       else
-      {
         return ee.getSubline()->getStart()->move(map, offset - d);
-      }
     }
-
     d += length;
   }
   LOG_VART(d);
@@ -350,10 +312,8 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(const ConstElementProviderP
 QList<ConstElementPtr> EdgeString::getMembers() const
 {
   QList<ConstElementPtr> result;
-  foreach (const EdgeEntry& e, _edges)
-  {
-    result += e.getEdge()->getMembers();
-  }
+  for (const auto& ee : qAsConst(_edges))
+    result += ee.getEdge()->getMembers();
   return result;
 }
 
@@ -387,7 +347,7 @@ bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
   const ConstEdgeLocationPtr& end = getTo();
 
   if ((start->isExtreme() && start->getVertex() == v) ||
-    (end->isExtreme() && end->getVertex() == v))
+      (end->isExtreme() && end->getVertex() == v))
   {
     result = true;
   }
@@ -398,9 +358,7 @@ bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
 {
   if (_edges.empty())
-  {
     addFirstEdge(subline);
-  }
   else
   {
     assert(isStub() == false);
@@ -444,9 +402,7 @@ void EdgeString::reverse()
 {
   std::reverse(_edges.begin(), _edges.end());
   for (int i = 0; i < _edges.size(); ++i)
-  {
     _edges[i].reverse();
-  }
   assert(validate());
 }
 
@@ -455,15 +411,9 @@ void EdgeString::snapExtremes(double epsilon)
   if (getFrom()->isExtreme(epsilon))
   {
     ConstEdgeSublinePtr es = _edges[0].getSubline();
-    double p;
+    double p = 1.0;
     if (es->getStart()->getPortion() < 0.5)
-    {
       p = 0.0;
-    }
-    else
-    {
-      p = 1.0;
-    }
     EdgeSublinePtr newEs =
       std::make_shared<EdgeSubline>(es->getEdge(), p, es->getEnd()->getPortion());
     _edges[0].setSubline(newEs);
@@ -471,15 +421,9 @@ void EdgeString::snapExtremes(double epsilon)
   if (getTo()->isExtreme(epsilon))
   {
     ConstEdgeSublinePtr es = _edges.back().getSubline();
-    double p;
+    double p = 1.0;
     if (es->getEnd()->getPortion() < 0.5)
-    {
       p = 0.0;
-    }
-    else
-    {
-      p = 1.0;
-    }
     EdgeSublinePtr newEs =
       std::make_shared<EdgeSubline>(es->getEdge(), es->getStart()->getPortion(), p);
     _edges.back().setSubline(newEs);
@@ -496,33 +440,23 @@ bool EdgeString::touches(const ConstEdgeSublinePtr& es) const
   if (getFrom()->isExtreme())
   {
     if (es->getStart()->isExtreme() && getFrom()->getVertex() == es->getStart()->getVertex())
-    {
       return true;
-    }
     if (es->getEnd()->isExtreme() && getFrom()->getVertex() == es->getEnd()->getVertex())
-    {
       return true;
-    }
   }
 
   if (getTo()->isExtreme())
   {
     if (es->getStart()->isExtreme() && getTo()->getVertex() == es->getStart()->getVertex())
-    {
       return true;
-    }
     if (es->getEnd()->isExtreme() && getTo()->getVertex() == es->getEnd()->getVertex())
-    {
       return true;
-    }
   }
 
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& ee : qAsConst(_edges))
   {
-    if (_edges[i].getSubline()->intersects(es))
-    {
+    if (ee.getSubline()->intersects(es))
       return true;
-    }
   }
 
   return false;
@@ -530,12 +464,10 @@ bool EdgeString::touches(const ConstEdgeSublinePtr& es) const
 
 bool EdgeString::touches(const std::shared_ptr<const EdgeString>& es) const
 {
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& ee : qAsConst(_edges))
   {
-    if (es->touches(_edges[i].getSubline()))
-    {
+    if (es->touches(ee.getSubline()))
       return true;
-    }
   }
   return false;
 }
@@ -554,12 +486,10 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
 
   // handle this edge case early which simplifies the loop
   if (newStart->getEdge() == newEnd->getEdge())
-  {
     newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(newStart, newEnd)));
-  }
   else
   {
-    foreach (const EdgeEntry& ee, _edges)
+    for (const auto& ee : qAsConst(_edges))
     {
       ConstEdgeSublinePtr s = ee.getSubline();
       Meters l = s->calculateLength(provider);
@@ -575,9 +505,7 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
         break;
       }
       else if (offset >= newStartOffset && offset + l <= newEndOffset)
-      {
         newEdges.append(EdgeEntry(s));
-      }
 
       offset += l;
     }
