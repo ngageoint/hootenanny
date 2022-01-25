@@ -29,6 +29,7 @@
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/elements/Element.h>
@@ -115,13 +116,27 @@ bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
 
   if (_mustCompletelyContain)
   {
-    LOG_VART(_bounds->contains(geom.get()));
-    return _bounds->contains(geom.get());
+    try
+    {
+      return _bounds->contains(geom.get());
+    }
+    catch (geos::util::TopologyException&)
+    {
+      //  If the contains call fails, use the envelope
+      return _bounds->contains(geom->getEnvelope().get());
+    }
   }
   else
   {
-    LOG_VART(_bounds->intersects(geom.get()));
-    return _bounds->intersects(geom.get());
+    try
+    {
+      return _bounds->intersects(geom.get());
+    }
+    catch (geos::util::TopologyException&)
+    {
+      //  If the intersects call fails, use the envelope
+      return _bounds->intersects(geom->getEnvelope().get());
+    }
   }
 }
 
