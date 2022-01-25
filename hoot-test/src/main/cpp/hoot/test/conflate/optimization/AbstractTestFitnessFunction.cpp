@@ -28,9 +28,9 @@
 #include "AbstractTestFitnessFunction.h"
 
 // Hoot
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 
 #include <hoot/test/SimpleTestListener.h>
 #include <hoot/test/TempTestFileName.h>
@@ -38,9 +38,9 @@
 namespace hoot
 {
 
-AbstractTestFitnessFunction::AbstractTestFitnessFunction() :
-_testCount(0),
-_lowestNumFailingTestsPerRun(-1)
+AbstractTestFitnessFunction::AbstractTestFitnessFunction()
+  : _testCount(0),
+    _lowestNumFailingTestsPerRun(-1)
 {
 }
 
@@ -50,10 +50,9 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   _failedTests.clear();
 
   Settings settings;
-  foreach (QString k, s->getAllValues().keys())
-  {
+  for (const auto& k : s->getAllValues().keys())
     settings.set(k, s->get(k));
-  }
+
   //if you need to add any other temporary custom settings for this test that wouldn't
   //normally be used with the network conflation case tests, add those here
   //settings.set("", "");
@@ -65,9 +64,8 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 
   LOG_VARD(_testCount);
   if (_testCount == 0)
-  {
     throw HootException("No tests found for fitness function.");
-  }
+
   for (int i = 0; i < _testCount; ++i)
   {
     _test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
@@ -91,23 +89,18 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 
   QString failedTestsStr;
   if (_failedTests.size() > 0)
-  {
     failedTestsStr = _failedTestsToString(_failedTests);
-  }
+
   if (_failedTests.size() < _lowestNumFailingTestsPerRun || _lowestNumFailingTestsPerRun == -1)
   {
     _lowestNumFailingTestsPerRun = _failedTests.size();
     _failingTestsForBestRuns.clear();
     if (!failedTestsStr.isEmpty())
-    {
       _failingTestsForBestRuns.append(failedTestsStr);
-    }
   }
   else if (_failedTests.size() == _lowestNumFailingTestsPerRun &&
            !failedTestsStr.isEmpty() && !_failingTestsForBestRuns.contains(failedTestsStr))
-  {
     _failingTestsForBestRuns.append(failedTestsStr);
-  }
 
   if (_failedTests.size() > 0)
   {
@@ -115,9 +108,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
       QString::number(_failedTests.size()) + "/" + QString::number(_testCount) +
       " tests failed:\n\n";
     for (int i = 0; i < _failedTests.size(); i++)
-    {
       failureMsg += "\t" + _failedTests[i] + "\n";
-    }
     LOG_INFO(failureMsg);
     LOG_INFO("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
   }
@@ -130,10 +121,8 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 QString AbstractTestFitnessFunction::_failedTestsToString(const QStringList failedTests) const
 {
   QString concatTestNames;
-  for (int i = 0; i < failedTests.size(); i++)
-  {
-    concatTestNames += failedTests.at(i) + ";";
-  }
+  for (const auto& test : qAsConst(failedTests))
+    concatTestNames += test + ";";
   concatTestNames.chop(1);
   return concatTestNames;
 }

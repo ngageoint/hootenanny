@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "AbstractRegressionTestFitnessFunction.h"
 
 // Hoot
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 
-#include <hoot/test/conflate/optimization/RegressionTestSuite.h>
 #include <hoot/test/conflate/optimization/AbstractRegressionTest.h>
+#include <hoot/test/conflate/optimization/RegressionTestSuite.h>
 
 // Standard
 #include <cassert>
@@ -42,10 +42,11 @@
 namespace hoot
 {
 
-AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(
-  const QString& dir, const QString& configFile, const QString& testDirExtension) :
-AbstractTestFitnessFunction(),
-_configFile(configFile)
+AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(const QString& dir,
+                                                                             const QString& configFile,
+                                                                             const QString& testDirExtension)
+  : AbstractTestFitnessFunction(),
+    _configFile(configFile)
 {
   _testSuite = std::make_shared<RegressionTestSuite>(dir, testDirExtension);
   QStringList confs;
@@ -55,8 +56,7 @@ _configFile(configFile)
   _testsToBestScores.clear();
 }
 
-void AbstractRegressionTestFitnessFunction::_createConfig(
-  const QString& testName, Settings& testSettings)
+void AbstractRegressionTestFitnessFunction::_createConfig(const QString& testName, Settings& testSettings)
 {
   //Calling test->addConfig with the network config file to add in the non-variable config options
   //won't work here, since configs added in that manner have no effect on regression tests.
@@ -68,13 +68,9 @@ void AbstractRegressionTestFitnessFunction::_createConfig(
   //call loadDefaults) then the config parser errors out...
   Settings updatedSettings = conf();
   if (!_configFile.trimmed().isEmpty())
-  {
     updatedSettings.loadJson(_configFile);
-  }
-  foreach (QString k, testSettings.getAll().keys())
-  {
+  for (const auto& k : testSettings.getAll().keys())
     updatedSettings.set(k, testSettings.get(k).toString());
-  }
   LOG_VART(updatedSettings);
 
   //for now, this will only work with network conflation regression release tests, since
@@ -83,15 +79,13 @@ void AbstractRegressionTestFitnessFunction::_createConfig(
   const QString settingsFileDestName = testName + "/Config.conf";
   QFile settingsFileDest(settingsFileDestName);
   if (settingsFileDest.exists() && !settingsFileDest.remove())
-  {
     throw HootException("Unable to remove previous test configuration file: " + settingsFileDestName);
-  }
+
   LOG_DEBUG("Writing test conf file to: " << settingsFileDestName << "...");
   updatedSettings.storeJson(settingsFileDestName);
 }
 
-void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(
-  AbstractRegressionTest* regressionTest)
+void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(AbstractRegressionTest* regressionTest)
 {
   const QString testName = QString::fromStdString(regressionTest->getName());
   LOG_VARD(testName);
@@ -99,9 +93,7 @@ void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(
   LOG_VARD(regressionTest->getTestStatus());
 
   if (!_testsToBestScores.contains(testName))
-  {
     _testsToBestScores[testName] = -1.0;
-  }
 
   if (regressionTest->getScore() > _testsToBestScores[testName])
   {
@@ -129,11 +121,9 @@ void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(
 QString AbstractRegressionTestFitnessFunction::bestScoresPerTestToString() const
 {
   QString str = "Best scores:\n";
-  for (QMap<QString, double>::const_iterator it = _testsToBestScores.begin();
-       it != _testsToBestScores.end(); ++it)
-  {
+  for (auto it = _testsToBestScores.begin(); it != _testsToBestScores.end(); ++it)
     str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";
-  }
+
   str.chop(1);
   return str;
 }
@@ -151,26 +141,19 @@ double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 
   AbstractRegressionTest* regressionTest = dynamic_cast<AbstractRegressionTest*>(_test);
   if (!regressionTest)
-  {
     throw HootException("Invalid test class.");
-  }
+
   LOG_VARD(regressionTest->getScore());
   LOG_VARD(regressionTest->getTestStatus());
   //score should be positive if the test ran or zero if the test errored out; never = -1
   assert(regressionTest->getScore() != -1);
   if (regressionTest->getScore() == -1)
-  {
     throw HootException("invalid score");
-  }
 
   if (regressionTest->getScore() == 0)
-  {
     return regressionTest->getScore();
-  }
   else
-  {
     return 1 / regressionTest->getScore();
-  }
 }
 
 void AbstractRegressionTestFitnessFunction::afterTestRun()
@@ -179,9 +162,7 @@ void AbstractRegressionTestFitnessFunction::afterTestRun()
   LOG_VARD(QDir::currentPath());
   AbstractRegressionTest* regressionTest = dynamic_cast<AbstractRegressionTest*>(_test);
   if (!regressionTest)
-  {
     throw HootException("Invalid test class.");
-  }
   _checkForBetterScoreFromTest(regressionTest);
   LOG_INFO(bestScoresPerTestToString());
 }
