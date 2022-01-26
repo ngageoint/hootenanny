@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryModifierOp.h"
@@ -43,13 +43,14 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, GeometryModifierOp)
 const std::string GeometryModifierAction::FILTER_TAG = "filter";
 const std::string GeometryModifierAction::ARGUMENT_TAG = "arguments";
 
-GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
+GeometryModifierOp::GeometryModifierOp()
+  : _pConf(&conf())
 {
   // get and instantiate available actions
   std::vector<QString> availableActionTypes =
     Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
   LOG_DEBUG( "Available Geometry Modifiers:")
-  for (QString availType : availableActionTypes)
+  for (const auto& availType : availableActionTypes)
   {
     std::shared_ptr<GeometryModifierAction> pAction =
       Factory::getInstance().constructObject<GeometryModifierAction>(availType);
@@ -72,7 +73,7 @@ void GeometryModifierOp::apply(std::shared_ptr<OsmMap>& map)
   _geometryModifierVisitor.setOsmMap(map.get());
 
   // process
-  foreach (GeometryModifierActionDesc actionDesc, actionDescs)
+  for (const auto& actionDesc : qAsConst(actionDescs))
   {
     // visit with specific action, using proper arguments
     LOG_DEBUG("Processing geometry modifier " + actionDesc.command + "...");
@@ -104,14 +105,14 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 
   QList<GeometryModifierActionDesc> actionDescs;
 
-  foreach (bpt::ptree::value_type commandLevelValue, propPtree)
+  for (const auto& commandLevelValue : qAsConst(propPtree))
   {
     // read command
     GeometryModifierActionDesc actionDesc;
     actionDesc.command = QString::fromStdString(commandLevelValue.first);
 
     // check command availability
-    foreach (std::shared_ptr<GeometryModifierAction> pAction, _actions)
+    for (const auto& pAction : qAsConst(_actions))
     {
       if (pAction->getCommandName() == actionDesc.command)
       {
@@ -121,28 +122,22 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
     }
 
     if (!actionDesc.pAction)
-    {
-      throw HootException("Invalid geometry modifier action '" + actionDesc.command + "' in " + _rulesFileName);
-    }
+      throw HootException(
+        QString("Invalid geometry modifier action '%1' in %2").arg(actionDesc.command, _rulesFileName));
 
     if (!commandLevelValue.second.empty())
     {
-      foreach (bpt::ptree::value_type dataLevelValue, commandLevelValue.second)
+      for (const auto& dataLevelValue : commandLevelValue.second)
       {
         // read filter
         if (dataLevelValue.first == GeometryModifierAction::FILTER_TAG)
-        {
           _parseFilter(actionDesc, dataLevelValue.second);
-        }
-        // read arguments
-        else if (dataLevelValue.first == GeometryModifierAction::ARGUMENT_TAG)
-        {
+        else if (dataLevelValue.first == GeometryModifierAction::ARGUMENT_TAG)  // read arguments
           _parseArguments(actionDesc, dataLevelValue.second);
-        }
         else
-        {
-          throw HootException("Invalid geometry modifier tag '" + QString::fromStdString(dataLevelValue.first) + "' for action '" + actionDesc.command + "' in " + _rulesFileName);
-        }
+          throw HootException(
+            QString("Invalid geometry modifier tag '%1' for action '%2' in %3")
+              .arg(QString::fromStdString(dataLevelValue.first), actionDesc.command, _rulesFileName));
       }
 
       actionDescs.append(actionDesc);
@@ -167,7 +162,8 @@ void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bp
   catch (const HootException& e)
   {
     QString exceptionMsg = QString(e.what());
-    throw HootException("Invalid filter for action '" + actionDesc.command + "' in " + _rulesFileName + ": '" + exceptionMsg + "'");
+    throw HootException(
+      QString("Invalid filter for action '%1' in %2: '%3'").arg(actionDesc.command, _rulesFileName, exceptionMsg));
   }
 }
 
@@ -175,17 +171,14 @@ void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc,
 {
   QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
 
-  foreach (bpt::ptree::value_type data, ptree)
+  for (const auto& data : ptree)
   {
     QString arg = QString::fromStdString(data.first);
     if (availableParameters.contains(arg))
-    {
       actionDesc.arguments[arg] = QString::fromStdString(data.second.data());
-    }
     else
-    {
-      throw HootException("Invalid geometry modifier argument '" + arg + "' for action '" + actionDesc.command + "' in " + _rulesFileName);
-    }
+      throw HootException(
+        QString("Invalid geometry modifier argument '%1' for action '%2' in %3").arg(arg, actionDesc.command, _rulesFileName));
   }
 }
 
