@@ -58,9 +58,9 @@ QString StringUtils::formatLargeNumber(const unsigned long number)
 
 bool StringUtils::hasAlphabeticCharacter(const QString& input)
 {
-  for (int i = 0; i < input.length(); i++)
+  for (QChar c : input)
   {
-    if (input.at(i).isLetter())
+    if (c.isLetter())
       return true;
   }
   return false;
@@ -68,9 +68,9 @@ bool StringUtils::hasAlphabeticCharacter(const QString& input)
 
 bool StringUtils::hasDigit(const QString& input)
 {
-  for (int i = 0; i < input.length(); i++)
+  for (QChar c : input)
   {
-    if (input.at(i).isDigit())
+    if (c.isDigit())
       return true;
   }
   return false;
@@ -78,10 +78,9 @@ bool StringUtils::hasDigit(const QString& input)
 
 bool StringUtils::isAlphaNumeric(const QString& input)
 {
-  for (int i = 0; i < input.length(); i++)
+  for (QChar c : input)
   {
-    const QChar character = input.at(i);
-    if (!character.isLetterOrNumber())
+    if (!c.isLetterOrNumber())
       return false;
   }
   return true;
@@ -119,10 +118,10 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonArray(
 {
   std::shared_ptr<boost::property_tree::ptree> strArr =
     std::make_shared<boost::property_tree::ptree>();
-  for (int i = 0; i < stringList.size(); i++)
+  for (const auto& value : qAsConst(stringList))
   {
     boost::property_tree::ptree str;
-    str.put("", stringList.at(i).toStdString());
+    str.put("", value.toStdString());
     strArr->push_back(std::make_pair("", str));
   }
   return strArr;
@@ -158,10 +157,10 @@ QString StringUtils::padFrontOfNumberStringWithZeroes(const int number, const in
 void StringUtils::removeEmptyStrings(QStringList& strings)
 {
   QStringList output;
-  for (int i = 0; i < strings.size(); i++)
+  for (const auto& value : qAsConst(strings))
   {
-    if (!strings.at(i).trimmed().isEmpty())
-      output.append(strings.at(i));
+    if (!value.trimmed().isEmpty())
+      output.append(value);
   }
   strings = output;
 }
@@ -170,9 +169,8 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
 {
   QSet<QString> duplicateStrings;
   QSet<QString> uniqueStrings;
-  for (int i = 0; i < input.size(); i++)
+  for (const auto& str : qAsConst(input))
   {
-    const QString str = input.at(i);
     if (uniqueStrings.contains(str))
       duplicateStrings.insert(str);
     else
@@ -195,9 +193,9 @@ bool StringUtils::containsSubstring(const QStringList& input, const QString& sub
 bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
                                      Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < substrings.size(); i++)
+  for (const auto& sub : qAsConst(substrings))
   {
-    if (!input.filter(substrings.at(i), caseSensitivity).empty())
+    if (!input.filter(sub, caseSensitivity).empty())
       return true;
   }
   return false;
@@ -218,9 +216,8 @@ int StringUtils::removePrefixes(const QString& prefix, QStringList& input)
 {
   int numRemoved = 0;
   QStringList inputCopy(input);
-  for (int i = 0; i < input.size(); i++)
+  for (auto inputStr : qAsConst(input))
   {
-    QString inputStr = input.at(i);
     if (inputStr.startsWith(prefix))
     {
       inputStr = inputStr.remove(prefix);
@@ -236,9 +233,8 @@ void StringUtils::removeAllContaining(QStringList& input, const QString& text,
                                       Qt::CaseSensitivity caseSensitivity)
 {
   QStringList toReturn;
-  for (int i = 0; i < input.size(); i++)
+  for (const auto& inputStr : qAsConst(input))
   {
-    const QString inputStr = input.at(i);
     if (!inputStr.contains(text, caseSensitivity))
       toReturn.append(inputStr);
   }
@@ -248,20 +244,20 @@ void StringUtils::removeAllContaining(QStringList& input, const QString& text,
 void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
                                     Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < toRemove.size(); i++)
+  for (const auto& value : qAsConst(toRemove))
   {
-    const int index = input.lastIndexOf(toRemove.at(i), -1, caseSensitivity);
+    const int index = input.lastIndexOf(value, -1, caseSensitivity);
     if (index != -1)
-      input = input.remove(index, toRemove.at(i).length()).trimmed();
+      input = input.remove(index, value.length()).trimmed();
   }
 }
 
 bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare,
                               Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < toCompare.size(); i++)
+  for (const auto& value : qAsConst(toCompare))
   {
-    if (input.contains(toCompare.at(i), caseSensitivity))
+    if (input.contains(value, caseSensitivity))
       return true;
   }
   return false;
@@ -269,9 +265,9 @@ bool StringUtils::containsAny(const QStringList& input, const QStringList& toCom
 
 bool StringUtils::matchesWildcard(const QString& str, const QStringList& wildcards)
 {
-  for (int i = 0; i < wildcards.size(); i++)
+  for (const auto& wildcard : qAsConst(wildcards))
   {
-    QRegExp regex(wildcards.at(i), Qt::CaseInsensitive, QRegExp::Wildcard);
+    QRegExp regex(wildcard, Qt::CaseInsensitive, QRegExp::Wildcard);
     if (regex.exactMatch(str))
       return true;
   }
@@ -281,9 +277,9 @@ bool StringUtils::matchesWildcard(const QString& str, const QStringList& wildcar
 bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare,
                               Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < toCompare.size(); i++)
+  for (const auto& value : qAsConst(toCompare))
   {
-    if (input.endsWith(toCompare.at(i), caseSensitivity))
+    if (input.endsWith(value, caseSensitivity))
       return true;
   }
   return false;
@@ -292,9 +288,9 @@ bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare
 bool StringUtils::endsWithAny(const QStringList& inputs, const QString& compareStr,
                               Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < inputs.size(); i++)
+  for (const auto& value : qAsConst(inputs))
   {
-    if (inputs.at(i).endsWith(compareStr, caseSensitivity))
+    if (value.endsWith(compareStr, caseSensitivity))
       return true;
   }
   return false;
@@ -303,20 +299,19 @@ bool StringUtils::endsWithAny(const QStringList& inputs, const QString& compareS
 QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& toCompare,
                                       Qt::CaseSensitivity caseSensitivity)
 {
-  for (int i = 0; i < toCompare.size(); i++)
+  for (const auto& value : qAsConst(toCompare))
   {
-    const QString toCompareStr = toCompare.at(i);
-    if (input.endsWith(toCompareStr, caseSensitivity))
-      return toCompareStr;
+    if (input.endsWith(value, caseSensitivity))
+      return value;
   }
   return "";
 }
 
 bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompare)
 {
-  for (int i = 0; i < toCompare.size(); i++)
+  for (const auto& value : qAsConst(toCompare))
   {
-    if (input.split(toCompare.at(i), QString::SkipEmptyParts).size() == 2)
+    if (input.split(value, QString::SkipEmptyParts).size() == 2)
       return true;
   }
   return false;
@@ -325,9 +320,9 @@ bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompa
 QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
                                     const int numOutputTokens)
 {
-  for (int i = 0; i < tokenList.size(); i++)
+  for (const auto& value : qAsConst(tokenList))
   {
-    const QStringList inputParts = input.split(tokenList.at(i), QString::SkipEmptyParts);
+    const QStringList inputParts = input.split(value, QString::SkipEmptyParts);
     if (inputParts.size() == numOutputTokens)
       return inputParts;
   }
