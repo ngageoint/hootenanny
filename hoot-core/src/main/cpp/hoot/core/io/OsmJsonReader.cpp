@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmJsonReader.h"
@@ -38,7 +38,6 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Boost
-#include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 // Qt
@@ -417,7 +416,7 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
     originalIdMap = _relationIdMap;
   }
 
-  for (auto relationId : relationIdsWithChildrenNotPresent)
+  for (auto relationId : qAsConst(relationIdsWithChildrenNotPresent))
   {
     LOG_VART(relationId);
     RelationPtr relation = _map->getRelation(relationId);
@@ -432,7 +431,7 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
       else if (childElementType == ElementType::Relation)
         childIdsNotPresentAtLoad = _relationIdsToRelationMemberIdsNotPresent.values(relationId);
 
-      for (auto memberId : childIdsNotPresentAtLoad)
+      for (auto memberId : qAsConst(childIdsNotPresentAtLoad))
       {
         LOG_VART(memberId);
         ElementId idToReplace = ElementId(childElementType, memberId);
@@ -459,10 +458,8 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
 void OsmJsonReader::_updateWayChildRefs()
 {
   const QList<long> wayIdsWithWayNodesNotPresent = _wayIdsToWayNodeIdsNotPresent.keys();
-  for (auto wayIdItr = wayIdsWithWayNodesNotPresent.begin();
-       wayIdItr != wayIdsWithWayNodesNotPresent.end(); ++wayIdItr)
+  for (auto wayId : qAsConst(wayIdsWithWayNodesNotPresent))
   {
-    const long wayId = *wayIdItr;
     LOG_VART(wayId);
     WayPtr way = _map->getWay(wayId);
     // haven't seen a null one yet but adding this to stay consistent with the behavior for
@@ -470,10 +467,8 @@ void OsmJsonReader::_updateWayChildRefs()
     if (way)
     {
       const QList<long> wayNodeIdsNotPresentAtLoad = _wayIdsToWayNodeIdsNotPresent.values(wayId);
-      for (auto wayNodeIdItr = wayNodeIdsNotPresentAtLoad.begin();
-           wayNodeIdItr != wayNodeIdsNotPresentAtLoad.end(); ++wayNodeIdItr)
+      for (auto wayNodeId : qAsConst(wayNodeIdsNotPresentAtLoad))
       {
-        const long wayNodeId = *wayNodeIdItr;
         LOG_VART(wayNodeId);
         if (way->containsNodeId(wayNodeId))
         {
@@ -543,29 +538,11 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   double lat = item.get("lat", 0.0);
   double lon = item.get("lon", 0.0);
 
-  long version = ElementData::VERSION_EMPTY;
-  version = item.get("version", version);
-  LOG_VART(version);
-  if (_warnOnVersionZeroElement && version == 0)
-  {
-    if (logWarnCount < Log::getWarnMessageLimit())
-    {
-      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Node, newId));
-    }
-    else if (logWarnCount == Log::getWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  changeset = item.get("changeset", changeset);
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  timestamp = item.get("timestamp", timestamp);
-  std::string user = ElementData::USER_EMPTY.toStdString();
-  user = item.get("user", user);
-  long uid = ElementData::UID_EMPTY;
-  uid = item.get("uid", uid);
+  long version = _getVersion(item, ElementType::Node, newId);
+  long changeset = _getChangeset(item);
+  unsigned int timestamp = _getTimestamp(item);
+  std::string user = _getUser(item);
+  long uid = _getUid(item);
 
   // Construct node
   NodePtr pNode(
@@ -631,29 +608,11 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
     LOG_VART(msg);
   }
 
-  long version = ElementData::VERSION_EMPTY;
-  version = item.get("version", version);
-  LOG_VART(version);
-  if (_warnOnVersionZeroElement && version == 0)
-  {
-    if (logWarnCount < Log::getWarnMessageLimit())
-    {
-      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Way, newId));
-    }
-    else if (logWarnCount == Log::getWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  changeset = item.get("changeset", changeset);
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  timestamp = item.get("timestamp", timestamp);
-  std::string user = ElementData::USER_EMPTY.toStdString();
-  user = item.get("user", user);
-  long uid = ElementData::UID_EMPTY;
-  uid = item.get("uid", uid);
+  long version = _getVersion(item, ElementType::Way, newId);
+  long changeset = _getChangeset(item);
+  unsigned int timestamp = _getTimestamp(item);
+  std::string user = _getUser(item);
+  long uid = _getUid(item);
 
   // Construct Way
   WayPtr pWay =
@@ -755,29 +714,11 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
     LOG_VART(msg);
   }
 
-  long version = ElementData::VERSION_EMPTY;
-  version = item.get("version", version);
-  LOG_VART(version);
-  if (_warnOnVersionZeroElement && version == 0)
-  {
-    if (logWarnCount < Log::getWarnMessageLimit())
-    {
-      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Relation, newId));
-    }
-    else if (logWarnCount == Log::getWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  changeset = item.get("changeset", changeset);
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  timestamp = item.get("timestamp", timestamp);
-  std::string user = ElementData::USER_EMPTY.toStdString();
-  user = item.get("user", user);
-  long uid = ElementData::UID_EMPTY;
-  uid = item.get("uid", uid);
+  long version = _getVersion(item, ElementType::Relation, newId);
+  long changeset = _getChangeset(item);
+  unsigned int timestamp = _getTimestamp(item);
+  std::string user = _getUser(item);
+  long uid = _getUid(item);
 
   // Construct Relation
   RelationPtr pRelation =
@@ -959,6 +900,79 @@ void OsmJsonReader::_readFromHttp()
     else
       _sleep();
   }
+}
+
+long OsmJsonReader::_getVersion(const boost::property_tree::ptree& item, ElementType::Type type, long id) const
+{
+  return _getVersion("version", item, type, id);
+}
+
+long OsmJsonReader::_getVersion(const std::string& field_name, const boost::property_tree::ptree& item, ElementType::Type type, long id) const
+{
+  long version = ElementData::VERSION_EMPTY;
+  version = item.get(field_name, version);
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(type, id));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+  return version;
+}
+
+long OsmJsonReader::_getChangeset(const boost::property_tree::ptree& item) const
+{
+  return _getChangeset("changeset", item);
+}
+
+long OsmJsonReader::_getChangeset(const std::string& field_name, const boost::property_tree::ptree& item) const
+{
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = item.get(field_name, changeset);
+  return changeset;
+}
+
+unsigned int OsmJsonReader::_getTimestamp(const boost::property_tree::ptree& item) const
+{
+  return _getTimestamp("timestamp", item);
+}
+
+unsigned int OsmJsonReader::_getTimestamp(const std::string& field_name, const boost::property_tree::ptree& item) const
+{
+  unsigned int timestamp = static_cast<unsigned int>(ElementData::TIMESTAMP_EMPTY);
+  timestamp = item.get(field_name, timestamp);
+  return timestamp;
+}
+
+std::string OsmJsonReader::_getUser(const boost::property_tree::ptree& item) const
+{
+  return _getUser("user", item);
+}
+
+std::string OsmJsonReader::_getUser(const std::string& field_name, const boost::property_tree::ptree& item) const
+{
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = item.get(field_name, user);
+  return user;
+}
+
+long OsmJsonReader::_getUid(const boost::property_tree::ptree& item) const
+{
+  return _getUid("uid", item);
+}
+
+long OsmJsonReader::_getUid(const std::string& field_name, const boost::property_tree::ptree& item) const
+{
+  long uid = ElementData::UID_EMPTY;
+  uid = item.get(field_name, uid);
+  return uid;
 }
 
 }

@@ -28,14 +28,14 @@
 #include "HootServicesLanguageDetectorClient.h"
 
 // hoot
+#include <hoot/core/auth/HootServicesLoginManager.h>
+#include <hoot/core/language/LanguageUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/auth/HootServicesLoginManager.h>
-#include <hoot/core/language/LanguageUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -51,19 +51,19 @@ HOOT_FACTORY_REGISTER(LanguageDetector, HootServicesLanguageDetectorClient)
 
 bool HootServicesLanguageDetectorClient::_loggedCacheMaxReached = false;
 
-HootServicesLanguageDetectorClient::HootServicesLanguageDetectorClient() :
-_useCookies(true),
-_numDetectionsAttempted(0),
-_numDetectionsMade(0),
-_numEnglishTextsSkipped(0),
-_skipWordsInEnglishDict(true),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_undetectableWords(0),
-_minConfidence(LanguageDetectionConfidenceLevel::Level::None),
-_cacheHits(0),
-_cacheSize(0),
-_cacheMaxSize(100),
-_timeout(500)
+HootServicesLanguageDetectorClient::HootServicesLanguageDetectorClient()
+  : _useCookies(true),
+    _numDetectionsAttempted(0),
+    _numDetectionsMade(0),
+    _numEnglishTextsSkipped(0),
+    _skipWordsInEnglishDict(true),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _undetectableWords(0),
+    _minConfidence(LanguageDetectionConfidenceLevel::Level::None),
+    _cacheHits(0),
+    _cacheSize(0),
+    _cacheMaxSize(100),
+    _timeout(500)
 {
 }
 
@@ -112,15 +112,11 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
   _skipWordsInEnglishDict = opts.getLanguageSkipWordsInEnglishDictionary();
   const QString minConfidenceStr = opts.getLanguageHootServicesDetectionMinConfidenceThreshold();
   if (!minConfidenceStr.trimmed().isEmpty())
-  {
     _minConfidence = LanguageDetectionConfidenceLevel::fromString(minConfidenceStr);
-  }
 
   _cacheMaxSize = opts.getLanguageMaxCacheSize();
   if (_cacheMaxSize != -1)
-  {
     _cache = std::make_shared<QCache<QString, DetectionResult>>(_cacheMaxSize);
-  }
 
   if (_useCookies)
   {
@@ -137,14 +133,12 @@ QString HootServicesLanguageDetectorClient::_getUnvailableLangNamesStr() const
 {
   QString str = "Language codes for which no name was available:\n";
 
-  for (QMap<QString, QSet<QString>>::const_iterator itr = _langCodesWithNoLangNamesAvailable.begin();
-       itr != _langCodesWithNoLangNamesAvailable.end(); ++itr)
+  for (auto itr = _langCodesWithNoLangNamesAvailable.begin(); itr != _langCodesWithNoLangNamesAvailable.end(); ++itr)
   {
     const QString detector = itr.key();
     str += detector + ":\n";
     const QSet<QString> unvailableLangNames = itr.value();
-    for (QSet<QString>::const_iterator itr2 = unvailableLangNames.begin();
-         itr2 != unvailableLangNames.end(); ++itr2)
+    for (auto itr2 = unvailableLangNames.begin(); itr2 != unvailableLangNames.end(); ++itr2)
     {
       const QString langCode = *itr2;
       str += langCode + "\n";
@@ -160,8 +154,7 @@ QString HootServicesLanguageDetectorClient::_getCountsStr(const QString& title,
 {
   QString str = title + ":\n";
 
-  for (QMap<QString, int>::const_iterator itr = data.begin();
-       itr != data.end(); ++itr)
+  for (auto itr = data.begin(); itr != data.end(); ++itr)
   {
     const QString confidence = itr.key();
     const int count = itr.value();
@@ -181,9 +174,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
   {
     detectedLanguage = _getLangFromCache(text);
     if (!detectedLanguage.trimmed().isEmpty())
-    {
       return detectedLanguage;
-    }
   }
 
   if (!_textIsDetectable(text))
@@ -237,19 +228,13 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
   LOG_VART(detectorUsed);
   assert(!detectorUsed.trimmed().isEmpty());
   if (_detectorUsedCounts.contains(detectorUsed))
-  {
     _detectorUsedCounts[detectorUsed] = _detectorUsedCounts[detectorUsed] + 1;
-  }
   else
-  {
     _detectorUsedCounts[detectorUsed] = 1;
-  }
 
   // update the cache
   if (!detectedLangCode.isEmpty() && _cache && !_cache->contains(text))
-  {
     _insertLangIntoCache(text, detectedLangCode);
-  }
 
   if (detectedLangCode == "en")
   {
@@ -294,8 +279,8 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString& text)
   return QString::fromStdString(requestStrStrm.str());
 }
 
-QString HootServicesLanguageDetectorClient::_parseResponse(
-  const std::shared_ptr<boost::property_tree::ptree>& replyObj, QString& detectorUsed)
+QString HootServicesLanguageDetectorClient::_parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
+                                                           QString& detectorUsed)
 {
   QString detectedLangCode =
     QString::fromStdString(replyObj->get<std::string>("detectedLangCode")).trimmed();
@@ -305,9 +290,7 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
     const QString langName = QString::fromStdString(replyObj->get<std::string>("detectedLang"));
     LOG_VART(langName);
     if (langName.toLower() == "unvailable")
-    {
       _langCodesWithNoLangNamesAvailable[detectorUsed].insert(detectedLangCode);
-    }
 
     const QString detectionConfidenceStr =
       QString::fromStdString(replyObj->get<std::string>("detectionConfidence"));
@@ -325,13 +308,9 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
         detectedLangCode = "";
       }
       if (_confidenceCounts.contains(detectionConfidenceStr))
-      {
         _confidenceCounts[detectionConfidenceStr] = _confidenceCounts[detectionConfidenceStr] + 1;
-      }
       else
-      {
         _confidenceCounts[detectionConfidenceStr] = 1;
-      }
     }
   }
   return detectedLangCode;
