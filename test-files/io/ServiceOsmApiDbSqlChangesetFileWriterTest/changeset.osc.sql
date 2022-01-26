@@ -23,7 +23,7 @@ INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (2
 DELETE FROM current_way_tags WHERE way_id = 2;
 DELETE FROM way_tags WHERE way_id = 2;
 DELETE FROM current_way_nodes WHERE way_id=2;
-DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = 2;
+DELETE FROM current_relation_members WHERE member_type='Way' AND member_id=2;
 UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=2;
 /* create node 1*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 46, -127, 1, true, (now() at time zone 'utc'), 1789569706, 1);
@@ -33,14 +33,14 @@ INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version)
 DELETE FROM current_relation_tags WHERE relation_id = 1;
 DELETE FROM relation_tags WHERE relation_id = 1;
 DELETE FROM current_relation_members WHERE relation_id=1;
-DELETE FROM current_relation_members WHERE member_type = 'Relation' AND member_id = 1;
+DELETE FROM current_relation_members WHERE member_type='Relation' AND member_id=1;
 UPDATE current_relations SET changeset_id=1, visible=false, version=2 WHERE id=1;
 /* delete way 4*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (4, 1, false, (now() at time zone 'utc'), 2);
 DELETE FROM current_way_tags WHERE way_id = 4;
 DELETE FROM way_tags WHERE way_id = 4;
 DELETE FROM current_way_nodes WHERE way_id=4;
-DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = 4;
+DELETE FROM current_relation_members WHERE member_type='Way' AND member_id=4;
 UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=4;
 /* create node 2*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 57, -30, 1, true, (now() at time zone 'utc'), 1789569706, 1);
@@ -72,6 +72,6 @@ INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timesta
 DELETE FROM current_node_tags WHERE node_id = 16;
 DELETE FROM node_tags WHERE node_id = 16;
 DELETE FROM current_way_nodes WHERE node_id=16;
-DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = 16;
+DELETE FROM current_relation_members WHERE member_type='Node' AND member_id=16;
 UPDATE current_nodes SET changeset_id=1, visible=false, version=2 WHERE id=16;
 UPDATE changesets SET min_lat=-88, max_lat=57, min_lon=-127, max_lon=69, num_changes=10 WHERE id=1;

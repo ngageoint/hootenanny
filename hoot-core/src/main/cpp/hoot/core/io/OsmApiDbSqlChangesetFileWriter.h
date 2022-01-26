@@ -72,8 +72,7 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  QString getStatsTable(
-    const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const override
+  QString getStatsTable(const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const override
   { throw NotImplementedException("Changeset statistics not implemented for SQL changesets."); }
 
   void setMap1List(const QList<ConstOsmMapPtr>& mapList) override { _map1List = mapList; }

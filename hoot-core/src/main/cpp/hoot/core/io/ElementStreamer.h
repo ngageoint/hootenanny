@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTSTREAMER_H
 #define ELEMENTSTREAMER_H
@@ -60,9 +60,8 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  void stream(
-    const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
-    Progress progress = Progress());
+  void stream(const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
+              Progress progress = Progress());
 
 private:
 
@@ -76,9 +75,8 @@ private:
    * @param convertOps conversion operations to apply to data
    * @return the number of elements written
    */
-  long _streamFromOgr(
-    const OgrReader& reader, QString& input, ElementOutputStream& writer,
-    const QStringList& convertOps = QStringList(), Progress progress = Progress()) const;
+  long _streamFromOgr(const OgrReader& reader, QString& input, ElementOutputStream& writer,
+                      const QStringList& convertOps = QStringList(), Progress progress = Progress()) const;
 };
 
 }
