@@ -51,7 +51,7 @@ void RemoveReviewUnknown2Visitor::visit(const std::shared_ptr<Element>& e)
     {
       const std::vector<RelationData::Entry>& relationMembers = r->getMembers();
       //  Iterate all of the relation members
-      foreach (RelationData::Entry member, relationMembers)
+      for (const auto& member : relationMembers)
       {
         ElementId id = member.getElementId();
         std::shared_ptr<Element> element(map->getElement(id));

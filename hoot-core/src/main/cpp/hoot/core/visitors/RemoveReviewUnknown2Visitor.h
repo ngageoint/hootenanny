@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVE_REVIEW_UKNOWN2_VISITOR_H
 #define REMOVE_REVIEW_UKNOWN2_VISITOR_H
@@ -56,8 +56,8 @@ public:
   QString getCompletedStatusMessage() const override
   {
     return
-      "Removed " + QString::number(_numAffected) + " review relations and their " +
-      QString::number(_numElements) + " UNKNOWN2 elements.";
+      QString("Removed %1 review relations and their %2 UNKNOWN2 elements.")
+        .arg(QString::number(_numAffected), QString::number(_numElements));
   }
 
   QString getName() const override { return className(); }

@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_HASH_VISITOR_H
 #define ELEMENT_HASH_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

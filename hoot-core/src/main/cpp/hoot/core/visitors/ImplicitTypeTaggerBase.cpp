@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTypeTaggerBase.h"
 
@@ -43,40 +43,40 @@
 namespace hoot
 {
 
-ImplicitTypeTaggerBase::ImplicitTypeTaggerBase() :
-_allowTaggingSpecificFeatures(true),
-_elementIsASpecificFeature(false),
-_ruleReader(std::make_shared<ImplicitTagRulesSqliteReader>()),
-_numFeaturesModified(0),
-_numTagsAdded(0),
-_numFeaturesInvolvedInMultipleRules(0),
-_numFeaturesParsed(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_smallestNumberOfTagsAdded(LONG_MAX),
-_largestNumberOfTagsAdded(0),
-_translateNamesToEnglish(true),
-_matchEndOfNameSingleTokenFirst(true),
-_additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
-_maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase()
+  : _allowTaggingSpecificFeatures(true),
+    _elementIsASpecificFeature(false),
+    _ruleReader(std::make_shared<ImplicitTagRulesSqliteReader>()),
+    _numFeaturesModified(0),
+    _numTagsAdded(0),
+    _numFeaturesInvolvedInMultipleRules(0),
+    _numFeaturesParsed(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _smallestNumberOfTagsAdded(LONG_MAX),
+    _largestNumberOfTagsAdded(0),
+    _translateNamesToEnglish(true),
+    _matchEndOfNameSingleTokenFirst(true),
+    _additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
+    _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
 {
   _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
-ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString& databasePath) :
-_allowTaggingSpecificFeatures(true),
-_elementIsASpecificFeature(false),
-_ruleReader(std::make_shared<ImplicitTagRulesSqliteReader>()),
-_numFeaturesModified(0),
-_numTagsAdded(0),
-_numFeaturesInvolvedInMultipleRules(0),
-_numFeaturesParsed(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_smallestNumberOfTagsAdded(LONG_MAX),
-_largestNumberOfTagsAdded(0),
-_translateNamesToEnglish(true),
-_matchEndOfNameSingleTokenFirst(true),
-_additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
-_maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString& databasePath)
+  : _allowTaggingSpecificFeatures(true),
+    _elementIsASpecificFeature(false),
+    _ruleReader(std::make_shared<ImplicitTagRulesSqliteReader>()),
+    _numFeaturesModified(0),
+    _numTagsAdded(0),
+    _numFeaturesInvolvedInMultipleRules(0),
+    _numFeaturesParsed(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _smallestNumberOfTagsAdded(LONG_MAX),
+    _largestNumberOfTagsAdded(0),
+    _translateNamesToEnglish(true),
+    _matchEndOfNameSingleTokenFirst(true),
+    _additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
+    _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
 {
   _ruleReader->open(databasePath);
 }
@@ -139,20 +139,14 @@ QStringList ImplicitTypeTaggerBase::_getNames(const Tags& tags) const
 {
   QStringList namesToReturn;
   QStringList names = tags.getNames();
-  for (int i = 0; i < _additionalNameKeys.size(); i++)
-  {
-    const QString key = _additionalNameKeys.at(i);
-    LOG_VART(key);
+  for (const auto& key : qAsConst(_additionalNameKeys))
     names.append(tags.get(key));
-  }
   LOG_VART(names);
-  for (int i = 0; i < names.size(); i++)
+
+  for (const auto& name : qAsConst(names))
   {
-    const QString name = names.at(i);
     if (name.size() <= _maxNameLength)
-    {
       namesToReturn.append(name);
-    }
   }
   LOG_VART(namesToReturn);
   return namesToReturn;
@@ -166,9 +160,7 @@ bool caseInsensitiveLessThan(const QString& s1, const QString& s2)
 void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 {
   if (_translateNamesToEnglish && !_translator.get())
-  {
     throw HootException("To English translation enabled but no translator was specified.");
-  }
 
   if (_visitElement(e))
   {
@@ -298,14 +290,10 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
         //bit of hack...to handle a situation where features have been incorrectly tagged;
         //the argument could be made to just correct the input data instead
         if (tagsToAdd.isEmpty())
-        {
           tagsToAdd = _applyCustomRules(e, filteredNames);
-        }
 
         if (!tagsToAdd.isEmpty())
-        {
           _addImplicitTags(e, tagsToAdd, matchingWords);
-        }
       } 
     }
 
@@ -325,9 +313,8 @@ Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStrin
 
   if (PoiPolygonSchema::isPark(e))
   {
-    for (int i = 0; i < filteredNames.size(); i++)
+    for (const auto& name : qAsConst(filteredNames))
     {
-      const QString name = filteredNames.at(i).toLower();
       LOG_VART(name);
       if (name.endsWith("play area") || name.endsWith("play areas") || name.endsWith("playground"))
       {
@@ -353,9 +340,7 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags) const
   //here, as it seems to cause more harm to implicit tagging than good
   QString nameValue = tags.get("name");
   if (nameValue.contains(";"))
-  {
     tags.set("name", nameValue.replace(";", "").trimmed());
-  }
 
   QStringList names = _getNames(tags);
   LOG_VART(names);
@@ -368,19 +353,15 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags) const
     LOG_VART("Removed former name tag.");
   }
   if (_translateNamesToEnglish)
-  {
     names = ImplicitTagUtils::translateNamesToEnglish(names, tags, _translator);
-  }
+
   LOG_VART(names);
   QStringList filteredNames;
-  for (int i = 0; i < names.size(); i++)
+  for (auto name : qAsConst(names))
   {
-    QString name = names.at(i);
     ImplicitTagUtils::cleanName(name);
     if (!name.isEmpty())
-    {
       filteredNames.append(name.toLower());
-    }
   }
   LOG_VART(filteredNames);
   return filteredNames;
@@ -389,19 +370,17 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags) const
 QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString& name,
                                                    const QStringList& nameTokensList) const
 {
-  for (int i = 0; i < nameTokensList.size(); i++)
+  for (const auto& nameToken : qAsConst(nameTokensList))
   {
-    const QString nameToken = nameTokensList.at(i);
     if (name.endsWith(nameToken))
-    {
       return nameToken;
-    }
   }
   return "";
 }
 
-void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
-  Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(const QStringList& names, const QStringList& nameTokensList,
+                                                                             const Tags& elementTags, Tags& implicitlyDerivedTags,
+                                                                             QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const
 {
   // This method needs cleanup
 
@@ -417,9 +396,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(con
       const QString englishNameToken = _translator->translate(nameToken);
       LOG_VART(englishNameToken);
       if (!englishNameToken.isEmpty())
-      {
         nameToken = englishNameToken;
-      }
     }
     nameTokensListGroupSizeTwo.append(nameToken);
   }
@@ -428,22 +405,17 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(con
   if (_matchEndOfNameSingleTokenFirst)
   {
     //match the end of the name with an implicit tag rule before matching anything else in the name
-
     QString endOfNameToken =
       _getEndOfNameToken(elementTags.get("name:en"), nameTokensListGroupSizeTwo);
     if (endOfNameToken.isEmpty())
-    {
       endOfNameToken = _getEndOfNameToken(elementTags.get("name"), nameTokensListGroupSizeTwo);
-    }
     if (endOfNameToken.isEmpty())
     {
-      for (int i = 0; i < names.size(); i++)
+      for (const auto& name : qAsConst(names))
       {
-        endOfNameToken = _getEndOfNameToken(names.at(i), nameTokensListGroupSizeTwo);
+        endOfNameToken = _getEndOfNameToken(name, nameTokensListGroupSizeTwo);
         if (!endOfNameToken.isEmpty())
-        {
           break;
-        }
       }
     }
     if (!endOfNameToken.isEmpty())
@@ -483,8 +455,8 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(con
 }
 
 void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names, QStringList& nameTokensList, const Tags& elementTags,
-  Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
-  bool& namesContainBuilding, bool& namesContainOffice) const
+                                                                           Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
+                                                                           bool& namesContainBuilding, bool& namesContainOffice) const
 {
   // Should be possible to combine this logic with
   //_getImplicitlyDerivedTagsFromMultipleNameTokens into a single method
@@ -494,21 +466,16 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const
   if (_translateNamesToEnglish)
   {
     QStringList translatedNameTokens;
-    for (int i = 0; i < nameTokensList.size(); i++)
+    for (const auto& word : qAsConst(nameTokensList))
     {
-      const QString word = nameTokensList.at(i);
       LOG_VART(word);
       // Can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = _translator->translate(word);
       LOG_VART(englishNameToken);
       if (!englishNameToken.isEmpty())
-      {
         translatedNameTokens.append(englishNameToken);
-      }
       else
-      {
         translatedNameTokens.append(word);
-      }
     }
     nameTokensList = translatedNameTokens;
   }
@@ -542,18 +509,14 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const
       QString endOfNameToken =
         _getEndOfNameToken(elementTags.get("name:en"), nameTokensList);
       if (endOfNameToken.isEmpty())
-      {
         endOfNameToken = _getEndOfNameToken(elementTags.get("name"), nameTokensList);
-      }
       if (endOfNameToken.isEmpty())
       {
-        for (int i = 0; i < names.size(); i++)
+        for (const auto& name : qAsConst(names))
         {
-          endOfNameToken = _getEndOfNameToken(names.at(i), nameTokensList);
+          endOfNameToken = _getEndOfNameToken(name, nameTokensList);
           if (!endOfNameToken.isEmpty())
-          {
             break;
-          }
         }
       }
       LOG_VART(endOfNameToken)
@@ -596,7 +559,7 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
   Tags updatedTags;
   bool tagsAdded = false;
   LOG_VART(_elementIsASpecificFeature);
-  for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
+  for (auto tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
   {
     const QString implicitTagKey = tagItr.key();
     LOG_VART(implicitTagKey);
@@ -624,9 +587,7 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
         tagsAdded = true;
       }
       else
-      {
         updatedTags.appendValue(elementTagKey, elementTagValue);
-      }
     }
     else if (!_elementIsASpecificFeature || _allowTaggingSpecificFeatures)
     {
@@ -640,13 +601,9 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
   LOG_VART(updatedTags);
   LOG_VART(tagsAdded);
   if (tagsAdded)
-  {
     tagsToAdd = updatedTags;
-  }
   else
-  {
     tagsToAdd.clear();
-  }
   LOG_VART(tagsToAdd);
 }
 
@@ -684,32 +641,12 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
   LOG_VART(tagValue);
   e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
 
-  //remove generic tags
-  //Removing the generic tag after adding the specific tag was causing certain feature to be ignored
-  //by the poi/poly criterion.
-//  if (e->getTags().get("poi") == "yes")
-//  {
-//    e->getTags().remove("poi");
-//  }
-//  if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
-//  {
-//    e->getTags().remove("building");
-//  }
-//  if (tagsToAdd.get("area") != "yes" && e->getTags().get("area") == "yes")
-//  {
-//    e->getTags().remove("area");
-//  }
-
   _numFeaturesModified++;
   _numTagsAdded += tagsToAdd.size();
   if (_numTagsAdded < _smallestNumberOfTagsAdded)
-  {
     _smallestNumberOfTagsAdded = _numTagsAdded;
-  }
   if (tagsToAdd.size() > _largestNumberOfTagsAdded)
-  {
     _largestNumberOfTagsAdded = tagsToAdd.size();
-  }
   if (_numFeaturesModified % 100 == 0)
   {
     PROGRESS_INFO(
@@ -721,16 +658,14 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
 QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList& names) const
 {
   if (_translateNamesToEnglish)
-  {
     assert(names.size() == 1);
-  }
 
   StringTokenizer tokenizer;
   QStringList nameTokens;
-  foreach (const QString& n, names)
+  for (const auto& n : names)
   {
     QStringList words = tokenizer.tokenize(n);
-    foreach (const QString& w, words)
+    for (const auto& w : words)
     {
       LOG_TRACE("Inserting token: " << w);
       nameTokens.append(w.toLower());

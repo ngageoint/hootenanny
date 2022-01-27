@@ -69,40 +69,25 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
   _clusterTagList = DEFAULT_CLUSTER_TAG_LIST;
   _clusterTags.clear();
 
-  if (arguments.keys().contains(DISTANCE_PARAM))
-  {
+  QStringList keys = arguments.keys();
+
+  if (keys.contains(DISTANCE_PARAM))
     _distance = arguments[DISTANCE_PARAM].toDouble();
-  }
-
-  if (arguments.keys().contains(ALPHA_PARAM))
-  {
+  if (keys.contains(ALPHA_PARAM))
     _alpha = arguments[ALPHA_PARAM].toDouble();
-  }
-
-  if (arguments.keys().contains(REMOVE_POLYS_PARAM))
-  {
+  if (keys.contains(REMOVE_POLYS_PARAM))
     _removePolys = arguments[REMOVE_POLYS_PARAM].toLower() == "true";
-  }
-
-  if (arguments.keys().contains(CHECK_INTERSECTIONS_PARAM))
-  {
+  if (keys.contains(CHECK_INTERSECTIONS_PARAM))
     _checkIntersections = arguments[CHECK_INTERSECTIONS_PARAM].toLower() == "true";
-  }
-
-  if (arguments.keys().contains(CLUSTER_TAG_LIST_PARAM))
-  {
+  if (keys.contains(CLUSTER_TAG_LIST_PARAM))
     _clusterTagList = arguments[CLUSTER_TAG_LIST_PARAM];
-  }
 
   QStringList tagList = _clusterTagList.split(";");
-
-  foreach (QString tag, tagList)
+  for (const auto& tag : qAsConst(tagList))
   {
     QStringList keyValues = tag.split("=");
     if (keyValues.length() >= 2)
-    {
       _clusterTags[keyValues[0]] = keyValues[1];
-    }
   }
 }
 
@@ -114,9 +99,11 @@ void PolyClusterGeoModifierAction::processStart(OsmMapPtr& /* pMap */)
 bool PolyClusterGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* /* pMap */)
 {
   // only process closed area ways
-  if (pElement->getElementType() != ElementType::Way) return false;
+  if (pElement->getElementType() != ElementType::Way)
+    return false;
   const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
-  if (!pWay->isClosedArea()) return false;
+  if (!pWay->isClosedArea())
+    return false;
 
   // store for use in processFinalize
   _ways.push_back(pWay);
@@ -151,10 +138,10 @@ void PolyClusterGeoModifierAction::processFinalize(OsmMapPtr& pMap)
   LOG_DEBUG("Generated " << _clusters.length() << " clusters.");
 
   // show clusters for debug
-  foreach (QList<long> cluster, _clusters)
+  for (const auto& cluster : qAsConst(_clusters))
   {
     LOG_TRACE("Cluster way ids:");
-    foreach (long id, cluster)
+    for (auto id : qAsConst(cluster))
     {
       LOG_TRACE(id);
     }
@@ -180,7 +167,7 @@ void PolyClusterGeoModifierAction::_createWayPolygons()
   // create a polygon from each building/way
   _polys.clear();
 
-  foreach (WayPtr pWay, _ways)
+  for (const auto& pWay :qAsConst(_ways))
   {
     if (!pWay)
       continue;
@@ -201,7 +188,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   _pClosePointHash = std::make_shared<ClosePointHash>(_distance);
 
   // gather coordinates and build lookups
-  foreach (std::shared_ptr<Polygon> poly, _polys)
+  for (const auto& poly : qAsConst(_polys))
   {
     long wayId = (long)poly->getUserData();
     std::unique_ptr<CoordinateSequence> pCoords = poly->getCoordinates();
@@ -219,7 +206,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   }
 
   // recursively build clusters
-  foreach (std::shared_ptr<Polygon> poly, _polys)
+  for (const auto& poly : qAsConst(_polys))
   {
     long wayId = (long)poly->getUserData();
     if (_processedPolys.contains(wayId)) continue;
@@ -258,7 +245,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
     CoordinateExt thisCoord = _coordinateByNodeIx[thisNodeIndex];
     vector<long> matches = _pClosePointHash->getMatchesFor(thisNodeIndex);
 
-    foreach (long otherNodeIndex, matches)
+    for (auto otherNodeIndex : matches)
     {
       long otherWayId = otherNodeIndex / MAX_PROCESSED_NODES_PER_POLY;
       CoordinateExt otherCoord = _coordinateByNodeIx[otherNodeIndex];
@@ -285,7 +272,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
               long wayToCheckNodeCount = pWayToCheck->getNodeCount();
               vector<long> wayToCheckNodeIds = pWayToCheck->getNodeIds();
 
-              for (int checkNodeIx = 0; checkNodeIx < wayToCheckNodeCount-1; checkNodeIx++)
+              for (int checkNodeIx = 0; checkNodeIx < wayToCheckNodeCount - 1; checkNodeIx++)
               {
                 long i1Id = wayToCheckNodeIds[checkNodeIx];
                 long i2Id = wayToCheckNodeIds[checkNodeIx+1];
@@ -308,9 +295,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
         }
 
         if (allow)
-        {
           _recursePolygons(_polyByWayId[otherWayId]);
-        }
       }
     }
   }
@@ -318,7 +303,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
 
 void PolyClusterGeoModifierAction::_createClusterPolygons()
 {
-  foreach (QList<long> cluster, _clusters)
+  for (const auto& cluster : qAsConst(_clusters))
   {
     // create alpha shape for each cluster
     AlphaShape alphashape(_alpha);
@@ -326,7 +311,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     // put all nodes of all buildings into an alpha shape
     std::vector<std::pair<double, double>> points;
 
-    foreach (long wayId, cluster)
+    for (auto wayId : qAsConst(cluster))
     {
       std::unique_ptr<CoordinateSequence> pCoords = _polyByWayId[wayId]->getCoordinates();
 
@@ -376,10 +361,8 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     // combine polys from this cluster with AlphaShape
     vector<Geometry*>* geomvect = new vector<Geometry*>();
     geomvect->push_back(pAlphaGeom.get());
-    foreach (long wayId, cluster)
-    {
+    for (auto wayId : cluster)
       geomvect->push_back(_polyByWayId[wayId].get());
-    }
 
     // GeometryFactory takes ownership of geomvect here.
     const Geometry* mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(geomvect);
@@ -411,21 +394,21 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
       // find all nodes from polys in this cluster
       std::vector<long> nodeIds;
 
-      foreach (WayPtr pWay, _ways)
+      for (const auto& pWay : qAsConst(_ways))
       {
         const std::vector<long> wayNodes = pWay->getNodeIds();
         nodeIds.insert(nodeIds.end(), wayNodes.begin(), wayNodes.end());
       }
 
       // remove polys
-      foreach (long wayId, cluster)
+      for (auto wayId : cluster)
       {
         RemoveWayByEid::removeWayFully(_pMap, wayId);
         _polyByWayId[wayId];
       }
 
       // remove nodes
-      foreach (long nodeId, nodeIds)
+      for (auto nodeId : nodeIds)
       {
         RemoveNodeByEid removeOp(nodeId, true, false, true);
         removeOp.apply(_pMap);

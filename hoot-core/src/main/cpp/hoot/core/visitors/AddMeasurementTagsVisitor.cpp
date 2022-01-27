@@ -28,22 +28,22 @@
 #include "AddMeasurementTagsVisitor.h"
 
 // Hoot
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/CoordinateExt.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
 
 // Geos
 #include <geos/algorithm/MinimumDiameter.h>
-#include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 
 using namespace geos::geom;
 using namespace geos::algorithm;
@@ -53,23 +53,22 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddMeasurementTagsVisitor)
 
-AddMeasurementTagsVisitor::AddMeasurementTagsVisitor(bool area, bool length, bool width) :
-_addArea(area),
-_addLength(length),
-_addWidth(width)
+AddMeasurementTagsVisitor::AddMeasurementTagsVisitor(bool area, bool length, bool width)
+  : _addArea(area),
+    _addLength(length),
+    _addWidth(width)
 {
 }
 
 void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 {
-  if (!_addArea && !_addWidth && !_addLength) return;
+  if (!_addArea && !_addWidth && !_addLength)
+    return;
 
   _numProcessed++;
 
   if (!_map->getProjection()->IsProjected())
-  {
     MapProjector::projectToPlanar(_map->shared_from_this());
-  }
 
   if (pElement->getElementType() == ElementType::Relation)
   {
@@ -89,7 +88,8 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 void AddMeasurementTagsVisitor::_processRelation(const RelationPtr pRelation)
 {
   //  Ignore NULL elements
-  if (!pRelation) return;
+  if (!pRelation)
+    return;
 
   // for length/width combine all way member polygons
   std::shared_ptr<Geometry> pCombined = std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
@@ -97,8 +97,7 @@ void AddMeasurementTagsVisitor::_processRelation(const RelationPtr pRelation)
 
   // for area add all outer role polys and subtract all inner role polys
   double totalArea = 0;
-
-  foreach (RelationData::Entry entry, pRelation->getMembers())
+  for (const auto& entry : pRelation->getMembers())
   {
     ElementPtr pMember =_map->getElement(entry.getElementId());
     if (pMember->getElementType() == ElementType::Way)
@@ -108,28 +107,19 @@ void AddMeasurementTagsVisitor::_processRelation(const RelationPtr pRelation)
 
       // build a combined polygon for extents
       if (_addLength || _addWidth)
-      {
         pCombined = std::shared_ptr<Geometry>(pCombined->Union(pPoly.get()));
-      }
 
       // gather all valid areas and their roles to calculate total area
       if (_addArea && pWay->isClosedArea())
       {
         double area = pPoly->getArea();
-
         if (entry.getRole() == MetadataTags::RelationOuter())
-        {
           totalArea += area;
-        }
-
         if (entry.getRole() == MetadataTags::RelationInner())
-        {
           totalArea -= area;
-        }
       }
     }
   }
-
   // calculate length and width of combined polygon
   double polyLength = 0;
   double polyWidth = 0;
@@ -138,15 +128,19 @@ void AddMeasurementTagsVisitor::_processRelation(const RelationPtr pRelation)
 
   // write to tags
   Tags& tags = pRelation->getTags();
-  if (_addLength) tags["length"] = QString::number(polyLength);
-  if (_addWidth) tags["width"] = QString::number(polyWidth);
-  if (_addArea) tags["area"] = QString::number(totalArea);
+  if (_addLength)
+    tags["length"] = QString::number(polyLength);
+  if (_addWidth)
+    tags["width"] = QString::number(polyWidth);
+  if (_addArea)
+    tags["area"] = QString::number(totalArea);
 }
 
 void AddMeasurementTagsVisitor::_processWay(const WayPtr pWay)
 {
   //  Ignore NULL elements
-  if (!pWay) return;
+  if (!pWay)
+    return;
 
   Tags& tags = pWay->getTags();
 
@@ -165,12 +159,12 @@ void AddMeasurementTagsVisitor::_processWay(const WayPtr pWay)
       polyLength = pLine->getLength();
     }
     else
-    {
       _calculateExtents(pPoly.get(), polyLength, polyWidth);
-    }
 
-    if (_addLength) tags["length"] = QString::number(polyLength);
-    if (_addWidth) tags["width"] = QString::number(polyWidth);
+    if (_addLength)
+      tags["length"] = QString::number(polyLength);
+    if (_addWidth)
+      tags["width"] = QString::number(polyWidth);
   }
 
   if (_addArea && pWay->isClosedArea())
@@ -181,8 +175,7 @@ void AddMeasurementTagsVisitor::_processWay(const WayPtr pWay)
   }
 }
 
-void AddMeasurementTagsVisitor::_calculateExtents(
-  Geometry* pGeometry, double& length, double &width) const
+void AddMeasurementTagsVisitor::_calculateExtents(Geometry* pGeometry, double& length, double &width) const
 {
   // calculate polygon length and width
   length = 0;
