@@ -121,7 +121,7 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
     { "infodiff", StatData::StatCall::InfoDiff }
   });
 
-  foreach (bpt::ptree::value_type listType, propPtree)
+  for (const auto& listType : propPtree)
   {
     if (listType.first == "#")
       continue; // skip comments
@@ -131,15 +131,16 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
       pCurr = &_slowStatData;
     else
     {
-      throw HootException("Invalid stats data list name '" + listType.first + "' in " + _statsFileName.toStdString() +
-                          ". Allowed: 'quick' or 'slow'.");
+      throw HootException(
+        QString("Invalid stats data list name '%1' in %2. Allowed: 'quick' or 'slow'.")
+          .arg(QString::fromStdString(listType.first), _statsFileName));
     }
 
-    foreach (bpt::ptree::value_type entry, listType.second)
+    for (const auto& entry : listType.second)
     {
       StatData newStatData;
 
-      foreach (bpt::ptree::value_type data, entry.second)
+      for (const auto& data : entry.second)
       {
         const QString key = QString::fromStdString(data.first).toLower().trimmed();
         const QString val = QString::fromStdString(data.second.data()).trimmed();
@@ -172,18 +173,18 @@ MatchCreatorPtr CalculateStatsOp::_getMatchCreator(const vector<MatchCreatorPtr>
                                                    const QString& matchCreatorName,
                                                    CreatorDescription::BaseFeatureType& featureType) const
 {
-  for (auto matchIt = matchCreators.begin(); matchIt != matchCreators.end(); ++matchIt)
+  for (const auto& match : matchCreators)
   {
-    vector<CreatorDescription> desc = (*matchIt)->getAllCreators();
-    for (auto descIt = desc.begin(); descIt != desc.end(); ++descIt)
+    vector<CreatorDescription> desc = match->getAllCreators();
+    for (const auto& description : desc)
     {
-      QString testName = descIt->getClassName();
+      QString testName = description.getClassName();
       LOG_VART(testName);
       if (0 == matchCreatorName.compare(testName))
       {
-        featureType = descIt->getBaseFeatureType();
+        featureType = description.getBaseFeatureType();
         LOG_VART(featureType);
-        return *matchIt;
+        return match;
       }
     }
   }
@@ -203,7 +204,7 @@ void CalculateStatsOp::_initConflatableFeatureCounts()
 int CalculateStatsOp::_getNumStatsPassingFilter(const QList<StatData>& stats) const
 {
   int numPassingFilter = 0;
-  for (const auto& stat : stats)//QList<StatData>::const_iterator it = stats.begin(); it != stats.end(); ++it)
+  for (const auto& stat : stats)
   {
     if (_statPassesFilter(stat))
       numPassingFilter++;
@@ -319,12 +320,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   _constMap = map;
 
-  for (const auto& d : _quickStatData)
+  for (const auto& d : qAsConst(_quickStatData))
     _interpretStatData(_constMap, d);
 
   if (!_quick)
   {
-    for (const auto& d : _slowStatData)
+    for (const auto& d : qAsConst(_slowStatData))
       _interpretStatData(_constMap, d);
   }
 

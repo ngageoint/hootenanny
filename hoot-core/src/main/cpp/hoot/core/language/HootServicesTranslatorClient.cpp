@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesTranslatorClient.h"
 
 // hoot
+#include <hoot/core/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
+#include <hoot/core/language/LanguageUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/auth/HootServicesLoginManager.h>
-#include <hoot/core/language/LanguageUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -43,7 +43,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 // std
 #include <sstream>
@@ -55,23 +54,23 @@ HOOT_FACTORY_REGISTER(ToEnglishTranslator, HootServicesTranslatorClient)
 
 bool HootServicesTranslatorClient::_loggedCacheMaxReached = false;
 
-HootServicesTranslatorClient::HootServicesTranslatorClient() :
-_detectedLang(""),
-_detectedLangAvailableForTranslation(false),
-_useCookies(true),
-_numTranslationsMade(0),
-_numTranslationsAttempted(0),
-_numEnglishTextsSkipped(0),
-_skipWordsInEnglishDict(true),
-_detectedLangOverrides(false),
-_performExhaustiveSearch(false),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_untranslatableWords(0),
-_numDetectionsMade(0),
-_cacheHits(0),
-_cacheMaxSize(100),
-_cacheSize(0),
-_timeout(500)
+HootServicesTranslatorClient::HootServicesTranslatorClient()
+  : _detectedLang(""),
+    _detectedLangAvailableForTranslation(false),
+    _useCookies(true),
+    _numTranslationsMade(0),
+    _numTranslationsAttempted(0),
+    _numEnglishTextsSkipped(0),
+    _skipWordsInEnglishDict(true),
+    _detectedLangOverrides(false),
+    _performExhaustiveSearch(false),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _untranslatableWords(0),
+    _numDetectionsMade(0),
+    _cacheHits(0),
+    _cacheMaxSize(100),
+    _cacheSize(0),
+    _timeout(500)
 {
 }
 
@@ -117,9 +116,7 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
 
   _cacheMaxSize = opts.getLanguageMaxCacheSize();
   if (_cacheMaxSize != -1)
-  {
     _cache = std::make_shared<QCache<QString, TranslationResult>>(_cacheMaxSize);
-  }
 
   if (_useCookies)
   {
@@ -140,14 +137,9 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList& langCod
   if (_sourceLangs.contains("detect", Qt::CaseInsensitive))
   {
     if (_sourceLangs.size() != 1)
-    {
-      throw HootException(
-        "When specifying 'detect' in source languages, no other languages may be specified.");
-    }
+      throw HootException("When specifying 'detect' in source languages, no other languages may be specified.");
     else
-    {
       return;
-    }
   }
 
   _checkLangsAvailable("detectable");
@@ -161,11 +153,11 @@ void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type) con
   _validateAvailableLangs(_infoClient->getAvailableLanguages(type), type);
 }
 
-void HootServicesTranslatorClient::_validateAvailableLangs(
-  const std::shared_ptr<boost::property_tree::ptree>& replyObj, const QString& type) const
+void HootServicesTranslatorClient::_validateAvailableLangs(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
+                                                           const QString& type) const
 {
   QMap<QString, bool> returnedLangs;
-  for (const boost::property_tree::ptree::value_type& language : replyObj->get_child("languages"))
+  for (const auto& language : replyObj->get_child("languages"))
   {
     const QString sourceLangCode =
       QString::fromStdString(language.second.get<std::string>("iso6391Code"));
@@ -175,9 +167,8 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
     returnedLangs[sourceLangCode] = available;
   }
   bool langNotFound = false;
-  for (int i = 0; i < _sourceLangs.size(); i++)
+  for (const auto& sourceLangCode : qAsConst(_sourceLangs))
   {
-    QString sourceLangCode = _sourceLangs.at(i);
     LOG_VART(sourceLangCode);
     if (!returnedLangs[sourceLangCode])
     {
@@ -188,7 +179,7 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
       }
       else
       {
-        msg += "; Skipping detection for language: " + _sourceLangs.at(i);
+        msg += "; Skipping detection for language: " + sourceLangCode;
         LOG_WARN(msg);
         langNotFound = true;
       }
@@ -221,8 +212,7 @@ QString HootServicesTranslatorClient::_getRequestData(const QString& text) const
   return QString::fromStdString(requestStrStrm.str());
 }
 
-void HootServicesTranslatorClient::_parseResponse(
-  const std::shared_ptr<boost::property_tree::ptree>& replyObj)
+void HootServicesTranslatorClient::_parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj)
 {
   _translatedText =
     QUrl::fromPercentEncoding(
@@ -300,9 +290,7 @@ void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString& te
 QString HootServicesTranslatorClient::translate(const QString& text)
 {
   if (_sourceLangs.empty())
-  {
     throw HootException("Cannot determine source language.");
-  }
 
   LOG_TRACE(
     "Translating to English with specified source languages: " <<
@@ -313,9 +301,7 @@ QString HootServicesTranslatorClient::translate(const QString& text)
   _detectorUsed = "";
 
   if (_cache && _getTranslationFromCache(text))
-  {
     return _translatedText;
-  }
 
   if (!_textIsTranslatable(text))
   {
@@ -358,22 +344,16 @@ QString HootServicesTranslatorClient::translate(const QString& text)
     throw HootException("Error translating text: " + text + ". error: " + e.what());
   }
   if (request.getHttpStatus() != HttpResponseCode::HTTP_OK)
-  {
     throw HootException("Error translating text: " + text + ". error: " + request.getErrorString());
-  }
 
   _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
 
   if (text.toLower() == _translatedText.toLower())
-  {
     _translatedText = "";
-  }
 
   //update the cache
   if (_cache && !_cache->contains(text))
-  {
     _insertTranslationIntoCache(text, _translatedText, _detectedLang);
-  }
 
   if (!_translatedText.isEmpty())
   {

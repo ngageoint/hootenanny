@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef STRINGUTILS_H
@@ -30,7 +30,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 namespace hoot
 {
@@ -308,10 +307,8 @@ public:
   static QString setToString(const std::set<T>& set)
   {
     QString out;
-    for (typename std::set<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
-    {
+    for (auto itr = set.begin(); itr != set.end(); ++itr)
       out += (*itr).toString() + ",";
-    }
     out.chop(1);
     return out;
   }
@@ -324,18 +321,15 @@ public:
   static QString setToString(const std::set<QString>& set)
   {
     QString out;
-    for (std::set<QString>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
-    {
+    for (auto itr = set.begin(); itr != set.end(); ++itr)
       out += (*itr) + ",";
-    }
     out.chop(1);
     return out;
   }
 
 private:
 
-  static QString _splitAndRemoveAtIndex(
-    QStringList& input, const int index, const QString& separator);
+  static QString _splitAndRemoveAtIndex(QStringList& input, const int index, const QString& separator);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeReplacements.h"
@@ -45,9 +45,7 @@ long NodeReplacements::_getFinalReplacement(long oldId)
   {
     last = _r[last];
     if (touched.find(last) != touched.end())
-    {
       throw HootException("Circular reference.");
-    }
     touched.insert(last);
   }
 
@@ -73,18 +71,12 @@ void NodeReplacements::_read(istream& is)
   {
     is.read((char*)&ids, sizeof(ids));
     if (is.gcount() != 0 && is.gcount() != sizeof(ids))
-    {
       throw HootException("Didn't read the expected number of bytes.");
-    }
 
     if (is.gcount() == sizeof(ids))
-    {
       _r[ids[0]] = ids[1];
-    }
     else
-    {
       break;
-    }
   }
 }
 
@@ -93,8 +85,9 @@ void NodeReplacements::readDir(QString inputDir)
   QStringList filters;
   filters << "*.replacement";
   QDir d(inputDir);
-  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
+  for (const auto& file : d.entryList(filters, QDir::Files, QDir::Name))
   {
+    QFileInfo info(file);
     QString fn = inputDir + "/" + info.filePath();
     _read(fn);
   }
@@ -104,7 +97,7 @@ void NodeReplacements::readDir(QString inputDir)
 void NodeReplacements::simplify()
 {
   HashMap<long, long> copy = _r;
-  for (HashMap<long, long>::const_iterator it = copy.begin(); it != copy.end(); ++it)
+  for (auto it = copy.begin(); it != copy.end(); ++it)
   {
     long oldId = it->first;
     long newId = _getFinalReplacement(oldId);
@@ -116,10 +109,8 @@ QString NodeReplacements::toString() const
 {
   QString result = "";
 
-  for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); ++it)
-  {
+  for (auto it = _r.begin(); it != _r.end(); ++it)
     result += QString("%1 : %2\n").arg(it->first).arg(it->second);
-  }
 
   return result;
 }
@@ -139,7 +130,7 @@ void NodeReplacements::_write(ostream& os)
   // change this format please address that class as well.
 
   int64_t ids[2];
-  for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); ++it)
+  for (auto it = _r.begin(); it != _r.end(); ++it)
   {
     ids[0] = it->first;
     ids[1] = it->second;

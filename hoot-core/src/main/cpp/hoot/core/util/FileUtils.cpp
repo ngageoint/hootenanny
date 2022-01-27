@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "FileUtils.h"
@@ -61,7 +61,7 @@ bool FileUtils::makeDir(const QString& path)
     std::this_thread::sleep_for(std::chrono::milliseconds(duration));
   }
   //  Report failure
-  LOG_ERROR(QString("Couldn't create output directory: %1").arg(path).toStdString());
+  LOG_ERROR(QString("Couldn't create output directory: %1").arg(path));
   return false;
 }
 
@@ -71,27 +71,22 @@ void FileUtils::removeDir(const QString& dirName)
 
   if (dir.exists("."))
   {
-    Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
-      QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
+    for (const auto& file : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
+                                              QDir::Hidden | QDir::AllDirs |
+                                              QDir::Files, QDir::DirsFirst))
     {
+      QFileInfo info(file);
       QString path = info.absoluteFilePath();
       if (info.isDir())
-      {
         removeDir(path);
-      }
       else
       {
         if (QFile::remove(path) == false)
-        {
           throw HootException(QString("Failed to remove %1").arg(dirName));
-        }
       }
-
     }
     if (QDir().rmdir(dirName) == false)
-    {
       throw HootException(QString("Failed to remove %1").arg(dirName));
-    }
   }
 }
 
@@ -118,9 +113,7 @@ QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString& filePath)
     file.close();
   }
   else
-  {
     throw HootException("Unable to open file " + filePath + ".");
-  }
 
   return tokens;
 }
@@ -137,9 +130,7 @@ QString FileUtils::readFully(const QString& path)
     return text;
   }
   else
-  {
     throw HootException("Unable to read file at: " + path);
-  }
 }
 
 void FileUtils::writeFully(const QString& path, const QString& text)
@@ -183,12 +174,10 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
 {
   const QString ext = extension.toLower().replace(".", "");
   const QStringList files = dir.entryList();
-  for (int i = 0; i < files.size(); i++)
+  for (const auto& file : qAsConst(files))
   {
-    if (files.at(i).endsWith(ext, Qt::CaseInsensitive))
-    {
+    if (file.endsWith(ext, Qt::CaseInsensitive))
       return true;
-    }
   }
   return false;
 }
@@ -201,22 +190,17 @@ QStringList FileUtils::readFileToLines(const QString& inputPath, const bool toLo
   {
     QFile inputFile(inputPath);
     if (!inputFile.open(QIODevice::ReadOnly))
-    {
       throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
-    }
+
     while (!inputFile.atEnd())
     {
       const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
       if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
         if (toLowerCase)
-        {
           outputList.append(line.toLower());
-        }
         else
-        {
           outputList.append(line);
-        }
       }
     }
     inputFile.close();
@@ -246,8 +230,8 @@ QString FileUtils::toLogFormat(QStringList urls, int characters)
 {
   QStringList files;
   //  Format each url individually
-  for (int i = 0; i < urls.size(); ++i)
-    files.push_back(FileUtils::toLogFormat(urls[i]));
+  for (const auto& url : qAsConst(urls))
+    files.push_back(FileUtils::toLogFormat(url));
   //  Make a comma separated list before truncating if desired
   QString result = files.join(", ");
   return result.right((characters >= 0) ? characters : result.length());
@@ -258,9 +242,9 @@ bool FileUtils::anyAreDirs(const QStringList& paths)
   if (paths.empty())
     return false;
 
-  for (int i = 0; i < paths.size(); i++)
+  for (const auto& path : qAsConst(paths))
   {
-    if (QFileInfo(paths.at(i)).isDir())
+    if (QFileInfo(path).isDir())
       return true;
   }
   return false;

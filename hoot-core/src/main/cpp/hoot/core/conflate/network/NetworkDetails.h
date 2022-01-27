@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -77,8 +77,7 @@ public:
    */
   Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const;
 
-  QList<EdgeSublineMatchPtr> calculateMatchingSublines(
-    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  QList<EdgeSublineMatchPtr> calculateMatchingSublines(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   /**
    * calculate the distance relative to the string start. This may be negative. An attempt will
@@ -93,8 +92,7 @@ public:
    * Run an experiment to see if a valid match is created by adding esm onto em. If a valid match
    * is created it will be returned. Otherwise a null is returned.
    */
-  EdgeMatchPtr extendEdgeMatch(
-    ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+  EdgeMatchPtr extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   /**
    * Extend edge string 'es' with 'e'. 'es' will be enlarged as necessary to include e. If e
    * cannot extend 'es' an exception will be thrown.
@@ -111,7 +109,7 @@ public:
    * returned. You are guaranteed in this case that elString == elSubline.
    */
   void calculateNearestLocation(ConstEdgeStringPtr string, ConstEdgeSublinePtr subline,
-    ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
+                                ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
 
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const;
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
@@ -161,13 +159,13 @@ private:
   {
     public:
 
-      SublineCache() :
-      _p(-1.0)
+      SublineCache()
+        : _p(-1.0)
       {
       }
-      SublineCache(double p, const WaySublineMatchStringPtr& matches) :
-      _p(p),
-      _matches(matches)
+      SublineCache(double p, const WaySublineMatchStringPtr& matches)
+        : _p(p),
+          _matches(matches)
       {
       }
 
@@ -196,9 +194,8 @@ private:
    * @param v2 - vertex in e2
    * @return a score
    */
-  double _getEdgeAngleScore(
-    ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
-    ConstNetworkEdgePtr e2) const;
+  double _getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
+                            ConstNetworkEdgePtr e2) const;
 
   const SublineCache _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
@@ -206,9 +203,8 @@ private:
 
   EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr) const;
 
-  void _trimEdgeString(
-    ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
-    const WaySublineCollection& ws) const;
+  void _trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
+                       const WaySublineCollection& ws) const;
 };
 
 using NetworkDetailsPtr = std::shared_ptr<NetworkDetails>;

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "JosmMapCleaner.h"
 
 // hoot
-#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/josm/jni/JniConversion.h>
@@ -42,11 +42,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapCleaner)
 
-JosmMapCleaner::JosmMapCleaner() :
-JosmMapValidatorAbstract(),
-_addDetailTags(false),
-_numElementsCleaned(0),
-_numFailedCleaningOperations(0)
+JosmMapCleaner::JosmMapCleaner()
+  : JosmMapValidatorAbstract(),
+    _addDetailTags(false),
+    _numElementsCleaned(0),
+    _numFailedCleaningOperations(0)
 {
 }
 
@@ -76,7 +76,7 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   // JNI sig format: (input params...)return type
 
   // If the map is large enough, we want to avoid string serialization.
-  if ((int)inputMap->size() > _maxElementsForMapString)
+  if (static_cast<int>(inputMap->size()) > _maxElementsForMapString)
   {
     // pass map as temp file and get it back as a temp file
 
@@ -85,10 +85,8 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-in.osm");
     tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
-    {
-      throw HootException(
-        "Unable to open temp input file for cleaning: " + tempInputFile->fileName() + ".");
-    }
+      throw HootException("Unable to open temp input file for cleaning: " + tempInputFile->fileName() + ".");
+
     LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
     OsmXmlWriter().write(inputMap, tempInputFile->fileName());
 
@@ -115,8 +113,7 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   }
 }
 
-QString JosmMapCleaner::_clean(
-  const QStringList& validators, const QString& map, const bool addDetailTags)
+QString JosmMapCleaner::_clean(const QStringList& validators, const QString& map, const bool addDetailTags)
 {
   // JNI sig format: (input params...)return type
   jstring cleanedMapResultStr =
@@ -136,9 +133,8 @@ QString JosmMapCleaner::_clean(
   return JniConversion::fromJavaString(_javaEnv, cleanedMapResultStr);
 }
 
-void JosmMapCleaner::_clean(
-  const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
-  const bool addDetailTags)
+void JosmMapCleaner::_clean(const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
+                            const bool addDetailTags)
 {
   // JNI sig format: (input params...)return type
   _javaEnv->CallVoidMethod(
@@ -178,30 +174,18 @@ void JosmMapCleaner::_getStats()
     "Found " + StringUtils::formatLargeNumber(_numValidationErrors) +
     " validation errors in " + StringUtils::formatLargeNumber(_numAffected) +
     " features with JOSM.\n";
-  _errorSummary +=
-    "Total elements cleaned: " + StringUtils::formatLargeNumber(_numElementsCleaned) + "\n";
-  _errorSummary +=
-    "Total elements deleted: " + StringUtils::formatLargeNumber(_deletedElementIds.size()) + "\n";
-  _errorSummary +=
-    "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
-  _errorSummary +=
-    "Total failing JOSM cleaning operations: " + QString::number(_numFailedCleaningOperations) +
-    "\n";
-  _errorSummary +=
-     _errorCountsByTypeToSummaryStr(
-       _getValidationErrorCountsByType(), _getValidationErrorFixCountsByType()) + "\n";
-  foreach (QString validatorName, failingValidatorInfo.keys())
-  {
-    _errorSummary +=
-      "Validator: " + validatorName + " failed with error: " +
-      failingValidatorInfo[validatorName] + ".\n";
-  }
-  foreach (QString cleanerName, failingCleanerInfo.keys())
-  {
-    _errorSummary +=
-      "Cleaner: " + cleanerName + " failed with error: " +
-      failingCleanerInfo[cleanerName] + ".\n";
-  }
+  _errorSummary += "Total elements cleaned: " + StringUtils::formatLargeNumber(_numElementsCleaned) + "\n";
+  _errorSummary += "Total elements deleted: " + StringUtils::formatLargeNumber(_deletedElementIds.size()) + "\n";
+  _errorSummary += "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
+  _errorSummary += "Total failing JOSM cleaning operations: " + QString::number(_numFailedCleaningOperations) + "\n";
+  _errorSummary += _errorCountsByTypeToSummaryStr(_getValidationErrorCountsByType(), _getValidationErrorFixCountsByType()) + "\n";
+
+  for (const auto& validatorName : failingValidatorInfo.keys())
+    _errorSummary += "Validator: " + validatorName + " failed with error: " + failingValidatorInfo[validatorName] + ".\n";
+
+  for (const auto& cleanerName : failingCleanerInfo.keys())
+    _errorSummary += "Cleaner: " + cleanerName + " failed with error: " + failingCleanerInfo[cleanerName] + ".\n";
+
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }
@@ -256,11 +240,10 @@ QMap<QString, QString> JosmMapCleaner::_getFailingCleanerInfo()
   return JniConversion::fromJavaStringMap(_javaEnv, failingCleanerInfo);
 }
 
-QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(
-  const QSet<QString>& elementIdStrs) const
+QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(const QSet<QString>& elementIdStrs) const
 {
   QSet<ElementId> result;
-  for (QString elementIdStr : elementIdStrs)
+  for (const auto& elementIdStr : elementIdStrs)
   {
     const QStringList elementIdParts = elementIdStr.split(":");
     if (elementIdParts.size() == 2)
@@ -268,33 +251,26 @@ QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(
       bool ok = false;
       const long id = elementIdParts[1].toLong(&ok);
       if (ok)
-      {
         result.insert(ElementId(ElementType::fromString(elementIdParts[0]), id));
-      }
     }
   }
   return result;
 }
 
-QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
-  const QMap<QString, int>& errorCountsByType, const QMap<QString, int>& errorFixCountsByType) const
+QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(const QMap<QString, int>& errorCountsByType,
+                                                       const QMap<QString, int>& errorFixCountsByType) const
 {
-  //assert(errorCountsByType.size() == errorFixCountsByType.size());
-
   const int longestErrorNameSize = 33;
   const int longestCountSize = 11;
   QString summary = "";
-  for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
-       errorItr != errorCountsByType.end(); ++errorItr)
+  for (auto errorItr = errorCountsByType.begin(); errorItr != errorCountsByType.end(); ++errorItr)
   {
-    //assert(errorFixCountsByType.contains(errorItr.key()));
     const int indentAfterName = longestErrorNameSize - errorItr.key().size() + 1;
     const QString numErrorsForTypeStr = StringUtils::formatLargeNumber(errorItr.value());
     const int indentAfterCount = longestCountSize - numErrorsForTypeStr.size();
-    summary +=
-      errorItr.key() + " errors: " + QString(indentAfterName, ' ') + numErrorsForTypeStr + " " +
-      QString(indentAfterCount, ' ') + " elements cleaned: " +
-      StringUtils::formatLargeNumber(errorFixCountsByType[errorItr.key()]) + "\n";
+    summary += errorItr.key() + " errors: " + QString(indentAfterName, ' ') + numErrorsForTypeStr + " " +
+               QString(indentAfterCount, ' ') + " elements cleaned: " +
+               StringUtils::formatLargeNumber(errorFixCountsByType[errorItr.key()]) + "\n";
   }
   return summary;
 }

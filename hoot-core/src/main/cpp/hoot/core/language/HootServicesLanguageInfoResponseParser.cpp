@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesLanguageInfoResponseParser.h"
@@ -33,15 +33,15 @@
 namespace hoot
 {
 
-QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
-    const QString& type,  const std::shared_ptr<boost::property_tree::ptree>& response)
+QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(const QString& type,
+                                                                                const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QString displayStr;
 
   displayStr += type + " languages:\n\n";
   int langCtr = 0;
   int availableCtr = 0;
-  for (const boost::property_tree::ptree::value_type& language : response->get_child("languages"))
+  for (const auto& language : response->get_child("languages"))
   {
     LOG_VART(language.second.get<std::string>("name"));
     LOG_VART(QString::fromStdString(language.second.get<std::string>("name")));
@@ -59,16 +59,12 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
     displayStr += "\n";
     langCtr++;
     if (available)
-    {
       availableCtr++;
-    }
   }
 
   QString descriptor = "translation";
   if (type != "translatable")
-  {
     descriptor = "detection";
-  }
   displayStr += QString::number(langCtr) + " languages are supported for " + descriptor + ".\n";
   displayStr +=
     "Currently, " + QString::number(availableCtr) +
@@ -77,14 +73,14 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
   return displayStr.trimmed();
 }
 
-QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
-    const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response)
+QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const QString& type,
+                                                                           const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QString displayStr;
 
   displayStr += "Available language " + type + ":\n\n";
   int appCtr = 0;
-  for (const boost::property_tree::ptree::value_type& app : response->get_child("apps"))
+  for (const auto& app : response->get_child("apps"))
   {
     displayStr += "Name: " + QString::fromStdString(app.second.get<std::string>("name")) + "\n";
     displayStr += "Description: " +
@@ -105,11 +101,10 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
   return displayStr.trimmed();
 }
 
-QMap<QString, QString> HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
-  const std::shared_ptr<boost::property_tree::ptree>& response)
+QMap<QString, QString> HootServicesLanguageInfoResponseParser::getLangCodesToLangs(const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QMap<QString, QString> langCodesToLangs;
-  for (const boost::property_tree::ptree::value_type& language : response->get_child("languages"))
+  for (const auto& language : response->get_child("languages"))
   {
     const QString langCode =
       QString::fromStdString(language.second.get<std::string>("iso6391Code"));

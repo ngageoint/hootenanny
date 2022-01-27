@@ -226,8 +226,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
         //  Output a bunch of stuff here to help develop the algorithm
         LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
                   "\nHeadings\t| Distances" <<
-                  "\n" << ts.readAll()
-                 );
+                  "\n" << ts.readAll());
       }
     }
   }
@@ -289,7 +288,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
     // Make sure any ways that are part of relations continue to be part of those relations after
     // they're split.
     QList<ElementPtr> newWays;
-    foreach (const WayPtr& w, splits)
+    for (const auto& w : splits)
       newWays.append(w);
 
     _map->replace(pWay, newWays);

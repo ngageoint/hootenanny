@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -63,10 +63,9 @@ public:
       // y [0, 1] optimal ~ 5.85
       // z [0, 3] optimal ~ 1.54
       double v = sin(x * .4 + 1.23) * sin(y * .2 + .4) * sin(z * .5 + .8) *
-        (w == 3 ? 1.0 : 0.5);
+                 (w == 3 ? 1.0 : 0.5);
 
       double result = 5.0 / std::max(1e-9, v);
-      //cout << "v: " << v << " score: " << 5.0 / max(1e-9, v) << endl;
 
       return result;
     }
@@ -81,16 +80,13 @@ public:
     sd->addVariable(new VariableDescription("z", VariableDescription::Real, 0, 3));
     SimulatedAnnealing uut(sd,  std::make_shared<TestFitnessFunction>());
     CPPUNIT_ASSERT(uut.iterate(100) < 5.5);
-    CPPUNIT_ASSERT_EQUAL(uut.getBestStates().size(), 1);
-    ConstStatePtr state = *uut.getBestStates().begin();
+    QSet<ConstStatePtr> states = uut.getBestStates();
+    CPPUNIT_ASSERT_EQUAL(states.size(), 1);
+    ConstStatePtr state = *states.begin();
     CPPUNIT_ASSERT_EQUAL(state->getInt("w"), 3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.852, state->get("x"), .1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.85, state->get("y"), .7);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.54, state->get("z"), .3);
-//    foreach (ConstStatePtr state, uut.getBestStates())
-//    {
-//      std::cout << state->toString().toUtf8().data() << std::endl;
-//    }
   }
 };
 

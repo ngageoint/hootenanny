@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Settings.h"
@@ -41,7 +41,6 @@
 // Boost
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 // Standard
 #include <fstream>
@@ -70,9 +69,7 @@ public:
     fstream is(path.toUtf8().constData(), ios::in);
 
     if (is.good() == false)
-    {
       throw IllegalArgumentException(QString("Error reading %1").arg(path));
-    }
 
     try
     {
@@ -104,9 +101,7 @@ public:
     stringstream ss(json.toUtf8().constData(), ios::in);
 
     if (ss.good() == false)
-    {
       throw HootException(QString("Error reading from JSON string:\n%1").arg(json));
-    }
 
     load(ss);
   }
@@ -125,7 +120,7 @@ private:
       QString base = it->second.data().c_str();
       const QStringList baseConfigs =
         base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
-      for (const QString value : baseConfigs)
+      for (const auto& value : qAsConst(baseConfigs))
       {
         LOG_DEBUG("Loading base config: " << value << "...");
         load(ConfPath::search(value));
@@ -133,7 +128,7 @@ private:
     }
 
     //  Iterate all of the children key/value pairs
-    for (pt::ptree::value_type& element : tree.get_child(""))
+    for (const auto& element : tree.get_child(""))
     {
       const QString optionName = QString::fromUtf8(element.first.c_str());
       LOG_VART(optionName);
@@ -161,18 +156,16 @@ private:
         Settings::replaceListOptionEntryValues(*_s, optionName, values);
       }
       else
-      {
         _s->set(optionName, optionVal);
-      }
     }
   }
 };
 
 std::shared_ptr<Settings> Settings::_theInstance = nullptr;
 
-Settings::Settings() :
-_dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
-_staticRegex("\\$\\(([\\w\\.]+)\\)")
+Settings::Settings()
+  : _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
+    _staticRegex("\\$\\(([\\w\\.]+)\\)")
 {
   _dynamicRegex.optimize();
   _staticRegex.optimize();
@@ -181,10 +174,10 @@ _staticRegex("\\$\\(([\\w\\.]+)\\)")
 void Settings::prepend(const QString& key, const QStringList& values)
 {
   QStringList l = getList(key, QStringList());
+  //  TODO:  Logically this doesn't even work
   for (int i = values.size() - 1; i == 0; i--)
-  {
     l.prepend(values.at(i));
-  }
+
   set(key, l);
 }
 
@@ -201,7 +194,7 @@ void Settings::_checkConvert(const QString& key, const QVariant& value, QVariant
   {
     throw HootException(
       QString("Unable to convert key: '%1', value: '%2' to %3.")
-        .arg(key).arg(value.toString()).arg(QVariant::typeToName(type)));
+        .arg(key, value.toString(), QVariant::typeToName(type)));
   }
 }
 
@@ -218,20 +211,15 @@ void Settings::clear()
 void Settings::_updateClassNamesInList(QStringList& list)
 {
   QStringList moddedList;
-  for (int i = 0; i < list.size(); i++)
-  {
-    QString val = list.at(i);
+  for (const auto& val : qAsConst(list))
     moddedList.append(val);
-  }
   list = moddedList;
 }
 
 QVariant Settings::get(const QString& key) const
 {
   if (hasKey(key) == false)
-  {
     throw IllegalArgumentException("Error finding option with key: " + key);
-  }
   QVariant result = _settings.value(key);
 
   if (result.type() == QVariant::String)
@@ -253,9 +241,7 @@ bool Settings::getBool(const QString& key) const
 bool Settings::getBool(const QString& key, bool defaultValue) const
 {
   if (hasKey(key) == false)
-  {
     return defaultValue;
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Bool);
   return v.toBool();
@@ -271,9 +257,7 @@ double Settings::getDouble(const QString& key) const
 double Settings::getDouble(const QString& key, double defaultValue) const
 {
   if (hasKey(key) == false)
-  {
     return defaultValue;
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Double);
   return v.toDouble();
@@ -283,13 +267,9 @@ double Settings::getDouble(const QString& key, double defaultValue, double min, 
 {
   double retVal = getDouble(key, defaultValue);
   if (retVal < min)
-  {
     retVal = min;
-  }
   else if (retVal > max)
-  {
     retVal = max;
-  }
   return retVal;
 }
 
@@ -298,9 +278,7 @@ double Settings::getDoubleValue(const QString& value) const
   QVariant v = getValue(value);
 
   if (v.isNull() || v.canConvert(QVariant::Double) == false)
-  {
     throw HootException("Unable to convert " + v.toString() + " to a double.");
-  }
   return v.toDouble();
 }
 
@@ -324,9 +302,7 @@ int Settings::getInt(const QString& key) const
 int Settings::getInt(const QString& key, int defaultValue) const
 {
   if (hasKey(key) == false)
-  {
     return defaultValue;
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Int);
   return v.toInt();
@@ -335,16 +311,10 @@ int Settings::getInt(const QString& key, int defaultValue) const
 int Settings::getInt(const QString& key, int defaultValue, int min, int max) const
 {
   int retVal = getInt(key, defaultValue);
-
   if ( retVal < min )
-  {
     retVal = min;
-  }
   else if ( retVal > max )
-  {
     retVal = max;
-  }
-
   return retVal;
 }
 
@@ -358,9 +328,7 @@ long Settings::getLong(const QString& key) const
 long Settings::getLong(const QString& key, long defaultValue) const
 {
   if (hasKey(key) == false)
-  {
     return defaultValue;
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::LongLong);
   return v.toLongLong();
@@ -370,13 +338,9 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
 {
   long retVal = getLong(key, defaultValue);
   if ( retVal < min )
-  {
     retVal = min;
-  }
   else if ( retVal > max )
-  {
     retVal = max;
-  }
   return retVal;
 }
 
@@ -385,9 +349,7 @@ QStringList Settings::getList(const QString& key) const
   QString val = getString(key);
   QStringList list;
   if (!val.trimmed().isEmpty())
-  {
     list = val.split(";");
-  }
   _updateClassNamesInList(list);
   return list;
 }
@@ -403,15 +365,11 @@ QStringList Settings::getList(const QString& key, const QStringList& defaultValu
 {
   QStringList result;
   if (hasKey(key))
-  {
     result = getString(key).split(";", QString::SkipEmptyParts);
-  }
   else
   {
-    for (int i = 0; i < defaultValue.size(); i++)
-    {
-      result.append(_replaceVariablesValue(defaultValue[i]));
-    }
+    for (const auto& val : qAsConst(defaultValue))
+      result.append(_replaceVariablesValue(val));
   }
   _updateClassNamesInList(result);
   return result;
@@ -482,12 +440,11 @@ void Settings::loadJson(QString path)
 
 void Settings::_validateOperatorRefs(const QStringList& operators)
 {
-  for (int i = 0; i < operators.size(); i++)
+  for (auto operatorName : qAsConst(operators))
   {
-    QString operatorName = operators[i];
     operatorName = operatorName.remove("\"");
     LOG_VARD(operatorName);
-    const QString errorMsg = "Invalid option operator class name: " + operatorName;
+    const QString errorMsg = QString("Invalid option operator class name: %1").arg(operatorName);
 
     // Should either be a visitor, op, or criterion, but we don't know which one, so check for all
     // of them.
@@ -530,9 +487,7 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
         {
         }
         if (!crit)
-        {
           throw IllegalArgumentException(errorMsg);
-        }
       }
     }
   }
@@ -553,9 +508,7 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
     if (args[0] == "--conf" || args[0] == "-C")
     {
       if (args.size() < 2)
-      {
         throw IllegalArgumentException("--conf must be followed by a file name.");
-      }
       LOG_DEBUG("Loading " << args[1] << "...");
       conf().loadJson(args[1]);
       // move on to the next argument.
@@ -603,15 +556,11 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
     }
     // HootTest settings have already been parsed by this point
     else if (toIgnore.contains(args[0]))
-    {
       args = args.mid(1);
-    }
     else if (args[0] == "--define" || args[0] == "-D")
     {
       if (args.size() < 2)
-      {
         throw IllegalArgumentException(optionInputFormatErrorMsg + ": " + args.join(";"));
-      }
 
       QString kv = args[1];
       bool append = false;
@@ -666,16 +615,12 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
         append = false;
         remove = false;
         prepend = false;
+        // '->' replaces one option val with another and there can be multiple list replacement
+        // entries within a single opt val string
         if (kv.contains("->"))
-        {
-          // '->' replaces one option val with another and there can be multiple list replacement
-          // entries within a single opt val string
           replace = true;
-        }
         else
-        {
           replace = false;
-        }
       }
 
       LOG_VART(append);
@@ -684,9 +629,7 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
       LOG_VART(replace);
 
       if (kvl.size() != 2)
-      {
         throw IllegalArgumentException(optionInputFormatErrorMsg + ": " + kvl.join(";"));
-      }
 
       const QString optionName = kvl[0];
       LOG_VART(optionName);
@@ -694,9 +637,7 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
       LOG_VART(optionVal);
 
       if (!conf().hasKey(optionName))
-      {
         throw IllegalArgumentException("Unknown settings option: (" + optionName + ")");
-      }
 
       const QStringList values = optionVal.split(";", QString::SkipEmptyParts);
       LOG_VART(values);
@@ -713,12 +654,10 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
       }
 
       if (append)
-      {
         conf().append(optionName, values);
-      }
       else if (remove)
       {
-        foreach (QString v, values)
+        for (const auto& v : qAsConst(values))
         {
           QStringList newList = conf().getList(optionName);
 
@@ -726,6 +665,8 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
           // to them or not.
           bool itemRemoved = false;
           QString listItemToRemove = v;
+          //  TODO: Do the next three if statements do the exact same thing?
+          //  Is one of them supposed to have a `hoot::` prepended?
           if (newList.contains(listItemToRemove))
           {
             newList.removeAll(listItemToRemove);
@@ -746,44 +687,32 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
             }
           }
           if (!itemRemoved)
-          {
             throw IllegalArgumentException("Option list does not contain value: (" + v + ")");
-          }
 
           conf().set(optionName, newList);
         }
       }
       else if (prepend)
-      {
         conf().prepend(optionName, values);
-      }
       else if (replace)
-      {
         replaceListOptionEntryValues(conf(), optionName, values);
-      }
       else
-      {
         conf().set(optionName, optionVal);
-      }
-
       // move on to the next argument
       args = args.mid(2);
     }
     else
-    {
       foundOne = false;
-    }
   }
-
   // Re-initialize the logger and other resources after the settings have been parsed.
   Hoot::getInstance().reinit();
 }
 
-void Settings::replaceListOptionEntryValues(
-  Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues)
+void Settings::replaceListOptionEntryValues(Settings& settings, const QString& optionName,
+                                            const QStringList& listReplacementEntryValues)
 {
   LOG_DEBUG(optionName << " before replacement: " << conf().getList(optionName));
-  foreach (QString v, listReplacementEntryValues)
+  for (const auto& v : qAsConst(listReplacementEntryValues))
   {
     const QStringList valEntryParts = v.split("->");
     if (valEntryParts.size() != 2)
@@ -802,7 +731,7 @@ void Settings::replaceListOptionEntryValues(
     if (!newListVal.contains(oldValEntry))
     {
       throw IllegalArgumentException(
-        "Option list: " + optionName + " does not contain value entry: (" + oldValEntry + ")");
+        QString("Option list: %1 does not contain value entry: (%2)").arg(optionName, oldValEntry));
     }
     // replace existing option val entry with new one
     newListVal = newListVal.replaceInStrings(oldValEntry, newValEntry);
@@ -815,16 +744,11 @@ void Settings::replaceListOptionEntryValues(
 QString Settings::_replaceVariables(const QString& key, std::set<QString> used) const
 {
   if (used.find(key) != used.end())
-  {
-    throw IllegalArgumentException("Recursive key in configuration file. (" + key + ")");
-  }
+    throw IllegalArgumentException(QString("Recursive key in configuration file. (%1)").arg(key));
   // If the variable doesn't exist, then it defaults to an empty string.
   if (_settings.contains(key) == false)
-  {
     return "";
-  }
   QString value = _settings.value(key).toString();
-
   used.insert(key);
   return _replaceVariablesValue(value, used);
 }
@@ -850,7 +774,6 @@ QString Settings::_replaceStaticVariables(QString value) const
       done = false;
     }
   }
-
   return value;
 }
 
@@ -879,7 +802,6 @@ QString Settings::_replaceVariablesValue(QString value, const std::set<QString>&
       done = false;
     }
   }
-
   return value;
 }
 
@@ -896,12 +818,8 @@ void Settings::set(const QString& key, const QString& value)
 void Settings::storeJson(const QString& path) const
 {
   fstream os(path.toUtf8().constData(), ios::out);
-
   if (os.good() == false)
-  {
     throw IllegalArgumentException(QString("Error opening %1 for writing.").arg(path));
-  }
-
   os << toString().toUtf8().constData();
 }
 
@@ -909,15 +827,11 @@ QString Settings::toString() const
 {
   QString result = "{\n";
 
-  for (SettingsMap::const_iterator it = _settings.constBegin(); it != _settings.constEnd(); ++it)
-  {
-    result += QString("  \"%1\":\"%2\",\n").arg(_markup(it.key()))
-        .arg(_markup(it.value().toString()));
-  }
+  for (auto it = _settings.constBegin(); it != _settings.constEnd(); ++it)
+    result += QString("  \"%1\":\"%2\",\n").arg(_markup(it.key()), _markup(it.value().toString()));
+
   result += "  \"#end\": \"\"\n";
-
   result += "}\n";
-
   return result;
 }
 

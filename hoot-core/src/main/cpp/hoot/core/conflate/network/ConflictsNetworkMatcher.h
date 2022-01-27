@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLICTSNETWORKMATCHER_H
 #define CONFLICTSNETWORKMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
-#include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -91,7 +91,7 @@ private:
   {
   public:
 
-    MatchRelationship(ConstEdgeMatchPtr e, bool conflict) : _e(e), _conflict(conflict) {}
+    MatchRelationship(ConstEdgeMatchPtr e, bool conflict) : _e(e), _conflict(conflict) { }
 
     ConstEdgeMatchPtr getEdge() const { return _e; }
 

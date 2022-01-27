@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ToEnglishTranslateDictionary.h"
@@ -37,14 +37,13 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
 namespace hoot
 {
 
-ToEnglishTranslateDictionary::ToEnglishTranslateDictionary() :
-_transliterationCachingEnabled(false)
+ToEnglishTranslateDictionary::ToEnglishTranslateDictionary()
+  : _transliterationCachingEnabled(false)
 {
   if (ConfigOptions().getTransliterationMaxCacheSize() != -1)
   {
@@ -83,13 +82,13 @@ ToEnglishTranslateDictionary& ToEnglishTranslateDictionary::getInstance()
 }
 
 bool ToEnglishTranslateDictionary::getFromTransliterationCache(const QString& originalText,
-                                                      QString& transliteratedText) const
+                                                               QString& transliteratedText) const
 {
   return _transliterationCache->get(originalText, transliteratedText);
 }
 
 void ToEnglishTranslateDictionary::insertIntoTransliterationCache(const QString& originalText,
-                                                         const QString& transliteratedText) const
+                                                                  const QString& transliteratedText) const
 {
   _transliterationCache->insert(originalText, transliteratedText);
 }
@@ -112,11 +111,11 @@ void ToEnglishTranslateDictionary::load(const QString& path)
 
 void ToEnglishTranslateDictionary::_loadTags(pt::ptree& tree)
 {
-  for (pt::ptree::value_type& translation : tree.get_child("Dictionary"))
+  for (const auto& translation : tree.get_child("Dictionary"))
   {
     int i = 0;
     QString from;
-    for (pt::ptree::value_type& t : translation.second.get_child(""))
+    for (const auto& t : translation.second.get_child(""))
     {
       std::string s = t.second.data();
       if (i == 0)

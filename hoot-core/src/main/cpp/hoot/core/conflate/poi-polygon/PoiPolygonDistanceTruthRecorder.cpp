@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonDistanceTruthRecorder.h"
 
@@ -39,9 +39,9 @@ QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyMatchRefIdsToDi
 QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_poiReviewRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyReviewRefIdsToDistances;
 
-void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-  ConstElementPtr poi, ConstElementPtr poly, const QString& poiBestKvp,
-  const QString& polyBestKvp, const double elementDistance)
+void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(ConstElementPtr poi, ConstElementPtr poly,
+                                                          const QString& poiBestKvp, const QString& polyBestKvp,
+                                                          const double elementDistance)
 {
   QString infoStr =
     "Recording distance truth for: " + poi->getElementId().toString() + " and " +
@@ -90,16 +90,14 @@ QString PoiPolygonDistanceTruthRecorder::getMatchDistanceInfo()
   return info;
 }
 
-QString PoiPolygonDistanceTruthRecorder::_getMatchDistanceInfo(
-  const QString& matchType, const QMultiMap<QString, double>& distanceInfo)
+QString PoiPolygonDistanceTruthRecorder::_getMatchDistanceInfo(const QString& matchType,
+                                                               const QMultiMap<QString, double>& distanceInfo)
 {
   if (distanceInfo.isEmpty())
-  {
     return matchType.toUpper() + ": no matches\n";
-  }
 
   QString info;
-  foreach (QString type, distanceInfo.uniqueKeys())
+  for (const auto& type : distanceInfo.uniqueKeys())
   {
     LOG_VART(type);
     if (!type.trimmed().isEmpty())
@@ -114,9 +112,8 @@ QString PoiPolygonDistanceTruthRecorder::_getMatchDistanceInfo(
       LOG_VART(distances);
       double sumDist = 0.0;
       QString distancesStr = "";
-      for (QList<double>::const_iterator itr = distances.begin(); itr != distances.end(); ++itr)
+      for (auto dist : qAsConst(distances))
       {
-        const double dist = *itr;
         maxDistance = max(maxDistance, dist);
         minimumDistance = min(minimumDistance, dist);
         sumDist += dist;

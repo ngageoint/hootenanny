@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesLoginManager.h"
@@ -36,7 +36,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 // Qt
 #include <QUrl>
@@ -57,9 +56,7 @@ QString HootServicesLoginManager::getBaseUrl()
   QString url = "http://" + opts.getHootServicesAuthHost();
   const int port = opts.getHootServicesAuthPort();
   if (port != 80)
-  {
     url += ":" + QString::number(port);
-  }
   return url + "/hoot-services";
 }
 
@@ -111,9 +108,8 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
 QString HootServicesLoginManager::promptForAuthorizationVerifier() const
 {
   std::string consoleInput;
-  std::cout <<
-    "1. Using the authorization URL shown above, authenticate through the 3rd party " <<
-    "application." << std::endl;
+  std::cout << "1. Using the authorization URL shown above, authenticate through the 3rd party "
+            <<  "application." << std::endl;
   std::cout << "2. Grant Hootenanny access to the application." << std::endl;
   std::cout << "3. Copy and paste your verifier code from the browser here and press ENTER: ";
   std::getline(std::cin, consoleInput);
@@ -196,9 +192,7 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
 
   LOG_VART(db.userExists(userId));
   if (!db.userExists(userId))
-  {
     throw HootException("User does not exist. ID: " + QString::number(userId));
-  }
 
   accessToken = db.getAccessTokenByUserId(userId);
   LOG_VARD(accessToken);
@@ -215,13 +209,10 @@ bool HootServicesLoginManager::logout(const QString& userName, const QString& ac
   db.open(url);
 
   if (!db.userExists(userName))
-  {
     throw HootException("User does not exist. user name:" + userName);
-  }
+
   if (!db.accessTokensAreValid(userName, accessToken, accessTokenSecret))
-  {
     throw HootException("Unable to log out user: " + userName + ".  Invalid access tokens.");
-  }
 
   // log the user out
   HootNetworkRequest logoutRequest;
@@ -234,9 +225,7 @@ bool HootServicesLoginManager::logout(const QString& userName, const QString& ac
     throw HootException("Error logging out user: " + userName + ". error: " + e.what());
   }
   if (logoutRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
-  {
     return false;
-  }
 
   // The services invalidate the http session associated with the user account on a logout but
   // don't remove the user account record.  If the user account record isn't removed here, then the

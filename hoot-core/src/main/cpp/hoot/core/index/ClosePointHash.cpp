@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ClosePointHash.h"
@@ -69,7 +69,7 @@ void ClosePointHash::addPoint(double x, double y, long id)
 void ClosePointHash::updatePoint(double x, double y, long id)
 {
   //  Iterate all bins associated with this ID
-  foreach (int64_t binIx, _idTobin[id])
+  for (auto binIx : _idTobin[id])
   {
     vector<long>& v = _bins[binIx];
     v.erase(std::remove(v.begin(), v.end(), id));
@@ -89,10 +89,8 @@ vector<long> ClosePointHash::getMatchesFor(long id)
 {
   vector<long> ids;
 
-  foreach (int64_t binIx, _idTobin[id])
-  {
+  for (auto binIx : _idTobin[id])
     ids.insert(ids.end(), _bins[binIx].begin(), _bins[binIx].end());
-  }
 
   // remove duplicates
   sort(ids.begin(), ids.end());

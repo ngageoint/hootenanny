@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_SERVICES_LOGIN_MANAGER_H
@@ -69,8 +69,7 @@ public:
    * @paraqm userName populated user name for the authenticated user
    * @return ID of the authenticated user
    */
-  long verifyUserAndLogin(
-    const QString& requestToken, const QString& verifier, QString& userName) const;
+  long verifyUserAndLogin(const QString& requestToken, const QString& verifier, QString& userName) const;
 
   /**
    * Retrieves OAuth access tokens for an authenticated user
@@ -89,8 +88,7 @@ public:
    * @param accessTokenSecret the OAuth private access token for the user
    * @return true if the logout was successful; false otherwise
    */
-  bool logout(
-    const QString& userName, const QString& accessToken, const QString& accessTokenSecret) const;
+  bool logout(const QString& userName, const QString& accessToken, const QString& accessTokenSecret) const;
 
   /**
    * Returns the base URL used to access Hootenanny Web Services

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -213,6 +213,13 @@ private:
    * For use with older data not necessarily in WGS84.
    */
   void _parseCoordSys();
+
+  long _getVersion(const boost::property_tree::ptree& item, ElementType::Type type, long id) const override;
+  long _getChangeset(const boost::property_tree::ptree& item) const override;
+  unsigned int _getTimestamp(const boost::property_tree::ptree& item) const override;
+  std::string _getUser(const boost::property_tree::ptree& item) const override;
+  long _getUid(const boost::property_tree::ptree& item) const override;
+
 };
 
 }

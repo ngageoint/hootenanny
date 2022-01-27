@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NetworkMergerCreator.h"
 
@@ -46,14 +46,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 
-NetworkMergerCreator::NetworkMergerCreator() :
-_map(nullptr),
-_minMatchOverlapPercentage(ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage())
+NetworkMergerCreator::NetworkMergerCreator()
+  : _map(nullptr),
+    _minMatchOverlapPercentage(ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage())
 {
 }
 
-bool NetworkMergerCreator::createMergers(
-  const MatchSet& matchesIn, vector<MergerPtr>& mergers) const
+bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<MergerPtr>& mergers) const
 {
   LOG_DEBUG("Creating mergers with " << className() << "...");
   LOG_TRACE("Creating mergers for match set: " << matchesIn);
@@ -61,13 +60,11 @@ bool NetworkMergerCreator::createMergers(
   QString matchesList = "";
   if (Log::Trace == Log::getInstance().getLevel())
   {
-    for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
+    for (const auto& matchPtr : matchesIn)
     {
-      const NetworkMatch* match = dynamic_cast<const NetworkMatch*>(it->get());
+      const NetworkMatch* match = dynamic_cast<const NetworkMatch*>(matchPtr.get());
       if (match)
-      {
         matchesList += match->getEdgeMatch()->getUid() + " ";
-      }
     }
   }
   LOG_VART(matchesList.size());
@@ -92,7 +89,7 @@ bool NetworkMergerCreator::createMergers(
       QSet<ConstEdgeMatchPtr> edgeMatches;
       int count = 0;
       set<pair<ElementId, ElementId>> pairs;
-      foreach (ConstMatchPtr itm, matches)
+      for (const auto& itm : matches)
       {
         const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm.get());
         edgeMatches.insert(nm->getEdgeMatch());
@@ -142,12 +139,11 @@ bool NetworkMergerCreator::createMergers(
         {
           LOG_DEBUG("Marking " << matches.size() << " overlapping matches for review...");
           int count = 0;
-          for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+          for (auto it = matches.begin(); it != matches.end(); ++it)
           {
             set<pair<ElementId, ElementId>> s = (*it)->getMatchPairs();
             set<ElementId> eids;
-            for (set<pair<ElementId, ElementId>>::const_iterator jt = s.begin(); jt != s.end();
-                 ++jt)
+            for (auto jt = s.begin(); jt != s.end(); ++jt)
             {
               eids.insert(jt->first);
               eids.insert(jt->second);
@@ -202,11 +198,11 @@ bool NetworkMergerCreator::_containsOverlap(const MatchSet& matches) const
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(matches.begin()->get());
   if (m)
   {
-    for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    for (auto it = matches.begin(); it != matches.end(); ++it)
     {
       const NetworkMatch* match1 = dynamic_cast<const NetworkMatch*>(it->get());
 
-      MatchSet::const_iterator jt = it;
+      auto jt = it;
       for (++jt; jt != matches.end(); ++jt)
       {
         const NetworkMatch* match2 = dynamic_cast<const NetworkMatch*>(jt->get());
@@ -242,11 +238,11 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
   double count = 0;
   double total = 0;
 
-  for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  for (auto it = matches.begin(); it != matches.end(); ++it)
   {
     const NetworkMatch* match1 = dynamic_cast<const NetworkMatch*>(it->get());
 
-    MatchSet::const_iterator jt = it;
+    auto jt = it;
     for (++jt; jt != matches.end(); ++jt)
     {
       const NetworkMatch* match2 = dynamic_cast<const NetworkMatch*>(jt->get());
@@ -295,13 +291,11 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
 
   double count = 0.0;
   double total = 0.0;
-  foreach (EdgeString::EdgeEntry ee, m1e1)
+  for (auto& ee : m1e1)
   {
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);
     if (m2e1.contains(ee))
-    {
       count += edgeLen;
-    }
     else // try the reverse
     {
       ee.reverse();
@@ -312,7 +306,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     total += edgeLen;
   }
 
-  foreach (EdgeString::EdgeEntry ee, m1e2)
+  for (auto& ee : m1e2)
   {
     pMap = _map->shared_from_this();
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);
@@ -345,7 +339,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargest(const MatchSet& matches) c
 
   const NetworkMatch* largest = dynamic_cast<const NetworkMatch*>(matches.begin()->get());
   double longestLen = 0.0;
-  foreach (ConstMatchPtr m, matches)
+  for (const auto& m : matches)
   {
     const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m.get());
 
@@ -367,7 +361,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
   const NetworkMatch* largest = _getLargest(matches);
 
   // Figure out if the largest contains the rest
-  foreach (ConstMatchPtr m, matches)
+  for (const auto& m : matches)
   {
     const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m.get());
     if (nm != largest && largest->getEdgeMatch()->contains(nm->getEdgeMatch()) == false)
@@ -381,14 +375,12 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
   return largest;
 }
 
-bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
+bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                                         const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   bool result = false;
   if (dynamic_cast<const NetworkMatch*>(m1.get()) || dynamic_cast<const NetworkMatch*>(m2.get()))
-  {
     result = m1->isConflicting(m2, map);
-  }
   return result;
 }
 

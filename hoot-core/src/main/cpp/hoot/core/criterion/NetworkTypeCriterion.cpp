@@ -22,47 +22,41 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NetworkTypeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NetworkTypeCriterion)
 
-NetworkTypeCriterion::NetworkTypeCriterion(ConstOsmMapPtr map) :
-_map(map)
+NetworkTypeCriterion::NetworkTypeCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
 bool NetworkTypeCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   if (element->getElementType() != ElementType::Way)
-  {
     return false;
-  }
 
   if (NodeMatcher::isNetworkFeatureType(element))
-  {
     return true;
-  }
 
   // If the element itself wasn't a network type, see if it belongs to a relation that is.
   const std::set<long>& relations =
     _map->getIndex().getElementToRelationMap()->getRelationByElement(element->getElementId());
   LOG_VART(relations.size());
-  foreach (long relationId, relations)
+  for (auto relationId : relations)
   {
     if (NodeMatcher::isNetworkFeatureType(_map->getRelation(relationId)))
-    {
       return true;
-    }
   }
 
   return false;

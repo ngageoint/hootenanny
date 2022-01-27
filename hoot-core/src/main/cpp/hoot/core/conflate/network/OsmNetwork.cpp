@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmNetwork.h"
 
@@ -38,10 +38,9 @@ void OsmNetwork::addEdge(NetworkEdgePtr edge)
   {
     throw IllegalArgumentException("Please add the vertices on an edge before adding the edge.");
   }
-  foreach (const ConstElementPtr& e, edge->getMembers())
-  {
+  for (const auto& e : edge->getMembers())
     _eidToEdge.insert(e->getElementId(), edge);
-  }
+
   _vertexToEdge.insertMulti(edge->getFrom(), edge);
   _vertexToEdge.insertMulti(edge->getTo(), edge);
   _edges.append(edge);
@@ -67,21 +66,16 @@ ConstNetworkVertexPtr OsmNetwork::getSingleVertex(ElementId eid) const
     throw IllegalArgumentException("Expected to receive a single vertex, but got more than one.");
   }
   else if (vertices.size() == 1)
-  {
     return vertices[0];
-  }
   else
-  {
     return ConstNetworkVertexPtr();
-  }
 }
 
 void OsmNetwork::removeEdge(ConstNetworkEdgePtr edge)
 {
-  foreach (const ConstElementPtr& e, edge->getMembers())
-  {
+  for (const auto& e : edge->getMembers())
     _eidToEdge.remove(e->getElementId(), edge);
-  }
+
   _vertexToEdge.remove(edge->getFrom(), edge);
   _vertexToEdge.remove(edge->getTo(), edge);
   _edges.removeAll(edge);
@@ -104,7 +98,7 @@ QString OsmNetwork::toString()
 
   QSet<ElementId> touchedVertices;
 
-  foreach (const ConstNetworkEdgePtr& e, _edges)
+  for (const auto& e : _edges)
   {
     result << e->toString();
     touchedVertices.insert(e->getFrom()->getElementId());
@@ -114,10 +108,8 @@ QString OsmNetwork::toString()
   QSet<ElementId> untouchedVertices = QSet<ElementId>::fromList(_eidToVertex.keys()).
     subtract(touchedVertices);
 
-  foreach (const ElementId& eid, untouchedVertices)
-  {
+  for (const auto& eid : untouchedVertices)
     result << hoot::toString(_eidToVertex.values(eid));
-  }
 
   return result.join("\n");
 }
