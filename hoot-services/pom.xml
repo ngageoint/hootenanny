@@ -48,7 +48,7 @@
         <spring.security.version>5.2.11.RELEASE</spring.security.version>
         <tika.version>1.26</tika.version>
         <xalan.version>2.7.2</xalan.version>
-        <xercesImpl.version>2.12.1</xercesImpl.version>
+        <xercesImpl.version>2.12.2</xercesImpl.version>
 
         <!-- test -->
         <cpsuite.version>1.2.6</cpsuite.version>
