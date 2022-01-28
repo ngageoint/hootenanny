@@ -52,6 +52,13 @@
     },
     {
         "categories": [],
+        "geometries": ["linestring", "area"],
+        "isA": "man_made",
+        "name": "man_made=shoreline_construction",
+        "objectType": "tag"
+    },
+    {
+        "categories": [],
         "geometries": [ "linestring" ],
         "isA": "man_made",
         "name": "man_made=causeway",
