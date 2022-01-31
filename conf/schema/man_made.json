@@ -45,7 +45,7 @@
     },
     {
         "categories": [],
-        "geometries": ["linestring", "area"],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=breakwater",
         "objectType": "tag"
@@ -55,6 +55,13 @@
         "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=shoreline_construction",
+        "objectType": "tag"
+    },
+    {
+        "categories": [],
+        "geometries": ["linestring"],
+        "isA": "man_made",
+        "name": "man_made=cut_edge",
         "objectType": "tag"
     },
     {

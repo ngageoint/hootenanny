@@ -147,6 +147,7 @@ mgcp.rules = {
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','BH170','natural','waterhole'], // Natural Pool
     ['F_CODE','DB090','embankment','berm'],
     ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','DB090','embankment','fill'],
@@ -366,8 +367,8 @@ mgcp.rules = {
 
     // COD - Delineation Known
     // ['COD','1000','raw:COD','limits_and_information_unknown'], // Limits and Information Unknown
-    ['COD','1000','deliniation','unknown'], // Limits and Information Unknown
-    ['COD','1001','deliniation','known'], // Limits and Information Known
+    ['COD','1000','delineation','unknown'], // Limits and Information Unknown
+    ['COD','1001','delineation','known'], // Limits and Information Known
 
     //CON - Road Width Constriction Type
     ['CON','35','junction','yes'],
@@ -1142,7 +1143,7 @@ mgcp.rules = {
     // ['SWT','0',undefined,undefined], // Unknown
     ['SWT','0','spring:type','unknown'], // Unknown
     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
-    ['SWT','5','water','water-hole'], // Water-hole
+    ['SWT','5','natural','waterhole'], // Water-hole
     ['SWT','999','spring:type','other'], // Other
 
     // TID - Tide Influenced
@@ -2336,7 +2337,8 @@ mgcp.rules = {
     // ##### End of dropList #####
 
     // Attribute names to swap on input. These are to avoid having copies of the same translation.
-    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC'},
+    // swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC','LEN_':'LEN'},
+    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC','LEN_':'LEN'},
 
     // Swap attribute values on export.
     // Format is: <FCODE>:{<from>:<to>}

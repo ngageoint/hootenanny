@@ -688,10 +688,10 @@ ufd = {
     ['COC','Inconspicuous','conspicuous','no'], // Inconspicuous
 
     // COD - Certainty of Delineation
-    ['COD','1','deliniation','known'], // Limits and Information Known
-    ['COD','Limits and Information Known','deliniation','known'], // Limits and Information Known
-    ['COD','2','deliniation','unknown'], // Limits and Information Unknown
-    ['COD','Limits and Information Unknown','deliniation','unknown'], // Limits and Information Unknown
+    ['COD','1','delineation','known'], // Limits and Information Known
+    ['COD','Limits and Information Known','delineation','known'], // Limits and Information Known
+    ['COD','2','delineation','unknown'], // Limits and Information Unknown
+    ['COD','Limits and Information Unknown','delineation','unknown'], // Limits and Information Unknown
     ['COD','997',undefined,undefined], // Unpopulated
 
     //COE - Certainty of Existence - Really???
@@ -2421,8 +2421,8 @@ ufd = {
     ['SWT','Fumarole','natural','fumarole'], // Fumarole
     ['SWT','4','natural','artesian'], // Artesian
     ['SWT','Artesian','natural','artesian'], // Artesian
-    ['SWT','5','natural','water-hole'], // Water-hole
-    ['SWT','Water-hole','natural','water-hole'], // Water-hole
+    ['SWT','5','natural','waterhole'], // Water-hole
+    ['SWT','Water-hole','natural','waterhole'], // Water-hole
     ['SWT','6','natural','walled-in_spring'], // Walled-In Spring
     ['SWT','Walled-In Spring','natural','walled-in_spring'], // Walled-In Spring
 

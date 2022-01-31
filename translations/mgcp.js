@@ -1053,6 +1053,17 @@ mgcp = {
       tags.natural = 'water';
       break;
 
+    // BA041 - Breakwater
+    case 'BB041':
+      // Differentiate between Line and Area breakwaters
+      if (geometryType == 'Area')
+      {
+        // Debug
+        // print('Adding area=yes');
+        tags.area = 'yes';
+      }
+      break;
+
     // BB190 - Berthing Structure
     case 'BB190':
       if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
@@ -2214,7 +2225,7 @@ mgcp = {
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
-        || '';
+        || 'UNK';
 
     // Chop the milliseconds off the "source:datetime"
     if (attrs.SDV)
@@ -2228,7 +2239,7 @@ mgcp = {
       attrs.SDP = tags['source:imagery']
         || tags['source:description']
         || tags['source:name']
-        || '';
+        || 'N_A';
 
     // Fix up SRT values so we comply with the spec. These values came from data files
     // Format is: orig:new

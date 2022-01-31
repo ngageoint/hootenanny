@@ -97,6 +97,7 @@ tds70.rules = {
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
+    ['F_CODE','BH082','natural','waterhole'], // Water-hole
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
@@ -1841,7 +1842,7 @@ tds70.rules = {
     ['IWT','3','water','undifferentiated_water_body'], // Undifferentiated Water Body
     ['IWT','4','water','reservoir'], // Reservoir
     ['IWT','5','landuse','basin'], // Basin
-    ['IWT','6','water','water-hole'], // Water-hole
+    ['IWT','6','natural','waterhole'], // Water-hole
     ['IWT','7','water','landlocked_sea'], // Landlocked Sea
     ['IWT','999','water','other'], // Other
 

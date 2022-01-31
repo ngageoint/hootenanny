@@ -784,7 +784,7 @@ geonames = {
         'WTLDI':{'natural':'wetland','intermittent':'yes'}, //  intermittent wetland:
         'WTLD':{'natural':'wetland'}, //  wetland: an area subject to inundation, usually characterized by bog, marsh, or swamp vegetation
         'WTRC':{'waterway':'river'}, //  watercourse: a natural, well-defined channel produced by flowing water, or an artificial channel designed to carry flowing water
-        'WTRH':{'landuse':'pond'}, //  waterhole(s): a natural hole, hollow, or small depression that contains water, used by man and animals, especially in arid areas
+        'WTRH':{'natural':'waterhole'}, //  waterhole(s): a natural hole, hollow, or small depression that contains water, used by man and animals, especially in arid areas
         'WTRW':{'man_made':'water_works'}, //  waterworks: a facility for supplying potable water through a water source and a system of pumps and filtration beds
         'ZNB':{'place':'buffer_zone'}, //  buffer zone: a zone recognized as a buffer between two nations in which military presence is minimal or absent
         'ZNF':{'place':'free_trade_zone'}, //  free trade zone: an area, usually a section of a port, where goods may be received and shipped free of customs duty and of most customs regulations

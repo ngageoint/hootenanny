@@ -1582,7 +1582,7 @@ gifd.rules = {
     ['EXS','57','existance','sonar_confirmed'], // Sonar Confirmed
     ['EXS','58','existance','sonar_not_confirmed'], // Sonar Not Confirmed
     ['EXS','59','operational_status','not_usable'], // Not Usable
-    ['EXS','60','shoreline:deliniated','no'], // Indefinite (Shoreline)
+    ['EXS','60','shoreline:delineated','no'], // Indefinite (Shoreline)
     ['EXS','62','operational_status','partially_destroyed'], // Partially Destroyed
     ['EXS','66','condition','damaged'], // Damaged
     ['EXS','997',undefined,undefined], // Unpopulated
@@ -4368,7 +4368,7 @@ gifd.rules = {
     ['SWT','2','natural','hot_spring'], // Hot Spring
     ['SWT','3','natural','fumarole'], // Fumarole
     ['SWT','4','natural','artesian'], // Artesian
-    ['SWT','5','water','water-hole'], // Water-hole
+    ['SWT','5','water','waterhole'], // Water-hole
     ['SWT','6','spring:type','walled-in'], // Walled-In Spring
     ['SWT','997',undefined,undefined], // Unpopulated
 
