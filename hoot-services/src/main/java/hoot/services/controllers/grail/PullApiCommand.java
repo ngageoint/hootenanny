@@ -165,6 +165,8 @@ public class PullApiCommand implements InternalCommand {
 
         String[] splitUrl = url.split("data=");
         HttpPost post = new HttpPost(splitUrl[0]);
+        logger.info(splitUrl[0]);
+        logger.info(splitUrl[1]);
 
         // Just a safety check but splitUrl[1] should be the query data
         if (splitUrl.length == 2) {
@@ -230,7 +232,7 @@ public class PullApiCommand implements InternalCommand {
         } else if (newQuery.lastIndexOf("out count;") != -1) {
             newQuery = newQuery.substring(0, newQuery.lastIndexOf("out count;")) + connectedWaysQuery;
         }
-        logger.info(newQuery);
+
         return newQuery;
     }
 }

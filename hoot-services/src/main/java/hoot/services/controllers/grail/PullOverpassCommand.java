@@ -168,6 +168,8 @@ class PullOverpassCommand implements InternalCommand {
             HttpURLConnection connection = (HttpURLConnection) urlReq.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
+            logger.info(splitUrl[0]);
+            logger.info(splitUrl[1]);
 
             // Just a safety check but splitUrl[1] should be the query data
             if (splitUrl.length == 2) {
