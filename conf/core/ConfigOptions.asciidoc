@@ -3819,6 +3819,14 @@ hoot convert \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ----
 
+=== ogr.writer.skip.failed.relations
+
+* Data Type: bool
+* Default Value: `false`
+
+When writing relations to OGR files, incomplete relations can cause errors setting this to
+true, the writer will ignore the errors and continue to output the results.
+
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
 * Data Type: bool
