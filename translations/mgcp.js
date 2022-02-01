@@ -2221,11 +2221,16 @@ mgcp = {
     //Map alternate source date tags to SDV in order of precedence
     //default in mgcp_rules is 'source:datetime'
     if (! attrs.SDV || attrs.SDV == 'UNK')
+    {
       attrs.SDV = tags['source:imagery:datetime']
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
         || 'UNK';
+
+      // UNK is the default value. OGR export will populate it.
+      if (attrs.SDV == 'UNK') delete attrs.SDV;
+    }
 
     // Chop the milliseconds off the "source:datetime"
     if (attrs.SDV)
@@ -2236,10 +2241,15 @@ mgcp = {
     //Map alternate source tags to ZI001_SDP in order of precedence
     //default in mgcp_rules is 'source'
     if (! attrs.SDP || attrs.SDP == 'N_A')
+    {
       attrs.SDP = tags['source:imagery']
         || tags['source:description']
         || tags['source:name']
         || 'N_A';
+
+      // N_A is the default value. OGR export will populate it.
+      if (attrs.SDP == 'N_A') delete attrs.SDP;
+    }
 
     // Fix up SRT values so we comply with the spec. These values came from data files
     // Format is: orig:new
