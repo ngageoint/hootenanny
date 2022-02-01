@@ -1109,8 +1109,8 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
   LOG_STATUS("Reading: " << _layerName.toLatin1().data() << "...");
 
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  OGRFeature* f;
-  while ((f = _layer->GetNextFeature()) != nullptr && (_limit == -1 || _count < _limit))
+  OGRFeature* f = _layer->GetNextFeature();
+  while (f != nullptr && (_limit == -1 || _count < _limit))
   {
     _addFeature(f);
     OGRFeature::DestroyFeature(f);
@@ -1130,6 +1130,8 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
         StringUtils::formatLargeNumber(_featureCount) + " features from layer: " +
         _layerName.toLatin1().data(), true);
     }
+
+    f = _layer->GetNextFeature();
   }
 }
 
