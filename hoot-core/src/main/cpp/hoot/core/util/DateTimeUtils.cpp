@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DateTimeUtils.h"
@@ -48,10 +48,9 @@ quint64 DateTimeUtils::fromTimeString(QString timestamp)
   //2016-05-04T22:07:19Z
   static QRegularExpression timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z*",
                                            QRegularExpression::OptimizeOnFirstUsageOption);
+
   if (!timestampRegex.match(timestamp).hasMatch())
-  {
     throw IllegalArgumentException("Invalid timestamp string: " + timestamp);
-  }
 
   struct tm t;
   strptime(timestamp.toStdString().c_str(), "%Y-%m-%dT%H:%M:%SZ", &t);

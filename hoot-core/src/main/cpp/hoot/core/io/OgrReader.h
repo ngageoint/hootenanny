@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -79,9 +79,8 @@ public:
    * @param jobSource optional job name for status reporting
    * @param numTasks optional number of job tasks being performed for status reporting
    */
-  void read(
-    const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource = "",
-    const int numTasks = -1);
+  void read(const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource = "",
+            const int numTasks = -1);
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
@@ -100,8 +99,7 @@ public:
    * Returns the bounding box for the specified projection and configuration settings. This is
    * likely only useful in unit tests.
    */
-  virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(
-    const Settings& s, const OGRSpatialReference* srs);
+  virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s, const OGRSpatialReference* srs);
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
@@ -132,8 +130,7 @@ private:
    * feature size. If the feature size hasn't already been calculated for each layer, then a even
    * distribution of weighting between layers is returned.
    */
-  std::vector<float> _getInputProgressWeights(
-    const QString& input, const QStringList& layers) const;
+  std::vector<float> _getInputProgressWeights(const QString& input, const QStringList& layers) const;
   /*
    * Determines the list of layers in an OGR input. The reader must already have been initialized.
    */

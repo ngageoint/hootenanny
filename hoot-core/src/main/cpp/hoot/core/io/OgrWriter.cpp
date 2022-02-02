@@ -469,11 +469,6 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
 
       switch (member_type)
       {
-      default:
-        //  Node and Way members throw if we don't force the skip
-        if (!_forceSkipFailedRelations)
-          throw HootException(msg);
-        break;
       case ElementType::Relation:
         //  Relation members throw that fail and aren't forced
         if (_failOnSkipRelation && !_forceSkipFailedRelations)
@@ -488,6 +483,11 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
           return;
         }
         break;
+      default:
+        //  Node and Way members throw if we don't force the skip
+        if (!_forceSkipFailedRelations)
+          throw HootException(msg);
+        break;
       }
       //  Add this member to the list to remove for OGR files
       removeEntries.insert(member);
@@ -496,9 +496,8 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
 
   ConstElementPtr constRelation(newRelation);
   //  Update the element to remove any non-existing members
-  if (removeEntries.size() > 0)
+  if (!removeEntries.empty())
   {
-
     std::vector<RelationData::Entry> newMembers;
     for (const auto& member : newRelation->getMembers())
     {
