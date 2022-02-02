@@ -277,7 +277,7 @@ mgcp = {
 
       default:
         // Debug
-        hoot.logWarn('ManyFeatures: Should not get to here');
+        hoot.logDebug('ManyFeatures: Should not get to here');
     } // end switch
 
     // Now make new features based on what tags are left
@@ -1053,7 +1053,7 @@ mgcp = {
       tags.natural = 'water';
       break;
 
-    // BA041 - Breakwater
+    // BB041 - Breakwater
     case 'BB041':
       // Differentiate between Line and Area breakwaters
       if (geometryType == 'Area')
