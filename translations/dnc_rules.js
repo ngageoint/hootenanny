@@ -494,8 +494,8 @@ dnc.rules = {
 
 
     // COD - Certainty of Delineation
-    ['COD','1','deliniation','known'], // Limits and Information Known
-    ['COD','2','deliniation','unknown'], // Limits and Information Unknown
+    ['COD','1','delineation','known'], // Limits and Information Known
+    ['COD','2','delineation','unknown'], // Limits and Information Unknown
 
 
     // CSM - Secondary Material Characteristics
