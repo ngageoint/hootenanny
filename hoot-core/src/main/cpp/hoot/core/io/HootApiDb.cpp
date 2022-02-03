@@ -61,11 +61,11 @@ namespace hoot
 
 int HootApiDb::logWarnCount = 0;
 
-HootApiDb::HootApiDb() :
-  _ignoreInsertConflicts(ConfigOptions().getMapMergeIgnoreDuplicateIds()),
-  _precision(ConfigOptions().getWriterPrecision()),
-  _createIndexesOnClose(true),
-  _flushOnClose(true)
+HootApiDb::HootApiDb()
+  : _ignoreInsertConflicts(ConfigOptions().getMapMergeIgnoreDuplicateIds()),
+    _precision(ConfigOptions().getWriterPrecision()),
+    _createIndexesOnClose(true),
+    _flushOnClose(true)
 {
   _init();
 }
@@ -123,9 +123,10 @@ Envelope HootApiDb::calculateEnvelope() const
 
   // if you're having performance issues read this:
   // http://www.postgresql.org/docs/8.0/static/functions-aggregate.html
-  QSqlQuery boundsQuery = _exec("SELECT MIN(latitude) as minLat, MAX(latitude) AS maxLat "
-                                ", MIN(longitude) as minLon, MAX(longitude) AS maxLon"
-                                " FROM " + getCurrentNodesTableName(mapId));
+  QSqlQuery boundsQuery =
+    _exec(QString("SELECT MIN(latitude) as minLat, MAX(latitude) AS maxLat "
+                  ", MIN(longitude) as minLon, MAX(longitude) AS maxLon"
+                  " FROM %1").arg(getCurrentNodesTableName(mapId)));
 
   if (boundsQuery.next())
   {
@@ -166,9 +167,8 @@ void HootApiDb::close()
   LOG_TRACE("Closing database connection...");
 
   if (_createIndexesOnClose)
-  {
     createPendingMapIndexes();
-  }
+
   if (_flushOnClose)
   {
     _flushBulkInserts();
@@ -193,24 +193,17 @@ void HootApiDb::commit()
   LOG_TRACE("Committing transaction...");
 
   if (_db.isOpen() == false)
-  {
     throw HootException("Tried to commit a transaction on a closed database.");
-  }
 
   if (_inTransaction == false)
-  {
-    throw HootException(QString("Tried to commit but weren't in a transaction.  You may ") +
-                        QString("need to set hootapi.db.writer.create.user=true."));
-  }
+    throw HootException(QString("Tried to commit but weren't in a transaction.  You may need to set hootapi.db.writer.create.user=true."));
 
   createPendingMapIndexes();
   _flushBulkInserts();
   _flushBulkDeletes();
   _resetQueries();
   if (!_db.commit())
-  {
     throw HootException("Error committing transaction: " + _db.lastError().text());
-  }
 
   _inTransaction = false;
 
@@ -229,17 +222,12 @@ void HootApiDb::_copyTableStructure(const QString& from, const QString& to) cons
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
-  QString sql = QString("CREATE TABLE %1 (LIKE %2 INCLUDING DEFAULTS INCLUDING CONSTRAINTS "
-      "INCLUDING INDEXES)").arg(to).arg(from);
+  QString sql = QString("CREATE TABLE %1 (LIKE %2 INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES)").arg(to, from);
   QSqlQuery q(_db);
 
   LOG_VART(sql);
   if (q.exec(sql) == false)
-  {
-    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
-        arg(sql);
-    throw HootException(error);
-  }
+    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
 }
 
 void HootApiDb::createPendingMapIndexes()
@@ -249,19 +237,15 @@ void HootApiDb::createPendingMapIndexes()
     LOG_DEBUG("Creating " << _pendingMapIndexes.size() << " map indexes...");
   }
 
-  for (int i = 0; i < _pendingMapIndexes.size(); i++)
+  for (auto mapId : _pendingMapIndexes)
   {
-    long mapId = _pendingMapIndexes[i];
-
     DbUtils::execNoPrepare(
       _db,
       QString("ALTER TABLE %1 "
         "ADD CONSTRAINT current_nodes_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
           "REFERENCES %3 (id) MATCH SIMPLE "
           "ON UPDATE NO ACTION ON DELETE NO ACTION ")
-          .arg(getCurrentNodesTableName(mapId))
-          .arg(getMapIdString(mapId))
-          .arg(getChangesetsTableName(mapId)));
+          .arg(getCurrentNodesTableName(mapId), getMapIdString(mapId), getChangesetsTableName(mapId)));
 
     DbUtils::execNoPrepare(
       _db,
@@ -274,9 +258,7 @@ void HootApiDb::createPendingMapIndexes()
         "ADD CONSTRAINT current_relations_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
           "REFERENCES %3 (id) MATCH SIMPLE "
           "ON UPDATE NO ACTION ON DELETE NO ACTION ")
-          .arg(getCurrentRelationsTableName(mapId))
-          .arg(getMapIdString(mapId))
-          .arg(getChangesetsTableName(mapId)));
+          .arg(getCurrentRelationsTableName(mapId), getMapIdString(mapId), getChangesetsTableName(mapId)));
 
     DbUtils::execNoPrepare(
       _db,
@@ -287,10 +269,8 @@ void HootApiDb::createPendingMapIndexes()
         "ADD CONSTRAINT current_way_nodes_way_id_fkey_%2 FOREIGN KEY (way_id) "
           "REFERENCES %4 (id) MATCH SIMPLE "
           "ON UPDATE NO ACTION ON DELETE NO ACTION")
-          .arg(getCurrentWayNodesTableName(mapId))
-          .arg(getMapIdString(mapId))
-          .arg(getCurrentNodesTableName(mapId))
-          .arg(getCurrentWaysTableName(mapId)));
+          .arg(getCurrentWayNodesTableName(mapId), getMapIdString(mapId),
+               getCurrentNodesTableName(mapId), getCurrentWaysTableName(mapId)));
 
     DbUtils::execNoPrepare(
       _db,
@@ -298,9 +278,7 @@ void HootApiDb::createPendingMapIndexes()
         "ADD CONSTRAINT current_ways_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
           "REFERENCES %3 (id) MATCH SIMPLE "
           "ON UPDATE NO ACTION ON DELETE NO ACTION ")
-          .arg(getCurrentWaysTableName(mapId))
-          .arg(getMapIdString(mapId))
-          .arg(getChangesetsTableName(mapId)));
+          .arg(getCurrentWaysTableName(mapId), getMapIdString(mapId), getChangesetsTableName(mapId)));
   }
 
   _pendingMapIndexes.clear();
@@ -339,7 +317,7 @@ void HootApiDb::deleteMap(long mapId) const
 bool HootApiDb::hasTable(const QString& tableName) const
 {
   QString sql = "SELECT 1 from pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON "
-      "n.oid = c.relnamespace WHERE c.relname = :name";
+                "n.oid = c.relnamespace WHERE c.relname = :name";
   QSqlQuery q = _exec(sql, tableName);
 
   return q.next();
@@ -355,11 +333,7 @@ void HootApiDb::dropTable(const QString& tableName) const
   QSqlQuery q(_db);
 
   if (q.exec(sql) == false)
-  {
-    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
-        arg(sql);
-    throw HootException(error);
-  }
+    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text(), sql));
 }
 
 void HootApiDb::dropSequence(const QString& sequenceName) const
@@ -372,19 +346,14 @@ void HootApiDb::dropSequence(const QString& sequenceName) const
   QSqlQuery q(_db);
 
   if (q.exec(sql) == false)
-  {
-    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
-        arg(sql);
-    throw HootException(error);
-  }
+    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text(), sql));
 }
 
 void HootApiDb::deleteUser(long userId)
 {
   LOG_TRACE("Deleting user: " << userId << "...");
 
-  QSqlQuery maps = _exec("SELECT id FROM " + getMapsTableName() +
-                         " WHERE user_id=:user_id", (qlonglong)userId);
+  QSqlQuery maps = _exec(QString("SELECT id FROM %1 WHERE user_id=:user_id").arg(getMapsTableName()), (qlonglong)userId);
 
   // delete all the maps owned by this user
   while (maps.next())
@@ -393,7 +362,7 @@ void HootApiDb::deleteUser(long userId)
     deleteMap(mapId);
   }
 
-  _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
+  _exec(QString("DELETE FROM %1 WHERE id=:id").arg(ApiDb::getUsersTableName()), (qlonglong)userId);
 }
 
 QString HootApiDb::_escapeTags(const Tags& tags)
@@ -401,7 +370,7 @@ QString HootApiDb::_escapeTags(const Tags& tags)
   QStringList l;
   static QChar f1('\\'), f2('"');
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  for (auto it = tags.begin(); it != tags.end(); ++it)
   {
     QString key = it.key();
     QString val = it.value().trimmed();
@@ -420,13 +389,9 @@ QString HootApiDb::_escapeTags(const Tags& tags)
 
   QString hstoreStr = l.join(",");
   if (!hstoreStr.isEmpty())
-  {
      hstoreStr = "hstore(ARRAY[" + hstoreStr + "])";
-  }
   else
-  {
      hstoreStr = "''";
-  }
   return hstoreStr;
 }
 
@@ -439,14 +404,11 @@ QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant 
   {
     QStringList row;
     for (int i = 0; i < q.record().count(); ++i)
-    {
       row.append(q.value(i).toString());
-    }
+
     l.append(row.join(";"));
   }
-
   q.finish();
-
   return l.join("\n");
 }
 
@@ -502,19 +464,13 @@ QString HootApiDb::getHootDbVersion()
   }
 
   if (_selectHootDbVersion->exec() == false)
-  {
     throw HootException(_selectHootDbVersion->lastError().text());
-  }
 
   QString result;
   if (_selectHootDbVersion->next())
-  {
     result = _selectHootDbVersion->value(0).toString();
-  }
   else
-  {
     throw HootException("Unable to retrieve the DB version.");
-  }
 
   return result;
 }
@@ -524,9 +480,8 @@ long HootApiDb::_getNextNodeId()
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
   if (_nodeIdReserver == nullptr)
-  {
     _nodeIdReserver = std::make_shared<InternalIdReserver>(_db, getCurrentNodesSequenceName(mapId));
-  }
+
   return _nodeIdReserver->getNextId();
 }
 
@@ -535,10 +490,8 @@ long HootApiDb::_getNextRelationId()
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
   if (_relationIdReserver == nullptr)
-  {
-    _relationIdReserver =
-      std::make_shared<InternalIdReserver>(_db, getCurrentRelationsSequenceName(mapId));
-  }
+    _relationIdReserver = std::make_shared<InternalIdReserver>(_db, getCurrentRelationsSequenceName(mapId));
+
   return _relationIdReserver->getNextId();
 }
 
@@ -547,9 +500,8 @@ long HootApiDb::_getNextWayId()
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
   if (_wayIdReserver == nullptr)
-  {
     _wayIdReserver = std::make_shared<InternalIdReserver>(_db, getCurrentWaysSequenceName(mapId));
-  }
+
   return _wayIdReserver->getNextId();
 }
 
@@ -575,10 +527,9 @@ void HootApiDb::beginChangeset(const Tags& tags)
     _insertChangeSet->prepare(
       QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
         "closed_at, tags) "
-        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), " +
-        _escapeTags(tags) + ") "
+        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), %2) "
         "RETURNING id")
-        .arg(getChangesetsTableName(mapId)));
+        .arg(getChangesetsTableName(mapId), _escapeTags(tags)));
   }
   _insertChangeSet->bindValue(":user_id", (qlonglong)userId);
   _insertChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
@@ -609,10 +560,9 @@ long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& 
     _insertChangeSet2->prepare(
       QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
         "closed_at, num_changes, tags) "
-        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :num_changes, " +
-        _escapeTags(tags) + ") "
+        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :num_changes, %2) "
         "RETURNING id")
-        .arg(getChangesetsTableName(mapId)));
+        .arg(getChangesetsTableName(mapId), _escapeTags(tags)));
   }
   _insertChangeSet2->bindValue(":user_id", (qlonglong)userId);
   _insertChangeSet2->bindValue(":min_lat", bounds.getMinY());
@@ -644,9 +594,7 @@ void HootApiDb::endChangeset()
 
   const long mapId = _currMapId;
   if (!changesetExists(_currChangesetId))
-  {
-    throw HootException("No changeset exists with ID: " + _currChangesetId);
-  }
+    throw HootException(QString("No changeset exists with ID: %1").arg(_currChangesetId));
 
   _checkLastMapId(mapId);
   if (_closeChangeSet == nullptr)
@@ -670,9 +618,9 @@ void HootApiDb::endChangeset()
     LOG_ERROR("query bound values: ");
     LOG_ERROR(_closeChangeSet->boundValues());
     LOG_ERROR("\n");
-    throw HootException("Error executing close changeset: " + _closeChangeSet->lastError().text() +
-                        " (SQL: " + _closeChangeSet->executedQuery() + ")" + " with envelope: " +
-                        QString::fromStdString(_changesetEnvelope.toString()));
+    throw HootException(
+      QString("Error executing close changeset: %1 (SQL: %2) with envelope: %3")
+        .arg(_closeChangeSet->lastError().text(), _closeChangeSet->executedQuery(), QString::fromStdString(_changesetEnvelope.toString())));
   }
 
   LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
@@ -686,15 +634,15 @@ long HootApiDb::insertMap(QString displayName)
 {
   LOG_TRACE("Inserting map...");
 
-  const int userId = _currUserId;
+  const int userId = static_cast<int>(_currUserId);
 
   if (_insertMap == nullptr)
   {
     _insertMap = std::make_shared<QSqlQuery>(_db);
-    _insertMap->prepare("INSERT INTO " + getMapsTableName() +
-                        " (display_name, user_id, public, created_at) "
-                        "VALUES (:display_name, :user_id, :public, NOW()) "
-                        "RETURNING id");
+    _insertMap->prepare(
+      QString("INSERT INTO %1 (display_name, user_id, public, created_at) "
+              "VALUES (:display_name, :user_id, :public, NOW()) "
+              "RETURNING id").arg(getMapsTableName()));
   }
   _insertMap->bindValue(":display_name", displayName);
   _insertMap->bindValue(":user_id", userId);
@@ -704,8 +652,7 @@ long HootApiDb::insertMap(QString displayName)
 
   _copyTableStructure(ApiDb::getChangesetsTableName(), getChangesetsTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentNodesTableName(), getCurrentNodesTableName(mapId));
-  _copyTableStructure(
-    ApiDb::getCurrentRelationMembersTableName(), getCurrentRelationMembersTableName(mapId));
+  _copyTableStructure(ApiDb::getCurrentRelationMembersTableName(), getCurrentRelationMembersTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentRelationsTableName(), getCurrentRelationsTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWayNodesTableName(), getCurrentWayNodesTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWaysTableName(), getCurrentWaysTableName(mapId));
@@ -714,27 +661,24 @@ long HootApiDb::insertMap(QString displayName)
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
+//TODO: %4 is an issue here, isn't it?
+  DbUtils::execNoPrepare(
+    _db,
+    QString("ALTER TABLE %1 "
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+        .arg(getCurrentNodesTableName(mapId), getCurrentNodesSequenceName(mapId)));
 
   DbUtils::execNoPrepare(
     _db,
     QString("ALTER TABLE %1 "
       "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
-        .arg(getCurrentNodesTableName(mapId))
-        .arg(getCurrentNodesSequenceName(mapId)));
+        .arg(getCurrentRelationsTableName(mapId), getCurrentRelationsSequenceName(mapId)));
 
   DbUtils::execNoPrepare(
     _db,
     QString("ALTER TABLE %1 "
       "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
-        .arg(getCurrentRelationsTableName(mapId))
-        .arg(getCurrentRelationsSequenceName(mapId)));
-
-  DbUtils::execNoPrepare(
-    _db,
-    QString("ALTER TABLE %1 "
-      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
-        .arg(getCurrentWaysTableName(mapId))
-        .arg(getCurrentWaysSequenceName(mapId)));
+        .arg(getCurrentWaysTableName(mapId), getCurrentWaysSequenceName(mapId)));
 
   // remove the index to speed up inserts. It'll be added back by createPendingMapIndexes
   DbUtils::execNoPrepare(
@@ -783,13 +727,9 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   v.append(DateTimeUtils::currentTimeAsString());
   v.append(tileForPoint(lat, lon));
   if (version == 0)
-  {
     v.append((qlonglong)1);
-  }
   else
-  {
     v.append((qlonglong)version);
-  }
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -800,9 +740,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   _nodesInsertElapsed += Tgs::Time::getTime() - start;
 
   if (_nodeBulkInsert->getPendingCount() >= _nodesPerBulkInsert)
-  {
     _nodeBulkInsert->flush();
-  }
 
   ConstNodePtr envelopeNode = std::make_shared<Node>(Status::Unknown1, id, lon, lat, 0.0);
   _updateChangesetEnvelope(envelopeNode);
@@ -846,13 +784,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
   v.append((qlonglong)_currChangesetId);
   v.append(DateTimeUtils::currentTimeAsString());
   if (version == 0)
-  {
     v.append((qlonglong)1);
-  }
   else
-  {
     v.append((qlonglong)version);
-  }
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -882,9 +816,9 @@ bool HootApiDb::insertRelationMember(const long relationId, const ElementType& t
   {
     _insertRelationMembers = std::make_shared<QSqlQuery>(_db);
     _insertRelationMembers->prepare(
-      "INSERT INTO " + getCurrentRelationMembersTableName(mapId) +
-        " (relation_id, member_type, member_id, member_role, sequence_id) "
-      "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)");
+      QString("INSERT INTO %1 (relation_id, member_type, member_id, member_role, sequence_id) "
+              "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)")
+          .arg(getCurrentRelationMembersTableName(mapId)));
   }
 
   _insertRelationMembers->bindValue(":relation_id", (qlonglong)relationId);
@@ -894,10 +828,8 @@ bool HootApiDb::insertRelationMember(const long relationId, const ElementType& t
   _insertRelationMembers->bindValue(":sequence_id", sequenceId);
 
   if (!_insertRelationMembers->exec())
-  {
-    throw HootException("Error inserting relation member: " +
-      _insertRelationMembers->lastError().text());
-  }
+    throw HootException(QString("Error inserting relation member: %1").arg(_insertRelationMembers->lastError().text()));
+
   return true;
 }
 
@@ -914,18 +846,14 @@ long HootApiDb::getOrCreateUser(QString email, QString displayName, bool admin)
       {
         _setUserAsAdmin = std::make_shared<QSqlQuery>(_db);
         _setUserAsAdmin->prepare(
-          "UPDATE " + getUsersTableName() +
-          " SET privileges = privileges || '\"admin\"=>\"true\"' :: hstore"
-          " WHERE id=:id;");
+          QString("UPDATE %1 SET privileges = privileges || '\"admin\"=>\"true\"' :: hstore"
+                  " WHERE id=:id;").arg(getUsersTableName()));
       }
       //  Add the "admin => true" value to the HSTORE
       _setUserAsAdmin->bindValue(":id", (qlonglong)result);
 
       if (!_setUserAsAdmin->exec())
-      {
-        throw HootException("Error setting user as admin: " +
-          _setUserAsAdmin->lastError().text());
-      }
+        throw HootException(QString("Error setting user as admin: %1").arg(_setUserAsAdmin->lastError().text()));
     }
   }
 
@@ -951,25 +879,21 @@ long HootApiDb::_insertRecord(QSqlQuery& query) const
 {
   if (query.exec() == false)
   {
-    QString err = QString("Error executing query: %1 (%2)").arg(query.executedQuery()).
-        arg(query.lastError().text());
+    QString err = QString("Error executing query: %1 (%2)").arg(query.executedQuery(), query.lastError().text());
     LOG_ERROR(err);
     throw HootException(err);
   }
   bool ok = false;
   long id = -1;
   if (query.next())
-  {
     id = query.value(0).toLongLong(&ok);
-  }
 
   if (!ok || id == -1)
   {
     LOG_ERROR("query bound values: ");
     LOG_ERROR(query.boundValues());
     LOG_ERROR("\n");
-    throw HootException("Error retrieving new ID " + query.lastError().text() + " Query: " +
-      query.executedQuery());
+    throw HootException(QString("Error retrieving new ID %1 Query: %2").arg(query.lastError().text(), query.executedQuery()));
   }
 
   query.finish();
@@ -983,9 +907,7 @@ bool HootApiDb::isSupported(const QUrl& url) const
 
   //postgresql is deprecated but still supported
   if (url.scheme() != MetadataTags::HootApiDbScheme() && url.scheme() != "postgresql")
-  {
     valid = false;
-  }
 
   if (valid)
   {
@@ -1024,11 +946,8 @@ bool HootApiDb::isSupported(const QUrl& url) const
       }
     }
     else
-    {
       valid = false;
-    }
   }
-
   return valid;
 }
 
@@ -1037,26 +956,16 @@ void HootApiDb::_lazyFlushBulkInsert() const
   bool flush = false;
 
   if (_nodeBulkInsert && _nodeBulkInsert->getPendingCount() > _nodesPerBulkInsert)
-  {
     flush = true;
-  }
-  if (_wayNodeBulkInsert && _wayNodeBulkInsert->getPendingCount() > _wayNodesPerBulkInsert)
-  {
+  else if (_wayNodeBulkInsert && _wayNodeBulkInsert->getPendingCount() > _wayNodesPerBulkInsert)
     flush = true;
-  }
-  if (_wayBulkInsert && _wayBulkInsert->getPendingCount() > _waysPerBulkInsert)
-  {
+  else if (_wayBulkInsert && _wayBulkInsert->getPendingCount() > _waysPerBulkInsert)
     flush = true;
-  }
-  if (_relationBulkInsert && _relationBulkInsert->getPendingCount() > _relationsPerBulkInsert)
-  {
+  else if (_relationBulkInsert && _relationBulkInsert->getPendingCount() > _relationsPerBulkInsert)
     flush = true;
-  }
 
   if (flush)
-  {
     _flushBulkInserts();
-  }
 }
 
 void HootApiDb::open(const QUrl& url)
@@ -1064,10 +973,7 @@ void HootApiDb::open(const QUrl& url)
   LOG_DEBUG("Opening database connection: " << url.toString(QUrl::RemoveUserInfo) << "...");
 
   if (!isSupported(url))
-  {
-    throw HootException(
-      "An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
-  }
+    throw HootException(QString("An unsupported URL was passed into HootApiDb: %1").arg(url.toString(QUrl::RemoveUserInfo)));
 
   _resetQueries();
 
@@ -1198,28 +1104,24 @@ void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)
   LOG_VART(write);
 
   if (!mapExists(mapId))
-  {
     throw HootException("No map exists with requested ID: " + QString::number(mapId));
-  }
   else if (!currentUserCanAccessMap(mapId, write))
   {
     QString errorMsg;
     QString accessType = "read";
     if (write)
-    {
       accessType = "write";
-    }
     if (_currUserId != -1)
     {
       errorMsg =
-        "User with ID: " + QString::number(_currUserId) +
-        " does not have " + accessType + " access to map with ID: " + QString::number(mapId);
+        QString("User with ID: %1 does not have %2 access to map with ID: %3")
+          .arg(QString::number(_currUserId), accessType, QString::number(mapId));
     }
     else
     {
       errorMsg =
-        "Requested map with ID: " + QString::number(mapId) + " not available for public " +
-        accessType + " access.";
+        QString("Requested map with ID: %1 not available for public %2 access.")
+          .arg(QString::number(mapId), accessType);
     }
     throw HootException(errorMsg);
   }
@@ -1235,18 +1137,17 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
   {
     _getMapPermissionsById = std::make_shared<QSqlQuery>(_db);
     const QString sql =
-      QString("SELECT m.user_id, f.public from " + getMapsTableName() + " m ") +
-      QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
-      QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
-      QString("WHERE m.id = :mapId");
+      QString("SELECT m.user_id, f.public from %1 m "
+              "LEFT JOIN %2 fmm ON (fmm.map_id = m.id) "
+              "LEFT JOIN %3 f ON (f.id = fmm.folder_id) "
+              "WHERE m.id = :mapId")
+        .arg(getMapsTableName(), getFolderMapMappingsTableName(), getFoldersTableName());
     LOG_VART(sql);
     _getMapPermissionsById->prepare(sql);
   }
   _getMapPermissionsById->bindValue(":mapId", (qlonglong)mapId);
   if (!_getMapPermissionsById->exec())
-  {
     throw HootException(_getMapPermissionsById->lastError().text());
-  }
 
   long userId = -1;
   bool isPublic = false;
@@ -1257,9 +1158,7 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
     userId = _getMapPermissionsById->value(0).toLongLong(&ok);
     LOG_VART(userId);
     if (!ok)
-    {
       throw HootException(_getMapPermissionsById->lastError().text());
-    }
     isPublic = _getMapPermissionsById->value(1).toBool();
     LOG_VART(isPublic);
   }
@@ -1284,13 +1183,9 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
   _getMapPermissionsById->finish();
 
   if (write)
-  {
     return _currUserId == userId || isAdmin;
-  }
   else
-  {
     return isPublic || _currUserId == userId || isAdmin;
-  }
 }
 
 set<long> HootApiDb::selectPublicMapIds(QString name)
@@ -1302,10 +1197,11 @@ set<long> HootApiDb::selectPublicMapIds(QString name)
   {
     _selectPublicMapIds = std::make_shared<QSqlQuery>(_db);
     const QString sql =
-      QString("SELECT m.id, f.public from " + getMapsTableName() + " m ") +
-        QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
-        QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
-        QString("WHERE m.display_name = :mapName AND f.public = TRUE");
+      QString("SELECT m.id, f.public from %1 m "
+              "LEFT JOIN %2 fmm ON (fmm.map_id = m.id) "
+              "LEFT JOIN %3 f ON (f.id = fmm.folder_id) "
+              "WHERE m.display_name = :mapName AND f.public = TRUE")
+        .arg(getMapsTableName(), getFolderMapMappingsTableName(), getFoldersTableName());
     LOG_VART(sql);
     _selectPublicMapIds->prepare(sql);
   }
@@ -1313,18 +1209,14 @@ set<long> HootApiDb::selectPublicMapIds(QString name)
   LOG_VART(_selectPublicMapIds->lastQuery());
 
   if (_selectPublicMapIds->exec() == false)
-  {
     throw HootException(_selectPublicMapIds->lastError().text());
-  }
 
   while (_selectPublicMapIds->next())
   {
     bool ok;
     long id = _selectPublicMapIds->value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException("Error selecting map public IDs.");
-    }
     result.insert(id);
   }
 
@@ -1351,21 +1243,17 @@ QStringList HootApiDb::selectMapNamesOwnedByCurrentUser()
   {
     _selectMapNamesOwnedByCurrentUser = std::make_shared<QSqlQuery>(_db);
     _selectMapNamesOwnedByCurrentUser->prepare(
-      "SELECT display_name FROM " + getMapsTableName() +
-      " WHERE user_id = :user_id");
+      QString("SELECT display_name FROM %1 WHERE user_id = :user_id").arg(getMapsTableName()));
   }
   _selectMapNamesOwnedByCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
   LOG_VART(_selectMapNamesOwnedByCurrentUser->lastQuery());
 
   if (_selectMapNamesOwnedByCurrentUser->exec() == false)
-  {
     throw HootException(_selectMapNamesOwnedByCurrentUser->lastError().text());
-  }
 
   while (_selectMapNamesOwnedByCurrentUser->next())
-  {
     result.append(_selectMapNamesOwnedByCurrentUser->value(0).toString());
-  }
+
   LOG_VART(result.size());
 
   return result;
@@ -1379,24 +1267,22 @@ QStringList HootApiDb::selectPublicMapNames()
   {
     _selectPublicMapNames = std::make_shared<QSqlQuery>(_db);
     const QString sql =
-      QString("SELECT m.display_name from " + getMapsTableName() + " m ") +
-        QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
-        QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
-        QString("WHERE f.public = TRUE");
+      QString("SELECT m.display_name from %1 m "
+              "LEFT JOIN %2 fmm ON (fmm.map_id = m.id) "
+              "LEFT JOIN %3 f ON (f.id = fmm.folder_id) "
+              "WHERE f.public = TRUE")
+        .arg(getMapsTableName(), getFolderMapMappingsTableName(), getFoldersTableName());
     LOG_VART(sql);
     _selectPublicMapNames->prepare(sql);
   }
   LOG_VART(_selectPublicMapNames->lastQuery());
 
   if (_selectPublicMapNames->exec() == false)
-  {
     throw HootException(_selectPublicMapNames->lastError().text());
-  }
 
   while (_selectPublicMapNames->next())
-  {
     result.append(_selectPublicMapNames->value(0).toString());
-  }
+
   LOG_VART(result.size());
 
   return result;
@@ -1413,8 +1299,7 @@ long HootApiDb::selectMapIdForCurrentUser(QString name)
   {
     _selectMapIdsForCurrentUser = std::make_shared<QSqlQuery>(_db);
     _selectMapIdsForCurrentUser->prepare(
-      "SELECT id FROM " + getMapsTableName() +
-      " WHERE display_name = :name AND user_id = :user_id");
+      QString("SELECT id FROM %1 WHERE display_name = :name AND user_id = :user_id").arg(getMapsTableName()));
   }
   _selectMapIdsForCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
 
@@ -1422,9 +1307,7 @@ long HootApiDb::selectMapIdForCurrentUser(QString name)
   LOG_VART(_selectMapIdsForCurrentUser->lastQuery());
 
   if (_selectMapIdsForCurrentUser->exec() == false)
-  {
     throw HootException(_selectMapIdsForCurrentUser->lastError().text());
-  }
 
   // There should only be one map owned by a user with a given name, since that's all
   // HootApiDbWriter allows.
@@ -1433,15 +1316,11 @@ long HootApiDb::selectMapIdForCurrentUser(QString name)
     bool ok;
     long id = _selectMapIdsForCurrentUser->value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException("Error selecting map IDs.");
-    }
     result = id;
   }
   else
-  {
     result = -1;
-  }
 
   return result;
 }
@@ -1454,24 +1333,19 @@ set<long> HootApiDb::getFolderIdsAssociatedWithMap(const long mapId)
   {
     _folderIdsAssociatedWithMap = std::make_shared<QSqlQuery>(_db);
     _folderIdsAssociatedWithMap->prepare(
-      "SELECT folder_id FROM " + getFolderMapMappingsTableName() +
-      " WHERE map_id = :mapId");
+      QString("SELECT folder_id FROM %1 WHERE map_id = :mapId").arg(getFolderMapMappingsTableName()));
   }
   _folderIdsAssociatedWithMap->bindValue(":mapId", (qlonglong)mapId);
 
   if (_folderIdsAssociatedWithMap->exec() == false)
-  {
     throw HootException(_folderIdsAssociatedWithMap->lastError().text());
-  }
 
   while (_folderIdsAssociatedWithMap->next())
   {
     bool ok;
     long id = _folderIdsAssociatedWithMap->value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException("Error selecting map IDs.");
-    }
     result.insert(id);
   }
 
@@ -1480,28 +1354,20 @@ set<long> HootApiDb::getFolderIdsAssociatedWithMap(const long mapId)
 
 void HootApiDb::_deleteFolderMapMappingsByMapId(const long mapId) const
 {
-  _exec(
-    "DELETE FROM " + getFolderMapMappingsTableName() +
-    " WHERE map_id = :id", (qlonglong)mapId);
+  _exec(QString("DELETE FROM %1 WHERE map_id = :id").arg(getFolderMapMappingsTableName()), (qlonglong)mapId);
 }
 
 void HootApiDb::_deleteAllFolders(const set<long>& folderIds)
 {
   if (folderIds.empty())
-  {
     return;
-  }
 
   if (_deleteFolders == nullptr)
-  {
     _deleteFolders = std::make_shared<QSqlQuery>(_db);
-  }
 
-  QString sql = "DELETE FROM " + getFoldersTableName() + " WHERE id IN (";
-  for (set<long>::const_iterator itr = folderIds.begin(); itr != folderIds.end(); ++itr)
-  {
-    sql += QString::number(*itr) + ",";
-  }
+  QString sql = QString("DELETE FROM %1 WHERE id IN (").arg(getFoldersTableName());
+  for (auto id : folderIds)
+    sql += QString::number(id) + ",";
   sql.chop(1);
   sql += ")";
   LOG_VART(sql);
@@ -1512,7 +1378,7 @@ void HootApiDb::_deleteAllFolders(const set<long>& folderIds)
     LOG_VART(_deleteFolders->lastError().databaseText());
     LOG_VART(_deleteFolders->lastError().number());
     LOG_VART(_deleteFolders->lastError().driverText());
-    throw HootException("Error deleting folders." + _deleteFolders->lastError().text());
+    throw HootException(QString("Error deleting folders. %1").arg(_deleteFolders->lastError().text()));
   }
   _deleteFolders->finish();
 }
@@ -1524,18 +1390,17 @@ long HootApiDb::insertFolder(const QString& displayName, const long parentId, co
   {
     _insertFolder = std::make_shared<QSqlQuery>(_db);
     _insertFolder->prepare(
-      "INSERT INTO " + getFoldersTableName() +
-      " (display_name, parent_id, user_id, public, created_at)" +
-      " VALUES (:displayName, :parentId, :userId, :public, NOW())" +
-      " RETURNING id");
+      QString("INSERT INTO %1 (display_name, parent_id, user_id, public, created_at)"
+              " VALUES (:displayName, :parentId, :userId, :public, NOW())"
+              " RETURNING id")
+        .arg(getFoldersTableName()));
   }
   _insertFolder->bindValue(":displayName", displayName);
   _insertFolder->bindValue(":userId", (qlonglong)userId);
   _insertFolder->bindValue(":public", isPublic);
   if (parentId != -1) 
-  {
     _insertFolder->bindValue(":parentId", (qlonglong)parentId);
-  }
+
   return _insertRecord(*_insertFolder);
 }
 
@@ -1545,8 +1410,7 @@ void HootApiDb::insertFolderMapMapping(const long mapId, const long folderId)
   {
     _insertFolderMapMapping = std::make_shared<QSqlQuery>(_db);
     _insertFolderMapMapping->prepare(
-      "INSERT INTO " + getFolderMapMappingsTableName() + " (map_id, folder_id)" +
-      " VALUES (:mapId, :folderId)");
+      QString("INSERT INTO %1 (map_id, folder_id) VALUES (:mapId, :folderId)").arg(getFolderMapMappingsTableName()));
   }
   _insertFolderMapMapping->bindValue(":mapId", (qlonglong)mapId);
   _insertFolderMapMapping->bindValue(":folderId", (qlonglong)folderId);
@@ -1557,38 +1421,25 @@ void HootApiDb::insertFolderMapMapping(const long mapId, const long folderId)
     LOG_VART(_insertFolderMapMapping->lastError().number());
     LOG_VART(_insertFolderMapMapping->lastError().driverText());
     throw HootException(
-      "Error inserting folder mapping for folder ID: " + QString::number(folderId) +
-      " and map ID: " + QString::number(mapId) + " " +
-      _insertFolderMapMapping->lastError().text());
+      QString("Error inserting folder mapping for folder ID: %1 and map ID: %2 %3")
+        .arg(QString::number(folderId), QString::number(mapId), _insertFolderMapMapping->lastError().text()));
   }
 }
 
 QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
 {
   if (tableType == TableType::Node)
-  {
     return getCurrentNodesTableName(_currMapId);
-  }
   else if (tableType == TableType::Way)
-  {
     return getCurrentWaysTableName(_currMapId);
-  }
   else if (tableType == TableType::Relation)
-  {
     return getCurrentRelationsTableName(_currMapId);
-  }
   else if (tableType == TableType::WayNode)
-  {
     return getCurrentWayNodesTableName(_currMapId);
-  }
   else if (tableType == TableType::RelationMember)
-  {
     return getCurrentRelationMembersTableName(_currMapId);
-  }
   else
-  {
     throw HootException("Unsupported table type.");
-  }
 }
 
 bool HootApiDb::mapExists(const long id)
@@ -1596,14 +1447,12 @@ bool HootApiDb::mapExists(const long id)
   if (_mapExistsById == nullptr)
   {
     _mapExistsById = std::make_shared<QSqlQuery>(_db);
-    _mapExistsById->prepare("SELECT display_name FROM " + getMapsTableName() +
-                            " WHERE id = :mapId");
+    _mapExistsById->prepare(
+      QString("SELECT display_name FROM %1 WHERE id = :mapId").arg(getMapsTableName()));
   }
   _mapExistsById->bindValue(":mapId", (qlonglong)id);
   if (_mapExistsById->exec() == false)
-  {
     throw HootException(_mapExistsById->lastError().text());
-  }
 
   return _mapExistsById->next();
 }
@@ -1614,14 +1463,12 @@ long HootApiDb::getMapIdByName(const QString& name)
   if (_getMapIdByName == nullptr)
   {
     _getMapIdByName = std::make_shared<QSqlQuery>(_db);
-    _getMapIdByName->prepare("SELECT id FROM " + getMapsTableName() +
-                             " WHERE display_name = :mapName");
+    _getMapIdByName->prepare(
+      QString("SELECT id FROM %1 WHERE display_name = :mapName").arg(getMapsTableName()));
   }
   _getMapIdByName->bindValue(":mapName", name);
   if (_getMapIdByName->exec() == false)
-  {
     throw HootException(_getMapIdByName->lastError().text());
-  }
 
   long result = -1;
   if (_getMapIdByName->next())
@@ -1629,9 +1476,7 @@ long HootApiDb::getMapIdByName(const QString& name)
     bool ok;
     result = _getMapIdByName->value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException(_getMapIdByName->lastError().text());
-    }
   }
   _getMapIdByName->finish();
   return result;
@@ -1646,15 +1491,12 @@ long HootApiDb::getMapIdByNameForCurrentUser(const QString& name)
   {
     _getMapIdByNameForCurrentUser = std::make_shared<QSqlQuery>(_db);
     _getMapIdByNameForCurrentUser->prepare(
-      "SELECT id FROM " + getMapsTableName() +
-      " WHERE display_name = :mapName AND user_id = :userId");
+      QString("SELECT id FROM %1 WHERE display_name = :mapName AND user_id = :userId").arg(getMapsTableName()));
   }
   _getMapIdByNameForCurrentUser->bindValue(":mapName", name);
   _getMapIdByNameForCurrentUser->bindValue(":userId", (qlonglong)_currUserId);
   if (_getMapIdByNameForCurrentUser->exec() == false)
-  {
     throw HootException(_getMapIdByNameForCurrentUser->lastError().text());
-  }
 
   long result = -1;
   if (_getMapIdByNameForCurrentUser->next())
@@ -1662,9 +1504,7 @@ long HootApiDb::getMapIdByNameForCurrentUser(const QString& name)
     bool ok;
     result = _getMapIdByNameForCurrentUser->value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException(_getMapIdByNameForCurrentUser->lastError().text());
-    }
   }
   _getMapIdByNameForCurrentUser->finish();
   LOG_VARD(result);
@@ -1676,7 +1516,7 @@ long HootApiDb::numChangesets()
   if (!_numChangesets)
   {
     _numChangesets = std::make_shared<QSqlQuery>(_db);
-    _numChangesets->prepare("SELECT COUNT(*) FROM " + getChangesetsTableName(_currMapId));
+    _numChangesets->prepare(QString("SELECT COUNT(*) FROM %1").arg(getChangesetsTableName(_currMapId)));
   }
   LOG_VART(_numChangesets->lastQuery());
 
@@ -1693,10 +1533,7 @@ long HootApiDb::numChangesets()
     bool ok;
     result = _numChangesets->value(0).toLongLong(&ok);
     if (!ok)
-    {
-      throw HootException(
-        "Could not get changeset count for map with ID: " + QString::number(_currMapId));
-    }
+      throw HootException(QString("Could not get changeset count for map with ID: %1").arg(QString::number(_currMapId)));
   }
   _numChangesets->finish();
   return result;
@@ -1737,20 +1574,16 @@ bool HootApiDb::accessTokensAreValid(const QString& userName, const QString& acc
   {
     _accessTokensAreValid = std::make_shared<QSqlQuery>(_db);
     _accessTokensAreValid->prepare(
-        QString("SELECT COUNT(*) FROM " + ApiDb::getUsersTableName() +
-                " WHERE display_name = :userName AND ") +
-        QString("provider_access_key = :accessToken AND ") +
-        QString("provider_access_token = :accessTokenSecret"));
+        QString("SELECT COUNT(*) FROM %1 "
+                "WHERE display_name = :userName AND "
+                "provider_access_key = :accessToken AND "
+                "provider_access_token = :accessTokenSecret").arg(ApiDb::getUsersTableName()));
   }
   _accessTokensAreValid->bindValue(":userName", userName);
   _accessTokensAreValid->bindValue(":accessToken", accessToken);
   _accessTokensAreValid->bindValue(":accessTokenSecret", accessTokenSecret);
   if (!_accessTokensAreValid->exec())
-  {
-    throw HootException(
-      "Error validating access tokens for user name: " + userName + " " +
-      _accessTokensAreValid->lastError().text());
-  }
+    throw HootException(QString("Error validating access tokens for user name: %1 %2").arg(userName, _accessTokensAreValid->lastError().text()));
 
   long result = -1;
   if (_accessTokensAreValid->next())
@@ -1759,9 +1592,7 @@ bool HootApiDb::accessTokensAreValid(const QString& userName, const QString& acc
     result = _accessTokensAreValid->value(0).toLongLong(&ok);
     assert(result <= 1);
     if (!ok)
-    {
       throw HootException("Error validating access tokens for user name: " + userName);
-    }
   }
   _accessTokensAreValid->finish();
 
@@ -1779,25 +1610,20 @@ QString HootApiDb::getAccessTokenByUserId(const long userId)
   {
     _getAccessTokenByUserId = std::make_shared<QSqlQuery>(_db);
     _getAccessTokenByUserId->prepare(
-      "SELECT provider_access_key FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
+      QString("SELECT provider_access_key FROM %1 WHERE id = :userId").arg(ApiDb::getUsersTableName()));
   }
   _getAccessTokenByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenByUserId->exec())
   {
-    throw HootException(
-      "Error finding access token for user ID: " + QString::number(userId) + " " +
-      _getAccessTokenByUserId->lastError().text());
+    throw HootException(QString("Error finding access token for user ID: %1 %2").arg(QString::number(userId), _getAccessTokenByUserId->lastError().text()));
   }
 
   //shouldn't be more than one result, but if there is we don't care
   if (_getAccessTokenByUserId->next())
-  {
     accessToken = _getAccessTokenByUserId->value(0).toString();
-  }
   else
   {
-    LOG_DEBUG(
-      "No access token available for user ID: " << userId);
+    LOG_DEBUG("No access token available for user ID: " << userId);
     _getAccessTokenByUserId->finish();
     return "";
   }
@@ -1817,25 +1643,22 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   {
     _getAccessTokenSecretByUserId = std::make_shared<QSqlQuery>(_db);
     _getAccessTokenSecretByUserId->prepare(
-      "SELECT provider_access_token FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
+      QString("SELECT provider_access_token FROM %1 WHERE id = :userId").arg(ApiDb::getUsersTableName()));
   }
   _getAccessTokenSecretByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenSecretByUserId->exec())
   {
     throw HootException(
-      "Error finding access token secret for user ID: " + QString::number(userId) + " " +
-      _getAccessTokenSecretByUserId->lastError().text());
+      QString("Error finding access token secret for user ID: %1 %2")
+        .arg(QString::number(userId), _getAccessTokenSecretByUserId->lastError().text()));
   }
 
   //shouldn't be more than one result, but if there is we don't care
   if (_getAccessTokenSecretByUserId->next())
-  {
     accessTokenSecret = _getAccessTokenSecretByUserId->value(0).toString();
-  }
   else
   {
-    LOG_DEBUG(
-      "No access token secret available for user ID: " << userId);
+    LOG_DEBUG("No access token secret available for user ID: " << userId);
     _getAccessTokenSecretByUserId->finish();
     return "";
   }
@@ -1850,10 +1673,10 @@ void HootApiDb::insertUserSession(const long userId, const QString& sessionId)
   {
     _insertUserSession = std::make_shared<QSqlQuery>(_db);
     _insertUserSession->prepare(
-      "INSERT INTO " + getUserSessionTableName() +
-      " (session_id, creation_time, last_access_time, max_inactive_interval, user_id)" +
-      " VALUES (:sessionId, " + currentTimestampAsBigIntSql() + ", " +
-      currentTimestampAsBigIntSql() + ", :maxInactiveInterval, :userId)");
+      QString("INSERT INTO %1"
+              " (session_id, creation_time, last_access_time, max_inactive_interval, user_id)"
+              " VALUES (:sessionId, %2, %3, :maxInactiveInterval, :userId)")
+        .arg(getUserSessionTableName(), currentTimestampAsBigIntSql(), currentTimestampAsBigIntSql()));
   }
   _insertUserSession->bindValue(":sessionId", sessionId);
   _insertUserSession->bindValue(":maxInactiveInterval", 1);
@@ -1865,8 +1688,7 @@ void HootApiDb::insertUserSession(const long userId, const QString& sessionId)
     LOG_VART(_insertUserSession->lastError().number());
     LOG_VART(_insertUserSession->lastError().driverText());
     throw HootException(
-      "Error inserting session for user ID: " + QString::number(userId) + " " +
-      _insertUserSession->lastError().text());
+      QString("Error inserting session for user ID: %1 %2").arg(QString::number(userId), _insertUserSession->lastError().text()));
   }
 }
 
@@ -1877,9 +1699,8 @@ void HootApiDb::updateUserAccessTokens(const long userId, const QString& accessT
   {
     _updateUserAccessTokens = std::make_shared<QSqlQuery>(_db);
     _updateUserAccessTokens->prepare(
-      "UPDATE " + ApiDb::getUsersTableName() +
-      " SET provider_access_key=:accessToken, provider_access_token=:accessTokenSecret" +
-      " WHERE id=:userId");
+      QString("UPDATE %1 SET provider_access_key=:accessToken, provider_access_token=:accessTokenSecret WHERE id=:userId")
+        .arg(ApiDb::getUsersTableName()));
   }
   _updateUserAccessTokens->bindValue(":userId", (qlonglong)userId);
   _updateUserAccessTokens->bindValue(":accessToken", accessToken);
@@ -1887,8 +1708,7 @@ void HootApiDb::updateUserAccessTokens(const long userId, const QString& accessT
   if (!_updateUserAccessTokens->exec())
   {
     throw HootException(
-      "Error updating access tokens for user ID: " + QString::number(userId) + " " +
-      _updateUserAccessTokens->lastError().text());
+      QString("Error updating access tokens for user ID: %1 %2").arg(QString::number(userId), _updateUserAccessTokens->lastError().text()));
   }
 }
 
@@ -1901,22 +1721,18 @@ QString HootApiDb::getSessionIdByUserId(const long userId)
   if (_getSessionIdByUserId == nullptr)
   {
     _getSessionIdByUserId = std::make_shared<QSqlQuery>(_db);
-    _getSessionIdByUserId->prepare(
-      "SELECT session_id FROM " + getUserSessionTableName() + " WHERE user_id = :userId");
+    _getSessionIdByUserId->prepare(QString("SELECT session_id FROM %1 WHERE user_id = :userId").arg(getUserSessionTableName()));
   }
   _getSessionIdByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getSessionIdByUserId->exec())
   {
     throw HootException(
-      "Error finding session ID for user ID: " + QString::number(userId) + " " +
-      _getSessionIdByUserId->lastError().text());
+      QString("Error finding session ID for user ID: %1 %2").arg(QString::number(userId), _getSessionIdByUserId->lastError().text()));
   }
 
   //shouldn't be more than one result, but if there is we don't care
   if (_getSessionIdByUserId->next())
-  {
     sessionId = _getSessionIdByUserId->value(0).toString();
-  }
   else
   {
     LOG_DEBUG("No user session ID available for user ID: " << userId);
@@ -1929,28 +1745,23 @@ QString HootApiDb::getSessionIdByUserId(const long userId)
   return sessionId;
 }
 
-QString HootApiDb::getSessionIdByAccessTokens(
-  const QString& userName, const QString& accessToken,
-  const QString& accessTokenSecret)
+QString HootApiDb::getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
+                                              const QString& accessTokenSecret)
 {
   QString sessionId = "";
 
   if (accessTokensAreValid(userName, accessToken, accessTokenSecret))
   {
     const long userId = getUserIdByName(userName);
+    //no user with user name found
     if (userId == -1)
-    {
-      //no user with user name found
       return "";
-    }
 
     //will be an empty string if no session ID was found
     sessionId = getSessionIdByUserId(userId);
   }
   else
-  {
     throw HootException("Access tokens for user: " + userName + " are invalid.");
-  }
 
   return sessionId;
 }
@@ -1964,8 +1775,7 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
 {
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
-  QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
-      " WHERE way_id = :wayId ORDER BY sequence_id";
+  QString sql = QString("SELECT node_id FROM %1 WHERE way_id = :wayId ORDER BY sequence_id").arg(getCurrentWayNodesTableName(mapId));
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
@@ -1979,17 +1789,16 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     _selectMembersForRelation = std::make_shared<QSqlQuery>(_db);
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
-      "SELECT member_type, member_id, member_role FROM " +
-      getCurrentRelationMembersTableName(mapId) +
-      " WHERE relation_id = :relationId ORDER BY sequence_id");
-    _selectMembersForRelation->bindValue(":mapId", (qlonglong)mapId);
+      QString("SELECT member_type, member_id, member_role FROM %1"
+              " WHERE relation_id = :relationId ORDER BY sequence_id").arg(getCurrentRelationMembersTableName(mapId)));
   }
 
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
   if (_selectMembersForRelation->exec() == false)
   {
-    throw HootException("Error selecting members for relation with ID: " +
-      QString::number(relationId) + " Error: " + _selectMembersForRelation->lastError().text());
+    throw HootException(
+      QString("Error selecting members for relation with ID: %1 Error: %2")
+        .arg(QString::number(relationId), _selectMembersForRelation->lastError().text()));
   }
   LOG_VART(_selectMembersForRelation->numRowsAffected());
   LOG_VART(_selectMembersForRelation->executedQuery());
@@ -2039,10 +1848,10 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   {
     _updateNode = std::make_shared<QSqlQuery>(_db);
     _updateNode->prepare(
-      "UPDATE " + getCurrentNodesTableName(mapId) +
+      QString("UPDATE %1"
       " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
-      " timestamp=:timestamp, tile=:tile, version=:version, tags=" + _escapeTags(tags) +
-      " WHERE id=:id");
+      " timestamp=:timestamp, tile=:tile, version=:version, tags=%2"
+      " WHERE id=:id").arg(getCurrentNodesTableName(mapId), _escapeTags(tags)));
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
@@ -2054,11 +1863,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   _updateNode->bindValue(":version", (qlonglong)version);
 
   if (_updateNode->exec() == false)
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_updateNode->executedQuery()).
-        arg(_updateNode->lastError().text());
-    throw HootException(err);
-  }
+    throw HootException(QString("Error executing query: %1 (%2)").arg(_updateNode->executedQuery(), _updateNode->lastError().text()));
 
   _updateNode->finish();
 
@@ -2077,9 +1882,9 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   {
     _updateWay = std::make_shared<QSqlQuery>(_db);
     _updateWay->prepare(
-      "UPDATE " + getCurrentWaysTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
-      _escapeTags(tags) + " WHERE id=:id");
+      QString("UPDATE %1"
+              " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=%2"
+              " WHERE id=:id").arg(getCurrentWaysTableName(mapId), _escapeTags(tags)));
   }
 
   _updateWay->bindValue(":id", (qlonglong)id);
@@ -2088,11 +1893,7 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   _updateWay->bindValue(":version", (qlonglong)version);
 
   if (_updateWay->exec() == false)
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_updateWay->executedQuery()).
-        arg(_updateWay->lastError().text());
-    throw HootException(err);
-  }
+    throw HootException(QString("Error executing query: %1 (%2)").arg(_updateWay->executedQuery(), _updateWay->lastError().text()));
 
   _updateWay->finish();
 
@@ -2131,13 +1932,10 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags, long version)
   v.append((qlonglong)_currChangesetId);
   v.append(DateTimeUtils::currentTimeAsString());
   if (version == 0)
-  {
     v.append((qlonglong)1);
-  }
   else
-  {
     v.append((qlonglong)version);
-  }
+
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -2171,8 +1969,8 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
 
   if (_wayNodeBulkInsert == nullptr)
   {
-    QStringList columns;
-    columns << "way_id" << "node_id" << "sequence_id";
+//TODO: QStringList initializer lists
+    QStringList columns({"way_id", "node_id", "sequence_id"});
 
     _wayNodeBulkInsert =
       std::make_shared<SqlBulkInsert>(
@@ -2228,15 +2026,12 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
   case ElementType::Node:
     retVal = _getNextNodeId();
     break;
-
   case ElementType::Way:
     retVal = _getNextWayId();
     break;
-
   case ElementType::Relation:
     retVal = _getNextRelationId();
     break;
-
   default:
     LOG_ERROR("Requested element ID for unknown element type");
     throw HootException("reserveElementId called with unknown type");
@@ -2271,9 +2066,8 @@ QString HootApiDb::removeTableName(const QString& url)
   QStringList urlParts =  url.split("/");
   QString modifiedUrl;
   for (int i = 0; i < urlParts.size() - 1; i++)
-  {
     modifiedUrl += urlParts[i] + "/";
-  }
+
   modifiedUrl.chop(1);
   return modifiedUrl;
 }
@@ -2287,7 +2081,7 @@ void HootApiDb::updateJobStatusResourceId(const QString& jobId, const long resou
   {
     _updateJobStatusResourceId = std::make_shared<QSqlQuery>(_db);
     _updateJobStatusResourceId->prepare(
-      "UPDATE " + getJobStatusTableName() + " SET resource_id = :resourceId WHERE job_id = :jobId");
+      QString("UPDATE %1 SET resource_id = :resourceId WHERE job_id = :jobId").arg(getJobStatusTableName()));
   }
   _updateJobStatusResourceId->bindValue(":jobId", jobId);
   _updateJobStatusResourceId->bindValue(":resourceId", (qlonglong)resourceId);
@@ -2295,8 +2089,7 @@ void HootApiDb::updateJobStatusResourceId(const QString& jobId, const long resou
   {
     const QString err =
       QString("Error executing query: %1 (%2)")
-        .arg(_updateJobStatusResourceId->executedQuery())
-        .arg(_updateJobStatusResourceId->lastError().text());
+        .arg(_updateJobStatusResourceId->executedQuery(), _updateJobStatusResourceId->lastError().text());
     throw HootException(err);
   }
   _updateJobStatusResourceId->finish();
@@ -2308,9 +2101,8 @@ QString HootApiDb::insertJob(const QString& statusDetail)
   {
     _insertJob = std::make_shared<QSqlQuery>(_db);
     _insertJob->prepare(
-      "INSERT INTO " + getJobStatusTableName() +
-      " (job_id, start, status, percent_complete, status_detail) " +
-      "VALUES (:jobId, NOW(), :status, :percentComplete, :statusDetail)");
+      QString("INSERT INTO %1 (job_id, start, status, percent_complete, status_detail) "
+      "VALUES (:jobId, NOW(), :status, :percentComplete, :statusDetail)").arg(getJobStatusTableName()));
   }
   const QString jobId = UuidHelper::createUuid().toString();
   _insertJob->bindValue(":jobId", jobId);
@@ -2321,8 +2113,7 @@ QString HootApiDb::insertJob(const QString& statusDetail)
   {
     const QString err =
       QString("Error executing query: %1 (%2)")
-        .arg(_insertJob->executedQuery())
-        .arg(_insertJob->lastError().text());
+        .arg(_insertJob->executedQuery(), _insertJob->lastError().text());
     throw HootException(err);
   }
   _insertJob->finish();
@@ -2336,9 +2127,7 @@ long HootApiDb::getJobStatusResourceId(const QString& jobId)
   if (_getJobStatusResourceId == nullptr)
   {
     _getJobStatusResourceId = std::make_shared<QSqlQuery>(_db);
-    _getJobStatusResourceId->prepare(
-      "SELECT resource_id FROM " + getJobStatusTableName() + " " +
-      "WHERE job_id = :jobId");
+    _getJobStatusResourceId->prepare(QString("SELECT resource_id FROM %1 WHERE job_id = :jobId").arg(getJobStatusTableName()));
   }
   _getJobStatusResourceId->bindValue(":jobId", jobId);
 
@@ -2346,17 +2135,14 @@ long HootApiDb::getJobStatusResourceId(const QString& jobId)
   {
     const QString err =
       QString("Error executing query: %1 (%2)")
-        .arg(_getJobStatusResourceId->executedQuery())
-        .arg(_getJobStatusResourceId->lastError().text());
+        .arg(_getJobStatusResourceId->executedQuery(), _getJobStatusResourceId->lastError().text());
     throw HootException(err);
   }
 
   long resourceId = -1;
   bool ok = false;
   if (_getJobStatusResourceId->next())
-  {
     resourceId = _getJobStatusResourceId->value(0).toLongLong(&ok);
-  }
   LOG_VARD(resourceId);
 
   if (!ok)
@@ -2372,17 +2158,14 @@ void HootApiDb::_deleteJob(const QString& id)
   if (_deleteJobById == nullptr)
   {
     _deleteJobById = std::make_shared<QSqlQuery>(_db);
-    _deleteJobById->prepare(
-      "DELETE FROM " + getJobStatusTableName() +
-      " WHERE job_id = :jobId");
+    _deleteJobById->prepare(QString("DELETE FROM %1 WHERE job_id = :jobId").arg(getJobStatusTableName()));
   }
   _deleteJobById->bindValue(":jobId", id);
   if (!_deleteJobById->exec())
   {
     const QString err =
       QString("Error executing query: %1 (%2)")
-        .arg(_deleteJobById->executedQuery())
-        .arg(_deleteJobById->lastError().text());
+        .arg(_deleteJobById->executedQuery(), _deleteJobById->lastError().text());
     throw HootException(err);
   }
   _deleteJobById->finish();
@@ -2402,15 +2185,12 @@ void HootApiDb::_updateImportSequence(long max, const QString& sequence)
 {
   LOG_TRACE("Updating sequence " << sequence);
   if (!_updateIdSequence)
-  {
     _updateIdSequence = std::make_shared<QSqlQuery>(_db);
-  }
-  if (!_updateIdSequence->exec(QString("ALTER SEQUENCE %1 RESTART %2").arg(sequence).arg(max + 1)))
+  if (!_updateIdSequence->exec(QString("ALTER SEQUENCE %1 RESTART %2").arg(sequence, QString::number(max + 1))))
   {
     const QString err =
       QString("Error executing query: %1 (%2)")
-        .arg(_updateIdSequence->executedQuery())
-        .arg(_updateIdSequence->lastError().text());
+        .arg(_updateIdSequence->executedQuery(), _updateIdSequence->lastError().text());
     LOG_TRACE(err);
     throw HootException(err);
   }

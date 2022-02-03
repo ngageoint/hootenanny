@@ -191,8 +191,8 @@ private:
 
   void populateElementMap();
 
-  QString _toWkt(const OGRSpatialReference* srs);
-  QString _toWkt(const OGRGeometry* geom);
+  QString _toWkt(const OGRSpatialReference* srs) const;
+  QString _toWkt(const OGRGeometry* geom) const;
 };
 
 class OgrElementIterator : public ElementIterator
@@ -895,7 +895,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
 }
 
-QString OgrReaderInternal::_toWkt(const OGRGeometry* geom)
+QString OgrReaderInternal::_toWkt(const OGRGeometry* geom) const
 {
   char* buffer;
   geom->exportToWkt(&buffer);
@@ -1412,7 +1412,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
   return MapProjector::createWgs84Projection();
 }
 
-QString OgrReaderInternal::_toWkt(const OGRSpatialReference* srs)
+QString OgrReaderInternal::_toWkt(const OGRSpatialReference* srs) const
 {
   char* buffer;
   srs->exportToWkt(&buffer);

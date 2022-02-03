@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
 
 // hoot
-#include <hoot/core/io/ApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/BulkDelete.h>
 #include <hoot/core/io/BulkInsert.h>
 
@@ -178,10 +178,8 @@ public:
    */
   long insertMap(QString mapName);
 
-  bool insertNode(
-    const double lat, const double lon, const Tags &tags, long& assignedId, long version = 0);
-  bool insertNode(
-    const long id, const double lat, const double lon, const Tags &tags, long version = 0);
+  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId, long version = 0);
+  bool insertNode(const long id, const double lat, const double lon, const Tags &tags, long version = 0);
 
   bool insertWay(const Tags& tags, long& assignedId, long version = 0);
   bool insertWay( const long wayId, const Tags& tags, long version = 0);
@@ -201,9 +199,8 @@ public:
    * @param sequenceId Sequence for the relation
    * @return True if success, else false
    */
-  bool insertRelationMember(
-    const long relationId, const ElementType& type, const long elementId, const QString& role,
-    const int sequenceId);
+  bool insertRelationMember(const long relationId, const ElementType& type, const long elementId, const QString& role,
+                            const int sequenceId);
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
@@ -244,8 +241,7 @@ public:
    */
   QStringList selectMapNamesAvailableToCurrentUser();
 
-  void updateNode(
-    const long id, const double lat, const double lon, const long version, const Tags& tags);
+  void updateNode(const long id, const double lat, const double lon, const long version, const Tags& tags);
 
   void updateWay(const long id, const long version, const Tags& tags);
 
@@ -377,8 +373,7 @@ public:
    * @param accessTokenSecret private OAuth access token for the user
    * @return an HTTP session ID or an empty string if no session ID was found for the given input
    */
-  QString getSessionIdByAccessTokens(
-    const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
+  QString getSessionIdByAccessTokens(const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Determines whether a set of access tokens are valid for a user
@@ -389,8 +384,7 @@ public:
    * @return true if the access tokens passed in are associated with the specified user; false
    * otherwise
    */
-  bool accessTokensAreValid(
-    const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
+  bool accessTokensAreValid(const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Returns the HTTP session ID associated with a user
@@ -431,8 +425,7 @@ public:
    * @param accessToken OAuth public access token
    * @param accessTokenSecret OAuth private access token
    */
-  void updateUserAccessTokens(
-    const long userId, const QString& accessToken, const QString& accessTokenSecret);
+  void updateUserAccessTokens(const long userId, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Determines whether a user has permission to access a map
@@ -457,8 +450,7 @@ public:
    * @param isPublic folder visibility
    * @returns ID of the created folder
    */
-  long insertFolder(
-    const QString& displayName, const long parentId, const long userId, const bool isPublic);
+  long insertFolder(const QString& displayName, const long parentId, const long userId, const bool isPublic);
 
   /**
    * Creates a mapping between a map and a data folder
