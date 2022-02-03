@@ -2337,7 +2337,6 @@ mgcp.rules = {
     // ##### End of dropList #####
 
     // Attribute names to swap on input. These are to avoid having copies of the same translation.
-    // swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC','LEN_':'LEN'},
     swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC','LEN_':'LEN'},
 
     // Swap attribute values on export.
