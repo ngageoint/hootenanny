@@ -86,6 +86,8 @@ public:
 
   static const Status DEFAULT_ELEMENT_STATUS;
 
+  static QString className() { return "ApiDb"; }
+
   ApiDb();
 
   virtual ~ApiDb();
@@ -145,8 +147,7 @@ public:
    * dealing with very large record sets
    * @return a result iterator to the elements
    */
-  virtual std::shared_ptr<QSqlQuery> selectElements(
-    const ElementType& elementType, const long minId = 0);
+  virtual std::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType, const long minId = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -228,8 +229,7 @@ public:
    * @param tableType the type of database table to query
    * @return a SQL results iterator
    */
-  std::shared_ptr<QSqlQuery> selectElementsByElementIdList(
-    const QSet<QString>& elementIds, const TableType& tableType);
+  std::shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds, const TableType& tableType);
 
   /**
    * Returns all the IDs of all nodes owned by the input way IDs
@@ -246,8 +246,7 @@ public:
    * @param memberElementType the element type of the associated relation member
    * @return a SQL results iterator
    */
-  std::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(
-    const QSet<QString>& memberIds, const ElementType& memberElementType);
+  std::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds, const ElementType& memberElementType);
 
   virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
 
@@ -426,15 +425,18 @@ protected:
 
   long _maxElementsPerPartialMap;
 
-  QSqlQuery _exec(
-    const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-    QVariant v3 = QVariant()) const;
+  QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+                  QVariant v3 = QVariant()) const;
 
   static void _unescapeString(QString& s);
 
   virtual void _resetQueries();
 
+  std::vector<RelationData::Entry> _selectRelationMembers(const std::shared_ptr<QSqlQuery>& relation_query) const;
+
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<QSqlQuery> _selectNodesByBounds;
   std::shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;

@@ -532,8 +532,6 @@ protected:
 
 private:
 
-  static int logWarnCount;
-
   friend class ServiceHootApiDbReaderTest;
   friend class ServiceHootApiDbWriterTest;
 

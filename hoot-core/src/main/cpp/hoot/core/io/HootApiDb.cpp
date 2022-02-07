@@ -59,8 +59,6 @@ using namespace std;
 namespace hoot
 {
 
-int HootApiDb::logWarnCount = 0;
-
 HootApiDb::HootApiDb()
   : _ignoreInsertConflicts(ConfigOptions().getMapMergeIgnoreDuplicateIds()),
     _precision(ConfigOptions().getWriterPrecision()),
@@ -227,7 +225,7 @@ void HootApiDb::_copyTableStructure(const QString& from, const QString& to) cons
 
   LOG_VART(sql);
   if (q.exec(sql) == false)
-    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
+    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text(), sql));
 }
 
 void HootApiDb::createPendingMapIndexes()
@@ -237,7 +235,7 @@ void HootApiDb::createPendingMapIndexes()
     LOG_DEBUG("Creating " << _pendingMapIndexes.size() << " map indexes...");
   }
 
-  for (auto mapId : _pendingMapIndexes)
+  for (auto mapId : qAsConst(_pendingMapIndexes))
   {
     DbUtils::execNoPrepare(
       _db,
@@ -661,23 +659,23 @@ long HootApiDb::insertMap(QString displayName)
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
-//TODO: %4 is an issue here, isn't it?
+
   DbUtils::execNoPrepare(
     _db,
     QString("ALTER TABLE %1 "
-      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%2'::regclass)")
         .arg(getCurrentNodesTableName(mapId), getCurrentNodesSequenceName(mapId)));
 
   DbUtils::execNoPrepare(
     _db,
     QString("ALTER TABLE %1 "
-      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%2'::regclass)")
         .arg(getCurrentRelationsTableName(mapId), getCurrentRelationsSequenceName(mapId)));
 
   DbUtils::execNoPrepare(
     _db,
     QString("ALTER TABLE %1 "
-      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%2'::regclass)")
         .arg(getCurrentWaysTableName(mapId), getCurrentWaysSequenceName(mapId)));
 
   // remove the index to speed up inserts. It'll be added back by createPendingMapIndexes
@@ -710,9 +708,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
 
   if (_nodeBulkInsert == nullptr)
   {
-    QStringList columns;
-    columns << "id" << "latitude" << "longitude" << "changeset_id" << "timestamp" <<
-               "tile" << "version" << "tags";
+    QStringList columns({"id", "latitude", "longitude", "changeset_id", "timestamp", "tile", "version", "tags"});
 
     _nodeBulkInsert =
       std::make_shared<SqlBulkInsert>(
@@ -771,8 +767,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
 
   if (_relationBulkInsert == nullptr)
   {
-    QStringList columns;
-    columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
+    QStringList columns({"id", "changeset_id", "timestamp", "version", "tags"});
 
     _relationBulkInsert =
       std::make_shared<SqlBulkInsert>(
@@ -1781,57 +1776,18 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
 
 vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 {
-  const long mapId = _currMapId;
-  vector<RelationData::Entry> result;
-
   if (!_selectMembersForRelation)
   {
     _selectMembersForRelation = std::make_shared<QSqlQuery>(_db);
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
       QString("SELECT member_type, member_id, member_role FROM %1"
-              " WHERE relation_id = :relationId ORDER BY sequence_id").arg(getCurrentRelationMembersTableName(mapId)));
+              " WHERE relation_id = :relationId ORDER BY sequence_id").arg(getCurrentRelationMembersTableName(_currMapId)));
   }
 
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
-  if (_selectMembersForRelation->exec() == false)
-  {
-    throw HootException(
-      QString("Error selecting members for relation with ID: %1 Error: %2")
-        .arg(QString::number(relationId), _selectMembersForRelation->lastError().text()));
-  }
-  LOG_VART(_selectMembersForRelation->numRowsAffected());
-  LOG_VART(_selectMembersForRelation->executedQuery());
 
-  while (_selectMembersForRelation->next())
-  {
-    const QString memberType = _selectMembersForRelation->value(0).toString();
-    LOG_VART(memberType);
-    if (ElementType::isValidTypeString(memberType))
-    {
-      RelationData::Entry member =
-        RelationData::Entry(
-          _selectMembersForRelation->value(2).toString(),
-          ElementId(ElementType::fromString(memberType),
-          _selectMembersForRelation->value(1).toLongLong()));
-      LOG_VART(member);
-      result.push_back(member);
-    }
-    else
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
-  }
-
-  return result;
+  return ApiDb::_selectRelationMembers(_selectMembersForRelation);
 }
 
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
@@ -1919,8 +1875,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags, long version)
 
   if (_wayBulkInsert == nullptr)
   {
-    QStringList columns;
-    columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
+    QStringList columns({"id", "changeset_id", "timestamp", "version", "tags"});
 
     _wayBulkInsert =
       std::make_shared<SqlBulkInsert>(
@@ -1969,7 +1924,6 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
 
   if (_wayNodeBulkInsert == nullptr)
   {
-//TODO: QStringList initializer lists
     QStringList columns({"way_id", "node_id", "sequence_id"});
 
     _wayNodeBulkInsert =

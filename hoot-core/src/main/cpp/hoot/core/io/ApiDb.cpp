@@ -65,6 +65,8 @@ namespace hoot
 
 const Status ApiDb::DEFAULT_ELEMENT_STATUS(Status::Invalid);
 
+int ApiDb::logWarnCount = 0;
+
 ApiDb::ApiDb()
   : _maxElementsPerPartialMap(ConfigOptions().getMaxElementsPerPartialMap())
 {
@@ -985,6 +987,52 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
   LOG_VART(_selectQueries[elementTableName]->executedQuery());
 
   return _selectQueries[elementTableName];
+}
+
+std::vector<RelationData::Entry> ApiDb::_selectRelationMembers(const std::shared_ptr<QSqlQuery>& relation_query) const
+{
+  vector<RelationData::Entry> results;
+  if (!relation_query)
+    return results;
+
+  if (relation_query->exec() == false)
+  {
+    throw HootException(
+      QString("Error selecting members for relation with ID: %1 Error: %2")
+        .arg(relation_query->boundValue(0).toString(), relation_query->lastError().text()));
+  }
+  LOG_VART(relation_query->numRowsAffected());
+  LOG_VART(relation_query->executedQuery());
+
+  while (relation_query->next())
+  {
+    const QString memberType = relation_query->value(0).toString();
+    LOG_VART(memberType);
+    if (ElementType::isValidTypeString(memberType))
+    {
+      RelationData::Entry member =
+        RelationData::Entry(
+          relation_query->value(2).toString(),
+          ElementId(ElementType::fromString(memberType),
+          relation_query->value(1).toLongLong()));
+      LOG_VART(member);
+      results.push_back(member);
+    }
+    else
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
+  }
+
+  return results;
 }
 
 }
