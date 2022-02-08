@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateNodeRemover.h"
@@ -73,8 +73,7 @@ DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold)
     if (_distance <= 0.0)
     {
       throw IllegalArgumentException(
-        "Nearby node merging distance must be greater than zero. Distance specified: " +
-        QString::number(_distance));
+        QString("Nearby node merging distance must be greater than zero. Distance specified: %1").arg(QString::number(_distance)));
     }
   }
 }
@@ -136,7 +135,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 
       for (auto matchIdJ : v)
       {
-        bool replace = false;
+        bool replace = true;
         double calcdDistanceSquared = -1.0;
 
         if (matchIdI != matchIdJ && map->containsNode(matchIdJ))
@@ -166,25 +165,27 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                   "actively configured conflate matcher...");
                 replace = false;
               }
-              else
-              {
-                replace = true;
-              }
-              LOG_VART(replace);
 
               Tags tags1 = n1->getTags();
               tags1.removeMetadata();
               Tags tags2 = n2->getTags();
               tags2.removeMetadata();
-              if (tags1.empty() || tags2.empty()) //  An empty node should always merge
+              //  Check the tags
+              if ((tags1.empty() && tags2.empty()) ||
+                  (!tags1.empty() && tags2.empty()))
               {
-                //  Keep the node that has tags, if any
-                if (!tags2.empty())
-                  std::swap(n1, n2);
+                //  When both sets of tags are empty or the first set is and the second set isn't, replace
                 replace = true;
+              }
+              else if (tags1.empty() && !tags2.empty())
+              {
+                //  When the first set of tags is empty but the second set isn't, don't replace the node
+                //  because a later iteration of the loop with merge the two nodes in the correct order
+                replace = false;
               }
               else if (replace && tagDiff.diff(map, n1, n2) != 0.0)
               {
+                //  Both sets of tags aren't empty and the tag differencer score is non-zero they can't be merged
                 LOG_VART(tagDiff.diff(map, n1, n2));
                 LOG_TRACE(
                   "Skipping merge for " << n1->getElementId() << " and " << n2->getElementId() <<
@@ -262,6 +263,9 @@ void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId
                                            const OsmMapPtr& map, const bool replaced,
                                            const double distance, const double calcdDistance) const
 {
+  //  Since all log messages below are TRACE level messages, if the log level is above trace, exit
+  if (Log::getInstance().getLevel() > Log::Trace)
+    return;
   if (_passesLogMergeFilter(nodeId1, nodeId2, map))
   {
     QString msg = "merging nodes: ";
