@@ -94,6 +94,7 @@ tds61.rules = {
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
+    ['F_CODE','BH082','natural','waterhole'], // Water-hole
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
@@ -929,8 +930,8 @@ tds61.rules = {
     ['CNF','1001','aquifer:confined','yes'],
 
     // COD - Delineation Known
-    ['COD','1000','deliniation','unknown'], // Limits and Information Unknown
-    ['COD','1001','deliniation','known'], // Limits and Information Known
+    ['COD','1000','delineation','unknown'], // Limits and Information Unknown
+    ['COD','1001','delineation','known'], // Limits and Information Known
 
     //COE - Certainty of Existence - Really???
     // ['COE','-999999',undefined,undefined], // No Information
@@ -2073,7 +2074,7 @@ tds61.rules = {
     ['IWT','3','water','undifferentiated_water_body'], // Undifferentiated Water Body
     ['IWT','4','water','reservoir'], // Reservoir
     ['IWT','5','landuse','basin'], // Basin
-    ['IWT','6','water','water-hole'], // Water-hole
+    ['IWT','6','natural','waterhole'], // Water-hole
     ['IWT','7','water','landlocked_sea'], // Landlocked Sea
     ['IWT','999','water','other'], // Other
 
@@ -3012,11 +3013,11 @@ tds61.rules = {
 
     // UDQ - Underwater Delineation Quality
     // ['UDQ','-999999',undefined,undefined], // No Information
-    ['UDQ','1','deliniation:quality','excellent'], // Excellent Delineation
-    ['UDQ','2','deliniation:quality','good'], // Good Delineation
-    ['UDQ','3','deliniation:quality','average'], // Average Delineation
-    ['UDQ','4','deliniation:quality','poor'], // Poor Delineation
-    ['UDQ','5','deliniation:quality','highly_obscured'], // Highly Obscured Delineation
+    ['UDQ','1','delineation:quality','excellent'], // Excellent Delineation
+    ['UDQ','2','delineation:quality','good'], // Good Delineation
+    ['UDQ','3','delineation:quality','average'], // Average Delineation
+    ['UDQ','4','delineation:quality','poor'], // Poor Delineation
+    ['UDQ','5','delineation:quality','highly_obscured'], // Highly Obscured Delineation
 
     // UMA - Underground Mine Access
     // ['UMA','-999999',undefined,undefined], // No Information
