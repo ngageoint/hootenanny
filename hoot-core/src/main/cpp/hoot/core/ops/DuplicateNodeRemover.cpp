@@ -163,7 +163,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                   "Skipping processing of " << n1->getElementId() << " and " <<
                   n2->getElementId() << " at least one of them cannot be conflated by any " <<
                   "actively configured conflate matcher...");
-                continue;
+                replace = false;
               }
 
               Tags tags1 = n1->getTags();
@@ -174,8 +174,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               if ((tags1.empty() && tags2.empty()) ||
                   (!tags1.empty() && tags2.empty()))
               {
-                //  When both sets of tags are empty or the first set is and the second set isn't
-                //  continue on because `replace` is already set
+                //  When both sets of tags are empty or the first set is and the second set isn't, replace
+                replace = true;
               }
               else if (tags1.empty() && !tags2.empty())
               {
@@ -183,7 +183,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                 //  because a later iteration of the loop with merge the two nodes in the correct order
                 replace = false;
               }
-              else if (tagDiff.diff(map, n1, n2) != 0.0)
+              else if (replace && tagDiff.diff(map, n1, n2) != 0.0)
               {
                 //  Both sets of tags aren't empty and the tag differencer score is non-zero they can't be merged
                 LOG_VART(tagDiff.diff(map, n1, n2));
