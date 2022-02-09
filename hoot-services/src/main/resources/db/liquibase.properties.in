@@ -28,7 +28,7 @@
 ##
 # This file is the source control version of the liquibase.properties. The first time
 # you build this should be copied to liquibase.properties. You can then modify that
-# file to suite your local build environment. If you make changes to
+# file to suit your local build environment. If you make changes to
 # liquibase.properties.orig please send an email out to all developers that there has
 # been a change.
 ##
