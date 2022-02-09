@@ -96,6 +96,10 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
     if ((ogrReader || ogrWriter) && _translationScript.isEmpty())
       throw IllegalArgumentException("No translation script specified.");
 
+    //  Set the translation script for OGR readers
+    if (ogrReader && !ogrWriter)
+      ogrReader->setSchemaTranslationScript(_translationScript);
+
     // Need to run separate logic for streaming from an OGR source with layers in order to support
     // the layer syntax.
     if (ogrReader && input.contains(";"))
