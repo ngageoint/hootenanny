@@ -490,8 +490,8 @@ QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3
 
 unsigned int ApiDb::tileForPoint(double lat, double lon)
 {
-  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
-  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
+  int lonInt = static_cast<int>(round((lon + 180.0) * 65535.0 / 360.0));
+  int latInt = static_cast<int>(round((lat + 90.0) * 65535.0 / 180.0));
 
   unsigned int tile = 0;
 
@@ -828,10 +828,10 @@ void ApiDb::readDbConfig(Settings& settings, const QString& config_path)
 
   QStringList sl = s.split('\n', QString::SkipEmptyParts);
 
-  for (const auto& s : qAsConst(sl))
+  for (const auto& split : qAsConst(sl))
   {
-    QString key = s.section("=", 0, 0).remove("export ").trimmed();
-    QString value = s.section("=", 1).trimmed();
+    QString key = split.section("=", 0, 0).remove("export ").trimmed();
+    QString value = split.section("=", 1).trimmed();
     if (!key.startsWith("#") && key.length() > 0)
       settings.set(key, value);
   }

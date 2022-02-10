@@ -120,7 +120,7 @@ bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
     {
       return _bounds->contains(geom.get());
     }
-    catch (geos::util::TopologyException&)
+    catch (const geos::util::TopologyException&)
     {
       //  If the contains call fails, use the envelope
       return _bounds->contains(geom->getEnvelope().get());
@@ -132,7 +132,7 @@ bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
     {
       return _bounds->intersects(geom.get());
     }
-    catch (geos::util::TopologyException&)
+    catch (const geos::util::TopologyException&)
     {
       //  If the intersects call fails, use the envelope
       return _bounds->intersects(geom->getEnvelope().get());

@@ -467,9 +467,8 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
                member.getElementId().getType().toString(),
                QString::number(cacheSize));
 
-      switch (member_type)
+      if (member_type == ElementType::Relation)
       {
-      case ElementType::Relation:
         //  Relation members throw that fail and aren't forced
         if (_failOnSkipRelation && !_forceSkipFailedRelations)
           throw HootException(msg);
@@ -482,12 +481,12 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
           _unwrittenFirstPassRelationIds.append(newRelation->getId());
           return;
         }
-        break;
-      default:
+      }
+      else
+      {
         //  Node and Way members throw if we don't force the skip
         if (!_forceSkipFailedRelations)
           throw HootException(msg);
-        break;
       }
       //  Add this member to the list to remove for OGR files
       removeEntries.insert(member);
@@ -523,7 +522,7 @@ void OgrWriter::writeElement(ElementPtr& element)
     return;
   Tags sourceTags = element->getTags();
   Tags destTags;
-  for (auto it = sourceTags.begin(); it != sourceTags.end(); ++it)
+  for (auto it = sourceTags.constBegin(); it != sourceTags.constEnd(); ++it)
   {
     if (it.value() != "")
       destTags.appendValue(it.key(), it.value());
@@ -764,7 +763,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
                                    const Geometry* g, OGRFeature* poFeature) const
 {
   std::string wkt = g->toString();
-  const char* t = (char*)wkt.data();
+  const char* t = wkt.data();
   OGRGeometry* geom;
   int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
   if (errCode != OGRERR_NONE)
