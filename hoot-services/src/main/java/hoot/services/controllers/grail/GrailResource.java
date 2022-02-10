@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -53,6 +53,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -1066,6 +1067,8 @@ public class GrailResource {
         InputStream inputStream = null;
         String[] splitUrl = urlString.split("(?=data)"); // prevents removal of 'data' text
         URL url = new URL(splitUrl[0]);
+        logger.info(splitUrl[0]);
+        logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(urlString.contains(replaceSensitiveData(RAILSPORT_PUSH_URL)) ? "GET" : "POST"); // Need to use GET for rails port
         conn.setDoOutput(true);

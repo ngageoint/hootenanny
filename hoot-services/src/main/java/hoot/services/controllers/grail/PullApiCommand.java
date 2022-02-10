@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -165,6 +165,8 @@ public class PullApiCommand implements InternalCommand {
 
         String[] splitUrl = url.split("data=");
         HttpPost post = new HttpPost(splitUrl[0]);
+        logger.info(splitUrl[0]);
+        logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
 
         // Just a safety check but splitUrl[1] should be the query data
         if (splitUrl.length == 2) {
@@ -230,7 +232,7 @@ public class PullApiCommand implements InternalCommand {
         } else if (newQuery.lastIndexOf("out count;") != -1) {
             newQuery = newQuery.substring(0, newQuery.lastIndexOf("out count;")) + connectedWaysQuery;
         }
-        logger.info(newQuery);
+
         return newQuery;
     }
 }
