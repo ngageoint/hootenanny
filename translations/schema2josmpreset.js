@@ -216,7 +216,7 @@ Object.keys(objs).forEach(s => {
             //because otherwise a closedway will be ambiguous in this case
             //How to ensure we don't overwrite existing OSMTAGS when this preset is applied?
             var val = (items[i].geom === 'Area') ? '{\"area\":\"yes\"}' : '{\"area\":\"no\"}';
-            it.ele('key', {key: 'OSMTAGS', value: val});
+            it.ele('key', {key: 'OSMTAGS', value: val, match: 'none'});
         }
 
         items[i].columns.forEach((col, j) => {
