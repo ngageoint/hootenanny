@@ -175,7 +175,7 @@ private:
    * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
    * that it will handle.
    */
-  std::shared_ptr<OGRSpatialReference> _fixProjection(std::shared_ptr<OGRSpatialReference> srs);
+  std::shared_ptr<OGRSpatialReference> _fixProjection(std::shared_ptr<OGRSpatialReference> srs) const;
 
   void _initTranslate();
   void _finalizeTranslate();
@@ -265,7 +265,7 @@ std::shared_ptr<ElementIterator> OgrReader::createIterator(const QString& path, 
   return std::make_shared<OgrElementIterator>(d);
 }
 
-std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shared_ptr<OGRSpatialReference> srs)
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shared_ptr<OGRSpatialReference> srs) const
 {
   std::shared_ptr<OGRSpatialReference> result;
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
@@ -422,7 +422,7 @@ std::vector<float> OgrReader::_getInputProgressWeights(const QString& input, con
       featureCountTotal += static_cast<long>(progressWeights[i]);
     LOG_VART(progressWeights);
     for (int i = 0; i < layers.size(); i++)
-      progressWeights[i] /= (float)featureCountTotal;
+      progressWeights[i] /= static_cast<float>(featureCountTotal);
   }
 
   LOG_VART(progressWeights);
