@@ -765,7 +765,6 @@ mgcp = {
     }
     else
     {
-      // Moving to upper case as a test
       if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
 
