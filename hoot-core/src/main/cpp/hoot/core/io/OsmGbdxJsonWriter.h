@@ -28,7 +28,7 @@
 #define OSM_GBDX_JSON_WRITER
 
 // hoot
-#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmGeoJsonWriterBase.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -38,7 +38,7 @@ namespace hoot
  * Writes an OsmMap to JSON files with one feature per file.
  * This is to support ingest into GBDX Vector Services.
  */
-class OsmGbdxJsonWriter : public OsmJsonWriter
+class OsmGbdxJsonWriter : public OsmGeoJsonWriterBase
 {
 public:
 
@@ -58,7 +58,6 @@ public:
    * @param map
    */
   void write(const ConstOsmMapPtr& map) override;
-
   /**
    * @brief isSupported returns true if the URL is likely supported
    * @param url Filename ending in ".gbdx"
@@ -86,13 +85,6 @@ protected:
    */
   void _writeRelations() override;
 
-  /**
-   * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
-   * @param relation
-   * @return Semicolon separated list of roles
-   */
-  std::string _buildRoles(ConstRelationPtr relation);
-
 private:
 
   QDir _outputDir;
@@ -104,65 +96,6 @@ private:
    */
   void _newOutputFile();
 
-  /**
-   * @brief _buildRoles Recursive version of _buildRoles, called my previous version
-   * @param relation
-   * @param first Flag used for semicolon separation
-   * @return Semicolon separated list of roles
-   */
-  std::string _buildRoles(ConstRelationPtr relation, bool& first);
-
-  /**
-   * @brief _writeNode Writes a single node; metadata, tags, and geometry
-   * @param node
-   */
-  void _writeNode(ConstNodePtr node);
-
-  /**
-   * @brief _writeWay Writes a single way; metadata, tags, and geometry
-   * @param way
-   */
-  void _writeWay(ConstWayPtr way);
-
-  /**
-   * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
-   * @param relation
-   */
-  void _writeRelationInfo(ConstRelationPtr relation);
-
-  /**
-   * @brief _writeFeature Calls _writeNode(), _writeWay(), or _writeRelation()
-   *   based on the type of element e
-   * @param element
-   */
-  void _writeFeature(ConstElementPtr element);
-
-  /**
-   * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
-   * @param nodes Vector of node ids in OsmMap
-   * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
-   */
-  void _writeGeometry(const std::vector<long>& nodes, std::string type);
-  /**
-   * @brief _writeGeometry Write out geometry for any element
-   * @param element
-   */
-  void _writeGeometry(ConstElementPtr element);
-  /**
-   * @brief _writeGeometry Write out geometry for a single node
-   * @param node
-   */
-  void _writeGeometry(ConstNodePtr node);
-  /**
-   * @brief _writeGeometry Write out geometry for a single way
-   * @param way
-   */
-  void _writeGeometry(ConstWayPtr way);
-  /**
-   * @brief _writeGeometry Write out geometry for a single relation
-   * @param relation
-   */
-  void _writeGeometry(ConstRelationPtr relation);
 };
 
 }

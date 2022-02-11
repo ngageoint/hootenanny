@@ -62,17 +62,17 @@ namespace hoot
 
 int ElementToGeometryConverter::logWarnCount = 0;
 
-ElementToGeometryConverter::ElementToGeometryConverter(
-  const ConstElementProviderPtr& provider, const bool logWarningsForMissingElements) :
-_constProvider(provider),
-_spatialReference(provider->getProjection()),
-_requireAreaForPolygonConversion(true),
-_logWarningsForMissingElements(logWarningsForMissingElements)
+ElementToGeometryConverter::ElementToGeometryConverter(const ConstElementProviderPtr& provider,
+                                                       const bool logWarningsForMissingElements)
+  : _constProvider(provider),
+    _spatialReference(provider->getProjection()),
+    _requireAreaForPolygonConversion(true),
+    _logWarningsForMissingElements(logWarningsForMissingElements)
 {
 }
 
-std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
-  const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const std::shared_ptr<const Element>& e,
+                                                                        bool throwError, const bool statsFlag) const
 {
   LOG_VART(e->getElementId());
   switch (e->getElementType().getEnum())
@@ -91,8 +91,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
 
 std::shared_ptr<Point> ElementToGeometryConverter::convertToGeometry(const ConstNodePtr& n) const
 {
-  return
-    std::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
+  return std::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 }
 
 std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const WayPtr& w) const
@@ -100,37 +99,26 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Wa
   return convertToGeometry((ConstWayPtr)w);
 }
 
-std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
-  const ConstWayPtr& e, bool throwError, const bool statsFlag) const
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const ConstWayPtr& e, bool throwError,
+                                                                        const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_POLYGON)
-  {
     return convertToPolygon(e);
-  }
   else if (gid == GEOS_LINESTRING)
-  {
     return convertToLineString(e);
-  }
-  else
-  {
-    // we don't recognize this geometry type
-    LOG_TRACE("Returning empty geometry...");
-    std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-    return g;
-  }
+  else  // We don't recognize this geometry type
+    return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 }
 
-std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
-  const ConstRelationPtr& e, bool throwError, const bool statsFlag) const
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const ConstRelationPtr& e, bool throwError,
+                                                                        const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
-  {
     return RelationToMultiPolygonConverter(_constProvider, e).createMultipolygon();
-  }
   else if (gid == GEOS_MULTILINESTRING)
   {
     MultiLineStringVisitor v;
@@ -138,11 +126,8 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
     e->visitRo(*_constProvider, v);
     return v.createMultiLineString();
   }
-  else
-  {
-    // We don't recognize this geometry type.
+  else  // We don't recognize this geometry type.
     return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-  }
 }
 
 std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const RelationPtr& r) const
@@ -150,30 +135,29 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Re
   return convertToGeometry((ConstRelationPtr)r);
 }
 
-std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
-  const ConstWayPtr& w) const
+std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(const ConstWayPtr& w) const
 {
   LOG_TRACE("Converting " << w->getElementId() << " to line string...");
 
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
   if (size == 1)
-  {
     size = 2;
-  }
+
   CoordinateSequence* cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   for (size_t i = 0; i < ids.size(); i++)
   {
-    ConstNodePtr n = _constProvider->getNode(ids[i]);
+    long node_id = ids[i];
+    ConstNodePtr n = _constProvider->getNode(node_id);
     if (!n.get())
     {
       if (_logWarningsForMissingElements)
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Missing node: " << ids[i] << ". Not creating line string...");
+          LOG_WARN("Missing node: " << node_id << ". Not creating line string...");
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -181,7 +165,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
         }
         logWarnCount++;
       }
-      LOG_TRACE("Missing node: " << ids[i] << ". Not creating line string...");
+      LOG_TRACE("Missing node: " << node_id << ". Not creating line string...");
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), i);
@@ -221,20 +205,14 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   LOG_VART(ids);
   size_t size = ids.size();
   if (size == 1)
-  {
     size = 2;
-  }
 
   // if the first and last nodes aren't the same.
   if (!ids.empty() && ids[0] != ids[ids.size() - 1])
-  {
     size++;
-  }
 
   if (size <= 3)
-  {
     return std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
-  }
 
   CoordinateSequence* cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
@@ -242,14 +220,15 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
-    LOG_VART(ids[i]);
-    ConstNodePtr n = _constProvider->getNode(ids[i]);
+    long node_id = ids[i];
+    LOG_VART(node_id);
+    ConstNodePtr n = _constProvider->getNode(node_id);
     if (!n.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(
-          "Node " << QString::number(ids[i]) << " does not exist. Skipping conversion of " <<
+          "Node " << QString::number(node_id) << " does not exist. Skipping conversion of " <<
           w->getElementId() << " to polygon...");
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
@@ -297,9 +276,9 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   return result;
 }
 
-geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
-  const ConstElementPtr& e, bool throwError, const bool statsFlag,
-  const bool requireAreaForPolygonConversion)
+geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(const ConstElementPtr& e, bool throwError,
+                                                                       const bool statsFlag,
+                                                                       const bool requireAreaForPolygonConversion)
 {
   ElementType t = e->getElementType();
 
@@ -307,116 +286,105 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
   {
   case ElementType::Node:
     return GEOS_POINT;
-
   case ElementType::Way:
-    {
-      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
-      assert(w);
+  {
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+    assert(w);
 
-      LOG_VART(statsFlag);
-      LOG_VART(w->isValidPolygon());
-      LOG_VART(w->isClosedArea());
-      LOG_VART(AreaCriterion().isSatisfied(w));
-      LOG_VART(OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area));
+    LOG_VART(statsFlag);
+    LOG_VART(w->isValidPolygon());
+    LOG_VART(w->isClosedArea());
+    LOG_VART(AreaCriterion().isSatisfied(w));
+    LOG_VART(OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area));
 
-      ElementCriterionPtr areaCrit;
-      if (statsFlag)
-      {
-        areaCrit = std::make_shared<StatsAreaCriterion>();
-      }
-      else
-      {
-        areaCrit = std::make_shared<AreaCriterion>();
-      }
+    ElementCriterionPtr areaCrit;
+    if (statsFlag)
+      areaCrit = std::make_shared<StatsAreaCriterion>();
+    else
+      areaCrit = std::make_shared<AreaCriterion>();
 
-      // Hootenanny by default requires that an polygon element be an area in the schema in order
-      // to be converted to a polygon, it is created as a linestring. There are situations, however,
-      // where we want to relax this requirement (generic geometry matching).
-      if (!requireAreaForPolygonConversion && w->isValidPolygon() && w->isClosedArea())
-        return GEOS_POLYGON;
-      else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
-        return GEOS_POLYGON;
-      else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
-        return GEOS_POLYGON;
-      else
-        return GEOS_LINESTRING;
+    // Hootenanny by default requires that an polygon element be an area in the schema in order
+    // to be converted to a polygon, it is created as a linestring. There are situations, however,
+    // where we want to relax this requirement (generic geometry matching).
+    if (!requireAreaForPolygonConversion && w->isValidPolygon() && w->isClosedArea())
+      return GEOS_POLYGON;
+    else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
+      return GEOS_POLYGON;
+    else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
+      return GEOS_POLYGON;
+    else
+      return GEOS_LINESTRING;
 
-      break;
-    }
-
+    break;
+  }
   case ElementType::Relation:
+  {
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
+    assert(r);
+
+    LinearCriterion linearCrit;
+
+    if (statsFlag)
     {
-      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-      assert(r);
-
-      LinearCriterion linearCrit;
-
-      if (statsFlag)
-      {
-        if (r->isMultiPolygon() || r->getType() == MetadataTags::RelationSite() ||
-            StatsAreaCriterion().isSatisfied(r))
-          return GEOS_MULTIPOLYGON;
-        else if (linearCrit.isSatisfied(r))
-          return GEOS_MULTILINESTRING;
-      }
-      else
-      {
-        if (r->isMultiPolygon() ||
-            // Relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
-            r->getType() == MetadataTags::RelationSite() ||
-            AreaCriterion().isSatisfied(r))
-          return GEOS_MULTIPOLYGON;
-        // Restriction relations are empty geometry
-        else if (r->isRestriction())
-          return GEOS_GEOMETRYCOLLECTION;
-        // Need to find a better way of doing this.
-        // If we have a review, send back a collection. This gets converted into an empty geometry.
-        else if (r->isReview())
-          return GEOS_GEOMETRYCOLLECTION;
-        // MultiPoint comes from GeoJSON
-        else if (r->getType() == MetadataTags::RelationMultiPoint())
-          return GEOS_MULTIPOINT;
-        //  Restrictions satisfy the linear criterion so test it after restrictions
-        else if (linearCrit.isSatisfied(r))
-          return GEOS_MULTILINESTRING;
-        // an empty geometry, pass back a collection
-        else if (r->getMembers().empty() || RelationCriterion().isSatisfied(r))
-          return GEOS_GEOMETRYCOLLECTION;
-      }
-
-      QString errorMsg;
-      // We are going to throw an error so we save the type of relation
-      QString relationType = r->getType().trimmed();
-      if (relationType != "")
-      {
-        errorMsg =
-          "Unknown geometry type for " + e->getElementId().toString() + " with type=" +
-          relationType;
-      }
-      else
-      {
-        errorMsg =
-          "Unknown geometry type for " + e->getElementId().toString() + " with missing type.";
-      }
-      if (throwError)
-      {
-        throw IllegalArgumentException(errorMsg);
-      }
-      else
-      {
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN(errorMsg);
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-      }
-      break;
+      if (r->isMultiPolygon() || r->getType() == MetadataTags::RelationSite() || StatsAreaCriterion().isSatisfied(r))
+        return GEOS_MULTIPOLYGON;
+      else if (linearCrit.isSatisfied(r))
+        return GEOS_MULTILINESTRING;
+    }
+    else
+    {
+      if (r->isMultiPolygon() ||
+          // Relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
+          r->getType() == MetadataTags::RelationSite() ||
+          AreaCriterion().isSatisfied(r))
+        return GEOS_MULTIPOLYGON;
+      // Restriction relations are empty geometry
+      else if (r->isRestriction())
+        return GEOS_GEOMETRYCOLLECTION;
+      // Need to find a better way of doing this.
+      // If we have a review, send back a collection. This gets converted into an empty geometry.
+      else if (r->isReview())
+        return GEOS_GEOMETRYCOLLECTION;
+      // MultiPoint comes from GeoJSON
+      else if (r->getType() == MetadataTags::RelationMultiPoint())
+        return GEOS_MULTIPOINT;
+      //  Restrictions satisfy the linear criterion so test it after restrictions
+      else if (linearCrit.isSatisfied(r))
+        return GEOS_MULTILINESTRING;
+      // an empty geometry, pass back a collection
+      else if (r->getMembers().empty() || RelationCriterion().isSatisfied(r))
+        return GEOS_GEOMETRYCOLLECTION;
     }
 
+    QString errorMsg;
+    // We are going to throw an error so we save the type of relation
+    QString relationType = r->getType().trimmed();
+    if (relationType != "")
+    {
+      errorMsg =
+        QString("Unknown geometry type for %1 with type=%2").arg(e->getElementId().toString(), relationType);
+    }
+    else
+    {
+      errorMsg =
+        QString("Unknown geometry type for %1 with missing type.").arg(e->getElementId().toString());
+    }
+    if (throwError)
+      throw IllegalArgumentException(errorMsg);
+    else
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN(errorMsg);
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
+    break;
+  }
   default:
     if (logWarnCount < Log::getWarnMessageLimit())
     {
