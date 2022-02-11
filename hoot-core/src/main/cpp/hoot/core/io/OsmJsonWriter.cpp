@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmJsonWriter.h"
 
@@ -53,16 +53,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
-OsmJsonWriter::OsmJsonWriter(int precision) :
-_precision(precision),
-_out(nullptr),
-_writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
-_numWritten(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCompatibilityTags(true),
-_pretty(ConfigOptions().getJsonPrettyPrint()),
-_writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags())
+OsmJsonWriter::OsmJsonWriter(int precision)
+  : _precision(precision),
+    _out(nullptr),
+    _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
+    _numWritten(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _includeCompatibilityTags(true),
+    _pretty(ConfigOptions().getJsonPrettyPrint()),
+    _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags())
 {
 }
 
@@ -98,9 +98,7 @@ void OsmJsonWriter::open(const QString& url)
 {
   _fp.setFileName(url);
   if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
-  }
+    throw HootException(QString("Error opening %1 for writing").arg(url));
   _out = &_fp;
 }
 
@@ -139,9 +137,7 @@ void OsmJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
   if (_out->isWritable() == false)
-  {
     throw HootException("Please open the file before attempting to write.");
-  }
 
   _write("{");
   _write("\"version\": 0.6,");
@@ -176,38 +172,42 @@ void OsmJsonWriter::_writeMetadata(const Element& element)
 {
   if (_includeCompatibilityTags)
   {
-    _writeKvp("timestamp", DateTimeUtils::toTimeString(element.getTimestamp())); _write(",");
+    _writeKvp("timestamp", DateTimeUtils::toTimeString(element.getTimestamp()));
+    _write(",");
     long version = element.getVersion();
     if (version == ElementData::VERSION_EMPTY)
-    {
       version = 1;
-    }
-    _writeKvp("version", version); _write(",");
+    _writeKvp("version", version);
+    _write(",");
   }
   else
   {
     if (element.getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
-      _writeKvp("timestamp", DateTimeUtils::toTimeString(element.getTimestamp())); _write(",");
+      _writeKvp("timestamp", DateTimeUtils::toTimeString(element.getTimestamp()));
+      _write(",");
     }
     if (element.getVersion() != ElementData::VERSION_EMPTY)
     {
-      _writeKvp("version", element.getVersion()); _write(",");
+      _writeKvp("version", element.getVersion());
+      _write(",");
     }
   }
-  if (element.getChangeset() != ElementData::CHANGESET_EMPTY &&
-      //  Negative IDs are considered "new" elements and shouldn't have a changeset
-      element.getId() > 0)
+  //  Negative IDs are considered "new" elements and shouldn't have a changeset
+  if (element.getChangeset() != ElementData::CHANGESET_EMPTY && element.getId() > 0)
   {
-    _writeKvp("changeset", element.getChangeset()); _write(",");
+    _writeKvp("changeset", element.getChangeset());
+    _write(",");
   }
   if (element.getUser() != ElementData::USER_EMPTY)
   {
-    _writeKvp("user", element.getUser()); _write(",");
+    _writeKvp("user", element.getUser());
+    _write(",");
   }
   if (element.getUid() != ElementData::UID_EMPTY)
   {
-    _writeKvp("uid", element.getUid()); _write(",");
+    _writeKvp("uid", element.getUid());
+    _write(",");
   }
 }
 
@@ -215,17 +215,16 @@ void OsmJsonWriter::_writeNodes()
 {
   const long debugId = 0;
 
-  QList<long> nids;
+  vector<long> nids;
   const NodeMap& nodes = _map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
-  {
-    nids.append(it->first);
-  }
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
+    nids.push_back(it->first);
+
   // sort the values to give consistent results.
-  qSort(nids.begin(), nids.end(), qLess<long>());
-  for (int i = 0; i < nids.size(); i++)
+  sort(nids.begin(), nids.end(), less<long>());
+  for (auto node_id : nids)
   {
-    ConstNodePtr n = _map->getNode(nids[i]);
+    ConstNodePtr n = _map->getNode(node_id);
     const QString msg = "Writing node: " + n->toString() + "...";
     if (n->getId() == debugId)
     {
@@ -240,12 +239,15 @@ void OsmJsonWriter::_writeNodes()
     _firstElement = false;
 
     _write("{");
-    _writeKvp("type", "node"); _write(",");
-    _writeKvp("id", n->getId()); _write(",");
+    _writeKvp("type", "node");
+    _write(",");
+    _writeKvp("id", n->getId());
+    _write(",");
 
     _writeMetadata(*n);
 
-    _writeKvp("lat", n->getY()); _write(",");
+    _writeKvp("lat", n->getY());
+    _write(",");
     _writeKvp("lon", n->getX());
     if (_hasTags(n)) _write(",");
     _writeTags(n);
@@ -270,9 +272,9 @@ void OsmJsonWriter::_write(const QString& str, bool newLine)
 bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const
 {
   return !e->getTags().empty() ||
-         e->getElementType() != ElementType::Node ||
-        (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
-         _includeDebug;
+          e->getElementType() != ElementType::Node ||
+         (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
+          _includeDebug;
 }
 
 void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& firstTag)
@@ -302,7 +304,7 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
   const Tags& tags = eClone->getTags();
   if (!tags.empty())
   {
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       QString key = it.key();
       QString value = it.value();
@@ -313,27 +315,24 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
   }
 
   if (firstTag == false)
-  {
     _write("}");
-  }
 }
 
 void OsmJsonWriter::_writeWays()
 {
   const long debugId = 0;
 
-  QList<long> wids;
+  vector<long> wids;
   const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    wids.append(it->first);
-  }
-  // sort the values to give consistent results.
-  qSort(wids.begin(), wids.end(), qLess<long>());
+  for (auto it = ways.begin(); it != ways.end(); ++it)
+    wids.push_back(it->first);
 
-  for (int i = 0; i < wids.size(); i++)
+  // sort the values to give consistent results.
+  sort(wids.begin(), wids.end(), less<long>());
+
+  for (auto way_id : wids)
   {
-    ConstWayPtr w = _map->getWay(wids[i]);
+    ConstWayPtr w = _map->getWay(way_id);
     const QString msg = "Writing way: " + w->toString() + "...";
 
     if (w->getId() == debugId)
@@ -345,26 +344,28 @@ void OsmJsonWriter::_writeWays()
       LOG_VART(msg);
     }
 
-    if (!_firstElement) _write(",", true);
+    if (!_firstElement)
+      _write(",", true);
     _firstElement = false;
 
     _write("{");
-    _writeKvp("type", "way"); _write(",");
-    _writeKvp("id", w->getId()); _write(",");
+    _writeKvp("type", "way");
+    _write(",");
+    _writeKvp("id", w->getId());
+    _write(",");
 
     _writeMetadata(*w);
 
     _write("\"nodes\":[");
     for (size_t j = 0; j < w->getNodeCount(); j++)
     {
-      _write(QString::number(w->getNodeId(j)), false);
+      _write(QString::number(w->getNodeId(static_cast<int>(j))), false);
       if (j != w->getNodeCount() - 1)
-      {
         _write(",");
-      }
     }
     _write("]");
-    if (_hasTags(w)) _write(",");
+    if (_hasTags(w))
+      _write(",");
     _writeTags(w);
     _write("}", false);
 
@@ -381,19 +382,17 @@ void OsmJsonWriter::_writeRelations()
 {
   const long debugId = 0;
 
-  QList<long> rids;
+  vector<long> rids;
   const RelationMap& relations = _map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    rids.append(it->first);
-  }
+  for (auto it = relations.begin(); it != relations.end(); ++it)
+    rids.push_back(it->first);
 
   // sort the values to give consistent results.
-  qSort(rids.begin(), rids.end(), qLess<long>());
+  sort(rids.begin(), rids.end(), less<long>());
 
-  for (int i = 0; i < rids.size(); i++)
+  for (auto relation_id : rids)
   {
-    ConstRelationPtr r = _map->getRelation(rids[i]);
+    ConstRelationPtr r = _map->getRelation(relation_id);
     const QString msg = "Writing relation: " + r->toString() + "...";
     if (r->getId() == debugId)
     {
@@ -404,12 +403,15 @@ void OsmJsonWriter::_writeRelations()
       LOG_VART(msg);
     }
 
-    if (!_firstElement) _write(",", true);
+    if (!_firstElement)
+      _write(",", true);
     _firstElement = false;
 
     _write("{");
-    _writeKvp("type", "relation"); _write(",");
-    _writeKvp("id", r->getId()); _write(",");
+    _writeKvp("type", "relation");
+    _write(",");
+    _writeKvp("id", r->getId());
+    _write(",");
 
     _writeMetadata(*r);
 
@@ -419,21 +421,21 @@ void OsmJsonWriter::_writeRelations()
     {
       const RelationData::Entry& e = members[j];
       if (j != 0)
-      {
         _write(",", true);
-      }
       else
-      {
         _write("", true);
-      }
+
       _write("{");
-      _writeKvp("type", _typeName(e.getElementId().getType())); _write(",");
-      _writeKvp("ref", e.getElementId().getId()); _write(",");
+      _writeKvp("type", _typeName(e.getElementId().getType()));
+      _write(",");
+      _writeKvp("ref", e.getElementId().getId());
+      _write(",");
       _writeKvp("role", e.getRole());
       _write("}");
     }
     _write("]");
-    if (_hasTags(r)) _write(",");
+    if (_hasTags(r))
+      _write(",");
     _writeTags(r);
     _write("}", false);
 

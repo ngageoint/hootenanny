@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_TO_GEOMETRY_CONVERTER_H
@@ -68,8 +68,7 @@ public:
    *      from the parameter will be set as the spatial reference for the element converter
    * @note the default spatial reference used is WGS84
    */
-  ElementToGeometryConverter(
-    const ConstElementProviderPtr& provider, const bool logWarningsForMissingElements = true);
+  ElementToGeometryConverter(const ConstElementProviderPtr& provider, const bool logWarningsForMissingElements = true);
   ~ElementToGeometryConverter() = default;
 
   /**
@@ -83,16 +82,13 @@ public:
    * statistics.
    * @return a geometry
    */
-  std::shared_ptr<geos::geom::Geometry> convertToGeometry(
-    const std::shared_ptr<const Element>& e, bool throwError = true,
-    const bool statsFlag = false) const;
+  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const std::shared_ptr<const Element>& e, bool throwError = true,
+                                                          const bool statsFlag = false) const;
 
   std::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
-  std::shared_ptr<geos::geom::Geometry> convertToGeometry(
-    const ConstWayPtr& w, bool throwError, const bool statsFlag = false) const;
-  std::shared_ptr<geos::geom::Geometry> convertToGeometry(
-    const ConstRelationPtr& r, bool throwError, const bool statsFlag = false) const;
+  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError, const bool statsFlag = false) const;
+  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r, bool throwError, const bool statsFlag = false) const;
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
   std::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
   std::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;
@@ -109,9 +105,8 @@ public:
    * become a polygon it must be classifiable in the schema as an area
    * @return a geometry ID
    */
-  static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
-    bool throwError = false, const bool statsFlag = false,
-    const bool requireAreaForPolygonConversion = true);
+  static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e, bool throwError = false, const bool statsFlag = false,
+                                                    const bool requireAreaForPolygonConversion = true);
 
   void setRequireAreaForPolygonConversion(bool require)
   { _requireAreaForPolygonConversion = require; }

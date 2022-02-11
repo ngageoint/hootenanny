@@ -1,0 +1,36 @@
+{
+    "features": [
+        {
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            [104.0, 2.0], 
+                            [105.0, 2.0], 
+                            [105.0, 3.0], 
+                            [104.0, 3.0], 
+                            [104.0, 2.0]
+                        ]
+                    ],
+                    [
+                        [
+                            [104.2, 2.2],
+                            [104.8, 2.2],
+                            [104.8, 2.8],
+                            [104.2, 2.8],
+                            [104.2, 2.2]
+                        ]
+                    ]
+                ],
+                "type": "MultiPolygon"
+            },
+            "properties": {
+                "id": "4",
+                "name": "Test04",
+                "building": "yes"
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}
