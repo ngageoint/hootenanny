@@ -765,6 +765,7 @@ mgcp = {
     }
     else
     {
+      // Moving to upper case as a test
       if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
 
@@ -1929,7 +1930,7 @@ mgcp = {
     if (tags.uuid)
     {
       var str = tags['uuid'].split(';');
-      attrs.UID = str[0].replace('{','').replace('}','');
+      attrs.UID = str[0].replace('{','').replace('}','').toUpperCase();
     }
     else if (tags['hoot:id'])
     {
@@ -1937,7 +1938,8 @@ mgcp = {
     }
     else
     {
-      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
+      // Moving to upper case as a test
+      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','').toUpperCase();
     }
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
@@ -2040,7 +2042,7 @@ mgcp = {
           attrs.FFN = '931';
         }
 
-        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
+        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931' && attrs.FFN !== '0'))
         {
           // Debug
           //print('AL015: Setting HWT 998');
@@ -2395,7 +2397,8 @@ mgcp = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        // Upper case as a test
+        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid().toUpperCase();
       }
 
       if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();
