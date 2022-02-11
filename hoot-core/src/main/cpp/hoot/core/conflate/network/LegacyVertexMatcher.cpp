@@ -136,12 +136,12 @@ double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie) const
   QSet<TiePointScorePtr> ties;
 
   QList<TiePointScorePtr> tie1 = _scores1.value(tie->v1);
-  for (const auto& tie : tie1)
-    ties.insert(tie);
+  for (const auto& t1 : tie1)
+    ties.insert(t1);
 
   QList<TiePointScorePtr> tie2 = _scores2.value(tie->v2);
-  for (const auto& tie : tie2)
-    ties.insert(tie);
+  for (const auto& t2 : tie2)
+    ties.insert(t2);
 
   double sum = 0.0;
   for (const auto& t : ties)

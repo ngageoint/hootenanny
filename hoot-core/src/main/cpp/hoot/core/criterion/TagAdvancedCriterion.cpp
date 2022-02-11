@@ -113,7 +113,7 @@ void TagAdvancedCriterion::_loadTagFilters(const QString& tagFilterType,
     propTree->get_child_optional(tagFilterType.toStdString());
   if (tagFilterChild)
   {
-    for (auto& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
+    for (const auto& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
     {
       TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);
       LOG_VART(tagFilter);
@@ -178,7 +178,7 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
 
   LOG_VART(tags);
 
-  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.constBegin(); tagItr != tags.constEnd(); ++tagItr)
   {
     const QString tagKey = tagItr.key();
     const QString tagValue = tagItr.value();

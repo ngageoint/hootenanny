@@ -559,7 +559,7 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
   Tags updatedTags;
   bool tagsAdded = false;
   LOG_VART(_elementIsASpecificFeature);
-  for (auto tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
+  for (auto tagItr = tagsToAdd.constBegin(); tagItr != tagsToAdd.constEnd(); ++tagItr)
   {
     const QString implicitTagKey = tagItr.key();
     LOG_VART(implicitTagKey);
@@ -662,10 +662,10 @@ QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList& names) con
 
   StringTokenizer tokenizer;
   QStringList nameTokens;
-  for (const auto& n : names)
+  for (const auto& n : qAsConst(names))
   {
     QStringList words = tokenizer.tokenize(n);
-    for (const auto& w : words)
+    for (const auto& w : qAsConst(words))
     {
       LOG_TRACE("Inserting token: " << w);
       nameTokens.append(w.toLower());

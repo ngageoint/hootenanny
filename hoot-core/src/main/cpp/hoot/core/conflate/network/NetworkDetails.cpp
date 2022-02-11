@@ -681,10 +681,10 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkEdgePtr e) const
 
   if (e->isStub())
   {
-    for (const auto& e : _n2->getEdgesFromVertex(e->getFrom()))
+    for (const auto& element : _n2->getEdgesFromVertex(e->getFrom()))
     {
-      if (e->isStub() == false)
-        ce = std::max(ce, getSearchRadius(e));
+      if (element->isStub() == false)
+        ce = std::max(ce, getSearchRadius(element));
     }
     if (ce == -1)
       ce = e->getFrom()->getElement()->getCircularError();
