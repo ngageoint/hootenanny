@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -624,9 +625,12 @@ void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree
 void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
                                                   const RelationPtr& relation) const
 {
+  ElementToGeometryConverter ec(_map);
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
-  bool is_polygon = geometry.get("type", "") == "Polygon";
+  std::string type = geometry.get("type", "");
+  bool is_polygon = (type == "Polygon" || type == "MultiPolygon");
   int position = 0;
+  std::vector<std::shared_ptr<geos::geom::Geometry>> geometries;
   for (auto multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
@@ -650,12 +654,26 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::pt
     QString role = "";
     if (is_polygon)
     {
-      //  Polygons with multiple LinearRing coordinate arrays specify the first one as the "outer"
-      //  poly and all of the others as "inner" polys
+      std::shared_ptr<geos::geom::Geometry> geometry = ec.convertToPolygon(way);
+      //  Polygons with multiple LinearRing coordinate arrays specify the first one as the "outer" poly
+      role = MetadataTags::RelationOuter();
       if (position == 0)
-        role = MetadataTags::RelationOuter();
+        geometries.push_back(geometry);
       else
-        role = MetadataTags::RelationInner();
+      {
+        //  Iterate all of the outer polys to see if this polygon is an inner poly
+        for (const auto& outer : geometries)
+        {
+          if (outer->contains(geometry.get()))
+          {
+            role = MetadataTags::RelationInner();
+            break;
+          }
+        }
+        //  Add the outer poly to the list
+        if (role == MetadataTags::RelationOuter())
+          geometries.push_back(geometry);
+      }
     }
     relation->addElement(role, ElementType::Way, way_id);
     position++;
