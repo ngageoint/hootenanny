@@ -165,13 +165,11 @@ public class PullApiCommand implements InternalCommand {
 
         String[] splitUrl = url.split("data=");
         HttpPost post = new HttpPost(splitUrl[0]);
-        if (splitUrl.length > 1) {
-            logger.info(splitUrl[0]);
-            logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
-        }
 
         // Just a safety check but splitUrl[1] should be the query data
         if (splitUrl.length == 2) {
+            logger.info(splitUrl[0]);
+            logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("data", URLDecoder.decode(splitUrl[1], "UTF-8")));
             post.setEntity(new UrlEncodedFormEntity(params));

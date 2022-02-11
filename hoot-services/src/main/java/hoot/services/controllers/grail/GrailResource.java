@@ -1067,10 +1067,6 @@ public class GrailResource {
         InputStream inputStream = null;
         String[] splitUrl = urlString.split("(?=data)"); // prevents removal of 'data' text
         URL url = new URL(splitUrl[0]);
-        if (splitUrl.length > 1) {
-            logger.info(splitUrl[0]);
-            logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
-        }
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(urlString.contains(replaceSensitiveData(RAILSPORT_PUSH_URL)) ? "GET" : "POST"); // Need to use GET for rails port
         conn.setDoOutput(true);
@@ -1085,6 +1081,8 @@ public class GrailResource {
         }
         // Just a safety check but splitUrl[1] should be the query data
         if (splitUrl.length == 2) {
+            logger.info(splitUrl[0]);
+            logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
             conn.getOutputStream().write(splitUrl[1].getBytes(StandardCharsets.UTF_8));
         }
 
