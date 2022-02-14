@@ -64,7 +64,7 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec
     if (file.endsWith(".off") == false && fi.isExecutable())
     {
       bool ignore = false;
-      for (const auto& prefix : ignorePrefix)
+      for (const auto& prefix : qAsConst(ignorePrefix))
       {
         if (fi.baseName().startsWith(prefix))
         {
