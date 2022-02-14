@@ -451,7 +451,7 @@ See the User Guide for more specific details on command usage. Most of these exa
       input1.osm input2.osm output.osm
 -----
 
-==== Conflate railways with the One To Many Railway Conflation Workflow:
+==== Conflate railways with the One-To-Many Railway Conflation Workflow:
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RailwayConflation.asciidoc#one-to-many-matching[detail]
 

@@ -36,7 +36,7 @@ namespace hoot
 
 /**
  * @brief The RailwayOneToManySecondaryMatchElementRemover class removes secondary features involved
- * in railway one to many matches
+ * in railway one-to-many matches
  */
 class RailwayOneToManySecondaryMatchElementRemover : public RemoveElementsVisitor
 {
@@ -55,7 +55,7 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override
-  { return "Removes secondary features involved in a one to many railway match."; }
+  { return "Removes secondary features involved in a one-to-many railway match."; }
 };
 
 }

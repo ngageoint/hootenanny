@@ -100,7 +100,7 @@ public:
     QString exceptionMsg;
     Settings settings;
 
-    // No error here, despite empty option values, since one to many rail matching is turned off.
+    // No error here, despite empty option values, since one-to-many rail matching is turned off.
     settings.clear();
     settings.set(ConfigOptions::getRailwayOneToManyMatchKey(), false);
     uut.setConfiguration(settings);
@@ -127,7 +127,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("No railway one to many identifying keys specified in"));
+    CPPUNIT_ASSERT(exceptionMsg.contains("No railway one-to-many identifying keys specified in"));
 
     // Error here since one of the option values list is empty.
     settings.clear();
@@ -142,7 +142,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("No railway one to many transfer tag keys specified in"));
+    CPPUNIT_ASSERT(exceptionMsg.contains("No railway one-to-many transfer tag keys specified in"));
 
     // No error here for empty transfer tags list since transfer of all tags is enabled.
     settings.clear();

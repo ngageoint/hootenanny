@@ -131,7 +131,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   }
   LOG_VART(review.size());
 
-  // REF2 and review can be multiple IDs (many to one match), but REF1 is always a single ID.
+  // REF2 and review can be multiple IDs (many-to-one match), but REF1 is always a single ID.
   if (ref1.split(";").size() > 1)
   {
     _recordIssue(element, "REF1 ID must be singular. REF1=" + ref1);
@@ -161,12 +161,12 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
            (ref2.contains("todo", Qt::CaseInsensitive) ||
             ref2.contains("none", Qt::CaseInsensitive)))
   {
-    _recordIssue(element, "Invalid many to one REF2=" + ref2.join(";"));
+    _recordIssue(element, "Invalid many-to-one REF2=" + ref2.join(";"));
   }
   else if (!review.isEmpty() && review.size() > 1 &&
            (review.contains("todo") || review.contains("none")))
   {
-    _recordIssue(element, "Invalid many to one REVIEW=" + review.join(";"));
+    _recordIssue(element, "Invalid many-to-one REVIEW=" + review.join(";"));
   }
   // check for dupes
   else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )

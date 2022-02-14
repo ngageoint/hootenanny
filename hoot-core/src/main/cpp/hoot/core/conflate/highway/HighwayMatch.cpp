@@ -100,7 +100,7 @@ _minSplitSize(0.0)
         _explainText = mt->getTypeDetail(_classification);
 
       // If the median classifier was used, we'll spruce up the explain text a bit and be sure to
-      // mark it as a one to many match so that needed matches don't get thrown out during match
+      // mark it as a one-to-many match so that needed matches don't get thrown out during match
       // optimization.
       if (type == MatchType::Match &&
           std::dynamic_pointer_cast<MedianToDividedRoadClassifier>(_classifier))

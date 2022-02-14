@@ -1293,7 +1293,7 @@ mgcp.rules = {
 
     ], // End one2one
 
-    // One to one translation table for MGCP TRD 3.0 attributes. This is for import only
+    // one-to-one translation table for MGCP TRD 3.0 attributes. This is for import only
     one2oneIn : [
     // ACE_EVAL Absolute Horizontal Accuracy Evaluation Method
     // ['ACE_EVAL','0',undefined,undefined],

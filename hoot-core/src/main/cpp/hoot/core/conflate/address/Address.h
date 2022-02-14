@@ -37,7 +37,7 @@ namespace hoot
  * @brief The Address class encapsulates a street address for conflation purposes.
  *
  * Note that a QMap can be used to represent the street type full names and their abbreviations
- * b/c we currently only support a one to one mapping. If we expand it to support multiple
+ * b/c we currently only support a one-to-one mapping. If we expand it to support multiple
  * abbreviations per full name, then we'll need to switch to a QMultiMap.
  */
 class Address

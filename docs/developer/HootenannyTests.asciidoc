@@ -709,7 +709,7 @@ reduce memory consumption.
 ===== General
 
 * Unit tests should strive to test at the single class level only, when possible.
-* Unit tests should have nearly a one to one mapping to each class in code. Use the code coverage
+* Unit tests should have nearly a one-to-one mapping to each class in code. Use the code coverage
 report to see where your tests are deficient.
 * Unit tests should avoid interfacing with external entities, when possible. e.g. databases,
 web servers. Such tests that interface with external entities should then become integration tests 

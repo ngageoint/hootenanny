@@ -140,14 +140,14 @@ public:
   virtual MatchType getType() const;
 
   /**
-   * @brief isOneToMany determines if a match is a one to many element match
-   * @return true if the match is a one to many match; false otherwise
+   * @brief isOneToMany determines if a match is a one-to-many element match
+   * @return true if the match is a one-to-many match; false otherwise
    */
   virtual bool isOneToMany() const { return _isOneToMany; }
   /**
-   * @brief setIsOneToMany sets the variable that determines if a match is a one to many element
+   * @brief setIsOneToMany sets the variable that determines if a match is a one-to-many element
    * match
-   * @param isOneToMany one to many value to set
+   * @param isOneToMany one-to-many value to set
    */
   virtual void setIsOneToMany(bool isOneToMany) { _isOneToMany = isOneToMany; }
 
@@ -190,7 +190,7 @@ protected:
 
   ElementId _eid1, _eid2;
 
-  // The original implementation of hoot matching always forced one to many matches into reviews.
+  // The original implementation of hoot matching always forced one-to-many matches into reviews.
   // Follow on workflows (road median matching, etc.) have been created to meet the requirement of
   // merging tags only from a single feature to many.
   bool _isOneToMany;

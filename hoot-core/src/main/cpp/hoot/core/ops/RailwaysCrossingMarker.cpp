@@ -133,7 +133,7 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
             way->getStatus() != Status::Conflated && neighbor->getStatus() != Status::Conflated &&
             way->getStatus() == neighbor->getStatus();
 
-          // Was either feature involved in a one to many match?
+          // Was either feature involved in a one-to-many match?
           const bool oneToManyMatch =
             way->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary()) ||
             neighbor->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary());
@@ -146,8 +146,8 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
 
           // If we haven't already processed the pair, we're either allowing intra-dataset features
           // to be marked as crossing OR we aren't and they don't have the same status, neither
-          // feature was involved in a one to many match, and they cross, then mark the pair for
-          // review. We skip anything involved in a one to many match since we know that in that
+          // feature was involved in a one-to-many match, and they cross, then mark the pair for
+          // review. We skip anything involved in a one-to-many match since we know that in that
           // case the secondary feature will not have been geometrically merged into the reference
           // feature. Due to that, there's no way conflation could have created a new crossing pair
           // of rails in that situation.

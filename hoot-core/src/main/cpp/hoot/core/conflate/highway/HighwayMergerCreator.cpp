@@ -108,7 +108,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
       LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
     result = true;
   }
-  // Use a different merger for the one to many median matches.
+  // Use a different merger for the one-to-many median matches.
   if (!medianMatchedEids.empty())
   {
     mergers.push_back(

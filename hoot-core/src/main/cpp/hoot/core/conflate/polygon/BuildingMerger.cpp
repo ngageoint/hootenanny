@@ -125,7 +125,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   LOG_VART(_pairs);
   _markedReviewText = "";
 
-  // check to see if it is many to many
+  // check to see if it is many-to-many
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
@@ -143,8 +143,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   if (_manyToManyMatch && !_mergeManyToManyMatches)
   {
-    // If the corresponding auto merge config option is not enabled, then auto review this many to
-    // many match.
+    // If the corresponding auto merge config option is not enabled, then auto review this
+    // many-to-many match.
     _markedReviewText =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
     reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);

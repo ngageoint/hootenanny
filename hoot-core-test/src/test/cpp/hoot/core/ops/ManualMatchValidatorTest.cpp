@@ -500,7 +500,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REF2=002da0;todo", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REF2=002da0;todo", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -513,7 +513,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REF2=none;002da0", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REF2=none;002da0", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -526,7 +526,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REVIEW=002da0;todo", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REVIEW=002da0;todo", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -538,7 +538,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REVIEW=none;002da0", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REVIEW=none;002da0", errorItr.value().toStdString());
   }
 
   void runDuplicateIdTest()

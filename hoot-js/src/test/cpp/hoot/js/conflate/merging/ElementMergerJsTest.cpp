@@ -135,7 +135,7 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(railwayMergeExtraNonRailwayTest);
   CPPUNIT_TEST(railwayInputWithConflatedStatusTest);
 
-  // RAILWAY ONE TO MANY
+  // RAILWAY ONE-TO-MANY
   CPPUNIT_TEST(railwayOneToManyMergeTwoWaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeTooFewRailwaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeMissingOneToManyFeatureTest);
@@ -491,7 +491,7 @@ public:
     _testMerge("railway-two-conflated-in.osm", "railway-two-conflated-out.osm");
   }
 
-  // RAILWAY ONE TO MANY
+  // RAILWAY ONE-TO-MANY
 
   void railwayOneToManyMergeTwoWaysTest()
   {
@@ -522,7 +522,7 @@ public:
     _testMerge(
       "railway-one-to-many-duplicate-one-to-many-feature-in.osm",
       "railway-one-to-many-duplicate-one-to-many-feature-out.osm",
-      "Input map for railway one to many merging must have exactly one qualifying "
+      "Input map for railway one-to-many merging must have exactly one qualifying "
       "secondary feature.");
   }
 

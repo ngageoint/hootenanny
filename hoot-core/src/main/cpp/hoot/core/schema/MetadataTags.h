@@ -67,7 +67,7 @@ public:
 
   /**
    * @brief HootRailwayOneToManyMatchSecondary This is used to identify secondary features to delete
-   * in the railway conflate one to many workflow.
+   * in the railway conflate one-to-many workflow.
    * @return a string
    */
   inline static QString HootRailwayOneToManyMatchSecondary()

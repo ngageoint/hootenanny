@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * This identifies a rail feature that is the merge source from a One To Many Railway workflow
+ * This identifies a rail feature that is the merge source from a one-to-many railway workflow
  * match.
  */
 class RailwayOneToManySourceCriterion : public ElementCriterion
@@ -58,7 +58,7 @@ public:
   { return std::make_shared<RailwayOneToManySourceCriterion>(); }
 
   QString getDescription() const override
-  { return "Identifies secondary features matched by One To Many Railway Conflation"; }
+  { return "Identifies secondary features matched by One-To-Many Railway Conflation"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }

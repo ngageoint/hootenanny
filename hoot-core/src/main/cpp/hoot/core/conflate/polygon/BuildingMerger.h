@@ -112,7 +112,7 @@ private:
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
   bool _keepMoreComplexGeometryWhenAutoMerging;
-  // The default behavior is to review many to many matches. Setting this to true allows them to
+  // The default behavior is to review many-to-many matches. Setting this to true allows them to
   // all be merged together.
   bool _mergeManyToManyMatches;
   // set to true if the current building merge involves two buildings, each part of multiple matches

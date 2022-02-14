@@ -326,7 +326,7 @@ private:
   void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches) const
   {
     // If we have matches or reviews between adjoining houses (building=terrace; townhouses and
-    // the like), check for many to one relationships. From the many to one, keep only the match
+    // the like), check for many-to-one relationships. From the many-to-one, keep only the match
     // with the highest overlap. Convert all others to misses by removing the matches completely.
     //
     // The argument could be made that this overlap check could be done for all buildings, not just

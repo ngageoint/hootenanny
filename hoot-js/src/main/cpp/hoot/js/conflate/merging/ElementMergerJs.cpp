@@ -204,7 +204,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
   LOG_VART(containsAtLeastOneRailwayOneToManyMatchedElement);
   if (containsAtLeastOneRailwayOneToManyMatchedElement)
   {
-    // If the input contains a rail feature matched with the One To Many workflow, we do different
+    // If the input contains a rail feature matched with the one-to-many workflow, we do different
     // error checking here. We're looking for exactly one secondary feature with a custom tag added
     // by Railway.js and exactly one reference feature to merge tags into.
 
@@ -215,7 +215,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
     if (numOneToManySecondaryMatchElements != 1)
     {
       throw IllegalArgumentException(
-        "Input map for railway one to many merging must have exactly one qualifying "
+        "Input map for railway one-to-many merging must have exactly one qualifying "
         "secondary feature.");
     }
 
@@ -245,7 +245,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
     }
   }
 
-  // This logic is for all merge input validation except One To Many rail. We should have exactly
+  // This logic is for all merge input validation except one-to-many rail. We should have exactly
   // one feature identified as the target and one or more features to merge into.
 
   const long numMergeTargets =

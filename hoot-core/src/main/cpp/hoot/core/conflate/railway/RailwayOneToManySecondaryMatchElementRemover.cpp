@@ -41,7 +41,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RailwayOneToManySecondaryMatchElementRemov
 
 RailwayOneToManySecondaryMatchElementRemover::RailwayOneToManySecondaryMatchElementRemover()
 {
-  // We're looking to remove secondary railways with the many to one match identifying tag, but only
+  // We're looking to remove secondary railways with the many-to-one match identifying tag, but only
   // if they aren't involved in a review.
   addCriterion(
     std::make_shared<ChainCriterion>(

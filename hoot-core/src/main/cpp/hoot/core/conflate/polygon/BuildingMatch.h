@@ -40,7 +40,7 @@ namespace hoot
 class BuildingRfClassifier;
 
 /**
- * Matches two building elements. If there is a many to many match it will be resolved by the
+ * Matches two building elements. If there is a many-to-many match it will be resolved by the
  * conflation routines and then merged properly with the BuildingMerger.
  */
 class BuildingMatch : public Match, public MatchDetails

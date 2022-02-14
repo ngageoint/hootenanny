@@ -36,7 +36,7 @@ namespace hoot
 
 /**
  * The OsmNetwork represents major transportational vertices and edges in the map. These may or
- * may not have a one to one correlation with nodes, ways and relations. For instance, a vertex
+ * may not have a one-to-one correlation with nodes, ways and relations. For instance, a vertex
  * may represent all the ways and nodes in a roundabout, or simply the node at a four way stop.
  * Though the former has yet to be implemented (as of 2016-07-06).
  *

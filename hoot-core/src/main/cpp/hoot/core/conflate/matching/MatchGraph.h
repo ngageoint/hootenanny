@@ -43,7 +43,7 @@ using MatchSetVector = std::vector<MatchSet>;
  * relationships (such as two roads are linked by an intersection). This will enable higher fidelity
  * matching. See Redmine #2376 for some musings and references.
  *
- * At this point this is useful for identifying many to many matches and one to many matches.
+ * At this point this is useful for identifying many-to-many matches and one-to-many matches.
  */
 class MatchGraph
 {
@@ -54,7 +54,7 @@ public:
   /**
    * Search the graph for subgraphs. The threshold value is used to determine links. If the
    * probability of a link is less than threshold then the link is disregarded. This is primarily
-   * useful with one to many and many to many matches. Each match is guaranteed to only be in one
+   * useful with one-to-many and many-to-many matches. Each match is guaranteed to only be in one
    * collection.
    *
    * @return Returns a collection of sets of Matches. The outer level set is the set of subgraphs.

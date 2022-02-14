@@ -64,7 +64,7 @@ namespace hoot
  *
  * The original merger only merged POIs and supported many into one merging. Many into one merging
  * is supported for all feature types except POI to Polygon and rail. However, don't actually think
- * many to one merging is actually used by any clients and that all merging is done as one feature
+ * many-to-one merging is actually used by any clients and that all merging is done as one feature
  * into one other feature. So, this code and supporting tests could probably be simplified by
  * removing support for many into one merging if it is not being utilized.
  *

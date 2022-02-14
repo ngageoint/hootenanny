@@ -175,10 +175,10 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
 
   // Globally optimize the set of matches to maximize the conflation score.
 
-  // At this point, we need to separate out one to many matches (road median matching, etc.) from
-  // other matches as part of match optimization is focused on marking one to many matches as
+  // At this point, we need to separate out one-to-many matches (road median matching, etc.) from
+  // other matches as part of match optimization is focused on marking one-to-many matches as
   // conflicting which forces them to reviews. Its assumed that merging routines involving one to
-  // many matches are going to be tag only, so we want to allow the one to many tag transfer.
+  // many matches are going to be tag only, so we want to allow the one-to-many tag transfer.
   std::vector<ConstMatchPtr> oneToManyMatches = _separateOneToManyMatches(matches);
   LOG_VARD(matches.size());
   LOG_VARD(oneToManyMatches.size());
@@ -245,11 +245,11 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   MatchSetVector tmpMatchSets = mg.findSubgraphs(_map);
   matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
 
-  // We're running the one to many matches in a separate optimization pass. Not completely convinced
+  // We're running the one-to-many matches in a separate optimization pass. Not completely convinced
   // that they need any optimization but running them through findSubgraphs gets them into the
   // correct format of MatchSetVector at least.
   mg.clearMatches();
-  // Don't check for conflicts b/c one to many matches by definition are conflicting.
+  // Don't check for conflicts b/c one-to-many matches by definition are conflicting.
   mg.setCheckForConflicts(false);
   mg.addMatches(oneToManyMatches.begin(), oneToManyMatches.end());
   MatchSetVector tmpOneToManyMatchSets = mg.findSubgraphs(_map);
