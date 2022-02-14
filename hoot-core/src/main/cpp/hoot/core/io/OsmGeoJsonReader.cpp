@@ -654,17 +654,17 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::pt
     QString role = "";
     if (is_polygon)
     {
-      std::shared_ptr<geos::geom::Geometry> geometry = ec.convertToPolygon(way);
+      std::shared_ptr<geos::geom::Geometry> geo = ec.convertToPolygon(way);
       //  Polygons with multiple LinearRing coordinate arrays specify the first one as the "outer" poly
       role = MetadataTags::RelationOuter();
       if (position == 0)
-        geometries.push_back(geometry);
+        geometries.push_back(geo);
       else
       {
         //  Iterate all of the outer polys to see if this polygon is an inner poly
         for (const auto& outer : geometries)
         {
-          if (outer->contains(geometry.get()))
+          if (outer->contains(geo.get()))
           {
             role = MetadataTags::RelationInner();
             break;
@@ -672,7 +672,7 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::pt
         }
         //  Add the outer poly to the list
         if (role == MetadataTags::RelationOuter())
-          geometries.push_back(geometry);
+          geometries.push_back(geo);
       }
     }
     relation->addElement(role, ElementType::Way, way_id);

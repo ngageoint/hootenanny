@@ -43,7 +43,7 @@ public:
 
   OsmGeoJsonWriterBase(int precision = ConfigOptions().getWriterPrecision(),
                        bool taskingManagerFormat = ConfigOptions().getJsonOutputTaskingManagerAoi());
-  virtual ~OsmGeoJsonWriterBase() = default;
+  ~OsmGeoJsonWriterBase() override = default;
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
