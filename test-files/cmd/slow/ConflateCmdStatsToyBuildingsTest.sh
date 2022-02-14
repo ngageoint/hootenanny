@@ -15,9 +15,6 @@ hoot conflate $CONFIG -D writer.include.debug.tags=true -D match.creators="Build
   test-files/ToyBuildingsTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/toy-buildings-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-buildings-out.osm
 
-validateTestOutput $OUT_DIR/toy-buildings-out.osm $OUT_DIR/toy-buildings-out-validation-report \
-  $OUT_DIR/toy-buildings-out-validated.osm $IN_DIR/toy-buildings-out-validation-report
-
 # Read in a set of stat names from a file, delete them from the hoot command stats output, and write 
 # the remaining stats to the final output.
 EDIT_CMD=""

@@ -17,15 +17,6 @@ hoot conflate $CONFIG -D "match.creators=ScriptMatchCreator,River.js" \
   $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm || diff $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm
 
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate --warn $CONFIG $OUT_DIR/generic-rivers-out.osm \
-    --report-output $OUT_DIR/generic-rivers-out-validation-report \
-    --output $OUT_DIR/generic-rivers-out-validated.osm
-  diff $IN_DIR/generic-rivers-out-validation-report $OUT_DIR/generic-rivers-out-validation-report
-fi
-validateTestOutput $OUT_DIR/generic-rivers-out.osm $OUT_DIR/generic-rivers-out-validation-report \
-  $OUT_DIR/generic-rivers-out-validated.osm $IN_DIR/generic-rivers-out-validation-report
-
 # Rread in a set of stat names from a file, delete them from the hoot command stats output, and 
 # write the remaining stats to the final output.
 EDIT_CMD=""

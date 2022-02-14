@@ -22,9 +22,6 @@ hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C ReferenceConflation.conf \
   $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/all-data-types-out.osm || diff $STATS_OUT.osm $IN_DIR/all-data-types-out.osm
 
-validateTestOutput $OUT_DIR/all-data-types-out.osm $OUT_DIR/all-data-types-out-validation-report \
-  $OUT_DIR/all-data-types-out-validated.osm $IN_DIR/all-data-types-out-validation-report
-
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""
 while read line

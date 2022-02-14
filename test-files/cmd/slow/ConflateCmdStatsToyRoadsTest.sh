@@ -14,9 +14,6 @@ hoot conflate $CONFIG -D match.creators="HighwayMatchCreator" -D merger.creators
   test-files/ToyTestA.osm test-files/ToyTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/toy-roads-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-roads-out.osm
 
-validateTestOutput $OUT_DIR/toy-roads-out.osm $OUT_DIR/toy-roads-out-validation-report \
-  $OUT_DIR/toy-roads-out-validated.osm $IN_DIR/toy-roads-out-validation-report
-
 # Read in a set of stat names from a file, delete them from the hoot command stats output, and write 
 # the remaining stats to the final output.
 EDIT_CMD=""

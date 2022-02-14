@@ -11,8 +11,6 @@ source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $CONFIG $IN_DIR/AllDataTypesA.osm $IN_DIR/AllDataTypesB.osm $OUT_DIR/output.osm
 hoot diff -C Testing.conf $OUT_DIR/output.osm $IN_DIR_2/output.osm || diff $OUT_DIR/output.osm $IN_DIR_2/output.osm
-validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
-  $OUT_DIR/output-validated.osm $IN_DIR_2/output-validation-report
 
 # Check to make sure we don't bomb out on empty files
 hoot conflate $CONFIG --warn test-files/Empty.osm test-files/Empty.osm $OUT_DIR/empty-out.osm

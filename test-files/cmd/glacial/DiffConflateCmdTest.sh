@@ -21,15 +21,6 @@ echo "Running diff..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
   $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output.osm
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output.osm \
-    --report-output $OUTPUT_DIR/output-validation-report --output $OUTPUT_DIR/output-validated.osm
-  diff $INPUT_DIR/output-validation-report $OUTPUT_DIR/output-validation-report
-fi
-validateTestOutput $OUTPUT_DIR/output.osm \
-  $OUTPUT_DIR/snapped-with-ref-output-validation-report \
-  $OUTPUT_DIR/output-validated.osm \
-  $INPUT_DIR/output-validation-report
 
 # Run changeset w/tags to produce a unified changeset output (geometry and tags)
 echo ""
@@ -184,16 +175,6 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-ref-output.osm \
   $INPUT_DIR/snapped-with-ref-output.osm || \
   diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/snapped-with-ref-output.osm \
-    --report-output $OUTPUT_DIR/snapped-with-ref-output-validation-report --output \
-    $OUTPUT_DIR/snapped-with-ref-output-validated.osm
-  diff $INPUT_DIR/snapped-with-ref-output-validation-report $OUTPUT_DIR/snapped-with-ref-output-validation-report
-fi
-validateTestOutput $OUTPUT_DIR/snapped-with-ref-output.osm \
-  $OUTPUT_DIR/snapped-with-ref-output-validation-report \
-  $OUTPUT_DIR/snapped-with-ref-output-validated.osm \
-  $INPUT_DIR/snapped-with-ref-output-validation-report
      
 echo ""
 echo "Checking conflation with road snapping and remove all ref data, even snapped..."
