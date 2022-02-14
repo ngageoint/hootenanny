@@ -113,7 +113,8 @@ void ConflateCaseTest::runTest()
 
     // Run validation on test output if configured for it.
     LOG_VART(ConfigOptions().getTestValidationEnable());
-    if (ConfigOptions().getTestValidationEnable())
+    QString validation_filename = _d.absolutePath() + "/validation-report";
+    if (ConfigOptions().getTestValidationEnable() && QFile::exists(validation_filename))
     {
       TestOutputValidator::validate(_d.dirName(), _d.absolutePath() + "/Output.osm",
                                     _d.absolutePath() + "/validation-report",

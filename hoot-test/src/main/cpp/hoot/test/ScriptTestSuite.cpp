@@ -52,7 +52,7 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec
     ignorePrefix << "Service";
 # endif
 
-  for (const auto& file : files)
+  for (const auto& file : qAsConst(files))
   {
     QFileInfo fi(d.absoluteFilePath(file));
     if (file.endsWith(".sh") && fi.isExecutable() == false)
