@@ -11,9 +11,6 @@ source scripts/core/ScriptTestUtils.sh
 hoot conflate -C Testing.conf -D writer.include.debug.tags=true \
   -D "match.creators=ScriptMatchCreator,Poi.js" -D "merger.creators=ScriptMergerCreator" \
   test-files/dcpoi_clip.osm test-files/mapcruzinpoi_clip.osm $STATS_OUT.osm --stats > $STATS_OUT
-  
-validateTestOutput $OUT_DIR/poi-out.osm $OUT_DIR/poi-out-validation-report \
-  $OUT_DIR/poi-out-validated.osm $IN_DIR/poi-out-validation-report
 
 # Read in a set of stat names from a file, delete them from the hoot command stats output, and write 
 # the remaining stats to the final output.

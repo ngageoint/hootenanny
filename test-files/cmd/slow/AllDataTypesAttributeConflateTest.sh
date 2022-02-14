@@ -15,6 +15,3 @@ hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C AttributeConflation.conf \
   -D conflate.use.data.source.ids.1="false" -D conflate.use.data.source.ids.2="true" \
   test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm $OUT_DIR/output.osm
 hoot diff $CONFIG $IN_DIR/output.osm $OUT_DIR/output.osm || diff $IN_DIR/output.osm $OUT_DIR/output.osm
-
-validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
-  $OUT_DIR/output-validated.osm $IN_DIR/output-validation-report

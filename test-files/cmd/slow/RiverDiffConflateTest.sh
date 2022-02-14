@@ -20,8 +20,6 @@ hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as
   $OUT_DIR/output-partial.osm
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm || \
   diff $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm
-validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validation-report \
-  $OUT_DIR/output-partial-validated.osm $IN_DIR/output-partial-validation-report
 
 # remove partial matches completely
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=true \
@@ -29,5 +27,3 @@ hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as
   $OUT_DIR/output-complete.osm
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm || \
   diff $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm
-validateTestOutput $OUT_DIR/output-complete.osm $OUT_DIR/output-complete-validation-report \
-  $OUT_DIR/output-complete-validated.osm $IN_DIR/output-complete-validation-report
