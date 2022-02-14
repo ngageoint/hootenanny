@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.models.osm;
 
@@ -178,8 +178,9 @@ public class Map extends Maps {
      * For retrieving the physical size of a map record
      * @param mapId
      * @return physical size of a map record
+     * @throws Exception
      */
-    private static Long getMapSize(long mapId) {
+    private static Long getMapSize(long mapId) throws Exception {
         long mapSize = 0;
 
         try {
@@ -199,7 +200,7 @@ public class Map extends Maps {
         }
         catch (Exception e) {
             String message = "Error getting map size.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+            throw new Exception(message);
         }
     }
 
@@ -665,8 +666,9 @@ public class Map extends Maps {
      * @param mapLayerRecords
      *            set of map layer records
      * @return map layers web service object
+     * @throws Exception
      */
-    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) {
+    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) throws Exception {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
 

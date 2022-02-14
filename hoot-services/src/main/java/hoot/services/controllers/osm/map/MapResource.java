@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -160,8 +160,12 @@ public class MapResource {
                 mapLayersOut.add(m);
             }
         }
-        MapLayers layers = Map.mapLayerRecordsToLayers(mapLayersOut);
-        return layers;
+        try {
+            MapLayers layers = Map.mapLayerRecordsToLayers(mapLayersOut);
+            return layers;
+        } catch (Exception e) {
+            throw new WebApplicationException(e, Response.serverError().entity(e.getMessage()).build());
+        }
     }
 
     private static Document generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat) {
