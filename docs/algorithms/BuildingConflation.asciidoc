@@ -4,11 +4,11 @@
 
 Building conflation supports multiple forms:
 
-* One to one
-* One to many
-* Many to many
+* One-to-one
+* One-to-many
+* Many-to-many
 
-The attribute merging in the one to one case when each building is made up of a single part is very simple and controlled through the typical `tag.merger.default` configuration setting.
+The attribute merging in the one-to-one case when each building is made up of a single part is very simple and controlled through the typical `tag.merger.default` configuration setting.
 
 If one of the buildings contains multiple parts, each with their own attributes such as building height, roof type, etc. The problem becomes more complex. Additional complexity is added when you're conflating one multi-part building with multiple multi-part buildings, or in the worse case, multiple multi-part buildings all being conflated into a single building.
 
