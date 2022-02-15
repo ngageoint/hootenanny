@@ -22,25 +22,25 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AbstractConflator.h"
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/MultipleMatcherSublineStringMatcher.h>
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -55,20 +55,20 @@
 namespace hoot
 {
 
-AbstractConflator::AbstractConflator() :
-_matchFactory(MatchFactory::getInstance()),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_currentStep(1)
+AbstractConflator::AbstractConflator()
+  : _matchFactory(MatchFactory::getInstance()),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _currentStep(1)
 {
   setConflateScoreTagsFilter(ConfigOptions().getConflateScoreTagsFilter());
   _reset();
 }
 
-AbstractConflator::AbstractConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
-_matchFactory(MatchFactory::getInstance()),
-_matchThreshold(matchThreshold),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_currentStep(1)
+AbstractConflator::AbstractConflator(const std::shared_ptr<MatchThreshold>& matchThreshold)
+  : _matchFactory(MatchFactory::getInstance()),
+    _matchThreshold(matchThreshold),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _currentStep(1)
 {
   setConflateScoreTagsFilter(ConfigOptions().getConflateScoreTagsFilter());
   _reset();
@@ -81,12 +81,10 @@ AbstractConflator::~AbstractConflator()
 
 void AbstractConflator::setConflateScoreTagsFilter(const QStringList& filter)
 {
-  for (int i = 0; i < filter.size(); i++)
+  for (const auto& single_filter : qAsConst(filter))
   {
-    if (!MatchType::isValidMatchTypeString(filter.at(i)))
-    {
-      throw IllegalArgumentException("Invalid conflate score tag filter type: " + filter.at(i));
-    }
+    if (!MatchType::isValidMatchTypeString(single_filter))
+      throw IllegalArgumentException("Invalid conflate score tag filter type: " + single_filter);
   }
   _conflateScoreTagsFilter = filter;
 }
@@ -109,38 +107,28 @@ void AbstractConflator::_reset()
 
 QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
 {
-  QString str;
-  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
-       itr != matchSet.end(); ++itr)
+  QStringList str;
+  for (const auto& match : matchSet)
   {
-    ConstMatchPtr match = *itr;
     std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
-         itr2 != matchPairs.end(); ++itr2)
-    {
-       std::pair<ElementId, ElementId> elementIdPair = *itr2;
-       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
-    }
+    for (const auto& elementIdPair : matchPairs)
+       str.append(QString("%1 %2").arg(elementIdPair.first.toString(), elementIdPair.second.toString()));
   }
-  str.chop(2);
-  return str;
+  return str.join(", ");
 }
 
 void AbstractConflator::_createMatches()
 {
   OsmMapWriterFactory::writeDebugMap(_map, className(), "before-matching");
   // find all the matches in this map
+  // Match scoring logic seems to be the only one that needs to pass in the match threshold now
+  // when the optimize param is activated. Otherwise, we get the match threshold information from
+  // the config.
   if (_matchThreshold.get())
-  {
-    // Match scoring logic seems to be the only one that needs to pass in the match threshold now
-    // when the optimize param is activated. Otherwise, we get the match threshold information from
-    // the config.
     _matchFactory.createMatches(_map, _matches, _bounds, _matchThreshold);
-  }
   else
-  {
     _matchFactory.createMatches(_map, _matches, _bounds);
-  }
+
   MemoryUsageChecker::getInstance().check();
   LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
   //LOG_VART(_matches);
@@ -262,30 +250,22 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   return matchSets;
 }
 
-std::vector<ConstMatchPtr> AbstractConflator::_separateOneToManyMatches(
-  std::vector<ConstMatchPtr>& matches) const
+std::vector<ConstMatchPtr> AbstractConflator::_separateOneToManyMatches(std::vector<ConstMatchPtr>& matches) const
 {
   std::vector<ConstMatchPtr> matchesCopy;
   std::vector<ConstMatchPtr> oneToManyMatches;
-  for (std::vector<ConstMatchPtr>::const_iterator itr = matches.begin(); itr != matches.end();
-       ++itr)
+  for (const auto& match : matches)
   {
-    ConstMatchPtr match = *itr;
     if (match->isOneToMany())
-    {
       oneToManyMatches.emplace_back(match);
-    }
     else
-    {
       matchesCopy.emplace_back(match);
-    }
   }
   matches = matchesCopy;
   return oneToManyMatches;
 }
 
-void AbstractConflator::_removeWholeGroups(
-  std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const
+void AbstractConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const
 {
   LOG_DEBUG("Removing whole group matches...");
 
@@ -299,26 +279,25 @@ void AbstractConflator::_removeWholeGroups(
   matchSets.reserve(matchSets.size() + tmpMatchSets.size());
   std::vector<ConstMatchPtr> leftovers;
 
-  for (size_t i = 0; i < tmpMatchSets.size(); i++)
+  for (const auto& match_set : tmpMatchSets)
   {
     bool wholeGroup = false;
-    for (MatchSet::const_iterator it = tmpMatchSets[i].begin(); it != tmpMatchSets[i].end(); ++it)
+    for (const auto& match : match_set)
     {
-      if ((*it)->isWholeGroup())
+      if (match->isWholeGroup())
       {
         wholeGroup = true;
+        break;
       }
     }
 
     if (wholeGroup)
     {
-      LOG_TRACE("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
-      matchSets.push_back(tmpMatchSets[i]);
+      LOG_TRACE("Removing whole group: " << _matchSetToString(match_set));
+      matchSets.push_back(match_set);
     }
     else
-    {
-      leftovers.insert(leftovers.end(), tmpMatchSets[i].begin(), tmpMatchSets[i].end());
-    }
+      leftovers.insert(leftovers.end(), match_set.begin(), match_set.end());
   }
 
   matches = leftovers;
@@ -327,23 +306,20 @@ void AbstractConflator::_removeWholeGroups(
 void AbstractConflator::_mapElementIdsToMergers()
 {
   _e2m.clear();
-  for (size_t i = 0; i < _mergers.size(); ++i)
+  for (const auto& merger : _mergers)
   {
-    std::set<ElementId> impacted = _mergers[i]->getImpactedElementIds();
-    for (std::set<ElementId>::const_iterator it = impacted.begin(); it != impacted.end(); ++it)
-    {
-      _e2m[*it].push_back(_mergers[i]);
-    }
+    std::set<ElementId> impacted = merger->getImpactedElementIds();
+    for (const auto& element_id : impacted)
+      _e2m[element_id].push_back(merger);
   }
   LOG_VART(_e2m.size());
 }
 
-void AbstractConflator::_replaceElementIds(
-  const std::vector<std::pair<ElementId, ElementId>>& replaced)
+void AbstractConflator::_replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  for (size_t i = 0; i < replaced.size(); ++i)
+  for (const auto& replaced_pair : replaced)
   {
-    HashMap<ElementId, std::vector<MergerPtr>>::const_iterator it = _e2m.find(replaced[i].first);
+    HashMap<ElementId, std::vector<MergerPtr>>::const_iterator it = _e2m.find(replaced_pair.first);
     if (it != _e2m.end())
     {
       const std::vector<MergerPtr>& mergers = it->second;
@@ -362,9 +338,7 @@ void AbstractConflator::_replaceElementIds(
 void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, const OsmMapPtr& map)
 {
   if (mergers.empty())
-  {
     return;
-  }
 
   QElapsedTimer mergersTimer;
   mergersTimer.start();
@@ -376,9 +350,8 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, con
   for (size_t i = 0; i < mergers.size(); ++i)
   {
     MergerPtr merger = mergers[i];
-    const QString msg =
-      "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
-      " / " + StringUtils::formatLargeNumber(mergers.size());
+    const QString msg = QString("Applying merger: %1 %2 / %3")
+        .arg(merger->getName(), StringUtils::formatLargeNumber(i + 1), StringUtils::formatLargeNumber(mergers.size()));
     // There are way more log statements generated from this than we normally want to see, so just
     // write out a subset. If running in debug, then you'll see all of them which can be useful.
     if (i != 0 && i % 10 == 0)
@@ -400,9 +373,7 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, con
     // causes problems at this time for LinearDiffMerger, so skipping clearing them out only when
     // its being used.
     if (merger->getName() != LinearDiffMerger::className())
-    {
       replaced.clear();
-    }
     LOG_VART(merger->getImpactedElementIds());
 
     if (ConfigOptions().getDebugMapsWriteDetailed())
@@ -470,19 +441,13 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   // Separate mergers that merge relations from other mergers. We want to run them very last so that
   // they have the latest version of their members to work with.
   std::vector<MergerPtr> nonRelationMergers;
-  for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
-       mergersItr != _mergers.end(); ++mergersItr)
+  for (const auto& merger : _mergers)
   {
-    MergerPtr merger = *mergersItr;
     LOG_VART(merger->getName());
     if (merger->getName().contains("Relation"))
-    {
       relationMergers.push_back(merger);
-    }
     else
-    {
       nonRelationMergers.push_back(merger);
-    }
   }
   _mergers = nonRelationMergers;
   LOG_VARD(_mergers.size());
@@ -508,9 +473,8 @@ void AbstractConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 }
 
-void AbstractConflator::_addConflateScoreTags(
-  const ElementPtr& e, const MatchClassification& matchClassification,
-  const MatchThreshold& matchThreshold) const
+void AbstractConflator::_addConflateScoreTags(const ElementPtr& e, const MatchClassification& matchClassification,
+                                              const MatchThreshold& matchThreshold) const
 {
   LOG_VART(matchClassification);
   LOG_VART(matchThreshold);
@@ -534,19 +498,16 @@ void AbstractConflator::_addConflateScoreTags(
 
 void AbstractConflator::_addConflateScoreTags()
 {
-  for (size_t i = 0; i < _matches.size(); i++)
+  for (const auto& match : _matches)
   {
-    ConstMatchPtr match = _matches[i];
     const MatchClassification& matchClassification = match->getClassification();
     std::shared_ptr<const MatchThreshold> matchThreshold = match->getThreshold();
     std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-         it != pairs.end(); ++it)
+    for (const auto& element_pair : pairs)
     {
-      ElementPtr e1 = _map->getElement(it->first);
-      ElementPtr e2 = _map->getElement(it->second);
-      LOG_TRACE(
-        "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
+      ElementPtr e1 = _map->getElement(element_pair.first);
+      ElementPtr e2 = _map->getElement(element_pair.second);
+      LOG_TRACE("Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
       _addConflateScoreTags(e1, matchClassification, *matchThreshold);
       _addConflateScoreTags(e2, matchClassification, *matchThreshold);
       e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());

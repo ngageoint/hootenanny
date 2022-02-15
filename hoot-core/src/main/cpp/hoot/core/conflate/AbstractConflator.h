@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ABSTRACT_CONFLATOR_H
 #define ABSTRACT_CONFLATOR_H
@@ -131,9 +131,8 @@ protected:
    * Adds tags describing the match scores computed during matching
    */
   void _addConflateScoreTags();
-  void _addConflateScoreTags(
-    const ElementPtr& e, const MatchClassification& matchClassification,
-    const MatchThreshold& matchThreshold) const;
+  void _addConflateScoreTags(const ElementPtr& e, const MatchClassification& matchClassification,
+                             const MatchThreshold& matchThreshold) const;
 
   void _updateProgress(const int currentStep, const QString message);
 
