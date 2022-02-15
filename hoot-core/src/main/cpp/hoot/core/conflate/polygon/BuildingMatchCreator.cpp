@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatchCreator.h"
 
@@ -75,28 +75,26 @@ class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  BuildingMatchVisitor(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-    ElementCriterionPtr filter = ElementCriterionPtr()) :
-  _map(map),
-  _result(result),
-  _filter(filter)
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+                       ElementCriterionPtr filter = ElementCriterionPtr())
+    : _map(map),
+      _result(result),
+      _filter(filter)
   {
   }
 
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
-  BuildingMatchVisitor(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-    std::shared_ptr<BuildingRfClassifier> rf, ConstMatchThresholdPtr threshold,
-    ElementCriterionPtr filter = ElementCriterionPtr(), Status matchStatus = Status::Invalid) :
-    _map(map),
-    _result(result),
-    _rf(rf),
-    _mt(threshold),
-    _filter(filter),
-    _matchStatus(matchStatus)
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+                       std::shared_ptr<BuildingRfClassifier> rf, ConstMatchThresholdPtr threshold,
+                       ElementCriterionPtr filter = ElementCriterionPtr(), Status matchStatus = Status::Invalid)
+    : _map(map),
+      _result(result),
+      _rf(rf),
+      _mt(threshold),
+      _filter(filter),
+      _matchStatus(matchStatus)
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
@@ -137,9 +135,8 @@ public:
     int neighborCount = 0;
 
     std::vector<MatchPtr> tempMatches;
-    for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    for (const auto& neighborId : neighbors)
     {
-      const ElementId neighborId = *it;
       if (from != neighborId)
       {
         const std::shared_ptr<const Element>& neighbor = _map->getElement(neighborId);
@@ -159,16 +156,11 @@ public:
     LOG_VART(neighborCount);
 
     if (neighborCount > 1 && ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne())
-    {
       _markNonOneToOneMatchesAsReview(tempMatches);
-    }
     _adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
 
-    for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end();
-         ++it)
-    {
-      _result.push_back(*it);
-    }
+    for (const auto& m : tempMatches)
+      _result.push_back(m);
 
     _neighborCountSum += neighborCount;
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
@@ -182,28 +174,18 @@ public:
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
     BuildingCriterion buildingCrit;
-    if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
-        buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    return (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
+            buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2));
   }
 
   Meters getSearchRadius(const std::shared_ptr<const Element>& e) const
   {
     Meters searchRadius;
     if (_searchRadius >= 0)
-    {
       searchRadius = _searchRadius;
-    }
     else
-    {
       searchRadius = e->getCircularError();
-    }
+
     LOG_VART(searchRadius);
     return searchRadius;
   }
@@ -234,17 +216,14 @@ public:
         " elements.");
     }
     if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
-    {
       MemoryUsageChecker::getInstance().check();
-    }
   }
 
   bool isMatchCandidate(ConstElementPtr element) const
   {
     if (_filter && !_filter->isSatisfied(element))
-    {
       return false;
-    }
+
     return BuildingCriterion().isSatisfied(element);
   }
 
@@ -311,9 +290,8 @@ private:
 
   void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches) const
   {
-    for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
+    for (const auto& match : matches)
     {
-      MatchPtr match = *it;
       // Not proud of this, but not sure what else to do at this point w/o having to change the
       // Match interface.
       MatchClassification& matchClass =
@@ -340,10 +318,8 @@ private:
     const double tagScoreThreshold = ConfigOptions().getBuildingAdjoiningTagScoreThreshold();
     bool adjoiningBuildingEncountered = false;
 
-    for (std::vector<MatchPtr>::const_iterator matchItr = matches.begin();
-         matchItr != matches.end(); ++matchItr)
+    for (const auto& match : matches)
     {
-      MatchPtr match = *matchItr;
       LOG_VART(match->getType());
       assert(match->getType() != MatchType::Miss);
 
@@ -394,11 +370,8 @@ private:
     if (adjoiningBuildingEncountered)
     {
       std::vector<MatchPtr> modifiedMatches;
-      for (QMap<ElementId, MatchPtr>::const_iterator modifiedMatchItr = highestOverlapMatches.begin();
-           modifiedMatchItr != highestOverlapMatches.end(); ++modifiedMatchItr)
-      {
-        modifiedMatches.push_back(modifiedMatchItr.value());
-      }
+      for (auto it = highestOverlapMatches.constBegin(); it != highestOverlapMatches.constEnd(); ++it)
+        modifiedMatches.push_back(it.value());
       matches = modifiedMatches;
     }
     highestOverlapMatches.clear();
@@ -406,13 +379,12 @@ private:
   }
 };
 
-BuildingMatchCreator::BuildingMatchCreator() :
-_conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
+BuildingMatchCreator::BuildingMatchCreator()
+  : _conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
-MatchPtr BuildingMatchCreator::createMatch(
-  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   std::shared_ptr<BuildingMatch> result;
   if (eid1.getType() != ElementType::Node && eid2.getType() != ElementType::Node)
@@ -420,17 +392,15 @@ MatchPtr BuildingMatchCreator::createMatch(
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
 
+    // score each candidate and push it on the result vector
     if (BuildingMatchVisitor::isRelated(e1, e2))
-    {
-      // score each candidate and push it on the result vector
       result = std::make_shared<BuildingMatch>(map, _getRf(), eid1, eid2, getMatchThreshold());
-    }
   }
   return result;
 }
 
-void BuildingMatchCreator::createMatches(
-  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
+void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                                         ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
   timer.start();
@@ -441,22 +411,17 @@ void BuildingMatchCreator::createMatches(
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusBuilding();
   if (searchRadius < 0)
-  {
     searchRadiusStr = "within a feature dependent search radius";
-  }
   else
-  {
-    searchRadiusStr =
-      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
-  }
+    searchRadiusStr = "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
-  const int matchesSizeBefore = matches.size();
+  const int matchesSizeBefore = static_cast<int>(matches.size());
 
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitWaysRo(v);
   map->visitRelationsRo(v);
-  const int matchesSizeAfter = matches.size();
+  const int matchesSizeAfter = static_cast<int>(matches.size());
 
   LOG_STATUS(
     "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
@@ -485,9 +450,8 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 
     QFile file(path.toLatin1().data());
     if (!file.open(QIODevice::ReadOnly))
-    {
       throw HootException("Error opening file: " + path);
-    }
+
     QDomDocument doc("");
     if (!doc.setContent(&file))
     {
