@@ -147,7 +147,6 @@ mgcp.rules = {
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
-    ['F_CODE','BH170','natural','waterhole'], // Natural Pool
     ['F_CODE','DB090','embankment','berm'],
     ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','DB090','embankment','fill'],
@@ -1143,7 +1142,7 @@ mgcp.rules = {
     // ['SWT','0',undefined,undefined], // Unknown
     ['SWT','0','spring:type','unknown'], // Unknown
     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
-    ['SWT','5','natural','waterhole'], // Water-hole
+    ['SWT','5','water','water-hole'], // Water-hole
     ['SWT','999','spring:type','other'], // Other
 
     // TID - Tide Influenced
@@ -2333,7 +2332,7 @@ mgcp.rules = {
     // Attribute values that are to be dropped since they are defaults or don't add value.
     dropList : { '-32765':1,'-32767':1,'-32768':1,
                  '-32765.0':1,'-32767.0':1,'-32768.0':1,
-                 '998':1,'n_a':1,'n/a':1,'unknown':1,'unk':1 },
+                 '998':1,'n_a':1,'n/a':1,'unknown':1,'unk':1,'fcsubtype':1 },
     // ##### End of dropList #####
 
     // Attribute names to swap on input. These are to avoid having copies of the same translation.
