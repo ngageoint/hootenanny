@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementMergerJs.h"
 
@@ -42,15 +42,15 @@
 #include <hoot/core/criterion/RailwayOneToManySourceCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/elements/MapUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
@@ -124,18 +124,18 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
 {
   switch (mergeType)
   {
-    case MergeType::Building:
-      return "Buildingg";
-    case MergeType::PoiToPolygon:
-      return "PoiToPolygon";
-    case MergeType::Poi:
-      return "Poi";
-    case MergeType::Area:
-      return "Area";
-    case MergeType::Railway:
-      return "Railway";
-    default:
-      throw IllegalArgumentException("Invalid merge type.");
+  case MergeType::Building:
+    return "Buildingg";
+  case MergeType::PoiToPolygon:
+    return "PoiToPolygon";
+  case MergeType::Poi:
+    return "Poi";
+  case MergeType::Area:
+    return "Area";
+  case MergeType::Railway:
+    return "Railway";
+  default:
+    throw IllegalArgumentException("Invalid merge type.");
   }
   return "";
 }
@@ -158,33 +158,28 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
   // here, depending on the feature type.
   switch (mergeType)
   {
-    case MergeType::Building:
-      BuildingMerger::merge(map, mergeTargetId);
-      break;
-
-    case MergeType::PoiToPolygon:
-      // POI/Poly always merges into the polygon and there's only one of them, so we let the
-      // routine determine the merge target ID.
-      mergeTargetId = PoiPolygonMerger::mergeOnePoiAndOnePolygon(map);
-      break;
-
-    case MergeType::Poi:
-      PoiMergerJs::merge(map, mergeTargetId, current);
-      break;
-
-    case MergeType::Area:
-      AreaMergerJs::merge(map, mergeTargetId, current);
-      break;
-
-    case MergeType::Railway:
-      MapProjector::projectToPlanar(map);
-      RailwayMergerJs::merge(map, mergeTargetId, current);
-      SuperfluousNodeRemover::removeNodes(map);
-      MapProjector::projectToWgs84(map);
-      break;
-
-    default:
-      throw HootException("Invalid merge type.");
+  case MergeType::Building:
+    BuildingMerger::merge(map, mergeTargetId);
+    break;
+  case MergeType::PoiToPolygon:
+    // POI/Poly always merges into the polygon and there's only one of them, so we let the
+    // routine determine the merge target ID.
+    mergeTargetId = PoiPolygonMerger::mergeOnePoiAndOnePolygon(map);
+    break;
+  case MergeType::Poi:
+    PoiMergerJs::merge(map, mergeTargetId, current);
+    break;
+  case MergeType::Area:
+    AreaMergerJs::merge(map, mergeTargetId, current);
+    break;
+  case MergeType::Railway:
+    MapProjector::projectToPlanar(map);
+    RailwayMergerJs::merge(map, mergeTargetId, current);
+    SuperfluousNodeRemover::removeNodes(map);
+    MapProjector::projectToWgs84(map);
+    break;
+  default:
+    throw HootException("Invalid merge type.");
   }
 
   // By convention, we're setting the status of any element that gets merged with something to
@@ -215,8 +210,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
     if (numOneToManySecondaryMatchElements != 1)
     {
       throw IllegalArgumentException(
-        "Input map for railway one-to-many merging must have exactly one qualifying "
-        "secondary feature.");
+        "Input map for railway one-to-many merging must have exactly one qualifying secondary feature.");
     }
 
     // _determineMergeType has already validated the input feature types, so just check status here.
@@ -236,13 +230,9 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
     // Return the ref or already conflated feature's ID as the target ID.
     ConstElementPtr status1Element = MapUtils::getFirstElementWithStatus(map, Status::Unknown1);
     if (status1Element)
-    {
       return status1Element->getElementId();
-    }
     else
-    {
       return MapUtils::getFirstElementWithStatus(map, Status::Conflated)->getElementId();
-    }
   }
 
   // This logic is for all merge input validation except one-to-many rail. We should have exactly
@@ -256,8 +246,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
   if (numMergeTargets != 1)
   {
     throw IllegalArgumentException(
-      "Input map must have exactly one feature marked with a " + MetadataTags::HootMergeTarget() +
-      " tag.");
+      QString("Input map must have exactly one feature marked with a %1 tag.").arg(MetadataTags::HootMergeTarget()));
   }
 
   const long numNonMergeTargets =
@@ -269,8 +258,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
   if (numNonMergeTargets < 1)
   {
     throw IllegalArgumentException(
-      "Input map must have at least one feature not marked with a " +
-      MetadataTags::HootMergeTarget() + " tag.");
+      QString("Input map must have at least one feature not marked with a %1 tag.").arg(MetadataTags::HootMergeTarget()));
   }
 
   TagKeyCriterion mergeTagCrit(MetadataTags::HootMergeTarget());
@@ -336,9 +324,9 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   {
     // Update this error message as support feature types are added to this merger.
     const QString errorMsg =
-      QString("Invalid inputs passed to the element merger. Input must contain only one ") +
-      QString("combination of the following: 1) two or more POIs, 2) two or more buildings, 3)") +
-      QString("two or more areas, 4) one POI and one polygon, or 5) two railways");
+      "Invalid inputs passed to the element merger. Input must contain only one "
+      "combination of the following: 1) two or more POIs, 2) two or more buildings, 3)"
+      "two or more areas, 4) one POI and one polygon, or 5) two railways";
     throw IllegalArgumentException(errorMsg);
   }
 
