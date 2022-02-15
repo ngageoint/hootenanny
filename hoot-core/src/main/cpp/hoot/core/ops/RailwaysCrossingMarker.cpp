@@ -28,20 +28,20 @@
 #include "RailwaysCrossingMarker.h"
 
 // Hoot
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/criterion/ArbitraryCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/geometry/GeometricRelationship.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -57,10 +57,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RailwaysCrossingMarker)
 
-RailwaysCrossingMarker::RailwaysCrossingMarker() :
-_markIntraDatasetCrossings(false),
-_numRailways(0),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+RailwaysCrossingMarker::RailwaysCrossingMarker()
+  : _markIntraDatasetCrossings(false),
+    _numRailways(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -94,7 +94,7 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
   ReviewMarker reviewMarker;
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
-  for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
+  for (auto waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     ConstWayPtr way = waysItr->second;
     LOG_VART(way->getElementId());
@@ -107,10 +107,8 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
       const std::set<ElementId> neighborIdsSet =
         SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
       LOG_VART(neighborIdsSet.size());
-      for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
-           neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
+      for (const auto& neighborId : neighborIdsSet)
       {
-        const ElementId neighborId = *neighborIdsItr;
         LOG_VART(neighborId);
         ConstElementPtr neighbor = _map->getElement(neighborId);
 
@@ -119,10 +117,8 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
         {
           // Create a unique ID string made from the two feature ID's. If we've already processed
           // this pair, then skip.
-          const QString idStr1 =
-            way->getElementId().toString() + ";" + neighbor->getElementId().toString();
-          const QString idStr2 =
-            neighbor->getElementId().toString() + ";" + way->getElementId().toString();
+          const QString idStr1 = QString("%1;%2").arg(way->getElementId().toString(), neighbor->getElementId().toString());
+          const QString idStr2 = QString("%1;%2").arg(neighbor->getElementId().toString(), way->getElementId().toString());
           const bool pairNotProcessed =
             !_markedRailways.contains(idStr1) && !_markedRailways.contains(idStr2);
 
@@ -186,14 +182,11 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
 void RailwaysCrossingMarker::setTagExcludeFilter(const QStringList& excludeTags)
 {
   if (excludeTags.empty())
-  {
     return;
-  }
 
   _tagExcludeFilter = std::make_shared<ChainCriterion>();
-  for (int i = 0; i < excludeTags.size(); i++)
+  for (const auto& kvp : excludeTags)
   {
-    const QString kvp = excludeTags.at(i);
     const QStringList kvpParts = Tags::kvpToParts(kvp);
     if (!kvpParts.empty())
     {

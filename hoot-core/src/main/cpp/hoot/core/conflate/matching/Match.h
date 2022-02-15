@@ -28,8 +28,8 @@
 #define MATCH_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchMembers.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
@@ -102,9 +102,8 @@ public:
    * caching to be used in situations where duplicated match calculation is prohibitively expensive
    * @return true if the two matches are conflicting; false otherwise
    */
-  virtual bool isConflicting(
-    const std::shared_ptr<const Match>& other, const ConstOsmMapPtr& map,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
+  virtual bool isConflicting(const std::shared_ptr<const Match>& other, const ConstOsmMapPtr& map,
+                             const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   /**
    * If the match should _not_ be optimized into a group of non-conflicting matches, then this
@@ -162,8 +161,7 @@ public:
    * @param matches the matches to index
    * @return an indexed collection of matches
    */
-  static QHash<QString, ConstMatchPtr> getIdIndexedMatches(
-    const std::vector<ConstMatchPtr>& matches);
+  static QHash<QString, ConstMatchPtr> getIdIndexedMatches(const std::vector<ConstMatchPtr>& matches);
 
   /**
    * String representation for match pairs
@@ -171,14 +169,13 @@ public:
    * @param matchPairs the match pairs to represent as a string
    * @return a string
    */
-  static QString matchPairsToString(
-    const std::set<std::pair<ElementId, ElementId>>& matchPairs);
+  static QString matchPairsToString(const std::set<std::pair<ElementId, ElementId>>& matchPairs);
 
   std::shared_ptr<const MatchThreshold> getThreshold() const { return _threshold; }
 
 protected:
 
-  friend class MatchPtrComparator;
+  friend struct MatchPtrComparator;
 
   /* All of this order silliness maintains a consistent ordering of matches when they're placed
    * into a set as pointers.
@@ -196,9 +193,8 @@ protected:
   bool _isOneToMany;
 
   Match(const std::shared_ptr<const MatchThreshold>& threshold);
-  Match(
-    const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
-    const ElementId& eid2);
+  Match(const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+        const ElementId& eid2);
 };
 
 inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)

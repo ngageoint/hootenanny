@@ -37,21 +37,20 @@ namespace hoot
 
 long Match::_orderCount = 0;
 
-Match::Match(const std::shared_ptr<const MatchThreshold>& threshold) :
-_order(_orderCount++),
-_threshold(threshold),
-_isOneToMany(false)
+Match::Match(const std::shared_ptr<const MatchThreshold>& threshold)
+  : _order(_orderCount++),
+    _threshold(threshold),
+    _isOneToMany(false)
 {
 }
 
-Match::Match(
-  const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
-  const ElementId& eid2) :
-_order(_orderCount++),
-_threshold(threshold),
-_eid1(eid1),
-_eid2(eid2),
-_isOneToMany(false)
+Match::Match(const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+             const ElementId& eid2)
+  : _order(_orderCount++),
+    _threshold(threshold),
+    _eid1(eid1),
+    _eid2(eid2),
+    _isOneToMany(false)
 {
 }
 
@@ -65,42 +64,29 @@ MatchType Match::getType() const
   return _threshold->getType(*this);
 }
 
-QHash<QString, ConstMatchPtr> Match::getIdIndexedMatches(
-  const std::vector<ConstMatchPtr>& matches)
+QHash<QString, ConstMatchPtr> Match::getIdIndexedMatches(const std::vector<ConstMatchPtr>& matches)
 {
   QHash<QString, ConstMatchPtr> indexedMatches;
-  for (std::vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    ConstMatchPtr match = *it;
+  for (const auto& match : matches)
     indexedMatches[matchPairsToString(match->getMatchPairs())] = match;
-  }
   return indexedMatches;
 }
 
-QString Match::matchPairsToString(
-  const std::set<std::pair<ElementId, ElementId>>& matchPairs)
+QString Match::matchPairsToString(const std::set<std::pair<ElementId, ElementId>>& matchPairs)
 {
   // sorting each individual pair by element id for consistency; For multiple pairs, collection
   // order must match, which may end up being too strict.
-  QString str;
-  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = matchPairs.begin();
-       it != matchPairs.end(); ++it)
+  QStringList str;
+  for (const auto& idPair : matchPairs)
   {
-    std::pair<ElementId, ElementId> idPair = *it;
     const ElementId firstId = idPair.first;
     const ElementId secondId = idPair.second;
     if (firstId < secondId)
-    {
-      str += firstId.toString() + "," + secondId.toString();
-    }
+      str.append(QString("%1,%2").arg(firstId.toString(), secondId.toString()));
     else
-    {
-      str += secondId.toString() + "," + firstId.toString();
-    }
-    str += ";";
+      str.append(QString("%1,%2").arg(secondId.toString(), firstId.toString()));
   }
-  str.chop(1);
-  return str;
+  return str.join(";");
 }
 
 }

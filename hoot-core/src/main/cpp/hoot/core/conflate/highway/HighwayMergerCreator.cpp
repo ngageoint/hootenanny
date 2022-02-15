@@ -64,9 +64,8 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   const bool medianMatchEnabled = ConfigOptions().getHighwayMedianToDualHighwayMatch();
   std::shared_ptr<SublineStringMatcher> sublineMatcher;
   // Go through all the matches.
-  for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  for (const auto& match : matches)
   {
-    ConstMatchPtr match = *it;
     LOG_VART(match->toString());
     const HighwayMatch* highwayMatch = dynamic_cast<const HighwayMatch*>(match.get());
     // Check to make sure all the input matches are highway matches.
@@ -86,16 +85,10 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
       set<pair<ElementId, ElementId>> matchPairs = highwayMatch->getMatchPairs();
       // We're going to separate out regular road matches from those matched median to divided
       // roads, as the merging is different for each.
-      if (medianMatchEnabled &&
-          highwayMatch->explain().contains(
-            MedianToDividedRoadClassifier::MEDIAN_MATCHED_DESCRIPTION))
-      {
+      if (medianMatchEnabled && highwayMatch->explain().contains(MedianToDividedRoadClassifier::MEDIAN_MATCHED_DESCRIPTION))
         medianMatchedEids.insert(matchPairs.begin(), matchPairs.end());
-      }
       else
-      {
         eids.insert(matchPairs.begin(), matchPairs.end());
-      }
     }
   }
   LOG_VART(eids.size());
@@ -131,9 +124,8 @@ vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
   return result;
 }
 
-bool HighwayMergerCreator::isConflicting(
-  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-  const QHash<QString, ConstMatchPtr>& /*matches*/) const
+bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                                         const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1.get());
   const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2.get());

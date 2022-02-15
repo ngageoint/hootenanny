@@ -258,7 +258,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     RecursiveElementRemover(element_id).apply(map);
 
   set<pair<ElementId, ElementId>> replacedSet;
-  for (const auto& p : _pairs)//set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end(); ++it)
+  for (const auto& p : _pairs)
   {
     // if we replaced the second group of buildings
     if (p.second != keeper->getElementId())

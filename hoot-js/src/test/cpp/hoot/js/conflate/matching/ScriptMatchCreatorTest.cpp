@@ -28,10 +28,10 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/info/CreatorDescription.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
@@ -54,8 +54,8 @@ class ScriptMatchCreatorTest : public HootTestFixture
 
 public:
 
-  ScriptMatchCreatorTest() :
-  HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
+  ScriptMatchCreatorTest()
+    : HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
     setResetType(ResetEnvironment);
   }
@@ -69,8 +69,7 @@ public:
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map, _inputPath + "ScriptMatchTest.osm", true);
+    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
     // To be a candidate: needs to be determined a candidate by the JS rules file, which for this
