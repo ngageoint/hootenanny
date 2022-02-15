@@ -43,9 +43,9 @@ AddAttributesVisitor::AddAttributesVisitor()
   setConfiguration(conf());
 }
 
-AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes, const bool negateCriteria) :
-_attributes(attributes),
-_addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty())
+AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes, const bool negateCriteria)
+  : _attributes(attributes),
+    _addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty())
 {
   _negateCriteria = negateCriteria;
   _chainCriteria = false;
@@ -67,15 +67,11 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   _addCriteria(critNames);
   if (_configureChildren)
   {
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
+    for (const auto& crit : _criteria)
     {
-      ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
       if (c != nullptr)
-      {
         c->setConfiguration(conf);
-      }
     }
   }
 }
@@ -89,74 +85,61 @@ void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
   }
 
   LOG_TRACE("Modifying attributes for: " << e->getElementId() << "...");
-  for (int i = 0; i < _attributes.length(); i++)
+  for (const auto& attribute : qAsConst(_attributes))
   {
     QString attributeValue;
-    const ElementAttributeType attrType = _getAttributeType(_attributes.at(i), attributeValue);
+    const ElementAttributeType attrType = _getAttributeType(attribute, attributeValue);
     LOG_VART(attrType);
 
     bool ok = false;
     switch (attrType.getEnum())
     {
-      case ElementAttributeType::Changeset:
-        if (!_addOnlyIfEmpty || e->getChangeset() == ElementData::CHANGESET_EMPTY)
-        {
-          e->setChangeset(attributeValue.toLong(&ok));
-          if (!ok)
-          {
-            throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
-          }
-          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
-          _numAffected++;
-        }
-        break;
-
-      case ElementAttributeType::Timestamp:
-        if (!_addOnlyIfEmpty || e->getTimestamp() == ElementData::TIMESTAMP_EMPTY)
-        {
-          e->setTimestamp(DateTimeUtils::fromTimeString(attributeValue));
-          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
-          _numAffected++;
-        }
-        break;
-
-      case ElementAttributeType::User:
-        if (!_addOnlyIfEmpty || e->getUser() == ElementData::USER_EMPTY)
-        {
-          e->setUser(attributeValue);
-        }
+    case ElementAttributeType::Changeset:
+      if (!_addOnlyIfEmpty || e->getChangeset() == ElementData::CHANGESET_EMPTY)
+      {
+        e->setChangeset(attributeValue.toLong(&ok));
+        if (!ok)
+          throw IllegalArgumentException(QString("Invalid attribute value: %1").arg(attributeValue));
         LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
         _numAffected++;
-        break;
-
-      case ElementAttributeType::Uid:
-        if (!_addOnlyIfEmpty || e->getUid() == ElementData::UID_EMPTY)
-        {
-          e->setUid(attributeValue.toLong(&ok));
-          if (!ok)
-          {
-            throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
-          }
-          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
-          _numAffected++;
-        }
-        break;
-
-      case ElementAttributeType::Version:
-        if (!_addOnlyIfEmpty || e->getVersion() == ElementData::VERSION_EMPTY)
-        {
-          e->setVersion(attributeValue.toLong(&ok));
-          if (!ok)
-          {
-            throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
-          }
-          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
-          _numAffected++;
-        }
-        break;
-
-      default:
-        throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+      }
+      break;
+    case ElementAttributeType::Timestamp:
+      if (!_addOnlyIfEmpty || e->getTimestamp() == ElementData::TIMESTAMP_EMPTY)
+      {
+        e->setTimestamp(DateTimeUtils::fromTimeString(attributeValue));
+        LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+        _numAffected++;
+      }
+      break;
+    case ElementAttributeType::User:
+      if (!_addOnlyIfEmpty || e->getUser() == ElementData::USER_EMPTY)
+        e->setUser(attributeValue);
+      LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+      _numAffected++;
+      break;
+    case ElementAttributeType::Uid:
+      if (!_addOnlyIfEmpty || e->getUid() == ElementData::UID_EMPTY)
+      {
+        e->setUid(attributeValue.toLong(&ok));
+        if (!ok)
+          throw IllegalArgumentException(QString("Invalid attribute value: %1").arg(attributeValue));
+        LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+        _numAffected++;
+      }
+      break;
+    case ElementAttributeType::Version:
+      if (!_addOnlyIfEmpty || e->getVersion() == ElementData::VERSION_EMPTY)
+      {
+        e->setVersion(attributeValue.toLong(&ok));
+        if (!ok)
+          throw IllegalArgumentException(QString("Invalid attribute value: %1").arg(attributeValue));
+        LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+        _numAffected++;
+      }
+      break;
+    default:
+      throw IllegalArgumentException(QString("Invalid attribute value: %1").arg(attributeValue));
     }
   }
 }
@@ -167,17 +150,14 @@ ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString
   LOG_VART(attribute);
   const QStringList attributeParts = attribute.split("=");
   if (attributeParts.size() != 2)
-  {
-    throw IllegalArgumentException("Invalid attribute: " + attribute);
-  }
+    throw IllegalArgumentException(QString("Invalid attribute: %1").arg(attribute));
+
   const QString attributeName = attributeParts[0];
   LOG_VART(attributeName);
   attributeValue = attributeParts[1].trimmed();
   LOG_VART(attributeValue);
   if (attributeValue.isEmpty())
-  {
     throw IllegalArgumentException("Invalid empty attribute.");
-  }
   return ElementAttributeType::fromString(attributeName);
 }
 
