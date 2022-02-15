@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ManualMatchValidator.h"
 
@@ -34,10 +34,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ManualMatchValidator)
 
-ManualMatchValidator::ManualMatchValidator() :
-_requireRef1(true),
-_allowUuidManualMatchIds(false),
-_fullDebugOutput(false)
+ManualMatchValidator::ManualMatchValidator()
+  : _requireRef1(true),
+    _allowUuidManualMatchIds(false),
+    _fullDebugOutput(false)
 {
   _uuidRegEx.setPattern(
     "\\{[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\}");
@@ -55,14 +55,14 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
   map->visitRo(_ref1Mappings);
 
   const NodeMap& nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     ConstNodePtr node = it->second;
     _validate(node);
   }
 
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     ConstWayPtr way = it->second;
     _validate(way);
@@ -70,7 +70,7 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 
   // Can't remember right now if relations are ever manually matched...maybe?
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     ConstRelationPtr relation = it->second;
     _validate(relation);
@@ -88,7 +88,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 
   // if the tag key for the id exists, it can't be empty
   QString ref1;
-  Tags::const_iterator tagRef1Itr = tags.find(MetadataTags::Ref1());
+  auto tagRef1Itr = tags.find(MetadataTags::Ref1());
   if (tagRef1Itr != tags.end())
   {
     ref1 = tagRef1Itr.value().trimmed().toLower();
@@ -101,12 +101,11 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   LOG_VART(ref1);
 
   QStringList ref2;
-  Tags::const_iterator tagRef2Itr = tags.find(MetadataTags::Ref2());
+  auto tagRef2Itr = tags.find(MetadataTags::Ref2());
   if (tagRef2Itr != tags.end())
   {
     // use SkipEmptyParts to get past trailing semicolons
-    ref2 =
-      tagRef2Itr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    ref2 = tagRef2Itr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
     ref2.removeAll(";");
     if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).trimmed().isEmpty()))
     {
@@ -117,11 +116,10 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   LOG_VART(ref2.size());
 
   QStringList review;
-  Tags::const_iterator tagReviewItr = tags.find(MetadataTags::Review());
+  auto tagReviewItr = tags.find(MetadataTags::Review());
   if (tagReviewItr != tags.end())
   {
-    review =
-      tagReviewItr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    review = tagReviewItr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
     review.removeAll(";");
     if (review.isEmpty() || (review.size() == 1 && review.at(0).trimmed().isEmpty()))
     {
@@ -133,43 +131,24 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 
   // REF2 and review can be multiple IDs (many-to-one match), but REF1 is always a single ID.
   if (ref1.split(";").size() > 1)
-  {
     _recordIssue(element, "REF1 ID must be singular. REF1=" + ref1);
-  }
-  // validate manual match ids
-  else if (!ref1.isEmpty() && !_isValidRef1Id(ref1))
-  {
+  else if (!ref1.isEmpty() && !_isValidRef1Id(ref1)) // validate manual match ids
     _recordIssue(element, "Invalid REF1=" + ref1);
-  }
-  // can't have both ref1 and ref2/review on the same element
-  else if (!ref1.isEmpty() && (!ref2.isEmpty() || !review.isEmpty()))
-  {
+  else if (!ref1.isEmpty() && (!ref2.isEmpty() || !review.isEmpty())) // can't have both ref1 and ref2/review on the same element
     _recordIssue(element, "Element has both REF1 and either a REF2 or REVIEW tag");
-  }
-  // an unknown1 element can't have a ref2 or review tag
-  else if (element->getStatus() == Status::Unknown1 && (!ref2.isEmpty() || !review.isEmpty()))
-  {
+  else if (element->getStatus() == Status::Unknown1 && (!ref2.isEmpty() || !review.isEmpty()))  // an unknown1 element can't have a ref2 or review tag
     _recordIssue(element, "Unknown1 element with REF2 or REVIEW tag");
-  }
-  // an unknown2 element can't have a ref1 tag
-  else if (element->getStatus() == Status::Unknown2 && !ref1.isEmpty())
-  {
+  else if (element->getStatus() == Status::Unknown2 && !ref1.isEmpty()) // an unknown2 element can't have a ref1 tag
     _recordIssue(element, "Unknown2 element with REF1 tag");
-  }
-  // If a ref2 or review has multiple ID's, they should all be hex.
-  else if (!ref2.isEmpty() && ref2.size() > 1 &&
+  else if (!ref2.isEmpty() && ref2.size() > 1 &&  // If a ref2 or review has multiple ID's, they should all be hex.
            (ref2.contains("todo", Qt::CaseInsensitive) ||
             ref2.contains("none", Qt::CaseInsensitive)))
   {
     _recordIssue(element, "Invalid many-to-one REF2=" + ref2.join(";"));
   }
-  else if (!review.isEmpty() && review.size() > 1 &&
-           (review.contains("todo") || review.contains("none")))
-  {
+  else if (!review.isEmpty() && review.size() > 1 && (review.contains("todo") || review.contains("none")))
     _recordIssue(element, "Invalid many-to-one REVIEW=" + review.join(";"));
-  }
-  // check for dupes
-  else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )
+  else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )  // check for dupes
   {
     const QStringList duplicates = StringUtils::getDuplicates(ref2).toList();
     assert(duplicates.size() > 0);
@@ -183,9 +162,8 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   }
   else if (!ref2.isEmpty())
   {
-    for (int i = 0; i < ref2.size(); i++)
+    for (const auto& ref2Id : qAsConst(ref2))
     {
-      const QString ref2Id = ref2.at(i);
       LOG_VART(ref2Id);
 
       if (!_isValidRef2OrReviewId(ref2Id))
@@ -198,13 +176,9 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
                !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2Id))
       {
         if (_requireRef1)
-        {
           _recordIssue(element, "No REF1 exists for REF2=" + ref2Id);
-        }
         else
-        {
           _recordIssue(element, "No REF1 exists for REF2=" + ref2Id, false);
-        }
         break;
       }
       // same id can't be on both ref2 and review for the same element
@@ -218,9 +192,8 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   // same as previous, except for review instead of ref2
   else if (!review.isEmpty())
   {
-    for (int i = 0; i < review.size(); i++)
+    for (const auto& reviewId : qAsConst(review))
     {
-      const QString reviewId = review.at(i);
       LOG_VART(reviewId);
 
       if (!_isValidRef2OrReviewId(reviewId))
@@ -251,57 +224,43 @@ void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString 
   tags.remove(MetadataTags::Review());
   if (!_fullDebugOutput)
   {
-    Tags::const_iterator tagItr = tags.find(MetadataTags::Uuid());
+    auto tagItr = tags.find(MetadataTags::Uuid());
+    // We'll take advantage here if an element has a uuid. score-matches adds uuids, but that's
+    // done after reading the source file, so not much help when its time to find the problem in
+    // the source file itself.
     if (tagItr != tags.end())
-    {
-      // We'll take advantage here if an element has a uuid. score-matches adds uuids, but that's
-      // done after reading the source file, so not much help when its time to find the problem in
-      // the source file itself.
-
       message += "; uuid=" + tagItr.value();
-    }
   }
-  else
-  {
-    // Here we'll just add all the tags.
-
+  else  // Here we'll just add all the tags.
     message += "; tags: " + tags.toString();
-  }
 
   LOG_VART(message);
   if (isError)
-  {
     _errors[element->getElementId()] = message;
-  }
   else
-  {
     _warnings[element->getElementId()] = message;
-  }
 }
 
 bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
 {
   const QString matchIdTemp = matchId.trimmed().toLower();
-  return
-    !matchIdTemp.isEmpty() &&
-    (_isValidNonUniqueMatchId(matchIdTemp) || _isValidUniqueMatchId(matchIdTemp));
+  return !matchIdTemp.isEmpty() &&
+         (_isValidNonUniqueMatchId(matchIdTemp) || _isValidUniqueMatchId(matchIdTemp));
 }
 
 bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
 {
   const QString matchIdTemp = matchId.trimmed().toLower();
-  return
-    !matchIdTemp.isEmpty() && !_isValidNonUniqueMatchId(matchIdTemp) &&
-    _isValidUniqueMatchId(matchIdTemp);
+  return !matchIdTemp.isEmpty() && !_isValidNonUniqueMatchId(matchIdTemp) &&
+         _isValidUniqueMatchId(matchIdTemp);
 }
 
 bool ManualMatchValidator::_isValidUniqueMatchId(const QString& matchId) const
 {
-  return
-    // backward compatibility with the original uuid ids
-    (_allowUuidManualMatchIds && _uuidRegEx.exactMatch(matchId)) ||
-    // This corresponds with how AddRef1Visitor creates the ids.
-    (matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6)));
+  return // backward compatibility with the original uuid ids
+         (_allowUuidManualMatchIds && _uuidRegEx.exactMatch(matchId)) ||
+         // This corresponds with how AddRef1Visitor creates the ids.
+         (matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6)));
 }
 
 bool ManualMatchValidator::_isValidNonUniqueMatchId(const QString& matchId) const
