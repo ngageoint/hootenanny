@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMatchCreator.h"
 
@@ -30,22 +30,22 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/info/CreatorDescription.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -85,22 +85,22 @@ class ScriptMatchVisitor : public ConstElementVisitor
 public:
 
   ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
-    ConstMatchThresholdPtr mt, std::shared_ptr<PluginContext> script,
-    ElementCriterionPtr filter = ElementCriterionPtr()) :
-    _map(map),
-    _result(result),
-    _mt(mt),
-    _script(script),
-    _filter(filter),
-    _customSearchRadius(-1.0),
-    _neighborCountMax(-1),
-    _neighborCountSum(0),
-    _elementsEvaluated(0),
-    _numElementsVisited(0),
-    _numMatchCandidatesVisited(0),
-    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
-    _totalElementsToProcess(0)
+                     ConstMatchThresholdPtr mt, std::shared_ptr<PluginContext> script,
+                     ElementCriterionPtr filter = ElementCriterionPtr())
+    : _map(map),
+      _result(result),
+      _mt(mt),
+      _script(script),
+      _filter(filter),
+      _customSearchRadius(-1.0),
+      _neighborCountMax(-1),
+      _neighborCountSum(0),
+      _elementsEvaluated(0),
+      _numElementsVisited(0),
+      _numMatchCandidatesVisited(0),
+      _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+      _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
+      _totalElementsToProcess(0)
   {
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
     // constructor gets called repeatedly by createMatch, keep those calls out of this constructor.
@@ -152,13 +152,9 @@ public:
       // pass
     }
     else if (value->IsFunction() == false)
-    {
       throw HootException("getSearchRadius is not a function.");
-    }
     else
-    {
       _getSearchRadius.Reset(current, Local<Function>::Cast(value));
-    }
   }
 
   QString getDescription() const override { return ""; }
@@ -185,21 +181,17 @@ public:
     LOG_VART(env);
 
     // find other nearby candidates
-    LOG_TRACE(
-      "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
-      "...");
-    const set<ElementId> neighbors =
-      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, map);
+    LOG_TRACE("Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath << "...");
+    const set<ElementId> neighbors = SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, map);
     LOG_VART(neighbors);
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
 
-    const bool isPointPolyConflation =
-      _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
-    for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    const bool isPointPolyConflation = _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
+    for (const auto& id : neighbors)
     {
-      ConstElementPtr e2 = map->getElement(*it);
+      ConstElementPtr e2 = map->getElement(id);
       LOG_VART(e2->getElementId());
 
       // isCorrectOrder and isMatchCandidate don't apply to Point/Polygon, so we add a different
@@ -215,24 +207,20 @@ public:
         attemptToMatch = isCorrectOrder(e, e2) && isMatchCandidate(e2);
       }
       else
-      {
         attemptToMatch = _pointPolyCrit->isSatisfied(e2);
-      }
       LOG_VART(attemptToMatch);
 
       if (attemptToMatch)
       {
         // Score each candidate and push it on the result vector.
         std::shared_ptr<ScriptMatch> m =
-          std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, from, *it, _mt);
+          std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, from, id, _mt);
         m->setMatchMembers(
           ScriptMatch::geometryTypeToMatchMembers(
             GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
         // if we're confident this is not a miss
         if (m->getType() != MatchType::Miss)
-        {
           _result.push_back(m);
-        }
       }
     }
 
@@ -254,16 +242,11 @@ public:
     {
       Local<Value> v = obj->Get(context, cdtKey).ToLocalChecked();
       if (v->IsNumber() == false || ::qIsNaN(v->NumberValue(context).ToChecked()))
-      {
         throw IllegalArgumentException("Expected " + key + " to be a number.");
-      }
       result = v->NumberValue(context).ToChecked();
 
       if (result < minValue)
-      {
-        throw IllegalArgumentException(
-          QString("Expected %1 to be greater than %2.").arg(key).arg(minValue));
-      }
+        throw IllegalArgumentException(QString("Expected %1 to be greater than %2.").arg(key, QString::number(minValue)));
     }
     return result;
   }
@@ -282,16 +265,12 @@ public:
     Local<Object> global = script->getContext(current)->Global();
 
     if (global->Has(context, toV8("plugin")).ToChecked() == false)
-    {
       throw IllegalArgumentException("Expected the script to have exports.");
-    }
 
     Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
     Local<Object> plugin(Local<Object>::Cast(pluginValue));
     if (plugin.IsEmpty() || plugin->IsObject() == false)
-    {
       throw IllegalArgumentException("Expected plugin to be a valid object.");
-    }
 
     return handleScope.Escape(plugin);
   }
@@ -440,21 +419,18 @@ public:
                          getMap());
         switch (_scriptInfo.getGeometryType())
         {
-          case GeometryTypeCriterion::GeometryType::Point:
-            getMap()->visitNodesRo(v);
-            break;
-          case GeometryTypeCriterion::GeometryType::Line:
-            getMap()->visitWaysRo(v);
-            getMap()->visitRelationsRo(v);
-            break;
-          case GeometryTypeCriterion::GeometryType::Polygon:
-            getMap()->visitWaysRo(v);
-            getMap()->visitRelationsRo(v);
-            break;
-          default:
-            // visit all geometry types if the script didn't identify its geometry
-            getMap()->visitRo(v);
-            break;
+        case GeometryTypeCriterion::GeometryType::Point:
+          getMap()->visitNodesRo(v);
+          break;
+        case GeometryTypeCriterion::GeometryType::Line:
+        case GeometryTypeCriterion::GeometryType::Polygon:
+          getMap()->visitWaysRo(v);
+          getMap()->visitRelationsRo(v);
+          break;
+        default:
+          // visit all geometry types if the script didn't identify its geometry
+          getMap()->visitRo(v);
+          break;
         }
         v.finalizeIndex();
         numElementsIndexed = v.getSize();
@@ -485,9 +461,7 @@ public:
     Isolate* current = v8::Isolate::GetCurrent();
     EscapableHandleScope handleScope(current);
     if (_mapJs.IsEmpty())
-    {
       _mapJs.Reset(current, OsmMapJs::create(getMap()));
-    }
     return handleScope.Escape(ToLocal(&_mapJs));
   }
 
@@ -504,28 +478,19 @@ public:
     LOG_VART(e2->getStatus().getEnum());
     LOG_VART(e1->getElementId());
     LOG_VART(e2->getElementId());
-
     if (e1->getStatus().getEnum() == e2->getStatus().getEnum())
-    {
       return e1->getElementId() < e2->getElementId();
-    }
     else
-    {
       return e1->getStatus().getEnum() < e2->getStatus().getEnum();
-    }
   }
 
   bool isMatchCandidate(ConstElementPtr e)
   {
     if (_matchCandidateCache.contains(e->getElementId()))
-    {
       return _matchCandidateCache[e->getElementId()];
-    }
 
     if (_filter && !_filter->isSatisfied(e))
-    {
       return false;
-    }
 
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
@@ -542,14 +507,10 @@ public:
     Local<String> isMatchCandidateStr =
       String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
     if (ToLocal(&plugin)->Has(context, isMatchCandidateStr).ToChecked() == false)
-    {
       throw HootException("Error finding 'isMatchCandidate' function.");
-    }
     Local<Value> value = ToLocal(&plugin)->Get(context, isMatchCandidateStr).ToLocalChecked();
     if (value->IsFunction() == false)
-    {
       throw HootException("isMatchCandidate is not a function.");
-    }
     Local<Function> func = Local<Function>::Cast(value);
     Local<Value> jsArgs[2];
 
@@ -584,13 +545,9 @@ public:
 
     // if matching gets slow, throttle the log update interval accordingly.
     if (_timer.elapsed() > 3000 && _taskStatusUpdateInterval >= 10)
-    {
       _taskStatusUpdateInterval /= 10;
-    }
     else if (_timer.elapsed() < 250 && _taskStatusUpdateInterval < 10000)
-    {
       _taskStatusUpdateInterval *= 10;
-    }
 
     _numElementsVisited++;
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
@@ -601,9 +558,7 @@ public:
        _timer.restart();
     }
     if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
-    {
       MemoryUsageChecker::getInstance().check();
-    }
   }
 
   void setScriptPath(QString path) { _scriptPath = path; }
@@ -628,19 +583,17 @@ public:
     {
       switch (_scriptInfo.getGeometryType())
       {
-        case GeometryTypeCriterion::GeometryType::Point:
-          _totalElementsToProcess = getMap()->getNodeCount();
-          break;
-        case GeometryTypeCriterion::GeometryType::Line:
-          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
-          break;
-        case GeometryTypeCriterion::GeometryType::Polygon:
-          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
-          break;
-        default:
-          // visit all geometry types if the script didn't identify its geometry
-          _totalElementsToProcess = getMap()->size();
-          break;
+      case GeometryTypeCriterion::GeometryType::Point:
+        _totalElementsToProcess = getMap()->getNodeCount();
+        break;
+      case GeometryTypeCriterion::GeometryType::Line:
+      case GeometryTypeCriterion::GeometryType::Polygon:
+        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+        break;
+      default:
+        // visit all geometry types if the script didn't identify its geometry
+        _totalElementsToProcess = getMap()->size();
+        break;
       }
     }
   }
@@ -699,9 +652,9 @@ private:
   set<ElementId> _empty;
 };
 
-ScriptMatchCreator::ScriptMatchCreator() :
-_railwayOneToManyMatchEnabled(false),
-_railwayOneToManyTransferAllKeys(false)
+ScriptMatchCreator::ScriptMatchCreator()
+  : _railwayOneToManyMatchEnabled(false),
+    _railwayOneToManyTransferAllKeys(false)
 {
 }
 
@@ -720,8 +673,7 @@ void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
   _getCachedVisitor(map)->initSearchRadiusInfo();
 }
 
-Meters ScriptMatchCreator::calculateSearchRadius(
-  const ConstOsmMapPtr& map, const ConstElementPtr& e)
+Meters ScriptMatchCreator::calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e)
 {
   return _getCachedVisitor(map)->getSearchRadius(e);
 }
@@ -729,9 +681,7 @@ Meters ScriptMatchCreator::calculateSearchRadius(
 void ScriptMatchCreator::setArguments(const QStringList& args)
 {
   if (args.size() != 1)
-  {
     throw HootException("The ScriptMatchCreator takes exactly one argument (script path).");
-  }
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -749,8 +699,7 @@ void ScriptMatchCreator::setArguments(const QStringList& args)
   // different conflate script is specified.
   _validateConfig(_scriptInfo.getBaseFeatureType());
 
-  LOG_DEBUG(
-    "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
+  LOG_DEBUG("Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
 }
 
 void ScriptMatchCreator::_validateConfig(
@@ -759,15 +708,14 @@ void ScriptMatchCreator::_validateConfig(
   ConfigOptions opts;
 
   // Other feature types may also need settings validation.
-  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway &&
-      _railwayOneToManyMatchEnabled)
+  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway && _railwayOneToManyMatchEnabled)
   {
     StringUtils::removeEmptyStrings(_railwayOneToManyIdentifyingKeys);
     if (_railwayOneToManyIdentifyingKeys.empty())
     {
       throw IllegalArgumentException(
-        "No railway one to many identifying keys specified in " +
-        ConfigOptions::getRailwayOneToManyIdentifyingKeysKey() + ".");
+        QString("No railway one-to-many identifying keys specified in %1.")
+          .arg(ConfigOptions::getRailwayOneToManyIdentifyingKeysKey()));
     }
 
     if (!_railwayOneToManyTransferAllKeys)
@@ -776,33 +724,31 @@ void ScriptMatchCreator::_validateConfig(
       if (_railwayOneToManyTransferKeys.empty())
       {
         throw IllegalArgumentException(
-          "No railway one to many transfer tag keys specified in " +
-          ConfigOptions::getRailwayOneToManyTransferKeysKey() + ".");
+          QString("No railway one-to-many transfer tag keys specified in %1.")
+            .arg(ConfigOptions::getRailwayOneToManyTransferKeysKey()));
       }
     }
 
-    LOG_STATUS("Running railway one to many custom conflation workflow...");
+    LOG_STATUS("Running railway one-to-many custom conflation workflow...");
   }
 }
 
-void ScriptMatchCreator::_validatePluginConfig(
-  const CreatorDescription::BaseFeatureType& baseFeatureType, Local<Object> plugin) const
+void ScriptMatchCreator::_validatePluginConfig(const CreatorDescription::BaseFeatureType& baseFeatureType,
+                                               Local<Object> plugin) const
 {
   if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
   {
-    const double railwayTypeMatchThreshold =
-      ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
-     if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
-     {
-       throw IllegalArgumentException(
-         "Railway type match threshold out of range: " +
-         QString::number(railwayTypeMatchThreshold) + ".");
+    const double railwayTypeMatchThreshold = ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
+    if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
+    {
+      throw IllegalArgumentException(
+        QString("Railway type match threshold out of range: %1.")
+          .arg(QString::number(railwayTypeMatchThreshold)));
      }
   }
 }
 
-MatchPtr ScriptMatchCreator::createMatch(
-  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   LOG_VART(eid1);
   LOG_VART(eid2);
@@ -819,9 +765,7 @@ MatchPtr ScriptMatchCreator::createMatch(
   if (e1 && e2)
   {
     if (!isPointPolyConflation)
-    {
       attemptToMatch = isMatchCandidate(e1, map) && isMatchCandidate(e2, map);
-    }
     else
     {
       if (!_pointPolyPolyCrit)
@@ -840,9 +784,8 @@ MatchPtr ScriptMatchCreator::createMatch(
       }
 
       // see related note in ScriptMatchVisitor::checkForMatch
-      attemptToMatch =
-        (_pointPolyPointCrit->isSatisfied(e1) && _pointPolyPolyCrit->isSatisfied(e2)) ||
-        (_pointPolyPolyCrit->isSatisfied(e1) && _pointPolyPointCrit->isSatisfied(e2));
+      attemptToMatch = (_pointPolyPointCrit->isSatisfied(e1) && _pointPolyPolyCrit->isSatisfied(e2)) ||
+                       (_pointPolyPolyCrit->isSatisfied(e1) && _pointPolyPointCrit->isSatisfied(e2));
     }
   }
   LOG_VART(attemptToMatch);
@@ -867,13 +810,11 @@ MatchPtr ScriptMatchCreator::createMatch(
   return MatchPtr();
 }
 
-void ScriptMatchCreator::createMatches(
-  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
+void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                                       ConstMatchThresholdPtr threshold)
 {
   if (!_script)
-  {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
-  }
 
   // The parent does some initialization we need.
   MatchCreator::createMatches(map, matches, threshold);
@@ -895,23 +836,16 @@ void ScriptMatchCreator::createMatches(
   QString searchRadiusStr;
   const double searchRadius = v.getCustomSearchRadius();
   if (v.hasCustomSearchRadiusFunction())
-  {
     searchRadiusStr = "within a function calculated search radius";
-  }
   else if (searchRadius < 0)
-  {
     searchRadiusStr = "within a feature dependent search radius";
-  }
   else
-  {
-    searchRadiusStr =
-      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
-  }
+    searchRadiusStr = QString("within a search radius of %1 meters").arg(QString::number(searchRadius, 'g', 2));
 
   LOG_INFO(
     "Looking for matches with: " << scriptFileInfo.fileName() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
-  const int matchesSizeBefore = matches.size();
+  const int matchesSizeBefore = static_cast<int>(matches.size());
 
   _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
@@ -920,40 +854,33 @@ void ScriptMatchCreator::createMatches(
   // kind of hack; not sure of a better way to do determine if we're doing collection relation
   // conflation
   if (scriptFileInfo.fileName().toLower().contains("relation"))
-  {
     map->visitRelationsRo(v);
-  }
   else
   {
     switch (_scriptInfo.getGeometryType())
     {
-      case GeometryTypeCriterion::GeometryType::Point:
-        map->visitNodesRo(v);
-        break;
-      case GeometryTypeCriterion::GeometryType::Line:
-        map->visitWaysRo(v);
-        map->visitRelationsRo(v);
-        break;
-      case GeometryTypeCriterion::GeometryType::Polygon:
-        map->visitWaysRo(v);
-        map->visitRelationsRo(v);
-        break;
-      default:
-        // visit all geometry types if the script didn't identify its geometry
-        map->visitRo(v);
-        break;
+    case GeometryTypeCriterion::GeometryType::Point:
+      map->visitNodesRo(v);
+      break;
+    case GeometryTypeCriterion::GeometryType::Line:
+    case GeometryTypeCriterion::GeometryType::Polygon:
+      map->visitWaysRo(v);
+      map->visitRelationsRo(v);
+      break;
+    default:
+      // visit all geometry types if the script didn't identify its geometry
+      map->visitRo(v);
+      break;
     }
   }
 
-  const int matchesSizeAfter = matches.size();
+  const int matchesSizeAfter = static_cast<int>(matches.size());
 
   QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.getBaseFeatureType());
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
-  {
     matchType = "PointPolygon";
-  }
 
   LOG_STATUS(
     "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
@@ -969,12 +896,12 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
   // find all the files that end with .js in [ConfPath]/rules/
   const QStringList scripts = ConfPath::find(QStringList() << "*.js", "rules");
   // go through each script
-  for (int i = 0; i < scripts.size(); i++)
+  for (const auto& script : qAsConst(scripts))
   {
     try
     {
       // if the script is a valid generic script w/ 'description' exposed, add it to the list.
-      CreatorDescription d = _getScriptDescription(scripts[i]);
+      CreatorDescription d = _getScriptDescription(script);
       if (!d.getDescription().isEmpty())
       {
         result.push_back(d);
@@ -982,21 +909,19 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
       }
       else
       {
-        LOG_TRACE(QString("Skipping reporting script %1 because it has no "
-          "description.").arg(scripts[i]));
+        LOG_TRACE(QString("Skipping reporting script %1 because it has no description.").arg(script));
       }
     }
     catch (const HootException& e)
     {
-      LOG_WARN("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
+      LOG_WARN(QString("Error loading script: %1 exception: %2").arg(script, e.getWhat()));
     }
   }
 
   return result;
 }
 
-std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
-  const ConstOsmMapPtr& map)
+std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(const ConstOsmMapPtr& map)
 {
   if (!_cachedScriptVisitor.get() || _cachedScriptVisitor->getMap() != map)
   {
@@ -1023,28 +948,19 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     // consolidated and cleaned up
     LOG_VART(_descriptionCache.contains(scriptPath));
     if (_descriptionCache.contains(scriptPath))
-    {
       _cachedScriptVisitor->setCreatorDescription(_descriptionCache[scriptPath]);
-    }
 
     LOG_VART(_candidateDistanceSigmaCache.contains(scriptPath));
     if (_candidateDistanceSigmaCache.contains(scriptPath))
-    {
       _cachedScriptVisitor->setCandidateDistanceSigma(_candidateDistanceSigmaCache[scriptPath]);
-    }
 
     //If the search radius has already been calculated for this matcher once, we don't want to do
     //it again due to the expense.
     LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
     if (!_cachedCustomSearchRadii.contains(scriptPath))
-    {
       _cachedScriptVisitor->calculateSearchRadius();
-    }
     else
-    {
-      LOG_VART(_cachedCustomSearchRadii[scriptPath]);
       _cachedScriptVisitor->setCustomSearchRadius(_cachedCustomSearchRadii[scriptPath]);
-    }
   }
 
   return _cachedScriptVisitor;
@@ -1072,9 +988,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     result.setDescription(toCpp<QString>(value));
   }
   else
-  {
-    throw IllegalArgumentException("No script description provided for: " + path);
-  }
+    throw IllegalArgumentException(QString("No script description provided for: %1").arg(path));
 
   Local<String> experimentalStr = String::NewFromUtf8(current, "experimental").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, experimentalStr).ToChecked())
@@ -1095,9 +1009,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   // A little kludgy, but we'll identify generic geometry Point/Polygon conflation by its script
   // name.
   else if (!path.contains("PointPolygon.js"))
-  {
-    throw IllegalArgumentException("No base feature type provided for: " + path);
-  }
+    throw IllegalArgumentException(QString("No base feature type provided for: %1").arg(path));
 
   Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, geometryTypeStr).ToChecked())
@@ -1106,9 +1018,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     result.setGeometryType(GeometryTypeCriterion::typeFromString(toCpp<QString>(value)));
   }
   else if (!path.contains("PointPolygon.js"))
-  {
-    throw IllegalArgumentException("No geometry type provided for: " + path);
-  }
+    throw IllegalArgumentException(QString("No geometry type provided for: %1").arg(path));
 
   // The criteria parsed here describe which feature types a script conflates. Its used only for
   // determining which conflate ops to disable with SuperfluousConflateOpRemover and for some
@@ -1123,18 +1033,12 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Local<Value> value = ToLocal(&plugin)->Get(context, matchCandidateCriterionStr).ToLocalChecked();
     const QString valueStr = toCpp<QString>(value);
     if (valueStr.contains(";"))
-    {
       result.setMatchCandidateCriteria(valueStr.split(";"));
-    }
     else
-    {
       result.setMatchCandidateCriteria(QStringList(valueStr));
-    }
   }
   else
-  {
-    throw IllegalArgumentException("No match candidate criteria provided for: " + path);
-  }
+    throw IllegalArgumentException(QString("No match candidate criteria provided for: %1").arg(path));
 
   QFileInfo fi(path);
   result.setClassName(className() + "," + fi.fileName());
@@ -1148,9 +1052,8 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
 bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
   if (!_script)
-  {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
-  }
+
   return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 
@@ -1159,9 +1062,8 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
   if (!_matchThreshold.get())
   {
     if (!_script)
-    {
       throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
-    }
+
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -1181,13 +1083,9 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
     }
 
     if (matchThreshold != -1.0 && missThreshold != -1.0 && reviewThreshold != -1.0)
-    {
       return std::make_shared<MatchThreshold>(matchThreshold, missThreshold, reviewThreshold);
-    }
     else
-    {
       return std::make_shared<MatchThreshold>();
-    }
   }
   return _matchThreshold;
 }

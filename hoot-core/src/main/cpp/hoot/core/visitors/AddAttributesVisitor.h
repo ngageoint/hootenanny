@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDATTRIBUTESVISITOR_H
 #define ADDATTRIBUTESVISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
@@ -80,8 +80,7 @@ private:
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
 
-  ElementAttributeType::Type _getAttributeType(
-    const QString& attribute, QString& attributeValue) const;
+  ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue) const;
 };
 
 }

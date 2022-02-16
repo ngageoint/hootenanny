@@ -23,7 +23,7 @@ features to search during matching.
 Matching is based off both tag and geometric attributes. For geometry matching, angle histogram, 
 edge distance, buffered overlap, and smaller overlap values are used for comparison. Their match 
 thresholds were determined against test data using Weka. Tag matching looks at type tags on features 
-only. Matching employs additional logic to help ensure a review is generated when a one to many 
+only. Matching employs additional logic to help ensure a review is generated when a one-to-many
 match occurs.
 
 ===== Merging

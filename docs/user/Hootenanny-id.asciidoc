@@ -452,7 +452,7 @@ When features are flagged as needing review, a number of different review notes 
 [[ReviewRelations]]
 ===== Show Review Relations
 
-When reviewing conflicts, a review is presented to the user with different options depending on the type of feature e.g. if POI they can merge or resolve, if building/road they can resolve, etc.  Reviews occur in a pairwise manner where feature a is reviewed against feature b but because any member of a review pair can also be involved in reviews against other features, it is important to provide a mechanism to display these relationships even if conflicts are only resolved between two features per review.  In an effort to account for these one to many relationships between reviewed features, users have the option to _show review relations_ for a given reviewed feature by clicking on the feature and then selecting the palette option, Show review relations for this feature (Shortcut: *Shift+R*). A line will appear from the feature to all related features with a letter designation depending on the order of the review inside a green circle.  In cases where there are more than 26 related reviews for a given feature, the letter displayed will appear as AA, BB, etc.  Each letter circles can be dragged around using a mouse cursor and clicking on it will open the review associated with that feature pair in the blue/red table.
+When reviewing conflicts, a review is presented to the user with different options depending on the type of feature e.g. if POI they can merge or resolve, if building/road they can resolve, etc.  Reviews occur in a pairwise manner where feature a is reviewed against feature b but because any member of a review pair can also be involved in reviews against other features, it is important to provide a mechanism to display these relationships even if conflicts are only resolved between two features per review.  In an effort to account for these one-to-many relationships between reviewed features, users have the option to _show review relations_ for a given reviewed feature by clicking on the feature and then selecting the palette option, Show review relations for this feature (Shortcut: *Shift+R*). A line will appear from the feature to all related features with a letter designation depending on the order of the review inside a green circle.  In cases where there are more than 26 related reviews for a given feature, the letter displayed will appear as AA, BB, etc.  Each letter circles can be dragged around using a mouse cursor and clicking on it will open the review associated with that feature pair in the blue/red table.
 
 [[LatviaHotelReview]]
 .The review relations of the selected Latvia Geonames Poi, Gutnebergs Hotel.  Clicking on each letter will display the associated review feature pair/table.
@@ -811,28 +811,28 @@ NOTE:  If the uploaded dataset contains more than one Feature Class a drop-down 
 
 The translation mappings are defined at the attribute level and support one-to-one, one-to-many and many-to-one attribute-tag associations. To better illustrate the utility of this tool, a walk through example is provided using the Washington, D.C. Street Centerline data downloaded from DCGIS Open Data's data catalog (http://opendata.dc.gov/). For this example we will be using a downloaded link:$$http://opendata.dc.gov/datasets/f3b0c6a6ff5f4493b85d858e67b7400b_43.zip$$[shapefile] from the site and mapping it to the OSM Tag Schema.
 
-*_One to One Mappings_*
+*_One-to-One Mappings_*
 
 In its simplest form, a translation mapping takes a field name and maps it to a tag key. Field values become tag values with no transformation. In this example the source dataset attribute, _ST_NAME_, is mapped to the OSM tag, `name` by typing/autofill name in the field. The same process can be repeated for the attribute, _REGISTERED_, mapped to the OSM tag, `alt_name`.
 
-.One to One Tag Key Mapping. _ST_NAME_ in the source data is mapped to the OSM tag, `name`.
+.One-to-One Tag Key Mapping. _ST_NAME_ in the source data is mapped to the OSM tag, `name`.
 image::images/id/hoot_TA_one-to-one.png[scaledwidth="25%"]
 
 The next form involves mapping specific attribute field values to specific tag values, in addition to translating the field name to a tag key. For this example (and many others), the process of mapping attributes may involve some additional research into the proper definitions for road classifications. In some cases, attributes from source data may not have direct 1:1 relationship to OSM tags so `best match` approaches are often taken at the discretion of the analyst performing the translation. Using the link::$$http://www.fhwa.dot.gov/planning/processes/statewide/related/highway_functional_classifications/fcauab.pdf$$[Highway Functional Classification] from the Department of Transportation, we can attempt to map the values to their link::$$http://wiki.openstreetmap.org/wiki/Highways$$[OSM tag] equivalents.
 
-.One to One Tag Key:Value Mapping. _FUNCTIONAL_ is mapped to the OSM tag, highway, with each value set appropriately.
+.One-to-One Tag Key:Value Mapping. _FUNCTIONAL_ is mapped to the OSM tag, highway, with each value set appropriately.
 image::images/id/hoot_TA_one-to-one_key-value.png[scaledwidth="25%"]
 
-*_One to Many Mappings_*
+*_One-to-Many Mappings_*
 
-One to many mappings are supported by clicking on the plus button after each new tag association has been added for a given attribute. The figure below shows a one to many mapping for the `ROUNDABOUT` field and maps to the OSM tags `junction=roundabout` and implies `oneway=true`. Note that this field is not present in the DC Street Centerline data and is simply used here as an example.
+one-to-many mappings are supported by clicking on the plus button after each new tag association has been added for a given attribute. The figure below shows a one-to-many mapping for the `ROUNDABOUT` field and maps to the OSM tags `junction=roundabout` and implies `oneway=true`. Note that this field is not present in the DC Street Centerline data and is simply used here as an example.
 
-.One to Many Mapping Example.
+.One-to-Many Mapping Example.
 image::images/id/hoot_TA_one-to-many.png[scaledwidth="25%"]
 
-*_Many to One Mappings_*
+*_Many-to-One Mappings_*
 
-Many to one mappings are supported with the Translation Assistant UI based on the OSM semi-colon value separator. The purpose of this is to allow the user to retain any fields in their shoebox dataset that would otherwise be dropped due to the lack of a corresponding tag in the target schema. The special tag key used for this feature is `extra_attributes`. All attributes mapped to this tag will be concatenated together. An example tag is `extra_attributes=speed_mph=45;city=District of Columbia;country=US`.
+Many-to-one mappings are supported with the Translation Assistant UI based on the OSM semi-colon value separator. The purpose of this is to allow the user to retain any fields in their shoebox dataset that would otherwise be dropped due to the lack of a corresponding tag in the target schema. The special tag key used for this feature is `extra_attributes`. All attributes mapped to this tag will be concatenated together. An example tag is `extra_attributes=speed_mph=45;city=District of Columbia;country=US`.
 
 NOTE:  Support for this extra_attributes tag does not exist in some export schemas such as TDS. If an export schema does support the concept of a catch-all field such as _notes_ or other, Hootenanny can add support for it in the export translation capability.
 

@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAYMATCH_H
 #define HIGHWAYMATCH_H
 
 // hoot
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -54,10 +54,9 @@ public:
   static const QString MATCH_NAME;
 
   HighwayMatch() = default;
-  HighwayMatch(
-    const std::shared_ptr<HighwayClassifier>& classifier,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
-    const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
+  HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+               const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
+               const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
   ~HighwayMatch() = default;
 
   /**
@@ -70,9 +69,8 @@ public:
   const MatchClassification& getClassification() const override { return _classification; }
   MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
 
-  bool isConflicting(
-    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
@@ -103,13 +101,11 @@ private:
 
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;
 
-  bool _isOrderedConflicting(
-    const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
-    const ElementId& other2) const;
+  bool _isOrderedConflicting(const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
+                             const ElementId& other2) const;
 
-  void _updateNonMatchDescriptionBasedOnGeometricProperties(
-    QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
-    const ConstElementPtr e2) const;
+  void _updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description, const ConstOsmMapPtr& map,
+                                                            const ConstElementPtr e1, const ConstElementPtr e2) const;
 };
 
 }

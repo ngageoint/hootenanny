@@ -21,26 +21,26 @@ Matching is based off both tag and geometric attributes. For geometry matching, 
 Hausdorff Distance, and edge distance values are used for comparison. Their match thresholds were
 determined against test data using Weka. Tag matching looks at type tags on features only.
 
-*_One To Many Matching_*
+*_One-To-Many Matching_*
 
 Railway conflation has an alternate workflow that allows for transferring selected tags from single 
 rail features in secondary data to multiple rail features in reference data when the single 
 secondary rail identifies how many tracks it represents. The configuration option that determines
 which attributes identify the track count is `railway.one.to.many.identifying.keys`. Any secondary
-feature that has at least one tag key with the keys from that option will be eligible for one to 
+feature that has at least one tag key with the keys from that option will be eligible for one-to-
 many matching. Once such a feature is identified, a record is kept of how many matches it is 
 involved in with other reference rail features. In the initial version of the algorithm, once that 
 match limit was reached, no more matching would occur for the secondary feature. In practice with
-one to many matches this caused variability in the output, so the limit currently is not enforced.
+one-to-many matches this caused variability in the output, so the limit currently is not enforced.
 
 ===== Merging
 
 Default railway merging uses the standard Hootenanny merging process that is used for merging most
 linear features, including roads.
 
-*_One To Many Merging_*
+*_One-To-Many Merging_*
 
-In the one to many workflow, selected tags are transferred from one secondary feature to potentially 
+In the one-to-many workflow, selected tags are transferred from one secondary feature to potentially
 multiple reference features. No geometry merging is performed. The tags transferred are configurable
 via the `railway.one.to.many.transfer.keys` configuration option where any tag in the secondary 
 feature with key matching those in the option list value will be transferred to a matching reference 
@@ -80,9 +80,9 @@ Combined Correct = number of correct matches + number of unnecessary reviews
 The initial 80% conflation accuracy goal was nearly achieved, but since only one test dataset was 
 utilized success cannot be declared.
 
-*_One To Many_*
+*_One-T- Many_*
 
-No manual match data for the one to many workflow are available yet, so there are no test results to 
+No manual match data for the one-to-many workflow are available yet, so there are no test results to
 report for the workflow.
 
 ===== Future Work

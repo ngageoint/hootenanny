@@ -35,7 +35,7 @@ follow describes possible review scenarios. Keep the review messages alphabetize
 |======
 | *Needs Review Message* | *Possible Causes* | *Potential User Actions to Take*
 | Identified as changed with an IoU score of <score>, which is less than the specified threshold of <score>. | If Intersection Over Union scoring is enabled during building conflation (not integrated at the time of this writing), this is generated if the IoU score passes the configured threshold. | Review the buildings to decide if the change between the two warrants merging them together.
-| Merging multiple buildings from each data source is error prone and requires a human eye. | This occurs if a building is involved in a many to many match. | Each review should be resolved manually or set `building.merge.many.to.many.matches=true` to avoid it.
+| Merging multiple buildings from each data source is error prone and requires a human eye. | This occurs if a building is involved in a many-to-many match. | Each review should be resolved manually or set `building.merge.many.to.many.matches=true` to avoid it.
 |======
 
 .*POI/Polygon Specific Reviews*

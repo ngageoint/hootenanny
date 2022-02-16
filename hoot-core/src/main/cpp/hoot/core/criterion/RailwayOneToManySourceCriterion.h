@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H
 #define RAILWAY_ONE_TO_MANY_SOURCE_CRITERION_H
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * This identifies a rail feature that is the merge source from a One To Many Railway workflow
+ * This identifies a rail feature that is the merge source from a one-to-many railway workflow
  * match.
  */
 class RailwayOneToManySourceCriterion : public ElementCriterion
@@ -58,7 +58,7 @@ public:
   { return std::make_shared<RailwayOneToManySourceCriterion>(); }
 
   QString getDescription() const override
-  { return "Identifies secondary features matched by One To Many Railway Conflation"; }
+  { return "Identifies secondary features matched by One-To-Many Railway Conflation"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }

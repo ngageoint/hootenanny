@@ -26,8 +26,6 @@
  */
 #include "OsmNetwork.h"
 
-
-
 namespace hoot
 {
 
