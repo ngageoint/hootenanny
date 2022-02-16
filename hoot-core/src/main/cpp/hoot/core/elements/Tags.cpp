@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Tags.h"
@@ -42,8 +42,8 @@ namespace hoot
 QStringList Tags::_nameKeys;
 QStringList Tags::_pseudoNameKeys;
 
-Tags::Tags(const QString& key, const QString& value) :
-QHash<QString, QString>()
+Tags::Tags(const QString& key, const QString& value)
+  : QHash<QString, QString>()
 {
   set(key, value);
 }
@@ -98,7 +98,7 @@ QStringList Tags::kvpToParts(const QString& kvp)
 
 void Tags::add(const Tags& t)
 {
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  for (auto it = t.constBegin(); it != t.constEnd(); ++it)
     operator[](it.key()) = it.value();
 }
 
@@ -151,10 +151,10 @@ void Tags::appendValueIfUnique(const QString& k, const QStringList& v)
   {
     QStringList l = split(oldV);
 
-    for (int i = 0; i < v.size(); i++)
+    for (const auto& value : qAsConst(v))
     {
-      if (!l.contains(v[i]))
-        l.append(v[i]);
+      if (!l.contains(value))
+        l.append(value);
     }
 
     setList(k, l);
@@ -182,7 +182,7 @@ void Tags::appendValueIfUnique(const QString& k, const QString& v)
 
 bool Tags::hasInformationTag() const
 {
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
     //LOG_VART(key);
@@ -202,7 +202,6 @@ QStringList Tags::getCreateUuid()
   {
     QString uuid = UuidHelper::createUuid().toString();
     set(uuidKey(), uuid);
-
     result << uuid;
   }
 
@@ -343,7 +342,7 @@ Length Tags::getLength(const QString& k) const
 int Tags::getInformationCount() const
 {
   int count = 0;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
     //LOG_VART(key);
@@ -370,7 +369,7 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
       QString regexStr = k[i].mid(6);
       QRegExp regex(regexStr);
 
-      for (const_iterator it = begin(); it != end(); ++it)
+      for (auto it = constBegin(); it != constEnd(); ++it)
       {
         if (regex.exactMatch(it.key()))
           result.append(it.key());
@@ -392,12 +391,10 @@ bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2, const bool str
 {
   const QStringList tag1Names = tags1.getNames(!strictNameMatch);
   const QStringList tag2Names = tags2.getNames(!strictNameMatch);
-  for (int i = 0; i < tag1Names.size(); i++)
+  for (const auto& tag1Name : tag1Names)
   {
-    const QString tag1Name = tag1Names[i];
-    for (int j = 0; j < tag2Names.size(); j++)
+    for (const auto& tag2Name : tag2Names)
     {
-      const QString tag2Name = tag2Names[j];
       if (tag1Name.compare(tag2Name, Qt::CaseInsensitive) == 0)
         return true;
     }
@@ -409,16 +406,16 @@ QStringList Tags::getNames(const bool includeAltName) const
 {
   QStringList result;
 
-  if (size() == 0)
+  if (empty())
     return result;
 
   // make sure the _nameKeys field is populated.
   getNameKeys();
 
-  for (int i = 0; i < _nameKeys.size(); i++)
+  for (auto key : _nameKeys)
   {
-    if (includeAltName || (!includeAltName && _nameKeys[i].toLower() != "alt_name"))
-      readValues(_nameKeys[i], result);
+    if (includeAltName || (!includeAltName && key.toLower() != "alt_name"))
+      readValues(key, result);
   }
 
   return result;
@@ -432,9 +429,9 @@ QString Tags::getName() const
   else
   {
     QStringList names = getNames();
-    for (int i = 0; i < names.size(); i++)
+    for (const auto& n : qAsConst(names))
     {
-      name = names.at(i).trimmed();
+      name = n.trimmed();
       //arbitrarily returning the first name here
       if (!name.isEmpty())
         return name;
@@ -450,8 +447,8 @@ const QStringList& Tags::getNameKeys()
   {
     const vector<SchemaVertex>& tags =
       OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
-    for (size_t i = 0; i < tags.size(); i++)
-      _nameKeys.append(tags[i].getKey());
+    for (const auto& vertex : tags)
+      _nameKeys.append(vertex.getKey());
   }
 
   return _nameKeys;
@@ -461,9 +458,8 @@ QStringList Tags::getNameKeys(const Tags& tags)
 {
   QStringList nameKeysInTags;
   const QStringList globalNameKeys = getNameKeys();
-  for (int i = 0; i < globalNameKeys.size(); i++)
+  for (const auto& nameKey : globalNameKeys)
   {
-    const QString nameKey = globalNameKeys.at(i);
     if (tags.contains(nameKey))
       nameKeysInTags.append(nameKey);
   }
@@ -473,7 +469,7 @@ QStringList Tags::getNameKeys(const Tags& tags)
 int Tags::getNonDebugCount() const
 {
   int count = 0;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
     if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
@@ -490,10 +486,10 @@ const QStringList& Tags::getPseudoNameKeys() const
     const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());
 
-    for (size_t i = 0; i < tags.size(); i++)
+    for (const auto& vertex : tags)
     {
-      LOG_TRACE("key : " << (tags[i].getKey().toStdString()));
-      _pseudoNameKeys.append(tags[i].getKey());
+      LOG_TRACE("key : " << (vertex.getKey().toStdString()));
+      _pseudoNameKeys.append(vertex.getKey());
     }
   }
 
@@ -504,14 +500,14 @@ QStringList Tags::getPseudoNames() const
 {
   QStringList result;
 
-  if (size() == 0)
+  if (empty())
     return result;
 
   // make sure the _nameKeys field is populated.
   getPseudoNameKeys();
 
-  for (int i = 0; i < _pseudoNameKeys.size(); i++)
-    readValues(_pseudoNameKeys[i], result);
+  for (const auto& key : qAsConst(_pseudoNameKeys))
+    readValues(key, result);
 
   return result;
 }
@@ -533,7 +529,7 @@ bool Tags::operator==(const Tags& other) const
   if (other.size() != size())
     return false;
 
-  for (const_iterator it = begin(); it != end(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     QStringList l1 = split(it.value());
     l1.sort();
@@ -562,15 +558,15 @@ int Tags::removeMetadata()
   // there are some other metadata keys that don't start with 'hoot:'
   QStringList keysToRemove;
   OsmSchema& schema = OsmSchema::getInstance();
-  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     const QString key = it.key();
     if (schema.isMetaData(key, it.value()))
       keysToRemove.append(key);
   }
 
-  for (int i = 0; i < keysToRemove.size(); i++)
-    numRemoved += remove(keysToRemove.at(i));
+  for (const auto& key : qAsConst(keysToRemove))
+    numRemoved += remove(key);
 
   return numRemoved;
 }
@@ -578,10 +574,10 @@ int Tags::removeMetadata()
 int Tags::removeKeys(const QStringList& keys)
 {
   int numRemoved = 0;
-  for (int i = 0; i < keys.size(); i++)
+  for (const auto& key : qAsConst(keys))
   {
-    LOG_TRACE("Removing " << keys.at(i) << "...");
-    numRemoved += remove(keys.at(i));
+    LOG_TRACE("Removing " << key << "...");
+    numRemoved += remove(key);
   }
   return numRemoved;
 }
@@ -589,7 +585,7 @@ int Tags::removeKeys(const QStringList& keys)
 int Tags::removeKey(const QRegExp& regex)
 {
   QStringList keysToRemove;
-  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     const QString key = it.key();
     if (regex.exactMatch(key))
@@ -602,8 +598,8 @@ int Tags::removeKey(const QRegExp& regex)
 int Tags::removeKeys(const QList<QRegExp>& regexes)
 {
   int numRemoved = 0;
-  for (int i = 0; i < regexes.size(); i++)
-    numRemoved += removeKey(regexes.at(i));
+  for (const auto& regex : qAsConst(regexes))
+    numRemoved += removeKey(regex);
 
   return numRemoved;
 }
@@ -611,7 +607,7 @@ int Tags::removeKeys(const QList<QRegExp>& regexes)
 int Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
 {
   QStringList keysToRemove;
-  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     const QString key = it.key();
     if (key.startsWith(tagKeySubstring))
@@ -619,15 +615,15 @@ int Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
   }
 
   int numRemoved = 0;
-  for (int i = 0; i < keysToRemove.size(); i++)
-    numRemoved += remove(keysToRemove.at(i));
+  for (const auto& key : qAsConst(keysToRemove))
+    numRemoved += remove(key);
   return numRemoved;
 }
 
 QStringList Tags::getDataOnlyValues(const Tags& tags) const
 {
   QStringList t;
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     if (!it.key().startsWith(MetadataTags::HootTagPrefix()))
       t.append(it.value());
@@ -674,7 +670,7 @@ void Tags::readValues(const QString &k, QStringList& list) const
     QString regexStr = k.mid(6);
     QRegExp regex(regexStr);
 
-    for (const_iterator it = begin(); it != end(); ++it)
+    for (auto it = constBegin(); it != constEnd(); ++it)
     {
       if (regex.exactMatch(it.key()))
         list.append(split(it.value()));
@@ -699,7 +695,7 @@ void Tags::set(const QString& key, bool v)
 
 void Tags::set(const Tags& other)
 {
-  for (Tags::const_iterator it = other.constBegin(); it != other.constEnd(); ++it)
+  for (auto it = other.constBegin(); it != other.constEnd(); ++it)
     set(it.key(), it.value());
 }
 
@@ -711,7 +707,7 @@ QStringList Tags::split(const QString& values)
 
   int strStart = 0;
   int last = values.length() - 1;
-  for (int i = 0; i < values.length(); i++)
+  for (int i = 0; i < values.length(); ++i)
   {
     // if there is an empty string at the beginning
     if (i == 0)
@@ -749,7 +745,7 @@ QStringList Tags::split(const QString& values)
 QString Tags::toString() const
 {
   QString result;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
     result += it.key() + " = " + it.value() + "\n";
   return result;
 }
@@ -771,9 +767,8 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
 
 QString Tags::getFirstMatchingKvp(const QStringList& kvps) const
 {
-  for (int i = 0; i < kvps.size(); i++)
+  for (const auto& kvp : qAsConst(kvps))
   {
-    const QString kvp = kvps.at(i);
     if (!kvp.contains("="))
       throw IllegalArgumentException("Invalid kvp: " + kvp);
 
@@ -796,28 +791,13 @@ bool Tags::hasKvp(const QString& kvp) const
 
 bool Tags::hasAnyKvp(const QStringList& kvps) const
 {
-  for (int i = 0; i < kvps.size(); i++)
-  {
-    const QString kvp = kvps.at(i);
-    if (!kvp.contains("="))
-      throw IllegalArgumentException("Invalid kvp: " + kvp);
-
-    const QStringList kvpParts = kvp.split("=");
-    if (kvpParts.size() != 2)
-      throw IllegalArgumentException("Invalid kvp: " + kvp);
-
-    const QString key = kvpParts[0];
-    const QString value = kvpParts[1];
-    if ((value != "*" && get(key) == value) || (value == "*" && contains(key)))
-      return true;
-  }
-  return false;
+  return !getFirstMatchingKvp(kvps).isEmpty();
 }
 
 QStringList Tags::toKvps() const
 {
   QStringList kvps;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
     kvps.append(it.key() + "=" + it.value());
 
   return kvps;
@@ -826,7 +806,7 @@ QStringList Tags::toKvps() const
 QStringList Tags::toKeys() const
 {
   QStringList keys;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
     keys.append(it.key());
 
   return keys;
@@ -834,9 +814,9 @@ QStringList Tags::toKeys() const
 
 bool Tags::hasAnyKey(const QStringList& keys) const
 {
-  for (int i = 0; i < keys.size(); i++)
+  for (const auto& key : qAsConst(keys))
   {
-    if (contains(keys.at(i)))
+    if (contains(key))
       return true;
   }
   return false;
@@ -844,9 +824,8 @@ bool Tags::hasAnyKey(const QStringList& keys) const
 
 QString Tags::getFirstMatchingKey(const QStringList& keys) const
 {
-  for (int i = 0; i < keys.size(); i++)
+  for (const auto& key : qAsConst(keys))
   {
-    const QString key = keys.at(i);
     if (contains(key))
       return key;
   }
@@ -856,9 +835,8 @@ QString Tags::getFirstMatchingKey(const QStringList& keys) const
 Tags Tags::kvpListToTags(const QStringList& kvps)
 {
   Tags tagsToReturn;
-  for (int i = 0; i < kvps.size(); i++)
+  for (const auto& tagStr : qAsConst(kvps))
   {
-    const QString tagStr = kvps.at(i);
     if (!tagStr.contains("="))
       throw IllegalArgumentException("Invalid tag: " + tagStr);
 
@@ -874,12 +852,8 @@ Tags Tags::kvpListToTags(const QStringList& kvps)
 Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
 {
   Tags tags;
-  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
-       itr != schemaVertices.end(); ++itr)
-  {
-    const SchemaVertex vertex = *itr;
+  for (const auto& vertex : schemaVertices)
     tags.appendValue(vertex.getKey(), vertex.getValue());
-  }
   return tags;
 }
 

@@ -339,17 +339,6 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     var poly = exports.validatePoly(querypoly);
     var willCrop = doCrop == 1 && (poly || bbox) !== null;
 
-    //if conn is url, write that response to a file
-    if (input.substring(0,4) === 'http') {
-        var cert_param = '';
-        if (input.substring(0,5) === 'https' && fs.existsSync(appDir + 'key.pem') && fs.existsSync(appDir + 'cert.pem')) {
-            cert_param = '--private-key=' + appDir + 'key.pem --certificate=' + appDir + 'cert.pem';
-        }
-        var temp_file = outDir + '.osm';
-        command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + (poly ? exports.polyToBbox(poly) : bbox) + ' && ';
-        input = temp_file;
-    }
-
     //create command and run
     command += 'hoot convert'
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmPbfWriter.h"
@@ -105,12 +105,12 @@ OsmPbfWriter::~OsmPbfWriter()
 
 long OsmPbfWriter::_convertLon(double lon) const
 {
-  return (1000000000 * lon - _lonOffset) / _granularity;
+  return static_cast<long>((1000000000.0 * lon - _lonOffset) / _granularity);
 }
 
 long OsmPbfWriter::_convertLat(double lat) const
 {
-  return (1000000000 * lat - _latOffset) / _granularity;
+  return static_cast<long>((1000000000.0 * lat - _latOffset) / _granularity);
 }
 
 int OsmPbfWriter::_convertString(const QString& s)
@@ -118,9 +118,7 @@ int OsmPbfWriter::_convertString(const QString& s)
   int id;
   QHash<QString, int>::const_iterator sit = _strings.find(s);
   if (sit != _strings.end())
-  {
     id = sit.value();
-  }
   else
   {
     _strings.insert(s, _strings.size() + 1);
@@ -137,7 +135,7 @@ char* OsmPbfWriter::_getBuffer(size_t size)
     _buffer.resize(size);
 
   // is this safe? question me in case of crash.
-  return (char*)_buffer.data();
+  return const_cast<char*>(_buffer.data());
 }
 
 void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
@@ -151,10 +149,10 @@ void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
   strm.zfree = Z_NULL;
   strm.opaque = Z_NULL;
   deflateInit(&strm, _compressionLevel);
-  strm.next_in = (Bytef*)raw;
-  strm.avail_in = rawSize;
-  strm.avail_out = rawSize + 1024;
-  strm.next_out = (Bytef*)_deflateBuffer.data();
+  strm.next_in = reinterpret_cast<unsigned char*>(const_cast<char*>(raw));
+  strm.avail_in = static_cast<unsigned int>(rawSize);
+  strm.avail_out = static_cast<unsigned int>(rawSize + 1024);
+  strm.next_out = reinterpret_cast<unsigned char*>(const_cast<char*>(_deflateBuffer.data()));
 
   int result = deflate(&strm, Z_FINISH);
   if (result != Z_STREAM_END)
@@ -164,7 +162,7 @@ void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
   if (result != Z_OK)
     throw HootException(QString("Error freeing deflate stream. %1").arg(result));
 
-  _deflateSize = strm.total_out;
+  _deflateSize = static_cast<int>(strm.total_out);
 }
 
 void OsmPbfWriter::finalizePartial()
@@ -511,10 +509,10 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   if (includeBounds && _map.get())
   {
     const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
-    _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
-    _d->headerBlock.mutable_bbox()->set_left(env.MinX);
-    _d->headerBlock.mutable_bbox()->set_right(env.MaxX);
-    _d->headerBlock.mutable_bbox()->set_top(env.MaxY);
+    _d->headerBlock.mutable_bbox()->set_bottom(static_cast<::google::protobuf::int64>(env.MinY));
+    _d->headerBlock.mutable_bbox()->set_left(static_cast<::google::protobuf::int64>(env.MinX));
+    _d->headerBlock.mutable_bbox()->set_right(static_cast<::google::protobuf::int64>(env.MaxX));
+    _d->headerBlock.mutable_bbox()->set_top(static_cast<::google::protobuf::int64>(env.MaxY));
   }
   else
     _d->headerBlock.clear_bbox();

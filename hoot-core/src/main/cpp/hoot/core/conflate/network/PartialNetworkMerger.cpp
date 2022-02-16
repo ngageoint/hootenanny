@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PartialNetworkMerger.h"
 
 // hoot
-#include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/WayMatchStringSplitter.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/visitors/NodesVisitor.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/NodesVisitor.h>
 
 using namespace std;
 
@@ -47,28 +47,28 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, PartialNetworkMerger)
 
-PartialNetworkMerger::PartialNetworkMerger() :
-MergerBase(),
-_needsReview(false)
+PartialNetworkMerger::PartialNetworkMerger()
+  : MergerBase(),
+    _needsReview(false)
 {
 }
 
 PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
-  const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details) :
-MergerBase(pairs),
-_edgeMatches(edgeMatches),
-_details(details)
+                                           const QSet<ConstEdgeMatchPtr>& edgeMatches,
+                                           const ConstNetworkDetailsPtr& details)
+  : MergerBase(pairs),
+    _edgeMatches(edgeMatches),
+    _details(details)
 {
   assert(_pairs.size() >= 1);
 }
 
-void PartialNetworkMerger::_appendSublineMappings(
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
+void PartialNetworkMerger::_appendSublineMappings(QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   LOG_TRACE("Appending subline mappings...");
-  foreach (WayMatchStringMerger::SublineMappingPtr sm, mappings)
+  for (const auto& sm : qAsConst(mappings))
   {
-    foreach (WayMatchStringMerger::SublineMappingPtr other, _allSublineMappings)
+    for (const auto& other : qAsConst(_allSublineMappings))
     {
       if (other->getSubline1().overlaps(sm->getSubline1()))
       {
@@ -90,13 +90,9 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
   _mergerList.clear();
 
   if (_edgeMatches.size() == 1 && (*_edgeMatches.begin())->containsStub())
-  {
     _processStubMatch(map, replaced, *_edgeMatches.begin());
-  }
   else
-  {
     _processFullMatch(map, replaced);
-  }
 }
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
@@ -124,7 +120,7 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   str2->visitRo(*map, extractVisitor);
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
   QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
-  foreach (ConstNodePtr n, scrapNodeSet)
+  for (const auto& n : qAsConst(scrapNodeSet))
   {
     // if the node contains informational tags or is part of another way
     if (n2w->getWaysByNode(n->getId()).size() >= 2)
@@ -145,9 +141,9 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   merger->replaceScraps();
 }
 
-WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
-  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced,
-  ConstEdgeMatchPtr edgeMatch) const
+WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const OsmMapPtr& map,
+                                                                       vector<pair<ElementId, ElementId>>& replaced,
+                                                                       ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1;
@@ -182,18 +178,15 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
 ElementId PartialNetworkMerger::mapEid(const ElementId &oldEid) const
 {
   if (_substitions.contains(oldEid))
-  {
     return _substitions[oldEid];
-  }
   return oldEid;
 }
 
-void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& replaced)
+void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   LOG_TRACE("Processing full match...");
 
-  foreach (ConstEdgeMatchPtr e, _edgeMatches)
+  for (const auto& e : qAsConst(_edgeMatches))
   {
     if (e->getString1()->isStub() || e->getString2()->isStub())
     {
@@ -222,7 +215,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 
   // calculate all the mappings and split points for all matches.
   LOG_TRACE("Calculating mappings and split points for matches...");
-  foreach (ConstEdgeMatchPtr em, _edgeMatches)
+  for (const auto& em : qAsConst(_edgeMatches))
   {
     WayMatchStringMergerPtr merger = _createMatchStringMerger(map, replaced, em);
     if (merger)
@@ -243,33 +236,23 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 
     // apply merge operations on the split ways.
     LOG_TRACE("Merging split ways...");
-    foreach (WayMatchStringMergerPtr merger, _mergerList)
-    {
+    for (const auto& merger : qAsConst(_mergerList))
       _applyMerger(map, merger);
-    }
   }
   catch (const NeedsReviewException& e)
   {
     set<ElementId> reviews;
-    foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)
+    for (const auto& mapping : qAsConst(_allSublineMappings))
     {
       if (mapping->getNewWay2())
-      {
         reviews.insert(mapping->getNewWay2()->getElementId());
-      }
       else
-      {
         reviews.insert(mapping->getStart2().getWay()->getElementId());
-      }
 
       if (mapping->getNewWay1())
-      {
         reviews.insert(mapping->getNewWay1()->getElementId());
-      }
       else
-      {
         reviews.insert(mapping->getStart1().getWay()->getElementId());
-      }
     }
 
     ReviewMarker().mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
@@ -278,7 +261,8 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 }
 
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
-  const vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
+                                             const vector<pair<ElementId, ElementId>>& /*replaced*/,
+                                             ConstEdgeMatchPtr edgeMatch)
 {
   LOG_TRACE("Processing stub match...");
   LOG_VART(edgeMatch);
@@ -290,10 +274,8 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
     // If the feature we're merging into is a stub, then just delete the secondary feature.
     // Attributes may be lost, but there isn't really anywhere to put them.
-    foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
-    {
+    for (const auto& e : edgeMatch->getString2()->getMembers())
       RecursiveElementRemover(mapEid(e->getElementId())).apply(map);
-    }
   }
   else if (edgeMatch->getString2()->isStub())
   {
@@ -311,12 +293,10 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     // TODO: add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
-    foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
-    {
-      LOG_VART(e);
+    for (const auto& e : edgeMatch->getString2()->getMembers())
       eids.insert(mapEid(e->getElementId()));
-    }
-    foreach (ConstElementPtr e, edgeMatch->getString1()->getMembers())
+
+    for (const auto& e : edgeMatch->getString1()->getMembers())
     {
       LOG_VART(e);
       eids.insert(mapEid(e->getElementId()));
@@ -328,9 +308,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     _needsReview = true;
   }
   else
-  {
     throw IllegalArgumentException("Invalid parameter. Expected a stub.");
-  }
 }
 
 void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)

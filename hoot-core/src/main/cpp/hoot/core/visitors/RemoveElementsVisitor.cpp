@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RemoveElementsVisitor.h"
 
@@ -39,10 +39,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 
-RemoveElementsVisitor::RemoveElementsVisitor(bool negateCriteria) :
-_recursive(false),
-_recursiveRemoveRefsFromParents(false),
-_startElementCount(0)
+RemoveElementsVisitor::RemoveElementsVisitor(bool negateCriteria)
+  : _recursive(false),
+    _recursiveRemoveRefsFromParents(false),
+    _startElementCount(0)
 {
   _negateCriteria = negateCriteria;
   _chainCriteria = false;
@@ -66,15 +66,11 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   LOG_VARD(_configureChildren);
   if (_configureChildren)
   {
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
+    for (const auto& crit : _criteria)
     {
-      ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
       if (c != nullptr)
-      {
         c->setConfiguration(conf);
-      }
     }
   }
 
@@ -86,10 +82,8 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
   _map = map;
   _startElementCount = _map->getElementCount();
 
-  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-       it != _criteria.end(); ++it)
+  for (const auto& crit : _criteria)
   {
-    ElementCriterionPtr crit = *it;
     OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(crit.get());
     if (consumer != nullptr)
       consumer->setOsmMap(map);
@@ -99,14 +93,10 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 void RemoveElementsVisitor::visit(const ElementPtr& e)
 {
   if (!e)
-  {
     return;
-  }
 
   if (_criteria.empty())
-  {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
-  }
 
   LOG_VART(e->getElementId());
 
@@ -136,8 +126,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
   _numProcessed++;
 }
 
-void RemoveElementsVisitor::removeWays(
-  const std::shared_ptr<OsmMap>& pMap, const std::shared_ptr<ElementCriterion>& pCrit)
+void RemoveElementsVisitor::removeWays(const std::shared_ptr<OsmMap>& pMap, const std::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v;
   v.addCriterion(pCrit);

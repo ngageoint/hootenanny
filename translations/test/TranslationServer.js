@@ -298,7 +298,7 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
                 assert.equal(result.osm.way[0].tag[0].$.v, "AL015");
                 assert.equal(result.osm.way[0].tag[1].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[1].$.v, "D7CDBDFE-88C6-4D8A-979D-AD88CFC65EF1");
             });
         });
 
@@ -423,7 +423,7 @@ describe('TranslationServer', function () {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "MGCP");
                 assert.equal(result.osm.way[0].tag[1].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[1].$.v, "D7CDBDFE-88C6-4D8A-979D-AD88CFC65EF1");
                 assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
                 assert.equal(result.osm.way[0].tag[0].$.v, "AT030");
             });
@@ -503,7 +503,7 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[1].$.k, "LTN");
                 assert.equal(result.osm.way[0].tag[1].$.v, "2");
                 assert.equal(result.osm.way[0].tag[2].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8CD72087-A7A2-43A9-8DFB-7836F2FFEA13");
                 assert.equal(result.osm.way[0].tag[3].$.k, "WD1");
                 assert.equal(result.osm.way[0].tag[3].$.v, "20");
             });
@@ -547,7 +547,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[1].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[1].$.v, "fee4529b-5ecc-4e5c-b06d-1b26a8e830e6");
+                assert.equal(result.osm.way[0].tag[1].$.v, "FEE4529B-5ECC-4E5C-B06D-1B26A8E830E6");
                 assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
                 assert.equal(result.osm.way[0].tag[0].$.v, "AL010");
             });
@@ -596,7 +596,7 @@ describe('TranslationServer', function () {
             assert.equal(tags["FCODE"], "AL015");
             assert.equal(tags["FFN"], "572");
             assert.equal(tags["HWT"], "998");
-            assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
+            assert.equal(tags["UID"], "4632D15B-7C44-4BA1-A0C4-8CFBB30E39D4");
 
             var osm_xml = server.handleInputs({
                 osm: mgcp_xml,
@@ -635,7 +635,7 @@ describe('TranslationServer', function () {
             var tags = gj.features[0].properties;
             assert.equal(tags["FCODE"], "AL020");
             assert.equal(tags["NAM"], "Manitou Springs");
-            assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
+            assert.equal(tags["UID"], "4632D15B-7C44-4BA1-A0C4-8CFBB30E39D4");
         });
 
         it ('translates multiple features in an OSM dataset', function() {

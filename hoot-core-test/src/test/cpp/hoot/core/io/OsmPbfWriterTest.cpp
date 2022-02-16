@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -30,13 +30,14 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
-using namespace hoot::pb;
 
 // Tgs
 #include <tgs/Statistics/Random.h>
 
 // Standard
 #include <sstream>
+
+using namespace hoot::pb;
 using namespace std;
 
 namespace hoot
@@ -95,9 +96,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
     for (size_t i = 0; i < dataSize; i++)
-    {
-      CPPUNIT_ASSERT_EQUAL(data[i], (unsigned char)ss.str().at(i));
-    }
+      CPPUNIT_ASSERT_EQUAL(data[i], static_cast<unsigned char>(ss.str().at(i)));
   }
 
   void runWriteRelationTest()
@@ -134,9 +133,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
     for (size_t i = 0; i < dataSize; i++)
-    {
-      CPPUNIT_ASSERT_EQUAL(data[i], (unsigned char)ss.str().at(i));
-    }
+      CPPUNIT_ASSERT_EQUAL(data[i], static_cast<unsigned char>(ss.str().at(i)));
   }
 
   void runWriteWayTest()
@@ -173,9 +170,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
     for (size_t i = 0; i < dataSize; i++)
-    {
-      CPPUNIT_ASSERT_EQUAL(data[i], (unsigned char)ss.str().at(i));
-    }
+      CPPUNIT_ASSERT_EQUAL(data[i], static_cast<unsigned char>(ss.str().at(i)));
   }
 
   void runWriteIncrementalTest()
@@ -245,9 +240,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
     for (size_t i = 0; i < dataSize; i++)
-    {
-      CPPUNIT_ASSERT_EQUAL((unsigned int)data[i], (unsigned int)(unsigned char)ss.str().at(i));
-    }
+      CPPUNIT_ASSERT_EQUAL(data[i], static_cast<unsigned char>(ss.str().at(i)));
   }
 
 };

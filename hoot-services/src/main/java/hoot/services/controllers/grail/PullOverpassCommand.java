@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -38,6 +38,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -171,6 +172,8 @@ class PullOverpassCommand implements InternalCommand {
 
             // Just a safety check but splitUrl[1] should be the query data
             if (splitUrl.length == 2) {
+                logger.info(splitUrl[0]);
+                logger.info(URLDecoder.decode(splitUrl[1], "UTF-8"));
                 connection.getOutputStream().write(splitUrl[1].getBytes(StandardCharsets.UTF_8));
             }
 

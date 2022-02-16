@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef PARTIALNETWORKMERGER_H
 #define PARTIALNETWORKMERGER_H
@@ -51,9 +51,9 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PartialNetworkMerger(
-    const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details);
+  PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                       const QSet<ConstEdgeMatchPtr>& edgeMatches,
+                       const ConstNetworkDetailsPtr& details);
   ~PartialNetworkMerger() = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
@@ -89,8 +89,8 @@ private:
   void _applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const;
 
   WayMatchStringMergerPtr _createMatchStringMerger(const OsmMapPtr &map,
-    std::vector<std::pair<ElementId, ElementId>>& replaced,
-    ConstEdgeMatchPtr edgeMatch) const;
+                                                   std::vector<std::pair<ElementId, ElementId>>& replaced,
+                                                   ConstEdgeMatchPtr edgeMatch) const;
 
   void _processFullMatch(const OsmMapPtr& map,
                          std::vector<std::pair<ElementId, ElementId>>& replaced);

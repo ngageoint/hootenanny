@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -51,6 +51,7 @@ class OsmGeoJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runGenericGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runMultiObjectGeoJsonTest);
+  CPPUNIT_TEST(runOuterInnerGeoJsonTest);
   CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST(runCrsBackwardCompatibilityTest);
   CPPUNIT_TEST_SUITE_END();
@@ -90,6 +91,11 @@ public:
   void runMultiObjectGeoJsonTest()
   {
     runTest("MultiObjectsReader.geojson", "MultiObjectsReader.osm");
+  }
+
+  void runOuterInnerGeoJsonTest()
+  {
+    runTest("OuterInnerTest.geojson", "OuterInnerTest.osm");
   }
 
   void runTest(const QString& input, const QString& output)

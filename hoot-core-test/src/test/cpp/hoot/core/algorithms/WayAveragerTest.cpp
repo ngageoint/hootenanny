@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 //  Hoot
@@ -44,9 +44,9 @@ class WayAveragerTest : public HootTestFixture
 
 public:
 
-  WayAveragerTest() :
-  HootTestFixture(
-    "test-files/algorithms/WayAveragerTest/", "test-output/algorithms/WayAveragerTest/")
+  WayAveragerTest()
+    : HootTestFixture("test-files/algorithms/WayAveragerTest/",
+                      "test-output/algorithms/WayAveragerTest/")
   {
   }
 
@@ -57,12 +57,10 @@ public:
     OsmMapReaderFactory::read(sourceMap, _inputPath + "input2.osm", false, Status::Unknown2);
 
     OsmMapPtr targetMap = std::make_shared<OsmMap>();
-    _replaceWithAveragedWay(
-      sourceMap, "{7dec13af-4519-426b-a007-a392a3e8710c}", "{46030cab-b4e4-4a65-952f-99bb09de439f}",
-      targetMap);
-    _replaceWithAveragedWay(
-      sourceMap, "{ea7d50c0-52cc-489b-861a-3c26ff3eb86b}", "{c6523954-dc6a-4df5-84d6-10e059cf63a3}",
-      targetMap);
+    _replaceWithAveragedWay(sourceMap, "{7dec13af-4519-426b-a007-a392a3e8710c}",
+                            "{46030cab-b4e4-4a65-952f-99bb09de439f}", targetMap);
+    _replaceWithAveragedWay(sourceMap, "{ea7d50c0-52cc-489b-861a-3c26ff3eb86b}",
+                            "{c6523954-dc6a-4df5-84d6-10e059cf63a3}", targetMap);
 
     OsmMapWriterFactory::write(targetMap, _outputPath + "runSimpleTestOut.osm");
     HOOT_FILE_EQUALS(_inputPath + "runSimpleTestOut.osm", _outputPath + "runSimpleTestOut.osm");
@@ -70,23 +68,17 @@ public:
 
 private:
 
-  void _replaceWithAveragedWay(
-    OsmMapPtr& sourceMap, const QString& input1Uuid, const QString& input2Uuid,
-    OsmMapPtr& targetMap)
+  void _replaceWithAveragedWay(OsmMapPtr& sourceMap, const QString& input1Uuid, const QString& input2Uuid,
+                               OsmMapPtr& targetMap)
   {
-    WayPtr way1 =
-      std::dynamic_pointer_cast<Way>(
-        MapUtils::getFirstElementWithTag(sourceMap, "uuid", input1Uuid));
+    WayPtr way1 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithTag(sourceMap, "uuid", input1Uuid));
     way1->setTag("note", "average input 1");
-    WayPtr way2 =
-      std::dynamic_pointer_cast<Way>(
-        MapUtils::getFirstElementWithTag(sourceMap, "uuid", input2Uuid));
+    WayPtr way2 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithTag(sourceMap, "uuid", input2Uuid));
     way2->setTag("note", "average input 2");
     std::set<ElementId> elementIds;
     elementIds.insert(way1->getElementId());
     elementIds.insert(way2->getElementId());
-    std::shared_ptr<CopyMapSubsetOp> mapCopier =
-      std::make_shared<CopyMapSubsetOp>(sourceMap, elementIds);
+    std::shared_ptr<CopyMapSubsetOp> mapCopier = std::make_shared<CopyMapSubsetOp>(sourceMap, elementIds);
     mapCopier->apply(targetMap);
 
     /*WayPtr averagedWay =*/ WayAverager::replaceWaysWithAveragedWay(targetMap, way1, way2);

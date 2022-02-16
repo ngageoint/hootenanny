@@ -22,36 +22,37 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "InBoundsCriterion.h"
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, InBoundsCriterion)
 
-InBoundsCriterion::InBoundsCriterion() :
-_mustCompletelyContain(true),
-_treatWayNodesAsPartOfWays(true)
+InBoundsCriterion::InBoundsCriterion()
+  : _mustCompletelyContain(true),
+    _treatWayNodesAsPartOfWays(true)
 {
   setConfiguration(conf());
 }
 
-InBoundsCriterion::InBoundsCriterion(const bool mustCompletelyContain) :
-_mustCompletelyContain(mustCompletelyContain),
-_treatWayNodesAsPartOfWays(true)
+InBoundsCriterion::InBoundsCriterion(const bool mustCompletelyContain)
+  : _mustCompletelyContain(mustCompletelyContain),
+    _treatWayNodesAsPartOfWays(true)
 {
 }
 
@@ -79,51 +80,29 @@ void InBoundsCriterion::setOsmMap(const OsmMap* map)
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map passed to InBoundsCriterion.");
-  }
   if (!_bounds)
-  {
     throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
-  }
   if (!_elementConverter)
-  {
     throw IllegalArgumentException("No map set on InBoundsCriterion.");
-  }
   if (!_wayNodeCrit)
-  {
     throw IllegalArgumentException("No way node criterion set on InBoundsCriterion.");
-  }
   if (!e)
-  {
     return false;
-  }
   LOG_VART(e->getElementId());
 
   const bool isWayNode = _wayNodeCrit->isSatisfied(e);
   LOG_VART(isWayNode);
   if (!isWayNode || (isWayNode && !_treatWayNodesAsPartOfWays))
-  {
     return _nonWayNodeInBounds(e);
-  }
   else
   {
-    std::vector<ConstWayPtr> containingWays =
-      WayUtils::getContainingWaysConst(e->getElementId().getId(), _map);
+    std::vector<ConstWayPtr> containingWays = WayUtils::getContainingWaysConst(e->getElementId().getId(), _map);
     LOG_VART(containingWays.size());
-    for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
-         containingWaysItr != containingWays.end(); ++containingWaysItr)
+    for (const auto& containingWay : containingWays)
     {
-      ConstWayPtr containingWay = *containingWaysItr;
-      if (containingWay)
-      {
-        LOG_VART(containingWay->getElementId());
-        const bool inBounds = _nonWayNodeInBounds(containingWay);
-        if (inBounds)
-        {
+      if (containingWay && _nonWayNodeInBounds(containingWay))
           return true;
-        }
-      }
     }
     return false;
   }
@@ -133,18 +112,31 @@ bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
 {
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
   if (!geom || geom->isEmpty())
-  {
     return false;
-  }
+
   if (_mustCompletelyContain)
   {
-    LOG_VART(_bounds->contains(geom.get()));
-    return _bounds->contains(geom.get());
+    try
+    {
+      return _bounds->contains(geom.get());
+    }
+    catch (const geos::util::TopologyException&)
+    {
+      //  If the contains call fails, use the envelope
+      return _bounds->contains(geom->getEnvelope().get());
+    }
   }
   else
   {
-    LOG_VART(_bounds->intersects(geom.get()));
-    return _bounds->intersects(geom.get());
+    try
+    {
+      return _bounds->intersects(geom.get());
+    }
+    catch (const geos::util::TopologyException&)
+    {
+      //  If the intersects call fails, use the envelope
+      return _bounds->intersects(geom->getEnvelope().get());
+    }
   }
 }
 

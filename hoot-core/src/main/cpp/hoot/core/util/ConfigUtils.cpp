@@ -22,46 +22,47 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ConfigUtils.h"
 
 // Hoot
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
 
 bool ConfigUtils::boundsOptionEnabled()
 {
-  return
-    !conf().get(ConfigOptions::getBoundsKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+  return !conf().get(ConfigOptions::getBoundsKey()).toString().trimmed().isEmpty() ||
+         !conf().get(ConfigOptions::getBoundsInputFileKey()).toString().trimmed().isEmpty() ||
+         !conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
+         !conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
 std::shared_ptr<geos::geom::Geometry> ConfigUtils::getBounds()
 {
   QString boundsStr = conf().get(ConfigOptions::getBoundsKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
-  {
     return GeometryUtils::boundsFromString(boundsStr);
-  }
+
+  boundsStr = conf().get(ConfigOptions::getBoundsInputFileKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+    return GeometryUtils::readBoundsFromFile(boundsStr);
+
   boundsStr = conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
-  {
     return GeometryUtils::boundsFromString(boundsStr);
-  }
+
   boundsStr = conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
-  {
     return GeometryUtils::boundsFromString(boundsStr);
-  }
+
   return std::shared_ptr<geos::geom::Geometry>();
 }
 
@@ -69,35 +70,35 @@ QString ConfigUtils::getBoundsString()
 {
   QString boundsStr = conf().get(ConfigOptions::getBoundsKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
-  {
     return boundsStr;
-  }
+
+  boundsStr = conf().get(ConfigOptions::getBoundsInputFileKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+    return boundsStr;
+
   boundsStr = conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
-  {
     return boundsStr;
-  }
+
   boundsStr = conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
-  {
     return boundsStr;
-  }
+
   return "";
 }
 
 GeometricRelationship ConfigUtils::getBoundsRelationship()
 {
   if (ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds())
-  {
     return GeometricRelationship::Contains;
-  }
+
   return GeometricRelationship::Intersects;
 }
 
 std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMapPtr& map)
 {
   std::shared_ptr<InBoundsCriterion> boundsCrit;
-  const QString boundsStr = ConfigOptions().getBounds().trimmed();
+  const QString boundsStr = ConfigUtils::getBoundsString();
   if (!boundsStr.isEmpty())
   {
     const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
@@ -127,15 +128,12 @@ void ConfigUtils::checkForTagValueTruncationOverride()
     QStringList conflatePreOps = ConfigOptions().getConflatePreOps();
     int numFound = conflatePreOps.removeAll(ApiTagTruncateVisitor::className());
     if (numFound > 0)
-    {
       conf().set(ConfigOptions::getConflatePreOpsKey(), conflatePreOps);
-    }
+
     QStringList conflatePostOps = ConfigOptions().getConflatePostOps();
     numFound = conflatePostOps.removeAll(ApiTagTruncateVisitor::className());
     if (numFound > 0)
-    {
       conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
-    }
   }
 }
 
@@ -143,9 +141,7 @@ void ConfigUtils::checkForDuplicateElementCorrectionMismatch(const QStringList& 
 {
   const QString dupeNodeRemoverClassName = DuplicateNodeRemover::className();
   if (ops.contains(dupeNodeRemoverClassName))
-  {
     conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
-  }
 }
 
 void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryToRemove)

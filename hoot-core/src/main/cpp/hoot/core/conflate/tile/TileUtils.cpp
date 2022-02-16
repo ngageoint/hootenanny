@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "TileUtils.h"
@@ -37,46 +37,29 @@
 namespace hoot
 {
 
-int TileUtils::getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                  int randomSeed)
+int TileUtils::getRandomTileIndex(const std::vector<geos::geom::Envelope>& tiles, int randomSeed)
 {
   if (tiles.empty())
-  {
     throw IllegalArgumentException("No tiles passed to TileUtils::getRandomTileIndex.");
-  }
+
   if (randomSeed == -1)
-  {
     randomSeed = RandomNumberUtils::generateSeed();
-  }
+
   LOG_VARD(tiles.size());
   LOG_VARD(randomSeed);
   Tgs::Random::instance()->seed(randomSeed);
 
-  const size_t numBboxes = tiles.size() * tiles[0].size();
+  const size_t numBboxes = tiles.size();
   LOG_VARD(numBboxes);
   return Tgs::Random::instance()->generateInt(numBboxes);
 }
 
-geos::geom::Envelope TileUtils::getRandomTile(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed)
+geos::geom::Envelope TileUtils::getRandomTile(const std::vector<geos::geom::Envelope>& tiles, int randomSeed)
 {
   const int randomTileIndex = getRandomTileIndex(tiles, randomSeed);
   LOG_VARD(randomTileIndex);
-  int bboxCtr = 1;
-  for (size_t tx = 0; tx < tiles.size(); tx++)
-  {
-    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
-    {
-      if ((bboxCtr - 1) == randomTileIndex)
-      {
-        LOG_DEBUG("Randomly selected tile: " << GeometryUtils::toConfigString(tiles[tx][ty]));
-        return tiles[tx][ty];
-      }
-      bboxCtr++;
-    }
-  }
-  // shouldn't ever get here
-  return geos::geom::Envelope();
+  LOG_DEBUG("Randomly selected tile: " << GeometryUtils::toConfigString(tiles[randomTileIndex]));
+  return tiles[randomTileIndex];
 }
 
 }

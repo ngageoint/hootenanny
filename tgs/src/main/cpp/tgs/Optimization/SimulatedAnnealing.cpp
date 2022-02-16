@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SimulatedAnnealing.h"
 
@@ -37,8 +37,9 @@ namespace Tgs
 {
 using namespace std;
 
-SimulatedAnnealing::SimulatedAnnealing(ConstStateDescriptionPtr sd,
-  FitnessFunctionPtr fitness) : _rand(0), _verbose(false)
+SimulatedAnnealing::SimulatedAnnealing(ConstStateDescriptionPtr sd, FitnessFunctionPtr fitness)
+  : _rand(0),
+    _verbose(false)
 {
   _stateDescription = sd;
   _fitness = fitness;
@@ -51,7 +52,7 @@ StatePtr SimulatedAnnealing::_generateNeighbor(ConstStatePtr from, double T) con
 
   double scale = pow(T, 1.0);
 
-  foreach (ConstVariableDescriptionPtr vd, _stateDescription->getVariables())
+  for (const auto& vd : _stateDescription->getVariables())
   {
     if (vd->getType() == VariableDescription::Real)
     {
@@ -70,14 +71,10 @@ StatePtr SimulatedAnnealing::_generateNeighbor(ConstStatePtr from, double T) con
         result->set(vd, v);
       }
       else
-      {
         result->set(vd, from->getInt(vd->getName()));
-      }
     }
     else
-    {
       throw Tgs::Exception("Unexpected argument type. (expected int or real)");
-    }
   }
 
   return result;
@@ -87,7 +84,7 @@ StatePtr SimulatedAnnealing::_generateRandomState() const
 {
   StatePtr result = std::make_shared<State>();
 
-  foreach (ConstVariableDescriptionPtr vd, _stateDescription->getVariables())
+  for (const auto& vd : _stateDescription->getVariables())
   {
     if (vd->getType() == VariableDescription::Real)
     {
@@ -107,30 +104,22 @@ StatePtr SimulatedAnnealing::_generateRandomState() const
 double SimulatedAnnealing::iterate(int kmax)
 {
   if (_verbose)
-  {
     cout << "Initializing simulated annealing state..." << endl;
-  }
 
   StatePtr s1 = _generateRandomState();
   s1->setScore(_fitness->f(s1));
   ConstStatePtr s = s1;
   _bestScore = s->getScore();
   _bestStates.insert(s);
-  //std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
 
   for (int k = 0; k < kmax; ++k)
   {
     if (_verbose)
-    {
       cout << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
-    }
 
     double T = 1.0 - (double)k / (double)kmax;
     StatePtr sNew = _generateNeighbor(s, T);
-//    std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
-//    std::cout << "sNew: " << sNew->toString().toUtf8().data() << std::endl;
     sNew->setScore(_fitness->f(sNew));
-//    cout << "sNew score: " << sNew->getScore() << endl;
 
     if (sNew->getScore() < _bestScore)
     {
@@ -139,21 +128,13 @@ double SimulatedAnnealing::iterate(int kmax)
       _bestStates.insert(sNew);
     }
     else if (sNew->getScore() == _bestScore)
-    {
       _bestStates.insert(sNew);
-    }
-//    cout << "_bestScore: " << _bestScore << endl;
 
     if (_pickFromBestScores)
-    {
       s = _bestStates.toList()[_rand.generateInt() % _bestStates.size()];
-    }
     else if (_P(s->getScore(), sNew->getScore(), T) >= _rand.generateUniform())
-    {
       s = sNew;
-    }
   }
-
   return _bestScore;
 }
 

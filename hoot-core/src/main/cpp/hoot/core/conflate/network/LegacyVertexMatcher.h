@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LEGACYVERTEXMATCHER_H
 #define LEGACYVERTEXMATCHER_H
@@ -60,10 +60,10 @@ public:
     ConstNetworkVertexPtr v1, v2;
     double rawScore;
 
-    TiePointScore(ConstNetworkVertexPtr iv1, ConstNetworkVertexPtr iv2, double score) :
-      v1(iv1),
-      v2(iv2),
-      rawScore(score)
+    TiePointScore(ConstNetworkVertexPtr iv1, ConstNetworkVertexPtr iv2, double score)
+      : v1(iv1),
+        v2(iv2),
+        rawScore(score)
     {
     }
 
@@ -86,13 +86,13 @@ public:
    * Returns false if we're confident this is not a tie point, otherwise returns true.
    */
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-    const SearchRadiusProvider& srp);
+                        const SearchRadiusProvider& srp);
 
   /**
    * Process n1 and n2 to identify candidate and confident tie points.
    */
   void identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
-    const SearchRadiusProvider& srp);
+                             const SearchRadiusProvider& srp);
 
   /**
    * Returns true if this is a confident tie point. If this is true then scoreTiePoint should return
@@ -149,16 +149,12 @@ private:
  * inconsistent output.
  */
 inline bool operator<(const LegacyVertexMatcher::TiePointScorePtr& t1,
-  const LegacyVertexMatcher::TiePointScorePtr& t2)
+                      const LegacyVertexMatcher::TiePointScorePtr& t2)
 {
   if (t1->v1->getElementId() < t2->v1->getElementId())
-  {
     return true;
-  }
   else if (t1->v1->getElementId() == t2->v1->getElementId())
-  {
     return t1->v2->getElementId() < t2->v2->getElementId();
-  }
 
   return false;
 }

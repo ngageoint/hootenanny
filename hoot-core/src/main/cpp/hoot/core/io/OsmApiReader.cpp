@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReader.h"
 
 // Hoot
+#include <hoot/core/criterion/ChildElementCriterion.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -36,6 +38,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/OsmApiUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
@@ -47,6 +50,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiReader)
 
 OsmApiReader::OsmApiReader()
+  : _isPolygon(false)
 {
   setConfiguration(conf());
   //  When reading in from the OSM API there won't be duplicates unless we are
@@ -113,20 +117,11 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_preserveAllTags);
 
   //  Set the bounds once we begin the read if setBounds() hasn't already been called
-  if (_bounds == nullptr)
-    setBounds(_getBoundsEnvelope());
+  if (_bounds == nullptr && _loadBounds())
+    setBounds(_boundingPoly);
 
-  // If a non-rectangular bounds was passed in from the config, we'll catch it here. If it is passed
-  // in from setBounds, we'll silently disregard by using the envelope of the bounds only.
-  if (!_boundsString.trimmed().isEmpty() && !GeometryUtils::isEnvelopeString(_boundsString))
-  {
-    throw IllegalArgumentException(
-      "OsmApiReader does not support a non-rectangular bounds: " + _boundsString);
-  }
-  else if (_bounds == nullptr)
-  {
+  if (_bounds == nullptr)
     throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
-  }
 
   //  Reusing the reader for multiple reads has two options, the first is the
   //  default where the reader is reset and duplicates error out.  The second
@@ -165,9 +160,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
       //  Do the actual parsing
       QXmlInputSource xmlInputSource(&buffer);
       if (reader.parse(xmlInputSource) == false)
-      {
         throw HootException(_errorString);
-      }
     }
     else
       _sleep();
@@ -183,27 +176,61 @@ void OsmApiReader::read(const OsmMapPtr& map)
   _map->visitRw(visitor);
   LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
 
+  //  Filter the map based on the polygon
+  if (_isPolygon)
+  {
+    size_t element_count = _map->getElementCount();
+    std::shared_ptr<InBoundsCriterion> crit = std::make_shared<InBoundsCriterion>(false);
+    crit->setBounds(_boundingPoly);
+    //  Remove any elements that don't meet the criterion
+    RemoveElementsVisitor v(true);
+    v.addCriterion(crit);
+    v.setRecursive(true);
+    v.setOsmMap(_map.get());
+    _map->visitRw(v);
+    size_t elements_filtered = element_count - _map->getElementCount();
+    if (elements_filtered > 0)
+      LOG_STATUS("Filtered " << elements_filtered << " out of bounds elements from OSM API.");
+ }
   _map.reset();
 }
 
 void OsmApiReader::close()
 {
   finalizePartial();
-
   _map.reset();
 }
 
-std::shared_ptr<geos::geom::Geometry> OsmApiReader::_getBoundsEnvelope() const
+void OsmApiReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
 {
+  _isPolygon = (bounds ? !bounds->isRectangle() : false);
+  _bounds = bounds;
+}
+
+void OsmApiReader::setBounds(const geos::geom::Envelope& bounds)
+{
+  _isPolygon = false;
+  setBounds(GeometryUtils::envelopeToPolygon(bounds));
+}
+
+bool OsmApiReader::_loadBounds()
+{
+  bool isEnvelope = false;
   //  Try to read the bounds from the `bounds` string
   if (_boundsString != ConfigOptions::getBoundsDefaultValue())
-    return GeometryUtils::boundsFromString(_boundsString);
+  {
+    _boundingPoly =  GeometryUtils::boundsFromString(_boundsString, isEnvelope);
+    _isPolygon = !isEnvelope;
+    return true;
+  }
   //  Try to read the bounds from the `bounds.input.file` file
   else if (_boundsFilename != ConfigOptions::getBoundsInputFileDefaultValue())
-    return GeometryUtils::readBoundsFromFile(_boundsFilename);
-  //  Neither exist return a NULL pointer
-  else
-    return nullptr;
+  {
+    _boundingPoly = GeometryUtils::readBoundsFromFile(_boundsFilename, isEnvelope);
+    _isPolygon = !isEnvelope;
+    return true;
+  }
+  return false;
 }
 
 }

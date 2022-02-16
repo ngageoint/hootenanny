@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
@@ -51,7 +51,7 @@ public:
   static const QString EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY;
 
   EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
-    ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
+                     ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
   /**
    * Evaluate edges e1 and e2 for match. If the end vertices don't match then recursively search
@@ -85,10 +85,10 @@ private:
   bool _addEdgeMatches(ConstEdgeMatchPtr em);
 
   bool _addEdgeNeighborsToEnd(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1,
-    QSet<ConstNetworkEdgePtr> neighbors2);
+                              QSet<ConstNetworkEdgePtr> neighbors2);
 
   bool _addEdgeNeighborsToStart(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1Set,
-    QSet<ConstNetworkEdgePtr> neighbors2Set);
+                                QSet<ConstNetworkEdgePtr> neighbors2Set);
 
   /**
    * Returns all the edges that intersect the given location. If the location isn't on a vertex

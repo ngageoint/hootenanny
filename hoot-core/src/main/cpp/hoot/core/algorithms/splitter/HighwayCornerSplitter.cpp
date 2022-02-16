@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HighwayCornerSplitter.h"
@@ -39,6 +39,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+
+// Geos
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
@@ -83,12 +85,10 @@ void HighwayCornerSplitter::splitCorners()
 
   // Get a list of ways (that look like roads) in the map
   HighwayCriterion highwayCrit(_map);
-  for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
+  for (auto it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
     if (highwayCrit.isSatisfied(it->second))
-    {
       _todoWays.push_back(it->first);
-    }
   }
 
   double threshold = toRadians(_cornerThreshold);
@@ -97,14 +97,16 @@ void HighwayCornerSplitter::splitCorners()
   for (size_t i = 0; i < _todoWays.size(); i++)
   {
     ConstWayPtr pWay = _map->getWay(_todoWays[i]);
-    size_t nodeCount = pWay->getNodeCount();
+    int nodeCount = static_cast<int>(pWay->getNodeCount());
     // If the way has just two nodes, there are no corners
     if (nodeCount > 2)
     {
       // Look until we find a split, or get to the end
       bool split = false;
-      for (size_t nodeIdx = 1; nodeIdx < nodeCount - 1 && !split; nodeIdx++)
+      for (int nodeIdx = 1; nodeIdx < nodeCount - 1; nodeIdx++)
       {
+        if (split)
+          break;
         WayLocation prev(_map, pWay, nodeIdx - 1, 0.0);
         WayLocation current(_map, pWay, nodeIdx, 0.0);
         WayLocation next(_map, pWay, nodeIdx + 1, 0.0);
@@ -140,7 +142,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
   _todoWays.clear();
   //  Get a list of ways (that look like roads) in the map
   HighwayCriterion highwayCriterion(_map);
-  for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
+  for (auto it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
     if (highwayCriterion.isSatisfied(it->second))
       _todoWays.push_back(it->first);
@@ -154,7 +156,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
   for (size_t i = 0; i < _todoWays.size(); i++)
   {
     ConstWayPtr pWay = _map->getWay(_todoWays[i]);
-    size_t nodeCount = pWay->getNodeCount();
+    int nodeCount = static_cast<int>(pWay->getNodeCount());
 
     // If the way has less than 4 nodes it can't be rounded
     if (nodeCount >= 4)
@@ -162,7 +164,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
       //  Precalculate the headings between points
       QVector<double> headings;
       QVector<double> distances;
-      for (size_t nodeIdx = 0; nodeIdx < nodeCount - 1; ++nodeIdx)
+      for (int nodeIdx = 0; nodeIdx < nodeCount - 1; ++nodeIdx)
       {
         //  Get the current and next way locations
         WayLocation current(_map, pWay, nodeIdx, 0.0);
@@ -224,8 +226,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
         //  Output a bunch of stuff here to help develop the algorithm
         LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
                   "\nHeadings\t| Distances" <<
-                  "\n" << ts.readAll()
-                 );
+                  "\n" << ts.readAll());
       }
     }
   }
@@ -272,7 +273,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
             ElementId(ElementType::Node, nodeId));
 
   // split the way and remove it from the map
-  WayLocation wayLoc(_map, pWay, nodeIdx, 0.0);
+  WayLocation wayLoc(_map, pWay, static_cast<int>(nodeIdx), 0.0);
   vector<WayPtr> splits = WaySplitter::split(_map, pWay, wayLoc);
 
   // Process splits
@@ -287,7 +288,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
     // Make sure any ways that are part of relations continue to be part of those relations after
     // they're split.
     QList<ElementPtr> newWays;
-    foreach (const WayPtr& w, splits)
+    for (const auto& w : splits)
       newWays.append(w);
 
     _map->replace(pWay, newWays);

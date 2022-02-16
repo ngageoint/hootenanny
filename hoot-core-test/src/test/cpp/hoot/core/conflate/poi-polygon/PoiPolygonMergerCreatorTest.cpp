@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
-#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>

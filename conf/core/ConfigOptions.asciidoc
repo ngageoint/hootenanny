@@ -619,7 +619,7 @@ See also:
 * Data Type: bool
 * Default Value: `false`
 
-If false, many to many building matches will result in a review. If true, they will all be merged
+If false, many-to-many building matches will result in a review. If true, they will all be merged
 together when matched.
 
 === building.miss.threshold
@@ -916,6 +916,28 @@ this list is empty, no circular error will be parsed from input features and a t
 * Default Value: `conf/core/ConfigOptions.asciidoc`
 
 Path to this file. Only modified during the testing of the `info` command.
+
+=== conflate.differential
+
+* Data Type: bool
+* Default Value: `false`
+
+Enable differential conflation through a setting instead of a command line option
+
+=== conflate.differential.include.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+Includes a check for modified tags when the `conflation.differential` option is enabled
+
+=== conflate.differential.tags.separate.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Writes separate output files for geometry and tag changes. Valid only when the
+`conflate.differential` and `conflate.differential.include.tags` options are used.
 
 === conflate.element.criterion
 
@@ -1848,7 +1870,7 @@ for match. For example:
 
 List of tag kvps used to identify a road median feature between two divided road features (dual
 carriageways; arbitarily, the first tag found from the key list is used). The list is used to
-identify one to many secondary match feature candidates if `highway.median.to.dual.highway.match` is
+identify one-to-many secondary match feature candidates if `highway.median.to.dual.highway.match` is
 enabled and the conditions described in `highway.median.to.dual.highway.match` are satisfied for a
 road match.
 
@@ -1857,7 +1879,7 @@ road match.
 * Data Type: bool
 * Default Value: `false`
 
-If true, road matching will attempt a one to many match from a single input 2 road median feature to
+If true, road matching will attempt a one-to-many match from a single input 2 road median feature to
 multiple input 1 divided road (dual carriageway) features. The road feature from input 2 must
 contain at least one of the tags identified in `highway.median.identifying.tags`. Only tag merging
 of selected tags identified in `highway.median.to.dual.highway.transfer.tags` will be performed with
@@ -3797,6 +3819,14 @@ hoot convert \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ----
 
+=== ogr.writer.skip.failed.relations
+
+* Data Type: bool
+* Default Value: `false`
+
+When writing relations to OGR files, incomplete relations can cause errors setting this to
+true, the writer will ignore the errors and continue to output the results.
+
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
 * Data Type: bool
@@ -4499,7 +4529,7 @@ Sets that maximum angle, in degrees, that is still considered a railway match.
 ** `passenger_lines`
 
 List of tag keys with values identifying how many tracks a particular rail feature uses (arbitarily,
-the first tag found from the key list is used). The list is used to identify one to many secondary
+the first tag found from the key list is used). The list is used to identify one-to-many secondary
 match feature candidates if `railway.one.to.many.match` is enabled and the conditions described in
 `railway.one.to.many.match` are satisfied. The default value of this option maps to the
 OpenStreetMap tagging standard for railways. If your input data has other tag keys that identify
@@ -4511,7 +4541,7 @@ additional entry values to this option.
 * Data Type: bool
 * Default Value: `false`
 
-If true, railway matching will attempt a one to many match from a single input 2 rail feature to
+If true, railway matching will attempt a one-to-many match from a single input 2 rail feature to
 multiple input 1 rail features. The rail feature from input 2 must contain at least one of the tag
 having a key matching that in `railway.one.to.many.identifying.keys`. Only tag merging of selected
 tags identified in `railway.one.to.many.transfer.keys` will be performed with no geometry merging,
@@ -4523,7 +4553,7 @@ regardless of the conflation workflow in use.
 * Default Value: `false`
 
 When this and `railway.one.to.many.match` are enabled, all tags from secondary rail features
-involved in a one to many match are transferred over to reference features. This overrides
+involved in a one-to-many match are transferred over to reference features. This overrides
 `railway.one.to.many.transfer.keys`.
 
 === railway.one.to.many.transfer.keys
@@ -4668,7 +4698,7 @@ The probability that a tag will be randomly removed when using `RandomTagModifie
 ** `highway`
 
 A list of tag keys which, rather than being randomly removed by the `RandomTagModifier`, will have
-their values replaced instead.  The tag keys in the list match one to one with the replacement
+their values replaced instead.  The tag keys in the list match one-to-one with the replacement
 values in `random.tag.modifier.subsitution.values`.
 
 === random.tag.modifier.substitution.values
@@ -4678,7 +4708,7 @@ values in `random.tag.modifier.subsitution.values`.
 ** `road`
 
 A list of tag values which should be substituted by `RandomTagModifier` when randomly modifying
-tags. The tag values in the list match one to one with the replacement values in
+tags. The tag values in the list match one-to-one with the replacement values in
 `random.tag.modifier.subsitution.keys`.
 
 === random.way.generalizer.epsilon
@@ -5865,15 +5895,15 @@ Conflation capability.
 * Data Type: bool
 * Default Value: `false`
 
-When activated, this runs the conflate case test conflate command with the `--differential` option.
+When activated, this runs the conflate case test conflate command with the `conflate.differential` option.
 
 === test.case.conflate.differential.include.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-When activated, this runs the conflate case test conflate command with both the `--differential`
-and `--include-tags` options (setting this to true automatically sets
+When activated, this runs the conflate case test conflate command with both the `conflate.differential`
+and `conflate.differential.include.tags` options (setting this to true automatically sets
 `test.case.conflate.differential` to true).
 
 === test.force.orthographic.projection
@@ -5889,7 +5919,7 @@ potential projections change over time. Very handy in unit tests.
 === test.script.max.exec.time
 
 * Data Type: int
-* Default Value: `-1`
+* Default Value: `900`
 
 For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
 If the script runs longer than the specified time, then it is forcefully stopped by the system. If

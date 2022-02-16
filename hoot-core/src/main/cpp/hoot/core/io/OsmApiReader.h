@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSM_API_READER_H
 #define OSM_API_READER_H
@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
- * Reads OSM XML output from an OSM API map call by bounding box.  Reading will fail without a bounding box
+ * Reads OSM XML output from an OSM API map call by bounding box or bounding polygon.  Reading will fail without
+ * bounds.  When using a bounding polygon, the bounding box for the polygon will be used in API calls and then
+ * subsequently filter the resulting map on the polygon afterwards
  * https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_map_data_by_bounding_box:_GET_.2Fapi.2F0.6.2Fmap
  */
 class OsmApiReader : public OsmXmlReader, private ParallelBoundedApiReader
@@ -79,20 +81,30 @@ public:
    * @param conf Updated configuration
    */
   void setConfiguration(const Settings& conf) override;
+  /**
+   * See `Boundable` class
+   */
+  void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override;
+  void setBounds(const geos::geom::Envelope& bounds) override;
 
 private:
-
   /**
-   * @brief _getBoundsEnvelope - Get either the `bounds` parameter value
+   * @brief _loadBounds - Get either the `bounds` parameter value
    *  or the bounds of a file listed in `bounds.file` parameter
-   * @return The bounds for the read
+   * @return true if the bounds were parsed correctly
    */
-  std::shared_ptr<geos::geom::Geometry> _getBoundsEnvelope() const;
+  bool _loadBounds();
 
   /** Value of the bounds envelope string */
   QString _boundsString;
   /** Value of the bounds filename string */
   QString _boundsFilename;
+  /** Is the bounds a polygon */
+  bool _isPolygon;
+  /** Value of the bounding box or polygon */
+  std::shared_ptr<geos::geom::Geometry> _boundingPoly;
+  /** For testing */
+  friend class OsmApiReaderTest;
 };
 
 }

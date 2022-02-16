@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 
@@ -69,14 +69,14 @@ public:
     reader.read(_inputPath + "ToyTestB.osm", map2);
 
     const WayMap& w1 = map->getWays();
-    for (WayMap::const_iterator it = w1.begin(); it != w1.end(); ++it)
+    for (auto it = w1.begin(); it != w1.end(); ++it)
     {
       WayPtr w = map->getWay(it->second->getId());
       w->setTag("highway", "road");
     }
 
     const WayMap& w2 = map2->getWays();
-    for (WayMap::const_iterator it = w2.begin(); it != w2.end(); ++it)
+    for (auto it = w2.begin(); it != w2.end(); ++it)
     {
       WayPtr w = map2->getWay(it->second->getId());
       w->setTag("highway", "road");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LegacyVertexMatcher.h"
 
@@ -43,45 +43,43 @@ namespace hoot
 
 using namespace Tgs;
 
-LegacyVertexMatcher::LegacyVertexMatcher(ConstOsmMapPtr map) :
-  _map(map)
+LegacyVertexMatcher::LegacyVertexMatcher(ConstOsmMapPtr map)
+  : _map(map)
 {
   _confidentThreshold = 0.7;
 }
 
 void LegacyVertexMatcher::_balanceVertexScores()
 {
-  foreach (ConstNetworkVertexPtr v1, _scores1.keys())
+  for (const auto& v1 : _scores1.keys())
   {
     QList<TiePointScorePtr> ties1 = _scores1.value(v1);
-    for (int i = 0; i < ties1.size(); ++i)
-    {
-      _finalScores[v1][ties1[i]->v2] = ties1[i]->rawScore / _denominatorForTie(ties1[i]);
-    }
+    for (const auto& tie : qAsConst(ties1))
+      _finalScores[v1][tie->v2] = tie->rawScore / _denominatorForTie(tie);
   }
 
 
-  foreach (ConstNetworkVertexPtr v1, _scores1.keys())
+  for (const auto& v1 : _scores1.keys())
   {
     QList<TiePointScorePtr> ties1 = _scores1.value(v1);
-    for (int i = 0; i < ties1.size(); ++i)
+    for (const auto& tie : qAsConst(ties1))
     {
       // if we're confident then clear the scores on all neighboring ties.
-      if (isConfidentTiePoint(v1, ties1[i]->v2))
+      if (isConfidentTiePoint(v1, tie->v2))
       {
-        double score = scoreMatch(v1, ties1[i]->v2);
+        double score = scoreMatch(v1, tie->v2);
         _hasConfidentTie.insert(v1);
-        _hasConfidentTie.insert(ties1[i]->v2);
+        _hasConfidentTie.insert(tie->v2);
         _finalScores[v1].clear();
-        _finalScores[v1][ties1[i]->v2] = score;
+        _finalScores[v1][tie->v2] = score;
       }
     }
   }
 
-  foreach (ConstNetworkVertexPtr v1, _finalScores.keys())
+  for (const auto& v1 : _finalScores.keys())
   {
     QMap<ConstNetworkVertexPtr, double> m = _finalScores[v1];
-    foreach (ConstNetworkVertexPtr v2, m.keys())
+    for (const auto& v2 : m.keys())
     {
       if (m[v2] > 0.0)
       {
@@ -105,7 +103,7 @@ IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)  
 }
 
 void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
-  const SearchRadiusProvider& srp)
+                                             const SearchRadiusProvider& srp)
 {
   // No tuning was done, just copied these settings from OsmMapIndex. 10 children = 368 bytes
   _vertex2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
@@ -113,7 +111,7 @@ void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
   std::vector<Box> boxes;
   std::vector<int> fids;
 
-  for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
+  for (auto it = vm.begin(); it != vm.end(); ++it)
   {
     // expand the indexed envelop by the search radius to make search radius intersections easy.
     Box b(2);
@@ -138,28 +136,21 @@ double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie) const
   QSet<TiePointScorePtr> ties;
 
   QList<TiePointScorePtr> tie1 = _scores1.value(tie->v1);
-  for (int i = 0; i < tie1.size(); ++i)
-  {
-    ties.insert(tie1[i]);
-  }
+  for (const auto& t1 : tie1)
+    ties.insert(t1);
 
   QList<TiePointScorePtr> tie2 = _scores2.value(tie->v2);
-  for (int i = 0; i < tie2.size(); ++i)
-  {
-    ties.insert(tie2[i]);
-  }
+  for (const auto& t2 : tie2)
+    ties.insert(t2);
 
   double sum = 0.0;
-  foreach (TiePointScorePtr t, ties)
-  {
+  for (const auto& t : ties)
     sum += t->rawScore;
-  }
 
   return sum;
 }
 
-QList<ConstNetworkVertexPtr> LegacyVertexMatcher::getCandidateMatches(ConstNetworkVertexPtr v)
-  const
+QList<ConstNetworkVertexPtr> LegacyVertexMatcher::getCandidateMatches(ConstNetworkVertexPtr v) const
 {
   return _finalCandidates[v];
 }
@@ -175,8 +166,8 @@ NodeMatcherPtr LegacyVertexMatcher::_getNodeMatcher()
   return _nodeMatcher;
 }
 
-void LegacyVertexMatcher::identifyVertexMatches(
-  ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2, const SearchRadiusProvider& srp)
+void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
+                                                const SearchRadiusProvider& srp)
 {
   LOG_DEBUG("Identifying vertex matches...");
 
@@ -184,7 +175,7 @@ void LegacyVertexMatcher::identifyVertexMatches(
 
   // go through all the vertices in n1
   const OsmNetwork::VertexMap& vm1 = n1->getVertexMap();
-  for (OsmNetwork::VertexMap::const_iterator it = vm1.begin(); it != vm1.end(); ++it)
+  for (auto it = vm1.begin(); it != vm1.end(); ++it)
   {
     ConstNetworkVertexPtr v1 = it.value();
     // find the neighboring vertices in n2
@@ -212,15 +203,13 @@ void LegacyVertexMatcher::identifyVertexMatches(
 }
 
 bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  const SearchRadiusProvider& srp)
+                                           const SearchRadiusProvider& srp)
 {
   bool result = false;
   double score = scoreMatch(v1, v2);
 
   if (score > 0)
-  {
     result = true;
-  }
   // If this isn't a tie point, the intersections aren't part of any confident tie points, and
   else if (score == 0.0 &&
            _hasConfidentTie.contains(v1) == false && _hasConfidentTie.contains(v2) == false &&
@@ -243,8 +232,7 @@ bool LegacyVertexMatcher::isConfidentTiePoint(ConstNetworkVertexPtr v1, ConstNet
 
 double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
 {
-  double score = _getNodeMatcher()->scorePair(v1->getElementId().getId(),
-    v2->getElementId().getId());
+  double score = _getNodeMatcher()->scorePair(v1->getElementId().getId(), v2->getElementId().getId());
   return score;
 }
 

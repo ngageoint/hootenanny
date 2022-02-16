@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef DIFFCONFLATOR_H
 #define DIFFCONFLATOR_H
@@ -30,9 +30,9 @@
 // hoot
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
+#include <hoot/core/conflate/AbstractConflator.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
-#include <hoot/core/conflate/AbstractConflator.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 
 namespace hoot
@@ -63,15 +63,15 @@ class MatchThreshold;
  * - Remove unconflatable elements (optional and enabled by default; generally only turned off for
  * debugging)
  * - Find matches
- * - Calc tag diff against the matches (optional; used when --separate-output is specified)
+ * - Calc tag diff against the matches (optional; used when conflate.differential.separate.output is true)
  * - Optimize linear matches (only happens when differential.remove.linear.partial.matches.as.whole
  * is disabled and a linear feature matcher has been specified in the configuration)
  * - Remove secondary match elements
  * - Snap secondary roads back to ref roads (optional; not enabled by default)
  * - Remove ref match elements
  * - Remove some metadata tags
- * - Get the tag diff (optional; used when --separate-output is specified)
- * - Add tag changes to back to the map (optional; used when --separate-output is specified)
+ * - Get the tag diff (optional; used when conflate.differential.separate.output is true)
+ * - Add tag changes to back to the map (optional; used when conflate.differential.separate.output is true)
  */
 class DiffConflator : public AbstractConflator
 {
@@ -281,8 +281,8 @@ private:
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed
    */
-  bool _satisfiesCompleteElementRemovalCondition(
-    const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
+  bool _satisfiesCompleteElementRemovalCondition(const ConstElementPtr& element, const Status& status,
+                                                 const ConstMatchPtr& match) const;
   /**
    * Removes match elements from a match completely regardless of whether only part of their
    * geometry is involved in a match (if linear).

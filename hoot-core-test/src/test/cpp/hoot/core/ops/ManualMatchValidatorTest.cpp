@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ManualMatchValidator.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 
@@ -87,8 +87,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 3);
-    QMap<ElementId, QString>::const_iterator errorItr =
-      uut.getErrors().find(node->getElementId());
+    auto errorItr = uut.getErrors().find(node->getElementId());
     HOOT_STR_EQUALS("Empty REF1 tag", errorItr.value().toStdString());
     errorItr = uut.getErrors().find(way->getElementId());
     HOOT_STR_EQUALS("Empty REF2 tag", errorItr.value());
@@ -103,7 +102,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002c75");
     tags.set(MetadataTags::Ref2(), "002da0");
@@ -113,7 +111,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(node->getElementId());
+    auto errorItr = uut.getErrors().find(node->getElementId());
     HOOT_STR_EQUALS(
       "Element has both REF1 and either a REF2 or REVIEW tag", errorItr.value().toStdString());
 
@@ -139,7 +137,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002c75");
     TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
@@ -152,7 +149,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(ref2->getElementId());
+    auto errorItr = uut.getErrors().find(ref2->getElementId());
     HOOT_STR_EQUALS("No REF1 exists for REF2=002da0", errorItr.value().toStdString());
 
     tags.clear();
@@ -195,7 +192,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator warningItr;
 
     uut.setRequireRef1(false);
 
@@ -211,7 +207,7 @@ public:
     CPPUNIT_ASSERT(!uut.hasErrors());
     CPPUNIT_ASSERT(uut.hasWarnings());
     CPPUNIT_ASSERT(uut.getWarnings().size() == 1);
-    warningItr = uut.getWarnings().find(ref2->getElementId());
+    auto warningItr = uut.getWarnings().find(ref2->getElementId());
     HOOT_STR_EQUALS("No REF1 exists for REF2=002da0", warningItr.value().toStdString());
   }
 
@@ -222,7 +218,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
     QMap<ElementId, QString> errors;
 
     uut.setAllowUuidManualMatchIds(true);
@@ -245,7 +240,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errors = uut.getErrors();
-    errorItr = errors.find(node->getElementId());
+    auto errorItr = errors.find(node->getElementId());
     const QString expectedErrorMsg = "Invalid REF1=" + badUuid;
     HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
 
@@ -266,7 +261,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
     QMap<ElementId, QString> errors;
     QString expectedErrorMsg;
 
@@ -279,7 +273,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(ref1->getElementId());
+    auto errorItr = uut.getErrors().find(ref1->getElementId());
     HOOT_STR_EQUALS("Invalid REF1=todo", errorItr.value().toStdString());
 
     map->clear();
@@ -393,7 +387,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0");
     TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
@@ -408,7 +401,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     //LOG_VARW(uut.getErrors().size());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(invalidRef->getElementId());
+    auto errorItr = uut.getErrors().find(invalidRef->getElementId());
     HOOT_STR_EQUALS(
       "Invalid repeated ID: REF2=002da0, REVIEW=002da0", errorItr.value().toStdString());
   }
@@ -421,7 +414,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0");
     ConstNodePtr invalidRef1 =
@@ -431,7 +423,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(invalidRef1->getElementId());
+    auto errorItr = uut.getErrors().find(invalidRef1->getElementId());
     HOOT_STR_EQUALS("Unknown2 element with REF1 tag", errorItr.value().toStdString());
 
     map->clear();
@@ -468,7 +460,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0;002e0f");
     ConstNodePtr invalidRef1 =
@@ -478,7 +469,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(invalidRef1->getElementId());
+    auto errorItr = uut.getErrors().find(invalidRef1->getElementId());
     HOOT_STR_EQUALS("REF1 ID must be singular. REF1=002da0;002e0f", errorItr.value().toStdString());
   }
 
@@ -489,7 +480,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref2(), "002da0;todo");
     ConstNodePtr invalidRef2 =
@@ -499,8 +489,8 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(invalidRef2->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REF2=002da0;todo", errorItr.value().toStdString());
+    auto errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS("Invalid many-to-one REF2=002da0;todo", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -513,7 +503,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REF2=none;002da0", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REF2=none;002da0", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -526,7 +516,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REVIEW=002da0;todo", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REVIEW=002da0;todo", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -538,7 +528,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
-    HOOT_STR_EQUALS("Invalid many to one REVIEW=none;002da0", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Invalid many-to-one REVIEW=none;002da0", errorItr.value().toStdString());
   }
 
   void runDuplicateIdTest()
@@ -548,7 +538,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref2(), "002da0;002da0");
     ConstNodePtr invalidRef2 =
@@ -558,7 +547,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    auto errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS("Duplicate IDs found in REF2: 002da0", errorItr.value().toStdString());
 
     tags.clear();
@@ -580,7 +569,6 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
-    QMap<ElementId, QString>::const_iterator errorItr;
 
     uut.setFullDebugOutput(true);
 
@@ -593,7 +581,7 @@ public:
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    auto errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS(
       "Duplicate IDs found in REF2: 002da0; tags: blah = bleh\n",
       errorItr.value().toStdString());

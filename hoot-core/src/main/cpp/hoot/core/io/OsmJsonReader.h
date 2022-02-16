@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -132,7 +132,7 @@ public:
    * @param ptree - input boost property tree
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromPtree(const boost::property_tree::ptree &tree);
+  virtual OsmMapPtr loadFromPtree(const boost::property_tree::ptree& tree);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -217,7 +217,7 @@ protected:
    * @param item Property Tree (subtree)
    * @param pElement Element to which we will add the tags
    */
-  void _addTags(const boost::property_tree::ptree &item,
+  void _addTags(const boost::property_tree::ptree& item,
                 ElementPtr pElement) const;
 
   /**
@@ -269,19 +269,19 @@ private:
    *        builds a Node object. Adds the node to the map.
    * @param item Property Tree (likely a sub-tree)
    */
-  void _parseOverpassNode(const boost::property_tree::ptree &item);
+  void _parseOverpassNode(const boost::property_tree::ptree& item);
   /**
    * @brief _parseOverpassWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
    * @param item Property Tree (or sub-tree)
    */
-  void _parseOverpassWay(const boost::property_tree::ptree &item);
+  void _parseOverpassWay(const boost::property_tree::ptree& item);
   /**
    * @brief _parseOverpassRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
    * @param item Property Tree (likely a subtree)
    */
-  void _parseOverpassRelation(const boost::property_tree::ptree &item);
+  void _parseOverpassRelation(const boost::property_tree::ptree& item);
 
   void _readToMap();
 
@@ -297,6 +297,20 @@ private:
 
   void _reset();
   void _resetIds();
+
+protected:
+
+  virtual long _getVersion(const boost::property_tree::ptree& item, ElementType::Type type, long id) const;
+  virtual long _getChangeset(const boost::property_tree::ptree& item) const;
+  virtual unsigned int _getTimestamp(const boost::property_tree::ptree& item) const;
+  virtual std::string _getUser(const boost::property_tree::ptree& item) const;
+  virtual long _getUid(const boost::property_tree::ptree& item) const;
+
+  long _getVersion(const std::string& field_name, const boost::property_tree::ptree& item, ElementType::Type type, long id) const;
+  long _getChangeset(const std::string& field_name, const boost::property_tree::ptree& item) const;
+  unsigned int _getTimestamp(const std::string& field_name, const boost::property_tree::ptree& item) const;
+  std::string _getUser(const std::string& field_name, const boost::property_tree::ptree& item) const;
+  long _getUid(const std::string& field_name, const boost::property_tree::ptree& item) const;
 };
 
 }

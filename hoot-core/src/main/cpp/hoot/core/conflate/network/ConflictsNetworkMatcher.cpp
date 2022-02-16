@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConflictsNetworkMatcher.h"
 
@@ -48,21 +48,21 @@ HOOT_FACTORY_REGISTER(NetworkMatcher, ConflictsNetworkMatcher)
 
 const double ConflictsNetworkMatcher::EPSILON = 1e-6;
 
-ConflictsNetworkMatcher::ConflictsNetworkMatcher() :
-_edgeMatches(std::make_shared<IndexedEdgeMatchSet>()),
-_partialHandicap(ConfigOptions().getNetworkConflictsPartialHandicap()),
-_stubHandicap(ConfigOptions().getNetworkConflictsStubHandicap()),
-_aggression(ConfigOptions().getNetworkConflictsAggression()),
-_stubThroughWeighting(ConfigOptions().getNetworkConflictsStubThroughWeighting()),
-_weightInfluence(ConfigOptions().getNetworkConflictsWeightInfluence()),
-_outboundWeighting(ConfigOptions().getNetworkConflictsOutboundWeighting()),
-_sanityCheckMinSeparationDistance(
-   ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
-_sanityCheckSeparationDistanceMultiplier(
-  ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
-_conflictingScoreThresholdModifier(
-  ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
-_matchThreshold(ConfigOptions().getNetworkConflictsMatcherThreshold())
+ConflictsNetworkMatcher::ConflictsNetworkMatcher()
+  : _edgeMatches(std::make_shared<IndexedEdgeMatchSet>()),
+    _partialHandicap(ConfigOptions().getNetworkConflictsPartialHandicap()),
+    _stubHandicap(ConfigOptions().getNetworkConflictsStubHandicap()),
+    _aggression(ConfigOptions().getNetworkConflictsAggression()),
+    _stubThroughWeighting(ConfigOptions().getNetworkConflictsStubThroughWeighting()),
+    _weightInfluence(ConfigOptions().getNetworkConflictsWeightInfluence()),
+    _outboundWeighting(ConfigOptions().getNetworkConflictsOutboundWeighting()),
+    _sanityCheckMinSeparationDistance(
+       ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
+    _sanityCheckSeparationDistanceMultiplier(
+      ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
+    _conflictingScoreThresholdModifier(
+      ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
+    _matchThreshold(ConfigOptions().getNetworkConflictsMatcherThreshold())
 {
   if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
   {
@@ -83,9 +83,9 @@ double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs) const
   double result = EPSILON;
   double denominator = 1;
   double multiplier = 1;
-  for (int i = 0; i < pairs.size(); i++)
+  for (auto pair : qAsConst(pairs))
   {
-    result += pairs[i] * denominator;
+    result += pair * denominator;
     denominator *= multiplier;
   }
 
@@ -117,17 +117,17 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
   const OsmNetwork::VertexMap& vm = na->getVertexMap();
 
   // go through all the vertices in the network
-  foreach (ConstNetworkVertexPtr va, vm.values())
+  for (const auto& va : vm.values())
   {
     QList<ConstNetworkVertexPtr> vCandidatesB = _details->getCandidateMatches(va);
     bool createStub = false;
 
-    foreach (ConstNetworkVertexPtr vb, vCandidatesB)
+    for (const auto& vb : qAsConst(vCandidatesB))
     {
       QList<ConstNetworkEdgePtr> edges = nb->getEdgesFromVertex(vb);
 
       // go through all the edges that start/end at vb
-      foreach (ConstNetworkEdgePtr e, edges)
+      for (const auto& e : qAsConst(edges))
       {
         // if both the from and to vertices are candidate matches with va
         if (e->getFrom() != e->getTo() && vCandidatesB.contains(e->getFrom()) &&
@@ -173,20 +173,19 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch) co
     return d;
   }
   else
-  {
     return 0.0;
-  }
 }
 
 void ConflictsNetworkMatcher::_sanityCheckRelationships()
 {
   int ctr = 0;
-  const int total = _scores.keys().size();
+  QList<ConstEdgeMatchPtr> keys = _scores.keys();
+  const int total = keys.size();
   int matchesRemoved = 0;
-  foreach (ConstEdgeMatchPtr em, _scores.keys())
+  for (const auto& em : qAsConst(keys))
   {
     const double myDistance = _getMatchSeparation(em);
-    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
+    for (const auto& r : qAsConst(_matchRelationships[em]))
     {
       // If it's a conflict, AND we are a lot closer, axe the other one
       if (r->isConflict())
@@ -227,7 +226,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
 void ConflictsNetworkMatcher::_createMatchRelationships()
 {
   int count = 0;
-  foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
+  for (const auto& em : _edgeMatches->getAllMatches().keys())
   {
     // if the two edges
     //  - overlap
@@ -304,12 +303,10 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     LOG_VART(support);
 
     // Conflicts
-    foreach (ConstEdgeMatchPtr other, conflict)
-    {
+    for (const auto& other : qAsConst(conflict))
       _matchRelationships[em].append(std::make_shared<const MatchRelationship>(other, true));
-    }
 
-    foreach (ConstEdgeMatchPtr other, support)
+    for (const auto& other : qAsConst(support))
     {
       MatchRelationshipPtr mr = std::make_shared<MatchRelationship>(other, false);
       QSet<ConstEdgeMatchPtr> connectingStubs = _edgeMatches->getConnectingStubs(em, other);
@@ -324,8 +321,8 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
 
     if (Log::getInstance().getLevel() <= Log::Trace)
     {
-      foreach (ConstEdgeMatchPtr aSupport, support) LOG_VART(aSupport);
-      foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VART(aConflict);
+      for (const auto& aConflict : qAsConst(conflict)) LOG_VART(aConflict);
+      for (const auto& aSupport : qAsConst(support)) LOG_VART(aSupport);
     }
 
     _scores[em] = 1.0;
@@ -348,10 +345,9 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
 QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
 {
   QList<NetworkEdgeScorePtr> result;
-  foreach (ConstEdgeMatchPtr em, _scores.keys())
-  {
+  for (const auto& em : _scores.keys())
     result.append(std::make_shared<NetworkEdgeScore>(em, _scores[em], _scores[em]));
-  }
+
   return result;
 }
 
@@ -366,8 +362,8 @@ QList<ConstNetworkEdgePtr> ConflictsNetworkMatcher::_getEdgesOnVertex(ConstNetwo
   return result;
 }
 
-QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTermination(
-  ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const
+QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTermination(ConstNetworkVertexPtr v1,
+                                                                                  ConstNetworkVertexPtr v2) const
 {
   // This function is the result of stubs. In some cases two edges may not directly share a
   // termination, but they share a termination through a stub. First we find the obvious shared
@@ -375,7 +371,7 @@ QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTerminatio
   QSet<ConstEdgeMatchPtr> m = _edgeMatches->getMatchesWithTermination(v1, v2);
   QSet<ConstEdgeMatchPtr> result = m;
 
-  foreach (ConstEdgeMatchPtr e, m)
+  for (const auto& e : qAsConst(m))
   {
     if (e->containsStub())
     {
@@ -400,7 +396,7 @@ QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTerminatio
   {
     LOG_VART(v1);
     LOG_VART(v2);
-    foreach (ConstEdgeMatchPtr e, result - m)
+    for (const auto& e : result - m)
     {
       LOG_VART(e);
     }
@@ -419,7 +415,7 @@ void ConflictsNetworkMatcher::_iterateRank()
   const double partialHandicap = 0.5;
   EdgeScoreMap newScores;
   LOG_VART(_scores.size());
-  foreach (ConstEdgeMatchPtr em, _scores.keys())
+  for (const auto& em : _scores.keys())
   {
     LOG_VART(em->containsPartial());
     LOG_VART(em->containsStub());
@@ -428,7 +424,7 @@ void ConflictsNetworkMatcher::_iterateRank()
       em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
     double denominator = numerator;
 
-    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
+    for (const auto& r : _matchRelationships[em])
     {
       LOG_VART(r->getEdge()->containsPartial());
 
@@ -440,12 +436,11 @@ void ConflictsNetworkMatcher::_iterateRank()
 
       int supportCount = 0;
       int relationCount = 0;
-      foreach (ConstMatchRelationshipPtr sr, _matchRelationships[r->getEdge()])
+      for (const auto& sr : _matchRelationships[r->getEdge()])
       {
         if (sr->isConflict() == false)
-        {
           supportCount++;
-        }
+
         relationCount++;
       }
       supportCount = max(1, supportCount);
@@ -456,9 +451,8 @@ void ConflictsNetworkMatcher::_iterateRank()
       s = s / (double)relationCount;
 
       if (r->isConflict() == false)
-      {
         numerator += s;
-      }
+
       denominator += s;
     }
 
@@ -482,8 +476,9 @@ void ConflictsNetworkMatcher::_iterateSimple()
   int count = 0;
 
   // go through all matches
-  const int total = _scores.keys().size();
-  foreach (ConstEdgeMatchPtr em, _scores.keys())
+  const QList<ConstEdgeMatchPtr>& scores = _scores.keys();
+  const int total = scores.size();
+  for (const auto& em : qAsConst(scores))
   {
     double handicap = pow(partialHandicap, em->countPartialMatches());
     LOG_VART(em);
@@ -500,16 +495,14 @@ void ConflictsNetworkMatcher::_iterateSimple()
     double denominator = numerator;
     LOG_VART(numerator);
 
-    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
+    for (const auto& r : _matchRelationships[em])
     {
       double childHandicap = pow(partialHandicap, r->getEdge()->countPartialMatches());
       LOG_VART(r->getEdge());
       LOG_VART(r->getEdge()->countPartialMatches());
       LOG_VART(childHandicap);
       if (r->getEdge()->containsStub())
-      {
         childHandicap = stubHandicap;
-      }
 
       LOG_VART(r->getEdge()->getString1()->contains(em->getString1()));
       LOG_VART(r->getEdge()->getString2()->contains(em->getString2()));
@@ -534,10 +527,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       // accordingly.
       double stubWeight = -1;
       QSet<ConstEdgeMatchPtr> throughStubs = r->getThroughStubs();
-      foreach (ConstEdgeMatchPtr stub, throughStubs)
-      {
+      for (const auto& stub : qAsConst(throughStubs))
         stubWeight = max(stubWeight, _scores[stub]);
-      }
 
       // based on testing through stubs connections shouldn't really count for or against matches.
       if (stubWeight != -1)
@@ -551,12 +542,11 @@ void ConflictsNetworkMatcher::_iterateSimple()
       int supportCount = 0;
       // Number of match relationships
       int relationCount = 0;
-      foreach (ConstMatchRelationshipPtr sr, _matchRelationships[r->getEdge()])
+      for (const auto& sr : _matchRelationships[r->getEdge()])
       {
         if (sr->isConflict() == false)
-        {
           supportCount++;
-        }
+
         relationCount++;
       }
       supportCount = max(1, supportCount);
@@ -613,7 +603,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
   }
 
   // Setting this really helps reduce scoring oscillation
-  foreach (ConstEdgeMatchPtr em, newWeights.keys())
+  for (const auto& em : newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);
     LOG_VART(newWeights[em]);
@@ -655,20 +645,16 @@ void ConflictsNetworkMatcher::finalize()
   // Check our relationships
   int count = 0;
   int total = _scores.size();
-  foreach (ConstEdgeMatchPtr em, _scores.keys())
+  for (const auto& em : _scores.keys())
   {
-    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
+    for (const auto& r : _matchRelationships[em])
     {
       const double myScore = _scores[em];
       const double theirScore = _scores[r->getEdge()];
-
       // If it's a conflict, AND we score a lot better, axe the other one
       if (r->isConflict() && myScore > (_conflictingScoreThresholdModifier + theirScore))
-      {
         _scores[r->getEdge()] = 1.0e-5;
-      }
     }
-
     count++;
     if (count % 100 == 0)
     {
@@ -691,7 +677,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   int totalNumIntersections = 0;
-  for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
+  for (auto it = em.begin(); it != em.end(); ++it)
   {
     ConstNetworkEdgePtr e1 = it.value();
 
@@ -743,35 +729,26 @@ void ConflictsNetworkMatcher::_printEdgeMatches() const
   if (Log::getInstance().getLevel() <= Log::Trace)
   {
     stringstream ss;
-    foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
+    for (const auto& em : _edgeMatches->getAllMatches().keys())
     {
-      foreach (EdgeString::EdgeEntry edge, em->getString1()->getAllEdges())
+      for (const auto& edge : em->getString1()->getAllEdges())
       {
-        foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
+        for (const auto& elmnt : edge.getSubline()->getStart()->getEdge()->getMembers())
         {
           if (elmnt->getElementType() == ElementType::Way)
-          {
             ss << "(way:" << elmnt->getId() << ")";
-          }
         }
       }
-
       ss << " <<matches>> ";
-      foreach (EdgeString::EdgeEntry edge, em->getString2()->getAllEdges())
+      for (const auto& edge : em->getString2()->getAllEdges())
       {
-        foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
+        for (const auto& elmnt : edge.getSubline()->getStart()->getEdge()->getMembers())
         {
           if (elmnt->getElementType() == ElementType::Way)
-          {
             ss << "(way:" << elmnt->getId() << ")";
-          }
         }
       }
-
       ss << std::endl;
-
-      int i = 0;
-      i++;
     }
     LOG_TRACE(ss.str());
   }

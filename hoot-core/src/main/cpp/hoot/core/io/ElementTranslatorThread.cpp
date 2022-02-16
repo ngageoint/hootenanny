@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementTranslatorThread.h"
 
@@ -72,7 +72,7 @@ void ElementTranslatorThread::run()
     pNewElement = _pElementQueue->dequeue();
 
     // Run any convert ops present.
-    foreach (ElementVisitorPtr op, _conversionOps)
+    for (const auto& op : _conversionOps)
       op->visit(pNewElement);
 
     std::shared_ptr<geos::geom::Geometry> g;

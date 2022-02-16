@@ -22,25 +22,25 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmXmlReader.h"
 
 // Hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
@@ -58,24 +58,24 @@ int OsmXmlReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
-OsmXmlReader::OsmXmlReader() :
-_status(Status::Invalid),
-_keepStatusTag(false),
-_useFileStatus(false),
-_useDataSourceId(false),
-_numRead(0),
-_osmFound(false),
-_missingNodeCount(0),
-_missingWayCount(0),
-_badAccuracyCount(0),
-_addSourceDateTime(true),
-_wayId(0),
-_relationId(0),
-_inputCompressed(false),
-_addChildRefsWhenMissing(false),
-_logWarningsForMissingElements(true),
-_statusUpdateInterval(1000),
-_keepImmediatelyConnectedWaysOutsideBounds(false)
+OsmXmlReader::OsmXmlReader()
+  : _status(Status::Invalid),
+    _keepStatusTag(false),
+    _useFileStatus(false),
+    _useDataSourceId(false),
+    _numRead(0),
+    _osmFound(false),
+    _missingNodeCount(0),
+    _missingWayCount(0),
+    _badAccuracyCount(0),
+    _addSourceDateTime(true),
+    _wayId(0),
+    _relationId(0),
+    _inputCompressed(false),
+    _addChildRefsWhenMissing(false),
+    _logWarningsForMissingElements(true),
+    _statusUpdateInterval(1000),
+    _keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());
 }
@@ -100,15 +100,10 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   // If a bounds was set and we don't want to remove missing elements as a result of cropping, we
   // need to modify the reader to allow reading in the missing refs.
   if (_bounds.get() && !configOptions.getBoundsRemoveMissingElements())
-  {
     setAddChildRefsWhenMissing(true);
-  }
   else
-  {
     setAddChildRefsWhenMissing(configOptions.getMapReaderAddChildRefsWhenMissing());
-  }
-  setKeepImmediatelyConnectedWaysOutsideBounds(
-    configOptions.getBoundsKeepImmediatelyConnectedWaysOutsideBounds());
+  setKeepImmediatelyConnectedWaysOutsideBounds(configOptions.getBoundsKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
   setLogWarningsForMissingElements(configOptions.getLogWarningsForMissingElements());
   setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
@@ -145,13 +140,9 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 
   long newId;
   if (_useDataSourceId)
-  {
     newId = id;
-  }
   else
-  {
     newId = _map->createNextNodeId();
-  }
   LOG_VART(newId);
   _nodeIdMap.insert(id, newId);
 
@@ -160,31 +151,12 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 
   // Check the next 3 attributes to see if a value exists, if not, assign a default since these
   // are not officially required by the DTD.
-  long version = ElementData::VERSION_EMPTY;
-  if (attributes.value("version") != "")
-  {
-    version = _parseDouble(attributes.value("version"));
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  if (attributes.value("changeset") != "")
-  {
-    changeset = _parseDouble(attributes.value("changeset"));
-  }
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  if (attributes.value("timestamp") != "")
-  {
-    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
-  }
-  QString user = ElementData::USER_EMPTY;
-  if (attributes.value("user") != "")
-  {
-    user = attributes.value("user");
-  }
-  long uid = ElementData::UID_EMPTY;
-  if (attributes.value("uid") != "")
-  {
-    uid = _parseDouble(attributes.value("uid"));
-  }
+  long version = _getVersion(attributes);
+  long changeset = _getChangeset(attributes);
+  unsigned int timestamp = _getTimestamp(attributes);
+  QString user = _getUser(attributes);
+  long uid = _getUid(attributes);
+
   //LOG_VART(version);
   if (_warnOnVersionZeroElement && version == 0)
   {
@@ -199,14 +171,10 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element =
-    Node::newSp(
-      _status, newId, x, y, _defaultCircularError, changeset, version, timestamp, user, uid);
+  _element = Node::newSp(_status, newId, x, y, _defaultCircularError, changeset, version, timestamp, user, uid);
 
   if (_element->getTags().getInformationCount() > 0)
-  {
     _parseTimeStamp(attributes);
-  }
 }
 
 void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
@@ -231,42 +199,20 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 
   long newId;
   if (_useDataSourceId)
-  {
     newId = _wayId;
-  }
   else
-  {
     newId = _map->createNextWayId();
-  }
+
   _wayIdMap.insert(_wayId, newId);
 
   // check the next 3 attributes to see if a value exists, if not, assign a default since
   // these are not officially required by the DTD
-  long version = ElementData::VERSION_EMPTY;
-  if (attributes.value("version") != "")
-  {
-    version = _parseLong(attributes.value("version"));
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  if (attributes.value("changeset") != "")
-  {
-    changeset = _parseLong(attributes.value("changeset"));
-  }
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  if (attributes.value("timestamp") != "")
-  {
-    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
-  }
-  QString user = ElementData::USER_EMPTY;
-  if (attributes.value("user") != "")
-  {
-    user = attributes.value("user");
-  }
-  long uid = ElementData::UID_EMPTY;
-  if (attributes.value("uid") != "")
-  {
-    uid = _parseLong(attributes.value("uid"));
-  }
+  long version = _getVersion(attributes);
+  long changeset = _getChangeset(attributes);
+  unsigned int timestamp = _getTimestamp(attributes);
+  QString user = _getUser(attributes);
+  long uid = _getUid(attributes);
+
   LOG_VART(version);
   if (_warnOnVersionZeroElement && version == 0)
   {
@@ -296,15 +242,8 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
 
   if (_ignoreDuplicates && _relationIdMap.contains(id))
   {
-    //if (_ignoreDuplicates)
-    //{
-      LOG_TRACE("Ignoring relation id " << id << " already exists");
-      return;
-    //}
-    // Adding this in causes issues with the tests...worth looking into at some point.
-//    else
-//      throw HootException(
-//        QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_url));
+    LOG_TRACE("Ignoring relation id " << id << " already exists");
+    return;
   }
 
   _relationId = id;
@@ -313,31 +252,12 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
 
   // Check the next 3 attributes to see if a value exists, if not, assign a default since these are
   // not officially required by the DTD.
-  long version = ElementData::VERSION_EMPTY;
-  if (attributes.value("version") != "")
-  {
-    version = _parseDouble(attributes.value("version"));
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  if (attributes.value("changeset") != "")
-  {
-    changeset = _parseDouble(attributes.value("changeset"));
-  }
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  if (attributes.value("timestamp") != "")
-  {
-    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
-  }
-  QString user = ElementData::USER_EMPTY;
-  if (attributes.value("user") != "")
-  {
-    user = attributes.value("user");
-  }
-  long uid = ElementData::UID_EMPTY;
-  if (attributes.value("uid") != "")
-  {
-    uid = _parseDouble(attributes.value("uid"));
-  }
+  long version = _getVersion(attributes);
+  long changeset = _getChangeset(attributes);
+  unsigned int timestamp = _getTimestamp(attributes);
+  QString user = _getUser(attributes);
+  long uid = _getUid(attributes);
+
   LOG_VART(version);
   if (_warnOnVersionZeroElement && version == 0)
   {
@@ -352,9 +272,7 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element =
-    std::make_shared<Relation>(
-      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid);
+  _element = std::make_shared<Relation>(_status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -389,9 +307,7 @@ double OsmXmlReader::_parseDouble(const QString& s) const
   double result = s.toDouble(&ok);
 
   if (ok == false)
-  {
     throw HootException("Error parsing double: " + s);
-  }
 
   return result;
 }
@@ -402,9 +318,7 @@ long OsmXmlReader::_parseLong(const QString& s) const
   long result = s.toLong(&ok);
 
   if (ok == false)
-  {
     throw HootException("Error parsing long: " + s);
-  }
 
   return result;
 }
@@ -452,16 +366,12 @@ void OsmXmlReader::read(const OsmMapPtr& map)
 
   QFile file(_url);
   if (!file.open(QFile::ReadOnly | QFile::Text))
-  {
     throw HootException(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
-  }
   LOG_DEBUG("File " << _url << " opened for read");
 
   QXmlInputSource xmlInputSource(&file);
   if (reader.parse(xmlInputSource) == false)
-  {
     throw HootException(_errorString);
-  }
   file.close();
   LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 
@@ -469,9 +379,9 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
   // cropping during streaming, and there is a check in IoUtils::isStreamableIo to make
   // sure nothing tries to stream with this reader when a bounds has been set.
-  LOG_VARD(_bounds.get());
   if (_bounds.get())
   {
+    LOG_VARD(_bounds->toString());
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
@@ -488,14 +398,11 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
-OsmMapPtr OsmXmlReader::fromXml(
-  const QString& xml, const bool useDataSourceId, const bool useDataSourceStatus,
-  const bool keepStatusTag, const bool addChildRefsWhenMissing)
+OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId, const bool useDataSourceStatus,
+                                const bool keepStatusTag, const bool addChildRefsWhenMissing)
 {
   if (xml.isEmpty())
-  {
     return OsmMapPtr();
-  }
 
   LOG_DEBUG("Reading map from xml...");
   OsmMapPtr map = std::make_shared<OsmMap>();
@@ -526,9 +433,7 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
-  {
     throw HootException(_errorString);
-  }
 
   LOG_DEBUG("Parsed map from xml.");
 
@@ -556,9 +461,7 @@ void OsmXmlReader::read(const QString& path, const OsmMapPtr& map)
 const QString& OsmXmlReader::_saveMemory(const QString& s)
 {
   if (!_strings.contains(s))
-  {
     _strings[s] = s;
-  }
   return _strings[s];
 }
 
@@ -570,25 +473,19 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     if (!_osmFound)
     {
       if (qName != "osm")
-      {
         throw HootException("The file is not an OSM file.");
-      }
       else
       {
         _osmFound = true;
         if (attributes.value("version") != "0.6")
-        {
           throw HootException("Only version 0.6 OSM files are supported.");
-        }
       }
     }
 
     if (qName == QLatin1String("node"))
     {
       if (attributes.value("action") != QLatin1String("delete"))
-      {
         _createNode(attributes);
-      }
       else
       {
         LOG_TRACE("Node " << attributes.value("id") << " set to delete.");
@@ -598,9 +495,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     else if (qName == QLatin1String("way"))
     {
       if (attributes.value("action") != QLatin1String("delete"))
-      {
         _createWay(attributes);
-      }
       else
       {
         LOG_TRACE("Way " << attributes.value("id") << " set to delete.");
@@ -610,9 +505,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     else if (qName == QLatin1String("relation"))
     {
       if (attributes.value("action") != QLatin1String("delete"))
-      {
         _createRelation(attributes);
-      }
       else
       {
         LOG_TRACE("Relation " << attributes.value("id") << " set to delete.");
@@ -672,9 +565,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
         if (!nodePresent)
         {
           if (_addChildRefsWhenMissing)
-          {
             r->addElement(role, ElementType::Node, ref);
-          }
           else
           {
             _missingNodeCount++;
@@ -708,9 +599,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
         if (!wayPresent)
         {
           if (_addChildRefsWhenMissing)
-          {
             r->addElement(role, ElementType::Way, ref);
-          }
           else
           {
             _missingWayCount++;
@@ -774,7 +663,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           _element->setStatus(Status::fromString(value));
           LOG_VART(_element->getStatus());
 
-          if (_keepStatusTag)  { _element->setTag(key, value); }
+          if (_keepStatusTag)
+            _element->setTag(key, value);
         }
         else if (key == MetadataTags::RelationType() &&
                  _element->getElementType() == ElementType::Relation)
@@ -782,7 +672,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
 
-          if (_preserveAllTags) { _element->setTag(key, value); }
+          if (_preserveAllTags)
+            _element->setTag(key, value);
         }
         // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
         // will be used. We're not expecting elements to have more than one CE tag.
@@ -792,32 +683,13 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           Meters circularError = value.toDouble(&ok);
 
           if (circularError > 0 && ok)
-          {
             _element->setCircularError(circularError);
-          }
           else
           {
-            bool isBad = false;
             Tags t1;
             t1.set(key, value);
-            try
-            {
-              circularError = t1.getLength(key).value();
-              if (circularError > 0)
-              {
-                _element->setCircularError(circularError);
-              }
-              else
-              {
-                isBad = true;
-              }
-            }
-            catch (const HootException&)
-            {
-              isBad = true;
-            }
 
-            if (isBad)
+            if (!_setElementCircularError(t1, key))
             {
               _badAccuracyCount++;
               if (logWarnCount < Log::getWarnMessageLimit())
@@ -879,6 +751,25 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
   return true;
 }
 
+bool OsmXmlReader::_setElementCircularError(const Tags& tags, const QString& key) const
+{
+  bool result = false;
+  try
+  {
+    Meters circularError = tags.getLength(key).value();
+    if (circularError > 0)
+    {
+      _element->setCircularError(circularError);
+      result = true;
+    }
+  }
+  catch (const HootException& e)
+  {
+    LOG_TRACE("Set circular error failed: " + e.getWhat());
+  }
+  return result;
+}
+
 bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
                               const QString& /* localName */,
                               const QString& qName)
@@ -891,7 +782,6 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
       _map->addNode(n);
       _element.reset();
       LOG_TRACE("Added: " << n->getElementId());
-      //LOG_TRACE("Added: " << n);
       _numRead++;
     }
     else if (qName == QLatin1String("way"))
@@ -900,7 +790,6 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
       _map->addWay(w);
       _element.reset();
       LOG_TRACE("Added: " << w->getElementId());
-      //LOG_TRACE("Added: " << w);
       _numRead++;
     }
     else if (qName == QLatin1String("relation"))
@@ -909,7 +798,6 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
       _map->addRelation(r);
       _element.reset();
       LOG_TRACE("Added: " << r->getElementId());
-      //LOG_TRACE("Added: " << r);
       _numRead++;
     }
 
@@ -918,7 +806,6 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
       PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
     }
   }
-
   return true;
 }
 
@@ -948,16 +835,13 @@ long OsmXmlReader::_getRelationId(long fileId)
 std::shared_ptr<OGRSpatialReference> OsmXmlReader::getProjection() const
 {
   if (!_wgs84)
-  {
     _wgs84 = MapProjector::createWgs84Projection();
-  }
   return _wgs84;
 }
 
 void OsmXmlReader::_uncompressInput()
 {
   // uncompress .osm.bz2 or .osm.gz files before processing
-
   QString originalFile;
   if (_url.endsWith(".osm.bz2") == true)
   {
@@ -1005,14 +889,12 @@ void OsmXmlReader::_uncompressInput()
   }
 }
 
-QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(
-  const QXmlStreamAttributes& streamAttributes) const
+QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes) const
 {
   QXmlAttributes attributes;
-  for (QXmlStreamAttributes::const_iterator itr = streamAttributes.begin();
-       itr != streamAttributes.end(); ++itr)
+  for (const auto& streamAttribute : streamAttributes)// itr = streamAttributes.begin(); itr != streamAttributes.end(); ++itr)
   {
-    const QXmlStreamAttribute streamAttribute = *itr;
+//    const QXmlStreamAttribute streamAttribute = *itr;
     attributes.append(
       streamAttribute.qualifiedName().toString(), "", "", streamAttribute.value().toString());
   }
@@ -1024,8 +906,8 @@ bool OsmXmlReader::hasMoreElements()
   if (!_inputFile.isOpen())
   {
     finalizePartial();
-    //map needed for assigning new element ids only (not actually putting any of the elements that
-    //are read into this map, since this is the partial reading logic)
+    //  map needed for assigning new element ids only (not actually putting any of the elements that
+    //  are read into this map, since this is the partial reading logic)
     _map = std::make_shared<OsmMap>();
 
     if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
@@ -1036,77 +918,61 @@ bool OsmXmlReader::hasMoreElements()
 
     _inputFile.setFileName(_url);
     if (!_inputFile.open(QFile::ReadOnly | QFile::Text))
-    {
       throw HootException(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
-    }
     _streamReader.setDevice(&_inputFile);
 
-    //check for a valid osm header as soon as the file is opened
+    //  check for a valid osm header as soon as the file is opened
     while (!_foundOsmHeaderXmlStartElement() && !_streamReader.atEnd())
-    {
       _streamReader.readNext();
-    }
+
     if (!_osmFound)
-    {
       throw HootException(_url + " is not an OSM file.");
-    }
   }
 
-  //chew up tokens until we find a node/way/relation start element or read to the end of the file
+  //  chew up tokens until we find a node/way/relation start element or read to the end of the file
   while (!_foundOsmElementXmlStartElement() && !_streamReader.atEnd())
-  {
     _streamReader.readNext();
-  }
 
-  if ((_streamReader.isEndElement() && _streamReader.name().toString() == "osm") ||
-       _streamReader.atEnd())
-  {
+  if ((_streamReader.isEndElement() && _streamReader.name().toString() == "osm") || _streamReader.atEnd())
     return false;
-  }
+
   return true;
 }
 
 bool OsmXmlReader::_foundOsmHeaderXmlStartElement()
 {
-  //this is a little redundant with the logic at the beginning startElement
+  //  this is a little redundant with the logic at the beginning startElement
 
   if (_streamReader.isStartElement() && _streamReader.name().toString() == "osm")
-  {
     _osmFound = true;
-  }
-  if (_osmFound &&
-      _streamAttributesToAttributes(_streamReader.attributes()).value("version") != "0.6")
-  {
+
+  if (_osmFound && _streamAttributesToAttributes(_streamReader.attributes()).value("version") != "0.6")
     throw HootException("Only version 0.6 OSM files are supported.");
-  }
+
   return _osmFound;
 }
 
 bool OsmXmlReader::_foundOsmElementXmlStartElement() const
 {
   const QString xmlElementName = _streamReader.name().toString();
-  return
-    _streamReader.isStartElement() &&
-    (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
-     xmlElementName == QLatin1String("relation"));
+  return _streamReader.isStartElement() &&
+         (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
+          xmlElementName == QLatin1String("relation"));
 }
 
 bool OsmXmlReader::_foundOsmElementXmlEndElement() const
 {
   const QString xmlElementName = _streamReader.name().toString();
-  return
-    _streamReader.isEndElement() &&
-    (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
-     xmlElementName == QLatin1String("relation"));
+  return _streamReader.isEndElement() &&
+         (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
+          xmlElementName == QLatin1String("relation"));
 }
 
 ElementPtr OsmXmlReader::readNextElement()
 {
   //hasMoreElements should have always put us at a node/way/relation start xml element by this point
   if (!_foundOsmElementXmlStartElement())
-  {
     throw HootException("Call hasMoreElements before calling readNextElement.");
-  }
 
   //chew up tokens until we find the end of the node/way/relation or read to the end of the file;
   //if the osm file is valid, we should never read to the end of the file within this method, but
@@ -1115,22 +981,16 @@ ElementPtr OsmXmlReader::readNextElement()
   {
     //parse the start xml element; startElement is only interested in node/way/relation, tag,
     //way nodes, or relation members...ignores the rest
+    //  this attribute conversion isn't the best for performance...but will leave as is for now
     if (_streamReader.isStartElement())
-    {
-      startElement(
-        "", "", _streamReader.qualifiedName().toString(),
-        //this attribute conversion isn't the best for performance...but will leave as is for now
-        _streamAttributesToAttributes(_streamReader.attributes()));
-    }
+      startElement("", "", _streamReader.qualifiedName().toString(),_streamAttributesToAttributes(_streamReader.attributes()));
 
     _streamReader.readNext();
   }
 
   //this should never happen here
   if (_streamReader.atEnd())
-  {
     throw HootException("Error reading XML file: readNextElement reached end of file.");
-  }
 
   assert(_foundOsmElementXmlEndElement());
 
@@ -1168,6 +1028,41 @@ void OsmXmlReader::finalizePartial()
   _missingNodeCount = 0;
   _missingWayCount = 0;
   _badAccuracyCount = 0;
+}
+
+long OsmXmlReader::_getVersion(const QXmlAttributes& attributes) const
+{
+  if (attributes.value("version") != "")
+    return _parseLong(attributes.value("version"));
+  return ElementData::VERSION_EMPTY;
+}
+
+long OsmXmlReader::_getChangeset(const QXmlAttributes& attributes) const
+{
+  if (attributes.value("changeset") != "")
+    return _parseLong(attributes.value("changeset"));
+  return ElementData::CHANGESET_EMPTY;
+}
+
+unsigned int OsmXmlReader::_getTimestamp(const QXmlAttributes& attributes) const
+{
+  if (attributes.value("timestamp") != "")
+    return static_cast<unsigned int>(DateTimeUtils::fromTimeString(attributes.value("timestamp")));
+  return static_cast<unsigned int>(ElementData::TIMESTAMP_EMPTY);
+}
+
+QString OsmXmlReader::_getUser(const QXmlAttributes& attributes) const
+{
+  if (attributes.value("user") != "")
+    return attributes.value("user");
+  return ElementData::USER_EMPTY;
+}
+
+long OsmXmlReader::_getUid(const QXmlAttributes& attributes) const
+{
+  if (attributes.value("uid") != "")
+    return _parseLong(attributes.value("uid"));
+  return ElementData::UID_EMPTY;
 }
 
 }

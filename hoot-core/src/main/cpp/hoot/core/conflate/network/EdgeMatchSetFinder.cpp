@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "EdgeMatchSetFinder.h"
 
@@ -41,15 +41,15 @@ const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY =
   "02-similar-second-reversed";
 
 EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
-    ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
-  _bidirectionalStubs(true),
-  _details(details),
-  _includePartialMatches(false),
-  _matchSet(matchSet),
-  _n1(n1),
-  _n2(n2),
-  _maxSteps(ConfigOptions().getNetworkEdgeMatchSetFinderMaxIterations()),
-  _numSimilarEdgeMatches(0)
+                                       ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2)
+  : _bidirectionalStubs(true),
+    _details(details),
+    _includePartialMatches(false),
+    _matchSet(matchSet),
+    _n1(n1),
+    _n2(n2),
+    _maxSteps(ConfigOptions().getNetworkEdgeMatchSetFinderMaxIterations()),
+    _numSimilarEdgeMatches(0)
 {
   _resetEdgeMatchSimilarities();
 }
@@ -82,7 +82,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
   else
   {
     QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
-    foreach (EdgeSublineMatchPtr s, sublines)
+    for (const auto& s : qAsConst(sublines))
     {
       EdgeMatchPtr em = std::make_shared<EdgeMatch>();
       em->getString1()->addFirstEdge(s->getSubline1());
@@ -121,9 +121,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   // Possibly continue to evaluate matches even if we find an end point. This may make
   // the search space very large, but would avoid missing matches. - #2939
   if (fromMatch && toMatch)
-  {
     foundSolution = _recordMatch(em);
-  }
   else
   {
     // If the end of the match isn't terminated and
@@ -143,9 +141,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
       LOG_VART(neighbors2);
 
       if (!neighbors1.empty() || !neighbors2.empty())
-      {
         foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
-      }
     }
     // If the beginning of the match isn't terminated and
     if (!fromMatch && !foundSolution &&
@@ -169,23 +165,22 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
 
   // if we couldn't find a whole string solution and we're supposed to include partial matches
   if (foundSolution == false && _includePartialMatches)
-  {
     foundSolution = _recordMatch(em);
-  }
 
   LOG_VART(foundSolution);
   return foundSolution;
 }
 
 bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
-  QSet<ConstNetworkEdgePtr> neighbors1Set, QSet<ConstNetworkEdgePtr> neighbors2Set)
+                                                QSet<ConstNetworkEdgePtr> neighbors1Set,
+                                                QSet<ConstNetworkEdgePtr> neighbors2Set)
 {
   LOG_TRACE("Adding edge neighbors to end...");
 
   bool foundSolution = false;
 
   // score all the e1 neighbors.
-  foreach (ConstNetworkEdgePtr neighbor1, neighbors1Set)
+  for (const auto& neighbor1 : qAsConst(neighbors1Set))
   {
     LOG_VART(neighbor1);
     LOG_VART(em->contains(neighbor1));
@@ -201,14 +196,12 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     {
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getLastEdge());
       if (next)
-      {
         foundSolution = _addEdgeMatches(next) || foundSolution;
-      }
     }
   }
 
   // score all the e2 neighbors.
-  foreach (ConstNetworkEdgePtr neighbor2, neighbors2Set)
+  for (const auto& neighbor2 : qAsConst(neighbors2Set))
   {
     LOG_VART(neighbor2);
     LOG_VART(em->contains(neighbor2));
@@ -225,9 +218,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     {
       EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getLastEdge(), neighbor2);
       if (next)
-      {
         foundSolution = _addEdgeMatches(next) || foundSolution;
-      }
     }
   }
 
@@ -244,7 +235,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   bool foundSolution = false;
 
   // score all the e1 neighbors.
-  foreach (ConstNetworkEdgePtr neighbor1, neighbors1Set)
+  for (const auto& neighbor1 : qAsConst(neighbors1Set))
   {
     LOG_VART(neighbor1);
     LOG_VART(em->getString2()->getFirstEdge());
@@ -260,14 +251,12 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
     {
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getFirstEdge());
       if (next)
-      {
         foundSolution = _addEdgeMatches(next) || foundSolution;
-      }
     }
   }
 
   // score all the e2 neighbors.
-  foreach (ConstNetworkEdgePtr neighbor2, neighbors2Set)
+  for (const auto& neighbor2 : qAsConst(neighbors2Set))
   {
     LOG_VART(neighbor2);
     LOG_VART(em->getString1()->getFirstEdge());
@@ -283,9 +272,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
     {
       EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getFirstEdge(), neighbor2);
       if (next)
-      {
         foundSolution = _addEdgeMatches(next) || foundSolution;
-      }
     }
   }
 
@@ -305,17 +292,11 @@ QSet<ConstNetworkEdgePtr> EdgeMatchSetFinder::_getEdgesFromLocation(ConstEdgeLoc
   {
     ConstNetworkVertexPtr v = l->getVertex(EdgeLocation::SLOPPY_EPSILON);
     if (_n1->contains(v))
-    {
       result = _n1->getEdgesFromVertex(v).toSet();
-    }
     else if (_n2->contains(v))
-    {
       result = _n2->getEdgesFromVertex(v).toSet();
-    }
     else
-    {
       throw IllegalArgumentException("Vertex not contained by a network.");
-    }
   }
 
   LOG_VART(result);
@@ -326,13 +307,9 @@ bool EdgeMatchSetFinder::_hasConfidentTiePoint(ConstEdgeLocationPtr l) const
 {
   bool result;
   if (l->isExtreme(EdgeLocation::SLOPPY_EPSILON))
-  {
     result = _details->hasConfidentTiePoint(l->getVertex(EdgeLocation::SLOPPY_EPSILON));
-  }
   else
-  {
     result = false;
-  }
   return result;
 }
 
@@ -340,13 +317,9 @@ bool EdgeMatchSetFinder::_isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLoc
 {
   bool result;
   if (l1->isExtreme() && l2->isExtreme())
-  {
     result = _details->isCandidateMatch(l1->getVertex(), l2->getVertex());
-  }
   else
-  {
     result = false;
-  }
   return result;
 }
 
@@ -369,17 +342,13 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     similarityValuesToIterate[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] =
       em->getFirstReversedSimilarityString();
     EdgeMatchScore existingSimilarMatch;
-    QMap<QString, QString>::iterator similarityValsItr;
     // This will iterate over the similarity indexes in the order we want.
-    for (similarityValsItr = similarityValuesToIterate.begin();
+    for (auto similarityValsItr = similarityValuesToIterate.begin();
          similarityValsItr != similarityValuesToIterate.end(); ++similarityValsItr)
     {
-      existingSimilarMatch =
-        _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()];
+      existingSimilarMatch = _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()];
       if (existingSimilarMatch.score != -1.0)
-      {
         break;
-      }
     }
 
     // An EdgeMatchScore returned with a score == -1.0 means that no similar match was found.
@@ -412,7 +381,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     EdgeMatchScore newMatch;
     newMatch.match = em;
     newMatch.score = score;
-    for (similarityValsItr = similarityValuesToIterate.begin();
+    for (auto similarityValsItr = similarityValuesToIterate.begin();
          similarityValsItr != similarityValuesToIterate.end(); ++similarityValsItr)
     {
       _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()] = newMatch;
@@ -424,16 +393,12 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     if (em->getString1()->isStub() != em->getString2()->isStub())
     {
       _matchSet->addEdgeMatch(em, score);
+      // add it in both directions. In some matchers we don't know which is better.
       if (_bidirectionalStubs)
-      {
-        // add it in both directions. In some matchers we don't know which is better.
         _addReverseMatch(em, score);
-      }
     }
     else
-    {
       _matchSet->addEdgeMatch(em, score);
-    }
 
     return true;
   }

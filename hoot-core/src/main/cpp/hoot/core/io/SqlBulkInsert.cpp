@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SqlBulkInsert.h"
 
@@ -38,8 +38,8 @@ namespace hoot
 {
 
 SqlBulkInsert::SqlBulkInsert(const QSqlDatabase& db, const QString &tableName,
-  const QStringList &columns, bool ignoreConflict) :
-    _db(db),
+                             const QStringList &columns, bool ignoreConflict)
+  : _db(db),
     _tableName(tableName),
     _columns(columns),
     _ignoreConflict(ignoreConflict)
@@ -68,24 +68,20 @@ inline QString SqlBulkInsert::_escape(const QVariant& v) const
   case QVariant::Double:
   case QVariant::LongLong:
   case QVariant::ULongLong:
-    {
       return v.toString();
-    }
   case QVariant::String:
+  {
+    QString result = v.toString();
+    //check tags string return from HootApiDb::_escapeTags(tags)
+    if (!result.contains("hstore(ARRAY", Qt::CaseInsensitive) && result != "''")
     {
-      QString result = v.toString();
-      //check tags string return from HootApiDb::_escapeTags(tags)
-      if (!result.contains("hstore(ARRAY", Qt::CaseInsensitive) && result != "''")
-      {
-         result.replace("'", "''");
-         result = "'" % result % "'";
-      }
-      return result;
+       result.replace("'", "''");
+       result = "'" % result % "'";
     }
+    return result;
+  }
   case QVariant::Bool:
-    {
       return v.toBool() ? _true : _false;
-    }
   default:
     throw UnsupportedException();
   }
@@ -102,37 +98,27 @@ void SqlBulkInsert::flush()
     QString sql;
     // the value 22 was found experimentally
     sql.reserve(_pending.size() * _columns.size() * 22);
-    sql.append(QLatin1Literal("INSERT INTO ") %
-        _tableName %
-        QLatin1Literal(" (") %
-        _columns.join(",") %
-        QLatin1Literal(") VALUES "));
+    sql.append(QString("INSERT INTO %1 (%2) VALUES ").arg(_tableName, _columns.join(",")));
 
-    QLatin1String firstOpenParen("("), openParen(",("), closeParen(")"), comma(",");
+    const QString firstOpenParen("(");
+    const QString openParen(",(");
+    const QString closeParen(")");
+    const QString comma(",");
 
     for (int i = 0; i < _pending.size(); i++)
     {
       if (i == 0)
-      {
         sql.append(firstOpenParen);
-      }
       else
-      {
         sql.append(openParen);
-      }
 
       for (int j = 0; j < _columns.size(); j++)
       {
         if (j == 0)
-        {
           sql.append(_escape(_pending[i][j]));
-        }
         else
-        {
           sql.append(comma % _escape(_pending[i][j]));
-        }
       }
-
       sql.append(closeParen);
     }
 
@@ -149,7 +135,7 @@ void SqlBulkInsert::flush()
       LOG_ERROR(q.lastError().text().left(500));
       throw HootException(
         QString("Error executing bulk insert: %1 (%2)")
-        .arg(q.lastError().text().left(500)).arg(sql).left(500));
+          .arg(q.lastError().text().left(500), sql).left(500));
     }
 
     q.finish();

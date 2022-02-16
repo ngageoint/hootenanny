@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKEDGE_H
 #define NETWORKEDGE_H
@@ -46,7 +46,7 @@ public:
 
   NetworkEdge();
   NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed = false,
-    ConstElementPtr member = ConstElementPtr());
+              ConstElementPtr member = ConstElementPtr());
 
   void addMember(ConstElementPtr e) { _members.append(e); }
 
@@ -92,10 +92,8 @@ inline bool operator==(const ConstNetworkEdgePtr& a, const ConstNetworkEdgePtr& 
 inline uint qHash(const ConstNetworkEdgePtr& v)
 {
   uint result = 0;
-  foreach (const ConstElementPtr& m, v->getMembers())
-  {
+  for (const auto& m : v->getMembers())
     result = ::qHash(Tgs::cantorPairing(qHash(m->getElementId()), result));
-  }
   result = ::qHash(Tgs::cantorPairing(qHash(v->getFrom()), result));
   result = ::qHash(Tgs::cantorPairing(qHash(v->getTo()), result));
 

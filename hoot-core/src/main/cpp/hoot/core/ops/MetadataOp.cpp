@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "MetadataOp.h"
@@ -53,7 +53,8 @@ void MetadataOp::apply(std::shared_ptr<OsmMap>& pMap)
   _configure();
 
   // don't process anything without a dataset indicator
-  if (_datasetIndicator.first.length() == 0) return;
+  if (_datasetIndicator.first.length() == 0)
+    return;
 
   _allWays = _pMap->getWays();
   _allNodes = _pMap->getNodes();
@@ -85,7 +86,7 @@ void MetadataOp::_configure()
   for (int i = 0; i < tags.length(); i+=2)
   {
     QString key = tags[i];
-    QString value = (i < tags.length()-1) ? tags[i+1] : "";
+    QString value = (i < tags.length() - 1) ? tags[i+1] : "";
     _tags[key] = value;
   }
 }
@@ -96,7 +97,7 @@ void MetadataOp::_gatherProcessElements()
   int nodeCount = 0;
   int nodesInDatasets = 0;
 
-  for (WayMap::const_iterator it = _allWays.begin(); it != _allWays.end(); ++it)
+  for (auto it = _allWays.begin(); it != _allWays.end(); ++it)
   {
     if (!_datasetWayPolys.contains(it->second) &&        // ignore the ways providing the dataset
         it->second->getTags().hasInformationTag())
@@ -106,7 +107,7 @@ void MetadataOp::_gatherProcessElements()
     }
   }
 
-  for (RelationMap::const_iterator it = _allRels.begin(); it != _allRels.end(); ++it)
+  for (auto it = _allRels.begin(); it != _allRels.end(); ++it)
   {
     if (it->second->getTags().hasInformationTag())
     {
@@ -115,7 +116,7 @@ void MetadataOp::_gatherProcessElements()
     }
   }
 
-  for (NodeMap::const_iterator it = _allNodes.begin(); it != _allNodes.end(); ++it)
+  for (auto it = _allNodes.begin(); it != _allNodes.end(); ++it)
   {
     NodePtr pNode = it->second;
 
@@ -132,7 +133,7 @@ void MetadataOp::_gatherProcessElements()
 
     nodeCount++;
 
-    for (shared_ptr<Geometry> geom : _mergedGeoms)
+    for (const auto& geom : qAsConst(_mergedGeoms))
     {
       if (geom->contains(pPoint.get()))
       {
@@ -162,9 +163,7 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
   vector<long> elementNodes;
 
   if (pn)
-  {
     elementNodes.push_back(pn->getId());
-  }
 
   if (pw)
   {
@@ -174,60 +173,52 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
 
   if (pr)
   {
-    for (RelationData::Entry entry : pr->getMembers())
+    for (const auto& entry : pr->getMembers())
     {
       ElementPtr pMember =_pMap->getElement(entry.getElementId());
-
       if (pMember)
       {
         switch(pMember->getElementType().getEnum())
         {
-          case ElementType::Way:
-          {
-            const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
-            vector<long> nodes = pWay->getNodeIds();
-            elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
-            break;
-          }
-
-          case ElementType::Node:
-          {
-            const NodePtr& pNode = std::dynamic_pointer_cast<Node>(pMember);
-            elementNodes.push_back(pNode->getId());
-            break;
-          }
-
-          default:
-            break;
+        case ElementType::Way:
+        {
+          const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
+          vector<long> nodes = pWay->getNodeIds();
+          elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
+          break;
+        }
+        case ElementType::Node:
+        {
+          const NodePtr& pNode = std::dynamic_pointer_cast<Node>(pMember);
+          elementNodes.push_back(pNode->getId());
+          break;
+        }
+        default:
+          break;
         }
       }
     }
   }
 
   // count number of nodes per dataset
-  QMap<shared_ptr<Geometry>,int> nodeCountPerGeom;
+  QMap<shared_ptr<Geometry>, int> nodeCountPerGeom;
 
   for (long nodeId : elementNodes)
   {
     if (_nodeLocations.contains(nodeId))
     {
       shared_ptr<Geometry> geom = _nodeLocations[nodeId];
-
       if (nodeCountPerGeom.contains(geom) )
-      {
         nodeCountPerGeom[geom]++;
-      }
       else
-      {
         nodeCountPerGeom[geom] = 1;
-      }
     }
   }
 
   WayPtr datasetWayWithMostNodes;
   int nodeCount = 0;
 
-  foreach (WayPtr pWay, _mergedGeoms.keys())
+  for (const auto& pWay : _mergedGeoms.keys())
   {
     shared_ptr<Geometry> pGeom =_mergedGeoms[pWay];
     if (nodeCountPerGeom[pGeom] > nodeCount)
@@ -236,7 +227,6 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
       nodeCount = nodeCountPerGeom[pGeom];
     }
   }
-
   return datasetWayWithMostNodes;
 }
 
@@ -244,14 +234,10 @@ void MetadataOp::_removeDatasetWay(WayPtr pDataset) const
 {
   // store way nodes for deletion
   vector<long> nodes = pDataset->getNodeIds();
-
   // remove the way
-  RemoveWayByEid::removeWayFully(_pMap,pDataset->getId());
-
-  for (long node: nodes)
-  {
-    RemoveNodeByEid::removeNodeFully(_pMap,node);
-  }
+  RemoveWayByEid::removeWayFully(_pMap, pDataset->getId());
+  for (long node : nodes)
+    RemoveNodeByEid::removeNodeFully(_pMap, node);
 }
 
 }

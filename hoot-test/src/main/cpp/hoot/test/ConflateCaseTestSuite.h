@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATECASETESTSUITE_H
 #define CONFLATECASETESTSUITE_H
@@ -51,9 +51,8 @@ public:
    * @param allowSerial if true, case tests under the serial directory are added to the tests to be
    * run
    */
-  ConflateCaseTestSuite(
-    const QString& dir, bool suppressFailureDetail = false, bool printValidationReportDiff = false,
-    bool hideDisableTests = false, bool allowSerial = false);
+  ConflateCaseTestSuite(const QString& dir, bool suppressFailureDetail = false, bool printValidationReportDiff = false,
+                        bool hideDisableTests = false, bool allowSerial = false);
 
   /**
    * @see AbstractTestSuite

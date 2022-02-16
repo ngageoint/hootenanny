@@ -14,7 +14,7 @@ OUTPUT_DIR=test-output/cmd/slow/NetworkConflateCmdRelationEdgeTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-hoot conflate --warn -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
+hoot conflate --warn -C ReferenceConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
   -D uuid.helper.repeatable=true -D match.creators="NetworkMatchCreator" \
   -D merger.creators="NetworkMergerCreator" \
   $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/out.osm

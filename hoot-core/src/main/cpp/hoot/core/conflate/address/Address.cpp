@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "Address.h"
 
 // hoot
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
-#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -42,56 +42,47 @@ QMap<QString, QString> Address::_streetFullTypesToTypeAbbreviations;
 QMap<QString, QString> Address::_streetTypeAbbreviationsToFullTypes;
 StringDistancePtr Address::_stringComp;
 
-Address::Address() :
-_address(""),
-_allowLenientHouseNumberMatching(true),
-_parsedFromAddressTag(true),
-_isRange(false),
-_isSubLetter(false)
+Address::Address()
+  : _address(""),
+    _allowLenientHouseNumberMatching(true),
+    _parsedFromAddressTag(true),
+    _isRange(false),
+    _isSubLetter(false)
 {
   if (!_stringComp)
-  {
     _initializeStringComparator();
-  }
 }
 
-Address::Address(const QString& address, const bool allowLenientHouseNumberMatching) :
-_address(address),
-_allowLenientHouseNumberMatching(allowLenientHouseNumberMatching),
-_parsedFromAddressTag(true),
-_isRange(false),
-_isSubLetter(false)
+Address::Address(const QString& address, const bool allowLenientHouseNumberMatching)
+  : _address(address),
+    _allowLenientHouseNumberMatching(allowLenientHouseNumberMatching),
+    _parsedFromAddressTag(true),
+    _isRange(false),
+    _isSubLetter(false)
 {
   if (!_stringComp)
-  {
     _initializeStringComparator();
-  }
 }
 
 void Address::_initializeStringComparator() const
 {
   const QString stringCompClassName = ConfigOptions().getAddressStringComparer().trimmed();
   if (stringCompClassName.isEmpty())
+    throw IllegalArgumentException("No address string comparer specified (must implement StringDistance).");
+
+  _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
+  if (!_stringComp)
   {
     throw IllegalArgumentException(
-      "No address string comparer specified (must implement StringDistance).");
+      QString("Invalid address string comparer (must implement StringDistance): %1")
+        .arg(stringCompClassName));
   }
-  else
+  std::shared_ptr<StringDistanceConsumer> strDistConsumer =
+    std::dynamic_pointer_cast<StringDistanceConsumer>(_stringComp);
+  if (strDistConsumer)
   {
-    _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
-    if (!_stringComp)
-    {
-      throw IllegalArgumentException(
-        "Invalid address string comparer (must implement StringDistance): " +
-        stringCompClassName);
-    }
-    std::shared_ptr<StringDistanceConsumer> strDistConsumer =
-      std::dynamic_pointer_cast<StringDistanceConsumer>(_stringComp);
-    if (strDistConsumer)
-    {
-      strDistConsumer->setStringDistance(
-        std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
-    }
+    strDistConsumer->setStringDistance(
+      std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
   }
 }
 
@@ -125,20 +116,15 @@ QSet<QString> Address::getStreetTypes(const bool includeAbbreviations)
     // Possibly, this could be expanded to use something like:
     // https://pe.usps.com/text/pub28/28apc_002.htm[this] instead.
     const QStringList streetTypesRaw = ConfigOptions().getAddressStreetTypes();
-    for (int i = 0; i < streetTypesRaw.size(); i++)
+    for (const auto& streetTypeEntry : qAsConst(streetTypesRaw))
     {
-      const QString streetTypeEntry = streetTypesRaw.at(i);
       const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
+      // Currently we only support 1:1 street type to abbreviation pairings.
       if (streetTypeEntryParts.size() != 2)
-      {
-        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
-      }
       _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
       if (includeAbbreviations)
-      {
         _streetTypes.insert(streetTypeEntryParts.at(1).toLower());
-      }
     }
   }
   return _streetTypes;
@@ -149,15 +135,12 @@ QMap<QString, QString> Address::getStreetFullTypesToTypeAbbreviations()
   if (_streetFullTypesToTypeAbbreviations.isEmpty())
   {
     const QStringList streetTypesRaw = ConfigOptions().getAddressStreetTypes();
-    for (int i = 0; i < streetTypesRaw.size(); i++)
+    for (const auto& streetTypeEntry : qAsConst(streetTypesRaw))
     {
-      const QString streetTypeEntry = streetTypesRaw.at(i);
       const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
+      // Currently we only support 1:1 street type to abbreviation pairings.
       if (streetTypeEntryParts.size() != 2)
-      {
-        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
-      }
       _streetFullTypesToTypeAbbreviations[streetTypeEntryParts.at(0).toLower()] =
         streetTypeEntryParts.at(1).toLower();
     }
@@ -170,15 +153,12 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
   if (_streetTypeAbbreviationsToFullTypes.isEmpty())
   {
     const QStringList streetTypesRaw = ConfigOptions().getAddressStreetTypes();
-    for (int i = 0; i < streetTypesRaw.size(); i++)
+    for (const auto& streetTypeEntry : qAsConst(streetTypesRaw))
     {
-      const QString streetTypeEntry = streetTypesRaw.at(i);
       const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
+      // Currently we only support 1:1 street type to abbreviation pairings.
       if (streetTypeEntryParts.size() != 2)
-      {
-        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
-      }
       _streetTypeAbbreviationsToFullTypes[streetTypeEntryParts.at(1).toLower()] =
         streetTypeEntryParts.at(0).toLower();
     }
@@ -195,21 +175,15 @@ bool Address::isStreetIntersectionAddress(const QString& addressStr,
                                           const bool requireStreetTypeInIntersection)
 {
   if (addressStr.trimmed().isEmpty())
-  {
     return false;
-  }
 
   // libpostal doesn't recognize intersections correctly, so doing it with some very simple custom
   // logic. Not even using a regex here, b/c our definition of an intersection is very loose. We
   // tighten it up some with 'requireStreetTypeInIntersection', which is meant to be used when an
   // address is parsed from a non-address tag (name, etc.). Our definition of an intersection
   // address is likely not foolproof.
-
-  if (requireStreetTypeInIntersection &&
-      !StringUtils::endsWithAny(addressStr, getStreetTypes().toList()))
-  {
+  if (requireStreetTypeInIntersection && !StringUtils::endsWithAny(addressStr, getStreetTypes().toList()))
     return false;
-  }
 
   return StringUtils::bisectsAny(addressStr, getIntersectionSplitTokens());
 }
@@ -224,12 +198,10 @@ void Address::removeStreetTypes()
 {
   LOG_TRACE(_address);
 
+  // If its a non-intersection, just remove the last street type token. We're assuming its at the
+  // end, which may not be alway true.
   if (!isStreetIntersectionAddress(_address, !_parsedFromAddressTag))
-  {
-    // If its a non-intersection, just remove the last street type token. We're assuming its at the
-    // end, which may not be alway true.
     StringUtils::removeLastIndexOf(_address, _streetTypes.toList());
-  }
   else
   {
     // If we have an intersection address, split it into its two parts and remove street type tokens
@@ -253,11 +225,9 @@ void Address::removeStreetTypes()
 void Address::removeHouseNumber()
 {
   LOG_VART(_address);
+  // house num should be the first token on a non-intersection address, so remove it
   if (!isStreetIntersectionAddress(_address, false))
-  {
-    // house num should be the first token on a non-intersection address, so remove it
     StringUtils::splitAndRemoveAtIndex(_address, QRegExp("\\s+"), 0);
-  }
   LOG_VART(_address);
 }
 

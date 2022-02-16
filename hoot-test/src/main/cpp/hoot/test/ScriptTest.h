@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPTTEST_H
 #define SCRIPTTEST_H
 
 // CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
 
 // Qt
 #include <QRunnable>
@@ -52,9 +52,8 @@ public:
    * @param suppressFailureDetail if true, detailed test failure information is not displayed
    * @param waitToFinishTime maximum time, in seconds, to wait for script to finish execution
    */
-  ScriptTest(
-    const QString& script, bool printDiff, bool suppressFailureDetail = false,
-    int waitToFinishTime = 30000);
+  ScriptTest(const QString& script, bool printDiff, bool suppressFailureDetail = false,
+             int waitToFinishTime = 30000);
 
   /**
    * @brief see TestCase
@@ -70,6 +69,10 @@ private:
   QString _stdout, _baseStdout;
   /** Timeout before emitting warning "Waiting for process to finish" in msecs */
   int _waitToFinishTime;
+  int _scriptTestTimeOutSeconds;
+
+  static QRegularExpression _regWarn;
+  static QRegularExpression _regError;
 
   QString _readFile(const QString& path);
   void _writeFile(const QString& path, const QString& content);

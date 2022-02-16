@@ -22,16 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.info;
-
-import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -53,7 +54,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
 
         // BuildingKeepMoreComplexGeometryWhenAutoMerging is one of the settings that Attribute Conflation customizes. That's unlikely to change.
         String jsonStr = responseData.readEntity(String.class);
-         assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
+        assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
     }
 
     @Ignore
@@ -67,7 +68,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
                     .get();
 
         String jsonStr = responseData.readEntity(String.class);
-         assertThat(jsonStr, CoreMatchers.containsString("Roads"));
+        assertThat(jsonStr, CoreMatchers.containsString("Roads"));
     }
 
     @Test

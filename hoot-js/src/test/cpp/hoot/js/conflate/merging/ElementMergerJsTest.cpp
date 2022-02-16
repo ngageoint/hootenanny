@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/merging/ElementMergerJs.h>
@@ -135,7 +135,7 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(railwayMergeExtraNonRailwayTest);
   CPPUNIT_TEST(railwayInputWithConflatedStatusTest);
 
-  // RAILWAY ONE TO MANY
+  // RAILWAY ONE-TO-MANY
   CPPUNIT_TEST(railwayOneToManyMergeTwoWaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeTooFewRailwaysTest);
   CPPUNIT_TEST(railwayOneToManyMergeMissingOneToManyFeatureTest);
@@ -147,10 +147,9 @@ class ElementMergerJsTest : public HootTestFixture
 
 public:
 
-  ElementMergerJsTest() :
-  HootTestFixture(
-    "test-files/js/conflate/merging/ElementMergerJsTest/",
-    "test-output/js/conflate/merging/ElementMergerJsTest/")
+  ElementMergerJsTest()
+    : HootTestFixture("test-files/js/conflate/merging/ElementMergerJsTest/",
+                      "test-output/js/conflate/merging/ElementMergerJsTest/")
   {
     setResetType(ResetEnvironment);
   }
@@ -159,291 +158,291 @@ public:
 
   void poiToPolyMergeWayAsPolyTest()
   {
-    _testMerge("poi-poly-way-poly-in.osm", "poi-poly-way-poly-out.osm");
+    _testMerge("poi-poly-way-poly-in.osm",
+               "poi-poly-way-poly-out.osm");
   }
 
   void poiToPolyMergeWayAsPolyNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "poi-poly-way-poly-no-constituents-in.osm", "poi-poly-way-poly-no-constituents-out.osm");
+    _testMerge("poi-poly-way-poly-no-constituents-in.osm",
+               "poi-poly-way-poly-no-constituents-out.osm");
   }
 
   void poiToPolyMergeRelationAsPolyTest()
   {
-    _testMerge("poi-poly-relation-poly-in.osm", "poi-poly-relation-poly-out.osm");
+    _testMerge("poi-poly-relation-poly-in.osm",
+               "poi-poly-relation-poly-out.osm");
   }
 
   void poiToPolyMergeRelationAsPolyNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "poi-poly-relation-poly-no-constituents-in.osm",
-      "poi-poly-relation-poly-no-constituents-out.osm");
+    _testMerge("poi-poly-relation-poly-no-constituents-in.osm",
+               "poi-poly-relation-poly-no-constituents-out.osm");
   }
 
   void poiToPolyMergeMissingPoiInputTest()
   {
-    _testMerge(
-      "poi-poly-missing-poi-in.osm", "poi-poly-missing-poi-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("poi-poly-missing-poi-in.osm", "poi-poly-missing-poi-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMissingPolyInputTest()
   {
-    _testMerge(
-      "poi-poly-missing-poly-in.osm", "poi-poly-missing-poly-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("poi-poly-missing-poly-in.osm", "poi-poly-missing-poly-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMoreThanOnePolyInputTest()
   {
-    _testMerge(
-      "poi-poly-more-than-one-poly-in.osm", "poi-poly-more-than-one-poly-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("poi-poly-more-than-one-poly-in.osm", "poi-poly-more-than-one-poly-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMoreThanOnePoiInputTest()
   {
-    _testMerge(
-      "poi-poly-more-than-one-poi-in.osm", "poi-poly-more-than-one-poi-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("poi-poly-more-than-one-poi-in.osm", "poi-poly-more-than-one-poi-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyPolyInputWithConflatedStatusTest()
   {
-    _testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-poly-input-conflated-out.osm");
+    _testMerge("poi-poly-way-poly-conflated-1-in.osm",
+               "poi-poly-poly-input-conflated-out.osm");
   }
 
   void poiToPolyPoiInputWithConflatedStatusTest()
   {
-    _testMerge(
-      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-poi-input-conflated-out.osm");
+    _testMerge("poi-poly-way-poly-conflated-2-in.osm",
+               "poi-poly-poi-input-conflated-out.osm");
   }
 
   // POI
 
   void poiMergeTwoPoisTest()
   {
-    _testMerge("poi-two-in.osm", "poi-two-out.osm");
+    _testMerge("poi-two-in.osm",
+               "poi-two-out.osm");
   }
 
   void poiMergeMoreThanTwoPoisTest()
   {
-    _testMerge("poi-more-than-two-in.osm", "poi-more-than-two-out.osm");
+    _testMerge("poi-more-than-two-in.osm",
+               "poi-more-than-two-out.osm");
   }
 
   void poiMergeTooFewPoisTest()
   {
-    _testMerge(
-      "poi-too-few-in.osm", "poi-too-few-out.osm", "Invalid inputs passed to the element merger");
+    _testMerge("poi-too-few-in.osm",
+               "poi-too-few-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void poiMergeMissingTargetTagTest()
   {
-    _testMerge(
-      "poi-missing-target-tag-in.osm", "poi-missing-target-tag-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("poi-missing-target-tag-in.osm",
+               "poi-missing-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void poiMergeDuplicateTargetTagTest()
   {
-    _testMerge(
-      "poi-duplicate-target-tag-in.osm", "poi-duplicate-target-tag-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("poi-duplicate-target-tag-in.osm",
+               "poi-duplicate-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void poiInputWithConflatedStatusTest()
   {
-    _testMerge("poi-two-conflated-in.osm", "poi-two-out.osm");
+    _testMerge("poi-two-conflated-in.osm",
+               "poi-two-out.osm");
   }
 
   // AREA
 
   void areaMergeTwoWaysTest()
   {
-    _testMerge("area-two-ways-in.osm", "area-two-ways-out.osm");
+    _testMerge("area-two-ways-in.osm",
+               "area-two-ways-out.osm");
   }
 
   void areaMergeTwoWaysNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge("area-two-ways-no-constituents-in.osm", "area-two-ways-no-constituents-out.osm");
+    _testMerge("area-two-ways-no-constituents-in.osm",
+               "area-two-ways-no-constituents-out.osm");
   }
 
   void areaMergeTwoRelationsTest()
   {
-    _testMerge("area-two-relations-in.osm", "area-two-relations-out.osm");
+    _testMerge("area-two-relations-in.osm",
+               "area-two-relations-out.osm");
   }
 
   void areaMergeTwoRelationsNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "area-two-relations-no-constituents-in.osm", "area-two-relations-no-constituents-out.osm");
+    _testMerge("area-two-relations-no-constituents-in.osm",
+               "area-two-relations-no-constituents-out.osm");
   }
 
   void areaMergeOneWayOneRelationTargetAsWayTest()
   {
-    _testMerge(
-      "area-one-way-one-relation-target-as-way-in.osm",
-      "area-one-way-one-relation-target-as-way-out.osm");
+    _testMerge("area-one-way-one-relation-target-as-way-in.osm",
+               "area-one-way-one-relation-target-as-way-out.osm");
   }
 
   void areaMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "area-one-way-one-relation-target-as-way-no-constituents-in.osm",
-      "area-one-way-one-relation-target-as-way-no-constituents-out.osm");
+    _testMerge("area-one-way-one-relation-target-as-way-no-constituents-in.osm",
+               "area-one-way-one-relation-target-as-way-no-constituents-out.osm");
   }
 
   void areaMergeOneWayOneRelationTargetAsRelationTest()
   {
-    _testMerge(
-      "area-one-way-one-relation-target-as-relation-in.osm",
-      "area-one-way-one-relation-target-as-relation-out.osm");
+    _testMerge("area-one-way-one-relation-target-as-relation-in.osm",
+               "area-one-way-one-relation-target-as-relation-out.osm");
   }
 
   void areaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "area-one-way-one-relation-target-as-relation-no-constituents-in.osm",
-      "area-one-way-one-relation-target-as-relation-no-constituents-out.osm");
+    _testMerge("area-one-way-one-relation-target-as-relation-no-constituents-in.osm",
+               "area-one-way-one-relation-target-as-relation-no-constituents-out.osm");
   }
 
   void areaMergeMoreThanTwoAreasTest()
   {
-    _testMerge("area-more-than-two-in.osm", "area-more-than-two-out.osm");
+    _testMerge("area-more-than-two-in.osm",
+               "area-more-than-two-out.osm");
   }
 
   void areaMergeMoreThanTwoAreasNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "area-more-than-two-no-constituents-in.osm", "area-more-than-two-no-constituents-out.osm");
+    _testMerge("area-more-than-two-no-constituents-in.osm",
+               "area-more-than-two-no-constituents-out.osm");
   }
 
   void areaMergeTooFewAreasTest()
   {
-    _testMerge(
-      "area-too-few-in.osm", "area-too-few-out.osm", "Invalid inputs passed to the element merger");
+    _testMerge("area-too-few-in.osm",
+               "area-too-few-out.osm", "Invalid inputs passed to the element merger");
   }
 
   void areaMergeMissingTargetTagTest()
   {
-    _testMerge(
-      "area-missing-target-tag-in.osm", "area-missing-target-tag-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("area-missing-target-tag-in.osm",
+               "area-missing-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void areaMergeDuplicateTargetTagTest()
   {
-    _testMerge(
-      "area-duplicate-target-tag-in.osm", "area-duplicate-target-tag-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("area-duplicate-target-tag-in.osm",
+               "area-duplicate-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void areaInputWithConflatedStatusTest()
   {
-    _testMerge("area-two-ways-conflated-in.osm", "area-two-ways-out.osm");
+    _testMerge("area-two-ways-conflated-in.osm",
+               "area-two-ways-out.osm");
   }
 
   // BUILDING
 
   void buildingMergeTwoWaysTest()
   {
-    _testMerge("building-two-ways-in.osm", "building-two-ways-out.osm");
+    _testMerge("building-two-ways-in.osm",
+               "building-two-ways-out.osm");
   }
 
   void buildingMergeTwoWaysNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "building-two-ways-no-constituents-in.osm", "building-two-ways-no-constituents-out.osm");
+    _testMerge("building-two-ways-no-constituents-in.osm",
+               "building-two-ways-no-constituents-out.osm");
   }
 
   void buildingMergeTwoRelationsTest()
   {
-    _testMerge("building-two-relations-in.osm", "building-two-relations-out.osm");
+    _testMerge("building-two-relations-in.osm",
+               "building-two-relations-out.osm");
   }
 
   void buildingMergeTwoRelationsNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "building-two-relations-no-constituents-in.osm",
-      "building-two-relations-no-constituents-out.osm");
+    _testMerge("building-two-relations-no-constituents-in.osm",
+               "building-two-relations-no-constituents-out.osm");
   }
 
   void buildingMergeOneWayOneRelationTargetAsWayTest()
   {
-    _testMerge(
-      "building-one-way-one-relation-target-as-way-in.osm",
-      "building-one-way-one-relation-target-as-way-out.osm");
+    _testMerge("building-one-way-one-relation-target-as-way-in.osm",
+               "building-one-way-one-relation-target-as-way-out.osm");
   }
 
   void buildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "building-one-way-one-relation-target-as-way-no-constituents-in.osm",
-      "building-one-way-one-relation-target-as-way-no-constituents-out.osm");
+    _testMerge("building-one-way-one-relation-target-as-way-no-constituents-in.osm",
+               "building-one-way-one-relation-target-as-way-no-constituents-out.osm");
   }
 
   void buildingMergeOneWayOneRelationTargetAsRelationTest()
   {
-    _testMerge(
-      "building-one-way-one-relation-target-as-relation-in.osm",
-      "building-one-way-one-relation-target-as-relation-out.osm");
+    _testMerge("building-one-way-one-relation-target-as-relation-in.osm",
+               "building-one-way-one-relation-target-as-relation-out.osm");
   }
 
   void buildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "building-one-way-one-relation-target-as-relation-no-constituents-in.osm",
-      "building-one-way-one-relation-target-as-relation-no-constituents-out.osm");
+    _testMerge("building-one-way-one-relation-target-as-relation-no-constituents-in.osm",
+               "building-one-way-one-relation-target-as-relation-no-constituents-out.osm");
   }
 
   void buildingMergeMoreThanTwoBuildingsTest()
   {
-    _testMerge("building-more-than-two-in.osm", "building-more-than-two-out.osm");
+    _testMerge("building-more-than-two-in.osm",
+               "building-more-than-two-out.osm");
   }
 
   void buildingMergeMoreThanTwoBuildingsNoConstituentsTest()
   {
     DisableLog dl;
-    _testMerge(
-      "building-more-than-two-no-constituents-in.osm",
-      "building-more-than-two-no-constituents-out.osm");
+    _testMerge("building-more-than-two-no-constituents-in.osm",
+               "building-more-than-two-no-constituents-out.osm");
   }
 
   void buildingMergeTooFewBuildingsTest()
   {
-    _testMerge(
-      "building-too-few-in.osm", "building-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("building-too-few-in.osm", "building-too-few-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void buildingMergeMissingTargetTagTest()
   {
-      _testMerge(
-        "building-missing-target-tag-in.osm", "building-missing-target-tag-out.osm",
-        "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("building-missing-target-tag-in.osm",
+               "building-missing-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void buildingMergeDuplicateTargetTagTest()
   {
-      _testMerge(
-        "building-missing-target-tag-in.osm", "building-missing-target-tag-out.osm",
-        "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("building-missing-target-tag-in.osm",
+               "building-missing-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void buildingInputWithConflatedStatusTest()
   {
-    _testMerge("building-two-ways-conflated-in.osm", "building-two-ways-out.osm");
+    _testMerge("building-two-ways-conflated-in.osm",
+               "building-two-ways-out.osm");
   }
 
   // RAILWAY
@@ -451,95 +450,95 @@ public:
   void railwayMergeTwoWaysTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge("railway-two-in.osm", "railway-two-out.osm");
+    _testMerge("railway-two-in.osm",
+               "railway-two-out.osm");
   }
 
   void railwayMergeTooFewRailwaysTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-too-few-in.osm", "railway-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("railway-too-few-in.osm",
+               "railway-too-few-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void railwayMergeMissingTargetTagTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-missing-target-tag-in.osm", "railway-missing-target-tag-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("railway-missing-target-tag-in.osm",
+               "railway-missing-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void railwayMergeDuplicateTargetTagTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-duplicate-target-tag-in.osm", "railway-duplicate-target-tag-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("railway-duplicate-target-tag-in.osm",
+               "railway-duplicate-target-tag-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void railwayMergeExtraNonRailwayTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge("railway-extra-non-railway-in.osm", "railway-extra-non-railway-out.osm",
-    "Invalid inputs passed to the element merger");
+    _testMerge("railway-extra-non-railway-in.osm",
+               "railway-extra-non-railway-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void railwayInputWithConflatedStatusTest()
   {
     _disableOneToManyRailwayConflation();
-    _testMerge("railway-two-conflated-in.osm", "railway-two-conflated-out.osm");
+    _testMerge("railway-two-conflated-in.osm",
+               "railway-two-conflated-out.osm");
   }
 
-  // RAILWAY ONE TO MANY
+  // RAILWAY ONE-TO-MANY
 
   void railwayOneToManyMergeTwoWaysTest()
   {
     _enableOneToManyRailwayConflation();
-    _testMerge("railway-one-to-many-two-in.osm", "railway-one-to-many-two-out.osm");
+    _testMerge("railway-one-to-many-two-in.osm",
+               "railway-one-to-many-two-out.osm");
   }
 
   void railwayOneToManyMergeTooFewRailwaysTest()
   {
     _enableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-one-to-many-too-few-in.osm", "railway-one-to-many-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("railway-one-to-many-too-few-in.osm",
+               "railway-one-to-many-too-few-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void railwayOneToManyMergeMissingOneToManyFeatureTest()
   {
     _enableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-one-to-many-missing-one-to-many-feature-in.osm",
-      "railway-one-to-many-missing-one-to-many-feature-out.osm",
-      "Input map must have exactly one feature marked with a hoot:merge:target tag");
+    _testMerge("railway-one-to-many-missing-one-to-many-feature-in.osm",
+               "railway-one-to-many-missing-one-to-many-feature-out.osm",
+               "Input map must have exactly one feature marked with a hoot:merge:target tag");
   }
 
   void railwayOneToManyMergeDuplicateOneToManyFeatureTest()
   {
     _enableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-one-to-many-duplicate-one-to-many-feature-in.osm",
-      "railway-one-to-many-duplicate-one-to-many-feature-out.osm",
-      "Input map for railway one to many merging must have exactly one qualifying "
-      "secondary feature.");
+    _testMerge("railway-one-to-many-duplicate-one-to-many-feature-in.osm",
+               "railway-one-to-many-duplicate-one-to-many-feature-out.osm",
+               "Input map for railway one-to-many merging must have exactly one qualifying secondary feature.");
   }
 
   void railwayOneToManyMergeExtraNonRailwayTest()
   {
     _enableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-one-to-many-extra-non-railway-in.osm",
-      "railway-one-to-many-extra-non-railway-out.osm",
-      "Invalid inputs passed to the element merger");
+    _testMerge("railway-one-to-many-extra-non-railway-in.osm",
+               "railway-one-to-many-extra-non-railway-out.osm",
+               "Invalid inputs passed to the element merger");
   }
 
   void railwayOneToManyInputWithConflatedStatusTest()
   {
     _enableOneToManyRailwayConflation();
-    _testMerge(
-      "railway-one-to-many-two-conflated-in.osm", "railway-one-to-many-two-conflated-out.osm");
+    _testMerge("railway-one-to-many-two-conflated-in.osm",
+               "railway-one-to-many-two-conflated-out.osm");
   }
 
 private:
@@ -558,9 +557,8 @@ private:
     conf().set(ConfigOptions::getRailwayOneToManyTransferKeysKey(), "");
   }
 
-  void _testMerge(
-    const QString& inFileName, const QString& outFileName,
-    const QString& expectedExceptionMsgContains = "") const
+  void _testMerge(const QString& inFileName, const QString& outFileName,
+                  const QString& expectedExceptionMsgContains = "") const
   {
     // Poi/poly test output is based on this config for now, despite it being different than the
     // default config.
@@ -590,8 +588,8 @@ private:
       if (exceptionMsg.isEmpty())
       {
         throw HootException(
-          "Expected exception substring: " + expectedExceptionMsgContains + "; Actual exception: " +
-          exceptionMsg);
+          QString("Expected exception substring: %1; Actual exception: %2")
+            .arg(expectedExceptionMsgContains, exceptionMsg));
       }
       else
       {

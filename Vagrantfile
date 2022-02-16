@@ -9,7 +9,15 @@ $nfsShare = ENV['NFSSHARE']
 if $nfsShare.nil?
   $nfsShare = false
 else
-  puts '## Using NFS for file syncing'
+  # for windows use WINNFS=true NFSSHARE=true vagrant up
+  # also, make sure to install the winnfsd plugin: vagrant plugin install vagrant-winnfsd
+  $winNfs = ENV['WINNFS']
+  if $winNfs.nil?
+    $winNfs = false
+    puts '## Using NFS for file syncing'
+  else
+    puts '## Using Windows NFS options for file syncing' 
+  end
 end
 
 $rsyncShare = ENV['RSYNCSHARE']
@@ -160,9 +168,17 @@ Vagrant.configure(2) do |config|
     # sharing of the hosts hoot folder and optionally the fouo folder with or without nfs
     if $nfsShare
       config.vm.network "private_network", ip: "192.168.33.10"
-      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs", mount_options: ['vers=4'], nfs_version: 4
+      if $winNfs
+        config.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs", mount_options: %w{rw,async,fsc,nolock,vers=3,udp,rsize=32768,wsize=32768,hard,noatime,actimeo=2}
+      else
+        config.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs", mount_options: ['vers=4'], nfs_version: 4
+      end
       if $fouoShare
-        config.vm.synced_folder "/fouo", "/fouo", type: "nfs"
+        if $winNfs
+          config.vm.synced_folder "/fouo", "/fouo", type: "nfs", mount_options: %w{rw,async,fsc,nolock,vers=3,udp,rsize=32768,wsize=32768,hard,noatime,actimeo=2}
+        else
+          config.vm.synced_folder "/fouo", "/fouo", type: "nfs"
+        end
       end
     elsif $rsyncShare
       config.vm.synced_folder ".", "/home/vagrant/hoot", type: "rsync", rsync__exclude: ['.vagrant/', '.git/']

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiSearchRadius.h"
@@ -32,7 +32,6 @@
 
 // Boost
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 namespace hoot
@@ -51,16 +50,12 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
   std::shared_ptr<boost::property_tree::ptree> propTree;
   if (!jsonStringOrFile.endsWith(".json", Qt::CaseInsensitive))
-  {
     propTree = StringUtils::jsonStringToPropTree(jsonStringOrFile);
-  }
   else
   {
     QFileInfo distancesFileInfo(jsonStringOrFile);
     if (!distancesFileInfo.exists())
-    {
       throw IllegalArgumentException("POI to POI search radii file does not exist.");
-    }
 
     propTree = std::make_shared<boost::property_tree::ptree>();
     try
@@ -71,8 +66,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
     {
       throw HootException(
         QString("Error parsing JSON: %1 (line %2)")
-          .arg(QString::fromStdString(e.message()))
-          .arg(QString::number(e.line())));
+          .arg(QString::fromStdString(e.message()), QString::number(e.line())));
     }
     catch (const std::exception& e)
     {
@@ -83,31 +77,25 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
   QList<PoiSearchRadius> radii;
 
-  for (const boost::property_tree::ptree::value_type& distProp : propTree->get_child("search_radii"))
+  for (const auto& distProp : propTree->get_child("search_radii"))
   {
     const QString key =
       QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
     LOG_VART(key);
     if (key.isEmpty())
-    {
       throw IllegalArgumentException("Missing 'key' in POI search radius entry.");
-    }
 
     // value is optional
     boost::optional<std::string> valProp = distProp.second.get_optional<std::string>("value");
     QString val = "";
     if (valProp)
-    {
       val = QString::fromStdString(valProp.get()).trimmed();
-    }
     LOG_VART(val);
 
     const int distance = distProp.second.get<int>("distance", -1);
     LOG_VART(distance);
     if (distance < 0)
-    {
       throw IllegalArgumentException("Missing 'distance' in POI search radius entry.");
-    }
 
     radii.append(PoiSearchRadius(key, val, distance));
   }

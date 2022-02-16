@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICITTYPETAGGERBASE_H
 #define IMPLICITTYPETAGGERBASE_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -131,14 +131,14 @@ private:
    */
   void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd) const;
 
-  void _getImplicitlyDerivedTagsFromMultipleNameTokens(
-    const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
-    Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const;
+  void _getImplicitlyDerivedTagsFromMultipleNameTokens(const QStringList& names, const QStringList& nameTokensList,
+                                                       const Tags& elementTags, Tags& implicitlyDerivedTags,
+                                                       QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const;
 
-  void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names,
-    QStringList& nameTokensList, const Tags& elementTags, Tags& implicitlyDerivedTags,
-    QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules, bool& namesContainBuilding,
-    bool& namesContainOffice) const;
+  void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names, QStringList& nameTokensList,
+                                                     const Tags& elementTags, Tags& implicitlyDerivedTags,
+                                                     QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
+                                                     bool& namesContainBuilding, bool& namesContainOffice) const;
 
   Tags _applyCustomRules(const ElementPtr& e, const QStringList& filteredNames);
 };

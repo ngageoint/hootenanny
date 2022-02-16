@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -258,11 +258,7 @@ public:
     w2->setTag("name", "w2");
 
     vector<long> nodes = w2->getNodeIds();
-    vector<long> newNodes;
-    foreach (long nid, nodes)
-    {
-      newNodes.push_back(nid);
-    }
+    vector<long> newNodes(nodes);
     newNodes.push_back(w1->getLastNodeId());
     w2->setNodes(newNodes);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConflateCaseTestSuite.h"
 
@@ -38,15 +38,14 @@
 namespace hoot
 {
 
-ConflateCaseTestSuite::ConflateCaseTestSuite(
-  const QString& dir, bool suppressFailureDetail, bool printValidationReportDiff,
-  bool hideDisableTests, bool allowSerial) :
-AbstractTestSuite(dir),
-_hideDisableTests(hideDisableTests),
-_numTests(0),
-_suppressFailureDetail(suppressFailureDetail),
-_printValidationReportDiff(printValidationReportDiff),
-_allowSerial(allowSerial)
+ConflateCaseTestSuite::ConflateCaseTestSuite(const QString& dir, bool suppressFailureDetail, bool printValidationReportDiff,
+                                             bool hideDisableTests, bool allowSerial)
+  : AbstractTestSuite(dir),
+    _hideDisableTests(hideDisableTests),
+    _numTests(0),
+    _suppressFailureDetail(suppressFailureDetail),
+    _printValidationReportDiff(printValidationReportDiff),
+    _allowSerial(allowSerial)
 {
   QStringList confs;
   loadDir(dir, confs);
@@ -56,15 +55,10 @@ _allowSerial(allowSerial)
 void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 {
   if (dir.endsWith(".off"))
-  {
     return;
-  }
   // If we're not set up to run serial jobs for this invocation, kick out of this method.
   if (!_allowSerial && dir.contains("serial"))
-  {
-    //std::cout << "Skipping: " << dir.toStdString() << std::endl;
     return;
-  }
 
   QDir d(dir);
   QFileInfo fi(d.absoluteFilePath("Config.conf"));
@@ -83,17 +77,15 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 # endif
 
   const QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
-  for (int i = 0; i < dirs.size(); i++)
+  for (const auto& dir : dirs)
   {
-    const QString path = d.absoluteFilePath(dirs[i]);
+    const QString path = d.absoluteFilePath(dir);
 
     bool ignore = false;
-    for (int i = 0; i < ignoreList.size(); i++)
+    for (const auto& ignoreValue : ignoreList)
     {
-      if (path.contains(ignoreList[i]))
-      {
+      if (path.contains(ignoreValue))
         ignore = true;
-      }
     }
 
     if (ignore)
@@ -102,9 +94,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
         LOG_INFO("Disabling: " + path);
     }
     else
-    {
       loadDir(path, confs);
-    }
   }
 
   if (dirs.size() > 0)
@@ -122,7 +112,6 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
     // test a chance to override it when necessary.
     confs.prepend(ConfPath::search("Testing.conf"));
 
-    //std::cout << "Adding test: " << dir.toStdString() << "..." << std::endl;
     addTest(new ConflateCaseTest(d, confs, _suppressFailureDetail, _printValidationReportDiff));
     _numTests++;
   }

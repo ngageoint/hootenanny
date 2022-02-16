@@ -2,12 +2,12 @@
   This is the conflate script for Railway Conflation. This handles linear railway features only.
 
   If the railway.one.to.many.match option is enabled, the script will attempt to conflate features
-  using the One to Many Railway Conflation Workflow (see description in Algorithms section of the
+  using the One-to-Many Railway Conflation Workflow (see description in Algorithms section of the
   documentation). If the features can't be conflated using that workflow, another attempt will be
   made to conflate them according to the current conflation configuration.
 
   This script does not yet generate reviews. If it ever does and any of the features involved in
-  the reviews are involved in a One To Many match, the review type should include the text
+  the reviews are involved in a One-To-Many match, the review type should include the text
   "OneToMany".
 
   Note: All test making calls to this script need to be run serially, as this script modifies the
@@ -49,18 +49,18 @@ var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
 
-// one to many matching
+// one-to-many matching
 
-// determines if one to many matching is enabled
+// determines if one-to-many matching is enabled
 var oneToManyMatchEnabled = (hoot.get("railway.one.to.many.match") === 'true');
-// This contains the keys in a secondary feature that will trigger a one to many tag only transfer.
+// This contains the keys in a secondary feature that will trigger a one-to-many tag only transfer.
 var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
 // Used to tag secondary features to identify them for removal post conflate; matches a var in
 // MetadataTags
 var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
 var transferAllTags = (hoot.get("railway.one.to.many.transfer.all.tags") === 'true');
 // Get the keys that when found in a secondary feature will be transferred to a reference feature
-// when a one a one to many tag only transfer is triggered.
+// when a one a one-to-many tag only transfer is triggered.
 if (!transferAllTags)
 {
   // Set the transfer keys on SelectiveOverwriteTag1Merger, as that's the tag merger we'll use for
@@ -70,14 +70,14 @@ if (!transferAllTags)
 hoot.set({'selective.overwrite.tag.merger.keys.exclude': oneToManySecondaryMatchTagKey});
 // The secondary feature gets deleted from output during merging, so add an op to do it. We need
 // the op to run after the crossing rails review marker, so that it can adjust the type of review
-// based on whether there was a one to many match or not.
+// based on whether there was a one-to-many match or not.
 if (!hoot.listContains("conflate.post.ops", "RailwayOneToManySecondaryMatchElementRemover"))
 {
   hoot.placeAfterInList("conflate.post.ops", "RailwaysCrossingMarker", "RailwayOneToManySecondaryMatchElementRemover");
 }
-// Save off the default tag merger for merges not involving a one to many match.
+// Save off the default tag merger for merges not involving a one-to-many match.
 var defaultTagMerger = hoot.get("tag.merger.default");
-// The current one to many match identifying tag key.
+// The current one-to-many match identifying tag key.
 var oneToManyTagKey;
 // Bookkeeping for secondary match elements.
 var oneToManySecondaryMatchElementIds = [];
@@ -221,9 +221,9 @@ exports.matchScore = function(map, e1, e2)
   var minHausdorffDistanceScore = 0.8;
   var minEdgeDistanceScore = 0.8;
 
-  // Check the secondary element to see if it has any of the one to many identifying tag keys.
+  // Check the secondary element to see if it has any of the one-to-many identifying tag keys.
   // Arbitrarily use the first one found (assumes that if more than one is found that they're in
-  // agreement). If so, we'll perform a one to many tag transfer from the feature up to the number
+  // agreement). If so, we'll perform a one-to-many tag transfer from the feature up to the number
   // of ref rails it matches with. Note that no geometry merging is done regardless of the type of
   // conflation being done. It *may* eventually make sense to only skip the geometry merging if
   // Attribute Conflation is selected and perform it when Reference Conflation is selected.
@@ -237,10 +237,10 @@ exports.matchScore = function(map, e1, e2)
       // Check the identifying tag to see how many rail tracks this single secondary feature
       // represents.
       var totalMatchesAllowed = parseInt(String(tags2.get(oneToManyTagKey)));
-      // Formerly, we checked here to see if we had a one to many match and if we'd already made the
+      // Formerly, we checked here to see if we had a one-to-many match and if we'd already made the
       // total number of matches. In that case we would do no further matching with the feature. In
       // practice this was leading to inconsistent conflated output. Disabling the logic *so far*
-      // hasn't seemed to reduce one to many conflated output quality, although could be causing
+      // hasn't seemed to reduce one-to-many conflated output quality, although could be causing
       // some unnecessary extra processing.
       if (totalMatchesAllowed > 1)
       {
@@ -252,7 +252,7 @@ exports.matchScore = function(map, e1, e2)
         else
         {*/
           currentMatchAttemptIsOneToMany = true;
-          // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
+          // If we're doing a one-to-many, we need to cover a wider swath to get all the matches, so
           // lessen the distance score. This value may need to be tweaked over time, as well as the
           // other score thresholds.
           minDistanceScore = 0.468;
@@ -271,7 +271,7 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("currentMatchAttemptIsOneToMany: " + currentMatchAttemptIsOneToMany);
   if (currentMatchAttemptIsOneToMany)
   {
-    // If we found a one to many match, increment our total matches for the secondary feature.
+    // If we found a one-to-many match, increment our total matches for the secondary feature.
     var numTotalMatches = 1;
     if (e2.getElementId() in oneToManyMatches)
     {
@@ -298,7 +298,7 @@ exports.matchScore = function(map, e1, e2)
     }
     hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
 
-    // Technically, this match should also be labeled as a one to many match, but the script
+    // Technically, this match should also be labeled as a one-to-many match, but the script
     // conflate workflow doesn't require that currently.
   }
 
@@ -327,14 +327,14 @@ exports.mergeSets = function(map, pairs, replaced)
   var oneToManyMergeOccurred = attemptOneToManyMerge(map, pairs, replaced);
   hoot.trace("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
 
-  // If we had any many to one merges earlier during this merge call, then we shouldn't have any
+  // If we had any many-to-one merges earlier during this merge call, then we shouldn't have any
   // other types of merges to perform.
   if (!oneToManyMergeOccurred)
   {
     // Go back to the original default tag merger.
     hoot.set({'tag.merger.default': defaultTagMerger});
 
-    // If its not a one to many match, business as usual...use the conflation behavior built into
+    // If its not a one-to-many match, business as usual...use the conflation behavior built into
     // the linear merger in use. Snap the ways in the second input to the first input. Use the
     // default tag merge method.
     hoot.trace("Performing linear merge...");
@@ -351,7 +351,7 @@ function attemptOneToManyMerge(map, pairs, replaced)
   // Don't love setting these config options on the fly within the merge loop, but there's no other
   // way right now to make this change.
 
-  // If the current match is one to many, we're only bringing over tags from secondary to
+  // If the current match is one-to-many, we're only bringing over tags from secondary to
   // reference in our specified list and we're doing no geometry merging.
   hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
 
@@ -372,7 +372,7 @@ function attemptOneToManyMerge(map, pairs, replaced)
       var refElement;
       var secondaryElement;
       // We check here either that the ID of the secondary element is in the collection of secondary
-      // element IDs involved in a one to many match (workflow when script is called from the
+      // element IDs involved in a one-to-many match (workflow when script is called from the
       // conflate command) or that the element has a custom tag (workflow when a merge is called in
       // externally by the merge server). As noted above, the tag method can't be used in tandem
       // with matching, as the elements being conflated are passed in as const.
@@ -391,7 +391,7 @@ function attemptOneToManyMerge(map, pairs, replaced)
         continue;
       }
 
-      hoot.trace("Merging one to many tags for " + refElement.getElementId() + " and " + secondaryElement.getElementId() + "...");
+      hoot.trace("Merging one-to-many tags for " + refElement.getElementId() + " and " + secondaryElement.getElementId() + "...");
       var newTags = hoot.TagMergerFactory.mergeTags(refElement.getTags(), secondaryElement.getTags());
       refElement.setTags(newTags);
       refElement.setStatusString("conflated");
@@ -403,7 +403,7 @@ function attemptOneToManyMerge(map, pairs, replaced)
       replaced.push(elementIdPair2);
 
       // We're deleting secondary match features, so mark it for removal later.
-      hoot.trace("Adding one to many match tag key to: " + secondaryElement.getElementId());
+      hoot.trace("Adding one-to-many match tag key to: " + secondaryElement.getElementId());
       secondaryElement.setTag(oneToManySecondaryMatchTagKey, "yes");
       oneToManyMergeOccurred = true;
     }

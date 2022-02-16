@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETFILEWRITER_H
 #define OSMAPIDBSQLCHANGESETFILEWRITER_H
@@ -72,8 +72,7 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  QString getStatsTable(
-    const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const override
+  QString getStatsTable(const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const override
   { throw NotImplementedException("Changeset statistics not implemented for SQL changesets."); }
 
   void setMap1List(const QList<ConstOsmMapPtr>& mapList) override { _map1List = mapList; }

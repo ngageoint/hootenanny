@@ -171,9 +171,9 @@ An example REF tag value: REF2=007be5
 
 The following are typical scenarios of data matching relationships:
 
-* one to one Points/Lines/Polygons
-* one to many Points/Lines/Polygons
-* many to one Points/Lines/Polygons
+* one-to-one Points/Lines/Polygons
+* one-to-many Points/Lines/Polygons
+* many-to-one Points/Lines/Polygons
 
 Note that matching standards will vary between the type of features that you are trying to match.  For example, a corresponding pair of matched
 road features may appear as a single road in the reference data but a divided road in the second dataset.  Similarly, a single POI in one

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConflateCaseTest.h"
 
@@ -43,11 +43,10 @@
 namespace hoot
 {
 
-ConflateCaseTest::ConflateCaseTest(
-  QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff ) :
-AbstractTest(d, confs),
-_suppressFailureDetail(suppressFailureDetail),
-_printValidationReportDiff(printValidationReportDiff)
+ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff)
+  : AbstractTest(d, confs),
+    _suppressFailureDetail(suppressFailureDetail),
+    _printValidationReportDiff(printValidationReportDiff)
 {
 }
 
@@ -58,17 +57,12 @@ void ConflateCaseTest::_runConflateCmd() const
     LOG_WARN("Please create a meaningful README.txt in " + _d.path());
   }
   QFileInfo in1(_d, "Input1.osm");
-  if (in1.exists() == false)
-  {
-    throw TestConfigurationException(
-      "Unable to find Input1.osm in conflate case: " + _d.absolutePath());
-  }
+  if (!in1.exists())
+    throw TestConfigurationException("Unable to find Input1.osm in conflate case: " + _d.absolutePath());
+
   QFileInfo in2(_d, "Input2.osm");
-  if (in2.exists() == false)
-  {
-    throw TestConfigurationException(
-      "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
-  }
+  if (!in2.exists())
+    throw TestConfigurationException("Unable to find Input2.osm in conflate case: " + _d.absolutePath());
 
   // This is also set in Testing.conf.
   conf().set(ConfigOptions::getConflateTagDisableValueTruncationKey(), "true");
@@ -79,21 +73,6 @@ void ConflateCaseTest::_runConflateCmd() const
   args << in1.absoluteFilePath();
   args << in2.absoluteFilePath();
   args << testOutput;
-  bool differential = ConfigOptions().getTestCaseConflateDifferential();
-  const bool differentialWithTags = ConfigOptions().getTestCaseConflateDifferentialIncludeTags();
-  if (differentialWithTags)
-  {
-    // let this override and correct what would otherwise be an invalid config
-    differential = true;
-  }
-  if (differential)
-  {
-    args << "--differential";
-  }
-  if (differentialWithTags)
-  {
-    args << "--include-tags";
-  }
 
   int result = -1;
   try
@@ -106,21 +85,17 @@ void ConflateCaseTest::_runConflateCmd() const
   }
 
   QFileInfo expected(_d, "Expected.osm");
-  if (expected.exists() == false)
-  {
-    throw TestConfigurationException(
-      "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
-  }
+  if (!expected.exists())
+    throw TestConfigurationException("Unable to find Expected.osm in conflate case: " + _d.absolutePath());
 
   if (result != 0)
   {
-    CPPUNIT_ASSERT_MESSAGE(
-      QString("Conflate command had nonzero exit status").toStdString(), false);
+    CPPUNIT_ASSERT_MESSAGE("Conflate command had nonzero exit status", false);
   }
 
   if (!TestUtils::compareMaps(expected.absoluteFilePath(), testOutput))
   {
-    CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
+    CPPUNIT_ASSERT_MESSAGE("Maps do not match", false);
   }
 }
 
@@ -138,11 +113,12 @@ void ConflateCaseTest::runTest()
 
     // Run validation on test output if configured for it.
     LOG_VART(ConfigOptions().getTestValidationEnable());
-    if (ConfigOptions().getTestValidationEnable())
+    QString validation_filename = _d.absolutePath() + "/validation-report";
+    if (ConfigOptions().getTestValidationEnable() && QFile::exists(validation_filename))
     {
-      TestOutputValidator::validate(
-        _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
-        _suppressFailureDetail, _printValidationReportDiff);
+      TestOutputValidator::validate(_d.dirName(), _d.absolutePath() + "/Output.osm",
+                                    _d.absolutePath() + "/validation-report",
+                                    _suppressFailureDetail, _printValidationReportDiff);
     }
   }
 }

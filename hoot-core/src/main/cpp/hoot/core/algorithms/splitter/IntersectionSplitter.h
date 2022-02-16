@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef INTERSECTIONSPLITTER_H
 #define INTERSECTIONSPLITTER_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
 #include <QMultiHash>
@@ -104,8 +104,7 @@ private:
    * @param newWays the ways replacing the way that has been split.
    * @note This may not be 100% correct yet.
    */
-  void _preserveWayRelationMemberOrder(
-    const ElementId& splitWayId, QList<ElementPtr>& newWays) const;
+  void _preserveWayRelationMemberOrder(const ElementId& splitWayId, QList<ElementPtr>& newWays) const;
   /*
    * Given a collection of ways made as the result of splitting, determines which one is the
    * original way that was split and which one was created as a result of the split.
@@ -116,9 +115,8 @@ private:
    * @param addedWay to be modified pointer to the way created as a result of splitting
    * @return true if the original split way is first in the input collection; false otherwise
    */
-  bool _determineSplitWaysOrdering(
-    const QList<ElementPtr>& splitWays, const ElementId& splitWayId, WayPtr& splitWay,
-    WayPtr& addedWay) const;
+  bool _determineSplitWaysOrdering(const QList<ElementPtr>& splitWays, const ElementId& splitWayId,
+                                   WayPtr& splitWay, WayPtr& addedWay) const;
   /*
    * Retrieves adjoining way members from a relation for a given way
    *
@@ -134,10 +132,10 @@ private:
    * way is an end member (first or last member), then a list of size one is returned with either
    * the ID of the member before OR the ID of the member after.
    */
-  QList<ElementId> _getAdjoiningRelationMembers(
-    const ElementId& wayId, const ConstRelationPtr& containingRelation,
-    ConstWayPtr& adjoiningWayMemberIndexedBefore,
-    ConstWayPtr& adjoiningWayMemberIndexedAfter) const;
+  QList<ElementId> _getAdjoiningRelationMembers(const ElementId& wayId,
+                                                const ConstRelationPtr& containingRelation,
+                                                ConstWayPtr& adjoiningWayMemberIndexedBefore,
+                                                ConstWayPtr& adjoiningWayMemberIndexedAfter) const;
 };
 
 }

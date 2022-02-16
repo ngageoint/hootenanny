@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NODE_DENSITY_TILE_BOUNDS_CALCULATOR_H
@@ -61,11 +61,8 @@ public:
 
   class TileCalcException : public HootException
   {
-    public:
-
-      TileCalcException(QString message) : HootException(message)
-      {
-      }
+  public:
+    TileCalcException(QString message) : HootException(message) { }
   };
 
   static QString className() { return "NodeDensityTileBoundsCalculator"; }
@@ -77,12 +74,9 @@ public:
   class Pixel
   {
   public:
-
     int x;
     int y;
-
     Pixel(int x, int y) : x(x), y(y) { }
-
     Pixel() = default;
   };
 
@@ -135,16 +129,16 @@ public:
    */
   void calculateTiles(const ConstOsmMapPtr& map);
 
-  static QString tilesToString(const std::vector<std::vector<geos::geom::Envelope>>& tiles);
+  static QString tilesToString(const std::vector<geos::geom::Envelope>& tiles);
 
-  std::vector<std::vector<geos::geom::Envelope>> getTiles() const { return _tiles; }
-  int getTileCount() const { return _tileCount; }
+  std::vector<geos::geom::Envelope> getTiles() const { return _tiles; }
+  size_t getTileCount() const { return _tiles.size(); }
   /**
    * Returns the node counts for each computed tile bounding box
    *
    * @return a grid of node counts
    */
-  std::vector<std::vector<long>> getNodeCounts() const { return _nodeCounts; }
+  std::vector<long> getNodeCounts() const { return _nodeCounts; }
   long getMinNodeCountInOneTile() const { return _minNodeCountInOneTile; }
   long getMaxNodeCountInOneTile() const { return _maxNodeCountInOneTile; }
   double getPixelSize() const { return _pixelSize; }
@@ -154,12 +148,6 @@ public:
    */
   long getMaxNodesPerTile() const { return _maxNodesPerTile; }
 
-  /**
-   * Set the slop. This is the percentage that the line can vary from center. A higher slop will
-   * yield slightly better conflation results, but less efficient distribution. The default should
-   * be fine in most cases.
-   */
-  void setSlop(double slop) { _slop = slop; }
   void setPixelSizeRetryReductionFactor(int factor) { _pixelSizeRetryReductionFactor = factor; }
   void setMaxNumTries(int numTries) { _maxNumTries = numTries; }
   void setMaxTimePerAttempt(int seconds) { _maxTimePerAttempt = seconds; }
@@ -182,7 +170,6 @@ private:
   OGREnvelope _envelope;
   // target max nodes per tile
   long _maxNodesPerTile;
-  double _slop;
   int32_t _maxValue;
 
   // actual max nodes per tile
@@ -198,9 +185,8 @@ private:
   int _maxTimePerAttempt;
   QElapsedTimer _timer;
 
-  std::vector<std::vector<long>> _nodeCounts;
-  std::vector<std::vector<geos::geom::Envelope>> _tiles;
-  int _tileCount;
+  std::vector<long> _nodeCounts;
+  std::vector<geos::geom::Envelope> _tiles;
 
   /*
    * Calculates a set of rectangular bounding boxes that at most contain a configured set of nodes;
@@ -213,9 +199,6 @@ private:
   void _setImages(const cv::Mat& r1, const cv::Mat& r2);
 
   void _calculateMin();
-
-  int _calculateSplitX(const PixelBox& b) const;
-  int _calculateSplitY(const PixelBox& b) const;
 
   void _countNode(const std::shared_ptr<Node>& n);
 

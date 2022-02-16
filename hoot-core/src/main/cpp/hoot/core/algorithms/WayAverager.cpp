@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayAverager.h"
@@ -40,9 +40,9 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 using namespace geos::geom;
 using namespace geos::operation::distance;
@@ -51,16 +51,16 @@ using namespace std;
 namespace hoot
 {
 
-WayAverager::WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2) :
-_map(map),
-_meanMovement1(0.0),
-_meanMovement2(0.0),
-_sumMovement1(0.0),
-_sumMovement2(0.0),
-_maxMovement1(0.0),
-_maxMovement2(0.0),
-_moveCount1(0),
-_moveCount2(0)
+WayAverager::WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2)
+  : _map(map),
+  _meanMovement1(0.0),
+  _meanMovement2(0.0),
+  _sumMovement1(0.0),
+  _sumMovement2(0.0),
+  _maxMovement1(0.0),
+  _maxMovement2(0.0),
+  _moveCount1(0),
+  _moveCount2(0)
 {
   if (w1->getStatus() == Status::Unknown2 && w2->getStatus() == Status::Unknown1)
   {
@@ -87,13 +87,9 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   if (DirectionFinder::isSimilarDirection(_map, _w1, _w2) == false)
   {
     if (OneWayCriterion().isSatisfied(_w1) == true)
-    {
       _w2->reverseOrder();
-    }
     else
-    {
       _w1->reverseOrder();
-    }
   }
 
   std::shared_ptr<const LineString> ls1 =
@@ -101,9 +97,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   std::shared_ptr<const LineString> ls2 =
     ElementToGeometryConverter(_map).convertToLineString(_w2);
   if (!ls1 || !ls2)
-  {
     return WayPtr();
-  }
 
   // All of the fancy stats here are compliments of Mike Porter.
 
@@ -126,9 +120,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   ConstNodePtr node1a = _map->getNode(_w1->getNodeIds()[0]);
   ConstNodePtr node2a = _map->getNode(_w2->getNodeIds()[0]);
   if (node1a && node2a)
-  {
     result->addNode(_merge(node1a, weight1, node2a, weight2));
-  }
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-first-add-node");
 
   // We're getting the vectors after the above merge because the merge will change node ids.
@@ -176,8 +168,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
       index++;
     }
 
-    OsmMapWriterFactory::writeDebugMap(
-      _map, className(), "after-add-node-loop-" + QString::number(index));
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-add-node-loop-" + QString::number(index));
   }
   LOG_VART(result->getNodeIds().size());
   LOG_VART(i1);
@@ -187,9 +178,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   ConstNodePtr node1b = _map->getNode(ns1[i1]);
   ConstNodePtr node2b = _map->getNode(ns2[i2]);
   if (node1b && node2b)
-  {
     result->addNode(_merge(node1b, weight1, node2b, weight2));
-  }
   LOG_VART(result->getNodeIds().size());
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-last-add-node");
 
@@ -207,14 +196,12 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   return result;
 }
 
-WayPtr WayAverager::replaceWaysWithAveragedWay(
-  const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2)
+WayPtr WayAverager::replaceWaysWithAveragedWay(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2)
 {
   return WayAverager(map, w1, w2).replaceWaysWithAveragedWay();
 }
 
-long WayAverager::_merge(
-  const ConstNodePtr& node1, double weight1, const ConstNodePtr& node2, double weight2)
+long WayAverager::_merge(const ConstNodePtr& node1, double weight1, const ConstNodePtr& node2, double weight2)
 {
   Meters d = node1->toCoordinate().distance(node2->toCoordinate());
   LOG_VART(d);
@@ -229,11 +216,10 @@ long WayAverager::_merge(
 
   NodePtr node =
     std::make_shared<Node>(
-      Node(
-        Status::Conflated, _map->createNextNodeId(),
-        node1->getX() * weight1 + node2->getX() * weight2,
-        node1->getY() * weight1 + node2->getY() * weight2,
-        std::min(node1->getCircularError(), node2->getCircularError())));
+      Status::Conflated, _map->createNextNodeId(),
+      node1->getX() * weight1 + node2->getX() * weight2,
+      node1->getY() * weight1 + node2->getY() * weight2,
+      std::min(node1->getCircularError(), node2->getCircularError()));
 
   _map->addNode(node);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-add-node");
@@ -246,8 +232,7 @@ long WayAverager::_merge(
   return node->getId();
 }
 
-long WayAverager::_moveToLine(
-  long ni, double nWeight, const LineString* ls, double lWeight, int w1OrW2)
+long WayAverager::_moveToLine(long ni, double nWeight, const LineString* ls, double lWeight, int w1OrW2)
 {
   NodePtr n = _map->getNode(ni);
   Coordinate c = _moveToLineAsCoordinate(ni, nWeight, ls, lWeight);
@@ -272,8 +257,8 @@ long WayAverager::_moveToLine(
   return ni;
 }
 
-Coordinate WayAverager::_moveToLineAsCoordinate(
-  long ni, double nWeight, const LineString* ls, double lWeight) const
+Coordinate WayAverager::_moveToLineAsCoordinate(long ni, double nWeight, const LineString* ls,
+                                                double lWeight) const
 {
   NodePtr n = _map->getNode(ni);
   std::shared_ptr<Point> point(

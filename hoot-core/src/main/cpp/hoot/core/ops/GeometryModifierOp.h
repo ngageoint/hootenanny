@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GEOMETRYMODIFIEROP_H
@@ -36,7 +36,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 namespace hoot
 {
@@ -93,12 +92,10 @@ namespace hoot
     QList<GeometryModifierActionDesc> _readJsonRules();
 
     // json filter parser
-    void _parseFilter(
-      GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
+    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     // json action arguments parser
-    void _parseArguments(
-      GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
+    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     const Settings* _pConf;
   };

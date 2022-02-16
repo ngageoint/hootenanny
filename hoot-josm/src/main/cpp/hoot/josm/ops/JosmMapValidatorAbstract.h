@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef JOSM_MAP_VALIDATOR_ABSTRACT_H
 #define JOSM_MAP_VALIDATOR_ABSTRACT_H
@@ -61,7 +61,7 @@ public:
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Returns a collection of available JOSM validators with descriptions
@@ -73,12 +73,12 @@ public:
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const { return _errorSummary; }
+  QString getCompletedStatusMessage() const override { return _errorSummary; }
 
   QString getSummary() const { return _errorSummary; }
   int getNumElementsProcessed() const { return _numAffected; }

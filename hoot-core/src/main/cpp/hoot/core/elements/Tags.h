@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
@@ -410,8 +410,7 @@ public:
    * @parm strictNameMatch if true, will not consider names with the alt_name tag key
    * @return true if the tags have at least one matching name; false otherwise
    */
-  static bool haveMatchingName(
-    const Tags& tags1, const Tags& tags2, const bool strictNameMatch = false);
+  static bool haveMatchingName(const Tags& tags1, const Tags& tags2, const bool strictNameMatch = false);
   /**
    * Determines whether a name exists in the set of tag
    *

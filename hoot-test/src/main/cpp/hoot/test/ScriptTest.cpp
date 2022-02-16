@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ScriptTest.h"
@@ -38,22 +38,26 @@
 // Qt
 #include <QCoreApplication>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QProcess>
 #include <QThreadPool>
-#include <QElapsedTimer>
 
 using namespace std;
 
 namespace hoot
 {
 
-ScriptTest::ScriptTest(
-  const QString& script, bool printDiff, bool suppressFailureDetail, int waitToFinishTime) :
-CppUnit::TestCase(script.toStdString()),
-_printDiff(printDiff),
-_suppressFailureDetail(suppressFailureDetail),
-_script(script),
-_waitToFinishTime(waitToFinishTime)
+QRegularExpression ScriptTest::_regWarn("[0-9:\\.]+ WARN  .*\\( *-?[0-9]+\\) ");
+QRegularExpression ScriptTest::_regError("[0-9:\\.]+ ERROR .*\\( *-?[0-9]+\\) ");
+
+
+ScriptTest::ScriptTest(const QString& script, bool printDiff, bool suppressFailureDetail, int waitToFinishTime)
+  : CppUnit::TestCase(script.toStdString()),
+    _printDiff(printDiff),
+    _suppressFailureDetail(suppressFailureDetail),
+    _script(script),
+    _waitToFinishTime(waitToFinishTime),
+    _scriptTestTimeOutSeconds(ConfigOptions(conf()).getTestScriptMaxExecTime())
 {
 }
 
@@ -62,9 +66,7 @@ QString ScriptTest::_readFile(const QString& path)
   QFile fp(path);
 
   if (!fp.open(QFile::ReadOnly))
-  {
     throw HootException("Error opening file for reading: " + path);
-  }
 
   return QString::fromUtf8(fp.readAll());
 }
@@ -73,13 +75,8 @@ void ScriptTest::_removeFile(const QString& path)
 {
   QFile f(path);
 
-  if (f.exists())
-  {
-    if (f.remove() == false)
-    {
-      throw HootException("Error removing: " + path);
-    }
-  }
+  if (f.exists() && f.remove() == false)
+    throw HootException("Error removing: " + path);
 }
 
 QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
@@ -87,30 +84,17 @@ QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
   QStringList outLines;
   QStringList inLines = input.split("\n");
 
-  // takes the form: "09:34:21.635 WARN  src/main/cpp/hoot/core/io/OsmPbfReader.cpp(455) - "
-  QRegExp reWarn("[0-9:\\.]+ WARN  .*\\( *-?[0-9]+\\) ");
-  QRegExp reError("[0-9:\\.]+ ERROR .*\\( *-?[0-9]+\\) ");
-
-  for (int i = 0; i < inLines.size(); i++)
+  for (auto line : inLines)
   {
-    bool keep = true;
-    QString line = inLines[i];
-
-    if (line.contains(" STATUS ") || line.contains(" INFO ") ||
-        line.contains(" DEBUG ") || line.contains(" elapsed: ") ||
-        line.contains("Time (sec)"))
+    if (!line.contains(" STATUS ") && !line.contains(" INFO ") &&
+        !line.contains(" DEBUG ") && !line.contains(" elapsed: ") &&
+        !line.contains("Time (sec)"))
     {
-      keep = false;
-    }
-
-    if (keep)
-    {
-      line.replace(reWarn, "WARN - ");
-      line.replace(reError, "ERROR - ");
+      line.replace(_regWarn, "WARN - ");
+      line.replace(_regError, "ERROR - ");
       outLines.append(line);
     }
   }
-
   return outLines.join("\n");
 }
 
@@ -157,26 +141,33 @@ void ScriptTest::runTest()
     _baseStdout = "<invalid/>";
     _writeFile(_script + ".stdout.first", _stdout);
     _writeFile(_script + ".stderr.first", _stderr);
-    _writeFile(_script + ".stdout.first.stripped", _removeIgnoredSubstrings(_stdout));
-    _writeFile(_script + ".stderr.first.stripped", _removeIgnoredSubstrings(_stderr));
-    CPPUNIT_ASSERT_MESSAGE(QString("STDOUT or STDERR does not exist").toStdString(), false);
+    //  No need to strip anything from "<invalid/>"
+    _writeFile(_script + ".stdout.first.stripped", _stdout);
+    _writeFile(_script + ".stderr.first.stripped", _stderr);
+    CPPUNIT_ASSERT_MESSAGE("STDOUT or STDERR does not exist", false);
   }
 
+  //  Load standard out and error files
   _baseStderr = _readFile(_script + ".stderr");
   _baseStdout = _readFile(_script + ".stdout");
 
+  //  Strip out non-important lines from log for *.stripped files
+  QString base_stdout = _removeIgnoredSubstrings(_baseStdout);
+  QString stdout = _removeIgnoredSubstrings(_stdout);
+  QString base_stderr = _removeIgnoredSubstrings(_baseStderr);
+  QString stderr = _removeIgnoredSubstrings(_stderr);
+
   bool failed = false;
 
-  if (_removeIgnoredSubstrings(_baseStdout) != _removeIgnoredSubstrings(_stdout))
+  if (base_stdout != stdout)
   {
     _writeFile(_script + ".stdout.failed", _stdout);
-    _writeFile(_script + ".stdout.failed.stripped", _removeIgnoredSubstrings(_stdout));
-    _writeFile(_script + ".stdout.stripped", _removeIgnoredSubstrings(_baseStdout));
+    _writeFile(_script + ".stdout.failed.stripped", stdout);
+    _writeFile(_script + ".stdout.stripped", base_stdout);
 
     if (!_suppressFailureDetail)
     {
-      QString msg =
-        "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
+      QString msg = "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
       if (_printDiff)
       {
         LOG_ERROR(msg);
@@ -194,21 +185,20 @@ void ScriptTest::runTest()
                "*************************";
         LOG_ERROR(msg);
       }
-    } 
+    }
 
     failed = true;
   }
 
-  if (_removeIgnoredSubstrings(_baseStderr) != _removeIgnoredSubstrings(_stderr))
+  if (base_stderr != stderr)
   {
     _writeFile(_script + ".stderr.failed", _stderr);
-    _writeFile(_script + ".stderr.failed.stripped", _removeIgnoredSubstrings(_stderr));
-    _writeFile(_script + ".stderr.stripped", _removeIgnoredSubstrings(_baseStderr));
+    _writeFile(_script + ".stderr.failed.stripped", stderr);
+    _writeFile(_script + ".stderr.stripped", base_stderr);
 
     if (!_suppressFailureDetail)
     {
-      QString msg =
-        "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
+      QString msg = "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
       if (_printDiff)
       {
         LOG_ERROR(msg);
@@ -227,14 +217,11 @@ void ScriptTest::runTest()
         LOG_ERROR(msg);
       }
     }
-
     failed = true;
   }
 
   if (failed)
-  {
-    CPPUNIT_ASSERT_MESSAGE(QString("STDOUT or STDERR does not match").toStdString(), false);
-  }
+    CPPUNIT_ASSERT_MESSAGE("STDOUT or STDERR does not match", false);
 }
 
 void ScriptTest::_runDiff(const QString& file1, const QString& file2)
@@ -247,11 +234,10 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
     LOG_WARN("Waiting for diff process to start for: " + _script);
   }
 
-  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
   bool scriptTimeOutSpecified = false;
-  if (scriptTestTimeOutSeconds != -1)
+  if (_scriptTestTimeOutSeconds != -1)
   {
-    _waitToFinishTime = scriptTestTimeOutSeconds * 1000;
+    _waitToFinishTime = _scriptTestTimeOutSeconds * 1000;
     scriptTimeOutSpecified = true;
   }
 
@@ -270,7 +256,7 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 
     // If the process hangs, this will allow us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
-    if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
+    if (scriptTimeOutSpecified && timeElapsedSeconds >= _scriptTestTimeOutSeconds)
     {
       LOG_ERROR(
         "Forcefully ending diff command for: " << _script << " after " << timeElapsedSeconds <<
@@ -297,11 +283,10 @@ void ScriptTest::_runProcess()
     LOG_WARN("Waiting for process to start: " + _script);
   }
 
-  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
   bool scriptTimeOutSpecified = false;
-  if (scriptTestTimeOutSeconds != -1)
+  if (_scriptTestTimeOutSeconds != -1)
   {
-    _waitToFinishTime = scriptTestTimeOutSeconds * 1000;
+    _waitToFinishTime = _scriptTestTimeOutSeconds * 1000;
     scriptTimeOutSpecified = true;
   }
 
@@ -320,7 +305,7 @@ void ScriptTest::_runProcess()
 
     // If the process hangs, this will allows us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
-    if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
+    if (scriptTimeOutSpecified && timeElapsedSeconds >= _scriptTestTimeOutSeconds)
     {
       LOG_ERROR("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
       break;
@@ -335,18 +320,11 @@ void ScriptTest::_writeFile(const QString& path, const QString& content)
 {
   QFile fp(path);
 
-  if (fp.exists())
-  {
-    if (fp.remove() == false)
-    {
-      throw HootException("Error removing file: " + path);
-    }
-  }
+  if (fp.exists() && fp.remove() == false)
+    throw HootException("Error removing file: " + path);
 
   if (fp.open(QFile::WriteOnly) == false)
-  {
     throw HootException("Error opening file for writing: " + path);
-  }
 
   fp.write(content.toUtf8());
 }

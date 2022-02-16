@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
@@ -43,6 +43,8 @@ namespace hoot
 
 class OsmMap;
 
+using OGRSpatialReferencePtr = std::shared_ptr<OGRSpatialReference>;
+
 /**
  * (Singleton)
  *
@@ -60,30 +62,29 @@ public:
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The
    * units are in meters.
    */
-  static std::shared_ptr<OGRSpatialReference> createAeacProjection(const OGREnvelope& env);
+  static OGRSpatialReferencePtr createAeacProjection(const OGREnvelope& env);
 
   /**
    * Create an orthographic projection centered around env.
    */
-  static std::shared_ptr<OGRSpatialReference> createOrthographic(const OGREnvelope& env);
-  static std::shared_ptr<OGRSpatialReference> createOrthographic(double x, double y);
+  static OGRSpatialReferencePtr createOrthographic(const OGREnvelope& env);
+  static OGRSpatialReferencePtr createOrthographic(double x, double y);
 
   /**
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The
    * units are in meters.
    */
-  static std::shared_ptr<OGRSpatialReference> createSinusoidalProjection(const OGREnvelope& env);
+  static OGRSpatialReferencePtr createSinusoidalProjection(const OGREnvelope& env);
 
-  static std::shared_ptr<OGRSpatialReference> createWgs84Projection();
+  static OGRSpatialReferencePtr createWgs84Projection();
 
   static void project(const std::shared_ptr<OsmMap>& map,
-                      const std::shared_ptr<OGRSpatialReference>& ref);
+                      const OGRSpatialReferencePtr& ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
    */
-  std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(
-    const OGREnvelope& env) const;
+  std::vector<OGRSpatialReferencePtr> createAllPlanarProjections(const OGREnvelope& env) const;
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -94,9 +95,9 @@ public:
    *
    * Best is an internal heuristic that is subject to change.
    */
-  std::shared_ptr<OGRSpatialReference> createPlanarProjection(const OGREnvelope& env,
-    Radians maxAngleError = toRadians(2.0), Meters maxDistanceError = 10.0,
-    Meters testDistance = 1000.0, bool warnOnFail = true) const;
+  OGRSpatialReferencePtr createPlanarProjection(const OGREnvelope& env, Radians maxAngleError = toRadians(2.0),
+                                                Meters maxDistanceError = 10.0, Meters testDistance = 1000.0,
+                                                bool warnOnFail = true) const;
 
   static MapProjector& getInstance();
 
@@ -113,8 +114,8 @@ public:
    * nothing else will be modified.
    */
   static void project(const std::shared_ptr<geos::geom::Geometry>& g,
-                      const std::shared_ptr<OGRSpatialReference>& srs1,
-                      const std::shared_ptr<OGRSpatialReference>& srs2);
+                      const OGRSpatialReferencePtr& srs1,
+                      const OGRSpatialReferencePtr& srs2);
 
   static void projectToAeac(const std::shared_ptr<OsmMap>& map);
 
@@ -142,17 +143,17 @@ public:
    * Very slow convenience function.
    */
   static geos::geom::Coordinate project(const geos::geom::Coordinate& c,
-                                        const std::shared_ptr<OGRSpatialReference>& srs1,
-                                        const std::shared_ptr<OGRSpatialReference>& srs2);
+                                        const OGRSpatialReferencePtr& srs1,
+                                        const OGRSpatialReferencePtr& srs2);
 
-  static QString toWkt(const std::shared_ptr<OGRSpatialReference>& srs) { return toWkt(srs.get()); }
+  static QString toWkt(const OGRSpatialReferencePtr& srs) { return toWkt(srs.get()); }
   static QString toWkt(const OGRSpatialReference* srs);
 
 private:
 
   struct PlanarTestResult
   {
-    size_t i;
+    long i;
     Meters distanceError;
     Radians angleError;
     double score;
@@ -189,9 +190,8 @@ private:
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  bool _evaluateProjection(
-    const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
-    Meters& maxDistanceError, Radians& maxAngleError) const;
+  bool _evaluateProjection(const OGREnvelope& env, const OGRSpatialReferencePtr& srs, Meters testDistance,
+                           Meters& maxDistanceError, Radians& maxAngleError) const;
 
   size_t _findBestScore(const std::vector<PlanarTestResult>& results) const;
 
