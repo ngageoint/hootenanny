@@ -188,7 +188,7 @@ translate = {
   },
 
 
-  // Apply one to one translations - used for import and export
+  // Apply one-to-one translations - used for import and export
   applyOne2One : function(inList, outList, lookup, fCodeList, transMap = [], fCodeOutList = {})
   {
     var endChar = '',
@@ -311,7 +311,7 @@ translate = {
   }, // End applyOne2One
 
 
-  // Apply one to one translations and don't report errors: missing columns etc
+  // Apply one-to-one translations and don't report errors: missing columns etc
   applyOne2OneQuiet : function(inList, outList, lookup, transMap = [])
   {
     var row = [];
@@ -348,7 +348,7 @@ translate = {
   }, // End applyOne2OneQuiet
 
 
-  // Apply one to one translations - For TDS export
+  // Apply one-to-one translations - For TDS export
   // This version populates the OTH field for values that are not in the rules
   applyTdsOne2One : function(inList, outList, lookup, fCodeList,transmap = [])
   {
@@ -1424,7 +1424,7 @@ translate = {
   }, // End buildComplexRules
 
 
-  // applyComplexRules - Apply rules that are more complex than one to one.
+  // applyComplexRules - Apply rules that are more complex than one-to-one.
   // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
   // Rules format:  ["test expression","output result"];
   // Note: t = tags, a = attrs and attrs can only be on the RHS

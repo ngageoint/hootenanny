@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMATCH_H
 #define BUILDINGMATCH_H
@@ -40,7 +40,7 @@ namespace hoot
 class BuildingRfClassifier;
 
 /**
- * Matches two building elements. If there is a many to many match it will be resolved by the
+ * Matches two building elements. If there is a many-to-many match it will be resolved by the
  * conflation routines and then merged properly with the BuildingMerger.
  */
 class BuildingMatch : public Match, public MatchDetails
@@ -65,7 +65,7 @@ public:
    * Building matches never conflict other building matches, but conflict with everything else.
    */
   bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
   /**
    * Simply returns the two elements that were matched.
    */
@@ -93,9 +93,8 @@ private:
 
   void _calculateClassification(const ConstOsmMapPtr& map);
 
-  QStringList _getNonMatchDescription(
-    const ConstOsmMapPtr& map, const MatchType& type, const ConstElementPtr& element1,
-    const ConstElementPtr& element2);
+  QStringList _getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                      const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * @brief _createReviewIfSecondaryFeatureNewer generates a rewview if the second input element
@@ -106,8 +105,7 @@ private:
    * @param element2 the second element to examine
    * @return a review description
    */
-  QStringList _createReviewIfSecondaryFeatureNewer(
-    const ConstElementPtr& element1, const ConstElementPtr& element2);
+  QStringList _createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1, const ConstElementPtr& element2);
 };
 
 }

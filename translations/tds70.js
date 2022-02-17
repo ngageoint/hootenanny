@@ -1280,7 +1280,7 @@ tds70 = {
       }
     } // End for GE4 loop
 
-    // Clean up metadata - the many to one issue
+    // Clean up metadata - the many-to-one issue
     switch(tags['source:datetime'])
     {
       case undefined:

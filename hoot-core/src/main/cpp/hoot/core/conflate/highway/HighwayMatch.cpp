@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMatch.h"
 
@@ -44,10 +44,10 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 using namespace std;
 
@@ -59,15 +59,14 @@ HOOT_FACTORY_REGISTER(Match, HighwayMatch)
 const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
-HighwayMatch::HighwayMatch(
-  const std::shared_ptr<HighwayClassifier>& classifier,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
-  const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
-Match(mt, eid1, eid2),
-_classifier(classifier),
-_score(0.0),
-_sublineMatcher(sublineMatcher),
-_minSplitSize(0.0)
+HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+                           const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
+                           const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt)
+  : Match(mt, eid1, eid2),
+    _classifier(classifier),
+    _score(0.0),
+    _sublineMatcher(sublineMatcher),
+    _minSplitSize(0.0)
 {
   LOG_VART(_eid1);
   LOG_VART(_eid2);
@@ -79,8 +78,7 @@ _minSplitSize(0.0)
   try
   {
     // calculated the shared sublines
-    _sublineMatch =
-      _sublineMatcher->findMatch(map, e1, e2, ConfigOptions().getSearchRadiusHighway());
+    _sublineMatch = _sublineMatcher->findMatch(map, e1, e2, ConfigOptions().getSearchRadiusHighway());
     if (_sublineMatch.isValid())
     {
       // calculate the match score  
@@ -90,9 +88,7 @@ _minSplitSize(0.0)
       LOG_VART(type);
       QStringList description;
       if (type != MatchType::Match)
-      {
         _updateNonMatchDescriptionBasedOnGeometricProperties(description, map, e1, e2);
-      }
 
       if (description.length() > 0)
         _explainText = description.join(" ");
@@ -100,7 +96,7 @@ _minSplitSize(0.0)
         _explainText = mt->getTypeDetail(_classification);
 
       // If the median classifier was used, we'll spruce up the explain text a bit and be sure to
-      // mark it as a one to many match so that needed matches don't get thrown out during match
+      // mark it as a one-to-many match so that needed matches don't get thrown out during match
       // optimization.
       if (type == MatchType::Match &&
           std::dynamic_pointer_cast<MedianToDividedRoadClassifier>(_classifier))
@@ -118,9 +114,9 @@ _minSplitSize(0.0)
 
     _score = _sublineMatch.getLength() * _classification.getMatchP();
   }
-  // if this is an unsupported geometry configuration
   catch (const NeedsReviewException& e)
   {
+    // if this is an unsupported geometry configuration
     _classification.clear();
     _classification.setReviewP(1.0);
     _explainText = e.getWhat();
@@ -131,34 +127,38 @@ _minSplitSize(0.0)
   LOG_VART(_explainText);
 }
 
-void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(
-  QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
-  const ConstElementPtr e2) const
+void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description, const ConstOsmMapPtr& map,
+                                                                        const ConstElementPtr e1, const ConstElementPtr e2) const
 {
   //  Check the Angle Histogram
   double angle = AngleHistogramExtractor().extract(*map, e1, e2);
-  if (angle >= 0.75)          description.append("Very similar highway orientation.");
-  else if (angle >= 0.5)      description.append("Similar highway orientation.");
-  else if (angle >= 0.25)     description.append("Semi-similar highway orientation.");
-  else                        description.append("Highway orientation not similar.");
+  if (angle >= 0.75)
+    description.append("Very similar highway orientation.");
+  else if (angle >= 0.5)
+    description.append("Similar highway orientation.");
+  else if (angle >= 0.25)
+    description.append("Semi-similar highway orientation.");
+  else
+    description.append("Highway orientation not similar.");
 
   //  Use the average of the edge distance extractors
   double edge =
     (EdgeDistanceExtractor(std::make_shared<RmseAggregator>()).extract(*map, e1, e2) +
      EdgeDistanceExtractor(std::make_shared<SigmaAggregator>()).extract(*map, e1, e2)) / 2.0;
 
-  if (edge >= 90)             description.append("Highway edges very close to each other.");
-  else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
-  else                        description.append("Highway edges not very close to each other.");
+  if (edge >= 90)
+    description.append("Highway edges very close to each other.");
+  else if (edge >= 70)
+    description.append("Highway edges somewhat close to each other.");
+  else
+    description.append("Highway edges not very close to each other.");
 }
 
 map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   map<QString, double> result;
   if (_sublineMatch.isValid())
-  {
     result = _classifier->getFeatures(m, _eid1, _eid2, _sublineMatch);
-  }
   return result;
 }
 
@@ -174,30 +174,23 @@ double HighwayMatch::getProbability() const
   return _classification.getMatchP();
 }
 
-bool HighwayMatch::isConflicting(
-  const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-  const QHash<QString, ConstMatchPtr>& /*matches*/) const
+bool HighwayMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+                                 const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.
   if (hm == nullptr)
-  {
     return true;
-  }
-  // if the other match is a highway match
   else
   {
+    // if the other match is a highway match
     // See Redmine ticket #5272.
     if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
-    {
       return true;
-    }
 
     ElementId sharedEid;
     if (_eid1 == hm->_eid1 || _eid1 == hm->_eid2)
-    {
       sharedEid = _eid1;
-    }
 
     if (_eid2 == hm->_eid1 || _eid2 == hm->_eid2)
     {
@@ -208,33 +201,25 @@ bool HighwayMatch::isConflicting(
 
     // If the matches don't share at least one eid then it isn't a conflict.
     if (sharedEid.isNull())
-    {
       return false;
-    }
 
     // assign o1 and o2 to the non-shared eids
     ElementId o1 = _eid1 == sharedEid ? _eid2 : _eid1;
     ElementId o2 = hm->_eid1 == sharedEid ? hm->_eid2 : hm->_eid1;
 
-    QHash<ElementId, bool>::const_iterator cit1 = _conflicts.find(o2);
+    auto cit1 = _conflicts.find(o2);
     if (cit1 != _conflicts.end())
-    {
       return cit1.value();
-    }
-    QHash<ElementId, bool>::const_iterator cit2 = hm->_conflicts.find(o1);
+    auto cit2 = hm->_conflicts.find(o1);
     if (cit2 != hm->_conflicts.end())
-    {
       return cit2.value();
-    }
 
     bool result;
     try
     {
       // easy optimization. If the sublines don't touch then they don't conflict
       if (_sublineMatch.touches(hm->_sublineMatch) == false)
-      {
         result = false;
-      }
       // We need to check for a conflict in two directions. Is it conflicting if we merge the shared
       // EID with this class first, then is it a conflict if we merge with the other EID first.
       // checking for subline match containment first. This is very fast to check and if either one
@@ -243,28 +228,21 @@ bool HighwayMatch::isConflicting(
                hm->_sublineMatch.contains(_sublineMatch) ||
                _isOrderedConflicting(map, sharedEid, o1, o2) ||
                hm->_isOrderedConflicting(map, sharedEid, o2, o1))
-      {
         result = true;
-      }
       else
-      {
         result = false;
-      }
     }
     catch (const NeedsReviewException&)
     {
       result = true;
     }
-
     _conflicts[o2] = result;
-
     return result;
   }
 }
 
-bool HighwayMatch::_isOrderedConflicting(
-  const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
-  const ElementId& other2) const
+bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
+                                         const ElementId& other2) const
 {
   set<ElementId> eids;
   eids.insert(sharedEid);
@@ -296,19 +274,14 @@ bool HighwayMatch::_isOrderedConflicting(
 
   // If the shared element has no scraps then there is a conflict.
   if (!scrapsShared)
-  {
     return true;
-  }
 
   // Check to see if the scraps match other2. So far there haven't been any problems with not
   // checking to see if the median classifier should be passed here instead...it may eventually need
   // to be done though.
-  HighwayMatch m0(
-    _classifier, _sublineMatcher, copiedMap, scrapsShared->getElementId(), other2, _threshold);
+  HighwayMatch m0(_classifier, _sublineMatcher, copiedMap, scrapsShared->getElementId(), other2, _threshold);
   if (m0.getType() == MatchType::Match)
-  {
     return false;
-  }
 
   // We didn't find any valid matches, so this is a conflict.
   return true;

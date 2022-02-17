@@ -16,7 +16,7 @@ the map passed into it. The 'hoot:status' tag must be present on the features be
 The element being merged into must also have the "hoot:merge:target=yes" tag with the following 
 exceptions where the tag is not needed and ignored: 
 * POI/Polygon merging always merges the POI into the polygon. 
-* Railway merging where features are involved in a One To Many match always merges secondary 
+* Railway merging where features are involved in a One-To-Many match always merges secondary
 features into reference or previously conflated features (status=2 into status=1 or 3).
 
 Constituent elements (way nodes or relation members) are optional in the request for polygon 
@@ -24,11 +24,11 @@ features. They are, however, required for linear features. Whether they are pass
 request for polygon features or not, the caller is responsible for deleting those constituent 
 features that belong to any parent features that were merged into other features.
 
-Railway One To Many merging additional notes:
+Railway One-To-Many merging additional notes:
 * The metadata tag: `hoot:railway:one:to:many:match:secondary=yes` must remain present on 
-secondary features involved in a one to many match in order for this type of merging to work 
+secondary features involved in a one-to-many match in order for this type of merging to work
 properly.
-* The merging process deletes the secondary way after merging. Since multiple one to many 
+* The merging process deletes the secondary way after merging. Since multiple one-to-many
 reviews are being merged one at a time, then the secondary way being merged should not be 
 deleted on the client end until it is no longer involved in reviews.
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMERGER_H
 #define BUILDINGMERGER_H
@@ -53,8 +53,7 @@ public:
   /**
    * @see Merger
    */
-  void apply(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings
@@ -65,8 +64,8 @@ public:
    * building relation
    * @return a building element
    */
-  static std::shared_ptr<Element> buildBuilding(
-    const OsmMapPtr& map, const std::set<ElementId>& eids, const bool preserveTypes = false);
+  static std::shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const std::set<ElementId>& eids,
+                                                const bool preserveTypes = false);
 
   QString toString() const override;
 
@@ -88,9 +87,8 @@ public:
    * @return a building relation if the constituent buildings all have 3D tags; otherwise a
    * multipolygon relation with a building tag
    */
-  static RelationPtr combineConstituentBuildingsIntoRelation(
-    const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
-    const bool preserveTypes = false);
+  static RelationPtr combineConstituentBuildingsIntoRelation(const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
+                                                             const bool preserveTypes = false);
 
   QString getDescription() const override { return "Merges buildings"; }
   QString getName() const override { return className(); }
@@ -112,7 +110,7 @@ private:
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
   bool _keepMoreComplexGeometryWhenAutoMerging;
-  // The default behavior is to review many to many matches. Setting this to true allows them to
+  // The default behavior is to review many-to-many matches. Setting this to true allows them to
   // all be merged together.
   bool _mergeManyToManyMatches;
   // set to true if the current building merge involves two buildings, each part of multiple matches
@@ -139,8 +137,8 @@ private:
    * Determine which of two buildings is more complex, using node count as a surrogate for
    * complexity
    */
-  ElementId _getIdOfMoreComplexBuilding(
-    const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const;
+  ElementId _getIdOfMoreComplexBuilding(const ElementPtr& building1, const ElementPtr& building2,
+                                        const OsmMapPtr& map) const;
 
   Tags _getMergedTags(const ElementPtr& e1, const ElementPtr& e2);
 

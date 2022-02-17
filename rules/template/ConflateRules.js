@@ -5,8 +5,8 @@
  *
  * The Conflation API provides the ability to perform simple matches and 
  * merges. Such as merging two points, or merging two buildings. This does
- * not provide the facilities to merge complex geometries such as one to many
- * or many to many merges.
+ * not provide the facilities to merge complex geometries such as one-to-many
+ * or many-to-many merges.
  *
  * The methods below describe the methods that are recognized by Hootenanny
  * when loading and using a plugin. Some are required and some are optional.
