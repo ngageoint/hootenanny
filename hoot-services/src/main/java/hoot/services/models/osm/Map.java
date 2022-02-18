@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.models.osm;
 
@@ -48,6 +48,7 @@ import java.util.TreeMap;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -98,6 +99,15 @@ public class Map extends Maps {
     private static final Logger logger = LoggerFactory.getLogger(Map.class);
 
     private BoundingBox bounds;
+
+    private static final String[] maptables = {
+            "changesets",
+            "current_nodes",
+            "current_relation_members",
+            "current_relations",
+            "current_way_nodes",
+            "current_ways"
+    };
 
     public Map(long id) {
         setId(id);
@@ -161,6 +171,36 @@ public class Map extends Maps {
             throw new BadRequestException("The maximum number of nodes that may be returned in a map query is "
                     + maxQueryNodes + ". This query returned " + nodeCount
                     + " nodes. Please execute a query which returns fewer nodes.");
+        }
+    }
+
+    /**
+     * For retrieving the physical size of a map record
+     * @param mapId
+     * @return physical size of a map record
+     * @throws Exception
+     */
+    private static Long getMapSize(long mapId) throws Exception {
+        long mapSize = 0;
+
+        try {
+            for (String table : maptables) {
+                if (mapId != -1) { // skips OSM API db layer
+                    mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
+                }
+            }
+
+            //stick map size in tags, it's expensive to calculate on every layers request
+            //and will probably not change significantly with interactive editing
+            java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapId);
+            tags.put("mapSize", String.valueOf(mapSize));
+            DbUtils.updateMapsTableTags(tags, mapId);
+
+            return mapSize;
+        }
+        catch (Exception e) {
+            String message = "Error getting map size.  Cause: " + e.getMessage();
+            throw new Exception(message);
         }
     }
 
@@ -626,8 +666,9 @@ public class Map extends Maps {
      * @param mapLayerRecords
      *            set of map layer records
      * @return map layers web service object
+     * @throws Exception
      */
-    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) {
+    public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) throws Exception {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
 
@@ -638,13 +679,21 @@ public class Map extends Maps {
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
             mapLayer.setPublicCol(mapLayerRecord.getPublicCol());
             mapLayer.setUserId(mapLayerRecord.getUserId());
-            mapLayer.setSize( mapLayerRecord.getSize() == null ? 0 : mapLayerRecord.getSize() );
             mapLayer.setFolderId( (mapLayerRecord.getFolderId()) == null ? 0 : mapLayerRecord.getFolderId());
             java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
             if (tags.containsKey("lastAccessed")) {
                 mapLayer.setLastAccessed(tags.get("lastAccessed"));
             } else {
                 mapLayer.setLastAccessed(MapLayer.format.format(mapLayerRecord.getCreatedAt()));
+            }
+            if (tags.containsKey("mapSize")) {
+                try {
+                    mapLayer.setSize(Long.parseLong(tags.get("mapSize")));
+                } catch (NumberFormatException ex) {
+                    mapLayer.setSize(0);
+                }
+            } else {
+                mapLayer.setSize(getMapSize(mapLayerRecord.getId()));
             }
             mapLayer.setGrailMerged(tags.get("grailMerged") != null && tags.get("grailMerged").equals("true"));
             mapLayer.setGrailReference(tags.get("grailReference") != null && tags.get("grailReference").equals("true"));
