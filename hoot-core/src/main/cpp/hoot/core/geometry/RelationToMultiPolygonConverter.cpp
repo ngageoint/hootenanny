@@ -209,9 +209,8 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   std::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
   // recursively add any child relation multipolygons.
-  for (size_t i = 0; i < _r->getMembers().size(); i++)
+  for (const auto& e : _r->getMembers())
   {
-    const RelationData::Entry& e = _r->getMembers()[i];
     LOG_VART(e.getElementId());
     if (e.getElementId().getType() == ElementType::Relation &&
        (e.getRole() == MetadataTags::RoleOuter() || e.getRole() == MetadataTags::RolePart()))
@@ -350,7 +349,7 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
       QString status = "";
 
       // Loop through the rest of the list looking for a match
-      for (deque<LinearRing*>::iterator i = notFound.begin(); i != notFound.end(); ++i)
+      for (auto i = notFound.begin(); i != notFound.end(); ++i)
       {
         status =_findRelationship(tRing, *i);
 
@@ -376,9 +375,7 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
       // If we didn't find a match, this must be an outer.
       // If we did find a match then we have already added it to a list so move on through the list
       if (status == "")
-      {
         outers.push_back(tRing);
-      }
     }
   }
 }
@@ -408,10 +405,7 @@ void RelationToMultiPolygonConverter::_createRings(const QString& role, vector<L
         // don't try to add empty ways
         LOG_VART(w->getNodeCount());
         if (w->getNodeCount() > 0)
-        {
-          LinearRing* lr = _toLinearRing(w);
-          rings.push_back(lr);
-        }
+          rings.push_back(_toLinearRing(w));
       }
       else
       {
