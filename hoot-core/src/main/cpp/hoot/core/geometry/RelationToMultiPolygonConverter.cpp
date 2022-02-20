@@ -389,9 +389,8 @@ void RelationToMultiPolygonConverter::_createRings(const QString& role, vector<L
   LOG_VART(_r.get());
   const vector<RelationData::Entry>& elements = _r->getMembers();
   LOG_VART(elements.size());
-  for (size_t i = 0; i < elements.size(); i++)
+  for (const auto& e : elements)
   {
-    const RelationData::Entry& e = elements[i];
     if (e.getElementId().getType() == ElementType::Way && e.getRole() == role)
     {
       const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
