@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RelationToMultiPolygonConverter.h"
 
@@ -54,16 +54,16 @@ namespace hoot
 
 int RelationToMultiPolygonConverter::logWarnCount = 0;
 
-RelationToMultiPolygonConverter::RelationToMultiPolygonConverter(
-  const ConstElementProviderPtr& provider, const ConstRelationPtr& r) :
-_provider(provider),
-_r(r)
+RelationToMultiPolygonConverter::RelationToMultiPolygonConverter(const ConstElementProviderPtr& provider,
+                                                                 const ConstRelationPtr& r)
+  : _provider(provider),
+    _r(r)
 {
   LOG_VART(_r.get());
 }
 
-Geometry* RelationToMultiPolygonConverter::_addHoles(
-  vector<LinearRing*>& outers, vector<LinearRing*>& inners) const
+Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers,
+                                                     vector<LinearRing*>& inners) const
 {
   LOG_TRACE("Adding holes...");
 
@@ -141,11 +141,13 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(
         }
         logWarnCount++;
       }
+      //  Because ownership of this inner won't be given to GeometryFactory::createPolygon below
+      //  delete the object
+      delete inners[i];
+      inners[i] = nullptr;
     }
     else
-    {
       holes[polygonIndex]->push_back(inners[i]);
-    }
   }
 
   // create the polygons from outers & holes
@@ -161,8 +163,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(
   return gf.createMultiPolygon(polygons);
 }
 
-void RelationToMultiPolygonConverter::_addWayToSequence(
-  ConstWayPtr w, CoordinateSequence& cs, bool reversed) const
+void RelationToMultiPolygonConverter::_addWayToSequence(ConstWayPtr w, CoordinateSequence& cs, bool reversed) const
 {
   size_t start = 0;
   size_t increment = 1;
@@ -178,9 +179,7 @@ void RelationToMultiPolygonConverter::_addWayToSequence(
   {
     Coordinate c = _provider->getNode(w->getNodeId(i))->toCoordinate();
     if (points.empty() || c != points.operator [](points.size() - 1))
-    {
       points.push_back(c);
-    }
   }
   cs.setPoints(points);
 }
@@ -197,23 +196,24 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   _createRings(MetadataTags::RoleInner(), inners);
 
   // Now go looking for rings that are not classified (empty role)
+/** TODO: _classifyRings() was commented out so all of the unclassified rings were being leaked.
+ *  Either enable _classifyRings() or delete this whole code block
   vector<LinearRing*> noRole;
   _createRings("", noRole);
 
   // Make sure that all rings are either an inner or an outer
 //  _classifyRings(noRole, inners, outers);
-
+*/
   LOG_TRACE("After classify: Outers: " << outers.size() << "  Inners: " << inners.size());
 
   std::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
   // recursively add any child relation multipolygons.
-  for (size_t i = 0; i < _r->getMembers().size(); i++)
+  for (const auto& e : _r->getMembers())
   {
-    const RelationData::Entry& e = _r->getMembers()[i];
     LOG_VART(e.getElementId());
     if (e.getElementId().getType() == ElementType::Relation &&
-        (e.getRole() == MetadataTags::RoleOuter() || e.getRole() == MetadataTags::RolePart()))
+       (e.getRole() == MetadataTags::RoleOuter() || e.getRole() == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
@@ -238,8 +238,7 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   return result;
 }
 
-QString RelationToMultiPolygonConverter::_findRelationship(
-  const LinearRing* ring1, const LinearRing* ring2) const
+QString RelationToMultiPolygonConverter::_findRelationship(const LinearRing* ring1, const LinearRing* ring2) const
 {
   QString result = "";
 
@@ -250,36 +249,27 @@ QString RelationToMultiPolygonConverter::_findRelationship(
   // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
   std::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
   if (im->isContains())
-  {
     result = "outer";
-  }
   else
   {
     std::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
     std::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
-
     if (im2->isContains())
-    {
       result = "inner";
-    }
   }
 
   return result;
 }
 
-void RelationToMultiPolygonConverter::_classifyRings(
-  std::vector<LinearRing*>& noRole, std::vector<LinearRing*>& inners,
-  std::vector<LinearRing*>& outers) const
+void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& noRole, std::vector<LinearRing*>& inners,
+                                                     std::vector<LinearRing*>& outers) const
 {
   // Empty == nothing else to do
   if (noRole.empty())
-  {
     return;
-  }
 
-  LOG_TRACE(
-    "Rings without a role: " << noRole.size() << "  Outers: " << outers.size() << "  Inners: " <<
-    inners.size());
+  LOG_TRACE("Rings without a role: " << noRole.size() << "  Outers: " << outers.size() << "  Inners: " <<
+            inners.size());
 
   // One polygon, no inners or outers
   if (noRole.size() == 1 && inners.empty() && outers.empty())
@@ -298,7 +288,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
     // Check of we have an inner polygon.
     for (size_t j = 0; j < outers.size(); ++j)
     {
-      status = _findRelationship(noRole[i],outers[j]);
+      status = _findRelationship(noRole[i], outers[j]);
 
       if (status == "inner")
       {
@@ -319,7 +309,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
       // Look for an outer polygon
       for (size_t j = 0; j < inners.size(); ++j)
       {
-        status =_findRelationship(noRole[i],inners[j]);
+        status =_findRelationship(noRole[i], inners[j]);
 
         if (status == "inner")
         {
@@ -337,9 +327,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
       // No inners or we still didn't find anything so push it onto the list of things to check
       // later.
       if (status == "")
-      {
         notFound.push_back(noRole[i]);
-      }
     }
   }
 
@@ -361,9 +349,9 @@ void RelationToMultiPolygonConverter::_classifyRings(
       QString status = "";
 
       // Loop through the rest of the list looking for a match
-      for (deque<LinearRing*>::iterator i = notFound.begin(); i != notFound.end(); ++i)
+      for (auto i = notFound.begin(); i != notFound.end(); ++i)
       {
-        status =_findRelationship(tRing,*i);
+        status =_findRelationship(tRing, *i);
 
         // If we find inner or outer, push both elements to the right list and then delete the
         // one from the loop. We break out of the loop since deleteing the element screws up the
@@ -387,15 +375,12 @@ void RelationToMultiPolygonConverter::_classifyRings(
       // If we didn't find a match, this must be an outer.
       // If we did find a match then we have already added it to a list so move on through the list
       if (status == "")
-      {
         outers.push_back(tRing);
-      }
     }
   }
 }
 
-void RelationToMultiPolygonConverter::_createRings(
-  const QString& role, vector<LinearRing*>& rings) const
+void RelationToMultiPolygonConverter::_createRings(const QString& role, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating rings for role: " << role << "...");
 
@@ -404,16 +389,13 @@ void RelationToMultiPolygonConverter::_createRings(
   LOG_VART(_r.get());
   const vector<RelationData::Entry>& elements = _r->getMembers();
   LOG_VART(elements.size());
-  for (size_t i = 0; i < elements.size(); i++)
+  for (const auto& e : elements)
   {
-    const RelationData::Entry& e = elements[i];
     if (e.getElementId().getType() == ElementType::Way && e.getRole() == role)
     {
       const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
       if (!w || w->getNodeCount() == 0)
-      {
         continue;
-      }
       LOG_VART(w->getElementId());
 
       // if the way forms a simple ring
@@ -422,10 +404,7 @@ void RelationToMultiPolygonConverter::_createRings(
         // don't try to add empty ways
         LOG_VART(w->getNodeCount());
         if (w->getNodeCount() > 0)
-        {
-          LinearRing* lr = _toLinearRing(w);
-          rings.push_back(lr);
-        }
+          rings.push_back(_toLinearRing(w));
       }
       else
       {
@@ -451,13 +430,10 @@ void RelationToMultiPolygonConverter::_createRings(
   LOG_VART(partials.size());
 
   if (!partials.empty())
-  {
     _createRingsFromPartials(partials, rings);
-  }
 }
 
-void RelationToMultiPolygonConverter::_createRingsFromPartials(
-  const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
+void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating rings from partials...");
 
@@ -468,16 +444,12 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(
   {
     ConstWayPtr wi = partials[i];
     if (!wi)
-    {
       continue;
-    }
     for (size_t j = i; j < partials.size(); j++)
     {
       ConstWayPtr wj = partials[j];
       if (!wj)
-      {
         continue;
-      }
 
       if (wi->getNodeId(0) == wj->getNodeId(0) ||
           wi->getNodeId(0) == wj->getLastNodeId() ||
@@ -490,15 +462,11 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(
   }
 
   Tgs::DisjointSetMap<ConstWayPtr>::AllGroups ag = ringSets.getAllGroups();
-  for (Tgs::DisjointSetMap<ConstWayPtr>::AllGroups::const_iterator it = ag.begin(); it != ag.end();
-       ++it)
-  {
+  for (auto it = ag.begin(); it != ag.end(); ++it)
     _createSingleRing(it->second, rings);
-  }
 }
 
-void RelationToMultiPolygonConverter::_createSingleRing(
-  const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
+void RelationToMultiPolygonConverter::_createSingleRing(const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating single ring...");
 
@@ -507,10 +475,8 @@ void RelationToMultiPolygonConverter::_createSingleRing(
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(
       (size_t)0, (size_t)2).release();
 
-  for (size_t i = 0; i < orderedWays.size(); i++)
-  {
-    _addWayToSequence(orderedWays[i], *cs, false);
-  }
+  for (const auto& way : orderedWays)
+    _addWayToSequence(way, *cs, false);
 
   if (cs->getAt(0) != cs->getAt(cs->getSize() - 1))
   {
@@ -533,31 +499,25 @@ void RelationToMultiPolygonConverter::_createSingleRing(
     logWarnCount++;
   }
   else
-  {
     rings.push_back(GeometryFactory::getDefaultInstance()->createLinearRing(cs));
-  }
 }
 
 bool RelationToMultiPolygonConverter::_isValidInner(const LinearRing* innerRing) const
 {
   if (innerRing->getNumPoints() > 0 && innerRing->getNumPoints() < 4)
-  {
     return false;
-  }
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<LinearRing*> noHoles;
   std::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
+
   if (p->getArea() <= 0.0)
-  {
     return false;
-  }
 
   return true;
 }
 
-deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(
-  const vector<ConstWayPtr>& partials) const
+deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(const vector<ConstWayPtr>& partials) const
 {
   LOG_TRACE("Ordering ways for ring...");
 
@@ -575,9 +535,7 @@ deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(
   {
     ConstWayPtr w = partials[i];
     if (!w)
-    {
       continue;
-    }
 
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId || w->getLastNodeId() == lastId)
@@ -659,13 +617,9 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   int size = ids.size();
   LOG_VART(size);
   if (size == 1)
-  {
     size = 2;
-  }
   else if (ids[0] != ids[ids.size() - 1])
-  {
     size++;
-  }
 
   if (size <= 3)
   {
@@ -682,9 +636,7 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   {
     ConstNodePtr n = _provider->getNode(ids[i]);
     if (n)
-    {
       cs->setAt(n->toCoordinate(), i);
-    }
   }
   LOG_VART(cs->size());
   // A linestring cannot contain 1 point. Do this to keep it valid.
@@ -692,17 +644,13 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   {
     ConstNodePtr n = _provider->getNode(ids[0]);
     if (n)
-    {
       cs->setAt(n->toCoordinate(), i++);
-    }
   }
   else if (ids[0] != ids[ids.size() - 1])
   {
     ConstNodePtr n = _provider->getNode(ids[0]);
     if (n)
-    {
       cs->setAt(n->toCoordinate(), i++);
-    }
   }
   LOG_VART(cs->size());
 
