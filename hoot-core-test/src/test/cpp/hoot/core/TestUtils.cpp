@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "TestUtils.h"
@@ -110,37 +110,30 @@ bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
   return MapComparator().isMatch(ref, test);
 }
 
-NodePtr TestUtils::createNode(
-  const OsmMapPtr& map, const QString& note, const Status& status, const double x, const double y,
-  const Meters circularError, const Tags& tags)
+NodePtr TestUtils::createNode(const OsmMapPtr& map, const QString& note, const Status& status,
+                              const double x, const double y,
+                              const Meters circularError, const Tags& tags)
 {
   long id;
   if (map)
-  {
     id = map->createNextNodeId();
-  }
   else
-  {
-    // arbitrary; callers will have to update this themselves to avoid id overlap between multiple
-    // nodes
-    id = 1;
-  }
+    id = 1; // arbitrary value; callers should update this to avoid id overlap
+
   NodePtr node = std::make_shared<Node>(status, id, x, y, circularError);
   if (map)
-  {
     map->addNode(node);
-  }
+
   node->getTags().add(tags);
   if (!note.isEmpty())
-  {
     node->getTags().addNote(note);
-  }
+
   return node;
 }
 
-WayPtr TestUtils::createWay(
-  const OsmMapPtr& map, const geos::geom::Coordinate c[], const QString& note, const Status& s,
-  const Meters circularError, const Tags& tags)
+WayPtr TestUtils::createWay(const OsmMapPtr& map, const geos::geom::Coordinate c[],
+                            const QString& note, const Status& s,
+                            const Meters circularError, const Tags& tags)
 {
   WayPtr way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
   if (c != nullptr)
@@ -154,93 +147,82 @@ WayPtr TestUtils::createWay(
   }
   way->getTags().add(tags);
   if (!note.isEmpty())
-  {
     way->getTags().addNote(note);
-  }
+
   map->addWay(way);
   return way;
 }
 
-WayPtr TestUtils::createWay(
-  const OsmMapPtr& map, const QList<NodePtr>& nodes, const QString& note, const Status& status,
-  const Meters circularError, const Tags& tags)
+WayPtr TestUtils::createWay(const OsmMapPtr& map, const QList<NodePtr>& nodes,
+                            const QString& note, const Status& status,
+                            const Meters circularError, const Tags& tags)
 {
   WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
-  foreach (NodePtr node, nodes)
+  for (const auto& node : qAsConst(nodes))
   {
     map->addNode(node);
     way->addNode(node->getId());
   }
   way->setTags(tags);
   if (!note.isEmpty())
-  {
     way->getTags().addNote(note);
-  }
+
   map->addWay(way);
   return way;
 }
 
-WayPtr TestUtils::createWay(
-  const OsmMapPtr& map, const QList<ElementId>& nodeIds, const QString& note, const Status& status,
-  const Meters circularError, const Tags& tags)
+WayPtr TestUtils::createWay(const OsmMapPtr& map, const QList<ElementId>& nodeIds,
+                            const QString& note, const Status& status,
+                            const Meters circularError, const Tags& tags)
 {
   WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
-  foreach (ElementId nodeId, nodeIds)
+  for (const auto& nodeId : qAsConst(nodeIds))
   {
     if (!map->containsNode(nodeId.getId()))
-    {
       throw IllegalArgumentException(nodeId.toString() + " not present in test map.");
-    }
     way->addNode(nodeId.getId());
   }
   way->setTags(tags);
   if (!note.isEmpty())
-  {
     way->getTags().addNote(note);
-  }
+
   map->addWay(way);
   return way;
 }
 
-RelationPtr TestUtils::createRelation(
-  const OsmMapPtr& map, const QList<ElementPtr>& elements, const QString& note,
-  const Status& status, const Meters circularError, const Tags& tags)
+RelationPtr TestUtils::createRelation(const OsmMapPtr& map, const QList<ElementPtr>& elements,
+                                      const QString& note, const Status& status,
+                                      const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation =
-    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
-  foreach (ElementPtr element, elements)
+  RelationPtr relation = std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
+  for (const auto& element : qAsConst(elements))
   {
     map->addElement(element);
     relation->addElement("test", element);
   }
   relation->setTags(tags);
   if (!note.isEmpty())
-  {
     relation->getTags().addNote(note);
-  }
+
   map->addRelation(relation);
   return relation;
 }
 
-RelationPtr TestUtils::createRelation(
-  const OsmMapPtr& map, const QList<ElementId>& elementIds, const QString& note,
-  const Status& status, const Meters circularError, const Tags& tags)
+RelationPtr TestUtils::createRelation(const OsmMapPtr& map, const QList<ElementId>& elementIds,
+                                      const QString& note, const Status& status,
+                                      const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation =
-    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
-  foreach (ElementId elementId, elementIds)
+  RelationPtr relation = std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
+  for (const auto& elementId : qAsConst(elementIds))
   {
     if (!map->containsElement(elementId))
-    {
       throw IllegalArgumentException(elementId.toString() + " not present in test map.");
-    }
     relation->addElement("test", elementId);
   }
   relation->setTags(tags);
   if (!note.isEmpty())
-  {
     relation->getTags().addNote(note);
-  }
+
   map->addRelation(relation);
   return relation;
 }
@@ -251,13 +233,9 @@ void TestUtils::dumpString(const string& str)
   for (size_t i = 0; i < str.size(); i++)
   {
     if (i != 0)
-    {
       cout << ", ";
-    }
     if (i % 18 == 0)
-    {
       cout << endl << "  ";
-    }
     printf("%3u", (unsigned char)str.at(i));
   }
   cout << "};" << endl;
@@ -308,10 +286,10 @@ void TestUtils::resetConfigs(const QStringList confs)
   // prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
   // many hoot commands at once.
   LOG_VART(confs.size());
-  for (int i = 0; i < confs.size(); i++)
+  for (const auto& conf_file : qAsConst(confs))
   {
-    LOG_VART(confs[i]);
-    conf().loadJson(confs[i]);
+    LOG_VART(conf_file);
+    conf().loadJson(conf_file);
   }
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
@@ -330,7 +308,7 @@ void TestUtils::resetEnvironment(const QStringList confs)
   MergerFactory::getInstance().reset();
   TagMergerFactory::getInstance().reset();
   //  Reset the registered resets
-  foreach (RegisteredReset* rr, getInstance()._resets)
+  for (auto rr : qAsConst(getInstance()._resets))
     rr->reset();
 }
 
@@ -350,13 +328,9 @@ QString TestUtils::toQuotedString(QString str)
   for (int i = 0; i < l.size(); ++i)
   {
     if (i != l.size() - 1)
-    {
       result += "\"" + l[i] + "\\n\"\n";
-    }
     else
-    {
       result += "\"" + l[i] + "\"\n";
-    }
   }
   return result;
 }
@@ -429,9 +403,8 @@ QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
   return mapCleanerTransforms;
 }
 
-void TestUtils::runConflateOpReductionTest(
-  const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
-  const int expectedCleaningOpsSize)
+void TestUtils::runConflateOpReductionTest(const QStringList& matchCreators, const int expectedPreOpSize,
+                                           const int expectedPostOpsSize, const int expectedCleaningOpsSize)
 {
   QStringList actualOps;
 
@@ -466,10 +439,10 @@ void TestUtils::runConflateOpReductionTest(
 
 bool HootTestFixture::_compareEnv = false;
 
-HootTestFixture::HootTestFixture(const QString& inputPath, const QString& outputPath) :
-  _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
-  _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
-  _reset(ResetBasic)
+HootTestFixture::HootTestFixture(const QString& inputPath, const QString& outputPath)
+  : _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
+    _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
+    _reset(ResetBasic)
 {
   if (outputPath != UNUSED_PATH)
     FileUtils::makeDir(_outputPath);

@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDb.h"
 
 // hoot
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/InternalIdReserver.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QVariant>
@@ -130,9 +130,7 @@ bool OsmApiDb::isSupported(const QUrl& url) const
 
   //postgresql is deprecated but still supported
   if (url.scheme() != MetadataTags::OsmApiDbScheme() && url.scheme() != "postgresql")
-  {
     valid = false;
-  }
 
   if (valid)
   {
@@ -141,9 +139,7 @@ bool OsmApiDb::isSupported(const QUrl& url) const
 
     // OSM API will have plist.size of 2.
     if ( plist.size() != 2 )
-    {
       valid = false;
-    }
   }
 
   return valid;
@@ -153,16 +149,14 @@ void OsmApiDb::open(const QUrl& url)
 {
   LOG_DEBUG("Opening database connection: " << url.toString(QUrl::RemoveUserInfo) << "...");
   if (!isSupported(url))
-  {
-    throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString(QUrl::RemoveUserInfo));
-  }
+    throw HootException(QString("An unsupported URL was passed into OsmApiDb: %1").arg(url.toString(QUrl::RemoveUserInfo)));
   ApiDb::open(url);
 }
 
 void OsmApiDb::deleteUser(long userId)
 {
   LOG_TRACE("Deleting user: " << userId << "...");
-  _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
+  _exec(QString("DELETE FROM %1 WHERE id=:id").arg(ApiDb::getUsersTableName()), (qlonglong)userId);
 }
 
 void OsmApiDb::_resetQueries()
@@ -176,11 +170,8 @@ void OsmApiDb::_resetQueries()
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
   _selectMembersForRelation.reset();
-  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _seqQueries.begin();
-       itr != _seqQueries.end(); ++itr)
-  {
+  for (auto itr = _seqQueries.begin(); itr != _seqQueries.end(); ++itr)
     itr.value().reset();
-  }
 }
 
 void OsmApiDb::commit()
@@ -188,47 +179,33 @@ void OsmApiDb::commit()
   LOG_TRACE("Committing transaction...");
 
   if ( _db.isOpen() == false )
-  {
     throw HootException("Tried to commit a transaction on a closed database");
-  }
 
   if ( _inTransaction == false )
-  {
     throw HootException("Tried to commit but weren't in a transaction");
-  }
 
   _resetQueries();
   if (!_db.commit())
-  {
     throw HootException("Error committing transaction: " + _db.lastError().text());
-  }
+
   _inTransaction = false;
 }
 
 QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
 {
-  if (tableType == TableType::Node)
+  switch(tableType.getEnum())
   {
+  case TableType::Node:
     return ApiDb::getCurrentNodesTableName();
-  }
-  else if (tableType == TableType::Way)
-  {
+  case TableType::Way:
     return ApiDb::getCurrentWaysTableName();
-  }
-  else if (tableType == TableType::Relation)
-  {
+  case TableType::Relation:
     return ApiDb::getCurrentRelationsTableName();
-  }
-  else if (tableType == TableType::WayNode)
-  {
+  case TableType::WayNode:
     return ApiDb::getCurrentWayNodesTableName();
-  }
-  else if (tableType == TableType::RelationMember)
-  {
+  case TableType::RelationMember:
     return ApiDb::getCurrentRelationMembersTableName();
-  }
-  else
-  {
+  default:
     throw HootException("Unsupported table type.");
   }
 }
@@ -238,83 +215,56 @@ QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
 {
   switch (elementType.getEnum())
   {
-    case ElementType::Node:
-      if (historical)
-      {
-        if (tags)
-        {
-          return ApiDb::getNodeTagsTableName();
-        }
-        else
-        {
-          return ApiDb::getNodesTableName();
-        }
-      }
+  case ElementType::Node:
+    if (historical)
+    {
+      if (tags)
+        return ApiDb::getNodeTagsTableName();
       else
-      {
-        if (tags)
-        {
-          return ApiDb::getCurrentNodeTagsTableName();
-        }
-        else
-        {
-          return ApiDb::getCurrentNodesTableName();
-        }
-      }
+        return ApiDb::getNodesTableName();
+    }
+    else
+    {
+      if (tags)
+        return ApiDb::getCurrentNodeTagsTableName();
+      else
+        return ApiDb::getCurrentNodesTableName();
+    }
     break;
-
-    case ElementType::Way:
-      if (historical)
-      {
-        if (tags)
-        {
-          return ApiDb::getWayTagsTableName();
-        }
-        else
-        {
-          return ApiDb::getWaysTableName();
-        }
-      }
+  case ElementType::Way:
+    if (historical)
+    {
+      if (tags)
+        return ApiDb::getWayTagsTableName();
       else
-      {
-        if (tags)
-        {
-          return ApiDb::getCurrentWayTagsTableName();
-        }
-        else
-        {
-          return ApiDb::getCurrentWaysTableName();
-        }
-      }
-      break;
-
-    case ElementType::Relation:
-      if (historical)
-      {
-        if (tags)
-        {
-          return ApiDb::getRelationTagsTableName();
-        }
-        else
-        {
-          return ApiDb::getRelationsTableName();
-        }
-      }
+        return ApiDb::getWaysTableName();
+    }
+    else
+    {
+      if (tags)
+        return ApiDb::getCurrentWayTagsTableName();
       else
-      {
-        if (tags)
-        {
-          return ApiDb::getCurrentRelationTagsTableName();
-        }
-        else
-        {
-          return ApiDb::getCurrentRelationsTableName();
-        }
-      }
-      break;
-
-    default:
-      throw HootException("Unknown element type");
+        return ApiDb::getCurrentWaysTableName();
+    }
+    break;
+  case ElementType::Relation:
+    if (historical)
+    {
+      if (tags)
+        return ApiDb::getRelationTagsTableName();
+      else
+        return ApiDb::getRelationsTableName();
+    }
+    else
+    {
+      if (tags)
+        return ApiDb::getCurrentRelationTagsTableName();
+      else
+        return ApiDb::getCurrentRelationsTableName();
+    }
+    break;
+  default:
+    throw HootException("Unknown element type");
   }
 }
 vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
@@ -327,8 +277,6 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
 
 vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 {
-  vector<RelationData::Entry> result;
-
   if (!_selectMembersForRelation)
   {
     _selectMembersForRelation = std::make_shared<QSqlQuery>(_db);
@@ -337,45 +285,9 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
       "SELECT member_type, member_id, member_role FROM " + getCurrentRelationMembersTableName() +
       " WHERE relation_id = :relationId ORDER BY sequence_id");
   }
-
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
-  if (_selectMembersForRelation->exec() == false)
-  {
-    throw HootException("Error selecting members for relation: " + QString::number(relationId) +
-      " Error: " + _selectMembersForRelation->lastError().text());
-  }
-  LOG_VART(_selectMembersForRelation->executedQuery());
-  LOG_VART(_selectMembersForRelation->numRowsAffected());
 
-  while (_selectMembersForRelation->next())
-  {
-    const QString memberType = _selectMembersForRelation->value(0).toString();
-    LOG_VART(memberType);
-    if (ElementType::isValidTypeString(memberType))
-    {
-      RelationData::Entry member =
-        RelationData::Entry(
-          _selectMembersForRelation->value(2).toString(),
-          ElementId(ElementType::fromString(memberType),
-          _selectMembersForRelation->value(1).toLongLong()));
-      LOG_VART(member);
-      result.push_back(member);
-    }
-    else
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
-  }
-
-  return result;
+  return ApiDb::_selectRelationMembers(_selectMembersForRelation);
 }
 
 QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType) const

@@ -1307,7 +1307,6 @@ tds40 = {
   {
     // Remove Hoot assigned tags for the source of the data
     delete tags['source:ingest:datetime'];
-    delete tags.area;
     delete tags['error:circular'];
     delete tags['hoot:status'];
 

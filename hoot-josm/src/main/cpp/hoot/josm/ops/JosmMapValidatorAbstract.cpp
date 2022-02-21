@@ -22,28 +22,28 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "JosmMapValidatorAbstract.h"
 
 // hoot
-#include <hoot/josm/jni/JavaEnvironment.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/josm/jni/JniConversion.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/josm/jni/JavaEnvironment.h>
+#include <hoot/josm/jni/JniConversion.h>
 #include <hoot/josm/jni/JniUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
-JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
-_maxElementsForMapString(2000000),
-_javaEnv(JavaEnvironment::getInstance().getEnvironment()),
-_josmInterfaceInitialized(false),
-_numValidationErrors(0),
-_numFailingValidators(0)
+JosmMapValidatorAbstract::JosmMapValidatorAbstract()
+  : _maxElementsForMapString(2000000),
+    _javaEnv(JavaEnvironment::getInstance().getEnvironment()),
+    _josmInterfaceInitialized(false),
+    _numValidationErrors(0),
+    _numFailingValidators(0)
 {
   _josmInterfaceName = ConfigOptions().getJosmMapValidatorJavaImplementation();
 }
@@ -76,15 +76,12 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   _javaEnv->ReleaseStringUTFChars(interfaceJavaStr, interfaceChars);
 
   QString coreLogLevel;
+  // When testing, we're not interested in seeing logging from josm or hoot-josm.
   if (ConfigOptions().getTestValidationEnable())
-  {
-    // When testing, we're not interested in seeing logging from josm or hoot-josm.
     coreLogLevel = Log::getInstance().levelToString(Log::None);
-  }
   else
-  {
     coreLogLevel = Log::getInstance().getLevelAsString();
-  }
+
   jstring logLevel = JniConversion::toJavaString(_javaEnv, coreLogLevel);
   _josmInterface =
     // Thought it would be best to wrap this in a global ref, since its possible it could be garbage
@@ -107,16 +104,12 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
 QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
 {
   if (_josmValidators.isEmpty())
-  {
     throw IllegalArgumentException("No JOSM validators configured.");
-  }
 
   LOG_DEBUG("Retrieving available validators...");
 
   if (!_josmInterfaceInitialized)
-  {
     _initJosmImplementation();
-  }
 
   jobject validatorsJavaMap =
     _javaEnv->CallObjectMethod(
@@ -133,9 +126,7 @@ QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
 void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 {
   if (_josmValidators.isEmpty())
-  {
     throw IllegalArgumentException("No JOSM validators configured.");
-  }
 
   LOG_VARD(map->size());
   if (map->isEmpty())
@@ -150,9 +141,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   _numFailingValidators = 0;
 
   if (!_josmInterfaceInitialized)
-  {
     _initJosmImplementation();
-  }
 
   // Pass the map to JOSM for updating.
   MapProjector::projectToWgs84(map);
@@ -195,14 +184,10 @@ void JosmMapValidatorAbstract::_getStats()
     " features with JOSM.\n";
   // convert the validation error info to a readable summary string
   _errorSummary += _errorCountsByTypeToSummaryStr(_getValidationErrorCountsByType());
-  _errorSummary +=
-    "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
-  foreach (QString validatorName, failingValidatorInfo.keys())
-  {
-    _errorSummary +=
-      "Validator: " + validatorName + " failed with error: " +
-      failingValidatorInfo[validatorName] + ".\n";
-  }
+  _errorSummary += "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
+  for (const auto& validatorName : failingValidatorInfo.keys())
+    _errorSummary += "Validator: " + validatorName + " failed with error: " + failingValidatorInfo[validatorName] + ".\n";
+
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }
@@ -242,15 +227,11 @@ QMap<QString, int> JosmMapValidatorAbstract::_getValidationErrorCountsByType()
   return JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap);
 }
 
-QString JosmMapValidatorAbstract::_errorCountsByTypeToSummaryStr(
-  const QMap<QString, int>& errorCountsByType) const
+QString JosmMapValidatorAbstract::_errorCountsByTypeToSummaryStr(const QMap<QString, int>& errorCountsByType) const
 {
   QString summary = "";
-  for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
-       errorItr != errorCountsByType.end(); ++errorItr)
-  {
+  for (auto errorItr = errorCountsByType.begin(); errorItr != errorCountsByType.end(); ++errorItr)
     summary += errorItr.key() + " errors: " + QString::number(errorItr.value()) + "\n";
-  }
   return summary;
 }
 

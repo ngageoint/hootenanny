@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "DebugNetworkMapCreator.h"
 
@@ -34,24 +34,19 @@
 namespace hoot
 {
 
-DebugNetworkMapCreator::DebugNetworkMapCreator() :
-_matchThreshold(ConfigOptions().getNetworkMatchThreshold())
+DebugNetworkMapCreator::DebugNetworkMapCreator()
+  : _matchThreshold(ConfigOptions().getNetworkMatchThreshold())
 {
 }
 
 void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-  QList<NetworkVertexScorePtr> vertexScores) const
+                                              QList<NetworkVertexScorePtr> vertexScores) const
 {
+  for (const auto& edge : qAsConst(edgeScores))
+    _addEdgeLink(map, edge);
 
-  for (int i = 0; i < edgeScores.size(); ++i)
-  {
-    _addEdgeLink(map, edgeScores[i]);
-  }
-
-  for (int i = 0; i < vertexScores.size(); ++i)
-  {
-    _addVertexLink(map, vertexScores[i]);
-  }
+  for (const auto& vertex : qAsConst(vertexScores))
+    _addVertexLink(map, vertex);
 }
 
 void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const
@@ -79,35 +74,25 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     r->setTags(tags);
     r->addElement("visual", w);
 
-    foreach (const EdgeString::EdgeEntry& ee,
-      edgeScore->getEdgeMatch()->getString1()->getAllEdges())
+    for (const auto& ee : edgeScore->getEdgeMatch()->getString1()->getAllEdges())
     {
-      foreach (ConstElementPtr e, ee.getEdge()->getMembers())
-      {
+      for (const auto& e : ee.getEdge()->getMembers())
         r->addElement("string1", e);
-      }
     }
 
-    foreach (const EdgeString::EdgeEntry& ee,
-      edgeScore->getEdgeMatch()->getString2()->getAllEdges())
+    for (const auto& ee : edgeScore->getEdgeMatch()->getString2()->getAllEdges())
     {
-      foreach (ConstElementPtr e, ee.getEdge()->getMembers())
-      {
+      for (const auto& e : ee.getEdge()->getMembers())
         r->addElement("string2", e);
-      }
     }
 
     map->addRelation(r);
 
     if (edgeScore->getScore() >= _matchThreshold)
-    {
       tags.set("highway", "cycleway");
-    }
-    else
-    {
-      // a hack to make it easier to look at.
+    else  // a hack to make it easier to look at.
       tags.set("highway", "dashpurple");
-    }
+
     w->setTags(tags);
 
     map->addWay(w);
@@ -130,26 +115,19 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
     w->getTags().set(MetadataTags::HootVertexScore(), vertexScore->getScore());
     w->getTags().set(MetadataTags::HootVertex(), vertexScore->toString());
     if (vertexScore->getScore() >= _matchThreshold)
-    {
       w->getTags().set("highway", "footway");
-    }
     else
-    {
       w->getTags().set("highway", "path");
-    }
 
     map->addWay(w);
   }
 }
 
-ConstNodePtr DebugNetworkMapCreator::_getMedianNode(
-  ConstOsmMapPtr map, QList<ConstElementPtr> e) const
+ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, const QList<ConstElementPtr>& e) const
 {
   MedianNodeVisitor v;
-  for (int i = 0; i < e.size(); ++i)
-  {
-    e[i]->visitRo(*map, v);
-  }
+  for (const auto& element : qAsConst(e))
+    element->visitRo(*map, v);
   return v.calculateMedianNode();
 }
 

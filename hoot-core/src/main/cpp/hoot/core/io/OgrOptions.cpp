@@ -22,17 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OgrOptions.h"
 
 namespace hoot
 {
 
-OgrOptions::OgrOptions() :
-_cryptic(nullptr)
+OgrOptions::OgrOptions()
+  : _cryptic(nullptr)
 {
-
 }
 
 OgrOptions::~OgrOptions()
@@ -45,9 +44,7 @@ void OgrOptions::deleteCrypticOptions()
   if (_cryptic)
   {
     for (size_t i = 0; _cryptic[i] != 0; ++i)
-    {
       delete[] _cryptic[i];
-    }
     delete[] _cryptic;
   }
 }
@@ -59,19 +56,18 @@ char** OgrOptions::getCrypticOptions()
 {
   deleteCrypticOptions();
 
-  if (size() == 0)
-  {
+  if (empty())
     return nullptr;
-  }
 
   _cryptic = new char*[size() + 1];
   _cryptic[size()] = nullptr;
   size_t i = 0;
-  for (OgrOptions::const_iterator it = constBegin(); it != constEnd(); ++it)
+  for (auto it = constBegin(); it != constEnd(); ++it)
   {
     QByteArray s = (it.key() + "=" + it.value()).toUtf8();
     _cryptic[i] = new char[s.size() + 1];
-    strcpy(_cryptic[i], s.data());
+    memset(_cryptic[i], 0, s.size() + 1);
+    strncpy(_cryptic[i], s.data(), s.size());
     ++i;
   }
 

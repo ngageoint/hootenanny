@@ -1,4 +1,0 @@
-1c1
-< Input: test-output/cmd/slow/PowerLineDiffConflateTest/output-partial.osm
----
-> Input: test-output/cmd/glacial/PowerLineDiffConflateTest/output-partial.osm

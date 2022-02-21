@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "State.h"
 
@@ -36,10 +36,8 @@ QString State::toString() const
 {
   QStringList result;
 
-  foreach (QString k, _values.keys())
-  {
+  for (const auto& k : _values.keys())
     result << QString("'%1':%2").arg(k).arg(_values[k]);
-  }
 
   return "{" + result.join(", ") + "}";
 }

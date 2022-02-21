@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayString.h"
 
@@ -48,10 +48,8 @@ Meters WayString::_aggregateCircularError() const
   // that is a problem for the distant future.
   Meters result = 0.0;
 
-  foreach (const WaySubline& subline, _sublines)
-  {
+  for (const auto& subline : qAsConst(_sublines))
     result = max(result, subline.getWay()->getCircularError());
-  }
 
   return result;
 }
@@ -61,7 +59,7 @@ void WayString::append(const WaySubline& subline)
   if (!_sublines.empty())
   {
     if (back().getWay() == subline.getWay() &&
-      back().getEnd() != subline.getStart())
+        back().getEnd() != subline.getStart())
     {
       LOG_VART(back());
       LOG_VART(subline);
@@ -71,7 +69,7 @@ void WayString::append(const WaySubline& subline)
     else
     {
       if (subline.getStart().isExtreme(WayLocation::SLOPPY_EPSILON) == false ||
-        back().getEnd().isExtreme(WayLocation::SLOPPY_EPSILON) == false)
+          back().getEnd().isExtreme(WayLocation::SLOPPY_EPSILON) == false)
       {
         throw IllegalArgumentException("If ways are different they must connect at an extreme "
           "node.");
@@ -111,30 +109,25 @@ void WayString::append(const WaySubline& subline)
 WayLocation WayString::calculateLocationFromStart(Meters distance, ElementId preferredEid) const
 {
   if (distance <= 0.0)
-  {
     return _sublines[0].getStart();
-  }
 
   Meters soFar = 0.0;
   for (int i = 0; i < _sublines.size(); ++i)
   {
-    Meters ls = _sublines[i].calculateLength();
+    const WaySubline& subline = _sublines[i];
+    Meters ls = subline.calculateLength();
     if (distance <= soFar + ls)
     {
-      ConstOsmMapPtr map = _sublines[i].getStart().getMap();
-      ConstWayPtr w = _sublines[i].getStart().getWay();
-      Meters offset = _sublines[i].getStart().calculateDistanceOnWay();
-      if (_sublines[i].isBackwards())
-      {
+      ConstOsmMapPtr map = subline.getStart().getMap();
+      ConstWayPtr w = subline.getStart().getWay();
+      Meters offset = subline.getStart().calculateDistanceOnWay();
+      if (subline.isBackwards())
         offset -= distance - soFar;
-      }
       else
-      {
         offset += distance - soFar;
-      }
       // if the offset isn't expected (while allowing for floating point rounding)
-      if (offset < _sublines[i].getFormer().calculateDistanceOnWay() - _epsilon ||
-        offset > _sublines[i].getLatter().calculateDistanceOnWay() + _epsilon)
+      if (offset < subline.getFormer().calculateDistanceOnWay() - _epsilon ||
+        offset > subline.getLatter().calculateDistanceOnWay() + _epsilon)
       {
         throw InternalErrorException("Expected offset to be in the bounds of the subline. "
           "Logic error?");
@@ -152,17 +145,12 @@ Meters WayString::calculateDistanceOnString(const WayLocation& l) const
 {
   Meters d = 0.0;
 
-  for (int i = 0; i < _sublines.size(); ++i)
+  for (const auto& subline : qAsConst(_sublines))
   {
-    if (_sublines[i].contains(l))
-    {
-      d += fabs(l.calculateDistanceOnWay() - _sublines[i].getStart().calculateDistanceOnWay());
-      return d;
-    }
+    if (subline.contains(l))
+      return d + fabs(l.calculateDistanceOnWay() - subline.getStart().calculateDistanceOnWay());
     else
-    {
-      d += _sublines[i].calculateLength();
-    }
+      d += subline.calculateLength();
   }
 
   throw IllegalArgumentException("Way location was not found in this way string.");
@@ -171,34 +159,29 @@ Meters WayString::calculateDistanceOnString(const WayLocation& l) const
 Meters WayString::calculateLength() const
 {
   Meters result = 0.0;
-  for (int i = 0; i < _sublines.size(); ++i)
-  {
-    result += _sublines[i].getLength();
-  }
+  for (const auto& subline : _sublines)
+    result += subline.getLength();
 
   return result;
 }
 
-WayLocation WayString::_changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid)
-  const
+WayLocation WayString::_changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid) const
 {
   WayLocation result = wl;
 
   if (preferredEid.isNull() || wl.getWay()->getElementId() == preferredEid)
-  {
     result = wl;
-  }
   else if (index >= 1 &&
-    _sublines[index - 1].getWay()->getElementId() == preferredEid &&
-    fabs(calculateDistanceOnString(wl) - calculateDistanceOnString(_sublines[index - 1].getEnd()))
-      < _epsilon)
+           _sublines[index - 1].getWay()->getElementId() == preferredEid &&
+           fabs(calculateDistanceOnString(wl) - calculateDistanceOnString(_sublines[index - 1].getEnd())) <
+           _epsilon)
   {
     result = _sublines[index - 1].getEnd();
   }
   else if (index < _sublines.size() - 1 &&
-    _sublines[index + 1].getWay()->getElementId() == preferredEid &&
-    fabs(calculateDistanceOnString(wl) - calculateDistanceOnString(_sublines[index + 1].getStart()))
-      < _epsilon)
+           _sublines[index + 1].getWay()->getElementId() == preferredEid &&
+           fabs(calculateDistanceOnString(wl) - calculateDistanceOnString(_sublines[index + 1].getStart())) <
+           _epsilon)
   {
     result = _sublines[index + 1].getStart();
   }
@@ -216,7 +199,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
   Tags newTags;
 
   // go through each subline.
-  foreach (const WaySubline& subline, _sublines)
+  for (const auto& subline : qAsConst(_sublines))
   {
     // first, create a vector that contains all the node IDs in ascending order.
     ConstWayPtr oldWay = subline.getWay();
@@ -238,9 +221,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
       formeri = subline.getFormer().getSegmentIndex() + 1;
     }
     else
-    {
       formeri = subline.getFormer().getSegmentIndex();
-    }
 
     // which is the last node that we can directly add.
     size_t latteri = subline.getLatter().getSegmentIndex();
@@ -265,18 +246,14 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
 
     // if the subline is backwards reverse the nodes so we can add them in the correct order.
     if (subline.isBackwards())
-    {
       std::reverse(newNids.begin(), newNids.end());
-    }
 
     // add each node to the new way. If the node is a duplicate (could happen with adjoining
     // sublines), then just don't add it.
-    foreach (long nid, newNids)
+    for (auto nid : newNids)
     {
       if (newWay->getNodeCount() == 0 || newWay->getLastNodeId() != nid)
-      {
         newWay->addNode(nid);
-      }
     }
   }
 
@@ -289,10 +266,9 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
 Meters WayString::getMaxCircularError() const
 {
   Meters result = 0.0;
-  foreach (const WaySubline& ws, _sublines)
-  {
+  for (const auto& ws : qAsConst(_sublines))
     result = max(ws.getWay()->getCircularError(), result);
-  }
+
   return result;
 }
 
@@ -305,10 +281,8 @@ void WayString::visitRo(const ElementProvider &map, ConstElementVisitor& v) cons
 {
   // go through each subline and call visitRw on the subline. The sublines should only visit the
   // nodes that intersect the subline.
-  for (int i = 0; i < _sublines.size(); ++i)
-  {
-    _sublines[i].visitRo(map, v);
-  }
+  for (const auto& subline : qAsConst(_sublines))
+    subline.visitRo(map, v);
 }
 
 }

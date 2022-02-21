@@ -13,6 +13,12 @@ You will also need some Vagrant plugins:
 
     vagrant plugin install vagrant-bindfs vagrant-sshfs
 
+On Windows, an NFS plugin is useful as well as enabling NFS for file sharing between the host and guest VM:
+    # for windows install the winnfsd plugin
+    vagrant plugin install vagrant-winnfsd
+    # and apply the environment variables to use NFS mount file sharing such as this
+    WINNFS=true NFSSHARE=true vagrant up
+
 You may also need to enable hardware virtualization extensions in your BIOS.
 
 ==== Quick Start

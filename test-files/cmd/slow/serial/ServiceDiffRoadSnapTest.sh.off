@@ -25,12 +25,12 @@ fi
 if [[ "$7" == "false" ]]; then
   INCLUDE_TAGS=
 else
-  INCLUDE_TAGS=--include-tags
+  INCLUDE_TAGS="-D conflate.differential.include.tags=true"
 fi
 if [[ "$8" == "false" ]]; then
   SEPARATE_OUTPUT=
 else
-  SEPARATE_OUTPUT=--separate-output
+  SEPARATE_OUTPUT="-D conflate.differential.tags.separate.output=true"
 fi
 ALG_CONFIG=$9
 # This is a bit of a hack, but just trying to reduce test runtime here.
@@ -50,6 +50,8 @@ NUM_STEPS=${10}
 WAY_SNAP_TOLERANCE=${11}
 CONFLATE_FROM_FILE=${12}
 UNIFYING_RUBBERSHEET=${13} # This ignored if the Network alg is used.
+# Default to debug=false or take parameter 11
+DEBUG=${14-false}
 
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
@@ -83,7 +85,6 @@ DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D ho
 CONFLATE_OPTS="-D debug.maps.filename=$OUTPUT_DIR/conflate.osm -D writer.include.conflate.score.tags=true $MATCHERS $MERGERS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true -D bounds.output.file=$OUTPUT_DIR/$TEST_NAME-bounds-conflate.osm"
 CHANGESET_DERIVE_OPTS="-D debug.maps.filename=$OUTPUT_DIR/derive.osm -D changeset.user.id=1 -D bounds.output.file=$OUTPUT_DIR/$TEST_NAME-bounds-changeset.osm"
 
-DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true -D debug.maps.write.detailed=true -D debug.maps.class.include.filter=UnconnectedWaySnapper;DiffConflator "
   LOG_LEVEL="--trace"
@@ -103,7 +104,7 @@ echo "Writing ref data..."
 echo ""
 hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
-  hoot convert --warn -D debug.maps.filename=$OUTPUT_DIR/ref-load.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
+  hoot convert $LOG_LEVEL -D debug.maps.filename=$OUTPUT_DIR/ref-load.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
 fi
 
 if [ "$CONFLATE_FROM_FILE" == "false" ]; then
@@ -128,16 +129,16 @@ if [ "$NUM_STEPS" == "2" ]; then
   echo ""
   echo "Running conflation as part of a two step process..."
   echo ""
-  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --write-bounds
   if [ "$DEBUG" == "true" ]; then
-    hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+    hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osc --write-bounds
   fi
 else
   # Run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
   echo ""
   echo "Running conflation as part of a three step process..."
   echo ""
-  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osm --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  hoot conflate $LOG_LEVEL $LOG_FILTER $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $INCLUDE_TAGS $SEPARATE_OUTPUT $REF_INPUT $SEC_INPUT $OUTPUT_DIR/diff.osm --write-bounds
   # Generate a changeset between the original ref data and the diff calculated in the previous step
   echo ""
   echo "Running changeset derivation as part of a three step process..."

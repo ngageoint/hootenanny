@@ -57,17 +57,12 @@ void ConflateCaseTest::_runConflateCmd() const
     LOG_WARN("Please create a meaningful README.txt in " + _d.path());
   }
   QFileInfo in1(_d, "Input1.osm");
-  if (in1.exists() == false)
-  {
-    throw TestConfigurationException(
-      "Unable to find Input1.osm in conflate case: " + _d.absolutePath());
-  }
+  if (!in1.exists())
+    throw TestConfigurationException("Unable to find Input1.osm in conflate case: " + _d.absolutePath());
+
   QFileInfo in2(_d, "Input2.osm");
-  if (in2.exists() == false)
-  {
-    throw TestConfigurationException(
-      "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
-  }
+  if (!in2.exists())
+    throw TestConfigurationException("Unable to find Input2.osm in conflate case: " + _d.absolutePath());
 
   // This is also set in Testing.conf.
   conf().set(ConfigOptions::getConflateTagDisableValueTruncationKey(), "true");
@@ -78,21 +73,6 @@ void ConflateCaseTest::_runConflateCmd() const
   args << in1.absoluteFilePath();
   args << in2.absoluteFilePath();
   args << testOutput;
-  bool differential = ConfigOptions().getTestCaseConflateDifferential();
-  const bool differentialWithTags = ConfigOptions().getTestCaseConflateDifferentialIncludeTags();
-  if (differentialWithTags)
-  {
-    // let this override and correct what would otherwise be an invalid config
-    differential = true;
-  }
-  if (differential)
-  {
-    args << "--differential";
-  }
-  if (differentialWithTags)
-  {
-    args << "--include-tags";
-  }
 
   int result = -1;
   try
@@ -105,11 +85,8 @@ void ConflateCaseTest::_runConflateCmd() const
   }
 
   QFileInfo expected(_d, "Expected.osm");
-  if (expected.exists() == false)
-  {
-    throw TestConfigurationException(
-      "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
-  }
+  if (!expected.exists())
+    throw TestConfigurationException("Unable to find Expected.osm in conflate case: " + _d.absolutePath());
 
   if (result != 0)
   {
@@ -136,7 +113,8 @@ void ConflateCaseTest::runTest()
 
     // Run validation on test output if configured for it.
     LOG_VART(ConfigOptions().getTestValidationEnable());
-    if (ConfigOptions().getTestValidationEnable())
+    QString validation_filename = _d.absolutePath() + "/validation-report";
+    if (ConfigOptions().getTestValidationEnable() && QFile::exists(validation_filename))
     {
       TestOutputValidator::validate(_d.dirName(), _d.absolutePath() + "/Output.osm",
                                     _d.absolutePath() + "/validation-report",

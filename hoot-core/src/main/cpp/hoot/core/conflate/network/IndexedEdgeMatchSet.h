@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef __INDEXED_EDGE_MATCH_SET_H__
 #define __INDEXED_EDGE_MATCH_SET_H__
@@ -80,8 +80,7 @@ public:
   /**
    * Return all the edges that either start at v1/v2 or end at v1/v2.
    */
-  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(
-    ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
+  QSet<ConstEdgeMatchPtr> getMatchesWithTermination(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
   /**
    * Return the score associated with an edge match.
@@ -105,7 +104,7 @@ public:
   QSet<ConstEdgeMatchPtr> getConnectingStubs(ConstEdgeMatchPtr a, ConstEdgeMatchPtr b) const;
 
   QSet<ConstEdgeMatchPtr> getConnectingStubs(ConstEdgeLocationPtr ela1, ConstEdgeLocationPtr ela2,
-    ConstEdgeLocationPtr elb1, ConstEdgeLocationPtr elb2) const;
+                                             ConstEdgeLocationPtr elb1, ConstEdgeLocationPtr elb2) const;
 
   void setScore(ConstEdgeMatchPtr em, double score) { _matches[em] = score; }
 

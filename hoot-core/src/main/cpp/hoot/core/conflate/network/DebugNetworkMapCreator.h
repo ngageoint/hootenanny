@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef DEBUGNETWORKMAPCREATOR_H
 #define DEBUGNETWORKMAPCREATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -46,7 +46,7 @@ public:
   DebugNetworkMapCreator();
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-    QList<NetworkVertexScorePtr> vertexScores) const;
+                        QList<NetworkVertexScorePtr> vertexScores) const;
 
 private:
 
@@ -55,7 +55,7 @@ private:
   void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const;
   void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const;
 
-  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e) const;
+  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, const QList<ConstElementPtr>& e) const;
   ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e) const;
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmGeoJsonReader.h"
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -38,7 +39,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 
@@ -258,7 +258,7 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
 
 geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox) const
 {
-  pt::ptree::const_iterator bboxIt = bbox.begin();
+  auto bboxIt = bbox.begin();
   if (bboxIt == bbox.end())
     return Envelope();
   double minX = bboxIt->second.get_value<double>();
@@ -303,16 +303,11 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
   double lat = coords[0].y;
   double lon = coords[0].x;
 
-  long version = ElementData::VERSION_EMPTY;
-  version = properties.get("@version", version);
-  long changeset = ElementData::CHANGESET_EMPTY;
-  changeset = properties.get("@changeset", changeset);
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  timestamp = properties.get("@timestamp", timestamp);
-  std::string user = ElementData::USER_EMPTY.toStdString();
-  user = properties.get("@user", user);
-  long uid = ElementData::UID_EMPTY;
-  uid = properties.get("@uid", uid);
+  long version = _getVersion(properties, ElementType::Node, node_id);
+  long changeset = _getChangeset(properties);
+  unsigned int timestamp = _getTimestamp(properties);
+  std::string user = _getUser(properties);
+  long uid = _getUid(properties);
 
   //  Construct node
   NodePtr pNode =
@@ -362,16 +357,11 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   else
     way_id = _map->createNextWayId();
 
-  long version = ElementData::VERSION_EMPTY;
-  version = properties.get("@version", version);
-  long changeset = ElementData::CHANGESET_EMPTY;
-  changeset = properties.get("@changeset", changeset);
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  timestamp = properties.get("@timestamp", timestamp);
-  std::string user = ElementData::USER_EMPTY.toStdString();
-  user = properties.get("@user", user);
-  long uid = ElementData::UID_EMPTY;
-  uid = properties.get("@uid", uid);
+  long version = _getVersion(properties, ElementType::Way, way_id);
+  long changeset = _getChangeset(properties);
+  unsigned int timestamp = _getTimestamp(properties);
+  std::string user = _getUser(properties);
+  long uid = _getUid(properties);
 
   //  Construct Way
   WayPtr way =
@@ -381,7 +371,7 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
 
   //  Add nodes
-  for (vector<Coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
+  for (auto it = coords.begin(); it != coords.end(); ++it)
   {
     //  Don't create another node to close the polygon, just use the first one
     if (isPoly && (it + 1) == coords.end())
@@ -427,16 +417,11 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   else
     relation_id = _map->createNextRelationId();
 
-  long version = ElementData::VERSION_EMPTY;
-  version = properties.get("@version", version);
-  long changeset = ElementData::CHANGESET_EMPTY;
-  changeset = properties.get("@changeset", changeset);
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  timestamp = properties.get("@timestamp", timestamp);
-  std::string user = ElementData::USER_EMPTY.toStdString();
-  user = properties.get("@user", user);
-  long uid = ElementData::UID_EMPTY;
-  uid = properties.get("@uid", uid);
+  long version = _getVersion(properties, ElementType::Relation, relation_id);
+  long changeset = _getChangeset(properties);
+  unsigned int timestamp = _getTimestamp(properties);
+  std::string user = _getUser(properties);
+  long uid = _getUid(properties);
 
   //  Create an empty set of properties
   pt::ptree empty;
@@ -640,9 +625,12 @@ void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree
 void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
                                                   const RelationPtr& relation) const
 {
+  ElementToGeometryConverter ec(_map);
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
-  bool is_polygon = geometry.get("type", "") == "Polygon";
+  std::string type = geometry.get("type", "");
+  bool is_polygon = (type == "Polygon" || type == "MultiPolygon");
   int position = 0;
+  std::vector<std::shared_ptr<geos::geom::Geometry>> geometries;
   for (auto multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
@@ -666,12 +654,26 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::pt
     QString role = "";
     if (is_polygon)
     {
-      //  Polygons with multiple LinearRing coordinate arrays specify the first one as the "outer"
-      //  poly and all of the others as "inner" polys
+      std::shared_ptr<geos::geom::Geometry> geo = ec.convertToPolygon(way);
+      //  Polygons with multiple LinearRing coordinate arrays specify the first one as the "outer" poly
+      role = MetadataTags::RelationOuter();
       if (position == 0)
-        role = MetadataTags::RelationOuter();
+        geometries.push_back(geo);
       else
-        role = MetadataTags::RelationInner();
+      {
+        //  Iterate all of the outer polys to see if this polygon is an inner poly
+        for (const auto& outer : geometries)
+        {
+          if (outer->contains(geo.get()))
+          {
+            role = MetadataTags::RelationInner();
+            break;
+          }
+        }
+        //  Add the outer poly to the list
+        if (role == MetadataTags::RelationOuter())
+          geometries.push_back(geo);
+      }
     }
     relation->addElement(role, ElementType::Way, way_id);
     position++;
@@ -882,7 +884,7 @@ void OsmGeoJsonReader::_parseOtherTags(const ElementPtr& element, const QString&
     tag_string.remove(tag_string.length() - 1, 1);
   //  Split the pairs by comma separated quotes
   QStringList pairs = tag_string.split("\",\"");
-  for (const auto& tag : pairs)
+  for (const auto& tag : qAsConst(pairs))
   {
     //  Each tag looks like `key\"=>\"value` at this point, parse them
     QStringList key_value = tag.split("\"=>\"");
@@ -898,7 +900,7 @@ std::shared_ptr<Coordinate> OsmGeoJsonReader::_readCoordinate(const pt::ptree& c
   double x = 0;
   double y = 0;
 
-  pt::ptree::const_iterator coord = coordsIt.begin();
+  auto coord = coordsIt.begin();
 
   // according to GeoJson specs, RFC7946, Section 9 we need to expect x,y,z and unc values but we
   // only care about x and y
@@ -917,5 +919,29 @@ std::shared_ptr<Coordinate> OsmGeoJsonReader::_readCoordinate(const pt::ptree& c
   return pCoord;
 }
 
+long OsmGeoJsonReader::_getVersion(const boost::property_tree::ptree& item, ElementType::Type type, long id) const
+{
+  return OsmJsonReader::_getVersion("@version", item, type, id);
 }
 
+long OsmGeoJsonReader::_getChangeset(const boost::property_tree::ptree& item) const
+{
+  return OsmJsonReader::_getChangeset("@changeset", item);
+}
+
+unsigned int OsmGeoJsonReader::_getTimestamp(const boost::property_tree::ptree& item) const
+{
+  return OsmJsonReader::_getTimestamp("@timestamp", item);
+}
+
+std::string OsmGeoJsonReader::_getUser(const boost::property_tree::ptree& item) const
+{
+  return OsmJsonReader::_getUser("@user", item);
+}
+
+long OsmGeoJsonReader::_getUid(const boost::property_tree::ptree& item) const
+{
+  return OsmJsonReader::_getUid("@uid", item);
+}
+
+}

@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RAILWAYS_CROSSING_MARKER_H
 #define RAILWAYS_CROSSING_MARKER_H
 
 // Hoot
+#include <hoot/core/conflate/highway/RoadCrossingPolyRule.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/conflate/highway/RoadCrossingPolyRule.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -79,9 +79,8 @@ public:
   { return "Marking rails that cross each other..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " crossing railways " +
-      "out of " + StringUtils::formatLargeNumber(_numRailways) + " total railways .";
+    return QString("Marked %1 crossing railways out of %2 total railways.")
+             .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numRailways));
   }
 
   QString getDescription() const override { return "Marks crossing railways"; }

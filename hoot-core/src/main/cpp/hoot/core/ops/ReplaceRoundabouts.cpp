@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ReplaceRoundabouts.h"
@@ -57,14 +57,10 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
   // Get a list of roundabouts from the map, go through & process them
   std::vector<RoundaboutPtr> roundabouts = pMap->getRoundabouts();
   LOG_VART(roundabouts.size());
-  for (size_t i = 0; i < roundabouts.size(); i++)
+  for (auto const& roundabout : roundabouts)
   {
-    RoundaboutPtr pRoundabout = roundabouts[i];
-    pRoundabout->replaceRoundabout(pMap);
+    roundabout->replaceRoundabout(pMap);
     _numAffected++;
-
-    // This could be very expensive...enable for debugging only.
-    //OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabout-" + QString::number(i + 1));
   }
   OsmMapWriterFactory::writeDebugMap(pMap, className(), "after-replacing-roundabouts-1");
 
@@ -74,7 +70,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     ElementIdsVisitor::findElementsByTag(
       pMap, ElementType::Way, MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
   LOG_VART(connectors.size());
-  foreach (long id, connectors)
+  for (auto id : connectors)
   {
     LOG_TRACE("Removing center node: " << id << "...");
     RemoveWayByEid::removeWayFully(pMap, id);
@@ -86,7 +82,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     ElementIdsVisitor::findElementsByTag(
       pMap, ElementType::Node, MetadataTags::HootSpecial(), MetadataTags::RoundaboutCenter());
   LOG_VART(centers.size());
-  foreach (long id, centers)
+  for (auto id : centers)
   {
     LOG_TRACE("Removing center node: " << id << "...");
     RemoveNodeByEid::removeNode(pMap, id, true);

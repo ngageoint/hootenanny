@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PertyTestRunner.h"
 
 // hoot
-#include <hoot/core/algorithms/perty/PertyTestRunResult.h>
 #include <hoot/core/algorithms/perty/PertyMatchScorer.h>
+#include <hoot/core/algorithms/perty/PertyTestRunResult.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
@@ -44,9 +44,9 @@ using namespace std;
 namespace hoot
 {
 
-PertyTestRunner::PertyTestRunner() :
-_settings(conf()),
-_returnTestScores(false)
+PertyTestRunner::PertyTestRunner()
+  : _settings(conf()),
+    _returnTestScores(false)
 {
   ConfigOptions configOptions;
   setNumTestRuns(configOptions.getPertyTestNumRuns());
@@ -63,33 +63,30 @@ _returnTestScores(false)
 void PertyTestRunner::setNumTestRuns(int numRuns)
 {
   if (numRuns < 1)
-  {
     throw HootException("Invalid number of test runs: " + QString::number(numRuns));
-  }
+
   _numTestRuns = numRuns;
 }
 
 void PertyTestRunner::setNumTestSimulations(int numSimulations)
 {
   if (numSimulations < 1)
-  {
     throw HootException("Invalid number of test simulations: " + QString::number(numSimulations));
-  }
+
   _numTestSimulations = numSimulations;
 }
 
 void PertyTestRunner::setDynamicVariables(const QStringList& dynamicVariables)
 {
   _dynamicVariables.clear();
-  foreach (QString var, dynamicVariables)
+  for (const auto& var : qAsConst(dynamicVariables))
   {
     //this isn't the best check, since not all perty.* vars are numeric but will do for now
     if (var.trimmed() != "")
     {
       if (!var.startsWith("perty."))
-      {
         throw HootException("Only PERTY variables may be manipulated during a PERTY test (config options = perty.*");
-      }
+
       _dynamicVariables.append(var);
     }
   }
@@ -98,18 +95,15 @@ void PertyTestRunner::setDynamicVariables(const QStringList& dynamicVariables)
 void PertyTestRunner::setExpectedScores(const QStringList& scores)
 {
   if (scores.size() < 1)
-  {
-    throw HootException("Invalid number of expected scores: " + scores.size());
-  }
+    throw HootException("Invalid number of expected scores: " + QString::number(scores.size()));
+
   QList<double> expectedScores;
-  for (int i = 0; i < scores.size(); i++)
+  for (const auto& score : qAsConst(scores))
   {
     bool ok;
-    expectedScores.append(scores[i].toDouble(&ok)) ;
+    expectedScores.append(score.toDouble(&ok)) ;
     if (!ok)
-    {
-      throw HootException("Error parsing expected score value: " + scores[i]);
-    }
+      throw HootException("Error parsing expected score value: " + score);
   }
   _expectedScores = expectedScores;
 }
@@ -117,9 +111,8 @@ void PertyTestRunner::setExpectedScores(const QStringList& scores)
 void PertyTestRunner::setAllowedScoreVariance(double scoreVariance)
 {
   if (scoreVariance > 1.0 || scoreVariance < 0.0)
-  {
     throw HootException("Invalid allowed score variance: " + QString::number(scoreVariance));
-  }
+
   _allowedScoreVariance = scoreVariance;
 }
 
@@ -132,8 +125,8 @@ void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, con
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
-QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
-  const QString& referenceMapInputPath, const QString& outputPath)
+QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(const QString& referenceMapInputPath,
+                                                                          const QString& outputPath)
 {
   if (_expectedScores.size() != _numTestRuns)
   {
@@ -161,9 +154,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
 
   QFile resultsFile(outputPath + "/results");
   if (resultsFile.exists())
-  {
     resultsFile.remove();
-  }
 
   QList<std::shared_ptr<const PertyTestRunResult>> testRunResults;
   double dynamicVariableValue = _dynamicVariableStartValue;
@@ -171,11 +162,10 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
   int testScoreCtr = 0;
   for (int i = 0; i < _numTestRuns; i++)
   {
-    for (int j = 0; j < _dynamicVariables.size(); j++)
-    {
-      // this code does nothing if there are no dynamic variables present
-      _settings.set(_dynamicVariables[j], QString::number(dynamicVariableValue));
-    }
+    // this code does nothing if there are no dynamic variables present
+    for (const auto& variable : qAsConst(_dynamicVariables))
+      _settings.set(variable, QString::number(dynamicVariableValue));
+
     _matchScorer->setConfiguration(_settings);
 
     QList<double> simulationScores;
@@ -258,9 +248,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
   _testScores.clear();
 
   if (!_dynamicVariables.empty())
-  {
     _writePlotFile(outputPath, testRunResults);
-  }
 
   return testRunResults;
 }
@@ -270,16 +258,12 @@ void PertyTestRunner::_writePlotFile(const QString& outputPath,
 {
   QFile plotFile(outputPath + "/results-plot.dat");
   if (plotFile.exists())
-  {
     plotFile.remove();
-  }
 
   QString outStr = "";
   double dynamicVariableValue = _dynamicVariableStartValue;
-  for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = testRunResults.begin();
-       it != testRunResults.end(); ++it)
+  for (const auto& result : testRunResults)
   {
-    std::shared_ptr<const PertyTestRunResult> result = *it;
     outStr += QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
     dynamicVariableValue += _dynamicVariableIncrement;
   }

@@ -22,24 +22,24 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OpExecutor.h"
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -49,16 +49,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, OpExecutor)
 
-OpExecutor::OpExecutor() :
-_conf(&conf()),
-_operateOnlyOnConflatableElements(false)
+OpExecutor::OpExecutor()
+  : _conf(&conf()),
+    _operateOnlyOnConflatableElements(false)
 {
 }
 
-OpExecutor::OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements) :
-_conf(&conf()),
-_namedOps(namedOps),
-_operateOnlyOnConflatableElements(operateOnlyOnConflatableElements)
+OpExecutor::OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements)
+  : _conf(&conf()),
+    _namedOps(namedOps),
+    _operateOnlyOnConflatableElements(operateOnlyOnConflatableElements)
 {
   LOG_VART(_namedOps);
   _substituteForContainingOps();
@@ -77,9 +77,9 @@ void OpExecutor::_substituteForContainingOps()
   {
     int cleaningOpIndex = _namedOps.indexOf(mapCleanerName);
     const QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
-    for (int i = 0; i < mapCleanerTransforms.size(); i++)
+    for (const auto& transform : qAsConst(mapCleanerTransforms))
     {
-      _namedOps.insert(cleaningOpIndex, mapCleanerTransforms.at(i));
+      _namedOps.insert(cleaningOpIndex, transform);
       cleaningOpIndex++;
     }
     _namedOps.removeAll(mapCleanerName);
@@ -95,18 +95,14 @@ void OpExecutor::apply(OsmMapPtr& map)
 
   std::shared_ptr<ConflateInfoCache> conflateInfoCache;
   if (_operateOnlyOnConflatableElements)
-  {
     conflateInfoCache = std::make_shared<ConflateInfoCache>(map);
-  }
 
   int opCount = 1;
-  foreach (QString s, _namedOps)
+  for (auto s : _namedOps)
   {
     s = s.remove("\"");
     if (s.isEmpty())
-    {
       return;
-    }
     LOG_VART(s);
 
     timer.restart();
@@ -116,7 +112,6 @@ void OpExecutor::apply(OsmMapPtr& map)
     LOG_TRACE("Projection before " << s << ": " << MapProjector::toWkt(map->getProjection()));
 
     // We could benefit from passing progress into some of the ops to get more granular feedback.
-
     std::shared_ptr<OperationStatus> statusInfo;
     if (f.hasBase<OsmMapOperation>(s))
     {
@@ -125,9 +120,7 @@ void OpExecutor::apply(OsmMapPtr& map)
 
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
       if (_progress.getState() == Progress::JobState::Running)
-      {
         _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
-      }
       else
       {
         // In case the caller isn't using progress, we still want to get status logging.
@@ -136,9 +129,7 @@ void OpExecutor::apply(OsmMapPtr& map)
 
       Configurable* c = dynamic_cast<Configurable*>(op.get());
       if (_conf != nullptr && c != nullptr)
-      {
         c->setConfiguration(*_conf);
-      }
 
       if (_operateOnlyOnConflatableElements)
       {
@@ -153,16 +144,12 @@ void OpExecutor::apply(OsmMapPtr& map)
 
         ConflateInfoCacheConsumer* cacheConsumer =
           dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
+        // This info cache will allow the op to verify whether elements it operates on should be
+        // modified or not based on the current conflation configuration.
         if (cacheConsumer != nullptr)
-        {
-          // This info cache will allow the op to verify whether elements it operates on should be
-          // modified or not based on the current conflation configuration.
           cacheConsumer->setConflateInfoCache(conflateInfoCache);
-        }
       }
-
       op->apply(map);
-
       _appliedOps[op->getName()] = op;
     }
     else if (f.hasBase<ElementVisitor>(s))
@@ -172,9 +159,7 @@ void OpExecutor::apply(OsmMapPtr& map)
 
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
       if (_progress.getState() == Progress::JobState::Running)
-      {
         _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
-      }
       else
       {
         // In case the caller isn't using progress, we still want to get status logging.
@@ -183,40 +168,29 @@ void OpExecutor::apply(OsmMapPtr& map)
 
       Configurable* c = dynamic_cast<Configurable*>(vis.get());
       if (_conf != nullptr && c != nullptr)
-      {
         c->setConfiguration(*_conf);
-      }
 
       // The ordering of setting the config before the map here seems to make sense, but all
       // ElementVisitors implementing OsmMapConsumer will need to be aware of it.
-
       OsmMapConsumer* mapConsumer = dynamic_cast<OsmMapConsumer*>(vis.get());
       if (mapConsumer)
-      {
         mapConsumer->setOsmMap(map.get());
-      }
 
       if (_operateOnlyOnConflatableElements)
       {
         ConflateInfoCacheConsumer* cacheConsumer =
           dynamic_cast<ConflateInfoCacheConsumer*>(vis.get());
         if (cacheConsumer != nullptr)
-        {
           cacheConsumer->setConflateInfoCache(conflateInfoCache);
-        }
       }
-
       // TODO: Somehow we should add an opt here to only process elements of the element type
       // specific to the vis, for those who don't process all element types. e.g. use visitWaysRw
       // instead of visitRw where appropriate
       map->visitRw(*vis);
-
       _appliedVis[vis->getName()] = vis;
     }
     else
-    {
       throw HootException("Unexpected operation: " + s);
-    }
 
     MemoryUsageChecker::getInstance().check();
 
@@ -232,7 +206,6 @@ void OpExecutor::apply(OsmMapPtr& map)
 
     opCount++;
     OsmMapWriterFactory::writeDebugMap(map, className(), "after-" + s);
-
     LOG_TRACE("Projection after " << s << ": " << MapProjector::toWkt(map->getProjection()));
   }
 }
@@ -250,18 +223,13 @@ void OpExecutor::_updateProgress(const int currentStep, const QString& message)
   }
 }
 
-QString OpExecutor::_getInitMessage(
-  const QString& message, const std::shared_ptr<OperationStatus>& statusInfo) const
+QString OpExecutor::_getInitMessage(const QString& message, const std::shared_ptr<OperationStatus>& statusInfo) const
 {
   QString initMessage;
   if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
-  {
     initMessage += statusInfo->getInitStatusMessage();
-  }
   else
-  {
     initMessage += message + "...";
-  }
   LOG_VART(initMessage);
   return initMessage;
 }

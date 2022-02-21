@@ -15,6 +15,3 @@ source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $LOG_LEVEL $CONFIG $IN_DIR_1/PoiPolygon1.osm $IN_DIR_1/PoiPolygon2.osm $OUT_DIR/output.osm
 hoot diff -C Testing.conf $OUT_DIR/output.osm $IN_DIR_2/output.osm || diff $OUT_DIR/output.osm $IN_DIR_2/output.osm
-
-validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
-  $OUT_DIR/output-validated.osm $IN_DIR_2/output-validation-report

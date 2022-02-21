@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "MatchCreator.h"
@@ -36,14 +36,14 @@
 namespace hoot
 {
 
-MatchCreator::MatchCreator() :
-_boundsAddedToFilter(false)
+MatchCreator::MatchCreator()
+  : _boundsAddedToFilter(false)
 {
 }
 
-void MatchCreator::createMatches(
-  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& /*matches*/,
-  ConstMatchThresholdPtr /*threshold*/)
+void MatchCreator::createMatches(const ConstOsmMapPtr& map,
+                                 std::vector<ConstMatchPtr>& /*matches*/,
+                                 ConstMatchThresholdPtr /*threshold*/)
 {    
   if (_filter)
   {
@@ -52,9 +52,7 @@ void MatchCreator::createMatches(
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
       std::dynamic_pointer_cast<ConstOsmMapConsumer>(_filter);
     if (mapConsumer)
-    {
       mapConsumer->setOsmMap(map.get());
-    }
   }
 
   if (!_boundsAddedToFilter && ConfigUtils::boundsOptionEnabled())
@@ -79,9 +77,7 @@ void MatchCreator::createMatches(
 
     ElementCriterionPtr boundsFilter = ConfigUtils::getBoundsFilter(map);
     if (!_filter)
-    {
       _filter = boundsFilter;
-    }
     else
     {
       ElementCriterionPtr existingFilter = _filter->clone();

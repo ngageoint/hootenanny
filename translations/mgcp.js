@@ -277,7 +277,7 @@ mgcp = {
 
       default:
         // Debug
-        hoot.logWarn('ManyFeatures: Should not get to here');
+        hoot.logDebug('ManyFeatures: Should not get to here');
     } // end switch
 
     // Now make new features based on what tags are left
@@ -1053,6 +1053,17 @@ mgcp = {
       tags.natural = 'water';
       break;
 
+    // BB041 - Breakwater
+    case 'BB041':
+      // Differentiate between Line and Area breakwaters
+      if (geometryType == 'Area')
+      {
+        // Debug
+        // print('Adding area=yes');
+        tags.area = 'yes';
+      }
+      break;
+
     // BB190 - Berthing Structure
     case 'BB190':
       if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
@@ -1148,7 +1159,6 @@ mgcp = {
   {
     // Remove Hoot assigned tags for the source of the data
     delete tags['source:ingest:datetime'];
-    delete tags.area;
     delete tags['error:circular'];
     delete tags['hoot:status'];
 
@@ -1919,7 +1929,7 @@ mgcp = {
     if (tags.uuid)
     {
       var str = tags['uuid'].split(';');
-      attrs.UID = str[0].replace('{','').replace('}','');
+      attrs.UID = str[0].replace('{','').replace('}','').toUpperCase();
     }
     else if (tags['hoot:id'])
     {
@@ -1927,7 +1937,8 @@ mgcp = {
     }
     else
     {
-      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
+      // Moving to upper case as a test
+      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','').toUpperCase();
     }
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
@@ -2030,7 +2041,7 @@ mgcp = {
           attrs.FFN = '931';
         }
 
-        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
+        if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931' && attrs.FFN !== '0'))
         {
           // Debug
           //print('AL015: Setting HWT 998');
@@ -2211,11 +2222,16 @@ mgcp = {
     //Map alternate source date tags to SDV in order of precedence
     //default in mgcp_rules is 'source:datetime'
     if (! attrs.SDV || attrs.SDV == 'UNK')
+    {
       attrs.SDV = tags['source:imagery:datetime']
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
-        || '';
+        || 'UNK';
+
+      // UNK is the default value. OGR export will populate it.
+      if (attrs.SDV == 'UNK') delete attrs.SDV;
+    }
 
     // Chop the milliseconds off the "source:datetime"
     if (attrs.SDV)
@@ -2226,10 +2242,15 @@ mgcp = {
     //Map alternate source tags to ZI001_SDP in order of precedence
     //default in mgcp_rules is 'source'
     if (! attrs.SDP || attrs.SDP == 'N_A')
+    {
       attrs.SDP = tags['source:imagery']
         || tags['source:description']
         || tags['source:name']
-        || '';
+        || 'N_A';
+
+      // N_A is the default value. OGR export will populate it.
+      if (attrs.SDP == 'N_A') delete attrs.SDP;
+    }
 
     // Fix up SRT values so we comply with the spec. These values came from data files
     // Format is: orig:new
@@ -2375,7 +2396,8 @@ mgcp = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        // Upper case as a test
+        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid().toUpperCase();
       }
 
       if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();

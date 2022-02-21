@@ -22,34 +22,34 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RandomMapCropper.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
-#include <hoot/core/io/NodeDensityTaskGridWriter.h>
 #include <hoot/core/conflate/tile/TileUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/NodeDensityTaskGridWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RandomMapCropper)
 
-RandomMapCropper::RandomMapCropper() :
-_maxNodeCount(1000),
-_randomSeed(-1),
-_pixelSize(0.001)
+RandomMapCropper::RandomMapCropper()
+  : _maxNodeCount(ConfigOptions().getCropRandomMaxNodeCount()),
+    _randomSeed(ConfigOptions().getRandomSeed()),
+    _pixelSize(ConfigOptions().getCropRandomPixelSize())
 {
 }
 
@@ -70,17 +70,13 @@ void RandomMapCropper::setTileFootprintOutputPath(QString path)
   _tileFootprintOutputPath = path;
 
   if (!OsmXmlWriter().isSupported(_tileFootprintOutputPath))
-  {
     throw IllegalArgumentException("RandomMapCropper supports .osm tile footprint outputs only.");
-  }
 }
 
 void RandomMapCropper::apply(OsmMapPtr& map)
 {
-  if (_maxNodeCount < 1 || _maxNodeCount > (int)map->size())
-  {
-    throw IllegalArgumentException("Invalid max node count: " + _maxNodeCount);
-  }
+  if (_maxNodeCount < 1 || _maxNodeCount > static_cast<int>(map->size()))
+    throw IllegalArgumentException(QString("Invalid max node count: %1").arg(_maxNodeCount));
 
   LOG_INFO("Cropping to random map tile of max node size: " << _maxNodeCount << "...");
   LOG_VARD(_randomSeed);
@@ -91,9 +87,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   // Could be an expensive operation. Keep as debug.
   geos::geom::Envelope startingBounds;
   if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     startingBounds = CalculateMapBoundsVisitor::getGeosBounds(map);
-  }
 
   // compute tiles for the whole dataset, select one tile at random, and crop to the bounds of
   // the selected tile
@@ -104,8 +98,8 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   tileCalc.setPixelSize(_pixelSize);
   tileCalc.setMaxNodesPerTile(_maxNodeCount);
   tileCalc.calculateTiles(map);
-  const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
-  const std::vector<std::vector<long>> nodeCounts = tileCalc.getNodeCounts();
+  const std::vector<geos::geom::Envelope> tiles = tileCalc.getTiles();
+  const std::vector<long> nodeCounts = tileCalc.getNodeCounts();
 
   if (!_tileFootprintOutputPath.isEmpty())
   {
@@ -123,9 +117,8 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   LOG_INFO("Starting map size: " << StringUtils::formatLargeNumber(startingMapSize));
   LOG_DEBUG("Starting map bounds: " << GeometryUtils::envelopeToString(startingBounds));
   LOG_INFO("Cropped map size: " << StringUtils::formatLargeNumber(map->size()));
-  LOG_DEBUG(
-    "Cropped map bounds: " <<
-    GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map)));
+  LOG_DEBUG("Cropped map bounds: " <<
+            GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map)));
   LOG_INFO("Minimum nodes in a single tile: " << tileCalc.getMinNodeCountInOneTile());
   LOG_INFO("Maximum nodes in a single tile: " << tileCalc.getMaxNodeCountInOneTile());
 }

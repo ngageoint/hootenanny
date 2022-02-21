@@ -366,8 +366,8 @@ mgcp.rules = {
 
     // COD - Delineation Known
     // ['COD','1000','raw:COD','limits_and_information_unknown'], // Limits and Information Unknown
-    ['COD','1000','deliniation','unknown'], // Limits and Information Unknown
-    ['COD','1001','deliniation','known'], // Limits and Information Known
+    ['COD','1000','delineation','unknown'], // Limits and Information Unknown
+    ['COD','1001','delineation','known'], // Limits and Information Known
 
     //CON - Road Width Constriction Type
     ['CON','35','junction','yes'],
@@ -1292,7 +1292,7 @@ mgcp.rules = {
 
     ], // End one2one
 
-    // One to one translation table for MGCP TRD 3.0 attributes. This is for import only
+    // one-to-one translation table for MGCP TRD 3.0 attributes. This is for import only
     one2oneIn : [
     // ACE_EVAL Absolute Horizontal Accuracy Evaluation Method
     // ['ACE_EVAL','0',undefined,undefined],
@@ -2332,11 +2332,11 @@ mgcp.rules = {
     // Attribute values that are to be dropped since they are defaults or don't add value.
     dropList : { '-32765':1,'-32767':1,'-32768':1,
                  '-32765.0':1,'-32767.0':1,'-32768.0':1,
-                 '998':1,'n_a':1,'n/a':1,'unknown':1,'unk':1 },
+                 '998':1,'n_a':1,'n/a':1,'unknown':1,'unk':1,'fcsubtype':1 },
     // ##### End of dropList #####
 
     // Attribute names to swap on input. These are to avoid having copies of the same translation.
-    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC'},
+    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC','LEN_':'LEN'},
 
     // Swap attribute values on export.
     // Format is: <FCODE>:{<from>:<to>}

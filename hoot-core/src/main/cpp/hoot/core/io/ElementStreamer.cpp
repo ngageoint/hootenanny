@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementStreamer.h"
 
@@ -45,13 +45,12 @@
 namespace hoot
 {
 
-ElementStreamer::ElementStreamer(const QString& translationScript) :
-_translationScript(translationScript)
+ElementStreamer::ElementStreamer(const QString& translationScript)
+  : _translationScript(translationScript)
 {
 }
 
-void ElementStreamer::stream(
-  const QStringList& inputs, const QString& out, const QStringList& convertOps, Progress progress)
+void ElementStreamer::stream(const QStringList& inputs, const QString& out, const QStringList& convertOps, Progress progress)
 {
   QElapsedTimer timer;
   timer.start();
@@ -95,16 +94,16 @@ void ElementStreamer::stream(
     // #4899 would relax this to only require a translation if only one or the other of the
     // input/output was OGR and not require one when both are.
     if ((ogrReader || ogrWriter) && _translationScript.isEmpty())
-    {
       throw IllegalArgumentException("No translation script specified.");
-    }
 
+    //  Set the translation script for OGR readers
+    if (ogrReader && !ogrWriter)
+      ogrReader->setSchemaTranslationScript(_translationScript);
+
+    // Need to run separate logic for streaming from an OGR source with layers in order to support
+    // the layer syntax.
     if (ogrReader && input.contains(";"))
-    {
-      // Need to run separate logic for streaming from an OGR source with layers in order to support
-      // the layer syntax.
       numFeaturesWritten += _streamFromOgr(*ogrReader, input, *streamWriter);
-    }
     else
     {
       reader->open(input);
@@ -118,22 +117,17 @@ void ElementStreamer::stream(
   }
 
   if (partialWriter.get())
-  {
     partialWriter->finalizePartial();
-  }
   if (partialReader.get())
-  {
     partialReader->finalizePartial();
-  }
 
   LOG_INFO(
     "Streamed " << StringUtils::formatLargeNumber(numFeaturesWritten) << " elements in: " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-long ElementStreamer::_streamFromOgr(
-  const OgrReader& reader, QString& input, ElementOutputStream& writer,
-  const QStringList& convertOps, Progress /*progress*/) const
+long ElementStreamer::_streamFromOgr(const OgrReader& reader, QString& input, ElementOutputStream& writer,
+                                     const QStringList& convertOps, Progress /*progress*/) const
 {
   // TODO: run a separate progress for _streamFromOgr as part of #4856?
 
@@ -147,9 +141,8 @@ long ElementStreamer::_streamFromOgr(
     layers.append(list.at(1));
   }
   else
-  {
     layers = reader.getFilteredLayerNames(input);
-  }
+
   if (layers.empty())
   {
     LOG_WARN("Could not find any valid layers to read from in " + input + ".");
@@ -158,20 +151,18 @@ long ElementStreamer::_streamFromOgr(
   const QList<ElementVisitorPtr> ops = IoUtils::toStreamingOps(convertOps);
 
   long numFeaturesWritten = 0;
-  for (int i = 0; i < layers.size(); i++)
+  for (const auto& layer : qAsConst(layers))
   {
-    LOG_TRACE("Reading: " << input + " " << layers[i] << "...");
+    LOG_TRACE("Reading: " << input + " " << layer << "...");
 
-    std::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
+    std::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layer));
     while (iterator->hasNext())
     {
       std::shared_ptr<Element> e = iterator->next();
 
       // Run any convert ops present.
-      foreach (ElementVisitorPtr op, ops)
-      {
+      for (const auto& op : ops)
         op->visit(e);
-      }
 
       if (e)
       {

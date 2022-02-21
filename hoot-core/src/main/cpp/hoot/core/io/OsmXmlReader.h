@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLREADER_H
 #define OSMXMLREADER_H
@@ -64,18 +64,15 @@ public:
    * @param addChildRefsWhenMissing add referenced children when they are missing from the input
    * @return a map
    */
-  static OsmMapPtr fromXml(
-    const QString& xml, const bool useDataSourceId = false, const bool useDataSourceStatus = false,
-    const bool keepStatusTag = false, const bool addChildRefsWhenMissing = false);
+  static OsmMapPtr fromXml(const QString& xml, const bool useDataSourceId = false, const bool useDataSourceStatus = false,
+                           const bool keepStatusTag = false, const bool addChildRefsWhenMissing = false);
 
   void read(const QString& path, const OsmMapPtr& map);
   void readFromString(const QString& xml, const OsmMapPtr& map);
 
-  bool startElement(
-   const QString& namespaceURI, const QString& localName, const QString& qName,
-   const QXmlAttributes& attributes) override;
-  bool endElement(
-    const QString& namespaceURI, const QString& localName, const QString& qName) override;
+  bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName,
+                    const QXmlAttributes& attributes) override;
+  bool endElement(const QString& namespaceURI, const QString& localName, const QString& qName) override;
   bool fatalError(const QXmlParseException &exception) override;
   QString errorString() const override { return _errorString; }
 
@@ -198,6 +195,8 @@ private:
   double _parseDouble(const QString& s) const;
   long _parseLong(const QString& s) const;
 
+  bool _setElementCircularError(const Tags& tags, const QString& key) const;
+
   const QString& _saveMemory(const QString& s);
 
   QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes) const;
@@ -205,6 +204,12 @@ private:
   void _uncompressInput();
 
   void _cropToBounds();
+
+  long _getVersion(const QXmlAttributes& attributes) const;
+  long _getChangeset(const QXmlAttributes& attributes) const;
+  unsigned int _getTimestamp(const QXmlAttributes& attributes) const;
+  QString _getUser(const QXmlAttributes& attributes) const;
+  long _getUid(const QXmlAttributes& attributes) const;
 };
 
 }

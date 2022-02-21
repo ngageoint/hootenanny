@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "MetadataExport.h"
 
 // Hoot
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -55,12 +55,10 @@ void MetadataExport::_apply()
   _exportMetadataFromElements();
 
   // remove datasets which contain no elements
-  foreach (WayPtr pDataset, _mergedGeoms.keys())
+  for (const auto& pDataset : _mergedGeoms.keys())
   {
     if (!_modifiedDatasets.contains(pDataset))
-    {
       _removeDatasetWay(pDataset);
-    }
   }
 }
 
@@ -126,12 +124,10 @@ void MetadataExport::_exportMetadataFromElements()
   for (int ie = 0; ie < _elementsToProcess.length(); ie++)
   {
     WayPtr assignedDataset = _assignToDataset( _elementsToProcess[ie] );
-
     if (assignedDataset)
     {
       Tags destTags = assignedDataset->getTags();
       Tags srcTags = _elementsToProcess[ie]->getTags();
-
       // assign the tags we find
       for (QString tag : _tags.keys())
       {
@@ -148,17 +144,14 @@ void MetadataExport::_exportMetadataFromElements()
             QStringList assignedDestTags = destTags[tag].split(";");
             QStringList newTags = srcTags[tag].split(";");
 
-            foreach (QString newTag, newTags)
+            for (const auto& newTag : qAsConst(newTags))
             {
               if (!assignedDestTags.contains(newTag))
-              {
                 destTags[tag] += ";" + newTag;
-              }
             }
           }
         }
       }
-
       assignedDataset->setTags(destTags);
       if (!_modifiedDatasets.contains(assignedDataset))
         _modifiedDatasets.push_back(assignedDataset);
@@ -166,18 +159,16 @@ void MetadataExport::_exportMetadataFromElements()
   }
 
   // make sure all tags are set, if not, assign the default
-  foreach (WayPtr pDataset, _mergedGeoms.keys())
+  for (const auto& pDataset : _mergedGeoms.keys())
   {
     Tags destTags = pDataset->getTags();
-
     for (QString tag : _tags.keys())
     {
-      if (!destTags.contains(tag)) destTags[tag] = _tags[tag];
+      if (!destTags.contains(tag))
+        destTags[tag] = _tags[tag];
     }
-
     pDataset->setTags(destTags);
   }
-
   _numAffected = _modifiedDatasets.length();
 }
 

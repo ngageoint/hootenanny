@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -395,39 +395,27 @@ inline NodePtr OsmMap::getNode(long id)
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
-  {
     return _tmpNodeMapIt->second;
-  }
   else
-  {
     return _nullNode;
-  }
 }
 
 inline ConstNodePtr OsmMap::getNode(long id) const
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
-  {
     return _tmpNodeMapIt->second;
-  }
   else
-  {
     return _constNullNode;
-  }
 }
 
 inline ConstRelationPtr OsmMap::getRelation(long id) const
 {
   RelationMap::iterator it = _relations.find(id);
   if (it != _relations.end())
-  {
     return it->second;
-  }
   else
-  {
     return _nullRelation;
-  }
 }
 
 inline ConstRelationPtr OsmMap::getRelation(ElementId eid) const
@@ -439,26 +427,18 @@ inline RelationPtr OsmMap::getRelation(long id)
 {
   _tmpRelationIt = _relations.find(id);
   if (_tmpRelationIt != _relations.end())
-  {
     return _tmpRelationIt->second;
-  }
   else
-  {
     return _nullRelation;
-  }
 }
 
 inline ConstWayPtr OsmMap::getWay(long id) const
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
-  {
     return _tmpWayIt->second;
-  }
   else
-  {
     return _constNullWay;
-  }
 }
 
 inline ConstWayPtr OsmMap::getWay(ElementId eid) const
@@ -470,13 +450,9 @@ inline WayPtr OsmMap::getWay(long id)
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
-  {
     return _tmpWayIt->second;
-  }
   else
-  {
     return _nullWay;
-  }
 }
 
 inline WayPtr OsmMap::getWay(ElementId eid)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OgrWriter.h"
 
@@ -128,6 +128,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
     throw HootException("Error setting strict checking. Expected on/off/warn. got: " + strictStr);
 
   _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
+  _forceSkipFailedRelations = configOptions.getOgrWriterSkipFailedRelations();
 }
 
 void OgrWriter::_strictError(const QString& warning) const
@@ -237,11 +238,8 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   // relations, so fail if any get skipped during the second pass.
   _failOnSkipRelation = true;
   LOG_DEBUG("Writing second pass relations...");
-  for (auto relationIdIter = _unwrittenFirstPassRelationIds.begin();
-       relationIdIter != _unwrittenFirstPassRelationIds.end(); ++relationIdIter)
-  {
-    _writePartial(provider, map->getRelation(*relationIdIter));
-  }
+  for (auto relation_id : qAsConst(_unwrittenFirstPassRelationIds))
+    _writePartial(provider, map->getRelation(relation_id));
 }
 
 void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const ConstElementPtr& e,
@@ -279,7 +277,7 @@ void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const Co
 
     Tags t = e->getTags();
     QStringList keys = t.keys();
-    for (const auto& key : keys)
+    for (const auto& key : qAsConst(keys))
     {
       if (t[key] == "")
         t.remove(key);
@@ -359,18 +357,18 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
   // Make sure all the nodes in the way are in our cache
   const std::vector<long> wayNodeIds = way->getNodeIds();
 
-  for (auto nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
+  for (auto node_id : wayNodeIds)
   {
-    if (_elementCache->containsNode(*nodeIdIterator) == false)
+    if (_elementCache->containsNode(node_id) == false)
     {
       throw HootException("Way " + QString::number(way->getId()) + " contains node " +
-        QString::number(*nodeIdIterator) + ", which is not present in the cache.  If you have the " +
+        QString::number(node_id) + ", which is not present in the cache.  If you have the " +
           "memory to support this number of nodes, you can increase the element.cache.size.node " +
           "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
     }
-    LOG_TRACE("Way " << way->getId() << " contains node " << *nodeIdIterator <<
-                 ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
-                _elementCache->getNode(*nodeIdIterator)->getY() );
+    LOG_TRACE("Way " << way->getId() << " contains node " << node_id <<
+                 ": " << _elementCache->getNode(node_id)->getX() << ", " <<
+                _elementCache->getNode(node_id)->getY() );
   }
 
   // Add to the element cache
@@ -393,9 +391,12 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
   unsigned long wayCount = 0;
   unsigned long relationCount = 0;
 
-  for (auto relationElementIter = relationEntries.begin(); relationElementIter != relationEntries.end(); ++relationElementIter)
+  std::set<RelationData::Entry> removeEntries;
+
+  for (const auto& member : relationEntries)
   {
-    switch (relationElementIter->getElementId().getType().getEnum())
+    ElementType::Type member_type = member.getElementId().getType().getEnum();
+    switch (member_type)
     {
     case ElementType::Node:
       nodeCount++;
@@ -437,13 +438,13 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
       break;
     }
 
-    LOG_TRACE("Checking to see if element with ID: " << relationElementIter->getElementId().getId() <<
-              " and type: " << relationElementIter->getElementId().getType() <<
+    LOG_TRACE("Checking to see if element with ID: " << member.getElementId().getId() <<
+              " and type: " << member.getElementId().getType() <<
               " contained by relation " << newRelation->getId() << " is in the element cache...");
-    if (_elementCache->containsElement(relationElementIter->getElementId()) == false )
+    if (_elementCache->containsElement(member.getElementId()) == false )
     {
       unsigned long cacheSize;
-      switch (relationElementIter->getElementId().getType().getEnum())
+      switch (member_type)
       {
       case ElementType::Node:
         cacheSize =  _elementCache->getNodeCacheSize();
@@ -458,32 +459,60 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
         throw HootException("Relation contains unknown type");
         break;
       }
-      const QString msg = "Relation element with ID: " +
-        QString::number(relationElementIter->getElementId().getId()) + " and type: " +
-        relationElementIter->getElementId().getType().toString() + " did not exist in the element " +
-        "cache with size = " + QString::number(cacheSize) + ".  You may need to increase the following " +
-        "settings: element.cache.size.node, element.cache.size.way, element.cache.size.relation";
-      if (_failOnSkipRelation ||
-          relationElementIter->getElementId().getType().getEnum() != ElementType::Relation)
+      const QString msg = QString("Relation (%1) element (%2: %3) does not exist in the element "
+        "cache with size = %4. You may need to increase the following settings: "
+        "element.cache.size.node, element.cache.size.way, element.cache.size.relation")
+          .arg(QString::number(newRelation->getElementId().getId()),
+               QString::number(member.getElementId().getId()),
+               member.getElementId().getType().toString(),
+               QString::number(cacheSize));
+
+      if (member_type == ElementType::Relation)
       {
-        throw HootException(msg);
+        //  Relation members throw that fail and aren't forced
+        if (_failOnSkipRelation && !_forceSkipFailedRelations)
+          throw HootException(msg);
+        else if (!_failOnSkipRelation)
+        {
+          //  The first time through the relations, failed relation members
+          //  might not have had the chance to write out to the cache yet, retry later
+          LOG_TRACE(msg << " Will attempt to write relation with ID: " <<
+                    newRelation->getId() << " on a subsequent pass.");
+          _unwrittenFirstPassRelationIds.append(newRelation->getId());
+          return;
+        }
       }
       else
       {
-        LOG_TRACE(msg << "   Will attempt to write relation with ID: " <<
-                  newRelation->getId() << " on a subsequent pass.");
-        _unwrittenFirstPassRelationIds.append(newRelation->getId());
-        return;
+        //  Node and Way members throw if we don't force the skip
+        if (!_forceSkipFailedRelations)
+          throw HootException(msg);
       }
+      //  Add this member to the list to remove for OGR files
+      removeEntries.insert(member);
     }
   }
 
-  // Add to the cache
   ConstElementPtr constRelation(newRelation);
-  _elementCache->addElement(constRelation);
+  //  Update the element to remove any non-existing members
+  if (!removeEntries.empty())
+  {
+    std::vector<RelationData::Entry> newMembers;
+    for (const auto& member : newRelation->getMembers())
+    {
+      if (removeEntries.find(member) == removeEntries.end())
+        newMembers.push_back(member);
+    }
+    RelationPtr p = std::dynamic_pointer_cast<Relation>(newRelation->clone());
+    p->setMembers(newMembers);
+    constRelation = p;
+  }
 
+  // Add to the cache
+  _elementCache->addElement(constRelation);
+  //  Write out the element
   ElementProviderPtr cacheProvider(_elementCache);
-  _writePartial(cacheProvider, newRelation);
+  _writePartial(cacheProvider, constRelation);
 }
 
 void OgrWriter::writeElement(ElementPtr& element)
@@ -493,9 +522,9 @@ void OgrWriter::writeElement(ElementPtr& element)
     return;
   Tags sourceTags = element->getTags();
   Tags destTags;
-  for (auto it = element->getTags().begin(); it != element->getTags().end(); ++it)
+  for (auto it = sourceTags.constBegin(); it != sourceTags.constEnd(); ++it)
   {
-    if (sourceTags[it.key()] != "")
+    if (it.value() != "")
       destTags.appendValue(it.key(), it.value());
   }
   // Now that all the empties are gone, update our element
@@ -734,7 +763,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
                                    const Geometry* g, OGRFeature* poFeature) const
 {
   std::string wkt = g->toString();
-  const char* t = (char*)wkt.data();
+  const char* t = wkt.data();
   OGRGeometry* geom;
   int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
   if (errCode != OGRERR_NONE)

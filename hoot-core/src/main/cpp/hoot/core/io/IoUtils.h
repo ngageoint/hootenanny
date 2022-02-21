@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IOUTILS_H
@@ -124,8 +124,8 @@ public:
    * @param nameFilters wildcard filters for path exclusion; e.g. *myFile*, *.json
    * @return a list of file paths
    */
-  static QStringList getSupportedInputsRecursively(
-    const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
+  static QStringList getSupportedInputsRecursively(const QStringList& topLevelPaths,
+                                                   const QStringList& nameFilters = QStringList());
   /**
    * Returns all valid input file paths expanding any paths by looking inside of VSI files
    *
@@ -202,8 +202,8 @@ public:
    * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
    * @return an input stream
    */
-  static ElementInputStreamPtr getFilteredInputStream(
-    ElementInputStreamPtr streamToFilter, const QStringList& ops);
+  static ElementInputStreamPtr getFilteredInputStream(ElementInputStreamPtr streamToFilter,
+                                                      const QStringList& ops);
 
   /**
     Loads an OSM map into an OsmMap object
@@ -221,10 +221,9 @@ public:
     @param numTasks number of job tasks being performed for status reporting; applicable to OGR
     inputs only; ignored otherwise
     */
-  static void loadMap(
-    const OsmMapPtr& map, const QString& path, bool useFileId = true,
-    Status defaultStatus = Status::Invalid, const QString& translationScript = "",
-    const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
+  static void loadMap(const OsmMapPtr& map, const QString& path, bool useFileId = true,
+                      Status defaultStatus = Status::Invalid, const QString& translationScript = "",
+                      const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
   /**
     Loads multiple OSM maps into an OsmMap object
 
@@ -241,10 +240,9 @@ public:
     @param numTasks number of job tasks being performed for status reporting; applicable to OGR
     inputs only; ignored otherwise
     */
-  static void loadMaps(
-    const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-    Status defaultStatus = Status::Invalid, const QString& translationScript = "",
-    const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
+  static void loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
+                       Status defaultStatus = Status::Invalid, const QString& translationScript = "",
+                       const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
   /**
     Saves an OSM map to an OsmMap object
 
@@ -261,8 +259,8 @@ public:
     * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
     * connected to a way within the bounds will be kept
     */
-   static void cropToBounds(
-     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays = false);
+   static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
+                            const bool keepConnectedOobWays = false);
   /**
    * Crops a map to a given bounds
    *
@@ -271,9 +269,8 @@ public:
    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
    * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(
-    OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const bool keepConnectedOobWays = false);
+  static void cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+                           const bool keepConnectedOobWays = false);
 
   /**
    * Determines if an input string is a URL by the hoot definition
@@ -298,8 +295,8 @@ public:
    * output directory extension (e.g. shp); not option if appendText is not specified
    * @return a URL
    */
-  static QString getOutputUrlFromInput(
-    const QString& inputUrl, const QString& appendText = "", const QString& outputFormat = "");
+  static QString getOutputUrlFromInput(const QString& inputUrl, const QString& appendText = "",
+                                       const QString& outputFormat = "");
 };
 
 }

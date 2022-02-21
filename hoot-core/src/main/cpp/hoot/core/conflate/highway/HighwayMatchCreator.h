@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAYMATCHCREATOR_H
 #define HIGHWAYMATCHCREATOR_H
@@ -55,9 +55,8 @@ public:
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  void createMatches(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-    ConstMatchThresholdPtr threshold) override;
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                     ConstMatchThresholdPtr threshold) override;
 
   std::vector<CreatorDescription> getAllCreators() const override;
 
@@ -87,8 +86,7 @@ public:
    * @param transferKeys tag keys transferred from matching secondary road median features to
    * reference road median features
    */
-  void setRunMedianMatching(
-    const bool runMatching, const QStringList& identifyingTags, const QStringList& transferKeys);
+  void setRunMedianMatching(const bool runMatching, const QStringList& identifyingTags, const QStringList& transferKeys);
 
 private:
 
@@ -96,13 +94,10 @@ private:
   std::shared_ptr<HighwayClassifier> _classifier;
   // classifier used for the road median to divided road tag transfer workflow
   std::shared_ptr<HighwayClassifier> _medianClassifier;
-
   // geometry matcher
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
   // threshold controlling the determined match classification
   std::shared_ptr<MatchThreshold> _matchThreshold;
-
   // used to prevent roads of widely different types from matching
   std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 };

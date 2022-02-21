@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.85292901852" minlon="-104.90285854516" maxlat="38.85547896322" maxlon="-104.8959223334"/>
+    <node visible="true" id="1" version="1" lat="38.85292901852" lon="-104.90285854516"/>
+    <node visible="true" id="2" version="1" lat="38.85292901852" lon="-104.8959223334"/>
+    <node visible="true" id="3" version="1" lat="38.85547896322" lon="-104.8959223334"/>
+    <node visible="true" id="4" version="1" lat="38.85547896322" lon="-104.90285854516"/>
+    <way visible="true" id="1" version="1">
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <nd ref="3"/>
+        <nd ref="4"/>
+        <nd ref="1"/>
+    </way>
+</osm>

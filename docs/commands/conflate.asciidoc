@@ -9,20 +9,13 @@ The `conflate` command conflates two maps into a single map.
                           Conflation workflow, this is treated as reference data.
 * `input2`              - The second input; may be any supported input format (e.g. osm file).
 * `output`              - Output; may be any supported map output format (e.g. osm file) or any supported changeset 
-                          format (e.g. .osc or .osc.sql file) if the `--differential` option is specified. 
+                          format (e.g. .osc or .osc.sql file) if the `conflate.differential` option is specified.
 * `--changeset-stats`   - Displays changeset statistics and may be optionally followed by an output JSON file to be 
-                          written to. Valid only if the `--differential` option is specified and the output format is 
-                          changeset XML (.osc). If the `--include-tags`` option is specified, tag changeset statistics are 
-                          also output.
-* `--differential`      - Calculates the the differential between two conflation inputs. The output will be all elements 
-                          in input2 that do not exist in input1.
-* `--include-tags`      - Includes a check for modified tags when using the `--differential` option. The output will 
-                          include unmodified geometries from input1 with new/updated tags from input2. Valid only when the 
-                          `--differential` option is used.
+                          written to. Valid only if the `conflate.differential` option is specified and the output format is
+                          changeset XML (.osc). If the `conflate.differential.include.tags` option is specified, tag changeset
+                          statistics are also output.
 * `--osmApiDatabaseUrl` - Target OSM API database the derived changeset is to be applied, used to maintain element 
                           ID continuity. Required only if the changeset output format is SQL (.osc.sql).
-* `--separate-output`   - Writes separate output files for geometry and tag changes. Valid only when the `--differential`
-                          and `--include-tags`` options are used.
 * `--stats`             - Displays map statistics and may be optionally followed by an output JSON file name to be written to. 
 * `--write-bounds`      - If the `bounds` configuration option is specified, optionally outputs a file containing the 
                           input bounds. The location of the file is controlled via the `bounds.output.file` 
@@ -32,8 +25,8 @@ The `conflate` command conflates two maps into a single map.
 
 --------------------------------------
 hoot conflate [-C workflowConfigFile] [-C algorithmConfigFile] (input1) (input2) (output) \
-  [--changeset-stats geometry-stats-filename tags-stats-filename] [--differential] [--include-tags] \
-  [--osmApiDatabaseUrl url] [--separate-output] [--stats filename] 
+  [--changeset-stats geometry-stats-filename tags-stats-filename] [--osmApiDatabaseUrl url] \
+  [--stats filename]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation[Examples]

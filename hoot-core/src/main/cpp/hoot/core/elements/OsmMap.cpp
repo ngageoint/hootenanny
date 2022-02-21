@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmMap.h"
@@ -136,9 +136,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
 
   // The append order must be nodes, ways, and then relations. If not, the map indexes won't update
   // properly.
-
-  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
-  while (itn != appendFromMap->_nodes.end())
+  for (auto itn = appendFromMap->_nodes.begin(); itn != appendFromMap->_nodes.end(); ++itn)
   {
     bool appendElement = true;
     NodePtr node = itn->second;
@@ -173,12 +171,9 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     }
     else
       _numNodesSkippedForAppending++;
-
-    ++itn;
   }
 
-  WayMap::const_iterator it = appendFromMap->_ways.begin();
-  while (it != appendFromMap->_ways.end())
+  for (auto it = appendFromMap->_ways.begin(); it != appendFromMap->_ways.end(); ++it)
   {
     bool appendElement = true;
     WayPtr way = it->second;
@@ -210,8 +205,6 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     }
     else
       _numWaysSkippedForAppending++;
-
-    ++it;
   }
 
   const RelationMap& allRelations = appendFromMap->getRelations();
@@ -504,7 +497,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const std::shar
 }
 
 void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
-{ 
+{
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // Do some error checking before we add the new element.
@@ -546,15 +539,15 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 }
 
 void OsmMap::replaceNode(long oldId, long newId)
-{  
+{
   //  nothing to do
   if (oldId == newId)
     return;
 
   LOG_TRACE("Replacing node: " << oldId << " with: " << newId << "...");
 
-  for (size_t i = 0; i < _listeners.size(); i++)
-    _listeners[i]->replaceNodePre(oldId, newId);
+  for (const auto& listener : _listeners)
+    listener->replaceNodePre(oldId, newId);
 
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
@@ -945,7 +938,7 @@ QString OsmMap::getSource() const
 void OsmMap::appendSource(const QString& url)
 {
   QStringList urls = url.split(";");
-  for (const auto& u : urls)
+  for (const auto& u : qAsConst(urls))
   {
     QUrl src(u);
     QString source;

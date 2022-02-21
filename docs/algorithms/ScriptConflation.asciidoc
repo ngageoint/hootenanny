@@ -24,7 +24,7 @@ Hootenanny currently supports generic conflation of data sets through the
 JavaScript (<<JS,JS>>) Application Programmers Interface (API). See the
 _JavaScript Conflation Reference_ <<hootuser>> for details. Using this interface
 pairwise matching and merging is supported, as well as the merging of complex
-linear situations such as partial matches, one to many matches, and many to many
+linear situations such as partial matches, one-to-many matches, and many-to-many
 matches.
 
 [[conflation-flow]]
@@ -100,7 +100,7 @@ well.
 
 For the next phase of development we propose creating a new JavaScript API for
 conflating linear data. This new approach will support some of the more complex
-linear conflation situations such as one to many, many to many and partial
+linear conflation situations such as one-to-many, many-to-many and partial
 matches. In the following sections we will present an approach that provides the
 mechanisms for defining the following functionality:
 

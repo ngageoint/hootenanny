@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BoundsFileTaskGridGenerator.h"
 
@@ -35,8 +35,8 @@
 namespace hoot
 {
 
-BoundsFileTaskGridGenerator::BoundsFileTaskGridGenerator(const QStringList& inputs) :
-_inputs(inputs)
+BoundsFileTaskGridGenerator::BoundsFileTaskGridGenerator(const QStringList& inputs)
+  : _inputs(inputs)
 {
 }
 
@@ -45,13 +45,11 @@ TaskGrid BoundsFileTaskGridGenerator::generateTaskGrid()
   LOG_INFO("Reading " << _inputs.size() << " task grid file(s)...");
   TaskGrid taskGrid;
   QMap<int, geos::geom::Envelope> taskGridTemp;
-  for (int i = 0; i < _inputs.size(); i++)
+  for (const auto& gridInput : qAsConst(_inputs))
   {
-    const QString gridInput = _inputs.at(i);
     LOG_INFO("Reading task grid file: ..." << FileUtils::toLogFormat(gridInput, 25) << "...");
     taskGridTemp = GeometryUtils::readBoundsFileWithIds(gridInput);
-    for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
-         taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
+    for (auto taskGridTempItr = taskGridTemp.constBegin(); taskGridTempItr != taskGridTemp.constEnd(); ++taskGridTempItr)
     {
       TaskGrid::TaskGridCell taskGridCell;
       taskGridCell.id = taskGridTempItr.key();

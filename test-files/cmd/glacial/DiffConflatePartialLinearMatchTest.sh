@@ -14,14 +14,14 @@ source scripts/core/ScriptTestUtils.sh
  
 # Remove partial linear matches partially. This results in a more granular diff.
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false \
-  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial.osm --differential
+  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial.osm
 hoot diff $LOG_LEVEL -C Testing.conf $INPUT_DIR/output-partial.osm $OUTPUT_DIR/output-partial.osm
 validateTestOutput $OUTPUT_DIR/output-partial.osm $OUTPUT_DIR/output-partial-validation-report \
   $OUTPUT_DIR/output-partial-validated.osm $INPUT_DIR/output-partial-validation-report
 
 # Remove partial linear matches completely. This results in a less granular diff.
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=true \
-  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-complete.osm --differential
+  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-complete.osm
 hoot diff $LOG_LEVEL -C Testing.conf $INPUT_DIR/output-complete.osm $OUTPUT_DIR/output-complete.osm
 validateTestOutput $OUTPUT_DIR/output-complete.osm $OUTPUT_DIR/output-complete-validation-report \
   $OUTPUT_DIR/output-complete-validated.osm $INPUT_DIR/output-complete-validation-report
@@ -31,7 +31,7 @@ validateTestOutput $OUTPUT_DIR/output-complete.osm $OUTPUT_DIR/output-complete-v
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false \
   -D differential.sec.way.removal.criteria="HighwayCriterion" \
   -D differential.sec.way.removal.length.threshold=15.0 $INPUT_DIR/input1.osm \
-  $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial-cleaned.osm --differential
+  $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial-cleaned.osm
 hoot diff $LOG_LEVEL -C Testing.conf \
   $INPUT_DIR/output-partial-cleaned.osm $OUTPUT_DIR/output-partial-cleaned.osm
 if [ -f "test-output/test-validation-enabled" ]; then

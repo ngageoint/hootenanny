@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MapStatsWriter.h"
 
@@ -43,34 +43,31 @@
 // Boost
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
 using namespace std;
 
 namespace hoot
 {
+
 void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names) const
 {
-  for (int i = 0; i < stats.size(); i++)
+  for (const auto& stat : qAsConst(stats))
   {
-    if (names.contains(stats[i].name) == false)
-    {
-      names.append(stats[i].name);
-    }
+    if (names.contains(stat.name) == false)
+      names.append(stat.name);
   }
 }
 
-void MapStatsWriter::writeStatsToJson(
-  QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const
+void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const
 {
   try
   {
     pt::ptree pt;
     QStringList allStats = statsToString(stats, "\t").split("\n");
-    for (int i = 0; i < allStats.size(); i++)
+    for (const auto& stat : qAsConst(allStats))
     {
-      QStringList statrow = allStats.at(i).split("\t");
+      QStringList statrow = stat.split("\t");
       if (!statrow.empty() && !statrow[0].isEmpty())
       {
         QStringList tmpValues;
@@ -78,9 +75,7 @@ void MapStatsWriter::writeStatsToJson(
         for (int j = 1; j < statrow.size(); j++)
         {
           if (!statrow.at(j).trimmed().isEmpty())
-          {
             tmpValues << statrow.at(j).trimmed();
-          }
         }
         //if only one value in the array, do not use array in json file
         if (tmpValues.size() == 1)
@@ -92,10 +87,10 @@ void MapStatsWriter::writeStatsToJson(
         else
         {
           pt::ptree children;
-          for (int j = 0; j < tmpValues.size(); j++)
+          for (const auto& value : qAsConst(tmpValues))
           {
             pt::ptree child;
-            child.put("", tmpValues.at(j).toStdString());
+            child.put("", value.toStdString());
             children.push_back(std::make_pair("", child));
           }
           pt.add_child(statrow.at(0).toStdString(), children);
@@ -111,17 +106,15 @@ void MapStatsWriter::writeStatsToJson(
   }
 }
 
-void MapStatsWriter::writeStatsToText(
-  QList<QList<SingleStat>>& stats, const QString &statsOutputFilePath) const
+void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>>& stats, const QString &statsOutputFilePath) const
 {
   LOG_INFO("Writing stats to file: " << statsOutputFilePath);
 
   //  Write to the text file
   QFile outputFile(statsOutputFilePath);
   if (outputFile.exists())
-  {
     outputFile.remove();
-  }
+
   if (outputFile.open(QFile::WriteOnly | QFile::Text))
   {
     QTextStream out(&outputFile);
@@ -134,8 +127,7 @@ void MapStatsWriter::writeStatsToText(
   }
 }
 
-void MapStatsWriter::writeStats(
-  const QString& mapInputPath, const QString& statsOutputFilePath, QString sep) const
+void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath, QString sep) const
 {
   LOG_INFO("Writing stats for map in file: " << mapInputPath << " to file: " << statsOutputFilePath);
 
@@ -152,13 +144,11 @@ void MapStatsWriter::writeStats(
 
   QFile outputFile(statsOutputFilePath);
   if (outputFile.exists())
-  {
     outputFile.remove();
-  }
+
   if (outputFile.open(QFile::WriteOnly | QFile::Text))
   {
     QTextStream out(&outputFile);
-    //out << "Stat Name\t" << args.join(sep) << endl;
     out << statsToString(allStats, sep);
     outputFile.close();
   }
@@ -173,18 +163,16 @@ QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString s
   QStringList allStatNames;
 
   for (int i = 0; i < stats.size(); i++)
-  {
     _appendUnique(stats[i], allStatNames);
-  }
 
   int precision = ConfigOptions().getWriterPrecision();
   QString result;
   // reserve a ballpark size to limit reallocs
   result.reserve(20 + 10 * allStatNames.size() * stats.size());
-  for (int i = 0; i < allStatNames.size(); i++)
+  for (const auto& name : qAsConst(allStatNames))
   {
     QStringList l;
-    l << allStatNames[i];
+    l << name;
 
     for (int j = 0; j < stats.size(); j++)
     {
@@ -192,7 +180,7 @@ QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString s
 
       for (int k = 0; k < stats[j].size(); k++)
       {
-        if (stats[j][k].name == allStatNames[i])
+        if (stats[j][k].name == name)
         {
           QString value = QString::number(stats[j][k].value, 'g', precision);
           l << ((value != "nan") ? value : "-");
@@ -201,14 +189,10 @@ QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString s
       }
 
       if (!foundIt)
-      {
         l << "";
-      }
     }
-
     result.append(l.join(sep) + "\n");
   }
-
   return result;
 }
 

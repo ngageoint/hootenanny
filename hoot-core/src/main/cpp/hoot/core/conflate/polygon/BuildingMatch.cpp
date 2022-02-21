@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatch.h"
 
 // hoot
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
@@ -37,7 +38,6 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 // Qt
 #include <QDateTime>
@@ -51,19 +51,18 @@ HOOT_FACTORY_REGISTER(Match, BuildingMatch)
 
 const QString BuildingMatch::MATCH_NAME = "Building";
 
-BuildingMatch::BuildingMatch(const ConstMatchThresholdPtr& mt) :
-Match(mt)
+BuildingMatch::BuildingMatch(const ConstMatchThresholdPtr& mt)
+  : Match(mt)
 {
 }
 
-BuildingMatch::BuildingMatch(
-  const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
-  const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
-Match(mt, eid1, eid2),
-_rf(rf),
-_explainText(""),
-_dateTagKey(ConfigOptions().getBuildingDateTagKey()),
-_dateFormat(ConfigOptions().getBuildingDateFormat())
+BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
+                             const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt)
+  : Match(mt, eid1, eid2),
+    _rf(rf),
+    _explainText(""),
+    _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
+    _dateFormat(ConfigOptions().getBuildingDateFormat())
 {
   ConstElementPtr element1 = map->getElement(_eid1);
   ConstElementPtr element2 = map->getElement(_eid2);
@@ -124,14 +123,10 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   // If we have a match, the secondary feature is newer than the reference feature, and the
   // associated config option is enabled, let's review them instead.
   else if (type == MatchType::Match && ConfigOptions().getBuildingReviewIfSecondaryNewer())
-  {
     description = _createReviewIfSecondaryFeatureNewer(element1, element2);
-  }
   // Otherwise if we have a miss or review, let's explain why.
   else
-  {
     description = _getNonMatchDescription(map, type, element1, element2);
-  }
 
   //  Join the string descriptions together or generate the default
   if (description.length() > 0)
@@ -142,8 +137,7 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   LOG_VART(_explainText);
 }
 
-QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(
-  const ConstElementPtr& element1, const ConstElementPtr& element2)
+QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   LOG_VART(_dateTagKey);
   LOG_VART(_dateFormat);
@@ -186,8 +180,8 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(
     if (!secondaryBuildingDate.isValid())
     {
       throw HootException(
-        "Invalid configured building date format: " + secondaryBuildingDate.toString() +
-        ".  Expected the form: " + _dateFormat);
+        QString("Invalid configured building date format: %1.  Expected the form: %2")
+          .arg(secondaryBuildingDate.toString(), _dateFormat));
     }
     const QDateTime refBuildingDate =
       QDateTime::fromString(refBuildingDateStrVal, _dateFormat);
@@ -195,8 +189,8 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(
     if (!refBuildingDate.isValid())
     {
       throw HootException(
-        "Invalid configured building date format: " + refBuildingDate.toString() +
-        ".  Expected the form: " + _dateFormat);
+        QString("Invalid configured building date format: %1. Expected the form: %2")
+          .arg(refBuildingDate.toString(), _dateFormat));
     }
 
     if (secondaryBuildingDate > refBuildingDate)
@@ -204,8 +198,8 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(
       _p.clear();
       _p.setReviewP(1.0);
       const QString msg =
-        "Secondary building with timestamp: " + secondaryBuildingDate.toString() +
-        " is newer than reference building with timestamp: " + refBuildingDate.toString();
+        QString("Secondary building with timestamp: %1 is newer than reference building with timestamp: %2")
+          .arg(secondaryBuildingDate.toString(), refBuildingDate.toString());
       LOG_TRACE(msg);
       description.append(msg);
     }
@@ -214,9 +208,8 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(
   return description;
 }
 
-QStringList BuildingMatch::_getNonMatchDescription(
-  const ConstOsmMapPtr& map, const MatchType& type, const ConstElementPtr& element1,
-  const ConstElementPtr& element2)
+QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                                   const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   QStringList description;
 
@@ -235,27 +228,38 @@ QStringList BuildingMatch::_getNonMatchDescription(
   else if (type == MatchType::Review)
   {
     //  Deal with the overlap first
-    if (overlap >= 0.75)        description.append("Large building overlap.");
-    else if (overlap >= 0.5)    description.append("Medium building overlap.");
-    else if (overlap >= 0.25)   description.append("Small building overlap.");
-    else                        description.append("Very little building overlap.");
+    if (overlap >= 0.75)
+      description.append("Large building overlap.");
+    else if (overlap >= 0.5)
+      description.append("Medium building overlap.");
+    else if (overlap >= 0.25)
+      description.append("Small building overlap.");
+    else
+      description.append("Very little building overlap.");
 
     //  Next check the Angle Histogram.
     const double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
     LOG_VART(angle);
-    if (angle >= 0.75)          description.append("Very similar building orientation.");
-    else if (angle >= 0.5)      description.append("Similar building orientation.");
-    else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
-    else                        description.append("Building orientation not similar.");
+    if (angle >= 0.75)
+      description.append("Very similar building orientation.");
+    else if (angle >= 0.5)
+      description.append("Similar building orientation.");
+    else if (angle >= 0.25)
+      description.append("Semi-similar building orientation.");
+    else
+      description.append("Building orientation not similar.");
 
     //  Finally, check edge distance.
     const double edge =
       EdgeDistanceExtractor(
         std::make_shared<QuantileAggregator>(0.4)).extract(*map, element1, element2);
     LOG_VART(edge);
-    if (edge >= 90)             description.append("Building edges very close to each other.");
-    else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
-    else                        description.append("Building edges not very close to each other.");
+    if (edge >= 90)
+      description.append("Building edges very close to each other.");
+    else if (edge >= 70)
+      description.append("Building edges somewhat close to each other.");
+    else
+      description.append("Building edges not very close to each other.");
   }
 
   return description;

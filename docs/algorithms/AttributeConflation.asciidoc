@@ -10,7 +10,7 @@ detail, and your secondary dataset has good tag attribution.
 ===== Tags
 
 Attribute Conflation transfers tags from the secondary layer to the reference layer during conflation and favors the secondary layer when there 
-are conflicts. The only exception occurs with many to many building matches (see "Buildings" section below). Changes to the configuration option 
+are conflicts. The only exception occurs with many-to-many building matches (see "Buildings" section below). Changes to the configuration option
 `tag.merger.default` outside of AttributeConflation.conf are always ignored
 
 ===== Roads

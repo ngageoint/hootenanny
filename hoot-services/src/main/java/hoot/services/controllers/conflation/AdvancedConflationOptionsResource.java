@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -93,13 +93,13 @@ public class AdvancedConflationOptionsResource {
     private JSONArray referenceTemplate;
     private JSONArray horizontalTemplate;
     private JSONArray attributeTemplate;
-    private JSONArray hoot2Template;
-    private JSONArray diffTemplate;
+    private static JSONArray hoot2Template;
+    private static JSONArray diffTemplate;
     private JSONObject conflationOptionsTemplate;
-    private JSONObject referenceOverride;
-    private JSONObject horizontalOverride;
-    private JSONObject attributeOverride;
-    private JSONObject hoot2Override;
+    private static JSONObject referenceOverride;
+    private static JSONObject horizontalOverride;
+    private static JSONObject attributeOverride;
+    private static JSONObject hoot2Override;
 
     private static Map<String, String> confMap = new HashMap<String, String>(){{
         put("attribute", ATTRIBUTE_CONFLATION_PATH);
@@ -109,7 +109,7 @@ public class AdvancedConflationOptionsResource {
         put("differential w/Tags", DIFFERENTIAL_CONFLATION_PATH);
     }};
 
-    private Map<String, String> matcherMap = new HashMap<String, String>(){{
+    private static Map<String, String> matcherMap = new HashMap<String, String>(){{
         put("GenericLines", "LinearCriterion");
         put("PowerLines", "PowerLineCriterion");
         put("Railways", "RailwayCriterion");
@@ -161,9 +161,67 @@ public class AdvancedConflationOptionsResource {
         return conflationTypes;
     }
 
-    public AdvancedConflationOptionsResource() {
+    public AdvancedConflationOptionsResource() throws IOException, ParseException {
         if (confOptionsMap == null) {
             confOptionsMap = buildConfOptionsMap();
+        }
+    }
+
+    public static void cacheTemplates(){
+        try {
+            getOverrides(false);
+        } catch (Exception e) {
+            String msg = "Error getting advanced options!  Cause: " + e.getMessage();
+            logger.error(msg);
+        }
+        if (hoot2Template == null) {
+            logger.info("initializing hoot2 template");
+            hoot2Template = new JSONArray();
+            hoot2Template = (JSONArray) hoot2Override.get("hoot2");
+
+            for (Object memberObj : hoot2Template) {
+                JSONObject obj = (JSONObject) memberObj;
+                if (obj.get("name") != null && obj.get("name").equals("Differential")) {
+                    addDifferentialMemberData((JSONArray) obj.get("members"));
+                }
+                if (obj.get("name") != null && obj.get("name").equals("General")) {
+                    addGeneralMemberData((JSONArray) obj.get("members"));
+                }
+            }
+        }
+        if (diffTemplate == null) {
+            JSONArray hoot2Opts = (JSONArray) hoot2Override.get("hoot2");
+            JSONObject diffOpts = (JSONObject) hoot2Opts.stream().filter(config -> {
+                        return ((JSONObject)config).get("name").equals("Differential");
+                    }).findFirst().orElse(null);
+            diffTemplate = (JSONArray) diffOpts.get("members");
+
+            addDifferentialMemberData(diffTemplate);
+
+            //Add select 'non-Differential' options here
+            List<Pair<String, String>> groupMembers = new ArrayList<>();
+            groupMembers.add(Pair.of("General", "SelectiveOverwriteTagMergerKeys"));
+            groupMembers.add(Pair.of("General", "TagMergerOverwriteExclude"));
+            groupMembers.add(Pair.of("Roads", "RoadEngines"));
+
+            groupMembers.stream().forEach(gm -> {
+                JSONObject optionObj = (JSONObject) hoot2Opts.stream().filter(config -> {
+                    return ((JSONObject) config).get("name").equals(gm.getKey());
+                }).findFirst().orElse(null);
+                if (optionObj != null) {
+                    JSONArray opts = (JSONArray) optionObj.get("members");
+                    JSONObject opt = (JSONObject) opts.stream().filter(config -> {
+                        return ((JSONObject) config).get("id").equals(gm.getValue());
+                    }).findFirst().orElse(null);
+                    diffTemplate.add(0, opt);
+                }
+            });
+            JSONObject genOpts = (JSONObject) hoot2Opts.stream().filter(config -> {
+                return ((JSONObject)config).get("name").equals("General");
+            }).findFirst().orElse(null);
+            JSONArray genTemplate = (JSONArray) genOpts.get("members");
+            JSONArray members = addGeneralMemberData(genTemplate);
+            diffTemplate.addAll(1, members);
         }
     }
 
@@ -206,60 +264,10 @@ public class AdvancedConflationOptionsResource {
             //This one gets the different options exposed in the advanced options pane
             //grouped by category
             else if (confType.equalsIgnoreCase("hoot2")) {
-                if ((hoot2Template == null) || doForce) {
-                    hoot2Template = new JSONArray();
-                    hoot2Template = (JSONArray) hoot2Override.get("hoot2");
-
-                    for (Object memberObj : hoot2Template) {
-                        JSONObject obj = (JSONObject) memberObj;
-                        if (obj.get("name") != null && obj.get("name").equals("Differential")) {
-                            addDifferentialMemberData((JSONArray) obj.get("members"));
-                        }
-                        if (obj.get("name") != null && obj.get("name").equals("General")) {
-                            addGeneralMemberData((JSONArray) obj.get("members"));
-                        }
-                    }
-                }
                 template = hoot2Template;
             }
             //This one gets the differential options from the hoot2 config
             else if (confType.equalsIgnoreCase("differential")) {
-                if ((diffTemplate == null) || doForce) {
-                    JSONArray hoot2Opts = (JSONArray) hoot2Override.get("hoot2");
-                    JSONObject diffOpts = (JSONObject) hoot2Opts.stream().filter(config -> {
-                                return ((JSONObject)config).get("name").equals("Differential");
-                            }).findFirst().orElse(null);
-                    diffTemplate = (JSONArray) diffOpts.get("members");
-
-                    addDifferentialMemberData(diffTemplate);
-
-                    //Add select 'non-Differential' options here
-                    List<Pair<String, String>> groupMembers = new ArrayList<>();
-                    groupMembers.add(Pair.of("General", "SelectiveOverwriteTagMergerKeys"));
-                    groupMembers.add(Pair.of("General", "TagMergerOverwriteExclude"));
-                    groupMembers.add(Pair.of("Roads", "RoadEngines"));
-
-                    groupMembers.stream().forEach(gm -> {
-                        JSONObject optionObj = (JSONObject) hoot2Opts.stream().filter(config -> {
-                            return ((JSONObject) config).get("name").equals(gm.getKey());
-                        }).findFirst().orElse(null);
-                        if (optionObj != null) {
-                            JSONArray opts = (JSONArray) optionObj.get("members");
-                            JSONObject opt = (JSONObject) opts.stream().filter(config -> {
-                                return ((JSONObject) config).get("id").equals(gm.getValue());
-                            }).findFirst().orElse(null);
-                            diffTemplate.add(0, opt);
-                        }
-                    });
-                    JSONObject genOpts = (JSONObject) hoot2Opts.stream().filter(config -> {
-                        return ((JSONObject)config).get("name").equals("General");
-                    }).findFirst().orElse(null);
-                    JSONArray genTemplate = (JSONArray) genOpts.get("members");
-                    JSONArray members = addGeneralMemberData(genTemplate);
-                    diffTemplate.addAll(1, members);
-
-
-                }
                 template = diffTemplate;
             }
             //The rest are used in Hoot1 UI
@@ -303,14 +311,14 @@ public class AdvancedConflationOptionsResource {
     }
 
     //maybe this could be moved to conflationTypeDefaults.json??
-    private void addDifferentialMemberData(JSONArray template) {
+    private static void addDifferentialMemberData(JSONArray template) {
         for (Object memberObj : template) {
             JSONObject obj = (JSONObject) memberObj;
 
             // add list of options for SnapUnconnectedWaysSnapCriteria
             if (obj.get("id") != null &&
                     (obj.get("id").equals("SnapUnconnectedWaysSnapCriteria") || obj.get("id").equals("DifferentialSecWayRemovalCriteria"))) {
-                HootWaySnapCriteria hootCriteriaCommand = new HootWaySnapCriteria(this.getClass());
+                HootWaySnapCriteria hootCriteriaCommand = new HootWaySnapCriteria(AdvancedConflationOptionsResource.class);
                 CommandResult commandResult = hootCriteriaCommand.execute();
                 String output = commandResult.getStdout().replace("\n", "");
 
@@ -331,7 +339,7 @@ public class AdvancedConflationOptionsResource {
         }
     }
 
-    private JSONArray addGeneralMemberData(JSONArray template) {
+    private static JSONArray addGeneralMemberData(JSONArray template) {
         JSONArray members = new JSONArray();
         for (Object memberObj : template) {
             JSONObject obj = (JSONObject) memberObj;
@@ -339,7 +347,7 @@ public class AdvancedConflationOptionsResource {
             // add list of options for Tag Mergers
             if (obj.get("id") != null &&
                     obj.get("id").equals("TagMergerDefault")) {
-                HootTagMergers hootCriteriaCommand = new HootTagMergers(this.getClass());
+                HootTagMergers hootCriteriaCommand = new HootTagMergers(AdvancedConflationOptionsResource.class);
                 CommandResult commandResult = hootCriteriaCommand.execute();
                 String output = commandResult.getStdout().replace("\n", "");
 
@@ -364,7 +372,7 @@ public class AdvancedConflationOptionsResource {
         return members;
     }
 
-    private void getOverrides(Boolean doForce) throws IOException, ParseException {
+    private static void getOverrides(Boolean doForce) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
         if ((hoot2Override == null) || doForce) {

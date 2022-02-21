@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPTMATCHCREATOR_H
 #define SCRIPTMATCHCREATOR_H
@@ -77,9 +77,8 @@ public:
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  void createMatches(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-    ConstMatchThresholdPtr threshold) override;
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                     ConstMatchThresholdPtr threshold) override;
   /**
    * Determines whether an element is a candidate for matching for this match creator
    *
@@ -156,8 +155,8 @@ private:
    * due to needing the plugin object. Also, the type match threshold range checking within this
    * methods being done for rails needs to be extended to all scripts that use it.
    */
-  void _validatePluginConfig(
-    const CreatorDescription::BaseFeatureType& baseFeatureType, v8::Local<v8::Object> plugin) const;
+  void _validatePluginConfig(const CreatorDescription::BaseFeatureType& baseFeatureType,
+                             v8::Local<v8::Object> plugin) const;
 
   std::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };

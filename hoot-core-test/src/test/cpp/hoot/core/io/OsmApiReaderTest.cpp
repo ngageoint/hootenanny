@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReaderTestServer.h"
@@ -38,7 +38,7 @@
 #include <hoot/core/util/OsmApiUtils.h>
 
 //  Run tests against a local test server
-#define RUN_LOCAL_TEST_SERVER
+//#define RUN_LOCAL_TEST_SERVER
 
 namespace hoot
 {
@@ -46,16 +46,16 @@ namespace hoot
 class OsmApiReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiReaderTest);
-#ifdef ENABLE_OSM_API_READER_TEST
+  CPPUNIT_TEST(runLoadBoundsTest);
 
 #ifdef RUN_LOCAL_TEST_SERVER
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runSplitGeographicTest);
   CPPUNIT_TEST(runSplitElementsTest);
   CPPUNIT_TEST(runFailureTest);
+  CPPUNIT_TEST(runPolygonBoundsTest);
 #endif
 
-#endif
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -67,11 +67,52 @@ public:
   const int PORT_SIMPLE =         9900;
   const int PORT_SPLIT_GEO =      9901;
   const int PORT_SPLIT_ELEMENTS = 9902;
+  const int PORT_POLYGON =        9903;
 
   OsmApiReaderTest()
     : HootTestFixture("test-files/io/OsmApiReaderTest/",
                       "test-output/io/OsmApiReaderTest/")
   {
+  }
+
+  void runLoadBoundsTest()
+  {
+    OsmApiReader reader;
+    Settings s;
+    //  Use a bounding box in `bounds`
+    s.set(ConfigOptions::getBoundsKey(), "38.4902,35.7982,38.6193,35.8536");
+    s.set(ConfigOptions::getBoundsInputFileKey(), "");
+    reader.setConfiguration(s);
+    CPPUNIT_ASSERT(reader._loadBounds());
+    CPPUNIT_ASSERT(!reader._isPolygon);
+
+    //  Use a bounding polygon that is a rectangle in `bounds`
+    s.set(ConfigOptions::getBoundsKey(), "-72.474,18.545;-72.474,18.548;-72.471,18.548;-72.471,18.545;-72.474,18.545");
+    s.set(ConfigOptions::getBoundsInputFileKey(), "");
+    reader.setConfiguration(s);
+    CPPUNIT_ASSERT(reader._loadBounds());
+    CPPUNIT_ASSERT(!reader._isPolygon);
+
+    //  Use a bounding polygon in `bounds`
+    s.set(ConfigOptions::getBoundsKey(), "-72.474,18.545;-72.471,18.548;-72.471,18.545;-72.474,18.545");
+    s.set(ConfigOptions::getBoundsInputFileKey(), "");
+    reader.setConfiguration(s);
+    CPPUNIT_ASSERT(reader._loadBounds());
+    CPPUNIT_ASSERT(reader._isPolygon);
+
+    //  Use a bounding box in `bounds.input.file`
+    s.set(ConfigOptions::getBoundsKey(), "");
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
+    reader.setConfiguration(s);
+    CPPUNIT_ASSERT(reader._loadBounds());
+    CPPUNIT_ASSERT(!reader._isPolygon);
+
+    //  Use a bounding polygon in `bounds.input.file`
+    s.set(ConfigOptions::getBoundsKey(), "");
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestPolyBounds.osm");
+    reader.setConfiguration(s);
+    CPPUNIT_ASSERT(reader._loadBounds());
+    CPPUNIT_ASSERT(reader._isPolygon);
   }
 
   void runSimpleTest()
@@ -178,6 +219,35 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg == "Cannot request areas larger than 1.0000 square degrees.");
 #endif
+  }
+
+  void runPolygonBoundsTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    SimpleReaderTestServer server(PORT_POLYGON);
+    server.start();
+
+    OsmMapPtr map = std::make_shared<OsmMap>();
+
+    OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestPolyBounds.osm");
+    reader.setConfiguration(s);
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_POLYGON) + OsmApiEndpoints::API_PATH_MAP);
+    reader.read(map);
+
+    server.shutdown();
+
+    QString output = _outputPath + "PolygonBoundsTestOutput.osm";
+
+    OsmXmlWriter writer;
+    writer.write(map, output);
+    writer.close();
+
+    HOOT_FILE_EQUALS(_inputPath + "PolygonBoundsTestExpected.osm", output);
+#endif
+
   }
 };
 

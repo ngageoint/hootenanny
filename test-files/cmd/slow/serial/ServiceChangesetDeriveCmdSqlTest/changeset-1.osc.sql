@@ -1,12 +1,12 @@
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, 1, (now() at time zone 'utc'), (now() at time zone 'utc'));
 INSERT INTO changeset_tags (changeset_id, k, v) VALUES (1, 'written_by', 'Hootenanny');
-/* create node 1*/
+/* create node 1 */
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388549524, 1048987389, 1, true, (now() at time zone 'utc'), 3852309038, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388549524, 1048987389, 1, true, (now() at time zone 'utc'), 3852309038, 1);
-/* create node 2*/
+/* create node 2 */
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 388549321, 1048979050, 1, true, (now() at time zone 'utc'), 3852309038, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 388549321, 1048979050, 1, true, (now() at time zone 'utc'), 3852309038, 1);
-/* create way 1*/
+/* create way 1 */
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (1, 'highway', 'road');

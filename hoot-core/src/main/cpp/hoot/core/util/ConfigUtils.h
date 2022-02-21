@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGUTILS_H
 #define CONFIGUTILS_H
 
 // Hoot
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementHashVisitor.h"
 
@@ -40,18 +40,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementHashVisitor)
 
-ElementHashVisitor::ElementHashVisitor() :
-_coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSensitivity()),
-_includeCe(false),
-_nonMetadataIgnoreKeys(ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys()),
-_useNodeTags(true),
-_writeHashes(true),
-_collectHashes(false)
+ElementHashVisitor::ElementHashVisitor()
+  : _coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSensitivity()),
+    _includeCe(false),
+    _nonMetadataIgnoreKeys(ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys()),
+    _useNodeTags(true),
+    _writeHashes(true),
+    _collectHashes(false)
 {
   if (!_writeHashes && !_collectHashes)
-  {
     throw IllegalArgumentException("ElementHashVisitor must either write or collect hashes.");
-  }
   LOG_VART(_coordinateComparisonSensitivity);
 }
 
@@ -64,9 +62,7 @@ void ElementHashVisitor::clearHashes()
 void ElementHashVisitor::visit(const ElementPtr& e)
 {
   if (!e)
-  {
     return;
-  }
 
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
@@ -111,17 +107,11 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
 {
   QString result;
   if (e->getElementType() == ElementType::Node)
-  {
     result = _toJson(std::dynamic_pointer_cast<const Node>(e));
-  }
   else if (e->getElementType() == ElementType::Way)
-  {
     result = _toJson(std::dynamic_pointer_cast<const Way>(e));
-  }
   else if (e->getElementType() == ElementType::Relation)
-  {
     result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
-  }
   LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
   return result;
 }
@@ -132,15 +122,9 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 
   Tags tags;
   if (_useNodeTags)
-  {
     tags = node->getTags();
-  }
-  else
-  {
-    tags = Tags();
-  }
-  result += toJson(tags, node->getCircularError());
 
+  result += toJson(tags, node->getCircularError());
   result += "},\"x\":";
   result += QString::number(node->getX(), 'f', _coordinateComparisonSensitivity);
   result += ",\"y\":";
@@ -153,9 +137,7 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 {
   if (_map == nullptr)
-  {
     throw IllegalArgumentException("A map must be set when calculating a way hash.");
-  }
 
   QString result = "{\"type\":\"way\",\"tags\":{";
 
@@ -163,18 +145,14 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 
   result += "},\"nodes\":[";
   const std::vector<long>& nodeIds = way->getNodeIds();
-  for (size_t i = 0; i < nodeIds.size(); i++)
+  QStringList nodes;
+  for (auto node_id : nodeIds)
   {
-    ConstNodePtr node = _map->getNode(nodeIds[i]);
+    ConstNodePtr node = _map->getNode(node_id);
     if (node)
-    {
-      result += _toJson(node);
-      if (i != (nodeIds.size() - 1))
-      {
-        result += ",";
-      }
-    }
+      nodes.append(_toJson(node));
   }
+  result += nodes.join(",");
   result += "]}";
 
   return result;
@@ -183,9 +161,7 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
 {
   if (_map == nullptr)
-  {
     throw IllegalArgumentException("A map must be set when calculating a relation hash.");
-  }
 
   QString result = "{\"type\":\"relation\",\"tags\":{";
 
@@ -193,9 +169,9 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
 
   result += "},\"members\":[";
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
+  QStringList relations;
+  for (const auto& member : relationMembers)
   {
-    const RelationData::Entry member = relationMembers[i];
     ConstElementPtr memberElement = _map->getElement(member.getElementId());
     if (memberElement)
     {
@@ -205,13 +181,10 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
         memberJson.replace(
           "\"type\":\"" + typeStr + "\",",
           "\"type\":\"" + typeStr + "\",\"role\":\"" + member.getRole() + "\",");
-      result += memberJson;
-      if (i != (relationMembers.size() - 1))
-      {
-        result += ",";
-      }
+      relations.append(memberJson);
     }
   }
+  result += relations.join(",");
   result += "]}";
 
   return result;
@@ -224,14 +197,11 @@ QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
   // Put the tags into an ordered map that only contains the non-metadata (info) tags. As
   // implemented, this is likely quite slow.
   QMap<QString, QString> infoTags;
-  foreach (QString key, tags.keys())
+  for (const auto& key : tags.keys())
   {
     QString v = tags[key];
-    if (!_nonMetadataIgnoreKeys.contains(key) &&
-        OsmSchema::getInstance().isMetaData(key, v) == false)
-    {
+    if (!_nonMetadataIgnoreKeys.contains(key) && OsmSchema::getInstance().isMetaData(key, v) == false)
       infoTags[key] = v;
-    }
   }
 
   if (_includeCe && ce != -1.0)
@@ -246,16 +216,11 @@ QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
   }
 
 
-  bool first = true;
-  foreach (QString key, infoTags.keys())
-  {
-    if (!first)
-    {
-      result += ",";
-    }
-    result += QString("\"%1\":\"%2\"").arg(key, infoTags[key]);
-    first = false;
-  }
+  QStringList tagList;
+  for (const auto& key : infoTags.keys())
+    tagList.append(QString("\"%1\":\"%2\"").arg(key, infoTags[key]));
+
+  result += tagList.join(",");
 
   return result;
 }

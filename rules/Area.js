@@ -30,7 +30,7 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 // thresholds.
 exports.typeThreshold = parseFloat(hoot.get("area.type.threshold"));
 
-// These are used to help with one to many area matching.
+// These are used to help with one-to-many area matching.
 var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
 var overlapReviewTypeThreshold = parseFloat(hoot.get("area.type.overlap.review.threshold"));
 
@@ -193,7 +193,7 @@ exports.matchScore = function(map, e1, e2)
     }
   }
 
-  // Here, we're attempting to handle the many to one scenario for diff conflate and will mark this
+  // Here, we're attempting to handle the many-to-one scenario for diff conflate and will mark this
   // as a review which will cause these features to drop out of the diff in the default config. See
   // tests area-3978-1 and area-4379-1.
   var typeScore = hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags(), true);

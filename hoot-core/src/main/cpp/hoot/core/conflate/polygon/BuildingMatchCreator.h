@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMATCHCREATOR_H
 #define BUILDINGMATCHCREATOR_H
@@ -48,7 +48,7 @@ public:
   MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
   void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-    ConstMatchThresholdPtr threshold) override;
+                     ConstMatchThresholdPtr threshold) override;
 
   std::vector<CreatorDescription> getAllCreators() const override;
 

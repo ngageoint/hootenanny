@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSTRINGMERGER_H
 #define WAYSTRINGMERGER_H
 
 // hoot
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
@@ -119,7 +119,7 @@ public:
   };
 
   WayMatchStringMerger(const OsmMapPtr& map, WayMatchStringMappingPtr mapping,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+                       std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /**
    * @brief Alternative constructor. If this is used operations that modify the map will fail.
@@ -188,8 +188,7 @@ private:
 
   void _addSublineMapping(SublineMappingPtr sm);
 
-  void _createWayMappings(
-    const WayLocation& split1, const WayLocation& split2, const WaySubline& subline2);
+  void _createWayMappings(const WayLocation& split1, const WayLocation& split2, const WaySubline& subline2);
 
   WayLocation _findNodeLocation2(WayStringPtr ws, ElementId nodeId);
 

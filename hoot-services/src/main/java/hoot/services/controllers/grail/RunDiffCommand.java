@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -78,6 +78,11 @@ class RunDiffCommand extends GrailCommand {
             options.add("bounds=" + params.getBounds());
         }
 
+        if (params.getApplyTags()) {
+            //Add include tags
+            options.add("conflate.differential.include.tags=true");
+        }
+
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("HOOT_OPTIONS", toHootOptions(options));
         substitutionMap.put("INPUT1", params.getInput1());
@@ -89,8 +94,7 @@ class RunDiffCommand extends GrailCommand {
 
         String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf"
                 + (!algorithm.equals("") ? " -C ${ROAD_ALGORITHM}" : "")
-                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE}"
-                + (params.getApplyTags() ? " --include-tags" : "");
+                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --changeset-stats ${STATS_FILE}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

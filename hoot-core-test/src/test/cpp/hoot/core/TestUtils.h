@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TESTUTILS_H
@@ -150,38 +150,32 @@ public:
   /**
    * Making the map optional here, as you don't always need a test node to belong to one.
    */
-  static NodePtr createNode(
-    const OsmMapPtr& map = OsmMapPtr(), const QString& note = "",
-    const Status& status = Status::Unknown1, const double x = 0.0, const double y = 0.0,
-    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const Tags& tags = Tags());
+  static NodePtr createNode(const OsmMapPtr& map = OsmMapPtr(), const QString& note = "",
+                            const Status& status = Status::Unknown1, const double x = 0.0, const double y = 0.0,
+                            const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                            const Tags& tags = Tags());
 
-  static WayPtr createWay(
-    const OsmMapPtr& map, const geos::geom::Coordinate c[] = nullptr,
-    const QString& note = "", const Status& s = Status::Unknown1,
-    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const Tags& tags = Tags());
-  static WayPtr createWay(
-    const OsmMapPtr& map, const QList<NodePtr>& nodes = QList<NodePtr>(),
-    const QString& note = "", const Status& status = Status::Unknown1,
-    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const Tags& tags = Tags());
-  static WayPtr createWay(
-    const OsmMapPtr& map, const QList<ElementId>& nodeIds = QList<ElementId>(),
-    const QString& note = "", const Status& status = Status::Unknown1,
-    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const Tags& tags = Tags());
+  static WayPtr createWay(const OsmMapPtr& map, const geos::geom::Coordinate c[] = nullptr,
+                          const QString& note = "", const Status& s = Status::Unknown1,
+                          const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                          const Tags& tags = Tags());
+  static WayPtr createWay(const OsmMapPtr& map, const QList<NodePtr>& nodes = QList<NodePtr>(),
+                          const QString& note = "", const Status& status = Status::Unknown1,
+                          const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                          const Tags& tags = Tags());
+  static WayPtr createWay(const OsmMapPtr& map, const QList<ElementId>& nodeIds = QList<ElementId>(),
+                          const QString& note = "", const Status& status = Status::Unknown1,
+                          const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                          const Tags& tags = Tags());
 
-  static RelationPtr createRelation(
-    const OsmMapPtr& map, const QList<ElementPtr>& elements = QList<ElementPtr>(),
-    const QString& note = "", const Status& status = Status::Unknown1,
-    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const Tags& tags = Tags());
-  static RelationPtr createRelation(
-    const OsmMapPtr& map, const QList<ElementId>& elementIds = QList<ElementId>(),
-    const QString& note = "", const Status& status = Status::Unknown1,
-    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const Tags& tags = Tags());
+  static RelationPtr createRelation(const OsmMapPtr& map, const QList<ElementPtr>& elements = QList<ElementPtr>(),
+                                    const QString& note = "", const Status& status = Status::Unknown1,
+                                    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                                    const Tags& tags = Tags());
+  static RelationPtr createRelation(const OsmMapPtr& map, const QList<ElementId>& elementIds = QList<ElementId>(),
+                                    const QString& note = "", const Status& status = Status::Unknown1,
+                                    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                                    const Tags& tags = Tags());
 
   /**
    * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
@@ -211,9 +205,8 @@ public:
    * @param expectedCleaningOpsSize the expected number of conflation cleaning ops after op
    * reduction
    */
-  static void runConflateOpReductionTest(
-    const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
-    const int expectedCleaningOpsSize);
+  static void runConflateOpReductionTest(const QStringList& matchCreators, const int expectedPreOpSize,
+                                         const int expectedPostOpsSize, const int expectedCleaningOpsSize);
 
 private:
 

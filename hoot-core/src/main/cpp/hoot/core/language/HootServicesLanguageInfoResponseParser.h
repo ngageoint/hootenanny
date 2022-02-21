@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 
@@ -30,7 +30,6 @@
 #define HOOT_SERVICES_LANGUAGE_INFO_RESPONSE_PARSER_H
 
 // Boost
-#include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 namespace hoot
@@ -50,8 +49,7 @@ public:
    * @param response the response to print
    * @return a display string
    */
-  static QString parseAvailableLanguagesResponse(
-    const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response);
+  static QString parseAvailableLanguagesResponse(const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response);
 
   /**
    * Returns an available language apps response string
@@ -60,8 +58,7 @@ public:
    * @param response the response to print
    * @return a display string
    */
-  static QString parseAvailableAppsResponse(
-    const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response);
+  static QString parseAvailableAppsResponse(const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response);
 
   /**
    * Returns a mapping of ISO-6391-1 language codes to language names
@@ -69,8 +66,7 @@ public:
    * @param response a languages info response
    * @return a mapping of ISO-6391-1 language codes to language names
    */
-  static QMap<QString, QString> getLangCodesToLangs(
-    const std::shared_ptr<boost::property_tree::ptree>& response);
+  static QMap<QString, QString> getLangCodesToLangs(const std::shared_ptr<boost::property_tree::ptree>& response);
 };
 
 }

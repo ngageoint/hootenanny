@@ -93,7 +93,8 @@ else
          proj \
          proj-devel \
          stxxl \
-         stxxl-devel >> CentOS_upgrade.txt 2>&1
+         stxxl-devel \
+         v8-devel >> CentOS_upgrade.txt 2>&1
 fi
 
 echo "### Installing libraries with locked versions"
@@ -118,7 +119,8 @@ sudo yum install -y \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
-     stxxl-devel-$STXXL_VERSION
+     stxxl-devel-$STXXL_VERSION \
+     v8-devel-$V8_VERSION
 
 echo "### Locking versions of libraries"
 sudo yum versionlock add \
@@ -142,7 +144,8 @@ sudo yum versionlock add \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
-     stxxl-devel-$STXXL_VERSION
+     stxxl-devel-$STXXL_VERSION \
+     v8-devel-$V8_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."

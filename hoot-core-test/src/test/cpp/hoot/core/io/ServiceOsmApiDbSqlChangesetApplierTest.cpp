@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -95,28 +95,26 @@ public:
     LOG_VARD(boundsStr);
     LOG_VARD(createdAt.toString(OsmApiDb::TIME_FORMAT));
     const QString sql =
-      QString("INSERT INTO %1 (id, user_id, created_at, closed_at, min_lat, max_lat, min_lon, max_lon) ")
-        .arg(ApiDb::getChangesetsTableName()) +
-      QString("VALUES (1, 1, '%1', '%2', %3, %4, %5, %6)")
-        .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
-        .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
-        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMinY()))
-        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMaxY()))
-        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMinX()))
-        .arg(OsmApiDb::toOsmApiDbCoord(bounds.getMaxX()));
+      QString("INSERT INTO %1 (id, user_id, created_at, closed_at, min_lat, max_lat, min_lon, max_lon) "
+              "VALUES (1, 1, '%2', '%3', %4, %5, %6, %7)")
+        .arg(ApiDb::getChangesetsTableName(),
+             createdAt.toString(OsmApiDb::TIME_FORMAT),
+             createdAt.toString(OsmApiDb::TIME_FORMAT),
+             QString::number(OsmApiDb::toOsmApiDbCoord(bounds.getMinY())),
+             QString::number(OsmApiDb::toOsmApiDbCoord(bounds.getMaxY())),
+             QString::number(OsmApiDb::toOsmApiDbCoord(bounds.getMinX())),
+             QString::number(OsmApiDb::toOsmApiDbCoord(bounds.getMaxX())));
     QSqlQuery q(db.getDB());
     LOG_VARD(sql);
     if (q.exec(sql) == false)
-    {
       throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
-    }
     LOG_VARD(q.numRowsAffected());
   }
 
   //This may get pushed up into OsmApiDb later.
   QDateTime now()
   {
-    return QDateTime::currentDateTime().toUTC();
+    return QDateTime::currentDateTimeUtc();
   }
 
   void runSqlChangesetWriteTest()
@@ -153,13 +151,10 @@ public:
     const long nextChangesetId = existingChangesetId + 1;
     QString sql =
       QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES (%2, 1, now(), now());\n")
-        .arg(ApiDb::getChangesetsTableName())
-        .arg(nextChangesetId);
+        .arg(ApiDb::getChangesetsTableName(), QString::number(nextChangesetId));
     sql +=
       QString("INSERT INTO %1 (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%2, 0, 0, %3, true, now(), 3221225472, 1);")
-        .arg(ApiDb::getCurrentNodesTableName())
-        .arg(nextNodeId)
-        .arg(nextChangesetId);
+        .arg(ApiDb::getCurrentNodesTableName(), QString::number(nextNodeId), QString::number(nextChangesetId));
 
     OsmApiDbSqlChangesetApplier(ServicesDbTestUtils::getOsmApiDbUrl()).write(sql);
 
@@ -167,9 +162,8 @@ public:
     assert(nodesItr->isActive());
     int nodesCountAfter = 0;
     while (nodesItr->next())
-    {
       nodesCountAfter++;
-    }
+
     nodesCountAfter--;
     LOG_VARD(nodesCountAfter);
 

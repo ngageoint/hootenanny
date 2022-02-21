@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_TO_MULTIPOLYGON_CONVERTER_H
 #define RELATION_TO_MULTIPOLYGON_CONVERTER_H
@@ -70,8 +70,7 @@ public:
 
   static int logWarnCount;
 
-  RelationToMultiPolygonConverter(
-    const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
+  RelationToMultiPolygonConverter(const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
 
   /**
    * Create and return a multipolygon. If the multipolygon contains gross errors then an empty
@@ -92,8 +91,8 @@ private:
 
   void _createRings(const QString &role, std::vector<geos::geom::LinearRing *>& rings) const;
 
-  void _createRingsFromPartials(
-    const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *>& rings) const;
+  void _createRingsFromPartials(const std::vector<ConstWayPtr>& partials,
+                                std::vector<geos::geom::LinearRing *>& rings) const;
 
   /*
    * Given a vector of unsorted partial ways, create a ring. If the partials do not create a
@@ -114,8 +113,8 @@ private:
    * Given two Linear Rings, determine the realtionship between the two.
    * Inner, Outer or "" for neither
    */
-  QString _findRelationship(
-    const geos::geom::LinearRing* ring1, const geos::geom::LinearRing* ring2) const;
+  QString _findRelationship(const geos::geom::LinearRing* ring1,
+                            const geos::geom::LinearRing* ring2) const;
 
   bool _isValidInner(const geos::geom::LinearRing* innerRing) const;
 
