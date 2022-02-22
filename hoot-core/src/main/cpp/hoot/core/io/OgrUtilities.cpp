@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OgrUtilities.h"
 
@@ -44,7 +44,6 @@ void OgrUtilities::loadDriverInfo()
   //  Load the extension-based driver info
   //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
   _drivers.emplace_back(".shp",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
-//  _drivers.emplace_back(".dbf",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".sqlite",   "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".db",       "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".mif",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR);
@@ -113,25 +112,21 @@ OgrUtilities& OgrUtilities::getInstance()
 QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly) const
 {
   QSet<QString> formats;
-  for (vector<OgrDriverInfo>::const_iterator it = _drivers.begin(); it != _drivers.end(); ++it)
+  for (const auto& driver : _drivers)
   {
-    if (readOnly || it->_is_rw)
-    {
-      formats.insert(QString::fromLatin1(it->_indicator));
-    }
+    if (readOnly || driver._is_rw)
+      formats.insert(QString::fromLatin1(driver._indicator));
   }
   return formats;
 }
 
 OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly) const
 {
-  for (vector<OgrDriverInfo>::const_iterator it = _drivers.begin(); it != _drivers.end(); ++it)
+  for (const auto& driver : _drivers)
   {
-    if (((it->_is_ext && url.endsWith(it->_indicator)) ||
-         (!it->_is_ext && url.startsWith(it->_indicator))) && (readonly || it->_is_rw))
-    {
-      return *it;
-    }
+    if (((driver._is_ext && url.endsWith(driver._indicator)) ||
+        (!driver._is_ext && url.startsWith(driver._indicator))) && (readonly || driver._is_rw))
+      return driver;
   }
   return OgrDriverInfo();
 }
@@ -152,11 +147,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) 
 
   std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr));
   if (result == nullptr)
-  {
-    throw HootException("Unable to create data source: " + source +
-                        " (" + QString(CPLGetLastErrorMsg()) + ")");
-  }
-
+    throw HootException(QString("Unable to create data source: %1 (%2)").arg(source, QString(CPLGetLastErrorMsg())));
   return result;
 }
 
@@ -181,9 +172,8 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   // With GDALOpenEx, we need to specify the GDAL_OF_UPDATE option or the dataset will get opened
   // Read Only.
   if (!readonly)
-  {
     driverInfo._driverType = driverInfo._driverType | GDAL_OF_UPDATE;
-  }
+
   LOG_VART(driverInfo._driverName);
   LOG_VART(driverInfo._driverType);
   LOG_VART(url.toUtf8().data());
@@ -233,9 +223,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   {
     QString errorMsg = "Unable to open: " + url + ".";
     if (url.contains(".zip"))
-    {
       errorMsg += " Is your path within the zip file correct?";
-    }
     throw HootException(errorMsg);
   }
   return result;
@@ -248,9 +236,9 @@ QStringList OgrUtilities::getValidFilesInContainer(const QString& url) const
   //  Ignore anything but files with these extensions
   QStringList extensions({".zip", ".tar", ".tar.gz", ".tgz", ".gz"});
   bool found = false;
-  for (int i = 0; i < extensions.length(); ++i)
+  for (const auto& ext : qAsConst(extensions))
   {
-    if (path.endsWith(extensions[i], Qt::CaseInsensitive))
+    if (path.endsWith(ext, Qt::CaseInsensitive))
       found = true;
   }
   //  If this file doesn't end with any of the above extensions return an empty list

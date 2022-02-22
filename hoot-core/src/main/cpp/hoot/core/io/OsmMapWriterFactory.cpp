@@ -136,6 +136,8 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
     writer->write(map);
     LOG_INFO("Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
              " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    //  Ensure that the writer is closed at the end of the function
+    writer.reset();
   }
 }
 
