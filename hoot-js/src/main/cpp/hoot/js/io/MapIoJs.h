@@ -43,6 +43,7 @@ public:
 
   static void loadMap(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadMapFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void loadMapFromJSONString(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadMapFromStringPreserveIdAndStatus(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void saveMap(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
