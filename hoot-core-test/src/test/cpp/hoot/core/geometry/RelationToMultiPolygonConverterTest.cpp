@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -30,8 +30,8 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 
 using namespace geos::geom;
 using namespace std;

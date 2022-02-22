@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MatchGraph.h"
 
@@ -61,14 +61,14 @@ class MatchEdge
 {
 public:
 
-  enum MatchType
+  enum class MatchType
   {
     AssociatedWith,
     MatchWith,
     InvalidMatch
   };
 
-  MatchEdge() : match(nullptr), type(InvalidMatch) { }
+  MatchEdge() : match(nullptr), type(MatchType::InvalidMatch) { }
   MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) { }
 
   ConstMatchPtr match;
@@ -111,19 +111,21 @@ public:
   {
   public:
 
-    MatchThresholdFilter() :
-      _graph(nullptr),
-      _threshold(-1) { }
+    MatchThresholdFilter()
+      : _graph(nullptr),
+        _threshold(-1)
+    { }
 
-    MatchThresholdFilter(MatchBoostGraph& graph, double threshold) :
-      _graph(&graph),
-      _threshold(threshold) { }
+    MatchThresholdFilter(MatchBoostGraph& graph, double threshold)
+      : _graph(&graph),
+        _threshold(threshold)
+    { }
 
     bool operator()(const MatchEdgeId& edgeId) const
     {
       MatchEdge::MatchType type = (*_graph)[edgeId].type;
       ConstMatchPtr m = (*_graph)[edgeId].match;
-      return (type == MatchEdge::MatchWith && m->getProbability() >= _threshold);
+      return (type == MatchEdge::MatchType::MatchWith && m->getProbability() >= _threshold);
     }
 
   private:
@@ -135,15 +137,11 @@ public:
   MatchVertexId createOrGetVertex(const ElementId& eid)
   {
     if (_eid2Vertex.contains(eid))
-    {
       return _eid2Vertex[eid];
-    }
     else
     {
       MatchVertex v(eid);
-
       MatchVertexId vid = _addVertex(v);
-
       return vid;
     }
   }
@@ -154,19 +152,15 @@ public:
     MatchSetVector result;
 
     LOG_VART(_matches.size());
-    for (size_t i = 0; i < _matches.size(); i++)
+    for (const auto& m : _matches)
     {
-      ConstMatchPtr m = _matches[i];
       MatchType type = m->getType();
       // If this is a solid match, then add it into the group.
       if (type == MatchType::Match)
       {
         set<pair<ElementId, ElementId>> eids = m->getMatchPairs();
-        for (set<pair<ElementId, ElementId>>::const_iterator it = eids.begin();
-             it != eids.end(); ++it)
-        {
-          dsm.joinT(it->first, it->second);
-        }
+        for (const auto& p : eids)
+          dsm.joinT(p.first, p.second);
       }
       // if this is a match that requires review
       else if (type == MatchType::Review)
@@ -182,25 +176,21 @@ public:
     const QHash<QString, ConstMatchPtr> idIndexedMatches = Match::getIdIndexedMatches(_matches);
 
     result.reserve(ag.size());
-    for (DisjointSetMap<ElementId>::AllGroups::const_iterator it = ag.begin(); it != ag.end(); ++it)
+    for (auto it = ag.begin(); it != ag.end(); ++it)
     {
       const vector<ElementId>& v = it->second;
       result.emplace_back();
       MatchSet& matches = result.back();
 
-      for (size_t i = 0; i < v.size(); i++)
-      {
-        // Find all the matches that reference this element id and add them to the set.
-        _findMatches(v[i], matches);
-      }
+      // Find all the matches that reference this element id and add them to the set.
+      for (const auto& element_id : v)
+        _findMatches(element_id, matches);
 
       // While this is O(n^2), matches should generally be pretty small.
-      for (MatchSet::const_iterator m1_it = matches.begin(); m1_it != matches.end(); ++m1_it)
+      for (const auto& m1 : matches)
       {
-        ConstMatchPtr m1 = *m1_it;
-        for (MatchSet::const_iterator m2_it = matches.begin(); m2_it != matches.end(); ++m2_it)
+        for (const auto& m2 : matches)
         {
-          ConstMatchPtr m2 = *m2_it;
           if (m1 != m2 && checkForConflicts &&
               MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
           {
@@ -225,11 +215,8 @@ public:
   {
     if (isValid() == false)
     {
-      for (size_t i = 0; i < _matches.size(); i++)
-      {
-        ConstMatchPtr m = _matches[i];
+      for (const auto& m : _matches)
         _addMatchWith(m);
-      }
     }
   }
 
@@ -247,15 +234,14 @@ private:
 
   void _addMatchWith(ConstMatchPtr m)
   {
-    MatchEdge matchWith(m, MatchEdge::MatchWith);
+    MatchEdge matchWith(m, MatchEdge::MatchType::MatchWith);
 
     // add an edge for each of the match pairs (typically just one match pair)
     set<pair<ElementId, ElementId>> eids = m->getMatchPairs();
-    for (set<pair<ElementId, ElementId>>::const_iterator it = eids.begin(); it != eids.end();
-      ++it)
+    for (const auto& p : eids)
     {
-      MatchVertexId vid1 = createOrGetVertex(it->first);
-      MatchVertexId vid2 = createOrGetVertex(it->second);
+      MatchVertexId vid1 = createOrGetVertex(p.first);
+      MatchVertexId vid2 = createOrGetVertex(p.second);
       add_edge(vid1, vid2, matchWith, _graph);
     }
   }
@@ -263,9 +249,7 @@ private:
   MatchVertexId _addVertex(const MatchVertex& v)
   {
     MatchVertexId vid = add_vertex(v, _graph);
-
     _eid2Vertex[v.eid] = vid;
-
     return vid;
   }
 
@@ -279,18 +263,15 @@ private:
       const MatchEdge& edge = _graph[*ei];
       ConstMatchPtr match = edge.match;
       if (match->getType() == MatchType::Match)
-      {
         matches.insert(match);
-      }
     }
   }
 
 };
 
-MatchGraph::MatchGraph() :
-_checkForConflicts(true),
-// The two classes share the matches vector.
-_d(std::make_shared<MatchGraphInternal>(_matches))
+MatchGraph::MatchGraph()
+  : _checkForConflicts(true),
+    _d(std::make_shared<MatchGraphInternal>(_matches))  // The two classes share the matches vector.
 {
 }
 

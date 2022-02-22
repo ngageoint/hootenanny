@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RailwayOneToManySecondaryMatchElementRemover.h"
 
@@ -41,7 +41,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RailwayOneToManySecondaryMatchElementRemov
 
 RailwayOneToManySecondaryMatchElementRemover::RailwayOneToManySecondaryMatchElementRemover()
 {
-  // We're looking to remove secondary railways with the many to one match identifying tag, but only
+  // We're looking to remove secondary railways with the many-to-one match identifying tag, but only
   // if they aren't involved in a review.
   addCriterion(
     std::make_shared<ChainCriterion>(

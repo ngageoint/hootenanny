@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -67,7 +67,7 @@ public:
 
   /**
    * @brief HootRailwayOneToManyMatchSecondary This is used to identify secondary features to delete
-   * in the railway conflate one to many workflow.
+   * in the railway conflate one-to-many workflow.
    * @return a string
    */
   inline static QString HootRailwayOneToManyMatchSecondary()

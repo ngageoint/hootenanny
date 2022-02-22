@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMerger.h"
 
@@ -76,17 +76,12 @@ public:
 
   bool isSatisfied(const ConstElementPtr& e) const override
   {
-    bool result = false;
     if (e->getElementType() == ElementType::Node && e->getTags().getInformationCount() == 0)
-    {
-      result = true;
-    }
-    else if (e->getElementType() != ElementType::Node &&
-             (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e)))
-    {
-      result = true;
-    }
-    return !result;
+      return false;
+    else if (e->getElementType() != ElementType::Node && (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e)))
+      return false;
+    else
+      return true;
   }
 
   QString getDescription() const override { return ""; }
@@ -105,14 +100,14 @@ private:
 
 int BuildingMerger::logWarnCount = 0;
 
-BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
-MergerBase(pairs),
-_keepMoreComplexGeometryWhenAutoMerging(
-  ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging()),
-_mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
-_manyToManyMatch(false),
-_useChangedReview(ConfigOptions().getBuildingChangedReview()),
-_changedReviewIouThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
+BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs)
+  : MergerBase(pairs),
+    _keepMoreComplexGeometryWhenAutoMerging(
+      ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging()),
+    _mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
+    _manyToManyMatch(false),
+    _useChangedReview(ConfigOptions().getBuildingChangedReview()),
+    _changedReviewIouThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
 {
   LOG_VART(_pairs);
 }
@@ -125,14 +120,13 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   LOG_VART(_pairs);
   _markedReviewText = "";
 
-  // check to see if it is many to many
-  for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
-       ++sit)
+  // check to see if it is many-to-many
+  for (const auto& p : _pairs)
   {
-    firstPairs.emplace(sit->first);
-    secondPairs.emplace(sit->second);
-    combined.emplace(sit->first);
-    combined.emplace(sit->second);
+    firstPairs.emplace(p.first);
+    secondPairs.emplace(p.second);
+    combined.emplace(p.first);
+    combined.emplace(p.second);
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
@@ -143,10 +137,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   if (_manyToManyMatch && !_mergeManyToManyMatches)
   {
-    // If the corresponding auto merge config option is not enabled, then auto review this many to
-    // many match.
-    _markedReviewText =
-      "Merging multiple buildings from each data source is error prone and requires a human eye.";
+    // If the corresponding auto merge config option is not enabled, then auto review this
+    // many-to-many match.
+    _markedReviewText = "Merging multiple buildings from each data source is error prone and requires a human eye.";
     reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
@@ -169,24 +162,20 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   double iou = 1.0;
   if (_useChangedReview)
-  {
     iou = IntersectionOverUnionExtractor().extract(*map, e1, e2);
-  }
 
   ElementPtr keeper;
   ElementPtr scrap;
 
-  if (_useChangedReview &&
-      // doubt iou would ever be <= 0 if these buildings matched in the first place but adding the
-      // check anyway
-      iou > 0.0 && iou < _changedReviewIouThreshold)
+  // doubt iou would ever be <= 0 if these buildings matched in the first place but adding the
+  // check anyway
+  if (_useChangedReview && iou > 0.0 && iou < _changedReviewIouThreshold)
   {
     // If the corresponding config option is enabled, auto review this "changed" building when the
     // IoU score falls below the specified threshold.
     _markedReviewText =
-      "Identified as changed with an IoU score of: " + QString::number(iou) +
-      ", which is less than the specified threshold of: " +
-      QString::number(_changedReviewIouThreshold);
+      QString("Identified as changed with an IoU score of: %1, which is less than the specified threshold of: %2")
+        .arg(QString::number(iou), QString::number(_changedReviewIouThreshold));
     reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
@@ -198,11 +187,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     // keep the most complex building
 
     const ElementId moreComplexBuildingId = _getIdOfMoreComplexBuilding(e1, e2, map);
-    if (moreComplexBuildingId.isNull())
-    {
-      // couldn't determine which one is more complex (one or both buildings were missing nodes)
+    if (moreComplexBuildingId.isNull()) // couldn't determine which one is more complex (one or both buildings were missing nodes)
       return;
-    }
     else if (e1->getElementId() == moreComplexBuildingId)
     {
       // ref is more complex
@@ -230,9 +216,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   keeper->setStatus(Status::Conflated);
   ConfigOptions conf;
   if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
-  {
     keeper->setTag(MetadataTags::HootMatchedBy(), BuildingMatch::MATCH_NAME);
-  }
 
   LOG_TRACE("BuildingMerger: keeper\n" << OsmUtils::getElementDetailString(keeper, map));
   LOG_TRACE("BuildingMerger: scrap\n" << OsmUtils::getElementDetailString(scrap, map));
@@ -270,22 +254,18 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   // delete any pre-existing multipoly members
   LOG_TRACE("Removing multi-poly members: " << multiPolyMemberIds);
-  for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
-       it != multiPolyMemberIds.end(); ++it)
-  {
-    RecursiveElementRemover(*it).apply(map);
-  }
+  for (const auto& element_id : qAsConst(multiPolyMemberIds))
+    RecursiveElementRemover(element_id).apply(map);
 
   set<pair<ElementId, ElementId>> replacedSet;
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-       ++it)
+  for (const auto& p : _pairs)
   {
     // if we replaced the second group of buildings
-    if (it->second != keeper->getElementId())
-      replacedSet.emplace(it->second, keeper->getElementId());
+    if (p.second != keeper->getElementId())
+      replacedSet.emplace(p.second, keeper->getElementId());
 
-    if (it->first != keeper->getElementId())
-      replacedSet.emplace(it->first, keeper->getElementId());
+    if (p.first != keeper->getElementId())
+      replacedSet.emplace(p.first, keeper->getElementId());
   }
   replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
@@ -295,16 +275,10 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
   Tags mergedTags;
   LOG_TRACE("e1 tags before merging and after built building tag merge: " << e1->getTags());
   LOG_TRACE("e2 tags before merging and after built building tag merge: " << e2->getTags());
-  if (_manyToManyMatch && _mergeManyToManyMatches)
-  {
-    // preserve type tags
+  if (_manyToManyMatch && _mergeManyToManyMatches)  // preserve type tags
     mergedTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
-  }
-  else
-  {
-    // use the default tag merging mechanism
+  else  // use the default tag merging mechanism
     mergedTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
-  }
   LOG_TRACE("tags after merging: " << mergedTags);
 
   QStringList ref1;
@@ -318,21 +292,17 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
   if (!ref1.empty() || !ref2.empty())
   {
     if (ref1 == ref2)
-    {
       mergedTags[MetadataTags::HootBuildingMatch()] = "true";
-    }
     else
-    {
       mergedTags[MetadataTags::HootBuildingMatch()] = "false";
-    }
   }
 
   LOG_VART(mergedTags);
   return mergedTags;
 }
 
-ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
-  const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const
+ElementId BuildingMerger::_getIdOfMoreComplexBuilding(const ElementPtr& building1, const ElementPtr& building2,
+                                                      const OsmMapPtr& map) const
 {
   // Use node count as a surrogate for complexity of the geometry.
   int nodeCount1 = 0;
@@ -416,9 +386,8 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
     if (relation->getType() == MetadataTags::RelationMultiPolygon())
     {
       const vector<RelationData::Entry>& entries = relation->getMembers();
-      for (size_t i = 0; i < entries.size(); i++)
+      for (const auto& entry : entries)
       {
-        const RelationData::Entry entry = entries[i];
         const QString role = entry.getRole();
         if (entry.getElementId().getType() == ElementType::Way &&
             (role == MetadataTags::RoleInner() || role == MetadataTags::RoleOuter()))
@@ -431,8 +400,8 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
   return relationMemberIdsToRemove;
 }
 
-std::shared_ptr<Element> BuildingMerger::buildBuilding(
-  const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
+std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid,
+                                                       const bool preserveTypes)
 {
   if (!eid.empty())
   {
@@ -440,13 +409,9 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
   }
 
   if (eid.empty())
-  {
     throw IllegalArgumentException("No element ID passed to building builder.");
-  }
   else if (eid.size() == 1)
-  {
     return map->getElement(*eid.begin());
-  }
   else
   {
     LOG_VART(preserveTypes);
@@ -455,9 +420,9 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
     vector<ElementId> toRemove;
     constituentBuildings.reserve(eid.size());
     OverwriteTagMerger tagMerger;
-    for (set<ElementId>::const_iterator it = eid.begin(); it != eid.end(); ++it)
+    for (const auto& element_id : eid)
     {
-      std::shared_ptr<Element> e = map->getElement(*it);
+      std::shared_ptr<Element> e = map->getElement(element_id);
       LOG_VART(e);
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
@@ -478,10 +443,8 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
           // when/where the reference would be changing, but I also don't think this will be
           // a significant optimization issue.
           vector<RelationData::Entry> m = r->getMembers();
-          for (size_t i = 0; i < m.size(); ++i)
+          for (const auto& constituentBuildingMember : r->getMembers())
           {
-            RelationData::Entry constituentBuildingMember = m[i];
-
             // If its a building relation and the member is a building part,
             if ((r->getType() == MetadataTags::RelationBuilding() &&
                 constituentBuildingMember.getRole() == MetadataTags::RolePart()) ||
@@ -490,7 +453,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
                  (constituentBuildingMember.getRole() == MetadataTags::RoleOuter() ||
                   constituentBuildingMember.getRole() == MetadataTags::RoleInner())))
             {
-              std::shared_ptr<Element> constituentBuilding = map->getElement(m[i].getElementId());
+              std::shared_ptr<Element> constituentBuilding = map->getElement(constituentBuildingMember.getElementId());
 
               // Push any non-conflicting tags in the parent relation down into the constituent
               // building.
@@ -542,13 +505,13 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
     // remove the relation we previously marked for removal
     std::shared_ptr<DeletableBuildingCriterion> crit =
       std::make_shared<DeletableBuildingCriterion>();
-    for (size_t i = 0; i < toRemove.size(); i++)
+    for (const auto& element_id : toRemove)
     {
-      if (map->containsElement(toRemove[i]))
+      if (map->containsElement(element_id))
       {
-        ElementPtr willRemove = map->getElement(toRemove[i]);
-        ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
-        RecursiveElementRemover(toRemove[i], false, crit).apply(map);
+        ElementPtr willRemove = map->getElement(element_id);
+        ReplaceElementOp(element_id, result->getElementId()).apply(map);
+        RecursiveElementRemover(element_id, false, crit).apply(map);
         // just in case it wasn't removed (e.g. part of another relation)
         willRemove->getTags().clear();
       }
@@ -558,13 +521,11 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
   }
 }
 
-RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
-  const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings, const bool preserveTypes)
+RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
+                                                                    const bool preserveTypes)
 {
   if (constituentBuildings.empty())
-  {
     throw IllegalArgumentException("No constituent buildings passed to building merger.");
-  }
   LOG_TRACE("Combining constituent buildings into a relation...");
 
   // This is primarily put here to support testable output.
@@ -605,9 +566,8 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   // put the building parts into a relation
   QString relationType = MetadataTags::RelationMultiPolygon();
   if (allAreBuildingParts)
-  {
     relationType = MetadataTags::RelationBuilding();
-  }
+
   RelationPtr parentRelation =
     std::make_shared<Relation>(
       constituentBuildings[0]->getStatus(), map->createNextRelationId(),
@@ -617,31 +577,21 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   TagMergerPtr tagMerger;
   LOG_VART(preserveTypes);
   QSet<QString> overwriteExcludeTags;
+  //  exclude building part type tags from the type tag preservation by passing them in to be skipped
   if (allAreBuildingParts)
-  {
-    // exclude building part type tags from the type tag preservation by passing them in to be
-    // skipped
     overwriteExcludeTags = BuildingRelationMemberTagMerger::getBuildingPartTagNames();
-  }
   LOG_VART(overwriteExcludeTags);
   if (!preserveTypes)
-  {
     tagMerger = std::make_shared<BuildingRelationMemberTagMerger>(overwriteExcludeTags);
-  }
   else
-  {
     tagMerger = std::make_shared<PreserveTypesTagMerger>(overwriteExcludeTags);
-  }
 
   Tags& relationTags = parentRelation->getTags();
   LOG_TRACE("Parent relation starting tags:" << relationTags);
-  for (size_t i = 0; i < constituentBuildings.size(); i++)
+  for (const auto& constituentBuilding : constituentBuildings)
   {
-    ElementPtr constituentBuilding = constituentBuildings[i];
     if (allAreBuildingParts)
-    {
       parentRelation->addElement(MetadataTags::RolePart(), constituentBuilding);
-    }
     else
     {
       // If the building was originally pulled out of a relation, remove the temp role tag.
@@ -654,9 +604,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       // Otherwise, it was a matched building to be grouped together with an outer role (think this
       // will always be true...).
       else
-      {
         parentRelation->addElement(MetadataTags::RoleOuter(), constituentBuilding);
-      }
     }
     relationTags =
       tagMerger->mergeTags(
@@ -664,9 +612,8 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     parentRelation->setTags(relationTags);
   }
   if (!parentRelation->getTags().contains("building"))
-  {
     parentRelation->getTags()["building"] = "yes";
-  }
+
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
@@ -680,12 +627,11 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
   LOG_VART(suppressBuildingTagOnConstituents);
-  for (Tags::const_iterator it = relationTags.begin(); it != relationTags.end(); ++it)
+  for (auto it = relationTags.constBegin(); it != relationTags.constEnd(); ++it)
   {
     // Remove any tags in the parent relation from each of the constituent buildings.
-    for (size_t i = 0; i < constituentBuildings.size(); i++)
+    for (const auto& constituentBuilding : constituentBuildings)
     {
-      ElementPtr constituentBuilding = constituentBuildings[i];
       // leave building=* on the relation member; remove status here since it will be on the parent
       // relation as conflated
       const bool isBuildingTag = it.key() == "building";
@@ -702,39 +648,35 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   // building:part tag.
   if (allAreBuildingParts)
   {
-    for (size_t i = 0; i < constituentBuildings.size(); i++)
+    for (const auto& constituentBuilding : constituentBuildings)
     {
-      ElementPtr constituentBuilding = constituentBuildings[i];
       constituentBuilding->getTags().remove("building");
       constituentBuilding->getTags()[MetadataTags::BuildingPart()] = "yes";
     }
   }
 
-  LOG_VART(parentRelation);
-  for (size_t i = 0; i < constituentBuildings.size(); i++)
+  if (Log::getInstance().getLevel() == Log::Trace)
   {
-    LOG_VART(constituentBuildings[i]);
+    LOG_VART(parentRelation);
+    for (const auto& building : constituentBuildings)
+    {
+      LOG_VART(building);
+    }
   }
 
   map->addRelation(parentRelation);
   return parentRelation;
 }
 
-std::shared_ptr<Element> BuildingMerger::_buildBuilding(
-  const OsmMapPtr& map, const bool unknown1) const
+std::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map, const bool unknown1) const
 {
   set<ElementId> eids;
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-       ++it)
+  for (const auto& p : _pairs)
   {
     if (unknown1)
-    {
-      eids.insert(it->first);
-    }
+      eids.insert(p.first);
     else
-    {
-      eids.insert(it->second);
-    }
+      eids.insert(p.second);
   }
   return buildBuilding(map, eids, _manyToManyMatch && _mergeManyToManyMatches);
 }
@@ -754,25 +696,17 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
       secondElement->getStatus() != Status::Conflated)
   {
     if (secondElement->getStatus() == Status::Unknown1)
-    {
       firstElement->setStatus(Status::Unknown2);
-    }
     else if (secondElement->getStatus() == Status::Unknown2)
-    {
       firstElement->setStatus(Status::Unknown1);
-    }
   }
   else if (secondElement->getStatus() == Status::Conflated &&
            firstElement->getStatus() != Status::Conflated)
   {
     if (firstElement->getStatus() == Status::Unknown1)
-    {
       secondElement->setStatus(Status::Unknown2);
-    }
     else if (firstElement->getStatus() == Status::Unknown2)
-    {
       secondElement->setStatus(Status::Unknown1);
-    }
   }
 }
 
@@ -795,9 +729,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
   // where we have more than one conflated building as input...haven't seen that in the wild yet
   // though.
   if (map->getElementCount() == 2)
-  {
     _fixStatuses(map);
-  }
 
   // Formerly, we required that the buildings have a status other than conflated in order to be
   // merged...can't remember exactly why...but removed that stipulation and test output still looks
@@ -807,7 +739,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
   BuildingCriterion buildingCrit;
 
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const ConstWayPtr& way = wayItr->second;
     if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
@@ -824,7 +756,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
   }
 
   const RelationMap relations = map->getRelations();
-  for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+  for (auto relItr = relations.begin(); relItr != relations.end(); ++relItr)
   {
     const ConstRelationPtr& relation = relItr->second;
     if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))

@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENTMERGERJS_H
 #define ELEMENTMERGERJS_H
 
 // Hoot
-#include <hoot/js/HootBaseJs.h>
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/PluginContext.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/js/HootBaseJs.h>
+#include <hoot/js/PluginContext.h>
+#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {
@@ -64,7 +64,7 @@ namespace hoot
  *
  * The original merger only merged POIs and supported many into one merging. Many into one merging
  * is supported for all feature types except POI to Polygon and rail. However, don't actually think
- * many to one merging is actually used by any clients and that all merging is done as one feature
+ * many-to-one merging is actually used by any clients and that all merging is done as one feature
  * into one other feature. So, this code and supporting tests could probably be simplified by
  * removing support for many into one merging if it is not being utilized.
  *
@@ -76,7 +76,7 @@ class ElementMergerJs : public HootBaseJs
 
 public:
 
- enum MergeType
+ enum class MergeType
  {
    Poi = 0,         // supports two or more pois
    PoiToPolygon,    // one poi and one poly

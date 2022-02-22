@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -115,15 +115,6 @@ import hoot.services.utils.XmlDocumentBuilder;
 public class MapResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
-    private static final String[] maptables = {
-            "changesets",
-            "current_nodes",
-            "current_relation_members",
-            "current_relations",
-            "current_way_nodes",
-            "current_ways"
-    };
-
     @Autowired
     private JobProcessor jobProcessor;
 
@@ -164,35 +155,16 @@ public class MapResource {
             }
             if(parentFolder == null || parentFolder.equals(0L) || foldersTheUserCanSee.contains(parentFolder)) {
                 Maps m = t.get(maps);
-                m.setSize(getMapSize(m.getId()));
                 m.setPublicCol(parentFolderIsPublic);
                 m.setFolderId(parentFolder);
                 mapLayersOut.add(m);
             }
         }
-        return Map.mapLayerRecordsToLayers(mapLayersOut);
-    }
-
-    /**
-     * For retrieving the physical size of a map record
-     * @param mapId
-     * @return physical size of a map record
-     */
-    private Long getMapSize(long mapId) {
-        long mapSize = 0;
-
         try {
-            for (String table : maptables) {
-                if (mapId != -1) { // skips OSM API db layer
-                    mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
-                }
-            }
-
-            return mapSize;
-        }
-        catch (Exception e) {
-            String message = "Error getting map size.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+            MapLayers layers = Map.mapLayerRecordsToLayers(mapLayersOut);
+            return layers;
+        } catch (Exception e) {
+            throw new WebApplicationException(e, Response.serverError().entity(e.getMessage()).build());
         }
     }
 

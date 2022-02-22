@@ -8,7 +8,7 @@ for OSM data, `.osm` , an XML format, and `.osm.pbf` , a compressed binary
 format. Discussions of OSM format reference either of these two data formats.
 
 By far, the most complex portion of the translation process is the converting the
-Shapefile's schema to the OSM schema. In many cases a one to one mapping can be
+Shapefile's schema to the OSM schema. In many cases a one-to-one mapping can be
 found due to the richness of the OSM schema, but finding the most appropriate mapping
 can be quite time consuming.  For example, one can spend days translating an obscure
 local language to determine the column headings and values in the context of OSM or
@@ -185,7 +185,7 @@ For more advanced translations it may make sense to define a simple set of table
 var nfddBiased = [
     { condition:"attrs['SBB'] == '995'", consequence:"tags['bridge'] = 'yes'" }
 ];
-// build a one to one translation table.
+// build a one-to-one translation table.
 var one2one = [
     ['ROC', '1',    'surface',  'ground'],
     ['ROC', '2',    'surface',  'unimproved'],

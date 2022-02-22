@@ -469,7 +469,7 @@ describe('ElementMergeServer', function () {
         });
     });
     
-    it('merges two rails with the one to many workflow', function() {
+    it('merges two rails with the one-to-many workflow', function() {
         var request  = httpMocks.createRequest({
             method: 'POST',
             url: '/elementmerge',
