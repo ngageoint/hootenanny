@@ -713,7 +713,7 @@ mgcp.rules = {
     ['NST','15','beacon:type','television'],
     ['NST','16','beacon:type','microwave'],
     ['NST','17','beacon:type','ndb'], // non-directional_radio_beacon
-    ['NST','18','beacon:type','non-directional_radio_beacon/distance_measuring_equipment'],
+    ['NST','18','beacon:type','ndb-dme'], // non-directional_radio_beacon/distance_measuring_equipment
     ['NST','20','beacon:type','vor'], // vhf_omni_directional_radio_range
     ['NST','21','beacon:type','vor-dme'], // vhf_omni_directional_radio_range/distance_measuring_equipment
     ['NST','22','beacon:type','vortac'], // vhf_omni_directional_radio_range_and_tacan
