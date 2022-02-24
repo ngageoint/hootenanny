@@ -96,7 +96,7 @@ void IntersectionSplitter::splitIntersections()
     {
       // evaluate each way for splitting.
       QList<long> ways = _nodeToWays.values(nodeId);
-      for (const auto& way : ways)
+      for (const auto& way : qAsConst(ways))
         _splitWay(way, nodeId);
     }
   }
@@ -191,7 +191,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       LOG_VART(idx);
 
       //  The endpoints of the other way should be split.
-      if (idx < 1 || idx > (long)compIds.size() - 1)
+      if (idx < 1 || idx > (long)compIds.size() - 2)
         continue;
 
       //  Check both in forward and reverse for shared nodes in the way
@@ -297,7 +297,7 @@ QList<ElementId> IntersectionSplitter::_getAdjoiningRelationMembers(const Elemen
   if (adjoiningMemberIds.size() == 2)
   {
     int ctr = 0;
-    for (const auto& elementId : adjoiningMemberIds)//QList<ElementId>::const_iterator itr = adjoiningMemberIds.begin(); itr != adjoiningMemberIds.end(); ++itr)
+    for (const auto& elementId : qAsConst(adjoiningMemberIds))
     {
       if (ctr == 0)
         adjoiningWayMemberIndexedBefore = _map->getWay(elementId);
@@ -340,8 +340,7 @@ QList<ElementId> IntersectionSplitter::_getAdjoiningRelationMembers(const Elemen
   return adjoiningMemberIds;
 }
 
-void IntersectionSplitter::_preserveWayRelationMemberOrder(
-  const ElementId& splitWayId, QList<ElementPtr>& newWays) const
+void IntersectionSplitter::_preserveWayRelationMemberOrder(const ElementId& splitWayId, QList<ElementPtr>& newWays) const
 {
   LOG_VART(splitWayId);
   LOG_VART(newWays);
