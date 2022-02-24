@@ -13,7 +13,7 @@ SHELL=/bin/bash
 
 # If you're adding another schema file be sure and update the archive target too.
 # NOTE: This is the list that gets deleted in "make clean"
-SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js translations/tds70_schema.js translations/tds70_full_schema.js translations/etds70_rules.js translations/etds70_osm_rules.js
+SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js translations/tds70_schema.js translations/tds70_full_schema.js translations/etds70_rules.js translations/etds70_osm_rules.js translations/tds71_schema.js translations/tds71_thematic_schema.js translations/tds71_full_schema.js translations/etds71_rules.js translations/etds71_osm_rules.js
 
 -include Makefile.inc
 
@@ -248,6 +248,33 @@ translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/tra
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+#### TDSv71
+# TDSv71 schema is built from an XML file made from a sample FGDB
+translations/tds71_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
+
+# TDSv71 full schema is built from an XML file made from a sample FGDB
+# This one has all of the Text Enumerations
+translations/tds71_full_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# TDSv71 thematic schema is built from an XML file made from a sample FGDB
+translations/tds71_thematic_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$< --thematic $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS71 "To English" rules
+translations/etds71_rules.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS71 "From English" rules
+translations/etds71_osm_rules.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
 #### GGDMv30
 # GGDMv30 is built from the GGDMv30 spec with additional layers and values files
 translations/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
@@ -450,6 +477,11 @@ archive: js-make services-docs docs
 	cp translations/tds70_full_schema.js $(HOOT_TARNAME)/translations/tds70_full_schema.js
 	cp translations/etds70_rules.js $(HOOT_TARNAME)/translations/etds70_rules.js
 	cp translations/etds70_osm_rules.js $(HOOT_TARNAME)/translations/etds70_osm_rules.js
+	# TDSv71
+	cp translations/tds71_schema.js $(HOOT_TARNAME)/translations/tds71_schema.js
+	cp translations/tds71_full_schema.js $(HOOT_TARNAME)/translations/tds71_full_schema.js
+	cp translations/etds71_rules.js $(HOOT_TARNAME)/translations/etds71_rules.js
+	cp translations/etds71_osm_rules.js $(HOOT_TARNAME)/translations/etds71_osm_rules.js
 	# MGCP
 	cp translations/mgcp_schema.js $(HOOT_TARNAME)/translations/mgcp_schema.js
 	cp translations/emgcp_rules.js $(HOOT_TARNAME)/translations/emgcp_rules.js
