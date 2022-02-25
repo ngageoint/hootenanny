@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
-#ifndef SPLITLONGLINEARWAYSVISITOR_H
-#define SPLITLONGLINEARWAYSVISITOR_H
+#ifndef SPLITLONGWAYSVISITOR_H
+#define SPLITLONGWAYSVISITOR_H
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -40,19 +40,19 @@ class OsmMap;
 class Element;
 
 /**
- * @brief The SplitLongLinearWaysVisitor class splits ways that are too long to be written to
+ * @brief The SplitLongWaysVisitor class splits ways that are too long to be written to
  * OpenStreetMap into smaller ones.
  */
-class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
+class SplitLongWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "SplitLongLinearWaysVisitor"; }
+  static QString className() { return "SplitLongWaysVisitor"; }
 
   static int logWarnCount;
 
-  SplitLongLinearWaysVisitor();
-  ~SplitLongLinearWaysVisitor() override = default;
+  SplitLongWaysVisitor();
+  ~SplitLongWaysVisitor() override = default;
 
   void setOsmMap(OsmMap* map) override { _map = map; }
   void setOsmMap(const OsmMap*) override { assert(false); }
@@ -85,4 +85,4 @@ private:
 
 }
 
-#endif // SPLITLONGLINEARWAYSVISITOR_H
+#endif // SPLITLONGWAYSVISITOR_H

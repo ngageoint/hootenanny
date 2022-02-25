@@ -134,6 +134,7 @@ private:
    */
   void _addMergeNearbyNodesOps();
   void _addSimplifyBuildingsOps();
+  void _addLongWaySplitterOps();
 
   // If specific columns were specified for export to a shape file, then this is called instaed of
   // using OgrWriter.

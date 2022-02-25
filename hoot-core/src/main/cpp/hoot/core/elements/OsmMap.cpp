@@ -463,7 +463,7 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
   return false;
 }
 
-void OsmMap::replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to)
+void OsmMap::replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to, bool remove_from)
 {
   LOG_TRACE("Replacing: " << from->getElementId() << " with: " << to->getElementId() << "...");
 
@@ -481,22 +481,23 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const std::shar
     replaceNode(from->getId(), to->getId());
   else
   {
-    if (!containsElement(to))
-      addElement(to);
-
-    // create a copy of the set b/c we may modify it with replace commands.
+    // Create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
     for (auto relation_id : rids)
     {
       const RelationPtr& r = getRelation(relation_id);
       r->replaceElement(from, to);
     }
-
-    RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
+    //  Add the new element to the map if necessary AFTER the relation update
+    if (!containsElement(to))
+      addElement(to);
+    //  Only remove the from element if requested
+    if (remove_from)
+      RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
-void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
+void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to, bool remove_from)
 {
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
@@ -516,14 +517,6 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
   }
   else
   {
-    QList<long> elem;
-    for (const auto& element : to)
-    {
-      elem.append(element->getId());
-      if (!containsElement(element))
-        addElement(element);
-    }
-
     // Create a copy of the set, b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
     for (auto relation_id : rids)
@@ -531,9 +524,16 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
       const RelationPtr& r = getRelation(relation_id);
       r->replaceElement(from, to);
     }
-
+    //  Add the new elements to the map if necessary AFTER the relation update
+    QList<long> elem;
+    for (const auto& element : to)
+    {
+      elem.append(element->getId());
+      if (!containsElement(element))
+        addElement(element);
+    }
     //  Don't remove the element if it is being replaced by itself
-    if (!elem.contains(from->getId()))
+    if (!elem.contains(from->getId()) && remove_from)
       RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }

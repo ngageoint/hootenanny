@@ -53,6 +53,7 @@
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
+#include <hoot/core/visitors/SplitLongWaysVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -271,6 +272,7 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
   {
     _addMergeNearbyNodesOps();
     _addSimplifyBuildingsOps();
+    _addLongWaySplitterOps();
   }
 
   if (!_convertOps.empty())
@@ -432,6 +434,8 @@ void DataConverter::_setFromOgrOptions(const QStringList& inputs)
   _addMergeNearbyNodesOps();
   //  Setup the building simplification ops
   _addSimplifyBuildingsOps();
+  //  Setup the OSM API way splitter
+  _addLongWaySplitterOps();
 
   //  We require that a translation be present when converting from OGR, since OgrReader is tightly
   //  coupled to the translation logic.
@@ -530,6 +534,16 @@ void DataConverter::_addSimplifyBuildingsOps()
       _convertOps.append(BuildingPartMergeOp::className());
     if (!_convertOps.contains(BuildingOutlineUpdateOp::className()))
       _convertOps.append(BuildingOutlineUpdateOp::className());
+  }
+}
+
+void DataConverter::_addLongWaySplitterOps()
+{
+  //  Some OGR sources can contain ways that are longer than the 2000 node limit and must be split
+  if (ConfigOptions().getNonOsmConvertSplitLongWays())
+  {
+    if (!_convertOps.contains(SplitLongWaysVisitor::className()))
+      _convertOps.append(SplitLongWaysVisitor::className());
   }
 }
 
