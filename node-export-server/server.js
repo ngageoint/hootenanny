@@ -415,12 +415,10 @@ function doExport(req, res, hash, input) {
             } else {
                 res.download(job.outZip, job.downloadFile, function(err) {
                     // write stream has closed but for larger zips maybe file
-                    // not yet ready for download, so just return hash
-                    // and await next polling request
+                    // not yet ready for download so log err so we can troubleshoot
                     if (err) {
                         console.error('Error with download');
                         console.error(err);
-                        res.send(hash);
                     }
 
                     if (jobs[hash].timeout)
