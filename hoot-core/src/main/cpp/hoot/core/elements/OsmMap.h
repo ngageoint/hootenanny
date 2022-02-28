@@ -132,13 +132,13 @@ public:
    * operation and an exception will be throw. E.g. replacing a node with a way where the node
    * is part of another way.
    */
-  void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to);
+  void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to, bool remove_from = true);
   /**
    * Similar to above, but from is replaced with a collection of elements. This makes sense in the
    * context of a relation, but may not make sense in other cases (e.g. replace a single node
    * that is part of a way with multiple nodes).
    */
-  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to);
+  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to, bool remove_from = true);
 
   /////////////////////////////////////NODE//////////////////////////////////////////////
 

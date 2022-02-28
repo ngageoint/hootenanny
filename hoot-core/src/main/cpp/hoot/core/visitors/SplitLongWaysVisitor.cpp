@@ -22,33 +22,32 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
-#include "SplitLongLinearWaysVisitor.h"
+#include "SplitLongWaysVisitor.h"
 
 #include <cstddef>
 
-
-
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/ElementType.h>
-#include <hoot/core/util/Settings.h>
-
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
 
-int SplitLongLinearWaysVisitor::logWarnCount = 0;
+int SplitLongWaysVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongWaysVisitor)
 
-SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor()
+SplitLongWaysVisitor::SplitLongWaysVisitor()
   : _maxNodesPerWay(0)
 {
   // Find out if user set our configuration value at cmdline or if we should use default
@@ -56,7 +55,7 @@ SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor()
   setMaxNumberOfNodes(configOptions.getWayMaxNodesPerWay());
 }
 
-void SplitLongLinearWaysVisitor::setMaxNumberOfNodes(unsigned int maxNodesPerWay)
+void SplitLongWaysVisitor::setMaxNumberOfNodes(unsigned int maxNodesPerWay)
 {
   _maxNodesPerWay = maxNodesPerWay;
   if (_maxNodesPerWay < 2)
@@ -79,7 +78,7 @@ void SplitLongLinearWaysVisitor::setMaxNumberOfNodes(unsigned int maxNodesPerWay
 }
 
 
-void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
+void SplitLongWaysVisitor::visit(const std::shared_ptr<Element>& element)
 {
   // If not a way, ignore
   if (element->getElementType() != ElementType::Way)
@@ -91,33 +90,25 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
 
   if (way == emptyWay)
   {
-    LOG_TRACE("SplitLongLinearWaysVisitor::visit: element is not a way, ignoring");
+    LOG_TRACE("SplitLongWaysVisitor::visit: element is not a way, ignoring");
     return;
   }
 
   // Does way exceed max number of nodes?
   if (way->getNodeCount() <= getMaxNumberOfNodes())
   {
-    LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
+    LOG_TRACE("SplitLongWaysVisitor::visit: way " << way->getId() <<
       " has " << way->getNodeCount() << " nodes which is <= than"
       " max of " << getMaxNumberOfNodes() << ", ignoring");
     return;
   }
   LOG_TRACE("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
 
-  // Ensure we're a linear way -- heuristic is reported to be mostly accurate
-  if (LinearCriterion().isSatisfied(way) == false)
-  {
-    LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
-      " is not linear, ignoring");
-    return;
-  }
-
-  LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
+  LOG_TRACE("SplitLongWaysVisitor::visit: way " << way->getId() <<
     " has " << way->getNodeCount() << " nodes which is greater thank"
     " max of " << getMaxNumberOfNodes() << ", splitting this way!");
 
-  unsigned int nodesRemaining = way->getNodeCount();
+  unsigned int nodesRemaining = static_cast<unsigned int>(way->getNodeCount());
 
   QList<ElementPtr> replacements;
 
@@ -176,9 +167,34 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
     }
   }
 
-  //  Update any relations
-  if (!replacements.empty())
-    _map->replace(way, replacements);
+  //  If the way is a 'loose' way create a relation, if not just replace it with all of the old ways as members of the relation
+  const std::set<long> rids = _map->getIndex().getElementToRelationMap()->getRelationByElement(way->getElementId());
+  if (rids.empty())
+  {
+    //  Create a new relation for all of the split ways
+    long relation_id = _map->createNextRelationId();
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, relation_id, way->getRawCircularError(), "");
+    QString role = "";
+    if (AreaCriterion().isSatisfied(way))
+    {
+      relation->setType("multipolygon");
+      role = "outer";
+    }
+    else
+      relation->setType("multilinestring");
+
+    //  Add all of the replacement elements to the relation
+    for (const auto& e : replacements)
+      relation->addElement(role, e);
+
+    //  Update any parent relations with the new relation
+    _map->replace(way, relation, false);
+  }
+  else
+  {
+    //  Replace the way with all other ways in the parent relations
+    _map->replace(way, replacements, false);
+  }
 
   _numAffected++;
 }
