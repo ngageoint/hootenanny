@@ -29,9 +29,7 @@
 
 
 # ConvertTDSv70Schema.py
-#
 # Build a TDSv70 schema. The script also generates rules and lookup tables from the schema
-#
 # Note: This script does not do any error or sanity checking of the input files.
 #
 # Mattj Jun 19
@@ -56,13 +54,6 @@ def printJavascript(schema,withDefs):
         if schema[f]['geom'] == 'Table':
             continue
         pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom']);
-        if 'fcsubtype' in schema[f]:
-            pString += 'fcsubtype:"%s",' % (schema[f]['fcsubtype'])
-        if 'fdname' in schema[f]:
-            # print '  fdname:"%s",' % (schema[f]['fdname'])
-            pString += 'fdname:"%s",' % (schema[f]['fdname'])
-        if 'thematic' in schema[f]:
-            pString += 'thematic:"%s",' % (schema[f]['thematic'])
         if withDefs and 'definition' in schema[f]:
             pString += 'definition:"%s",' % (schema[f]['definition'])
 
@@ -201,10 +192,10 @@ geo_list = {'T':'Table', 'C':'Line', 'S':'Area', 'P':'Point' }
 # Convert from the Spec into what Hoot understands
 dataType_list = {
     'BasicEncyclopediaStrucText':'String',
-    'CodeList':'Enumeration',
+    'CodeList':'enumeration',
     'DateTimeStrucText':'String',
     'Double':'Real',
-    'Enumeration':'Enumeration',
+    'Enumeration':'enumeration',
     'IcaoLocIndStrucText':'String',
     'LexicalText':'String',
     # 'Local specification':'String',
@@ -558,7 +549,7 @@ def processFile(fileName,enValues):
                 fCode = 'AL013'
             # The lookup table is in the Values.csv
             tschema[fName]['columns'][aName]['func'] = fCode
-            tschema[fName]['columns'][aName]['type'] = 'Enumeration'
+            tschema[fName]['columns'][aName]['type'] = 'enumeration'
             tschema[fName]['columns'][aName]['defValue'] = default_list['Enumeration']
             for i in enValues[fCode]['values']:
                 tschema[fName]['columns'][aName]['enum'].append({'name':enValues[fCode]['values'][i],'value':i})
