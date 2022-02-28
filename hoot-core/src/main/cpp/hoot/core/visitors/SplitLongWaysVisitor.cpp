@@ -108,7 +108,7 @@ void SplitLongWaysVisitor::visit(const std::shared_ptr<Element>& element)
     " has " << way->getNodeCount() << " nodes which is greater thank"
     " max of " << getMaxNumberOfNodes() << ", splitting this way!");
 
-  unsigned int nodesRemaining = way->getNodeCount();
+  unsigned int nodesRemaining = static_cast<unsigned int>(way->getNodeCount());
 
   QList<ElementPtr> replacements;
 
@@ -184,8 +184,8 @@ void SplitLongWaysVisitor::visit(const std::shared_ptr<Element>& element)
       relation->setType("multilinestring");
 
     //  Add all of the replacement elements to the relation
-    for (const auto& element : replacements)
-      relation->addElement(role, element);
+    for (const auto& e : replacements)
+      relation->addElement(role, e);
 
     //  Update any parent relations with the new relation
     _map->replace(way, relation, false);

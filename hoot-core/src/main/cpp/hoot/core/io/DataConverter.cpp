@@ -540,11 +540,8 @@ void DataConverter::_addSimplifyBuildingsOps()
 void DataConverter::_addLongWaySplitterOps()
 {
   //  Some OGR sources can contain ways that are longer than the 2000 node limit and must be split
-  if (ConfigOptions().getNonOsmConvertSplitLongWays())
-  {
-    if (!_convertOps.contains(SplitLongWaysVisitor::className()))
+  if (ConfigOptions().getNonOsmConvertSplitLongWays() && !_convertOps.contains(SplitLongWaysVisitor::className()))
       _convertOps.append(SplitLongWaysVisitor::className());
-  }
 }
 
 }
