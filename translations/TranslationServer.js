@@ -33,6 +33,7 @@ var availableTrans = {
     TDSv40: {isavailable: true},
     TDSv61: {isavailable: true},
     TDSv70: {isavailable: true},
+    TDSv71: {isavailable: true},
     MGCP: {isavailable: true},
     GGDMv30: {isavailable: true}
 };
@@ -41,6 +42,7 @@ var schemaMap = {
     TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
     TDSv70: require(HOOT_HOME + '/translations/tds70_full_schema.js'),
+    TDSv71: require(HOOT_HOME + '/translations/tds71_full_schema.js'),
     MGCP: require(HOOT_HOME + '/translations/mgcp_schema.js'),
     GGDMv30: require(HOOT_HOME + '/translations/ggdm30_schema.js')
 };
@@ -50,6 +52,7 @@ var fcodeLookup = {
     TDSv40: require(HOOT_HOME + '/translations/etds40_osm.js'),
     TDSv61: require(HOOT_HOME + '/translations/etds61_osm.js'),
     TDSv70: require(HOOT_HOME + '/translations/etds70_osm.js'),
+    TDSv71: require(HOOT_HOME + '/translations/etds71_osm.js'),
     MGCP: require(HOOT_HOME + '/translations/emgcp_osm.js'),
     GGDMv30: require(HOOT_HOME + '/translations/eggdm30_osm.js')
 };
@@ -66,6 +69,10 @@ var translationsMap = {
         }),
         TDSv70: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv70.js',
+            'schema.translation.direction': 'toogr'
+        }),
+        TDSv71: new hoot.SchemaTranslationOp({
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv71.js',
             'schema.translation.direction': 'toogr'
         }),
         MGCP: new hoot.SchemaTranslationOp({
@@ -88,6 +95,10 @@ var translationsMap = {
         }),
         TDSv70: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv70.js',
+            'schema.translation.direction': 'toosm'
+        }),
+        TDSv71: new hoot.SchemaTranslationOp({
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv71.js',
             'schema.translation.direction': 'toosm'
         }),
         MGCP: new hoot.SchemaTranslationOp({

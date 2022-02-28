@@ -36,7 +36,6 @@ if (typeof hoot === 'undefined')
 {
   var HOOT_HOME = process.env.HOOT_HOME;
   var hoot = require(HOOT_HOME + '/lib/HootJs');
-
 }
 
 schemaTools.expandAliases = function(tags) {

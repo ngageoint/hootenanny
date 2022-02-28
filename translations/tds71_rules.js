@@ -29,6 +29,13 @@
     TDSv71 One2one rules
 */
 
+var _global = (0, eval)('this');
+if (!_global.schemaTools)
+{
+  hoot.require('SchemaTools');
+}
+
+
 tds71.rules = {
   // ##### Start of One2One Rules #####
 
