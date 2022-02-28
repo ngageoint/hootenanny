@@ -5,7 +5,7 @@ var assert = require('assert'),
 
 var server = require('../TranslationServer.js');
 
-describe('TranslationServer', function () {
+describe('Facility', function () {
 
     var cases = {
         850: {},
@@ -15,6 +15,7 @@ describe('TranslationServer', function () {
     };
 
     var schemas = [
+        'TDSv71',
         'TDSv70',
         'TDSv61',
         'TDSv40',
@@ -38,11 +39,7 @@ describe('TranslationServer', function () {
                                 <node id="-12" action="modify" visible="true" lat="0.68306209303" lon="18.45157116983" />\
                                 <node id="-13" action="modify" visible="true" lat="0.68270797876" lon="18.45141400736" />\
                                 <way id="-19">\
-                                    <nd ref="-10" />\
-                                    <nd ref="-11" />\
-                                    <nd ref="-12" />\
-                                    <nd ref="-13" />\
-                                    <nd ref="-10" />\
+                                    <nd ref="-10" /> <nd ref="-11" /> <nd ref="-12" /> <nd ref="-13" /> <nd ref="-10" />\
                                     <tag k="' + fcode_key + '" v="AL010"/>\
                                     <tag k="FFN" v="' + code + '"/>\
                                 </way>\

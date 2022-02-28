@@ -1812,8 +1812,8 @@ translate = {
       // Reuse tKey but don't remove spaces, underscores etc
       tKey = col.toUpperCase();
 
-      // Drop the "GEOM" attribute
-      if (tKey == 'GEOM' || tKey == 'SHAPE_LENGTH' || tKey == 'SHAPE_AREA')
+      // Drop not needed attribute
+      if (tKey == 'GEOM' || tKey == 'SHAPE_LENGTH' || tKey == 'SHAPE_AREA' || tKey == 'FCSUBTYPE')
       {
         delete attrs[col];
         continue;

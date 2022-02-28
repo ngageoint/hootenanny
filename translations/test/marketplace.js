@@ -16,6 +16,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
     var ffns = [272, 343, 459, 460, 464, 465, 466, 474, 475, 476, 478, 640, 691, 701, 706, 711, 714, 717, 752, 760, 770, 775, 801, 810, 811, 812, 813, 814, 818, 819, 961, 962]
 
     var schemas = [
+        'TDSv71',
         'TDSv70',
         'TDSv61',
         'TDSv40',
@@ -33,11 +34,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
 
                 var tds_xml = '<osm version="0.6">\
                                 <way id="-19">\
-                                    <nd ref="-10" />\
-                                    <nd ref="-11" />\
-                                    <nd ref="-12" />\
-                                    <nd ref="-13" />\
-                                    <nd ref="-10" />\
+                                    <nd ref="-10" /> <nd ref="-11" /> <nd ref="-12" /> <nd ref="-13" /> <nd ref="-10" />\
                                     <tag k="' + fcode_key + '" v="' + fcode + '"/>\
                                     <tag k="FFN" v="' + ffn + '"/>\
                                 </way>\

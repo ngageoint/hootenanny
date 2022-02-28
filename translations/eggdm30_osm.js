@@ -51,7 +51,6 @@ hoot.require('eggdm30_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
-// hoot.require('config');
 
 
 eggdm30_osm = {

@@ -33,11 +33,7 @@ describe('TranslationServer', function () {
                             <node id="-12" lat="0.68306209303" lon="18.45157116983" />\
                             <node id="-13" lat="0.68270797876" lon="18.45141400736" />\
                             <way id="-19" >\
-                                <nd ref="-10" />\
-                                <nd ref="-11" />\
-                                <nd ref="-12" />\
-                                <nd ref="-13" />\
-                                <nd ref="-10" />\
+                                <nd ref="-10" /><nd ref="-11" /><nd ref="-12" /><nd ref="-13" /><nd ref="-10" />\
                                 <tag k="F_CODE" v="' + fcode + '"/>\
                             </way>\
                         </osm>';

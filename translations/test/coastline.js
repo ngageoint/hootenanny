@@ -9,7 +9,7 @@ var assert = require('assert'),
 
 var server = require('../TranslationServer.js');
 
-describe('Bridgs and Aqueduct', function () {
+describe('TranslationServer', function () {
     this.timeout(5000);
 
     // Strings used to build OSM XML features
@@ -42,45 +42,47 @@ describe('Bridgs and Aqueduct', function () {
     schemas.forEach(schema => {
         var fcode_key = (schema === 'MGCP') ? 'FCODE' : 'F_CODE';
 
-        it('should translate Bridge (AQ040) Area from ' + schema + ' -> osm -> ' + schema, function() {
-            var data = startArea + '<tag k="' + fcode_key + '" v="AQ040"/>' + endWay;
+        it('should translate Coastline (BA010) from ' + schema + ' -> osm -> ' + schema, function() {
+            var data = startWay + '<tag k="' + fcode_key + '" v="BA010"/>' + endWay;
             var osm_xml = server.handleInputs({osm: data, method: 'POST', translation: schema, path: '/translateFrom'});
             // console.log(osm_xml);
-            var xml = parser.parseFromString(osm_xml);
-            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
 
-            var tags = osmtogeojson(xml).features[0].properties;
-            assert.equal(tags["bridge"], 'yes');
-            assert.equal(tags["area"], 'yes');
+            xml2js.parseString(osm_xml, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "natural")
+                assert.equal(result.osm.way[0].tag[0].$.v, "coastline")
+            });
 
             var trans_xml = server.handleInputs({osm: osm_xml, method: 'POST', translation: schema, path: '/translateTo'});
-            // console.log(trans_xml);
-            xml = parser.parseFromString(trans_xml);
+            // console.log(tds_xml);
+            var xml = parser.parseFromString(trans_xml);
             assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), schema);
 
             var tags = osmtogeojson(xml).features[0].properties;
-            assert.equal(tags[fcode_key], 'AQ040');
+            assert.equal(tags[fcode_key], 'BA010');
         });
 
-        it('should translate Aqueduct (BH010) Area from ' + schema + ' -> osm -> ' + schema, function() {
-            var data = startArea + '<tag k="' + fcode_key + '" v="BH010"/>' + endWay;
+        it('should persist Land Water Boundary (BA010) FCODE and SLT=6 (mangrove) from ' + schema + ' -> osm -> ' + schema, function() {
+            var data = startWay + '<tag k="' + fcode_key + '" v="BA010"/><tag k="SLT" v="6" />' + endWay;
             var osm_xml = server.handleInputs({osm: data, method: 'POST', translation: schema, path: '/translateFrom'});
             // console.log(osm_xml);
-            var xml = parser.parseFromString(osm_xml);
-            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
+            xml2js.parseString(osm_xml, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, 'shoreline:type')
+                assert.equal(result.osm.way[0].tag[0].$.v, 'mangrove')
+                assert.equal(result.osm.way[0].tag[1].$.k, 'natural')
+                assert.equal(result.osm.way[0].tag[1].$.v, 'coastline')
+            })
+
+            var trans_xml = server.handleInputs({osm: osm_xml, method: 'POST', translation: schema, path: '/translateTo'})
+            var xml = parser.parseFromString(trans_xml);
 
             var tags = osmtogeojson(xml).features[0].properties;
-            assert.equal(tags["bridge"], 'aqueduct');
-            assert.equal(tags["area"], 'yes');
-
-            var trans_xml = server.handleInputs({osm: osm_xml, method: 'POST', translation: schema, path: '/translateTo'});
-            // console.log(trans_xml);
-            xml = parser.parseFromString(trans_xml);
-            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), schema);
-
-            var tags = osmtogeojson(xml).features[0].properties;
-            assert.equal(tags[fcode_key], 'BH010');
+            assert.equal(tags[fcode_key], 'BA010');
+            assert.equal(tags['SLT'], '6');
         });
+
+
     });
 
 });

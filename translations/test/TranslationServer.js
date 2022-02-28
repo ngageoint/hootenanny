@@ -42,6 +42,14 @@ describe('TranslationServer', function () {
             }).length, 280);
         });
 
+        it('should return fcodes for TDSv71 Area', function(){
+            assert.equal(server.getFCodes({
+                method: 'GET',
+                translation: 'TDSv71',
+                geometry: 'Area'
+            }).length, 204);
+        });
+
         it('should return fcodes for TDSv40 Vertex', function(){
             assert.equal(server.getFCodes({
                 method: 'GET',
@@ -144,6 +152,16 @@ describe('TranslationServer', function () {
             assert.equal(intersection, true);
         })
 
+        it('should handle translateFrom GET for TDSv71', function() {
+            var attrs = server.handleInputs({
+                fcode: 'AL013',
+                translation: 'TDSv71',
+                method: 'GET',
+                path: '/translateFrom'
+            }).attrs;
+            assert.equal(attrs.building, 'yes')
+        })
+
         it('should handle translateFrom GET for TDSv70', function() {
             var attrs = server.handleInputs({
                 fcode: 'AL013',
@@ -225,6 +243,21 @@ describe('TranslationServer', function () {
             assert.equal(tags["UFI"], "bfd3f222-8e04-4ddc-b201-476099761302");
         }).timeout(3000);
 
+        it('should handle translateTo TDSv71 POST', function() {
+            var output = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                method: 'POST',
+                translation: 'TDSv71',
+                path: '/translateTo'
+            });
+
+            var xml = parser.parseFromString(output);
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv71");
+            var tags = osmtogeojson(xml).features[0].properties;
+            assert.equal(tags["F_CODE"], "AL013");
+            assert.equal(tags["UFI"], "bfd3f222-8e04-4ddc-b201-476099761302");
+        }).timeout(3000);
+
         it('should handle translateTo TDSv70 POST', function() {
             var output = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
@@ -302,192 +335,6 @@ describe('TranslationServer', function () {
             });
         });
 
-
-        it('should translate Coastline (BA010) from ogr -> osm -> ogr', function() {
-
-            var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /></way></osm>'
-
-            var osm_xml = server.handleInputs({
-                osm: data,
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateFrom'
-            });
-
-            xml2js.parseString(osm_xml, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "natural")
-                assert.equal(result.osm.way[0].tag[0].$.v, "coastline")
-
-            });
-
-            var tds61_xml = server.handleInputs({
-                osm: osm_xml,
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
-
-            xml2js.parseString(tds61_xml, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE")
-                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
-            });
-
-            var tds40_xml = server.handleInputs({
-                osm: osm_xml,
-                method: 'POST',
-                translation: 'TDSv40',
-                path: '/translateTo'
-            });
-
-            xml2js.parseString(tds40_xml, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE")
-                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
-            });
-
-            var mgcp_xml = server.handleInputs({
-                osm: osm_xml,
-                method: 'POST',
-                translation: 'MGCP',
-                path: '/translateTo'
-            });
-
-            xml2js.parseString(mgcp_xml, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE")
-                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
-            });
-
-            var ggdmv30_xml = server.handleInputs({
-                osm: osm_xml,
-                method: 'POST',
-                translation: 'GGDMv30',
-                path: '/translateTo'
-            });
-
-            xml2js.parseString(ggdmv30_xml, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE")
-                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
-            });
-
-        }).timeout(8000);
-
-        it('should persist Land Water Boundary (BA010) FCODE and SLT=6 (mangrove) from TDSv61-> osm -> TDSv61', function() {
-
-            var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /><tag k="SLT" v="6" /></way></osm>'
-
-                var osm_xml = server.handleInputs({
-                    osm: data,
-                    method: 'POST',
-                    translation: 'TDSv61',
-                    path: '/translateFrom'
-                });
-
-
-                xml2js.parseString(osm_xml, function(err, result) {
-                    if (err) console.error(err);
-
-                    assert.equal(result.osm.way[0].tag[0].$.k, 'shoreline:type')
-                    assert.equal(result.osm.way[0].tag[0].$.v, 'mangrove')
-                    assert.equal(result.osm.way[0].tag[1].$.k, 'natural')
-                    assert.equal(result.osm.way[0].tag[1].$.v, 'coastline')
-                })
-
-                var tds_xml = server.handleInputs({
-                    osm: osm_xml,
-                    method: 'POST',
-                    translation: 'TDSv61',
-                    path: '/translateTo'
-                })
-
-                xml2js.parseString(tds_xml, function(err, result) {
-                    if (err) console.error(err);
-                    assert.equal(result.osm.way[0].tag[0].$.k, 'SLT')
-                    assert.equal(result.osm.way[0].tag[0].$.v, '6')
-                    assert.equal(result.osm.way[0].tag[1].$.k, 'F_CODE')
-                    assert.equal(result.osm.way[0].tag[1].$.v, 'BA010')
-                })
-        })
-
-        it('should handle OSM to MGCP POST of power line feature', function() {
-            var osm2trans = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
-                method: 'POST',
-                translation: 'MGCP',
-                path: '/translateTo'
-            });
-            xml2js.parseString(osm2trans, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.$.schema, "MGCP");
-                assert.equal(result.osm.way[0].tag[1].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[1].$.v, "D7CDBDFE-88C6-4D8A-979D-AD88CFC65EF1");
-                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AT030");
-            });
-        });
-
-        it('should handle OSM to TDSv40 POST of power line feature', function() {
-            var osm2trans = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
-                method: 'POST',
-                translation: 'TDSv40',
-                path: '/translateTo'
-            });
-            xml2js.parseString(osm2trans, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.$.schema, "TDSv40");
-                assert.equal(result.osm.way[0].tag[1].$.k, "CAB");
-                assert.equal(result.osm.way[0].tag[1].$.v, "2");
-                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[2].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AT005");
-            });
-        });
-
-        it('should handle OSM to TDSv61 POST of power line feature', function() {
-            var osm2trans = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
-            xml2js.parseString(osm2trans, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.$.schema, "TDSv61");
-                assert.equal(result.osm.way[0].tag[1].$.k, "CAB");
-                assert.equal(result.osm.way[0].tag[1].$.v, "2");
-                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[2].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AT005");
-            });
-        });
-
-        it('should handle OSM to GGDMv30 POST of power line feature', function() {
-            this.timeout(3000);
-
-            var osm2trans = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
-                method: 'POST',
-                translation: 'GGDMv30',
-                path: '/translateTo'
-            });
-            xml2js.parseString(osm2trans, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.$.schema, "GGDMv30");
-                assert.equal(result.osm.way[0].tag[1].$.k, "CAB");
-                assert.equal(result.osm.way[0].tag[1].$.v, "2");
-                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[2].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AT005");
-            });
-        });
-
         it('should handle OSM to MGCP POST of road line feature with width', function() {
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
@@ -506,6 +353,33 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[2].$.v, "8CD72087-A7A2-43A9-8DFB-7836F2FFEA13");
                 assert.equal(result.osm.way[0].tag[3].$.k, "WD1");
                 assert.equal(result.osm.way[0].tag[3].$.v, "20");
+            });
+        });
+
+        it('should handle OSM to TDSv71 POST of road line feature with width', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv71',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv71");
+                assert.equal(result.osm.way[0].tag[0].$.k, "LTN");
+                assert.equal(result.osm.way[0].tag[0].$.v, "2");
+                assert.equal(result.osm.way[0].tag[1].$.k, "ZI016_WD1");
+                assert.equal(result.osm.way[0].tag[1].$.v, "20");
+                assert.equal(result.osm.way[0].tag[2].$.k, "RIN_ROI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "5");
+                assert.equal(result.osm.way[0].tag[3].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[3].$.v, "AP030");
+                assert.equal(result.osm.way[0].tag[4].$.k, "OSMTAGS");
+                assert.equal(result.osm.way[0].tag[4].$.v, '{"highway":"road"}');
+                assert.equal(result.osm.way[0].tag[5].$.k, "RTY");
+                assert.equal(result.osm.way[0].tag[5].$.v, "-999999");
+                assert.equal(result.osm.way[0].tag[6].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[6].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
             });
         });
 
@@ -686,37 +560,6 @@ describe('TranslationServer', function () {
             })
         });
 
-        it('should handle tdstoosm POST of power line feature', function() {
-            var trans2osm = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AT030"/></way></osm>',
-                method: 'POST',
-                translation: 'MGCP',
-                path: '/translateFrom'
-            });
-            var output = xml2js.parseString(trans2osm, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
-                assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
-                assert.equal(result.osm.way[0].tag[0].$.k, "power");
-                assert.equal(result.osm.way[0].tag[0].$.v, "line");
-            });
-        });
-        it('should handle tdstoosm POST of power line feature', function() {
-            var trans2osm = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UFI" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="F_CODE" v="AT005"/><tag k="CAB" v="2"/></way></osm>',
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateFrom'
-            });
-            var output = xml2js.parseString(trans2osm, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
-                assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
-                assert.equal(result.osm.way[0].tag[0].$.k, "power");
-                assert.equal(result.osm.way[0].tag[0].$.v, "line");
-            });
-        });
-
         it('should handle tdstoosm POST of facility area feature', function() {
             var trans2osm = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><nd ref="-13"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AL010"/><tag k="SDP" v="D"/></way></osm>',
@@ -845,6 +688,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/capabilities'
             });
+            assert.equal(capas.TDSv71.isavailable, true);
             assert.equal(capas.TDSv70.isavailable, true);
             assert.equal(capas.TDSv61.isavailable, true);
             assert.equal(capas.TDSv40.isavailable, true);
@@ -868,6 +712,21 @@ describe('TranslationServer', function () {
             var schm = server.handleInputs({
                 geometry: 'line',
                 translation: 'TDSv40',
+                searchstr: 'river',
+                maxLeinDistance: 20,
+                limit: 12,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert.equal(schm[0].name, 'RIVER_C');
+            assert.equal(schm[0].fcode, 'BH140');
+            assert.equal(schm[0].desc, 'River');
+        });
+
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'TDSv71',
                 searchstr: 'river',
                 maxLeinDistance: 20,
                 limit: 12,

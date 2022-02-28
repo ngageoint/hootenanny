@@ -3803,10 +3803,10 @@ gifd.rules = {
     ['SHL','999','shoreline:type:left','other'], // Other
 
     // SHO - Shoreline Category
-    ['SHO','2','shoreline:type','flat'], // Flat
-    ['SHO','6','shoreline:type','steep'], // Steep
-    ['SHO','7','shoreline:type','glacier'], // Glacier
-    ['SHO','8','shoreline:type','ice'], // Ice Coast
+    ['SHO','2','coast:type','flat'], // Flat
+    ['SHO','6','coast:type','steep'], // Steep
+    ['SHO','7','coast:type','glacier'], // Glacier
+    ['SHO','8','coast:type','ice'], // Ice Coast
 
     // SHP - Shape of Beacon
     ['SHP','0','seamark:beacon:shape','undefined'], // Undefined

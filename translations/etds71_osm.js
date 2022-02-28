@@ -51,7 +51,6 @@ hoot.require('etds71_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
-hoot.require('config');
 
 
 etds71_osm = {
@@ -68,10 +67,10 @@ etds71_osm = {
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-        // if (config.getOgrDebugDumptags() == 'true')
+        // if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
         // {
-        //     var kList = Object.keys(attrs).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('eTds In: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            // var kList = Object.keys(attrs).sort()
+            // for (var i = 0, fLen = kList.length; i < fLen; i++) hoot.print('eTds In: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         // }
 
         // Go through the attrs and turn them back into TDS
@@ -95,6 +94,7 @@ etds71_osm = {
                 // One FCODE
                 var fcode = attrs['Feature Code'].split(':');
                 attrs['Feature Code'] = fcode[0];
+                // hoot.print('attrs_featureCode: ' + attrs['Feature Code']);
             }
         }
         else
@@ -113,7 +113,7 @@ etds71_osm = {
             {
                 nAttrs[etds71_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                // print('Single: ' + etds71_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // hoot.print('Single: ' + etds71_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -154,12 +154,12 @@ etds71_osm = {
         }
 
         // Debug:
-//         if (config.getOgrDebugDumptags() == 'true')
-//         {
-//             var kList = Object.keys(tags).sort()
-//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
-//             print('');
-//         }
+        // if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
+        // {
+            // var kList = Object.keys(tags).sort()
+            // for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
+            // hoot.print('');
+        // }
 
         return {attrs: tags, tableName: ''};
 

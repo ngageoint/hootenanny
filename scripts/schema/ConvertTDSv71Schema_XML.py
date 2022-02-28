@@ -265,7 +265,7 @@ def readDomains(xmlDoc):
 
     for domain in itemList:
         domainName = domain.getElementsByTagName('DomainName')[0].firstChild.data.encode('utf8')
-        domainType = typList[domain.getElementsByTagName('FieldType')[0].firstChild.data]
+        domainType = typList[domain.getElementsByTagName('FieldType')[0].firstChild.data.encode('utf8')]
 
         # Debug
         # print "domainName:",domainName
@@ -275,7 +275,7 @@ def readDomains(xmlDoc):
             continue
 
         tDomain[domainName] = {}
-        tDomain[domainName]['type'] = typList[domain.getElementsByTagName('FieldType')[0].firstChild.data]
+        tDomain[domainName]['type'] = typList[domain.getElementsByTagName('FieldType')[0].firstChild.data.encode('utf8')]
         tDomain[domainName]['enum'] = []
 
         if domain.getElementsByTagName('CodedValues'):
@@ -296,7 +296,7 @@ def testFeatures(xmlDoc,funcList,domList,namList,fSchema,tSchema):
     itemList = xmlDoc.getElementsByTagName('DataElement')
 
     for feature in itemList:
-        featureName = feature.getElementsByTagName('Name')[0].firstChild.data
+        featureName = feature.getElementsByTagName('Name')[0].firstChild.data.encode('utf8')
 
         print ''
         print "featureName:",featureName
@@ -316,7 +316,7 @@ def testFeatures(xmlDoc,funcList,domList,namList,fSchema,tSchema):
         subTypeList = feature.getElementsByTagName('Subtype')
         if subTypeList != 'None':
             for subType in subTypeList:
-                featureName = subType.getElementsByTagName('SubtypeName')[0].firstChild.data
+                featureName = subType.getElementsByTagName('SubtypeName')[0].firstChild.data.encode('utf8')
                 print ''
                 print 'fName:',featureName
 
@@ -328,7 +328,7 @@ def testFeatures(xmlDoc,funcList,domList,namList,fSchema,tSchema):
                 fieldList = feature.getElementsByTagName('SubtypeFieldInfo')
                 if fieldList != 'None':
                     for field in fieldList:
-                        fieldName = field.getElementsByTagName('FieldName')[0].firstChild.data
+                        fieldName = field.getElementsByTagName('FieldName')[0].firstChild.data.encode('utf8')
                         defaultValueNode = field.getElementsByTagName('DefaultValue')[0]
                         # defaultValue = field.getElementsByTagName('DefaultValue')[0].firstChild.data
                         # defaultValue = defaultValueNode.firstChild.data
@@ -336,7 +336,7 @@ def testFeatures(xmlDoc,funcList,domList,namList,fSchema,tSchema):
                         # print 'dvType',defaultValueNode.getAttributeNS('http://www.w3.org/2001/XMLSchema-instance','type')
 
                         if field.getElementsByTagName('DomainName'):
-                            domainName = field.getElementsByTagName('DomainName')[0].firstChild.data
+                            domainName = field.getElementsByTagName('DomainName')[0].firstChild.data.encode('utf8')
                         else:
                             domainName = ''
 
@@ -400,7 +400,7 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
         if fieldValueList != 'None':
             for fieldValue in fieldValueList:
                 # fName = fieldValue.getElementsByTagName('Name')[0].firstChild.data
-                fName = fieldValue.getElementsByTagName('ModelName')[0].firstChild.data.upper()
+                fName = fieldValue.getElementsByTagName('ModelName')[0].firstChild.data.encode('utf8').upper()
 
                 # Skip features we don't want
                 if fName in ['OBJECTID','SHAPE','SHAPE_LENGTH','SHAPE_AREA']:
@@ -410,16 +410,16 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
 
                 # These are OK. We have filtered out the features that don't have these
                 if fieldValue.getElementsByTagName('DefaultValue'):
-                    defaultValue = fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data
+                    defaultValue = fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data.encode('utf8')
                 else:
                     defaultValue = ''
 
                 # print 'Field:', fName
 
-                fType = fieldValue.getElementsByTagName('Type')[0].firstChild.data
-                length = fieldValue.getElementsByTagName('Length')[0].firstChild.data
+                fType = fieldValue.getElementsByTagName('Type')[0].firstChild.data.encode('utf8')
+                length = fieldValue.getElementsByTagName('Length')[0].firstChild.data.encode('utf8')
                 if fieldValue.getElementsByTagName('AliasName'):
-                    desc = fieldValue.getElementsByTagName('AliasName')[0].firstChild.data
+                    desc = fieldValue.getElementsByTagName('AliasName')[0].firstChild.data.encode('utf8')
                 else:
                     desc = ''
 
@@ -436,11 +436,11 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
 
                 # Now start building the attribute
                 tSchema[featureName]['columns'][fName] = {}
-                tSchema[featureName]['columns'][fName] = { 'name':fName.encode('utf8'),
-                                                        'desc':desc.encode('utf8'),
+                tSchema[featureName]['columns'][fName] = { 'name':fName,
+                                                        'desc':desc,
                                                         'type':typList[fType],
-                                                        'defValue':defaultValue.encode('utf8'),
-                                                        'length':length.encode('utf8'),
+                                                        'defValue':defaultValue,
+                                                        'length':length,
                                                         'optional':'R'
                                                       }
 
@@ -480,7 +480,7 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
                 fieldList = subType.getElementsByTagName('SubtypeFieldInfo')
                 if fieldList != 'None':
                     for field in fieldList:
-                        fieldName = field.getElementsByTagName('FieldName')[0].firstChild.data.upper()
+                        fieldName = field.getElementsByTagName('FieldName')[0].firstChild.data.encode('utf8').upper()
 
                         defaultValueNode = field.getElementsByTagName('DefaultValue')[0]
 
@@ -495,17 +495,16 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
 
                         # Now start building the attribute
                         fSchema[subName]['columns'][fieldName] = {}
-                        fSchema[subName]['columns'][fieldName] = { 'name':fieldName.encode('utf8'),
+                        fSchema[subName]['columns'][fieldName] = { 'name':fieldName,
                                                                 'desc':'',
                                                                 'type':typList[fType],
                                                                 'defValue':defaultValueNode.firstChild.data.encode('utf8'),
                                                                 'optional':'R'
                                                               }
 
-
                         # Start filling in the domains
-                        if field.getElementsByTagName('DomainName'):
-                            domainName = field.getElementsByTagName('DomainName')[0].firstChild.data
+                        if field.getElementsByTagName('DomainName') and fieldName != 'F_CODE':
+                            domainName = field.getElementsByTagName('DomainName')[0].firstChild.data.encode('utf8')
 
                             if domainName == 'Mst_Null_Integer' or domainName == 'Mst_Null_Double' or domainName == 'Mst_Null_String':
                                 # print ' ',subName,'Dropping: ',fieldName
