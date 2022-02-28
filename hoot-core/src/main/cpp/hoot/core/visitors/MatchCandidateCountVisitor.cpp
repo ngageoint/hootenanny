@@ -66,7 +66,7 @@ void MatchCandidateCountVisitor::_setupCreators(
   LOG_VART(_matchCreatorsByName.size());
 }
 
-void MatchCandidateCountVisitor::visit(const std::shared_ptr<const Element>& e)
+void MatchCandidateCountVisitor::visit(const std::shared_ptr<Element const>& e)
 {
   _totalCandidateCount = 0;
 

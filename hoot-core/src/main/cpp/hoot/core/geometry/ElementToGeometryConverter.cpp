@@ -71,7 +71,7 @@ ElementToGeometryConverter::ElementToGeometryConverter(const ConstElementProvide
 {
 }
 
-std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const std::shared_ptr<const Element>& e,
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const std::shared_ptr<Element const>& e,
                                                                         bool throwError, const bool statsFlag) const
 {
   LOG_VART(e->getElementId());

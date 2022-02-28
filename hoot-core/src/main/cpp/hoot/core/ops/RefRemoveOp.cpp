@@ -50,7 +50,7 @@ public:
 
   const set<QString>& getRefs() const { return _refs; }
 
-  void visit(const std::shared_ptr<const Element>& e) override
+  void visit(const std::shared_ptr<Element const>& e) override
   {
     if (e->getTags().contains(MetadataTags::Ref1()) && _criterion->isSatisfied(e))
     {

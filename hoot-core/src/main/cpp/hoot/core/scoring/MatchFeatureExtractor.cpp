@@ -86,7 +86,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(
   // go through the set of provided elements
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
-    const std::shared_ptr<const Element>& e = map->getElement(*it);
+    const std::shared_ptr<Element const>& e = map->getElement(*it);
     if (e->getStatus() == Status::Unknown1)
     {
       QString r = e->getTags()[MetadataTags::Ref1()];

@@ -59,7 +59,7 @@ public:
 
   ElementPtr clone() const override { return std::make_shared<Relation>(*this); }
 
-  void addElement(const QString& role, const std::shared_ptr<const Element>& e);
+  void addElement(const QString& role, const std::shared_ptr<Element const>& e);
   void addElement(const QString& role, ElementType t, long id);
   void addElement(const QString& role, ElementId);
   /**
@@ -75,7 +75,7 @@ public:
    * Remove all members that meet the specified criteria. If no members meet the criteria then
    * no changes are made.
    */
-  void removeElement(const QString& role, const std::shared_ptr<const Element>& e);
+  void removeElement(const QString& role, const std::shared_ptr<Element const>& e);
   void removeElement(const QString& role, ElementId eid);
   void removeElement(ElementId eid);
 
@@ -84,7 +84,7 @@ public:
    * no changes are made.
    */
   void replaceElement(
-    const std::shared_ptr<const Element>& from, const std::shared_ptr<const Element>& to);
+    const std::shared_ptr<Element const>& from, const std::shared_ptr<Element const>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
   void replaceElement(const ElementId& from, const ElementId& to);
   /**

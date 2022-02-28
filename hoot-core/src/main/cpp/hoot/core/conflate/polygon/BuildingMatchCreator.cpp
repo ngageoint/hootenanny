@@ -118,7 +118,7 @@ public:
   QString getName() const override { return ""; }
   QString getClassName() const override { return ""; }
 
-  void checkForMatch(const std::shared_ptr<const Element>& e)
+  void checkForMatch(const std::shared_ptr<Element const>& e)
   {
     LOG_VART(e->getElementId());
 
@@ -139,7 +139,7 @@ public:
     {
       if (from != neighborId)
       {
-        const std::shared_ptr<const Element>& neighbor = _map->getElement(neighborId);
+        const std::shared_ptr<Element const>& neighbor = _map->getElement(neighborId);
         if (isRelated(neighbor, e))
         {
           // score each candidate and push it on the result vector
@@ -178,7 +178,7 @@ public:
             buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2));
   }
 
-  Meters getSearchRadius(const std::shared_ptr<const Element>& e) const
+  Meters getSearchRadius(const std::shared_ptr<Element const>& e) const
   {
     Meters searchRadius;
     if (_searchRadius >= 0)

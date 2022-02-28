@@ -161,7 +161,7 @@ public:
   QString getName() const override { return ""; }
   QString getClassName() const override { return ""; }
 
-  void checkForMatch(const std::shared_ptr<const Element>& e)
+  void checkForMatch(const std::shared_ptr<Element const>& e)
   {
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);

@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ABSTRACTDISTANCEEXTRACTOR_H
 #define ABSTRACTDISTANCEEXTRACTOR_H
@@ -57,14 +57,14 @@ public:
   virtual ~AbstractDistanceExtractor() = default;
 
   virtual double combinedEnvelopeDiagonalDistance(const OsmMap& map,
-    const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+                                                  const std::shared_ptr<Element const>& target,
+                                                  const std::shared_ptr<Element const>& candidate) const;
 
-  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const = 0;
+  virtual double distance(const OsmMap& map, const std::shared_ptr<Element const>& target,
+                          const std::shared_ptr<Element const>& candidate) const = 0;
 
-  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double extract(const OsmMap& map, const std::shared_ptr<Element const>& target,
+                 const std::shared_ptr<Element const>& candidate) const override;
 };
 
 }

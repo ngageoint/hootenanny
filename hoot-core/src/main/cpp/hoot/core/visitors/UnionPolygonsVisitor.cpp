@@ -45,7 +45,7 @@ UnionPolygonsVisitor::UnionPolygonsVisitor()
   _result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 }
 
-void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
+void UnionPolygonsVisitor::visit(const std::shared_ptr<Element const>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {

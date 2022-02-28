@@ -61,7 +61,7 @@ public:
   ColumnVisitor(ElementType type) : _type(type) { }
   ~ColumnVisitor() override = default;
 
-  void visit(const std::shared_ptr<const Element>& e) override
+  void visit(const std::shared_ptr<Element const>& e) override
   {
     if (e->getElementType() == _type || _type == ElementType::Unknown)
     {

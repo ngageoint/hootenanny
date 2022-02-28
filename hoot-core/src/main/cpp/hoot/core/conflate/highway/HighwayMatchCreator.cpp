@@ -115,7 +115,7 @@ public:
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  void checkForMatch(const std::shared_ptr<const Element>& e)
+  void checkForMatch(const std::shared_ptr<Element const>& e)
   {
     LOG_VART(e->getElementId());
 
@@ -134,7 +134,7 @@ public:
     {
       if (elementBeingMatched != elementId)
       {
-        const std::shared_ptr<const Element>& neighbor = _map->getElement(elementId);
+        const std::shared_ptr<Element const>& neighbor = _map->getElement(elementId);
 
         std::shared_ptr<HighwayClassifier> classifier;
 
@@ -215,7 +215,7 @@ public:
     return result;
   }
 
-  Meters getSearchRadius(const std::shared_ptr<const Element>& e) const
+  Meters getSearchRadius(const std::shared_ptr<Element const>& e) const
   {
     Meters searchRadius;
     if (_searchRadius >= 0)

@@ -196,7 +196,7 @@ const Envelope& Way::getApproximateEnvelope(const std::shared_ptr<const ElementP
       }
       else
       {
-        std::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+        std::shared_ptr<Element const> e = ep->getElement(ElementId::node(ids[i]));
         ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
         assert(n.get());
         _cachedEnvelope.expandToInclude(n->getX(), n->getY());
@@ -225,7 +225,7 @@ const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProv
   const std::vector<long>& ids = _wayData->getNodeIds();
   for (size_t i = 0; i < ids.size(); i++)
   {
-    std::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+    std::shared_ptr<Element const> e = ep->getElement(ElementId::node(ids[i]));
     ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     if (n)
     {

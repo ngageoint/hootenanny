@@ -39,7 +39,7 @@ _count(0)
 {
 }
 
-void FeatureCountVisitor::visit(const std::shared_ptr<const Element>& e)
+void FeatureCountVisitor::visit(const std::shared_ptr<Element const>& e)
 {
   LOG_VART(e->getElementId());
   if (e->getTags().getInformationCount() > 0)

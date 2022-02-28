@@ -59,8 +59,8 @@ public:
 
   static QString className() { return "hoot::SmallerOverlapExtractor"; }
 
-  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double extract(const OsmMap& map, const std::shared_ptr<Element const>& target,
+    const std::shared_ptr<Element const>& candidate) const override;
 
   /**
    * @see Configurable

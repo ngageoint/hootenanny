@@ -82,7 +82,7 @@ public:
    * statistics.
    * @return a geometry
    */
-  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const std::shared_ptr<const Element>& e, bool throwError = true,
+  std::shared_ptr<geos::geom::Geometry> convertToGeometry(const std::shared_ptr<Element const>& e, bool throwError = true,
                                                           const bool statsFlag = false) const;
 
   std::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;

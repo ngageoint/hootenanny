@@ -48,8 +48,8 @@ public:
   CentroidDistanceExtractor() = default;
   ~CentroidDistanceExtractor() = default;
 
-  double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double distance(const OsmMap& map, const std::shared_ptr<Element const>& target,
+    const std::shared_ptr<Element const>& candidate) const override;
 
   QString getName() const  override{ return className(); }
   QString getClassName() const  override{ return CentroidDistanceExtractor::className(); }

@@ -36,7 +36,7 @@ _w(w)
 {
 }
 
-void WaysVisitor::visit(const std::shared_ptr<const Element>& e)
+void WaysVisitor::visit(const std::shared_ptr<Element const>& e)
 {
   if (e->getElementType() == ElementType::Way)
   {

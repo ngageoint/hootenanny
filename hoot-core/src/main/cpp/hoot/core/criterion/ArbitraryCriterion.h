@@ -45,11 +45,11 @@ public:
 
   explicit ArbitraryCriterion(const std::function<bool (ConstElementPtr e)>& f)
     : _f(f) { }
-  explicit ArbitraryCriterion(const std::function<bool (const std::shared_ptr<const Element> &e)>& f)
+  explicit ArbitraryCriterion(const std::function<bool (const std::shared_ptr<Element const> &e)>& f)
     : _f(f) { }
   ~ArbitraryCriterion() override = default;
 
-  bool isSatisfied(const std::shared_ptr<const Element>& e) const override
+  bool isSatisfied(const std::shared_ptr<Element const>& e) const override
   {
     const bool result = _f(e);
     LOG_VART(result);
@@ -64,7 +64,7 @@ public:
 
 private:
 
-  std::function<bool (const std::shared_ptr<const Element>& e)> _f;
+  std::function<bool (const std::shared_ptr<Element const>& e)> _f;
 };
 
 }

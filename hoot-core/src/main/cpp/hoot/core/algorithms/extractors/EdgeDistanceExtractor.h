@@ -55,8 +55,8 @@ public:
 
   static QString className() { return "hoot::EdgeDistanceExtractor"; }
 
-  double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double distance(const OsmMap& map, const std::shared_ptr<Element const>& target,
+    const std::shared_ptr<Element const>& candidate) const override;
 
   void setConfiguration(const Settings& conf) override;
 
@@ -73,14 +73,14 @@ private:
   ValueAggregatorPtr _aggregator;
   double _spacing;
 
-  double _oneDistance(const OsmMap& map, const std::shared_ptr<const Element>& e1,
-    const std::shared_ptr<const Element>& e2) const;
+  double _oneDistance(const OsmMap& map, const std::shared_ptr<Element const>& e1,
+    const std::shared_ptr<Element const>& e2) const;
 
   std::vector<geos::geom::Coordinate> _discretize(const OsmMap& map,
-                                                  const std::shared_ptr<const Element>& e) const;
+                                                  const std::shared_ptr<Element const>& e) const;
 
   std::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap& map,
-                                                 const std::shared_ptr<const Element>& e) const;
+                                                 const std::shared_ptr<Element const>& e) const;
 };
 
 }

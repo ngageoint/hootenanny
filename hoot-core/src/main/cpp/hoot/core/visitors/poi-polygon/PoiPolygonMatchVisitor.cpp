@@ -78,7 +78,7 @@ _infoCache(infoCache)
   _timer.start();
 }
 
-void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>& e,
+void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<Element const>& e,
                                             const std::set<ElementId>& surroundingPolyIds)
 {
   LOG_TRACE("Checking for match with POI: " << e->getElementId());
@@ -96,7 +96,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
     LOG_VART(polyId);
     if (poiId != polyId)
     {
-      const std::shared_ptr<const Element>& poly = _map->getElement(polyId);
+      const std::shared_ptr<Element const>& poly = _map->getElement(polyId);
       LOG_VART(poly.get());
       LOG_VART(poly->getElementId());
       if (poly->isUnknown() && _polyCrit.isSatisfied(poly))
@@ -124,7 +124,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
 }
 
 std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
-  const std::shared_ptr<const Element>& e)
+  const std::shared_ptr<Element const>& e)
 {
   LOG_TRACE("Collecting surrounding poly IDs for: " << e->getElementId());
 
@@ -146,7 +146,7 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
     ElementId neighboringElementId = *it;
     if (from != neighboringElementId)
     {
-      const std::shared_ptr<const Element>& poly = _map->getElement(neighboringElementId);
+      const std::shared_ptr<Element const>& poly = _map->getElement(neighboringElementId);
       LOG_VART(neighboringElementId);
       LOG_VART(poly->isUnknown());
       if (poly->isUnknown())
@@ -161,7 +161,7 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
   return surroundingPolyIds;
 }
 
-Meters PoiPolygonMatchVisitor::_getSearchRadius(const std::shared_ptr<const Element>& e) const
+Meters PoiPolygonMatchVisitor::_getSearchRadius(const std::shared_ptr<Element const>& e) const
 {
   const Meters searchRadius = e->getCircularError() + _reviewDistanceThreshold;
   //LOG_VART(searchRadius);

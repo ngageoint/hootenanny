@@ -55,7 +55,7 @@ public:
   /**
    * @see ElementVisitor
    */
-  void visit(const std::shared_ptr<const Element>& e) override;
+  void visit(const std::shared_ptr<Element const>& e) override;
 
   std::vector<long> getIds() const { return _elementIds; }
 

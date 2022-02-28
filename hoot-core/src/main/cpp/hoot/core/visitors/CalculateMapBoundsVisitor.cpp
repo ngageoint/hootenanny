@@ -37,7 +37,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateMapBoundsVisitor)
 
-void CalculateMapBoundsVisitor::visit(const std::shared_ptr<const Element>& e)
+void CalculateMapBoundsVisitor::visit(const std::shared_ptr<Element const>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)

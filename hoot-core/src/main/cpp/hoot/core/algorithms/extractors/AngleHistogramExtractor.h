@@ -63,8 +63,8 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   double extract(
-    const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+    const OsmMap& map, const std::shared_ptr<Element const>& target,
+    const std::shared_ptr<Element const>& candidate) const override;
 
   /**
    * @brief getNormalizedHistogram creates a normalized heading variance histogram for an element.

@@ -111,7 +111,7 @@ protected:
 
   virtual std::vector<long> _remapNodes(const std::vector<long>& nids);
 
-  void _addElementTags(const std::shared_ptr<const Element>& e, Tags& t) const;
+  void _addElementTags(const std::shared_ptr<Element const>& e, Tags& t) const;
 
   /**
    * Counts the change and if necessary closes the old changeset and starts a new one.

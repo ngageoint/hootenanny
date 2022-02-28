@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 // Standard
 #include <math.h>
@@ -55,24 +55,24 @@ class RFqHybridDummyData
 public:
 
   RFqHybridDummyData() {}
-  RFqHybridDummyData(const RFqHybridDummyData& dd) :
-    _e(dd._e),
-    _eid(dd._eid),
-    _name(dd._name)
+  RFqHybridDummyData(const RFqHybridDummyData& dd)
+    : _e(dd._e),
+      _eid(dd._eid),
+      _name(dd._name)
   {}
 
   RFqHybridDummyData(const QString& name) : _name(name) {}
 
-  RFqHybridDummyData(double x, double y, const QString& name, ElementId eid) :
-    _e(x, x, y, y),
-    _eid(eid),
-    _name(name)
+  RFqHybridDummyData(double x, double y, const QString& name, ElementId eid)
+    : _e(x, x, y, y),
+      _eid(eid),
+      _name(name)
   {}
 
-  RFqHybridDummyData(const Coordinate& c, const QString& name, ElementId eid) :
-    _e(c.x, c.x, c.y, c.y),
-    _eid(eid),
-    _name(name)
+  RFqHybridDummyData(const Coordinate& c, const QString& name, ElementId eid)
+    : _e(c.x, c.x, c.y, c.y),
+      _eid(eid),
+      _name(name)
   {}
 
   ElementId getElementId() const { return _eid; }
@@ -134,9 +134,7 @@ public:
     Tgs::Random::instance()->seed(0);
 
     for (size_t i = 0; i < keys.size(); ++i)
-    {
       values.push_back(i);
-    }
 
     {
       RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, -1, -1);
@@ -259,9 +257,7 @@ public:
     keys.push_back(RFqHybridDummyData(4, 0, "bandana", ElementId::node(c++)));
 
     for (size_t i = 0; i < keys.size(); ++i)
-    {
       values.push_back(i);
-    }
 
     RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut;
     uut.buildIndex(keys, values);
@@ -281,10 +277,10 @@ public:
     for (size_t i = 0; i < haystack.size(); i++)
     {
       if (e.distance(haystack[i].getEnvelope()) <= radius &&
-        (int)LevenshteinDistance::distance(
+          (int)LevenshteinDistance::distance(
             term.getMetricElement(), haystack[i].getMetricElement()) <= D)
       {
-        result.insert((int)i);
+        result.insert(static_cast<int>(i));
       }
     }
 
@@ -297,7 +293,7 @@ public:
 
     BuildKeysVisitor(vector<RFqHybridDummyData>& keys) : _keys(keys) {}
 
-    virtual void visit(const std::shared_ptr<const Element>& e)
+    void visit(const std::shared_ptr<Element const>& e) override
     {
       if (e->getElementType() == ElementType::Node)
       {
@@ -305,14 +301,14 @@ public:
           std::dynamic_pointer_cast<const hoot::Node>(e);
         QStringList names = n->getTags().getNames();
         set<QString> nameSet;
-        for (int i = 0; i < names.size(); i++)
+        for (const auto& name : qAsConst(names))
         {
-          nameSet.insert(names[i].toLower());
-          nameSet.insert(ToEnglishDictionaryTranslator().toEnglish(names[i]).toLower());
+          nameSet.insert(name.toLower());
+          nameSet.insert(ToEnglishDictionaryTranslator().toEnglish(name).toLower());
         }
-        for (set<QString>::const_iterator it = nameSet.begin(); it != nameSet.end(); ++it)
+        for (const auto& name : nameSet)
         {
-          RFqHybridDummyData d(n->toCoordinate(), *it, n->getElementId());
+          RFqHybridDummyData d(n->toCoordinate(), name, n->getElementId());
           _keys.push_back(d);
         }
       }
@@ -339,6 +335,15 @@ public:
       int fqDepth;
       double score;
 
+      TestRun()
+        : childCount(0),
+          bucketSize(0),
+          rDepth(0),
+          fqDepth(0),
+          score(0.0)
+      {
+      }
+
       bool operator== (const TestRun& s1) const
       {
         return (s1.childCount == childCount && s1.bucketSize == bucketSize &&
@@ -355,17 +360,12 @@ public:
 
 
     OptimizeFunction(vector<RFqHybridDummyData>& keys, vector<int>& values, const Envelope& bounds)
-      :
-      _keys(keys),
-      _values(values),
-      _bounds(bounds)
-    {
-
-    }
-
-    ~OptimizeFunction()
+      : _keys(keys),
+        _values(values),
+        _bounds(bounds)
     {
     }
+    ~OptimizeFunction() = default;
 
     void addTestRun(const TestRun& tr)
     {
@@ -381,12 +381,10 @@ public:
       s.rDepth = min(40, max(-1, (int)round(v[2])));
       s.fqDepth = min(40, max(s.rDepth, (int)round(v[3])));
 
-      for (size_t i = 0; i < _results.size(); ++i)
+      for (const auto& run : _results)
       {
-        if (s == _results[i])
-        {
+        if (s == run)
           return s.score;
-        }
       }
 
       scoreSettings(s);
@@ -421,8 +419,8 @@ public:
     {
       LOG_DEBUG("childCount: " << score.childCount << " bucketSize: " << score.bucketSize <<
                 " rDepth: " << score.rDepth << " fqDepth: " << score.fqDepth);
-      RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(score.bucketSize,
-        score.childCount, score.rDepth, score.fqDepth);
+      RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(score.bucketSize, score.childCount,
+                                                                      score.rDepth, score.fqDepth);
       LOG_DEBUG("Building index.");
       double start = Tgs::Time::getTime();
       uut.buildIndex(_keys, _values);
@@ -487,9 +485,7 @@ public:
     map->visitRo(visitor);
 
     for (size_t i = 0; i < keys.size(); ++i)
-    {
       values.push_back(i);
-    }
     LOG_INFO("Key count: " << keys.size());
 
     Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);

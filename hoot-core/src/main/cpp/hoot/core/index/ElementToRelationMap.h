@@ -62,7 +62,7 @@ public:
    * (ElementType::Way, 3) you will get both the multipolygon and the building relation.
    */
   const std::set<long>& getRelationByElement(ElementId eid) const;
-  const std::set<long>& getRelationByElement(const std::shared_ptr<const Element>& e) const;
+  const std::set<long>& getRelationByElement(const std::shared_ptr<Element const>& e) const;
   const std::set<long>& getRelationByElement(const Element* e) const;
 
   /**

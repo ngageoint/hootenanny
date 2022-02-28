@@ -125,7 +125,7 @@ void EdgeDistanceExtractor::setConfiguration(const Settings& conf)
 }
 
 vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
-  const std::shared_ptr<const Element>& e) const
+  const std::shared_ptr<Element const>& e) const
 {
   vector<Coordinate> result;
   DiscretizeWaysVisitor v(_spacing, result);
@@ -135,8 +135,8 @@ vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
 }
 
 double EdgeDistanceExtractor::distance(
-  const OsmMap& map, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+  const OsmMap& map, const std::shared_ptr<Element const>& target,
+  const std::shared_ptr<Element const>& candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
@@ -149,8 +149,8 @@ QString EdgeDistanceExtractor::getName() const
 }
 
 double EdgeDistanceExtractor::_oneDistance(
-  const OsmMap& map, const std::shared_ptr<const Element>& e1,
-  const std::shared_ptr<const Element>& e2) const
+  const OsmMap& map, const std::shared_ptr<Element const>& e1,
+  const std::shared_ptr<Element const>& e2) const
 {
   vector<Coordinate> points = _discretize(map, e1);
 
@@ -173,7 +173,7 @@ double EdgeDistanceExtractor::_oneDistance(
 }
 
 std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
-  const OsmMap& map, const std::shared_ptr<const Element>& e) const
+  const OsmMap& map, const std::shared_ptr<Element const>& e) const
 {
   std::shared_ptr<Geometry> result;
   if (e->getElementType() != ElementType::Node)

@@ -42,7 +42,7 @@ _pCrit(pCrit)
 {
 }
 
-void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
+void ElementIdsVisitor::visit(const std::shared_ptr<Element const>& e)
 {
   if ((e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType) &&
       (_pCrit == nullptr || _pCrit->isSatisfied(e)))

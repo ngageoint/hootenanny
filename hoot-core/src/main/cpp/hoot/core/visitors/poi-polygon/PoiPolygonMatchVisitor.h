@@ -110,10 +110,10 @@ private:
 
   QElapsedTimer _timer;
 
-  void _checkForMatch(const std::shared_ptr<const Element>& e,
+  void _checkForMatch(const std::shared_ptr<Element const>& e,
                       const std::set<ElementId>& surroundingPolyIds);
-  std::set<ElementId> _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);
-  Meters _getSearchRadius(const std::shared_ptr<const Element>& e) const;
+  std::set<ElementId> _collectSurroundingPolyIds(const std::shared_ptr<Element const>& e);
+  Meters _getSearchRadius(const std::shared_ptr<Element const>& e) const;
 
   std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
 

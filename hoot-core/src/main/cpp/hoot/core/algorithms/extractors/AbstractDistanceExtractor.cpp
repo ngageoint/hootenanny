@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AbstractDistanceExtractor.h"
 
@@ -38,24 +38,22 @@ namespace hoot
 {
 
 double AbstractDistanceExtractor::combinedEnvelopeDiagonalDistance(const OsmMap& map,
-  const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+                                                                   const std::shared_ptr<Element const>& target,
+                                                                   const std::shared_ptr<Element const>& candidate) const
 {
   ConstOsmMapPtr m = map.shared_from_this();
   std::shared_ptr<Envelope> env(target->getEnvelope(m));
   std::shared_ptr<Envelope> candidateEnv(candidate->getEnvelope(m));
   env->expandToInclude(candidateEnv.get());
-  const double result =
-    sqrt(env->getWidth() * env->getWidth() + env->getHeight() * env->getHeight());
+  const double result = sqrt(env->getWidth() * env->getWidth() + env->getHeight() * env->getHeight());
   return result;
 }
 
 double AbstractDistanceExtractor::extract(const OsmMap& map,
-                                          const std::shared_ptr<const Element>& target,
-                                          const std::shared_ptr<const Element>& candidate) const
+                                          const std::shared_ptr<Element const>& target,
+                                          const std::shared_ptr<Element const>& candidate) const
 {
-  return
-    1 - distance(map, target, candidate) / combinedEnvelopeDiagonalDistance(map, target, candidate);
+  return 1 - distance(map, target, candidate) / combinedEnvelopeDiagonalDistance(map, target, candidate);
 }
 
 }

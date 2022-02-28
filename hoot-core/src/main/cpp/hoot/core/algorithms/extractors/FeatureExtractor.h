@@ -70,8 +70,8 @@ public:
    * The feature may be something like the distance between colors, the overlap of two polygons,
    * etc.
    */
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const = 0;
+  virtual double extract(const OsmMap& map, const std::shared_ptr<Element const>& target,
+    const std::shared_ptr<Element const>& candidate) const = 0;
 
   QString toString() const override { return ""; }
 

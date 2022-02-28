@@ -51,7 +51,7 @@ public:
 
   void visit(const ElementPtr& e) override
   {
-    visit(std::dynamic_pointer_cast<const Element>(e));
+    visit(std::dynamic_pointer_cast<Element const>(e));
   }
 };
 

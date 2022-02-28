@@ -85,8 +85,8 @@ map<QString, double> RfExtractorClassifier::getFeatures(
 {
   map<QString, double> result;
 
-  const std::shared_ptr<const Element>& e1 = m->getElement(eid1);
-  const std::shared_ptr<const Element> e2 = m->getElement(eid2);
+  const std::shared_ptr<Element const>& e1 = m->getElement(eid1);
+  const std::shared_ptr<Element const> e2 = m->getElement(eid2);
 
   _getExtractors();
   for (size_t i = 0; i < _extractors.size(); i++)

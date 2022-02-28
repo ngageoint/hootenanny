@@ -90,7 +90,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
 }
 
 const set<long>& ElementToRelationMap::getRelationByElement(
-  const std::shared_ptr<const Element>& e) const
+  const std::shared_ptr<Element const>& e) const
 {
   return getRelationByElement(e->getElementId());
 }

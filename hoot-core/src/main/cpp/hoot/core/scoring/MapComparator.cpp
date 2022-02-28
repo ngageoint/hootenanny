@@ -103,13 +103,13 @@ public:
   QString getName() const override { return ""; }
   QString getClassName() const override { return ""; }
 
-  void visit(const std::shared_ptr<const Element>& e) override
+  void visit(const std::shared_ptr<Element const>& e) override
   {
     // e is the test element
 
     CHECK_MSG(_refMap->containsElement(e->getElementId()), "Did not find element: " <<
               e->getElementId());
-    const std::shared_ptr<const Element>& refElement = _refMap->getElement(e->getElementId());
+    const std::shared_ptr<Element const>& refElement = _refMap->getElement(e->getElementId());
 
     Tags refTags = refElement->getTags();
     Tags testTags = e->getTags();
@@ -198,8 +198,8 @@ public:
     }
   }
 
-  void compareNode(const std::shared_ptr<const Element>& refElement,
-                   const std::shared_ptr<const Element>& testElement)
+  void compareNode(const std::shared_ptr<Element const>& refElement,
+                   const std::shared_ptr<Element const>& testElement)
   {
     ConstNodePtr refNode = std::dynamic_pointer_cast<const Node>(refElement);
     ConstNodePtr testNode = std::dynamic_pointer_cast<const Node>(testElement);
@@ -217,8 +217,8 @@ public:
     }
   }
 
-  void compareWay(const std::shared_ptr<const Element>& refElement,
-                  const std::shared_ptr<const Element>& testElement)
+  void compareWay(const std::shared_ptr<Element const>& refElement,
+                  const std::shared_ptr<Element const>& testElement)
   {
     ConstWayPtr refWay = std::dynamic_pointer_cast<const Way>(refElement);
     ConstWayPtr testWay = std::dynamic_pointer_cast<const Way>(testElement);
@@ -237,8 +237,8 @@ public:
     }
   }
 
-  void compareRelation(const std::shared_ptr<const Element>& refElement,
-                       const std::shared_ptr<const Element>& testElement)
+  void compareRelation(const std::shared_ptr<Element const>& refElement,
+                       const std::shared_ptr<Element const>& testElement)
   {
     ConstRelationPtr refRelation = std::dynamic_pointer_cast<const Relation>(refElement);
     ConstRelationPtr testRelation = std::dynamic_pointer_cast<const Relation>(testElement);

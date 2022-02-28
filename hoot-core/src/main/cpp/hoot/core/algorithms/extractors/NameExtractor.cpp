@@ -51,8 +51,8 @@ _matchAttemptMade(false)
 {
 }
 
-double NameExtractor::extract(const OsmMap& /*map*/, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+double NameExtractor::extract(const OsmMap& /*map*/, const std::shared_ptr<Element const>& target,
+  const std::shared_ptr<Element const>& candidate) const
 {
   return extract(target, candidate);
 }
