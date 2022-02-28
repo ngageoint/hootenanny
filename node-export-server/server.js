@@ -288,7 +288,7 @@ exports.validateBbox = function(bbox) {
  */
 function jobComplete(hash) {
     jobs[hash].status = 'complete';
-    console.log(jobs[hash].id + ' complete');
+    console.log('Job id: ' + hash + ' complete, output to ' + jobs[hash].outFile);
 }
 
 /**
@@ -396,7 +396,6 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
 
     //used for testing to simulate hoot export
     //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';
-    console.log(command);
     return command;
 };
 
@@ -415,6 +414,13 @@ function doExport(req, res, hash, input) {
                 res.send(hash);
             } else {
                 res.download(job.outZip, job.downloadFile, function(err) {
+                    // write stream has closed but for larger zips maybe file
+                    // not yet ready for download so log err so we can troubleshoot
+                    if (err) {
+                        console.error('Error with download');
+                        console.error(err);
+                    }
+
                     if (jobs[hash].timeout)
                         clearTimeout(jobs[hash].timeout);
 
@@ -447,15 +453,6 @@ function doExport(req, res, hash, input) {
                                     console.log('deleted ' + job.outZip);
                                 }
                             });
-                            if (fs.existsSync(job.outDir + '.osm')) {
-                                fs.unlink(job.outDir + '.osm', function(err) {
-                                    if (err) {
-                                        console.error(err);
-                                    } else {
-                                        console.log('deleted ' + job.outDir + '.osm');
-                                    }
-                                });
-                            }
                             //Attempt to remove superfluous POST payload file if job is already running
                             if (fs.existsSync(input)) {
                                 fs.unlink(input, function(err) {
@@ -503,6 +500,7 @@ function doExport(req, res, hash, input) {
 
         }
     } else { //if missing, run job
+        console.log('Running job id: ' + hash);
         var child = null;
         var id = uuid.v4();
         var output = 'export_' + id;
@@ -544,11 +542,11 @@ function doExport(req, res, hash, input) {
 
             console.log(multiCommand);
             child = exec(multiCommand, function(error, stdout, stderr) {
-                if (stderr || error) {
-                    jobs[hash].status = error;
-                    console.log(jobs[hash].status);
+                if (stderr) {
+                    jobs[hash].status = stderr;
+                    console.error('Error with job id: ' + hash);
+                    console.error(stderr);
                 } else {
-                    jobComplete(hash)
                     //zip the merged output then remove the rings individual export/crop output files.
                     zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format, function() {
                         rings.forEach(function(ring) {
@@ -565,13 +563,15 @@ function doExport(req, res, hash, input) {
             })
         } else {
             var command = buildCommand(req.params.schema, req.params.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, Number(req.query.crop));
+            console.log(command);
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
                     //setTimeout(function() { //used to simulate a long request
-                    if (stderr || error) {
+                    if (stderr) {
                         //res.send({command: command, stderr: stderr, error: error});
                         jobs[hash].status = stderr;
-
+                        console.error('Error with job id: ' + hash);
+                        console.error(stderr);
                     } else {
                         zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
                     }

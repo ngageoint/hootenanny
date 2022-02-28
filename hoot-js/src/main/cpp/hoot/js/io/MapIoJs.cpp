@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MapIoJs.h"
 
@@ -55,6 +55,8 @@ void MapIoJs::Init(Local<Object> exports)
                FunctionTemplate::New(current, loadMap)->GetFunction(context).ToLocalChecked());
   exports->Set(context, toV8("loadMapFromString"),
                FunctionTemplate::New(current, loadMapFromString)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("loadMapFromJSONString"),
+               FunctionTemplate::New(current, loadMapFromJSONString)->GetFunction(context).ToLocalChecked());
   exports->Set(context, toV8("loadMapFromStringPreserveIdAndStatus"),
                FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction(context).ToLocalChecked());
   exports->Set(context, toV8("saveMap"),
@@ -117,6 +119,31 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
     reader.setDefaultStatus(status);
   }
   reader.readFromString(mapXml, map->getMap());
+
+  args.GetReturnValue().SetUndefined();
+}
+
+void MapIoJs::loadMapFromJSONString(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  QString mapJson = toCpp<QString>(args[1]);
+
+  OsmJsonReader reader;
+  if (args.Length() >= 3)
+  {
+    reader.setUseDataSourceIds(toCpp<bool>(args[2]));
+  }
+  Status status = Status::Invalid;
+  if (args.Length() >= 4)
+  {
+    status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
+    reader.setDefaultStatus(status);
+  }
+  reader.loadFromString(mapJson, map->getMap());
 
   args.GetReturnValue().SetUndefined();
 }
