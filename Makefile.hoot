@@ -254,30 +254,26 @@ translations/tds71_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/tra
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
+# Build the TDS71 "From English" rules
+translations/etds71_osm_rules.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
 # TDSv71 full schema is built from an XML file made from a sample FGDB
 # This one has all of the Text Enumerations
 translations/tds71_full_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-#	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # TDSv71 thematic schema is built from an XML file made from a sample FGDB
 translations/tds71_thematic_schema.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
 	mkdir -p $(@D)
 	$< --thematic  $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-#	$< --thematic $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS71 "To English" rules
 translations/etds71_rules.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-#	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-
-# Build the TDS71 "From English" rules
-translations/etds71_osm_rules.js: scripts/schema/ConvertTDSv71Schema_XML.py conf/translations/TDSv71.xml.gz
-	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### GGDMv30
 # GGDMv30 is built from the GGDMv30 spec with additional layers and values files
