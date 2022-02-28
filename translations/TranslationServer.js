@@ -336,9 +336,14 @@ var postHandler = function(data) {
     } else {
         hoot.Settings.set({"map.writer.schema": "OSM"});
     }
+
     var map = new hoot.OsmMap();
-    // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
-    hoot.loadMapFromString(map, data.osm, true);
+    // loadMapFrom(JSON)String arguments: map, XML, preserve ID's, hoot:status
+    if (data.osm[0] === "{")
+        hoot.loadMapFromJSONString(map, data.osm, true);
+    else
+        hoot.loadMapFromString(map, data.osm, true);
+
     translation.apply(map);
 
     if (haveDropDefaults) {
