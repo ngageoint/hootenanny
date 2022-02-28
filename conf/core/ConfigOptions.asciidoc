@@ -3530,6 +3530,13 @@ Merges nearby nodes together when converting from a non-OSM format to OSM.
 Implicitly merges certain individual building parts into a single part when converting from a non-OSM
 format to OSM.
 
+=== non.osm.convert.split.long.ways
+
+* Data Type: bool
+* Default Value: `true`
+
+When loading non-OSM sources split ways that exceed the OSM API way node limit of 2000
+
 === offset.intersection.max
 
 * Data Type: double

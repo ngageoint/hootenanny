@@ -22,25 +22,25 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include <limits> // for std::min
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
+#include <hoot/core/visitors/SplitLongWaysVisitor.h>
 
 namespace hoot
 {
 
-class SplitLongLinearWaysVisitorTest : public HootTestFixture
+class SplitLongWaysVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(SplitLongLinearWaysVisitorTest);
+  CPPUNIT_TEST_SUITE(SplitLongWaysVisitorTest);
   CPPUNIT_TEST(defaultConstructorNoOpTest);
   CPPUNIT_TEST(defaultConstructorModifyTest);
   CPPUNIT_TEST(splitWayInRelationTest);
@@ -48,7 +48,7 @@ class SplitLongLinearWaysVisitorTest : public HootTestFixture
 
 public:
 
-  SplitLongLinearWaysVisitorTest()
+  SplitLongWaysVisitorTest()
     : HootTestFixture("test-files/visitors/SplitLongLinearWaysVisitorTest/",
                       "test-output/visitors/SplitLongLinearWaysVisitorTest/")
   {
@@ -56,7 +56,7 @@ public:
 
   void defaultConstructorNoOpTest()
   {
-    SplitLongLinearWaysVisitor splitVisitor;
+    SplitLongWaysVisitor splitVisitor;
     CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(1900), splitVisitor.getMaxNumberOfNodes());
 
     _noOpTests(splitVisitor);
@@ -64,7 +64,7 @@ public:
 
   void defaultConstructorModifyTest()
   {
-    SplitLongLinearWaysVisitor splitVisitor;
+    SplitLongWaysVisitor   splitVisitor;
     CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(1900), splitVisitor.getMaxNumberOfNodes());
 
     _modifyTests(splitVisitor);
@@ -72,7 +72,7 @@ public:
 
   void splitWayInRelationTest()
   {
-    SplitLongLinearWaysVisitor split;
+    SplitLongWaysVisitor split;
     split.setMaxNumberOfNodes(5);
     _map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(_map, _inputPath + "SplitWayInRelationTest.osm", true, Status::Unknown1);
@@ -120,7 +120,7 @@ private:
     LOG_TRACE("Way added to map with ID " << newWay->getId());
   }
 
-  void _noOpTests(SplitLongLinearWaysVisitor& splitVisitor)
+  void _noOpTests(SplitLongWaysVisitor& splitVisitor)
   {
     int wayID = 0;
     int startNode;
@@ -217,7 +217,7 @@ private:
     }
   }
 
-  void _modifyTests(SplitLongLinearWaysVisitor& splitVisitor)
+  void _modifyTests(SplitLongWaysVisitor& splitVisitor)
   {
 
     int wayID = 0;
@@ -374,7 +374,7 @@ private:
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
   }
 
-  void _sanityCheckSplit(SplitLongLinearWaysVisitor& /*splitVisitor*/, const int startNode,
+  void _sanityCheckSplit(SplitLongWaysVisitor& /*splitVisitor*/, const int startNode,
                          const int numNodes, const int numWays)
   {
     // Pull out ways
@@ -383,11 +383,11 @@ private:
 
     // Pull out nodes
     NodeMap nodes = _map->getNodes();
-    CPPUNIT_ASSERT_EQUAL( numNodes, (int)nodes.size() );
+    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numNodes), nodes.size() );
 
     // Make sure no relations
     RelationMap relations = _map->getRelations();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), relations.size() );
+    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), relations.size() );
 
     unsigned int nodesLeftToFind = numNodes;
     unsigned int searchId = startNode;
@@ -444,7 +444,7 @@ private:
     }
   }
 
-  unsigned int _calcNumWays( const int numNodes, SplitLongLinearWaysVisitor& splitVisitor )
+  unsigned int _calcNumWays( const int numNodes, SplitLongWaysVisitor& splitVisitor )
   {
     unsigned int nodesRemaining = numNodes;
     unsigned int numWays = 0;
@@ -469,6 +469,6 @@ private:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SplitLongLinearWaysVisitorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SplitLongWaysVisitorTest, "slow");
 
 }

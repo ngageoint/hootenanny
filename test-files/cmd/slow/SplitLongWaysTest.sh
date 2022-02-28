@@ -2,7 +2,7 @@
 set -e
 
 export HOOT_OPTS="--warn -C Testing.conf"
-export ADDITIONAL_VISITORS="SchemaTranslationVisitor;SplitLongLinearWaysVisitor"
+export ADDITIONAL_VISITORS="SchemaTranslationVisitor;SplitLongWaysVisitor"
 export TRANSLATION="TDSv40.js"
 export OUTPUT_DIR=$HOOT_HOME/test-output/cmd/slow/SplitLongWaysTest
 export DATA_DIR=$HOOT_HOME/test-files/cmd/slow/SplitLongWaysTest

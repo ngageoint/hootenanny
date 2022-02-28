@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
@@ -134,6 +134,7 @@ private:
    */
   void _addMergeNearbyNodesOps();
   void _addSimplifyBuildingsOps();
+  void _addLongWaySplitterOps();
 
   // If specific columns were specified for export to a shape file, then this is called instaed of
   // using OgrWriter.
