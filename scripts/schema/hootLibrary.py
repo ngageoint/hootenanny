@@ -388,17 +388,17 @@ def printLayerList(layerList):
 
 # Print out a codelist as a JS variable
 def printVariableBody(name,var):
-    print '    var %s = [' % (name)
+    print 'var %s = [' % (name)
 
     num_vals = len(var.keys()) # How many values does the thing have?
     for l in var:
         if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-            print '              { name:"%s", value:"%s" } ' % (l,var[l])
+            print ' {name:"%s",value:"%s"}' % (l,var[l])
         else:
-            print '              { name:"%s", value:"%s" }, ' % (l,var[l])
+            print ' {name:"%s",value:"%s"},' % (l,var[l])
             num_vals -= 1
 
-    print '             ];'
+    print '];'
     print
 # End printVariableBody
 
@@ -448,19 +448,19 @@ def printToEnglish(schema,spec,engValue,fCodeValue):
 
     # Dump out the Enumerated Values
     print '    // Enumerated Values'
-    print '    engEnum : %s , // End of engEnum\n' % (eList)
+    print '    engEnum:%s,\n' % (eList)
 
     # Dump out the Single Values
     print '    // Single Values'
-    print '    engSingle : %s , // End of engSingle\n' % (sList)
+    print '    engSingle:%s,\n' % (sList)
 
     # Dump out the Default Values
     print '    // Default values for attributes'
-    print '    engDefault : %s , // End of engDefault\n' % (dList)
+    print '    engDefault:%s,\n' % (dList)
 
     # Dump out the FCodes
     print '    // FCode Lookup Table'
-    print '    fcodeLookup : %s ,  // End of fcodeLookup\n' % (fList)
+    print '    fcodeLookup:%s,' % (fList)
 
     print '} // End of %s.rules\n' % (engValue)
 # End printToEnglish
@@ -496,16 +496,14 @@ def printFromEnglish(schema,spec,engValue):
     print '    Huge piles of Ugly JSON!'
     print '*/\n'
     print '%s = {' % (engValue)
-    # print '    // Tables built from %s' % (main_csv_file)
 
     # Dump out the Enumerated Values
     print '    // Enumerated Values'
-    print '    enumValues : %s , // End of enumValues\n' % (eList)
+    print '    enumValues:%s,\n' % (eList)
 
     # Dump out the Single Values
     print '    // Single Values'
-    print '    singleValues : %s , // End of singleValues\n' % (sList)
-
+    print '    singleValues:%s,\n' % (sList)
     print '} // End of %s\n' % (engValue)
 # End printFromEnglish
 

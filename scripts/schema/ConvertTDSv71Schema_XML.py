@@ -22,50 +22,65 @@ def printJavascript(schema,withDefs):
         if schema[f]['geom'] == 'Table' or schema[f]['geom'] == 'None':
             continue
 
-        print ' {name:"%s",fcode:"%s",desc:"%s",' % (f,schema[f]['fcode'],schema[f]['desc']); # name = geom + FCODE
-        if withDefs and 'definition' in schema[f]:
-            print '  definition:"%s",' % (schema[f]['definition'])
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom']);
         if 'fcsubtype' in schema[f]:
-            print '  fcsubtype:"%s",' % (schema[f]['fcsubtype'])
+            pString += 'fcsubtype:"%s",' % (schema[f]['fcsubtype'])
         if 'fdname' in schema[f]:
-            print '  fdname:"%s",' % (schema[f]['fdname'])
+            # print '  fdname:"%s",' % (schema[f]['fdname'])
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
         if 'thematic' in schema[f]:
-            print '  thematic:"%s",' % (schema[f]['thematic'])
-        print '  geom:"%s",' % (schema[f]['geom'])
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+        if withDefs and 'definition' in schema[f]:
+            pString += 'definition:"%s",' % (schema[f]['definition'])
+
+        print pString
         print '  columns:['
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
-            print '   {name:"%s",desc:"%s",optional:"%s",' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'])
-
-            if withDefs and 'definition' in schema[f]['columns'][k]:
-                print '    definition:"%s",' % (schema[f]['columns'][k]['definition'])
+            aString = '   {name:"%s",desc:"%s",optional:"%s",' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'])
 
             if 'length' in schema[f]['columns'][k]:
-                print '    length:"%s",' % (schema[f]['columns'][k]['length'])
+                aString += 'length:"%s",' % (schema[f]['columns'][k]['length'])
 
             if 'units' in schema[f]['columns'][k]:
-                print '    units:"%s",' % (schema[f]['columns'][k]['units'])
+                aString += 'units:"%s",' % (schema[f]['columns'][k]['units'])
+
+            if withDefs and 'definition' in schema[f]['columns'][k]:
+                aString += 'definition:"%s",' % (schema[f]['columns'][k]['definition'])
 
             if 'func' in schema[f]['columns'][k]:
-                print '    type:"enumeration",defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
-                print '    enumerations: %s' % (schema[f]['columns'][k]['func'])
+                aString += 'type:"enumeration",defValue:"%s",enumerations: %s}' % (schema[f]['columns'][k]['defValue'],schema[f]['columns'][k]['func'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
+
             elif schema[f]['columns'][k]['type'] == 'enumeration':
-                print '    type:"enumeration",defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
+                aString += 'type:"enumeration",defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
+                print aString
                 print '    enumerations:['
+                num_enum = len(schema[f]['columns'][k]['enum']) # How many attributes does the feature have?
                 for l in schema[f]['columns'][k]['enum']:
-                    print '     {name:"%s", value:"%s"},' % (l['name'],l['value'])
+                    if num_enum == 1:
+                        print '     {name:"%s",value:"%s"}' % (l['name'],l['value'])
+                    else:
+                        print '     {name:"%s",value:"%s"},' % (l['name'],l['value'])
+                        num_enum -= 1
                 print '    ]'
+                if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                    print '   }'
+                else:
+                    print '   },'
+                    num_attrib -= 1
             else:
-                print '    type:"%s",defValue:"%s"' % (schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                aString += 'type:"%s",defValue:"%s"}' % (schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
 
-            if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '   }'
-            else:
-                print '   },'
-                num_attrib -= 1
-
-        print '  ]'
+        print '  ]' # End of the attributes
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
             print ' }'
@@ -93,22 +108,21 @@ def printThematic(schema,spec):
         if schema[f]['geom'] == 'Table' or schema[f]['geom'] == 'None':
             continue
 
-        print ' {name:"%s",fcode:"%s",desc:"%s",' % (f,schema[f]['fcode'],schema[f]['desc']); # name = geom + FCODE
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom']); # name = geom + FCODE
         if 'fdname' in schema[f]:
-            print '  fdname:"%s",' % (schema[f]['fdname'])
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
         if 'thematic' in schema[f]:
-            print '  thematic:"%s",' % (schema[f]['thematic'])
-        print '  geom:"%s",' % (schema[f]['geom'])
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+
+        print pString
         print '  columns:['
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                # print '   }'
                 print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"}' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
             else:
                 print '   {name:"%s",desc:"%s",optional:"%s",type:"%s",length:"%s",defValue:"%s"},' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'],schema[f]['columns'][k]['type'],schema[f]['columns'][k]['length'],schema[f]['columns'][k]['defValue'])
-                # print '   },'
                 num_attrib -= 1
 
         print '  ]'
@@ -143,9 +157,9 @@ def printFuncList(schema):
         num_vals = len(printList[i]) # How many values does the thing have?
         for k in printList[i]:
             if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-                print ' {name:"%s", value:"%s"}' % (k['name'],k['value'])
+                print ' {name:"%s",value:"%s"}' % (k['name'],k['value'])
             else:
-                print ' {name:"%s", value:"%s"},' % (k['name'],k['value'])
+                print ' {name:"%s",value:"%s"},' % (k['name'],k['value'])
                 num_vals -= 1
 
         print '];'
