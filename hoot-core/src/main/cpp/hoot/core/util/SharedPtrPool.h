@@ -63,10 +63,12 @@ private:
 
   /** Default constructor/destructor */
   SharedPtrPool() = default;
-  ~SharedPtrPool()
+  ~SharedPtrPool() = default;
+/** TODO: Investigate why this destructor works for the majority of operations but crashes on some unit tests
   {
     boost::singleton_pool<boost::fast_pool_allocator_tag, sizeof(T)>::purge_memory();
   }
+*/
   /** Delete copy constructor and assignment operator */
   SharedPtrPool(const SharedPtrPool<T>&) = delete;
   SharedPtrPool<T>& operator=(const SharedPtrPool<T>&) = delete;
