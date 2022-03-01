@@ -60,6 +60,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
 
     Scenario: Add conflated dataset with Reviews
         When I select the "sprocket" div
+        Then I wait 3 "seconds" to see "Add Reference Dataset"
         And I press "Add Reference Dataset"
         And I click the "3MergeDataTypes_Cucumber" Dataset
         And I press "Add Layer"

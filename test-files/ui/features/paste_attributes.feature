@@ -19,6 +19,7 @@ Feature: Paste Attributes
         Then I select the "sprocket" div
 
     Scenario: Copy and Paste Attributes
+        Then I wait 3 "seconds" to see "Add Reference Dataset"
         And I press "Add Reference Dataset"
         And I click the "dcpoi_clip_paste_attribu..." Dataset
         And I press "Add Layer"
