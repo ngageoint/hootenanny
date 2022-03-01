@@ -109,6 +109,12 @@ OgrWriter::OgrWriter()
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
+OgrWriter::~OgrWriter()
+{
+  //  Force the GDALDataset to be disposed before GDAL is shutdown
+  close();
+}
+
 void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
@@ -178,8 +184,13 @@ void OgrWriter::openOutput(const QString& url)
 void OgrWriter::close()
 {
   _layers.clear();
-  _ds->FlushCache();
-  _ds.reset();
+  //  Allow close() to be called multiple times without causing errors
+  if (_ds)
+  {
+    _ds->FlushCache();
+    //  Force the GDALDataset to be disposed before GDAL is shutdown
+    _ds.reset();
+  }
 }
 
 bool OgrWriter::isSupported(const QString& url) const
@@ -321,6 +332,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
 void OgrWriter::finalizePartial()
 {
+  close();
 }
 
 void OgrWriter::writePartial(const ConstNodePtr& newNode)

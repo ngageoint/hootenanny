@@ -54,8 +54,6 @@ namespace pt = boost::property_tree;
 namespace hoot
 {
 
-const char* BASE_CONFIG_OPTION_KEY = "base.config";
-
 class JsonLoader
 {
 public:
@@ -107,6 +105,8 @@ public:
   }
 
 private:
+
+  const char* BASE_CONFIG_OPTION_KEY = "base.config";
 
   Settings* _s;
 

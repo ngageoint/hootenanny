@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
@@ -48,14 +48,13 @@ public:
    * @param is_rw Value is true if the driver is able to read and write, false for readonly
    * @param driverType GDAL_OF_VECTOR or GDAL_OF_ALL open flags
    */
-  OgrDriverInfo(
-    const char* indicator = nullptr, const char* driverName = nullptr, bool is_ext = false,
-    bool is_rw = true, unsigned int driverType = GDAL_OF_ALL) :
-  _indicator(indicator),
-  _driverName(driverName),
-  _is_ext(is_ext),
-  _is_rw(is_rw),
-  _driverType(driverType)
+  OgrDriverInfo(const char* indicator = nullptr, const char* driverName = nullptr, bool is_ext = false,
+                bool is_rw = true, unsigned int driverType = GDAL_OF_ALL)
+    : _indicator(indicator),
+      _driverName(driverName),
+      _is_ext(is_ext),
+      _is_rw(is_rw),
+      _driverType(driverType)
   {
   }
 
