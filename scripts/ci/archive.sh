@@ -30,6 +30,10 @@ automake --add-missing --copy
 
 # Make the archive.
 make -j"$(nproc)" clean
+
+# Make the generated schema BEFORE trying to build everything.
+# Some of the python scripts get killed due to lack of resources.
+make -j$(( `nproc` > 4 ? 4 : `nproc` )) js-schema
 make -j"$(nproc)" archive
 
 # All done.
