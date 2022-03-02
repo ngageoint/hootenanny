@@ -160,6 +160,12 @@ tds71 = {
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = tds71.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
+    if (attrList == undefined)
+    {
+      hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+      return
+    }
+
     // Don't add an FCSUBTYPE attribute if we are not going out via OGR
     if (! attrs.FCSUBTYPE && tds71.configOut.OgrFormat !== '')
     {
@@ -167,64 +173,57 @@ tds71 = {
     }
 
     var othList = {};
-
     if (attrs.OTH)
     {
       othList = translate.parseOTH(attrs.OTH); // Unpack the OTH field
       delete attrs.OTH;
     }
 
-    if (attrList != undefined)
+    for (var val in attrs)
     {
-      for (var val in attrs)
+      if (attrList.indexOf(val) == -1)
       {
-        if (attrList.indexOf(val) == -1)
+        if (val in othList)
         {
-          if (val in othList)
-          {
-            //Debug:
-            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-            delete othList[val];
-          }
-
-          if (val in transMap)
-          {
-            notUsed[transMap[val][1]] = transMap[val][2];
-            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-          }
-
-          hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
-          delete attrs[val];
-          // Since we deleted the attribute, Skip the text check
-          continue;
+          //Debug:
+          // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+          delete othList[val];
         }
 
-        // Now check the length of the text fields
-        // We need more info from the customer about this: What to do if it is too long
-        if (val in tds71.rules.txtLength)
+        hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
+        delete attrs[val];
+
+        if (val in transMap)
         {
-          if (attrs[val].length > tds71.rules.txtLength[val])
+          notUsed[transMap[val][1]] = transMap[val][2];
+          hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+        }
+
+        // Since we deleted the attribute, Skip the text check
+        continue;
+      }
+
+      // Now check the length of the text fields
+      // We need more info from the customer about this: What to do if it is too long
+      if (val in tds71.rules.txtLength)
+      {
+        if (attrs[val].length > tds71.rules.txtLength[val])
+        {
+          // First try splitting the attribute and grabbing the first value
+          var tStr = attrs[val].split(';');
+          if (tStr[0].length <= tds71.rules.txtLength[val])
           {
-            // First try splitting the attribute and grabbing the first value
-            var tStr = attrs[val].split(';');
-            if (tStr[0].length <= tds71.rules.txtLength[val])
-            {
-              attrs[val] = tStr[0];
-            }
-            else
-            {
-              hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds71.rules.txtLength[val] + ' characters.');
-              // Still too long. Chop to the maximum length.
-              attrs[val] = tStr[0].substring(0,tds71.rules.txtLength[val]);
-            }
-          } // End text attr length > max length
-        } // End in txtLength
-      } // End attrs loop
-    }
-    else
-    {
-      hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
-    } // End Drop attrs
+            attrs[val] = tStr[0];
+          }
+          else
+          {
+            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds71.rules.txtLength[val] + ' characters.');
+            // Still too long. Chop to the maximum length.
+            attrs[val] = tStr[0].substring(0,tds71.rules.txtLength[val]);
+          }
+        } // End text attr length > max length
+      } // End in txtLength
+    } // End attrs loop
 
     // Repack the OTH field
     if (Object.keys(othList).length > 0)
