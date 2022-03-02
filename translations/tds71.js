@@ -2496,7 +2496,10 @@ tds71 = {
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
-        || '';
+        || 'noInformation';
+
+      // Drop the default value so that it doesn't cause issues in the UI
+      if (attrs.ZI001_SDV == 'noInformation') delete attrs.ZI001_SDV;
 
     // Fix the ZI020_GE4X Values
     // NOTE: This is the opposite to what is done in the toOSM post processing
@@ -2969,7 +2972,7 @@ tds71 = {
           if (tds71.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds71.thematicGroupList[gFcode];
-            tds71.validateThematicAttrs(gFcode, returnData[i]['attrs']);
+            // tds71.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {
