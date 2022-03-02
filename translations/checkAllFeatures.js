@@ -37,7 +37,7 @@ var HOOT_HOME = process.env.HOOT_HOME;
 transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 
 // Skip the TransportationGroundCrv type layers
-hoot.Settings.set({"ogr.tds.structure":"false"});
+hoot.Settings.set({"ogr.thematic.structure":"false"});
 
 // LOTS of debug output
 // hoot.Settings.set({"ogr.debug.dumptags":"true"});
@@ -53,6 +53,7 @@ var schemaMap = {
   // TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
   // TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
   // TDSv70: require(HOOT_HOME + '/translations/tds70_full_schema.js'),
+  // TDSv71: require(HOOT_HOME + '/translations/tds71_full_schema.js')
 };
 
 // Test a single schema
@@ -78,7 +79,7 @@ transTest.dumpValues(schemaMap.MGCP,'WID');
 var geomList = ['Point','Line','Area'];
 
 // All of the possible export schema
-var schemaList = ['MGCP','DNC','ENCv311','TDSv40','TDSv61','TDSv70','GGDMv30'];
+var schemaList = ['MGCP','DNC','ENCv311','TDSv40','TDSv61','TDSv70','TDSv71','GGDMv30'];
 
 // List of F_CODES to test
 // NOTE: "smurf" should send back an error

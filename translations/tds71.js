@@ -315,8 +315,8 @@ tds71 = {
       // If it's in the feature, nothing to do
       if (~attrList.indexOf(i)) continue;
 
-      // If it is in the Thematic feature, just remove it
-      if (~tdsAttrList.indexOf(i)) attrs[i] = '-999999';
+      // If it is in the Thematic feature, just set a default value BUT only if we are not going to the UI
+      if (~tdsAttrList.indexOf(i) && tds71.configOut.OgrFormat !== '') attrs[i] = '-999999';
     }
   }, // End validateThematicAttrs
 
@@ -779,7 +779,7 @@ tds71 = {
     }
 
     // Add the LayerName to the source
-    if ((! tags.source) && layerName !== '') tags.source = 'tdsv70:' + layerName.toLowerCase();
+    if ((! tags.source) && layerName !== '') tags.source = 'tdsv71:' + layerName.toLowerCase();
 
     // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
     if (attrs.UFI)
@@ -2684,7 +2684,7 @@ tds71 = {
 
       // Add some metadata
       if (!tags.uuid && tds71.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
-      if (!tags.source) tags.source = 'tdsv70:' + layerName.toLowerCase();
+      if (!tags.source) tags.source = 'tdsv71:' + layerName.toLowerCase();
 
       // Debug:
       if (tds71.configIn.OgrDebugDumptags == 'true')
@@ -3041,7 +3041,7 @@ tds71 = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv70'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv71'}, tableName: ''});
           return returnData;
         }
       }
