@@ -72,6 +72,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
   vector<Geometry*>* polygons = new vector<Geometry*>();
   vector<Geometry*>& tmpPolygons = *polygons;
   tmpPolygons.reserve(outers.size());
+  vector<std::shared_ptr<Geometry>> recover;
 
   vector<double> outerArea;
   // a vector of holes for each of the outer polygons.
@@ -142,8 +143,8 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
         logWarnCount++;
       }
       //  Because ownership of this inner won't be given to GeometryFactory::createPolygon below
-      //  delete the object
-      delete inners[i];
+      //  add the object to the memory recovery vector
+      recover.emplace_back(inners[i]);
       inners[i] = nullptr;
     }
     else
@@ -153,10 +154,10 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
   // create the polygons from outers & holes
   for (size_t i = 0; i < outers.size(); i++)
   {
-    // delete temporary polygons
-    delete tmpPolygons[i];
-    Polygon* p = gf.createPolygon(outers[i], holes[i]);
-    tmpPolygons[i] = p;
+    //  Move the temp polygon to the memory recovery vector to not leak the polygons
+    recover.emplace_back(tmpPolygons[i]);
+    //  Create the new polygons
+    tmpPolygons[i] = gf.createPolygon(outers[i], holes[i]);
   }
 
   // create the final MultiPolygon; GeometryFactory takes ownership of these input parameters.
