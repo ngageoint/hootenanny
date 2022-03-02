@@ -302,10 +302,21 @@ tds71 = {
     var tdsAttrList = tds71.thematicLookup[tds71.thematicGroupList[gFcode]];
     var attrList = tds71.attrLookup[gFcode];
 
-    for (var i = 0, len = tdsAttrList.length; i < len; i++)
+    // Commented this out until we get resolution from QA
+    // for (var i = 0, len = tdsAttrList.length; i < len; i++)
+    // {
+    //   if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+    //   //if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+    // }
+
+    // Now fix the Closure attributes
+    for (var i in tds71.rules.closureList)
     {
-      if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
-      //if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+      // If it's in the feature, nothing to do
+      if (~attrList.indexOf(i)) continue;
+
+      // If it is in the Thematic feature, just remove it
+      if (~tdsAttrList.indexOf(i)) attrs[i] = '-999999';
     }
   }, // End validateThematicAttrs
 
@@ -2574,7 +2585,8 @@ tds71 = {
       case 'crossing_box':
       case 'engine_shed':
       case 'workshop':
-        notUsedTags.railway = tags.railway; // Preserving this
+        notUsedTags.railway = tags.railway; // Preserving thisjavascript ~ operator
+
         break;
     }
 
@@ -2972,7 +2984,7 @@ tds71 = {
           if (tds71.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds71.thematicGroupList[gFcode];
-            // tds71.validateThematicAttrs(gFcode, returnData[i]['attrs']);
+            tds71.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {
