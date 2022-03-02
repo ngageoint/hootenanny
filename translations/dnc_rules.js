@@ -906,7 +906,7 @@ dnc.rules = {
     ['NS2','4','beacon:type:2','radio_direction_finding'], // Radio Direction Finding
     ['NS2','5','beacon:type:2','directional_radio_beacon'], // Directional Radio Beacon
     ['NS2','10','beacon:type:2','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
-    ['NS2','17','beacon:type:2','non-directional_radio_beacon_(ndb)'], // Non-Directional Radio Beacon (NDB)
+    ['NS2','17','beacon:type:2','ndb'], // Non-Directional Radio Beacon (NDB)
     ['NS2','41','beacon:type:2','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
     ['NS2','45','beacon:type:2','radar_station'], // Radar Station
     ['NS2','51','beacon:type:2','radiobeacon_type_unknown'], // Radiobeacon, Type Unknown

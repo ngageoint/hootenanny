@@ -1,6 +1,5 @@
 This file lists changes to the published TDS specs.
 
-
 TDSv6.1
 NGA added to the TDSv60 specification to make TDSv61.
 The NGA additions include attributes and changes that are not included in the ESRI TDSv61 template FGDB.
@@ -18,4 +17,7 @@ Files:
 TDSv70
 21 Aug 20: Added attributes to each feature to store image metadata.
 Dec 20: Added attributes to "not extracted" fcodes.
+
+TDSv71
+22 Feb 22: Added 'OTH' to carto features and also image metadata attributes
 

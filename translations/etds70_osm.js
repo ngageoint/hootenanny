@@ -51,7 +51,6 @@ hoot.require('etds70_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
-hoot.require('config');
 
 
 etds70_osm = {
@@ -68,7 +67,7 @@ etds70_osm = {
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-        // if (config.getOgrDebugDumptags() == 'true')
+        // if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
         // {
         //     var kList = Object.keys(attrs).sort()
         //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('eTds In: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -154,7 +153,7 @@ etds70_osm = {
         }
 
         // Debug:
-//         if (config.getOgrDebugDumptags() == 'true')
+//         if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
 //         {
 //             var kList = Object.keys(tags).sort()
 //             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');

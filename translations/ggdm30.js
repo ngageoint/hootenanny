@@ -2569,12 +2569,6 @@ ggdm30 = {
         }
         break;
 
-    // BA010 - Land Water Boundary has a different code for 'glacier' then the SLT list has
-    // This gets swapped to "SHO" during export
-      case 'BA010':
-        if (attrs.SLT == '17') attrs.SLT = '8';
-        break;
-
       case 'BH140': // River
         if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
         if (!attrs.TID) attrs.TID = '1000'; // Not tidal

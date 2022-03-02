@@ -4225,14 +4225,14 @@ ggdm30.rules = {
     ['SHD','1000','shoreline:delineated','no'],
     ['SHD','1001','shoreline:delineated','yes'],
 
-    // SHO - Coast Type - see SLT
-    // ['SHO','-999999',undefined,undefined], // No Information
-    // ['SHO','1','coast:type','hillocks'], // Hillocks
-    // ['SHO','2','coast:type','flat'], // Flat Coast
-    // ['SHO','7','coast:type','glacier'], // Glacier
-    // ['SHO','8','coast:type','ice'], // Ice Coast
-    // ['SHO','9','coast:type','steep'], // Steep Coast
-    // ['SHO','999','coast:type','other'], // Other
+    // SHO - Coast Type
+    ['SHO','-999999',undefined,undefined], // No Information
+    ['SHO','1','coast:type','hillocks'], // Hillocks
+    ['SHO','2','coast:type','flat'], // Flat Coast
+    ['SHO','7','coast:type','glacier'], // Glacier
+    ['SHO','8','coast:type','ice'], // Ice Coast
+    ['SHO','9','coast:type','steep'], // Steep Coast
+    ['SHO','999','coast:type','other'], // Other
 
     // SHT - Shipping Container Type
     // ['SHT','-999999',undefined,undefined], // No Information
@@ -4257,13 +4257,8 @@ ggdm30.rules = {
 
     // SLT - Shoreline Type
     // ['SLT','-999999',undefined,undefined], // No Information
-    ['SLT','1','shoreline:type','hillocks'], // Hillocks - SHO
-    ['SLT','2','shoreline:type','flat'], // Flat Coast - SHO
     ['SLT','6','shoreline:type','mangrove'], // Mangrove
-    ['SLT','7','shoreline:type','glacier'], // Glacier - SHO
-    // ['SHO','8','coast:type','ice'], // Ice Coast
     ['SLT','8','shoreline:type','marshy'], // Marshy
-    ['SLT','9','shoreline:type','steep'], // Steep Coast - SHO
     ['SLT','10','shoreline:type','stony'], // Stony
     ['SLT','11','shoreline:type','building_rubble'], // Building Rubble
     ['SLT','12','shoreline:type','erosion_rubble'], // Erosion Rubble
@@ -6451,7 +6446,6 @@ ggdm30.rules = {
     'RCG':'ZI004_RCG',
     'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
     'SUR':'ZI026_SUR',
-    'SHO':'SLT',
     'WBD':'PWA',
     'WD1':'ZI016_WD1',
     'WTBB':'ZI024_WTBB',
@@ -6522,7 +6516,7 @@ ggdm30.rules = {
     'AT005':{'WLE':'ZI025_WLE'},
     'AT042':{'GUG':'ZI032_GUG','PYC':'ZI032_PYC','PYM':'ZI032_PYM',
       'TOS':'ZI032_TOS','CAB':'AT005_CAB'},
-    'BA010':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC','SLT':'SHO'},
+    'BA010':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC'},
     'BA030':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC'},
     'BB010':{'ZI025_HDP':'HDP'},
     'BB155':{'BC034_BRF':'ZI018_BRF'},

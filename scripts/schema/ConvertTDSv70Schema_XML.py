@@ -8,13 +8,12 @@ from hootLibrary import *
 
 from xml.dom import minidom
 
-
 # printJavascript: Dump out the structure as Javascript
 #
 # Note: This uses double quotes ( " ) around data elements in the output.  The XML files have values with
 # single quotes ( ' ) in them.  These quotes are also in the DFDD and NFDD specs.
 def printJavascript(schema):
-    print '    var schema = [' # And so it begins...
+    print 'var schema = [' # And so it begins...
 
     num_feat = len(schema.keys()) # How many features in the schema?
     for f in sorted(schema.keys()):
@@ -22,76 +21,73 @@ def printJavascript(schema):
         if schema[f]['geom'] == 'Table' or schema[f]['geom'] == 'None':
             continue
 
-        print '        { name:"%s",' % (f); # name = geom + FCODE
-        print '          fcode:"%s",' % (schema[f]['fcode'])
-        print '          desc:"%s",' % (schema[f]['desc'])
-        if 'definition' in schema[f]:
-            print '          definition:"%s",' % (schema[f]['definition'])
-        print '          geom:"%s",' % (schema[f]['geom'])
-        print '          columns:['
+        pString = ' {name:"%s",fcode:"%s",desc:"%s",geom:"%s",' % (f,schema[f]['fcode'],schema[f]['desc'],schema[f]['geom']);
+        if 'fcsubtype' in schema[f]:
+            pString += 'fcsubtype:"%s",' % (schema[f]['fcsubtype'])
+        if 'fdname' in schema[f]:
+            # print '  fdname:"%s",' % (schema[f]['fdname'])
+            pString += 'fdname:"%s",' % (schema[f]['fdname'])
+        if 'thematic' in schema[f]:
+            pString += 'thematic:"%s",' % (schema[f]['thematic'])
+        if withDefs and 'definition' in schema[f]:
+            pString += 'definition:"%s",' % (schema[f]['definition'])
+
+        print pString
+        print '  columns:['
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
-            print '                     { name:"%s",' % (k)
-            print '                       desc:"%s",' % (schema[f]['columns'][k]['desc'])
-            print '                       optional:"%s",' % (schema[f]['columns'][k]['optional'])
-
-            #if schema[f]['columns'][k]['length'] != '':
-            if 'definition' in schema[f]['columns'][k]:
-                print '                       definition:"%s",' % (schema[f]['columns'][k]['definition'])
+            aString = '   {name:"%s",desc:"%s",optional:"%s",' % (k,schema[f]['columns'][k]['desc'],schema[f]['columns'][k]['optional'])
 
             if 'length' in schema[f]['columns'][k]:
-                print '                       length:"%s",' % (schema[f]['columns'][k]['length'])
+                aString += 'length:"%s",' % (schema[f]['columns'][k]['length'])
 
             if 'units' in schema[f]['columns'][k]:
-                print '                       units:"%s",' % (schema[f]['columns'][k]['units'])
+                aString += 'units:"%s",' % (schema[f]['columns'][k]['units'])
 
-            #if schema[f]['columns'][k]['type'].find('numeration') != -1:
+            if withDefs and 'definition' in schema[f]['columns'][k]:
+                aString += 'definition:"%s",' % (schema[f]['columns'][k]['definition'])
+
             if 'func' in schema[f]['columns'][k]:
-                print '                       type:"enumeration",'
-                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
-                print '                       enumerations: %s' % (schema[f]['columns'][k]['func'])
+                aString += 'type:"enumeration",defValue:"%s",enumerations: %s}' % (schema[f]['columns'][k]['defValue'],schema[f]['columns'][k]['func'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
 
             elif schema[f]['columns'][k]['type'] == 'enumeration':
-                #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
-                print '                       type:"enumeration",'
-                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
-                print '                       enumerations:['
+                aString += 'type:"enumeration",defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
+                print aString
+                print '    enumerations:['
+                num_enum = len(schema[f]['columns'][k]['enum']) # How many attributes does the feature have?
                 for l in schema[f]['columns'][k]['enum']:
-                    print '                           { name:"%s", value:"%s" },' % (l['name'],l['value'])
-                # print '                        ] // End of Enumerations'
-                print '                        ]'
-
-            #elif schema[f]['columns'][k]['type'] == 'textEnumeration':
-                #print '                       type:"Xenumeration",'
-                #print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
-                #print '                       enumerations: text_%s' % (k)
-
+                    if num_enum == 1:
+                        print '     {name:"%s",value:"%s"}' % (l['name'],l['value'])
+                    else:
+                        print '     {name:"%s",value:"%s"},' % (l['name'],l['value'])
+                        num_enum -= 1
+                print '    ]'
+                if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
+                    print '   }'
+                else:
+                    print '   },'
+                    num_attrib -= 1
             else:
-                print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
-                print '                       defValue:"%s"' % (schema[f]['columns'][k]['defValue'])
+                aString += 'type:"%s",defValue:"%s"}' % (schema[f]['columns'][k]['type'],schema[f]['columns'][k]['defValue'])
+                if num_attrib > 1:  # Are we at the last attribute? yes = no trailing comma
+                    aString += ','
+                    num_attrib -= 1
+                print aString
 
-            if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                # print '                     } // End of %s' % (k)
-                print '                     }'
-            else:
-                # print '                     }, // End of %s' % (k)
-                print '                     },'
-                num_attrib -= 1
-
-        # print '                    ] // End of Columns'
-        print '                    ]'
+        print '  ]' # End of the attributes
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            # print '          } // End of feature %s\n' % (schema[f]['fcode'])
-            print '          }'
+            print ' }'
         else:
-            # print '          }, // End of feature %s\n' % (schema[f]['fcode'])
-            print '          },'
+            print ' },'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
-# End printJavascript
+    print '];' # End of schema# End printJavascript
 
 
 # Go through the schema and pull out all of the attributes that are to be replaced with
@@ -107,16 +103,16 @@ def printFuncList(schema):
                     printList[tName] = schema[i]['columns'][j]['enum']
 
     for i in printList:
-        print '    var %s = [' % (i)
+        print 'var %s = [' % (i)
         num_vals = len(printList[i]) # How many values does the thing have?
         for k in printList[i]:
             if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-                print '              { name:"%s", value:"%s" } ' % (k['name'],k['value'])
+                print ' {name:"%s",value:"%s"}' % (k['name'],k['value'])
             else:
-                print '              { name:"%s", value:"%s" }, ' % (k['name'],k['value'])
+                print ' {name:"%s",value:"%s"},' % (k['name'],k['value'])
                 num_vals -= 1
 
-        print '             ];'
+        print '];'
         print
 # End printFuncList
 

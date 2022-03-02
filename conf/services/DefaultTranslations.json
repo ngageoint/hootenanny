@@ -1,5 +1,11 @@
 [
     {
+        "name" : "TDSv71",
+        "description" : "NSG Topographic Data Store (TDS) v7.1",
+        "canExport" : true,
+        "path" : "translations/TDSv71.js"
+    },
+    {
         "name" : "TDSv61",
         "description" : "NSG Topographic Data Store (TDS) v6.1",
         "canExport" : true,

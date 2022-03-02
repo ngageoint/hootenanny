@@ -99,10 +99,6 @@ missing
 Output.osm
 /output.osm
 /output.pgm
-translations/*_schema.js
-translations/etds*_rules.js
-translations/emgcp*_rules.js
-translations/eggdm*_rules.js
 .qmake.stash
 translations-local
 **/*.pro.user*

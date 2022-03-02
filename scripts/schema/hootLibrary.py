@@ -22,7 +22,7 @@
  #* This will properly maintain the copyright information. Maxar
  #* copyrights will be updated automatically.
  #*
- #* @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ #* @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
 
  #*/
 
@@ -64,10 +64,10 @@ def dumpEnumerations(schema,dirName):
         for j in schema[i]['columns']:
             if schema[i]['columns'][j]['type'].find('numeration') > -1:
                     outFile = open(j + '_' + fCode,'w')
-                    
+
                     for k in schema[i]['columns'][j]['enum']:
                         outFile.write('{} = {}\n'.format(k['name'],k['value']))
-                    
+
                     outFile.close()
 
     os.chdir(currentDir)
@@ -98,8 +98,7 @@ def printCopyright():
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
-
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 2022 Maxar (http://www.maxar.com/)
  */
 
  ////
@@ -115,7 +114,7 @@ def printJSHeader(spec):
     print "var _global = (0, eval)('this');"
     print 'if (!_global.%s)' % (spec)
     print '{'
-    print '  _global.%s = {};' % (spec)
+    print ' _global.%s = {};' % (spec)
     print '}'
     print
     print '%s.schema = {' % (spec)
@@ -124,9 +123,9 @@ def printJSHeader(spec):
 
 
 def printJSFooter(spec):
-    print '    return schema; \n'
-    print '} // End of getDbSchema\n'
-    print '} // End of %s.schema\n' % (spec)
+    print '  return schema;'
+    print '} // End of getDbSchema'
+    print '} // End of %s.schema' % (spec)
     print
     print 'exports.getDbSchema = %s.schema.getDbSchema;' % (spec)
     print
@@ -157,7 +156,7 @@ def printFieldValues(schema,variableName):
                 # Turn the F_CODE into this structure:  <short name>::<long name>
                 # E.g. AJ030::Holding Pen
                 # The Translation Assistant keeps the part BEFORE the "::" for translation - the F_CODE in this case
-                tList['F_CODE::Feature Code'][schema[i]['fcode'] + "::" + schema[i]['desc']] = 0 
+                tList['F_CODE::Feature Code'][schema[i]['fcode'] + "::" + schema[i]['desc']] = 0
                 continue
 
             # Add enumerated values
@@ -389,17 +388,17 @@ def printLayerList(layerList):
 
 # Print out a codelist as a JS variable
 def printVariableBody(name,var):
-    print '    var %s = [' % (name)
+    print 'var %s = [' % (name)
 
     num_vals = len(var.keys()) # How many values does the thing have?
     for l in var:
         if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-            print '              { name:"%s", value:"%s" } ' % (l,var[l])
+            print ' {name:"%s",value:"%s"}' % (l,var[l])
         else:
-            print '              { name:"%s", value:"%s" }, ' % (l,var[l])
+            print ' {name:"%s",value:"%s"},' % (l,var[l])
             num_vals -= 1
 
-    print '             ];'
+    print '];'
     print
 # End printVariableBody
 
@@ -449,19 +448,19 @@ def printToEnglish(schema,spec,engValue,fCodeValue):
 
     # Dump out the Enumerated Values
     print '    // Enumerated Values'
-    print '    engEnum : %s , // End of engEnum\n' % (eList)
+    print '    engEnum:%s,\n' % (eList)
 
     # Dump out the Single Values
     print '    // Single Values'
-    print '    engSingle : %s , // End of engSingle\n' % (sList)
+    print '    engSingle:%s,\n' % (sList)
 
     # Dump out the Default Values
     print '    // Default values for attributes'
-    print '    engDefault : %s , // End of engDefault\n' % (dList)
+    print '    engDefault:%s,\n' % (dList)
 
     # Dump out the FCodes
     print '    // FCode Lookup Table'
-    print '    fcodeLookup : %s ,  // End of fcodeLookup\n' % (fList)
+    print '    fcodeLookup:%s,' % (fList)
 
     print '} // End of %s.rules\n' % (engValue)
 # End printToEnglish
@@ -497,16 +496,14 @@ def printFromEnglish(schema,spec,engValue):
     print '    Huge piles of Ugly JSON!'
     print '*/\n'
     print '%s = {' % (engValue)
-    # print '    // Tables built from %s' % (main_csv_file)
 
     # Dump out the Enumerated Values
     print '    // Enumerated Values'
-    print '    enumValues : %s , // End of enumValues\n' % (eList)
+    print '    enumValues:%s,\n' % (eList)
 
     # Dump out the Single Values
     print '    // Single Values'
-    print '    singleValues : %s , // End of singleValues\n' % (sList)
-
+    print '    singleValues:%s,\n' % (sList)
     print '} // End of %s\n' % (engValue)
 # End printFromEnglish
 

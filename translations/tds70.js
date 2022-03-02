@@ -79,12 +79,12 @@ tds70 = {
       if (hoot.Settings.get('ogr.output.format') == 'shp')
       {
         // Add tag1, tag2, tag3 and tag4
-        tds70.rawSchema = translate.addO2sFeatures(tds70.rawSchema);
+        tds70.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(tds70.rawSchema));
       }
       else
       {
-        // Just add tag1
-        tds70.rawSchema = translate.addSingleO2sFeature(tds70.rawSchema);
+        // Just add tag1 && OSMTAGS
+        tds70.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(tds70.rawSchema));
       }
 
       // Debugging:
@@ -598,7 +598,6 @@ tds70 = {
 
   }, // End dropDefaults
 
-
   // Clean up the attributes
   cleanAttrs : function (attrs)
   {
@@ -774,7 +773,7 @@ tds70 = {
         }
       } // End nTags
 
-      if (tObj.text !== '')
+      if (tObj.text && tObj.text !== '')
       {
         tags.note = tObj.text;
       }
@@ -843,7 +842,7 @@ tds70 = {
     // Ugly hack to get around a number of conflicts
     if (tags.highway == 'yes') tags.highway = 'road';
 
-    // Remove a defaukt
+    // Remove a default
     if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
 
     // New TDSv61 Attribute - ROR (Road Interchange Ramp)
@@ -2515,7 +2514,7 @@ tds70 = {
         if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
         if (!attrs.TID) attrs.TID = '1000'; // Not tidal
         break;
-    } // Enf switch F_CODE
+    } // End switch F_CODE
 
     // Fix HGT and LMC to keep GAIT happy
     // If things have a height greater than 46m, tags them as being a "Navigation Landmark"

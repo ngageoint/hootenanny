@@ -65,6 +65,7 @@ help:
 	@echo "docs                    - Build all project documentation."
 	@echo "dist                    - Make a distributable tarball."
 	@echo "eclipse                 - If configured '--with-services', then build Eclipse IDE project files."
+	@echo "js-schema               - Build the Javascript schema files."
 	@echo "osmapidb                - If configured '--with-services', then build a clean copy of an OSM API database."
 	@echo "translations-test       - Run the mocha translations tests. Should take less than five minutes."
 	@echo "services-build          - If configured '--with-services', then build the web services."
@@ -122,6 +123,9 @@ ui-clean-coverage:
 
 ui2x-build:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-build
+
+js-schema:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot js-make
 
 translations-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot translations-test

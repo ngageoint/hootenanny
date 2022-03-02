@@ -48,7 +48,6 @@ translate = {
       }
       else
       {
-        // if (config.getOgrDebugLookupclash() == 'true')
         if (hoot.Settings.get('ogr.debug.lookupclash') == 'true')
         {
           if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
@@ -147,7 +146,6 @@ translate = {
         }
         else
         {
-          // if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
           if (hoot.Settings.get('ogr.debug.lookupclash') == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
         }
       }
@@ -473,7 +471,6 @@ translate = {
         }
         else
         {
-          // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
           if (hoot.Settings.get('ogr.debug.lookupcolumn') == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
         }
       } // End !key in lookup
@@ -1812,8 +1809,8 @@ translate = {
       // Reuse tKey but don't remove spaces, underscores etc
       tKey = col.toUpperCase();
 
-      // Drop the "GEOM" attribute
-      if (tKey == 'GEOM' || tKey == 'SHAPE_LENGTH' || tKey == 'SHAPE_AREA')
+      // Drop not needed attribute
+      if (tKey == 'GEOM' || tKey == 'SHAPE_LENGTH' || tKey == 'SHAPE_AREA' || tKey == 'FCSUBTYPE')
       {
         delete attrs[col];
         continue;
