@@ -100,7 +100,7 @@ tds71 = {
       tds71.rawSchema = translate.addReviewFeature(tds71.rawSchema);
 
       // Debugging:
-      translate.dumpSchema(tds71.rawSchema);
+      // translate.dumpSchema(tds71.rawSchema);
 
       return tds71.rawSchema;
     }
