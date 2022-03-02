@@ -235,25 +235,25 @@ def addExtraAttrs(tSchema):
     for featureName in tSchema:
         tSchema[featureName]['columns']['image_id'] = {}
         tSchema[featureName]['columns']['image_id'] = {'name':'image_id','desc':'Image Id','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         tSchema[featureName]['columns']['legacy_id'] = {}
         tSchema[featureName]['columns']['legacy_id'] = {'name':'legacy_id','desc':'Legacy Image Id','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         tSchema[featureName]['columns']['early_date'] = {}
         tSchema[featureName]['columns']['early_date'] = {'name':'early_date','desc':'Earliest image date in mosaic','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         tSchema[featureName]['columns']['late_date'] = {}
         tSchema[featureName]['columns']['late_date'] = {'name':'late_date','desc':'Latest image date in mosaic','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         tSchema[featureName]['columns']['img_layer'] = {}
         tSchema[featureName]['columns']['img_layer'] = {'name':'img_layer','desc':'Imagery Layer Name','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         tSchema[featureName]['columns']['img_mosaic'] = {}
         tSchema[featureName]['columns']['img_mosaic'] = {'name':'img_mosaic','desc':'Image Mosaic','type':'String',
                                                 'defValue':'no','length':'3','optional':'R'}
         tSchema[featureName]['columns']['PFI'] = {}
         tSchema[featureName]['columns']['PFI'] = {'name':'PFI','desc':'Acquisition Platform Identifier','type':'String',
-                                                'defValue':'No Information','length':'15','optional':'R'}
+                                                'defValue':'noInformation','length':'15','optional':'R'}
 
     return tSchema
 # End addExtraAttrs
@@ -293,6 +293,48 @@ def addNames(namList,tSchema):
 
     return tSchema
 # End addNames
+
+
+# Fixup the default values in the thematic schema
+def fixDefaults():
+    defList = {}
+
+    for feature in schema:
+        for field in schema[feature]['columns']:
+            aName = schema[feature]['columns'][field]['name']
+
+            if aName == 'F_CODE' or aName == 'FCSUBTYPE' or aName == 'GLOBALID':
+                continue
+
+            if aName in defList:  # Sanity check
+                # One different value left that we are going to ignore
+                # if defList[aName] != schema[feature]['columns'][field]['defValue']:
+                #     print '## ',schema[feature]['name'],'different',aName,defList[aName],'vs',schema[feature]['columns'][field]['defValue']
+                continue
+
+            defList[aName] = schema[feature]['columns'][field]['defValue']
+
+    for feature in thematicSchema:
+        for field in thematicSchema[feature]['columns']:
+            aName = thematicSchema[feature]['columns'][field]['name']
+
+            if aName == 'F_CODE' or aName == 'FCSUBTYPE' or aName == 'GLOBALID':
+                continue
+
+            if aName not in defList: # Sanity check
+                # print '## ',thematicSchema[feature]['name'],'Missing default value for',aName
+                continue
+
+            thematicSchema[feature]['columns'][field]['defValue'] = defList[aName]
+
+        # Remove the default FCSUBTYPE from the thematic layers.  This gets populated from the individual F_CODES
+        thematicSchema[feature]['columns']['FCSUBTYPE']['defValue'] = ''
+
+    thematicSchema['MaximumElevationSrf']['columns']['MAX_TERRAIN']['defValue'] = '-999999'
+    thematicSchema['MaximumElevationSrf']['columns']['MAX_ELEVATION']['defValue'] = '-999999'
+    thematicSchema['MaximumElevationSrf']['columns']['MEF_VALUE']['defValue'] = '-999999'
+
+# End fixDefaults
 
 
     # Setup handy lists
@@ -395,6 +437,7 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
     geoList = {'C':'Line','Crv':'Line','S':'Area','Srf':'Area','P':'Point','Pnt':'Point','_':'None'}
     typList = {'esriFieldTypeDouble':'Real','xs:double':'Real','esriFieldTypeString':'String','xs:string':'String',
                'esriFieldTypeInteger':'Integer','xs:int':'Integer','esriFieldTypeGlobalID':'String'}
+    fixDefList = {'ZI013_CSP':'-999999','DOF':'-999999.0','ZI001_SPS':'-999999'}
     fdName = '' # Feature Dataset Name
 
     itemList = xmlDoc.getElementsByTagName('DataElement')
@@ -449,12 +492,6 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
                     # print 'Skipped: ', fName
                     continue
 
-                # These are OK. We have filtered out the features that don't have these
-                if fieldValue.getElementsByTagName('DefaultValue'):
-                    defaultValue = fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data.encode('utf8')
-                else:
-                    defaultValue = ''
-
                 # print 'Field:', fName
 
                 fType = fieldValue.getElementsByTagName('Type')[0].firstChild.data.encode('utf8')
@@ -475,6 +512,12 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
                 #         print' nam:',namList[fName]['desc']
                 #         print' des:',desc
 
+                # These are OK. We have filtered out the features that don't have these
+                if fieldValue.getElementsByTagName('DefaultValue'):
+                    defaultValue = fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data.encode('utf8')
+                else:
+                    defaultValue = ''
+
                 # Now start building the attribute
                 tSchema[featureName]['columns'][fName] = {}
                 tSchema[featureName]['columns'][fName] = { 'name':fName,
@@ -491,14 +534,10 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
                     tSchema[featureName]['columns']['OTH'] = {'name':'OTH','desc':'Specified Domain Value(s)','type':'String',
                                                           'defValue':'noInformation','length':'255','optional':'R'}
 
-
-
                 # Debug
                 # print 'Name:',fName.encode('utf8'),'  Type:',fType.encode('utf8')
                 # print 'Default:',defaultValue.encode('utf8')
                 # print 'Length:',length.encode('utf8')
-
-
 
         subTypeList = feature.getElementsByTagName('Subtype')
         if subTypeList != 'None':
@@ -533,13 +572,21 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
 
                         # print 'fieldName',fieldName
                         fType = defaultValueNode.getAttributeNS('http://www.w3.org/2001/XMLSchema-instance','type')
+                        defValue = defaultValueNode.firstChild.data.encode('utf8')
+
+                        if fType == 'xs:double':  # For some reason, this is an int value in the XML
+                            defValue = '-999999.0'
+
+                        # Mass changes to some values
+                        if fieldName in fixDefList:
+                            defValue = fixDefList[fieldName]
 
                         # Now start building the attribute
                         fSchema[subName]['columns'][fieldName] = {}
                         fSchema[subName]['columns'][fieldName] = { 'name':fieldName,
                                                                 'desc':'',
                                                                 'type':typList[fType],
-                                                                'defValue':defaultValueNode.firstChild.data.encode('utf8'),
+                                                                'defValue':defValue,
                                                                 'optional':'R'
                                                               }
 
@@ -671,6 +718,9 @@ if __name__ == "__main__":
     # Add names and descriptions to elements
     schema = addNames(namesList,schema)
     thematicSchema = addNames(namesList,thematicSchema)
+
+    # Fix default values in the schema
+    fixDefaults()
 
     # Add extra attributes to each feature
     schema = addExtraAttrs(schema)

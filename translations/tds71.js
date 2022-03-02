@@ -56,8 +56,22 @@ tds71 = {
     //     fcList.push(item.fcode);
     //   }
     // });
-
     // print(JSON.stringify(fcList));
+
+    // Code to dump out the FCSUBTYPE list
+    // tds71.fcsubList = {}
+    // tds71.rawSchema.forEach( function (item) {
+    //   if (! tds71.fcsubList[item.fcode])
+    //   {
+    //     tds71.fcsubList[item.fcode] = item.fcsubtype;
+    //   }
+    //   else
+    //   {
+        // if (item.fcsubtype !== tds71.fcsubList[item.fcode]) print('## ' + item.fcode + ' different ' + item.fcsubtype + ' vs ' + tds71.fcsubList[item.fcode]);
+    //   }
+    // });
+    // print(JSON.stringify(tds71.fcsubList));
+
     // print("##########");
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
@@ -145,6 +159,11 @@ tds71 = {
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = tds71.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+
+    if (! attrs.FCSUBTYPE)
+    {
+      attrs.FCSUBTYPE = tds71.rules.fcSubtypeList[attrs.F_CODE];
+    }
 
     var othList = {};
 
