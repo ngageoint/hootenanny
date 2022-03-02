@@ -160,7 +160,8 @@ tds71 = {
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = tds71.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
-    if (! attrs.FCSUBTYPE)
+    // Don't add an FCSUBTYPE attribute if we are not going out via OGR
+    if (! attrs.FCSUBTYPE && tds71.configOut.OgrFormat !== '')
     {
       attrs.FCSUBTYPE = tds71.rules.fcSubtypeList[attrs.F_CODE];
     }
