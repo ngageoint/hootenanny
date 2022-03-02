@@ -437,8 +437,7 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
     geoList = {'C':'Line','Crv':'Line','S':'Area','Srf':'Area','P':'Point','Pnt':'Point','_':'None'}
     typList = {'esriFieldTypeDouble':'Real','xs:double':'Real','esriFieldTypeString':'String','xs:string':'String',
                'esriFieldTypeInteger':'Integer','xs:int':'Integer','esriFieldTypeGlobalID':'String'}
-    fixDefList = {'ZI013_CSP':'-999999','DOF':'-999999.0','ZI001_SPS':'-999999'}
-    fdName = '' # Feature Dataset Name
+    fixDefList = {'ZI013_CSP':'-999999','DOF':'-999999.0','ZI001_SPS':'-999999','CIW':'-999999'}
 
     itemList = xmlDoc.getElementsByTagName('DataElement')
 
