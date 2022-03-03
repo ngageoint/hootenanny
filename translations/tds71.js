@@ -112,6 +112,23 @@ tds71 = {
     // translate.dumpSchema(tds71.thematicSchema);
     // print('##########');
 
+    // Until asked to change this, we are only supporting exporting to a "clean" structure with thematic layers.
+    if (hoot.Settings.get('ogr.clean.export') !== 'false')
+    {
+      tds71.thematicSchema.forEach( function(item) {
+          newColumns = [];
+          for (var i in item.columns)
+          {
+            // Skip the stuff we don't want
+            if (~['image_id','legacy_id','early_date','late_date','img_layer','img_mosaic','PFI'].indexOf(item.columns[i].name)) continue;
+            newColumns.push(item.columns[i]);
+          }
+
+          delete item.columns;
+          item.columns = newColumns;
+      });
+    }
+
     // Create a lookup table of Thematic structure attributes. Note this is <GLOBAL>
     tds71.thematicLookup = translate.makeThematicAttrLookup(tds71.thematicSchema);
     // Debug:
@@ -139,8 +156,16 @@ tds71 = {
     }
     else
     {
-      // Just add tag1 && OSMTAGS
+      if (hoot.Settings.get('ogr.clean.export') !== 'false')
+      {
+        // Just add O2S features
+        tds71.thematicSchema = translate.addSingleO2sFeature(tds71.thematicSchema);
+      }
+      else
+      {
+        // Add O2S and OSMTAGS
       tds71.thematicSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(tds71.thematicSchema));
+      }
     }
 
     // Add the empty Review layers
@@ -2824,6 +2849,7 @@ tds71 = {
     {
       tds71.configOut = {};
       tds71.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      tds71.configOut.OgrCleanExport = hoot.Settings.get('ogr.clean.export')
       tds71.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
       tds71.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
       tds71.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
@@ -2832,7 +2858,6 @@ tds71 = {
       tds71.configOut.OgrThematicStructure = hoot.Settings.get('ogr.thematic.structure');
       tds71.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       tds71.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
-
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon

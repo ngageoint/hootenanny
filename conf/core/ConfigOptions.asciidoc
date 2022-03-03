@@ -3560,6 +3560,14 @@ If true, translation files will add a UUID to features.
 If the OGR output file/layer exists when exporting, append the data instead of trying to create a
 new file/layer.
 
+=== ogr.clean.export
+
+* Data Type: bool
+* Default Value: `false`
+
+When exporting, remove all non-spec attributes from the features. I.e. Do a "clean" export.
+NOTE: This is destructive. It will drop data that is usually kept - OSMTAGS etc
+
 === ogr.debug.addfcode
 
 * Data Type: bool
@@ -3612,14 +3620,6 @@ Add the ESRI specific FCSUBTYPE field to the output.
 The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
 Geodatabases.
 
-=== ogr.text.field.number
-
-* Data Type: int
-* Default Value: `8`
-
-The maximum number of O2S_[P,L,A] tags attributes and OSMTAGS attributes to create when writing a translated schema to a shapefile.
-Unused OSM tags and values will be split and stored in these fields on export.
-
 === ogr.import.filter
 
 * Data Type: string
@@ -3635,18 +3635,22 @@ script.
 * Data Type: string
 * Default Value: `attribute`
 
-When exporting to TDSv40 and TDSv61:
-- "attribute" Add unused tags to the "ZI006_MEM" field.
+Decide what to do with left over tags when exporting:
+- "attribute" Add unused tags to the "OSMTAGS" field.
 - "file" Save the unused tags in a new layer (extra_[PLA]).
 - "none" Don't save the unused tags, just drop them.
 
-When exporting to MGCP:
-- "attribute" Add unused tags to the "TXT" field.
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "none" Don't save the unused tags, just drop them.
+NOTE: According to the MGCP and Shapefile specifications, the "OSMTAGS" field has a maximum length of
+255 characters. It will try to split Extra text across OSMTAGSXX where the maximum number of XX is
+determined by ogr.text.field.number.
 
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
-255 characters. Extra text will be truncated.
+=== ogr.text.field.number
+
+* Data Type: int
+* Default Value: `8`
+
+The maximum number of O2S_[P,L,A] tags attributes and OSMTAGS attributes to create when writing a translated schema to a shapefile.
+Unused OSM tags and values will be split and stored in these fields on export.
 
 === ogr.reader.bounding.box.latlng
 
