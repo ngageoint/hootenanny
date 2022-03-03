@@ -109,7 +109,7 @@ etds71_osm = {
         // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
-            if (val in etds70_osm_rules.singleValues)
+            if (val in etds71_osm_rules.singleValues)
             {
                 nAttrs[etds71_osm_rules.singleValues[val]] = attrs[val];
                 // Debug

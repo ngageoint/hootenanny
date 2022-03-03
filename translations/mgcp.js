@@ -1134,7 +1134,7 @@ mgcp = {
     if (tags.facility == 'processing')
     {
       if (! tags.product) tags.product = 'unknown';
-      tags.facility = 'yes';
+      // tags.facility = 'yes';
     }
 
     // Sort out the WID, WD1 etc attributes
