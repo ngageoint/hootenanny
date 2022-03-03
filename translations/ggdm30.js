@@ -2514,7 +2514,11 @@ ggdm30 = {
           || tags['source:imagery:earliestDate']
           || tags['source:date']
           || tags['source:geometry:date']
-          || '';
+          || 'noInformation';
+
+      // Drop the default value so that it doesn't cause issues in the UI
+      if (attrs.ZI001_SDV == 'noInformation') delete attrs.ZI001_SDV;
+
 
     // Map alternate source tags to ZI001_SDP in order of precedence
     // default is 'source'

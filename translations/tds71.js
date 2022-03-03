@@ -160,6 +160,12 @@ tds71 = {
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = tds71.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
+    if (attrList == undefined)
+    {
+      hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+      return
+    }
+
     // Don't add an FCSUBTYPE attribute if we are not going out via OGR
     if (! attrs.FCSUBTYPE && tds71.configOut.OgrFormat !== '')
     {
@@ -167,64 +173,57 @@ tds71 = {
     }
 
     var othList = {};
-
     if (attrs.OTH)
     {
       othList = translate.parseOTH(attrs.OTH); // Unpack the OTH field
       delete attrs.OTH;
     }
 
-    if (attrList != undefined)
+    for (var val in attrs)
     {
-      for (var val in attrs)
+      if (attrList.indexOf(val) == -1)
       {
-        if (attrList.indexOf(val) == -1)
+        if (val in othList)
         {
-          if (val in othList)
-          {
-            //Debug:
-            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-            delete othList[val];
-          }
-
-          if (val in transMap)
-          {
-            notUsed[transMap[val][1]] = transMap[val][2];
-            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-          }
-
-          hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
-          delete attrs[val];
-          // Since we deleted the attribute, Skip the text check
-          continue;
+          //Debug:
+          // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+          delete othList[val];
         }
 
-        // Now check the length of the text fields
-        // We need more info from the customer about this: What to do if it is too long
-        if (val in tds71.rules.txtLength)
+        hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
+        delete attrs[val];
+
+        if (val in transMap)
         {
-          if (attrs[val].length > tds71.rules.txtLength[val])
+          notUsed[transMap[val][1]] = transMap[val][2];
+          hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+        }
+
+        // Since we deleted the attribute, Skip the text check
+        continue;
+      }
+
+      // Now check the length of the text fields
+      // We need more info from the customer about this: What to do if it is too long
+      if (val in tds71.rules.txtLength)
+      {
+        if (attrs[val].length > tds71.rules.txtLength[val])
+        {
+          // First try splitting the attribute and grabbing the first value
+          var tStr = attrs[val].split(';');
+          if (tStr[0].length <= tds71.rules.txtLength[val])
           {
-            // First try splitting the attribute and grabbing the first value
-            var tStr = attrs[val].split(';');
-            if (tStr[0].length <= tds71.rules.txtLength[val])
-            {
-              attrs[val] = tStr[0];
-            }
-            else
-            {
-              hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds71.rules.txtLength[val] + ' characters.');
-              // Still too long. Chop to the maximum length.
-              attrs[val] = tStr[0].substring(0,tds71.rules.txtLength[val]);
-            }
-          } // End text attr length > max length
-        } // End in txtLength
-      } // End attrs loop
-    }
-    else
-    {
-      hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
-    } // End Drop attrs
+            attrs[val] = tStr[0];
+          }
+          else
+          {
+            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds71.rules.txtLength[val] + ' characters.');
+            // Still too long. Chop to the maximum length.
+            attrs[val] = tStr[0].substring(0,tds71.rules.txtLength[val]);
+          }
+        } // End text attr length > max length
+      } // End in txtLength
+    } // End attrs loop
 
     // Repack the OTH field
     if (Object.keys(othList).length > 0)
@@ -302,10 +301,21 @@ tds71 = {
     var tdsAttrList = tds71.thematicLookup[tds71.thematicGroupList[gFcode]];
     var attrList = tds71.attrLookup[gFcode];
 
-    for (var i = 0, len = tdsAttrList.length; i < len; i++)
+    // Commented this out until we get resolution from QA
+    // for (var i = 0, len = tdsAttrList.length; i < len; i++)
+    // {
+    //   if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+    //   //if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+    // }
+
+    // Now fix the Closure attributes
+    for (var i in tds71.rules.closureList)
     {
-      if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
-      //if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+      // If it's in the feature, nothing to do
+      if (~attrList.indexOf(i)) continue;
+
+      // If it is in the Thematic feature, just set a default value BUT only if we are not going to the UI
+      if (~tdsAttrList.indexOf(i) && tds71.configOut.OgrFormat !== '') attrs[i] = '-999999';
     }
   }, // End validateThematicAttrs
 
@@ -768,7 +778,7 @@ tds71 = {
     }
 
     // Add the LayerName to the source
-    if ((! tags.source) && layerName !== '') tags.source = 'tdsv70:' + layerName.toLowerCase();
+    if ((! tags.source) && layerName !== '') tags.source = 'tdsv71:' + layerName.toLowerCase();
 
     // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
     if (attrs.UFI)
@@ -2496,7 +2506,10 @@ tds71 = {
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
-        || '';
+        || 'noInformation';
+
+      // Drop the default value so that it doesn't cause issues in the UI
+      if (attrs.ZI001_SDV == 'noInformation') delete attrs.ZI001_SDV;
 
     // Fix the ZI020_GE4X Values
     // NOTE: This is the opposite to what is done in the toOSM post processing
@@ -2571,7 +2584,8 @@ tds71 = {
       case 'crossing_box':
       case 'engine_shed':
       case 'workshop':
-        notUsedTags.railway = tags.railway; // Preserving this
+        notUsedTags.railway = tags.railway; // Preserving thisjavascript ~ operator
+
         break;
     }
 
@@ -2669,7 +2683,7 @@ tds71 = {
 
       // Add some metadata
       if (!tags.uuid && tds71.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
-      if (!tags.source) tags.source = 'tdsv70:' + layerName.toLowerCase();
+      if (!tags.source) tags.source = 'tdsv71:' + layerName.toLowerCase();
 
       // Debug:
       if (tds71.configIn.OgrDebugDumptags == 'true')
@@ -3026,7 +3040,7 @@ tds71 = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv70'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv71'}, tableName: ''});
           return returnData;
         }
       }

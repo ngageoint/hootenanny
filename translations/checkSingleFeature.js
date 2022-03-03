@@ -36,7 +36,7 @@ var HOOT_HOME = process.env.HOOT_HOME;
 transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 
 // Skip the TransportationGroundCrv type layers
-hoot.Settings.set({"ogr.tds.structure":"false"});
+hoot.Settings.set({"ogr.thematic.structure":"true"});
 
 // LOTS of debug output
 hoot.Settings.set({"ogr.debug.dumptags":"true"});
@@ -45,7 +45,7 @@ hoot.Settings.set({"ogr.debug.dumptags":"true"});
 hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
 
 // Set this to false to  keep  default/usless values
-// hoot.Settings.set({"reader.drop.defaults":"true"});
+hoot.Settings.set({"reader.drop.defaults":"false"});
 
 
 // ####################################################################################
@@ -53,9 +53,8 @@ hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
 // Parameters for the call:  schema, F_CODE, {attribute:value}. ['Point','Line','Area']
 // NOTE: if the geometry is not specified, the default is to try all geometries
 
-
 // console.log('Just the F_CODE');
-// transTest.testTranslated('MGCP','AQ040',{});
+// transTest.testTranslated('TDSv71','AL013',{});
 
 // console.log('\nF_CODE with attributes');
 // transTest.testTranslated('MGCP','AQ040',{'FUN':'6','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
@@ -63,13 +62,17 @@ hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
 // console.log('\nF_CODE with default attributes');
 // transTest.testTranslated('MGCP','AQ040',{'VOI':'N_A','OHB':'-32767.0','FUN':'0','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
 
-console.log('\nF_CODE with attributes');
-transTest.testTranslated('MGCP','BH140',{},['Line']);
+// console.log('\nF_CODE with attributes');
+// transTest.testTranslated('MGCP','AL015',{'HWT':'20','FFN':'850'},['Point']);
 
+console.log('\nF_CODE with attributes');
+transTest.testTranslated('GGDMv30','BA010',{'SLT':'6'},['Line']);
+
+// transTest.testTranslated('MGCP','AL015',{'HWT':'20','FFN':'850'});
 
 // Parameters for the call:  schema, {tag:value}
-console.log('\nOSM Tags');
-transTest.testOSM('MGCP',{'poi':'yes','amenity':'cafe','uuid':'{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}',});
+// console.log('\nOSM Tags');
+// transTest.testOSM('MGCP',{'poi':'yes','amenity':'cafe','uuid':'{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}',});
 
 // End
 
