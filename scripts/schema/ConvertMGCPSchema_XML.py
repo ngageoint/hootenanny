@@ -485,7 +485,7 @@ if __name__ == "__main__":
         dumpEnumerations(schema,'enumMGCP')
 
     elif args.fieldvalues:
-        printFieldValues(schema,'mgcpFieldValues')
+        printFieldValues(schema)
 
     else:
         printCopyright()

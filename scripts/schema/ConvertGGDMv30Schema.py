@@ -528,7 +528,7 @@ elif args.dumpenum:
     dumpEnumerations(schema,'enumGGDM30')
 
 elif args.fieldvalues:
-    printFieldValues(schema,'ggdmFieldValues')
+    printFieldValues(schema)
 
 else: # The default is to dump out a basic schema with no text enumerations
     schema = convertTextEnumerations(schema)
