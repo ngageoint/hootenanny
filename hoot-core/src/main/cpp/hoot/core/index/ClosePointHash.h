@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CLOSEPOINTHASH_H
@@ -83,6 +83,11 @@ public:
   void resetIterator();
 
   size_t size() const { return _bins.size(); }
+
+  /**
+   * Empty out the ClosePointHash object
+   */
+  void reset();
 
 private:
 

@@ -50,17 +50,19 @@ public:
   /**
    * @brief getW1Index returns the start index of the match in w1.
    */
-  int getW1Index() const{ return _i1; }
+  int getW1Index() const{ return static_cast<int>(_i1); }
 
   /**
    * @brief getW2Index returns the start index of the match in w2.
    */
-  int getW2Index() const{ return _i2; }
+  int getW2Index() const{ return static_cast<int>(_i2); }
 
 private:
 
-  std::shared_ptr<Way> _w1, _w2;
-  size_t _i1, _i2;
+  std::shared_ptr<Way> _w1;
+  std::shared_ptr<Way> _w2;
+  size_t _i1;
+  size_t _i2;
 };
 
 }

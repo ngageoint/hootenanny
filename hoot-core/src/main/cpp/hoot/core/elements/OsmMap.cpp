@@ -290,11 +290,9 @@ void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
     // it modifies the order in which the elements are written to the output. Which presumably (?)
     // impacts the ID when reading the file with re-numbering. Sad.
     // TODO: The BigPertyCmd.sh test no longer exists, so maybe try it again.
-//    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
-//    if (_nodes.bucket_count() < minBuckets)
-//    {
-//      _nodes.resize(minBuckets);
-//    }
+    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
+    if (_nodes.bucket_count() < minBuckets)
+      _nodes.resize(minBuckets);
 
     for (const auto& node : nodes)
     {
@@ -590,6 +588,56 @@ void OsmMap::replaceNode(long oldId, long newId)
     RemoveNodeByEid::removeNodeNoCheck(shared_from_this(), oldId);
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
+}
+
+void OsmMap::replaceNodes(const std::map<long, long>& replacements)
+{
+  //  Iterate all relations looking for members in the map
+  for (auto r = _relations.begin(); r != _relations.end(); ++r)
+  {
+    bool updated = false;
+    RelationPtr relation = r->second;
+    vector<RelationData::Entry> members = relation->getMembers();
+    //  Iterate all of the members looking for nodes from the replacements
+    for (size_t i = 0; i < members.size(); ++i)
+    {
+      ElementId eid = members[i].getElementId();
+      //  Update the element ID of the node in the relation
+      if (eid.getType() == ElementType::Node && replacements.find(eid.getId()) != replacements.end())
+      {
+        members[i].setElementId(ElementId(ElementType::Node, replacements.at(eid.getId())));
+        updated = true;
+      }
+    }
+    //  Don't update the members if nothing changed
+    if (updated)
+      relation->setMembers(members);
+  }
+  //  Iterate all ways looking for members in the map
+  for (auto w = _ways.begin(); w != _ways.end(); ++w)
+  {
+    bool updated = false;
+    WayPtr way = w->second;
+    vector<long> nodes = way->getNodeIds();
+    //  Iterate all of the nodes in the way looking for replacements
+    for (size_t i = 0; i < nodes.size(); ++i)
+    {
+      if (replacements.find(nodes[i]) != replacements.end())
+      {
+        nodes[i] = replacements.at(nodes[i]);
+        updated = true;
+      }
+    }
+    //  Don't update the nodes if nothing changed
+    if (updated)
+      way->setNodes(nodes);
+  }
+  //  Iterate all of the
+  for (auto r = replacements.begin(); r != replacements.end(); ++r)
+  {
+    _index->removeNode(getNode(r->first));
+    _nodes.erase(r->first);
+  }
 }
 
 void OsmMap::setProjection(const std::shared_ptr<OGRSpatialReference>& srs)

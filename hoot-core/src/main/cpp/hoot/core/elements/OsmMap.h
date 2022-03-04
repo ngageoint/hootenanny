@@ -63,8 +63,7 @@ class RubberSheet;
  * OsmMap class maintains pointers to OsmData and an OsmIndex where neither directly references the
  * other.
  */
-class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider,
-  public ElementIterator
+class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider, public ElementIterator
 {
 public:
 
@@ -169,6 +168,11 @@ public:
    * removed from this OsmMap entirely.
    */
   void replaceNode(long oldId, long newId);
+  /**
+   * Replace all of the nodes in the map<from, to> all at one time, deleting the 'from' nodes after updating
+   * all ways and relations with the new values, used to quickly replace large quantities of nodes
+   */
+  void replaceNodes(const std::map<long, long>& replacements);
 
   long createNextNodeId() const { return _idGen->createNodeId(); }
 

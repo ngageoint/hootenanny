@@ -46,6 +46,8 @@
 #include <tgs/StreamUtils.h>
 #include <tgs/RStarTree/HilbertRTree.h>
 
+#include <unordered_set>
+
 using namespace Tgs;
 
 namespace hoot
@@ -124,27 +126,35 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   cph.resetIterator();
   ExactTagDifferencer tagDiff;
 
+  //  Keep a map of the replacements to do all of the replacements at the same time
+  std::map<long, long> replacements;
+  std::multimap<long, long> reverse_replacements;
+  //  Keep track of nodes that have already been deleted so they aren't used as replacements
+  std::unordered_set<long> deleted;
+
   while (cph.next())
   {
     const std::vector<long>& v = cph.getMatch();
-
-    for (auto matchIdI : v)
+    //  Iterate all of the nodes in the match group against all other nodes in the group
+    for (auto matchId1 : v)
     {
-      if (!map->containsNode(matchIdI))
+      if (!map->containsNode(matchId1))
         continue;
 
-      for (auto matchIdJ : v)
+      for (auto matchId2 : v)
       {
         bool replace = true;
         double calcdDistanceSquared = -1.0;
-
-        if (matchIdI != matchIdJ && map->containsNode(matchIdJ))
+        //  Don't compare a node against itself of if the node doesn't exist or won't exist later
+        if (matchId1 != matchId2 && map->containsNode(matchId2) &&
+            replacements.find(matchId2) == replacements.end() &&
+            deleted.find(matchId1) == deleted.end())
         {
-          NodePtr n1 = planar->getNode(matchIdI);
-          NodePtr n2 = planar->getNode(matchIdJ);
+          NodePtr n1 = planar->getNode(matchId1);
+          NodePtr n2 = planar->getNode(matchId2);
           LOG_VART(n1);
           LOG_VART(n2);
-
+          //  Must have the node to compare the tags
           if ((n1 != nullptr && n2 != nullptr) && (n1->getStatus() == n2->getStatus() || _ignoreStatus))
           {
             calcdDistanceSquared = calcDistanceSquared(n1, n2);
@@ -174,7 +184,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               if ((tags1.empty() && tags2.empty()) ||
                   (!tags1.empty() && tags2.empty()))
               {
-                //  When both sets of tags are empty or the first set is and the second set isn't, replace
+                //  When both sets of tags are empty or the first set isn't and the second set is, replace
                 replace = true;
               }
               else if (tags1.empty() && !tags2.empty())
@@ -194,13 +204,40 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               }
 
               LOG_VART(replace);
+              //  Check for already deleted nodes pointing to node 2
               if (replace)
               {
-                LOG_TRACE(
-                  "Merging nodes: " << ElementId(ElementType::Node, matchIdJ) << " and " <<
-                  ElementId(ElementType::Node, matchIdI) << "...");
-                map->replaceNode(n2->getId(), n1->getId());
-                _numAffected++;
+                //  Check for circular deletes
+                bool found = replacements.find(matchId1) != replacements.end();
+                if (!found || (found && replacements[matchId1] != matchId2))
+                {
+                  LOG_TRACE("Merging nodes: " << ElementId(ElementType::Node, matchId2) << " and " <<
+                            ElementId(ElementType::Node, matchId1) << "...");
+                  //  Check if node 1 is already in the replacements as node 2
+                  if (reverse_replacements.find(matchId2) != reverse_replacements.end())
+                  {
+                    std::vector<long> updates;
+                    auto range = reverse_replacements.equal_range(matchId2);
+                    for (auto it = range.first; it != range.second; ++it)
+                    {
+                      //  Update the replacements with the new value
+                      replacements[it->second] = matchId1;
+                      //  Keep track of the values to update in the reverse
+                      updates.emplace_back(it->second);
+                    }
+                    //  Remove all instances of ID2
+                    reverse_replacements.erase(matchId2);
+                    //  Add all updates back into the reverse list
+                    for (auto id : updates)
+                      reverse_replacements.emplace(matchId1, id);
+                  }
+                  //  Add this set to the replacements lists
+                  replacements.emplace(matchId2, matchId1);
+                  reverse_replacements.emplace(matchId1, matchId2);
+                  //  Mark the second element as deleted now
+                  deleted.emplace(matchId2);
+                  _numAffected++;
+                }
               }
             }
           }
@@ -211,12 +248,11 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         {
           if (calcdDistanceSquared != -1.0)
           {
-            _logMergeResult(
-              matchIdI, matchIdJ, map, replace, std::sqrt(distanceSquared),
-              std::sqrt(calcdDistanceSquared));
+            _logMergeResult(matchId1, matchId2, map, replace, std::sqrt(distanceSquared),
+                            std::sqrt(calcdDistanceSquared));
           }
           else
-            _logMergeResult(matchIdI, matchIdJ, map, replace);
+            _logMergeResult(matchId1, matchId2, map, replace);
         }
       }
     }
@@ -229,6 +265,12 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                     " total nodes.");
     }
   }
+  //  Reset the CPH before moving on to the replacement in the map
+  cph.reset();
+  //  Debugging to see replacement matches
+  LOG_TRACE("Replacements:\n" << replacements);
+  //  Replace all of the nodes in one fell swoop
+  map->replaceNodes(replacements);
 }
 
 bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,
