@@ -61,7 +61,7 @@ void NonIntersectionWayJoiner::_joinAtNode()
   std::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   HighwayCriterion highway(_map);
   //  Find all ways that have non-intersection endpoints that can be joined
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     //  Eliminate 0 and 1 node ways (there are some...)
@@ -83,9 +83,9 @@ void NonIntersectionWayJoiner::_joinAtNode()
       ids.insert(last);
   }
   //  Iterate all of the nodes and merge the two ways that join at that node
-  for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
+  for (auto node_id : ids)
   {
-    const set<long>& way_ids = nodeToWayMap->getWaysByNode(*it);
+    const set<long>& way_ids = nodeToWayMap->getWaysByNode(node_id);
     const vector<long> v_way_ids(way_ids.begin(), way_ids.end());
     if (way_ids.size() != 2)
       continue;

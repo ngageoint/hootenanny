@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ProbabilityOfMatch.h"
 
 // GEOS
-#include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 
 // Hoot
@@ -60,8 +60,8 @@ ProbabilityOfMatch::ProbabilityOfMatch()
   _parallelExp = ConfigOptions().getMatchParallelExponent();
 }
 
-double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2) const
+double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+                                          const ConstWayPtr& w2) const
 {
   double score = 1.0;
 
@@ -69,14 +69,11 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
   OneWayCriterion oneWayCrit;
   if (oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2) &&
       !DirectionFinder::isSimilarDirection(map, w1, w2))
-  {
     score *= .1;
-  }
+
   // if we can't compare the scores, then just give it a 1. Hrmph.
   if (score < 0.0)
-  {
     score = 1.0;
-  }
 
   return score;
 }
@@ -88,7 +85,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 }
 
 double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-  const std::shared_ptr<const LineString>& ls2, Meters circularError)
+                                         const std::shared_ptr<const LineString>& ls2, Meters circularError)
 {
   Meters distanceSum = 0.0;
 
@@ -98,9 +95,9 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   _dMax = 0.0;
 
-  for (size_t i = 0; i < v.size(); i++)
+  for (const auto& coord : v)
   {
-    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(coord));
     LOG_VART(ls2->distance(point.get()));
     double d = ls2->distance(point.get());
     distanceSum += d;
@@ -109,7 +106,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   _dMax /= (circularError + w1->getCircularError());
 
-  Meters distanceMean = distanceSum / v.size();
+  Meters distanceMean = distanceSum / static_cast<Meters>(v.size());
 
   // TODO: Make me better.
   // E.g. if s1 = 50 & s2 = 50, then sigma = 70.
@@ -136,7 +133,7 @@ ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
 }
 
 double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-  const ConstWayPtr &w2) const
+                                       const ConstWayPtr &w2) const
 {
   Meters l1 = ElementToGeometryConverter(map).convertToLineString(w1)->getLength();
   Meters l2 = ElementToGeometryConverter(map).convertToLineString(w2)->getLength();
@@ -178,16 +175,10 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
 double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2) const
 {
   double result = 1.0;
-
   if (w1->getNodeId(0) != w2->getNodeId(0))
-  {
     result *= 0.5;
-  }
   if (w1->getLastNodeId() != w2->getLastNodeId())
-  {
     result *= 0.5;
-  }
-
   return result;
 }
 
