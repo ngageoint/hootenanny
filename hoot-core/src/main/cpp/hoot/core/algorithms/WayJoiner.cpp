@@ -50,13 +50,13 @@ using namespace std;
 namespace hoot
 {
 
-WayJoiner::WayJoiner() :
-_leavePid(false),
-_writePidToChildId(false),
-_numJoined(0),
-_numProcessed(0),
-_totalWays(0),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+WayJoiner::WayJoiner()
+  : _leavePid(false),
+    _writePidToChildId(false),
+    _numJoined(0),
+    _numProcessed(0),
+    _totalWays(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -108,10 +108,10 @@ void WayJoiner::_joinParentChild()
   LOG_INFO("\tJoining parent ways to children...");
 
   WayMap ways = _map->getWays();
-  _totalWays = ways.size();
+  _totalWays = static_cast<int>(ways.size());
   vector<long> ids;
   //  Find all ways that have a split parent id
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     if (way->hasPid())
@@ -126,9 +126,9 @@ void WayJoiner::_joinParentChild()
   sort(ids.begin(), ids.end());
 
   //  Iterate all of the ids
-  for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
+  for (auto way_id : ids)
   {
-    WayPtr way = ways[*it];
+    WayPtr way = ways[way_id];
     if (way)
     {
       LOG_VART(way->getElementId());
@@ -160,7 +160,7 @@ void WayJoiner::_joinSiblings()
   // Get a list of ways that still have a parent
   map<long, deque<long>> w;
   //  Find all ways that have a split parent id
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     LOG_VART(way->getElementId());
@@ -173,10 +173,11 @@ void WayJoiner::_joinSiblings()
   }
 
   //  Rejoin any sibling ways where the parent id no longer exists
-  for (map<long, deque<long>>::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
+  for (auto map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
     LOG_VART(way_ids);
+
     while (way_ids.size() > 1)
       _rejoinSiblings(way_ids);
 
@@ -196,7 +197,7 @@ void WayJoiner::_joinAtNode()
   WayMap ways = _map->getWays();
   unordered_set<long> ids;
   //  Find all ways that have a split parent id
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     if (way->hasPid())
@@ -204,23 +205,23 @@ void WayJoiner::_joinAtNode()
   }
   std::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   //  Iterate all of the nodes and check for compatible ways to join them to
-  for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
+  for (auto way_id : ids)
   {
-    WayPtr way = ways[*it];
+    WayPtr way = ways[way_id];
     LOG_VART(way->getElementId());
     Tags pTags = way->getTags();
     if (way->getNodeCount() < 1)
       continue;
     //  Check each of the endpoints for ways to merge
     vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
-    for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
+    for (auto endpoint_id : endpoints)
     {
       //  Find all ways connected to this node
-      const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
+      const set<long>& way_ids = nodeToWayMap->getWaysByNode(endpoint_id);
       LOG_VART(way_ids);
-      for (set<long>::const_iterator w = way_ids.begin(); w != way_ids.end(); ++w)
+      for (auto way_id : way_ids)
       {
-        WayPtr child = _map->getWay(*w);
+        WayPtr child = _map->getWay(way_id);
         if (child && way->getId() != child->getId() && _areJoinable(way, child))
         {
           LOG_VART(child->getElementId());
@@ -270,7 +271,7 @@ void WayJoiner::_writeParentIdsToChildIds() const
 {
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     LOG_VART(way->getElementId());
@@ -284,9 +285,7 @@ void WayJoiner::_writeParentIdsToChildIds() const
       ElementPtr newWay = way->clone();
       newWay->setId(pid);
       if (newWay->hasTag(MetadataTags::HootId()))
-      {
         newWay->setTag(MetadataTags::HootId(), QString::number(pid));
-      }
       _map->replace(way, newWay);
       pidsUsed.insert(pid);
     }
@@ -297,7 +296,7 @@ void WayJoiner::_resetParents() const
 {
   WayMap ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     if (way->hasPid())
