@@ -140,7 +140,7 @@ def openFile(path, mode):
 
 # Print JSON field values
 # This prints out the schema as a JSON lookup table for the Translation Assistant
-def printFieldValues(schema,variableName):
+def printFieldValues(schema):
     tList = {}
     for i in schema:
         for j in schema[i]['columns']:
@@ -169,8 +169,7 @@ def printFieldValues(schema,variableName):
                 continue
 
     # Now start printing
-    print '{'
-    print '  "%s":[' % (variableName)
+    print '['
     numKeys = len(tList.keys())
     for i in sorted(tList.keys()):
         print '  {'
@@ -195,8 +194,7 @@ def printFieldValues(schema,variableName):
             print '  },'
             numKeys -= 1
 
-    print '  ]'
-    print '}'
+    print ']'
 # End printFieldValues
 
 

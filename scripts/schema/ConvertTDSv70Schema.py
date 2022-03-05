@@ -683,7 +683,7 @@ elif args.dumpenum:
     dumpEnumerations(schema,'enumTDS70')
 
 elif args.fieldvalues:
-    printFieldValues(schema,'tdsv70FieldValues')
+    printFieldValues(schema)
 
 else: # The default is to dump out a basic schema with no text enumerations
     schema = convertTextEnumerations(schema)

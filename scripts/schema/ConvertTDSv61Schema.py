@@ -1589,7 +1589,7 @@ elif args.dumpenum:
     dumpEnumerations(schema,'enumTDSv61')
 
 elif args.fieldvalues:
-    printFieldValues(schema,'tdsv61FieldValues')
+    printFieldValues(schema)
 
 else:
     convertTextEnumerations(schema)

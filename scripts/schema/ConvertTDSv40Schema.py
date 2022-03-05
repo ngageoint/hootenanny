@@ -1455,7 +1455,7 @@ elif args.dumpenum:
     dumpEnumerations(schema,'enumTDSv40')
 
 elif args.fieldvalues:
-    printFieldValues(schema,'tdsv40FieldValues')
+    printFieldValues(schema)
 
 else:
     convertTextEnumerations(schema)
