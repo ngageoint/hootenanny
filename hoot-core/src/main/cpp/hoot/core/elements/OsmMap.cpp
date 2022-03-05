@@ -632,7 +632,7 @@ void OsmMap::replaceNodes(const std::map<long, long>& replacements)
     if (updated)
       way->setNodes(nodes);
   }
-  //  Iterate all of the
+  //  Iterate all of the nodes that are being replaced and delete them
   for (auto r = replacements.begin(); r != replacements.end(); ++r)
   {
     _index->removeNode(getNode(r->first));
