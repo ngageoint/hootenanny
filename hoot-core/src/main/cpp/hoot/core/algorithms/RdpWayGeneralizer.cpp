@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RdpWayGeneralizer.h"
@@ -44,8 +44,8 @@ using namespace std;
 namespace hoot
 {
 
-RdpWayGeneralizer::RdpWayGeneralizer(double epsilon) :
-_removeNodesSharedByWays(false)
+RdpWayGeneralizer::RdpWayGeneralizer(double epsilon)
+  : _removeNodesSharedByWays(false)
 {
   setEpsilon(epsilon);
 }
@@ -53,9 +53,7 @@ _removeNodesSharedByWays(false)
 void RdpWayGeneralizer::setEpsilon(double epsilon)
 {
   if (epsilon <= 0.0)
-  {
     throw HootException("Invalid epsilon value: " + QString::number(epsilon));
-  }
   _epsilon = epsilon;
   LOG_VART(_epsilon);
 }
@@ -63,9 +61,7 @@ void RdpWayGeneralizer::setEpsilon(double epsilon)
 int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map passed to way generalizer.");
-  }
 
   LOG_TRACE("Attempting to generalize: " << way->getElementId() << "...");
 
@@ -76,13 +72,10 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   // filter the nodes to be generalized to those in this way and those with no information tags;
   // tried using hoot filters here at first, but it didn't end up making sense
   QList<long> wayNodeIdsAfterFiltering;
-  for (QList<long>::const_iterator it = wayNodeIdsBeforeFiltering.begin();
-       it != wayNodeIdsBeforeFiltering.end(); ++it)
+  for (auto node_id : qAsConst(wayNodeIdsBeforeFiltering))
   {
-    if (_map->getNode(*it)->getTags().getInformationCount() == 0)
-    {
-      wayNodeIdsAfterFiltering.append(*it);
-    }
+    if (_map->getNode(node_id)->getTags().getInformationCount() == 0)
+      wayNodeIdsAfterFiltering.append(node_id);
   }
   LOG_VART(wayNodeIdsAfterFiltering);
 
@@ -100,16 +93,13 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   // If _removeNodesSharedByWays=true, we don't want to remove any nodes shared between ways. So,
   // let's come up with a new removal list that excludes those nodes.
   QSet<long> modifiedNodeIdsToRemove;
-  for (QSet<long>::const_iterator it = nodeIdsToRemove.begin(); it != nodeIdsToRemove.end(); ++it)
+  for (auto node_id : qAsConst(nodeIdsToRemove))
   {
-    const long nodeId = *it;
-    LOG_VART(nodeId);
+    LOG_VART(node_id);
     LOG_VART(_removeNodesSharedByWays);
-    LOG_VART(WayUtils::nodeContainedByMoreThanOneWay(nodeId, _map));
-    if (_removeNodesSharedByWays || !WayUtils::nodeContainedByMoreThanOneWay(nodeId, _map))
-    {
-      modifiedNodeIdsToRemove.insert(nodeId);
-    }
+    LOG_VART(WayUtils::nodeContainedByMoreThanOneWay(node_id, _map));
+    if (_removeNodesSharedByWays || !WayUtils::nodeContainedByMoreThanOneWay(node_id, _map))
+      modifiedNodeIdsToRemove.insert(node_id);
   }
   LOG_VART(modifiedNodeIdsToRemove);
 
@@ -138,16 +128,14 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   // this with SuperfluousNodeRemover, but that might be a little more intrusive)
   int nodesRemoved = 0;
   LOG_VART(originalNodeIdsToRemove);
-  for (QSet<long>::const_iterator it = originalNodeIdsToRemove.begin();
-       it != originalNodeIdsToRemove.end(); ++it)
+  for (auto node_id : qAsConst(originalNodeIdsToRemove))
   {
-    const long nodeId = *it;
-    LOG_VART(nodeId);
+    LOG_VART(node_id);
     LOG_VART(_removeNodesSharedByWays);
-    LOG_VART(nodeIdsNotAllowedToBeRemoved.contains(nodeId));
-    if (_removeNodesSharedByWays || !nodeIdsNotAllowedToBeRemoved.contains(nodeId))
+    LOG_VART(nodeIdsNotAllowedToBeRemoved.contains(node_id));
+    if (_removeNodesSharedByWays || !nodeIdsNotAllowedToBeRemoved.contains(node_id))
     {
-      RemoveNodeByEid::removeNode(_map, nodeId, true);
+      RemoveNodeByEid::removeNode(_map, node_id, true);
       nodesRemoved++;
     }
   }
@@ -156,35 +144,29 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   return nodesRemoved;
 }
 
-QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
-  const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
-  const QList<long>& generalizedNodeIds) const
+QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(const QSet<long>& nodeIdsNotAllowedToBeRemoved,
+                                                                                  const QList<long>& nodeIdsBeforeGeneralization,
+                                                                                  const QList<long>& generalizedNodeIds) const
 {
   LOG_VART(nodeIdsBeforeGeneralization);
   LOG_VART(generalizedNodeIds);
 
   QList<long> newNodeIds = generalizedNodeIds;
 
-  for (QSet<long>::const_iterator it = nodeIdsNotAllowedToBeRemoved.begin();
-       it != nodeIdsNotAllowedToBeRemoved.end(); ++it)
+  for (auto nodeIdToAddBack : qAsConst(nodeIdsNotAllowedToBeRemoved))
   {
-    const long nodeIdToAddBack = *it;
     LOG_VART(nodeIdToAddBack);
     const int originalIndex = nodeIdsBeforeGeneralization.indexOf(nodeIdToAddBack);
     LOG_VART(originalIndex);
 
     QList<long> originalBefore;
     for (int i = 0; i < originalIndex; i++)
-    {
       originalBefore.append(nodeIdsBeforeGeneralization.at(i));
-    }
     LOG_VART(originalBefore);
 
     QList<long> originalAfter;
     for (int i = originalIndex + 1; i < nodeIdsBeforeGeneralization.size(); i++)
-    {
       originalAfter.append(nodeIdsBeforeGeneralization.at(i));
-    }
     LOG_VART(originalAfter);
 
     int closestOriginalBeforeIndex = -1;
@@ -197,9 +179,7 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
       }
     }
     if (closestOriginalBeforeIndex == -1)
-    {
       closestOriginalBeforeIndex = 0;
-    }
     LOG_VART(closestOriginalBeforeIndex);
 
     int closestOriginalAfterIndex = -1;
@@ -212,14 +192,9 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
       }
     }
     if (closestOriginalAfterIndex == -1)
-    {
       closestOriginalAfterIndex = generalizedNodeIds.size() - 1;
-    }
     LOG_VART(closestOriginalAfterIndex);
 
-    //assert(closestOriginalBeforeIndex != closestOriginalAfterIndex);
-    //assert(closestOriginalBeforeIndex < closestOriginalAfterIndex);
-    //assert((closestOriginalAfterIndex - closestOriginalBeforeIndex) >= 2);
     const int newNodeInsertIndex = closestOriginalBeforeIndex + 1;
     LOG_VART(newNodeInsertIndex);
     newNodeIds.insert(newNodeInsertIndex, nodeIdToAddBack);
@@ -231,19 +206,13 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
   return newNodeIds;
 }
 
-QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
-  const QList<std::shared_ptr<const Node>>& wayPoints)
+QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(const QList<std::shared_ptr<const Node>>& wayPoints)
 {
-  //LOG_VART(wayPoints.size());
   if (wayPoints.size() < 3)
-  {
     return wayPoints;
-  }
 
   std::shared_ptr<const Node> firstPoint = wayPoints.at(0);
-  //LOG_VART(firstPoint->toString());
   std::shared_ptr<const Node> lastPoint = wayPoints.at(wayPoints.size() - 1);
-  //LOG_VART(lastPoint->toString());
 
   int indexOfLargestPerpendicularDistance = -1;
   double largestPerpendicularDistance = 0;
@@ -258,9 +227,6 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
       indexOfLargestPerpendicularDistance = i;
     }
   }
-  //LOG_VART(largestPerpendicularDistance);
-  //LOG_VART(indexOfLargestPerpendicularDistance);
-  //LOG_VART(_epsilon);
 
   if (largestPerpendicularDistance > _epsilon)
   {
@@ -291,31 +257,20 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
   }
 }
 
-double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-  const std::shared_ptr<const Node> splitPoint,
-  const std::shared_ptr<const Node> lineToBeReducedStartPoint,
-  const std::shared_ptr<const Node> lineToBeReducedEndPoint) const
+double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(const std::shared_ptr<const Node> splitPoint,
+                                                                                    const std::shared_ptr<const Node> lineToBeReducedStartPoint,
+                                                                                    const std::shared_ptr<const Node> lineToBeReducedEndPoint) const
 {
-  //LOG_VART(lineToBeReducedStartPoint->getX());
-  //LOG_VART(lineToBeReducedEndPoint->getX());
   double perpendicularDistance;
   if (lineToBeReducedStartPoint->getX() == lineToBeReducedEndPoint->getX())
-  {
     perpendicularDistance = abs(splitPoint->getX() - lineToBeReducedStartPoint->getX());
-  }
   else
   {
-    const double slope =
-      (lineToBeReducedEndPoint->getY() - lineToBeReducedStartPoint->getY()) /
-      (lineToBeReducedEndPoint->getX() - lineToBeReducedStartPoint->getX());
-    //LOG_VART(slope);
-    const double intercept =
-      lineToBeReducedStartPoint->getY() - (slope * lineToBeReducedStartPoint->getX());
-    //LOG_VART(intercept);
-    perpendicularDistance =
-      abs(slope * splitPoint->getX() - splitPoint->getY() + intercept) / sqrt(pow(slope, 2) + 1);
+    const double slope = (lineToBeReducedEndPoint->getY() - lineToBeReducedStartPoint->getY()) /
+                         (lineToBeReducedEndPoint->getX() - lineToBeReducedStartPoint->getX());
+    const double intercept = lineToBeReducedStartPoint->getY() - (slope * lineToBeReducedStartPoint->getX());
+    perpendicularDistance = abs(slope * splitPoint->getX() - splitPoint->getY() + intercept) / sqrt(pow(slope, 2) + 1);
   }
-  //LOG_VART(perpendicularDistance);
   return perpendicularDistance;
 }
 

@@ -8,7 +8,7 @@ export OUTPUT_DIR=$HOOT_HOME/test-output/cmd/slow/SplitLongWaysTest
 export DATA_DIR=$HOOT_HOME/test-files/cmd/slow/SplitLongWaysTest
 export INPUTS=$DATA_DIR/SplitLongWaysTest.shp
 export KNOWN_GOOD_OUTPUT=$DATA_DIR/SplitLongWaysTestResults.osm.pbf
-export TEST_OUTPUT=$OUTPUT_DIR/SplitLongWaysTest.osm.pbf
+export TEST_OUTPUT=$OUTPUT_DIR/SplitLongWaysTest.osm #.pbf
 
 # Wipe out output dir so we don't get stale data and false pass
 rm -rf $OUTPUT_DIR

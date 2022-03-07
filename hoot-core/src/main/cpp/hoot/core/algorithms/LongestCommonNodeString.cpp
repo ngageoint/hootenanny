@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "LongestCommonNodeString.h"
@@ -47,16 +47,13 @@ int LongestCommonNodeString::apply()
   _i2 = -1;
 
   if (_w1->getNodeCount() == 0 || _w2->getNodeCount() == 0)
-  {
     return 0;
-  }
 
   const vector<long>& str1 = _w1->getNodeIds();
   const vector<long>& str2 = _w2->getNodeIds();
 
-  int* curr = new int[_w2->getNodeCount()];
-  int* prev = new int[_w2->getNodeCount()];
-  int* swap = nullptr;
+  std::vector<int> curr(_w2->getNodeCount());
+  std::vector<int> prev(_w2->getNodeCount());
   int maxSubstr = 0;
 
   for (size_t i = 0; i < str1.size(); ++i)
@@ -64,34 +61,24 @@ int LongestCommonNodeString::apply()
     for (size_t j = 0; j < str2.size(); ++j)
     {
       if (str1[i] != str2[j])
-      {
         curr[j] = 0;
-      }
       else
       {
         if (i == 0 || j == 0)
-        {
           curr[j] = 1;
-        }
         else
-        {
           curr[j] = 1 + prev[j-1];
-        }
+
         if (curr[j] > maxSubstr)
         {
-          _i1 = (int)i - curr[j] + 1;
-          _i2 = (int)j - curr[j] + 1;
+          _i1 = i - curr[j] + 1;
+          _i2 = j - curr[j] + 1;
           maxSubstr = curr[j];
         }
       }
     }
-    swap = curr;
-    curr = prev;
-    prev = swap;
+    curr.swap(prev);
   }
-  delete [] curr;
-  delete [] prev;
-
   return maxSubstr;
 }
 

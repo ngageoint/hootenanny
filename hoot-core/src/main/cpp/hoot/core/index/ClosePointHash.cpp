@@ -127,4 +127,11 @@ int64_t ClosePointHash::_toBin(double x, double y) const
   return (yi << 32) | xi;
 }
 
+void ClosePointHash::reset()
+{
+  _bins.clear();
+  _idTobin.clear();
+  resetIterator();
+}
+
 }

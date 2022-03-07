@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RDP_WAY_GENERALIZER_H
@@ -115,8 +115,7 @@ private:
     @param wayPoints the collection of points to be reduced
     @returns a reduced set of line points
     */
-  QList<std::shared_ptr<const Node>> _getGeneralizedPoints(
-    const QList<std::shared_ptr<const Node>>& wayPoints);
+  QList<std::shared_ptr<const Node>> _getGeneralizedPoints(const QList<std::shared_ptr<const Node>>& wayPoints);
 
   /*
     Finds the perpendicular distance between an imaginary line drawn from the first point on a line
@@ -128,10 +127,9 @@ private:
     @param lineToBeReducedEndPoint end point on the line to be reduced; also the ending
     point for the imaginary line drawn directly from start to end point on the line to be reduced
     */
-  double _getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-    const std::shared_ptr<const Node> splitPoint,
-    const std::shared_ptr<const Node> lineToBeReducedStartPoint,
-    const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
+  double _getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(const std::shared_ptr<const Node> splitPoint,
+                                                                   const std::shared_ptr<const Node> lineToBeReducedStartPoint,
+                                                                   const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
 
   /*
    * Takes in the way node IDs before the way was generalized and after it was generalized and
@@ -140,9 +138,9 @@ private:
    * keep shared nodes into the recursive generalization function, so we run the logic after the
    * generalization instead.
    */
-  QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
-    const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
-    const QList<long>& generalizedNodeIds) const;
+  QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(const QSet<long>& nodeIdsNotAllowedToBeRemoved,
+                                                                 const QList<long>& nodeIdsBeforeGeneralization,
+                                                                 const QList<long>& generalizedNodeIds) const;
 };
 
 }

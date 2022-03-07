@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PROBABILITYOFMATCH_H
@@ -46,22 +46,17 @@ public:
 
   static ProbabilityOfMatch& getInstance();
 
-  double attributeScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2) const;
+  double attributeScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr &w2) const;
 
+  double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
   double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2);
-  double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const std::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
+                       const std::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
 
-  double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2) const;
+  double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
-  double parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2) const;
+  double parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
-  double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2);
+  double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr &w2);
 
   double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 

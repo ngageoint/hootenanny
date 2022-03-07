@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0.28224074854" minlon="0.35617674624" maxlat="0.28256533117" maxlon="0.3566515199"/>
+    <!-- Upper-left cluster tests the first node having tags -->
+    <node visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824564966200000" lon="0.3563072202900000">
+        <tag k="name" v="Upper-left cluster"/>
+    </node>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824564775300000" lon="0.3563072460100000"/>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824564767300000" lon="0.3563072092900000"/>
+    <!-- Lower-left cluster tests the middle node having tags -->
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823251186500000" lon="0.3563058736900000"/>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823251149500000" lon="0.3563058933000000">
+        <tag k="name" v="Lower-left cluster"/>
+    </node>
+    <node visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823251020800000" lon="0.3563058763500000"/>
+    <!-- Upper-right cluster tests the last node having tags -->
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824531642800000" lon="0.3564721883700000"/>
+    <node visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824531715200000" lon="0.3564722121500000"/>
+    <node visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824531940200000" lon="0.3564721772900000">
+        <tag k="name" v="Upper-right cluster"/>
+    </node>
+    <!-- Lower-right cluster tests all nodes with no tags -->
+    <node visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823204590100000" lon="0.3564767268100000"/>
+    <node visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823204491600000" lon="0.3564767361100000"/>
+    <node visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823204465300000" lon="0.3564767226400000"/>
+    <!-- Middle cluster tests both nodes having tags -->
+    <node visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823893735200000" lon="0.3563890303300000">
+        <tag k="name" v="Middle cluster"/>
+    </node>
+    <node visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823893715400000" lon="0.3563890935200000">
+        <tag k="name" v="Middle cluster"/>
+    </node>
+    <node visible="true" id="101" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2825586640700000" lon="0.3566427472900000"/>
+    <node visible="true" id="102" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2822442575400000" lon="0.3561767462400000"/>
+    <node visible="true" id="103" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2822414503400000" lon="0.3566125695100000"/>
+    <node visible="true" id="104" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2825516460700000" lon="0.3562027131600000"/>
+    <node visible="true" id="105" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2822414503400000" lon="0.3564778222200000"/>
+    <node visible="true" id="106" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2825653311700000" lon="0.3564620315200000"/>
+    <node visible="true" id="107" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2822407485400000" lon="0.3563044754400000"/>
+    <node visible="true" id="108" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2825628748700000" lon="0.3563058790600000"/>
+    <node visible="true" id="109" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823172447700000" lon="0.3566515199000000"/>
+    <node visible="true" id="110" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2823277717800000" lon="0.3561806061800000"/>
+    <node visible="true" id="111" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824502359300000" lon="0.3566504671900000"/>
+    <node visible="true" id="112" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.2824569030300000" lon="0.3561851679400000"/>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="102"/>
+        <nd ref="4"/>
+        <nd ref="13"/>
+        <nd ref="9"/>
+        <nd ref="101"/>
+        <tag k="name" v="way-1"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="104"/>
+        <nd ref="3"/>
+        <nd ref="14"/>
+        <nd ref="12"/>
+        <nd ref="103"/>
+        <tag k="name" v="way-2"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="106"/>
+        <nd ref="8"/>
+        <nd ref="11"/>
+        <nd ref="105"/>
+        <tag k="name" v="way-3"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="108"/>
+        <nd ref="2"/>
+        <nd ref="5"/>
+        <nd ref="107"/>
+        <tag k="name" v="way-4"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="110"/>
+        <nd ref="6"/>
+        <nd ref="10"/>
+        <nd ref="109"/>
+        <tag k="name" v="way-5"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="112"/>
+        <nd ref="1"/>
+        <nd ref="7"/>
+        <nd ref="111"/>
+        <tag k="name" v="way-6"/>
+        <tag k="highway" v="primary"/>
+    </way>
+</osm>
