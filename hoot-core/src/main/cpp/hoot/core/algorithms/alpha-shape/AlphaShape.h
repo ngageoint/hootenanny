@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
@@ -126,8 +126,7 @@ private:
    * @param e Envelope containing all faces
    * @return Sum of the area of all faces
    */
-  double _collectValidFaces(
-    const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
+  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
 
   /**
    * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha
@@ -139,16 +138,13 @@ private:
    * @param face_count Number of total faces in the Delaunay Triangulation
    * @param alpha_options List of all Delaunay Triangulation face edge lengths (deduplicated) as
    * candidate alpha values
-   * @param min_index Minimum search index in the alpha_options vector, for binary search; starts at
-   * 0
+   * @param min_index Minimum search index in the alpha_options vector, for binary search; starts at 0
    * @param max_index Maximum search index in the alpha_options vector, for binary search; starts at
    * alpha_options.size() - 1
    * @return True when alpha value is found
    */
-  bool _searchAlpha(
-    double& alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e, double& area,
-    size_t face_count, const std::vector<double>& alpha_options, size_t min_index,
-    size_t max_index);
+  bool _searchAlpha(double& alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e, double& area,
+                    size_t face_count, const std::vector<double>& alpha_options, size_t min_index, size_t max_index);
 
   GeometryPtr _validateGeometry(const GeometryPtr& g);
 

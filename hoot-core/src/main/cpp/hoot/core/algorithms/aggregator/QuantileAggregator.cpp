@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "QuantileAggregator.h"
 
@@ -59,7 +59,7 @@ void QuantileAggregator::setConfiguration(const Settings& conf)
 double QuantileAggregator::aggregate(vector<double>& d) const
 {
   sort(d.begin(), d.end());
-  size_t index = floor(double(d.size()) * _quantile);
+  size_t index = static_cast<size_t>(floor(static_cast<double>(d.size()) * _quantile));
   return d[index];
 }
 
