@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesLanguageInfoClient.h"
@@ -47,29 +47,35 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(LanguageInfoProvider, HootServicesLanguageInfoClient)
 
+HootServicesLanguageInfoClient::HootServicesLanguageInfoClient()
+  : _useCookies(true),
+    _timeout(ConfigOptions().getApiTimeout())
+{
+}
+
 QString HootServicesLanguageInfoClient::_getBaseUrl()
 {
-  return HootServicesLoginManager::getBaseUrl() + "/language/toEnglishTranslation";
+  return QString("%1/language/toEnglishTranslation").arg(HootServicesLoginManager::getBaseUrl());
 }
 
 QString HootServicesLanguageInfoClient::_getDetectableUrl()
 {
-  return _getBaseUrl() + "/detectable";
+  return QString("%1/detectable").arg(_getBaseUrl());
 }
 
 QString HootServicesLanguageInfoClient::_getTranslatableUrl()
 {
-  return _getBaseUrl() + "/translatable";
+  return QString("%1/translatable").arg(_getBaseUrl());
 }
 
 QString HootServicesLanguageInfoClient::_getDetectorsUrl()
 {
-  return _getBaseUrl() + "/detectors";
+  return QString("%1/detectors").arg(_getBaseUrl());
 }
 
 QString HootServicesLanguageInfoClient::_getTranslatorsUrl()
 {
-  return _getBaseUrl() + "/translators";
+  return QString("%1/translators").arg(_getBaseUrl());
 }
 
 void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
@@ -97,35 +103,27 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
 
  QString urlStr;
  if (type == "translators")
- {
    urlStr = _getTranslatorsUrl();
- }
  else
- {
    urlStr = _getDetectorsUrl();
- }
  LOG_VARD(urlStr);
 
  QUrl url(urlStr);
  HootNetworkRequest request;
+ // Hoot OAuth requires that session state be maintained for the authenticated user
  if (_useCookies)
- {
-   //Hoot OAuth requires that session state be maintained for the authenticated user
    request.setCookies(_cookies);
- }
+
  try
  {
    request.networkRequest(url, _timeout);
  }
  catch (const HootException& e)
  {
-   const QString errorMsg = e.what();
-   throw HootException("Error getting available translation apps. error: " + errorMsg);
+   throw HootException(QString("Error getting available translation apps. error: %1").arg(e.what()));
  }
  if (request.getHttpStatus() != HttpResponseCode::HTTP_OK)
- {
    throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
- }
 
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
@@ -154,9 +152,8 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
   headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_JSON;
   HootNetworkRequest request;
   if (_useCookies)
-  {
     request.setCookies(_cookies);
-  }
+
   try
   {
     request.networkRequest(
@@ -165,19 +162,15 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
   }
   catch (const HootException& e)
   {
-    const QString errorMsg = e.what();
-    throw HootException("Error getting available translation languages. error: " + errorMsg);
+    throw HootException(QString("Error getting available translation languages. error: %1").arg(e.what()));
   }
   if (request.getHttpStatus() != HttpResponseCode::HTTP_OK)
-  {
     throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
-  }
 
   return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(
-  const QStringList& apps) const
+QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(const QStringList& apps) const
 { 
   boost::property_tree::ptree requestObj;
   requestObj.add_child("apps", *StringUtils::stringListToJsonArray(apps));

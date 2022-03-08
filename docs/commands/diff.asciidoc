@@ -12,7 +12,8 @@ If they differ significantly, the differences will be displayed.
                       directory containing XML changesets.
 * `--error-limit`   - Increase the compare error limit from the default value
 * `--ignore-uuid`   - Ignores UUID's during comparison
-* `--use-datetime`  - Ignores `source:datetime` and `source:ingest:datetime` tags during comparison
+* `--use-datetime`  - Include `source:datetime` and `source:ingest:datetime` tag values in comparision instead
+                      of ignoring them
 
 === Usage
 

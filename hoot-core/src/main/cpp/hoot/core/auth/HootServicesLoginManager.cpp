@@ -45,34 +45,34 @@ namespace hoot
 {
 
 HootServicesLoginManager::HootServicesLoginManager()
-  : _timeout(500)
+  : _timeout(ConfigOptions().getApiTimeout())
 {
 }
 
 QString HootServicesLoginManager::getBaseUrl()
 {
   ConfigOptions opts = ConfigOptions(conf());
-  //assuming for now we don't need to go over https
-  QString url = "http://" + opts.getHootServicesAuthHost();
-  const int port = opts.getHootServicesAuthPort();
-  if (port != 80)
-    url += ":" + QString::number(port);
-  return url + "/hoot-services";
+  //  Assuming for now we don't need to go over https
+  QString port;
+  const int p = opts.getHootServicesAuthPort();
+  if (p != 80)
+    port = QString(":%1").arg(QString::number(p));
+  return QString("http://%1%2/hoot-services").arg(opts.getHootServicesAuthHost(), port);
 }
 
 QString HootServicesLoginManager::_getRequestTokenUrl()
 {
-  return getBaseUrl() + "/auth/oauth1/request";
+  return QString("%1/auth/oauth1/request").arg(getBaseUrl());
 }
 
 QString HootServicesLoginManager::_getVerifyUrl()
 {
-  return getBaseUrl() + "/auth/oauth1/verify";
+  return QString("%1/auth/oauth1/verify").arg(getBaseUrl());
 }
 
 QString HootServicesLoginManager::_getLogoutUrl()
 {
-  return getBaseUrl() + "/auth/oauth1/logout";
+  return QString("%1/auth/oauth1/logout").arg(getBaseUrl());
 }
 
 QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
@@ -87,13 +87,12 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
   }
   catch (const HootException& e)
   {
-    const QString exceptionMsg = e.what();
-    throw HootException("Error retrieving request token. error: " + exceptionMsg);
+    throw HootException(QString("Error retrieving request token. error: %1").arg(e.what()));
   }
   if (requestTokenRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
     throw HootException(
-      "Error retrieving request token. error: " + requestTokenRequest.getErrorString());
+      QString("Error retrieving request token. error: %1").arg(requestTokenRequest.getErrorString()));
   }
   LOG_VART(_cookies->size());
   LOG_VART(_cookies->toString());
@@ -129,12 +128,12 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString& requestToken,
   }
   catch (const HootException& e)
   {
-    const QString exceptionMsg = e.what();
-    throw HootException("Error verifying user. error: " + exceptionMsg);
+    throw HootException(QString("Error verifying user. error: %1").arg(e.what()));
   }
   if (loginRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
-    throw HootException("Error verifying user. error: " + loginRequest.getErrorString());
+    throw HootException(
+      QString("Error verifying user. error: %1").arg(loginRequest.getErrorString()));
   }
   LOG_VART(_cookies->size());
   LOG_VART(_cookies->toString());
@@ -192,7 +191,7 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
 
   LOG_VART(db.userExists(userId));
   if (!db.userExists(userId))
-    throw HootException("User does not exist. ID: " + QString::number(userId));
+    throw HootException(QString("User does not exist. ID: %1").arg(QString::number(userId)));
 
   accessToken = db.getAccessTokenByUserId(userId);
   LOG_VARD(accessToken);
@@ -209,10 +208,10 @@ bool HootServicesLoginManager::logout(const QString& userName, const QString& ac
   db.open(url);
 
   if (!db.userExists(userName))
-    throw HootException("User does not exist. user name:" + userName);
+    throw HootException(QString("User does not exist. user name: %1").arg(userName));
 
   if (!db.accessTokensAreValid(userName, accessToken, accessTokenSecret))
-    throw HootException("Unable to log out user: " + userName + ".  Invalid access tokens.");
+    throw HootException(QString("Unable to log out user: %1.  Invalid access tokens.").arg(userName));
 
   // log the user out
   HootNetworkRequest logoutRequest;
@@ -222,7 +221,7 @@ bool HootServicesLoginManager::logout(const QString& userName, const QString& ac
   }
   catch (const HootException& e)
   {
-    throw HootException("Error logging out user: " + userName + ". error: " + e.what());
+    throw HootException(QString("Error logging out user: %1. error: %2").arg(userName, e.what()));
   }
   if (logoutRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
     return false;

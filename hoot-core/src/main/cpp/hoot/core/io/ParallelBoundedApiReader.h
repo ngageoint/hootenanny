@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PARALLEL_BOUNDED_API_READER_H
@@ -105,6 +105,7 @@ public:
   /**
    * @brief setMaxGridSize
    * @param maxSize Maximum size of an area that can be downloaded
+   *        (1 square degree default)
    */
   void setMaxGridSize(double maxSize)
   { if (maxSize >= _coordGridSize) _maxGridSize = maxSize; }
@@ -161,7 +162,7 @@ private:
   int _totalEnvelopes;
   /** Mutex guarding the bounding box list */
   std::mutex _bboxMutex;
-  /** Maximum size of an area that can be downloaded */
+  /** Maximum size of an area, in square degrees, that can be downloaded */
   double _maxGridSize;
   /** Processing thread pool */
   std::vector<std::thread> _threads;

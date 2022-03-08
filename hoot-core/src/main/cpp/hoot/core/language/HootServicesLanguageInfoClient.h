@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_SERVICES_LANGUAGE_INFO_CLIENT_H
@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "HootServicesLanguageInfoClient"; }
 
-  HootServicesLanguageInfoClient() : _useCookies(true), _timeout(500) { }
+  HootServicesLanguageInfoClient();
   virtual ~HootServicesLanguageInfoClient() = default;
 
   void setConfiguration(const Settings& conf) override;
