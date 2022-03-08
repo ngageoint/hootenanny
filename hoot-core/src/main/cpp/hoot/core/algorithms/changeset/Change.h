@@ -43,12 +43,12 @@ public:
   /**
    * The allowable changeset types
    */
-  enum ChangeType
+  enum class ChangeType : int
   {
     Create = 0,
-    Modify = 1,
-    Delete = 2,
-    Unknown = 3
+    Modify,
+    Delete,
+    Unknown
   };
 
   Change();
@@ -75,6 +75,12 @@ private:
 };
 
 using ChangePtr = std::shared_ptr<Change>;
+
+inline std::ostream& operator<<(std::ostream& os, Change::ChangeType c)
+{
+  os << Change::changeTypeToString(c);
+  return os;
+}
 
 }
 

@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RUBBERSHEET_H
 #define RUBBERSHEET_H
 
 // hoot
-#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
@@ -176,18 +176,18 @@ private:
 
   class Tie
   {
-    public:
+  public:
 
-      // Unknown1 coordinate
-      geos::geom::Coordinate c1;
-      // Unknown2 coordinate
-      geos::geom::Coordinate c2;
+    // Unknown1 coordinate
+    geos::geom::Coordinate c1;
+    // Unknown2 coordinate
+    geos::geom::Coordinate c2;
 
-      double dx() const { return c1.x - c2.x; }
-      double dy() const { return c1.y - c2.y; }
+    double dx() const { return c1.x - c2.x; }
+    double dy() const { return c1.y - c2.y; }
 
-      QString toString() const
-      { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
+    QString toString() const
+    { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
   };
 
   std::shared_ptr<OsmMap> _map;
