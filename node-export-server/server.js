@@ -320,7 +320,8 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
 /**
  * Builds the hootenanny command(s) from parts of provided request.
  */
-function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, ignoreConf) {
+function buildCommand(params, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, ignoreConf) {
+    var paramschema = params.schema;
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
         if (queryOverrideTags === 'true') { //if it's true
@@ -344,6 +345,9 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
 
     if (!ignoreConf)
         command += ' -C NodeExport.conf';
+
+    if (config.datasources[params.datasource].overrideConfig)
+        command += ' -C ' + config.datasources[params.datasource].overrideConfig
 
     var convertOpts = [];
     var bboxOption = '';
@@ -398,6 +402,8 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';
     return command;
 };
+
+exports.buildCommand = buildCommand
 
 /**
  * Manages request to the node-export service.
@@ -528,17 +534,17 @@ function doExport(req, res, hash, input) {
                 var ringOutDir = appDir + ringOutput;
                 var ringOutFile = ringOutDir + '.osm';
 
-                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, doCrop);
+                multiCommand += buildCommand({schema:'OSM'}, req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, doCrop);
                 multiCommand += ' && ';
 
                 rings.push(ringOutFile);
             }
 
             //here we merge the rings into a single osm file and create a new id sequence (to avoid negative id collisions).
-            multiCommand += buildCommand('OSM', req.query.overrideTags, null, null, true, rings.join(' '), outDir, tempOsmFile, false, true);
+            multiCommand += buildCommand({schema:'OSM'}, req.query.overrideTags, null, null, true, rings.join(' '), outDir, tempOsmFile, false, true);
             //if we need to make a shapefile/geodatabase or our ourput schema is not OSM, then we add a second command that'll do so.
             if (!isFile || req.params.schema !== 'OSM')
-                multiCommand += ' && ' + buildCommand(req.params.schema, req.query.overrideTags, null, null, isFile, tempOsmFile, outDir, outFile, false, false, true);
+                multiCommand += ' && ' + buildCommand(req.params, req.query.overrideTags, null, null, isFile, tempOsmFile, outDir, outFile, false, false, true);
 
             console.log(multiCommand);
             child = exec(multiCommand, function(error, stdout, stderr) {
@@ -562,7 +568,7 @@ function doExport(req, res, hash, input) {
                 }
             })
         } else {
-            var command = buildCommand(req.params.schema, req.params.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, Number(req.query.crop));
+            var command = buildCommand(req.params, req.params.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, Number(req.query.crop));
             console.log(command);
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
