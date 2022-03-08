@@ -68,6 +68,7 @@ help:
 	@echo "js-schema               - Build the Javascript schema files."
 	@echo "osmapidb                - If configured '--with-services', then build a clean copy of an OSM API database."
 	@echo "translations-test       - Run the mocha translations tests. Should take less than five minutes."
+	@echo "node-export-test        - Run the mocha node export tests. Should take less than five minutes."
 	@echo "services-build          - If configured '--with-services', then build the web services."
 	@echo "services-clean          - If configured '--with-services', then clean the web services. This will not modify the DB."
 	@echo "services-clean-coverage - If configured '--with-services', then remove the web services test code coverage report output."
@@ -111,7 +112,7 @@ ui-build:
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-test
-	
+
 ui2x-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-test
 
@@ -129,6 +130,9 @@ js-schema:
 
 translations-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot translations-test
+
+node-export-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot node-export-test
 
 services-build:
 	$(MAKE) -f Makefile.hoot services-build
