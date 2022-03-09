@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmXmlChangesetFileWriter.h"
 
@@ -47,10 +47,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
 
-OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
-OsmChangesetFileWriter(),
-_precision(16),
-_addTimestamp(false)
+OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
+  : OsmChangesetFileWriter(),
+    _precision(16),
+    _addTimestamp(false)
 {
 }
 
@@ -67,7 +67,8 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 void OsmXmlChangesetFileWriter::_initStats()
 {
   _stats.clear();
-  _stats.resize(Change::Unknown, ElementType::Unknown);
+  _stats.resize(static_cast<size_t>(Change::ChangeType::Unknown),
+                static_cast<size_t>(ElementType::Unknown));
   vector<QString> rows({"Create", "Modify", "Delete"});
   vector<QString> columns({"Node", "Way", "Relation"});
   _stats.setLabels(rows, columns);
@@ -114,9 +115,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   QFile f;
   f.setFileName(filepath);
   if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
-  }
+    throw HootException(QString("Error opening %1 for writing").arg(path));
 
   QXmlStreamWriter writer(&f);
   writer.setCodec("UTF-8");
@@ -127,7 +126,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
 
-  Change::ChangeType last = Change::Unknown;
+  Change::ChangeType last = Change::ChangeType::Unknown;
 
   for (int i = 0; i < changesetProviders.size(); i++)
   {
@@ -140,13 +139,10 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
     if (!_map1List.empty())
-    {
       map1 = _map1List.at(i);
-    }
+
     if (!_map2List.empty())
-    {
       map2 = _map2List.at(i);
-    }
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VARD(changesetProvider->hasMoreChanges());
@@ -160,9 +156,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       changeElement = _change.getElement();
 
       if (!changeElement)
-      {
         continue;
-      }
 
       // When multiple changeset providers are passed in, sometimes multiple changes for the same
       // element may exist as a result of combining their results together, so we're skipping those
@@ -190,65 +184,65 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)
       {
-        if (last != Change::Unknown)
+        if (last != Change::ChangeType::Unknown)
         {
           writer.writeEndElement();
           _parsedChangeIds.append(changeElement->getElementId());
         }
         switch (_change.getType())
         {
-          case Change::Create:
-            LOG_TRACE("Writing create start element...");
-            writer.writeStartElement("create");
-            break;
-          case Change::Delete:
-            LOG_TRACE("Writing delete start element...");
-            writer.writeStartElement("delete");
-            break;
-          case Change::Modify:
-            LOG_TRACE("Writing modify start element...");
-            writer.writeStartElement("modify");
-            break;
-          case Change::Unknown:
-            //see comment in ChangesetDeriver::_nextChange() when
-            //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
-            break;
-          default:
-            throw IllegalArgumentException("Unexpected change type.");
+        case Change::ChangeType::Create:
+          LOG_TRACE("Writing create start element...");
+          writer.writeStartElement("create");
+          break;
+        case Change::ChangeType::Delete:
+          LOG_TRACE("Writing delete start element...");
+          writer.writeStartElement("delete");
+          break;
+        case Change::ChangeType::Modify:
+          LOG_TRACE("Writing modify start element...");
+          writer.writeStartElement("modify");
+          break;
+        case Change::ChangeType::Unknown:
+          //see comment in ChangesetDeriver::_nextChange() when
+          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+          break;
+        default:
+          throw IllegalArgumentException("Unexpected change type.");
         }
         last = _change.getType();
         LOG_VART(last);
       }
 
-      if (_change.getType() != Change::Unknown)
+      if (_change.getType() != Change::ChangeType::Unknown)
       {
         ElementType::Type type = changeElement->getElementType().getEnum();
         switch (type)
         {
-          case ElementType::Node:
-            _writeNode(writer, changeElement, _change.getPreviousElement());
-            break;
-          case ElementType::Way:
-            _writeWay(writer, changeElement, _change.getPreviousElement());
-            break;
-          case ElementType::Relation:
-            _writeRelation(writer, changeElement, _change.getPreviousElement());
-            break;
-          default:
-            throw IllegalArgumentException("Unexpected element type.");
+        case ElementType::Node:
+          _writeNode(writer, changeElement, _change.getPreviousElement());
+          break;
+        case ElementType::Way:
+          _writeWay(writer, changeElement, _change.getPreviousElement());
+          break;
+        case ElementType::Relation:
+          _writeRelation(writer, changeElement, _change.getPreviousElement());
+          break;
+        default:
+          throw IllegalArgumentException("Unexpected element type.");
         }
         changesetProgress++;
         //  Update the stats
-        _stats(last, type)++;
+        _stats(static_cast<size_t>(last), type)++;
       }
     }
 
     LOG_VART(Change::changeTypeToString(last));
-    if (last != Change::Unknown)
+    if (last != Change::ChangeType::Unknown)
     {
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
-      last = Change::Unknown;
+      last = Change::ChangeType::Unknown;
       _parsedChangeIds.append(changeElement->getElementId());
     }
   }
@@ -271,7 +265,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
 
   writer.writeStartElement("node");
   long id = n->getId();
-  if (_change.getType() == Change::Create)
+  if (_change.getType() == Change::ChangeType::Create)
   {
     // rails port expects negative ids for new elements; we're starting at -1 to match the
     // convention of iD editor, but that's not absolutely necessary to write the changeset to rails
@@ -286,13 +280,13 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
   writer.writeAttribute("id", QString::number(id));
   long version;
   //  for xml changeset OSM rails port expects created elements to have version = 0
-  if (_change.getType() == Change::Create)
+  if (_change.getType() == Change::ChangeType::Create)
     version = 0;
   else if (n->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
-      QString("version greater than zero: ") + n->getElementId().toString());
+      QString("Elements being modified or deleted in an .osc changeset must always have a "
+              "version greater than zero: %1").arg(n->getElementId().toString()));
   }
   else if (pn && pn->getVersion() < n->getVersion())
   {
@@ -330,7 +324,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
 
   writer.writeStartElement("way");
   long id = w->getId();
-  if (_change.getType() == Change::Create)
+  if (_change.getType() == Change::ChangeType::Create)
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Way] * -1;
@@ -343,13 +337,13 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
   writer.writeAttribute("id", QString::number(id));
   long version;
   // for xml changeset OSM rails port expects created elements to have version = 0
-  if (_change.getType() == Change::Create)
+  if (_change.getType() == Change::ChangeType::Create)
     version = 0;
   else if (w->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
-      QString("version greater than zero: ")  + w->getElementId().toString());
+      QString("Elements being modified or deleted in an .osc changeset must always have a "
+              "version greater than zero: %1").arg(w->getElementId().toString()));
   }
   else if (pw && pw->getVersion() < w->getVersion())
   {
@@ -368,10 +362,9 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
       writer.writeAttribute("timestamp", "");
   }
 
-  for (size_t j = 0; j < w->getNodeCount(); j++)
+  for (auto nodeRefId : w->getNodeIds())
   {
     writer.writeStartElement("nd");
-    long nodeRefId = w->getNodeId(j);
     if (_newElementIdMappings[ElementType::Node].contains(nodeRefId))
     {
       const long newNodeRefId = _newElementIdMappings[ElementType::Node][nodeRefId];
@@ -399,7 +392,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
 
   writer.writeStartElement("relation");
   long id = r->getId();
-  if (_change.getType() == Change::Create)
+  if (_change.getType() == Change::ChangeType::Create)
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Relation] * -1;
@@ -412,13 +405,13 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   writer.writeAttribute("id", QString::number(id));
   long version;
   //  for xml changeset OSM rails port expects created elements to have version = 0
-  if (_change.getType() == Change::Create)
+  if (_change.getType() == Change::ChangeType::Create)
     version = 0;
   else if (r->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
-      QString("version greater than zero: ") + r->getElementId().toString());
+      QString("Elements being modified or deleted in an .osc changeset must always have a "
+              "version greater than zero: ").arg(r->getElementId().toString()));
   }
   else if (pr && pr->getVersion() < r->getVersion())
   {
@@ -438,9 +431,8 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   }
 
   const vector<RelationData::Entry>& members = r->getMembers();
-  for (size_t j = 0; j < members.size(); j++)
+  for (const auto& e : members)
   {
-    const RelationData::Entry& e = members[j];
     writer.writeStartElement("member");
     const ElementType elementType = e.getElementId().getType();
     writer.writeAttribute("type", elementType.toString().toLower());
@@ -454,8 +446,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
       memberId = newMemberId;
     }
     writer.writeAttribute("ref", QString::number(memberId));
-    writer.writeAttribute(
-      "role", _invalidCharacterHandler.removeInvalidCharacters(e.getRole()));
+    writer.writeAttribute("role", _invalidCharacterHandler.removeInvalidCharacters(e.getRole()));
     writer.writeEndElement();
   }
 
@@ -466,9 +457,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", "type");
-    writer.writeAttribute(
-      "v",
-      _invalidCharacterHandler.removeInvalidCharacters(r->getType()));
+    writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(r->getType()));
     writer.writeEndElement();
   }
 
@@ -497,7 +486,7 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
   metadataAlwaysIgnore.append(MetadataTags::HootConnectedWayOutsideBounds());
   metadataAlwaysIgnore.append(MetadataTags::HootSnapped());
 
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString key = it.key();
     const QString val = it.value();
@@ -536,13 +525,13 @@ QString OsmXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat& for
 {
   switch (format.getEnum())
   {
-    case ChangesetStatsFormat::Text:
-      return _stats.toTableString();
-    case ChangesetStatsFormat::Json:
-      return _stats.toJsonString();
-      break;
-    default:
-      return "";
+  case ChangesetStatsFormat::Text:
+    return _stats.toTableString();
+  case ChangesetStatsFormat::Json:
+    return _stats.toJsonString();
+    break;
+  default:
+    return "";
   }
 }
 

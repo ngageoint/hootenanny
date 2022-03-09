@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetDeriver.h"
 
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 
@@ -134,16 +133,13 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE("Last to element: " << _toE->getElementId());
     }
 
-    result = Change(Change::Create, _toE);
+    result = Change(Change::ChangeType::Create, _toE);
 
     if (_to->hasMoreElements())
-    {
       _toE = _to->readNextElement();
-    }
     else
-    {
       _toE.reset();
-    }
+
     if (_toE)
     {
       _numToElementsParsed++;
@@ -164,7 +160,7 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE(
         "run out of 'to' elements; to' element null; 'from' element not null: " <<
         _fromE->getElementId() << "; deleting 'from' element...");
-      result = Change(Change::Delete, _fromE);
+      result = Change(Change::ChangeType::Delete, _fromE);
     }
     else
     {
@@ -173,7 +169,7 @@ Change ChangesetDeriver::_nextChange()
         "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
         " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
         "=false or inclusion of " << MetadataTags::HootChangeExcludeDelete() << " tag...");
-      result = Change(Change::Unknown, _fromE);
+      result = Change(Change::ChangeType::Unknown, _fromE);
     }
 
     if (_from->hasMoreElements())
@@ -251,7 +247,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE("Last to element: " << _toE->getElementId());
       }
 
-      result = Change(Change::Create, _toE);
+      result = Change(Change::ChangeType::Create, _toE);
 
       if (_to->hasMoreElements())
         _toE = _to->readNextElement();
@@ -278,7 +274,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE(
           "run out of 'to' elements; to' element null; 'from' element not null: " <<
           _fromE->getElementId() << "; deleting 'from' element...");
-        result = Change(Change::Delete, _fromE);
+        result = Change(Change::ChangeType::Delete, _fromE);
       }
       else
       {
@@ -287,7 +283,7 @@ Change ChangesetDeriver::_nextChange()
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
           "=false or inclusion of " << MetadataTags::HootChangeExcludeDelete() << " tag...");
-        result = Change(Change::Unknown, _fromE);
+        result = Change(Change::ChangeType::Unknown, _fromE);
       }
 
       if (_from->hasMoreElements())
@@ -316,7 +312,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE("Last to element: " << _toE->getElementId());
       }
 
-      result = Change(Change::Modify, _toE, _fromE);
+      result = Change(Change::ChangeType::Modify, _toE, _fromE);
 
       if (_to->hasMoreElements())
         _toE = _to->readNextElement();
@@ -352,7 +348,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE(
           "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
           _toE->getElementId() << "; deleting 'from' element...");
-        result = Change(Change::Delete, _fromE);
+        result = Change(Change::ChangeType::Delete, _fromE);
       }
       else
       {
@@ -364,7 +360,7 @@ Change ChangesetDeriver::_nextChange()
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
           "=false or inclusion of " << MetadataTags::HootChangeExcludeDelete() << " tag...");
-        result = Change(Change::Unknown, _fromE);
+        result = Change(Change::ChangeType::Unknown, _fromE);
       }
 
       if (_from->hasMoreElements())
@@ -389,7 +385,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE("Last to element: " << _toE->getElementId());
       }
 
-      result = Change(Change::Create, _toE);
+      result = Change(Change::ChangeType::Create, _toE);
 
       if (_to->hasMoreElements())
         _toE = _to->readNextElement();

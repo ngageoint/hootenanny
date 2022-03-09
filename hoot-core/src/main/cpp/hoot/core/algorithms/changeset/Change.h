@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGE_H
 #define CHANGE_H
@@ -43,12 +43,12 @@ public:
   /**
    * The allowable changeset types
    */
-  enum ChangeType
+  enum class ChangeType : int
   {
     Create = 0,
-    Modify = 1,
-    Delete = 2,
-    Unknown = 3
+    Modify,
+    Delete,
+    Unknown
   };
 
   Change();
@@ -75,6 +75,12 @@ private:
 };
 
 using ChangePtr = std::shared_ptr<Change>;
+
+inline std::ostream& operator<<(std::ostream& os, Change::ChangeType c)
+{
+  os << Change::changeTypeToString(c);
+  return os;
+}
 
 }
 

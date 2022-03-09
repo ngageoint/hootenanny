@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiWriter.h"
@@ -73,7 +73,7 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _apiId(0),
     _threadsCanExit(false),
     _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
-    _timeout(ConfigOptions().getChangesetApidbTimeout()),
+    _timeout(ConfigOptions().getApiTimeout()),
     _failed(false)
 {
   _changesets.push_back(changeset);
@@ -104,7 +104,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _apiId(0),
     _threadsCanExit(false),
     _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
-    _timeout(ConfigOptions().getChangesetApidbTimeout()),
+    _timeout(ConfigOptions().getApiTimeout()),
     _failed(false)
 {
   if (isSupported(url))
@@ -145,7 +145,7 @@ bool OsmApiWriter::apply()
   bool success = true;
   //  Load all of the changesets into memory
   _changeset.setMaxPushSize(_maxPushSize);
-  for (const auto& changeset : _changesets)
+  for (const auto& changeset : qAsConst(_changesets))
   {
     LOG_INFO("Loading changeset: " << changeset);
     _changeset.loadChangeset(changeset);
@@ -451,16 +451,11 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  The changeset was closed already so set the ID to -1 and reprocess
             id = -1;
 
+            //  Split the changeset into half so that it is smaller and won't fail
             if ((int)workInfo->size() > _maxChangesetSize / 2)
-            {
-              //  Split the changeset into half so that it is smaller and won't fail
               _splitChangeset(workInfo);
-            }
-            else
-            {
-              //  Push the changeset back on the queue
+            else  //  Push the changeset back on the queue
               _pushChangesets(workInfo);
-            }
             //  Loop back around to work on the next changeset
             continue;
           }
@@ -493,14 +488,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             workInfo->setAttemptedResolveChangesetIssues(true);
             //  Try to automatically resolve certain issues, like out of date version
             if (_resolveIssues(request, workInfo))
-            {
               _pushChangesets(workInfo);
-            }
-            else
-            {
-              //  Set the element in the changeset to failed because the issues couldn't be resolved
+            else  //  Set the element in the changeset to failed because the issues couldn't be resolved
               _changeset.updateFailedChangeset(workInfo);
-            }
           }
           break;
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
@@ -513,9 +503,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             workInfo->setAttemptedResolveChangesetIssues(true);
             //  Try to automatically resolve certain issues, like out of date version
             if (_resolveIssues(request, workInfo))
-            {
               _pushChangesets(workInfo);
-            }
             else
             {
               //  Set the element in the changeset to failed because the issues couldn't be resolved
@@ -574,11 +562,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
               _updateThreadStatus(index, ThreadStatus::Failed);
               stop_thread = true;
             }
-            else
-            {
-              //  Sleep between 30 and 60 seconds to allow the database server to recover
+            else  //  Sleep between 30 and 60 seconds to allow the database server to recover
               _yield(30 * 1000, 60 * 1000);
-            }
           }
           else  //  Upload was validated, update the changeset
             _changeset.updateChangeset(workInfo);
@@ -691,7 +676,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _debugOutput = options.getChangesetApidbWriterDebugOutput();
   _debugOutputPath = options.getChangesetApidbWriterDebugOutputPath();
   _throttleCgiMap = options.getChangesetApidbWritersThrottleCgimap();
-  _timeout = options.getChangesetApidbTimeout();
+  _timeout = options.getApiTimeout();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url) const
@@ -870,7 +855,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
       "    <tag k='hashtags' v='%4'/>"
       "    <tag k='bot' v='yes'/>"
       "  </changeset>"
-      "</osm>").arg(HOOT_NAME).arg(description).arg(source).arg(hashtags);
+      "</osm>").arg(QString(HOOT_NAME), description, source, hashtags);
 
     QByteArray content = xml.toUtf8();
     QMap<QNetworkRequest::KnownHeaders, QVariant> headers;

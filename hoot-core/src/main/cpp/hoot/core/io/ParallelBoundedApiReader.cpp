@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ParallelBoundedApiReader.h"
@@ -53,7 +53,7 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
     _addProjection(addProjection),
     _continueRunning(true),
     _filenumber(0),
-    _timeout(500)
+    _timeout(ConfigOptions().getApiTimeout())
 {
 }
 
@@ -64,11 +64,12 @@ ParallelBoundedApiReader::~ParallelBoundedApiReader()
 
 void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom::Envelope& envelope)
 {
-  //  Validate the size of the envelope before beginning, don't allow the whole earth to be downloaded!
-  if (envelope.getWidth() > _maxGridSize || envelope.getHeight() > _maxGridSize)
+  //  Validate the size of the envelope, in square degrees, before beginning
+  //  Don't allow the whole earth to be downloaded!
+  if (envelope.getWidth() * envelope.getHeight() > _maxGridSize)
   {
-    throw UnsupportedException("Cannot request areas larger than " +
-                               QString::number(_maxGridSize, 'f', 4) + " square degrees.");
+    throw UnsupportedException(
+      QString("Cannot request areas larger than %1 square degrees.").arg(QString::number(_maxGridSize, 'f', 4)));
   }
   //  Save the endpoint URL to query
   _sourceUrl = endpoint;

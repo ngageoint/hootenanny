@@ -144,16 +144,16 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path, const QList<Chan
       LOG_VART(change.getType());
       switch (change.getType())
       {
-      case Change::Create:
+      case Change::ChangeType::Create:
         _createNewElement(changeElement);
         break;
-      case Change::Modify:
+      case Change::ChangeType::Modify:
         _updateExistingElement(changeElement);
         break;
-      case Change::Delete:
+      case Change::ChangeType::Delete:
         _deleteExistingElement(changeElement);
         break;
-      case Change::Unknown:
+      case Change::ChangeType::Unknown:
         // see comment in ChangesetDeriver::_nextChange() when
         // _fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
         break;
@@ -161,7 +161,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path, const QList<Chan
         throw IllegalArgumentException("Unexpected change type.");
       }
 
-      if (change.getType() != Change::Unknown)
+      if (change.getType() != Change::ChangeType::Unknown)
       {
         if (changeElement->getElementType().getEnum() == ElementType::Node)
         {
@@ -231,9 +231,8 @@ ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr ele
   case ElementType::Way:
     changeElement = std::make_shared<Way>(*std::dynamic_pointer_cast<const Way>(element));
     break;
- case ElementType::Relation:
-    changeElement =
-      std::make_shared<Relation>(*std::dynamic_pointer_cast<const Relation>(element));
+  case ElementType::Relation:
+    changeElement = std::make_shared<Relation>(*std::dynamic_pointer_cast<const Relation>(element));
     break;
   default:
     throw HootException("Unknown element type");

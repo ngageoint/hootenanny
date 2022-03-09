@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "AlphaShape.h"
@@ -159,12 +159,12 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   double minY = numeric_limits<double>::max();
   double maxY = -minY;
 
-  for (size_t i = 0; i < points.size(); i++)
+  for (const auto& point : points)
   {
-    minX = min(points[i].first, minX);
-    maxX = max(points[i].first, maxX);
-    minY = min(points[i].second, minY);
-    maxY = max(points[i].second, maxY);
+    minX = min(point.first, minX);
+    maxX = max(point.first, maxX);
+    minY = min(point.second, minY);
+    maxY = max(point.second, maxY);
   }
 
   _sizeX = maxX - minX;
@@ -182,14 +182,15 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   _outsidePoint.insert(randomized[1]);
   _outsidePoint.insert(randomized[2]);
 
-  for (size_t i = 0; i < points.size(); i++)
-    randomized.push_back(points[i]);
+  for (const auto& point : points)
+    randomized.push_back(point);
 
   // By randomizing the input we take the complexity from O(n^2) to O(n lg(n)).
+  int random_max = static_cast<int>(points.size());
   for (size_t i = 0; i < points.size() * 3; i++)
   {
-    int i1 = Tgs::Random::instance()->generateInt(points.size()) + 3;
-    int i2 = Tgs::Random::instance()->generateInt(points.size()) + 3;
+    int i1 = Tgs::Random::instance()->generateInt(random_max) + 3;
+    int i2 = Tgs::Random::instance()->generateInt(random_max) + 3;
     swap(randomized[i1], randomized[i2]);
   }
   for (size_t i = 0; i < randomized.size(); i++)
@@ -214,7 +215,7 @@ OsmMapPtr AlphaShape::_toOsmMap()
   OsmMapPtr result = std::make_shared<OsmMap>();
   GeometryToElementConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
   const RelationMap& rm = result->getRelations();
-  for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
+  for (auto it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
     r->setTag("area", "yes");
@@ -225,8 +226,7 @@ OsmMapPtr AlphaShape::_toOsmMap()
 double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e) const
 {
   double preUnionArea = 0.0;
-  for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
-       fi != _pDelauneyTriangles->getFaceEnd(); fi++)
+  for (auto fi = _pDelauneyTriangles->getFaceIterator(); fi != _pDelauneyTriangles->getFaceEnd(); fi++)
   {
     const Face& f = *fi;
     if (_isInside(alpha, f))
@@ -254,7 +254,7 @@ bool AlphaShape::_searchAlpha(double &alpha, std::vector<GeometryPtr> &faces, En
     temp_faces.clear();
     temp_env.init();
     double temp_area = _collectValidFaces(temp_alpha, temp_faces, temp_env);
-    bool is_valid = face_count * 0.9 <= temp_faces.size();
+    bool is_valid = static_cast<double>(face_count) * 0.9 <= static_cast<double>(temp_faces.size());
 
     if (is_valid)
     {
@@ -308,16 +308,16 @@ GeometryPtr AlphaShape::toGeometry()
     else if (_sizeX < 100 || _sizeY < 100)
       scale = 10.0;
     //  Iterate all of the edges to get the alpha value candidates
-    for (EdgeIterator it = _pDelauneyTriangles->getEdgeIterator(); it != _pDelauneyTriangles->getEdgeEnd(); ++it)
+    for (auto it = _pDelauneyTriangles->getEdgeIterator(); it != _pDelauneyTriangles->getEdgeEnd(); ++it)
     {
       //  Multiply by scale and convert it to a whole number for deduplication in the set
       long length = static_cast<long>((*it).getLength() * scale);
-      if (length > 0 && length > _alpha)
+      if (length > 0 && length > static_cast<long>(_alpha))
         alpha_values.insert(length);
     }
     //  Get a list of possible alpha values to test
-    for (std::set<long>::iterator it = alpha_values.begin(); it != alpha_values.end(); ++it)
-      alpha_options.push_back((*it) / scale);
+    for (auto alpha : alpha_values)
+      alpha_options.push_back(static_cast<double>(alpha) / scale);
     //  Iterate the alpha values searching for one that uses at least
     //  90% of the Delauney triangle faces
     bool success = _searchAlpha(alpha, faces, e, preUnionArea, faceCount, alpha_options, 0, alpha_options.size() - 1);
@@ -327,10 +327,7 @@ GeometryPtr AlphaShape::toGeometry()
 
     // if the result is an empty geometry
     if (faces.empty() || !success)
-    {
-      throw IllegalArgumentException(
-        "Unable to find alpha value to create alpha shape.");
-    }
+      throw IllegalArgumentException("Unable to find alpha value to create alpha shape.");
     //  Choose the alpha value
     LOG_INFO("No alpha value supplied; generated alpha value: " << alpha);
     _alpha = alpha;
@@ -359,7 +356,7 @@ GeometryPtr AlphaShape::toGeometry()
     if (faces.empty())
     {
       throw IllegalArgumentException(
-        "Unable to create alpha shape with alpha value of: " + QString::number(_alpha) + ".");
+        QString("Unable to create alpha shape with alpha value of: %1.").arg(QString::number(_alpha)));
     }
   }
 

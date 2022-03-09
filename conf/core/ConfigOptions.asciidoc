@@ -219,6 +219,13 @@ Smoothing value in radians used by `AngleHistogramExtractor` and `SampledAngleHi
 
 Email address of the API database user. Can be set here for debugging and testing.
 
+=== api.timeout
+
+* Data Type: int
+* Default Value: `500`
+
+Timeout for HTTP requests to the OSM API db in number of seconds, for example `changeset-apply` operations
+
 === apidb.bulk.inserter.output.files.copy.location
 
 * Data Type: string
@@ -688,13 +695,6 @@ This value is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
-
-=== changeset.apidb.timeout
-
-* Data Type: int
-* Default Value: `500`
-
-Timeout for HTTP requests for `changeset-apply` operations in number of seconds
 
 === changeset.apidb.writer.debug.output
 
@@ -4777,14 +4777,14 @@ This means that attributes with values like "UNK", "NoInformation" etc will be d
 * Data Type: double
 * Default Value: `1.0`
 
-Maximum size of an overall bounding box, in degrees, before a download request is rejected.
+Maximum size of an overall bounding box, in square degrees, before a download request is rejected.
 
 === reader.http.bbox.max.size
 
 * Data Type: double
 * Default Value: `0.25`
 
-Maximum size of an HTTP request's bounding box, in degrees, before it is split up into smaller
+Maximum size of an HTTP request's bounding box's length or width, in degrees, before it is split up into smaller
 bounding boxes and run in parallel.
 
 === reader.http.bbox.thread.count

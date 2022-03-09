@@ -22,21 +22,19 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCleaner.h"
 
 namespace hoot
 {
 
-ChangesetCleaner::ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders) :
-_changesetProviders(changesetProviders),
-_numDeleteChangesRemoved(0)
+ChangesetCleaner::ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders)
+  : _changesetProviders(changesetProviders),
+    _numDeleteChangesRemoved(0)
 {
   if (_changesetProviders.isEmpty())
-  {
     throw IllegalArgumentException("No changeset providers were sent to ChangesetCleaner.");
-  }
   _clean();
 }
 
@@ -49,10 +47,8 @@ void ChangesetCleaner::_clean()
 {
   LOG_DEBUG("Deriving and cleaning " << _changesetProviders.size() << " changeset(s)...");
 
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-         _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  for (const auto& changesetProvider : qAsConst(_changesetProviders))
   {
-    ChangesetProviderPtr changesetProvider = *itr;
     while (changesetProvider->hasMoreChanges())
     {
       const Change change = changesetProvider->readNextChange();
@@ -66,7 +62,7 @@ void ChangesetCleaner::_clean()
           LOG_VART(existingChange);
           // We already have a modify or create change for this element, so ignore the delete
           // change.
-          if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
+          if (existingChange.getType() != Change::ChangeType::Delete && change.getType() == Change::ChangeType::Delete)
           {
             _numDeleteChangesRemoved++;
             continue;
@@ -118,55 +114,45 @@ Change ChangesetCleaner::readNextChange()
 int ChangesetCleaner::getNumFromElementsParsed() const
 {
   int total = 0;
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-  {
-    total += (*itr)->getNumFromElementsParsed();
-  }
+  for (const auto& provider : qAsConst(_changesetProviders))
+    total += provider->getNumFromElementsParsed();
+
   return total;
 }
 
 int ChangesetCleaner::getNumToElementsParsed() const
 {
   int total = 0;
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-  {
-    total += (*itr)->getNumToElementsParsed();
-  }
+  for (const auto& provider : qAsConst(_changesetProviders))
+    total += provider->getNumToElementsParsed();
+
   return total;
 }
 
 int ChangesetCleaner::getNumCreateChanges() const
 {
   int total = 0;
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-  {
-    total += (*itr)->getNumCreateChanges();
-  }
+  for (const auto& provider : qAsConst(_changesetProviders))
+    total += provider->getNumCreateChanges();
+
   return total;
 }
 
 int ChangesetCleaner::getNumModifyChanges() const
 {
   int total = 0;
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-  {
-    total += (*itr)->getNumModifyChanges();
-  }
+  for (const auto& provider : qAsConst(_changesetProviders))
+    total += provider->getNumModifyChanges();
+
   return total;
 }
 
 int ChangesetCleaner::getNumDeleteChanges() const
 {
   int total = 0;
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-  {
-    total += (*itr)->getNumDeleteChanges();
-  }
+  for (const auto& provider : qAsConst(_changesetProviders))
+    total += provider->getNumDeleteChanges();
+
   total -= _numDeleteChangesRemoved;
   return total;
 }
@@ -174,11 +160,9 @@ int ChangesetCleaner::getNumDeleteChanges() const
 int ChangesetCleaner::getNumChanges() const
 {
   int total = 0;
-  for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-  {
-    total += (*itr)->getNumChanges();
-  }
+  for (const auto& provider : qAsConst(_changesetProviders))
+    total += provider->getNumChanges();
+
   return total;
 }
 

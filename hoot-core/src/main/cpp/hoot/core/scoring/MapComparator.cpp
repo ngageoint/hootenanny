@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MapComparator.h"
 
@@ -30,8 +30,8 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // Standard
 #include <iomanip>
@@ -82,17 +82,16 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  CompareVisitor(
-    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime,
-    const QStringList& ignoreTagKeys, int errorLimit = 5, Meters threshold = 0.05) :
-  _refMap(refMap),
-  _threshold(threshold),
-  _matches(true),
-  _ignoreUUID(ignoreUUID),
-  _useDateTime(useDateTime),
-  _errorCount(0),
-  _errorLimit(errorLimit),
-  _ignoreTagKeys(ignoreTagKeys)
+  CompareVisitor(std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime,
+                 const QStringList& ignoreTagKeys, int errorLimit = 5, Meters threshold = 0.05)
+    : _refMap(refMap),
+      _threshold(threshold),
+      _matches(true),
+      _ignoreUUID(ignoreUUID),
+      _useDateTime(useDateTime),
+      _errorCount(0),
+      _errorLimit(errorLimit),
+      _ignoreTagKeys(ignoreTagKeys)
   {
   }
   ~CompareVisitor() override = default;
@@ -131,9 +130,8 @@ public:
       testTags.set(MetadataTags::SourceDateTime(), "None");
     }
 
-    for (int i = 0; i < _ignoreTagKeys.size(); i++)
+    for (const auto& key : qAsConst(_ignoreTagKeys))
     {
-      const QString key = _ignoreTagKeys.at(i);
       refTags.set(key, "None");  // Wipe out the tag
       testTags.set(key, "None");
     }
@@ -155,9 +153,8 @@ public:
 
         if (_errorCount < _errorLimit)
         {
-          for (int i = 0; i < keys.size(); i++)
+          for (const auto& k : qAsConst(keys))
           {
-            QString k = keys[i];
             if (refTags[k] != testTags[k])
             {
               LOG_WARN("< " + k + " = " + refTags[k]);
@@ -232,8 +229,7 @@ public:
     {
       CHECK_MSG(refWay->getNodeIds()[i] == testWay->getNodeIds()[i],
         QString("Node IDs don't match. (%1 vs. %2)").
-        arg(hoot::toString(refWay)).
-        arg(hoot::toString(testWay)));
+        arg(hoot::toString(refWay), hoot::toString(testWay)));
     }
   }
 
@@ -244,7 +240,7 @@ public:
     ConstRelationPtr testRelation = std::dynamic_pointer_cast<const Relation>(testElement);
 
     QString relationStr =
-      QString("%1 vs. %2").arg(hoot::toString(refRelation)).arg(hoot::toString(testRelation));
+      QString("%1 vs. %2").arg(hoot::toString(refRelation), hoot::toString(testRelation));
 
     CHECK_MSG(
       refRelation->getType() == testRelation->getType(), "Types do not match. " + relationStr);
@@ -273,16 +269,15 @@ private:
   QStringList _ignoreTagKeys;
 };
 
-MapComparator::MapComparator() :
-_ignoreUUID(false),
-_useDateTime(false),
-_errorLimit(ConfigOptions().getLogWarnMessageLimit())
+MapComparator::MapComparator()
+  : _ignoreUUID(false),
+    _useDateTime(false),
+    _errorLimit(ConfigOptions().getLogWarnMessageLimit())
 {
 }
 
-void MapComparator::_printIdDiff(
-  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
-  const ElementType& elementType, const int limit) const
+void MapComparator::_printIdDiff(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
+                                 const ElementType& elementType, const int limit) const
 {
   QSet<long> ids1;
   QSet<long> ids2;
@@ -312,15 +307,12 @@ void MapComparator::_printIdDiff(
   if (limit < idsIn1AndNotIn2.size())
   {
      int ctr = 0;
-     for (QSet<long>::const_iterator it = idsIn1AndNotIn2.begin(); it != idsIn1AndNotIn2.end(); ++it)
+     for (auto id : qAsConst(idsIn1AndNotIn2))
      {
-       idsIn1AndNotIn2Limited.insert(*it);
+       idsIn1AndNotIn2Limited.insert(id);
        ctr++;
-
        if (ctr == limit)
-       {
          break;
-       }
      }
   }
   else
@@ -334,15 +326,12 @@ void MapComparator::_printIdDiff(
   if (limit < idsIn2AndNotIn1.size())
   {
      int ctr = 0;
-     for (QSet<long>::const_iterator it = idsIn2AndNotIn1.begin(); it != idsIn2AndNotIn1.end(); ++it)
+     for (auto id : qAsConst(idsIn2AndNotIn1))
      {
-       idsIn2AndNotIn1Limited.insert(*it);
+       idsIn2AndNotIn1Limited.insert(id);
        ctr++;
-
        if (ctr == limit)
-       {
          break;
-       }
      }
   }
   else
@@ -359,10 +348,9 @@ void MapComparator::_printIdDiff(
       idsIn1AndNotIn2Limited);
     if (printFullElements)
     {
-      for (QSet<long>::const_iterator it = idsIn1AndNotIn2Limited.begin();
-           it != idsIn1AndNotIn2Limited.end(); ++it)
+      for (auto id : qAsConst(idsIn1AndNotIn2Limited))
       {
-        LOG_WARN(map1->getElement(ElementId(elementType, *it)));
+        LOG_WARN(map1->getElement(ElementId(elementType, id)));
       }
     }
   }
@@ -373,10 +361,9 @@ void MapComparator::_printIdDiff(
       idsIn2AndNotIn1Limited);
     if (printFullElements)
     {
-      for (QSet<long>::const_iterator it = idsIn2AndNotIn1Limited.begin();
-           it != idsIn2AndNotIn1Limited.end(); ++it)
+      for (auto id : qAsConst(idsIn2AndNotIn1Limited))
       {
-        LOG_WARN(map2->getElement(ElementId(elementType, *it)));
+        LOG_WARN(map2->getElement(ElementId(elementType, id)));
       }
     }
   }
@@ -428,9 +415,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
   }
 
   if (mismatch)
-  {
     return false;
-  }
 
   CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime, _ignoreTagKeys, _errorLimit);
   testMap->visitRo(compareVis);

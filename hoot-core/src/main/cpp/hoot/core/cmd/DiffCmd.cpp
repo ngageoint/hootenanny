@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -87,9 +87,7 @@ public:
       bool ok = false;
       errorLimit = args.at(errorLimitIndex + 1).trimmed().toInt(&ok);
       if (!ok)
-      {
-        throw IllegalArgumentException("Invalid error limit: " + args.at(errorLimitIndex + 1));
-      }
+        throw IllegalArgumentException(QString("Invalid error limit: %1").arg(args.at(errorLimitIndex + 1)));
       args.removeAt(errorLimitIndex + 1);
       args.removeAt(errorLimitIndex);
       setErrorLimit = true;
@@ -100,9 +98,7 @@ public:
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 takes two parameters. You provided %2: %3")
-          .arg(getName())
-          .arg(args.size())
-          .arg(args.join(",")));
+          .arg(getName(), QString::number(args.size()), args.join(",")));
     }
 
     // We always want to know if there are duplicate nodes during comparison.

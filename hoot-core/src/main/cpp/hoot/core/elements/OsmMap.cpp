@@ -290,7 +290,7 @@ void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
     // it modifies the order in which the elements are written to the output. Which presumably (?)
     // impacts the ID when reading the file with re-numbering. Sad.
     // TODO: The BigPertyCmd.sh test no longer exists, so maybe try it again.
-    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
+    size_t minBuckets = _nodes.size() + static_cast<size_t>(nodes.size() * 1.1);
     if (_nodes.bucket_count() < minBuckets)
       _nodes.resize(minBuckets);
 

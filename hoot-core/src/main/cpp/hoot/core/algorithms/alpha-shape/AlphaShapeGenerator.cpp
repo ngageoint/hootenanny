@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "AlphaShapeGenerator.h"
@@ -64,12 +64,11 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   OsmMapWriterFactory::writeDebugMap(inputMap, className(), "alpha-shape-input-map");
 
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+  //  Would rather this be thrown than a warning logged, as the warning may go unoticed by
+  //  clients who are expecting the alpha shape to be generated
   if (cutterShape->getArea() == 0.0)
-  {
-    // would rather this be thrown than a warning logged, as the warning may go unoticed by
-    // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
-  }
+
   OsmMapWriterFactory::writeDebugMap(
     cutterShape, inputMap->getProjection(), className(), "cutter-shape-map");
 
@@ -79,7 +78,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     .convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 
   const RelationMap& rm = result->getRelations();
-  for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
+  for (auto it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
     r->setTag("area", "yes");
@@ -100,7 +99,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   std::vector<std::pair<double, double>> points;
   points.reserve(inputMap->getNodes().size());
   const NodeMap& nodes = inputMap->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     pair<double, double> p;
     p.first = (it->second)->getX();
@@ -123,17 +122,14 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
       StringUtils::formatLargeNumber(_alpha) << ".");
   }
   if (!_geometry)
-  {
     _geometry = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-  }
+
   _geometry = _geometry->buffer(_buffer);
 
   // See _coverStragglers description. This is an add-on behavior that is separate from the original
   // Alpha Shape algorithm.
   if (_manuallyCoverSmallPointClusters)
-  {
     _coverStragglers(inputMap);
-  }
 
   return _geometry;
 }
@@ -147,7 +143,7 @@ void AlphaShapeGenerator::_coverStragglers(const ConstOsmMapPtr& map)
   // here, if possible, for better performance.
   const NodeMap& nodes = map->getNodes();
   //  Push all nodes onto the work queue
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
     _nodes.push(it->second);
   //  Minimize the threads needed to either _maxThreads or the node count
   _maxThreads = std::min(_maxThreads, static_cast<int>(_nodes.size()));
@@ -187,7 +183,7 @@ void AlphaShapeGenerator::_coverStragglersWorker()
     {
       //  Lock the mutex
       std::lock_guard<std::mutex> nodes_lock(_nodesMutex);
-      stack_size = _nodes.size();
+      stack_size = static_cast<int>(_nodes.size());
       if (stack_size > 0)
       {
         node = _nodes.top();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -43,13 +43,13 @@ class ChangesetDeriverTest : public HootTestFixture
 
 public:
 
-  ChangesetDeriverTest() :
-  HootTestFixture("test-files/algorithms/changeset/ChangesetDeriverTest/", UNUSED_PATH)
+  ChangesetDeriverTest()
+    : HootTestFixture("test-files/algorithms/changeset/ChangesetDeriverTest/", UNUSED_PATH)
   {
   }
 
-  QMap<Change::ChangeType, QList<long>> _getChangeset(
-    const QString& input1, const QString& input2, const bool allowRefDelete = true)
+  QMap<Change::ChangeType, QList<long>> _getChangeset(const QString& input1, const QString& input2,
+                                                      const bool allowRefDelete = true)
   {
     OsmMapPtr map1 = std::make_shared<OsmMap>();
     // each dataset needs to have a different input status
@@ -82,9 +82,9 @@ public:
     const QMap<Change::ChangeType, QList<long>> changeTypeToIds =
       _getChangeset(_inputPath + "Map1.osm", _inputPath + "Map2.osm");
 
-    HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
-    HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
-    HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::Delete]);
+    HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::ChangeType::Create]);
+    HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::ChangeType::Modify]);
+    HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::ChangeType::Delete]);
   }
 
   void disableRefDeleteTest()
@@ -96,9 +96,9 @@ public:
 
     // These checks could be a bit more granular but good enough for now while we're still
     // experimenting with this feature.
-    HOOT_STR_EQUALS(99, changeTypeToIds[Change::Create].size());
-    HOOT_STR_EQUALS(0, changeTypeToIds[Change::Modify].size());
-    HOOT_STR_EQUALS(0, changeTypeToIds[Change::Delete].size());
+    HOOT_STR_EQUALS(99, changeTypeToIds[Change::ChangeType::Create].size());
+    HOOT_STR_EQUALS(0, changeTypeToIds[Change::ChangeType::Modify].size());
+    HOOT_STR_EQUALS(0, changeTypeToIds[Change::ChangeType::Delete].size());
   }
 };
 

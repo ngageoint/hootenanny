@@ -29,9 +29,9 @@
 
 // hoot
 #include <hoot/core/auth/HootServicesLoginManager.h>
-#include <hoot/core/language/LanguageUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
+#include <hoot/core/language/LanguageUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootNetworkUtils.h>
@@ -63,7 +63,7 @@ HootServicesLanguageDetectorClient::HootServicesLanguageDetectorClient()
     _cacheHits(0),
     _cacheSize(0),
     _cacheMaxSize(100),
-    _timeout(500)
+    _timeout(ConfigOptions().getApiTimeout())
 {
 }
 
@@ -127,42 +127,30 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
         opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
         opts.getHootServicesAuthAccessTokenSecret(), _getDetectUrl());
   }
+
+  _timeout = opts.getApiTimeout();
 }
 
 QString HootServicesLanguageDetectorClient::_getUnvailableLangNamesStr() const
 {
-  QString str = "Language codes for which no name was available:\n";
-
+  QStringList options;
   for (auto itr = _langCodesWithNoLangNamesAvailable.begin(); itr != _langCodesWithNoLangNamesAvailable.end(); ++itr)
   {
-    const QString detector = itr.key();
-    str += detector + ":\n";
+    options.append(itr.key() + ":");
     const QSet<QString> unvailableLangNames = itr.value();
-    for (auto itr2 = unvailableLangNames.begin(); itr2 != unvailableLangNames.end(); ++itr2)
-    {
-      const QString langCode = *itr2;
-      str += langCode + "\n";
-    }
+    for (const auto& langCode : qAsConst(unvailableLangNames))
+      options.append(langCode);
   }
-  str.chop(1);
-
-  return str;
+  return QString("Language codes for which no name was available:\n%1").arg(options.join("\n"));
 }
 
 QString HootServicesLanguageDetectorClient::_getCountsStr(const QString& title,
                                                           const QMap<QString, int>& data) const
 {
-  QString str = title + ":\n";
-
+  QStringList counts;
   for (auto itr = data.begin(); itr != data.end(); ++itr)
-  {
-    const QString confidence = itr.key();
-    const int count = itr.value();
-    str += confidence + ": " + QString::number(count) + "\n";
-  }
-  str.chop(1);
-
- return str;
+    counts.append(QString("%1: %2").arg(itr.key(), QString::number(itr.value())));
+ return QString("%1:\n%2").arg(title, counts.join("\n"));
 }
 
 QString HootServicesLanguageDetectorClient::detect(const QString& text)
@@ -200,26 +188,24 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_JSON;
   HootNetworkRequest request;
+  //Hoot OAuth requires that session state be maintained for the authenticated user
   if (_useCookies)
-  {
-    //Hoot OAuth requires that session state be maintained for the authenticated user
     request.setCookies(_cookies);
-  }
+
   try
   {
-    request.networkRequest(
-      url, _timeout, headers, QNetworkAccessManager::Operation::PostOperation,
-      _getRequestData(text).toUtf8());
+    request.networkRequest(url, _timeout, headers, QNetworkAccessManager::Operation::PostOperation,
+                           _getRequestData(text).toUtf8());
   }
   catch (const HootException& e)
   {
-    throw HootException("Error detecting language for text: " + text + ". error: " + e.what());
+    throw HootException(QString("Error detecting language for text: %1. error: %2").arg(text, e.what()));
   }
   if (request.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
     throw HootException(
-      "Error detecting language for text: " + text + ".  HTTP status: " +
-      QString::number(request.getHttpStatus()) + "; error: " + request.getErrorString());
+      QString("Error detecting language for text: %1.  HTTP status: %2; error: %3")
+        .arg(text, QString::number(request.getHttpStatus()), request.getErrorString()));
   }
 
   QString detectorUsed;

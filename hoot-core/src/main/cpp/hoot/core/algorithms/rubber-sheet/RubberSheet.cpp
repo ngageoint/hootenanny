@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheet.h"
@@ -109,9 +109,9 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
   if (!criteria.isEmpty())
   {
     _criteria = std::make_shared<OrCriterion>();
-    for (int i = 0; i < criteria.size(); i++)
+    for (const auto& crit : qAsConst(criteria))
     {
-      const QString critName = criteria.at(i).trimmed();
+      const QString critName = crit.trimmed();
       if (!critName.isEmpty())
       {
         LOG_VART(critName);
@@ -162,12 +162,9 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         if (mapConsumer)
         {
           if (!map)
-          {
             throw IllegalArgumentException("No map available to pass to map consumer.");
-          }
           mapConsumer->setOsmMap(map.get());
         }
-
         _criteria->addCriterion(crit);
       }
     }
@@ -178,11 +175,9 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
+  // This has to be done here vs setConfiguration, b/c we may need a map to pass to some criteria.
   if (!_criteria)
-  {
-    // This has to be done here vs setConfiguration, b/c we may need a map to pass to some criteria.
     setCriteria(ConfigOptions().getRubberSheetElementCriteria(), map);
-  }
 
   if (!_criteria)
   {
@@ -252,11 +247,9 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   LOG_DEBUG(
     "Element count for map being modified: " <<
     StringUtils::formatLargeNumber(toModify->getElementCount()));
+  // nothing to rubbersheet
   if (toModify->size() == 0)
-  {
-    // nothing to rubbersheet
     return;
-  }
 
   // check our way limit
   if (_maxAllowedWays != -1 && toModify->getWayCount() > _maxAllowedWays)
@@ -312,8 +305,7 @@ bool RubberSheet::applyTransform(const OsmMapPtr& map)
 
   if (!_interpolator2to1)
   {
-    const QString msg =
-      "No appropriate interpolator was specified, skipping rubber sheet transform.";
+    const QString msg = "No appropriate interpolator was specified, skipping rubber sheet transform.";
     if (_logWarningWhenRequirementsNotFound)
     {
       LOG_WARN(msg);
@@ -326,18 +318,13 @@ bool RubberSheet::applyTransform(const OsmMapPtr& map)
   }
 
   if (_projection.get() != nullptr)
-  {
     MapProjector::project(_map, _projection);
-  }
-  else
-  {
-    // if it is already planar then nothing will be done.
+  else  // if it is already planar then nothing will be done.
     MapProjector::projectToPlanar(_map);
-  }
 
   int ctr = 0;
   const NodeMap& nm = map->getNodes();
-  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  for (auto it = nm.begin(); it != nm.end(); ++it)
   {
     const NodePtr& n = it->second;
 
@@ -379,29 +366,25 @@ std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
   // TODO: This should be replaced with an circular error based method at some point.
   double multiplier;
   if (_ref)
-  {
     multiplier = 1.0;
-  }
   else
-  {
     multiplier = 0.5;
-  }
 
-  for (size_t i = 0; i < _ties.size(); i++)
+  for (const auto& tie : _ties)
   {
     if (s == Status::Unknown1)
     {
-      d[0] = _ties[i].c1.x;
-      d[1] = _ties[i].c1.y;
-      d[2] = -_ties[i].dx() * multiplier;
-      d[3] = -_ties[i].dy() * multiplier;
+      d[0] = tie.c1.x;
+      d[1] = tie.c1.y;
+      d[2] = -tie.dx() * multiplier;
+      d[3] = -tie.dy() * multiplier;
     }
     else
     {
-      d[0] = _ties[i].c2.x;
-      d[1] = _ties[i].c2.y;
-      d[2] = _ties[i].dx() * multiplier;
-      d[3] = _ties[i].dy() * multiplier;
+      d[0] = tie.c2.x;
+      d[1] = tie.c2.y;
+      d[2] = tie.dx() * multiplier;
+      d[3] = tie.dy() * multiplier;
     }
     LOG_VART(d);
     df->addDataVector("", d);
@@ -416,13 +399,9 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
 
   vector<QString> candidates;
   if (_interpolatorClassName.isEmpty())
-  {
     candidates = Factory::getInstance().getObjectNamesByBase(Interpolator::className());
-  }
   else
-  {
     candidates.push_back(_interpolatorClassName);
-  }
 
   double bestError = numeric_limits<double>::max();
   std::shared_ptr<Interpolator> bestCandidate;
@@ -443,9 +422,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     // may need to occur over time.
     int maxOptIterations = ConfigOptions().getRubberSheetMaxInterpolatorIterations();
     if (maxOptIterations == -1)
-    {
       maxOptIterations = INT_MAX;
-    }
     candidate->setMaxAllowedPerLoopOptimizationIterations(maxOptIterations);
     vector<string> ind;
     ind.emplace_back("x");
@@ -473,9 +450,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   }
 
   if (bestCandidate.get() == nullptr)
-  {
     throw HootException("Unable to determine rubber sheeting interpolation candidate.");
-  }
 
   LOG_INFO("Using interpolator: " << bestCandidate->toString());
 
@@ -506,7 +481,7 @@ bool RubberSheet::_findTies()
 
   std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   // go through all the intersections w/ 2 or more ways intersecting
-  for (NodeToWayMap::const_iterator it = n2w->begin(); it != n2w->end(); ++it)
+  for (auto it = n2w->begin(); it != n2w->end(); ++it)
   {
     long nid = it->first;
     LOG_VART(nid);
@@ -530,7 +505,7 @@ bool RubberSheet::_findTies()
 
   // go through all the paired intersections
   ctr = 0;
-  for (MatchList::const_iterator it = _matches.begin(); it != _matches.end(); ++it)
+  for (auto it = _matches.begin(); it != _matches.end(); ++it)
   {
     NodePtr n = _map->getNode(it->first);
     LOG_VART(n->getElementId());
@@ -539,10 +514,9 @@ bool RubberSheet::_findTies()
     if (n->getStatus() == Status::Unknown1)
     {
       const list<Match>& l = it->second;
-      for (list<Match>::const_iterator lt = l.begin(); lt != l.end(); ++lt)
+      for (auto m1 : l)
       {
         // set the new score for the pair to the product of the pair
-        Match m1 = *lt;
         LOG_TRACE(m1.score);
         const Match& m2 = _findMatch(m1.nid2, m1.nid1);
         LOG_TRACE(m2.score);
@@ -634,18 +608,16 @@ bool RubberSheet::_findTies()
     if (_failWhenMinTiePointsNotFound)
     {
       throw HootException(
-        QString("Error rubbersheeting due to not finding enough tie points.  ") +
-        QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
-          .arg(QString::number(_minimumTies))
-          .arg(QString::number(_ties.size())));
+        QString("Error rubbersheeting due to not finding enough tie points.  "
+                "The minimum allowable tie points configured is %1 and %2 tie points were found.")
+          .arg(QString::number(_minimumTies), QString::number(_ties.size())));
     }
     else
     {
       const QString msg =
-        QString("Skipping rubbersheeting due to not finding enough tie points.  ") +
-        QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
-          .arg(QString::number(_minimumTies))
-          .arg(QString::number(_ties.size()));
+        QString("Skipping rubbersheeting due to not finding enough tie points.  "
+                "The minimum allowable tie points configured is %1 and %2 tie points were found.")
+          .arg(QString::number(_minimumTies), QString::number(_ties.size()));
       if (_logWarningWhenRequirementsNotFound)
       {
         LOG_WARN(msg);
@@ -670,13 +642,11 @@ const RubberSheet::Match& RubberSheet::_findMatch(long nid1, long nid2)
 {
   const list<Match>& matches = _matches[nid1];
 
-  for (list<Match>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  for (const auto& match : matches)
   {
-    LOG_VART(it->nid2);
-    if (it->nid2 == nid2)
-    {
-      return *it;
-    }
+    LOG_VART(match.nid2);
+    if (match.nid2 == nid2)
+      return match;
   }
 
   return _emptyMatch;
@@ -707,13 +677,9 @@ Coordinate RubberSheet::_translate(const Coordinate& c, Status s)
 
   const vector<double>* delta;
   if (s == Status::Unknown1)
-  {
     delta = &_interpolator1to2->interpolate(_matchPoint);
-  }
   else
-  {
     delta = &_interpolator2to1->interpolate(_matchPoint);
-  }
 
   return Coordinate(c.x + (*delta)[0], c.y + (*delta)[1]);
 }
@@ -725,17 +691,11 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   // the status type we're searching for
   Status s;
   if (from->getStatus() == Status::Unknown1)
-  {
     s = Status::Unknown2;
-  }
   else if (from->getStatus() == Status::Unknown2)
-  {
     s = Status::Unknown1;
-  }
   else
-  {
     throw HootException("Expected either Unknown1 or Unknown2.");
-  }
   LOG_VART(s);
 
   std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
@@ -743,21 +703,21 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   list<Match>& matches = _matches[nid];
   LOG_VART(matches.size());
   vector<long> neighbors = _map->getIndex().findNodes(from->toCoordinate(), _searchRadius);
-  for (size_t i = 0; i < neighbors.size(); ++i)
+  for (auto neighbor_id : neighbors)
   {
-    NodePtr aNeighbor = _map->getNode(neighbors[i]);
+    NodePtr aNeighbor = _map->getNode(neighbor_id);
     LOG_VART(aNeighbor->getElementId());
-    NodeToWayMap::const_iterator it = n2w->find(neighbors[i]);
+    NodeToWayMap::const_iterator it = n2w->find(neighbor_id);
     if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
     {
-      double score = _nm.scorePair(nid, neighbors[i]);
+      double score = _nm.scorePair(nid, neighbor_id);
       LOG_VART(QString::number(score, 'g', 10));
 
       if (score > 0.0)
       {
         Match m;
         m.nid1 = nid;
-        m.nid2 = neighbors[i];
+        m.nid2 = neighbor_id;
         m.score = score;
         matches.push_back(m);
         sum += m.score;
@@ -771,21 +731,18 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   sum = max(1.0, sum);
   LOG_VART(sum);
 
-  for (list<Match>::iterator it = matches.begin(); it != matches.end(); ++it)
+  for (auto it = matches.begin(); it != matches.end(); ++it)
   {
     it->p = it->score / sum;
     LOG_VART(it->p);
   }
 }
 
-void RubberSheet::_writeInterpolator(
-  const std::shared_ptr<const Interpolator>& interpolator, QIODevice& os) const
+void RubberSheet::_writeInterpolator(const std::shared_ptr<const Interpolator>& interpolator, QIODevice& os) const
 {
   // this could be modified to write an empty or null interpolator if needed.
   if (!interpolator)
-  {
     throw HootException("An invalid interpolator was specified. Too few tie points?");
-  }
   QDataStream ds(&os);
   char* projStr = nullptr;
   _projection->exportToProj4(&projStr);
@@ -799,14 +756,11 @@ void RubberSheet::_writeInterpolator(
 vector<double> RubberSheet::calculateTiePointDistances()
 {
   if (_ties.empty())
-  {
     throw HootException("No tie points have been generated.");
-  }
 
   vector<double> tiePointDistances;
-  for (vector<Tie>::const_iterator it = _ties.begin(); it != _ties.end(); ++it)
+  for (const auto& tiePoint : _ties)
   {
-    Tie tiePoint = *it;
     LOG_TRACE(tiePoint.toString());
     tiePointDistances.push_back(tiePoint.c1.distance(tiePoint.c2));
   }

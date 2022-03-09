@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "DiffConflator.h"
 
 // hoot
 #include <hoot/core/algorithms/changeset/GeoTagCombinationChangesetProvider.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
@@ -417,9 +417,8 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
   // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VARD(treatReviewsAsMatches);
-  for (auto mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (const auto& match : _matches)
   {
-    ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
     // Don't include misses.
     if (matchType == MatchType::Match)
@@ -442,9 +441,8 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
 int DiffConflator::_countMatchesToRemoveAsPartial() const
 {
   int numMatchesToRemovePartially = 0;
-  for (auto mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (const auto& match : _matches)
   {
-    ConstMatchPtr match = *mit;
     if (_isMatchToRemovePartially(match))
       numMatchesToRemovePartially++;
   }
@@ -461,24 +459,22 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(c
   // Go through and record any element's involved in an intra-dataset match, since we don't want
   // those types of matches from preventing an element from passing through to the diff output.
 
-  for (auto matchItr = matches.begin(); matchItr != matches.end(); ++matchItr)
+  for (const auto& match : matches)
   {
-    ConstMatchPtr match = *matchItr;
     if (match->getType() == MatchType::Match ||
         (allowReviews && match->getType() == MatchType::Review))
     {
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-      for (auto pairItr = pairs.begin(); pairItr != pairs.end(); ++pairItr)
+      for (const auto& p : pairs)
       {
-        std::pair<ElementId, ElementId> pair = *pairItr;
-        ConstElementPtr e1 = _map->getElement(pair.first);
-        ConstElementPtr e2 = _map->getElement(pair.second);
+        ConstElementPtr e1 = _map->getElement(p.first);
+        ConstElementPtr e2 = _map->getElement(p.second);
         // Any match with elements having the same status (came from the same dataset) is an
         // intra-dataset match.
         if (e1 && e2 && e1->getStatus() == e2->getStatus())
         {
-          elementIds.insert(pair.first);
-          elementIds.insert(pair.second);
+          elementIds.insert(p.first);
+          elementIds.insert(p.second);
         }
       }
     }
@@ -487,24 +483,22 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(c
   // Now, go back through and exclude any previously added that are also involved in an
   // inter-dataset match, since we don't want those in the diff output.
 
-  for (auto matchItr = matches.begin(); matchItr != matches.end(); ++matchItr)
+  for (const auto& match : matches)
   {
-    ConstMatchPtr match = *matchItr;
     if (match->getType() == MatchType::Match ||
         (allowReviews && match->getType() == MatchType::Review))
     {
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-      for (auto pairItr = pairs.begin(); pairItr != pairs.end(); ++pairItr)
+      for (const auto& p : pairs)
       {
-        std::pair<ElementId, ElementId> pair = *pairItr;
-        ConstElementPtr e1 = _map->getElement(pair.first);
-        ConstElementPtr e2 = _map->getElement(pair.second);
+        ConstElementPtr e1 = _map->getElement(p.first);
+        ConstElementPtr e2 = _map->getElement(p.second);
         // Any match with elements having a different status (came from different datasets) is an
         // inter-dataset match.
         if (e1 && e2 && e1->getStatus() != e2->getStatus())
         {
-          elementIds.remove(pair.first);
-          elementIds.remove(pair.second);
+          elementIds.remove(p.first);
+          elementIds.remove(p.second);
         }
       }
     }
@@ -598,9 +592,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   }
 
   // Go through all the matches.
-  for (auto mit = matchesToRemoveCompletely.begin(); mit != matchesToRemoveCompletely.end(); ++mit)
+  for (const auto& match : matchesToRemoveCompletely)
   {
-    ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
 
     // Make sure its not a miss. Throw out reviews if configured to do so.
@@ -612,8 +605,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
       // Get the element IDs involved in the match and remove the elements involved in the match
       // completely.
       const std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
-      for (auto pairItr = singleMatchPairs.begin(); pairItr != singleMatchPairs.end(); ++pairItr)
-        _removeMatchElementPairCompletely(match, *pairItr, status);
+      for (const auto& p : singleMatchPairs)
+        _removeMatchElementPairCompletely(match, p, status);
     }
   }
 
@@ -763,9 +756,8 @@ void DiffConflator::_calcAndStoreTagChanges()
     _tagChanges = std::make_shared<MemChangesetProvider>(_map->getProjection());
 
   int numMatchesProcessed = 0;
-  for (auto mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (const auto& match : _matches)
   {
-    ConstMatchPtr match = *mit;
     LOG_VART(match);
     std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
 
@@ -773,27 +765,25 @@ void DiffConflator::_calcAndStoreTagChanges()
     // elements when we do this. We want to ignore elements created during map cleaning operations
     // (e.g. intersection splitting) because the map that the changeset operates on won't have those
     // elements.
-    for (auto pit = pairs.begin(); pit != pairs.end(); ++pit)
+    for (const auto& p : pairs)
     {
       // If it's a POI-Poly match the poi always comes first, even if it's from the secondary
       // dataset, so we can't always count on the first being the old element.
       ConstElementPtr pOldElement;
       ConstElementPtr pNewElement;
-      if (_originalMap->containsElement(pit->first))
+      if (_originalMap->containsElement(p.first))
       {
-        pOldElement = _originalMap->getElement(pit->first);
-        pNewElement = _map->getElement(pit->second);
+        pOldElement = _originalMap->getElement(p.first);
+        pNewElement = _map->getElement(p.second);
       }
-      else if (_originalMap->containsElement(pit->second))
+      else if (_originalMap->containsElement(p.second))
       {
-        pOldElement = _originalMap->getElement(pit->second);
-        pNewElement = _map->getElement(pit->first);
+        pOldElement = _originalMap->getElement(p.second);
+        pNewElement = _map->getElement(p.first);
       }
-      else
-      {
-        // Skip this element, because it's not in the OG map.
+      else  // Skip this element, because it's not in the OG map.
         continue;
-      }
+
       LOG_VART(pOldElement->getElementId());
       LOG_VART(pNewElement->getElementId());
 
@@ -810,8 +800,8 @@ void DiffConflator::_calcAndStoreTagChanges()
       }
 
       // Double check to make sure we don't create multiple changes for the same element.
-      if (!_tagChanges->containsChange(pOldElement->getElementId())
-          && _tagsAreDifferent(pOldElement->getTags(), pNewElement->getTags()))
+      if (!_tagChanges->containsChange(pOldElement->getElementId()) &&
+          _tagsAreDifferent(pOldElement->getTags(), pNewElement->getTags()))
       {
         // Make a new change.
         Change newChange = _getChange(pOldElement, pNewElement);
@@ -839,7 +829,7 @@ bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) 
   // Always ignore metadata tags and then allow additional tags to be ignored on a case by case
   // basis.
   const QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
-  for (auto newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
+  for (auto newTagIt = newTags.constBegin(); newTagIt != newTags.constEnd(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
     if (newTagKey != MetadataTags::Ref1() && // Make sure not ref1
@@ -874,7 +864,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   pChangeElement->setTags(newTags);
 
   // Create the change.
-  return Change(Change::Modify, pChangeElement);
+  return Change(Change::ChangeType::Modify, pChangeElement);
 }
 
 void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges)
@@ -894,12 +884,12 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
       // Add nodes if needed to.
       std::vector<long> nIds = pWay->getNodeIds();
       LOG_VART(nIds);
-      for (auto it = nIds.begin(); it != nIds.end(); ++it)
+      for (auto node_id : nIds)
       {
-        if (!map->containsNode(*it))
+        if (!map->containsNode(node_id))
         {
           // Add a copy.
-          NodePtr pNewNode = std::make_shared<Node>(*(_originalMap->getNode(*it)));
+          NodePtr pNewNode = std::make_shared<Node>(*(_originalMap->getNode(node_id)));
           pNewNode->setStatus(Status::TagChange);
           map->addNode(pNewNode);
         }

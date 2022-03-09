@@ -28,10 +28,10 @@
 #define OSMAPIDBSQLCHANGESETFILEWRITER_H
 
 // Hoot
-#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // Qt

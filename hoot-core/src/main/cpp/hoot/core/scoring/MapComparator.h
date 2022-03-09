@@ -22,12 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MAPCOMPARATOR_H
 #define MAPCOMPARATOR_H
-
-
 
 namespace hoot
 {
@@ -62,9 +60,8 @@ private:
   int _errorLimit;
   QStringList _ignoreTagKeys;
 
-  void _printIdDiff(
-    const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
-    const ElementType& elementType, const int limit = 5) const;
+  void _printIdDiff(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
+                    const ElementType& elementType, const int limit = 5) const;
 };
 
 }

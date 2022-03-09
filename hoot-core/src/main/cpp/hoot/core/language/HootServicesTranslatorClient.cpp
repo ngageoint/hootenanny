@@ -70,7 +70,7 @@ HootServicesTranslatorClient::HootServicesTranslatorClient()
     _cacheHits(0),
     _cacheMaxSize(100),
     _cacheSize(0),
-    _timeout(500)
+    _timeout(ConfigOptions().getApiTimeout())
 {
 }
 
@@ -172,15 +172,12 @@ void HootServicesTranslatorClient::_validateAvailableLangs(const std::shared_ptr
     LOG_VART(sourceLangCode);
     if (!returnedLangs[sourceLangCode])
     {
-      QString msg = "Requested source language code: " + sourceLangCode + " not available.";
+      QString msg = QString("Requested source language code: %1 not available.").arg(sourceLangCode);
       if (type == "translatable")
-      {
         throw HootException(msg);
-      }
       else
       {
-        msg += "; Skipping detection for language: " + sourceLangCode;
-        LOG_WARN(msg);
+        LOG_WARN(msg << "; Skipping detection for language: " << sourceLangCode);
         langNotFound = true;
       }
     }
@@ -341,10 +338,10 @@ QString HootServicesTranslatorClient::translate(const QString& text)
   }
   catch (const HootException& e)
   {
-    throw HootException("Error translating text: " + text + ". error: " + e.what());
+    throw HootException(QString("Error translating text: %1. error: %2").arg(text, e.what()));
   }
   if (request.getHttpStatus() != HttpResponseCode::HTTP_OK)
-    throw HootException("Error translating text: " + text + ". error: " + request.getErrorString());
+    throw HootException(QString("Error translating text: %1. error: %2").arg(text, request.getErrorString()));
 
   _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
 
