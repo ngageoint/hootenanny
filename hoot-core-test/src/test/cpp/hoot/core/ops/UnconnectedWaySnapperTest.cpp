@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -35,7 +36,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 namespace hoot
@@ -58,8 +58,9 @@ class UnconnectedWaySnapperTest : public HootTestFixture
 
 public:
 
-  UnconnectedWaySnapperTest() :
-  HootTestFixture("test-files/ops/UnconnectedWaySnapper/", "test-output/ops/UnconnectedWaySnapper/")
+  UnconnectedWaySnapperTest()
+    : HootTestFixture("test-files/ops/UnconnectedWaySnapper/",
+                      "test-output/ops/UnconnectedWaySnapper/")
   {
     setResetType(ResetEnvironment);
   }
