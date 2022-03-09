@@ -1,10 +1,13 @@
 var expect  = require("chai").expect;
-var server = require("../server.js");
 var fs = require('fs');
+
+var config = require('../config.json');
+config.datasources.API.overrideConfig = 'test.conf';
+
+var server = require("../server.js");
 var path = require('path');
 
 describe("Node Export Server", function() {
-
     describe("Validate BBOX", function() {
         it("fails for empty string", function() {
             var bbox = '';
@@ -189,5 +192,16 @@ describe("Node Export Server", function() {
                 expect(server.isMultipolygon(multipolygon)).to.equal(true);
             })
         })
+    })
+    describe("Override Configs", function() {
+      it("Override config gets included if specified for a data source", function(){
+        var apiParams = {
+          datasource: 'API',
+          schema: 'TDSv70',
+          format: 'json'
+        }
+        var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
+        expect(command.indexOf('-C test.conf') !== -1).to.equal(true)
+      });
     })
 });
