@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -70,13 +70,11 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
   WayMap wm = _map->getWays();
 
   // go through each way and remove duplicate nodes in one way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+  for (auto it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
     if (!w)
-    {
       continue;
-    }
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
     // and active conflate matcher in the current conflation configuration.
@@ -90,10 +88,10 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     }
     vector<long> newNodes;
     const vector<long>& nodes = w->getNodeIds();
-    for (size_t i = 0; i < nodes.size(); i++)
+    for (auto node_id : nodes)
     {
-      if (newNodes.empty() || newNodes[newNodes.size() - 1] != nodes[i])
-        newNodes.push_back(nodes[i]);
+      if (newNodes.empty() || newNodes[newNodes.size() - 1] != node_id)
+        newNodes.push_back(node_id);
     }
 
     if (newNodes.size() < nodes.size())
@@ -101,14 +99,12 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
   }
 
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+  for (auto it = wm.begin(); it != wm.end(); ++it)
   {
     long key = it->first;
     const WayPtr& w = it->second;
     if (!w)
-    {
       continue;
-    }
     else if (_conflateInfoCache &&
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
@@ -125,18 +121,17 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     // create a map of all the ways that share nodes with this way and the number of nodes shared.
     std::map<long, int> nodesSharedCount;
     const vector<long>& nodes = w->getNodeIds();
-    for (size_t i = 0; i < nodes.size(); i++)
+    for (auto node_id : nodes)
     {
-      const set<long>& ways = n2w[nodes[i]];
-      for (set<long>::iterator wit = ways.begin(); wit != ways.end(); ++wit)
+      const set<long>& ways = n2w[node_id];
+      for (auto way_id : ways)
       {
-        if (*wit != w->getId() && _isCandidateWay(w))
-          nodesSharedCount[*wit]++;
+        if (way_id != w->getId() && _isCandidateWay(w))
+          nodesSharedCount[way_id]++;
       }
     }
 
-    for (std::map<long, int>::iterator wit = nodesSharedCount.begin();
-         wit != nodesSharedCount.end(); ++wit)
+    for (auto wit = nodesSharedCount.begin(); wit != nodesSharedCount.end(); ++wit)
     {
       // If a way shares 2 or more nodes,
       if (wit->second >= 2 && _map->containsWay(wit->first) && _map->containsWay(w->getId()))
@@ -178,9 +173,9 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 {
   return
     // is this a linear way
-    (LinearCriterion().isSatisfied(w) &&
-     // if this is not part of a relation
-     _map->getIndex().getParents(w->getElementId()).empty());
+    LinearCriterion().isSatisfied(w) &&
+    // if this is not part of a relation
+    _map->getIndex().getParents(w->getElementId()).empty();
 }
 
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)
@@ -198,7 +193,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
     // _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2), so the following
     // logic works
     if (nodes1.size() == nodes2.size() &&
-        nodes1.size() == static_cast<vector<long>::size_type>(length))
+        nodes1.size() == static_cast<size_t>(length))
     {
       //  Merge the two ways' tags
       w1->setTags(mergedTags);
@@ -210,7 +205,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
       //  Remove w2
       _replaceMultiple(w2, vector<WayPtr>());
     }
-    else if (nodes2.size() == static_cast<vector<long>::size_type>(length))
+    else if (nodes2.size() == static_cast<size_t>(length))
     {
       //  Way 2 is completely engulfed in way 1, shrink way 1 and leave way 2 intact
       vector<WayPtr> ways1 = _splitWay(w1, lcs.getW1Index(), length, false);
@@ -346,16 +341,16 @@ void DuplicateWayRemover::_replaceMultiple(
 
   vector<RelationData::Entry> newValues;
   newValues.reserve(ways.size());
-  for (vector<WayPtr>::size_type i = 0; i < ways.size(); ++i)
+  for (size_t i = 0; i < ways.size(); ++i)
     newValues[i].setElementId(ways[i]->getElementId());
 
   RelationData::Entry old(oldWay->getElementId());
 
   //  Make a copy just in case the index changes while we're replacing elements.
   set<long> rids = _map->getIndex().getElementToRelationMap()->getRelationByElement(oldWay.get());
-  for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
+  for (auto relation_id : rids)
   {
-    const RelationPtr& r = _map->getRelation(*it);
+    const RelationPtr& r = _map->getRelation(relation_id);
     if (r)
       r->replaceElements(old, newValues.begin(), newValues.end());
   }
