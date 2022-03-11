@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.jobs;
 
@@ -122,10 +122,17 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                 .collect(Collectors.toList());
         }
 
+        List<String> familyIds = new ArrayList<>();
+        if (!groupJobId.equals("")) {
+            List<String> processedIds = new ArrayList<>();
+            findJobsFamily(familyIds, processedIds, groupJobId);
+        }
+
         Predicate whereClause = jobStatus.userId.eq(user.getId()) //filter by user
                 .and(jobStatus.status.gt(0)) //filter out running jobs
                 .and((!types.isEmpty()) ? jobStatus.jobType.in(types) : jobStatus.jobType.isNotNull()) //filter by type
                 .and((!statuses.isEmpty()) ? jobStatus.status.in(statuses) : jobStatus.status.isNotNull()) //filter by status
+                .and((!familyIds.isEmpty()) ? jobStatus.jobId.in(familyIds) : null) //filter by related job id
                 ;
 
         List<JobStatus> jobsHistory = createQuery()
@@ -137,20 +144,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                 .limit(limit)
                 .fetch();
 
-        List<String> familyIds = new ArrayList<>();
-        if (!groupJobId.equals("")) {
-            List<String> processedIds = new ArrayList<>();
-            findJobsFamily(familyIds, processedIds, groupJobId);
-        }
-
         List<JobStatusResponse> jobs = jobsHistory.stream()
-            .filter(j -> {
-                if (!familyIds.isEmpty()) {
-                    return familyIds.contains(j.getJobId());
-                }
-
-                return true;
-            })
             .map(j -> {
                 JobStatusResponse response = new JobStatusResponse();
                 response.setJobId(j.getJobId());
