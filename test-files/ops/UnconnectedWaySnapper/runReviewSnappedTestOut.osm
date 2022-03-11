@@ -2257,7 +2257,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-25"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
@@ -2281,7 +2280,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-24"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
@@ -2316,7 +2314,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-23"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
@@ -2359,7 +2356,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-20"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
@@ -2387,7 +2383,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-18"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
@@ -2417,7 +2412,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-16"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
@@ -2439,7 +2433,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-14"/>
-        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
     </way>
@@ -2465,7 +2458,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-13"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
     </way>
@@ -2500,7 +2492,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-10"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
     </way>
@@ -2512,7 +2503,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-9"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
     </way>
@@ -2528,7 +2518,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="-8"/>
-        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source" v="bing"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
@@ -2573,7 +2562,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-5"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source" v="bing"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
@@ -2591,7 +2579,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-4"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source" v="bing"/>
         <tag k="source:datetime" v="2011-11-27T07:24:23.000Z"/>
@@ -2638,7 +2625,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="trunk"/>
         <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="ref" v="P-2"/>
         <tag k="source" v="landsat"/>

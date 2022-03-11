@@ -11899,7 +11899,6 @@
         <nd ref="-532"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="primary"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="junction" v="roundabout"/>
         <tag k="oneway" v="yes"/>
         <tag k="ref" v="RN6"/>

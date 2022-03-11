@@ -183,12 +183,10 @@ private:
   // the feature criteria to be used for way snap target candidates
   QStringList _wayToSnapToCriteria;
   ElementCriterionPtr _wayToSnapCrit;
+  ElementCriterionPtr _wayNodeToSnapToCrit;
   // the feature criteria to be used for way snap source candidates
   QStringList _wayToSnapCriteria;
   ElementCriterionPtr _wayToSnapToCrit;
-  // the feature criteria to be used for way snap target candidates
-  QStringList _wayNodeToSnapToCriteria;
-  ElementCriterionPtr _wayNodeToSnapToCrit;
   // the status criteria to be used for the snap source way
   QStringList _snapWayStatuses;
   // the status criteria to be used for the snap target way or way node
@@ -353,6 +351,10 @@ private:
    * Marks a snapped way with a review tag
    */
   void _reviewSnappedWay(const long idOfNodeBeingSnapped) const;
+  /*
+   * Setup the default criterion for the snapper
+   */
+  void _setDefaultCriterion(ConfigOptions& options);
 };
 
 }

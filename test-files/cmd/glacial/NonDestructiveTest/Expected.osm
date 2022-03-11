@@ -39164,7 +39164,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:id" v="-188"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="27"/>
         <tag k="junction" v="roundabout"/>

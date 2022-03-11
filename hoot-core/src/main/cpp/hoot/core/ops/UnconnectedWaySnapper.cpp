@@ -65,26 +65,25 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnconnectedWaySnapper)
 
 UnconnectedWaySnapper::UnconnectedWaySnapper()
-  : _snapToExistingWayNodes(true),
-    _favorReferenceWayNode(false),
-    _maxNodeReuseDistance(0.5),
-    _maxSnapDistance(5.0),
+  : _snapToExistingWayNodes(ConfigOptions().getSnapUnconnectedWaysUseExistingWayNodes()),
+    _favorReferenceWayNode(ConfigOptions().getSnapUnconnectedWaysFavorReferenceWayNode()),
+    _maxNodeReuseDistance(ConfigOptions().getSnapUnconnectedWaysExistingWayNodeTolerance()),
+    _maxSnapDistance(ConfigOptions().getSnapUnconnectedWaysSnapTolerance()),
     _snapToWayDiscretizationSpacing(1.0),
-    _addCeToSearchDistance(false),
-    _markSnappedNodes(false),
-    _markSnappedWays(false),
-    _reviewSnappedWays(false),
-    _markOnly(false),
-    _wayToSnapToCriteria(QStringList(LinearCriterion::className())),
-    _wayToSnapCriteria(QStringList(LinearCriterion::className())),
-    _wayNodeToSnapToCriteria(QStringList(LinearWayNodeCriterion::className())),
+    _addCeToSearchDistance(ConfigOptions().getSnapUnconnectedWaysAddCircularErrorToSearchRadius()),
+    _markSnappedNodes(ConfigOptions().getSnapUnconnectedWaysMarkSnappedNodes()),
+    _markSnappedWays(ConfigOptions().getSnapUnconnectedWaysMarkSnappedWays()),
+    _reviewSnappedWays(ConfigOptions().getSnapUnconnectedWaysReviewSnappedWays()),
+    _markOnly(ConfigOptions().getSnapUnconnectedWaysMarkOnly()),
     _snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
     _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
     _minTypeMatchScore(-1.0),
     _numSnappedToWays(0),
     _numSnappedToWayNodes(0),
-    _taskStatusUpdateInterval(1000)
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
+  ConfigOptions defaultOptions;
+  _setDefaultCriterion(defaultOptions);
 }
 
 void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
@@ -106,20 +105,7 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setSnapWayStatuses(confOpts.getSnapUnconnectedWaysSnapWayStatuses());
   setSnapToWayStatuses(confOpts.getSnapUnconnectedWaysSnapToWayStatuses());
 
-  const QStringList globalSnapCriteria = confOpts.getSnapUnconnectedWaysSnapCriteria();
-
-  const QStringList snappedWayCriteria = confOpts.getSnapUnconnectedWaysSnapWayCriteria();
-  // If neither of these conditions are true, we'll use the default of snapping ways of all types.
-  if (!snappedWayCriteria.isEmpty())
-    setWayToSnapCriteria(snappedWayCriteria);
-  else if (!globalSnapCriteria.isEmpty())
-    setWayToSnapCriteria(globalSnapCriteria);
-
-  const QStringList snapToWayCriteria = confOpts.getSnapUnconnectedWaysSnapToWayCriteria();
-  if (!snapToWayCriteria.isEmpty())
-    setWayToSnapToCriteria(snapToWayCriteria);
-  else if (!globalSnapCriteria.isEmpty())
-    setWayToSnapToCriteria(globalSnapCriteria);
+  _setDefaultCriterion(confOpts);
 
   setMarkSnappedNodes(confOpts.getSnapUnconnectedWaysMarkSnappedNodes());
   setMarkSnappedWays(confOpts.getSnapUnconnectedWaysMarkSnappedWays());
@@ -131,6 +117,28 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setTypeExcludeKvps(confOpts.getSnapUnconnectedWaysExcludeTypes());
 
   _conf = conf;
+}
+
+void UnconnectedWaySnapper::_setDefaultCriterion(ConfigOptions &options)
+{
+  const QStringList globalSnapCriteria = options.getSnapUnconnectedWaysSnapCriteria();
+
+  const QStringList snappedWayCriteria = options.getSnapUnconnectedWaysSnapWayCriteria();
+  // If neither of these conditions are true, we'll use the default of snapping ways of all types.
+  if (!snappedWayCriteria.isEmpty())
+    setWayToSnapCriteria(snappedWayCriteria);
+  else if (!globalSnapCriteria.isEmpty())
+    setWayToSnapCriteria(globalSnapCriteria);
+  else
+    setWayToSnapCriteria(QStringList(LinearCriterion::className()));
+
+  const QStringList snapToWayCriteria = options.getSnapUnconnectedWaysSnapToWayCriteria();
+  if (!snapToWayCriteria.isEmpty())
+    setWayToSnapToCriteria(snapToWayCriteria);
+  else if (!globalSnapCriteria.isEmpty())
+    setWayToSnapToCriteria(globalSnapCriteria);
+  else
+    setWayToSnapToCriteria(QStringList(LinearCriterion::className()));
 }
 
 void UnconnectedWaySnapper::setMaxNodeReuseDistance(double distance)
@@ -784,7 +792,8 @@ void UnconnectedWaySnapper::_snap(const NodePtr& nodeToSnap, const NodePtr& wayN
   LOG_TRACE(waysContainingWayNodeToSnapTo.size());
   assert(waysContainingWayNodeToSnapTo.size() > 0);
   _snappedToWay = _map->getWay(*waysContainingWayNodeToSnapTo.begin());
-  _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_node_target");
+  if (_markSnappedWays)
+    _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_node_target");
   LOG_VART(_snappedToWay);
 
   // Skip the actual snapping if we're only marking ways that could be snapped.
@@ -985,7 +994,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWay(const NodePtr& nodeT
         LOG_VART(wayToSnapTo->getNodeIds());
       }
       _snappedToWay = wayToSnapTo;
-      _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_target");
+      if (_markSnappedWays)
+        _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_target");
       LOG_VART(_snappedToWay);
 
       return true;
