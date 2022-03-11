@@ -240,7 +240,7 @@ public class ImportResource {
             // if id is used for translation then set translation to the file path of that file
             try {
                 long translationId = Long.parseLong(translation);
-                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId);
+                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId, false /*editable*/);
                 TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationFile.getFolderId());
 
                 String translationPath = File.separator + translationFile.getDisplayName();
