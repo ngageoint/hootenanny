@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.IMPORT_OPTIONS;
-import static hoot.services.HootProperties.SCRIPT_FOLDER;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
@@ -88,7 +87,6 @@ import hoot.services.job.JobType;
 import hoot.services.models.db.TranslationFolder;
 import hoot.services.models.db.Translations;
 import hoot.services.models.db.Users;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.MultipartSerializer;
 
 
@@ -240,7 +238,7 @@ public class ImportResource {
             // if id is used for translation then set translation to the file path of that file
             try {
                 long translationId = Long.parseLong(translation);
-                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId);
+                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId, false /*editable*/);
                 TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationFile.getFolderId());
 
                 String translationPath = File.separator + translationFile.getDisplayName();

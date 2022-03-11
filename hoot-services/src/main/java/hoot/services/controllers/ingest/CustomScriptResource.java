@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -48,8 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
@@ -68,16 +66,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -607,7 +600,7 @@ public class CustomScriptResource {
         try {
             if (translationId > -1) {
                 // get the display name because that's the file to delete. folder id is to get path for the file
-                Translations folderMapInfo = getTranslationForUser(user, translationId);
+                Translations folderMapInfo = getTranslationForUser(user, translationId, true /*editable*/);
                 String translationName = folderMapInfo.getDisplayName();
 
                 // get full directory path for file being deleted
@@ -987,7 +980,7 @@ public class CustomScriptResource {
 
         Users user = Users.fromRequest(request);
 
-        Translations translation = getTranslationForUser(user, translationId);
+        Translations translation = getTranslationForUser(user, translationId, true /*editable*/);
         TranslationFolder currentFolder = getTranslationFolderForUser(user, translation.getFolderId());
         File currentFile = getTranslationFile(currentFolder.getPath(), translation.getDisplayName());
 
@@ -1046,7 +1039,7 @@ public class CustomScriptResource {
         throw new ForbiddenException("You do not have access to this folder");
     }
 
-    public static Translations getTranslationForUser(Users user, Long translationId) throws WebApplicationException {
+    public static Translations getTranslationForUser(Users user, Long translationId, boolean editable) throws WebApplicationException {
         Translations translation = DbUtils.getTranslation(translationId);
 
         if(translation == null) {
@@ -1054,11 +1047,12 @@ public class CustomScriptResource {
         }
 
         if(user != null && !isVisible(user, translationId)) {
-            throw new ForbiddenException("You must own the translation to modify it");
+            throw new ForbiddenException("This translation is not visible to you");
         }
 
+        // For write operations (delete/modify)
         // Check if owner of translation isn't the user, user isn't admin, and there isn't an owner of the translation
-        if(user != null && !translation.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user) && translation.getUserId() != -1) {
+        if(editable && user != null && !translation.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user) && translation.getUserId() != -1) {
             throw new ForbiddenException("You must own the translation to modify it");
         }
         return translation;
