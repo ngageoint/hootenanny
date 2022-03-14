@@ -219,9 +219,9 @@ void WayJoiner::_joinAtNode()
       //  Find all ways connected to this node
       const set<long>& way_ids = nodeToWayMap->getWaysByNode(endpoint_id);
       LOG_VART(way_ids);
-      for (auto wid : way_ids)
+      for (auto child_wid : way_ids)
       {
-        WayPtr child = _map->getWay(wid);
+        WayPtr child = _map->getWay(child_wid);
         if (child && way->getId() != child->getId() && _areJoinable(way, child))
         {
           LOG_VART(child->getElementId());
