@@ -7,6 +7,7 @@ mkdir -p test-output/cmd/glacial/NonDestructiveTest/
 hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
  -D match.creators=NetworkMatchCreator -D merger.creators=NetworkMergerCreator \
  -D writer.include.debug.tags=true \
+ -D conflate.post.ops++=UnconnectedWaySnapper -D snap.unconnected.ways.favor.reference.way.node=true \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-files/Congo_OSM_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonDestructiveTest/output.osm
