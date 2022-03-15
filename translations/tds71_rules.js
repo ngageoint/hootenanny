@@ -200,7 +200,6 @@ tds71.rules = {
     'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
     'URI':'source:ref', // Unique Resource Identifier
     'USAGE':'navaid:usage', // USAGE
-    'URI':'source:ref', // Unique Resource Identifier
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
     'WAC':'world_aeronautical_chart', // WAC
     'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
@@ -1260,7 +1259,8 @@ tds71.rules = {
     ['FFN','385','use','materials_recovery'], // Materials Recovery
     ['FFN','440','use','commercial'], // Commerce
     ['FFN','459','shop','wholesale'], // Wholesale Merchant
-    ['FFN','460','shop','yes'], // Retail Sale
+    // ['FFN','460','shop','yes'], // Retail Sale
+    ['FFN','460','use','retail_sale'], // Retail Sale
     ['FFN','464','shop','specialized'], // Specialized Store
     ['FFN','465','shop','non-specialized'], // Non-specialized Store
     ['FFN','466','shop','convenience'], // Convenience Store
@@ -1275,7 +1275,7 @@ tds71.rules = {
     ['FFN','481','use','terminal'], // Terminal
     ['FFN','482','public_transport','station'], // Station
     ['FFN','483','amenity','stop'], // Stop
-    ['FFN','484','amenity','transfer_hub'], // Transfer Hub
+    ['FFN','484','use','transfer_hub'], // Transfer Hub
     ['FFN','486','use','signalling'], // Signalling
     ['FFN','487','use','transport_system_maintenance'], // Transport System Maintenance
     ['FFN','488','use','navigation'], // Navigation - Not great, used in a number of FCodes
@@ -4221,8 +4221,6 @@ tds71.rules = {
     ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur From PRW
     ['ZI014_PRW','999','raw_material','other'], // Other
 
-
-
     // ZI014_PRW2 - Manufacturing Information : Raw Material [2]
     // ZI014_PRW3 - Manufacturing Information : Raw Material [3]
 
@@ -4707,7 +4705,6 @@ tds71.rules = {
     ['TRE','2','wood','evergreen'], // Evergreen
     ['TRE','3','wood','mixed'], // Mixed
     ['TRE','999','wood','other'], // Other
-
   ], // End one2oneOut
 
   // ##### End of One2One Rules #####
@@ -4805,6 +4802,14 @@ tds71.rules = {
     ],
     // ##### End of ignoreList #####
 
+  // multiList - List of things that have multiple versions. E.g. FFN, FFN2, FFN3
+  multiList : [
+    'APT','APU','ASU','AT005_CAB','BMC','BSC','CVT','FFN','FHC','FRT','HST','MCC','PBY','PLT','POS','PPO','PRW','RIN_ROI','RRC','SBT',
+    'SSR','STL','TRS','TSM','TTC','VCA','VCM','VSP','ZI013_CSP','ZI013_FFP','ZI013_FMM','ZI014_PBY','ZI014_PPO','ZI014_PRW','ZI019_ASP',
+    'ZI019_ASU','ZI071_FFN'
+    ],
+  // ##### End of multiList #####
+
   // ##### Start of fCodeMap #####
   // This is a map of FCODE's and filenames
   fCodeMap : [
@@ -4894,6 +4899,7 @@ tds71.rules = {
     'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
     'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
     'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'URI':'UFI',
     'WBD':'PWA',
     'YWQ':'ZI024_YWQ',
     'ZI032_TOS':'TOS',
@@ -4932,9 +4938,8 @@ tds71.rules = {
     'BH070':{'PWA':'WBD'},
     'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
     'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
-    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'ZI002_UFI'},
+    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'URI'},
     },
-
   // ##### End of swapListOut #####
 
   // ##### Start of txtLength #####
