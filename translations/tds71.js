@@ -805,16 +805,6 @@ tds71 = {
     // Add the LayerName to the source
     if ((! tags.source) && layerName !== '') tags.source = 'tdsv71:' + layerName.toLowerCase();
 
-    // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-    if (attrs.UFI)
-    {
-      tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
-    }
-    else
-    {
-      if (tds71.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
-    }
-
     if (tds71.osmPostRules == undefined)
     {
       // ##############
@@ -1197,7 +1187,7 @@ tds71 = {
       } // End switch
 
     // Religious buildings: Church, Pagoda, Temple etc
-    if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')
+    if (attrs.ZI037_REL && attrs.ZI037_REL !== '14' && tags.amenity !== 'place_of_worship')
     {
       tags.amenity = 'place_of_worship';
     }
@@ -1537,11 +1527,11 @@ tds71 = {
     }
 
     // Wind Turbines, Solar Panels etc  vs power plants
-    // if (tags['generator:source'])
-    // {
-    //   delete tags.power;
-    // }
-    if (tags.power == 'generator')
+    if (tags['generator:source'] && tags.power == 'generator')
+    {
+      delete tags.power;
+    }
+    else if (tags.power == 'generator')
     {
       attrs.F_CODE = 'AL013';
       tags.use = 'power_generation';
@@ -1652,7 +1642,7 @@ tds71 = {
     }
 
     // Sort out tidal features
-    if (tags.tidal && (tags.water || tags.waterway))
+    if (tags.tidal && (tags.water || tags.waterway || tags.landuse == 'port'))
     {
       if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
       if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
@@ -2302,19 +2292,19 @@ tds71 = {
     }
 
     // Sort out the UUID
-    if (attrs.UFI)
-    {
-      var str = attrs['UFI'].split(';');
-      attrs.UFI = str[0].replace('{','').replace('}','');
-    }
-    else if (tags['hoot:id'])
-    {
-      attrs.UFI = 'raw_id:' + tags['hoot:id'];
-    }
-    else
-    {
-      if (tds71.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
-    }
+    // if (attrs.UFI)
+    // {
+    //   var str = attrs['UFI'].split(';');
+    //   attrs.UFI = str[0].replace('{','').replace('}','');
+    // }
+    // else if (tags['hoot:id'])
+    // {
+    //   attrs.UFI = 'raw_id:' + tags['hoot:id'];
+    // }
+    // else
+    // {
+    //   if (tds71.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
+    // }
 
     // Add Weather Restrictions to transportation features
     if (['AP010','AP030','AP050'].indexOf(attrs.FCODE > -1) && !attrs.ZI016_WTC )
@@ -2688,6 +2678,7 @@ tds71 = {
     {
       tds71.configIn = {};
       tds71.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      tds71.configIn.OgrCompareOutput = hoot.Settings.get('ogr.compare.output')
       tds71.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
       tds71.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
@@ -2748,6 +2739,21 @@ tds71 = {
       // translate.dumpOne2OneLookup(tds71.lookup);
     }
 
+    // Doing this early so we can get better debug output
+    var uuidField = 'UFI';
+    if (attrs.F_CODE == 'ZI031')
+    {
+      if (!attrs.URI && tds71.configIn.OgrAddUuid == 'true') attrs.URI = createUuid();
+      uuidField = 'URI';
+    }
+    else
+    {
+      if (!attrs.UFI && tds71.configIn.OgrAddUuid == 'true') attrs.UFI = createUuid();
+    }
+
+    // Keeping the output AFTER the clean.  Might have to put this back in after more testing
+    // if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
+
     // Untangle TDS attributes & OSM tags.
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
     translate.untangleAttributes(attrs,tags,tds71);
@@ -2755,6 +2761,8 @@ tds71 = {
     // Clean out the usless values
     // NOTE: Doing this AFTER the untangle since untangle will push attrs to upper case
     tds71.cleanAttrs(attrs);
+
+    if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,'UFI',layerName,'toOSM');
 
     // Debug:
     if (tds71.configIn.OgrDebugDumptags == 'true')
@@ -2828,6 +2836,14 @@ tds71 = {
     // Override tag values if appropriate
     translate.overrideValues(tags,tds71.toChange);
 
+    if (tds71.configIn.OgrCompareOutput == 'true')
+    {
+      var uuidField = 'uuid';
+      if (!tags.uuid && tags['source:ref']) uuidField = 'source:ref'
+
+      translate.compareOutput(tags,uuidField,'outputOSM','toOSM');
+    }
+
     return tags;
   }, // End of toOsm
 
@@ -2850,6 +2866,7 @@ tds71 = {
       tds71.configOut = {};
       tds71.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       tds71.configOut.OgrCleanExport = hoot.Settings.get('ogr.clean.export')
+      tds71.configOut.OgrCompareOutput = hoot.Settings.get('ogr.compare.output')
       tds71.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
       tds71.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
       tds71.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
@@ -2870,8 +2887,7 @@ tds71 = {
       var tmp_schema = tds71.getDbSchema();
     }
 
-    // Start processing here
-    // Debug:
+      // Debug
     if (tds71.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // The Nuke Option: If we have a relation, drop the feature and carry on
@@ -2893,8 +2909,6 @@ tds71 = {
       // translation to an FCode
       tds71.fcodeLookupOut = translate.createBackwardsLookup(tds71.rules.fcodeOne2oneOut);
 
-      // Debug
-    if (tds71.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
     }
 
     if (tds71.lookup == undefined)
@@ -2908,7 +2922,6 @@ tds71 = {
 
       // Make the fuzzy lookup table
       tds71.fuzzy = schemaTools.generateToOgrTable(tds71.rules.fuzzyTable);
-
       // Debug
       //             for (var k1 in tds71.fuzzy)
       //             {
@@ -2918,6 +2931,17 @@ tds71 = {
       //                 }
       //             }
     } // End tds71.lookup Undefined
+
+    // Doing this early to help the debug output
+    if (!tags.uuid && !tags['source:ref'] && tds71.configOut.OgrAddUuid == 'true') tags.uuid = createUuid();
+
+    if (tds71.configOut.OgrCompareOutput == 'true')
+    {
+      var uuidField = 'uuid';
+      if (!tags.uuid && tags['source:ref']) uuidField = 'source:ref'
+
+      translate.compareOutput(tags,uuidField,'inputOSM','toOgr');
+    }
 
     // Override values if appropriate
     translate.overrideValues(tags,tds71.toChange);
@@ -3085,6 +3109,8 @@ tds71 = {
         delete tags['hoot:id'];
       }
 
+      if (tds71.configOut.OgrCompareOutput == 'true') translate.compareOutput(tags,'uuid',tableName,'toOgr');
+
       // Convert all of the Tags to a string so we can jam it into an attribute
       // var str = JSON.stringify(tags);
       var str = JSON.stringify(tags,Object.keys(tags).sort());
@@ -3122,6 +3148,20 @@ tds71 = {
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
       print('');
+    }
+
+    // Debug:
+    if (tds71.configOut.OgrCompareOutput == 'true')
+    {
+      for (var i = 0, fLen = returnData.length; i < fLen; i++)
+      {
+        var uuidField = 'UFI';
+
+        // Some of the ResourceSrf features only have a URI
+        if (returnData[i]['attrs']['URI']) uuidField = 'URI';
+
+        if (returnData[i]['tableName'].indexOf('o2s_') == -1) translate.compareOutput(returnData[i]['attrs'],uuidField,returnData[i]['tableName'],'toOgr');
+      }
     }
 
     return returnData;

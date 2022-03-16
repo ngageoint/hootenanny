@@ -363,7 +363,7 @@ translate = {
       var value = inList[key];
 
       // Debug
-      // print('key: ' + key + '  value: ' + value);
+      // print('\nkey: ' + key + '  value: ' + value);
 
       if (key in lookup)
       {
@@ -379,6 +379,9 @@ translate = {
           // Drop all of the undefined values and only continue if we have a value
           if (row[0])
           {
+            // Debug
+            // print('Got row[0] from : ' + row)
+
             // Make sure that we don't stomp on already assigned values
             // unless the first n-1 characters are identical then we replace with the higher value
             // (used for cases of where the more specific ffn code is a higher value)
@@ -388,7 +391,7 @@ translate = {
             {
               outList[row[0]] = this.getMaxAsString(outList[row[0]], row[1]);
               // Debug
-              // print('Used:' + key + ' = ' + inList[key]);
+              // print('Used:' + key + ' = ' + inList[key] + '  as ' + row[0] + ' = ' + this.getMaxAsString(outList[row[0]], row[1]));
               delete inList[key];
             }
             else if (! outList[row[0] + '2'] || outList[row[0] + '2'].slice(0, -1) === row[1].slice(0, -1))
@@ -1627,6 +1630,27 @@ translate = {
 
     return schema;
   }, // End addFdName
+
+
+  // compareOutput - Dump out tags or attributes in a JSON format to make it easier to match translated features
+  compareOutput : function(values,uuidField,layerName='layer',direction='toOsm')
+  {
+    var outStr = '"';
+    if (values[uuidField])
+    {
+      outStr += values[uuidField].toString().replace('{','').replace('}','').toUpperCase();
+    }
+    else
+    {
+      outStr += 'XXX';
+    }
+      outStr += '":{"layer":"' + layerName +'","direction":"' + direction + '",';
+      // print('"' + uuidField + '":' + JSON.stringify(values,Object.keys(values).sort()));
+      outStr += '"tags":' + JSON.stringify(values,Object.keys(values).sort()) + '}'
+
+      print(outStr);
+
+  }, // End compareOutput
 
 
   // debugOutput - Dump out tags or attributes to figure out what is going on

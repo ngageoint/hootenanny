@@ -1,0 +1,1574 @@
+93522ADB-BA0C-4E44-9FAA-AC6D2370741B
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+3DF8F982-D64A-4196-83D0-2C6C01DC6EC9
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+87B5B534-F724-47AF-BC95-DC515692385C
+# Missing toOSM
+B710F27A-0366-4A3B-805D-E111A52C971C
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'wadi', u'error:circular'])
+
+A7694937-07D8-437B-8A03-384B8A3B7369
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular', u'light:obstacle'])
+
+48124B31-53AB-4CA1-A965-8480943DFB7D
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+C7575604-8E31-4F89-A83A-2C247279CAE6
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+FD5605A3-70B6-492B-896A-6BDB2E5E439C
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+932B5E3E-F9A8-481D-9C6F-CDF9786BAD19
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+19AB50F6-8CE7-4EDD-892B-A59887739903
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+21962F08-469A-4714-9080-E7362841C21F
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'error:circular'])
+
+31A7D704-3216-44D3-A71C-0FB3CCF1E44F
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+63DA8B8F-6C7E-4C12-9CDA-58163417FA41
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+AE014362-8C96-46B2-8149-D377ED03F334
+in: FacilitySrf out: FacilitySrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+68D0DD28-6B60-468A-B33C-EAA663675DC8
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+1339103F-9A67-4DC1-AA67-B590B33B3000
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+BC8D301F-0E78-43A3-B6EA-0FD0230C82B8
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E5B6F022-4B34-44CF-BEF4-3BC1E170BB00
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+8DEDB86F-3331-41EF-BD39-63C5A809EABE
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+91B5CD10-C9A9-4573-983F-CD7EB41AFBF5
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+C5D722AF-C570-42DE-8AC6-4ABEA5A4983F
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+8994F53F-6565-4D7C-852D-47CC75023AE0
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+143203AA-06B0-49B2-9FCD-98C0F89E2FCB
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+AC05FED0-E5D2-40EA-9916-B979E1E2FF49
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+26CB3035-D35E-4B09-AEBA-EC27BE6A0BB1
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+DB8DB081-3262-434E-9772-E6FF47DF657C
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E68C306D-BD66-4A9C-896C-3A313A9C0A64
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular', u'light:obstacle'])
+
+18021657-B6E6-4B01-B5A4-41329DEF51D5
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5653D95B-3B19-4B75-8571-4C67C4597227
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'wadi', u'error:circular'])
+
+815AAC0F-05FD-41B2-9881-65311103DBEE
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+AF12E7C5-C4B9-4DB9-A11B-FE53910C9E0D
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E0D8B175-219B-4811-A59E-C44FD731DE9B
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+433D3595-8958-477A-B978-6E29B258A43C
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'landuse', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+C253DA4D-F6D4-41E1-A7AD-8BB6EA55D8F8
+in: AeronauticPnt out: AeronauticPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'building', u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'abandoned:building', u'error:circular', u'light:obstacle'])
+
+3B2ED22C-0C03-43EA-9AEF-C821705D007A
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:resource_owner', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+C650708F-0984-4C35-A971-8154879AF68F
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'RMWC', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'gauge:type', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+1432B382-1299-4AA7-AF5F-C89E3C15234D
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+39D182E1-6088-4185-A1C4-7FC58B9C002C
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+22D1976E-F36F-46ED-896E-9B439E63DED5
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5B3DCD21-281F-4F4A-8C94-9807837B0541
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:resource_owner', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+964AC67B-8AE1-4320-8A68-F804510D076B
+in: FacilityPnt out: FacilityPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+998EB9E9-E6A0-4284-8AAC-D4CC94E9A352
+in: FacilitySrf out: FacilitySrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+ADA3FB8E-D49A-412A-A427-1DF9FDBDDE9B
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular', u'light:obstacle'])
+
+CBCF9671-3825-46A9-8EF0-F1676648B43E
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E0E597A8-F2FD-4982-B3F0-2DC6FFDEA549
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+275A5223-4ADB-497D-9BA6-EDAC1DCA6B6F
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'highway', u'condition'])
+  out - in: set([u'abandoned:highway', u'error:circular'])
+
+7CC3F7A2-845B-441E-A89F-D6939FB0F5F0
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+74F5436E-997B-472D-8BB4-A5AE953D2E5C
+in: StructureCrv out: StructureCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source', u'security:dissemination_control:non_ic', u'security:classification', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+12D8E91E-46D3-4EF4-B66D-FEA61C12AA20
+in: AeronauticPnt out: AeronauticPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+7F9B99DC-0C7A-4379-8010-C5FCD0E224F9
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+9BEACDCA-869F-4188-B894-5AB18E6A4FE3
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+843565F8-09E3-4F5B-9039-3F5341BD0841
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+711B42AC-132C-44E5-8ECB-3F39451C41DA
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+79ADC4F4-A754-4818-B0A3-3A225EAE4AD8
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+CF031628-1B2D-47E5-A715-D567EE5C4963
+in: FacilityPnt out: FacilityPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+9A518E65-127B-4F23-8D5F-38990FD6D667
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'error:circular', u'light:obstacle'])
+
+6928C36D-69A3-43F4-AB53-4E1AC7E2FFBA
+in: TransportationGroundPnt out: TransportationGroundPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular', u'public_transport'])
+
+5A1B64E8-D713-41FD-BD7E-252120EF275A
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+08B347F2-0039-4BDE-A17D-A456214F56E1
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+1514E475-0A8B-450D-8138-AF8623CBDD56
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+93248830-B208-4DEC-B4D5-971EEC822645
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E3FE79CC-CD87-4E44-9D76-62086136BB95
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+440884FB-8904-4333-9319-57451AC9FA38
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'building', u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'demolished:building', u'error:circular'])
+
+E76B27AE-22E0-43B0-B269-CA024BC2CA03
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5F4211F0-EA5A-44DF-8CD9-675BFDF37D00
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+9ECBC68C-79C6-4318-BAB0-9942BCDC58FE
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+69D80B50-1EB2-4FE6-8DB6-EA346395B285
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+C87F3ED7-5656-4F80-B556-5B85DF1CB9BE
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'error:circular'])
+
+5D83C96D-0F75-4626-8663-3BA50D8FAF1B
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+0A51DD03-F3DB-4B48-92E3-1F37A4E6CB16
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+0D490002-2C16-4659-8311-7B7C8B59B48E
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+128252CC-D3F2-4BDB-BA3D-DBE2DC69FEF2
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+25FA4462-4FC9-4F15-8193-FAAFD0891F5F
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+2DF4F57E-69BD-468A-9113-35434C475DC9
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+1435A737-6A0C-431A-A964-BE06DDB6122D
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+0803AEDC-8A51-4009-95E8-5F9A82869B72
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'landuse', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+04876E5F-F7C8-4836-8910-A7C35212A064
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+2BB9C4AE-DEF9-4FCE-9AD2-F4F00BFC4537
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+34788650-9DC2-45B0-95EE-42F28C23F8F4
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular', u'light:obstacle'])
+
+11489FD2-31FE-40F1-9417-6C4E2FA2194F
+in: StoragePnt out: StoragePnt
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+BF5E8938-4E6B-490D-94B5-DF4A2DA5EE76
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:resource_owner', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+12449BC4-C059-4270-8D72-134FCF54291D
+in: StoragePnt out: StoragePnt
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+7EDDCDF0-3E83-4658-88B5-C4DA67B9BF82
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+10A5246E-415F-4B1D-9C12-4C15AB1C10B4
+in: StoragePnt out: StoragePnt
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+85D5644C-3347-403C-8479-31701BC34156
+# Missing toOSM
+7A025070-C136-4E11-8E67-EF14135D50D6
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'error:circular'])
+
+C9C1F4EB-32D4-438D-8C4B-1EFABE1F0548
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+59302BE3-1415-48EB-96CC-C3D482AF34E1
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+149E733E-626F-45DB-BFCC-56AD12DE425A
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+7ADB30EC-8975-460D-A5CA-DE395C3EB0E9
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+D9D0703D-83D7-4874-AC98-1B323E5DE301
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+A941263E-CA69-413D-9148-B2550CD5256D
+in: AeronauticPnt out: AeronauticPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+87B593E6-EDD4-4556-9629-121CDE24DD8B
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'landuse', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+01E8C028-8AFB-4C30-88E4-FED176B8FD9A
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+23BC0C51-26FE-4EC3-9A5B-3CD4792FB840
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'security:dissemination_control:non_ic', u'landuse', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+8B026A81-1F4E-4C4C-A2B2-40E750426B9E
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:resource_owner', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+2728CC25-56FA-487F-801B-0D56BDACF98A
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+CDDE649E-AB52-416B-AA26-6188D3641214
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+0CB16BC6-3C09-482F-B31A-8144B1FB7430
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+14093E3A-29DA-41E5-A13F-E8E43EF5D9CC
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E4600F2B-AE94-4934-8D6E-E4A55FE12F28
+# Missing toOSM
+8B735764-25EB-4D52-B732-6C69ED0CD206
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+4C076D27-3EF4-4AD3-9137-920B4278CE6C
+in: SettlementSrf out: SettlementSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+C0041728-2262-4969-BD62-4CA3607AF853
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'railway', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'error:circular', u'demolished:railway'])
+
+C9E03C34-8AB5-4F9C-B31F-5F4D316BC61D
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+F9F1E2E7-7699-4DD7-8271-586970F42122
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'building', u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'abandoned:building', u'error:circular', u'light:obstacle'])
+
+CD706B59-6F0F-467B-8FF7-2BC5B22A8CEA
+in: TransportationGroundPnt out: TransportationGroundPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+AEA98498-70B6-4BEB-9395-63F768F4F29E
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'wadi'])
+
+20599E44-9357-4B09-BC43-F3B5F7C47AC9
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'shelter:type', u'error:circular'])
+
+B9745971-A030-4956-BA12-1BCD926F0F78
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+E8CBC330-A431-4CF6-ADCF-73A9C8F10FE9
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+2A8C5E62-61AD-4AB8-9DE3-6AA59AD6AD11
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+0A4336BE-41D4-4732-B495-791E2BEC9BCB
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5DC03ED7-7F8B-4006-A53F-40F4267664C8
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'building', u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'demolished:building', u'error:circular'])
+
+9C86570D-5DAE-4EE4-A767-337C3F4E77F1
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:resource_owner', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+BA0C8A94-7F45-4628-B15D-4DFB2AD3D1CA
+in: SettlementPnt out: SettlementPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5A91AA90-F929-4441-9FA4-D16CE062FC98
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+F0ECD77E-FDAC-4DEB-BD9C-D4F84DAD328C
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+64C05490-22B9-44D1-8FB9-7A3130C08F9B
+in: UtilityInfrastructurePnt out: UtilityInfrastructurePnt
+translated:
+  in - out: set([u'TOS', u'img_mosaic', u'PYC', u'PYM', u'CAB'])
+  out - in: set([u'ZI032_PYM', u'ZI032_TOS', u'AT005_CAB', u'FCSUBTYPE', u'ZI032_PYC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+6F588533-90A0-4928-B7B3-3E452D1144AB
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+38816F81-A5BC-4FFF-954F-29423F09B76B
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+4C26FA83-EFC1-41A7-9568-768A390E6E54
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+AAD37B05-3771-44B8-ACE3-3F7933D18890
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'building', u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'abandoned:building', u'error:circular'])
+
+1811751E-7141-4DDC-884D-B17B26D4B9E5
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source:name', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+4C2A2CF3-9DDA-4A11-8F85-FDE7797B92E6
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+0914D0CC-D696-485E-89BC-1D4E0EDEE797
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'landuse', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+38BB77AA-444E-49AA-9585-1D56253F7B6E
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+AF4E3199-44C2-477D-BB18-758584294DF8
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+BE171F7C-B9F1-47B6-8FCC-455508F11621
+in: UtilityInfrastructurePnt out: UtilityInfrastructurePnt
+translated:
+  in - out: set([u'img_mosaic', u'GUG', u'TOS', u'PYM', u'CAB2', u'CAB'])
+  out - in: set([u'AT005_CAB2', u'FCSUBTYPE', u'ZI032_PYM', u'ZI032_GUG', u'AT005_CAB', u'ZI032_TOS'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+D8FAE562-B5CE-4529-92E4-DD209F69EE31
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+CED792BC-E484-494D-A019-602E72A43274
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'landuse', u'security:dissemination_control:non_ic', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+9E5F2B36-E9E5-4E61-8CCB-BFFB08256DD9
+in: TransportationGroundPnt out: TransportationGroundPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+ADA332AC-AEEC-428C-8011-5241C94F4B8E
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+0BCDE809-CDDC-4409-B0B9-91273D57E736
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+C484012C-333D-4AE9-B995-8F2190BE07FD
+in: FacilityPnt out: FacilityPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+AF7324FD-6E0B-4347-8072-5978DF62DDDB
+in: SettlementPnt out: SettlementPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+EEA2047E-4A2D-449E-9DEF-8D1BC1765166
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+FA9CB0B5-6C5F-4353-874F-BE27ECB5A9E5
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+1EA0E03C-4BFA-4FCF-AA6C-D05676895F8E
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+B202F179-5156-4769-A5A0-031BB3468D10
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'error:circular'])
+
+97C3C816-D0CC-4416-A906-7FF94D1FEEBA
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+2E82FBDF-171F-4A1E-AE7A-6CBE5A0922C7
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+6921F190-E551-465E-868C-2AAF4E0534EF
+in: SettlementPnt out: SettlementPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+DA3A5344-74C3-451A-A3C9-70CB1B527149
+in: VegetationSrf out: VegetationSrf
+translated:
+  in - out: set([u'ZSAX_RX3', u'img_mosaic', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:resource_owner', u'source:name', u'security:dissemination_control:non_ic', u'landuse', u'source:imagery:mosaic'])
+  out - in: set([u'natural', u'error:circular'])
+
+1EAEA615-9A59-46D7-B0AE-1413898252AA
+# Missing toOSM
+3CDD04F4-A468-4DFE-A564-7E0369A9832B
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+1DEE6011-6730-4B71-ADB3-1A7FF398579F
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+0B2A16AC-0689-4388-A422-3945DE4CEEAF
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+65322290-34E9-4B36-90D0-0CF930EC8142
+in: AeronauticPnt out: AeronauticPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+0B86CAB4-AEF6-4D13-AAFB-83CB19E33950
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+EC56C1BD-CD9C-482B-9A0D-95A24282E305
+in: HydrographyCrv out: HydrographyCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+13389C28-59AC-4D20-9C29-D34FE8F84CC6
+in: StorageSrf out: StorageSrf
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+389F4414-8E8C-45A7-9935-3401C2EAF29D
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'SGCC', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5995970C-4266-429F-AE1E-5146A77EAFEE
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'building', u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'abandoned:building', u'error:circular'])
+
+72BF2B85-D371-48B2-A5EF-54F45B492373
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+FB58F307-C7ED-4023-90D2-535B440BB474
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+127B406C-964F-4403-A275-40F096ADCABE
+in: StoragePnt out: StoragePnt
+translated:
+  in - out: set([u'ZSAX_RS0', u'ZI014_PPO', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'PPO'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+B865241D-FB0A-4662-8042-21378B5D8149
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+7B0243F4-29F8-40AF-85F6-85E3D923F37E
+in: SettlementPnt out: SettlementPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+375F559B-1F8B-47C0-AD34-7F0DF3E6A60E
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+4AC17181-16E9-4BE0-BD7B-8CC68BBEEA59
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+09528206-90F4-4CBE-A616-1E5FB200D5EE
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+2E21028A-196A-4ABC-9235-E92296942756
+in: FacilityPnt out: FacilityPnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5A9C3BDC-49B6-44C9-BA88-81C6B10104FB
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+C57BCB46-FABF-46F1-A3E6-2E77F4F5C32D
+in: StructureSrf out: StructureSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'shelter:type', u'error:circular'])
+
+3BAF263F-4C66-4640-8A48-E98AEBA77678
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+76CCA591-23E3-4900-875F-5DAF40457BD3
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+8DDE26F8-3143-4D7A-B021-65DADE3722DA
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular', u'light:obstacle'])
+
+632DB716-7256-4B2C-B27D-593BF9A2093E
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+B14E13C0-5EA4-4B04-8CE9-422E15B3037E
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'construction', u'shelter:type', u'error:circular', u'light:obstacle'])
+
+DA1025EB-D540-4A47-900D-3687D3CD0E37
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+D2A441D2-5080-4C6B-9E05-B40ED6569FFD
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+18AB8349-3FB0-48EB-917B-49995B451FC5
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'source', u'railway', u'source:imagery:mosaic', u'condition'])
+  out - in: set([u'error:circular', u'abandoned:railway'])
+
+54698B56-A6C0-454D-A77F-FBC9A92CB6E6
+in: StructurePnt out: StructurePnt
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'use', u'shelter:type', u'error:circular'])
+
+627C4C65-2A14-4C7F-B8B9-9B799FE12F4F
+in: RecreationSrf out: RecreationSrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+21ADAEDC-37CE-4C2A-BB73-FE7BA76F4093
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'SGCC', u'FCSUBTYPE', u'RMWC'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+8F97A17A-A3DF-40B4-9DC0-71228B65BF0A
+in: FacilitySrf out: FacilitySrf
+translated:
+  in - out: set([u'img_mosaic'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'source', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+
+5632CD0A-D533-45B5-A873-049E718C0013
+in: TransportationGroundCrv out: TransportationGroundCrv
+translated:
+  in - out: set([u'ZSAX_RS0', u'img_mosaic', u'ZSAX_RX3', u'ZSAX_RX4'])
+  out - in: set([u'FCSUBTYPE', u'OSMTAGS8', u'OSMTAGS2', u'OSMTAGS3', u'OSMTAGS4', u'OSMTAGS5', u'OSMTAGS6', u'OSMTAGS7'])
+OSM:
+  in - out: set([u'security:classification', u'source', u'security:dissemination_control:non_ic', u'security:resource_owner', u'source:imagery:mosaic'])
+  out - in: set([u'error:circular'])
+

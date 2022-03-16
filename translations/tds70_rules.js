@@ -1119,7 +1119,8 @@ tds70.rules = {
     ['FFN','385','use','materials_recovery'], // Materials Recovery
     ['FFN','440','use','commercial'], // Commerce
     ['FFN','459','shop','wholesale'], // Wholesale Merchant
-    ['FFN','460','shop','yes'], // Retail Sale
+    // ['FFN','460','shop','yes'], // Retail Sale
+    ['FFN','460','use','retail_sale'], // Retail Sale
     ['FFN','464','shop','specialized'], // Specialized Store
     ['FFN','465','shop','non-specialized'], // Non-specialized Store
     ['FFN','466','shop','convenience'], // Convenience Store
@@ -1134,7 +1135,7 @@ tds70.rules = {
     ['FFN','481','use','terminal'], // Terminal
     ['FFN','482','public_transport','station'], // Station
     ['FFN','483','amenity','stop'], // Stop
-    ['FFN','484','amenity','transfer_hub'], // Transfer Hub
+    ['FFN','484','use','transfer_hub'], // Transfer Hub
     ['FFN','486','use','signalling'], // Signalling
     ['FFN','487','use','transport_system_maintenance'], // Transport System Maintenance
     ['FFN','488','use','navigation'], // Navigation - Not great, used in a number of FCodes
@@ -1952,7 +1953,6 @@ tds70.rules = {
     ['MGL','8','geopolitical_line:maritime','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
     ['MGL','9','geopolitical_line:maritime','customs_boundary'], // Customs Boundary
     ['MGL','999','geopolitical_line:maritime','other'], // Other
-
 
     // MNS - Man-made Shoreline
     // ['MNS','-999999',undefined,undefined], // No Information
@@ -4021,7 +4021,6 @@ tds70.rules = {
   ],
   // ##### End of fCodeMap #####
 
-
   // ##### Start of closureList #####
   closureList : {
     'GSGCHC':['GSGCHL','GSGCHU'],
@@ -4061,11 +4060,6 @@ tds70.rules = {
   // ##### Start of swapListOut #####
   // Format is: <FCODE>:{<from>:<to>}
   swapListOut : {
-    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
-    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
-    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'ZI002_UFI'},
-    'AT005':{'WLE':'ZI025_WLE'},
-    'BD100':{'WLE':'ZI025_WLE'},
     'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
@@ -4085,11 +4079,15 @@ tds70.rules = {
     'AM080':{'ZI014_YWQ':'YWQ'},
     'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AT005':{'WLE':'ZI025_WLE'},
+    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
+    'BD100':{'WLE':'ZI025_WLE'},
     'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH070':{'PWA':'WBD'},
     'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'ZI002_UFI'},
     },
-
   // ##### End of swapListOut #####
 
   // ##### Start of txtLength #####

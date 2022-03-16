@@ -3568,6 +3568,13 @@ new file/layer.
 When exporting, remove all non-spec attributes from the features. I.e. Do a "clean" export.
 NOTE: This is destructive. It will drop data that is usually kept - OSMTAGS etc
 
+=== ogr.compare.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Debugging: Print out the tags or attributes in a JSON structure so they can be cross referenced by UUID
+
 === ogr.debug.addfcode
 
 * Data Type: bool
