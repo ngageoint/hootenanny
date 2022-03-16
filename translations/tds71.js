@@ -2751,7 +2751,8 @@ tds71 = {
       if (!attrs.UFI && tds71.configIn.OgrAddUuid == 'true') attrs.UFI = createUuid();
     }
 
-    if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
+    // Keeping the output AFTER the clean.  Might have to put this back in after more testing
+    // if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
 
     // Untangle TDS attributes & OSM tags.
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
@@ -2834,6 +2835,14 @@ tds71 = {
 
     // Override tag values if appropriate
     translate.overrideValues(tags,tds71.toChange);
+
+    if (tds71.configIn.OgrCompareOutput == 'true')
+    {
+      var uuidField = 'uuid';
+      if (!tags.uuid && tags['source:ref']) uuidField = 'source:ref'
+
+      translate.compareOutput(tags,uuidField,'outputOSM','toOSM');
+    }
 
     return tags;
   }, // End of toOsm

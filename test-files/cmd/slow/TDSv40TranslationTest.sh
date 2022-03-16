@@ -4,7 +4,7 @@ set -e
 # Test the TDSv40 Translation
 
 inputDir=test-files/cmd/slow/TDSv40
-outputDir=test-output/cmd/slow/tdsv40_translation
+outputDir=test-output/cmd/slow/tds40_translation
 
 TRANS=$HOOT_HOME/translations/TDSv40.js
 
