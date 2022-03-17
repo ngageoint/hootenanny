@@ -71,9 +71,10 @@ void FileUtils::removeDir(const QString& dirName)
 
   if (dir.exists("."))
   {
-    for (const auto& file : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
-                                              QDir::Hidden | QDir::AllDirs |
-                                              QDir::Files, QDir::DirsFirst))
+    QFileInfoList file_list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
+                                                QDir::Hidden | QDir::AllDirs |
+                                                QDir::Files, QDir::DirsFirst);
+    for (const auto& file : qAsConst(file_list))
     {
       QFileInfo info(file);
       QString path = info.absoluteFilePath();

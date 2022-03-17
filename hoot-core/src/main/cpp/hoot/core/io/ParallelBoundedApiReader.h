@@ -39,6 +39,7 @@
 namespace hoot
 {
 
+class HootNetworkRequest;
 /**
  * @brief The ParallelBoundedApiReader class is a base class for HTTP reader classes that are bounded
  *  by an envelope bounding box.  If the bounding box exceeds the `reader.http.bbox.max.size` value
@@ -149,6 +150,12 @@ private:
    * @param name Name of file to write in $HOOT_HOME/tmp/
    */
   void writeDebugMap(const QString& data, const QString& name);
+
+  /**
+   * @brief logNetworkError Function to log an unknown network request error
+   * @param request Network request object
+   */
+  void logNetworkError(const HootNetworkRequest& request);
 
   /** List of result strings, one for each HTTP response */
   QStringList _resultsList;

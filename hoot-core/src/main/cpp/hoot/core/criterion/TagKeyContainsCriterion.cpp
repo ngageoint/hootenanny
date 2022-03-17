@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "TagKeyContainsCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagKeyContainsCriterion)
 
-TagKeyContainsCriterion::TagKeyContainsCriterion(const QString& text) :
-_text(text),
-_caseSensitive(false)
+TagKeyContainsCriterion::TagKeyContainsCriterion(const QString& text)
+  : _text(text),
+    _caseSensitive(false)
 {
 }
 
@@ -53,17 +53,14 @@ bool TagKeyContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   Qt::CaseSensitivity caseSens = Qt::CaseSensitive;
   if (!_caseSensitive)
-  {
     caseSens = Qt::CaseInsensitive;
-  }
-  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+
+  for (auto it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);
     if (tagKey.contains(_text, caseSens))
-    {
       return true;
-    }
   }
   return false;
 }
