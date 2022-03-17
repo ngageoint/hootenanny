@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -70,9 +70,7 @@ public:
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 takes at least two or four parameters. You provided %2: %3")
-          .arg(getName())
-          .arg(args.size())
-          .arg(args.join(",")));
+          .arg(getName(), QString::number(args.size()), args.join(",")));
     }
 
     QString input1;

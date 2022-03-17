@@ -169,6 +169,8 @@ void ParallelBoundedApiReader::_sleep() const
 
 void ParallelBoundedApiReader::_process()
 {
+  int timeout = 0;
+  int max_timeout = 3;
   //  Continue working until all of the results are back
   while (!isComplete() && _continueRunning && !_fatalError)
   {
@@ -249,13 +251,24 @@ void ParallelBoundedApiReader::_process()
         _fatalError = true;
         break;
       }
-      default:
-      {
-        std::lock_guard<std::mutex> error_lock(_errorMutex);
-        request.logConnectionError();
-        _fatalError = true;
+      case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:
+        timeout++;
+        if (timeout <= max_timeout)
+        {
+          //  The gateway timed out, retry the bbox
+          std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+          //  Sleep before retrying, inside of the mutex so that other threads wait too
+          _sleep();
+          //  Retry
+          _bboxes.push(envelope);
+          LOG_DEBUG("Gateway timed out while communicating with API, retrying.");
+        }
+        else
+          logNetworkError(request);
         break;
-      }
+      default:
+        logNetworkError(request);
+        break;
       }
     }
     else
@@ -289,6 +302,13 @@ void ParallelBoundedApiReader::writeDebugMap(const QString& data, const QString&
     //  Write out the text to a uniquely named file
     FileUtils::writeFully(QString("tmp/%1-%2.%3").arg(name, filenumber, ext), data);
   }
+}
+
+void ParallelBoundedApiReader::logNetworkError(const HootNetworkRequest& request)
+{
+  std::lock_guard<std::mutex> error_lock(_errorMutex);
+  request.logConnectionError();
+  _fatalError = true;
 }
 
 }
