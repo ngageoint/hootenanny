@@ -2768,7 +2768,7 @@ tds70 = {
     // Clean out the usless values
     tds70.cleanAttrs(attrs);
 
-    // Doing this so we can get better debug output0
+    // Doing this so we can get better debug output
     var uuidField = 'UFI';
     if (attrs.F_CODE == 'ZI031') uuidField = 'ZI002_UFI';
 
