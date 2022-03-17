@@ -26,10 +26,8 @@
  */
 package hoot.services.controllers.nodejs;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -60,29 +58,9 @@ abstract class NodejsService {
 
         // This combines stdout and stderr into one stream
         builder.redirectErrorStream(true);
-        Process serverProcess = builder.start();
 
-        // Pumping the output to service output stream
-        // Also, if there is no handler to pump out the std and stderr stream
-        // for Processbuilder (Also applies to Runtime.exe)
-        // the outputs get built up and then end up locking up process. Quite nasty!
-        new Thread(() -> {
-            try {
-                try (InputStreamReader combinedStream = new InputStreamReader(serverProcess.getInputStream())) {
-                    try (BufferedReader bufferedCombinedStream = new BufferedReader(combinedStream)) {
-                        StringBuilder combinedOutput = new StringBuilder();
-                        String line;
-                        while ((line = bufferedCombinedStream.readLine()) != null) {
-                            combinedOutput.append(line).append(System.lineSeparator());
-                        }
-                        logger.info(combinedOutput.toString());
-                    }
-                }
-            }
-            catch (IOException ioe) {
-                logger.error("Error during a call to processStreamHandler()", ioe);
-            }
-        }).start();
+        // Use inherit IO to redirect nodejs subprocess stdout and stderr to java process
+        Process serverProcess = builder.inheritIO().start();
 
         return serverProcess;
     }
