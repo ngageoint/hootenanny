@@ -674,7 +674,8 @@ dnc = {
     tags.source = 'dnc:' + layerName.toLowerCase();
     if (attrs.OSM_UUID)
     {
-      tags.uuid = '{' + attrs['OSM_UUID'].toString().toLowerCase() + '}';
+      // tags.uuid = '{' + attrs['OSM_UUID'].toString().toLowerCase() + '}';
+      tags.uuid = attrs['OSM_UUID'].toString().toLowerCase();
     }
     else
     {

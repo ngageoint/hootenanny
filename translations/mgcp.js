@@ -761,7 +761,8 @@ mgcp = {
     // If we have a UID, store it
     if (tags.uuid)
     {
-      tags.uuid = '{' + tags['uuid'].toString().toLowerCase()  + '}'
+      tags.uuid = tags['uuid'].toString().toLowerCase();
+      if (tags['uuid'].indexOf('{') == -1)  tags.uuid = '{' + tags['uuid'] + '}';
     }
     else
     {
