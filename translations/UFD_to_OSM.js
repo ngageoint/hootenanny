@@ -3455,7 +3455,8 @@ ufd = {
     // Format or add a UUID
     if (tags.uuid)
     {
-      if (tags.uuid.slice[0,1] !== '{' && tags.uuid.slice[-1] !== '}') tags.uuid = '{' + tags.uuid + '}';
+      tags.uuid = tags.uuid.toString().toLowerCase();
+      if (tags['uuid'].indexOf('{') == -1)  tags.uuid = '{' + tags['uuid'] + '}';
     }
     else
     {

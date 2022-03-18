@@ -853,10 +853,15 @@ ggdm30 = {
     // Add the LayerName to the source
     if ((! tags.source) && layerName !== '') tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
-    // If we have a UFI, store it
-    if (attrs.UFI)
+    // If we have a UID, check it's format
+    if (tags.uuid)
     {
-      tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+      tags.uuid = tags['uuid'].toString().toLowerCase();
+      if (tags['uuid'].indexOf('{') == -1)  tags.uuid = '{' + tags['uuid'] + '}';
+    }
+    else
+    {
+      if (ggdm30.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
 
     if (ggdm30.osmPostRules == undefined)
@@ -912,7 +917,6 @@ ggdm30 = {
         ['t.wetland && !(t.natural)','t.natural = "wetland"'],
         ['t["width:minimum_traveled_way"] && !(t.width)','t.width = t["width:minimum_traveled_way"]']
       ];
-
       ggdm30.osmPostRules = translate.buildComplexRules(rulesList);
     }
 

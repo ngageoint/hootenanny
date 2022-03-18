@@ -845,15 +845,15 @@ tds61 = {
     if ((! tags.source) && layerName !== '') tags.source = 'tdsv61:' + layerName.toLowerCase();
 
     // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-    if (attrs.UFI)
+    if (tags.uuid)
     {
-      tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+      tags.uuid = tags['uuid'].toString().toLowerCase();
+      if (tags['uuid'].indexOf('{') == -1)  tags.uuid = '{' + tags['uuid'] + '}';
     }
     else
     {
       if (tds61.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
-
 
     if (tds61.osmPostRules == undefined)
     {

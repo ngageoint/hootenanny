@@ -2768,31 +2768,19 @@ tds70 = {
     // Clean out the usless values
     tds70.cleanAttrs(attrs);
 
-    // Doing this early so we can get better debug output
-    if (tds70.configIn.OgrAddUuid == 'true')
-    {
-      var uuidField = 'UFI';
+    // Doing this so we can get better debug output
+    var uuidField = 'UFI';
+    if (attrs.F_CODE == 'ZI031') uuidField = 'ZI002_UFI';
 
-      // Dataset_S Why?????
-      if (attrs.F_CODE == 'ZI031')
-      {
-        if (attrs.ZI002_UFI)
-        {
-          uuidField = 'ZI002_UFI';
-        }
-        else if (attrs.URI)
-        {
-          uuidField = 'URI';
-        }
-        else
-        {
-          attrs.ZI002_UFI = createUuid();
-        }
-      }
-      else
-      {
-        if (!attrs.UFI) attrs.UFI = createUuid();
-      }
+    if (attrs[uuidField])
+    {
+      // UUID cleanup
+      attrs[uuidField] = attrs[uuidField].toString().toLowerCase();
+      if (attrs[uuidField].indexOf('{') == -1) attrs[uuidField] = '{' + attrs[uuidField] + '}';
+    }
+    else
+    {
+      if (tds70.configIn.OgrAddUuid == 'true') attrs[uuidField] = createUuid();
     }
 
     if (tds70.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
@@ -2973,7 +2961,23 @@ tds70 = {
     } // End tds70.lookup Undefined
 
     // Doing this early to help the debug output
-    if (!tags.uuid && tds70.configOut.OgrAddUuid == 'true') tags.uuid = createUuid();
+    var uuidField = 'uuid';
+    if (tags['source:ref'])
+    {
+      uuidField = 'source:ref'
+      tags['source:ref'] = tags['source:ref'].toString().toLowerCase().replace('{','').replace('}','')
+    }
+    else
+    {
+      if (tags.uuid)
+      {
+        tags.uuid = tags['uuid'].toString().toLowerCase().replace('{','').replace('}','')
+      }
+      else
+      {
+        if (tds70.configOut.OgrAddUuid == 'true') tags.uuid = createUuid().replace('{','').replace('}','');
+      }
+    }
 
     if (tds70.configOut.OgrCompareOutput == 'true') translate.compareOutput(tags,'uuid','inputOSM','toOgr');
 

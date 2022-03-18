@@ -796,7 +796,8 @@ tds40 = {
     // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
     if (tags.uuid)
     {
-      tags.uuid = '{' + tags['uuid'].toString().toLowerCase() + '}';
+      tags.uuid = tags['uuid'].toString().toLowerCase();
+      if (tags['uuid'].indexOf('{') == -1)  tags.uuid = '{' + tags['uuid'] + '}';
     }
     else
     {

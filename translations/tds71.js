@@ -2739,21 +2739,6 @@ tds71 = {
       // translate.dumpOne2OneLookup(tds71.lookup);
     }
 
-    // Doing this early so we can get better debug output
-    var uuidField = 'UFI';
-    if (attrs.F_CODE == 'ZI031')
-    {
-      if (!attrs.URI && tds71.configIn.OgrAddUuid == 'true') attrs.URI = createUuid();
-      uuidField = 'URI';
-    }
-    else
-    {
-      if (!attrs.UFI && tds71.configIn.OgrAddUuid == 'true') attrs.UFI = createUuid();
-    }
-
-    // Keeping the output AFTER the clean.  Might have to put this back in after more testing
-    // if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
-
     // Untangle TDS attributes & OSM tags.
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
     translate.untangleAttributes(attrs,tags,tds71);
@@ -2762,7 +2747,22 @@ tds71 = {
     // NOTE: Doing this AFTER the untangle since untangle will push attrs to upper case
     tds71.cleanAttrs(attrs);
 
-    if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,'UFI',layerName,'toOSM');
+    // Doing this so we can get better debug output
+    var uuidField = 'UFI';
+    if (attrs.F_CODE == 'ZI031') uuidField = 'URI';
+
+    if (attrs[uuidField])
+    {
+      // UUID cleanup
+      attrs[uuidField] = attrs[uuidField].toString().toLowerCase();
+      if (attrs[uuidField].indexOf('{') == -1) attrs[uuidField] = '{' + attrs[uuidField] + '}';
+    }
+    else
+    {
+      if (tds71.configIn.OgrAddUuid == 'true') attrs[uuidField] = createUuid();
+    }
+
+    if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
 
     // Debug:
     if (tds71.configIn.OgrDebugDumptags == 'true')
@@ -2933,15 +2933,25 @@ tds71 = {
     } // End tds71.lookup Undefined
 
     // Doing this early to help the debug output
-    if (!tags.uuid && !tags['source:ref'] && tds71.configOut.OgrAddUuid == 'true') tags.uuid = createUuid();
-
-    if (tds71.configOut.OgrCompareOutput == 'true')
+    var uuidField = 'uuid';
+    if (tags['source:ref'])
     {
-      var uuidField = 'uuid';
-      if (!tags.uuid && tags['source:ref']) uuidField = 'source:ref'
-
-      translate.compareOutput(tags,uuidField,'inputOSM','toOgr');
+      uuidField = 'source:ref'
+      tags['source:ref'] = tags['source:ref'].toString().toLowerCase().replace('{','').replace('}','')
     }
+    else
+    {
+      if (tags.uuid)
+      {
+        tags.uuid = tags['uuid'].toString().toLowerCase().replace('{','').replace('}','')
+      }
+      else
+      {
+        if (tds71.configOut.OgrAddUuid == 'true') tags.uuid = createUuid().replace('{','').replace('}','');
+      }
+    }
+
+    if (tds71.configOut.OgrCompareOutput == 'true') translate.compareOutput(tags,uuidField,'inputOSM','toOgr');
 
     // Override values if appropriate
     translate.overrideValues(tags,tds71.toChange);
