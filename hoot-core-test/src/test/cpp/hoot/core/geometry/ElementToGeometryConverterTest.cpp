@@ -184,6 +184,10 @@ public:
     relation->setType(MetadataTags::RelationBoundary());
     CPPUNIT_ASSERT_EQUAL(ec.getGeometryType(relation), GEOS_MULTILINESTRING);
 
+    //  Multilinestrings are multilinestrings
+    relation->setType(MetadataTags::RelationMultilineString());
+    CPPUNIT_ASSERT_EQUAL(ec.getGeometryType(relation), GEOS_MULTILINESTRING);
+
     //  Empty relations with no members are collections also
     elements.clear();
     relation = TestUtils::createRelation(map, elements);

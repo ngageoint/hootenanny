@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "EdgeDistanceExtractor.h"
 
@@ -90,8 +90,7 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       ConstWayPtr w(std::dynamic_pointer_cast<const Way>(e));
-      Geometry* ls =
-        ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone().release();
+      Geometry* ls = ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone().release();
       _lines.push_back(ls);
     }
   }
@@ -105,18 +104,18 @@ private:
   vector<Geometry*>& _lines;
 };
 
-EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacing):
-_aggregator(a)
+EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacing)
+  : _aggregator(a),
+    _spacing(spacing)
 {
   if (!_aggregator)
     _aggregator = std::make_shared<MeanAggregator>();
-  setSpacing(spacing);
 }
 
 EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
+  : _aggregator(std::make_shared<MeanAggregator>()),
+    _spacing(spacing)
 {
-  _aggregator = std::make_shared<MeanAggregator>();
-  setSpacing(spacing);
 }
 
 void EdgeDistanceExtractor::setConfiguration(const Settings& conf)
@@ -124,8 +123,7 @@ void EdgeDistanceExtractor::setConfiguration(const Settings& conf)
   setSpacing(ConfigOptions(conf).getEdgeDistanceExtractorSpacing());
 }
 
-vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
-  const std::shared_ptr<const Element>& e) const
+vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map, const std::shared_ptr<const Element>& e) const
 {
   vector<Coordinate> result;
   DiscretizeWaysVisitor v(_spacing, result);
@@ -134,9 +132,8 @@ vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
   return result;
 }
 
-double EdgeDistanceExtractor::distance(
-  const OsmMap& map, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+double EdgeDistanceExtractor::distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+                                       const std::shared_ptr<const Element>& candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
@@ -148,9 +145,8 @@ QString EdgeDistanceExtractor::getName() const
   return QString("EdgeDistance") + _aggregator->toString();
 }
 
-double EdgeDistanceExtractor::_oneDistance(
-  const OsmMap& map, const std::shared_ptr<const Element>& e1,
-  const std::shared_ptr<const Element>& e2) const
+double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const std::shared_ptr<const Element>& e1,
+                                           const std::shared_ptr<const Element>& e2) const
 {
   vector<Coordinate> points = _discretize(map, e1);
 
@@ -159,21 +155,18 @@ double EdgeDistanceExtractor::_oneDistance(
   // This pre-aggregation step is a performance bottleneck for Area Conflation.
   vector<double> distances;
   distances.reserve(points.size());
-  for (size_t i = 0; i < points.size(); i++)
+  for (const auto& pt : points)
   {
-    std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
+    std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(pt));
     distances.push_back(g->distance(p.get()));
   }
   if (distances.empty())
-  {
     return -1;
-  }
 
   return _aggregator->aggregate(distances);
 }
 
-std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
-  const OsmMap& map, const std::shared_ptr<const Element>& e) const
+std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map, const std::shared_ptr<const Element>& e) const
 {
   std::shared_ptr<Geometry> result;
   if (e->getElementType() != ElementType::Node)
@@ -187,9 +180,8 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
     result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(lines));
   }
   else
-  {
     result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-  }
+
   return result;
 }
 

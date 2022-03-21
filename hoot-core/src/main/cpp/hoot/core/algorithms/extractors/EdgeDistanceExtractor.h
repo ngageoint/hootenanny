@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -44,8 +44,7 @@ namespace hoot
  * geometries into points every samples meters and then calculating the distance from each sample to
  * the lines that make up the other geometry.
  */
-class EdgeDistanceExtractor : public AbstractDistanceExtractor, public ValueAggregatorConsumer,
-  public Configurable
+class EdgeDistanceExtractor : public AbstractDistanceExtractor, public ValueAggregatorConsumer, public Configurable
 {
 public:
 
@@ -56,7 +55,7 @@ public:
   static QString className() { return "hoot::EdgeDistanceExtractor"; }
 
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+                  const std::shared_ptr<const Element>& candidate) const override;
 
   void setConfiguration(const Settings& conf) override;
 
@@ -74,7 +73,7 @@ private:
   double _spacing;
 
   double _oneDistance(const OsmMap& map, const std::shared_ptr<const Element>& e1,
-    const std::shared_ptr<const Element>& e2) const;
+                      const std::shared_ptr<const Element>& e2) const;
 
   std::vector<geos::geom::Coordinate> _discretize(const OsmMap& map,
                                                   const std::shared_ptr<const Element>& e) const;

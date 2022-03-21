@@ -45,8 +45,8 @@ class LargeWaySplitterTest : public HootTestFixture
 
 public:
 
-  LargeWaySplitterTest() :
-  HootTestFixture("test-files/algorithms/splitter/", "test-output/algorithms/splitter/")
+  LargeWaySplitterTest()
+    : HootTestFixture("test-files/algorithms/splitter/", "test-output/algorithms/splitter/")
   {
   }
 

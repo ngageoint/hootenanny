@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "TagComparator.h"
@@ -604,7 +604,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result, const QStringLis
       // exclude list
       const Qt::CaseSensitivity caseSensitivity =
         caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-      for (const auto& value : values1)
+      for (const auto& value : qAsConst(values1))
       {
         //LOG_VART(values1[i]);
         if (value.isEmpty() == false &&
@@ -615,7 +615,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result, const QStringLis
           //LOG_VART(result);
         }
       }
-      for (const auto& value : values2)
+      for (const auto& value : qAsConst(values2))
       {
         //LOG_VART(values2[i]);
         if (value.isEmpty() == false)
