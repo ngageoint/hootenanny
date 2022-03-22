@@ -112,22 +112,25 @@ QString ConfPath::_subDirSearch(QString baseName, QString searchDir)
 
 QString ConfPath::search(QString baseName, QString searchDir)
 {
-  if (QFileInfo(baseName).isFile())
-  {
-    return QFileInfo(baseName).absoluteFilePath();
-  }
-
+  // Try searchDir first
   if (QFileInfo(searchDir + "/" + baseName).isFile())
   {
     return QFileInfo(searchDir + "/" + baseName).absoluteFilePath();
   }
 
+  // Now try HOOT_HOME + / + searchDir
   QString hootHome = getHootHome();
 
   if (hootHome.isEmpty() == false && QFileInfo(hootHome + "/" + searchDir + "/" + baseName).
       isFile())
   {
     return QFileInfo(hootHome + "/" + searchDir + "/" + baseName).absoluteFilePath();
+  }
+
+  // Now try local dir
+  if (QFileInfo(baseName).isFile())
+  {
+    return QFileInfo(baseName).absoluteFilePath();
   }
 
   // If we still can't find it, try searching subdirectories.
