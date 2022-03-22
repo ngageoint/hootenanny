@@ -325,12 +325,10 @@ void UnconnectedWaySnapper::_createFeatureIndexes()
   if (_wayNodeToSnapToCrit)
   {
     LOG_DEBUG("Creating way node to snap to index...");
-    _createFeatureIndex(
-      _wayNodeToSnapToCrit, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, ElementType::Node);
+    _createFeatureIndex(_wayNodeToSnapToCrit, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, ElementType::Node);
   }
   LOG_DEBUG("Creating way to snap to index...");
-  _createFeatureIndex(
-    _wayToSnapToCrit, _snapToWayIndex, _snapToWayIndexToEid, ElementType::Way);
+  _createFeatureIndex(_wayToSnapToCrit, _snapToWayIndex, _snapToWayIndexToEid, ElementType::Way);
 }
 
 long UnconnectedWaySnapper::_getPid(const ConstWayPtr& way) const
@@ -592,8 +590,7 @@ Meters UnconnectedWaySnapper::_getWaySearchRadius(const ConstElementPtr& e) cons
 
 Meters UnconnectedWaySnapper::_getWayNodeSearchRadius(const ConstElementPtr& e) const
 {
-  return
-    _addCeToSearchDistance ? _maxNodeReuseDistance + e->getCircularError() : _maxNodeReuseDistance;
+  return  _addCeToSearchDistance ? _maxNodeReuseDistance + e->getCircularError() : _maxNodeReuseDistance;
 }
 
 std::set<long> UnconnectedWaySnapper::_getUnconnectedWayEndNodeIds(const ConstWayPtr& way,
