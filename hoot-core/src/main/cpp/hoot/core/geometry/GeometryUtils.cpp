@@ -185,10 +185,12 @@ QString GeometryUtils::envelopeToString(const Envelope& bounds)
 {
   LOG_VART(bounds);
   const int precision = ConfigOptions().getWriterPrecision();
-  return QString::number(bounds.getMinX(), 'g', precision) + "," +
-    QString::number(bounds.getMinY(), 'g', precision) + "," +
-    QString::number(bounds.getMaxX(), 'g', precision) + "," +
-    QString::number(bounds.getMaxY(), 'g', precision);
+  return
+    QString("%1,%2,%3,%4")
+      .arg(QString::number(bounds.getMinX(), 'g', precision),
+           QString::number(bounds.getMinY(), 'g', precision),
+           QString::number(bounds.getMaxX(), 'g', precision),
+           QString::number(bounds.getMaxY(), 'g', precision));
 }
 
 Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
@@ -214,8 +216,7 @@ Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
       boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
 }
 
-std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
-  const geos::geom::Envelope& env)
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(const geos::geom::Envelope& env)
 {
   LOG_VART(env.isNull());
   if (env.isNull())
@@ -301,15 +302,14 @@ QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   std::unique_ptr<geos::geom::CoordinateSequence> coords = poly->getCoordinates();
-  QString str;
+  QStringList str;
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);
-    str += QString::number(coord.x, 'g', precision) + "," +
-           QString::number(coord.y, 'g', precision) + ";";
+    str.append(QString("%1,%2").arg(QString::number(coord.x, 'g', precision),
+                                    QString::number(coord.y, 'g', precision)));
   }
-  str.chop(1);
-  return str;
+  return str.join(";");
 }
 
 std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromString(const QString& str)
@@ -446,8 +446,7 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
   return boundaryMap;
 }
 
-OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
-  const QMap<int, geos::geom::Envelope>& boundsCollection)
+OsmMapPtr GeometryUtils::createMapFromBoundsCollection(const QMap<int, geos::geom::Envelope>& boundsCollection)
 {
   OsmMapPtr boundariesMap = std::make_shared<OsmMap>();
   for (auto boundsItr = boundsCollection.begin(); boundsItr != boundsCollection.end(); ++boundsItr)

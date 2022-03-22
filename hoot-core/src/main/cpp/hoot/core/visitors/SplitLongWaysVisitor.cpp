@@ -130,8 +130,9 @@ void SplitLongWaysVisitor::visit(const std::shared_ptr<Element>& element)
     if (masterNodeIndex > 0)
       way_id = _map->createNextWayId();
     WayPtr newWay = std::make_shared<Way>(Status::Unknown1, way_id, way->getRawCircularError());
-    newWay->setPid(way->getPid());
     newWay->setTags(way->getTags());
+    //  Set the parent ID to the original way ID, this makes a circular reference on the first way but that is ok
+    newWay->setPid(way->getId());
     replacements.append(newWay);
     LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime <<
               " nodes");
@@ -177,24 +178,28 @@ void SplitLongWaysVisitor::visit(const std::shared_ptr<Element>& element)
     QString role = "";
     if (AreaCriterion().isSatisfied(way))
     {
-      relation->setType("multipolygon");
+      relation->setType(MetadataTags::RelationMultiPolygon());
       role = "outer";
     }
     else
-      relation->setType("multilinestring");
+      relation->setType(MetadataTags::RelationMultilineString());
+
+    //  Update the relation with the tags from the way
+    relation->setTags(way->getTags());
 
     //  Add all of the replacement elements to the relation
     for (const auto& e : replacements)
+    {
       relation->addElement(role, e);
+      //  Clear the tags on the ways because they are now on the relation
+      e->setTags(Tags());
+    }
 
     //  Update any parent relations with the new relation
     _map->replace(way, relation, false);
   }
-  else
-  {
-    //  Replace the way with all other ways in the parent relations
+  else  //  Replace the way with all other ways in the parent relations
     _map->replace(way, replacements, false);
-  }
 
   _numAffected++;
 }

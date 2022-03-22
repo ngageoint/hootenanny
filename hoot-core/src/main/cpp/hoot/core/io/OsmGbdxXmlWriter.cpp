@@ -79,9 +79,8 @@ QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
   result.reserve(s.size());
 
   bool foundError = false;
-  for (const auto& c : s)//int i = 0; i < s.size(); i++)
+  for (const auto& c : s)
   {
-//    QChar c = s[i];
     // See http://stackoverflow.com/questions/730133/invalid-characters-in-xml
     if (c < 0x20 && c != 0x9 && c != 0xA && c != 0xD)
       foundError = true;
@@ -520,19 +519,19 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
   QString startBracket;
   QString endBracket;
 
-  if (featureGeometry == "multipolygon")
+  if (featureGeometry == MetadataTags::RelationMultiPolygon())
   {
     featureGeometry = "MultiPolygon";
     startBracket = "((";
     endBracket = "))";
   }
-  else if (featureGeometry == "multilinestring")
+  else if (featureGeometry == MetadataTags::RelationMultilineString())
   {
     featureGeometry = "MultiLineString";
     startBracket = "(";
     endBracket = ")";
   }
-  else if (featureGeometry == "multipoint")
+  else if (featureGeometry == MetadataTags::RelationMultiPoint())
   {
     featureGeometry = "MultiPoint";
     startBracket = "";
@@ -540,11 +539,6 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
   }
 
   _writer->writeCharacters(featureGeometry.toUpper() + QString(" ("));
-  //    _writer->writeStartElement("member");
-  //    _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
-  //    _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-  //    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
-  //    _writer->writeEndElement();
 
   bool firstRel = true;
   const vector<RelationData::Entry>& members = r->getMembers();
@@ -585,20 +579,12 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
   _writer->writeCharacters(QString(")"));
   _writer->writeEndElement(); // WKT
 
-//  _writer->writeStartElement("type");
-//  _writer->writeCharacters(featureGeometry);
-//  _writer->writeEndElement();
-
   _writer->writeEndElement(); // geometry
 
   // Add the Det_id from the Tag
   _writer->writeStartElement("id");
   _writer->writeCharacters(r->getTags()["Det_id"]);
   _writer->writeEndElement();
-
-//  _writer->writeStartElement("type");
-//  _writer->writeCharacters("Feature");
-//  _writer->writeEndElement();
 
   _writer->writeEndElement(); // features
 
@@ -611,8 +597,7 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
 
 void OsmGbdxXmlWriter::finalizePartial()
 {
-  //osmosis chokes on the bounds being written at the end of the file, so not writing it at all
-  //_writeBounds(_bounds);
+  //  osmosis chokes on the bounds being written at the end of the file, so not writing it at all
   close();
 }
 

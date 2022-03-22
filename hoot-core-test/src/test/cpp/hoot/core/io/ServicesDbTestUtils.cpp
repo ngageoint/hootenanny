@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ServicesDbTestUtils.h"
@@ -144,9 +144,7 @@ void ServicesDbTestUtils::deleteUser(QString email)
 
   long userId = database.getUserId(email, false);
   if (userId != -1)
-  {
     database.deleteUser(userId);
-  }
   database.close();
 }
 
@@ -154,7 +152,8 @@ int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& ke
 {
   for (int i = 0; i < keys.size(); i++)
   {
-    if (keys[i] == key) return i;
+    if (keys[i] == key)
+      return i;
   }
 
   // didn't find a match so return -1
@@ -270,7 +269,7 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   map->addWay(w5);
 
   std::shared_ptr<Relation> r1 =
-    std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "multipolygon");
+    std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon());
   r1->setTag("building", "yes");
   r1->setTag("name", "r1");
   r1->addElement("outer", w4->getElementId());
@@ -344,9 +343,8 @@ bool ServicesDbTestUtils::deleteUserByUserName(const QString& userName)
   db.open(getDbModifyUrl());
   const long userId = db.getUserIdByName(userName);
   if (userId == -1)
-  {
     return false;
-  }
+
   db.deleteUser(userId);
   db.close();
   return true;
