@@ -217,7 +217,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="junction" v="roundabout"/>
         <tag k="note" v="way1"/>

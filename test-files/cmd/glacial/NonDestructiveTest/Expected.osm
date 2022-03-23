@@ -997,7 +997,7 @@
         <tag k="hoot:id" v="-872"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-871" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.2068798672572045" lon="22.3610793807557755">
+    <node visible="true" id="-871" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.2068937392809653" lon="22.3611055609500156">
         <tag k="hoot:id" v="-871"/>
         <tag k="hoot:status" v="2"/>
     </node>
@@ -2713,7 +2713,7 @@
         <tag k="hoot:id" v="-249"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-248" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.1743466642106148" lon="22.4745484782597238">
+    <node visible="true" id="-248" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.1743667257165638" lon="22.4745427759763921">
         <tag k="hoot:id" v="-248"/>
         <tag k="hoot:status" v="2"/>
     </node>
@@ -2949,7 +2949,7 @@
         <tag k="hoot:id" v="-186"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-185" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.2115220999999998" lon="22.3688077999999990">
+    <node visible="true" id="-185" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.2115423491179902" lon="22.3688008529961202">
         <tag k="hoot:id" v="-185"/>
         <tag k="hoot:status" v="2"/>
     </node>
@@ -3449,7 +3449,7 @@
         <tag k="hoot:id" v="-22"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-21" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.1965574643151080" lon="22.4710626788796723">
+    <node visible="true" id="-21" timestamp="2016-04-11T14:26:31Z" version="1" lat="2.1965471013398048" lon="22.4711023480812671">
         <tag k="hoot:id" v="-21"/>
         <tag k="hoot:status" v="2"/>
     </node>
@@ -36206,6 +36206,7 @@
         <nd ref="2293"/>
         <nd ref="2292"/>
         <nd ref="2291"/>
+        <nd ref="-248"/>
         <nd ref="2290"/>
         <nd ref="2289"/>
         <nd ref="2288"/>
@@ -36237,7 +36238,7 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="-6055"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="39"/>
+        <tag k="hoot:way:node:count" v="40"/>
         <tag k="lanes" v="1"/>
         <tag k="location" v="surface"/>
         <tag k="median" v="no"/>
@@ -36969,6 +36970,7 @@
         <nd ref="891"/>
         <nd ref="-3923"/>
         <nd ref="890"/>
+        <nd ref="-21"/>
         <nd ref="889"/>
         <nd ref="888"/>
         <nd ref="768"/>
@@ -36985,7 +36987,7 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="-5910"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="16"/>
+        <tag k="hoot:way:node:count" v="17"/>
         <tag k="lanes" v="1"/>
         <tag k="location" v="surface"/>
         <tag k="median" v="no"/>
@@ -37420,6 +37422,7 @@
         <nd ref="-3814"/>
         <nd ref="690"/>
         <nd ref="689"/>
+        <nd ref="-871"/>
         <nd ref="688"/>
         <nd ref="687"/>
         <nd ref="686"/>
@@ -37431,7 +37434,7 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="-5840"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="17"/>
+        <tag k="hoot:way:node:count" v="18"/>
         <tag k="lanes" v="1"/>
         <tag k="location" v="surface"/>
         <tag k="median" v="no"/>
@@ -39164,7 +39167,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:id" v="-188"/>
-        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="27"/>
         <tag k="junction" v="roundabout"/>
@@ -48339,6 +48341,7 @@
         <nd ref="1456"/>
         <nd ref="2634"/>
         <nd ref="2633"/>
+        <nd ref="-185"/>
         <nd ref="2632"/>
         <nd ref="2631"/>
         <nd ref="2630"/>
@@ -48544,7 +48547,7 @@
         <tag k="highway" v="track"/>
         <tag k="hoot:id" v="53"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:way:node:count" v="204"/>
+        <tag k="hoot:way:node:count" v="205"/>
         <tag k="seasonal" v="fair"/>
         <tag k="source" v="mgcp"/>
         <tag k="source:accuracy:horizontal" v="25"/>

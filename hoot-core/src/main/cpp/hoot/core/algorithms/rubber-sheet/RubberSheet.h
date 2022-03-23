@@ -120,7 +120,7 @@ public:
    * @return a collection of distance values
    * @throws HootException if the tie points have not been created
    */
-   std::vector<double> calculateTiePointDistances();
+   std::vector<double> calculateTiePointDistances() const;
 
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
