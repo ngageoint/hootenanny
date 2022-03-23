@@ -119,7 +119,7 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   _conf = conf;
 }
 
-void UnconnectedWaySnapper::_setDefaultCriterion(ConfigOptions &options)
+void UnconnectedWaySnapper::_setDefaultCriterion(const ConfigOptions& options)
 {
   const QStringList globalSnapCriteria = options.getSnapUnconnectedWaysSnapCriteria();
 

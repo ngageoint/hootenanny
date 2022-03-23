@@ -354,7 +354,7 @@ private:
   /*
    * Setup the default criterion for the snapper
    */
-  void _setDefaultCriterion(ConfigOptions& options);
+  void _setDefaultCriterion(const ConfigOptions& options);
 };
 
 }
