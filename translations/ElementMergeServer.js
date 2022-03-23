@@ -1,5 +1,5 @@
 /************************************************************************
-This is a nodejs integration with Hootenanny element merging logic. See 
+This is a nodejs integration with Hootenanny element merging logic. See
 docs/developer/ElementMergeService.asciidoc
 ************************************************************************/
 var http = require('http');
@@ -7,6 +7,7 @@ var url = require('url');
 var serverPort = 8096;
 var HOOT_HOME = process.env.HOOT_HOME;
 var hoot = require(HOOT_HOME + '/lib/HootJs');
+const util = require('util');
 
 if (require.main === module) {
     //I'm a running server
@@ -80,18 +81,17 @@ function ElementMergeserver(request, response) {
 
 
             request.on('end', function() {
-
-                var result;
                 try {
-                    result = postHandler(payload);
+                    // console.log(payload);
+                    var result = postHandler(payload);
+                    // console.log(result);
+                    response.writeHead(200, header);
+                    response.end(result);
                 } catch (err) {
-                    var status = 400;
-                    response.writeHead(status, header);
-                    response.end(JSON.stringify({error: err}));
+                    // console.error(err);
+                    response.writeHead(400, header);
+                    response.end(util.inspect(err));
                 }
-
-                response.writeHead(200, header);
-                response.end(result);
             });
 
         } else if (request.method === 'OPTIONS') {
@@ -119,14 +119,11 @@ function ElementMergeserver(request, response) {
 
 var postHandler = function(data)
 {
-  // can't seem to get this to work
-  //hoot.Log.setLogLevel('trace');
-
-  var map = new hoot.OsmMap();
-  hoot.loadMapFromStringPreserveIdAndStatus(map, data);
-  var mergedMap = hoot.merge(map);
-  var xml = hoot.OsmWriter.toString(mergedMap);
-  return xml;
+    var map = new hoot.OsmMap();
+    hoot.loadMapFromStringPreserveIdAndStatus(map, data);
+    var mergedMap = hoot.merge(map);
+    var xml = hoot.OsmWriter.toString(mergedMap);
+    return xml;
 }
 
 if (typeof exports !== 'undefined') {
