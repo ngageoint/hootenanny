@@ -76,6 +76,8 @@ private:
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  static void toJSON(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)

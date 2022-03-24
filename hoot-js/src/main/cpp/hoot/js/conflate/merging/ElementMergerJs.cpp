@@ -115,7 +115,6 @@ void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
   // use scripts/core/MergeElements.js to see log output during merging.
   catch (const HootException& e)
   {
-    LOG_ERROR(e.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }

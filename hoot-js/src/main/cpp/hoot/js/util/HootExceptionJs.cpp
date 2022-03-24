@@ -74,6 +74,7 @@ void HootExceptionJs::Init(Local<Object> target)
     // Prototype
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(HootException::className()));
     tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
+    tpl->PrototypeTemplate()->Set(current, "toJSON", FunctionTemplate::New(current, toJSON));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(context, toV8(opName), ToLocal(&_constructor));
@@ -194,7 +195,16 @@ void HootExceptionJs::toString(const FunctionCallbackInfo<Value>& args)
 
   std::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
-  args.GetReturnValue().Set(toV8(e->getWhat().toStdString()));
+  args.GetReturnValue().Set(toV8(QString("%1: %2").arg(e->getName(), e->getWhat()).toStdString()));
+}
+
+void HootExceptionJs::toJSON(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  std::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+
+  args.GetReturnValue().Set(toV8(QString("{'Exception': '%1', 'What': '%2'}").arg(e->getName(), e->getWhat()).toStdString()));
 }
 
 }
