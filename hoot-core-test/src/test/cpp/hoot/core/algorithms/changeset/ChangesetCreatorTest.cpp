@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -40,9 +40,9 @@ class ChangesetCreatorTest : public HootTestFixture
 
 public:
 
-  ChangesetCreatorTest() :
-  HootTestFixture("test-files/algorithms/changeset/ChangesetCreatorTest/",
-                  "test-output/algorithms/changeset/ChangesetCreatorTest/")
+  ChangesetCreatorTest()
+    : HootTestFixture("test-files/algorithms/changeset/ChangesetCreatorTest/",
+                      "test-output/algorithms/changeset/ChangesetCreatorTest/")
   {
   }
 

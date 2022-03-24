@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmChangesetFileWriter.h"
 
@@ -33,20 +33,18 @@
 namespace hoot
 {
 
-OsmChangesetFileWriter::OsmChangesetFileWriter() :
-_includeDebugTags(false),
-_includeCircularErrorTags(false),
-_changesetIgnoreBounds(false)
+OsmChangesetFileWriter::OsmChangesetFileWriter()
+  : _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
+    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+    _changesetIgnoreBounds(ConfigOptions().getChangesetIgnoreBounds())
 {
 }
 
-bool OsmChangesetFileWriter::_failsBoundsCheck(
-  const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const
+bool OsmChangesetFileWriter::_failsBoundsCheck(const ConstElementPtr& element, const ConstOsmMapPtr& map1,
+                                               const ConstOsmMapPtr& map2) const
 {
   if (!element || !map1 || !map2)
-  {
     return false;
-  }
 
   LOG_TRACE("Checking bounds requirement for " << element->getElementId() << "...");
 
@@ -83,9 +81,7 @@ bool OsmChangesetFileWriter::_failsBoundsCheck(
     boundsCrit->setMustCompletelyContain(true);
   }
   else
-  {
     boundsCrit->setMustCompletelyContain(ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds());
-  }
 
   LOG_VART(boundsCrit->isSatisfied(element));
   if (!boundsCrit->isSatisfied(element))

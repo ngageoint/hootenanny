@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/TestOsmChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/algorithms/changeset/TestOsmChangesetProvider.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 
@@ -53,14 +53,12 @@ public:
 
   void runSimpleTest()
   {
-    std::shared_ptr<ChangesetProvider> changesetProvider =
-      std::make_shared<TestOsmChangesetProvider>(false);
+    std::shared_ptr<ChangesetProvider> changesetProvider = std::make_shared<TestOsmChangesetProvider>(false);
     OsmXmlChangesetFileWriter uut;
     uut.setConfiguration(conf());
     uut.write(_outputPath + "changeset.osc", changesetProvider);
-    FileUtils::writeFully(_outputPath + "stats", uut.getStatsTable(ChangesetStatsFormat::Text));
-    FileUtils::writeFully(
-      _outputPath + "stats.json", uut.getStatsTable(ChangesetStatsFormat::Json));
+    FileUtils::writeFully(_outputPath + "stats", uut.getStatsTable(ChangesetStatsFormat::TextFormat));
+    FileUtils::writeFully(_outputPath + "stats.json", uut.getStatsTable(ChangesetStatsFormat::JsonFormat));
 
     HOOT_FILE_EQUALS(_inputPath + "changeset.osc", _outputPath + "changeset.osc");
     HOOT_FILE_EQUALS(_inputPath + "stats", _outputPath + "stats");

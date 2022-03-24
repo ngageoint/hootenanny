@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -197,7 +197,12 @@ struct TagEdge
 public:
 
   TagEdge()
-    : show(true)
+    : type(IsA),
+      similarToWeight(0.0),
+      averageWeight(0.0),
+      show(true),
+      w1(0.0),
+      w2(0.0)
   {
   }
 

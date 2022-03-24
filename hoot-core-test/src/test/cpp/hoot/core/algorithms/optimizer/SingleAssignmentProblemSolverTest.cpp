@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -52,13 +52,9 @@ public:
   virtual double cost(const ActorTask *a, const ActorTask *t) const
   {
     if (a->value == t->value)
-    {
       return a->value * t->value;
-    }
     else
-    {
       return min(a->value, t->value);
-    }
   }
 };
 
@@ -98,14 +94,10 @@ public:
   {
     CostFunction costFunction;
     double totalCost = 0.0;
-    for (vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair>::const_iterator it = pairs.begin();
-         it != pairs.end(); ++it)
+    for (const auto& p : pairs)
     {
-      SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
-      if (pair.actor != nullptr && pair.task != nullptr)
-      {
-        totalCost += costFunction.cost(pair.actor, pair.task);
-      }
+      if (p.actor != nullptr && p.task != nullptr)
+        totalCost += costFunction.cost(p.actor, p.task);
     }
     return totalCost;
   }
@@ -120,8 +112,7 @@ public:
     addActors(solver, actors);
     addTasks(solver, tasks);
 
-    vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair> pairs =
-      solver.calculatePairing();
+    vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair> pairs = solver.calculatePairing();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(55, getTotalCost(pairs), 0.1);
   }
 
@@ -135,8 +126,7 @@ public:
     addActors(solver, actors);
     addTasks(solver, tasks);
 
-    vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair> pairs =
-      solver.calculatePairing();
+    vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair> pairs = solver.calculatePairing();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(58, getTotalCost(pairs), 0.1);
   }
 

@@ -28,10 +28,10 @@
 #define OSM_CHANGESET_FILE_WRITER_H
 
 // Hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
-#include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -62,8 +62,7 @@ public:
    * @param path Pathname for the output file(s)
    * @param changesetProviders changeset providers to stream the changes from
    */
-  virtual void write(const QString& path,
-                     const QList<ChangesetProviderPtr>& changesetProviders) = 0;
+  virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders) = 0;
 
   /**
    * Returns a changeset statistics as a table string
@@ -71,8 +70,7 @@ public:
    * @param format statistics format
    * @return a changeset statistics string
    */
-  virtual QString getStatsTable(
-    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const = 0;
+  virtual QString getStatsTable(const ChangesetStatsFormat& format = ChangesetStatsFormat::TextFormat) const = 0;
 
   /**
    * Determines if the output location is supported by this writer
@@ -117,8 +115,7 @@ protected:
    * @param map2 after changes map
    * @return true if the element passes the configured bounds requirement; false otherwise
    */
-  bool _failsBoundsCheck(
-    const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
+  bool _failsBoundsCheck(const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
 };
 
 }

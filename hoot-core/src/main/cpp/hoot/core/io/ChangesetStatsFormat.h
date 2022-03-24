@@ -39,12 +39,12 @@ public:
 
   enum Format
   {
-    Text = 0,
-    Json,
-    Unknown
+    TextFormat = 0,
+    JsonFormat,
+    UnknownFormat
   };
 
-  ChangesetStatsFormat() : _format(Unknown) { }
+  ChangesetStatsFormat() : _format(UnknownFormat) { }
   ChangesetStatsFormat(Format format) : _format(format) { }
 
   void setFormat(Format format) { _format = format; }
@@ -59,16 +59,16 @@ public:
     // Obviously this could change in the future but for now, the commands calling this expect to
     // either output table text to the display or output a JSON file (only other format supported
     // currently).
-    return fromString(extension) == Format::Json;
+    return fromString(extension) == Format::JsonFormat;
   }
 
   QString toString() const
   {
     switch (_format)
     {
-      case ChangesetStatsFormat::Text:
+      case ChangesetStatsFormat::TextFormat:
         return "Text";
-      case ChangesetStatsFormat::Json:
+      case ChangesetStatsFormat::JsonFormat:
         return "Json";
       default:
         return QString("Unknown (%1)").arg(_format);
@@ -79,18 +79,12 @@ public:
   {
     str = str.toLower();
     if (str == "text")
-    {
-      return Text;
-    }
+      return TextFormat;
     else if (str == "json")
-    {
-      return Json;
-    }
+      return JsonFormat;
     else if (str == "unknown" || str.trimmed().isEmpty())
-    {
-      return Unknown;
-    }
-    return Unknown;
+      return UnknownFormat;
+    return UnknownFormat;
   }
 
 private:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_H
 #define CHANGESET_REPLACEMENT_H
@@ -50,6 +50,9 @@ public:
 
   static QString className() { return "ChangesetReplacement"; }
 
+  ChangesetReplacement() = default;
+  virtual ~ChangesetReplacement() = default;
+
   /**
    * The manner in which replacement boundary conditions are handled. See the
    * changeset-derive CLI doc for more detail.
@@ -69,9 +72,8 @@ public:
    * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& output) = 0;
+  virtual void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+                      const QString& output) = 0;
   /**
    * @brief create creates a changeset that replaces data.
    * @param input1 the target data file path
@@ -79,9 +81,8 @@ public:
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2,
-    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) = 0;
+  virtual void create(const QString& input1, const QString& input2, const std::shared_ptr<geos::geom::Polygon>& bounds,
+                      const QString& output) = 0;
 
   virtual int getNumChanges() const = 0;
 
@@ -97,8 +98,7 @@ public:
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
    */
-  virtual void setChangesetOptions(
-    const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) = 0;
+  virtual void setChangesetOptions(const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) = 0;
 
   virtual QString toString() const  = 0;
 };

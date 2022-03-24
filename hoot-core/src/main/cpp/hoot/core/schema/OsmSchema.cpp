@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Boost
@@ -1001,7 +1001,7 @@ private:
     set<VertexId> compoundTags;
 
     // go through each of the tags and look for the tag vertex.
-    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+    for (auto it = tags.begin(); it != tags.end(); ++it)
     {
       QString n = normalizeKvp(OsmSchema::toKvp(it.key(), it.value()));
       // find each compound vertex linked from a tag vertex and put into a set.
@@ -1014,9 +1014,8 @@ private:
     }
 
     // go through each compound vertex found and evaluate it for match against tags.
-    for (set<VertexId>::const_iterator it = compoundTags.begin(); it != compoundTags.end(); ++it)
+    for (const auto& compoundTagId : compoundTags)
     {
-      VertexId compoundTagId = *it;
       const SchemaVertex& sv = _graph[compoundTagId];
       if (sv.isCompoundMatch(tags))
         result.push_back(compoundTagId);
@@ -1076,12 +1075,11 @@ private:
     else
     {
       // check to see if any of the regular expressions match
-      for (auto it = _regexKeys.begin(); it != _regexKeys.end(); ++it)
+      for (const auto& re : qAsConst(_regexKeys))
       {
-        const QRegExp& re = it->first;
-        if (re.exactMatch(key))
+        if (re.first.exactMatch(key))
         {
-          VertexId vid = it->second;
+          VertexId vid = re.second;
           return _graph[vid].getKey();
         }
       }
@@ -1288,7 +1286,7 @@ QSet<QString> OsmSchema::getAllTypeKeys()
   if (_allTypeKeysCache.isEmpty())
   {  
     QSet<QString> allTypeKeysCacheTemp = _d->getAllTagKeys();
-    for (const auto& typeKey : allTypeKeysCacheTemp)
+    for (const auto& typeKey : qAsConst(allTypeKeysCacheTemp))
     {
       // All we care about for type comparison are tags of schema type "tag". We definitely don't
       // care about metadata tags, but its possible we may care about some text or numeric tags
@@ -1665,7 +1663,7 @@ QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
 {
   QStringList keys = tags.keys();
   keys.sort();
-  for (const auto& key : keys)
+  for (const auto& key : qAsConst(keys))
   {
     const QString val = tags[key];
     if (!val.trimmed().isEmpty())

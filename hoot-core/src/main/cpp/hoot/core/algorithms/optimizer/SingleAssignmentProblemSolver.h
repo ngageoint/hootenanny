@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SINGLEASSIGNMENTPROBLEMSOLVER_H
@@ -55,6 +55,9 @@ public:
   class CostFunction
   {
   public:
+
+    CostFunction() = default;
+    virtual ~CostFunction() = default;
 
     /**
      * @brief cost returns the cost associated with assigning actor a to task t.
@@ -113,24 +116,24 @@ public:
       }
     }
 
-    for (size_t i = 0; i < _actors.size(); i++)
+    for (auto actor : _actors)
     {
-      if (usedActors.find(_actors[i]) == usedActors.end())
+      if (usedActors.find(actor) == usedActors.end())
       {
         ResultPair r;
-        r.actor = _actors[i];
+        r.actor = actor;
         r.task = nullptr;
         result.push_back(r);
       }
     }
 
-    for (size_t i = 0; i < _tasks.size(); i++)
+    for (auto task : _tasks)
     {
-      if (usedTasks.find(_tasks[i]) == usedTasks.end())
+      if (usedTasks.find(task) == usedTasks.end())
       {
         ResultPair r;
         r.actor = nullptr;
-        r.task = _tasks[i];
+        r.task = task;
         result.push_back(r);
       }
     }
@@ -146,16 +149,18 @@ private:
 
   void _populateSolver(IntegerProgrammingSolver& solver) const
   {
+    int tasks_size = static_cast<int>(_tasks.size());
+    int actors_size = static_cast<int>(_actors.size());
     // try to maximize the score.
     solver.setObjectiveDirection(GLP_MAX);
 
     // one column for each actor/task pair.
-    solver.addColumns(_actors.size() * _tasks.size());
-    for (size_t t = 0; t < _tasks.size(); t++)
+    solver.addColumns(actors_size * tasks_size);
+    for (int t = 0; t < tasks_size; t++)
     {
-      for (size_t a = 0; a < _actors.size(); a++)
+      for (int a = 0; a < actors_size; a++)
       {
-        int column = t * _actors.size() + a + 1;
+        int column = t * actors_size + a + 1;
         solver.setColumnKind(column, GLP_BV);
         double c = _costFunction.cost(_actors[a], _tasks[t]);
         // each actor/task has a cost
@@ -163,7 +168,7 @@ private:
       }
     }
 
-    int rows = _tasks.size() * _actors.size() * 2;
+    int rows = tasks_size * actors_size * 2;
     solver.addRows(rows);
 
     std::vector<int> ia;
@@ -175,25 +180,23 @@ private:
     ja.push_back(0);
     ra.push_back(0);
 
-    for (size_t a = 0; a < _actors.size(); a++)
-    {
-      solver.setRowBounds(_tasks.size() + a + 1, GLP_DB, 0.0, 1.0);
-    }
+    for (int a = 0; a < actors_size; a++)
+      solver.setRowBounds(tasks_size + a + 1, GLP_DB, 0.0, 1.0);
 
     // all actor/task pairs for a given task have a coefficient of 1 and must <= 1. Or in other words
     // only one actor can be assigned to a task.
-    for (size_t t = 0; t < _tasks.size(); t++)
+    for (int t = 0; t < tasks_size; t++)
     {
       solver.setRowBounds(t + 1, GLP_DB, 0.0, 1.0);
-      for (size_t a = 0; a < _actors.size(); a++)
+      for (int a = 0; a < actors_size; a++)
       {
         // Set the coefficients to 1 for each of the actors and set the max value to 1. This
         // will make it so only up to one of the values can be 1 at a time for a given target.
         ia.push_back(t + 1);
-        ja.push_back(t * _actors.size() + a + 1);
+        ja.push_back(t * actors_size + a + 1);
         ra.push_back(1.0);
-        ia.push_back(_tasks.size() + a + 1);
-        ja.push_back(t * _actors.size() + a + 1);
+        ia.push_back(tasks_size + a + 1);
+        ja.push_back(t * actors_size + a + 1);
         ra.push_back(1.0);
         i++;
       }
