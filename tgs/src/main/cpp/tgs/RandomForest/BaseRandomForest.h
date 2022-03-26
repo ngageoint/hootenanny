@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BASERANDOMFOREST_H
 #define BASERANDOMFOREST_H
@@ -36,211 +36,208 @@
 
 namespace Tgs
 {
-  /**
-   * @brief The TrainingInputs struct
-   *
-   * Contains the inputs required for multiclass training
-   */
-  struct TrainingInputs
+/**
+ * @brief The TrainingInputs struct
+ *
+ * Contains the inputs required for multiclass training
+ */
+struct TrainingInputs
+{
+  TrainingInputs()
+    : numFactors(0),
+      nodeSize(1),
+      balanced(false)
   {
-    TrainingInputs()
-    {
-      numFactors = 0;
-      nodeSize = 1;
-      balanced = false;
-    }
+  }
 
-    std::shared_ptr<DataFrame> data;
-    unsigned int numFactors;
-    unsigned int nodeSize;
-    bool balanced;
-  };
+  std::shared_ptr<DataFrame> data;
+  unsigned int numFactors;
+  unsigned int nodeSize;
+  bool balanced;
+};
+
+/**
+ * @brief The BaseRandomForest class base class for the Random Forest
+ *
+ *  The RandomForest is an implementation of the Leo Breiman
+ * Random Forest Classification algorithm
+ *
+ * For more information see:
+ * http://oz.berkeley.edu/~breiman/RandomForests/
+ *
+ */
+class BaseRandomForest
+{
+public:
 
   /**
-   * @brief The BaseRandomForest class base class for the Random Forest
-   *
-   *  The RandomForest is an implementation of the Leo Breiman
-   * Random Forest Classification algorithm
-   *
-   * For more information see:
-   * http://oz.berkeley.edu/~breiman/RandomForests/
-   *
+   * @brief BaseRandomForest constructor
    */
-  class BaseRandomForest
-  {
-  public:
+  BaseRandomForest();
+  /**
+   * @brief ~BaseRandomForest destructor
+   */
+  virtual ~BaseRandomForest();
 
-    /**
-     * @brief BaseRandomForest constructor
-     */
-    BaseRandomForest();
-    /**
-     * @brief ~BaseRandomForest destructor
-     */
-    virtual ~BaseRandomForest();
+  /**
+  *  Clears the random forest of its trees.
+  */
+  void clear();
 
-    /**
-    *  Clears the random forest of its trees.
-    */
-    void clear();
+  /**
+  * Classifies a data vector against a generated random forest.
+  *
+  * The vector is classified against each tree in the forest and the final classification is the
+  * result of majority vote for each tree.
+  *
+  * @param dataVector a single data vector of size N where N is the number of factors
+  * @param scores a map to hold the classification results as class name mapped to probability
+  */
+  void classifyVector(const std::vector<double> & dataVector, std::map<std::string, double>& scores) const;
 
-    /**
-    * Classifies a data vector against a generated random forest.
-    *
-    * The vector is classified against each tree in the forest and the final classification is the
-    * result of majority vote for each tree.
-    *
-    * @param dataVector a single data vector of size N where N is the number of factors
-    * @param scores a map to hold the classification results as class name mapped to probability
-    */
-    void classifyVector(
-      const std::vector<double> & dataVector, std::map<std::string, double>& scores) const;
+  /**
+  *  Exports the random forest to a file
+  *
+  * @param modelDoc the active DOM document
+  * @param parentNode the parent node to append the forest
+  */
+  void exportModel(QDomDocument & modelDoc, QDomElement & parentNode);
 
-    /**
-    *  Exports the random forest to a file
-    *
-    * @param modelDoc the active DOM document
-    * @param parentNode the parent node to append the forest
-    */
-    void exportModel(QDomDocument & modelDoc, QDomElement & parentNode);
+  /**
+   * Exports the random forest to a file
+   *
+   * @param fileStream Opened filestream for writing the random forest to a file; caller is
+   * responsible for closing the stream
+   */
+  void exportModel(std::ostream& filestream);
 
-    /**
-     * Exports the random forest to a file
-     *
-     * @param fileStream Opened filestream for writing the random forest to a file; caller is
-     * responsible for closing the stream
-     */
-    void exportModel(std::ostream& filestream);
+  /**
+  * Finds the average classification error statistic for the forest based on the
+  * oob sets for the trees
+  *
+  * @param data the data set to operate upon
+  * @param average variable to hold the computed average error
+  * @param stdDev variable to hold the computed standard deviation
+  */
+  void findAverageError(const std::shared_ptr<DataFrame>& data, double& average, double& stdDev);
 
-    /**
-    * Finds the average classification error statistic for the forest based on the
-    * oob sets for the trees
-    *
-    * @param data the data set to operate upon
-    * @param average variable to hold the computed average error
-    * @param stdDev variable to hold the computed standard deviation
-    */
-    void findAverageError(const std::shared_ptr<DataFrame>& data, double& average, double& stdDev);
+  /**
+  * Computes the proximity of the data vectors in the data set by running the
+  * complete data set through the tree and then tracking which vectors
+  * were classified to the same node
+  *
+  * @param data the set of data vectors
+  * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
+  */
+  void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int>& proximity);
 
-    /**
-    * Computes the proximity of the data vectors in the data set by running the
-    * complete data set through the tree and then tracking which vectors
-    * were classified to the same node
-    *
-    * @param data the set of data vectors
-    * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
-    */
-    void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int>& proximity);
+  /**
+  * This generates a text file containing the raw probability scores and a text file
+  * containing the confusion matrix along with generated balanced *accuracy
+  */
+  void generateResults(const std::string& fileName);
 
-    /**
-    * This generates a text file containing the raw probability scores and a text file
-    * containing the confusion matrix along with generated balanced *accuracy
-    */
-    void generateResults(const std::string& fileName);
+  /**
+  *  Gets the factor importance as generated by the random forest the highest
+  *  values correspond to most important factors.
+  *
+  *  @param data the original data set
+  *  @param factorImportance a map of factor labels to purity improvement
+  */
+  void getFactorImportance(const std::shared_ptr<DataFrame>& data, std::map<std::string, double>& factorImportance);
 
-    /**
-    *  Gets the factor importance as generated by the random forest the highest
-    *  values correspond to most important factors.
-    *
-    *  @param data the original data set
-    *  @param factorImportance a map of factor labels to purity improvement
-    */
-    void getFactorImportance(const std::shared_ptr<DataFrame>& data,
-      std::map<std::string, double>& factorImportance);
+  /**
+   * Return a vector of the factor labels used to train this random forest.
+   */
+  const std::vector<std::string>& getFactorLabels() const { return _factorLabels; }
 
-    /**
-     * Return a vector of the factor labels used to train this random forest.
-     */
-    const std::vector<std::string>& getFactorLabels() const { return _factorLabels; }
+  /**
+   * @brief importModel import the random forest object
+   * @param e the XML DOM element for the forest
+   */
+  void importModel(const QDomElement& e);
 
-    /**
-     * @brief importModel import the random forest object
-     * @param e the XML DOM element for the forest
-     */
-    void importModel(const QDomElement& e);
+  /**
+   * Import the random forest object
+   *
+   * @param file an opened file handle to a random forest (.rf) file; caller is responsible for
+   * closing the handle
+   */
+  void importModel(QFile& file);
 
-    /**
-     * Import the random forest object
-     *
-     * @param file an opened file handle to a random forest (.rf) file; caller is responsible for
-     * closing the handle
-     */
-    void importModel(QFile& file);
+  /**
+  *  @return true if the forest has been trained
+  */
+  bool isTrained() const {return _forestCreated;}
 
-    /**
-    *  @return true if the forest has been trained
-    */
-    bool isTrained() const {return _forestCreated;}
+  /**
+   * @brief replaceMissingTrainingValues
+   *
+   * Replaces null values in the training data with the median values by class
+   *
+   * Should be used after all training data is applied and before a model is generated
+   */
+  void replaceMissingTrainingValues();
 
-    /**
-     * @brief replaceMissingTrainingValues
-     *
-     * Replaces null values in the training data with the median values by class
-     *
-     * Should be used after all training data is applied and before a model is generated
-     */
-    void replaceMissingTrainingValues();
+  /**
+  * Build the forest from a data set
+  *
+  * @param data the data set to train on
+  * @param numTrees the number of random trees to create
+  * @param numFactors the number of factors to randomly choose as candidates for node splitting
+  * @param posClass the name of the positive class
+  * @param nodeSize the minimum number of data vectors in a set to split a node
+  * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+  * @param balanced true if the forest will be balanced
+  */
+  virtual void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                           const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) = 0;
 
-    /**
-    * Build the forest from a data set
-    *
-    * @param data the data set to train on
-    * @param numTrees the number of random trees to create
-    * @param numFactors the number of factors to randomly choose as candidates for node splitting
-    * @param posClass the name of the positive class
-    * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
-    * @param balanced true if the forest will be balanced
-    */
-    virtual void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-      unsigned int numFactors, const std::string& posClass, unsigned int nodeSize = 1,
-      double retrain = 1.0, bool balanced = false) = 0;
+  /**
+  * Build the forest from a data set
+  *
+  * @param data the data set to train on
+  * @param numTrees the number of random trees to create
+  * @param numFactors the number of factors to randomly choose as candidates for node splitting
+  * @param nodeSize the minimum number of data vectors in a set to split a node
+  * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+  * @param balanced true if the forest will be balanced
+  */
+  virtual void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                               unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) = 0;
 
-    /**
-    * Build the forest from a data set
-    *
-    * @param data the data set to train on
-    * @param numTrees the number of random trees to create
-    * @param numFactors the number of factors to randomly choose as candidates for node splitting
-    * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
-    * @param balanced true if the forest will be balanced
-    */
-    virtual void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-      unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
-      bool balanced = false) = 0;
+  /**
+  * Build the forest from a data set
+  *
+  * @param data the data set to train on
+  * @param numTrees the number of random trees to create
+  * @param numFactors the number of factors to randomly choose as candidates for node splitting
+  * @param posClass the name of the positive class
+  * @param negClass the name of the negative class
+  * @param nodeSize the minimum number of data vectors in a set to split a node
+  * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+  * @param balanced true if the forest will be balanced
+  */
+  virtual void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                               const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
+                               double retrain = 1.0, bool balanced = false) = 0;
 
-    /**
-    * Build the forest from a data set
-    *
-    * @param data the data set to train on
-    * @param numTrees the number of random trees to create
-    * @param numFactors the number of factors to randomly choose as candidates for node splitting
-    * @param posClass the name of the positive class
-    * @param negClass the name of the negative class
-    * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
-    * @param balanced true if the forest will be balanced
-    */
-    virtual void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-      unsigned int numFactors, const std::string& posClass, const std::string& negClass,
-      unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) = 0;
+protected:
 
-  protected:
+  std::vector<std::shared_ptr<RandomTree>> _forest; /// A container for the random forest
 
-    std::vector<std::shared_ptr<RandomTree>> _forest; /// A container for the random forest
+  unsigned int _numSplitFactors;  /// The number of factors to test to split a node
+  std::vector<std::string> _factorLabels; /// Labels for all the factors used in training.
 
-    unsigned int _numSplitFactors;  /// The number of factors to test to split a node
-    std::vector<std::string> _factorLabels; /// Labels for all the factors used in training.
+  static TrainingInputs _trainInputs;  ///The inputs used by the map function train
 
-    static TrainingInputs _trainInputs;  ///The inputs used by the map function train
+  bool _forestCreated;  /// A flag to indicate if the forest was created successfully
 
-    bool _forestCreated;  /// A flag to indicate if the forest was created successfully
+private:
 
-  private:
+  unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node
+};
 
-    unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node
-  };
 }
 
 #endif // BASERANDOMFOREST_H
