@@ -112,7 +112,7 @@ void BaseRandomForestManager::classifyVector(const std::string& objId, const std
   }
 }
 
-void BaseRandomForestManager::exportModel(const std::string& outputFilePath)
+void BaseRandomForestManager::exportModel(const std::string& outputFilePath) const
 {
   try
   {
@@ -135,7 +135,7 @@ void BaseRandomForestManager::exportModel(const std::string& outputFilePath)
   }
 }
 
-void BaseRandomForestManager::exportModel(std::ostream & fileStream)
+void BaseRandomForestManager::exportModel(std::ostream & fileStream) const
 {
   try
   {

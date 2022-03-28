@@ -87,14 +87,14 @@ public:
    * @brief exportModel exports the model an XML file
    * @param outputFile the target file path/name
    */
-  void exportModel(const std::string& outputFilePath);
+  void exportModel(const std::string& outputFilePath) const;
 
   /**
   *  Exports the random forest model and data to a file
   *
   * @param fileStream the file stream to export the model
   */
-  void exportModel(std::ostream& fileStream);
+  void exportModel(std::ostream& fileStream) const;
 
   /**
   * Exports the currently loaded training data
