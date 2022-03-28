@@ -246,7 +246,7 @@ public:
   * @param dataSet the data vector set
   * @return the class label corresponding to the majority of data vectors
   */
-  std::string getMajorityTrainingLabel(std::vector<unsigned int> & dataSet);
+  std::string getMajorityTrainingLabel(const std::vector<unsigned int>& dataSet);
 
   /**
    * Returns the NullTreatment for a given factor

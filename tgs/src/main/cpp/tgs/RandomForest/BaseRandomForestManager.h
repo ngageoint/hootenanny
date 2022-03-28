@@ -151,7 +151,7 @@ public:
   *  @param basefilename the name of the file to write the top factors
   *  without file suffix
   */
-  void generateTopFactors(std::string& basefilename);
+  void generateTopFactors(std::string& basefilename) const;
 
   /**
   *  Gets the class labels unique to the training data set mapped to a
@@ -224,7 +224,7 @@ public:
    * @brief toXml converts the model to an XML formatted string
    * @return the XML representation of the model
    */
-  std::string toXml();
+  std::string toXml() const;
 
   /**
   *  Trains the random forest on the training vectors previously added

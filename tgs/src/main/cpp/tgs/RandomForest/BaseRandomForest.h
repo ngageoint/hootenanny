@@ -119,7 +119,7 @@ public:
   * @param average variable to hold the computed average error
   * @param stdDev variable to hold the computed standard deviation
   */
-  void findAverageError(const std::shared_ptr<DataFrame>& data, double& average, double& stdDev);
+  void findAverageError(const std::shared_ptr<DataFrame>& data, double& average, double& stdDev) const;
 
   /**
   * Computes the proximity of the data vectors in the data set by running the
@@ -129,7 +129,7 @@ public:
   * @param data the set of data vectors
   * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
   */
-  void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int>& proximity);
+  void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int>& proximity) const;
 
   /**
   * This generates a text file containing the raw probability scores and a text file
@@ -144,7 +144,7 @@ public:
   *  @param data the original data set
   *  @param factorImportance a map of factor labels to purity improvement
   */
-  void getFactorImportance(const std::shared_ptr<DataFrame>& data, std::map<std::string, double>& factorImportance);
+  void getFactorImportance(const std::shared_ptr<DataFrame>& data, std::map<std::string, double>& factorImportance) const;
 
   /**
    * Return a vector of the factor labels used to train this random forest.

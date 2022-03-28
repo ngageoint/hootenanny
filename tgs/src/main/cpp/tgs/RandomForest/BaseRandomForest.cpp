@@ -124,9 +124,7 @@ void BaseRandomForest::exportModel(QDomDocument & modelDoc, QDomElement & parent
       labelStream << _factorLabels[i];
 
       if (i != _factorLabels.size() - 1)
-      {
         labelStream << " ";
-      }
     }
 
     QDomText factorLabelsText = modelDoc.createTextNode(labelStream.str().c_str());
@@ -136,7 +134,7 @@ void BaseRandomForest::exportModel(QDomDocument & modelDoc, QDomElement & parent
     //Append Trees
     QDomElement randomTreesNode = modelDoc.createElement("RandomTrees");
 
-    for (auto& tree : _forest)
+    for (const auto& tree : _forest)
       tree->exportTree(modelDoc, randomTreesNode);
 
     forestNode.appendChild(randomTreesNode);
@@ -149,7 +147,7 @@ void BaseRandomForest::exportModel(QDomDocument & modelDoc, QDomElement & parent
 }
 
 void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, double & average,
-                                        double & stdDev)
+                                        double & stdDev) const
 {
   try
   {
@@ -159,7 +157,7 @@ void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, 
       double errorSumSqr = 0;
       double variance;
 
-      for (auto& tree : _forest)
+      for (const auto& tree : _forest)
       {
         double errRate = tree->computeErrorRate(data);
         errorSum += errRate;
@@ -180,7 +178,7 @@ void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, 
 }
 
 void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
-                                     std::vector<unsigned int> & proximity)
+                                     std::vector<unsigned int> & proximity) const
 {
   try
   {
@@ -191,7 +189,7 @@ void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
       proximity.resize(dSize * dSize);
       std::fill(proximity.begin(), proximity.end(), 0);
 
-      for (auto& tree : _forest)
+      for (const auto& tree : _forest)
         tree->findProximity(data, proximity);
     }
     else
@@ -206,7 +204,7 @@ void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
 }
 
 void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& data,
-                                           std::map<std::string, double> & factorImportance)
+                                           std::map<std::string, double> & factorImportance) const
 {
   try
   {
@@ -218,13 +216,13 @@ void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& dat
 
     //Calc factor importance for each tree in forest
     //and aggregate the results
-    for (auto& tree : _forest)
+    for (const auto& tree : _forest)
     {
       std::map<unsigned int, double> factPureMap;
       tree->getFactorImportance(factPureMap);
 
-      for (auto itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
-        factorImportance[factorLabels[itr->first]] += itr->second;
+      for (const auto& factor : factPureMap)
+        factorImportance[factorLabels[factor.first]] += factor.second;
     }
   }
   catch(const Exception & e)

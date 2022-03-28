@@ -84,7 +84,7 @@ void DataFrame::addDataVector(const std::string& label, const std::vector<double
   try
   {
     _data.push_back(dataItem);         //Append a new training vector
-    _weights.push_back(eventWeight);        //Append the event weight
+    _weights.push_back(eventWeight);   //Append the event weight
     _trainingLabels.push_back(label);  //Store its training class label
     _classSet.insert(label);           //Keep a set of unique class names
     if (_trainingLabelEnum.find(label) == _trainingLabelEnum.end())
@@ -289,13 +289,13 @@ void DataFrame::exportData(QDomDocument & modelDoc, QDomElement & dataFrameNode)
         QDomElement medianValuesByFactorNode = modelDoc.createElement("MedianValuesByFactor");
         modelDoc.appendChild(medianValuesByFactorNode);
 
-        for (auto medianItr = factorMedianMap.begin(); medianItr != factorMedianMap.end(); ++medianItr)
+        for (const auto& median : factorMedianMap)
         {
           QDomElement classMedianNode = modelDoc.createElement("ClassMedian");
           modelDoc.appendChild(classMedianNode);
 
           std::stringstream medianStream;
-          medianStream << medianItr->first << " " << medianItr->second;
+          medianStream << median.first << " " << median.second;
           QDomText classMedianText = modelDoc.createTextNode(medianStream.str().c_str());
           classMedianNode.appendChild(classMedianText);
           medianValuesByFactorNode.appendChild(classMedianNode);
@@ -514,7 +514,7 @@ unsigned int DataFrame::getIndexFromFactorLabel(const std::string& fLabel) const
   }
 }
 
-std::string DataFrame::getMajorityTrainingLabel(std::vector<unsigned int> & dataSet)
+std::string DataFrame::getMajorityTrainingLabel(const std::vector<unsigned int>& dataSet)
 {
   try
   {
@@ -527,12 +527,12 @@ std::string DataFrame::getMajorityTrainingLabel(std::vector<unsigned int> & data
 
     std::string maxClass;
 
-    for (auto itr = classMap.begin(); itr != classMap.end(); ++itr)
+    for (const auto& value : classMap)
     {
-      if (itr->second > maxCount)
+      if (value.second > maxCount)
       {
-        maxCount = itr->second;
-        maxClass = itr->first;
+        maxCount = value.second;
+        maxClass = value.first;
       }
     }
 
@@ -742,13 +742,13 @@ void DataFrame::makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & boots
       unsigned int pickCtr = 0;
       while (pickCtr < bootstrap.size())
       {
-        for (auto itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
+        for (const auto& index : idxSortedByClass)
         {
           r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
-          unsigned int rndIdx = (unsigned int)(r * (double)itr->second.size());
-          bootstrap[pickCtr] = itr->second[rndIdx];
-          selectedVectors[itr->second[rndIdx]] = true;
+          unsigned int rndIdx = (unsigned int)(r * (double)index.second.size());
+          bootstrap[pickCtr] = index.second[rndIdx];
+          selectedVectors[index.second[rndIdx]] = true;
           pickCtr++;
         }
       }

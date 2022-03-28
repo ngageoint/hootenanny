@@ -260,12 +260,12 @@ void BaseRandomForestManager::generateResults(const std::string& filename)
           std::string highestScoreName;
           double maxScore = -1.0;
 
-          for (auto scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
+          for (const auto& score : _results[j])
           {
-            if (scoreItr->second > maxScore)
+            if (score.second > maxScore)
             {
-              maxScore = scoreItr->second;
-              highestScoreName = scoreItr->first;
+              maxScore = score.second;
+              highestScoreName = score.first;
             }
           }
 
@@ -314,7 +314,7 @@ void BaseRandomForestManager::generateResults(const std::string& filename)
   }
 }
 
-void BaseRandomForestManager::generateTopFactors(std::string& basefilename)
+void BaseRandomForestManager::generateTopFactors(std::string& basefilename) const
 {
   try
   {
@@ -337,12 +337,12 @@ void BaseRandomForestManager::generateTopFactors(std::string& basefilename)
             std::map<std::string, double> tempFactMap;
             rf->getFactorImportance(_data, tempFactMap);
 
-            for (auto itr = tempFactMap.begin(); itr != tempFactMap.end(); ++itr)
-              factMap[itr->first] += tempFactMap[itr->first];
+            for (const auto& tf : tempFactMap)
+              factMap[tf.first] += tf.second;
           }
 
-          for (auto itr = factMap.begin(); itr != factMap.end(); ++itr)
-            outStream << itr->first << " " << itr->second << std::endl;
+          for (const auto& factor : factMap)
+            outStream << factor.first << " " << factor.second << std::endl;
 
           outStream.close();
         }
@@ -542,7 +542,7 @@ void BaseRandomForestManager::setFactorLabels(const std::vector<std::string>& fa
   }
 }
 
-std::string BaseRandomForestManager::toXml()
+std::string BaseRandomForestManager::toXml() const
 {
   try
   {
@@ -632,12 +632,12 @@ void BaseRandomForestManager::_classifyBinaryTestVector(const std::string& objId
           std::map<std::string, double> tempResult;
           rf->classifyVector(dataVector, tempResult);
 
-          for (auto mItr = tempResult.begin(); mItr != tempResult.end(); ++mItr)
+          for (const auto& temp : tempResult)
           {
-            if (mItr->first != "other")
+            if (temp.first != "other")
             {
-              scores[mItr->first] = mItr->second;
-              sqrSum += pow(mItr->second, 2);
+              scores[temp.first] = temp.second;
+              sqrSum += pow(temp.second, 2);
             }
           }
         }
@@ -645,8 +645,8 @@ void BaseRandomForestManager::_classifyBinaryTestVector(const std::string& objId
         if (sqrSum > 0)
         {
           //Normalize Scores
-          for (auto mItr = scores.begin(); mItr != scores.end(); ++mItr)
-            scores[mItr->first] /= sqrSum;
+          for (const auto& score : scores)
+            scores[score.first] /= sqrSum;
         }
         else
           throw Exception("Empty score returned from testing");
@@ -721,8 +721,8 @@ void BaseRandomForestManager::_classifyRoundRobinTestVector(const std::string& o
           std::map<std::string, double> tempResult;
           rf->classifyVector(dataVector, tempResult);
 
-          for (auto mItr = tempResult.begin(); mItr != tempResult.end(); ++mItr)
-            scores[mItr->first] += mItr->second / (double)_rfList.size();
+          for (const auto& result : tempResult)
+            scores[result.first] += result.second / (double)_rfList.size();
         }
 
         _testObjectIds.push_back(objId);
@@ -823,12 +823,12 @@ void BaseRandomForestManager::_generateRemappedResults(const std::string& filena
           std::string highestScoreName;
           double maxScore = -1.0;
 
-          for (auto scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
+          for (const auto& score : _results[j])
           {
-            if (scoreItr->second > maxScore)
+            if (score.second > maxScore)
             {
-              maxScore = scoreItr->second;
-              highestScoreName = scoreItr->first;
+              maxScore = score.second;
+              highestScoreName = score.first;
             }
           }
 
@@ -867,12 +867,12 @@ void BaseRandomForestManager::_generateRemappedResults(const std::string& filena
           std::string highestScoreName;
           double maxScore = -1.0;
 
-          for (auto scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
+          for (const auto& score : _results[j])
           {
-            if (scoreItr->second > maxScore)
+            if (score.second > maxScore)
             {
-              maxScore = scoreItr->second;
-              highestScoreName = scoreItr->first;
+              maxScore = score.second;
+              highestScoreName = score.first;
             }
           }
 
