@@ -996,7 +996,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, 
     writer->write(output, geoChanges);
     // ChangesetStatsFormat::Unknown is the default format setting, and we'll assume no stats are
     // to be output if that's the requested format.
-    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::UnknownFormat)
       _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
   }
   else if (separateOutput)
@@ -1004,7 +1004,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, 
     // write two changesets
     LOG_DEBUG("Writing separate changesets...");
     writer->write(output, geoChanges);
-    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::UnknownFormat)
       _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
 
     QString outFileName = output;
@@ -1021,7 +1021,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, 
     }
     LOG_VARD(outFileName);
     writer->write(outFileName, _tagChanges);
-    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::UnknownFormat)
       _tagChangesetStats = writer->getStatsTable(changesetStatsFormat);
   }
   else
@@ -1033,7 +1033,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, 
     pChanges->setGeoChangesetProvider(geoChanges);
     pChanges->setTagChangesetProvider(_tagChanges);
     writer->write(output, pChanges);
-    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::UnknownFormat)
       _unifiedChangesetStats = writer->getStatsTable(changesetStatsFormat);
   }
 }

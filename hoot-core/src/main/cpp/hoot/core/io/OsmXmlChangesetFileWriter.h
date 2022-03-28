@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLCHANGESETFILEWRITER_H
 #define OSMXMLCHANGESETFILEWRITER_H
@@ -71,8 +71,7 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  QString getStatsTable(
-    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const override;
+  QString getStatsTable(const ChangesetStatsFormat& format = ChangesetStatsFormat::TextFormat) const override;
 
   void setMap1List(const QList<ConstOsmMapPtr>& mapList) override { _map1List = mapList; }
   void setMap2List(const QList<ConstOsmMapPtr>& mapList) override { _map2List = mapList; }

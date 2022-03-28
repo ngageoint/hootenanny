@@ -122,9 +122,9 @@ public:
 
     int shoreline = 0;
     int water = 0;
-    for (auto it = map->getWays().begin(); it != map->getWays().end(); ++it)
+    for (const auto& val : map->getWays())
     {
-      WayPtr w = it->second;
+      WayPtr w = val.second;
       if (w->getTags()["natural"] == "shoreline")
         shoreline++;
       if (w->getTags()["natural"] == "water")
@@ -147,9 +147,9 @@ public:
 
     int shoreline = 0;
     int water = 0;
-    for (auto it = map->getWays().begin(); it != map->getWays().end(); ++it)
+    for (const auto& val : map->getWays())
     {
-      WayPtr w = it->second;
+      WayPtr w = val.second;
       if (w->getTags()["natural"] == "shoreline")
         shoreline++;
       if (w->getTags()["natural"] == "water")

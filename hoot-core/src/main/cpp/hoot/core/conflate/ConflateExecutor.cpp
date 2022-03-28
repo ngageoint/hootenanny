@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ConflateExecutor.h"
@@ -124,12 +124,10 @@ void ConflateExecutor::_initConfig(const QString& output)
   if (ConfigUtils::boundsOptionEnabled())
     _updateConfigOptionsForBounds();
 
+  // Let's see if we can remove any ops in the configuration that will have no effect on the
+  // feature types we're conflating in order to improve runtime performance.
   if (_filterOps)
-  {
-    // Let's see if we can remove any ops in the configuration that will have no effect on the
-    // feature types we're conflating in order to improve runtime performance.
     SuperfluousConflateOpRemover::removeSuperfluousOps();
-  }
 
   // If no translation was specified, this does nothing. Otherwise, this attempts to set the
   // translation direction if it wasn't specified. The caller must have also added a translation
@@ -158,8 +156,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
-  _progress =
-    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
+  _progress = std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   OsmMapPtr map = std::make_shared<OsmMap>();
   const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
@@ -169,12 +166,10 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
 
   _initConfig(output);
   _initTaskCount();
+  // Write the output dir now so we don't get a nasty surprise at the end of a long job that it
+  // can't be written.
   if (!IoUtils::isUrl(output))
-  {
-    // Write the output dir now so we don't get a nasty surprise at the end of a long job that it
-    // can't be written.
     IoUtils::writeOutputDir(output);
-  }
 
   QString msg = "Conflating ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + " with ..." +
                 FileUtils::toLogFormat(input2, _maxFilePrintLength);
@@ -481,7 +476,7 @@ void ConflateExecutor::_writeOutput(const OsmMapPtr& map, const QString& output,
           ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
       }
       else
-        statsFormat.setFormat(ChangesetStatsFormat::Text);
+        statsFormat.setFormat(ChangesetStatsFormat::TextFormat);
     }
     //  Merge in the tag changes if they aren't in supposed to be in a separate output
     if (!_diffConflateSeparateOutput && _diffConflator.conflatingTags())
@@ -679,9 +674,8 @@ void ConflateExecutor::_setRubberSheetElementCriteria() const
 {
   const QStringList criteriaClassNames = ConfigOptions().getConflateRubberSheetElementCriteria();
   QStringList criteriaClassNamesWithChildren;
-  for (int i = 0; i < criteriaClassNames.size(); i++)
+  for (const auto& criterionClassName : qAsConst(criteriaClassNames))
   {
-    const QString criterionClassName = criteriaClassNames.at(i);
     ElementCriterionPtr crit =
       Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
 
