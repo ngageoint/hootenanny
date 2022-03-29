@@ -86,6 +86,9 @@ var oneToManyMatches = {};
 // This maps secondary element IDs to their matched ref elements (could be combined with
 // oneToManyMatches eventually).
 var oneToManyMatchIds = {};
+// used for distance weighting
+var distanceWeightCoeff = parseFloat(hoot.get("railway.matcher.distance.weight.coefficient")) * -1.0;
+var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -302,8 +305,16 @@ exports.matchScore = function(map, e1, e2)
     // conflate workflow doesn't require that currently.
   }
 
-  hoot.trace("Match: " + e1.getElementId()  + ", " + e2.getElementId());
-  result = { match: 1.0, explain: "match" };
+  // Use distance weighting to slightly favor features that are closer together.
+  var distanceScoreValue = distanceScoreExtractor.extract(map, e1, e2);
+  var delta = (1.0 - distanceScoreValue) * distanceWeightCoeff;
+  result.match = 1.0 + delta;
+  hoot.trace(result.match);
+  result.miss = 0.0 - delta;
+  hoot.trace(result.miss);
+
+//  result = { match: 1.0, explain: "match" };
+
   return result;
 };
 

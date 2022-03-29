@@ -45,6 +45,10 @@ var nameExtractor = new hoot.NameExtractor(
     { "translate.string.distance.tokenize": "false" },
     new hoot.LevenshteinDistance( { "levenshtein.distance.alpha": 1.15 } )));
 
+// used for distance weighting
+var distanceWeightCoeff = parseFloat(hoot.get("river.matcher.distance.weight.coefficient")) * -1.0;
+var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
+
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
@@ -218,6 +222,14 @@ exports.matchScore = function(map, e1, e2)
   {
     return result;
   }
+
+  // Use distance weighting to slightly favor features that are closer together.
+  var distanceScoreValue = distanceScoreExtractor.extract(map, e1, e2);
+  var delta = (1.0 - distanceScoreValue) * distanceWeightCoeff;
+  result.match = 1.0 + delta;
+  hoot.trace(result.match);
+  result.miss = 0.0 - delta;
+  hoot.trace(result.miss);
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;

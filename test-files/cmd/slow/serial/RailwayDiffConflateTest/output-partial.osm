@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="39.569728" minlon="125.780683" maxlat="39.75273500000001" maxlon="126.079206"/>
-    <node visible="true" id="-4211" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6002022233422366" lon="125.8642861978360372"/>
-    <node visible="true" id="-4206" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6220347585461639" lon="125.8941776411788425"/>
-    <node visible="true" id="-4205" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6219849945947260" lon="125.8941130594038640"/>
-    <node visible="true" id="-4204" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6101069574638487" lon="125.8751599429818953"/>
-    <node visible="true" id="-4200" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7239372873752927" lon="125.8972495899472648"/>
-    <node visible="true" id="-4193" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6025854473928192" lon="125.9879182838872964"/>
-    <node visible="true" id="-4175" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6715943259999975" lon="125.7912185310000126"/>
-    <node visible="true" id="-4168" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6668074649999980" lon="125.7826792830000073"/>
-    <node visible="true" id="-4151" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6146811685940463" lon="125.9645338243991688"/>
-    <node visible="true" id="-4144" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6062186523853939" lon="125.8681657191718699"/>
-    <node visible="true" id="-4142" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7069006624283816" lon="125.8848913856198521"/>
-    <node visible="true" id="-4141" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7115006846315737" lon="125.8847665650248189"/>
-    <node visible="true" id="-4129" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6753215044886716" lon="125.9107856106588770"/>
-    <node visible="true" id="-4127" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6519750045330639" lon="125.9070334940444127"/>
-    <node visible="true" id="-4122" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6517054981941683" lon="125.9067318594896108"/>
-    <node visible="true" id="-4105" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7156892551352811" lon="125.8888748229620234"/>
-    <node visible="true" id="-4100" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5840263581996652" lon="125.8639738151986052"/>
-    <node visible="true" id="-4099" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5892002922154589" lon="125.8687295313154237"/>
-    <node visible="true" id="-4098" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5835673982505156" lon="125.8638177106951019"/>
-    <node visible="true" id="-4093" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5760188147746277" lon="125.8601184929684393"/>
-    <node visible="true" id="-4091" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7300808034633803" lon="126.0787565628532008"/>
-    <node visible="true" id="-4086" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6992609188214445" lon="125.8888476350337982"/>
-    <node visible="true" id="-4078" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7070738247108252" lon="125.8847576372468922"/>
-    <node visible="true" id="-4063" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6999423734368548" lon="125.8883673580242117"/>
-    <node visible="true" id="-4058" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6350962604673995" lon="125.9030895613158236"/>
-    <node visible="true" id="-4057" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6350722610326756" lon="125.9030078320884627"/>
-    <node visible="true" id="-4055" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6317800714951005" lon="125.8982282009924205"/>
-    <node visible="true" id="-4050" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7097185550000020" lon="126.0621820330000133"/>
-    <node visible="true" id="-4046" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6943288591571957" lon="126.0145299608137606"/>
-    <node visible="true" id="-4045" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6936160373209717" lon="126.0131855605725093"/>
-    <node visible="true" id="-4044" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6924363784685568" lon="126.0110057352741251"/>
+    <node visible="true" id="-4209" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6002022233422366" lon="125.8642861978360372"/>
+    <node visible="true" id="-4204" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6220347585461639" lon="125.8941776411788425"/>
+    <node visible="true" id="-4203" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6219849945947260" lon="125.8941130594038640"/>
+    <node visible="true" id="-4202" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6101069574638487" lon="125.8751599429818953"/>
+    <node visible="true" id="-4198" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7239372873752927" lon="125.8972495899472648"/>
+    <node visible="true" id="-4191" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6025854473928192" lon="125.9879182838872964"/>
+    <node visible="true" id="-4173" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6715943259999975" lon="125.7912185310000126"/>
+    <node visible="true" id="-4166" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6668074649999980" lon="125.7826792830000073"/>
+    <node visible="true" id="-4149" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6146811685940463" lon="125.9645338243991688"/>
+    <node visible="true" id="-4142" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6062186523853939" lon="125.8681657191718699"/>
+    <node visible="true" id="-4140" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7069006624283816" lon="125.8848913856198521"/>
+    <node visible="true" id="-4139" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7115006846315737" lon="125.8847665650248189"/>
+    <node visible="true" id="-4128" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6519750045330639" lon="125.9070334940444127"/>
+    <node visible="true" id="-4123" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6517054981941683" lon="125.9067318594896108"/>
+    <node visible="true" id="-4106" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7156892551352811" lon="125.8888748229620234"/>
+    <node visible="true" id="-4100" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5760188147746277" lon="125.8601184929684393"/>
+    <node visible="true" id="-4097" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5804427968956816" lon="125.8627060952961614"/>
+    <node visible="true" id="-4096" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5840263581996652" lon="125.8639738151986052"/>
+    <node visible="true" id="-4095" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5892002922154589" lon="125.8687295313154237"/>
+    <node visible="true" id="-4094" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5835673982505156" lon="125.8638177106951019"/>
+    <node visible="true" id="-4092" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7300808034633803" lon="126.0787565628532008"/>
+    <node visible="true" id="-4087" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6992609188214445" lon="125.8888476350337982"/>
+    <node visible="true" id="-4079" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7070738247108252" lon="125.8847576372468922"/>
+    <node visible="true" id="-4064" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6999423734368548" lon="125.8883673580242117"/>
+    <node visible="true" id="-4059" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6350962604673995" lon="125.9030895613158236"/>
+    <node visible="true" id="-4058" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6350722610326756" lon="125.9030078320884627"/>
+    <node visible="true" id="-4056" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6317800714951005" lon="125.8982282009924205"/>
+    <node visible="true" id="-4049" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7097185550000020" lon="126.0621820330000133"/>
     <node visible="true" id="-2092" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7505546020000011" lon="125.9132189900000185"/>
     <node visible="true" id="-2091" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7510661150000075" lon="125.9134548340000066"/>
     <node visible="true" id="-2090" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7517626699999980" lon="125.9137486890000162"/>
@@ -221,21 +218,6 @@
     <node visible="true" id="-1240" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5750423049999966" lon="125.8598139159999789"/>
     <node visible="true" id="-1239" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5753733830000058" lon="125.8598854300000056"/>
     <node visible="true" id="-1238" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5758160549999971" lon="125.8600236720000112"/>
-    <node visible="true" id="-1159" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6798588340000009" lon="125.9087805700000189"/>
-    <node visible="true" id="-1158" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6796376799999990" lon="125.9089130859999983"/>
-    <node visible="true" id="-1157" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6793452770000030" lon="125.9090615820000210"/>
-    <node visible="true" id="-1156" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6789859159999949" lon="125.9092510960000055"/>
-    <node visible="true" id="-1155" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6786043139999975" lon="125.9094514709999970"/>
-    <node visible="true" id="-1154" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6782366990000099" lon="125.9096336390000062"/>
-    <node visible="true" id="-1153" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6779272679999977" lon="125.9097992049999988"/>
-    <node visible="true" id="-1152" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6776152300000007" lon="125.9099616679999940"/>
-    <node visible="true" id="-1151" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6773136519999952" lon="125.9101216459999932"/>
-    <node visible="true" id="-1150" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6769796150000005" lon="125.9102865389999977"/>
-    <node visible="true" id="-1149" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6766537150000076" lon="125.9104225199999973"/>
-    <node visible="true" id="-1148" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6763651190000033" lon="125.9105319650000041"/>
-    <node visible="true" id="-1147" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6760944769999995" lon="125.9106055140000109"/>
-    <node visible="true" id="-1146" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6757787539999995" lon="125.9106813909999829"/>
-    <node visible="true" id="-1145" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6755162050000010" lon="125.9107409239999953"/>
     <node visible="true" id="-1141" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6817392299999980" lon="125.8403200740000045"/>
     <node visible="true" id="-1140" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6817303870000018" lon="125.8402982970000039"/>
     <node visible="true" id="-1139" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6817155040000031" lon="125.8402616459999876"/>
@@ -323,30 +305,15 @@
     <node visible="true" id="-252" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7113348889999926" lon="125.8846627770000168"/>
     <node visible="true" id="-251" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7112885640000002" lon="125.8846360269999991"/>
     <node visible="true" id="-250" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7111990060000011" lon="125.8845843120000154"/>
+    <node visible="true" id="-249" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5828855700000091" lon="125.8636050490000002"/>
+    <node visible="true" id="-248" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5823673570000025" lon="125.8634375529999971"/>
+    <node visible="true" id="-247" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5818343259999992" lon="125.8632409650000028"/>
+    <node visible="true" id="-246" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5812207809999990" lon="125.8630137189999942"/>
+    <node visible="true" id="-245" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5807077710000073" lon="125.8628162300000071"/>
     <node visible="true" id="-231" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5833401189999989" lon="125.8637469359999983"/>
     <node visible="true" id="-230" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5833158630000028" lon="125.8637377639999926"/>
     <node visible="true" id="-229" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5832858950000102" lon="125.8637276539999874"/>
     <node visible="true" id="-228" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7237282069999935" lon="125.8970103590000065"/>
-    <node visible="true" id="-210" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6927077250000053" lon="126.0115137829999981"/>
-    <node visible="true" id="-209" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6930153930000031" lon="126.0120774180000183"/>
-    <node visible="true" id="-208" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6932974200000004" lon="126.0125991209999938"/>
-    <node visible="true" id="-204" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6944373520000084" lon="126.0147378340000159"/>
-    <node visible="true" id="-203" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6947572870000087" lon="126.0153362640000125"/>
-    <node visible="true" id="-202" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6950191500000074" lon="126.0158288689999893"/>
-    <node visible="true" id="-201" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6952435509999901" lon="126.0162276389999931"/>
-    <node visible="true" id="-200" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6955341250000018" lon="126.0167633180000024"/>
-    <node visible="true" id="-199" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6958016840000099" lon="126.0172753180000171"/>
-    <node visible="true" id="-198" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6959923300000099" lon="126.0176312950000010"/>
-    <node visible="true" id="-197" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6962971450000026" lon="126.0182003460000004"/>
-    <node visible="true" id="-196" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6964723829999997" lon="126.0185235819999860"/>
-    <node visible="true" id="-195" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6966105119999995" lon="126.0187833709999978"/>
-    <node visible="true" id="-194" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6968861780000069" lon="126.0192962320000021"/>
-    <node visible="true" id="-193" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6971765349999970" lon="126.0198253540000053"/>
-    <node visible="true" id="-192" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6976058240000071" lon="126.0206134730000116"/>
-    <node visible="true" id="-191" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6979719980000070" lon="126.0212960489999858"/>
-    <node visible="true" id="-190" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6984061019999999" lon="126.0221075510000190"/>
-    <node visible="true" id="-189" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6986379800000009" lon="126.0225377400000184"/>
-    <node visible="true" id="-111" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6987830139999929" lon="126.0228092380000078"/>
     <node visible="true" id="-108" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6883166819999929" lon="126.0073696410000110"/>
     <node visible="true" id="-107" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6884632270000068" lon="126.0074137769999965"/>
     <node visible="true" id="-106" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6885319960000089" lon="126.0074526759999998"/>
@@ -361,7 +328,7 @@
     <node visible="true" id="-1" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7527350000000084" lon="125.9141793350100045"/>
     <way visible="true" id="-4525" timestamp="2018-02-16T13:57:43Z" version="1">
         <nd ref="-1049"/>
-        <nd ref="-4211"/>
+        <nd ref="-4209"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="06CDEA93-8387-4E74-8BA3-D516CDFF35ED"/>
         <tag k="SHAPE_Leng" v="0.0074347424660099999"/>
@@ -389,9 +356,9 @@
         <tag k="uuid" v="{8bea8c4a-389e-4858-8aa1-80c944fece58}"/>
     </way>
     <way visible="true" id="-4515" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4206"/>
+        <nd ref="-4204"/>
         <nd ref="-1641"/>
-        <nd ref="-4205"/>
+        <nd ref="-4203"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="E321083D-F887-4B88-A6B3-D426D856EFA4"/>
         <tag k="SHAPE_Leng" v="0.0331224642794"/>
@@ -419,7 +386,7 @@
         <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28}"/>
     </way>
     <way visible="true" id="-4507" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4204"/>
+        <nd ref="-4202"/>
         <nd ref="-1586"/>
         <nd ref="-1585"/>
         <nd ref="-1584"/>
@@ -464,7 +431,7 @@
         <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28}"/>
     </way>
     <way visible="true" id="-4491" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4200"/>
+        <nd ref="-4198"/>
         <nd ref="-338"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="0A463DAA-BD74-4BD5-8652-362B7F51A59E"/>
@@ -494,7 +461,7 @@
     </way>
     <way visible="true" id="-4481" timestamp="2018-02-16T13:57:43Z" version="1">
         <nd ref="-2070"/>
-        <nd ref="-4193"/>
+        <nd ref="-4191"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="21B95A9E-52CF-409B-883B-35A9D1660021"/>
         <tag k="SHAPE_Leng" v="0.0024139442267300001"/>
@@ -519,7 +486,7 @@
         <tag k="uuid" v="{7496465e-e9d7-4184-a426-c9b738781922}"/>
     </way>
     <way visible="true" id="-4448" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4175"/>
+        <nd ref="-4173"/>
         <nd ref="-1369"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="CE45E966-F7D0-4A7A-BD04-52839A146E25"/>
@@ -548,7 +515,7 @@
         <tag k="uuid" v="{8f3a4881-f4a9-46f6-9256-0dc8c8b74c2e}"/>
     </way>
     <way visible="true" id="-4442" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4168"/>
+        <nd ref="-4166"/>
         <nd ref="-680"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="B75A63E4-ED0D-4FA9-B63B-8FDCF8C3522F"/>
@@ -577,7 +544,7 @@
         <tag k="uuid" v="{87126459-e815-4abf-a2c6-f1b5025a33c0}"/>
     </way>
     <way visible="true" id="-4428" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4151"/>
+        <nd ref="-4149"/>
         <nd ref="-712"/>
         <nd ref="-711"/>
         <nd ref="-710"/>
@@ -606,7 +573,7 @@
     </way>
     <way visible="true" id="-4418" timestamp="2018-02-16T13:57:43Z" version="1">
         <nd ref="-1568"/>
-        <nd ref="-4144"/>
+        <nd ref="-4142"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="E88AC4FD-9ECB-46E1-8422-D0CD37FF7CE9"/>
         <tag k="SHAPE_Leng" v="0.0066840824949699999"/>
@@ -657,7 +624,7 @@
         <nd ref="-267"/>
         <nd ref="-266"/>
         <nd ref="-265"/>
-        <nd ref="-4142"/>
+        <nd ref="-4140"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="874803D2-9CB4-4461-9A4A-D3A85DA354F8"/>
         <tag k="SHAPE_Leng" v="0.0155755425742"/>
@@ -685,7 +652,7 @@
         <tag k="uuid" v="{cb84b01d-3161-44be-8ee6-db1604553333}"/>
     </way>
     <way visible="true" id="-4409" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4141"/>
+        <nd ref="-4139"/>
         <nd ref="-252"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="71193742-965D-4F34-9FBA-20F883D11FF2"/>
@@ -714,55 +681,12 @@
         <tag k="uuid" v="{9a240920-fd44-43bd-9403-edb08c6b18a5}"/>
     </way>
     <way visible="true" id="-4389" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-1159"/>
-        <nd ref="-1158"/>
-        <nd ref="-1157"/>
-        <nd ref="-1156"/>
-        <nd ref="-1155"/>
-        <nd ref="-1154"/>
-        <nd ref="-1153"/>
-        <nd ref="-1152"/>
-        <nd ref="-1151"/>
-        <nd ref="-1150"/>
-        <nd ref="-1149"/>
-        <nd ref="-1148"/>
-        <nd ref="-1147"/>
-        <nd ref="-1146"/>
-        <nd ref="-1145"/>
-        <nd ref="-4129"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="2C0AA698-F5A4-4C52-A502-63B9672C5CE9"/>
-        <tag k="SHAPE_Leng" v="0.0050289045246600002"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.884Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{5fb8b74b-703e-4e3a-abc2-576225a869c8}"/>
-    </way>
-    <way visible="true" id="-4386" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4127"/>
+        <nd ref="-4128"/>
         <nd ref="-405"/>
         <nd ref="-404"/>
         <nd ref="-403"/>
         <nd ref="-402"/>
-        <nd ref="-4122"/>
+        <nd ref="-4123"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="CF55958D-3815-42C9-B9C4-D5AC9E191181"/>
         <tag k="SHAPE_Leng" v="0.0060340641372099999"/>
@@ -789,8 +713,8 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{940cac72-480e-472b-82fe-964e9bcf5b40}"/>
     </way>
-    <way visible="true" id="-4343" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4105"/>
+    <way visible="true" id="-4346" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4106"/>
         <nd ref="-312"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="5DF182A2-EF20-4760-A3E8-0A8B2C173301"/>
@@ -819,65 +743,6 @@
         <tag k="uuid" v="{f178421d-fd17-4a0b-9043-066a392886cf}"/>
     </way>
     <way visible="true" id="-4332" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4100"/>
-        <nd ref="-1942"/>
-        <nd ref="-4098"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="7E3486F2-DFB6-4DB4-B7EF-C382DEF1D95E"/>
-        <tag k="SHAPE_Leng" v="0.00799775686823"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{aa909189-e138-49c5-bca8-8e34db155572}"/>
-    </way>
-    <way visible="true" id="-4329" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-1963"/>
-        <nd ref="-4099"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="7E3486F2-DFB6-4DB4-B7EF-C382DEF1D95E"/>
-        <tag k="SHAPE_Leng" v="0.00799775686823"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{aa909189-e138-49c5-bca8-8e34db155572}"/>
-    </way>
-    <way visible="true" id="-4316" timestamp="2018-02-16T13:57:43Z" version="1">
         <nd ref="-4"/>
         <nd ref="-1251"/>
         <nd ref="-1250"/>
@@ -893,7 +758,7 @@
         <nd ref="-1240"/>
         <nd ref="-1239"/>
         <nd ref="-1238"/>
-        <nd ref="-4093"/>
+        <nd ref="-4100"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="D339C2B4-E595-4354-97BF-3B9A181DCBBA"/>
         <tag k="SHAPE_Leng" v="0.0153244490001"/>
@@ -920,8 +785,101 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{a26f95b0-df1a-4003-85c8-6b17d3cfed2b}"/>
     </way>
-    <way visible="true" id="-4312" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4091"/>
+    <way visible="true" id="-4327" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-229"/>
+        <nd ref="-249"/>
+        <nd ref="-248"/>
+        <nd ref="-247"/>
+        <nd ref="-246"/>
+        <nd ref="-245"/>
+        <nd ref="-4097"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="37F03C01-6C64-49CC-BE79-D603D0BC0821"/>
+        <tag k="SHAPE_Leng" v="0.0071384093354699999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.903Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{256fdcaf-8ea5-45b2-b654-8dbfcd079d8f}"/>
+    </way>
+    <way visible="true" id="-4325" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4096"/>
+        <nd ref="-1942"/>
+        <nd ref="-4094"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="7E3486F2-DFB6-4DB4-B7EF-C382DEF1D95E"/>
+        <tag k="SHAPE_Leng" v="0.00799775686823"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{aa909189-e138-49c5-bca8-8e34db155572}"/>
+    </way>
+    <way visible="true" id="-4322" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1963"/>
+        <nd ref="-4095"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="7E3486F2-DFB6-4DB4-B7EF-C382DEF1D95E"/>
+        <tag k="SHAPE_Leng" v="0.00799775686823"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{aa909189-e138-49c5-bca8-8e34db155572}"/>
+    </way>
+    <way visible="true" id="-4314" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4092"/>
         <nd ref="-51"/>
         <nd ref="-6"/>
         <tag k="FCSubtype" v="0"/>
@@ -946,8 +904,8 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{d7d4ba79-5452-4ceb-9869-336b33a55595}"/>
     </way>
-    <way visible="true" id="-4304" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4086"/>
+    <way visible="true" id="-4306" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4087"/>
         <nd ref="-1792"/>
         <nd ref="-1791"/>
         <nd ref="-287"/>
@@ -973,8 +931,8 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{015c9439-e28a-439f-acfc-c1d26fdf26f9}"/>
     </way>
-    <way visible="true" id="-4288" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4063"/>
+    <way visible="true" id="-4290" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4064"/>
         <nd ref="-1930"/>
         <nd ref="-1929"/>
         <nd ref="-1928"/>
@@ -998,7 +956,7 @@
         <nd ref="-1910"/>
         <nd ref="-1909"/>
         <nd ref="-1908"/>
-        <nd ref="-4078"/>
+        <nd ref="-4079"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="45FA327E-47D7-4C7B-BFB2-BD377EF95E9F"/>
         <tag k="SHAPE_Leng" v="0.029715494970199999"/>
@@ -1022,10 +980,10 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{0cf4ea9f-d066-4a91-a5f0-8fffac7776b2}"/>
     </way>
-    <way visible="true" id="-4253" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4058"/>
+    <way visible="true" id="-4255" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4059"/>
         <nd ref="-1693"/>
-        <nd ref="-4057"/>
+        <nd ref="-4058"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="CE15A63D-8BB5-42E7-BB13-462DBB77FB44"/>
         <tag k="SHAPE_Leng" v="0.022989659365000002"/>
@@ -1052,8 +1010,8 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{93f3e200-8a80-48c6-8295-52655354fea7}"/>
     </way>
-    <way visible="true" id="-4240" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4055"/>
+    <way visible="true" id="-4242" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4056"/>
         <nd ref="-1677"/>
         <nd ref="-1676"/>
         <nd ref="-1675"/>
@@ -1094,7 +1052,7 @@
         <tag k="uuid" v="{93f3e200-8a80-48c6-8295-52655354fea7}"/>
     </way>
     <way visible="true" id="-4229" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4050"/>
+        <nd ref="-4049"/>
         <nd ref="-22"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="865454EB-A4C8-47D1-B727-2A75C8FDFBAB"/>
@@ -1117,75 +1075,6 @@
         <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{5f08faf6-1221-46e6-a257-d834e0a8986f}"/>
-    </way>
-    <way visible="true" id="-4222" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4046"/>
-        <nd ref="-204"/>
-        <nd ref="-203"/>
-        <nd ref="-202"/>
-        <nd ref="-201"/>
-        <nd ref="-200"/>
-        <nd ref="-199"/>
-        <nd ref="-198"/>
-        <nd ref="-197"/>
-        <nd ref="-196"/>
-        <nd ref="-195"/>
-        <nd ref="-194"/>
-        <nd ref="-193"/>
-        <nd ref="-192"/>
-        <nd ref="-191"/>
-        <nd ref="-190"/>
-        <nd ref="-189"/>
-        <nd ref="-111"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
-        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
-    </way>
-    <way visible="true" id="-4219" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-4044"/>
-        <nd ref="-210"/>
-        <nd ref="-209"/>
-        <nd ref="-208"/>
-        <nd ref="-4045"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
-        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
     </way>
     <way visible="true" id="-132" timestamp="2018-02-16T13:57:43Z" version="1">
         <nd ref="-5"/>
