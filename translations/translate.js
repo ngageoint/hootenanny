@@ -1375,8 +1375,8 @@ translate = {
       if (rules[i] in tags)
       {
         // Strip out anything that is not a number. Get rid of 125m etc
-        var tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
-
+        // but check to make sure it's not a number already
+        var tNum = isNaN(tags[rules[i]]) ? tags[rules[i]].replace(/-[^0-9\\.]+/g, '') : tags[rules[i]];
         if (translate.isNumber(tNum))
         {
           // Now check the Integer attributes
