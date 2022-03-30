@@ -316,8 +316,8 @@ GeometryPtr AlphaShape::toGeometry()
         alpha_values.insert(length);
     }
     //  Get a list of possible alpha values to test
-    for (auto alpha : alpha_values)
-      alpha_options.push_back(static_cast<double>(alpha) / scale);
+    for (auto value : alpha_values)
+      alpha_options.push_back(static_cast<double>(value) / scale);
     //  Iterate the alpha values searching for one that uses at least
     //  90% of the Delauney triangle faces
     bool success = _searchAlpha(alpha, faces, e, preUnionArea, faceCount, alpha_options, 0, alpha_options.size() - 1);

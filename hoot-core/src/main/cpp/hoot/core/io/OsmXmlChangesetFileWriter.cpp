@@ -49,8 +49,8 @@ HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
 
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
   : OsmChangesetFileWriter(),
-    _precision(16),
-    _addTimestamp(false)
+    _precision(ConfigOptions().getWriterPrecision()),
+    _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp())
 {
 }
 
@@ -525,9 +525,9 @@ QString OsmXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat& for
 {
   switch (format.getEnum())
   {
-  case ChangesetStatsFormat::Text:
+  case ChangesetStatsFormat::TextFormat:
     return _stats.toTableString();
-  case ChangesetStatsFormat::Json:
+  case ChangesetStatsFormat::JsonFormat:
     return _stats.toJsonString();
     break;
   default:

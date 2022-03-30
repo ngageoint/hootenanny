@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCHTYPE_H
 #define MATCHTYPE_H
@@ -48,11 +48,9 @@ public:
 
   MatchType(double v)
   {
-    int t = round(v);
+    int t = static_cast<int>(round(v));
     if (t < Miss || t > Review)
-    {
       throw HootException("Invalid match type.");
-    }
     _type = (Type)t;
   }
 
@@ -60,21 +58,13 @@ public:
   {
     QString l = v.toLower();
     if (l == "miss")
-    {
       _type = Miss;
-    }
     else if (l == "match")
-    {
       _type = Match;
-    }
     else if (l == "review")
-    {
       _type = Review;
-    }
     else
-    {
       throw HootException("Invalid match type.");
-    }
   }
 
   bool operator==(MatchType t) const { return t._type == _type; }

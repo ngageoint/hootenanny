@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTTYPE_H
 #define ELEMENTTYPE_H
@@ -73,32 +73,22 @@ public:
   {
     typeString = typeString.toLower();
     return typeString == "node" || typeString == "way" || typeString == "relation" ||
-      typeString == "unknown";
+           typeString == "unknown";
   }
 
   static Type fromString(QString typeString)
   {
     typeString = typeString.toLower();
     if (typeString == "node")
-    {
       return Node;
-    }
     else if (typeString == "way")
-    {
       return Way;
-    }
     else if (typeString == "relation")
-    {
       return Relation;
-    }
     else if (typeString == "unknown")
-    {
       return Unknown;
-    }
     else
-    {
       throw IllegalArgumentException("Invalid element type string: " + typeString);
-    }
   }
 
 private:

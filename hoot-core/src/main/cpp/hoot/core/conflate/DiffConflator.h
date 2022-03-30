@@ -131,7 +131,7 @@ public:
    */
   void writeChangeset(OsmMapPtr pResultMap, const QString& output, bool separateOutput,
                       const ChangesetStatsFormat& changesetStatsFormat =
-                        ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
+                        ChangesetStatsFormat(ChangesetStatsFormat::UnknownFormat),
                       const QString& osmApiDbUrl = "");
 
   /**

@@ -2903,6 +2903,15 @@ details. The "best" value varies depending on the input data as well as how the 
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
+=== linear.matcher.distance.weight.coefficient
+
+* Data Type: double
+* Default Value: `0.01`
+
+A weighting coefficient value, in the range [0.0, 1.0], for the applying distance weighting to linear
+script matches. This will favor feature that are closer together. The higher the coefficient value,
+the higher the weighting applied. A value of 0.0 will disable distance weighting.
+
 === log.class.exclude.filter
 
 * Data Type: list
@@ -4474,7 +4483,7 @@ sheet tie point distances.
 === power.line.matcher.distance.weight.coefficient
 
 * Data Type: double
-* Default Value: `0.01`
+* Default Value: `${linear.matcher.distance.weight.coefficient}`
 
 A weighting coefficient value, in the range [0.0, 1.0], for the applying distance weighting to power
 line matches. This will favor feature that are closer together. The higher the coefficient value,
@@ -4524,6 +4533,15 @@ honored by all progress logging.
 
 Distance, in meters, used for sampling railway data during angle histogram extraction with
 `SampledAngleHistogramExtractor`.
+
+=== railway.matcher.distance.weight.coefficient
+
+* Data Type: double
+* Default Value: `${linear.matcher.distance.weight.coefficient}`
+
+A weighting coefficient value, in the range [0.0, 1.0], for the applying distance weighting to railway
+matches. This will favor feature that are closer together. The higher the coefficient value,
+the higher the weighting applied. A value of 0.0 will disable distance weighting.
 
 === railway.matcher.heading.delta
 
@@ -4999,6 +5017,15 @@ Distance, in meters, used for sampling river data during angle histogram extract
 
 Automatically calculates the search radius to be used during conflation of rivers using rubber
 sheet tie point distances.
+
+=== river.matcher.distance.weight.coefficient
+
+* Data Type: double
+* Default Value: `${linear.matcher.distance.weight.coefficient}`
+
+A weighting coefficient value, in the range [0.0, 1.0], for the applying distance weighting to river
+matches. This will favor feature that are closer together. The higher the coefficient value,
+the higher the weighting applied. A value of 0.0 will disable distance weighting.
 
 === river.matcher.heading.delta
 

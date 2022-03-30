@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BaseRandomForest.h"
 
@@ -39,298 +39,274 @@ using namespace std;
 
 namespace Tgs
 {
-  TrainingInputs BaseRandomForest::_trainInputs;
 
-  BaseRandomForest::BaseRandomForest() : _numSplitFactors(0), _forestCreated(false)
+TrainingInputs BaseRandomForest::_trainInputs;
+
+BaseRandomForest::BaseRandomForest()
+  : _numSplitFactors(0),
+    _forestCreated(false)
+{
+}
+
+BaseRandomForest::~BaseRandomForest()
+{
+  clear();
+}
+
+void BaseRandomForest::clear()
+{
+  try
   {
+    _forest.clear();
   }
-
-  BaseRandomForest::~BaseRandomForest()
+  catch (const Exception & e)
   {
-    clear();
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
   }
+}
 
-  void BaseRandomForest::clear()
+void BaseRandomForest::classifyVector(const std::vector<double>& dataVector, std::map<std::string, double>& scores) const
+{
+  try
   {
-    try
+    double itrVal = 1.0 / (double)_forest.size();
+    for (auto& tree : _forest)
     {
-      _forest.clear();
+      std::string result;
+      tree->classifyDataVector(dataVector, result);
+      scores[result] += itrVal;
     }
-    catch (const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
   }
-
-  void BaseRandomForest::classifyVector(
-    const std::vector<double>& dataVector, std::map<std::string, double>& scores) const
+  catch (const Exception& e)
   {
-    try
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void BaseRandomForest::exportModel(std::ostream& filestream)
+{
+  if (filestream.good())
+  {
+    QDomDocument doc;
+    QDomElement docRoot = doc.createElement("Model");
+    exportModel(doc, docRoot);
+    doc.appendChild(docRoot);
+    filestream << doc.toString().toLatin1().constData();
+  }
+  else
+    throw Exception("Random forest export - File stream is not open for exporting.");
+}
+
+void BaseRandomForest::exportModel(QDomDocument & modelDoc, QDomElement & parentNode)
+{
+  try
+  {
+    QDomElement forestNode = modelDoc.createElement("RandomForest");
+
+    //Append number of trees
+    QDomElement numTreesNode = modelDoc.createElement("NumTrees");
+    QDomText numTreesText = modelDoc.createTextNode(QString::number(_forest.size()));
+    numTreesNode.appendChild(numTreesText);
+    forestNode.appendChild(numTreesNode);
+
+    //Append number of split factors
+    QDomElement numSplitFactorsNode = modelDoc.createElement("NumSplitFactors");
+    QDomText numSplitFactorText = modelDoc.createTextNode(QString::number(_numSplitFactors));
+    numSplitFactorsNode.appendChild(numSplitFactorText);
+    forestNode.appendChild(numSplitFactorsNode);
+
+    //Append factor labels
+    QDomElement factorLabelsNode = modelDoc.createElement("FactorLabels");
+    stringstream labelStream;
+
+    for (size_t i = 0; i < _factorLabels.size(); ++i)
     {
-      double itrVal = 1.0 / (double)_forest.size();
-      for (unsigned int i = 0; i < _forest.size(); i++)
+      labelStream << _factorLabels[i];
+
+      if (i != _factorLabels.size() - 1)
+        labelStream << " ";
+    }
+
+    QDomText factorLabelsText = modelDoc.createTextNode(labelStream.str().c_str());
+    factorLabelsNode.appendChild(factorLabelsText);
+    forestNode.appendChild(factorLabelsNode);
+
+    //Append Trees
+    QDomElement randomTreesNode = modelDoc.createElement("RandomTrees");
+
+    for (const auto& tree : _forest)
+      tree->exportTree(modelDoc, randomTreesNode);
+
+    forestNode.appendChild(randomTreesNode);
+    parentNode.appendChild(forestNode);
+  }
+  catch(const Exception & e)
+  {
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, double & average,
+                                        double & stdDev) const
+{
+  try
+  {
+    if (isTrained())
+    {
+      double errorSum = 0;
+      double errorSumSqr = 0;
+      double variance;
+
+      for (const auto& tree : _forest)
       {
-        std::string result;
-        _forest[i]->classifyDataVector(dataVector, result);
-        scores[result] += itrVal;
+        double errRate = tree->computeErrorRate(data);
+        errorSum += errRate;
+        errorSumSqr += errRate * errRate;
       }
-    }
-    catch (const Exception& e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
 
-  void BaseRandomForest::exportModel(std::ostream& filestream)
+      average = errorSum / ((double)_forest.size());
+      variance = errorSumSqr / ((double)_forest.size()) - average * average;
+      stdDev = sqrt(variance);
+    }
+    else
+      throw Exception(__LINE__, "Forest has not been trained");
+  }
+  catch(const Exception & e)
   {
-    if (filestream.good())
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
+                                     std::vector<unsigned int> & proximity) const
+{
+  try
+  {
+    unsigned int dSize = data->getNumDataVectors();
+
+    if (_forestCreated  && dSize > 0)
     {
-      QDomDocument doc;
-      QDomElement docRoot = doc.createElement("Model");
-      exportModel(doc, docRoot);
-      doc.appendChild(docRoot);
-      filestream << doc.toString().toLatin1().constData();
+      proximity.resize(dSize * dSize);
+      std::fill(proximity.begin(), proximity.end(), 0);
+
+      for (const auto& tree : _forest)
+        tree->findProximity(data, proximity);
     }
     else
     {
-      throw Exception("Random forest export - File stream is not open for exporting.");
+      throw Exception(__LINE__, "Forest has not been trained");
     }
   }
-
-  void BaseRandomForest::exportModel(QDomDocument & modelDoc, QDomElement & parentNode)
+  catch(const Exception & e)
   {
-    try
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& data,
+                                           std::map<std::string, double> & factorImportance) const
+{
+  try
+  {
+    std::vector<std::string> factorLabels = data->getFactorLabels();
+
+    //Init factor importance map with all factors
+    for (const auto& label : factorLabels)
+      factorImportance[label] = 0;
+
+    //Calc factor importance for each tree in forest
+    //and aggregate the results
+    for (const auto& tree : _forest)
     {
-      QDomElement forestNode = modelDoc.createElement("RandomForest");
+      std::map<unsigned int, double> factPureMap;
+      tree->getFactorImportance(factPureMap);
 
-      //Append number of trees
-      QDomElement numTreesNode = modelDoc.createElement("NumTrees");
-      QDomText numTreesText = modelDoc.createTextNode(QString::number(_forest.size()));
-      numTreesNode.appendChild(numTreesText);
-      forestNode.appendChild(numTreesNode);
-
-      //Append number of split factors
-      QDomElement numSplitFactorsNode = modelDoc.createElement("NumSplitFactors");
-      QDomText numSplitFactorText = modelDoc.createTextNode(QString::number(_numSplitFactors));
-      numSplitFactorsNode.appendChild(numSplitFactorText);
-      forestNode.appendChild(numSplitFactorsNode);
-
-      //Append factor labels
-      QDomElement factorLabelsNode = modelDoc.createElement("FactorLabels");
-      stringstream labelStream;
-
-      for (size_t i = 0; i < _factorLabels.size(); ++i)
-      {
-        labelStream << _factorLabels[i];
-
-        if (i != _factorLabels.size() - 1)
-        {
-          labelStream << " ";
-        }
-      }
-
-      QDomText factorLabelsText = modelDoc.createTextNode(labelStream.str().c_str());
-      factorLabelsNode.appendChild(factorLabelsText);
-      forestNode.appendChild(factorLabelsNode);
-
-      //Append Trees
-      QDomElement randomTreesNode = modelDoc.createElement("RandomTrees");
-
-      for (unsigned int i = 0; i < _forest.size(); i++)
-      {
-        _forest[i]->exportTree(modelDoc, randomTreesNode);
-      }
-
-      forestNode.appendChild(randomTreesNode);
-      parentNode.appendChild(forestNode);
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      for (const auto& factor : factPureMap)
+        factorImportance[factorLabels[factor.first]] += factor.second;
     }
   }
-
-  void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, double & average,
-    double & stdDev)
+  catch(const Exception & e)
   {
-    try
-    {
-      if (isTrained())
-      {
-        double errorSum = 0;
-        double errorSumSqr = 0;
-        double variance;
-
-        for (unsigned int i = 0; i < _forest.size(); i++)
-        {
-          double errRate = _forest[i]->computeErrorRate(data);
-          errorSum += errRate;
-          errorSumSqr += errRate * errRate;
-
-        }
-
-        average = errorSum / ((double)_forest.size());
-        variance = errorSumSqr / ((double)_forest.size()) - average * average;
-        stdDev = sqrt(variance);
-      }
-      else
-      {
-        throw Exception(__LINE__, "Forest has not been trained");
-      }
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
   }
+}
 
-  void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
-    std::vector<unsigned int> & proximity)
+void BaseRandomForest::importModel(QFile& file)
+{
+  if (file.isOpen())
   {
-    try
-    {
-      unsigned int dSize = data->getNumDataVectors();
-
-      if (_forestCreated  && dSize > 0)
-      {
-        proximity.resize(dSize * dSize);
-        std::fill(proximity.begin(), proximity.end(), 0);
-
-        for (unsigned int i = 0; i < _forest.size(); i++)
-        {
-          _forest[i]->findProximity(data, proximity);
-        }
-      }
-      else
-      {
-        throw Exception(__LINE__, "Forest has not been trained");
-      }
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& data,
-    std::map<std::string, double> & factorImportance)
-  {
-    try
-    {
-      std::map<unsigned int, double>::iterator itr;
-      std::vector<std::string> factorLabels = data->getFactorLabels();
-
-      //Init factor importance map with all factors
-      for (unsigned int j = 0; j < factorLabels.size(); j++)
-      {
-        factorImportance[factorLabels[j]] = 0;
-      }
-
-      //Calc factor importance for each tree in forest
-      //and aggregate the results
-      for (unsigned int i = 0; i < _forest.size(); i++)
-      {
-        std::map<unsigned int, double> factPureMap;
-        _forest[i]->getFactorImportance(factPureMap);
-
-        for (itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
-        {
-          factorImportance[factorLabels[itr->first]] += itr->second;
-        }
-      }
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void BaseRandomForest::importModel(QFile& file)
-  {
-    if (file.isOpen())
-    {
-      QDomDocument doc("");
-      if (!doc.setContent(&file))
-      {
-        throw Exception("Error reading the <RandomForest> header.");
-      }
-      QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
-      importModel(docRoot);
-    }
-    else
-    {
+    QDomDocument doc("");
+    if (!doc.setContent(&file))
       throw Exception("Error reading the <RandomForest> header.");
-    }
+    QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
+    importModel(docRoot);
   }
+  else
+    throw Exception("Error reading the <RandomForest> header.");
+}
 
-  void BaseRandomForest::importModel(const QDomElement& e)
+void BaseRandomForest::importModel(const QDomElement& e)
+{
+  try
   {
-    try
-    {
-      QDomNodeList childList = e.childNodes();
+    QDomNodeList childList = e.childNodes();
 
-      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+    for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+    {
+      if (childList.at(i).nodeType() == QDomNode::CommentNode)
+        continue;
+
+      if (childList.at(i).isElement())
       {
-        if (childList.at(i).nodeType() == QDomNode::CommentNode)
+        QDomElement element = childList.at(i).toElement(); // try to convert the node to an element.
+
+        QString tag = element.tagName().toUpper();
+
+        bool parseOkay = true;
+
+        if (tag == "NUMTREES")
         {
-          continue;
+          unsigned int numTrees = element.text().toUInt(&parseOkay);
+          _forest.reserve(numTrees);
+        }
+        else if (tag == "NUMSPLITFACTORS")
+          _numSplitFactors = element.text().toUInt(&parseOkay);
+        else if (tag == "FACTORLABELS")
+        {
+          QStringList factorList = element.text().split(" ");
+          for (const auto& factor : qAsConst(factorList))
+            _factorLabels.emplace_back(factor.toLatin1().constData());
+        }
+        else if (tag == "RANDOMTREES")
+        {
+          QDomNodeList treeList = element.childNodes();
+          for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
+          {
+            QDomElement treeElement = treeList.at(rIdx).toElement();
+            _forest.push_back(std::make_shared<RandomTree>());
+            _forest.back()->importTree(treeElement);
+          }
+        }
+        else
+        {
+          std::stringstream ss;
+          ss << "The tag " << tag.toLatin1().constData()
+             << " is not supported within the <RandomForest> tag";
+          throw Exception(__LINE__, ss.str());
         }
 
-        if (childList.at(i).isElement())
+        if (!parseOkay)
         {
-          QDomElement element = childList.at(i).toElement(); // try to convert the node to an element.
-
-          QString tag = element.tagName().toUpper();
-
-          bool parseOkay = true;
-
-          if (tag == "NUMTREES")
-          {
-            unsigned int numTrees = element.text().toUInt(&parseOkay);
-            _forest.reserve(numTrees);
-          }
-          else if (tag == "NUMSPLITFACTORS")
-          {
-            _numSplitFactors = element.text().toUInt(&parseOkay);
-          }
-          else if (tag == "FACTORLABELS")
-          {
-            QStringList factorList = element.text().split(" ");
-            for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
-            {
-              _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
-            }
-          }
-          else if (tag == "RANDOMTREES")
-          {
-            QDomNodeList treeList = element.childNodes();
-            for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
-            {
-              QDomElement treeElement = treeList.at(rIdx).toElement();
-              _forest.push_back(std::make_shared<RandomTree>());
-              _forest.back()->importTree(treeElement);
-            }
-          }
-          else
-          {
-            std::stringstream ss;
-            ss << "The tag " << tag.toLatin1().constData() <<
-              " is not supported within the <RandomForest> tag";
-            throw Exception(__LINE__, ss.str());
-          }
-
-          if (!parseOkay)
-          {
-            std::stringstream ss;
-            ss << "Unable to parse tag " << tag.toLatin1().constData() << " with value " <<
-              e.text().toLatin1().constData();
-          }
+          std::stringstream ss;
+          ss << "Unable to parse tag " << tag.toLatin1().constData()
+             << " with value " << e.text().toLatin1().constData();
         }
       }
     }
-    catch(const Exception & ex)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
-    }
   }
+  catch(const Exception & ex)
+  {
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
+  }
+}
 }

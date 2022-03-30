@@ -109,9 +109,9 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
   if (!criteria.isEmpty())
   {
     _criteria = std::make_shared<OrCriterion>();
-    for (const auto& crit : qAsConst(criteria))
+    for (const auto& criterion : qAsConst(criteria))
     {
-      const QString critName = crit.trimmed();
+      const QString critName = criterion.trimmed();
       if (!critName.isEmpty())
       {
         LOG_VART(critName);
@@ -753,7 +753,7 @@ void RubberSheet::_writeInterpolator(const std::shared_ptr<const Interpolator>& 
   interpolator->writeInterpolator(os);
 }
 
-vector<double> RubberSheet::calculateTiePointDistances()
+vector<double> RubberSheet::calculateTiePointDistances() const
 {
   if (_ties.empty())
     throw HootException("No tie points have been generated.");

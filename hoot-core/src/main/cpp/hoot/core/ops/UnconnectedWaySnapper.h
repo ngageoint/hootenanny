@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef UNCONNECTED_WAY_SNAPPER
@@ -94,8 +94,7 @@ public:
    * @param connectTo Way to connect the disconnected way to
    * @returns True if the ways were successfully snapped together
    */
-  static bool snapClosestWayEndpointToWay(
-    OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo);
+  static bool snapClosestWayEndpointToWay(OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo);
 
   /**
    * @see OperationStatus
@@ -184,12 +183,10 @@ private:
   // the feature criteria to be used for way snap target candidates
   QStringList _wayToSnapToCriteria;
   ElementCriterionPtr _wayToSnapCrit;
+  ElementCriterionPtr _wayNodeToSnapToCrit;
   // the feature criteria to be used for way snap source candidates
   QStringList _wayToSnapCriteria;
   ElementCriterionPtr _wayToSnapToCrit;
-  // the feature criteria to be used for way snap target candidates
-  QStringList _wayNodeToSnapToCriteria;
-  ElementCriterionPtr _wayNodeToSnapToCrit;
   // the status criteria to be used for the snap source way
   QStringList _snapWayStatuses;
   // the status criteria to be used for the snap target way or way node
@@ -258,12 +255,10 @@ private:
    * @param isNode if true, indicates we are creating matching criteria for a node instead of a way
    * @return an element criterion
    */
-  ElementCriterionPtr _createFeatureCriteria(
-    const QStringList& typeCriteria, const QStringList& statuses, const bool isNode = false) const;
-  ElementCriterionPtr _getTypeCriteria(
-    const QStringList& typeCriteria, const bool isNode = false) const;
-  ElementCriterionPtr _getTypeCriterion(
-    const QString& typeCriterion, const bool isNode = false) const;
+  ElementCriterionPtr _createFeatureCriteria(const QStringList& typeCriteria, const QStringList& statuses,
+                                             const bool isNode = false) const;
+  ElementCriterionPtr _getTypeCriteria(const QStringList& typeCriteria, const bool isNode = false) const;
+  ElementCriterionPtr _getTypeCriterion(const QString& typeCriterion, const bool isNode = false) const;
   ElementCriterionPtr _getStatusCriteria(const QStringList& statuses) const;
 
   /*
@@ -278,9 +273,8 @@ private:
    * @param featureIndexToEid a pointer to the element ID index being created
    * @param elementType the element type of the criterion class; either Way or Node
    */
-  void _createFeatureIndex(
-    const ElementCriterionPtr& featureCrit, std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
-    std::deque<ElementId>& featureIndexToEid, const ElementType& elementType);
+  void _createFeatureIndex(const ElementCriterionPtr& featureCrit, std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+                           std::deque<ElementId>& featureIndexToEid, const ElementType& elementType);
 
   /*
    * Finds all unconnected way end nodes and attempts to snap them
@@ -295,8 +289,7 @@ private:
    * @param wayCrit an optional element criterion to restrict the types of ways being examined
    * @return a collection of node IDs
    */
-  std::set<long> _getUnconnectedWayEndNodeIds(
-    const ConstWayPtr& way, const ElementCriterionPtr& wayCrit = ElementCriterionPtr()) const;
+  std::set<long> _getUnconnectedWayEndNodeIds(const ConstWayPtr& way, const ElementCriterionPtr& wayCrit = ElementCriterionPtr()) const;
   /*
    * Return feature candidates to snap to
    *
@@ -304,8 +297,7 @@ private:
    * @param elementType the element type of the feature being snapped to; either Way or Node
    * @return a collection of element IDs
    */
-  QList<ElementId> _getNearbyFeaturesToSnapTo(
-    const ConstNodePtr& node, const ElementType& elementType) const;
+  QList<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node, const ElementType& elementType) const;
 
   /*
    * Attempts to snap an unconnected way end node to another way node
@@ -326,8 +318,7 @@ private:
    * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if a node was snapped; false otherwise
    */
-  bool _snapUnconnectedWayEndNodeToWay(
-    const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
+  bool _snapUnconnectedWayEndNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
 
   /*
    * Snaps a particular node into a way at its closest intersecting point
@@ -341,8 +332,7 @@ private:
    * to
    * @return true if a node was snapped; false otherwise
    */
-  bool _snapUnconnectedWayEndNodeToWay(
-    const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo, bool& snappedToNode);
+  bool _snapUnconnectedWayEndNodeToWay(const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo, bool& snappedToNode);
 
   /*
    * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
@@ -361,6 +351,10 @@ private:
    * Marks a snapped way with a review tag
    */
   void _reviewSnappedWay(const long idOfNodeBeingSnapped) const;
+  /*
+   * Setup the default criterion for the snapper
+   */
+  void _setDefaultCriterion(const ConfigOptions& options);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCreator.h"
 
@@ -173,8 +173,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // TODO: There need to be checks here to only sort if the input isn't already sorted like
     // there are for the external sorting (e.g. pre-sorted PBF file).
 
-    progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting input elements...");
+    progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting input elements...");
     if (!_singleInput)
     {
       sortedElements1 = _sortElementsInMemory(map1);
@@ -619,15 +618,14 @@ ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) con
 
 ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input) const
 {
-  std::shared_ptr<ExternalMergeElementSorter> sorted =
-    std::make_shared<ExternalMergeElementSorter>();
+  std::shared_ptr<ExternalMergeElementSorter> sorted = std::make_shared<ExternalMergeElementSorter>();
   sorted->sort(_getFilteredInputStream(input));
   return sorted;
 }
 
-void ChangesetCreator::_streamChangesetOutput(
-  const QList<ElementInputStreamPtr>& inputs1, const QList<ElementInputStreamPtr>& inputs2,
-  const QString& output)
+void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>& inputs1,
+                                              const QList<ElementInputStreamPtr>& inputs2,
+                                              const QString& output)
 {
   LOG_VARD(inputs1.size());
   LOG_VARD(inputs2.size());
@@ -655,8 +653,7 @@ void ChangesetCreator::_streamChangesetOutput(
   {
     // This was added primarily for use by ChangesetReplacementCreator implementations. Eventually,
     // it may be able to be removed if its changeset writing bugs can be fixed.
-    std::shared_ptr<ChangesetCleaner> cleaner =
-      std::make_shared<ChangesetCleaner>(changesetProviders);
+    std::shared_ptr<ChangesetCleaner> cleaner = std::make_shared<ChangesetCleaner>(changesetProviders);
     changesetProviders.clear();
     changesetProviders.append(cleaner);
   }
@@ -687,7 +684,7 @@ void ChangesetCreator::_streamChangesetOutput(
         statsFormat.setFormat(ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix()));
       }
       else
-        statsFormat.setFormat(ChangesetStatsFormat::Text);
+        statsFormat.setFormat(ChangesetStatsFormat::TextFormat);
 
       detailedStats = writer->getStatsTable(statsFormat);
     }
