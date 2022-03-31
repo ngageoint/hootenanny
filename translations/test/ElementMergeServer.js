@@ -9,6 +9,9 @@ var osmtogeojson = require('osmtogeojson'),
     parser = new DOMParser(),
     xml2js = require('xml2js');
 
+var HOOT_HOME = process.env.HOOT_HOME;
+var hoot = require(HOOT_HOME + '/lib/HootJs');
+
 var poisInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
      <osm version='0.6' upload='true' generator='hootenanny'>\
@@ -371,7 +374,7 @@ function testMergeXml(input, callback) {
         eventEmitter: require('events').EventEmitter
     });
     response.on('end', function() {
-        var xml = xml2js.parseString(response._getData(), function(err, result) {
+        xml2js.parseString(response._getData(), function(err, result) {
             if (err) {
                 console.log(err);
             }
@@ -410,6 +413,16 @@ function testError(input, callback) {
 }
 
 describe('ElementMergeServer', function () {
+
+    before(function() {
+        hoot.Settings.set({'writer.include.circular.error.tags': 'true'});
+        hoot.Settings.set({'map.writer.schema':'OSM'});
+    });
+
+    after(function() {
+        hoot.Settings.set({'writer.include.circular.error.tags': 'false'});
+    });
+
     it('responds with HTTP 404 if url not found', function() {
         var request  = httpMocks.createRequest({
             method: 'POST',
