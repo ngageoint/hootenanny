@@ -409,6 +409,7 @@ function testError(input, callback) {
     server.ElementMergeserver(request, response);
     request.send(input);
     assert.equal(response.statusCode, 400);
+    assert.equal(response.statusMessage, "IllegalArgumentException");
 
 }
 
@@ -509,13 +510,13 @@ describe('ElementMergeServer', function () {
 
     it('errors for two roads', function() {
         testError(waysNodeRefOnly, function(err) {
-            assert.equal(err.includes('Invalid inputs passed to the element merger. Input must contain only one combination of the following: 1) two or more POIs, 2) two or more buildings, 3)two or more areas, 4) one POI and one polygon, or 5) two railways'), true);
+            assert.equal(err, 'Invalid inputs passed to the element merger. Input must contain only one combination of the following: 1) two or more POIs, 2) two or more buildings, 3)two or more areas, 4) one POI and one polygon, or 5) two railways');
         });
     });
 
     it('errors for two target yes tags', function() {
         testError(twoTargetYesInput, function(err) {
-            assert.equal(err.includes('Input map must have exactly one feature marked with a hoot:merge:target tag'), true);
+            assert.equal(err, 'Input map must have exactly one feature marked with a hoot:merge:target tag.');
         });
     });
 

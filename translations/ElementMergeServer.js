@@ -88,9 +88,9 @@ function ElementMergeserver(request, response) {
                     response.writeHead(200, header);
                     response.end(result);
                 } catch (err) {
-                    // console.error(err);
-                    response.writeHead(400, header);
-                    response.end(util.inspect(err));
+                    // console.error(err.What);
+                    response.writeHead(400, err.Exception, header);
+                    response.end(err.What);
                 }
             });
 
