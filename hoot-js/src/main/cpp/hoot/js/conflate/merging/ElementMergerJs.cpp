@@ -122,7 +122,7 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
   switch (mergeType)
   {
   case MergeType::Building:
-    return "Buildingg";
+    return "Building";
   case MergeType::PoiToPolygon:
     return "PoiToPolygon";
   case MergeType::Poi:
@@ -138,7 +138,7 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
 }
 
 void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
-{  
+{
   const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
 
