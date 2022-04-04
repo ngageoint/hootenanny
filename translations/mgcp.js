@@ -2309,7 +2309,11 @@ mgcp = {
     if (tags.gauge)
     {
       // First, see if we have a range
-      if (~tags['gauge'].indexOf(';'))
+      // make sure the gauge is not already a number
+      // the tags get modified in this method and a way with both railway and bridge
+      // will get sent through this method twice, so the gauge may have already converted to number
+      // alternate to "isNaN()" could be "typeof tags['gauge'] === 'string'"
+      if (isNaN(tags['gauge']) && ~tags['gauge'].indexOf(';'))
       {
         notUsedTags.gauge = tags.gauge; // Save the raw value
         tags.gauge = tags['gauge'].split(';')[0]; // Grab the first value
