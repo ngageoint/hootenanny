@@ -1,11 +1,16 @@
 
 // See docs/developer/ElementMergeService.asciidoc
 
-var assert = require('assert'),
-    http = require('http'),
-    xml2js = require('xml2js');
+var assert = require('assert');
 var httpMocks = require('node-mocks-http');
 var server = require('../ElementMergeServer.js');
+var osmtogeojson = require('osmtogeojson'),
+    DOMParser = new require('@xmldom/xmldom').DOMParser,
+    parser = new DOMParser(),
+    xml2js = require('xml2js');
+
+var HOOT_HOME = process.env.HOOT_HOME;
+var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var poisInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
@@ -97,8 +102,8 @@ var buildingsInput =
          <tag k='name' v='building 2' />\
        </way>\
      </osm>";
-     
-var railsInput = 
+
+var railsInput =
 "<?xml version='1.0' encoding='UTF-8'?>\
 <osm version='0.6' generator='JOSM'>\
   <node id='-98888685' action='modify' visible='true' lat='38.93508466921' lon='-9.25677124088'>\
@@ -298,17 +303,137 @@ var railsOneToManyInput =
   </way>\
 </osm>";
 
+var waysNodeRefOnly =
+'<osm version="0.6" upload="true" generator="hootenanny">\
+    <way id="-14080" version="1">\
+        <nd ref="-178676" />\
+        <nd ref="-178497" />\
+        <nd ref="-178580" />\
+        <tag k="railway" v="Principal Arterial" />\
+        <tag k="hoot:merge:target" v="yes" />\
+    </way>\
+    <way id="-25982" version="1">\
+        <nd ref="-49583" />\
+        <nd ref="-178676" />\
+        <tag k="error:circular" v="5" />\
+        <tag k="highway" v="road" />\
+        <tag k="hoot:hash" v="sha1sum:15990d2f5b2e2504c5044e30c0dd3c2d9ab802e3" />\
+        <tag k="hoot:status" v="Input1" />\
+        <tag k="name" v="PENNSYLVANIA AVE NW" />\
+    </way>\
+</osm>';
+
+var twoTargetYesInput =
+    "<?xml version='1.0' encoding='UTF-8'?>\
+     <osm version='0.6' upload='true' generator='hootenanny'>\
+       <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
+         <tag k='amenity' v='post_office' />\
+         <tag k='error:circular' v='15' />\
+         <tag k='hoot:status' v='1' />\
+         <tag k='hoot:merge:target' v='yes' />\
+       </node>\
+       <node id='-3200083' visible='true' lat='48.04854' lon='11.70194'>\
+         <tag k='amenity' v='post_office' />\
+         <tag k='error:circular' v='150' />\
+         <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />\
+         <tag k='hoot:status' v='2' />\
+         <tag k='hoot:merge:target' v='yes' />\
+       </node>\
+     </osm>";
+
+function testMerge(input, callback) {
+    var request  = httpMocks.createRequest({
+        method: 'POST',
+        url: '/elementmerge'
+    });
+    var response = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+    });
+    response.on('end', function() {
+        var xml = parser.parseFromString(response._getData());
+        try {
+          var gj = osmtogeojson(xml);
+          callback(gj);
+        } catch(err) {
+          console.log(err);
+        }
+    });
+    server.ElementMergeserver(request, response);
+    request.send(input);
+    assert.equal(response.statusCode, 200);
+}
+
+// Use this function for incomplete osm files (missing node refs, etc)
+// that can't be converted to geojson
+function testMergeXml(input, callback) {
+    var request  = httpMocks.createRequest({
+        method: 'POST',
+        url: '/elementmerge'
+    });
+    var response = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+    });
+    response.on('end', function() {
+        xml2js.parseString(response._getData(), function(err, result) {
+            if (err) {
+                console.log(err);
+            }
+            var tags = {};
+            function addTag(e) {
+                e.tag.forEach(function(t) {
+                    tags[t.$.k] = t.$.v;
+                });
+            }
+            if (result.osm.node) result.osm.node.forEach(addTag);
+            if (result.osm.way) result.osm.way.forEach(addTag);
+            if (result.osm.relation) result.osm.relation.forEach(addTag);
+            callback(tags);
+        });
+    });
+    server.ElementMergeserver(request, response);
+    request.send(input);
+    assert.equal(response.statusCode, 200);
+}
+
+function testError(input, callback) {
+    var request  = httpMocks.createRequest({
+        method: 'POST',
+        url: '/elementmerge'
+    });
+    var response = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+    });
+    response.on('end', function() {
+         callback(response._getData());
+    });
+    server.ElementMergeserver(request, response);
+    request.send(input);
+    assert.equal(response.statusCode, 400);
+    assert.equal(response.statusMessage, "IllegalArgumentException");
+
+}
+
 describe('ElementMergeServer', function () {
+
+    before(function() {
+        hoot.Settings.set({'writer.include.circular.error.tags': 'true'});
+        hoot.Settings.set({'map.writer.schema':'OSM'});
+    });
+
+    after(function() {
+        hoot.Settings.set({'writer.include.circular.error.tags': 'false'});
+    });
+
     it('responds with HTTP 404 if url not found', function() {
         var request  = httpMocks.createRequest({
             method: 'POST',
-            url: '/foo',
-            body: poisInput
+            url: '/foo'
         });
         var response = httpMocks.createResponse();
         server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '404');
+        assert.equal(response.statusCode, 404);
     });
+
     it('responds with HTTP 400 if unsupported method', function() {
         var request  = httpMocks.createRequest({
             method: 'GET',
@@ -316,184 +441,82 @@ describe('ElementMergeServer', function () {
         });
         var response = httpMocks.createResponse();
         server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '400');
+        assert.equal(response.statusCode, 400);
     });
 
-    // Testing good inputs here only. Bad inputs are thoroughly tested ElementMergerJsTest.
-
     it('merges two pois', function() {
-        var request  = httpMocks.createRequest({
-            method: 'POST',
-            url: '/elementmerge',
-            body: poisInput
-        });
-        var response = httpMocks.createResponse();
-        server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '200');
-        var body = '';
-        response.on('data', function(chunk){
-            body += chunk;
-        })
-        response.on('end', function(body){
-            xml2js.parseString(body, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
-                assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
-                assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
-                assert.equal(result.osm.node[0].tag[0].$.v, "3");
-                assert.equal(result.osm.node[0].tag[1].$.k, "name");
-                assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
-                assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
-                assert.equal(result.osm.node[0].tag[2].$.v, "post_office");
-                assert.equal(result.osm.node[0].tag[3].$.k, "error:circular");
-                assert.equal(result.osm.node[0].tag[3].$.v, "15");
-            });
+        testMerge(poisInput, function(gj) {
+            var coords = gj.features[0].geometry.coordinates;
+            assert.equal(coords[0], 11.7012814);
+            assert.equal(coords[1], 48.0479399);
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["hoot:status"], "3");
+            assert.equal(tags["name"], "POST, JÄGER-VON-FALL-STRASSE");
+            assert.equal(tags["amenity"], "post_office");
+            assert.equal(tags["error:circular"], "15");
         });
     });
 
     it('merges a poi and a polygon', function() {
-        var request  = httpMocks.createRequest({
-            method: 'POST',
-            url: '/elementmerge',
-            body: poiToPolyInput
-        });
-        var response = httpMocks.createResponse();
-        server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '200');
-        var body = '';
-        response.on('data', function(chunk){
-            body += chunk;
-        })
-        response.on('end', function(body){
-            xml2js.parseString(body, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "note");
-                assert.equal(result.osm.way[0].tag[0].$.v, "poi1;building1");
-                assert.equal(result.osm.way[0].tag[1].$.k, "hoot:poipolygon:poismerged");
-                assert.equal(result.osm.way[0].tag[1].$.v, "1");
-                assert.equal(result.osm.way[0].tag[2].$.k, "hoot:status");
-                assert.equal(result.osm.way[0].tag[2].$.v, "3");
-                assert.equal(result.osm.way[0].tag[3].$.k, "building");
-               assert.equal(result.osm.way[0].tag[3].$.v, "yes");
-                assert.equal(result.osm.way[0].tag[4].$.k, "amenity");
-                assert.equal(result.osm.way[0].tag[4].$.v, "prison");
-                assert.equal(result.osm.way[0].tag[5].$.k, "error:circular");
-                assert.equal(result.osm.way[0].tag[5].$.v, "15");
-            });
+        testMergeXml(poiToPolyInput, function(tags) {
+            assert.equal(tags["hoot:status"], "3");
+            assert.equal(tags["note"], "poi1;building1");
+            assert.equal(tags["hoot:poipolygon:poismerged"], "1");
+            assert.equal(tags["building"], "yes");
+            assert.equal(tags["amenity"], "prison");
+            assert.equal(tags["error:circular"], "15");
         });
     });
 
     it('merges two areas', function() {
-        var request  = httpMocks.createRequest({
-            method: 'POST',
-            url: '/elementmerge',
-            body: areasInput
-        });
-        var response = httpMocks.createResponse();
-        server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '200');
-        var body = '';
-        response.on('data', function(chunk){
-            body += chunk;
-        })
-        response.on('end', function(body){
-            xml2js.parseString(body, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "hoot:status");
-                assert.equal(result.osm.way[0].tag[0].$.v, "3");
-                assert.equal(result.osm.way[0].tag[1].$.k, "leisure");
-                assert.equal(result.osm.way[0].tag[1].$.v, "pitch");
-                assert.equal(result.osm.way[0].tag[2].$.k, "alt_name");
-                assert.equal(result.osm.way[0].tag[2].$.v, "Margaret S.Hayward Playground");
-                assert.equal(result.osm.way[0].tag[3].$.k, "name");
-                assert.equal(result.osm.way[0].tag[3].$.v, "baseball field");
-                assert.equal(result.osm.way[0].tag[4].$.k, "area");
-                assert.equal(result.osm.way[0].tag[4].$.v, "yes");
-                assert.equal(result.osm.way[0].tag[5].$.k, "sport");
-                assert.equal(result.osm.way[0].tag[5].$.v, "baseball");
-            });
+        testMergeXml(areasInput, function(tags) {
+            assert.equal(tags["hoot:status"], "3");
+            assert.equal(tags["name"], "Mt. Davidson Park");
+            assert.equal(tags["error:circular"], "15");
+            assert.equal(tags["alt_name"], "Mt. Davidson Park 2");
+            assert.equal(tags["area"], "yes");
+            assert.equal(tags["type"], "multipolygon");
         });
     });
 
     it('merges two buildings', function() {
-        var request  = httpMocks.createRequest({
-            method: 'POST',
-            url: '/elementmerge',
-            body: buildingsInput
-        });
-        var response = httpMocks.createResponse();
-        server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '200');
-        var body = '';
-        response.on('data', function(chunk){
-            body += chunk;
-        })
-        response.on('end', function(body){
-            xml2js.parseString(body, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "hoot:status");
-                assert.equal(result.osm.way[0].tag[0].$.v, "3");
-                assert.equal(result.osm.way[0].tag[1].$.k, "alt_name");
-                assert.equal(result.osm.way[0].tag[1].$.v, "building 2");
-                assert.equal(result.osm.way[0].tag[2].$.k, "building");
-                assert.equal(result.osm.way[0].tag[2].$.v, "yes");
-                assert.equal(result.osm.way[0].tag[3].$.k, "name");
-                assert.equal(result.osm.way[0].tag[3].$.v, "building 1");
-            });
+        testMergeXml(buildingsInput, function(tags) {
+            assert.equal(tags["hoot:status"], "3");
+            assert.equal(tags["name"], "building 1");
+            assert.equal(tags["alt_name"], "building 2");
+            assert.equal(tags["building"], "yes");
         });
     });
-    
-    it('merges two rails', function() {
-        var request  = httpMocks.createRequest({
-            method: 'POST',
-            url: '/elementmerge',
-            body: railsInput
-        });
-        var response = httpMocks.createResponse();
-        server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '200');
-        var body = '';
-        response.on('data', function(chunk){
-            body += chunk;
-        })
-        response.on('end', function(body){
-            xml2js.parseString(body, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[2].tag[4].$.k, "hoot:status");
-                assert.equal(result.osm.way[2].tag[4].$.v, "3");
-                assert.equal(result.osm.way[2].tag[6].$.k, "name");
-                assert.equal(result.osm.way[2].tag[6].$.v, "Linha do Oeste");
-                assert.equal(result.osm.way[2].tag[7].$.k, "railway");
-                assert.equal(result.osm.way[2].tag[7].$.v, "rail");
-            });
-        });
-    });
-    
+
     it('merges two rails with the one-to-many workflow', function() {
-        var request  = httpMocks.createRequest({
-            method: 'POST',
-            url: '/elementmerge',
-            body: railsOneToManyInput
+        testMerge(railsOneToManyInput, function(gj) {
+            var tags = gj.features[0].properties;
+            assert.equal(tags["arrangement"], "multiple");
+            assert.equal(tags["hoot:status"], "3");
+            assert.equal(tags["name"], "AwesomeRail");
+            assert.equal(tags["railway"], "rail");
         });
-        var response = httpMocks.createResponse();
-        server.ElementMergeserver(request, response);
-        assert.equal(response.statusCode, '200');
-        var body = '';
-        response.on('data', function(chunk){
-            body += chunk;
-        })
-        response.on('end', function(body){
-            xml2js.parseString(body, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "arrangement");
-                assert.equal(result.osm.way[0].tag[0].$.v, "multiple");
-                assert.equal(result.osm.way[0].tag[2].$.k, "hoot:status");
-                assert.equal(result.osm.way[0].tag[2].$.v, "3");
-                assert.equal(result.osm.way[0].tag[4].$.k, "name");
-                assert.equal(result.osm.way[0].tag[4].$.v, "AwesomeRail");
-                assert.equal(result.osm.way[0].tag[5].$.k, "railway");
-                assert.equal(result.osm.way[0].tag[5].$.v, "rail");
-            });
+    });
+
+    it('merges two rails', function() {
+        testMerge(railsInput, function(gj) {
+            var tags = gj.features[2].properties;
+            assert.equal(tags["hoot:status"], "3");
+            assert.equal(tags["name"], "Linha do Oeste");
+            assert.equal(tags["railway"], "rail");
+        });
+    });
+
+    it('errors for two roads', function() {
+        testError(waysNodeRefOnly, function(err) {
+            assert.equal(err, 'Invalid inputs passed to the element merger. Input must contain only one combination of the following: 1) two or more POIs, 2) two or more buildings, 3)two or more areas, 4) one POI and one polygon, or 5) two railways');
+        });
+    });
+
+    it('errors for two target yes tags', function() {
+        testError(twoTargetYesInput, function(err) {
+            assert.equal(err, 'Input map must have exactly one feature marked with a hoot:merge:target tag.');
         });
     });
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HootExceptionJs.h"
 
@@ -48,7 +48,14 @@ Local<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
+  // Construct our exception object
   Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+
+  // Set the values that will be reported by log(...) functions
+  Maybe<bool> success = result->Set(context, Local<String>::Cast(toV8("Exception")), Local<String>::Cast(toV8(e->getName())));
+  success = result->Set(context, Local<String>::Cast(toV8("What")), Local<String>::Cast(toV8(e->what())));
+
+  // Unwrap & set our pointer to the underlying hoot exception
   HootExceptionJs* from = ObjectWrap::Unwrap<HootExceptionJs>(result);
   from->_e = e;
 
@@ -57,27 +64,25 @@ Local<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
 
 void HootExceptionJs::Init(Local<Object> target)
 {
+  QString className = "HootExceptionJS";
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(HootException::className());
 
-  for (size_t i = 0; i < opNames.size(); i++)
-  {
-    QString opName = opNames[i];
+  // Prepare constructor template
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(Local<String>::Cast(toV8(className.toStdString())));
+  tpl->InstanceTemplate()->SetInternalFieldCount(2);
 
-    // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(Local<String>::Cast(toV8(opNames[i])));
-    tpl->InstanceTemplate()->SetInternalFieldCount(2);
-    // Prototype
-    tpl->PrototypeTemplate()->Set(
-      PopulateConsumersJs::baseClass(), toV8(HootException::className()));
+  // Wire up functions
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(HootException::className()));
+  tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
+  tpl->PrototypeTemplate()->Set(current, "toJSON", FunctionTemplate::New(current, toString));
+  tpl->PrototypeTemplate()->Set(current, "stringify", FunctionTemplate::New(current, toString));
 
-    _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(context, toV8(opName), ToLocal(&_constructor));
-  }
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+  Maybe<bool> success = target->Set(context, toV8(className.toStdString()), ToLocal(&_constructor));
+  (void) success; // unused var
 }
 
 bool HootExceptionJs::isHootException(Local<Value> v)
@@ -186,6 +191,16 @@ void HootExceptionJs::throwAsHootException(const TryCatch& tc)
           .arg(stack_trace_string));
     }
   }
+}
+
+void HootExceptionJs::toString(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  std::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+  QString msg = QString("Exception %1 : %2").arg(e->getName(), e->what());
+
+  args.GetReturnValue().Set(toV8(msg.toStdString()));
 }
 
 }

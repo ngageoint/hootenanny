@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LinearMergerJs.h"
 
@@ -66,7 +66,8 @@ void LinearMergerJs::Init(Local<Object> target)
   tpl->PrototypeTemplate()->Set(current, "apply", FunctionTemplate::New(current, apply));
 
   _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-  target->Set(context, toV8(name), ToLocal(&_constructor));
+  Maybe<bool> success = target->Set(context, toV8(name), ToLocal(&_constructor));
+  (void) success; // unused variable
 }
 
 void LinearMergerJs::New(const FunctionCallbackInfo<Value>& args)
@@ -117,10 +118,10 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   // Modify the parameter that was passed in.
   Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
   Local<Array> arr = Local<Array>::Cast(args[3]);
-  arr->Set(context, toV8("length"), Integer::New(current, newArr->Length()));
+  Maybe<bool> success = arr->Set(context, toV8("length"), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {
-    arr->Set(context, i, newArr->Get(context, i).ToLocalChecked());
+    success = arr->Set(context, i, newArr->Get(context, i).ToLocalChecked());
   }
 
   args.GetReturnValue().SetUndefined();

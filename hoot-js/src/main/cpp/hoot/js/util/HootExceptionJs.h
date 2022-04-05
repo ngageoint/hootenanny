@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTEXCEPTIONJS_H
 #define HOOTEXCEPTIONJS_H
@@ -74,6 +74,7 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)
