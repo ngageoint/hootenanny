@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "Hoot.h"
 
@@ -35,6 +35,7 @@
 #include <geos/version.h>
 
 // hoot
+#include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
@@ -62,6 +63,12 @@ namespace hoot
 Hoot::Hoot()
 {
   _init();
+}
+
+Hoot::~Hoot()
+{
+  // Shutdown the protobuf library
+  ::google::protobuf::ShutdownProtobufLibrary();
 }
 
 Hoot& Hoot::getInstance()
@@ -139,9 +146,7 @@ void Hoot::loadLibrary(const QString& name) const
       LOG_WARN(lib.errorString());  // no biggie.
     }
     else
-    {
       throw HootException("Error loading libary: " + lib.errorString());
-    }
   }
 }
 
@@ -187,9 +192,7 @@ long Hoot::_toBytes(const QString& str) const
   long result = s.toLong(&ok) * multiplier;
 
   if (!ok)
-  {
     throw HootException("Unable to parse max memory usage: " + s);
-  }
 
   return result;
 }
