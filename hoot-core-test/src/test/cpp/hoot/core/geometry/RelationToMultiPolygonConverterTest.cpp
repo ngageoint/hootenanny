@@ -145,6 +145,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr uut =
       std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, 2, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
@@ -155,6 +156,7 @@ public:
     addPoint(map, w, 14, 4);
     closeWay(w);
     uut->addElement(MetadataTags::RoleOuter(), w);
+    r->addElement("", w);
 
     w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
@@ -164,6 +166,7 @@ public:
     addPoint(map, w, 12, 7);
     closeWay(w);
     uut->addElement(MetadataTags::RoleInner(), w);
+    r->addElement("", w);
 
     w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
@@ -173,8 +176,15 @@ public:
     addPoint(map, w, 10, 7);
     closeWay(w);
     uut->addElement(MetadataTags::RoleOuter(), w);
+    r->addElement("", w);
 
     std::shared_ptr<Geometry> g = RelationToMultiPolygonConverter(map, uut).createMultipolygon();
+
+    CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((9.0000000000000000 1.0000000000000000, 2.0000000000000000 6.0000000000000000, 6.0000000000000000 12.0000000000000000, 13.0000000000000000 11.0000000000000000, 14.0000000000000000 4.0000000000000000, 9.0000000000000000 1.0000000000000000), (10.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 7.0000000000000000, 10.0000000000000000 2.0000000000000000)), ((9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000, 8.0000000000000000 7.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000)))"),
+                         g->toString());
+
+    //  Run the same test but without roles and make RelationToMultiPolygonConverter::createMultipolygon() decide
+    g = RelationToMultiPolygonConverter(map,  r).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((9.0000000000000000 1.0000000000000000, 2.0000000000000000 6.0000000000000000, 6.0000000000000000 12.0000000000000000, 13.0000000000000000 11.0000000000000000, 14.0000000000000000 4.0000000000000000, 9.0000000000000000 1.0000000000000000), (10.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 7.0000000000000000, 10.0000000000000000 2.0000000000000000)), ((9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000, 8.0000000000000000 7.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000)))"),
                          g->toString());
