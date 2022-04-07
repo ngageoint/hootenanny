@@ -66,6 +66,13 @@ class RelationToMultiPolygonConverter
 {
 public:
 
+  enum class MultiPolygonRelationRole
+  {
+    NoRole = -1,
+    Inner,
+    Outer
+  };
+
   static QString className() { return "RelationToMultiPolygonConverter"; }
 
   static int logWarnCount;
@@ -113,8 +120,8 @@ private:
    * Given two Linear Rings, determine the realtionship between the two.
    * Inner, Outer or "" for neither
    */
-  QString _findRelationship(const geos::geom::LinearRing* ring1,
-                            const geos::geom::LinearRing* ring2) const;
+  MultiPolygonRelationRole _findRelationship(const geos::geom::LinearRing* ring1,
+                                             const geos::geom::LinearRing* ring2) const;
 
   bool _isValidInner(const geos::geom::LinearRing* innerRing) const;
 
