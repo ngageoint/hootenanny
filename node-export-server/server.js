@@ -117,8 +117,32 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
     })
 });
 
+/* Validate export params */
+function validateExportParams(req, res) {
+    var message;
+    // check the datasource
+    if (!config.datasources[req.params.datasource]) {
+        message = 'Datasource not found';
+    }
+    // check the schema
+    if (!config.schemas[req.params.schema]) {
+        message = 'Schema not found';
+    }
+    // check the format
+    if (!config.formats[req.params.format]) {
+        message = 'Format not found';
+    }
+    if (message) {
+        res.status(400);
+        res.send(message);
+    }
+}
+
 /* Get export */
 app.get('/export/:datasource/:schema/:format', function(req, res) {
+
+    //validate the params
+    validateExportParams(req, res);
 
     //Build a hash for the input params using base64
     var params = req.params.datasource
@@ -133,7 +157,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
     doExport(req, res, hash, input);
 
 });
-
+exports.validateExportParams = validateExportParams
 exports.writeExportFile = writeExportFile
 
 /**
@@ -346,7 +370,9 @@ function buildCommand(params, queryOverrideTags, querybbox, querypoly, isFile, i
     if (!ignoreConf)
         command += ' -C NodeExport.conf';
 
-    if (config.datasources[params.datasource].overrideConfig)
+    if (params.datasource
+        && config.datasources[params.datasource]
+        && config.datasources[params.datasource].overrideConfig)
         command += ' -C ' + config.datasources[params.datasource].overrideConfig
 
     var convertOpts = [];

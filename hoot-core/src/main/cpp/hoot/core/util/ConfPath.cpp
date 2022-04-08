@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ConfPath.h"
@@ -112,22 +112,25 @@ QString ConfPath::_subDirSearch(QString baseName, QString searchDir)
 
 QString ConfPath::search(QString baseName, QString searchDir)
 {
-  if (QFileInfo(baseName).isFile())
-  {
-    return QFileInfo(baseName).absoluteFilePath();
-  }
-
+  // Try searchDir first
   if (QFileInfo(searchDir + "/" + baseName).isFile())
   {
     return QFileInfo(searchDir + "/" + baseName).absoluteFilePath();
   }
 
+  // Now try HOOT_HOME + / + searchDir
   QString hootHome = getHootHome();
 
   if (hootHome.isEmpty() == false && QFileInfo(hootHome + "/" + searchDir + "/" + baseName).
       isFile())
   {
     return QFileInfo(hootHome + "/" + searchDir + "/" + baseName).absoluteFilePath();
+  }
+
+  // Now try local dir
+  if (QFileInfo(baseName).isFile())
+  {
+    return QFileInfo(baseName).absoluteFilePath();
   }
 
   // If we still can't find it, try searching subdirectories.

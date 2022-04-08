@@ -203,5 +203,78 @@ describe("Node Export Server", function() {
         var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
         expect(command.indexOf('-C test.conf') !== -1).to.equal(true)
       });
+      it("Override config does NOT get included if specified for a data source", function(){
+        var apiParams = {
+          datasource: 'APIDB',
+          schema: 'TDSv70',
+          format: 'json'
+        }
+        var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
+        expect(command.indexOf('-C test.conf') !== -1).to.equal(false)
+      });
+      it("Override config does NOT get included if undefined data source", function(){
+        var apiParams = {
+          schema: 'TDSv70',
+          format: 'json'
+        }
+        var command = server.buildCommand(apiParams, false, '38.4902,35.7982,38.6193,35.8536', null, false, 'in', 'out_dir', 'out');
+        expect(command.indexOf('-C test.conf') !== -1).to.equal(false)
+      });
     })
+    describe("Validate Params", function() {
+        it("It returns error for unknown data source", function(){
+            var req = {
+                params: {
+                    datasource: 'foo',
+                    schema: 'MGCP',
+                    format: 'Shapefile'
+                }
+            };
+            var res = {
+                status: function(s) {
+                    expect(s).to.equal(400);
+                },
+                send: function(m) {
+                    expect(m).to.equal('Datasource not found');
+                }
+            }
+            server.validateExportParams(req, res);
+        });
+        it("It returns error for unknown schema source", function(){
+            var req = {
+                params: {
+                    datasource: 'API',
+                    schema: 'foo',
+                    format: 'Shapefile'
+                }
+            };
+            var res = {
+                status: function(s) {
+                    expect(s).to.equal(400);
+                },
+                send: function(m) {
+                    expect(m).to.equal('Schema not found');
+                }
+            }
+            server.validateExportParams(req, res);
+        });
+        it("It returns error for unknown format source", function(){
+            var req = {
+                params: {
+                    datasource: 'API',
+                    schema: 'MGCP',
+                    format: 'foo'
+                }
+            };
+            var res = {
+                status: function(s) {
+                    expect(s).to.equal(400);
+                },
+                send: function(m) {
+                    expect(m).to.equal('Format not found');
+                }
+            }
+            server.validateExportParams(req, res);
+        });
+    });
 });

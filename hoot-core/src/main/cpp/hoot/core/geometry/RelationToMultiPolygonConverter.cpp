@@ -75,29 +75,29 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
   vector<std::shared_ptr<Geometry>> recover;
 
   vector<double> outerArea;
+  outerArea.reserve(outers.size());
   // a vector of holes for each of the outer polygons.
   vector<vector<LinearRing*>*> holes;
-  holes.resize(outers.size());
+  holes.reserve(outers.size());
 
-  outerArea.reserve(outers.size());
   vector<LinearRing*> noHoles;
-  for (size_t i = 0; i < outers.size(); i++)
+  for (auto outer : outers)
   {
-    Polygon* p = gf.createPolygon(*outers[i], noHoles);
+    Polygon* p = gf.createPolygon(*outer, noHoles);
     tmpPolygons.push_back(p);
     outerArea.push_back(p->getArea());
-    holes[i] = new vector<LinearRing*>();
+    holes.push_back(new vector<LinearRing*>());
   }
 
   // go through all the holes.
-  for (size_t i = 0; i < inners.size(); i++)
+  for (size_t i = 0; i < inners.size(); ++i)
   {
     // the index of the containing polygon
     int polygonIndex = -1;
     bool contained = false;
 
     // look for an outer ring that contains this hole.
-    for (size_t j = 0; j < outers.size(); j++)
+    for (size_t j = 0; j < outers.size(); ++j)
     {
       // if we've already found a polygon that contains this inner
       if (contained && (outerArea[j] < outerArea[polygonIndex]))
@@ -152,7 +152,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
   }
 
   // create the polygons from outers & holes
-  for (size_t i = 0; i < outers.size(); i++)
+  for (size_t i = 0; i < outers.size(); ++i)
   {
     //  Move the temp polygon to the memory recovery vector to not leak the polygons
     recover.emplace_back(tmpPolygons[i]);
@@ -197,15 +197,15 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   _createRings(MetadataTags::RoleInner(), inners);
 
   // Now go looking for rings that are not classified (empty role)
-/** TODO: _classifyRings() was commented out so all of the unclassified rings were being leaked.
- *  Either enable _classifyRings() or delete this whole code block
   vector<LinearRing*> noRole;
   _createRings("", noRole);
-
   // Make sure that all rings are either an inner or an outer
-//  _classifyRings(noRole, inners, outers);
-*/
+  _classifyRings(noRole, inners, outers);
   LOG_TRACE("After classify: Outers: " << outers.size() << "  Inners: " << inners.size());
+  //  Cleanup the memory for any dangling LinearRings still left in noRole
+  vector<std::shared_ptr<LinearRing>> cleanup;
+  for (auto ring : noRole)
+    cleanup.push_back(std::shared_ptr<LinearRing>(ring));
 
   std::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
@@ -239,9 +239,10 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   return result;
 }
 
-QString RelationToMultiPolygonConverter::_findRelationship(const LinearRing* ring1, const LinearRing* ring2) const
+RelationToMultiPolygonConverter::MultiPolygonRelationRole RelationToMultiPolygonConverter::_findRelationship(const LinearRing* ring1,
+                                                                                                             const LinearRing* ring2) const
 {
-  QString result = "";
+  MultiPolygonRelationRole result = MultiPolygonRelationRole::NoRole;
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<LinearRing*> noHoles;
@@ -250,13 +251,13 @@ QString RelationToMultiPolygonConverter::_findRelationship(const LinearRing* rin
   // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
   std::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
   if (im->isContains())
-    result = "outer";
+    result = MultiPolygonRelationRole::Outer;
   else
   {
     std::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
     std::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
     if (im2->isContains())
-      result = "inner";
+      result = MultiPolygonRelationRole::Inner;
   }
 
   return result;
@@ -275,110 +276,113 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
   // One polygon, no inners or outers
   if (noRole.size() == 1 && inners.empty() && outers.empty())
   {
-    outers.push_back(noRole[0]);
+    outers.push_back(noRole.front());
+    //  Must clear because there are no more noRole objects
+    noRole.clear();
     return;
   }
 
   // A list of things we haven't found yet.
   deque<LinearRing*> notFound;
 
-  for (size_t i = 0; i < noRole.size(); ++i)
+  for (auto member : noRole)
   {
-    QString status = "";
+    MultiPolygonRelationRole status = MultiPolygonRelationRole::NoRole;
 
-    // Check of we have an inner polygon.
-    for (size_t j = 0; j < outers.size(); ++j)
+    // Check if we have an inner polygon.
+    for (auto outer : outers)
     {
-      status = _findRelationship(noRole[i], outers[j]);
+      status = _findRelationship(member, outer);
 
-      if (status == "inner")
+      if (status == MultiPolygonRelationRole::Inner)
       {
-        inners.push_back(noRole[i]);
+        inners.push_back(member);
         break;
       }
-      else if (status == "outer")
+      else if (status == MultiPolygonRelationRole::Outer)
       {
         // This is not a good combination: Outside of an Outer
-        outers.push_back(noRole[i]);
+        outers.push_back(member);
         break;
       }
     }
 
     // No outers or we didn't find an inner polygon
-    if (status == "")
+    if (status == MultiPolygonRelationRole::NoRole)
     {
       // Look for an outer polygon
-      for (size_t j = 0; j < inners.size(); ++j)
+      for (auto inner : inners)
       {
-        status =_findRelationship(noRole[i], inners[j]);
+        status =_findRelationship(member, inner);
 
-        if (status == "inner")
+        if (status == MultiPolygonRelationRole::Inner)
         {
           // This is not a good combination: Inside of an inner
-          inners.push_back(noRole[i]);
+          inners.push_back(member);
           break;
         }
-        else if (status == "outer")
+        else if (status == MultiPolygonRelationRole::Outer)
         {
-          outers.push_back(noRole[i]);
+          outers.push_back(member);
           break;
         }
       }
 
       // No inners or we still didn't find anything so push it onto the list of things to check
       // later.
-      if (status == "")
-        notFound.push_back(noRole[i]);
+      if (status == MultiPolygonRelationRole::NoRole)
+        notFound.push_back(member);
     }
   }
 
   // Now go through the things we didn't find.
   while (!notFound.empty())
   {
-    if (notFound.size() == 1)
+    //  Grab the first member off of the deque
+    LinearRing* member = notFound.front();
+    notFound.pop_front();
+    if (notFound.empty())
     {
       // We only have one polygon left so it must be an outer
-      outers.push_back(notFound.front());
-      return;
+      outers.push_back(member);
     }
     else
     {
       // We have 2 or more polygons. Grab the first one to compare with and remove it from the list
-      LinearRing* tRing = notFound.front();
-      notFound.pop_front();
-
-      QString status = "";
+      MultiPolygonRelationRole status = MultiPolygonRelationRole::NoRole;
 
       // Loop through the rest of the list looking for a match
-      for (auto i = notFound.begin(); i != notFound.end(); ++i)
+      for (auto it = notFound.begin(); it != notFound.end(); ++it)
       {
-        status =_findRelationship(tRing, *i);
+        status =_findRelationship(member, *it);
 
         // If we find inner or outer, push both elements to the right list and then delete the
         // one from the loop. We break out of the loop since deleteing the element screws up the
         // iterator and we only care about one match for each pair of polygons.
-        if (status == "inner")
+        if (status == MultiPolygonRelationRole::Inner)
         {
-          inners.push_back(tRing);
-          outers.push_back(*i);
-          notFound.erase(i);
+          inners.push_back(member);
+          outers.push_back(*it);
+          notFound.erase(it);
           break;
         }
-        else if (status == "outer")
+        else if (status == MultiPolygonRelationRole::Outer)
         {
-          inners.push_back(*i);
-          outers.push_back(tRing);
-          notFound.erase(i);
+          inners.push_back(*it);
+          outers.push_back(member);
+          notFound.erase(it);
           break;
         }
       }
 
       // If we didn't find a match, this must be an outer.
       // If we did find a match then we have already added it to a list so move on through the list
-      if (status == "")
-        outers.push_back(tRing);
+      if (status == MultiPolygonRelationRole::NoRole)
+        outers.push_back(member);
     }
   }
+  //  Empty out the list of elements with no role as all have now been assigned
+  noRole.clear();
 }
 
 void RelationToMultiPolygonConverter::_createRings(const QString& role, vector<LinearRing*>& rings) const

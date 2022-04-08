@@ -77,9 +77,9 @@ void ElementMergerJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  exports->Set(
-    context, toV8("merge"),
-    FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
+  Maybe<bool> success = exports->Set(context, toV8("merge"),
+                                 FunctionTemplate::New(current, merge)->GetFunction(context).ToLocalChecked());
+  (void) success; // unused variable
 }
 
 void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
@@ -110,9 +110,6 @@ void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
     Local<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
-  // This error handling has been proven to not work, as it never returns the error message to the
-  // nodejs calling service....makes debugging very difficult. Need to fix: #2231. As a workaround,
-  // use scripts/core/MergeElements.js to see log output during merging.
   catch (const HootException& e)
   {
     LOG_ERROR(e.getWhat());
@@ -125,7 +122,7 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
   switch (mergeType)
   {
   case MergeType::Building:
-    return "Buildingg";
+    return "Building";
   case MergeType::PoiToPolygon:
     return "PoiToPolygon";
   case MergeType::Poi:
@@ -141,7 +138,7 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
 }
 
 void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
-{  
+{
   const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
 
