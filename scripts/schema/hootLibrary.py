@@ -309,7 +309,7 @@ def printAttributeCsv(schema):
 
 
 # Print Rules
-def printRules(schema):
+def printRules(schema,printUnk = False):
     tList = {}
     for i in schema:
         for j in schema[i]['columns']:
@@ -336,14 +336,14 @@ def printRules(schema):
         for j in sorted(tList[i]['enum'].keys(), key=asint):
             rVal = tList[i]['enum'][j]
             eVal = rVal.replace(' ','_').lower()
-            if j == '-999999':
-                print "     // ['%s','%s',undefined,undefined], // %s" % (i,j,rVal)
-                continue
             if j == '1000':
                 print "     ['%s','%s','raw:%s','no']," % (i,j,i)
                 continue
             if j == '1001':
                 print "     ['%s','%s','raw:%s','yes']," % (i,j,i)
+                continue
+            if j == '-999999' and not printUnk:
+                print "     // ['%s','%s','raw:%s','%s'], // %s" % (i,j,i,eVal,rVal)
                 continue
             print "     ['%s','%s','raw:%s','%s'], // %s" % (i,j,i,eVal,rVal)
 # End printRules

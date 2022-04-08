@@ -167,6 +167,7 @@ tds71.rules = {
     'BRN':'bridge:reference', // Bridge Reference Number
     'CCN':'source:copyright', // Commercial Copyright Notice
     'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
+    'CHAN':'navaid:channel', // CHAN
     'CID':'source:cell_identifier', // Cell Identifier
     'DIA':'diam:classification', // DIAM Functional Classification
     'DQS':'source:data_quality', // Data Quality Statement
@@ -184,6 +185,7 @@ tds71.rules = {
     'MDE':'source:update:datetime', // Maintenance Date and Time
     // 'MEM':'raw:MEM', // Memorandum
     'NA8':'official_name', // Aerodrome Official Name
+    'NAA':'airspace:name', //Airspace Name
     'NAM':'navaid:name', // NAM
     'NAV_COUNTRY':'navaid:country', // NAV_COUNTRY
     'NAV_IDENT':'navaid:identifier', // NAV_IDENT
@@ -255,7 +257,7 @@ tds71.rules = {
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
     'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
-    //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
+    // 'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction (low end) : Surface Slope (low) (lower value)
@@ -271,6 +273,7 @@ tds71.rules = {
     'LC3':'mlc:tracked_oneway', // Load Class Type 3
     'LC4':'mlc:tracked', // Load Class Type 4
     'LDC':'length:crest', // Dam Crest Length
+    'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
     'LTN':'lanes', // Track or Lane Count
     'LZN':'length', // Length
     'MAG':'magnetic_variation', // Magnetic Variation
@@ -4906,6 +4909,7 @@ tds71.rules = {
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
+    'ZVH_VDT':'VDT'
   },
   // ##### End of swapListIn #####
 
@@ -4936,6 +4940,7 @@ tds71.rules = {
     'BD100':{'WLE':'ZI025_WLE'},
     'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH070':{'PWA':'WBD'},
+    'CA030':{'VDT':'ZVH_VDT'},
     'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
     'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'URI'},

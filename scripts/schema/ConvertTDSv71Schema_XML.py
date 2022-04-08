@@ -609,6 +609,11 @@ def readFeatures(xmlDoc,funcList,domList,namList,tfList,fSchema,tSchema):
 
                             fSchema[subName]['columns'][fieldName]['domain'] = domainName
 
+                            if domainName == 'BG010_DOF':
+                                fSchema[subName]['columns'][fieldName]['type'] = 'Integer'
+                                fSchema[subName]['columns'][fieldName]['defValue'] = '-999999'
+                                continue
+
                             # print 'dName:',domainName
                             if domainName not in domList:
                                 print '## Missing Domain',domainName,'from',fieldName,'in',subName
@@ -727,7 +732,7 @@ if __name__ == "__main__":
 
     # Now dump the schema out
     if args.rules:
-        printRules(schema)
+        printRules(schema,True)
     elif args.txtrules:
         printTxtRules(schema)
     elif args.txtlen:  # Print all of the lengths of the text attributes
