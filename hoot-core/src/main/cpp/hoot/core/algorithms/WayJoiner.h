@@ -89,6 +89,7 @@ protected:
 
   // mapping of joined ways ids; ID before joining mapped to ID after joining
   QHash<long, long> _joinedWayIdMappings;
+  std::multimap<long, long> _parentIDsToWays;
 
   int _numJoined;
   int _numProcessed;
@@ -147,6 +148,11 @@ private:
    * @see _writePidToChildId
    */
   void _writeParentIdsToChildIds() const;
+
+  /**
+   * @brief _updateParentIdMap clears and rebuilds our map of parentIDs to Ways
+   */
+  void _updateParentIdMap();
 };
 
 }

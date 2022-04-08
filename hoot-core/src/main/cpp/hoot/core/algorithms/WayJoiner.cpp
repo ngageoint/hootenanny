@@ -66,18 +66,22 @@ void WayJoiner::join(const OsmMapPtr& map)
   _map = map;
 
   //  Join back any ways with parent ids
+  _updateParentIdMap();
   _joinParentChild();
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-parent-child-1");
 
   //  Join any siblings that have the same parent id but the parent isn't connected
+  _updateParentIdMap();
   _joinSiblings();
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-siblings");
 
   //  Rejoin any ways that are now connected to their parents
+  _updateParentIdMap();
   _joinParentChild();
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-parent-child-2");
 
   //  Run one last join on ways that share a node and have a parent id
+  _updateParentIdMap();
   _joinAtNode();
   OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-at-node");
 
@@ -525,11 +529,36 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
   child->getTags().clear();
 
+  // Micah says: this looks very, very innefficient
   //  Update any ways that have the child's ID as their parent to the parent's ID
+  std::list<std::pair<long, long>> newEntries;
+  auto iterPair = _parentIDsToWays.equal_range(child->getId());
+  for (auto it = iterPair.first; it != iterPair.second; ++it)
+  {
+    if (_map->containsWay(it->second))
+    {
+      // If the way exists, update it
+      _map->getWay(it->second)->setPid(parent->getId());
+
+      // Store the new/updated entry
+      newEntries.push_back(std::pair<long, long>(parent->getId(), it->second));
+    }
+  }
+
+  // Delete stale entries
+  _parentIDsToWays.erase(child->getId());
+
+  // Insert updated entries
+  for (auto it = newEntries.begin(); it != newEntries.end(); ++it)
+    _parentIDsToWays.insert(*it);
+
+
+  /* Old Way
   UpdateWayParentVisitor visitor(child->getId(), parent->getId());
   _map->setEnableProgressLogging(false);
   _map->visitWaysRw(visitor);
   _map->setEnableProgressLogging(true);
+  */
 
   //  Delete the child
   RecursiveElementRemover(child->getElementId()).apply(_map);
@@ -541,6 +570,19 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   _numJoined++;
 
   return true;
+}
+
+void WayJoiner::_updateParentIdMap()
+{
+  // Get our map of parentIDs to ways that reference them
+  _parentIDsToWays.clear();
+  WayMap ways = _map->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    if (way->hasPid())
+      _parentIDsToWays.insert(std::pair<long, long>(way->getPid(), way->getId()));
+  }
 }
 
 }
