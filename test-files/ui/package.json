@@ -12,6 +12,6 @@
     "express": "^4.17.1",
     "express-http-proxy": "^1.6.2",
     "http-parser-js": "^0.5.3",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.6"
   }
 }
