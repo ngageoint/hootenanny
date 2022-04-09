@@ -340,7 +340,7 @@ tds71 = {
       if (~attrList.indexOf(i)) continue;
 
       // If it is in the Thematic feature, just set a default value BUT only if we are not going to the UI
-      if (~tdsAttrList.indexOf(i) && tds71.configOut.OgrFormat !== '') attrs[i] = '-999999';
+      if (~tdsAttrList.indexOf(i) && tds71.configOut.OgrFormat !== '') attrs[i] = '5';
     }
   }, // End validateThematicAttrs
 
@@ -576,6 +576,10 @@ tds71 = {
     // 2) Convert all of the Attrs to uppercase - if needed
     for (var col in attrs)
     {
+
+      // Move noInformation to be Unknown if we are storing it.
+      if (attrs[col] == 'noInformation' || attrs[col] == 'noinformation') attrs[col] = 'unknown'
+
       // Remove attributes with '0' values if they can't be '0'
       if (tds71.rules.noZeroList.indexOf(col) > -1 && attrs[col] == '0')
       {
