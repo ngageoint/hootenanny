@@ -191,6 +191,9 @@ tds71 = {
       return
     }
 
+    // Debug: Dump transmap
+    // print('\nTransMap: ' + JSON.stringify(transMap));
+
     // Don't add an FCSUBTYPE attribute if we are not going out via OGR
     if (! attrs.FCSUBTYPE && tds71.configOut.OgrFormat !== '')
     {
@@ -340,7 +343,7 @@ tds71 = {
       if (~attrList.indexOf(i)) continue;
 
       // If it is in the Thematic feature, just set a default value BUT only if we are not going to the UI
-      if (~tdsAttrList.indexOf(i) && tds71.configOut.OgrFormat !== '') attrs[i] = '5';
+      if (tds71.configOut.OgrFormat !== '' && (attrs[tds71.rules.closureList[i][0]] || attrs[tds71.rules.closureList[i][1]]))  attrs[i] = '5';
     }
   }, // End validateThematicAttrs
 
@@ -556,7 +559,7 @@ tds71 = {
   cleanAttrs : function (attrs)
   {
     // Drop the mosaic tag if we don't have an image id
-    if (attrs.image_id == 'No Information') delete attrs.img_mosaic;
+    if (!attrs.image_id || attrs.image_id == 'No Information') delete attrs.img_mosaic;
 
     // Switch to keep all of the default values. Mainly for the schema switcher
     if (tds71.configIn.ReaderDropDefaults == 'true')
@@ -1266,6 +1269,9 @@ tds71 = {
     {
       delete tags['source:datetime'];
     }
+
+    // Stop this tag getting through the translation
+    if (tags['source:imagery'] == 'unknown' || tags['source:imagery'] == 'Unknown') delete tags['source:imagery'];
 
     // Unpack othertags if required
     translate.unpackOtherTags(tags);
@@ -2574,12 +2580,12 @@ tds71 = {
     if (!attrs.ZI001_SRT)
     {
       // Not sure if this should be a default
-      attrs.ZI001_SRT == 'openSource';
+      attrs.ZI001_SRT == '160';
 
-      if (notUsedTags['source:imagery']) attrs.ZI001_SRT = 'imageryUnspecified';
+      if (notUsedTags['source:imagery']) attrs.ZI001_SRT = '30';
 
       // This should have already been removed from notUsedTags
-      if (tags['source:imagery:sensor'] == 'IK02') attrs.ZI001_SRT = 'ikonosImagery';
+      if (tags['source:imagery:sensor'] == 'IK02') attrs.ZI001_SRT = '28';
     }
 
     if (!attrs.ZI001_SDP && notUsedTags['source:imagery'])
@@ -2773,11 +2779,11 @@ tds71 = {
     if (tds71.configIn.OgrCompareOutput == 'true') translate.compareOutput(attrs,uuidField,layerName,'toOSM');
 
     // Debug:
-    if (tds71.configIn.OgrDebugDumptags == 'true')
-    {
-      translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
-      translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
-    }
+    // if (tds71.configIn.OgrDebugDumptags == 'true')
+    // {
+    //   translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+    //   translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
+    // }
 
     // pre processing
     tds71.applyToOsmPreProcessing(attrs, layerName, geometryType);

@@ -1,17 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
   <bounds minlat='-25.5022365' minlon='153.0711096' maxlat='-25.3489175' maxlon='153.2157657' origin='hootenanny' />
-  <node id='-102501' visible='true' version='1' lat='-25.40609916553' lon='153.08739099891' />
-  <node id='-102502' visible='true' version='1' lat='-25.39395168388' lon='153.08747839086' />
-  <node id='-102503' visible='true' version='1' lat='-25.4063613414' lon='153.0780400598' />
-  <node id='-102504' visible='true' version='1' lat='-25.39421385975' lon='153.07812745175' />
-  <node id='-102505' visible='true' version='1' lat='-25.35529873194' lon='153.13438018902'>
+  <node id='-102952' visible='true' version='1' lat='-25.40609916553' lon='153.08739099891' />
+  <node id='-102953' visible='true' version='1' lat='-25.39395168388' lon='153.08747839086' />
+  <node id='-102954' visible='true' version='1' lat='-25.4063613414' lon='153.0780400598' />
+  <node id='-102955' visible='true' version='1' lat='-25.39421385975' lon='153.07812745175' />
+  <node id='-102956' action='modify' visible='true' version='1' lat='-25.35529873194' lon='153.13438018902'>
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='A Station. Station Street' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:multi_unit' v='no' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Station' />
     <tag k='navigation:landmark' v='no' />
     <tag k='note' v='Underground Station' />
@@ -29,13 +28,12 @@
     <tag k='underground' v='yes' />
     <tag k='uuid' v='{9e5f2b36-e9e5-4e61-8ccb-bffb08256dd9}' />
   </node>
-  <node id='-102506' visible='true' version='1' lat='-25.36200221451' lon='153.13438018902'>
+  <node id='-102957' action='modify' visible='true' version='1' lat='-25.36200221451' lon='153.13438018902'>
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='Another Station' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:multi_unit' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Train Station' />
     <tag k='navigation:landmark' v='no' />
     <tag k='note' v='Above Ground' />
@@ -54,23 +52,22 @@
     <tag k='underground' v='no' />
     <tag k='uuid' v='{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}' />
   </node>
-  <node id='-102507' visible='true' version='1' lat='-25.40618655749' lon='153.09184798858' />
-  <node id='-102508' visible='true' version='1' lat='-25.39403907584' lon='153.09193538053' />
-  <node id='-102509' visible='true' version='1' lat='-25.40592438162' lon='153.09551845066' />
-  <node id='-102510' visible='true' version='1' lat='-25.39377689997' lon='153.09560584261' />
-  <node id='-102511' visible='true' version='1' lat='-25.4063613414' lon='153.08275922533' />
-  <node id='-102512' visible='true' version='1' lat='-25.39421385975' lon='153.08284661728' />
-  <node id='-102513' visible='true' version='1' lat='-25.44047763679' lon='153.19173844229' />
-  <node id='-102514' visible='true' version='1' lat='-25.42850841321' lon='153.19165105034' />
-  <node id='-102515' visible='true' version='1' lat='-25.44073307116' lon='153.20011828879' />
-  <node id='-102516' visible='true' version='1' lat='-25.42876387296' lon='153.20003089682' />
-  <node id='-102517' visible='true' version='1' lat='-25.34936327241' lon='153.17986191569'>
+  <node id='-102958' visible='true' version='1' lat='-25.40618655749' lon='153.09184798858' />
+  <node id='-102959' visible='true' version='1' lat='-25.39403907584' lon='153.09193538053' />
+  <node id='-102960' visible='true' version='1' lat='-25.40592438162' lon='153.09551845066' />
+  <node id='-102961' visible='true' version='1' lat='-25.39377689997' lon='153.09560584261' />
+  <node id='-102962' visible='true' version='1' lat='-25.4063613414' lon='153.08275922533' />
+  <node id='-102963' visible='true' version='1' lat='-25.39421385975' lon='153.08284661728' />
+  <node id='-102964' visible='true' version='1' lat='-25.44047763679' lon='153.19173844229' />
+  <node id='-102965' visible='true' version='1' lat='-25.42850841321' lon='153.19165105034' />
+  <node id='-102966' visible='true' version='1' lat='-25.44073307116' lon='153.20011828879' />
+  <node id='-102967' visible='true' version='1' lat='-25.42876387296' lon='153.20003089682' />
+  <node id='-102968' action='modify' visible='true' version='1' lat='-25.34936327241' lon='153.17986191569'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:cellular_phone' v='yes' />
     <tag k='condition' v='construction' />
     <tag k='design' v='a-frame' />
-    <tag k='error:circular' v='15' />
     <tag k='guyed' v='no' />
     <tag k='height:object' v='10' />
     <tag k='man_made' v='tower' />
@@ -88,13 +85,12 @@
     <tag k='tower:type' v='observation' />
     <tag k='uuid' v='{18021657-b6e6-4b01-b5a4-41329def51d5}' />
   </node>
-  <node id='-102518' action='modify' visible='true' version='1' lat='-25.35535015075' lon='153.17962510436'>
+  <node id='-102969' action='modify' visible='true' version='1' lat='-25.35535015075' lon='153.17962510436'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:cellular_phone' v='yes' />
     <tag k='condition' v='functional' />
     <tag k='design' v='i-frame' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='man_made' v='tower' />
     <tag k='material' v='wood' />
@@ -109,14 +105,13 @@
     <tag k='tower:type' v='communication' />
     <tag k='uuid' v='{59302be3-1415-48eb-96cc-c3d482af34e1}' />
   </node>
-  <node id='-102519' action='modify' visible='true' version='1' lat='-25.36155111461' lon='153.17944674358'>
+  <node id='-102970' action='modify' visible='true' version='1' lat='-25.36155111461' lon='153.17944674358'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:radio_broadcast' v='yes' />
     <tag k='condition' v='destroyed' />
     <tag k='design' v='t-frame' />
     <tag k='ele:max' v='782.60809999000003' />
-    <tag k='error:circular' v='15' />
     <tag k='guyed' v='yes' />
     <tag k='height' v='50' />
     <tag k='height:object' v='500' />
@@ -139,14 +134,13 @@
     <tag k='tower:type:2' v='observation' />
     <tag k='uuid' v='{3df8f982-d64a-4196-83d0-2c6c01dc6ec9}' />
   </node>
-  <node id='-102520' action='modify' visible='true' version='1' lat='-25.36776722984' lon='153.17939697507'>
+  <node id='-102971' action='modify' visible='true' version='1' lat='-25.36776722984' lon='153.17939697507'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:television' v='yes' />
     <tag k='condition' v='functional' />
     <tag k='design' v='a-frame' />
     <tag k='ele:max' v='306.32649999' />
-    <tag k='error:circular' v='15' />
     <tag k='guyed' v='no' />
     <tag k='height' v='59' />
     <tag k='light:obstacle' v='no' />
@@ -164,14 +158,13 @@
     <tag k='tower:type' v='industrial' />
     <tag k='uuid' v='{8dde26f8-3143-4d7a-b021-65dade3722da}' />
   </node>
-  <node id='-102521' action='modify' visible='true' version='1' lat='-25.36707593468' lon='153.16019973942'>
+  <node id='-102972' action='modify' visible='true' version='1' lat='-25.36707593468' lon='153.16019973942'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:radio_broadcast' v='yes' />
     <tag k='condition' v='functional' />
     <tag k='design' v='a-frame' />
     <tag k='ele:max' v='304.98230000000001' />
-    <tag k='error:circular' v='15' />
     <tag k='guyed' v='no' />
     <tag k='height' v='57' />
     <tag k='man_made' v='tower' />
@@ -187,76 +180,71 @@
     <tag k='tower:shape' v='truss' />
     <tag k='uuid' v='{d8fae562-b5ce-4529-92e4-dd209f69ee31}' />
   </node>
-  <node id='-102522' visible='true' version='1' lat='-25.4928922408' lon='153.13357721454' />
-  <node id='-102523' visible='true' version='1' lat='-25.49279156268' lon='153.13990376366' />
-  <node id='-102524' visible='true' version='1' lat='-25.48599365287' lon='153.13977114011' />
-  <node id='-102525' visible='true' version='1' lat='-25.48609415724' lon='153.13344432732' />
-  <node id='-102526' visible='true' version='1' lat='-25.45934705712' lon='153.15434767566' />
-  <node id='-102527' visible='true' version='1' lat='-25.45962090238' lon='153.16117189773' />
-  <node id='-102528' visible='true' version='1' lat='-25.45277458391' lon='153.15753231262' />
-  <node id='-102529' visible='true' version='1' lat='-25.45921013426' lon='153.16541808035' />
-  <node id='-102530' visible='true' version='1' lat='-25.4529115141' lon='153.16905766546' />
-  <node id='-102531' visible='true' version='1' lat='-25.45277458391' lon='153.16329498904' />
-  <node id='-102532' visible='true' version='1' lat='-25.46140088139' lon='153.2121260892' />
-  <node id='-102533' visible='true' version='1' lat='-25.45510237589' lon='153.21576567431' />
-  <node id='-102534' visible='true' version='1' lat='-25.45496544819' lon='153.21000299789' />
-  <node id='-102535' visible='true' version='1' lat='-25.46003166911' lon='153.1709532827' />
-  <node id='-102536' visible='true' version='1' lat='-25.46030551281' lon='153.17777750477' />
-  <node id='-102537' visible='true' version='1' lat='-25.45345923329' lon='153.17413791967' />
-  <node id='-102538' visible='true' version='1' lat='-25.45989474702' lon='153.18202368739' />
-  <node id='-102539' visible='true' version='1' lat='-25.45359616269' lon='153.1856632725' />
-  <node id='-102540' visible='true' version='1' lat='-25.45345923329' lon='153.17990059608' />
-  <node id='-102541' visible='true' version='1' lat='-25.4607162772' lon='153.18626987002' />
-  <node id='-102542' visible='true' version='1' lat='-25.46099011934' lon='153.19309409209' />
-  <node id='-102543' visible='true' version='1' lat='-25.45414387876' lon='153.18945450698' />
-  <node id='-102544' visible='true' version='1' lat='-25.46057935589' lon='153.19734027471' />
-  <node id='-102545' visible='true' version='1' lat='-25.45428080739' lon='153.20097985982' />
-  <node id='-102546' visible='true' version='1' lat='-25.45414387876' lon='153.1952171834' />
-  <node id='-102547' visible='true' version='1' lat='-25.46133242115' lon='153.20158645734' />
-  <node id='-102548' visible='true' version='1' lat='-25.46160626189' lon='153.20841067941' />
-  <node id='-102549' visible='true' version='1' lat='-25.45476005636' lon='153.2047710943' />
-  <node id='-102550' action='modify' visible='true' version='1' lat='-25.44825580041' lon='153.15813891014'>
+  <node id='-102973' visible='true' version='1' lat='-25.4928922408' lon='153.13357721454' />
+  <node id='-102974' visible='true' version='1' lat='-25.49279156268' lon='153.13990376366' />
+  <node id='-102975' visible='true' version='1' lat='-25.48599365287' lon='153.13977114011' />
+  <node id='-102976' visible='true' version='1' lat='-25.48609415724' lon='153.13344432732' />
+  <node id='-102977' visible='true' version='1' lat='-25.45934705712' lon='153.15434767566' />
+  <node id='-102978' visible='true' version='1' lat='-25.45962090238' lon='153.16117189773' />
+  <node id='-102979' visible='true' version='1' lat='-25.45277458391' lon='153.15753231262' />
+  <node id='-102980' visible='true' version='1' lat='-25.45921013426' lon='153.16541808035' />
+  <node id='-102981' visible='true' version='1' lat='-25.4529115141' lon='153.16905766546' />
+  <node id='-102982' visible='true' version='1' lat='-25.45277458391' lon='153.16329498904' />
+  <node id='-102983' visible='true' version='1' lat='-25.46140088139' lon='153.2121260892' />
+  <node id='-102984' visible='true' version='1' lat='-25.45510237589' lon='153.21576567431' />
+  <node id='-102985' visible='true' version='1' lat='-25.45496544819' lon='153.21000299789' />
+  <node id='-102986' visible='true' version='1' lat='-25.46003166911' lon='153.1709532827' />
+  <node id='-102987' visible='true' version='1' lat='-25.46030551281' lon='153.17777750477' />
+  <node id='-102988' visible='true' version='1' lat='-25.45345923329' lon='153.17413791967' />
+  <node id='-102989' visible='true' version='1' lat='-25.45989474702' lon='153.18202368739' />
+  <node id='-102990' visible='true' version='1' lat='-25.45359616269' lon='153.1856632725' />
+  <node id='-102991' visible='true' version='1' lat='-25.45345923329' lon='153.17990059608' />
+  <node id='-102992' visible='true' version='1' lat='-25.4607162772' lon='153.18626987002' />
+  <node id='-102993' visible='true' version='1' lat='-25.46099011934' lon='153.19309409209' />
+  <node id='-102994' visible='true' version='1' lat='-25.45414387876' lon='153.18945450698' />
+  <node id='-102995' visible='true' version='1' lat='-25.46057935589' lon='153.19734027471' />
+  <node id='-102996' visible='true' version='1' lat='-25.45428080739' lon='153.20097985982' />
+  <node id='-102997' visible='true' version='1' lat='-25.45414387876' lon='153.1952171834' />
+  <node id='-102998' visible='true' version='1' lat='-25.46133242115' lon='153.20158645734' />
+  <node id='-102999' visible='true' version='1' lat='-25.46160626189' lon='153.20841067941' />
+  <node id='-103000' visible='true' version='1' lat='-25.45476005636' lon='153.2047710943' />
+  <node id='-103001' action='modify' visible='true' version='1' lat='-25.44825580041' lon='153.15813891014'>
     <tag k='content' v='silage' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{10a5246e-415f-4b1d-9c12-4c15ab1c10b4}' />
   </node>
-  <node id='-102551' action='modify' visible='true' version='1' lat='-25.44839273573' lon='153.16511478159'>
+  <node id='-103002' action='modify' visible='true' version='1' lat='-25.44839273573' lon='153.16511478159'>
     <tag k='content' v='water' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{11489fd2-31fe-40f1-9417-6c4e2fa2194f}' />
   </node>
-  <node id='-102552' action='modify' visible='true' version='1' lat='-25.4485296709' lon='153.17102910739'>
+  <node id='-103003' action='modify' visible='true' version='1' lat='-25.4485296709' lon='153.17102910739'>
     <tag k='content' v='petroleum' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{12449bc4-c059-4270-8d72-134fcf54291d}' />
   </node>
-  <node id='-102553' action='modify' visible='true' version='1' lat='-25.44866660592' lon='153.17603353691'>
+  <node id='-103004' action='modify' visible='true' version='1' lat='-25.44866660592' lon='153.17603353691'>
     <tag k='content' v='petroleum' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{127b406c-964f-4403-a275-40f096adcabe}' />
   </node>
-  <node id='-102554' visible='true' version='1' lat='-25.4405766034' lon='153.19549817451' />
-  <node id='-102555' visible='true' version='1' lat='-25.42860738965' lon='153.19541078256' />
-  <node id='-102556' visible='true' version='1' lat='-25.40631105968' lon='153.1471681745' />
-  <node id='-102557' visible='true' version='1' lat='-25.39231089402' lon='153.14732465792' />
-  <node id='-102558' visible='true' version='1' lat='-25.3922424529' lon='153.14091519348' />
-  <node id='-102559' visible='true' version='1' lat='-25.40622885694' lon='153.14080447922' />
-  <node id='-102560' visible='true' version='1' lat='-25.39016607144' lon='153.14701431785' />
-  <node id='-102561' visible='true' version='1' lat='-25.37616403305' lon='153.14717080127' />
-  <node id='-102562' visible='true' version='1' lat='-25.37609558277' lon='153.14076133683' />
-  <node id='-102563' visible='true' version='1' lat='-25.3900838577' lon='153.14065062257' />
-  <node id='-102564' action='modify' visible='true' version='1' lat='-25.36179918467' lon='153.17275983075'>
+  <node id='-103005' visible='true' version='1' lat='-25.4405766034' lon='153.19549817451' />
+  <node id='-103006' visible='true' version='1' lat='-25.42860738965' lon='153.19541078256' />
+  <node id='-103007' visible='true' version='1' lat='-25.40631105968' lon='153.1471681745' />
+  <node id='-103008' visible='true' version='1' lat='-25.39231089402' lon='153.14732465792' />
+  <node id='-103009' visible='true' version='1' lat='-25.3922424529' lon='153.14091519348' />
+  <node id='-103010' visible='true' version='1' lat='-25.40622885694' lon='153.14080447922' />
+  <node id='-103011' visible='true' version='1' lat='-25.39016607144' lon='153.14701431785' />
+  <node id='-103012' visible='true' version='1' lat='-25.37616403305' lon='153.14717080127' />
+  <node id='-103013' visible='true' version='1' lat='-25.37609558277' lon='153.14076133683' />
+  <node id='-103014' visible='true' version='1' lat='-25.3900838577' lon='153.14065062257' />
+  <node id='-103015' action='modify' visible='true' version='1' lat='-25.36179918467' lon='153.17275983075'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='Jason&apos;s Backyard' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='construction' />
     <tag k='by_product' v='slag' />
     <tag k='construction' v='shed' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='aluminium' />
     <tag k='material:vertical:2' v='wood' />
     <tag k='name' v='Another Garden Shed' />
@@ -275,14 +263,13 @@
     <tag k='use:2' v='meeting_place' />
     <tag k='uuid' v='{b202f179-5156-4769-a5a0-031bb3468d10}' />
   </node>
-  <node id='-102565' action='modify' visible='true' version='1' lat='-25.36741319285' lon='153.17256017433'>
+  <node id='-103016' action='modify' visible='true' version='1' lat='-25.36741319285' lon='153.17256017433'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='In a garden' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='shed' />
     <tag k='by_product' v='no_byproduct' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='concrete' />
     <tag k='name' v='Another Shed' />
     <tag k='navigation:landmark' v='yes' />
@@ -299,103 +286,102 @@
     <tag k='use' v='emergency_operations' />
     <tag k='uuid' v='{7cc3f7a2-845b-441e-a89f-d6939fb0f5f0}' />
   </node>
-  <node id='-102566' visible='true' version='1' lat='-25.40592438162' lon='153.10373329437' />
-  <node id='-102567' visible='true' version='1' lat='-25.39395168388' lon='153.10364590241' />
-  <node id='-102568' visible='true' version='1' lat='-25.40548742185' lon='153.11727904728' />
-  <node id='-102569' visible='true' version='1' lat='-25.39351472411' lon='153.11719165533' />
-  <node id='-102570' visible='true' version='1' lat='-25.40548742185' lon='153.10836506794' />
-  <node id='-102571' visible='true' version='1' lat='-25.39351472411' lon='153.10827767599' />
-  <node id='-102572' visible='true' version='1' lat='-25.40548742185' lon='153.12077472546' />
-  <node id='-102573' visible='true' version='1' lat='-25.39351472411' lon='153.1206873335' />
-  <node id='-102574' visible='true' version='1' lat='-25.40592438162' lon='153.0994510886' />
-  <node id='-102575' visible='true' version='1' lat='-25.39395168388' lon='153.09936369665' />
-  <node id='-102576' visible='true' version='1' lat='-25.40557481381' lon='153.11290944957' />
-  <node id='-102577' visible='true' version='1' lat='-25.39360211607' lon='153.11282205761' />
-  <node id='-102578' visible='true' version='1' lat='-25.40540073574' lon='153.15431137752' />
-  <node id='-102579' visible='true' version='1' lat='-25.39342802072' lon='153.15422398556' />
-  <node id='-102580' visible='true' version='1' lat='-25.4058134062' lon='153.12492032075' />
-  <node id='-102581' visible='true' version='1' lat='-25.3938407408' lon='153.1248329288' />
-  <node id='-102582' visible='true' version='1' lat='-25.40512563577' lon='153.15050424581' />
-  <node id='-102583' visible='true' version='1' lat='-25.39315285877' lon='153.15041685386' />
-  <node id='-102584' visible='true' version='1' lat='-25.40526317282' lon='153.15750936815' />
-  <node id='-102585' visible='true' version='1' lat='-25.39329045283' lon='153.1574219762' />
-  <node id='-102586' visible='true' version='1' lat='-25.40526317282' lon='153.16131649986' />
-  <node id='-102587' visible='true' version='1' lat='-25.39329045283' lon='153.1612291079' />
-  <node id='-102588' visible='true' version='1' lat='-25.44017595261' lon='153.18212124524' />
-  <node id='-102589' visible='true' version='1' lat='-25.42820669906' lon='153.18203385329' />
-  <node id='-102590' visible='true' version='1' lat='-25.44031779739' lon='153.18462773603' />
-  <node id='-102591' visible='true' version='1' lat='-25.42834855792' lon='153.18454034407' />
-  <node id='-102592' visible='true' version='1' lat='-25.44023163499' lon='153.17931815433' />
-  <node id='-102593' visible='true' version='1' lat='-25.42826238697' lon='153.17923076237' />
-  <node id='-102594' visible='true' version='1' lat='-25.44002101302' lon='153.16525695248' />
-  <node id='-102595' visible='true' version='1' lat='-25.42805174408' lon='153.16516956051' />
-  <node id='-102596' visible='true' version='1' lat='-25.43979291341' lon='153.15588602389' />
-  <node id='-102597' visible='true' version='1' lat='-25.42782362181' lon='153.15579863193' />
-  <node id='-102598' visible='true' version='1' lat='-25.43985664884' lon='153.16865820839' />
-  <node id='-102599' visible='true' version='1' lat='-25.42788736356' lon='153.16857081644' />
-  <node id='-102600' visible='true' version='1' lat='-25.43999359376' lon='153.17608903005' />
-  <node id='-102601' visible='true' version='1' lat='-25.42802432209' lon='153.1760016381' />
-  <node id='-102602' visible='true' version='1' lat='-25.43991140438' lon='153.16214277848' />
-  <node id='-102603' visible='true' version='1' lat='-25.42794212455' lon='153.16205538652' />
-  <node id='-102604' visible='true' version='1' lat='-25.43989188058' lon='153.15903915843' />
-  <node id='-102605' visible='true' version='1' lat='-25.4279225988' lon='153.15895176647' />
-  <node id='-102606' visible='true' version='1' lat='-25.43999359376' lon='153.17244944393' />
-  <node id='-102607' visible='true' version='1' lat='-25.42802432209' lon='153.17236205197' />
-  <node id='-102608' visible='true' version='1' lat='-25.39069133558' lon='153.08756794909' />
-  <node id='-102609' visible='true' version='1' lat='-25.37587064617' lon='153.08756794909' />
-  <node id='-102610' visible='true' version='1' lat='-25.39069133558' lon='153.1332739412' />
-  <node id='-102611' visible='true' version='1' lat='-25.37587064617' lon='153.1332739412' />
-  <node id='-102612' visible='true' version='1' lat='-25.39121568731' lon='153.10347328477' />
-  <node id='-102613' visible='true' version='1' lat='-25.3763949979' lon='153.10347328477' />
-  <node id='-102614' visible='true' version='1' lat='-25.39060394363' lon='153.07236174904' />
-  <node id='-102615' visible='true' version='1' lat='-25.37578325422' lon='153.07236174904' />
-  <node id='-102616' visible='true' version='1' lat='-25.39069133558' lon='153.12077689173' />
-  <node id='-102617' visible='true' version='1' lat='-25.37587064617' lon='153.12077689173' />
-  <node id='-102618' visible='true' version='1' lat='-25.39077872754' lon='153.09560800889' />
-  <node id='-102619' visible='true' version='1' lat='-25.37595803813' lon='153.09560800889' />
-  <node id='-102620' visible='true' version='1' lat='-25.39077872754' lon='153.08284878356' />
-  <node id='-102621' visible='true' version='1' lat='-25.37595803813' lon='153.08284878356' />
-  <node id='-102622' visible='true' version='1' lat='-25.39086611949' lon='153.11701903769' />
-  <node id='-102623' visible='true' version='1' lat='-25.37604543008' lon='153.11701903769' />
-  <node id='-102624' visible='true' version='1' lat='-25.39086611949' lon='153.12907912739' />
-  <node id='-102625' visible='true' version='1' lat='-25.37604543008' lon='153.12907912739' />
-  <node id='-102626' visible='true' version='1' lat='-25.3910409034' lon='153.09936586292' />
-  <node id='-102627' visible='true' version='1' lat='-25.37622021399' lon='153.09936586292' />
-  <node id='-102628' visible='true' version='1' lat='-25.3910409034' lon='153.1080176664' />
-  <node id='-102629' visible='true' version='1' lat='-25.37622021399' lon='153.1080176664' />
-  <node id='-102630' visible='true' version='1' lat='-25.39060394363' lon='153.07804222607' />
-  <node id='-102631' visible='true' version='1' lat='-25.37578325422' lon='153.07804222607' />
-  <node id='-102632' visible='true' version='1' lat='-25.39086611949' lon='153.11264943998' />
-  <node id='-102633' visible='true' version='1' lat='-25.37604543008' lon='153.11264943998' />
-  <node id='-102634' visible='true' version='1' lat='-25.39069133558' lon='153.12505909749' />
-  <node id='-102635' visible='true' version='1' lat='-25.37587064617' lon='153.12505909749' />
-  <node id='-102636' visible='true' version='1' lat='-25.39095351144' lon='153.0917627629' />
-  <node id='-102637' visible='true' version='1' lat='-25.37613282204' lon='153.0917627629' />
-  <node id='-102638' visible='true' version='1' lat='-25.42109559163' lon='153.0912362449' />
-  <node id='-102639' visible='true' version='1' lat='-25.42109559163' lon='153.09141102881' />
-  <node id='-102640' visible='true' version='1' lat='-25.41069614201' lon='153.09158581272' />
-  <node id='-102641' visible='true' version='1' lat='-25.42118298196' lon='153.07742831612' />
-  <node id='-102642' visible='true' version='1' lat='-25.42118298196' lon='153.07760310003' />
-  <node id='-102643' visible='true' version='1' lat='-25.41078353235' lon='153.07777788393' />
-  <node id='-102644' visible='true' version='1' lat='-25.42109559163' lon='153.08669186327' />
-  <node id='-102645' visible='true' version='1' lat='-25.42109559163' lon='153.08686664718' />
-  <node id='-102646' visible='true' version='1' lat='-25.41069614201' lon='153.08704143109' />
-  <node id='-102647' visible='true' version='1' lat='-25.42100820129' lon='153.0952562748' />
-  <node id='-102648' visible='true' version='1' lat='-25.42100820129' lon='153.09543105871' />
-  <node id='-102649' visible='true' version='1' lat='-25.41060875168' lon='153.09560584261' />
-  <node id='-102650' visible='true' version='1' lat='-25.42118298196' lon='153.07227219081' />
-  <node id='-102651' visible='true' version='1' lat='-25.42118298196' lon='153.07244697472' />
-  <node id='-102652' visible='true' version='1' lat='-25.41078353235' lon='153.07262175863' />
-  <node id='-102653' visible='true' version='1' lat='-25.42083342063' lon='153.08240965751' />
-  <node id='-102654' visible='true' version='1' lat='-25.42083342063' lon='153.08258444142' />
-  <node id='-102655' visible='true' version='1' lat='-25.41043397101' lon='153.08275922533' />
-  <node id='-102656' action='modify' visible='true' version='1' lat='-25.35594089691' lon='153.17294783168'>
+  <node id='-103017' visible='true' version='1' lat='-25.40592438162' lon='153.10373329437' />
+  <node id='-103018' visible='true' version='1' lat='-25.39395168388' lon='153.10364590241' />
+  <node id='-103019' visible='true' version='1' lat='-25.40548742185' lon='153.11727904728' />
+  <node id='-103020' visible='true' version='1' lat='-25.39351472411' lon='153.11719165533' />
+  <node id='-103021' visible='true' version='1' lat='-25.40548742185' lon='153.10836506794' />
+  <node id='-103022' visible='true' version='1' lat='-25.39351472411' lon='153.10827767599' />
+  <node id='-103023' visible='true' version='1' lat='-25.40548742185' lon='153.12077472546' />
+  <node id='-103024' visible='true' version='1' lat='-25.39351472411' lon='153.1206873335' />
+  <node id='-103025' visible='true' version='1' lat='-25.40592438162' lon='153.0994510886' />
+  <node id='-103026' visible='true' version='1' lat='-25.39395168388' lon='153.09936369665' />
+  <node id='-103027' visible='true' version='1' lat='-25.40557481381' lon='153.11290944957' />
+  <node id='-103028' visible='true' version='1' lat='-25.39360211607' lon='153.11282205761' />
+  <node id='-103029' visible='true' version='1' lat='-25.40540073574' lon='153.15431137752' />
+  <node id='-103030' visible='true' version='1' lat='-25.39342802072' lon='153.15422398556' />
+  <node id='-103031' visible='true' version='1' lat='-25.4058134062' lon='153.12492032075' />
+  <node id='-103032' visible='true' version='1' lat='-25.3938407408' lon='153.1248329288' />
+  <node id='-103033' visible='true' version='1' lat='-25.40512563577' lon='153.15050424581' />
+  <node id='-103034' visible='true' version='1' lat='-25.39315285877' lon='153.15041685386' />
+  <node id='-103035' visible='true' version='1' lat='-25.40526317282' lon='153.15750936815' />
+  <node id='-103036' visible='true' version='1' lat='-25.39329045283' lon='153.1574219762' />
+  <node id='-103037' visible='true' version='1' lat='-25.40526317282' lon='153.16131649986' />
+  <node id='-103038' visible='true' version='1' lat='-25.39329045283' lon='153.1612291079' />
+  <node id='-103039' visible='true' version='1' lat='-25.44017595261' lon='153.18212124524' />
+  <node id='-103040' visible='true' version='1' lat='-25.42820669906' lon='153.18203385329' />
+  <node id='-103041' visible='true' version='1' lat='-25.44031779739' lon='153.18462773603' />
+  <node id='-103042' visible='true' version='1' lat='-25.42834855792' lon='153.18454034407' />
+  <node id='-103043' visible='true' version='1' lat='-25.44023163499' lon='153.17931815433' />
+  <node id='-103044' visible='true' version='1' lat='-25.42826238697' lon='153.17923076237' />
+  <node id='-103045' visible='true' version='1' lat='-25.44002101302' lon='153.16525695248' />
+  <node id='-103046' visible='true' version='1' lat='-25.42805174408' lon='153.16516956051' />
+  <node id='-103047' visible='true' version='1' lat='-25.43979291341' lon='153.15588602389' />
+  <node id='-103048' visible='true' version='1' lat='-25.42782362181' lon='153.15579863193' />
+  <node id='-103049' visible='true' version='1' lat='-25.43985664884' lon='153.16865820839' />
+  <node id='-103050' visible='true' version='1' lat='-25.42788736356' lon='153.16857081644' />
+  <node id='-103051' visible='true' version='1' lat='-25.43999359376' lon='153.17608903005' />
+  <node id='-103052' visible='true' version='1' lat='-25.42802432209' lon='153.1760016381' />
+  <node id='-103053' visible='true' version='1' lat='-25.43991140438' lon='153.16214277848' />
+  <node id='-103054' visible='true' version='1' lat='-25.42794212455' lon='153.16205538652' />
+  <node id='-103055' visible='true' version='1' lat='-25.43989188058' lon='153.15903915843' />
+  <node id='-103056' visible='true' version='1' lat='-25.4279225988' lon='153.15895176647' />
+  <node id='-103057' visible='true' version='1' lat='-25.43999359376' lon='153.17244944393' />
+  <node id='-103058' visible='true' version='1' lat='-25.42802432209' lon='153.17236205197' />
+  <node id='-103059' visible='true' version='1' lat='-25.39069133558' lon='153.08756794909' />
+  <node id='-103060' visible='true' version='1' lat='-25.37587064617' lon='153.08756794909' />
+  <node id='-103061' visible='true' version='1' lat='-25.39069133558' lon='153.1332739412' />
+  <node id='-103062' visible='true' version='1' lat='-25.37587064617' lon='153.1332739412' />
+  <node id='-103063' visible='true' version='1' lat='-25.39121568731' lon='153.10347328477' />
+  <node id='-103064' visible='true' version='1' lat='-25.3763949979' lon='153.10347328477' />
+  <node id='-103065' visible='true' version='1' lat='-25.39060394363' lon='153.07236174904' />
+  <node id='-103066' visible='true' version='1' lat='-25.37578325422' lon='153.07236174904' />
+  <node id='-103067' visible='true' version='1' lat='-25.39069133558' lon='153.12077689173' />
+  <node id='-103068' visible='true' version='1' lat='-25.37587064617' lon='153.12077689173' />
+  <node id='-103069' visible='true' version='1' lat='-25.39077872754' lon='153.09560800889' />
+  <node id='-103070' visible='true' version='1' lat='-25.37595803813' lon='153.09560800889' />
+  <node id='-103071' visible='true' version='1' lat='-25.39077872754' lon='153.08284878356' />
+  <node id='-103072' visible='true' version='1' lat='-25.37595803813' lon='153.08284878356' />
+  <node id='-103073' visible='true' version='1' lat='-25.39086611949' lon='153.11701903769' />
+  <node id='-103074' visible='true' version='1' lat='-25.37604543008' lon='153.11701903769' />
+  <node id='-103075' visible='true' version='1' lat='-25.39086611949' lon='153.12907912739' />
+  <node id='-103076' visible='true' version='1' lat='-25.37604543008' lon='153.12907912739' />
+  <node id='-103077' visible='true' version='1' lat='-25.3910409034' lon='153.09936586292' />
+  <node id='-103078' visible='true' version='1' lat='-25.37622021399' lon='153.09936586292' />
+  <node id='-103079' visible='true' version='1' lat='-25.3910409034' lon='153.1080176664' />
+  <node id='-103080' visible='true' version='1' lat='-25.37622021399' lon='153.1080176664' />
+  <node id='-103081' visible='true' version='1' lat='-25.39060394363' lon='153.07804222607' />
+  <node id='-103082' visible='true' version='1' lat='-25.37578325422' lon='153.07804222607' />
+  <node id='-103083' visible='true' version='1' lat='-25.39086611949' lon='153.11264943998' />
+  <node id='-103084' visible='true' version='1' lat='-25.37604543008' lon='153.11264943998' />
+  <node id='-103085' visible='true' version='1' lat='-25.39069133558' lon='153.12505909749' />
+  <node id='-103086' visible='true' version='1' lat='-25.37587064617' lon='153.12505909749' />
+  <node id='-103087' visible='true' version='1' lat='-25.39095351144' lon='153.0917627629' />
+  <node id='-103088' visible='true' version='1' lat='-25.37613282204' lon='153.0917627629' />
+  <node id='-103089' visible='true' version='1' lat='-25.42109559163' lon='153.0912362449' />
+  <node id='-103090' visible='true' version='1' lat='-25.42109559163' lon='153.09141102881' />
+  <node id='-103091' visible='true' version='1' lat='-25.41069614201' lon='153.09158581272' />
+  <node id='-103092' visible='true' version='1' lat='-25.42118298196' lon='153.07742831612' />
+  <node id='-103093' visible='true' version='1' lat='-25.42118298196' lon='153.07760310003' />
+  <node id='-103094' visible='true' version='1' lat='-25.41078353235' lon='153.07777788393' />
+  <node id='-103095' visible='true' version='1' lat='-25.42109559163' lon='153.08669186327' />
+  <node id='-103096' visible='true' version='1' lat='-25.42109559163' lon='153.08686664718' />
+  <node id='-103097' visible='true' version='1' lat='-25.41069614201' lon='153.08704143109' />
+  <node id='-103098' visible='true' version='1' lat='-25.42100820129' lon='153.0952562748' />
+  <node id='-103099' visible='true' version='1' lat='-25.42100820129' lon='153.09543105871' />
+  <node id='-103100' visible='true' version='1' lat='-25.41060875168' lon='153.09560584261' />
+  <node id='-103101' visible='true' version='1' lat='-25.42118298196' lon='153.07227219081' />
+  <node id='-103102' visible='true' version='1' lat='-25.42118298196' lon='153.07244697472' />
+  <node id='-103103' visible='true' version='1' lat='-25.41078353235' lon='153.07262175863' />
+  <node id='-103104' visible='true' version='1' lat='-25.42083342063' lon='153.08240965751' />
+  <node id='-103105' visible='true' version='1' lat='-25.42083342063' lon='153.08258444142' />
+  <node id='-103106' visible='true' version='1' lat='-25.41043397101' lon='153.08275922533' />
+  <node id='-103107' action='modify' visible='true' version='1' lat='-25.35594089691' lon='153.17294783168'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='cable:type' v='power' />
     <tag k='condition' v='functional' />
     <tag k='design' v='t-frame' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='material' v='steel' />
     <tag k='name' v='Power Cable' />
@@ -411,13 +397,12 @@
     <tag k='tower:shape' v='mast' />
     <tag k='uuid' v='{64c05490-22b9-44d1-8fb9-7a3130c08f9b}' />
   </node>
-  <node id='-102657' action='modify' visible='true' version='1' lat='-25.34957735782' lon='153.17292402971'>
+  <node id='-103108' action='modify' visible='true' version='1' lat='-25.34957735782' lon='153.17292402971'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='cable:type' v='fibre-optic' />
     <tag k='cable:type:2' v='load_bearing' />
     <tag k='condition' v='construction' />
-    <tag k='error:circular' v='15' />
     <tag k='guyed' v='no' />
     <tag k='material' v='fibreglass' />
     <tag k='name' v='Fibre Optic' />
@@ -433,11 +418,10 @@
     <tag k='tower:shape' v='pole' />
     <tag k='uuid' v='{be171f7c-b9f1-47b6-8fcc-455508f11621}' />
   </node>
-  <node id='-102658' action='modify' visible='true' version='1' lat='-25.34987836905' lon='153.12082895677'>
+  <node id='-103109' action='modify' visible='true' version='1' lat='-25.34987836905' lon='153.12082895677'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='fuel' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Petrol Sale' />
     <tag k='operator' v='civilian' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -448,13 +432,12 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{cd706b59-6f0f-467b-8ff7-2bc5b22a8cea}' />
   </node>
-  <node id='-102659' action='modify' visible='true' version='1' lat='-25.34982294345' lon='153.16690647497'>
+  <node id='-103110' action='modify' visible='true' version='1' lat='-25.34982294345' lon='153.16690647497'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='On a hill' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='construction' />
     <tag k='construction' v='hut' />
-    <tag k='error:circular' v='15' />
     <tag k='navigation:landmark' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -465,12 +448,11 @@
     <tag k='use' v='agriculture' />
     <tag k='uuid' v='{21962f08-469a-4714-9080-e7362841c21f}' />
   </node>
-  <node id='-102660' action='modify' visible='true' version='1' lat='-25.3559810355' lon='153.1666839561'>
+  <node id='-103111' action='modify' visible='true' version='1' lat='-25.3559810355' lon='153.1666839561'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='hut' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Holiday House' />
     <tag k='note' v='On the beach' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -482,12 +464,11 @@
     <tag k='use' v='vacation_cottage' />
     <tag k='uuid' v='{5a9c3bdc-49b6-44c9-ba88-81c6b10104fb}' />
   </node>
-  <node id='-102661' action='modify' visible='true' version='1' lat='-25.36171507423' lon='153.16671064849'>
+  <node id='-103112' action='modify' visible='true' version='1' lat='-25.36171507423' lon='153.16671064849'>
     <tag k='abandoned:building' v='hut' />
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='In a field' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Clinic of some sort' />
     <tag k='navigation:landmark' v='yes' />
     <tag k='note' v='Yes, a memo' />
@@ -501,13 +482,12 @@
     <tag k='use:2' v='religious_activities' />
     <tag k='uuid' v='{aad37b05-3771-44b8-ace3-3f7933d18890}' />
   </node>
-  <node id='-102662' action='modify' visible='true' version='1' lat='-25.36715713627' lon='153.16697164986'>
+  <node id='-103113' action='modify' visible='true' version='1' lat='-25.36715713627' lon='153.16697164986'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='Third village from the left' />
     <tag k='amenity' v='social_facility' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='hut' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='The Hut' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -519,82 +499,81 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{9beacdca-869f-4188-b894-5ab18e6a4fe3}' />
   </node>
-  <node id='-102663' visible='true' version='1' lat='-25.50223652215' lon='153.09854091615' />
-  <node id='-102664' visible='true' version='1' lat='-25.50213585189' lon='153.10486746527' />
-  <node id='-102665' visible='true' version='1' lat='-25.49533847069' lon='153.10473484176' />
-  <node id='-102666' visible='true' version='1' lat='-25.49543896728' lon='153.09840802893' />
-  <node id='-102667' visible='true' version='1' lat='-25.50212849993' lon='153.0725696885' />
-  <node id='-102668' visible='true' version='1' lat='-25.50202782955' lon='153.07889623767' />
-  <node id='-102669' visible='true' version='1' lat='-25.49523044223' lon='153.07876361412' />
-  <node id='-102670' visible='true' version='1' lat='-25.49533093894' lon='153.07243680133' />
-  <node id='-102671' visible='true' version='1' lat='-25.50223652215' lon='153.11565559609' />
-  <node id='-102672' visible='true' version='1' lat='-25.50213585189' lon='153.12198214525' />
-  <node id='-102673' visible='true' version='1' lat='-25.49533847069' lon='153.1218495217' />
-  <node id='-102674' visible='true' version='1' lat='-25.49543896728' lon='153.11552270887' />
-  <node id='-102675' visible='true' version='1' lat='-25.50212849993' lon='153.10703841455' />
-  <node id='-102676' visible='true' version='1' lat='-25.50202782955' lon='153.11336496372' />
-  <node id='-102677' visible='true' version='1' lat='-25.49523044223' lon='153.11323234017' />
-  <node id='-102678' visible='true' version='1' lat='-25.49533093894' lon='153.10690552738' />
-  <node id='-102679' visible='true' version='1' lat='-25.49321633212' lon='153.08977320848' />
-  <node id='-102680' visible='true' version='1' lat='-25.49311565427' lon='153.09609975765' />
-  <node id='-102681' visible='true' version='1' lat='-25.48631776276' lon='153.09596713409' />
-  <node id='-102682' visible='true' version='1' lat='-25.48641826686' lon='153.0896403213' />
-  <node id='-102683' visible='true' version='1' lat='-25.49321633212' lon='153.11586411917' />
-  <node id='-102684' visible='true' version='1' lat='-25.49311565427' lon='153.12219066834' />
-  <node id='-102685' visible='true' version='1' lat='-25.48631776276' lon='153.12205804478' />
-  <node id='-102686' visible='true' version='1' lat='-25.48641826686' lon='153.11573123199' />
-  <node id='-102687' visible='true' version='1' lat='-25.49321633212' lon='153.09874943923' />
-  <node id='-102688' visible='true' version='1' lat='-25.49311565427' lon='153.1050759884' />
-  <node id='-102689' visible='true' version='1' lat='-25.48631776276' lon='153.10494336484' />
-  <node id='-102690' visible='true' version='1' lat='-25.48641826686' lon='153.09861655201' />
-  <node id='-102691' visible='true' version='1' lat='-25.50223652215' lon='153.0895646854' />
-  <node id='-102692' visible='true' version='1' lat='-25.50213585189' lon='153.09589123456' />
-  <node id='-102693' visible='true' version='1' lat='-25.49533847069' lon='153.09575861101' />
-  <node id='-102694' visible='true' version='1' lat='-25.49543896728' lon='153.08943179818' />
-  <node id='-102695' visible='true' version='1' lat='-25.50218215153' lon='153.12421109148' />
-  <node id='-102696' visible='true' version='1' lat='-25.50208148121' lon='153.13053764065' />
-  <node id='-102697' visible='true' version='1' lat='-25.49528409692' lon='153.1304050171' />
-  <node id='-102698' visible='true' version='1' lat='-25.49538459357' lon='153.1240782043' />
-  <node id='-102699' visible='true' version='1' lat='-25.49310830176' lon='153.08115602699' />
-  <node id='-102700' visible='true' version='1' lat='-25.49300762384' lon='153.08748257611' />
-  <node id='-102701' visible='true' version='1' lat='-25.48620972621' lon='153.0873499526' />
-  <node id='-102702' visible='true' version='1' lat='-25.48631023044' lon='153.08102313977' />
-  <node id='-102703' visible='true' version='1' lat='-25.49316195739' lon='153.1244196146' />
-  <node id='-102704' visible='true' version='1' lat='-25.49306127954' lon='153.13074616373' />
-  <node id='-102705' visible='true' version='1' lat='-25.48626338494' lon='153.13061354022' />
-  <node id='-102706' visible='true' version='1' lat='-25.4863638891' lon='153.12428672739' />
-  <node id='-102707' visible='true' version='1' lat='-25.50212849993' lon='153.08094750386' />
-  <node id='-102708' visible='true' version='1' lat='-25.50202782955' lon='153.08727405303' />
-  <node id='-102709' visible='true' version='1' lat='-25.49523044223' lon='153.08714142948' />
-  <node id='-102710' visible='true' version='1' lat='-25.49533093894' lon='153.08081461669' />
-  <node id='-102711' visible='true' version='1' lat='-25.49310830176' lon='153.10724693768' />
-  <node id='-102712' visible='true' version='1' lat='-25.49300762384' lon='153.11357348684' />
-  <node id='-102713' visible='true' version='1' lat='-25.48620972621' lon='153.11344086329' />
-  <node id='-102714' visible='true' version='1' lat='-25.48631023044' lon='153.10711405046' />
-  <node id='-102715' visible='true' version='1' lat='-25.49310830176' lon='153.07277821162' />
-  <node id='-102716' visible='true' version='1' lat='-25.49300762384' lon='153.07910476075' />
-  <node id='-102717' visible='true' version='1' lat='-25.48620972621' lon='153.07897213724' />
-  <node id='-102718' visible='true' version='1' lat='-25.48631023044' lon='153.07264532441' />
-  <node id='-102719' visible='true' version='1' lat='-25.46024527025' lon='153.10435670707' />
-  <node id='-102720' visible='true' version='1' lat='-25.46041529642' lon='153.10435670707' />
-  <node id='-102721' visible='true' version='1' lat='-25.46092537494' lon='153.11523838215' />
-  <node id='-102722' visible='true' version='1' lat='-25.44630312405' lon='153.1155784345' />
-  <node id='-102723' visible='true' version='1' lat='-25.44630312405' lon='153.10503681176' />
-  <node id='-102724' visible='true' version='1' lat='-25.46024527025' lon='153.1218694029' />
-  <node id='-102725' visible='true' version='1' lat='-25.46041529642' lon='153.1218694029' />
-  <node id='-102726' visible='true' version='1' lat='-25.46092537494' lon='153.13275107799' />
-  <node id='-102727' visible='true' version='1' lat='-25.44630312405' lon='153.13309113033' />
-  <node id='-102728' visible='true' version='1' lat='-25.44630312405' lon='153.1225495076' />
-  <node id='-102729' visible='true' version='1' lat='-25.46076974728' lon='153.136991677' />
-  <node id='-102730' visible='true' version='1' lat='-25.4609367048' lon='153.14968044846' />
-  <node id='-102731' visible='true' version='1' lat='-25.44674531567' lon='153.14984740598' />
-  <node id='-102732' visible='true' version='1' lat='-25.44691227319' lon='153.13682471948' />
-  <node id='-102733' action='modify' visible='true' version='1' lat='-25.3616748649' lon='153.14781556301'>
+  <node id='-103114' visible='true' version='1' lat='-25.50223652215' lon='153.09854091615' />
+  <node id='-103115' visible='true' version='1' lat='-25.50213585189' lon='153.10486746527' />
+  <node id='-103116' visible='true' version='1' lat='-25.49533847069' lon='153.10473484176' />
+  <node id='-103117' visible='true' version='1' lat='-25.49543896728' lon='153.09840802893' />
+  <node id='-103118' visible='true' version='1' lat='-25.50212849993' lon='153.0725696885' />
+  <node id='-103119' visible='true' version='1' lat='-25.50202782955' lon='153.07889623767' />
+  <node id='-103120' visible='true' version='1' lat='-25.49523044223' lon='153.07876361412' />
+  <node id='-103121' visible='true' version='1' lat='-25.49533093894' lon='153.07243680133' />
+  <node id='-103122' visible='true' version='1' lat='-25.50223652215' lon='153.11565559609' />
+  <node id='-103123' visible='true' version='1' lat='-25.50213585189' lon='153.12198214525' />
+  <node id='-103124' visible='true' version='1' lat='-25.49533847069' lon='153.1218495217' />
+  <node id='-103125' visible='true' version='1' lat='-25.49543896728' lon='153.11552270887' />
+  <node id='-103126' visible='true' version='1' lat='-25.50212849993' lon='153.10703841455' />
+  <node id='-103127' visible='true' version='1' lat='-25.50202782955' lon='153.11336496372' />
+  <node id='-103128' visible='true' version='1' lat='-25.49523044223' lon='153.11323234017' />
+  <node id='-103129' visible='true' version='1' lat='-25.49533093894' lon='153.10690552738' />
+  <node id='-103130' visible='true' version='1' lat='-25.49321633212' lon='153.08977320848' />
+  <node id='-103131' visible='true' version='1' lat='-25.49311565427' lon='153.09609975765' />
+  <node id='-103132' visible='true' version='1' lat='-25.48631776276' lon='153.09596713409' />
+  <node id='-103133' visible='true' version='1' lat='-25.48641826686' lon='153.0896403213' />
+  <node id='-103134' visible='true' version='1' lat='-25.49321633212' lon='153.11586411917' />
+  <node id='-103135' visible='true' version='1' lat='-25.49311565427' lon='153.12219066834' />
+  <node id='-103136' visible='true' version='1' lat='-25.48631776276' lon='153.12205804478' />
+  <node id='-103137' visible='true' version='1' lat='-25.48641826686' lon='153.11573123199' />
+  <node id='-103138' visible='true' version='1' lat='-25.49321633212' lon='153.09874943923' />
+  <node id='-103139' visible='true' version='1' lat='-25.49311565427' lon='153.1050759884' />
+  <node id='-103140' visible='true' version='1' lat='-25.48631776276' lon='153.10494336484' />
+  <node id='-103141' visible='true' version='1' lat='-25.48641826686' lon='153.09861655201' />
+  <node id='-103142' visible='true' version='1' lat='-25.50223652215' lon='153.0895646854' />
+  <node id='-103143' visible='true' version='1' lat='-25.50213585189' lon='153.09589123456' />
+  <node id='-103144' visible='true' version='1' lat='-25.49533847069' lon='153.09575861101' />
+  <node id='-103145' visible='true' version='1' lat='-25.49543896728' lon='153.08943179818' />
+  <node id='-103146' visible='true' version='1' lat='-25.50218215153' lon='153.12421109148' />
+  <node id='-103147' visible='true' version='1' lat='-25.50208148121' lon='153.13053764065' />
+  <node id='-103148' visible='true' version='1' lat='-25.49528409692' lon='153.1304050171' />
+  <node id='-103149' visible='true' version='1' lat='-25.49538459357' lon='153.1240782043' />
+  <node id='-103150' visible='true' version='1' lat='-25.49310830176' lon='153.08115602699' />
+  <node id='-103151' visible='true' version='1' lat='-25.49300762384' lon='153.08748257611' />
+  <node id='-103152' visible='true' version='1' lat='-25.48620972621' lon='153.0873499526' />
+  <node id='-103153' visible='true' version='1' lat='-25.48631023044' lon='153.08102313977' />
+  <node id='-103154' visible='true' version='1' lat='-25.49316195739' lon='153.1244196146' />
+  <node id='-103155' visible='true' version='1' lat='-25.49306127954' lon='153.13074616373' />
+  <node id='-103156' visible='true' version='1' lat='-25.48626338494' lon='153.13061354022' />
+  <node id='-103157' visible='true' version='1' lat='-25.4863638891' lon='153.12428672739' />
+  <node id='-103158' visible='true' version='1' lat='-25.50212849993' lon='153.08094750386' />
+  <node id='-103159' visible='true' version='1' lat='-25.50202782955' lon='153.08727405303' />
+  <node id='-103160' visible='true' version='1' lat='-25.49523044223' lon='153.08714142948' />
+  <node id='-103161' visible='true' version='1' lat='-25.49533093894' lon='153.08081461669' />
+  <node id='-103162' visible='true' version='1' lat='-25.49310830176' lon='153.10724693768' />
+  <node id='-103163' visible='true' version='1' lat='-25.49300762384' lon='153.11357348684' />
+  <node id='-103164' visible='true' version='1' lat='-25.48620972621' lon='153.11344086329' />
+  <node id='-103165' visible='true' version='1' lat='-25.48631023044' lon='153.10711405046' />
+  <node id='-103166' visible='true' version='1' lat='-25.49310830176' lon='153.07277821162' />
+  <node id='-103167' visible='true' version='1' lat='-25.49300762384' lon='153.07910476075' />
+  <node id='-103168' visible='true' version='1' lat='-25.48620972621' lon='153.07897213724' />
+  <node id='-103169' visible='true' version='1' lat='-25.48631023044' lon='153.07264532441' />
+  <node id='-103170' visible='true' version='1' lat='-25.46024527025' lon='153.10435670707' />
+  <node id='-103171' visible='true' version='1' lat='-25.46041529642' lon='153.10435670707' />
+  <node id='-103172' visible='true' version='1' lat='-25.46092537494' lon='153.11523838215' />
+  <node id='-103173' visible='true' version='1' lat='-25.44630312405' lon='153.1155784345' />
+  <node id='-103174' visible='true' version='1' lat='-25.44630312405' lon='153.10503681176' />
+  <node id='-103175' visible='true' version='1' lat='-25.46024527025' lon='153.1218694029' />
+  <node id='-103176' visible='true' version='1' lat='-25.46041529642' lon='153.1218694029' />
+  <node id='-103177' visible='true' version='1' lat='-25.46092537494' lon='153.13275107799' />
+  <node id='-103178' visible='true' version='1' lat='-25.44630312405' lon='153.13309113033' />
+  <node id='-103179' visible='true' version='1' lat='-25.44630312405' lon='153.1225495076' />
+  <node id='-103180' visible='true' version='1' lat='-25.46076974728' lon='153.136991677' />
+  <node id='-103181' visible='true' version='1' lat='-25.4609367048' lon='153.14968044846' />
+  <node id='-103182' visible='true' version='1' lat='-25.44674531567' lon='153.14984740598' />
+  <node id='-103183' visible='true' version='1' lat='-25.44691227319' lon='153.13682471948' />
+  <node id='-103184' action='modify' visible='true' version='1' lat='-25.3616748649' lon='153.14781556301'>
     <tag k='addr:country' v='EH' />
     <tag k='amenity' v='school' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='2' />
     <tag k='material' v='mud-based_construction' />
@@ -609,12 +588,11 @@
     <tag k='use' v='education' />
     <tag k='uuid' v='{964ac67b-8ae1-4320-8a68-f804510d076b}' />
   </node>
-  <node id='-102734' action='modify' visible='true' version='1' lat='-25.34955121044' lon='153.15319847121'>
+  <node id='-103185' action='modify' visible='true' version='1' lat='-25.34955121044' lon='153.15319847121'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:cellular_phone' v='yes' />
     <tag k='condition' v='construction' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='3' />
     <tag k='material' v='steel' />
@@ -629,12 +607,11 @@
     <tag k='use' v='healthcare' />
     <tag k='uuid' v='{2e21028a-196a-4abc-9235-e92296942756}' />
   </node>
-  <node id='-102735' action='modify' visible='true' version='1' lat='-25.36707152078' lon='153.14805334598'>
+  <node id='-103186' action='modify' visible='true' version='1' lat='-25.36707152078' lon='153.14805334598'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='1' />
     <tag k='material' v='stone' />
@@ -647,7 +624,7 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{cf031628-1b2d-47e5-a715-d567ee5c4963}' />
   </node>
-  <node id='-102736' action='modify' visible='true' version='1' lat='-25.35532188373' lon='153.14771287796'>
+  <node id='-103187' action='modify' visible='true' version='1' lat='-25.35532188373' lon='153.14771287796'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='Yet another Street' />
     <tag k='amenity' v='place_of_worship' />
@@ -655,7 +632,6 @@
     <tag k='building' v='mosque' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='material' v='prestressed_concrete' />
     <tag k='material:vertical:2' v='stone' />
@@ -670,13 +646,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{f9f1e2e7-7699-4dd7-8271-586970f42122}' />
   </node>
-  <node id='-102737' action='modify' visible='true' version='1' lat='-25.34969456587' lon='153.14800905258'>
+  <node id='-103188' action='modify' visible='true' version='1' lat='-25.34969456587' lon='153.14800905258'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='A Street' />
     <tag k='by_product' v='ash' />
     <tag k='by_product:2' v='cinders' />
     <tag k='condition' v='construction' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='2' />
     <tag k='man_made' v='works' />
@@ -695,11 +670,10 @@
     <tag k='use' v='manufacturing' />
     <tag k='uuid' v='{c484012c-333d-4ae9-b995-8f2190be07fd}' />
   </node>
-  <node id='-102738' action='modify' visible='true' version='1' lat='-25.3796437928' lon='153.15261867161'>
+  <node id='-103189' action='modify' visible='true' version='1' lat='-25.3796437928' lon='153.15261867161'>
     <tag k='addr:country' v='AU' />
     <tag k='crossing' v='uncontrolled' />
     <tag k='crossing_point' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Another crossing' />
     <tag k='railway' v='crossing' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -710,10 +684,9 @@
     <tag k='transport:type' v='railway' />
     <tag k='uuid' v='{1eaea615-9a59-46d7-b0ae-1413898252aa}' />
   </node>
-  <node id='-102739' action='modify' visible='true' version='1' lat='-25.37685170486' lon='153.15259254359'>
+  <node id='-103190' action='modify' visible='true' version='1' lat='-25.37685170486' lon='153.15259254359'>
     <tag k='addr:country' v='AU' />
     <tag k='crossing_point' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='crossing' />
     <tag k='intersection_control' v='stop_sign' />
     <tag k='name' v='A crossing' />
@@ -727,9 +700,8 @@
     <tag k='transport:type' v='road' />
     <tag k='uuid' v='{85d5644c-3347-403c-8479-31701bc34156}' />
   </node>
-  <node id='-102740' action='modify' visible='true' version='1' lat='-25.38518647587' lon='153.15266630263'>
+  <node id='-103191' action='modify' visible='true' version='1' lat='-25.38518647587' lon='153.15266630263'>
     <tag k='crossing_point' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:resource_owner' v='USA' />
     <tag k='source:name' v='commercial_data' />
@@ -737,10 +709,9 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{87b5b534-f724-47af-bc95-dc515692385c}' />
   </node>
-  <node id='-102741' action='modify' visible='true' version='1' lat='-25.38253115059' lon='153.15259254359'>
+  <node id='-103192' action='modify' visible='true' version='1' lat='-25.38253115059' lon='153.15259254359'>
     <tag k='addr:country' v='AU' />
     <tag k='crossing_point' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='intersection_control' v='stop_sign' />
     <tag k='name' v='Level Crossing' />
     <tag k='note' v='It is a crossing' />
@@ -755,13 +726,12 @@
     <tag k='transport:type:2' v='road' />
     <tag k='uuid' v='{e4600f2b-ae94-4934-8d6e-e4a55fe12f28}' />
   </node>
-  <node id='-102742' action='modify' visible='true' version='1' lat='-25.34981773615' lon='153.16029730979'>
+  <node id='-103193' action='modify' visible='true' version='1' lat='-25.34981773615' lon='153.16029730979'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='On the left of the airfield' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
     <tag k='control_tower' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='man_made' v='tower' />
     <tag k='material' v='brick' />
@@ -781,12 +751,11 @@
     <tag k='use' v='air_traffic_control' />
     <tag k='uuid' v='{65322290-34e9-4b36-90d0-0cf930ec8142}' />
   </node>
-  <node id='-102743' action='modify' visible='true' version='1' lat='-25.35549906914' lon='153.16008913709'>
+  <node id='-103194' action='modify' visible='true' version='1' lat='-25.35549906914' lon='153.16008913709'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='construction' />
     <tag k='control_tower' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='iron' />
     <tag k='material:vertical:2' v='prestressed_concrete' />
     <tag k='name' v='Emergency Tower' />
@@ -802,13 +771,12 @@
     <tag k='use' v='emergency_operations' />
     <tag k='uuid' v='{12d8e91e-46d3-4ef4-b66d-fea61c12aa20}' />
   </node>
-  <node id='-102744' action='modify' visible='true' version='1' lat='-25.36164632091' lon='153.16024304132'>
+  <node id='-103195' action='modify' visible='true' version='1' lat='-25.36164632091' lon='153.16024304132'>
     <tag k='addr:country' v='EH' />
     <tag k='addr:full' v='The other side of the airfield' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
     <tag k='control_tower' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='name' v='Transport Tower' />
     <tag k='navigation:landmark' v='no' />
@@ -824,54 +792,53 @@
     <tag k='use' v='air_transport' />
     <tag k='uuid' v='{a941263e-ca69-413d-9148-b2550cd5256d}' />
   </node>
-  <node id='-102745' visible='true' version='1' lat='-25.4057884213' lon='153.12949570264' />
-  <node id='-102746' visible='true' version='1' lat='-25.39425276223' lon='153.12949570264' />
-  <node id='-102747' visible='true' version='1' lat='-25.4051766818' lon='153.13369051645' />
-  <node id='-102748' visible='true' version='1' lat='-25.39364102274' lon='153.13369051645' />
-  <node id='-102749' visible='true' version='1' lat='-25.40535146451' lon='153.13797272221' />
-  <node id='-102750' visible='true' version='1' lat='-25.39381580545' lon='153.13797272221' />
-  <node id='-102751' visible='true' version='1' lat='-25.44031779739' lon='153.18826732214' />
-  <node id='-102752' visible='true' version='1' lat='-25.42834855792' lon='153.18817993018' />
-  <node id='-102753' visible='true' version='1' lat='-25.46024527025' lon='153.08718406358' />
-  <node id='-102754' visible='true' version='1' lat='-25.46041529642' lon='153.08718406358' />
-  <node id='-102755' visible='true' version='1' lat='-25.46092537494' lon='153.09806573866' />
-  <node id='-102756' visible='true' version='1' lat='-25.44630312405' lon='153.09840579101' />
-  <node id='-102757' visible='true' version='1' lat='-25.44630312405' lon='153.08786416827' />
-  <node id='-102758' visible='true' version='1' lat='-25.46007524407' lon='153.07256181269' />
-  <node id='-102759' visible='true' version='1' lat='-25.46024527025' lon='153.07256181269' />
-  <node id='-102760' visible='true' version='1' lat='-25.46075534877' lon='153.08344348777' />
-  <node id='-102761' visible='true' version='1' lat='-25.44613309787' lon='153.08378354012' />
-  <node id='-102762' visible='true' version='1' lat='-25.44613309787' lon='153.07324191738' />
-  <node id='-102763' visible='true' version='1' lat='-25.47809801843' lon='153.12067921969' />
-  <node id='-102764' visible='true' version='1' lat='-25.4782680446' lon='153.12067921969' />
-  <node id='-102765' visible='true' version='1' lat='-25.47877812312' lon='153.13156089477' />
-  <node id='-102766' visible='true' version='1' lat='-25.46415587223' lon='153.13190094712' />
-  <node id='-102767' visible='true' version='1' lat='-25.46415587223' lon='153.12135932438' />
-  <node id='-102768' visible='true' version='1' lat='-25.4782680446' lon='153.10299649768' />
-  <node id='-102769' visible='true' version='1' lat='-25.47843807078' lon='153.10299649768' />
-  <node id='-102770' visible='true' version='1' lat='-25.47894814929' lon='153.11387817277' />
-  <node id='-102771' visible='true' version='1' lat='-25.4643258984' lon='153.11421822511' />
-  <node id='-102772' visible='true' version='1' lat='-25.4643258984' lon='153.10367660238' />
-  <node id='-102773' visible='true' version='1' lat='-25.47690783522' lon='153.07171168182' />
-  <node id='-102774' visible='true' version='1' lat='-25.47707786139' lon='153.07171168182' />
-  <node id='-102775' visible='true' version='1' lat='-25.47758793991' lon='153.0825933569' />
-  <node id='-102776' visible='true' version='1' lat='-25.46296568902' lon='153.08293340925' />
-  <node id='-102777' visible='true' version='1' lat='-25.46296568902' lon='153.07239178651' />
-  <node id='-102778' visible='true' version='1' lat='-25.47656778287' lon='153.08667398506' />
-  <node id='-102779' visible='true' version='1' lat='-25.47673780904' lon='153.08667398506' />
-  <node id='-102780' visible='true' version='1' lat='-25.47724788756' lon='153.09755566014' />
-  <node id='-102781' visible='true' version='1' lat='-25.46262563667' lon='153.09789571249' />
-  <node id='-102782' visible='true' version='1' lat='-25.46262563667' lon='153.08735408975' />
-  <node id='-102783' visible='true' version='1' lat='-25.47945822781' lon='153.13615160145' />
-  <node id='-102784' visible='true' version='1' lat='-25.47962825399' lon='153.13615160145' />
-  <node id='-102785' visible='true' version='1' lat='-25.48013833251' lon='153.14703327653' />
-  <node id='-102786' visible='true' version='1' lat='-25.46551608161' lon='153.14737332888' />
-  <node id='-102787' visible='true' version='1' lat='-25.46551608161' lon='153.13683170614' />
-  <node id='-102788' action='modify' visible='true' version='1' lat='-25.34982698257' lon='153.14184473589'>
+  <node id='-103196' visible='true' version='1' lat='-25.4057884213' lon='153.12949570264' />
+  <node id='-103197' visible='true' version='1' lat='-25.39425276223' lon='153.12949570264' />
+  <node id='-103198' visible='true' version='1' lat='-25.4051766818' lon='153.13369051645' />
+  <node id='-103199' visible='true' version='1' lat='-25.39364102274' lon='153.13369051645' />
+  <node id='-103200' visible='true' version='1' lat='-25.40535146451' lon='153.13797272221' />
+  <node id='-103201' visible='true' version='1' lat='-25.39381580545' lon='153.13797272221' />
+  <node id='-103202' visible='true' version='1' lat='-25.44031779739' lon='153.18826732214' />
+  <node id='-103203' visible='true' version='1' lat='-25.42834855792' lon='153.18817993018' />
+  <node id='-103204' visible='true' version='1' lat='-25.46024527025' lon='153.08718406358' />
+  <node id='-103205' visible='true' version='1' lat='-25.46041529642' lon='153.08718406358' />
+  <node id='-103206' visible='true' version='1' lat='-25.46092537494' lon='153.09806573866' />
+  <node id='-103207' visible='true' version='1' lat='-25.44630312405' lon='153.09840579101' />
+  <node id='-103208' visible='true' version='1' lat='-25.44630312405' lon='153.08786416827' />
+  <node id='-103209' visible='true' version='1' lat='-25.46007524407' lon='153.07256181269' />
+  <node id='-103210' visible='true' version='1' lat='-25.46024527025' lon='153.07256181269' />
+  <node id='-103211' visible='true' version='1' lat='-25.46075534877' lon='153.08344348777' />
+  <node id='-103212' visible='true' version='1' lat='-25.44613309787' lon='153.08378354012' />
+  <node id='-103213' visible='true' version='1' lat='-25.44613309787' lon='153.07324191738' />
+  <node id='-103214' visible='true' version='1' lat='-25.47809801843' lon='153.12067921969' />
+  <node id='-103215' visible='true' version='1' lat='-25.4782680446' lon='153.12067921969' />
+  <node id='-103216' visible='true' version='1' lat='-25.47877812312' lon='153.13156089477' />
+  <node id='-103217' visible='true' version='1' lat='-25.46415587223' lon='153.13190094712' />
+  <node id='-103218' visible='true' version='1' lat='-25.46415587223' lon='153.12135932438' />
+  <node id='-103219' visible='true' version='1' lat='-25.4782680446' lon='153.10299649768' />
+  <node id='-103220' visible='true' version='1' lat='-25.47843807078' lon='153.10299649768' />
+  <node id='-103221' visible='true' version='1' lat='-25.47894814929' lon='153.11387817277' />
+  <node id='-103222' visible='true' version='1' lat='-25.4643258984' lon='153.11421822511' />
+  <node id='-103223' visible='true' version='1' lat='-25.4643258984' lon='153.10367660238' />
+  <node id='-103224' visible='true' version='1' lat='-25.47690783522' lon='153.07171168182' />
+  <node id='-103225' visible='true' version='1' lat='-25.47707786139' lon='153.07171168182' />
+  <node id='-103226' visible='true' version='1' lat='-25.47758793991' lon='153.0825933569' />
+  <node id='-103227' visible='true' version='1' lat='-25.46296568902' lon='153.08293340925' />
+  <node id='-103228' visible='true' version='1' lat='-25.46296568902' lon='153.07239178651' />
+  <node id='-103229' visible='true' version='1' lat='-25.47656778287' lon='153.08667398506' />
+  <node id='-103230' visible='true' version='1' lat='-25.47673780904' lon='153.08667398506' />
+  <node id='-103231' visible='true' version='1' lat='-25.47724788756' lon='153.09755566014' />
+  <node id='-103232' visible='true' version='1' lat='-25.46262563667' lon='153.09789571249' />
+  <node id='-103233' visible='true' version='1' lat='-25.46262563667' lon='153.08735408975' />
+  <node id='-103234' visible='true' version='1' lat='-25.47945822781' lon='153.13615160145' />
+  <node id='-103235' visible='true' version='1' lat='-25.47962825399' lon='153.13615160145' />
+  <node id='-103236' visible='true' version='1' lat='-25.48013833251' lon='153.14703327653' />
+  <node id='-103237' visible='true' version='1' lat='-25.46551608161' lon='153.14737332888' />
+  <node id='-103238' visible='true' version='1' lat='-25.46551608161' lon='153.13683170614' />
+  <node id='-103239' action='modify' visible='true' version='1' lat='-25.34982698257' lon='153.14184473589'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='defence_imagery_and_geospatial_organisation_(australia)' />
     <tag k='condition' v='construction' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='name' v='Religious BUA' />
     <tag k='operator' v='private' />
@@ -884,12 +851,11 @@
     <tag k='use' v='religious_activities' />
     <tag k='uuid' v='{6921f190-e551-465e-868c-2aaf4e0534ef}' />
   </node>
-  <node id='-102789' action='modify' visible='true' version='1' lat='-25.35550072137' lon='153.14178520056'>
+  <node id='-103240' action='modify' visible='true' version='1' lat='-25.35550072137' lon='153.14178520056'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._army' />
     <tag k='building:density' v='sparse' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='residential' />
     <tag k='name' v='Residential Area' />
     <tag k='note' v='Lots of houses' />
@@ -902,12 +868,11 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{af7324fd-6e0b-4347-8072-5978df62dddb}' />
   </node>
-  <node id='-102790' action='modify' visible='true' version='1' lat='-25.36197014216' lon='153.14194076391'>
+  <node id='-103241' action='modify' visible='true' version='1' lat='-25.36197014216' lon='153.14194076391'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='dense' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='name' v='Industrial Estate' />
     <tag k='operator' v='public' />
@@ -920,12 +885,11 @@
     <tag k='use' v='manufacturing' />
     <tag k='uuid' v='{7b0243f4-29f8-40af-85f6-85e3d923f37e}' />
   </node>
-  <node id='-102791' action='modify' visible='true' version='1' lat='-25.36737298496' lon='153.14182343993'>
+  <node id='-103242' action='modify' visible='true' version='1' lat='-25.36737298496' lon='153.14182343993'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='moderate' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='commercial' />
     <tag k='note' v='No More Information' />
     <tag k='operator' v='military' />
@@ -937,13 +901,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{ba0c8a94-7f45-4628-b15d-4dfb2ad3d1ca}' />
   </node>
-  <node id='-102792' action='modify' visible='true' version='1' lat='-25.35562763137' lon='153.15322766631'>
+  <node id='-103243' action='modify' visible='true' version='1' lat='-25.35562763137' lon='153.15322766631'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:superstructure' v='yes' />
     <tag k='building:superstructure:type' v='minaret' />
     <tag k='ele:max' v='198' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='13' />
     <tag k='length' v='3' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -955,13 +918,12 @@
     <tag k='uuid' v='{91b5cd10-c9a9-4573-983f-cd7eb41afbf5}' />
     <tag k='width' v='3' />
   </node>
-  <node id='-102793' action='modify' visible='true' version='1' lat='-25.36172213137' lon='153.153052846'>
+  <node id='-103244' action='modify' visible='true' version='1' lat='-25.36172213137' lon='153.153052846'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:superstructure' v='yes' />
     <tag k='building:superstructure:type' v='minaret' />
     <tag k='ele:max' v='194' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='8' />
     <tag k='length' v='2' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -973,13 +935,12 @@
     <tag k='uuid' v='{4c2a2cf3-9dda-4a11-8f85-fde7797b92e6}' />
     <tag k='width' v='2' />
   </node>
-  <node id='-102794' action='modify' visible='true' version='1' lat='-25.36708814444' lon='153.15298773212'>
+  <node id='-103245' action='modify' visible='true' version='1' lat='-25.36708814444' lon='153.15298773212'>
     <tag k='addr:country' v='EH' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:superstructure' v='yes' />
     <tag k='building:superstructure:type' v='minaret' />
     <tag k='ele:max' v='197' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='9' />
     <tag k='length' v='2' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -991,46 +952,45 @@
     <tag k='uuid' v='{04876e5f-f7c8-4836-8910-a7c35212a064}' />
     <tag k='width' v='2' />
   </node>
-  <node id='-102795' visible='true' version='1' lat='-25.42410563238' lon='153.10035104913' />
-  <node id='-102796' visible='true' version='1' lat='-25.4242725899' lon='153.11303982059' />
-  <node id='-102797' visible='true' version='1' lat='-25.41008120076' lon='153.11320677811' />
-  <node id='-102798' visible='true' version='1' lat='-25.41024815828' lon='153.10018409161' />
-  <node id='-102799' visible='true' version='1' lat='-25.44161832821' lon='153.13741675488' />
-  <node id='-102800' visible='true' version='1' lat='-25.44178528573' lon='153.15010552634' />
-  <node id='-102801' visible='true' version='1' lat='-25.4275938966' lon='153.15027248386' />
-  <node id='-102802' visible='true' version='1' lat='-25.42776085412' lon='153.13724979736' />
-  <node id='-102803' visible='true' version='1' lat='-25.42427565855' lon='153.11650353558' />
-  <node id='-102804' visible='true' version='1' lat='-25.42444261607' lon='153.12919230704' />
-  <node id='-102805' visible='true' version='1' lat='-25.41025122694' lon='153.12935926456' />
-  <node id='-102806' visible='true' version='1' lat='-25.41041818445' lon='153.11633657806' />
-  <node id='-102807' visible='true' version='1' lat='-25.44093822352' lon='153.10528180815' />
-  <node id='-102808' visible='true' version='1' lat='-25.44110518104' lon='153.11797057961' />
-  <node id='-102809' visible='true' version='1' lat='-25.42691379191' lon='153.11813753713' />
-  <node id='-102810' visible='true' version='1' lat='-25.42708074942' lon='153.10511485063' />
-  <node id='-102811' visible='true' version='1' lat='-25.44070602945' lon='153.08886045307' />
-  <node id='-102812' visible='true' version='1' lat='-25.44087605563' lon='153.08886045307' />
-  <node id='-102813' visible='true' version='1' lat='-25.44138613415' lon='153.09974212815' />
-  <node id='-102814' visible='true' version='1' lat='-25.42676388325' lon='153.1000821805' />
-  <node id='-102815' visible='true' version='1' lat='-25.42676388325' lon='153.08954055776' />
-  <node id='-102816' visible='true' version='1' lat='-25.44059817117' lon='153.12109424225' />
-  <node id='-102817' visible='true' version='1' lat='-25.44076512869' lon='153.13378301371' />
-  <node id='-102818' visible='true' version='1' lat='-25.42657373956' lon='153.13394997123' />
-  <node id='-102819' visible='true' version='1' lat='-25.42674069708' lon='153.12092728473' />
-  <node id='-102820' visible='true' version='1' lat='-25.42427565855' lon='153.13588651932' />
-  <node id='-102821' visible='true' version='1' lat='-25.42444261607' lon='153.14857529078' />
-  <node id='-102822' visible='true' version='1' lat='-25.41025122694' lon='153.1487422483' />
-  <node id='-102823' visible='true' version='1' lat='-25.41041818445' lon='153.1357195618' />
-  <node id='-102824' visible='true' version='1' lat='-25.43991806648' lon='153.07127657352' />
-  <node id='-102825' visible='true' version='1' lat='-25.440085024' lon='153.08396534498' />
-  <node id='-102826' visible='true' version='1' lat='-25.42589363487' lon='153.0841323025' />
-  <node id='-102827' visible='true' version='1' lat='-25.42606059239' lon='153.071109616' />
-  <node id='-102828' action='modify' visible='true' version='1' lat='-25.35519106098' lon='153.0798897138'>
+  <node id='-103246' visible='true' version='1' lat='-25.42410563238' lon='153.10035104913' />
+  <node id='-103247' visible='true' version='1' lat='-25.4242725899' lon='153.11303982059' />
+  <node id='-103248' visible='true' version='1' lat='-25.41008120076' lon='153.11320677811' />
+  <node id='-103249' visible='true' version='1' lat='-25.41024815828' lon='153.10018409161' />
+  <node id='-103250' visible='true' version='1' lat='-25.44161832821' lon='153.13741675488' />
+  <node id='-103251' visible='true' version='1' lat='-25.44178528573' lon='153.15010552634' />
+  <node id='-103252' visible='true' version='1' lat='-25.4275938966' lon='153.15027248386' />
+  <node id='-103253' visible='true' version='1' lat='-25.42776085412' lon='153.13724979736' />
+  <node id='-103254' visible='true' version='1' lat='-25.42427565855' lon='153.11650353558' />
+  <node id='-103255' visible='true' version='1' lat='-25.42444261607' lon='153.12919230704' />
+  <node id='-103256' visible='true' version='1' lat='-25.41025122694' lon='153.12935926456' />
+  <node id='-103257' visible='true' version='1' lat='-25.41041818445' lon='153.11633657806' />
+  <node id='-103258' visible='true' version='1' lat='-25.44093822352' lon='153.10528180815' />
+  <node id='-103259' visible='true' version='1' lat='-25.44110518104' lon='153.11797057961' />
+  <node id='-103260' visible='true' version='1' lat='-25.42691379191' lon='153.11813753713' />
+  <node id='-103261' visible='true' version='1' lat='-25.42708074942' lon='153.10511485063' />
+  <node id='-103262' visible='true' version='1' lat='-25.44070602945' lon='153.08886045307' />
+  <node id='-103263' visible='true' version='1' lat='-25.44087605563' lon='153.08886045307' />
+  <node id='-103264' visible='true' version='1' lat='-25.44138613415' lon='153.09974212815' />
+  <node id='-103265' visible='true' version='1' lat='-25.42676388325' lon='153.1000821805' />
+  <node id='-103266' visible='true' version='1' lat='-25.42676388325' lon='153.08954055776' />
+  <node id='-103267' visible='true' version='1' lat='-25.44059817117' lon='153.12109424225' />
+  <node id='-103268' visible='true' version='1' lat='-25.44076512869' lon='153.13378301371' />
+  <node id='-103269' visible='true' version='1' lat='-25.42657373956' lon='153.13394997123' />
+  <node id='-103270' visible='true' version='1' lat='-25.42674069708' lon='153.12092728473' />
+  <node id='-103271' visible='true' version='1' lat='-25.42427565855' lon='153.13588651932' />
+  <node id='-103272' visible='true' version='1' lat='-25.42444261607' lon='153.14857529078' />
+  <node id='-103273' visible='true' version='1' lat='-25.41025122694' lon='153.1487422483' />
+  <node id='-103274' visible='true' version='1' lat='-25.41041818445' lon='153.1357195618' />
+  <node id='-103275' visible='true' version='1' lat='-25.43991806648' lon='153.07127657352' />
+  <node id='-103276' visible='true' version='1' lat='-25.440085024' lon='153.08396534498' />
+  <node id='-103277' visible='true' version='1' lat='-25.42589363487' lon='153.0841323025' />
+  <node id='-103278' visible='true' version='1' lat='-25.42606059239' lon='153.071109616' />
+  <node id='-103279' action='modify' visible='true' version='1' lat='-25.35519106098' lon='153.0798897138'>
     <tag k='addr:country' v='BN' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='construction' />
     <tag k='building:multi_unit' v='yes' />
     <tag k='construction' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='adobe_brick' />
     <tag k='navigation:landmark' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -1042,7 +1002,7 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{20599e44-9357-4b09-bc43-f3b5f7c47ac9}' />
   </node>
-  <node id='-102829' action='modify' visible='true' version='1' lat='-25.348917496' lon='153.07235232128'>
+  <node id='-103280' action='modify' visible='true' version='1' lat='-25.348917496' lon='153.07235232128'>
     <tag k='addr:country' v='BN' />
     <tag k='amenity' v='embassy' />
     <tag k='attached' v='no' />
@@ -1050,7 +1010,6 @@
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='yes' />
     <tag k='diplomatic' v='embassy' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Embassy' />
     <tag k='operator' v='private' />
     <tag k='roof:shape' v='with_cupola' />
@@ -1062,14 +1021,13 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{fb58f307-c7ed-4023-90d2-535b440bb474}' />
   </node>
-  <node id='-102830' action='modify' visible='true' version='1' lat='-25.36132049727' lon='153.09513673046'>
+  <node id='-103281' action='modify' visible='true' version='1' lat='-25.36132049727' lon='153.09513673046'>
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='metal' />
     <tag k='name' v='Hostel' />
     <tag k='operator' v='military' />
@@ -1083,14 +1041,13 @@
     <tag k='tourism' v='hostel' />
     <tag k='uuid' v='{01e8c028-8afb-4c30-88e4-fed176b8fd9a}' />
   </node>
-  <node id='-102831' action='modify' visible='true' version='1' lat='-25.35540418205' lon='153.10887474356'>
+  <node id='-103282' action='modify' visible='true' version='1' lat='-25.35540418205' lon='153.10887474356'>
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='no' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:levels' v='2' />
     <tag k='craft' v='sawmilling' />
     <tag k='demolished:building' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='25' />
     <tag k='name' v='Sawmill' />
     <tag k='operator' v='joint_military_civilian' />
@@ -1103,7 +1060,7 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{5dc03ed7-7f8b-4006-a53f-40f4267664c8}' />
   </node>
-  <node id='-102832' action='modify' visible='true' version='1' lat='-25.36714643421' lon='153.07221210361'>
+  <node id='-103283' action='modify' visible='true' version='1' lat='-25.36714643421' lon='153.07221210361'>
     <tag k='addr:country' v='BN' />
     <tag k='addr:full' v='On Main Street' />
     <tag k='amenity' v='bank' />
@@ -1111,7 +1068,6 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='21' />
     <tag k='material' v='wood' />
     <tag k='name' v='Bank' />
@@ -1126,7 +1082,7 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{af4e3199-44c2-477d-bb18-758584294df8}' />
   </node>
-  <node id='-102833' action='modify' visible='true' version='1' lat='-25.35531776964' lon='153.12060118801'>
+  <node id='-103284' action='modify' visible='true' version='1' lat='-25.35531776964' lon='153.12060118801'>
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
@@ -1134,7 +1090,6 @@
     <tag k='building:levels' v='1' />
     <tag k='communication:cellular_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Paper Mill' />
     <tag k='operator' v='public' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -1146,14 +1101,13 @@
     <tag k='use' v='paper_mill' />
     <tag k='uuid' v='{5f4211f0-ea5a-44df-8cd9-675bfdf37d00}' />
   </node>
-  <node id='-102834' action='modify' visible='true' version='1' lat='-25.3618249392' lon='153.11469855512'>
+  <node id='-103285' action='modify' visible='true' version='1' lat='-25.3618249392' lon='153.11469855512'>
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
     <tag k='building:multi_unit' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='name' v='Palace' />
     <tag k='operator' v='private' />
@@ -1167,13 +1121,12 @@
     <tag k='use' v='palace' />
     <tag k='uuid' v='{ac05fed0-e5d2-40ea-9916-b979e1e2ff49}' />
   </node>
-  <node id='-102835' action='modify' visible='true' version='1' lat='-25.34934325039' lon='153.09511276725'>
+  <node id='-103286' action='modify' visible='true' version='1' lat='-25.34934325039' lon='153.09511276725'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='industrial' />
     <tag k='building:levels' v='4' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='wood' />
     <tag k='name' v='Whiskey Distillery' />
     <tag k='navigation:landmark' v='no' />
@@ -1188,14 +1141,13 @@
     <tag k='use' v='petroleum_and_coal_product_manufacturing' />
     <tag k='uuid' v='{8b735764-25eb-4d52-b732-6c69ed0cd206}' />
   </node>
-  <node id='-102836' action='modify' visible='true' version='1' lat='-25.36163938835' lon='153.10893237078'>
+  <node id='-103287' action='modify' visible='true' version='1' lat='-25.36163938835' lon='153.10893237078'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='fire_station' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='5' />
     <tag k='communication:mobile_phone' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='adobe_brick' />
     <tag k='name' v='Fire Station' />
     <tag k='operator' v='private' />
@@ -1209,13 +1161,12 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{19ab50f6-8ce7-4edd-892b-a59887739903}' />
   </node>
-  <node id='-102837' action='modify' visible='true' version='1' lat='-25.36118446432' lon='153.07997600678'>
+  <node id='-103288' action='modify' visible='true' version='1' lat='-25.36118446432' lon='153.07997600678'>
     <tag k='addr:country' v='BN' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='6' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Agriculture' />
     <tag k='operator' v='civilian' />
     <tag k='product' v='fruit' />
@@ -1228,14 +1179,13 @@
     <tag k='use' v='agriculture' />
     <tag k='uuid' v='{c9c1f4eb-32d4-438d-8c4b-1efabe1f0548}' />
   </node>
-  <node id='-102838' action='modify' visible='true' version='1' lat='-25.34946372137' lon='153.10256943012'>
+  <node id='-103289' action='modify' visible='true' version='1' lat='-25.34946372137' lon='153.10256943012'>
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='no' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='by_product' v='cinders' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='wood' />
     <tag k='name' v='Power Plant' />
     <tag k='operator' v='civilian' />
@@ -1251,11 +1201,10 @@
     <tag k='use' v='power_generation' />
     <tag k='uuid' v='{09528206-90f4-4cbe-a616-1e5fb200d5ee}' />
   </node>
-  <node id='-102839' action='modify' visible='true' version='1' lat='-25.36165678369' lon='153.12083659652'>
+  <node id='-103290' action='modify' visible='true' version='1' lat='-25.36165678369' lon='153.12083659652'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='operator' v='civilian' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -1267,14 +1216,13 @@
     <tag k='use' v='water_transport' />
     <tag k='uuid' v='{4ac17181-16e9-4be0-bd7b-8cc68bbeea59}' />
   </node>
-  <node id='-102840' action='modify' visible='true' version='1' lat='-25.35503831861' lon='153.12765266284'>
+  <node id='-103291' action='modify' visible='true' version='1' lat='-25.35503831861' lon='153.12765266284'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='cathedral' />
     <tag k='denomination' v='roman_catholic' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='wood' />
     <tag k='name' v='Place of Worship' />
     <tag k='operator' v='civilian' />
@@ -1289,13 +1237,12 @@
     <tag k='use:3' v='healthcare' />
     <tag k='uuid' v='{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}' />
   </node>
-  <node id='-102841' action='modify' visible='true' version='1' lat='-25.34948461549' lon='153.08784507899'>
+  <node id='-103292' action='modify' visible='true' version='1' lat='-25.34948461549' lon='153.08784507899'>
     <tag k='addr:country' v='BN' />
     <tag k='attached' v='no' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='demolished:building' v='university' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Higher Education' />
     <tag k='navigation:landmark' v='no' />
     <tag k='operator' v='joint_military_civilian' />
@@ -1308,13 +1255,12 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{440884fb-8904-4333-9319-57451ac9fa38}' />
   </node>
-  <node id='-102842' action='modify' visible='true' version='1' lat='-25.35518075714' lon='153.09512264922'>
+  <node id='-103293' action='modify' visible='true' version='1' lat='-25.35518075714' lon='153.09512264922'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='pharmacy' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='metal' />
     <tag k='operator' v='joint_military_civilian' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -1325,7 +1271,7 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{1435a737-6a0c-431a-a964-be06ddb6122d}' />
   </node>
-  <node id='-102843' action='modify' visible='true' version='1' lat='-25.35503029535' lon='153.07232000378'>
+  <node id='-103294' action='modify' visible='true' version='1' lat='-25.35503029535' lon='153.07232000378'>
     <tag k='addr:country' v='BN' />
     <tag k='attached' v='no' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
@@ -1333,7 +1279,6 @@
     <tag k='building:levels' v='1' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Residential House' />
     <tag k='operator' v='joint_military_civilian' />
     <tag k='roof:shape' v='domed' />
@@ -1346,7 +1291,7 @@
     <tag k='use' v='residential' />
     <tag k='uuid' v='{31a7d704-3216-44d3-a71c-0fb3ccf1e44f}' />
   </node>
-  <node id='-102844' action='modify' visible='true' version='1' lat='-25.36726817834' lon='153.08745596303'>
+  <node id='-103295' action='modify' visible='true' version='1' lat='-25.36726817834' lon='153.08745596303'>
     <tag k='addr:country' v='BN' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
@@ -1354,7 +1299,6 @@
     <tag k='building:levels' v='1' />
     <tag k='building:multi_unit' v='yes' />
     <tag k='crop' v='dairy' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='75' />
     <tag k='material' v='plant_material' />
     <tag k='name' v='Dairy' />
@@ -1370,13 +1314,12 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{815aac0f-05fd-41b2-9881-65311103dbee}' />
   </node>
-  <node id='-102845' action='modify' visible='true' version='1' lat='-25.36758997621' lon='153.11502524761'>
+  <node id='-103296' action='modify' visible='true' version='1' lat='-25.36758997621' lon='153.11502524761'>
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='name' v='Hotel' />
     <tag k='operator' v='joint_military_civilian' />
@@ -1389,12 +1332,11 @@
     <tag k='tourism' v='hotel' />
     <tag k='uuid' v='{cdde649e-ab52-416b-aa26-6188d3641214}' />
   </node>
-  <node id='-102846' action='modify' visible='true' version='1' lat='-25.3551316777' lon='153.11465940802'>
+  <node id='-103297' action='modify' visible='true' version='1' lat='-25.3551316777' lon='153.11465940802'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='construction' />
     <tag k='construction' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='name' v='Government Office' />
     <tag k='office' v='government' />
@@ -1408,11 +1350,10 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{9a518e65-127b-4f23-8d5f-38990fd6d667}' />
   </node>
-  <node id='-102847' action='modify' visible='true' version='1' lat='-25.34956258925' lon='153.1345447'>
+  <node id='-103298' action='modify' visible='true' version='1' lat='-25.34956258925' lon='153.1345447'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='material' v='adobe_brick' />
     <tag k='name' v='Wind tunnel' />
@@ -1426,13 +1367,12 @@
     <tag k='use' v='wind_tunnel' />
     <tag k='uuid' v='{4c26fa83-efc1-41a7-9568-768a390e6e54}' />
   </node>
-  <node id='-102848' action='modify' visible='true' version='1' lat='-25.34914028115' lon='153.07999697416'>
+  <node id='-103299' action='modify' visible='true' version='1' lat='-25.34914028115' lon='153.07999697416'>
     <tag k='addr:country' v='BN' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='6' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='material' v='Smoke' />
     <tag k='name' v='Many Funky Things' />
@@ -1450,7 +1390,7 @@
     <tag k='use:2' v='Elf Store' />
     <tag k='uuid' v='{34788650-9dc2-45b0-95ee-42f28c23f8f4}' />
   </node>
-  <node id='-102849' action='modify' visible='true' version='1' lat='-25.36149146569' lon='153.10245252709'>
+  <node id='-103300' action='modify' visible='true' version='1' lat='-25.36149146569' lon='153.10245252709'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='restaurant' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
@@ -1458,7 +1398,6 @@
     <tag k='building:levels' v='6' />
     <tag k='communication:television' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Restaurant' />
     <tag k='operator' v='public' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -1469,14 +1408,13 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{3baf263f-4c66-4640-8a48-e98aeba77678}' />
   </node>
-  <node id='-102850' action='modify' visible='true' version='1' lat='-25.36729863548' lon='153.09495353724'>
+  <node id='-103301' action='modify' visible='true' version='1' lat='-25.36729863548' lon='153.09495353724'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='school' />
     <tag k='building:levels' v='2' />
     <tag k='building:multi_unit' v='no' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='isced:level' v='2,3' />
     <tag k='light:obstacle' v='no' />
     <tag k='material' v='metal' />
@@ -1490,12 +1428,11 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{08b347f2-0039-4bde-a17d-a456214f56e1}' />
   </node>
-  <node id='-102851' action='modify' visible='true' version='1' lat='-25.36154470518' lon='153.08787822725'>
+  <node id='-103302' action='modify' visible='true' version='1' lat='-25.36154470518' lon='153.08787822725'>
     <tag k='addr:country' v='BN' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='school' />
     <tag k='building:levels' v='3' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='glass' />
     <tag k='name' v='Education' />
     <tag k='roof:shape' v='pitched' />
@@ -1508,12 +1445,11 @@
     <tag k='use' v='education' />
     <tag k='uuid' v='{38816f81-a5bc-4fff-954f-29423f09b76b}' />
   </node>
-  <node id='-102852' action='modify' visible='true' version='1' lat='-25.3553774147' lon='153.10254755646'>
+  <node id='-103303' action='modify' visible='true' version='1' lat='-25.3553774147' lon='153.10254755646'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='mosque' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='material' v='wood' />
     <tag k='name' v='Public Order' />
@@ -1528,14 +1464,13 @@
     <tag k='use' v='public_order' />
     <tag k='uuid' v='{375f559b-1f8b-47c0-ad34-7f0df3e6a60e}' />
   </node>
-  <node id='-102853' action='modify' visible='true' version='1' lat='-25.36100648001' lon='153.07212542065'>
+  <node id='-103304' action='modify' visible='true' version='1' lat='-25.36100648001' lon='153.07212542065'>
     <tag k='addr:country' v='BN' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='2' />
     <tag k='communication:television' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='material' v='plant_material' />
     <tag k='operator' v='military' />
@@ -1549,13 +1484,12 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{e68c306d-bd66-4a9c-896c-3a313a9c0a64}' />
   </node>
-  <node id='-102854' action='modify' visible='true' version='1' lat='-25.34968171149' lon='153.11467485858'>
+  <node id='-103305' action='modify' visible='true' version='1' lat='-25.34968171149' lon='153.11467485858'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='prison' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Prison' />
     <tag k='operator' v='military' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -1566,7 +1500,7 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{25fa4462-4fc9-4f15-8193-faafd0891f5f}' />
   </node>
-  <node id='-102855' action='modify' visible='true' version='1' lat='-25.36749529304' lon='153.10266738769'>
+  <node id='-103306' action='modify' visible='true' version='1' lat='-25.36749529304' lon='153.10266738769'>
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='industrial' />
@@ -1574,7 +1508,6 @@
     <tag k='building:multi_unit' v='no' />
     <tag k='by_product' v='scrap-metal' />
     <tag k='by_product:2' v='slag' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='50' />
     <tag k='material' v='adobe_brick' />
     <tag k='name' v='Metal Products' />
@@ -1591,14 +1524,13 @@
     <tag k='use' v='metal_product_manufacturing' />
     <tag k='uuid' v='{ada332ac-aeec-428c-8011-5241c94f4b8e}' />
   </node>
-  <node id='-102856' action='modify' visible='true' version='1' lat='-25.36193845875' lon='153.12776784785'>
+  <node id='-103307' action='modify' visible='true' version='1' lat='-25.36193845875' lon='153.12776784785'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='pagoda' />
     <tag k='communication:television' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='name' v='Place of Worship' />
     <tag k='religion' v='buddhist' />
@@ -1610,13 +1542,12 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{3cdd04f4-a468-4dfe-a564-7e0369a9832b}' />
   </node>
-  <node id='-102857' action='modify' visible='true' version='1' lat='-25.34952151002' lon='153.1088703282'>
+  <node id='-103308' action='modify' visible='true' version='1' lat='-25.34952151002' lon='153.1088703282'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='police' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='71' />
     <tag k='light:obstacle' v='yes' />
     <tag k='material' v='glass' />
@@ -1632,12 +1563,11 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{ada3fb8e-d49a-412a-a427-1df9fdbdde9b}' />
   </node>
-  <node id='-102858' action='modify' visible='true' version='1' lat='-25.35531820808' lon='153.08796163581'>
+  <node id='-103309' action='modify' visible='true' version='1' lat='-25.35531820808' lon='153.08796163581'>
     <tag k='addr:country' v='BN' />
     <tag k='amenity' v='community_centre' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='material' v='adobe_brick' />
     <tag k='name' v='Community Centre' />
@@ -1649,7 +1579,7 @@
     <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
     <tag k='uuid' v='{97c3c816-d0cc-4416-a906-7ff94d1feeba}' />
   </node>
-  <node id='-102859' action='modify' visible='true' version='1' lat='-25.3674807106' lon='153.12130935589'>
+  <node id='-103310' action='modify' visible='true' version='1' lat='-25.3674807106' lon='153.12130935589'>
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='On a Street' />
     <tag k='attached' v='no' />
@@ -1657,7 +1587,6 @@
     <tag k='building' v='construction' />
     <tag k='building:levels' v='1' />
     <tag k='construction' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='60' />
     <tag k='light:obstacle' v='no' />
     <tag k='name' v='Healthcare - Hospital' />
@@ -1673,14 +1602,13 @@
     <tag k='use' v='healthcare' />
     <tag k='uuid' v='{b14e13c0-5ea4-4b04-8ce9-422e15b3037e}' />
   </node>
-  <node id='-102860' action='modify' visible='true' version='1' lat='-25.36682930567' lon='153.08007774'>
+  <node id='-103311' action='modify' visible='true' version='1' lat='-25.36682930567' lon='153.08007774'>
     <tag k='addr:country' v='BN' />
     <tag k='addr:full' v='On another Street' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='brick' />
     <tag k='name' v='A Barn' />
     <tag k='navigation:landmark' v='no' />
@@ -1697,12 +1625,11 @@
     <tag k='use' v='raising_animals' />
     <tag k='uuid' v='{26cb3035-d35e-4b09-aeba-ec27be6a0bb1}' />
   </node>
-  <node id='-102861' action='modify' visible='true' version='1' lat='-25.36741892506' lon='153.10876154999'>
+  <node id='-103312' action='modify' visible='true' version='1' lat='-25.36741892506' lon='153.10876154999'>
     <tag k='abandoned:building' v='yes' />
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='Left of Main Street' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='height' v='35' />
     <tag k='name' v='Abandoned Hospital' />
     <tag k='note' v='Closed for a long time' />
@@ -1716,14 +1643,13 @@
     <tag k='use' v='healthcare' />
     <tag k='uuid' v='{5995970c-4266-429f-ae1e-5146a77eafee}' />
   </node>
-  <node id='-102862' action='modify' visible='true' version='1' lat='-25.36758011958' lon='153.12785791663'>
+  <node id='-103313' action='modify' visible='true' version='1' lat='-25.36758011958' lon='153.12785791663'>
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='Third building on the Left' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='mosque' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='A Mosque' />
     <tag k='note' v='Memo' />
     <tag k='operator' v='civilian' />
@@ -1739,13 +1665,12 @@
     <tag k='use' v='islamic_prayer_hall' />
     <tag k='uuid' v='{fd5605a3-70b6-492b-896a-6bdb2e5e439c}' />
   </node>
-  <node id='-102863' action='modify' visible='true' version='1' lat='-25.34972342894' lon='153.12762676206'>
+  <node id='-103314' action='modify' visible='true' version='1' lat='-25.34972342894' lon='153.12762676206'>
     <tag k='addr:country' v='AU' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='mission' />
     <tag k='denomination' v='protestant' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Mission' />
     <tag k='note' v='We are on a Mission' />
     <tag k='operator' v='civilian' />
@@ -1760,18 +1685,17 @@
     <tag k='use' v='religious_activities' />
     <tag k='uuid' v='{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}' />
   </node>
-  <node id='-102864' visible='true' version='1' lat='-25.49292616677' lon='153.14203520662' />
-  <node id='-102865' visible='true' version='1' lat='-25.4928254887' lon='153.14836175575' />
-  <node id='-102866' visible='true' version='1' lat='-25.48602758074' lon='153.14822913223' />
-  <node id='-102867' visible='true' version='1' lat='-25.48612808512' lon='153.1419023194' />
-  <node id='-102868' visible='true' version='1' lat='-25.40627394944' lon='153.07270915058' />
-  <node id='-102869' visible='true' version='1' lat='-25.39412646779' lon='153.07279654254' />
-  <node id='-102870' action='modify' visible='true' version='1' lat='-25.36706694535' lon='153.13480886443'>
+  <node id='-103315' visible='true' version='1' lat='-25.49292616677' lon='153.14203520662' />
+  <node id='-103316' visible='true' version='1' lat='-25.4928254887' lon='153.14836175575' />
+  <node id='-103317' visible='true' version='1' lat='-25.48602758074' lon='153.14822913223' />
+  <node id='-103318' visible='true' version='1' lat='-25.48612808512' lon='153.1419023194' />
+  <node id='-103319' visible='true' version='1' lat='-25.40627394944' lon='153.07270915058' />
+  <node id='-103320' visible='true' version='1' lat='-25.39412646779' lon='153.07279654254' />
+  <node id='-103321' action='modify' visible='true' version='1' lat='-25.36706694535' lon='153.13480886443'>
     <tag k='abandoned:building' v='hangar' />
     <tag k='addr:country' v='AU' />
     <tag k='attached' v='no' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='hangar:type' v='underground' />
     <tag k='light:obstacle' v='no' />
     <tag k='material' v='metal' />
@@ -1789,12 +1713,11 @@
     <tag k='use:2' v='warehouse' />
     <tag k='uuid' v='{c253da4d-f6d4-41e1-a7ad-8bb6ea55d8f8}' />
   </node>
-  <way id='-102069' action='modify' visible='true' version='1'>
-    <nd ref='-102581' />
-    <nd ref='-102580' />
+  <way id='-102502' action='modify' visible='true' version='1'>
+    <nd ref='-103032' />
+    <nd ref='-103031' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
     <tag k='security:resource_owner' v='USA' />
@@ -1805,12 +1728,11 @@
     <tag k='tunnel' v='yes' />
     <tag k='uuid' v='{22d1976e-f36f-46ed-896e-9b439e63ded5}' />
   </way>
-  <way id='-102070' action='modify' visible='true' version='1'>
-    <nd ref='-102583' />
-    <nd ref='-102582' />
+  <way id='-102503' action='modify' visible='true' version='1'>
+    <nd ref='-103034' />
+    <nd ref='-103033' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
     <tag k='security:resource_owner' v='USA' />
@@ -1821,13 +1743,12 @@
     <tag k='tunnel' v='yes' />
     <tag k='uuid' v='{e5b6f022-4b34-44cf-bef4-3bc1e170bb00}' />
   </way>
-  <way id='-102071' action='modify' visible='true' version='1'>
-    <nd ref='-102502' />
-    <nd ref='-102501' />
+  <way id='-102504' action='modify' visible='true' version='1'>
+    <nd ref='-102953' />
+    <nd ref='-102952' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
     <tag k='security:resource_owner' v='USA' />
@@ -1838,13 +1759,12 @@
     <tag k='tunnel' v='yes' />
     <tag k='uuid' v='{9ecbc68c-79c6-4318-bab0-9942bcdc58fe}' />
   </way>
-  <way id='-102072' action='modify' visible='true' version='1'>
-    <nd ref='-102504' />
-    <nd ref='-102503' />
+  <way id='-102505' action='modify' visible='true' version='1'>
+    <nd ref='-102955' />
+    <nd ref='-102954' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
     <tag k='security:resource_owner' v='USA' />
@@ -1855,13 +1775,12 @@
     <tag k='tunnel' v='yes' />
     <tag k='uuid' v='{fa9cb0b5-6c5f-4353-874f-be27ecb5a9e5}' />
   </way>
-  <way id='-102073' action='modify' visible='true' version='1'>
-    <nd ref='-102502' />
-    <nd ref='-102501' />
+  <way id='-102506' action='modify' visible='true' version='1'>
+    <nd ref='-102953' />
+    <nd ref='-102952' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='in_tunnel' v='yes' />
     <tag k='location' v='underground' />
@@ -1874,13 +1793,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{2a8c5e62-61ad-4ab8-9de3-6aa59ad6ad11}' />
   </way>
-  <way id='-102074' action='modify' visible='true' version='1'>
-    <nd ref='-102504' />
-    <nd ref='-102503' />
+  <way id='-102507' action='modify' visible='true' version='1'>
+    <nd ref='-102955' />
+    <nd ref='-102954' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='in_tunnel' v='yes' />
     <tag k='layer' v='-1' />
@@ -1896,13 +1814,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{1dee6011-6730-4b71-adb3-1a7ff398579f}' />
   </way>
-  <way id='-102075' action='modify' visible='true' version='1'>
-    <nd ref='-102508' />
-    <nd ref='-102507' />
+  <way id='-102508' action='modify' visible='true' version='1'>
+    <nd ref='-102959' />
+    <nd ref='-102958' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='highway:through_route' v='no' />
     <tag k='layer' v='-1' />
@@ -1916,13 +1833,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{da1025eb-d540-4a47-900d-3687d3cd0e37}' />
   </way>
-  <way id='-102076' action='modify' visible='true' version='1'>
-    <nd ref='-102869' />
-    <nd ref='-102868' />
+  <way id='-102509' action='modify' visible='true' version='1'>
+    <nd ref='-103320' />
+    <nd ref='-103319' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='damaged' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='highway:through_route' v='yes' />
     <tag k='in_tunnel' v='no' />
@@ -1940,13 +1856,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{389f4414-8e8c-45a7-9935-3401c2eaf29d}' />
   </way>
-  <way id='-102077' action='modify' visible='true' version='1'>
-    <nd ref='-102510' />
-    <nd ref='-102509' />
+  <way id='-102510' action='modify' visible='true' version='1'>
+    <nd ref='-102961' />
+    <nd ref='-102960' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='layer' v='0' />
     <tag k='location' v='surface' />
@@ -1960,13 +1875,12 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{2728cc25-56fa-487f-801b-0d56bdacf98a}' />
   </way>
-  <way id='-102078' action='modify' visible='true' version='1'>
-    <nd ref='-102512' />
-    <nd ref='-102511' />
+  <way id='-102511' action='modify' visible='true' version='1'>
+    <nd ref='-102963' />
+    <nd ref='-102962' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='defence_imagery_and_geospatial_organisation_(australia)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='highway:through_route' v='no' />
     <tag k='in_tunnel' v='no' />
@@ -1983,143 +1897,129 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{39d182e1-6088-4185-a1c4-7fc58b9c002c}' />
   </way>
-  <way id='-102079' action='modify' visible='true' version='1'>
-    <nd ref='-102514' />
-    <nd ref='-102513' />
-    <tag k='error:circular' v='15' />
+  <way id='-102512' action='modify' visible='true' version='1'>
+    <nd ref='-102965' />
+    <nd ref='-102964' />
     <tag k='highway' v='path' />
     <tag k='seasonal' v='fair' />
     <tag k='uuid' v='{93248830-b208-4dec-b4d5-971eec822645}' />
   </way>
-  <way id='-102080' action='modify' visible='true' version='1'>
-    <nd ref='-102516' />
-    <nd ref='-102515' />
-    <tag k='error:circular' v='15' />
+  <way id='-102513' action='modify' visible='true' version='1'>
+    <nd ref='-102967' />
+    <nd ref='-102966' />
     <tag k='highway' v='path' />
     <tag k='seasonal' v='fair' />
     <tag k='uuid' v='{21adaedc-37ce-4c2a-bb73-fe7ba76f4093}' />
   </way>
-  <way id='-102081' action='modify' visible='true' version='1'>
-    <nd ref='-102525' />
-    <nd ref='-102524' />
-    <nd ref='-102523' />
-    <nd ref='-102522' />
-    <nd ref='-102525' />
+  <way id='-102514' action='modify' visible='true' version='1'>
+    <nd ref='-102976' />
+    <nd ref='-102975' />
+    <nd ref='-102974' />
+    <nd ref='-102973' />
+    <nd ref='-102976' />
     <tag k='angle' v='179.0' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Scrub' />
     <tag k='natural' v='scrub' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='undergrowth:density' v='40' />
     <tag k='uuid' v='{c7575604-8e31-4f89-a83a-2c247279cae6}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102082' action='modify' visible='true' version='1'>
-    <nd ref='-102528' />
-    <nd ref='-102527' />
-    <nd ref='-102526' />
-    <nd ref='-102528' />
+  <way id='-102515' action='modify' visible='true' version='1'>
+    <nd ref='-102979' />
+    <nd ref='-102978' />
+    <nd ref='-102977' />
+    <nd ref='-102979' />
     <tag k='content' v='silage' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}' />
   </way>
-  <way id='-102083' action='modify' visible='true' version='1'>
-    <nd ref='-102531' />
-    <nd ref='-102530' />
-    <nd ref='-102529' />
-    <nd ref='-102531' />
+  <way id='-102516' action='modify' visible='true' version='1'>
+    <nd ref='-102982' />
+    <nd ref='-102981' />
+    <nd ref='-102980' />
+    <nd ref='-102982' />
     <tag k='content' v='water' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{13389c28-59ac-4d20-9c29-d34fe8f84cc6}' />
   </way>
-  <way id='-102084' action='modify' visible='true' version='1'>
-    <nd ref='-102534' />
-    <nd ref='-102533' />
-    <nd ref='-102532' />
-    <nd ref='-102534' />
+  <way id='-102517' action='modify' visible='true' version='1'>
+    <nd ref='-102985' />
+    <nd ref='-102984' />
+    <nd ref='-102983' />
+    <nd ref='-102985' />
     <tag k='content' v='manure' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='name' v='with Building = storage_tank' />
     <tag k='uuid' v='{1514e475-0a8b-450d-8138-af8623cbdd56}' />
   </way>
-  <way id='-102085' action='modify' visible='true' version='1'>
-    <nd ref='-102537' />
-    <nd ref='-102536' />
-    <nd ref='-102535' />
-    <nd ref='-102537' />
+  <way id='-102518' action='modify' visible='true' version='1'>
+    <nd ref='-102988' />
+    <nd ref='-102987' />
+    <nd ref='-102986' />
+    <nd ref='-102988' />
     <tag k='content' v='petroleum' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{1339103f-9a67-4dc1-aa67-b590b33b3000}' />
   </way>
-  <way id='-102086' action='modify' visible='true' version='1'>
-    <nd ref='-102540' />
-    <nd ref='-102539' />
-    <nd ref='-102538' />
-    <nd ref='-102540' />
+  <way id='-102519' action='modify' visible='true' version='1'>
+    <nd ref='-102991' />
+    <nd ref='-102990' />
+    <nd ref='-102989' />
+    <nd ref='-102991' />
     <tag k='content' v='petroleum' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}' />
   </way>
-  <way id='-102087' action='modify' visible='true' version='1'>
-    <nd ref='-102543' />
-    <nd ref='-102542' />
-    <nd ref='-102541' />
-    <nd ref='-102543' />
+  <way id='-102520' action='modify' visible='true' version='1'>
+    <nd ref='-102994' />
+    <nd ref='-102993' />
+    <nd ref='-102992' />
+    <nd ref='-102994' />
     <tag k='content' v='slurry' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}' />
   </way>
-  <way id='-102088' action='modify' visible='true' version='1'>
-    <nd ref='-102546' />
-    <nd ref='-102545' />
-    <nd ref='-102544' />
-    <nd ref='-102546' />
+  <way id='-102521' action='modify' visible='true' version='1'>
+    <nd ref='-102997' />
+    <nd ref='-102996' />
+    <nd ref='-102995' />
+    <nd ref='-102997' />
     <tag k='content' v='manure' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='uuid' v='{149e733e-626f-45db-bfcc-56ad12de425a}' />
   </way>
-  <way id='-102089' action='modify' visible='true' version='1'>
-    <nd ref='-102549' />
-    <nd ref='-102548' />
-    <nd ref='-102547' />
-    <nd ref='-102549' />
+  <way id='-102522' action='modify' visible='true' version='1'>
+    <nd ref='-103000' />
+    <nd ref='-102999' />
+    <nd ref='-102998' />
+    <nd ref='-103000' />
     <tag k='content' v='silage' />
-    <tag k='error:circular' v='15' />
     <tag k='man_made' v='storage_tank' />
     <tag k='name' v='with Building = yes' />
     <tag k='uuid' v='{1514e475-0a8b-450d-8138-af8623cbdd56}' />
   </way>
-  <way id='-102090' action='modify' visible='true' version='1'>
-    <nd ref='-102555' />
-    <nd ref='-102554' />
-    <tag k='error:circular' v='15' />
+  <way id='-102523' action='modify' visible='true' version='1'>
+    <nd ref='-103006' />
+    <nd ref='-103005' />
     <tag k='highway' v='steps' />
     <tag k='uuid' v='{74f5436e-997b-472d-8bb4-a5ae953d2e5c}' />
   </way>
-  <way id='-102091' action='modify' visible='true' version='1'>
-    <nd ref='-102559' />
-    <nd ref='-102558' />
-    <nd ref='-102557' />
-    <nd ref='-102556' />
-    <nd ref='-102559' />
+  <way id='-102524' action='modify' visible='true' version='1'>
+    <nd ref='-103010' />
+    <nd ref='-103009' />
+    <nd ref='-103008' />
+    <nd ref='-103007' />
+    <nd ref='-103010' />
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='Downtown Denver' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='condition' v='functional' />
     <tag k='cover:type' v='moveable' />
-    <tag k='error:circular' v='15' />
     <tag k='leisure' v='stadium' />
     <tag k='light:obstacle' v='no' />
     <tag k='name' v='Broncos Stadium' />
@@ -2137,12 +2037,12 @@
     <tag k='use:2' v='religious_activities' />
     <tag k='uuid' v='{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}' />
   </way>
-  <way id='-102092' action='modify' visible='true' version='1'>
-    <nd ref='-102563' />
-    <nd ref='-102562' />
-    <nd ref='-102561' />
-    <nd ref='-102560' />
-    <nd ref='-102563' />
+  <way id='-102525' action='modify' visible='true' version='1'>
+    <nd ref='-103014' />
+    <nd ref='-103013' />
+    <nd ref='-103012' />
+    <nd ref='-103011' />
+    <nd ref='-103014' />
     <tag k='addr:country' v='AU' />
     <tag k='addr:full' v='Downtown DC' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
@@ -2150,7 +2050,6 @@
     <tag k='by_product' v='radioactive_material' />
     <tag k='by_product:2' v='no_byproduct' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='adobe_brick' />
     <tag k='material:vertical:2' v='mud-based_construction' />
     <tag k='name' v='The Shed' />
@@ -2172,13 +2071,12 @@
     <tag k='use:2' v='meeting_place' />
     <tag k='uuid' v='{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}' />
   </way>
-  <way id='-102093' action='modify' visible='true' version='1'>
-    <nd ref='-102567' />
-    <nd ref='-102566' />
+  <way id='-102526' action='modify' visible='true' version='1'>
+    <nd ref='-103018' />
+    <nd ref='-103017' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='construction' v='motorway' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='construction' />
     <tag k='highway:through_route' v='yes' />
     <tag k='in_tunnel' v='no' />
@@ -2201,13 +2099,12 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102094' action='modify' visible='true' version='1'>
-    <nd ref='-102569' />
-    <nd ref='-102568' />
+  <way id='-102527' action='modify' visible='true' version='1'>
+    <nd ref='-103020' />
+    <nd ref='-103019' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='construction' v='tertiary' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_configuration' v='same' />
     <tag k='highway' v='construction' />
     <tag k='in_tunnel' v='no' />
@@ -2236,12 +2133,11 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102095' action='modify' visible='true' version='1'>
-    <nd ref='-102571' />
-    <nd ref='-102570' />
+  <way id='-102528' action='modify' visible='true' version='1'>
+    <nd ref='-103022' />
+    <nd ref='-103021' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='secondary' />
     <tag k='lanes' v='2' />
     <tag k='layer' v='0' />
@@ -2262,12 +2158,11 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102096' action='modify' visible='true' version='1'>
-    <nd ref='-102573' />
-    <nd ref='-102572' />
+  <way id='-102529' action='modify' visible='true' version='1'>
+    <nd ref='-103024' />
+    <nd ref='-103023' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='lanes' v='1' />
     <tag k='layer' v='0' />
@@ -2288,13 +2183,12 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102097' action='modify' visible='true' version='1'>
-    <nd ref='-102575' />
-    <nd ref='-102574' />
+  <way id='-102530' action='modify' visible='true' version='1'>
+    <nd ref='-103026' />
+    <nd ref='-103025' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='road' />
     <tag k='in_tunnel' v='no' />
     <tag k='lanes' v='1' />
@@ -2317,13 +2211,12 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102098' action='modify' visible='true' version='1'>
-    <nd ref='-102577' />
-    <nd ref='-102576' />
+  <way id='-102531' action='modify' visible='true' version='1'>
+    <nd ref='-103028' />
+    <nd ref='-103027' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='damaged' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_configuration' v='different' />
     <tag k='highway' v='primary' />
     <tag k='is_divided' v='yes' />
@@ -2351,12 +2244,11 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102099' action='modify' visible='true' version='1'>
-    <nd ref='-102579' />
-    <nd ref='-102578' />
+  <way id='-102532' action='modify' visible='true' version='1'>
+    <nd ref='-103030' />
+    <nd ref='-103029' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='primary_link' />
     <tag k='interchange_ramp' v='yes' />
     <tag k='ref:road:class' v='primary' />
@@ -2370,12 +2262,11 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{0b86cab4-aef6-4d13-aafb-83cb19e33950}' />
   </way>
-  <way id='-102100' action='modify' visible='true' version='1'>
-    <nd ref='-102581' />
-    <nd ref='-102580' />
+  <way id='-102533' action='modify' visible='true' version='1'>
+    <nd ref='-103032' />
+    <nd ref='-103031' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='in_tunnel' v='yes' />
     <tag k='ref:road:class' v='local' />
@@ -2389,12 +2280,11 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{8994f53f-6565-4d7c-852d-47cc75023ae0}' />
   </way>
-  <way id='-102101' action='modify' visible='true' version='1'>
-    <nd ref='-102583' />
-    <nd ref='-102582' />
+  <way id='-102534' action='modify' visible='true' version='1'>
+    <nd ref='-103034' />
+    <nd ref='-103033' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='motorway_link' />
     <tag k='in_tunnel' v='yes' />
     <tag k='interchange_ramp' v='yes' />
@@ -2409,12 +2299,11 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{b865241d-fb0a-4662-8042-21378b5d8149}' />
   </way>
-  <way id='-102102' action='modify' visible='true' version='1'>
-    <nd ref='-102585' />
-    <nd ref='-102584' />
+  <way id='-102535' action='modify' visible='true' version='1'>
+    <nd ref='-103036' />
+    <nd ref='-103035' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='secondary_link' />
     <tag k='interchange_ramp' v='yes' />
     <tag k='ref:road:class' v='secondary' />
@@ -2428,12 +2317,11 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{63da8b8f-6c7e-4c12-9cda-58163417fa41}' />
   </way>
-  <way id='-102103' action='modify' visible='true' version='1'>
-    <nd ref='-102587' />
-    <nd ref='-102586' />
+  <way id='-102536' action='modify' visible='true' version='1'>
+    <nd ref='-103038' />
+    <nd ref='-103037' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary_link' />
     <tag k='interchange_ramp' v='yes' />
     <tag k='ref:road:class' v='local' />
@@ -2447,112 +2335,101 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{76cca591-23e3-4900-875f-5daf40457bd3}' />
   </way>
-  <way id='-102104' action='modify' visible='true' version='1'>
-    <nd ref='-102589' />
-    <nd ref='-102588' />
-    <tag k='error:circular' v='15' />
+  <way id='-102537' action='modify' visible='true' version='1'>
+    <nd ref='-103040' />
+    <nd ref='-103039' />
     <tag k='highway' v='unclassified' />
     <tag k='ref:road:class' v='local' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{0a51dd03-f3db-4b48-92e3-1f37a4e6cb16}' />
   </way>
-  <way id='-102105' action='modify' visible='true' version='1'>
-    <nd ref='-102591' />
-    <nd ref='-102590' />
-    <tag k='error:circular' v='15' />
+  <way id='-102538' action='modify' visible='true' version='1'>
+    <nd ref='-103042' />
+    <nd ref='-103041' />
     <tag k='highway' v='pedestrian' />
     <tag k='ref:road:type' v='pedestrian' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{72bf2b85-d371-48b2-a5ef-54f45b492373}' />
   </way>
-  <way id='-102106' action='modify' visible='true' version='1'>
-    <nd ref='-102593' />
-    <nd ref='-102592' />
-    <tag k='error:circular' v='15' />
+  <way id='-102539' action='modify' visible='true' version='1'>
+    <nd ref='-103044' />
+    <nd ref='-103043' />
     <tag k='highway' v='unclassified' />
     <tag k='ref:road:class' v='local' />
     <tag k='ref:road:type' v='street' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{0bcde809-cddc-4409-b0b9-91273d57e736}' />
   </way>
-  <way id='-102107' action='modify' visible='true' version='1'>
-    <nd ref='-102595' />
-    <nd ref='-102594' />
-    <tag k='error:circular' v='15' />
+  <way id='-102540' action='modify' visible='true' version='1'>
+    <nd ref='-103046' />
+    <nd ref='-103045' />
     <tag k='highway' v='secondary' />
     <tag k='ref:road:class' v='secondary' />
     <tag k='ref:road:type' v='road' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{0a4336be-41d4-4732-b495-791e2bec9bcb}' />
   </way>
-  <way id='-102108' action='modify' visible='true' version='1'>
-    <nd ref='-102597' />
-    <nd ref='-102596' />
-    <tag k='error:circular' v='15' />
+  <way id='-102541' action='modify' visible='true' version='1'>
+    <nd ref='-103048' />
+    <nd ref='-103047' />
     <tag k='highway' v='motorway' />
     <tag k='ref:road:class' v='national_motorway' />
     <tag k='ref:road:type' v='motorway' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{5d83c96d-0f75-4626-8663-3ba50d8faf1b}' />
   </way>
-  <way id='-102109' action='modify' visible='true' version='1'>
-    <nd ref='-102599' />
-    <nd ref='-102598' />
-    <tag k='error:circular' v='15' />
+  <way id='-102542' action='modify' visible='true' version='1'>
+    <nd ref='-103050' />
+    <nd ref='-103049' />
     <tag k='highway' v='tertiary' />
     <tag k='ref:road:class' v='local' />
     <tag k='ref:road:type' v='road' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{7f9b99dc-0c7a-4379-8010-c5fcd0e224f9}' />
   </way>
-  <way id='-102110' action='modify' visible='true' version='1'>
-    <nd ref='-102601' />
-    <nd ref='-102600' />
-    <tag k='error:circular' v='15' />
+  <way id='-102543' action='modify' visible='true' version='1'>
+    <nd ref='-103052' />
+    <nd ref='-103051' />
     <tag k='highway' v='unclassified' />
     <tag k='ref:road:class' v='local' />
     <tag k='ref:road:type' v='street' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{2bb9c4ae-def9-4fce-9ad2-f4f00bfc4537}' />
   </way>
-  <way id='-102111' action='modify' visible='true' version='1'>
-    <nd ref='-102603' />
-    <nd ref='-102602' />
-    <tag k='error:circular' v='15' />
+  <way id='-102544' action='modify' visible='true' version='1'>
+    <nd ref='-103054' />
+    <nd ref='-103053' />
     <tag k='highway' v='primary' />
     <tag k='ref:road:class' v='primary' />
     <tag k='ref:road:type' v='road' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{d2a441d2-5080-4c6b-9e05-b40ed6569ffd}' />
   </way>
-  <way id='-102112' action='modify' visible='true' version='1'>
-    <nd ref='-102605' />
-    <nd ref='-102604' />
-    <tag k='error:circular' v='15' />
+  <way id='-102545' action='modify' visible='true' version='1'>
+    <nd ref='-103056' />
+    <nd ref='-103055' />
     <tag k='highway' v='trunk' />
     <tag k='ref:road:class' v='primary' />
     <tag k='ref:road:type' v='limited_access_motorway' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{e0d8b175-219b-4811-a59e-c44fd731de9b}' />
   </way>
-  <way id='-102113' action='modify' visible='true' version='1'>
-    <nd ref='-102607' />
-    <nd ref='-102606' />
-    <tag k='error:circular' v='15' />
+  <way id='-102546' action='modify' visible='true' version='1'>
+    <nd ref='-103058' />
+    <nd ref='-103057' />
     <tag k='highway' v='unclassified' />
     <tag k='ref:road:class' v='local' />
     <tag k='ref:road:type' v='street' />
     <tag k='seasonal' v='no' />
     <tag k='uuid' v='{5632cd0a-d533-45b5-a873-049e718c0013}' />
   </way>
-  <way id='-102114' action='modify' visible='true' version='1'>
-    <nd ref='-102609' />
-    <nd ref='-102608' />
+  <way id='-102547' action='modify' visible='true' version='1'>
+    <nd ref='-103060' />
+    <nd ref='-103059' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='channelized_stream' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='dry' />
     <tag k='name' v='Nile' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -2567,13 +2444,12 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102115' action='modify' visible='true' version='1'>
-    <nd ref='-102611' />
-    <nd ref='-102610' />
+  <way id='-102548' action='modify' visible='true' version='1'>
+    <nd ref='-103062' />
+    <nd ref='-103061' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='yes' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2586,13 +2462,12 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102116' action='modify' visible='true' version='1'>
-    <nd ref='-102613' />
-    <nd ref='-102612' />
+  <way id='-102549' action='modify' visible='true' version='1'>
+    <nd ref='-103064' />
+    <nd ref='-103063' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='no' />
     <tag k='name' v='Murray' />
     <tag k='navigation' v='no' />
@@ -2607,13 +2482,12 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102117' action='modify' visible='true' version='1'>
-    <nd ref='-102615' />
-    <nd ref='-102614' />
+  <way id='-102550' action='modify' visible='true' version='1'>
+    <nd ref='-103066' />
+    <nd ref='-103065' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='dry' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2627,13 +2501,12 @@
     <tag k='waterway:bottom' v='bedrock' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102118' action='modify' visible='true' version='1'>
-    <nd ref='-102617' />
-    <nd ref='-102616' />
+  <way id='-102551' action='modify' visible='true' version='1'>
+    <nd ref='-103068' />
+    <nd ref='-103067' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='braided_stream' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2645,14 +2518,13 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102119' action='modify' visible='true' version='1'>
-    <nd ref='-102619' />
-    <nd ref='-102618' />
+  <way id='-102552' action='modify' visible='true' version='1'>
+    <nd ref='-103070' />
+    <nd ref='-103069' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='Raging Torrent' />
     <tag k='covered' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Covered Drain test' />
     <tag k='navigation' v='yes' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -2666,14 +2538,13 @@
     <tag k='waterway:bottom' v='sand_and_gravel' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102120' action='modify' visible='true' version='1'>
-    <nd ref='-102621' />
-    <nd ref='-102620' />
+  <way id='-102553' action='modify' visible='true' version='1'>
+    <nd ref='-103072' />
+    <nd ref='-103071' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='gorge' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='yes' />
     <tag k='name' v='Mighty' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -2687,14 +2558,13 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102121' action='modify' visible='true' version='1'>
-    <nd ref='-102623' />
-    <nd ref='-102622' />
+  <way id='-102554' action='modify' visible='true' version='1'>
+    <nd ref='-103074' />
+    <nd ref='-103073' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='braided_stream' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2708,13 +2578,12 @@
     <tag k='waterway:bottom' v='clay_and_silt' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102122' action='modify' visible='true' version='1'>
-    <nd ref='-102625' />
-    <nd ref='-102624' />
+  <way id='-102555' action='modify' visible='true' version='1'>
+    <nd ref='-103076' />
+    <nd ref='-103075' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='yes' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2727,13 +2596,12 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102123' action='modify' visible='true' version='1'>
-    <nd ref='-102627' />
-    <nd ref='-102626' />
+  <way id='-102556' action='modify' visible='true' version='1'>
+    <nd ref='-103078' />
+    <nd ref='-103077' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2745,13 +2613,12 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102124' action='modify' visible='true' version='1'>
-    <nd ref='-102629' />
-    <nd ref='-102628' />
+  <way id='-102557' action='modify' visible='true' version='1'>
+    <nd ref='-103080' />
+    <nd ref='-103079' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
     <tag k='security:resource_owner' v='USA' />
@@ -2764,13 +2631,12 @@
     <tag k='waterway:bottom' v='sand_and_gravel' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102125' action='modify' visible='true' version='1'>
-    <nd ref='-102631' />
-    <nd ref='-102630' />
+  <way id='-102558' action='modify' visible='true' version='1'>
+    <nd ref='-103082' />
+    <nd ref='-103081' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='dry' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2784,14 +2650,13 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102126' action='modify' visible='true' version='1'>
-    <nd ref='-102633' />
-    <nd ref='-102632' />
+  <way id='-102559' action='modify' visible='true' version='1'>
+    <nd ref='-103084' />
+    <nd ref='-103083' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='braided_stream' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Amazon' />
     <tag k='navigation' v='yes_operational' />
     <tag k='note' v='Very long river' />
@@ -2806,12 +2671,11 @@
     <tag k='waterway:bottom' v='bedrock' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102127' action='modify' visible='true' version='1'>
-    <nd ref='-102635' />
-    <nd ref='-102634' />
+  <way id='-102560' action='modify' visible='true' version='1'>
+    <nd ref='-103086' />
+    <nd ref='-103085' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2824,14 +2688,13 @@
     <tag k='waterway' v='river' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102128' action='modify' visible='true' version='1'>
-    <nd ref='-102637' />
-    <nd ref='-102636' />
+  <way id='-102561' action='modify' visible='true' version='1'>
+    <nd ref='-103088' />
+    <nd ref='-103087' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='channel:type' v='channelized_stream' />
     <tag k='covered' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='intermittent' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -2844,15 +2707,14 @@
     <tag k='waterway:bottom' v='clay_and_silt' />
     <tag k='width' v='3' />
   </way>
-  <way id='-102129' action='modify' visible='true' version='1'>
-    <nd ref='-102640' />
-    <nd ref='-102639' />
-    <nd ref='-102638' />
+  <way id='-102562' action='modify' visible='true' version='1'>
+    <nd ref='-103091' />
+    <nd ref='-103090' />
+    <nd ref='-103089' />
     <tag k='addr:country' v='US' />
     <tag k='arrangement' v='single' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='construction' v='rail' />
-    <tag k='error:circular' v='15' />
     <tag k='location' v='surface' />
     <tag k='name' v='Big Train' />
     <tag k='railway' v='construction' />
@@ -2864,16 +2726,15 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{2df4f57e-69bd-468a-9113-35434c475dc9}' />
   </way>
-  <way id='-102130' action='modify' visible='true' version='1'>
-    <nd ref='-102643' />
-    <nd ref='-102642' />
-    <nd ref='-102641' />
+  <way id='-102563' action='modify' visible='true' version='1'>
+    <nd ref='-103094' />
+    <nd ref='-103093' />
+    <nd ref='-103092' />
     <tag k='abandoned:railway' v='funicular' />
     <tag k='addr:country' v='US' />
     <tag k='arrangement' v='single' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='electrified' v='rail' />
-    <tag k='error:circular' v='15' />
     <tag k='gauge' v='3000' />
     <tag k='gauge:type' v='broad' />
     <tag k='location' v='surface' />
@@ -2888,15 +2749,14 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{18ab8349-3fb0-48eb-917b-49995b451fc5}' />
   </way>
-  <way id='-102131' action='modify' visible='true' version='1'>
-    <nd ref='-102646' />
-    <nd ref='-102645' />
-    <nd ref='-102644' />
+  <way id='-102564' action='modify' visible='true' version='1'>
+    <nd ref='-103097' />
+    <nd ref='-103096' />
+    <nd ref='-103095' />
     <tag k='addr:country' v='US' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='demolished:railway' v='monorail' />
     <tag k='electrified' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='gauge' v='4000' />
     <tag k='gauge:type' v='standard' />
     <tag k='location' v='surface' />
@@ -2909,15 +2769,14 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{c0041728-2262-4969-bd62-4ca3607af853}' />
   </way>
-  <way id='-102132' action='modify' visible='true' version='1'>
-    <nd ref='-102649' />
-    <nd ref='-102648' />
-    <nd ref='-102647' />
+  <way id='-102565' action='modify' visible='true' version='1'>
+    <nd ref='-103100' />
+    <nd ref='-103099' />
+    <nd ref='-103098' />
     <tag k='addr:country' v='US' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
     <tag k='electrified' v='unknown' />
-    <tag k='error:circular' v='15' />
     <tag k='gauge' v='2000' />
     <tag k='gauge:type' v='narrow' />
     <tag k='location' v='surface' />
@@ -2931,16 +2790,15 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{711b42ac-132c-44e5-8ecb-3f39451c41da}' />
   </way>
-  <way id='-102133' action='modify' visible='true' version='1'>
-    <nd ref='-102652' />
-    <nd ref='-102651' />
-    <nd ref='-102650' />
+  <way id='-102566' action='modify' visible='true' version='1'>
+    <nd ref='-103103' />
+    <nd ref='-103102' />
+    <nd ref='-103101' />
     <tag k='addr:country' v='US' />
     <tag k='arrangement' v='single' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='construction' v='logging' />
     <tag k='electrified' v='no' />
-    <tag k='error:circular' v='15' />
     <tag k='gauge' v='1000' />
     <tag k='gauge:type' v='narrow' />
     <tag k='location' v='surface' />
@@ -2955,16 +2813,15 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{cbcf9671-3825-46a9-8ef0-f1676648b43e}' />
   </way>
-  <way id='-102134' action='modify' visible='true' version='1'>
-    <nd ref='-102655' />
-    <nd ref='-102654' />
-    <nd ref='-102653' />
+  <way id='-102567' action='modify' visible='true' version='1'>
+    <nd ref='-103106' />
+    <nd ref='-103105' />
+    <nd ref='-103104' />
     <tag k='addr:country' v='US' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='automated_transit_system' v='yes' />
     <tag k='condition' v='destroyed' />
     <tag k='electrified' v='contact_line' />
-    <tag k='error:circular' v='15' />
     <tag k='gauge' v='2000' />
     <tag k='location' v='surface' />
     <tag k='railway' v='rail' />
@@ -2977,289 +2834,261 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{c650708f-0984-4c35-a971-8154879af68f}' />
   </way>
-  <way id='-102135' action='modify' visible='true' version='1'>
-    <nd ref='-102666' />
-    <nd ref='-102665' />
-    <nd ref='-102664' />
-    <nd ref='-102663' />
-    <nd ref='-102666' />
+  <way id='-102568' action='modify' visible='true' version='1'>
+    <nd ref='-103117' />
+    <nd ref='-103116' />
+    <nd ref='-103115' />
+    <nd ref='-103114' />
+    <nd ref='-103117' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='leaf_cycle' v='mixed' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Mixed 80%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{0803aedc-8a51-4009-95e8-5f9a82869b72}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102136' action='modify' visible='true' version='1'>
-    <nd ref='-102670' />
-    <nd ref='-102669' />
-    <nd ref='-102668' />
-    <nd ref='-102667' />
-    <nd ref='-102670' />
+  <way id='-102569' action='modify' visible='true' version='1'>
+    <nd ref='-103121' />
+    <nd ref='-103120' />
+    <nd ref='-103119' />
+    <nd ref='-103118' />
+    <nd ref='-103121' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Wood 80%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{23bc0c51-26fe-4ec3-9a5b-3cd4792fb840}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102137' action='modify' visible='true' version='1'>
-    <nd ref='-102674' />
-    <nd ref='-102673' />
-    <nd ref='-102672' />
-    <nd ref='-102671' />
-    <nd ref='-102674' />
+  <way id='-102570' action='modify' visible='true' version='1'>
+    <nd ref='-103125' />
+    <nd ref='-103124' />
+    <nd ref='-103123' />
+    <nd ref='-103122' />
+    <nd ref='-103125' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='leaf_cycle' v='semi_evergreen' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Semi E 80%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{433d3595-8958-477a-b978-6e29b258a43c}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102138' action='modify' visible='true' version='1'>
-    <nd ref='-102678' />
-    <nd ref='-102677' />
-    <nd ref='-102676' />
-    <nd ref='-102675' />
-    <nd ref='-102678' />
+  <way id='-102571' action='modify' visible='true' version='1'>
+    <nd ref='-103129' />
+    <nd ref='-103128' />
+    <nd ref='-103127' />
+    <nd ref='-103126' />
+    <nd ref='-103129' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='leaf_cycle' v='semi_deciduous' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Semi D 80%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{ced792bc-e484-494d-a019-602e72a43274}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102139' action='modify' visible='true' version='1'>
-    <nd ref='-102682' />
-    <nd ref='-102681' />
-    <nd ref='-102680' />
-    <nd ref='-102679' />
-    <nd ref='-102682' />
+  <way id='-102572' action='modify' visible='true' version='1'>
+    <nd ref='-103133' />
+    <nd ref='-103132' />
+    <nd ref='-103131' />
+    <nd ref='-103130' />
+    <nd ref='-103133' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='leaf_cycle' v='evergreen' />
     <tag k='length' v='117.7' />
     <tag k='name' v='EverG 80%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{bf5e8938-4e6b-490d-94b5-df4a2da5ee76}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102140' action='modify' visible='true' version='1'>
-    <nd ref='-102686' />
-    <nd ref='-102685' />
-    <nd ref='-102684' />
-    <nd ref='-102683' />
-    <nd ref='-102686' />
+  <way id='-102573' action='modify' visible='true' version='1'>
+    <nd ref='-103137' />
+    <nd ref='-103136' />
+    <nd ref='-103135' />
+    <nd ref='-103134' />
+    <nd ref='-103137' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='leaf_cycle' v='semi_evergreen' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Semi E 80%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{3b2ed22c-0c03-43ea-9aef-c821705d007a}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102141' action='modify' visible='true' version='1'>
-    <nd ref='-102690' />
-    <nd ref='-102689' />
-    <nd ref='-102688' />
-    <nd ref='-102687' />
-    <nd ref='-102690' />
+  <way id='-102574' action='modify' visible='true' version='1'>
+    <nd ref='-103141' />
+    <nd ref='-103140' />
+    <nd ref='-103139' />
+    <nd ref='-103138' />
+    <nd ref='-103141' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='leaf_cycle' v='mixed' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Mixed 80%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{9c86570d-5dae-4ee4-a767-337c3f4e77f1}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102142' action='modify' visible='true' version='1'>
-    <nd ref='-102694' />
-    <nd ref='-102693' />
-    <nd ref='-102692' />
-    <nd ref='-102691' />
-    <nd ref='-102694' />
+  <way id='-102575' action='modify' visible='true' version='1'>
+    <nd ref='-103145' />
+    <nd ref='-103144' />
+    <nd ref='-103143' />
+    <nd ref='-103142' />
+    <nd ref='-103145' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='leaf_cycle' v='evergreen' />
     <tag k='length' v='117.7' />
     <tag k='name' v='EverG 80%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{87b593e6-edd4-4556-9629-121cde24dd8b}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102143' action='modify' visible='true' version='1'>
-    <nd ref='-102698' />
-    <nd ref='-102697' />
-    <nd ref='-102696' />
-    <nd ref='-102695' />
-    <nd ref='-102698' />
+  <way id='-102576' action='modify' visible='true' version='1'>
+    <nd ref='-103149' />
+    <nd ref='-103148' />
+    <nd ref='-103147' />
+    <nd ref='-103146' />
+    <nd ref='-103149' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='40' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Wood 40%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{da3a5344-74c3-451a-a3c9-70cb1b527149}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102144' action='modify' visible='true' version='1'>
-    <nd ref='-102702' />
-    <nd ref='-102701' />
-    <nd ref='-102700' />
-    <nd ref='-102699' />
-    <nd ref='-102702' />
+  <way id='-102577' action='modify' visible='true' version='1'>
+    <nd ref='-103153' />
+    <nd ref='-103152' />
+    <nd ref='-103151' />
+    <nd ref='-103150' />
+    <nd ref='-103153' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='leaf_cycle' v='deciduous' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Decid 80%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{8b026a81-1f4e-4c4c-a2b2-40e750426b9e}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102145' action='modify' visible='true' version='1'>
-    <nd ref='-102706' />
-    <nd ref='-102705' />
-    <nd ref='-102704' />
-    <nd ref='-102703' />
-    <nd ref='-102706' />
+  <way id='-102578' action='modify' visible='true' version='1'>
+    <nd ref='-103157' />
+    <nd ref='-103156' />
+    <nd ref='-103155' />
+    <nd ref='-103154' />
+    <nd ref='-103157' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='40' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Forest 40%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{1811751e-7141-4ddc-884d-b17b26d4b9e5}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102146' action='modify' visible='true' version='1'>
-    <nd ref='-102710' />
-    <nd ref='-102709' />
-    <nd ref='-102708' />
-    <nd ref='-102707' />
-    <nd ref='-102710' />
+  <way id='-102579' action='modify' visible='true' version='1'>
+    <nd ref='-103161' />
+    <nd ref='-103160' />
+    <nd ref='-103159' />
+    <nd ref='-103158' />
+    <nd ref='-103161' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11600.6' />
     <tag k='leaf_cycle' v='deciduous' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Decid 80%' />
     <tag k='natural' v='wood' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{0914d0cc-d696-485e-89bc-1d4e0edee797}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102147' action='modify' visible='true' version='1'>
-    <nd ref='-102714' />
-    <nd ref='-102713' />
-    <nd ref='-102712' />
-    <nd ref='-102711' />
-    <nd ref='-102714' />
+  <way id='-102580' action='modify' visible='true' version='1'>
+    <nd ref='-103165' />
+    <nd ref='-103164' />
+    <nd ref='-103163' />
+    <nd ref='-103162' />
+    <nd ref='-103165' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='leaf_cycle' v='semi_deciduous' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Semi D 80%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{5b3dcd21-281f-4f4a-8c94-9807837b0541}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102148' action='modify' visible='true' version='1'>
-    <nd ref='-102718' />
-    <nd ref='-102717' />
-    <nd ref='-102716' />
-    <nd ref='-102715' />
-    <nd ref='-102718' />
+  <way id='-102581' action='modify' visible='true' version='1'>
+    <nd ref='-103169' />
+    <nd ref='-103168' />
+    <nd ref='-103167' />
+    <nd ref='-103166' />
+    <nd ref='-103169' />
     <tag k='angle' v='179' />
     <tag k='canopy_cover' v='80' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='landuse' v='forest' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Forest 80%' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='uuid' v='{5a91aa90-f929-4441-9fa4-d16ce062fc98}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102149' action='modify' visible='true' version='1'>
-    <nd ref='-102723' />
-    <nd ref='-102722' />
-    <nd ref='-102721' />
-    <nd ref='-102720' />
-    <nd ref='-102719' />
-    <nd ref='-102723' />
+  <way id='-102582' action='modify' visible='true' version='1'>
+    <nd ref='-103174' />
+    <nd ref='-103173' />
+    <nd ref='-103172' />
+    <nd ref='-103171' />
+    <nd ref='-103170' />
+    <nd ref='-103174' />
     <tag k='addr:country' v='XE' />
     <tag k='addr:full' v='Yes it does' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
@@ -3267,7 +3096,6 @@
     <tag k='by_product:2' v='radioactive_material' />
     <tag k='communication:microwave_radio_relay' v='yes' />
     <tag k='condition' v='construction' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='man_made' v='works' />
     <tag k='material' v='adobe_brick' />
@@ -3290,17 +3118,16 @@
     <tag k='use' v='manufacturing' />
     <tag k='uuid' v='{ae014362-8c96-46b2-8149-d377ed03f334}' />
   </way>
-  <way id='-102150' action='modify' visible='true' version='1'>
-    <nd ref='-102728' />
-    <nd ref='-102727' />
-    <nd ref='-102726' />
-    <nd ref='-102725' />
-    <nd ref='-102724' />
-    <nd ref='-102728' />
+  <way id='-102583' action='modify' visible='true' version='1'>
+    <nd ref='-103179' />
+    <nd ref='-103178' />
+    <nd ref='-103177' />
+    <nd ref='-103176' />
+    <nd ref='-103175' />
+    <nd ref='-103179' />
     <tag k='addr:country' v='XE' />
     <tag k='area' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='name' v='HealthCare' />
     <tag k='note' v='Hospital' />
@@ -3314,17 +3141,16 @@
     <tag k='use' v='healthcare' />
     <tag k='uuid' v='{8f97a17a-a3df-40b4-9dc0-71228b65bf0a}' />
   </way>
-  <way id='-102151' action='modify' visible='true' version='1'>
-    <nd ref='-102732' />
-    <nd ref='-102731' />
-    <nd ref='-102730' />
-    <nd ref='-102729' />
-    <nd ref='-102732' />
+  <way id='-102584' action='modify' visible='true' version='1'>
+    <nd ref='-103183' />
+    <nd ref='-103182' />
+    <nd ref='-103181' />
+    <nd ref='-103180' />
+    <nd ref='-103183' />
     <tag k='addr:country' v='XE' />
     <tag k='area' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='operator' v='private' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3336,12 +3162,11 @@
     <tag k='uuid' v='{998eb9e9-e6a0-4284-8aac-d4cc94e9a352}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102152' action='modify' visible='true' version='1'>
-    <nd ref='-102746' />
-    <nd ref='-102745' />
+  <way id='-102585' action='modify' visible='true' version='1'>
+    <nd ref='-103197' />
+    <nd ref='-103196' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='track' />
     <tag k='name' v='Dirt' />
     <tag k='seasonal' v='fair' />
@@ -3355,13 +3180,12 @@
     <tag k='width' v='3' />
     <tag k='width:minimum_traveled_way' v='3' />
   </way>
-  <way id='-102153' action='modify' visible='true' version='1'>
-    <nd ref='-102748' />
-    <nd ref='-102747' />
+  <way id='-102586' action='modify' visible='true' version='1'>
+    <nd ref='-103199' />
+    <nd ref='-103198' />
     <tag k='abandoned:highway' v='track' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='in_tunnel' v='no' />
     <tag k='layer' v='0' />
     <tag k='name' v='Jinglemoney' />
@@ -3377,13 +3201,12 @@
     <tag k='width' v='2.5' />
     <tag k='width:minimum_traveled_way' v='2.5' />
   </way>
-  <way id='-102154' action='modify' visible='true' version='1'>
-    <nd ref='-102750' />
-    <nd ref='-102749' />
+  <way id='-102587' action='modify' visible='true' version='1'>
+    <nd ref='-103201' />
+    <nd ref='-103200' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='highway' v='track' />
     <tag k='layer' v='0' />
     <tag k='name' v='Kokoda' />
@@ -3398,24 +3221,22 @@
     <tag k='width' v='4' />
     <tag k='width:minimum_traveled_way' v='4' />
   </way>
-  <way id='-102155' action='modify' visible='true' version='1'>
-    <nd ref='-102752' />
-    <nd ref='-102751' />
-    <tag k='error:circular' v='15' />
+  <way id='-102588' action='modify' visible='true' version='1'>
+    <nd ref='-103203' />
+    <nd ref='-103202' />
     <tag k='highway' v='track' />
     <tag k='seasonal' v='limited' />
     <tag k='uuid' v='{bc8d301f-0e78-43a3-b6ea-0fd0230c82b8}' />
   </way>
-  <way id='-102156' action='modify' visible='true' version='1'>
-    <nd ref='-102757' />
-    <nd ref='-102756' />
-    <nd ref='-102755' />
-    <nd ref='-102754' />
-    <nd ref='-102753' />
-    <nd ref='-102757' />
+  <way id='-102589' action='modify' visible='true' version='1'>
+    <nd ref='-103208' />
+    <nd ref='-103207' />
+    <nd ref='-103206' />
+    <nd ref='-103205' />
+    <nd ref='-103204' />
+    <nd ref='-103208' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='operator' v='military' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3426,18 +3247,17 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{e76b27ae-22e0-43b0-b269-ca024bc2ca03}' />
   </way>
-  <way id='-102157' action='modify' visible='true' version='1'>
-    <nd ref='-102762' />
-    <nd ref='-102761' />
-    <nd ref='-102760' />
-    <nd ref='-102759' />
-    <nd ref='-102758' />
-    <nd ref='-102762' />
+  <way id='-102590' action='modify' visible='true' version='1'>
+    <nd ref='-103213' />
+    <nd ref='-103212' />
+    <nd ref='-103211' />
+    <nd ref='-103210' />
+    <nd ref='-103209' />
+    <nd ref='-103213' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='moderate' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='name' v='Defence' />
     <tag k='operator' v='joint_military_civilian' />
@@ -3450,17 +3270,16 @@
     <tag k='use' v='military' />
     <tag k='uuid' v='{c5d722af-c570-42de-8ac6-4abea5a4983f}' />
   </way>
-  <way id='-102158' action='modify' visible='true' version='1'>
-    <nd ref='-102767' />
-    <nd ref='-102766' />
-    <nd ref='-102765' />
-    <nd ref='-102764' />
-    <nd ref='-102763' />
-    <nd ref='-102767' />
+  <way id='-102591' action='modify' visible='true' version='1'>
+    <nd ref='-103218' />
+    <nd ref='-103217' />
+    <nd ref='-103216' />
+    <nd ref='-103215' />
+    <nd ref='-103214' />
+    <nd ref='-103218' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='name' v='Religious' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3472,18 +3291,17 @@
     <tag k='use' v='religious_activities' />
     <tag k='uuid' v='{8dedb86f-3331-41ef-bd39-63c5a809eabe}' />
   </way>
-  <way id='-102159' action='modify' visible='true' version='1'>
-    <nd ref='-102772' />
-    <nd ref='-102771' />
-    <nd ref='-102770' />
-    <nd ref='-102769' />
-    <nd ref='-102768' />
-    <nd ref='-102772' />
+  <way id='-102592' action='modify' visible='true' version='1'>
+    <nd ref='-103223' />
+    <nd ref='-103222' />
+    <nd ref='-103221' />
+    <nd ref='-103220' />
+    <nd ref='-103219' />
+    <nd ref='-103223' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='sparse' />
     <tag k='condition' v='damaged' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='residential' />
     <tag k='name' v='Residential' />
     <tag k='operator' v='public' />
@@ -3495,18 +3313,17 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{0d490002-2c16-4659-8311-7b7c8b59b48e}' />
   </way>
-  <way id='-102160' action='modify' visible='true' version='1'>
-    <nd ref='-102777' />
-    <nd ref='-102776' />
-    <nd ref='-102775' />
-    <nd ref='-102774' />
-    <nd ref='-102773' />
-    <nd ref='-102777' />
+  <way id='-102593' action='modify' visible='true' version='1'>
+    <nd ref='-103228' />
+    <nd ref='-103227' />
+    <nd ref='-103226' />
+    <nd ref='-103225' />
+    <nd ref='-103224' />
+    <nd ref='-103228' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='sparse' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='residential' />
     <tag k='name' v='Residential' />
     <tag k='note' v='Small suburb' />
@@ -3518,17 +3335,16 @@
     <tag k='source:vertical_source:type' v='dted_2' />
     <tag k='uuid' v='{4c076d27-3ef4-4ad3-9137-920b4278ce6c}' />
   </way>
-  <way id='-102161' action='modify' visible='true' version='1'>
-    <nd ref='-102782' />
-    <nd ref='-102781' />
-    <nd ref='-102780' />
-    <nd ref='-102779' />
-    <nd ref='-102778' />
-    <nd ref='-102782' />
+  <way id='-102594' action='modify' visible='true' version='1'>
+    <nd ref='-103233' />
+    <nd ref='-103232' />
+    <nd ref='-103231' />
+    <nd ref='-103230' />
+    <nd ref='-103229' />
+    <nd ref='-103233' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='name' v='Utilities' />
     <tag k='operator' v='civilian' />
@@ -3541,18 +3357,17 @@
     <tag k='use' v='utilities' />
     <tag k='uuid' v='{932b5e3e-f9a8-481d-9c6f-cdf9786bad19}' />
   </way>
-  <way id='-102162' action='modify' visible='true' version='1'>
-    <nd ref='-102787' />
-    <nd ref='-102786' />
-    <nd ref='-102785' />
-    <nd ref='-102784' />
-    <nd ref='-102783' />
-    <nd ref='-102787' />
+  <way id='-102595' action='modify' visible='true' version='1'>
+    <nd ref='-103238' />
+    <nd ref='-103237' />
+    <nd ref='-103236' />
+    <nd ref='-103235' />
+    <nd ref='-103234' />
+    <nd ref='-103238' />
     <tag k='addr:country' v='XE' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='dense' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='landuse' v='built_up_area' />
     <tag k='name' v='Manufacturing' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3564,19 +3379,18 @@
     <tag k='use' v='manufacturing' />
     <tag k='uuid' v='{843565f8-09e3-4f5b-9039-3f5341bd0841}' />
   </way>
-  <way id='-102163' action='modify' visible='true' version='1'>
-    <nd ref='-102798' />
-    <nd ref='-102797' />
-    <nd ref='-102796' />
-    <nd ref='-102795' />
-    <nd ref='-102798' />
+  <way id='-102596' action='modify' visible='true' version='1'>
+    <nd ref='-103249' />
+    <nd ref='-103248' />
+    <nd ref='-103247' />
+    <nd ref='-103246' />
+    <nd ref='-103249' />
     <tag k='addr:country' v='US' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Place of Worship' />
     <tag k='operator' v='private' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3588,19 +3402,18 @@
     <tag k='uuid' v='{e8cbc330-a431-4cf6-adcf-73a9c8f10fe9}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102164' action='modify' visible='true' version='1'>
-    <nd ref='-102802' />
-    <nd ref='-102801' />
-    <nd ref='-102800' />
-    <nd ref='-102799' />
-    <nd ref='-102802' />
+  <way id='-102597' action='modify' visible='true' version='1'>
+    <nd ref='-103253' />
+    <nd ref='-103252' />
+    <nd ref='-103251' />
+    <nd ref='-103250' />
+    <nd ref='-103253' />
     <tag k='addr:country' v='US' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='yes' />
     <tag k='by_product' v='ash' />
     <tag k='condition' v='damaged' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='material' v='prestressed_concrete' />
     <tag k='name' v='Petroleum Facility' />
@@ -3620,18 +3433,17 @@
     <tag k='uuid' v='{a7694937-07d8-437b-8a03-384b8a3b7369}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102165' action='modify' visible='true' version='1'>
-    <nd ref='-102806' />
-    <nd ref='-102805' />
-    <nd ref='-102804' />
-    <nd ref='-102803' />
-    <nd ref='-102806' />
+  <way id='-102598' action='modify' visible='true' version='1'>
+    <nd ref='-103257' />
+    <nd ref='-103256' />
+    <nd ref='-103255' />
+    <nd ref='-103254' />
+    <nd ref='-103257' />
     <tag k='addr:country' v='US' />
     <tag k='amenity' v='prison' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='construction' />
     <tag k='construction' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='operator' v='civilian' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -3642,12 +3454,12 @@
     <tag k='uuid' v='{7a025070-c136-4e11-8e67-ef14135d50d6}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102166' action='modify' visible='true' version='1'>
-    <nd ref='-102810' />
-    <nd ref='-102809' />
-    <nd ref='-102808' />
-    <nd ref='-102807' />
-    <nd ref='-102810' />
+  <way id='-102599' action='modify' visible='true' version='1'>
+    <nd ref='-103261' />
+    <nd ref='-103260' />
+    <nd ref='-103259' />
+    <nd ref='-103258' />
+    <nd ref='-103261' />
     <tag k='addr:country' v='US' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attached' v='no' />
@@ -3656,7 +3468,6 @@
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='functional' />
     <tag k='denomination' v='sunni' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='stone' />
     <tag k='name' v='Place of Worship' />
     <tag k='religion' v='muslim' />
@@ -3671,19 +3482,18 @@
     <tag k='uuid' v='{c57bcb46-fabf-46f1-a3e6-2e77f4f5c32d}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102167' action='modify' visible='true' version='1'>
-    <nd ref='-102815' />
-    <nd ref='-102814' />
-    <nd ref='-102813' />
-    <nd ref='-102812' />
-    <nd ref='-102811' />
-    <nd ref='-102815' />
+  <way id='-102600' action='modify' visible='true' version='1'>
+    <nd ref='-103266' />
+    <nd ref='-103265' />
+    <nd ref='-103264' />
+    <nd ref='-103263' />
+    <nd ref='-103262' />
+    <nd ref='-103266' />
     <tag k='addr:country' v='US' />
     <tag k='amenity' v='place_of_worship' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='monastery' />
     <tag k='condition' v='functional' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='no' />
     <tag k='religion' v='buddhist' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3695,17 +3505,16 @@
     <tag k='use' v='Hobbit Hole' />
     <tag k='uuid' v='{eea2047e-4a2d-449e-9def-8d1bc1765166}' />
   </way>
-  <way id='-102168' action='modify' visible='true' version='1'>
-    <nd ref='-102819' />
-    <nd ref='-102818' />
-    <nd ref='-102817' />
-    <nd ref='-102816' />
-    <nd ref='-102819' />
+  <way id='-102601' action='modify' visible='true' version='1'>
+    <nd ref='-103270' />
+    <nd ref='-103269' />
+    <nd ref='-103268' />
+    <nd ref='-103267' />
+    <nd ref='-103270' />
     <tag k='addr:country' v='US' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='navigation:landmark' v='no' />
     <tag k='operator' v='military' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3717,17 +3526,16 @@
     <tag k='uuid' v='{b9745971-a030-4956-ba12-1bcd926f0f78}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102169' action='modify' visible='true' version='1'>
-    <nd ref='-102823' />
-    <nd ref='-102822' />
-    <nd ref='-102821' />
-    <nd ref='-102820' />
-    <nd ref='-102823' />
+  <way id='-102602' action='modify' visible='true' version='1'>
+    <nd ref='-103274' />
+    <nd ref='-103273' />
+    <nd ref='-103272' />
+    <nd ref='-103271' />
+    <nd ref='-103274' />
     <tag k='abandoned:building' v='yes' />
     <tag k='addr:country' v='US' />
     <tag k='area' v='yes' />
     <tag k='communication:mobile_phone' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='light:obstacle' v='yes' />
     <tag k='name' v='Barracks' />
     <tag k='operator' v='military' />
@@ -3740,12 +3548,12 @@
     <tag k='uuid' v='{f9f1e2e7-7699-4dd7-8271-586970f42122}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102170' action='modify' visible='true' version='1'>
-    <nd ref='-102827' />
-    <nd ref='-102826' />
-    <nd ref='-102825' />
-    <nd ref='-102824' />
-    <nd ref='-102827' />
+  <way id='-102603' action='modify' visible='true' version='1'>
+    <nd ref='-103278' />
+    <nd ref='-103277' />
+    <nd ref='-103276' />
+    <nd ref='-103275' />
+    <nd ref='-103278' />
     <tag k='addr:country' v='US' />
     <tag k='addr:full' v='Left side of the street' />
     <tag k='amenity' v='bank' />
@@ -3754,7 +3562,6 @@
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='no' />
     <tag k='condition' v='destroyed' />
-    <tag k='error:circular' v='15' />
     <tag k='material' v='wood' />
     <tag k='name' v='Bank' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3767,33 +3574,30 @@
     <tag k='uuid' v='{69d80b50-1eb2-4fe6-8db6-ea346395b285}' />
     <tag k='width' v='25' />
   </way>
-  <way id='-102171' action='modify' visible='true' version='1'>
-    <nd ref='-102867' />
-    <nd ref='-102866' />
-    <nd ref='-102865' />
-    <nd ref='-102864' />
-    <nd ref='-102867' />
+  <way id='-102604' action='modify' visible='true' version='1'>
+    <nd ref='-103318' />
+    <nd ref='-103317' />
+    <nd ref='-103316' />
+    <nd ref='-103315' />
+    <nd ref='-103318' />
     <tag k='angle' v='179' />
-    <tag k='error:circular' v='15' />
     <tag k='feature_area' v='11599.799999999999' />
     <tag k='length' v='117.7' />
     <tag k='name' v='Heath' />
     <tag k='natural' v='heath' />
     <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Unknown' />
-    <tag k='source:imagery' v='Unknown' />
+    <tag k='source' v='unknown' />
     <tag k='undergrowth:density' v='40' />
     <tag k='uuid' v='{79adc4f4-a754-4818-b0a3-3a225eae4ad8}' />
     <tag k='width' v='98.900000000000006' />
   </way>
-  <way id='-102172' action='modify' visible='true' version='1'>
-    <nd ref='-102567' />
-    <nd ref='-102566' />
+  <way id='-102605' action='modify' visible='true' version='1'>
+    <nd ref='-103018' />
+    <nd ref='-103017' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='bridge' v='construction' />
     <tag k='construction' v='yes' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Main' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='security:dissemination_control:non_ic' v='DS' />
@@ -3805,14 +3609,13 @@
     <tag k='uuid' v='{c87f3ed7-5656-4f80-b556-5b85df1cb9be}' />
     <tag k='width' v='4' />
   </way>
-  <way id='-102173' action='modify' visible='true' version='1'>
-    <nd ref='-102869' />
-    <nd ref='-102868' />
+  <way id='-102606' action='modify' visible='true' version='1'>
+    <nd ref='-103320' />
+    <nd ref='-103319' />
     <tag k='addr:country' v='AU' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='bridge' v='yes' />
     <tag k='condition' v='damaged' />
-    <tag k='error:circular' v='15' />
     <tag k='name' v='Big' />
     <tag k='navigation:landmark' v='no' />
     <tag k='security:classification' v='UNCLASSIFIED' />
