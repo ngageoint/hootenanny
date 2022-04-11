@@ -441,7 +441,6 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(child->getStatus());
 
   //  Check if the two ways are able to be joined back up
-
   vector<long> child_nodes = child->getNodeIds();
   vector<long> parent_nodes = parent->getNodeIds();
 
@@ -529,7 +528,6 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
   child->getTags().clear();
 
-  // Micah says: this looks very, very innefficient
   //  Update any ways that have the child's ID as their parent to the parent's ID
   std::list<std::pair<long, long>> newEntries;
   auto iterPair = _parentIDsToWays.equal_range(child->getId());
@@ -540,25 +538,17 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
       // If the way exists, update it
       _map->getWay(it->second)->setPid(parent->getId());
 
-      // Store the new/updated entry
+      // Store the new/updated entry - the new map from parentID to wayID
       newEntries.push_back(std::pair<long, long>(parent->getId(), it->second));
     }
   }
 
-  // Delete stale entries
+  // Delete stale entries - these have all been modified
   _parentIDsToWays.erase(child->getId());
 
   // Insert updated entries
   for (auto it = newEntries.begin(); it != newEntries.end(); ++it)
     _parentIDsToWays.insert(*it);
-
-
-  /* Old Way
-  UpdateWayParentVisitor visitor(child->getId(), parent->getId());
-  _map->setEnableProgressLogging(false);
-  _map->visitWaysRw(visitor);
-  _map->setEnableProgressLogging(true);
-  */
 
   //  Delete the child
   RecursiveElementRemover(child->getElementId()).apply(_map);
