@@ -4492,11 +4492,11 @@ tds71.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
+    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
+    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
+    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
+    ['ZSAX_RS0','S','security:classification','SECRET'],
+    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
   ], // End one2one

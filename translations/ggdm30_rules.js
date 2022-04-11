@@ -6349,6 +6349,12 @@ ggdm30.rules = {
     // ['ZI016_ROC','1','surface','earth'], // Unimproved
     // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
+
+    ['ZSAX_RS0','U','security:classification','U'],
+    ['ZSAX_RS0','R','security:classification','R'],
+    ['ZSAX_RS0','C','security:classification','C'],
+    ['ZSAX_RS0','S','security:classification','S'],
+    ['ZSAX_RS0','TS','security:classification','TS'],
   ], // End one2oneOut
 
   // ##### End of One2One Rules #####
