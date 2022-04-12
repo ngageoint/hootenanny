@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LogJs.h"
 
@@ -31,9 +31,13 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
+
+//TEST
+#include <thread>
+//ENDTEST
 
 using namespace std;
 using namespace v8;
@@ -71,20 +75,12 @@ void LogJs::Init(Local<Object> exports)
 
 int LogJs::getLogCount(QString log)
 {
-  int result;
-
   if (_logs.contains(log) == false)
-  {
     _logs[log] = 1;
-    result = 1;
-  }
   else
-  {
-    result = _logs[log] + 1;
-    _logs[log] = result;
-  }
+    _logs[log] += 1;
 
-  return result;
+  return _logs[log];
 }
 
 void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level)
@@ -104,20 +100,20 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
     if (stack->GetFrameCount() >= 1)
     {
       lineNumber = frame->GetLineNumber();
-      script = toString(frame->GetScriptName()).replace("\"", "");
-      functionName = toString(frame->GetFunctionName());
+      Local<String> script_name = frame->GetScriptNameOrSourceURL();
+      if (!script_name.IsEmpty())
+        script = toString(script_name).replace("\"", "");
+
+      Local<String> function_name = frame->GetFunctionName();
+      if (!function_name.IsEmpty())
+        functionName = toString(function_name);
     }
-    //std::cout << "lineNumber: " << lineNumber << std::endl;
-    //std::cout << "script: " << script << std::endl;
-    //std::cout << "functionName: " << functionName << std::endl;
 
     std::stringstream rMessage;
     for (int i = 0; i < args.Length(); i++)
     {
       if (i != 0)
-      {
         rMessage << " ";
-      }
       rMessage << args[i];
     }
 
@@ -130,19 +126,15 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
       const int messageCount = getLogCount(message);
 
       if (messageCount == logLimit)
-      {
-        message =
-          QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
-      }
+        message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
 
       if (messageCount >= logLimit)
-      {
         logMessage = false;
-      }
     }
 
     if (logMessage)
     {
+      //  Pass the script name in twice since the function in JS doesn't work with filtering
       Log::getInstance().log(level, message, script, script, lineNumber);
     }
   }
