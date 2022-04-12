@@ -1,33 +1,33 @@
-/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
- */
 
-/*
-    TDSv71 One2one rules
-*/
+//  * This file is part of Hootenanny.
+//  *
+//  * Hootenanny is free software: you can redistribute it and/or modify
+//  * it under the terms of the GNU General Public License as published by
+//  * the Free Software Foundation, either version 3 of the License, or
+//  * (at your option) any later version.
+//  *
+//  * This program is distributed in the hope that it will be useful,
+//  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  * GNU General Public License for more details.
+//  *
+//  * You should have received a copy of the GNU General Public License
+//  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//  *
+//  * --------------------------------------------------------------------
+//  *
+//  * The following copyright notices are generated automatically. If you
+//  * have a new notice to add, please use the format:
+//  * " * @copyright Copyright ..."
+//  * This will properly maintain the copyright information. DigitalGlobe
+//  * copyrights will be updated automatically.
+//  *
+//  * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+
+
+// /*
+//     TDSv71 One2one rules
+// */
 
 var _global = (0, eval)('this');
 if (!_global.schemaTools)
@@ -136,6 +136,7 @@ tds71.rules = {
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
+    ['F_CODE','BH140','waterway','stream'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
     ['F_CODE','DB090','embankment','mound'], // Embankment
@@ -167,6 +168,7 @@ tds71.rules = {
     'BRN':'bridge:reference', // Bridge Reference Number
     'CCN':'source:copyright', // Commercial Copyright Notice
     'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
+    'CHAN':'navaid:channel', // CHAN
     'CID':'source:cell_identifier', // Cell Identifier
     'DIA':'diam:classification', // DIAM Functional Classification
     'DQS':'source:data_quality', // Data Quality Statement
@@ -184,12 +186,12 @@ tds71.rules = {
     'MDE':'source:update:datetime', // Maintenance Date and Time
     // 'MEM':'raw:MEM', // Memorandum
     'NA8':'official_name', // Aerodrome Official Name
+    'NAA':'airspace:name', //Airspace Name
     'NAM':'navaid:name', // NAM
     'NAV_COUNTRY':'navaid:country', // NAV_COUNTRY
     'NAV_IDENT':'navaid:identifier', // NAV_IDENT
     'OIQ':'object_identification_quality', // Object Identification Quality
     'OTH':'note:oth', // Specified Domain Value(s)
-    'PFI':'source:imagery:sensor', // Acquisition Platform Identifier
     'PROVINCE':'province:name', // PROVINCE
     'PSE':'restriction_interval', // Periodic Restriction Month Interval
     'RIN_RTN':'ref', // Route Identification <route designation>
@@ -224,12 +226,13 @@ tds71.rules = {
     'ZI020_GE42':'addr:country:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
     'ZI020_GE43':'addr:country:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
     'ZI020_GE44':'addr:country:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
-    'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
+    // 'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
     'imagery_id':'source:imagery:id', // Image_id - non-spec
-    'legacy_id':'source:imagery:legacy_id', // Image_id - non-spec    'img_layer':'source:imagery:layerName', // Layer name - non-spec
+    'legacy_id':'source:imagery:legacy_id', // Image_id - non-spec    '
+    'img_layer':'source:imagery:layerName', // Layer name - non-spec
     'early_date':'source:imagery:earliestDate', // Earliest image in a mosaic - non-spec
     'late_date':'source:imagery:latestDate', // Latest image in a mosaic - non-spec
     'PFI':'source:imagery:sensor', // Acquisition Platform Identifier - non-spec
@@ -255,7 +258,7 @@ tds71.rules = {
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
     'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
-    //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
+    // 'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction (low end) : Surface Slope (low) (lower value)
@@ -271,6 +274,7 @@ tds71.rules = {
     'LC3':'mlc:tracked_oneway', // Load Class Type 3
     'LC4':'mlc:tracked', // Load Class Type 4
     'LDC':'length:crest', // Dam Crest Length
+    'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
     'LTN':'lanes', // Track or Lane Count
     'LZN':'length', // Length
     'MAG':'magnetic_variation', // Magnetic Variation
@@ -319,13 +323,13 @@ tds71.rules = {
     ['img_mosaic','no','source:imagery:mosaic','no'],
 
     // ACC - Horizontal Accuracy Category
-    // ['ACC','-999999',undefined,undefined], // noInformation
+    ['ACC','-999999','source:accuracy:horizontal:category','unknown'], // noInformation
     ['ACC','1','source:accuracy:horizontal:category','accurate'],
     ['ACC','2','source:accuracy:horizontal:category','approximate'],
     ['ACC','3','source:accuracy:horizontal:category','doubtful'],
 
     // AMA - Amusement Attraction Type
-    // ['AMA','-999999',undefined,undefined], // No Information
+    ['AMA','-999999','attraction','unknown'], // noInformation
     ['AMA','1','attraction','artificial_mountain'], // Artificial Mountain
     ['AMA','2','attraction','ferris_wheel'], // Ferris Wheel
     ['AMA','3','attraction','roller-coaster'], // Roller-coaster
@@ -335,7 +339,7 @@ tds71.rules = {
     ['AMA','999','attraction','other'], // Other
 
     // AMB - Special Administrative Unit
-    // ['AMB','-999999',undefined,undefined], // No Information
+    ['AMB','-999999','administrative_unit:type','unknown'], // No Information
     ['AMB','1','administrative_unit:type','lease_area'], // Lease Area
     ['AMB','2','administrative_unit:type','concession_area'], // Concession Area
     ['AMB','3','administrative_unit:type','free_trade_zone'], // Free Trade Zone
@@ -358,7 +362,7 @@ tds71.rules = {
     ['AMB','20','administrative_unit:type','fbi_resident_agency_district'], // FBI Resident Agency District
 
     // APT - Airfield Use
-    // ['APT','-999999',undefined,undefined], // No Information
+    ['APT','-999999','aeroway:use','unknown'], // No Information
     ['APT','1','aeroway:use','major_airfield'], // Major Airfield
     ['APT','2','aeroway:use','minor_airfield'], // Minor Airfield
     ['APT','3','aeroway:use','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
@@ -375,7 +379,7 @@ tds71.rules = {
     // APT3 - Airfield Use [3]
 
     // APU - Apron Usage
-    // ['APU','-999999',undefined,undefined], // No Information
+    ['APU','-999999','apron:use','unknown'], // No Information
     ['APU','1','apron:use','parking'], // Parking
     ['APU','2','apron:use','loading_and/or_unloading'], // Loading and/or Unloading
     ['APU','3','apron:use','fuelling'], // Fuelling
@@ -396,7 +400,7 @@ tds71.rules = {
     // APU3 - Apron Usage [3]
 
     // APY - Apron Type
-    // ['APY','-999999',undefined,undefined], // No Information
+    ['APY','-999999','apron:type','unknown'], // No Information
     ['APY','1','apron:type','passenger'], // Passenger
     ['APY','2','apron:type','cargo'], // Cargo
     ['APY','3','apron:type','remote_parking'], // Remote Parking
@@ -408,13 +412,13 @@ tds71.rules = {
     ['APY','999','apron:type','other'], // Other
 
     // ART - Aeronautical Route Category
-    // ['ART','-999999',undefined,undefined], // No Information
+    ['ART','-999999','navigationaid:route_type','unknown'], // No Information
     ['ART','1','navigationaid:route_type','low'], // Low
     ['ART','2','navigationaid:route_type','high'], // High
     ['ART','3','navigationaid:route_type','high_and_low'], // Both
 
     // ASO - Aeronautical Service Operational Status
-    // ['ASO','-999999',undefined,undefined], // No Information
+    ['ASO','-999999','aeronautical_service_status','unknown'], // No Information
     ['ASO','1','aeronautical_service_status','operational'], // Operational
     ['ASO','2','aeronautical_service_status','unserviceable'], // Unserviceable
     ['ASO','3','aeronautical_service_status','on-test'], // On-Test
@@ -432,7 +436,7 @@ tds71.rules = {
     ['ASO','17','aeronautical_service_status','navaid_partial_service'], // NAVAID Partial Service
 
     // ASU - Aerodrome Movement Area Surface Composition - See ZI019_ASU
-    // ['ASU','-999999',undefined,undefined], // noInformation
+    // ['ASU','-999999','raw:ASU','unknown'], // noInformation
     // ['ASU','1','raw:ASU','asphalt'], // Asphalt
     // ['ASU','2','raw:ASU','bituminous_mix'], // Bituminous Mix
     // ['ASU','3','raw:ASU','brick'], // Brick
@@ -460,7 +464,7 @@ tds71.rules = {
     // ASU3 - Aerodrome Movement Area Surface Composition [3]
 
     // ASY - Airfield Symbol Type
-    // ['ASY','-999999',undefined,undefined], // No Information
+    ['ASY','-999999','aeroway:aerodrome_symbol','unknown'], // No Information
     ['ASY','1','aeroway:aerodrome_symbol','active_civilian'], // A - Active Civilian
     ['ASY','2','aeroway:aerodrome_symbol','active_joint_(civilian/military)'], // B - Active Joint (Civilian/Military)
     ['ASY','3','aeroway:aerodrome_symbol','active_military'], // C - Active Military
@@ -480,14 +484,14 @@ tds71.rules = {
     // AT005_CAB3 - Cable : Cable Type [3]
 
     // ATC - Aqueduct Type
-    // ['ATC','-999999',undefined,undefined], // No Information
+    ['ATC','-999999','aqueduct:type','unknown'], // No Information
     ['ATC','3','aqueduct:type','underground'], // Underground
     ['ATC','4','aqueduct:type','underwater'], // Underwater
     ['ATC','5','aqueduct:type','surface'], // Surface
     ['ATC','6','aqueduct:type','qanat'], // Qanat
 
     // ATY - Airspace Type
-    // ['ATY','-999999',undefined,undefined], // noInformation
+    ['ATY','-999999','airspace:type','unknown'], // noInformation
     ['ATY','1','airspace:type','air_defense_identification_zone'], // Air Defense Identification Zone
     ['ATY','2','airspace:type','airway'], // Airway
     ['ATY','3','airspace:type','alert_area'], // Alert Area
@@ -525,10 +529,11 @@ tds71.rules = {
     ['ATY','35','airspace:type','special_rules_zone'], // Special Rules Zone
     ['ATY','36','airspace:type','military_operations_area'], // Military Operations Area
     ['ATY','41','airspace:type','no-fly_area'], // No-fly Area
+    ['ATY','42','airspace:type','buffer_zone'], // Buffer Zone
     ['ATY','999','airspace:type','other'], // Other
 
     // AWP - Aeronautical Obstacle Light Present
-    // ['AWP','-999999',undefined,undefined], // No Information
+    ['AWP','-999999','light:obstacle','unknown'], // No Information
     ['AWP','1000','light:obstacle','no'],
     ['AWP','1001','light:obstacle','yes'],
 // ['AWP','-1001','raw:AWP','true'], // TRUE
@@ -536,19 +541,19 @@ tds71.rules = {
 
 
     // AXS - Aerodrome Surface Status
-    // ['AXS','-999999',undefined,undefined], // No Information
+    ['AXS','-999999','aeroway:surface:status','unknown'], // No Information
     ['AXS','1','aeroway:surface:status','closed'], // Closed
     ['AXS','2','aeroway:surface:status','open'], // Open
     ['AXS','3','aeroway:surface:status','work_in_progress'], // Work in Progress
     ['AXS','4','aeroway:surface:status','parked_or_disabled_aircraft'], // Parked or Disabled Aircraft
 
     // AZC - Man-made
-    // ['AZC','-999999',undefined,undefined], // No Information
+    ['AZC','-999999','artificial','unknown'], // No Information
     ['AZC','1000','artificial','no'],
     ['AZC','1001','artificial','yes'],
 
     // BA000_VDC - Water Line : Sounding Datum
-    // ['BA000_VDC','-999999',undefined,undefined], // No Information
+    ['BA000_VDC','-999999','source:datum:sounding','unknown'], // No Information
     ['BA000_VDC','4','source:datum:sounding','indian_spring_low_water'], // Indian Spring Low Water
     ['BA000_VDC','7','source:datum:sounding','mean_high_water'], // Mean High Water
     ['BA000_VDC','9','source:datum:sounding','mean_high_water_springs'], // Mean High Water Springs
@@ -566,13 +571,13 @@ tds71.rules = {
     ['BA000_VDC','999','source:datum:sounding','other'], // Other
 
     // BAC - Built-up Area Density Category
-    // ['BAC','-999999',undefined,undefined], // No Information
+    ['BAC','-999999','building:density','unknown'], // No Information
     ['BAC','1','building:density','sparse'], // Sparse
     ['BAC','2','building:density','dense'], // Dense
     ['BAC','3','building:density','moderate'], // Moderate
 
     // BAL - BGN Administrative Level
-    // ['BAL','-999999',undefined,undefined], // noInformation
+    ['BAL','-999999','administrative_subdivision','unknown'], // noInformation
     ['BAL','1','administrative_subdivision','first-order'], // First-order
     ['BAL','2','administrative_subdivision','second-order'], // Second-order
     ['BAL','3','administrative_subdivision','third-order'], // Third-order
@@ -581,7 +586,7 @@ tds71.rules = {
     ['BAL','999','administrative_subdivision','other'], // Other
 
     // BAT - Barrier Top Type
-    // ['BAT','-999999',undefined,undefined], // No Information
+    ['BAT','-999999','barrier:top','unknown'], // No Information
     ['BAT','1','barrier:top','barbed_wire'], // Barbed Wire
     ['BAT','2','barrier:top','chain_link'], // Chain-link
     ['BAT','3','barrier:top','concertina_wire'], // Concertina Wire
@@ -590,7 +595,7 @@ tds71.rules = {
     ['BAT','999','barrier:top','other'], // Other
 
     // BC034_MRT - Maritime Radiobeacon : Maritime Radiobeacon Type
-    // ['BC034_MRT','-999999',undefined,undefined], // noInformation
+    ['BC034_MRT','-999999','seamark:radio_station:category','unknown'], // noInformation
     ['BC034_MRT','1','seamark:radio_station:category','ais'], // Automated Identification System (AIS)
     ['BC034_MRT','2','seamark:radio_station:category','omnidirectional'], // Circular Radiobeacon
     ['BC034_MRT','3','seamark:radio_station:category','directional'], // Directional Radiobeacon
@@ -603,7 +608,7 @@ tds71.rules = {
     ['BC034_MRT','999','seamark:radio_station:category','other'], // Other
 
    // BC101_SST - Fog Signal : Fog Signal Type
-   // ['BC101_SST','-999999',undefined,undefined], // noInformation
+   ['BC101_SST','-999999','seamark:fog_signal:category','unknown'], // noInformation
     ['BC101_SST','1','seamark:fog_signal:category','bell'], // Bell
     ['BC101_SST','2','seamark:fog_signal:category','diaphone'], // Diaphone
     ['BC101_SST','3','seamark:fog_signal:category','explosive'], // Explosive
@@ -621,20 +626,20 @@ tds71.rules = {
     ['BC101_SST','999','seamark:fog_signal:category','other'], // Other
 
     // BCC - Bypass Condition
-    // ['BCC','-999999',undefined,undefined], // No Information
+    ['BCC','-999999','bypass','unknown'], // No Information
     ['BCC','1','bypass','easy'],
     ['BCC','2','bypass','difficult'],
     ['BCC','3','bypass','impossible'],
 
     // BGT - Basin Gate Type
-    // ['BGT','-999999',undefined,undefined], // No Information
+    ['BGT','-999999','seamark:gate:category','unknown'], // No Information
     ['BGT','1','seamark:gate:category','caisson'], // Caisson
     ['BGT','2','seamark:gate:category','lock'], // Lock Gate
     ['BGT','3','seamark:gate:category','tide_lock'], // Tide Lock
     ['BGT','999','seamark:gate:category','other'], // Other
 
     // BH141_SLTA - Waterbody bank 1 shoreline type: No OSM even close, See MGCP SHR & SHL
-    // ['BH141_SLTA','-999999',undefined,undefined], // Null
+    ['BH141_SLTA','-999999','waterway:bank1:type','unknown'], // Null
     ['BH141_SLTA','6','waterway:bank1:type','mangrove'],
     ['BH141_SLTA','8','waterway:bank1:type','marshy'],
     ['BH141_SLTA','10','waterway:bank1:type','stony'],
@@ -647,7 +652,7 @@ tds71.rules = {
     ['BH141_SLTA','999','waterway:bank1:type','other'],
 
     // BH141_SLTB - Waterbody bank 2 shoreline type: No OSM even close, See MGCP SHR & SHL
-    // ['BH141_SLTB','-999999',undefined,undefined], // Null
+    ['BH141_SLTB','-999999','waterway:bank2:type','unknown'], // Null
     ['BH141_SLTB','6','waterway:bank2:type','mangrove'],
     ['BH141_SLTB','8','waterway:bank2:type','marshy'],
     ['BH141_SLTB','10','waterway:bank2:type','stony'],
@@ -660,7 +665,7 @@ tds71.rules = {
     ['BH141_SLTB','999','waterway:bank2:type','other'],
 
     // BMC - Bottom Material Type
-    // ['BMC','-999999',undefined,undefined], // No Information
+    ['BMC','-999999','waterway:bottom','unknown'], // No Information
     ['BMC','1','waterway:bottom','clay_and_silt'], // Clay and Silt
     ['BMC','2','waterway:bottom','silty_sands'], // Silty Sands
     ['BMC','3','waterway:bottom','sand_and_gravel'], // Sand and Gravel
@@ -682,7 +687,7 @@ tds71.rules = {
     // BMC3 - Bottom Material Type [3]
 
     // BOC - Bog Type
-    // ['BOC','-999999',undefined,undefined], // No Information
+    ['BOC','-999999','bog:type','unknown'], // No Information
     ['BOC','1','bog:type','palsa'], // Palsa Bog
     ['BOC','2','bog:type','string'], // String Bog
     ['BOC','3','bog:type','atlantic_plateau'], // Atlantic Plateau Bog
@@ -705,7 +710,7 @@ tds71.rules = {
     ['BOC','999','bog:type','other'], // Other
 
     // BOT - Bridge Opening Type
-    // ['BOT','-999999',undefined,undefined], // Null
+    ['BOT','-999999','bridge:movable','unknown'], // Null
     ['BOT','4','bridge:movable','bascule'],
     ['BOT','10','bridge:movable','swing'],
     ['BOT','11','bridge:movable','lift'],
@@ -717,7 +722,7 @@ tds71.rules = {
     ['BOT','999','bridge:movable','other'],
 
     // BSC - Bridge Structure Type
-    // ['BSC','-999999',undefined,undefined], // No Information
+    ['BSC','-999999','bridge:structure','unknown'], // No Information
     ['BSC','1','bridge:structure','open_spandrel_arch'], // Open Spandrel Arch
     ['BSC','2','bridge:structure','cantilever'], // Cantilever
     ['BSC','5','bridge:structure','floating'], // Floating
@@ -741,19 +746,19 @@ tds71.rules = {
     // BSC3 - Bridge Structure Type [3]
 
     // BSM - Mobile Bridge Span
-    // ['BSM','-999999',undefined,undefined], // No Information
+    ['BSM','-999999','bridge:mobile_span','unknown'], // No Information
     ['BSM','1000','bridge:mobile_span','no'],
     ['BSM','1001','bridge:mobile_span','yes'],
 
     // BST - Boundary Status
-    // ['BST','-999999',undefined,undefined], // No Information
+    ['BST','-999999','boundary:status','unknown'], // No Information
     ['BST','1','boundary:status','definite'], // Definite
     ['BST','2','boundary:status','indefinite'], // Indefinite
     ['BST','3','boundary:status','in_dispute'], // In Dispute
     ['BST','4','boundary:status','no_defined_boundary'], // No Defined Boundary
 
     // BSU - Building Superstructure Type
-    // ['BSU','-999999',undefined,undefined], // No Information
+    ['BSU','-999999','building:superstructure:type','unknown'], // No Information
     ['BSU','1','building:superstructure:type','chimney'], // Chimney
     ['BSU','2','building:superstructure:type','elevator_machine_room'], // Elevator Machine Room
     ['BSU','3','building:superstructure:type','hvac_equipment'], // HVAC Equipment
@@ -775,8 +780,7 @@ tds71.rules = {
     ['BSU','999','building:superstructure:type','other'], // Other
 
     // CAA - Controlling Authority - This does not play nicely in OSM
-    // ['CAA','-999999',undefined,undefined], // No Information
-    // ['CAA','0','operator','unknown'], // Not sure where this came from
+    ['CAA','-999999','operator','unknown'], // No Information
     ['CAA','1','operator','national'],
     ['CAA','2','operator','state'],
     ['CAA','3','operator','private'], // Private
@@ -785,14 +789,14 @@ tds71.rules = {
     ['CAA','6','operator','municipal'], // Municipal
     ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
     ['CAA','8','operator','international'],
-    ['CAA','11','operator','province'], // From NFDD
-    // ['CAA','13','operator','regional'], // From NFDD
+    ['CAA','10','operator','insular'], // Insular
+    ['CAA','11','operator','province'], // Province
     ['CAA','16','operator','civilian'], // Civilian
     ['CAA','17','operator','public'], // Public
     ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
-    // ['CAB','-999999',undefined,undefined], // No Information
+    ['CAB','-999999','cable:type','unknown'], // No Information
     // ['CAB','2','power','line'], // Power Distribution Line
     ['CAB','2','cable:type','power'], // Power Line
     ['CAB','3','cable:type','telephone'], // Telephone
@@ -814,7 +818,7 @@ tds71.rules = {
     // CAB3 - Cable Type [3]
 
     // CAM - Conservation Area Management Category
-    // ['CAM','-999999',undefined,undefined], // No Information
+    ['CAM','-999999','protect_class','unknown'], // No Information
     ['CAM','1','protect_class','1a'], // Strict Nature Reserve
     ['CAM','2','protect_class','1b'], // Wilderness Area
     ['CAM','3','protect_class','2'], // National Park
@@ -829,7 +833,7 @@ tds71.rules = {
     ['CAM','999','protect_class','other'], // Other
 
     // CAT - Cableway Type
-    // ['CAT','-999999',undefined,undefined], // No Information
+    ['CAT','-999999','cableway:type','unknown'], // No Information
     ['CAT','2','cableway:type','chair-lift'], // Chair-lift
     ['CAT','3','cableway:type','ski_tow'], // Ski Tow
     ['CAT','5','cableway:type','aerial_tramway'], // Aerial Tramway
@@ -840,24 +844,24 @@ tds71.rules = {
     ['CAT','999','cableway:type','other'], // Other
 
     // CBP - Containment Berm Present
-    // ['CBP','-999999',undefined,undefined], // No Information
+    ['CBP','-999999','containment_berm','unknown'], // No Information
     ['CBP','1000','containment_berm','no'],
     ['CBP','1001','containment_berm','yes'],
 
     // CCT - Cover Closure Type
-    // ['CCT','-999999',undefined,undefined], // No Information
+    ['CCT','-999999','cover:type','unknown'], // No Information
     ['CCT','1','cover:type','open'], // Open
     ['CCT','2','cover:type','partial'], // Partial
     ['CCT','3','cover:type','moveable'], // Moveable
     ['CCT','4','cover:type','complete'], // Complete
 
     // CDA - Covered Drain
-    // ['CDA','-999999',undefined,undefined], // No Information
+    ['CDA','-999999','covered','unknown'], // No Information
     ['CDA','1000','covered','no'],
     ['CDA','1001','covered','yes'],
 
     // CET - Grading Type
-    // ['CET','-999999',undefined,undefined], // No Information
+    ['CET','-999999','grading:type','unknown'], // No Information
     ['CET','1','grading:type','one_side'], // One Side
     ['CET','2','grading:type','two_sides'], // Two Sides
     ['CET','3','grading:type','many_sides'], // Many Sides
@@ -865,7 +869,7 @@ tds71.rules = {
     ['CET','999','grading:type','other'], // Other
 
     // CHA - Navigation Light Charateristic
-    // ['CHA','-999999',undefined,undefined], // noInformation
+    ['CHA','-999999','beacon:light','unknown'], // noInformation
     ['CHA','1','beacon:light','alternating'], // Alternating
     ['CHA','4','beacon:light','ultra_quick-flashing'], // Ultra Quick-flashing
     ['CHA','5','beacon:light','fixed'], // Fixed
@@ -895,12 +899,12 @@ tds71.rules = {
     ['CHA','999','beacon:light','other'], // Other
 
     // CIW - Closed in Winter
-    // ['CIW','-999999',undefined,undefined], // noInformation
+    ['CIW','-999999','closed_in_winter','unknown'], // noInformation
     ['CIW','1000','closed_in_winter','no'],
     ['CIW','1001','closed_in_winter','yes'],
 
     // CMS - Commissioned Status
-    // ['CMS','-999999',undefined,undefined], // No Information
+    ['CMS','-999999','commissioned','unknown'], // No Information
     ['CMS','1','commissioned','commissioned_and_operational'], // Commissioned and Operational
     ['CMS','2','commissioned','commissioned_and_on_test'], // Commissioned and on Test
     ['CMS','3','commissioned','commissioned_but_out_of_service'], // Commissioned but Out of Service
@@ -909,7 +913,7 @@ tds71.rules = {
     ['CMS','6','commissioned','not_commissioned_and_out_of_service'], // Not Commissioned and Out of Service
 
     // COS - Facility Operational Status
-    // ['COS','-999999',undefined,undefined], // noInformation
+    ['COS','-999999','operational_status','unknown'], // noInformation
     ['COS','4','operational_status','non-operational'], // Non-operational
     ['COS','6','operational_status','planned'], // Planned
     ['COS','9','operational_status','temporarily_non-operational'], // Temporarily Non-operational
@@ -923,10 +927,10 @@ tds71.rules = {
 //
     // ['COUNTRY_CODE','ZA','raw:COUNTRY_CODE','za'], // ZA
     // ['COUNTRY_CODE','ZI','raw:COUNTRY_CODE','zi'], // ZI
-    // ['COUNTRY_CODE','noInformation','raw:COUNTRY_CODE','noinformation'], // noInformation
+    // ['COUNTRY_CODE','noInformation','raw:COUNTRY_CODE','unknown'], // noInformation
 
     // CPS - Cell Partition Scheme
-    // ['CPS','noInformation',undefined,undefined], // No Information
+    ['CPS','-999999','source:cell_partition_scheme','unknown'], // No Information
     ['CPS','1','source:cell_partition_scheme','5_arc_degree'], // A global geodetic grid consisting of 5 by 5 arc degree cells.
     ['CPS','2','source:cell_partition_scheme','1_arc_degree'], // A global geodetic grid consisting of 1 by 1 arc degree cells.
     ['CPS','3','source:cell_partition_scheme','0.5_arc_degree'], // A global geodetic grid consisting of 30 by 30 arc minute cells over land.
@@ -936,7 +940,7 @@ tds71.rules = {
     ['CPS','999','source:cell_partition_scheme','other'], // Other
 
     // CRA - Crane Type
-    // ['CRA','-999999',undefined,undefined], // No Information
+    ['CRA','-999999','crane:type','unknown'], // No Information
     ['CRA','2','crane:type','bridge'], // Bridge Crane
     ['CRA','3','crane:type','rotating'], // Rotating Crane
     ['CRA','7','crane:type','tower'], // Tower Crane
@@ -944,7 +948,7 @@ tds71.rules = {
     ['CRA','999','crane:type','other'], // Other
 
     // CRM - Crane Mobility Type
-    // ['CRM','-999999',undefined,undefined], // No Information
+    ['CRM','-999999','crane:mobile','unknown'], // No Information
     ['CRM','1','crane:mobile','fixed'], // Fixed
     ['CRM','2','crane:mobile','travelling'], // Travelling
     ['CRM','3','crane:mobile','floating'], // Floating
@@ -952,25 +956,25 @@ tds71.rules = {
     ['CRM','999','crane:mobile','other'], // Other
 
     // CST - Contained within Service Tunnel
-    // ['CST','-999999',undefined,undefined], // No Information
+    ['CST','-999999','service_tunnel','unknown'], // No Information
     ['CST','1000','service_tunnel','no'],
     ['CST','1001','service_tunnel','yes'],
 
     // CTC - Culvert Type
-    // ['CTC','-999999',undefined,undefined], // No Information
+    ['CTC','-999999','culvert:type','unknown'], // No Information
     ['CTC','1','culvert:type','regular_with_soil'], // Regular with Soil
     ['CTC','2','culvert:type','box_with_soil'], // Box with Soil
     ['CTC','3','culvert:type','load_bearing_box'], // Box with Load
     ['CTC','999','culvert:type','other'], // Other
 
     // CUR - Current Type Category
-    // ['CUR','-999999',undefined,undefined], // No Information
+    ['CUR','-999999','current','unknown'], // No Information
     ['CUR','4','current','river_flow'], // River Flow
     ['CUR','5','current','ocean_current'], // Ocean Current
     ['CUR','9','current','tidal_flow'], // Tidal Flow
 
     // CVT - Conveyor Type
-    // ['CVT','-999999',undefined,undefined], // No Information
+    ['CVT','-999999','conveyor:type','unknown'], // No Information
     ['CVT','1','conveyor:type','not_visible'], // Not Visible
     ['CVT','2','conveyor:type','belt'], // Belt
     ['CVT','3','conveyor:type','rollers'], // Rollers
@@ -984,17 +988,17 @@ tds71.rules = {
     // CVT3 - Conveyor Type [3]
 
     // CWT - Contained Within Tunnel
-    // ['CWT','-999999',undefined,undefined], // No Information
+    ['CWT','-999999','in_tunnel','unknown'], // No Information
     ['CWT','1000','in_tunnel','no'],
     ['CWT','1001','in_tunnel','yes'], // Need to think about this
 
     // DFT - Dam Face Type
-    // ['DFT','-999999',undefined,undefined], // No Information
+    ['DFT','-999999','dam:face:type','unknown'], // No Information
     ['DFT','1','dam:face:type','vertical'], // Vertical
     ['DFT','2','dam:face:type','slope'], // Slope
 
     // DFU - Dam Function
-    // ['DFU','-999999',undefined,undefined], // No Information
+    ['DFU','-999999','dam:type','unknown'], // No Information
     ['DFU','1','dam:type','impoundment'], // Impoundment
     ['DFU','2','dam:type','navigation'], // Navigation
     ['DFU','3','dam:type','flood_control'], // Flood Control
@@ -1006,19 +1010,19 @@ tds71.rules = {
     ['DFU','999','dam:type','other'], // Other
 
     // DGC - Transportation Block Type
-    // ['DGC','-999999',undefined,undefined], // No Information
+    ['DGC','-999999','block:type','unknown'], // No Information
     ['DGC','1','block:type','drop_gate'], // Drop Gate
     ['DGC','2','block:type','rolling_block'], // Rolling Block
     ['DGC','999','block:type','other'], // Other
 
     // DIR - Directivity
-    // ['DIR','-999999',undefined,undefined], // No Information
+    ['DIR','-999999','directivity','unknown'], // No Information
     ['DIR','1','directivity','unidirectional'], // Unidirectional
     ['DIR','2','directivity','bidirectional'], // Bidirectional
     ['DIR','3','directivity','omnidirectional'], // Omnidirectional
 
     // DMD - Dammed
-    // ['DMD','-999999',undefined,undefined], // No Information
+    ['DMD','-999999','dammed','unknown'], // No Information
     ['DMD','1000','dammed','no'], // Just to get rid of errors
     ['DMD','1001','dammed','yes'], // yes
 
@@ -1026,14 +1030,14 @@ tds71.rules = {
    // ####
 
     // DSP - Boundary Dispute Type
-    // ['DSP','-999999',undefined,undefined], // No Information
+    ['DSP','-999999','boundary:dispute_type','unknown'], // No Information
     ['DSP','1','boundary:dispute_type','in_dispute'], // In Dispute
     ['DSP','2','boundary:dispute_type','undisputed'], // Undisputed
     ['DSP','3','boundary:dispute_type','de_facto'], // De Facto
     ['DSP','4','boundary:dispute_type','de_jure'], // De Jure
 
     // EET - Engineered Earthwork Type
-    // ['EET','-999999',undefined,undefined], // No Information
+    ['EET','-999999','trench','unknown'], // No Information
     ['EET','1','trench','battery'], // Battery
     ['EET','2','trench','parapet'], // Military Parapet
     ['EET','3','military','trench'], // Military Trench
@@ -1042,7 +1046,7 @@ tds71.rules = {
     ['EET','999','trench','other'], // Other
 
     // ESC - Elevation Surface Category
-    // ['ESC','-999999',undefined,undefined], // No Information
+    ['ESC','-999999','elevation:surface','unknown'], // No Information
     ['ESC','1','elevation:surface','land'], // Land
     ['ESC','2','elevation:surface','snow_field_and/or_ice-field'], // Snow Field and/or Ice-field
     ['ESC','4','elevation:surface','vegetation'], // Vegetation
@@ -1050,7 +1054,7 @@ tds71.rules = {
     ['ESC','6','elevation:surface','tidal_water'], // Tidal Water
 
     // ETS - Extraction Specification
-    // ['ETS','-999999',undefined,undefined], // No Information
+    ['ETS','-999999','source:extraction_specification','unknown'], // No Information
     ['ETS','1','source:extraction_specification','1aa-tpc'], // 1AA-TPC
     ['ETS','2','source:extraction_specification','1ab-onc'], // 1AB-ONC
     ['ETS','3','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
@@ -1103,7 +1107,7 @@ tds71.rules = {
     ['ETS','999','source:extraction_specification','other'], // Other
 
     // ETY - Engine Test Cell Type
-    // ['ETY','-999999',undefined,undefined], // No Information
+    ['ETY','-999999','test_cell:type','unknown'], // No Information
     ['ETY','1','test_cell:type','jet_engine_dismounted'], // Jet Engine Dismounted
     ['ETY','2','test_cell:type','jet_engine_mounted'], // Jet Engine Mounted
     ['ETY','3','test_cell:type','rocket_engine_upright'], // Rocket Engine Upright
@@ -1111,18 +1115,18 @@ tds71.rules = {
     ['ETY','999','test_cell:type','other'], // Other
 
     // FAC - Solid Maritime Construction
-    // ['FAC','-999999',undefined,undefined], // No Information
+    ['FAC','-999999','solid_construction','unknown'], // No Information
     ['FAC','1000','solid_construction','no'],
     ['FAC','1001','solid_construction','yes'],
 
     // FCO - Feature Configuration
-    // ['FCO','-999999',undefined,undefined], // No Information
+    ['FCO','-999999','feature_configuration','unknown'], // No Information
     ['FCO','5','feature_configuration','same'],
     ['FCO','6','feature_configuration','different'],
     ['FCO','7','feature_configuration','non_divided'], // Ugly
 
     // FCS - Flood Control Structure Type
-    // ['FCS','-999999',undefined,undefined], // No Information
+    ['FCS','-999999','flood_control:type','unknown'], // No Information
     ['FCS','1','flood_control:type','dyke_gate'], // Dyke Gate
     ['FCS','2','flood_control:type','emergency_gate'], // Emergency Gate
     ['FCS','3','flood_control:type','flood_gate'], // Flood Gate
@@ -1131,19 +1135,20 @@ tds71.rules = {
     ['FCS','999','flood_control:type','other'], // Other
 
     // FER - Ferry Crossing Type
-    // ['FER','-999999',undefined,undefined], // No Information
+    ['FER','-999999','ferry:type','unknown'], // No Information
     ['FER','1','ferry:type','cable'], // Cable
     ['FER','2','ferry:type','free-moving'], // Free-moving
     ['FER','3','ferry:type','ice'], // Ice
     ['FER','999','ferry:type','other'], // Other
 
     // FFN - Feature Function
-    // ['FFN','-999999',undefined,undefined], // No Information
+    ['FFN','-999999','use','unknown'], // No Information
     ['FFN','2','use','agriculture'], // Agriculture
     ['FFN','3','use','growing_crops'], // Growing of Crops
     ['FFN','9','use','raising_animals'], // Raising of Animals
     ['FFN','14','use','grazing'], // Grazing
     ['FFN','15','use','mixed_farming'], // Mixed Farming
+    ['FFN','16','use','migrant_labour'], // Migrant Labour
     ['FFN','19','amenity','hunting'], // Hunting
     ['FFN','20','camp:type','forestry'], // Forestry and/or Logging
     ['FFN','21','landuse','silviculture'], // Silviculture
@@ -1477,7 +1482,7 @@ tds71.rules = {
     // FFN3 - Feature Function [3]
 
     // FHC - Harbour Facility Function
-    // ['FHC','-999999',undefined,undefined], // No Information
+    ['FHC','-999999','harbour:use','unknown'], // No Information
     ['FHC','1','harbour:use','ro-ro_terminal'], // Ro-Ro Terminal
     ['FHC','2','harbour:use','timber-yard'], // Timber-yard
     ['FHC','3','harbour:use','ferry_terminal'], // Ferry Terminal
@@ -1495,7 +1500,7 @@ tds71.rules = {
     // FHC3 - Harbour Facility Function [3]
 
     // FIC - Embankment Type
-    // ['FIC','-999999',undefined,undefined], // No Information
+    ['FIC','-999999','embankment','unknown'], // No Information
     ['FIC','1','embankment','mound'], // Mound
     ['FIC','2','embankment','fill'], // Fill
     ['FIC','3','man-made','dyke'], // Dyke
@@ -1504,12 +1509,12 @@ tds71.rules = {
     ['FIC','999','embankment','other'], // Other
 
     // FLO - Floating
-    // ['FLO','-999999',undefined,undefined], // No Information
+    ['FLO','-999999','floating','unknown'], // No Information
     ['FLO','1000','floating','no'],
     ['FLO','1001','floating','yes'],
 
     // FPT - Airfield Type
-    // ['FPT','-999999',undefined,undefined], // No Information
+    ['FPT','-999999','aeroway:airfield:type','unknown'], // No Information
     ['FPT','1','aeroway:airfield:type','major'], // Major
     ['FPT','2','aeroway:airfield:type','minor_and_hard'], // Minor and Hard
     ['FPT','3','aeroway:airfield:type','minor_and_soft'], // Minor and Soft
@@ -1517,7 +1522,7 @@ tds71.rules = {
     ['FPT','999','aeroway:airfield:type','other'], // Other
 
     // FRT - Weapons Range Type
-    // ['FRT','-999999',undefined,undefined], // No Information
+    ['FRT','-999999','range:type','unknown'], // No Information
     ['FRT','1','range:type','small_arms'], // Small Arms
     ['FRT','2','range:type','tank'], // Tank
     ['FRT','3','range:type','artillery'], // Field Artillery
@@ -1530,12 +1535,12 @@ tds71.rules = {
     // FRT3 - Weapons Range Type [3]
 
     // FSC - Flight Strip Capable
-    // ['FSC','-999999',undefined,undefined], // No Information
+    ['FSC','-999999','road:runway','unknown'], // No Information
     ['FSC','1000','road:runway','no'],
     ['FSC','1001','road:runway','yes'],
 
     // FTI - Fence Type
-    // ['FTI','-999999',undefined,undefined], // No Information
+    ['FTI','-999999','fence:type','unknown'], // No Information
     ['FTI','1','fence:type','metal'], // Metal
     ['FTI','2','fence:type','wood'], // Wood
     ['FTI','5','fence:type','barbed_wire'], // Barbed Wire
@@ -1546,7 +1551,7 @@ tds71.rules = {
     ['FTI','999','fence:type','other'], // Other
 
     // FZR - Fortified Building Type
-    // ['FZR','-999999',undefined,undefined], // No Information
+    ['FZR','-999999','bunker_type','unknown'], // No Information
     ['FZR','1','bunker_type','blockhouse'], // Blockhouse
     ['FZR','2','bunker_type','casement'], // Casement
     ['FZR','3','defensive','keep'], // Keep
@@ -1556,7 +1561,7 @@ tds71.rules = {
     ['FZR','999','fortified:type','other'], // Other
 
     // GEC - Geopolitical Entity Type
-    // ['GEC','-999999',undefined,undefined], // No Information
+    ['GEC','-999999','geopolitical_entity','unknown'], // No Information
     ['GEC','5','geopolitical_entity','area_of_no_sovereignty'], // Area of No Sovereignty
     ['GEC','7','geopolitical_entity','demilitarized_zone'], // Demilitarized Zone (DMZ)
     ['GEC','8','geopolitical_entity','zone_of_occupation'], // Zone of Occupation
@@ -1572,12 +1577,12 @@ tds71.rules = {
     ['GEC','999','geopolitical_entity','other'], // Other
 
     // GFT - Geologic Fault Trace Visible
-    // ['GFT','-999999',undefined,undefined], // No Information
+    ['GFT','-999999','visible_fault','unknown'], // No Information
     ['GFT','1000','visible_fault','no'],
     ['GFT','1001','visible_fault','yes'],
 
     // GOT - Geothermal Outlet Type
-    // ['GOT','-999999',undefined,undefined], // No Information
+    ['GOT','-999999','natural','unknown'], // No Information
     ['GOT','1','natural','fissure'], // Fissure
     ['GOT','2','natural','fumarole'], // Fumarole
     ['GOT','3','natural','hot_spring'], // Hot Spring
@@ -1606,7 +1611,7 @@ tds71.rules = {
     ['GSGCLC','9','aeroway:runway_lowend:slope:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // GTC - Gate Use
-    // ['GTC','-999999',undefined,undefined], // No Information
+    ['GTC','-999999','barrier','unknown'], // No Information
     ['GTC','1','barrier','toll_booth'], // Toll-gate
     ['GTC','2','barrier','crossing'], // Crossing
     ['GTC','3','barrier','entrance'], // Entrance - Not great but the closest thing OSM has to the enterence to a facility
@@ -1614,12 +1619,12 @@ tds71.rules = {
     ['GTC','999','barrier','other'], // Other
 
     // GUG - Guyed
-    // ['GUG','-999999',undefined,undefined], // No Information
+    ['GUG','-999999','guyed','unknown'], // No Information
     ['GUG','1000','guyed','no'],
     ['GUG','1001','guyed','yes'],
 
     // HAF - Helipad Associated Facility
-    // ['HAF','-999999',undefined,undefined], // No Information
+    ['HAF','-999999','helipad:facility','unknown'], // No Information
     ['HAF','1','helipad:facility','heliport'], // Heliport
     ['HAF','2','helipad:facility','land_aerodrome'], // Land Aerodrome
     ['HAF','3','helipad:facility','hospital'], // Hospital
@@ -1631,7 +1636,7 @@ tds71.rules = {
     ['HAF','999','helipad:facility','other'], // Other
 
     // HQC - Hypsography Portrayal Type
-    // ['HQC','-999999',undefined,undefined], // No Information
+    ['HQC','-999999','contour:type','unknown'], // No Information
     ['HQC','1','contour:type','index_contour'], // Index Contour
     ['HQC','2','contour:type','intermediate_contour'], // Intermediate Contour
     ['HQC','3','contour:type','half_auxiliary_contour'], // Half Auxiliary Contour
@@ -1657,7 +1662,7 @@ tds71.rules = {
     ['HQC','999','contour:type','other'], // Other
 
     // HST - Hazard Shelter Intended Use
-    // ['HST','-999999',undefined,undefined], // No Information
+    ['HST','-999999','shelter:type','unknown'], // No Information
     ['HST','1','shelter:type','bomb'], // Bomb Shelter
     ['HST','2','shelter:type','fallout'], // Fallout Shelter
     ['HST','3','shelter:type','storm'], // Storm Shelter
@@ -1667,7 +1672,7 @@ tds71.rules = {
     // HST3 - Hazard Shelter Intended Use [3]
 
     // HTP - Hangar Type Category
-    // ['HTP','-999999',undefined,undefined], // No Information
+    ['HTP','-999999','hangar:type','unknown'], // No Information
     ['HTP','1','hangar:type','multi-bay'], // M - Multi-bay
     ['HTP','2','hangar:type','open_end'], // O - Open End
     ['HTP','3','hangar:type','nose_in'], // N - Nose In
@@ -1677,7 +1682,7 @@ tds71.rules = {
     ['HTP','7','hangar:type','t-shaped'], // T - T-Shaped
 
     // HZD - Geodetic Datum
-    // ['HZD','-999999',undefined,undefined], // No Information
+    ['HZD','-999999','source:datum:geodetic','unknown'], // No Information
     ['HZD','2','source:datum:geodetic','adindan_(ethiopia)'], // Adindan (Ethiopia)
     ['HZD','3','source:datum:geodetic','adindan_(sudan)'], // Adindan (Sudan)
     ['HZD','4','source:datum:geodetic','adindan_(mali)'], // Adindan (Mali)
@@ -1973,12 +1978,12 @@ tds71.rules = {
     ['HZD','999','source:datum:geodetic','other'], // Other
 
     // INU - Inundation Type
-    // ['INU','-999999',undefined,undefined], // No Information
+    ['INU','-999999','inundation','unknown'], // No Information
     ['INU','1','inundation','controlled'], // Controlled
     ['INU','2','inundation','natural'], // Natural
 
     // IWT - Inland Water Type
-    // ['IWT','-999999',undefined,undefined], // No Information
+    ['IWT','-999999','water','unknown'], // No Information
     ['IWT','1','water','lake'], // Lake
     ['IWT','2','water','pond'], // Pond
     ['IWT','3','water','undifferentiated_water_body'], // Undifferentiated Water Body
@@ -1989,19 +1994,19 @@ tds71.rules = {
     ['IWT','999','water','other'], // Other
 
     // LMC - Navigation Landmark
-    // ['LMC','-999999',undefined,undefined], // No Information
+    ['LMC','-999999','navigation:landmark','unknown'], // No Information
     ['LMC','1000','navigation:landmark','no'],
     ['LMC','1001','navigation:landmark','yes'],
 
     // LND - Land Morphology
-    // ['LND','-999999',undefined,undefined], // No Information
+    ['LND','-999999','land:morphology','unknown'], // No Information
     ['LND','19','land:morphology','dome'], // Dome
     ['LND','41','land:morphology','ridge'], // Ridge
     ['LND','56','land:morphology','depression'], // Depression
     ['LND','999','land:morphology','other'], // Other
 
     // LOC - Vertical Relative Location
-    // ['LOC','-999999',undefined,undefined], // No Information
+    ['LOC','-999999','location','unknown'], // No Information
     ['LOC','17','location','on_waterbody_bottom'], // On Waterbody Bottom
     ['LOC','23','location','below_waterbody_bottom'], // Below Waterbody Bottom
     ['LOC','40','location','underground'], // Below Ground Surface
@@ -2011,7 +2016,7 @@ tds71.rules = {
     ['LOC','47','location','underwater'], // Below Waterbody Surface
 
     // LSP - Geopolitical Line Type
-    // ['LSP','-999999',undefined,undefined], // No Information
+    ['LSP','-999999','geopolitical_line','unknown'], // No Information
     ['LSP','1','geopolitical_line','administrative'], // Generic Administrative Boundary
     ['LSP','2','geopolitical_line','provisional_administrative'], // Provisional Administrative Line
     ['LSP','3','geopolitical_line','armistice'], // Armistice Line
@@ -2032,17 +2037,17 @@ tds71.rules = {
     ['LSP','999','geopolitical_line','other'], // Other
 
     // LUN - Located Underground
-    // ['LUN','-999999',undefined,undefined], // No Information
+    ['LUN','-999999','underground','unknown'], // No Information
     ['LUN','1000','underground','no'],
     ['LUN','1001','underground','yes'],
 
     // MAN - Maritime Navigation Marked
-    // ['MAN','-999999',undefined,undefined], // No Information
+    ['MAN','-999999','navigation:maritime_landmark','unknown'], // No Information
     ['MAN','1000','navigation:maritime_landmark','no'],
     ['MAN','1001','navigation:maritime_landmark','yes'],
 
     // MCC - Structural Material Type
-    // ['MCC','-999999',undefined,undefined], // No Information
+    ['MCC','-999999','material','unknown'], // No Information
     ['MCC','2','material','aluminium'], // Aluminum
     ['MCC','5','material','asphalt'], // Asphalt
     ['MCC','7','material','bedrock'], // Bedrock
@@ -2078,17 +2083,17 @@ tds71.rules = {
     // MCC3 - Structural Material Type [3]
 
     // MCX - Motorized Crossing
-    // ['MCX','-999999',undefined,undefined], // No Information
+    ['MCX','-999999','ferry:motorized','unknown'], // No Information
     ['MCX','1000','ferry:motorized','no'],
     ['MCX','1001','ferry:motorized','yes'],
 
     // MES - Median Present
-    // ['MES','-999999',undefined,undefined], // No Information
+    ['MES','-999999','median','unknown'], // No Information
     ['MES','1000','median','no'],
     ['MES','1001','median','yes'],
 
     // MGL - Maritime Geopolitical Limit Type
-    // ['MGL','-999999',undefined,undefined], // No Information
+    ['MGL','-999999','geopolitical_line:maritime','unknown'], // No Information
     ['MGL','1','geopolitical_line:maritime','international_boundary'], // International Boundary
     ['MGL','2','geopolitical_line:maritime','territorial_sea_baseline'], // Territorial Sea Baseline
     ['MGL','3','geopolitical_line:maritime','three_nautical_mile_limit'], // Three Nautical Mile Limit
@@ -2102,12 +2107,12 @@ tds71.rules = {
 
 
     // MNS - Man-made Shoreline
-    // ['MNS','-999999',undefined,undefined], // No Information
+    ['MNS','-999999','man_made:shoreline','unknown'], // No Information
     ['MNS','1000','man_made:shoreline','no'],
     ['MNS','1001','man_made:shoreline','yes'],
 
     // MZN - Extraction Mine Type
-    // ['MZN','-999999',undefined,undefined], // No Information
+    ['MZN','-999999','mine:type','unknown'], // No Information
     ['MZN','1','mine:type','borrow-pit'], // Borrow-pit
     ['MZN','3','mine:type','opencast'], // Opencast
     ['MZN','4','mine:type','placer'], // Placer
@@ -2122,7 +2127,7 @@ tds71.rules = {
     ['MZN','999','mine:type','other'], // Other
 
     // NAV_TYPE - NAV_TYPE
-    // ['NAV_TYPE','-999999',undefined,undefined], // noInformation
+    ['NAV_TYPE','-999999','beacon:type','unknown'], // noInformation
     ['NAV_TYPE','1','beacon:type','vor'], // VOR
     ['NAV_TYPE','2','beacon:type','vortac'], // VORTAC
     ['NAV_TYPE','3','beacon:type','tacan'], // TACAN
@@ -2132,7 +2137,7 @@ tds71.rules = {
     ['NAV_TYPE','9','beacon:type','dme'], // DME
 
     // NLT - Named Location Type
-    // ['NLT','-999999',undefined,undefined], // No Information
+    ['NLT','-999999','named_location','unknown'], // No Information
     ['NLT','1','named_location:type','area'], // Area
     ['NLT','2','named_location:type','locality'], // Locality
     ['NLT','3','named_location:type','region'], // Region
@@ -2141,7 +2146,7 @@ tds71.rules = {
     ['NLT','999','named_location:type','other'], // Other
 
     // NVS - Navigability Information
-    // ['NVS','-999999',undefined,undefined], // No Information
+    ['NVS','-999999','navigation','unknown'], // No Information
     ['NVS','1','navigation','yes_operational'], // Navigable and Operational
     ['NVS','2','navigation','yes_abandoned'], // Navigable but Abandoned
     ['NVS','3','navigation','yes'], // Navigable
@@ -2150,7 +2155,7 @@ tds71.rules = {
     ['NVS','999','navigation','other'], // Other
 
     // OCS - Offshore Construction Primary Structure
-    // ['OCS','-999999',undefined,undefined], // No Information
+    ['OCS','-999999','structure:type','unknown'], // No Information
     ['OCS','1','structure:type','platform'], // Platform
     ['OCS','2','structure:type','terminal_buoy'], // Terminal Buoy
     ['OCS','3','structure:type','catenary_turntable'], // Catenary Turntable
@@ -2161,12 +2166,12 @@ tds71.rules = {
     ['OCS','999','structure:type','other'], // Other
 
     // ONE - One-way
-    // ['ONE','-999999',undefined,undefined], // No Information
+    ['ONE','-999999','oneway','unknown'], // No Information
     ['ONE','1000','oneway','no'], // Value from OSM
     ['ONE','1001','oneway','yes'],
 
     // OOC - Overhead Obstruction Type
-    // ['OOC','-999999',undefined,undefined], // No Information
+    ['OOC','-999999','overhead_obstruction:type','unknown'], // No Information
     ['OOC','1','overhead_obstruction:type','frame_bridge_span'], // Frame Bridge Span
     ['OOC','2','overhead_obstruction:type','arch_bridge_span'], // Arch Bridge Span
     ['OOC','3','overhead_obstruction:type','roof'], // Roof
@@ -2196,7 +2201,7 @@ tds71.rules = {
     ['OOC','999','overhead_obstruction:type','other'], // Other
 
     // OPT - Operating Cycle
-    // ['OPT','-999999',undefined,undefined], // No Information
+    ['OPT','-999999','operating_cycle','unknown'], // No Information
     ['OPT','1','operating_cycle','daytime'], // Daytime
     ['OPT','2','operating_cycle','night-time'], // Night-time
     ['OPT','3','operating_cycle','continuous'], // Continuously Operating
@@ -2207,12 +2212,12 @@ tds71.rules = {
     ['OPT','999','operating_cycle','other'], // Other
 
     // OWO - Waterbody Overhead Obstruction
-    // ['OWO','-999999',undefined,undefined], // No Information
+    ['OWO','-999999','waterway:overhead_obstruction','unknown'], // No Information
     ['OWO','1000','waterway:overhead_obstruction','no'],
     ['OWO','1001','waterway:overhead_obstruction','yes'],
 
     // PBY - By-product See ZI014_PBY
-    // ['PBY','-999999',undefined,undefined], // noInformation
+    // ['PBY','-999999','raw:PBY','unknown'], // noInformation
     // ['PBY','8','raw:PBY','refuse'], // Refuse
     // ['PBY','15','raw:PBY','slag'], // Slag
     // ['PBY','16','raw:PBY','sludge'], // Sludge
@@ -2223,7 +2228,7 @@ tds71.rules = {
     // PBY3 - By-product [3]
 
     // PCF - Physical Condition
-    // ['PCF','-999999',undefined,undefined], // No Information
+    ['PCF','-999999','condition','unknown'], // No Information
     ['PCF','1','condition','construction'], // Construction
     ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
     ['PCF','3','condition','abandoned'], // Unmaintained in spec
@@ -2232,12 +2237,12 @@ tds71.rules = {
     ['PCF','6','condition','destroyed'], // Destroyed
 
     // PEC - Port of Entry
-    // ['PEC','-999999',undefined,undefined], // No Information
+    ['PEC','-999999','port_of_entry','unknown'], // No Information
     ['PEC','1000','port_of_entry','no'],
     ['PEC','1001','port_of_entry','yes'],
 
     // PLT - Pipeline Type
-    // ['PLT','-999999',undefined,undefined], // No Information
+    ['PLT','-999999','pipeline:type','unknown'], // No Information
     ['PLT','1','pipeline:type','transport'], // Transport Pipe
     ['PLT','2','pipeline:type','outfall'], // Outfall Pipe
     ['PLT','3','pipeline:type','intake'], // Intake Pipe
@@ -2250,7 +2255,7 @@ tds71.rules = {
     // PLT3 - Pipeline Type [3]
 
     // POS - Power Source
-    // ['POS','-999999',undefined,undefined], // No Information
+    ['POS','-999999','generator:source','unknown'], // No Information
     ['POS','1','generator:source','geothermal'], // Geothermal
     ['POS','2','generator:source','hydro'], // Hydro-electric
     ['POS','3','generator:source','nuclear'], // Nuclear
@@ -2266,7 +2271,7 @@ tds71.rules = {
     // PPO3 - Product [3]
 
     // PRM - Permanent
-    // ['PRM','-999999',undefined,undefined], // No Information
+    ['PRM','-999999','permanent','unknown'], // No Information
     ['PRM','1000','permanent','no'],
     ['PRM','1001','permanent','yes'],
     // ['PRM','-1001','raw:PRM','true'], // TRUE
@@ -2274,7 +2279,7 @@ tds71.rules = {
 
 
     // PRW - Raw Material See ZI014_PRW
-    // ['PRW','-999999',undefined,undefined], // noInformation
+    // ['PRW','-999999','raw:PRW','unknown'], // noInformation
     // ['PRW','12','raw:PRW','coal'], // Coal
     // ['PRW','14','raw:PRW','coke'], // Coke
     // ['PRW','34','raw:PRW','gravel'], // Gravel
@@ -2289,7 +2294,7 @@ tds71.rules = {
     // PRW3 - Raw Material [3]
 
     // PWC - Shoreline Construction Type
-    // ['PWC','-999999',undefined,undefined], // No Information
+    ['PWC','-999999','shoreline_construction:type','unknown'], // No Information
     ['PWC','1','man_made','pier'], // Pier
     ['PWC','2','waterway','dock'], // Wharf
     ['PWC','3','man_made','quay'], // Quay
@@ -2305,7 +2310,7 @@ tds71.rules = {
     ['PWC','999','construction:type','other'], // Other
 
     // PYC - Pylon Configuration
-    // ['PYC','-999999',undefined,undefined], // No Information
+    ['PYC','-999999','design','unknown'], // No Information
     ['PYC','1','design','a-frame'], // 'A'
     ['PYC','2','design','h-frame'], // 'H'
     ['PYC','3','design','i-frame'], // 'I'
@@ -2314,7 +2319,7 @@ tds71.rules = {
     ['PYC','999','design','other'], // Other
 
     // PYM - Pylon Material
-    // ['PYM','-999999',undefined,undefined], // No Information
+    ['PYM','-999999','tower:material','unknown'], // No Information
     ['PYM','1','tower:material','aluminium'], // Aluminum
     ['PYM','3','tower:material','concrete'], // Concrete
     ['PYM','4','tower:material','masonry'], // Masonry
@@ -2326,7 +2331,7 @@ tds71.rules = {
     ['PYM','999','tower:material','other'], // Other
 
     // RAC - Radar Antenna Configuration
-    // ['RAC','-999999',undefined,undefined], // No Information
+    ['RAC','-999999','radar:configuration','unknown'], // No Information
     ['RAC','1','radar:configuration','dome_enclosed'], // Dome Enclosed
     ['RAC','3','radar:configuration','radome'], // Radome
     ['RAC','4','radar:configuration','radome_on_tower'], // Radome on Tower
@@ -2334,7 +2339,7 @@ tds71.rules = {
     ['RAC','999','radar:configuration','other'], // Other
 
     // RAS - Radar Station Function
-    // ['RAS','-999999',undefined,undefined], // No Information
+    ['RAS','-999999','radar:use','unknown'], // No Information
     ['RAS','1','radar:use','general_surveillance'], // General Surveillance
     ['RAS','2','radar:use','coastal_radar'], // Coastal Radar
     ['RAS','5','radar:use','early_warning'], // Early Warning
@@ -2350,12 +2355,12 @@ tds71.rules = {
     // RCG - Resource Content Originator - See ZI004_RCG
 
     // RFD - Roofed
-    // ['RFD','-999999',undefined,undefined], // No Information
+    ['RFD','-999999','bridge:roof','unknown'], // No Information
     ['RFD','1000','bridge:roof','no'],
     ['RFD','1001','bridge:roof','yes'],
 
     // RIN_ROI - Route Identification <route designation type>
-    // ['RIN_ROI','-999999',undefined,undefined], // No Information
+    ['RIN_ROI','-999999','ref:road:class','unknown'], // No Information
     ['RIN_ROI','1','ref:road:class','international'], // International
     ['RIN_ROI','2','ref:road:class','national_motorway'], // National Motorway
     ['RIN_ROI','3','ref:road:class','primary'], // National
@@ -2367,12 +2372,12 @@ tds71.rules = {
     // RIN_ROI3 - Route Identification [3] <route designation type>
 
     // RIP - Rig Present
-    // ['RIP','-999999',undefined,undefined], // No Information
+    ['RIP','-999999','rig','unknown'], // No Information
     ['RIP','1000','rig','no'],
     ['RIP','1001','rig','yes'],
 
     // RIT - Road Interchange Type
-    // ['RIT','-999999',undefined,undefined], // No Information
+    ['RIT','-999999','junction','unknown'], // No Information
     ['RIT','1','junction','cloverleaf'], // Cloverleaf
     ['RIT','2','junction','diamond'], // Diamond
     ['RIT','3','junction','fork'], // Fork
@@ -2386,7 +2391,7 @@ tds71.rules = {
     ['RIT','999','junction','other'], // Other
 
     // RKF - Rock Formation Structure
-    // ['RKF','-999999',undefined,undefined], // No Information
+    ['RKF','-999999','rock_formation','unknown'], // No Information
     ['RKF','1','rock_formation','columnar'], // Columnar
     ['RKF','2','rock_formation','needle'], // Needle
     ['RKF','3','rock_formation','pinnacle'], // Pinnacle
@@ -2394,7 +2399,7 @@ tds71.rules = {
     ['RKF','999','rock_formation','other'], // Other
 
     // RLE - Relative Level
-    // ['RLE','-999999',undefined,undefined], // No Information
+    ['RLE','-999999','layer','unknown'], // No Information
     ['RLE','1','layer','1'], // Raised
     ['RLE','2','layer','0'], // Level with surrounding area
     ['RLE','3','layer','-1'], // Depressed
@@ -2412,12 +2417,12 @@ tds71.rules = {
     ['RMWC','9','median:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // ROR - Road Interchange Ramp
-    // ['ROR','-999999',undefined,undefined], // No Information
-    ['ROR','1000',undefined,undefined], // The default: No ramp
+    ['ROR','-999999','interchange_ramp','unknown'], // No Information
+    ['ROR','1000','interchange_ramp','no'], // The default: No ramp
     ['ROR','1001','interchange_ramp','yes'],
 
     // RPC - Boundary Representation Policy
-    // ['RPC','-999999',undefined,undefined], // No Information
+    ['RPC','-999999','boundary:representation','unknown'], // No Information
     ['RPC','1','boundary:representation','show_no_line'], // Show No Line
     ['RPC','2','boundary:representation','definite'], // Definite
     ['RPC','3','boundary:representation','indefinite'], // Indefinite
@@ -2426,7 +2431,7 @@ tds71.rules = {
     ['RPC','999','boundary:representation','other'], // Other
 
     // RRC - Railway Use
-    // ['RRC','-999999',undefined,undefined], // No Information
+    ['RRC','-999999','railway:use','unknown'], // No Information
     ['RRC','2','railway','carline'], // Carline
     ['RRC','6','railway','subway'], // Underground Railway
     ['RRC','8','railway','logging'], // Logging
@@ -2443,14 +2448,14 @@ tds71.rules = {
     // RRC3 - Railway Use [3]
 
     // RSA - Branch Railway Type
-    // ['RSA','-999999',undefined,undefined], // No Information
+    ['RSA','-999999','service','unknown'], // No Information
     ['RSA','1','service','spur'], // Spur
     ['RSA','2','service','siding'], // Siding
     ['RSA','3','service','passing'], // Passing
     ['RSA','999','service','other'], // Other
 
     // RSI - Radar Significance
-    // ['RSI','-999999',undefined,undefined], // No Information
+    ['RSI','-999999','airmark:radar_significance','unknown'], // No Information
     ['RSI','1','airmark:radar_significance','metal'], // Metal
     ['RSI','2','airmark:radar_significance','part_metal'], // Part Metal
     ['RSI','3','airmark:radar_significance','masonry'], // Masonry
@@ -2459,7 +2464,7 @@ tds71.rules = {
     ['RSI','999','airmark:radar_significance','other'], // Other
 
     // RTA - Linear Feature Arrangement
-    // ['RTA','-999999',undefined,undefined], // No Information
+    ['RTA','-999999','arrangement','unknown'], // No Information
     ['RTA','1','arrangement','single'], // Single Arrangement
     ['RTA','2','arrangement','double'], // Double Arrangement
     ['RTA','3','arrangement','multiple'], // Multiple Arrangements
@@ -2467,7 +2472,7 @@ tds71.rules = {
 
     // These give the basic highway types. Post processing fixes them
     // RTY - Roadway Type
-    // ['RTY','-999999',undefined,undefined], // No Information
+    ['RTY','-999999','ref:road:type','unknown'], // No Information
     ['RTY','1','ref:road:type','motorway'], // Motorway
     ['RTY','2','ref:road:type','limited_access_motorway'], // Limited Access Motorway
     ['RTY','3','ref:road:type','road'], // Road - Def: Roads outside a BUA
@@ -2475,30 +2480,30 @@ tds71.rules = {
     ['RTY','999','ref:road:type','other'], // Other
 
     // RWC - Railway Class
-    // ['RWC','-999999',undefined,undefined], // No Information
+    ['RWC','-999999','usage','unknown'], // No Information
     ['RWC','1','usage','high_speed_rail'], // High Speed Rail
     ['RWC','2','usage','main'], // Main Line
     ['RWC','3','usage','branch'], // Branch-line
     ['RWC','999','usage','other'], // Other
 
     // SAD - Sand Dune Stabilized
-    // ['SAD','-999999',undefined,undefined], // No Information
+    ['SAD','-999999','stabilized','unknown'], // No Information
     ['SAD','1000','stabilized','no'],
     ['SAD','1001','stabilized','yes'],
 
 
     // SBB - Supported by Bridge Span
-    // ['SBB','-999999',undefined,undefined], // No Information
+    ['SBB','-999999','on_bridge','unknown'], // No Information
     ['SBB','1000','on_bridge','no'], // Do we need this??
     ['SBB','1001','on_bridge','yes'],
 
     // SBC - Shelter Belt
-    // ['SBC','-999999',undefined,undefined], // No Information
+    ['SBC','-999999','shelter_belt','unknown'], // No Information
     ['SBC','1000','shelter_belt','no'],
     ['SBC','1001','shelter_belt','yes'],
 
     // SBT - Substation Type: Not a good translation.
-    // ['SBT','-999999',undefined,undefined], // No Information
+    ['SBT','-999999','substation:type','unknown'], // No Information
     ['SBT','1','substation','switched'], // Switched Substation
     ['SBT','2','substation','transformer'], // Transformer Substation
     ['SBT','3','substation','converter'], // Converter Substation
@@ -2508,7 +2513,7 @@ tds71.rules = {
     // SBT3 - Substation Type [3]
 
     // SDT - Sand Dune Type
-    // ['SDT','-999999',undefined,undefined], // No Information
+    ['SDT','-999999','dune:type','unknown'], // No Information
     ['SDT','1','dune:type','crescent'], // Crescent
     ['SDT','2','dune:type','dome'], // Dome
     ['SDT','3','dune:type','transverse'], // Transverse
@@ -2520,7 +2525,7 @@ tds71.rules = {
     ['SDT','999','dune:type','other'], // Other
 
     // SEP - Divided
-    // ['SEP','-999999',undefined,undefined], // No Information
+    ['SEP','-999999','is_divided','unknown'], // No Information
     ['SEP','1000','is_divided','no'],
     ['SEP','1001','is_divided','yes'],
 
@@ -2535,19 +2540,19 @@ tds71.rules = {
     ['SGCC','9','incline:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // SIC - Frozen Cover Type
-    // ['SIC','-999999',undefined,undefined], // No Information
+    ['SIC','-999999','landcover','unknown'], // No Information
     ['SIC','1','landcover','snowfield'], // Snowfield
     ['SIC','2','landcover','ice-field'], // Ice-field
 
     // SLR - Shoreline Ramp Type
-    // ['SLR','-999999',undefined,undefined], // No Information
+    ['SLR','-999999','shoreline:ramp','unknown'], // No Information
     ['SLR','1','shoreline:ramp','log'], // Log Ramp
     ['SLR','2','shoreline:ramp','marine'], // Marine Ramp
     ['SLR','3','leisure','slipway'], // Slipway
     ['SLR','999','shoreline:ramp','other'], // Other
 
     // SLT - Shoreline Type
-    // ['SLT','-999999',undefined,undefined], // No Information
+    ['SLT','-999999','shoreline:type','unknown'], // No Information
     ['SLT','6','shoreline:type','mangrove'], // Mangrove
     ['SLT','8','shoreline:type','marshy'], // Marshy
     ['SLT','10','shoreline:type','stony'], // Stony
@@ -2562,12 +2567,12 @@ tds71.rules = {
     ['SLT','999','shoreline:type','other'], // Other
 
     // SPT - Supported
-    // ['SPT','-999999',undefined,undefined], // No Information
+    ['SPT','-999999','supported','unknown'], // No Information
     ['SPT','1000','supported','no'],
     ['SPT','1001','supported','yes'],
 
     // SRD - Terrain Morphology
-    // ['SRD','-999999',undefined,undefined], // No Information
+    ['SRD','-999999','terrain:morphology','unknown'], // No Information
     ['SRD','1','terrain:morphology','no_effect'], // No Effect
     ['SRD','2','terrain:morphology','landslide_potential'], // Landslide Potential
     ['SRD','11','terrain:morphology','numerous_cobbles_and_boulders'], // Numerous Cobbles and Boulders
@@ -2619,13 +2624,13 @@ tds71.rules = {
     ['SRD','999','terrain:morphology','other'], // Other
 
     // SRL - Location Referenced to Shoreline -- deconflicted with LOC
-    // ['SRL','-999999',undefined,undefined], // No Information
+    ['SRL','-999999','referenced_to_shoreline','unknown'], // No Information
     ['SRL','1','location','offshore'], // Offshore
     ['SRL','2','location','inland'], // Inland
     ['SRL','3','location','at_shoreline'], // At Shoreline
 
     // SSC - Structure Shape
-    // ['SSC','-999999',undefined,undefined], // No Information
+    ['SSC','-999999','shape','unknown'], // No Information
     ['SSC','2','shape','horizontal_capped_cylindrical'], // Horizontal Capped Cylindrical
     ['SSC','4','shape','vertical_capped_cylindrical'], // Vertical Capped Cylindrical
     ['SSC','12','shape','pyramidal'], // Pyramidal
@@ -2654,7 +2659,7 @@ tds71.rules = {
     ['SSC','999','shape','other'], // Other
 
     // SSR - Roof Shape
-    // ['SSR','-999999',undefined,undefined], // No Information
+    ['SSR','-999999','roof:shape','unknown'], // No Information
     ['SSR','6','roof:shape','conical'], // Conical
     ['SSR','7','roof:shape','pyramidal'], // Pyramidal
     ['SSR','38','roof:shape','semi-cylindrical'], // Semi-cylindrical
@@ -2671,7 +2676,7 @@ tds71.rules = {
     // SSR3 - Roof Shape [3]
 
     // STL - Nomadic Seasonal Location
-    // ['STL','-999999',undefined,undefined], // No Information
+    ['STL','-999999','seasonal_location','unknown'], // No Information
     ['STL','1','seasonal_location','winter'], // Winter
     ['STL','2','seasonal_location','summer'], // Summer
     ['STL','3','seasonal_location','spring'], // Spring
@@ -2682,7 +2687,7 @@ tds71.rules = {
     // STL3 - Nomadic Seasonal Location [3]
 
     // STP - Soil Type
-    // ['STP','-999999',undefined,undefined], // No Information
+    ['STP','-999999','soil:type','unknown'], // No Information
     ['STP','1','soil:type','gw:well-graded_gravel'], // GW: Well-graded Gravel
     ['STP','2','soil:type','gp:poorly-graded_gravel'], // GP: Poorly-graded Gravel
     ['STP','3','soil:type','gm:silty_gravel_sand'], // GM: Silty Gravel Sand
@@ -2704,7 +2709,7 @@ tds71.rules = {
     ['STP','999','soil:type','other'], // Other
 
     // SUY - Survey Point Type
-    // ['SUY','-999999',undefined,undefined], // No Information
+    ['SUY','-999999','survey_point:type','unknown'], // No Information
     ['SUY','1','survey_point:type','astronomic_position'], // Astronomic Position
     ['SUY','2','survey_point:type','benchmark'], // Benchmark
     ['SUY','3','survey_point:type','cadastral_control_point'], // Cadastral Control Point
@@ -2718,14 +2723,14 @@ tds71.rules = {
     ['SUY','999','survey_point:type','other'], // Other
 
     // SWC - Soil Wetness Condition
-    // ['SWC','-999999',undefined,undefined], // No Information
+    ['SWC','-999999','soil:wetness','unknown'], // No Information
     ['SWC','1','soil:wetness','normally_dry'], // Normally Dry
     ['SWC','2','soil:wetness','normally_moist'], // Normally Moist
     ['SWC','3','soil:wetness','normally_wet'], // Normally Wet
     ['SWC','4','soil:wetness','normally_frozen'], // Normally Frozen
 
     // SWT - Natural Pool Type
-    // ['SWT','-999999',undefined,undefined], // No Information
+    ['SWT','-999999','spring:type','unknown'], // No Information
     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
     ['SWT','6','spring:type','walled-in'], // Walled-in Spring
     ['SWT','7','spring:type','resurgence'], // Resurgence
@@ -3389,31 +3394,31 @@ tds71.rules = {
     ['TAC','NULL','navaid:tactical_channel','null'], // NULL
 
     // TCS - Cross-sectional Profile
-    // ['TCS','-999999',undefined,undefined], // No Information
+    ['TCS','-999999','culvert:profile','unknown'], // No Information
     ['TCS','1','culvert:profile','arch'], // Arch
     ['TCS','2','culvert:profile','box'], // Box
     ['TCS','3','culvert:profile','semicircular'], // Semicircular
     ['TCS','999','culvert:profile','other'], // Other
 
     // TEL - Telescope Type
-    // ['TEL','-999999',undefined,undefined], // No Information
+    ['TEL','-999999','telescope:type','unknown'], // No Information
     ['TEL','1','telescope:type','optical'], // Optical
     ['TEL','2','telescope:type','parabolic_radio_aerial'], // Parabolic Radio Aerial
     ['TEL','3','telescope:type','radio_aerial_array'], // Radio Aerial Array
     ['TEL','999','telescope:type','other'], // Other
 
     // THR - Through Route
-    // ['THR','-999999',undefined,undefined], // No Information
+    ['THR','-999999','highway:through_route','unknown'], // No Information
     ['THR','1000','highway:through_route','no'],
     ['THR','1001','highway:through_route','yes'], // Need to look at custom rules to deconflict this
 
     // TID - Tide Influenced
-    // ['TID','-999999',undefined,undefined], // No Information
+    ['TID','-999999','tidal','unknown'], // No Information
     ['TID','1000','tidal','no'],
     ['TID','1001','tidal','yes'],
 
     // TOS - Tower Shape
-    // ['TOS','-999999',undefined,undefined], // No Information
+    ['TOS','-999999','tower:shape','unknown'], // No Information
     ['TOS','1','tower:shape','a_frame'], // 'A' Frame
     ['TOS','2','tower:shape','h_frame'], // 'H' Frame
     ['TOS','3','tower:shape','i_frame'], // 'I' Frame
@@ -3427,19 +3432,19 @@ tds71.rules = {
     ['TOS','999','tower:shape','other'], // Other
 
     // TRA - Pedestrian Traversable
-    // ['TRA','-999999',undefined,undefined], // No Information
+    ['TRA','-999999','foot','unknown'], // No Information
     ['TRA','1000','foot','no'],
     ['TRA','1001','foot','yes'],
 
     // TRE - Foliage Type
-    // ['TRE','-999999',undefined,undefined], // No Information
+    ['TRE','-999999','leaf_cycle','unknown'], // No Information
     ['TRE','1','leaf_cycle','deciduous'], // Deciduous
     ['TRE','2','leaf_cycle','evergreen'], // Evergreen
     ['TRE','3','leaf_cycle','mixed'], // Mixed
     ['TRE','999','leaf_cycle','other'], // Other
 
     // TRP - Transportation Route Protection Structure Type
-    // ['TRP','-999999',undefined,undefined], // No Information
+    ['TRP','-999999','protection_structure','unknown'], // No Information
     ['TRP','1','tunnel','avalanche_protector'], // Gallery
     ['TRP','2','man_made','rock_shed'], // Rock Protection Shed
     ['TRP','3','man_made','snow_fence'], // Snow Protection Shed
@@ -3447,7 +3452,7 @@ tds71.rules = {
     ['TRP','999','protection_structure','other'], // Other
 
     // TRS - Transportation System Type
-    // ['TRS','-999999',undefined,undefined], // No Information
+    ['TRS','-999999','transport:type','unknown'], // No Information
     ['TRS','1','transport:type','air'],
     ['TRS','2','transport:type','aqueduct'], // Aqueduct
     ['TRS','3','transport:type','automotive'], // From TRD3.0 to stop warnings Automotive
@@ -3477,7 +3482,7 @@ tds71.rules = {
     // TRS3 - Transportation System Type [3]
 
     // TSM - Terrain Surface Material - Added to ZI016_ROC list
-    // ['TSM','-999999',undefined,undefined], // No Information
+    ['TSM','-999999','desert_surface','unknown'], // No Information
     ['TSM','1','desert_surface','asphalt'], // Asphalt
     ['TSM','2','desert_surface','bedrock'], // Bedrock
     ['TSM','3','desert_surface','boulders'], // Boulders
@@ -3498,14 +3503,14 @@ tds71.rules = {
     // TSM3 - Terrain Surface Material [3]
 
     // TST - Cable Suspended Shape
-    // ['TST','-999999',undefined,undefined], // No Information
+    ['TST','-999999','cable:shape','unknown'], // No Information
     ['TST','1','cable:shape','symmetric_catenary'], // Symmetric Catenary
     ['TST','2','cable:shape','mountain_catenary'], // Mountain Catenary
     ['TST','3','cable:shape','overwater_catenary'], // Overwater Catenary
     ['TST','999','cable:shape','other'], // Other
 
     // TTC - Tower Type
-    // ['TTC','-999999',undefined,undefined], // No Information
+    ['TTC','-999999','tower:type','unknown'], // No Information
     ['TTC','2','tower:type','observation'], // Observation Tower
     ['TTC','10','tower:type','lookout'], // Lookout Tower
     ['TTC','12','tower:type','fire'], // Fire Tower
@@ -3520,7 +3525,7 @@ tds71.rules = {
     // TTC3 - Tower Type [3]
 
     // TTY - Tomb Type
-    // ['TTY','-999999',undefined,undefined], // No Information
+    ['TTY','-999999','tomb','unknown'], // No Information
     ['TTY','1','tomb','cave'], // Cave
     ['TTY','2','tomb','catacomb'], // Catacomb
     ['TTY','3','tomb','crypt'], // Crypt
@@ -3531,7 +3536,7 @@ tds71.rules = {
     ['TTY','999','tomb','other'], // Other
 
     // TXP - Taxiway Type
-    // ['TXP','-999999',undefined,undefined], // No Information
+    ['TXP','-999999','taxiway:type','unknown'], // No Information
     ['TXP','1','taxiway:type','parallel'], // Parallel Taxiway
     ['TXP','2','taxiway:type','stub'], // Stub Taxiway
     ['TXP','3','taxiway:type','rapid_exit_and/or_turnoff'], // Rapid Exit and/or Turnoff Taxiway
@@ -3548,7 +3553,7 @@ tds71.rules = {
     ['TXP','999','taxiway:type','other'], // Other
 
     // UMA - Underground Mine Access
-    // ['UMA','-999999',undefined,undefined], // No Information
+    ['UMA','-999999','mine:access','unknown'], // No Information
     ['UMA','1','mine:access','drift'], // Drift
     ['UMA','2','mine:access','slope'], // Slope
     ['UMA','3','mine:access','shaft'], // Shaft
@@ -3556,7 +3561,7 @@ tds71.rules = {
     ['UMA','998','mine:access','not_applicable'], // Not Applicable
 
     // VCA - Void Collection Reason
-    // ['VCA','-999999',undefined,undefined], // No Information
+    ['VCA','-999999','void_collection:reason','unknown'], // No Information
     ['VCA','1','void_collection:reason','not_requested'], // Not Requested
     ['VCA','2','void_collection:reason','inaccessible'], // Inaccessible
     ['VCA','3','void_collection:reason','no_available_imagery'], // No Available Imagery
@@ -3575,7 +3580,7 @@ tds71.rules = {
     // VCA3 - Void Collection Reason [3]
 
     // VCM - Vertical Construction Material
-    // ['VCM','-999999',undefined,undefined], // No Information
+    ['VCM','-999999','material:vertical','unknown'], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
     ['VCM','2','material:vertical','aluminium'], // Aluminum
     ['VCM','3','material:vertical','brick'], // Brick
@@ -3600,7 +3605,7 @@ tds71.rules = {
     // VCM3 - Vertical Construction Material [3]
 
     // VCT - Void Collection Type
-    // ['VCT','-999999',undefined,undefined], // No Information
+    ['VCT','-999999','void_collection:type','unknown'], // No Information
     ['VCT','1','void_collection:type','hypsography'], // Hypsography
     ['VCT','3','void_collection:type','bathymetry'], // Bathymetry
     ['VCT','4','void_collection:type','waterbody_bottom_composition'], // Waterbody Bottom Composition
@@ -3610,7 +3615,7 @@ tds71.rules = {
     // VCT3 - Void Collection Type [3]
 
     // VDT - Vertical Datum
-    // ['VDT','noInformation',undefined,undefined], // No Information
+    ['VDT','-999999','source:datum:vertical','unknown'], // No Information
     ['VDT','1','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
     ['VDT','2','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
     ['VDT','3','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
@@ -3623,7 +3628,7 @@ tds71.rules = {
 
 
     // VEG - Vegetation Characteristic
-    // ['VEG','-999999',undefined,undefined], // No Information
+    ['VEG','-999999','grassland:type','unknown'], // No Information
     ['VEG','8','grassland:type','grassland'], // Grassland
     ['VEG','9','grassland:type','grassland_with_trees'], // Grassland with Trees
     ['VEG','10','grassland:type','tropical_grass'], // Tropical Grass
@@ -3632,7 +3637,7 @@ tds71.rules = {
     ['VEG','999','grassland:type','other'], // Other
 
     // VET - Vehicle Type
-    // ['VET','-999999',undefined,undefined], // No Information
+    ['VET','-999999','vehicle:type','unknown'], // No Information
     ['VET','1','vehicle:type','aircraft'], // Aircraft
     ['VET','2','vehicle:type','automobile'], // Automobile
     ['VET','3','vehicle:type','barge'], // Barge
@@ -3646,7 +3651,7 @@ tds71.rules = {
     ['VET','999','vehicle:type','other'], // Other
 
     // VGT - Volcano Shape
-    // ['VGT','-999999',undefined,undefined], // No Information
+    ['VGT','-999999','volcano:type','unknown'], // No Information
     ['VGT','1','volcano:type','cone'], // Cone
     ['VGT','2','volcano:type','cinder_cone'], // Cinder Cone
     ['VGT','3','volcano:type','shield'], // Shield
@@ -3654,13 +3659,13 @@ tds71.rules = {
     ['VGT','5','volcano:type','composite'], // Composite
 
     // VOA - Volcanic Activity
-    // ['VOA','-999999',undefined,undefined], // No Information
+    ['VOA','-999999','volcano:status','unknown'], // No Information
     ['VOA','1','volcano:status','active'], // Active
     ['VOA','2','volcano:status','dormant'], // Dormant
     ['VOA','3','volcano:status','inactive_or_extinct'], // Inactive or Extinct
 
     // VSP - Vegetation Species
-    // ['VSP','-999999',undefined,undefined], // No Information
+    ['VSP','-999999','vegetation:type','unknown'], // No Information
     ['VSP','8','vegetation:type','cypress'], // Cypress
     ['VSP','19','vegetation:type','mangrove'], // Mangrove
     ['VSP','22','vegetation:type','nipa'], // Nipa
@@ -3673,16 +3678,16 @@ tds71.rules = {
     // VSP3 - Vegetation Species [3]
 
     // WCC - Watercourse Channel Type
-    // ['WCC','-999999',undefined,undefined], // No Information
-    ['WCC','1','waterway','stream'], // Channelized Stream
-    ['WCC','2','waterway','braided_stream'], // Braided Stream
-    ['WCC','3','waterway','gorge'], // Gorge
+    ['WCC','-999999','channel:type','unknown'], // No Information
+    ['WCC','1','channel:type','channelized_stream'], // Channelized Stream
+    ['WCC','2','channel:type','braided_stream'], // Braided Stream
+    ['WCC','3','natural','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
-    ['WCC','7','waterway','river'], // Normal Channel
+    ['WCC','7','channel:type','normal'], // Normal Channel
     ['WCC','999','waterway','other'], // Other
 
     // WEQ - Well Equipment
-    // ['WEQ','-999999',undefined,undefined], // No Information
+    ['WEQ','-999999','well:equipment','unknown'], // No Information
     ['WEQ','1','well:equipment','wellhead'], // Wellhead
     ['WEQ','2','well:equipment','christmas_tree'], // Christmas Tree
     ['WEQ','3','well:equipment','manifold'], // Manifold
@@ -3699,7 +3704,7 @@ tds71.rules = {
     // WEQ3 - Well Equipment [3]
 
     // WFT - Well Type
-    // ['WFT','-999999',undefined,undefined], // No Information
+    ['WFT','-999999','water_well:type','unknown'], // No Information
     ['WFT','2','water_well:type','walled-in'], // Walled-in
     ['WFT','3','water_well:type','artesian'], // Artesian
     ['WFT','5','water_well:type','dug_or_drilled'], // Dug or Drilled
@@ -3708,7 +3713,7 @@ tds71.rules = {
     ['WFT','999','water_well:type','other'], // Other
 
     // WLE - Hydrographic Vertical Positioning Information : Water Level Effect
-    // ['WLE','-999999',undefined,undefined], // No Information
+    ['WLE','-999999','hydrographic_vertical_position','unknown'], // No Information
     ['WLE','1','hydrographic_vertical_position','partly_submerged'], // Partly Submerged
     ['WLE','2','hydrographic_vertical_position','always_dry'], // Always Dry
     ['WLE','3','hydrographic_vertical_position','always_submerged'], // Always Submerged
@@ -3718,7 +3723,7 @@ tds71.rules = {
     ['WLE','999','hydrographic_vertical_position','other'], // Other
 
     // WLO - Wreck or Hulk Exposure
-    // ['WLO','-999999',undefined,undefined], // No Information
+    ['WLO','-999999','wreck_exposure','unknown'], // No Information
     ['WLO','1','wreck_exposure','hull_showing'], // Hull Showing
     ['WLO','2','wreck_exposure','masts_showing'], // Masts Showing
     ['WLO','3','wreck_exposure','funnel_showing'], // Funnel Showing
@@ -3727,7 +3732,7 @@ tds71.rules = {
     ['WLO','999','wreck_exposure','other'], // Other
 
     // WMT - Watercourse Morphology
-    // ['WMT','-999999',undefined,undefined], // No Information
+    ['WMT','-999999','water:morphology','unknown'], // No Information
     ['WMT','1','water:morphology','mouth'], // Mouth
     ['WMT','2','water:morphology','pool'], // Pool
     ['WMT','3','water:morphology','bend'], // Bend
@@ -3743,14 +3748,14 @@ tds71.rules = {
     ['WMT','999','water:morphology','other'], // Other
 
     // WRT - Water Race Type
-    // ['WRT','-999999',undefined,undefined], // No Information
+    ['WRT','-999999','water:race','unknown'], // No Information
     ['WRT','1','water:race','sluice'], // Sluice
     ['WRT','2','water:race','flume'], // Flume
     ['WRT','3','water:race','headrace'], // Headrace
     ['WRT','4','water:race','tailrace'], // Tailrace
 
     // WST - Watercourse Sink Type: No OSM even close
-    // ['WST','-999999',undefined,undefined], // No Information
+    ['WST','-999999','water:sink:type','unknown'], // No Information
     ['WST','1','water:sink:type','dissipating'], // Dissipating
     ['WST','2','water:sink:type','disappearing'], // Disappearing
     ['WST','3','water:sink:type','sinkhole'], // Sinkhole
@@ -3758,12 +3763,13 @@ tds71.rules = {
     ['WST','999','water:sink:type','other'], // Other
 
     // WTI - Wall Type
-    // ['WTI','-999999',undefined,undefined], // No Information
+    ['WTI','-999999','wall','unknown'], // No Information
     ['WTI','1','wall','free-standing'], // Free-standing
     ['WTI','2','wall','retaining'], // Retaining
     ['WTI','999','wall','other'], // Other
 
     // YSU - Military Service Branch
+    ['YSU','-999999','military:service','unknown'], // noInformation
     ['YSU','1','military:service','air_force'], // Air Force
     ['YSU','2','military:service','army'], // Army
     ['YSU','3','military:service','coastguard'], // Coastguard
@@ -3772,12 +3778,12 @@ tds71.rules = {
     ['YSU','7','military:service','joint'], // Joint
     ['YSU','8','military:service','air_national_guard'], // Air National Guard
     ['YSU','9','military:service','army_national_guard'], // Army National Guard
-    // ['YSU','998',undefined,undefined], // Not Applicable
+    ['YSU','998',undefined,undefined], // Not Applicable
     ['YSU','998','military:service','not_applicable'], // Not Applicable
     ['YSU','999','military:service','other'], // Other
 
     // YWQ - Water Potability See ZI024_YWQ
-    // ['YWQ','-999999',undefined,undefined], // noInformation
+    // ['YWQ','-999999','raw:YWQ','unknown'], // noInformation
     // ['YWQ','1','raw:YWQ','potable'], // Potable
     // ['YWQ','2','raw:YWQ','treatable'], // Treatable
     // ['YWQ','3','raw:YWQ','contaminated'], // Contaminated
@@ -3785,18 +3791,18 @@ tds71.rules = {
     // ['YWQ','999','raw:YWQ','other'], // Other
 
     // ZHBH_TEC - Hydrographic Base Height : Sounding Metadata : Bathymetric Measurement Technique
-    // ['ZHBH_TEC','-999999',undefined,undefined], // noInformation
+    ['ZHBH_TEC','-999999','source:datum:sounding:method','unknown'], // noInformation
     ['ZHBH_TEC','6','source:datum:sounding:method','area_swept_by_wire-drag'], // Area Swept by Wire-drag
     ['ZHBH_TEC','999','source:datum:sounding:method','other'], // Other
     ['ZHBH_TEC','1001','source:datum:sounding:method','depth_known_by_other_then_wire-drag'],  // Depth Known by Other Than Wire Drag
 
     // ZI001_SPS - Source Information : Spatial Source
-    // ['ZI001_SPS','-999999',undefined,undefined], // No Information
+    ['ZI001_SPS','-999999','source:spatial_source','unknown'], // No Information
     ['ZI001_SPS','1000','source:spatial_source','no'],
     ['ZI001_SPS','1001','source:spatial_source','yes'],
 
     // ZI001_SRT - Source : Source Type
-    // ['ZI001_SRT','-999999',undefined,undefined], // No Information
+    ['ZI001_SRT','-999999','source:name','unknown'], // No Information
     ['ZI001_SRT','2','source:name','automated_aeronautical_facilities_information_file_(aafif)'], // AAFIF
     ['ZI001_SRT','7','source:name','controlled_imagery_base_1_(cib1)'], // CIB1
     ['ZI001_SRT','9','source:name','quickbird_imagery'], // QuickBird Imagery
@@ -3827,7 +3833,7 @@ tds71.rules = {
     ['ZI001_SRT','999','source:name','other'], // Other
 
     // ZI001_VSC - Source Information : Vertical Source Category
-    // ['ZI001_VSC','-999999',undefined,undefined], // No Information
+    ['ZI001_VSC','-999999','source:vertical_source:type','unknown'], // No Information
     ['ZI001_VSC','1','source:vertical_source:type','dted_1'], // DTED 1
     ['ZI001_VSC','2','source:vertical_source:type','dted_2'], // DTED 2
     ['ZI001_VSC','3','source:vertical_source:type','no_elevations'], // No Elevations
@@ -3838,7 +3844,7 @@ tds71.rules = {
     ['ZI001_VSC','999','source:vertical_source:type','other'], // Other
 
     // ZI004_RCG - Feature Metadata : Process Step Information : Resource Content Originator
-    // ['ZI004_RCG','-999999',undefined,undefined], // noInformation
+    ['ZI004_RCG','-999999','attribution','unknown'], // noInformation
     ['ZI004_RCG','1','attribution','u.s._army'], // U.S. Army
     ['ZI004_RCG','2','attribution','u.s._navy'], // U.S. Navy
     ['ZI004_RCG','3','attribution','u.s._air_force'], // U.S. Air Force
@@ -3929,10 +3935,11 @@ tds71.rules = {
     ['ZI004_RCG','88','attribution','instituto_geografico_nacional_tommy_guardia_(panama)'], // Instituto Geografico Nacional "Tommy Guardia" (Panama)
     ['ZI004_RCG','89','attribution','instituto_geografico_nacional_(argentina)'], // Instituto Geografico Nacional (Argentina)
     ['ZI004_RCG','90','attribution','diretoria_de_servico_geografico_(brazil)'], // Diretoria de Servico Geografico (Brazil)
+    ['ZI004_RCG','998','attribution','not_applicable'], // Not Applicable
     ['ZI004_RCG','999','attribution','other'], // Other
 
     // ZI013_CSP - Crop Information : Crop Species
-    // ['ZI013_CSP','-999999',undefined,undefined], // No Information
+    ['ZI013_CSP','-999999','crop','unknown'], // No Information
     ['ZI013_CSP','1','crop','almond'], // Almond
     ['ZI013_CSP','2','crop','apple'], // Apple
     ['ZI013_CSP','3','crop','barley'], // Barley
@@ -3989,7 +3996,7 @@ tds71.rules = {
     // ZI013_CSP3 - Crop Information : Crop Species [3]
 
     // ZI013_FFP - Crop Information : Farming Pattern
-    // ['ZI013_FFP','-999999',undefined,undefined], // No Information
+    ['ZI013_FFP','-999999','farm:pattern','unknown'], // No Information
     ['ZI013_FFP','1','farm:pattern','linear'], // Linear
     ['ZI013_FFP','2','farm:pattern','regular'], // Regular
     ['ZI013_FFP','3','farm:pattern','terraced'], // Terraced
@@ -4004,7 +4011,7 @@ tds71.rules = {
     // ZI013_FFP3 - Crop Information : Farming Pattern [3]
 
     // ZI013_FMM - Crop Information : Farming Method
-    // ['ZI013_FMM','-999999',undefined,undefined], // No Information
+    ['ZI013_FMM','-999999','farm:method','unknown'], // No Information
     ['ZI013_FMM','1','farm:method','fallow'], // Fallow
     ['ZI013_FMM','2','farm:method','grazing'], // Grazing
     ['ZI013_FMM','3','farm:method','permanent'], // Permanent
@@ -4015,7 +4022,7 @@ tds71.rules = {
     // ZI013_FMM3 - Crop Information : Farming Method [3]
 
     // ZI013_IRG - Crop Information : Irrigation Method
-    // ['ZI013_IRG','-999999',undefined,undefined], // No Information
+    ['ZI013_IRG','-999999','farm:irrigation','unknown'], // No Information
     ['ZI013_IRG','1','farm:irrigation','furrow'], // Furrow
     ['ZI013_IRG','2','farm:irrigation','overhead'], // Overhead
     ['ZI013_IRG','3','farm:irrigation','centre_pivot'], // Center Pivot
@@ -4027,12 +4034,12 @@ tds71.rules = {
     ['ZI013_IRG','999','farm:irrigation','other'], // Other
 
     // ZI013_PIG - Crop Information : Permanent Irrigation
-    // ['ZI013_PIG','-999999',undefined,undefined], // No Information
+    ['ZI013_PIG','-999999','permanent_irrigation','unknown'], // No Information
     ['ZI013_PIG','1000','permanent_irrigation','no'],
     ['ZI013_PIG','1001','permanent_irrigation','yes'],
 
     // ZI014_PBY - Manufacturing Information : By-product
-    // ['ZI014_PBY','-999999',undefined,undefined], // No Information
+    ['ZI014_PBY','-999999','by_product','unknown'], // No Information
     ['ZI014_PBY','1','by_product','ash'], // Ash
     ['ZI014_PBY','2','by_product','cinders'], // Cinders
     ['ZI014_PBY','6','by_product','no_byproduct'], // No Byproduct
@@ -4049,7 +4056,7 @@ tds71.rules = {
     // ZI014_PBY3 - Manufacturing Information : By-product [3]
 
     // ZI014_PPO - Manufacturing Information : Product
-    // ['ZI014_PPO','-999999',undefined,undefined], // No Information
+    ['ZI014_PPO','-999999','product','unknown'], // No Information
     ['ZI014_PPO','1','product','aircraft'], // Aircraft
     ['ZI014_PPO','2','product','aluminium'], // Aluminium
     ['ZI014_PPO','3','product','ammunition'], // Ammunition
@@ -4172,7 +4179,7 @@ tds71.rules = {
     // ZI014_PPO3 - Manufacturing Information : Product [3]
 
     // ZI014_PRW - Manufacturing Information : Raw Material
-    // ['ZI014_PRW','-999999',undefined,undefined], // No Information
+    ['ZI014_PRW','-999999','raw_material','unknown'], // No Information
     ['ZI014_PRW','1','raw_material','aluminium'], // Aluminium
     ['ZI014_PRW','2','raw_material','asphalt'], // Asphalt
     ['ZI014_PRW','5','raw_material','bauxite'], // Bauxite
@@ -4225,7 +4232,7 @@ tds71.rules = {
     // ZI014_PRW3 - Manufacturing Information : Raw Material [3]
 
     // ZI016_ROC - Route Pavement Information : Route Surface Composition
-    // ['ZI016_ROC','-999999',undefined,undefined], // No Information
+    ['ZI016_ROC','-999999','surface','unknown'], // No Information
     ['ZI016_ROC','1','surface','unimproved'], // Unimproved
     ['ZI016_ROC','2','surface','stabilized_earth'], // Stabilized Earth
     ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
@@ -4247,7 +4254,7 @@ tds71.rules = {
     ['ZI016_ROC','999','surface','other'], // Other
 
     // ZI016_WTC - Route Pavement Information : Road Weather Restriction
-    // ['ZI016_WTC','-999999',undefined,undefined], // No Information
+    ['ZI016_WTC','-999999','seasonal','unknown'], // No Information
     ['ZI016_WTC','1','seasonal','no'], // All-weather
     ['ZI016_WTC','2','seasonal','fair'], // possibly seasonal // Fair-weather
     ['ZI016_WTC','3','seasonal','winter'], // Winter Only
@@ -4256,25 +4263,25 @@ tds71.rules = {
     ['ZI016_WTC','999','seasonal','other'], // Other
 
     // ZI017_RGC - Track Information : Railway Gauge Classification
-    // ['ZI017_RGC','-999999',undefined,undefined], // No Information
+    ['ZI017_RGC','-999999','gauge:type','unknown'], // No Information
     ['ZI017_RGC','1','gauge:type','broad'], // Broad
     ['ZI017_RGC','2','gauge:type','narrow'], // Narrow
     ['ZI017_RGC','3','gauge:type','standard'], // Standard
 
     // ZI017_RIR - Track Information : Railway in Road
-    // ['ZI017_RIR','-999999',undefined,undefined], // No Information
+    ['ZI017_RIR','-999999','railway:in_road','unknown'], // No Information
     ['ZI017_RIR','1000','railway:in_road','separated'],
     ['ZI017_RIR','1001','railway:in_road','yes'],
 
     // ZI017_RRA - Track Information : Railway Power Method
-    // ['ZI017_RRA','-999999',undefined,undefined], // No Information
+    ['ZI017_RRA','-999999','electrified','unknown'], // No Information
     ['ZI017_RRA','1','electrified','rail'], // Electrified Track
     ['ZI017_RRA','3','electrified','overhead'], // Overhead Electrified
     ['ZI017_RRA','4','electrified','no'], // Non-electrified
     ['ZI017_RRA','999','electrified','other'], // Other
 
     // ZI017_TRT - Track Information : Track Type
-    // ['ZI017_TRT','-999999',undefined,undefined], // No Information
+    ['ZI017_TRT','-999999','railway:track','unknown'], // No Information
     ['ZI017_TRT','1','railway:track','crane'], // Crane Track
     ['ZI017_TRT','2','railway:track','drill'], // Drill Track
     ['ZI017_TRT','3','railway:track','house'], // House Track
@@ -4290,7 +4297,7 @@ tds71.rules = {
     ['ZI017_TRT','999','railway:track','other'], // Other
 
     // ZI018_WIT - Wireless Telecommunication Information : Wireless Telecommunication Type
-    // ['ZI018_WIT','-999999',undefined,undefined], // No Information
+    ['ZI018_WIT','-999999','communication:wireless:type','unknown'], // No Information
     ['ZI018_WIT','1','communication:cellular_phone','yes'], // Cellular Phone
     ['ZI018_WIT','2','communication:microwave_radio_relay','yes'], // Microwave Radio Relay
     ['ZI018_WIT','3','communication:mobile_phone','yes'], // Mobile Phone
@@ -4301,7 +4308,7 @@ tds71.rules = {
     ['ZI018_WIT','999','communication:other','yes'], // Other
 
     // ZI019_ASP - Aerodrome Pavement Information : Aerodrome Movement Area Surface Preparation Method
-    // ['ZI019_ASP','-999999',undefined,undefined], // No Information
+    ['ZI019_ASP','-999999','aeroway:pavement:preparation','unknown'], // No Information
     ['ZI019_ASP','1','aeroway:pavement:preparation','aggregate_seal_coat'], // Aggregate Seal Coat
     ['ZI019_ASP','2','aeroway:pavement:preparation','graded'], // Graded
     ['ZI019_ASP','3','aeroway:pavement:preparation','grass'], // Grass
@@ -4316,7 +4323,7 @@ tds71.rules = {
     // ZI019_ASP3 - Aerodrome Pavement Information : Aerodrome Movement Area Surface Preparation Method [3]
 
     // ZI019_ASU - Aerodrome Pavement Information : Aerodrome Movement Area Surface Composition
-    // ['ZI019_ASU','-999999',undefined,undefined], // No Information
+    ['ZI019_ASU','-999999','aeroway:surface','unknown'], // No Information
     ['ZI019_ASU','1','aeroway:surface','asphalt'], // Asphalt
     ['ZI019_ASU','2','aeroway:surface','bituminous_mix'], // Bituminous Mix
     ['ZI019_ASU','3','aeroway:surface','brick'], // Brick
@@ -4344,7 +4351,7 @@ tds71.rules = {
     // ZI019_ASU3 - Aerodrome Pavement Information : Aerodrome Movement Area Surface Composition [3]
 
     // ZI019_ASX - Aerodrome Pavement Information : Aerodrome Movement Area Surface Category
-    // ['ZI019_ASX','-999999',undefined,undefined], // No Information
+    ['ZI019_ASX','-999999','aeroway:pavement','unknown'], // No Information
     ['ZI019_ASX','1','aeroway:pavement','paved'], // Completely Paved
     ['ZI019_ASX','2','aeroway:pavement','mostly_paved'], // Mostly Paved
     ['ZI019_ASX','3','aeroway:pavement','unprepared'], // Unprepared
@@ -4353,7 +4360,7 @@ tds71.rules = {
     ['ZI019_ASX','999','aeroway:pavement','other'], // Other
 
     // ZI019_SFS - Aerodrome Pavement Information : Aerodrome Pavement Functional Status
-    // ['ZI019_SFS','-999999',undefined,undefined], // No Information
+    ['ZI019_SFS','-999999','surface:condition','unknown'], // No Information
     ['ZI019_SFS','1','surface:condition','fair'], // Fair
     ['ZI019_SFS','2','surface:condition','fair_estimated'], // Fair Estimated
     ['ZI019_SFS','3','surface:condition','good'], // Good
@@ -4371,13 +4378,13 @@ tds71.rules = {
     // ZI020_GE44 - (Location Country) Designation : GENC Short URN-based Identifier (fourth)
 
     // ZI024_HYP - Water Resource Information : Hydrologic Persistence
-    // ['ZI024_HYP','-999999',undefined,undefined], // No Information
+    ['ZI024_HYP','-999999','intermittent','unknown'], // No Information
     ['ZI024_HYP','1','intermittent','no'], // Perennial
     ['ZI024_HYP','2','intermittent','yes'],
     ['ZI024_HYP','4','intermittent','dry'], // Dry
 
     // ZI024_SCC - Water Resource Information : Water Type
-    // ['ZI024_SCC','-999999',undefined,undefined], // No Information
+    ['ZI024_SCC','-999999','water:type','unknown'], // No Information
     ['ZI024_SCC','1','water:type','alkaline'], // Alkaline
     ['ZI024_SCC','4','water:type','mineral'], // Mineral
     ['ZI024_SCC','10','water:type','salt'], // Saline
@@ -4389,7 +4396,7 @@ tds71.rules = {
     ['ZI024_SCC','998','water:type','not_applicable'], // Not Applicable
 
     // ZI024_YWQ - Water Resource Information : Water Potability
-    // ['ZI024_YWQ','-999999',undefined,undefined], // No Information
+    ['ZI024_YWQ','-999999','water:potable','unknown'], // No Information
     ['ZI024_YWQ','1','water:potable','yes'], // Potable
     ['ZI024_YWQ','2','water:potable','treatable'], // Treatable
     ['ZI024_YWQ','3','water:potable','contaminated'], // Contaminated
@@ -4409,7 +4416,7 @@ tds71.rules = {
     ['ZI026_CTUC','9','cartographic_scale:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // ZI026_SUR - Feature Metadata : Survey Coverage Category
-    // ['ZI026_SUR','-999999',undefined,undefined], // No Information
+    ['ZI026_SUR','-999999','surface:surveyed','unknown'], // No Information
     ['ZI026_SUR','1','source:surveyed','yes'], // Surveyed
     ['ZI026_SUR','2','source:surveyed','inadequately_surveyed'], // Inadequately Surveyed
     ['ZI026_SUR','3','source:surveyed','no'], // Unsurveyed
@@ -4423,7 +4430,7 @@ tds71.rules = {
     // ZI032_TOS - Pylon Information : Tower Shape - See TOS
 
     // ZI037_REL - Religious Information : Religious Designation
-    // ['ZI037_REL','-999999',undefined,undefined], // No Information
+    ['ZI037_REL','-999999','religion:type','unknown'], // No Information
     ['ZI037_REL','1','religion','buddhist'], // Buddhism
     ['ZI037_REL','2','religion','muslim'], // Islam
     ['ZI037_REL','3','denomination','roman_catholic'], // Roman Catholic
@@ -4462,10 +4469,11 @@ tds71.rules = {
     ['ZI037_RFA','20','building','noviciate'], // Noviciate
     ['ZI037_RFA','21','building','hermitage'], // Hermitage
     ['ZI037_RFA','22','building','retreat'], // Retreat
+    ['ZI037_RFA','25','building','islamic_prayer_hall'], // Islamic Prayer Hall
     ['ZI037_RFA','999','building:religious','other'], // Other
 
     // ZI071_FFN - Cave Information : Feature Function See FFN
-    // ['ZI071_FFN','-999999',undefined,undefined], // noInformation
+    // ['ZI071_FFN','-999999','raw:ZI071_FFN','unknown'], // noInformation
     // ['ZI071_FFN','530','raw:ZI071_FFN','warehousing_and_storage'], // Warehousing and Storage
     // ['ZI071_FFN','563','raw:ZI071_FFN','residence'], // Residence
     // ['ZI071_FFN','835','raw:ZI071_FFN','defence_activities'], // Defence Activities
@@ -4476,7 +4484,7 @@ tds71.rules = {
     // ZI071_FFN3 - Cave Information : Feature Function [3]
 
     // ZI071_UAO - Cave Information : Underground Access Orientation
-    // ['ZI071_UAO','-999999',undefined,undefined], // No Information
+    ['ZI071_UAO','-999999','direction','unknown'], // No Information
     ['ZI071_UAO','1','direction','horizontal'], // Horizontal
     ['ZI071_UAO','2','direction','slopes_downward'], // Slopes Downward
     ['ZI071_UAO','3','direction','vertical_down'], // Vertical Down
@@ -4484,11 +4492,11 @@ tds71.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
+    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
+    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
+    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
+    ['ZSAX_RS0','S','security:classification','SECRET'],
+    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
   ], // End one2one
@@ -4538,14 +4546,62 @@ tds71.rules = {
   // One2one translation table for converting "Other" OSM attributes to TDS
   // This is for Export only. The values are swapped before use
   one2oneOut : [
-    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
-    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
-    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
-    ['ZSAX_RS0','S','security:classification','SECRET'],
-    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
-
-    // OTH Filler.  These are to build OTH values
-    // ['RTY','999','highway','other'],
+    ['FFN','2','building','farm'], // Agriculture
+    ['FFN','122','man_made','winery'], // Winery
+    ['FFN','190','use','oil_gas_facility'], //
+    ['FFN','342','railway','engine_shed'],
+    ['FFN','342','railway','workshop'],
+    ['FFN','440','office','company'], // Commerce
+    ['FFN','440','office','yes'], // Commerce
+    ['FFN','464','shop','books'], // Specialized Store
+    ['FFN','464','shop','car'], // Specialized Store
+    ['FFN','464','shop','motorcycle'], // Specialized Store
+    ['FFN','465','shop','general'], // Non-specialized Store
+    ['FFN','480','amenity','transportation'], // Transport
+    ['FFN','480','building','transportation_outbuilding'], // Transportation
+    ['FFN','481','aeroway','terminal'], // Terminal
+    ['FFN','481','man_made','depot'], // not a good fit for depot terminal
+    ['FFN','482','amenity','bus_station'], // Station
+    ['FFN','486','railway','crossing_box'],
+    ['FFN','530','building','warehouse'],
+    ['FFN','550','building','dwelling'], // Accomodation
+    ['FFN','552','leisure','ski_resort'], // Resort Hotel
+    ['FFN','558','building','dependents_housing'], // Dependents Housing
+    ['FFN','563','building','house'], // Residence
+    ['FFN','572','amenity','fast_food'], // Restaurant
+    ['FFN','610','building','communication'],
+    ['FFN','610','office','telecommunication'], // telecommunication
+    ['FFN','640','shop','bureau_de_change'], // Financial Services
+    ['FFN','760','amenity','office'], // Business and Personal Support Services
+    ['FFN','775','tourism','information'], // Travel Agency
+    ['FFN','811','amenity','government_administration_building'], //
+    ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
+    ['FFN','815','building','palace'], // Palace
+    ['FFN','827','amenity','embassy'], // Embassy
+    ['FFN','831','amenity','courthouse'], // Public Order - from spec
+    ['FFN','835','building','military'],
+    ['FFN','835','military','barracks'], // Military
+    ['FFN','835','military','military_outbuilding'], // Military
+    ['FFN','843','amenity','jail'], // Imprisonment
+    ['FFN','850','amenity','education'], // Education
+    ['FFN','850','amenity','kindergarten'], // Education
+    ['FFN','850','building','school'],
+    ['FFN','850','isced:level','0'], // Education
+    // ['FFN','851','isced:level','1'], // Primary Education
+    // ['FFN','852','isced:level','2,3'], // Secondary Education
+    ['FFN','852','isced:level','2'], // Secondary Education
+    ['FFN','852','isced:level','3'], // Secondary Education
+    ['FFN','857','building','college'], // Vocational Education
+    ['FFN','860','amenity','clinic'], // Human Health Activities
+    ['FFN','860','amenity','medical'], // Human Health Activities
+    ['FFN','860','building','hospital'], // Human Health Activities
+    ['FFN','890','amenity','cultural'], // Cultural, Arts and Entertainment
+    ['FFN','900','tourism','yes'], // Sports, Amusement and Recreation
+    ['FFN','909','amenity','casino'], // Gambling
+    ['FFN','912','leisure','sports_complex'], // Sports Centre
+    ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
+    ['FFN','970','amenity','townhall'], // Meeting Place
+    ['FFN','980','building','cemetery_building'], // Death care services
     ['FFN','999','amenity','other'],
     ['FFN','999','building','other'],
     ['FFN','999','camp:type','other'],
@@ -4559,6 +4615,8 @@ tds71.rules = {
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
 
+    ['FFN','572','amenity','cafe'], // Restaurant
+    ['FFN','572','building','restaurant'], // Restaurant
     ['FIC','1','embankment:type','mound'], // Mound
     ['FIC','1','embankment:type','berm'],
     ['FIC','1','embankment','berm'],
@@ -4569,8 +4627,15 @@ tds71.rules = {
     ['FIC','6','embankment:type','divider'], // Divider
     ['FIC','999','embankment:type','other'], // Other
 
-    // RTY - Roadway Type
-    // Funky Road Type attributes from TDSv40
+    ['IWT','4','man_made','reservoir'], // Reservoir
+
+    ['MCC','2','material','aluminum'], // Aluminum
+
+    ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
+
+    ['PYM','1','tower:material','aluminum'], // Aluminum
+
+    // RTY - Roadway Type Funky Road Type attributes from TDSv40
     ['RTY','4','ref:road:type','boulevard'], // Boulevard
     ['RTY','4','ref:road:type','avenue'], // Avenue
     ['RTY','4','ref:road:type','drive'], // Drive
@@ -4582,43 +4647,38 @@ tds71.rules = {
     ['RTY','4','ref:road:type','place'], // Place
     ['RTY','4','ref:roadtype','roundabout'], // Roundabout
 
-    // Fix up the building/use tags from FFN
-    [undefined,undefined,'building','industrial'], // Industrial
-    [undefined,undefined,'man_made','works'], // Works
-    ['FFN','2','building','farm'], // Agriculture
+    // TRE - Foliage Type
+    ['TRE','1','wood','deciduous'], // Deciduous
+    ['TRE','2','wood','evergreen'], // Evergreen
+    ['TRE','3','wood','mixed'], // Mixed
+    ['TRE','999','wood','other'], // Other
 
-    ['FFN','342','railway','engine_shed'],
-    ['FFN','486','railway','crossing_box'],
-    ['FFN','342','railway','workshop'],
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
 
-    ['FFN','827','amenity','embassy'], // Embassy
-
-    ['FFN','850','building','school'],
-    ['FFN','850','isced:level','0'], // Education
-    ['FFN','850','amenity','kindergarten'], // Education
-    // ['FFN','851','isced:level','1'], // Primary Education
-    ['FFN','852','isced:level','2'], // Secondary Education
-    ['FFN','852','isced:level','3'], // Secondary Education
-    // ['FFN','852','isced:level','2,3'], // Secondary Education
-    ['FFN','857','building','college'], // Vocational Education
-
-    ['FFN','572','amenity','cafe'], // Restaurant
-    ['FFN','572','building','restaurant'], // Restaurant
+    ['WCC','3','channel:type','gorge'], // Gorge
 
     // Backward compatibility for 'oil'
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
-
-    ['MCC','2','material','aluminum'], // Aluminum
-    ['PYM','1','tower:material','aluminum'], // Aluminum
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
     ['ZI014_PPO','2','product','aluminum'], // Aluminum
     ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
-
     ['ZI004_RCG','28','attribution','defence_imagery_and_geospatial_organisation_(australia)'], // Defence Imagery and Geospatial Organisation (Australia)
     ['ZI004_RCG','36','attribution','joint_geography_bureau_(france)'], // Joint Geography Bureau (France)
     ['ZI004_RCG','39','attribution','mapping_service_(hungary)'], // Mapping Service (Hungary)
     ['ZI004_RCG','45','attribution','geospatial_intelligence_organisation_(new_zealand)'], // Geospatial Intelligence Organisation (New Zealand)
+
+    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
+    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
+    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
+    ['ZSAX_RS0','S','security:classification','SECRET'],
+    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
+
+    // OTH Filler.  These are to build OTH values
+    // ['RTY','999','highway','other'],
+
+    // Fix up the building/use tags from FFN
+    [undefined,undefined,'building','industrial'], // Industrial
+    [undefined,undefined,'man_made','works'], // Works
 
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
@@ -4632,79 +4692,12 @@ tds71.rules = {
     [undefined,undefined,'natural','water'], // to get rid of errors
 
     // From MGCP
-    ['FFN','480','building','transportation_outbuilding'], // Transportation
-    ['FFN','481','man_made','depot'], // not a good fit for depot terminal
-    ['FFN','550','building','dwelling'], // Accomodation
-    ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-    ['FFN','811','amenity','government_administration_building'], //
-    ['FFN','835','military','military_outbuilding'], // Military
-    ['FFN','835','military','barracks'], // Military
-    ['FFN','843','amenity','jail'], // Imprisonment
-    ['FFN','980','building','cemetery_building'], // Death care services
-    ['ZI014_PPO','-999999','product','unknown'], // Unknown
     //     [undefined,undefined,'amenity','school'], //  converted in pre processing
     //     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
     //     [undefined,undefined,'amenity','university'], //  converted in pre processing
     //     [undefined,undefined,'amenity','college'], //  converted in pre processing
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
-
-    ['IWT','4','man_made','reservoir'], // Reservoir
-
-    ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
-
-    // From UFD
-    ['CAA','-999999','operator','unknown'],
-    ['FFN','190','use','oil_gas_facility'], //
-
-    // From UTP
-    // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
-    ['FFN','482','amenity','bus_station'], // Station
-    ['FFN','831','amenity','courthouse'], // Public Order - from spec
-    ['FFN','610','building','communication'],
-    ['FFN','530','building','warehouse'],
-    ['FFN','835','building','military'],
-    // ['FFN','999','landuse','institutional'], //
-
-    // From NAVTEQ
-    ['FFN','122','man_made','winery'], // Winery
-    ['FFN','440','office','company'], // Commerce
-    ['FFN','440','office','yes'], // Commerce
-    ['FFN','464','shop','car'], // Specialized Store
-    ['FFN','464','shop','motorcycle'], // Specialized Store
-    ['FFN','465','shop','general'], // Non-specialized Store
-    ['FFN','480','amenity','transportation'], // Transport
-    ['FFN','481','aeroway','terminal'], // Terminal
-    ['FFN','552','leisure','ski_resort'], // Resort Hotel
-    ['FFN','572','amenity','fast_food'], // Restaurant
-    ['FFN','775','tourism','information'], // Travel Agency
-    ['FFN','850','amenity','education'], // Education
-    ['FFN','860','building','hospital'], // Human Health Activities
-    ['FFN','860','amenity','clinic'], // Human Health Activities
-    ['FFN','860','amenity','medical'], // Human Health Activities
-    ['FFN','890','amenity','cultural'], // Cultural, Arts and Entertainment
-    ['FFN','900','tourism','yes'], // Sports, Amusement and Recreation
-    // ['FFN','922','tourism','theme_park'], // Amusement
-    ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
-    ['FFN','909','amenity','casino'], // Gambling
-    ['FFN','912','leisure','sports_complex'], // Sports Centre
-    ['FFN','970','amenity','townhall'], // Meeting Place
     //[undefined,undefined,'historic','yes'], // Not a good translation, push to o2s
-
-    // ### From OSM - This list could never end.....
-    ['FFN','464','shop','books'], // Specialized Store
-    ['FFN','563','building','house'], // Residence
-    ['FFN','558','building','dependents_housing'], // Dependents Housing
-    ['FFN','610','office','telecommunication'], // telecommunication
-    ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services
-    ['FFN','815','building','palace'], // Palace
-
-    // TRE - Foliage Type
-    // ['TRE','-999999',undefined,undefined], // No Information
-    ['TRE','1','wood','deciduous'], // Deciduous
-    ['TRE','2','wood','evergreen'], // Evergreen
-    ['TRE','3','wood','mixed'], // Mixed
-    ['TRE','999','wood','other'], // Other
   ], // End one2oneOut
 
   // ##### End of One2One Rules #####
@@ -4906,6 +4899,7 @@ tds71.rules = {
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
+    'ZVH_VDT':'VDT'
   },
   // ##### End of swapListIn #####
 
@@ -4936,6 +4930,7 @@ tds71.rules = {
     'BD100':{'WLE':'ZI025_WLE'},
     'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH070':{'PWA':'WBD'},
+    'CA030':{'VDT':'ZVH_VDT'},
     'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
     'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'URI'},
@@ -4963,7 +4958,7 @@ tds71.rules = {
   // ##### End of noZeroList #####
 
   // Attribute values that are to be dropped since they are defaults or don't add value.
-  dropList : { '-999999.0':1,'-999999':1,'noinformation':1 },
+  dropList : { '-999999.0':1,'-999999':1,'noinformation':1,'unknown':1},
   // ##### End of dropList #####
 
   // ##### Start of ge4List #####

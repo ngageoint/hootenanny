@@ -67510,10 +67510,7 @@ var schema = [
      {name:"Tidal Flow",value:"9"}
     ]
    },
-   {name:"DOF",desc:"Direction of Flow",optional:"R",type:"enumeration",defValue:"-999999.0",
-    enumerations:[
-    ]
-   },
+   {name:"DOF",desc:"Direction of Flow",optional:"R",type:"Integer",defValue:"-999999"},
    {name:"FCSUBTYPE",desc:"Feature Code Subtype",optional:"R",type:"Integer",defValue:"100215"},
    {name:"F_CODE",desc:"Feature Code",optional:"R",type:"String",defValue:"BG010"},
    {name:"OTH",desc:"Specified Domain Value(s)",optional:"R",length:"255",type:"String",defValue:"noInformation"},

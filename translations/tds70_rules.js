@@ -164,7 +164,7 @@ tds70.rules = {
     'ZI020_GE42':'addr:country:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
     'ZI020_GE43':'addr:country:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
     'ZI020_GE44':'addr:country:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
-    'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
+    // 'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
@@ -3656,11 +3656,11 @@ tds70.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
+    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
+    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
+    ['ZSAX_RS0','S','security:classification','SECRET'],
+    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
+    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
   ], // End one2one
@@ -3858,11 +3858,11 @@ tds70.rules = {
 
     ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
 
-    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
-    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
-    ['ZSAX_RS0','S','security:classification','SECRET'],
-    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
-    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
+    ['ZSAX_RS0','U','security:classification','U'],
+    ['ZSAX_RS0','R','security:classification','R'],
+    ['ZSAX_RS0','C','security:classification','C'],
+    ['ZSAX_RS0','S','security:classification','S'],
+    ['ZSAX_RS0','TS','security:classification','TS'],
   ], // End one2oneOut
 
   // ##### End of One2One Rules #####

@@ -21,12 +21,14 @@ HOOT_OPT="--info -C Testing.conf"
 COMPARE_OUTPUT=$HOOT_HOME/scripts/schema/compareTrans.py
 
 # Make shapefiles from the OSM file
-hoot convert --error -D ogr.compare.output=true  -D ogr.debug.dumptags=true  \
+hoot convert --debug -D ogr.compare.output=true  -D ogr.debug.dumptags=true  \
+  -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true \
   -D schema.translation.script=$TRANS \
   $inputDir/TDSv71.osm $outputDir/new_TDSv71.shp > $outputDir/x_testfile.txt
 
 # Convert the Shapefiles back to OSM
-hoot convert --error -D ogr.compare.output=true  -D ogr.debug.dumptags=true  \
+hoot convert --debug -D ogr.compare.output=true  -D ogr.debug.dumptags=true  \
+  -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true \
   -D schema.translation.script=$TRANS \
   $outputDir/new_TDSv71/*.shp  $outputDir/new_TDSv71.osm > $outputDir/in_testfile.txt
 

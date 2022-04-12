@@ -348,7 +348,7 @@ translate = {
 
   // Apply one-to-one translations - For TDS export
   // This version populates the OTH field for values that are not in the rules
-  applyTdsOne2One : function(inList, outList, lookup, fCodeList,transmap = [])
+  applyTdsOne2One : function(inList, outList, lookup, fCodeList,transMap = [])
   {
     var endChar = '',
       tAttrib = '',
@@ -390,6 +390,7 @@ translate = {
             if (! outList[row[0]] || outList[row[0]].slice(0, -1) === row[1].slice(0, -1))
             {
               outList[row[0]] = this.getMaxAsString(outList[row[0]], row[1]);
+              transMap[row[0]] = [outList[row[0]],key,value];
               // Debug
               // print('Used:' + key + ' = ' + inList[key] + '  as ' + row[0] + ' = ' + this.getMaxAsString(outList[row[0]], row[1]));
               delete inList[key];
@@ -397,6 +398,7 @@ translate = {
             else if (! outList[row[0] + '2'] || outList[row[0] + '2'].slice(0, -1) === row[1].slice(0, -1))
             {
               outList[row[0] + '2'] = this.getMaxAsString(outList[row[0] + '2'], row[1]);
+              transMap[row[0]] = [outList[row[0] + '2'],key,value];
               // Debug
               // print('Used:' + key + ' = ' + inList[key] + ' as 2nd');
               delete inList[key];
@@ -404,6 +406,7 @@ translate = {
             else if (! outList[row[0] + '3'] || outList[row[0] + '3'].slice(0, -1) === row[1].slice(0, -1))
             {
               outList[row[0] + '3'] = this.getMaxAsString(outList[row[0] + '3'], row[1]);
+              transMap[row[0]] = [outList[row[0] + '3'],key,value];
               // Debug
               // print('Used:' + key + ' = ' + inList[key] + ' as 3rd');
               delete inList[key];
