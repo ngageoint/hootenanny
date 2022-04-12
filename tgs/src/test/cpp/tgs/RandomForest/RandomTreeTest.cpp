@@ -71,62 +71,64 @@ namespace Tgs
 
     void test1()
     {
-//       //std::cout <<"Start Data Frame Test"  << std::endl;
-//       DataFrame df;
-//       for(int i = 0; i < 12; i++)
-//       {
-//         std::vector<double> vi;
-//         vi.push_back(area[i]);
-//         vi.push_back(perimeter[i]);
-//         vi.push_back(compactness[i]);
-//         df.addDataVector(labels[i], vi);
-//       }
-// 
-//       RandomTree rt;
-//       rt.buildTest(df, 3);
-// 
-//       std::map<unsigned int, double> factImport;
-//       rt.getFactorImportance(factImport);
-// 
-//       std::map<unsigned int, double>::iterator itr;
-// 
-//       for(itr = factImport.begin(); itr != factImport.end(); ++itr)
-//       {
-//         std::cout << "Factor " << itr->first << " - " << itr->second << std::endl;
-//       }
-// 
-//       std::string treeOutput;
-// 
-//       rt.toString(treeOutput);
-// 
-//       //Test consistent tree build
-//       CPPUNIT_ASSERT(treeOutput == testTreeString);
-// 
-//       RandomTree rt2;
-//       rt2.load(treeOutput);
-// 
-//       std::string treeOutput2;
-// 
-//       rt2.toString(treeOutput2);
-// 
-//       //Test tree importing
-//       CPPUNIT_ASSERT(treeOutput == treeOutput2);
-// 
-//       std::string resultClass;
-// 
-//       for(unsigned int j = 0; j < 4; j++)
-//       {
-//         std::vector<double> dataVec(3);
-//         dataVec[0] = testArea[j];
-//         dataVec[1] = testPerimeter[j];
-//         dataVec[2] = testCompactness[j];
-// 
-//         rt.classifyDataVector(dataVec, resultClass);
-// 
-//         //Test correct classification result
-//         CPPUNIT_ASSERT( resultClass == classTestLabels[j]);
-//         //std::cout << "The result is " << resultClass << " " << classTestLabels[j] << std::endl;
-//       }
+/*
+       //std::cout <<"Start Data Frame Test"  << std::endl;
+       DataFrame df;
+       for(int i = 0; i < 12; i++)
+       {
+         std::vector<double> vi;
+         vi.push_back(area[i]);
+         vi.push_back(perimeter[i]);
+         vi.push_back(compactness[i]);
+         df.addDataVector(labels[i], vi);
+       }
+
+       RandomTree rt;
+       rt.buildTest(df, 3);
+
+       std::map<unsigned int, double> factImport;
+       rt.getFactorImportance(factImport);
+
+       std::map<unsigned int, double>::iterator itr;
+
+       for(itr = factImport.begin(); itr != factImport.end(); ++itr)
+       {
+         std::cout << "Factor " << itr->first << " - " << itr->second << std::endl;
+       }
+
+       std::string treeOutput;
+
+       rt.toString(treeOutput);
+
+       //Test consistent tree build
+       CPPUNIT_ASSERT(treeOutput == testTreeString);
+
+       RandomTree rt2;
+       rt2.load(treeOutput);
+
+       std::string treeOutput2;
+
+       rt2.toString(treeOutput2);
+
+       //Test tree importing
+       CPPUNIT_ASSERT(treeOutput == treeOutput2);
+
+       std::string resultClass;
+
+       for(unsigned int j = 0; j < 4; j++)
+       {
+         std::vector<double> dataVec(3);
+         dataVec[0] = testArea[j];
+         dataVec[1] = testPerimeter[j];
+         dataVec[2] = testCompactness[j];
+
+         rt.classifyDataVector(dataVec, resultClass);
+
+         //Test correct classification result
+         CPPUNIT_ASSERT( resultClass == classTestLabels[j]);
+         //std::cout << "The result is " << resultClass << " " << classTestLabels[j] << std::endl;
+       }
+*/
     }
   };
 }  //End namespace

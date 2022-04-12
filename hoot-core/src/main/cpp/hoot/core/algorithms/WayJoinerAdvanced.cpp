@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayJoinerAdvanced.h"
@@ -56,9 +56,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerAdvanced)
 
-WayJoinerAdvanced::WayJoinerAdvanced() :
-WayJoiner::WayJoiner(),
-_callingClass(className())
+WayJoinerAdvanced::WayJoinerAdvanced()
+  : WayJoiner::WayJoiner(),
+    _callingClass(className())
 {
 }
 
@@ -90,7 +90,7 @@ void WayJoinerAdvanced::_joinParentChild()
   _totalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     if (_hasPid(way))
@@ -104,9 +104,9 @@ void WayJoinerAdvanced::_joinParentChild()
   sort(ids.begin(), ids.end());
   LOG_VART(ids);
   //  Iterate all of the ids
-  for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
+  for (auto id : ids)
   {
-    WayPtr way = ways[*it];
+    WayPtr way = ways[id];
     if (way)
     {
       LOG_VART(way->getElementId());
@@ -182,7 +182,7 @@ void WayJoinerAdvanced::_joinAtNode()
     WayMap ways = _map->getWays();
     ids.clear();
     //  Find all ways that have a split parent id
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+    for (auto it = ways.begin(); it != ways.end(); ++it)
     {
       WayPtr way = it->second;
       if (_hasPid(way))
@@ -198,9 +198,8 @@ void WayJoinerAdvanced::_joinAtNode()
     // If we didn't reduce the number of ways from the previous iteration, or there are none left
     // to reduce, then exit out.
     if (ids.empty() || currentNumSplitParentIds == ids.size())
-    {
       break;
-    }
+
     currentNumSplitParentIds = ids.size();
     LOG_VART(currentNumSplitParentIds);
 
@@ -209,9 +208,9 @@ void WayJoinerAdvanced::_joinAtNode()
     // being updated as well?
     std::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
     //  Iterate all of the nodes and check for compatible ways to join them to
-    for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
+    for (auto id : ids)
     {
-      WayPtr way = ways[*it];
+      WayPtr way = ways[id];
       LOG_VART(way->getElementId());
 
       if (way->getNodeCount() < 1)
@@ -227,16 +226,16 @@ void WayJoinerAdvanced::_joinAtNode()
       LOG_VART(endpoints.size());
       LOG_VART(endpoints);
 
-      for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
+      for (auto endpoint_id : endpoints)
       {
         //  Find all ways connected to this node
-        const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
+        const set<long>& way_ids = nodeToWayMap->getWaysByNode(endpoint_id);
         LOG_VART(way_ids.size());
         LOG_VART(way_ids);
-        for (set<long>::const_iterator w = way_ids.begin(); w != way_ids.end(); ++w)
+        for (auto way_id : way_ids)
         {
           LOG_VART(way->getElementId());
-          WayPtr child = _map->getWay(*w);
+          WayPtr child = _map->getWay(way_id);
           if (child)
           {
             LOG_VART(child->getElementId());
@@ -396,9 +395,9 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
     {
       LOG_VART(parent->getElementId());
     }
-    for (size_t i = 1; i < sorted.size(); ++i)
+    for (auto way_id : sorted)
     {
-      WayPtr child = ways[sorted[i]];
+      WayPtr child = ways[way_id];
       // don't try to join if there are explicitly conflicting names; fix for #2888
       bool childHasName = false;
       Tags childTags;
@@ -409,9 +408,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
         childHasName = childTags.hasName();
       }
       else
-      {
         break;
-      }
       const Tags parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
       // TODO: use TagUtils::nameConflictExists here instead
@@ -492,13 +489,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(child_nodes[child_nodes.size() - 1]);
   LOG_VART(parent_nodes[0]);
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
-  {
     joinType = JoinAtNodeMergeType::ParentFirst;
-  }
   else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
-  {
     joinType = JoinAtNodeMergeType::ParentLast;
-  }
   else
   {
     LOG_TRACE(
@@ -579,9 +572,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   Tags mergedTags = TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way);
   if (totalLength != -1.0)
-  {
     mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
-  }
 
   wayWithIdToKeep->setTags(mergedTags);
 
@@ -640,22 +631,20 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
   const WayMap ways = _map->getWays();
   int joinAttempts = 0;
   int successfulJoins = 0;
-  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr wayToJoin = wayItr->second;
     if (wayToJoin->getTags().get("highway") == "road" && !wayToJoin->getTags().hasName() &&
         !oneWayCrit.isSatisfied(wayToJoin))
     {
       const vector<long> endpoints({ wayToJoin->getFirstNodeId(), wayToJoin->getLastNodeId() });
-      for (vector<long>::const_iterator endpointItr = endpoints.begin();
-           endpointItr != endpoints.end(); ++endpointItr)
+      for (auto endpoint_id : endpoints)
       {
-        const set<long>& connectedWaysIds = nodeToWayMap->getWaysByNode(*endpointItr);
+        const set<long>& connectedWaysIds = nodeToWayMap->getWaysByNode(endpoint_id);
         LOG_VART(connectedWaysIds);
-        for (set<long>::const_iterator connectedItr = connectedWaysIds.begin();
-             connectedItr != connectedWaysIds.end(); ++connectedItr)
+        for (auto connected_way_id : connectedWaysIds)
         {
-          WayPtr connectedWay = _map->getWay(*connectedItr);
+          WayPtr connectedWay = _map->getWay(connected_way_id);
           // Not sure how the connected way could be empty...
           if (connectedWay && highwayCrit.isSatisfied(connectedWay))
           {
@@ -787,18 +776,14 @@ double WayJoinerAdvanced::_getTotalLengthFromTags(const Tags& tags1, const Tags&
       bool ok = false;
       length1 = tags1.get(MetadataTags::Length()).toDouble(&ok);
       if (!ok)
-      {
         length1 = 0.0;
-      }
     }
     if (tags2.contains(MetadataTags::Length()))
     {
       bool ok = false;
       length2 = tags2.get(MetadataTags::Length()).toDouble(&ok);
       if (!ok)
-      {
         length2 = 0.0;
-      }
     }
     totalLength = length1 + length2;
   }
