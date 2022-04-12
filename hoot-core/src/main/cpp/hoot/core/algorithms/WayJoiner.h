@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYJOINER_H
@@ -90,6 +90,9 @@ protected:
   // mapping of joined ways ids; ID before joining mapped to ID after joining
   QHash<long, long> _joinedWayIdMappings;
 
+  // mapping of parentIDs to the ways that references them.
+  std::multimap<long, long> _parentIDsToWays;
+
   int _numJoined;
   int _numProcessed;
   int _totalWays;
@@ -147,6 +150,14 @@ private:
    * @see _writePidToChildId
    */
   void _writeParentIdsToChildIds() const;
+
+  /**
+   * @brief _updateParentIdMap clears and rebuilds our map of parentIDs to
+   *    Ways. This map is used to speed up _joinWays by letting us quickly
+   *    modify parentIDs after ways have been joined. This will iterate through
+   *    all of the ways in the map, so use carefully.
+   */
+  void _updateParentIdMap();
 };
 
 }
