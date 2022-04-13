@@ -49,39 +49,50 @@ void SettingsJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> settings = Object::New(current);
-  exports->Set(context, toV8("Settings"), settings);
-  exports->Set(context, toV8("get"),
+  Maybe<bool> result = exports->Set(context, toV8("Settings"), settings);
+  result = exports->Set(context, toV8("clear"),
+               FunctionTemplate::New(current, clear)->GetFunction(context).ToLocalChecked());
+  result = settings->Set(context, toV8("clear"),
+                FunctionTemplate::New(current, clear)->GetFunction(context).ToLocalChecked());
+  result = exports->Set(context, toV8("get"),
                FunctionTemplate::New(current, get)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("get"),
+  result = settings->Set(context, toV8("get"),
                 FunctionTemplate::New(current, get)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("set"),
+  result = exports->Set(context, toV8("set"),
                FunctionTemplate::New(current, set)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("set"),
+  result = settings->Set(context, toV8("set"),
                 FunctionTemplate::New(current, set)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("appendToList"),
+  result = exports->Set(context, toV8("appendToList"),
                FunctionTemplate::New(current, appendToList)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("appendToList"),
+  result = settings->Set(context, toV8("appendToList"),
                 FunctionTemplate::New(current, appendToList)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("prependToList"),
+  result = exports->Set(context, toV8("prependToList"),
                FunctionTemplate::New(current, prependToList)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("prependToList"),
+  result = settings->Set(context, toV8("prependToList"),
                 FunctionTemplate::New(current, prependToList)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("removeFromList"),
+  result = exports->Set(context, toV8("removeFromList"),
                FunctionTemplate::New(current, removeFromList)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("removeFromList"),
+  result = settings->Set(context, toV8("removeFromList"),
                 FunctionTemplate::New(current, removeFromList)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("replaceInList"),
+  result = exports->Set(context, toV8("replaceInList"),
                FunctionTemplate::New(current, replaceInList)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("replaceInList"),
+  result = settings->Set(context, toV8("replaceInList"),
                 FunctionTemplate::New(current, replaceInList)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("placeAfterInList"),
+  result = exports->Set(context, toV8("placeAfterInList"),
                FunctionTemplate::New(current, placeAfterInList)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("placeAfterInList"),
+  result = settings->Set(context, toV8("placeAfterInList"),
                 FunctionTemplate::New(current, placeAfterInList)->GetFunction(context).ToLocalChecked());
-  exports->Set(context, toV8("listContains"),
+  result = exports->Set(context, toV8("listContains"),
                FunctionTemplate::New(current, listContains)->GetFunction(context).ToLocalChecked());
-  settings->Set(context, toV8("listContains"),
+  result = settings->Set(context, toV8("listContains"),
                 FunctionTemplate::New(current, listContains)->GetFunction(context).ToLocalChecked());
+}
+
+void SettingsJs::clear(const FunctionCallbackInfo<Value>& args)
+{
+  Settings* settings = &conf();
+  settings->clear();
+  args.GetReturnValue().SetUndefined();
 }
 
 void SettingsJs::get(const FunctionCallbackInfo<Value>& args)

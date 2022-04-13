@@ -72,4 +72,31 @@ describe('SettingsJs', function() {
 
     }).timeout(5000);
 
+    it('Should clear the configuration', function() {
+
+      var someKey = 'some.test.key';
+      var someVal = 'some.test.value';
+
+      var testSetting = {someKey : someVal};
+
+      // Set a config item
+      hoot.set(testSetting);
+      var testVal = hoot.get(someKey);
+      assert.equal(someVal, testVal);
+
+      // Clear config
+      hoot.clear();
+
+      // Verify
+      testVal = hoot.get(someKey);
+      assert.equal('', testVal);
+
+      hoot.set({'conflate.post.ops': defaultConflatePostOpsStr});
+
+      assert.equal(1, 'holy balls batman!');
+
+      assert.equal(1, 0);
+
+    }).timeout(5000);
+
 });

@@ -45,6 +45,11 @@ private:
 
   SettingsJs() = default;
 
+  /**
+   * @brief clear Removes all user defined settings. This is most useful for unit testing.
+   * @param args
+   */
+  static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void listContains(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
