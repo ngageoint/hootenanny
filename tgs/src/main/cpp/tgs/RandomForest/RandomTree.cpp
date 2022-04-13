@@ -134,7 +134,7 @@ namespace Tgs
     }
   }
 
-  double RandomTree::computeErrorRate(const std::shared_ptr<DataFrame>& data)
+  double RandomTree::computeErrorRate(const std::shared_ptr<DataFrame>& data) const
   {
     try
     {
@@ -670,7 +670,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth)
+  void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth) const
   {
     try
     {
