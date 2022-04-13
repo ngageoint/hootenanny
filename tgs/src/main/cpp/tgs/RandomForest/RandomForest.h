@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __RANDOM_FOREST_H__
@@ -70,10 +70,9 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  void trainBinary(
-    const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
-    const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0,
-    bool balanced = false) override;
+  void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                   const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0,
+                   bool balanced = false) override;
 
   /**
   * Build the forest from a data set
@@ -85,9 +84,8 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  void trainMulticlass(
-    const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
-    unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
+  void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                       unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 
   /**
   * Build the forest from a data set
@@ -101,10 +99,9 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  void trainRoundRobin(
-    const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
-    const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
-    double retrain = 1.0, bool balanced = false) override;
+  void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                       const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
+                       double retrain = 1.0, bool balanced = false) override;
 };
 
 }

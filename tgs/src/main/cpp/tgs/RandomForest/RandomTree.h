@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __RANDOM_TREE_H__
@@ -85,8 +85,8 @@ namespace Tgs
     *  @return the id number for the terminal node in the tree for the classification 
     *
     */
-    unsigned int classifyDataVector(const std::vector<double> & dataVector, 
-      std::string & outputClass) const;
+    unsigned int classifyDataVector(const std::vector<double> & dataVector,
+                                    std::string & outputClass) const;
 
     /**
     *  Classifies the vectors in the out of bag set and computes the error rate as
@@ -94,7 +94,7 @@ namespace Tgs
     *
     * @param data this data frame contains all the data vectors in the training set
     */
-    double computeErrorRate(const std::shared_ptr<DataFrame>& data);
+    double computeErrorRate(const std::shared_ptr<DataFrame>& data) const;
 
     /**
     * Computes the proximity of the data vectors in the data set by running the 
@@ -151,7 +151,7 @@ namespace Tgs
     * @param balanced true if the tree should used balanced data
     */
     void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-      const std::string& posClass, unsigned int nodeSize = 1, bool balanced = false);
+                     const std::string& posClass, unsigned int nodeSize = 1, bool balanced = false);
     /**
     * Builds a tree 
     *
@@ -161,7 +161,7 @@ namespace Tgs
     * @param balanced true if the tree should used balanced data
     */
     void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-      unsigned int nodeSize = 1, bool balanced = false);
+                         unsigned int nodeSize = 1, bool balanced = false);
     /**
     * Builds a tree 
     *
@@ -173,8 +173,8 @@ namespace Tgs
     * @param balanced true if the tree should used balanced data
     */
     void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-      const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
-      bool balanced = false);
+                         const std::string& posClass, const std::string& negClass,
+                         unsigned int nodeSize = 1, bool balanced = false);
 
    /**
     * Resets the id counter.  Only needed in build-model when a model is loaded, increasing the ids,
@@ -188,9 +188,8 @@ namespace Tgs
     /**
     * Recursive function for building random tree nodes
     */
-    void _build(
-      const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
-      const std::shared_ptr<TreeNode>& node, unsigned int nodeSize);
+    void _build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
+                const std::shared_ptr<TreeNode>& node, unsigned int nodeSize);
 
     /**
     * A recursive function to sum the purity gain per node based for its splitting factor
@@ -199,8 +198,7 @@ namespace Tgs
     *  @param factorPurity the results container as a map of factor index to current purity gain 
     *  sum
     */
-    void _calcFactorPurity(
-      const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double> & factorPurity);
+    void _calcFactorPurity(const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double> & factorPurity);
     
     /**
     *  Destroys the tree by recursively deleting its child nodes
@@ -216,8 +214,7 @@ namespace Tgs
     * @param node the current node under consideration
     * @param tabDepth set of tabs to indent the exported content
     */
-    void _exportNode(
-      std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth);
+    void _exportNode(std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth);
 
     /**
      * @brief _exportNode a recursive function to write a trees nodes
@@ -228,8 +225,7 @@ namespace Tgs
      * @param parentNode the parent XML node to append the tree nodes
      * @param node the current tree node
      */
-    void _exportNode(
-      QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node);
+    void _exportNode(QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node);
 
     /**
     *  Exports the out of bag set indices
@@ -237,7 +233,7 @@ namespace Tgs
     * @param fileStream the stream to export the data
     * @param tabDepth set of tabs to indent the exported content
     */
-    void _exportOobSet(std::ostream & fileStream, const std::string& tabDepth);
+    void _exportOobSet(std::ostream & fileStream, const std::string& tabDepth) const;
 
     /**
     *  A recursive method for importing nodes for creation

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PluginContext.h"
 
@@ -71,9 +71,9 @@ PluginContext::PluginContext()
   JsRegistrar::getInstance().initAll(hns);
 
   QStringList includes = ConfigOptions().getPluginContextIncludes();
-  for (int i = 0; i < includes.size(); i++)
+  for (const auto& include : qAsConst(includes))
   {
-    QString fullPath = ConfPath::search(includes[i], "rules/lib");
+    QString fullPath = ConfPath::search(include, "rules/lib");
     LOG_TRACE("Loading system include: " << fullPath);
     loadScript(fullPath);
   }
@@ -93,10 +93,10 @@ Local<Value> PluginContext::call(Local<Object> obj, QString name, QList<QVariant
 
   Local<Function> func = Local<Function>::Cast(value);
   LOG_VART(args);
-  vector<Local<Value>> jsArgs(args.size());
+  vector<Local<Value>> jsArgs;
 
-  for (int i = 0; i < args.size(); i++)
-    jsArgs[i] = toValue(args[i]);
+  for (const auto& arg : args)
+    jsArgs.push_back(toValue(arg));
 
   MaybeLocal<Value> result = func->Call(context, obj, args.size(), jsArgs.data());
 
@@ -154,7 +154,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 
   // Compile the source code.
   ScriptOrigin origin(toV8(scriptName));
-  script = Script::Compile(context, v8::String::NewFromUtf8(current, text.toUtf8().data()).ToLocalChecked());
+  script = Script::Compile(context, v8::String::NewFromUtf8(current, text.toUtf8().data()).ToLocalChecked(), &origin);
 
   if (script.IsEmpty())
     HootExceptionJs::throwAsHootException(try_catch);

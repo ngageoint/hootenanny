@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Log.h"
@@ -89,9 +89,9 @@ static void cplErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
   Log::getInstance().log(l, ss.str());
 }
 
-Log::Log() :
-_level(Log::Info),
-_decorateLogs(false)
+Log::Log()
+  : _level(Log::Info),
+    _decorateLogs(false)
 {
   qInstallMessageHandler(myLoggerFunction);
   CPLSetErrorHandler(cplErrorHandler);
@@ -192,13 +192,9 @@ QString Log::getLevelAsString() const
   return levelToString(_level);
 }
 
-void Log::log(
-  WarningLevel level, const QString& str, const QString& filename, const QString& prettyFunction,
-  int lineNumber)
+void Log::log(WarningLevel level, const QString& str, const QString& filename, const QString& prettyFunction, int lineNumber)
 {
-  log(
-    level, string(str.toUtf8().data()), string(filename.toUtf8().data()),
-    string(prettyFunction.toUtf8().data()), lineNumber);
+  log(level, string(str.toUtf8().data()), string(filename.toUtf8().data()), string(prettyFunction.toUtf8().data()), lineNumber);
 }
 
 string Log::ellipsisStr(const string& str, uint count)
@@ -228,16 +224,15 @@ bool Log::_passesFilter(const string& prettyFunction)
     nameParts = nameParts[0].split("::", QString::SkipEmptyParts);
     const int listLen = nameParts.size();
     if (listLen <= 1)
-    {
       return false;
-    }
     name = nameParts[listLen - 2];
   }
   else  // call from a JS generic conflate script
   {
     // split arguments from script path
     const QStringList nameParts = prettyFunctionQt.split("/", QString::SkipEmptyParts);
-    if (nameParts.length() < 1) return true;
+    if (nameParts.length() < 1)
+      return true;
 
     name = nameParts[nameParts.size() - 1];
   }
@@ -250,9 +245,8 @@ bool Log::_passesFilter(const string& prettyFunction)
   // If anything was added to the exclude filter and this class was explicitly excluded, we'll skip
   // logging.
   if (!_excludeClassFilter.isEmpty() && StringUtils::matchesWildcard(name, _excludeClassFilter))
-  {
     return false;
-  }
+
   // If nothing was added to the include list, everything is allowed to log. Otherwise, only allow
   // this class to log if it has been added to the include list.
   return _includeClassFilter.isEmpty() || StringUtils::matchesWildcard(name, _includeClassFilter);

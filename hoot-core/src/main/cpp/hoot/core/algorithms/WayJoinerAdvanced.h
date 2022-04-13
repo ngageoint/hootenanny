@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYJOINER_ADVANCED_H
 #define WAYJOINER_ADVANCED_H
 
 // Hoot
+#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/WayJoiner.h>
 
 namespace hoot
 {
