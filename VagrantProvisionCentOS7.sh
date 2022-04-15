@@ -90,7 +90,6 @@ else
          libphonenumber-devel \
          nodejs \
          nodejs-devel \
-	 npm \
          proj \
          proj-devel \
          stxxl \
@@ -115,7 +114,6 @@ sudo yum install -y \
      libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
-     npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
      proj-$PROJ_VERSION \
@@ -141,7 +139,6 @@ sudo yum versionlock add \
      libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
-     npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
      proj-$PROJ_VERSION \
