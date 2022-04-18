@@ -736,7 +736,9 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
         break;
       }
       default:
-        throw HootException("Unsupported geometry type.");
+          LOG_TRACE("Bad Geom: " << _toWkt(g).left(100));
+          LOG_ERROR("Feature dropped. Unsupported geometry type: " << wkbFlatten(g->getGeometryType()));
+//        throw HootException("Unsupported geometry type.");
       }
     }
     catch (const IllegalArgumentException& e)
