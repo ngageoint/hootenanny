@@ -725,6 +725,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
         break;
       case wkbMultiPoint:
       case wkbMultiLineString:
+      case wkbMultiCurve:
       case wkbGeometryCollection:
       {
         LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.): " <<
@@ -736,7 +737,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
         break;
       }
       default:
-        throw HootException("Unsupported geometry type.");
+        LOG_ERROR("Feature dropped. Unsupported geometry type: " << _toWkt(g).left(100));
       }
     }
     catch (const IllegalArgumentException& e)
