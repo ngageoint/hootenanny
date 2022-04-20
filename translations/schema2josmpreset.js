@@ -5,6 +5,7 @@ var ggdm30_schema = require('./ggdm30_full_schema.js').getDbSchema();
 var tds40_schema = require('./tds40_full_schema.js').getDbSchema();
 var tds61_schema = require('./tds61_full_schema.js').getDbSchema();
 var tds70_schema = require('./tds70_full_schema.js').getDbSchema();
+var tds71_schema = require('./tds71_full_schema.js').getDbSchema();
 var fs = require('fs');
 var builder = require('xmlbuilder');
 var crypto = require('crypto');
@@ -27,6 +28,11 @@ const objs = {
     tds70: {
         schema: tds70_schema,
         name: 'TDSv70',
+        icon: 'presets/misc/nga_logo.png'
+    },
+    tds71: {
+        schema: tds71_schema,
+        name: 'TDSv71',
         icon: 'presets/misc/nga_logo.png'
     },
     mgcp: {
@@ -201,6 +207,12 @@ Object.keys(objs).forEach(s => {
     Object.keys(items).sort().forEach(i => {
         //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
+
+        //TDSv71 has some F_CODEs that don't fit into FACC groups & subgroups
+        if (!subgroups[code]) {
+            //Set to General/Miscellaneous
+            code = 'ZD';
+        }
 
         let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(items[i].geom), preset_name_label: true});
 
