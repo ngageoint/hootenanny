@@ -281,11 +281,11 @@ void WayJoiner::_writeParentIdsToChildIds() const
     LOG_VART(way->getElementId());
     const long pid = way->getPid();
     LOG_VART(pid);
-    if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid))
+    //  Use only positive IDs that haven't been used before and don't already exist
+    if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid) && ways.find(pid) == ways.end())
     {
-      LOG_TRACE(
-        "Setting parent ID: " << ElementId(ElementType::Way, pid) << " on: " <<
-        way->getElementId());
+      LOG_TRACE("Setting parent ID: " << ElementId(ElementType::Way, pid).toString() << " on: " <<
+                way->getElementId());
       ElementPtr newWay = way->clone();
       newWay->setId(pid);
       if (newWay->hasTag(MetadataTags::HootId()))
