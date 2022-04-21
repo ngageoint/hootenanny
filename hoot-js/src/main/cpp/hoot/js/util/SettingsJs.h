@@ -50,6 +50,20 @@ private:
    * @param args
    */
   static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  /**
+   * @brief push Pushes a copy of the current settings onto an internal stack,
+   *              leaving current settings unchanged.
+   * @param args
+   */
+  static void push(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  /**
+   * @brief pop Pops settings off the stack, and overwrites the current settings.
+   *              if the stack is empty, pop will do nothing.
+   * @param args
+   */
+  static void pop(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void listContains(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);

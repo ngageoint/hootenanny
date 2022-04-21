@@ -54,6 +54,14 @@ void SettingsJs::Init(Local<Object> exports)
                FunctionTemplate::New(current, clear)->GetFunction(context).ToLocalChecked());
   result = settings->Set(context, toV8("clear"),
                 FunctionTemplate::New(current, clear)->GetFunction(context).ToLocalChecked());
+  result = exports->Set(context, toV8("push"),
+               FunctionTemplate::New(current, push)->GetFunction(context).ToLocalChecked());
+  result = settings->Set(context, toV8("push"),
+                FunctionTemplate::New(current, push)->GetFunction(context).ToLocalChecked());
+  result = exports->Set(context, toV8("pop"),
+               FunctionTemplate::New(current, pop)->GetFunction(context).ToLocalChecked());
+  result = settings->Set(context, toV8("pop"),
+                FunctionTemplate::New(current, pop)->GetFunction(context).ToLocalChecked());
   result = exports->Set(context, toV8("get"),
                FunctionTemplate::New(current, get)->GetFunction(context).ToLocalChecked());
   result = settings->Set(context, toV8("get"),
@@ -92,6 +100,20 @@ void SettingsJs::clear(const FunctionCallbackInfo<Value>& args)
 {
   Settings* settings = &conf();
   settings->clear();
+  args.GetReturnValue().SetUndefined();
+}
+
+void SettingsJs::push(const FunctionCallbackInfo<Value>& args)
+{
+  Settings* settings = &conf();
+  settings->push();
+  args.GetReturnValue().SetUndefined();
+}
+
+void SettingsJs::pop(const FunctionCallbackInfo<Value>& args)
+{
+  Settings* settings = &conf();
+  settings->pop();
   args.GetReturnValue().SetUndefined();
 }
 

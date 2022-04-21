@@ -72,31 +72,30 @@ describe('SettingsJs', function() {
 
     }).timeout(5000);
 
-    it('Should clear the configuration', function() {
+    it('Should test push, pop, and clear configuration', function() {
 
-      var someKey = 'some.test.key';
-      var someVal = 'some.test.value';
+      var origVal = hoot.get('conflate.post.ops');
+      var testVal = 'WayJoinerOp;RelationCircularRefRemover';
 
-      var testSetting = {someKey : someVal};
+      // Save settings
+      hoot.push();
 
-      // Set a config item
-      hoot.set(testSetting);
-      var testVal = hoot.get(someKey);
-      assert.equal(someVal, testVal);
+      // Now change something and verify
+      hoot.set({'conflate.post.ops': testVal});
+      var checkVal = hoot.get('conflate.post.ops');
+      assert.equal(testVal, checkVal);
 
-      // Clear config
+      // Clear Settings & verify
       hoot.clear();
+      checkVal = hoot.get('conflate.post.ops');
+      assert.equal(undefined, checkVal);
+
+      // Set back to how it was
+      hoot.pop();
 
       // Verify
-      testVal = hoot.get(someKey);
-      assert.equal('', testVal);
-
-      hoot.set({'conflate.post.ops': defaultConflatePostOpsStr});
-
-      assert.equal(1, 'holy balls batman!');
-
-      assert.equal(1, 0);
-
+      checkVal = hoot.get('conflate.post.ops');
+      assert.equal(origVal, checkVal);
     }).timeout(5000);
 
 });
