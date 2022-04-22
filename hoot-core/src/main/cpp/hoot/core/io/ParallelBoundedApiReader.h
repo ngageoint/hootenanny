@@ -46,6 +46,7 @@ class HootNetworkRequest;
  *  (default of 0.25 degrees) then it is split up and processed.  Some APIs will respond with an error
  *  if the amount of data for an area surpasses a certain threashold (50k elements in the OSM API for
  *  example) that area is divided into quarters and reprocessed until all areas are successfully read.
+ *  Also some responses may be too large to handle and those are split and re-handled.
  */
 class ParallelBoundedApiReader
 {
@@ -149,13 +150,19 @@ private:
    * @param data Response from API to write to file
    * @param name Name of file to write in $HOOT_HOME/tmp/
    */
-  void writeDebugMap(const QString& data, const QString& name);
-
+  void _writeDebugMap(const QString& data, const QString& name);
   /**
    * @brief logNetworkError Function to log an unknown network request error
    * @param request Network request object
    */
-  void logNetworkError(const HootNetworkRequest& request);
+  void _logNetworkError(const HootNetworkRequest& request);
+  /**
+   * @brief _splitEnvelope Split the envelope into four quadrants and push them
+   *  back on to the work queue
+   * @param envelope Envelope that needs to be split, should have already been removed
+   *  from the work queue
+   */
+  void _splitEnvelope(const geos::geom::Envelope& envelope);
 
   /** List of result strings, one for each HTTP response */
   QStringList _resultsList;
