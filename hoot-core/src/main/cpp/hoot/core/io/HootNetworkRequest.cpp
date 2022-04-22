@@ -157,7 +157,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   //  Start the timer
   timeoutTimer.start(timeout * 1000);
   //  Connect the timeout lambda
-  QObject::connect(&timeoutTimer, &QTimer::timeout, [&]()
+  QObject::connect(&timeoutTimer, &QTimer::timeout,
+  [this, &timeoutTimer, &reply, &tempUrl, &loop]()
   {
     //  Stop the timer first so the lambda isn't called again
     timeoutTimer.stop();
@@ -173,7 +174,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     loop.exit(_status);
   });
   //  Connect the finished lambda
-  QObject::connect(reply, &QNetworkReply::finished, [&]()
+  QObject::connect(reply, &QNetworkReply::finished,
+  [this, &timeoutTimer, &loop]()
   {
     //  The finished signal is emitted when the reply is aborted in the
     //  timeout lambda, so don't do anything
