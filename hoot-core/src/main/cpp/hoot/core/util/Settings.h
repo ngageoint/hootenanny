@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -35,6 +35,7 @@
 // Std
 // Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
 #include <set>
+#include <stack>
 
 namespace hoot
 {
@@ -68,6 +69,19 @@ public:
    * Removes all user defined settings. This is most useful for unit testing.
    */
   void clear();
+
+  /**
+   * @brief push - Push a copy of the current settings to the stack.
+   *               Current settings remain unmodified.
+   */
+  void push();
+
+  /**
+   * @brief pop - Pops settings off the stack, and overwrites the current
+   *              settings with them. If there is nothing to pop, just
+   *              do nothing.
+   */
+  void pop();
 
   /**
    * Retrieves the default configuration. This is global.
@@ -176,6 +190,10 @@ private:
 
   static std::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
+
+  // Used to push and pop configurations
+  std::stack<SettingsMap> _settingsStack;
+
   // matches variables in the form ${My_Var_1}
   QRegularExpression _dynamicRegex;
   // matches variables in the form $(My_Var_1)
