@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootNetworkRequest.h"
@@ -30,8 +30,6 @@
 //  Hootenanny
 #include <hoot/core/io/HootNetworkCookieJar.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-
 
 //  Qt
 #include <QEventLoop>
@@ -123,10 +121,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     tempUrl.setUserInfo("");
   }
   //  Add the known headers
-  for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
-  {
+  for (auto it = headers.begin(); it != headers.end(); ++it)
     request.setHeader(it.key(), it.value());
-  }
   //  Add any cookies if necessary
   if (_cookies)
   {
@@ -161,7 +157,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   //  Start the timer
   timeoutTimer.start(timeout * 1000);
   //  Connect the timeout lambda
-  QObject::connect(&timeoutTimer, &QTimer::timeout, [&]()
+  QObject::connect(&timeoutTimer, &QTimer::timeout,
+  [this, &timeoutTimer, &reply, &tempUrl, &loop]()
   {
     //  Stop the timer first so the lambda isn't called again
     timeoutTimer.stop();
@@ -177,8 +174,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     loop.exit(_status);
   });
   //  Connect the finished lambda
-//  QObject::connect(pNAM.get(), &QNetworkAccessManager::finished, [&]()
-  QObject::connect(reply, &QNetworkReply::finished, [&]()
+  QObject::connect(reply, &QNetworkReply::finished,
+  [this, &timeoutTimer, &loop]()
   {
     //  The finished signal is emitted when the reply is aborted in the
     //  timeout lambda, so don't do anything

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Status.h"
@@ -39,9 +39,7 @@ int Status::getInput() const
 {
   int result;
   if (_type > EnumEnd)
-  {
     result = _type - EnumEnd + 1;
-  }
   else
   {
     switch (_type)
@@ -53,20 +51,17 @@ int Status::getInput() const
       result = 1;
       break;
     default:
-      throw HootException("This is not an input status type.");
+      LOG_WARN("Invalid input status type: " << _type);
+      result = -1;
     }
   }
-
   return result;
 }
 
 QString Status::toString() const
 {
   if (_type > EnumEnd)
-  {
-    int inputNum = _type - EnumEnd + 2;
-    return QString("Input%1").arg(inputNum, 3, 10, QChar('0'));
-  }
+    return QString("Input%1").arg(_type - EnumEnd + 2, 3, 10, QChar('0'));
   else
   {
     switch (_type)
@@ -90,9 +85,7 @@ QString Status::toString() const
 QString Status::toTextStatus() const
 {
   if (_type > EnumEnd)
-  {
     return toString();
-  }
   else
   {
     switch (_type)
@@ -121,54 +114,48 @@ Status::Type Status::fromString(QString statusString)
   int rawNum = statusString.toInt(&rawOk);
 
   if (rawOk)
-  {
     return rawNum;
-  }
-  else if (statusString == "invalid" || statusString == QString::number(Status::Invalid))
+
+  if (statusString.contains(";"))
   {
-    return Invalid;
+    QStringList values = statusString.split(";");
+    if (values.size() > 0)
+      statusString = values[0];
+    else
+      return Invalid;
   }
-  else if (statusString == "unknown1" || statusString == "input1" ||
-           statusString == QString::number(Status::Unknown1))
-  {
+  //  Check for valid values
+  if (statusString == "unknown1" || statusString == "input1" || statusString == QString::number(Status::Unknown1))
     return Unknown1;
-  }
-  else if (statusString == "unknown2" || statusString == "input2" ||
-           statusString == QString::number(Status::Unknown2))
-  {
+  else if (statusString == "unknown2" || statusString == "input2" || statusString == QString::number(Status::Unknown2))
     return Unknown2;
-  }
   else if (statusString == "conflated" || statusString == QString::number(Status::Conflated))
-  {
     return Conflated;
-  }
-  // This is used by the DiffConflator.
-  else if (statusString == "tagchange" || statusString == QString::number(Status::TagChange))
-  {
+  else if (statusString == "tagchange" || statusString == QString::number(Status::TagChange)) // This is used by the DiffConflator.
     return TagChange;
-  }
   else if (statusString.startsWith("input"))
   {
       bool ok;
       int num = statusString.replace("input", "").toInt(&ok);
       if (!ok)
       {
-        throw HootException("Invalid element type string: " + statusString);
+        LOG_WARN("Invalid element status string: " << statusString);
+        return Invalid;
       }
       else
       {
-        // Input 1 and 2 are enumeration 1 and 2. After that the inputs start at EnumEnd + 1 and
-        // go up.
+        // Input 1 and 2 are enumeration 1 and 2. After that the inputs start at EnumEnd + 1 and go up.
         if (num > 2)
-        {
           num = (num - 2) + EnumEnd;
-        }
         return num;
       }
   }
+  else if (statusString == "invalid" || statusString == QString::number(Status::Invalid))
+    return Invalid;
   else
   {
-    throw IllegalArgumentException("Invalid element status string: " + statusString);
+    LOG_WARN("Invalid element status string: " << statusString);
+    return Invalid;
   }
 }
 

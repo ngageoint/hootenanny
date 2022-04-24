@@ -210,38 +210,28 @@ void ParallelBoundedApiReader::_process()
       request.networkRequest(url, _timeout);
       //  Check the HTTP status code and result
       int status = request.getHttpStatus();
-      QString result = QString::fromUtf8(request.getResponseContent().data());
       switch (status)
       {
       case HttpResponseCode::HTTP_OK:
-        //  Store the result and increment the number of results received
+        try
         {
+          //  Store the result and increment the number of results received
+          QString result = QString::fromUtf8(request.getResponseContent().data());
           std::lock_guard<std::mutex> results_lock(_resultsMutex);
           _resultsList.append(result);
           _totalResults++;
+          //  Write out a "debug map" for each result that comes in
+          _writeDebugMap(result, "bounded-reader-result");
         }
-        //  Write out a "debug map" for each result that comes in
-        writeDebugMap(result, "bounded-reader-result");
+        catch(const std::bad_alloc&)
+        {
+          //  It is possible that the response is so big that Qt cannot handle it,
+          //  split the envelope and try again
+          _splitEnvelope(envelope);
+        }
         break;
       case HttpResponseCode::HTTP_BAD_REQUEST:
-        //  Split the envelope in quarters and push them all back on the queue
-        {
-          double lon1 = envelope.getMinX();
-          double lon2 = envelope.getMinX() + envelope.getWidth() / 2.0f;
-          double lon3 = envelope.getMaxX();
-
-          double lat1 = envelope.getMinY();
-          double lat2 = envelope.getMinY() + envelope.getHeight() / 2.0f;
-          double lat3 = envelope.getMaxY();
-          std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-          //  Split the boxes into quads and push them onto the queue
-          _bboxes.emplace(lon1, lon2, lat1, lat2);
-          _bboxes.emplace(lon2, lon3, lat1, lat2);
-          _bboxes.emplace(lon1, lon2, lat2, lat3);
-          _bboxes.emplace(lon2, lon3, lat2, lat3);
-          //  Increment by three because 1 turned into 4, i.e. 3 more were added
-          _totalEnvelopes += 3;
-        }
+        _splitEnvelope(envelope);
         break;
       case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:
       {
@@ -264,10 +254,10 @@ void ParallelBoundedApiReader::_process()
           LOG_DEBUG("Gateway timed out while communicating with API, retrying.");
         }
         else
-          logNetworkError(request);
+          _logNetworkError(request);
         break;
       default:
-        logNetworkError(request);
+        _logNetworkError(request);
         break;
       }
     }
@@ -279,7 +269,7 @@ void ParallelBoundedApiReader::_process()
   }
 }
 
-void ParallelBoundedApiReader::writeDebugMap(const QString& data, const QString& name)
+void ParallelBoundedApiReader::_writeDebugMap(const QString& data, const QString& name)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
@@ -304,11 +294,32 @@ void ParallelBoundedApiReader::writeDebugMap(const QString& data, const QString&
   }
 }
 
-void ParallelBoundedApiReader::logNetworkError(const HootNetworkRequest& request)
+void ParallelBoundedApiReader::_logNetworkError(const HootNetworkRequest& request)
 {
   std::lock_guard<std::mutex> error_lock(_errorMutex);
   request.logConnectionError();
   _fatalError = true;
 }
+
+void ParallelBoundedApiReader::_splitEnvelope(const geos::geom::Envelope &envelope)
+{
+  //  Split the envelope in quarters and push them all back on the queue
+  double lon1 = envelope.getMinX();
+  double lon2 = envelope.getMinX() + envelope.getWidth() / 2.0f;
+  double lon3 = envelope.getMaxX();
+
+  double lat1 = envelope.getMinY();
+  double lat2 = envelope.getMinY() + envelope.getHeight() / 2.0f;
+  double lat3 = envelope.getMaxY();
+  std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+  //  Split the boxes into quads and push them onto the queue
+  _bboxes.emplace(lon1, lon2, lat1, lat2);
+  _bboxes.emplace(lon2, lon3, lat1, lat2);
+  _bboxes.emplace(lon1, lon2, lat2, lat3);
+  _bboxes.emplace(lon2, lon3, lat2, lat3);
+  //  Increment by three because 1 turned into 4, i.e. 3 more were added
+  _totalEnvelopes += 3;
+}
+
 
 }

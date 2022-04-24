@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/Progress.h>
 
 namespace hoot
@@ -94,9 +94,9 @@ public:
     // hoot:* tags are metadata tags and should be ignored, so no removal here
     map->clear();
     NodePtr node5 = TestUtils::createNode(map);
-    node5->getTags().set("hoot:id", "1");
+    node5->getTags().set(MetadataTags::HootId(), "1");
     NodePtr node6 = TestUtils::createNode(map);
-    node6->getTags().set("hoot:id", "2");
+    node6->getTags().set(MetadataTags::HootId(), "2");
     MapProjector::projectToOrthographic(map);
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
@@ -130,10 +130,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Nearby node merging distance must be greater than zero. Distance specified: -1")
-        .toStdString(),
-      exceptionMsg.toStdString());
+    HOOT_STR_EQUALS("Nearby node merging distance must be greater than zero. Distance specified: -1", exceptionMsg);
   }
 
   void runIgnoreStatusTest()
