@@ -157,6 +157,8 @@ bool OgrUtilities::isReasonableUrl(const QString& url) const
   //  /vsi* files should have the "/vsi*/" portion of the URL removed before checking the file type
   if (url.startsWith("/vsi"))
     relative_url = url.right(url.length() - url.indexOf("/", 4) - 1);
+  if (relative_url.endsWith("/"))
+    relative_url = relative_url.left(relative_url.size() - 1);
   //  Check if there is a valid driver for this file type
   return getDriverInfo(relative_url, true)._driverName != nullptr;
 }
