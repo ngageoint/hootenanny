@@ -14,7 +14,7 @@ SONAR_LOGIN=""
 SONAR_ORG="hootenanny"
 SONAR_PROJECT="hoot"
 SONAR_SOURCES="./hoot-core,./hoot-js,./tbs,./tgs"
-SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
+SONAR_THREADS=""
 
 # Getting parameters from the command line.
 while getopts ":a:b:dj:l:o:p:r:s:t:" opt; do
@@ -78,7 +78,6 @@ fi
 OPTIONS=(
     "-Dsonar.projectKey=$SONAR_PROJECT"
     "-Dsonar.cfamily.build-wrapper-output=bw-output"
-    "-Dsonar.cfamily.threads=$SONAR_THREADS"
 )
 
 # Add gcov.reportsPath if the directory exists
@@ -88,6 +87,20 @@ if [ -d $HOOT_HOME/gcov ]; then
         "-Dsonar.cfamily.gcov.reportsPath=$HOOT_HOME/gcov"
     )
 fi
+
+# Optional thread count parameter
+if [ -n "$SONAR_THREADS" ]; then
+    # NOTE: Sonar docs say that using more that `nproc` threads can actually
+    # cause slowdowns, as of 4/2022 using 2 x nproc was slowing hootenanny
+    # down about 2 minutes (from 31 minutes to 29 minutes) even though
+    # the sonar scan process wasn't taking even 50% of each available process
+    # See "Parallel Code Scan" at https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/
+    OPTIONS=(
+        "${OPTIONS[@]}"
+        "-Dsonar.cfamily.threads=$SONAR_THREADS"
+    )
+fi
+
 # Optional scan parameters based off parameters passed into script
 if [ -n "$SONAR_LOGIN" ]; then
     # This is the hoot sonarcloud project key, requried to pass scan results to
