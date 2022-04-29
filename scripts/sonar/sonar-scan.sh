@@ -14,10 +14,10 @@ SONAR_LOGIN=""
 SONAR_ORG="hootenanny"
 SONAR_PROJECT="hoot"
 SONAR_SOURCES="./hoot-core,./hoot-js,./tbs,./tgs"
-SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
+#SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
 
 # Getting parameters from the command line.
-while getopts ":a:b:dj:l:o:p:r:s:t:" opt; do
+while getopts ":a:b:dj:l:o:p:r:s:" opt; do
     case "$opt" in
         # Required parameters.
         a)
@@ -47,9 +47,6 @@ while getopts ":a:b:dj:l:o:p:r:s:t:" opt; do
         s)
             SONAR_SOURCES="$OPTARG"
             ;;
-        t)
-            SONAR_THREADS="$OPTARG"
-            ;;
         *)
             USAGE=yes
             ;;
@@ -78,7 +75,6 @@ fi
 OPTIONS=(
     "-Dsonar.projectKey=$SONAR_PROJECT"
     "-Dsonar.cfamily.build-wrapper-output=bw-output"
-    "-Dsonar.cfamily.threads=$SONAR_THREADS"
 )
 
 # Add gcov.reportsPath if the directory exists
