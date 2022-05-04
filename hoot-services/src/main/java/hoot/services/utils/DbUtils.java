@@ -63,6 +63,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -738,7 +739,7 @@ public class DbUtils {
         }
 
         // Check if we can compare by ID
-        if (org.apache.commons.lang3.math.NumberUtils.isNumber(input)) {
+        if (StringUtils.isNumeric(input)) {
             logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
                     input, table.getTableName());
 
