@@ -26,6 +26,10 @@
  */
 package hoot.services.utils;
 
+import static hoot.services.job.JobStatus.COMPLETE;
+import static hoot.services.models.db.QCommandStatus.commandStatus;
+import static hoot.services.models.db.QJobStatus.jobStatus;
+import static hoot.services.utils.DbUtils.createQuery;
 import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -39,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
@@ -59,7 +64,11 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.models.db.CommandStatus;
+import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Maps;
+import hoot.services.models.db.QCommandStatus;
+import hoot.services.models.db.QJobStatus;
 import hoot.services.models.osm.MapLayer;
 
 
@@ -348,4 +357,51 @@ public class DbUtilsTest {
         DbUtils.deleteMap(mapIdNoLastAccessed);
         MapUtils.deleteUser(userId);
     }
+
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testDidChangesetUpload() throws Exception {
+        String jobId = UUID.randomUUID().toString();
+
+        //Before
+        assertTrue(DbUtils.didChangesetsUpload(jobId));
+
+        JobStatus jobStatus = new JobStatus();
+        jobStatus.setJobId(jobId);
+        jobStatus.setStatus(COMPLETE.ordinal());
+        jobStatus.setPercentComplete(100);
+
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        jobStatus.setStart(ts);
+        jobStatus.setEnd(new Timestamp(System.currentTimeMillis() + 1000));
+
+        createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+
+        CommandStatus listCommandStatus = new CommandStatus();
+        listCommandStatus.setCommand("bobby magic");
+        listCommandStatus.setExitCode(0);
+        listCommandStatus.setStart(new Timestamp(System.currentTimeMillis()));
+        listCommandStatus.setFinish(new Timestamp(System.currentTimeMillis() + 1000));
+        listCommandStatus.setJobId(jobId);
+        listCommandStatus.setStderr("");
+        listCommandStatus.setStdout("Total OSM Changesets Uploaded\t0");
+
+        createQuery().insert(QCommandStatus.commandStatus).populate(listCommandStatus).execute();
+
+        //Test
+        assertFalse(DbUtils.didChangesetsUpload(jobId));
+
+        //Cleanup
+        createQuery().delete(QCommandStatus.commandStatus)
+            .where((QCommandStatus.commandStatus.jobId.eq(jobId)))
+            .execute();
+
+        createQuery().delete(QJobStatus.jobStatus)
+        .where((QJobStatus.jobStatus.jobId.eq(jobId)))
+        .execute();
+
+        assertTrue(DbUtils.didChangesetsUpload(jobId));
+   }
+
 }

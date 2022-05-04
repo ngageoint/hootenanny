@@ -89,7 +89,9 @@ class WaitOverpassUpdate extends GrailCommand {
         DbUtils.upsertCommandStatus(commandResultStart);
         DbUtils.completeCommandStatus(commandResultStart);
 
-        if (GrailResource.isPrivateOverpassActive()) {
+        //Check if any changesets were pushed
+        //there are circumstances where no data will have changed
+        if (GrailResource.isPrivateOverpassActive() && DbUtils.didChangesetsUpload(jobId)) {
             long timeSpent = 0;
             String url = null;
             boolean elementFound = false;

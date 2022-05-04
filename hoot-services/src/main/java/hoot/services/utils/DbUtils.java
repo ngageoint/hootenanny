@@ -1150,6 +1150,24 @@ public class DbUtils {
         return elementInfo;
     }
 
+    public static boolean didChangesetsUpload(String jobId) {
+
+        if (jobId != null) {
+            String stdOutWithId = createQuery()
+                .select(commandStatus.stdout)
+                .from(commandStatus)
+                .where(commandStatus.stdout.like("%Total OSM Changesets Uploaded\t0%").and(commandStatus.jobId.eq(jobId)))
+                .fetchFirst();
+
+            if (stdOutWithId == null) {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
     public static List<TranslationFolder> getTranslationFoldersForUser(Long userId) {
         SQLQuery<TranslationFolder> sql = createQuery()
                 .select(translationFolders)
