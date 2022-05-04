@@ -1153,13 +1153,12 @@ public class DbUtils {
     public static boolean didChangesetsUpload(String jobId) {
 
         if (jobId != null) {
-            String stdOutWithId = createQuery()
-                .select(commandStatus.stdout)
-                .from(commandStatus)
+            Long noChangesetsUploaded = createQuery()
+                .selectFrom(commandStatus)
                 .where(commandStatus.stdout.like("%Total OSM Changesets Uploaded\t0%").and(commandStatus.jobId.eq(jobId)))
-                .fetchFirst();
+                .fetchCount();
 
-            if (stdOutWithId == null) {
+            if (noChangesetsUploaded == 0) {
                 return true;
             }
             return false;

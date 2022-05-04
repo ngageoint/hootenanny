@@ -365,6 +365,7 @@ public class DbUtilsTest {
         String jobId = UUID.randomUUID().toString();
 
         //Before
+        assertTrue(DbUtils.didChangesetsUpload(null));
         assertTrue(DbUtils.didChangesetsUpload(jobId));
 
         JobStatus jobStatus = new JobStatus();
