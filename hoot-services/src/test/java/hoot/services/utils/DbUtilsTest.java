@@ -22,13 +22,11 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.utils;
 
 import static hoot.services.job.JobStatus.COMPLETE;
-import static hoot.services.models.db.QCommandStatus.commandStatus;
-import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
