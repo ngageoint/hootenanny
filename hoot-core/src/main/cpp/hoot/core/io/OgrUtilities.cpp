@@ -89,6 +89,9 @@ OgrUtilities::OgrUtilities()
 
   // Apparently, this speeds up writes. Comment in OgrWriterThread.cpp says that it doesn't
   CPLSetConfigOption("FGDB_BULK_LOAD", "YES");
+
+  // Use all of the CPU's for processing Virtual file system files - vsizip etc
+  CPLSetConfigOption("GDAL_NUM_THREADS", "ALL_CPUS");
 }
 
 OgrUtilities::~OgrUtilities()
@@ -221,7 +224,12 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   {
     // Restore broken or absent .shx file from associated .shp file during opening
     // NOTE: This is a GLOBAL setting, not one for the driver.
-    CPLSetConfigOption("SHAPE_RESTORE_SHX", "YES");
+    // Also, this setting fights with the /vsi driver.  The vsi driver can not write to the .shx
+    // file while it is reading from the zip/tar/etc
+    if (!url.startsWith("/vsi"))
+    {
+      CPLSetConfigOption("SHAPE_RESTORE_SHX", "YES");
+    }
   }
 
   std::shared_ptr<GDALDataset> result(
