@@ -86,7 +86,11 @@ OgrUtilities::OgrUtilities()
   loadDriverInfo();
   //  Turn off writing a properties file for GZIP operations in GDAL
   CPLSetConfigOption("CPL_VSIL_GZIP_WRITE_PROPERTIES", "NO");
+
+  // Restore broken or absent .shx file from associated .shp file during opening
   CPLSetConfigOption("SHAPE_RESTORE_SHX", "YES");
+
+  // Apparently, this speeds up writes. Comment in OgrWriterThread.cpp says that it doesn't
   CPLSetConfigOption("FGDB_BULK_LOAD", "YES");
 }
 
@@ -215,12 +219,6 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
     // depth of the sounding. This should only be enabled with SPLIT_MULTIPOINT is also enabled.
     // Default is OFF.
     options["ADD_SOUNDG_DEPTH"] = "ON";
-  }
-  else if (QString(driverInfo._driverName) == "ESRI Shapefile")
-  {
-    LOG_DEBUG("Setting SHAPE_RESTORE");
-    // Restore broken or absent .shx file from associated .shp file during opening
-//    options["SHAPE_RESTORE_SHX"] = "YES";
   }
 
   std::shared_ptr<GDALDataset> result(
