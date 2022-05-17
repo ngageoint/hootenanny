@@ -172,6 +172,28 @@ describe('TranslationServer', function () {
             assert.equal(attrs.building, 'yes')
         })
 
+        it('should handle translateFrom GET for TDSv71', function() {
+            //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv71
+            var attrs = server.handleInputs({
+                fcode: 'AL013',
+                translation: 'TDSv71',
+                method: 'GET',
+                path: '/translateFrom'
+            });
+            assert.equal(attrs.building, 'yes');
+        });
+
+        it('should handle translateFrom GET for TDSv70', function() {
+            //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv70
+            var attrs = server.handleInputs({
+                fcode: 'AL013',
+                translation: 'TDSv70',
+                method: 'GET',
+                path: '/translateFrom'
+            });
+            assert.equal(attrs.building, 'yes');
+        });
+
         it('should handle translateFrom GET for TDSv61', function() {
             //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
             var attrs = server.handleInputs({
@@ -184,7 +206,7 @@ describe('TranslationServer', function () {
         });
 
         it('should handle translateFrom GET for TDSv40', function() {
-            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv40
             var attrs = server.handleInputs({
                 fcode: 'AP030',
                 translation: 'TDSv40',
@@ -205,8 +227,8 @@ describe('TranslationServer', function () {
             assert.equal(attrs.waterway, 'river');
         });
 
-        it('should handle translateFrom GET for MGCP', function() {
-            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+        it('should handle translateFrom GET for GGDMv30', function() {
+            //http://localhost:8094/tdstoosm?fcode=AL013&translation=GGDMv30
             var attrs = server.handleInputs({
                 fcode: 'BH140',
                 translation: 'GGDMv30',
