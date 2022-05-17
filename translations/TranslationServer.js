@@ -49,12 +49,12 @@ var schemaMap = {
 
 //Getting osm tags for fcode
 var fcodeLookup = {
-    TDSv40: require(HOOT_HOME + '/translations/etds40_osm.js'),
-    TDSv61: require(HOOT_HOME + '/translations/etds61_osm.js'),
-    TDSv70: require(HOOT_HOME + '/translations/etds70_osm.js'),
-    TDSv71: require(HOOT_HOME + '/translations/etds71_osm.js'),
-    MGCP: require(HOOT_HOME + '/translations/emgcp_osm.js'),
-    GGDMv30: require(HOOT_HOME + '/translations/eggdm30_osm.js')
+    TDSv40: require(HOOT_HOME + '/translations/TDSv40.js'),
+    TDSv61: require(HOOT_HOME + '/translations/TDSv61.js'),
+    TDSv70: require(HOOT_HOME + '/translations/TDSv70.js'),
+    TDSv71: require(HOOT_HOME + '/translations/TDSv71.js'),
+    MGCP: require(HOOT_HOME + '/translations/MGCP_TRD4.js'),
+    GGDMv30: require(HOOT_HOME + '/translations/GGDMv30.js')
 };
 
 var translationsMap = {
@@ -457,9 +457,13 @@ var ogr2osm = function(params) {
         // var osm = translateToOsm.toosm[params.translation].toOSM({
         //     'FCODE': params.fcode
         createUuid = hoot.UuidHelper.createUuid;
-        var osm = fcodeLookup[params.translation].toOSM({
-            'Feature Code': params.fcode
+        var osm = fcodeLookup[params.translation].toOsm({
+            'FCODE': params.fcode
         }, '', params.geom || '');
+
+        if (JSON.stringify(osm) === '{}') {
+            return {'error':'Feature Code ' + params.fcode + ' is not valid for MGCP'};
+        }
 
         return osm;
     }
