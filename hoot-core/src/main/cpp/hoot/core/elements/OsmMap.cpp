@@ -58,8 +58,6 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
-
 OsmMap::OsmMap()
   : _index(std::make_shared<OsmMapIndex>(*this)),
     _idSwap(std::make_shared<IdSwap>()),

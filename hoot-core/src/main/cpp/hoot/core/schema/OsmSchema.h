@@ -233,7 +233,7 @@ public:
   /**
    * ONLY FOR UNIT TESTING. Be a good neighbor and call loadDefault() when you're done.
    */
-  void createTestingGraph() const;
+  void createTestingGraph();
 
   void addAssociatedWith(const QString& name1, const QString& name2) const;
   void addIsA(const QString& name1, const QString& name2) const;
@@ -535,7 +535,6 @@ private:
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   std::shared_ptr<OsmSchemaData> _d;
-  static std::shared_ptr<OsmSchema> _theInstance;
   SchemaVertex _empty;
 
   /// Provide caching for isMetaData

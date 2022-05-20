@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "v8Engine.h"
 
@@ -58,16 +58,18 @@ v8Engine::v8Engine()
 v8Engine::~v8Engine()
 {
   _scopeContext.reset();
+  _context.reset();
   _locker.reset();
   _isolateScope.reset();
+  //  Dispose of the isolate
   if (_isolate != nullptr)
-  {
-    //  Dispose of the v8 subsystem
     _isolate->Dispose();
-  }
+  //  Dispose of the v8 subsystem
   V8::Dispose();
   //  Shutdown the platform
   V8::ShutdownPlatform();
+  _allocator.reset();
+  _platform.reset();
 }
 
 v8Engine& v8Engine::getInstance()

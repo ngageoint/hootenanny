@@ -59,10 +59,10 @@ private:
 
   long _toBytes(const QString& str) const;
 
-  //  Constructor
+  /** Constructor */
   Hoot();
   /** Default destructor */
-  ~Hoot();
+  ~Hoot() = default;
   /** Delete copy constructor and assignment operator */
   Hoot(const Hoot&) = delete;
   Hoot& operator=(const Hoot&) = delete;

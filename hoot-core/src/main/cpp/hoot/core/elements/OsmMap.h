@@ -321,7 +321,7 @@ private:
 
   mutable std::shared_ptr<IdGenerator> _idGen;
 
-  static std::shared_ptr<OGRSpatialReference> _wgs84;
+  std::shared_ptr<OGRSpatialReference> _wgs84;
 
   std::shared_ptr<OGRSpatialReference> _srs;
 
