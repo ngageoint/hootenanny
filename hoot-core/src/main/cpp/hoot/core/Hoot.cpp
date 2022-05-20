@@ -65,10 +65,6 @@ Hoot::Hoot()
   _init();
 }
 
-Hoot::~Hoot()
-{
-}
-
 Hoot& Hoot::getInstance()
 {
   /** Hootenanny singletons follow the Meyers' Singleton pattern seen below */
