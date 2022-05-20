@@ -58,16 +58,18 @@ v8Engine::v8Engine()
 v8Engine::~v8Engine()
 {
   _scopeContext.reset();
+  _context.reset();
   _locker.reset();
   _isolateScope.reset();
+  //  Dispose of the isolate
   if (_isolate != nullptr)
-  {
-    //  Dispose of the v8 subsystem
     _isolate->Dispose();
-  }
+  //  Dispose of the v8 subsystem
   V8::Dispose();
   //  Shutdown the platform
   V8::ShutdownPlatform();
+  _allocator.reset();
+  _platform.reset();
 }
 
 v8Engine& v8Engine::getInstance()

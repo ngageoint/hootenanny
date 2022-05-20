@@ -86,6 +86,12 @@ OgrUtilities::OgrUtilities()
   loadDriverInfo();
   //  Turn off writing a properties file for GZIP operations in GDAL
   CPLSetConfigOption("CPL_VSIL_GZIP_WRITE_PROPERTIES", "NO");
+/** Writing to GPKG files can be quite slow, these config options
+ *  may help speed it up.
+  CPLSetConfigOption("OGR_SQLITE_CACHE", "512");
+  CPLSetConfigOption("OGR_SQLITE_SYNCHRONOUS", "OFF");
+  CPLSetConfigOption("SQLITE_USE_OGR_VFS", "YES");
+*/
 }
 
 OgrUtilities::~OgrUtilities()
@@ -96,10 +102,10 @@ OgrUtilities::~OgrUtilities()
     CPLDumpSharedList(nullptr);
   }
 
-  LOG_TRACE("Cleaning up OGR...");
+/** In certain instances these clean up functions cause a corrupt doubly-linked-list
   OGRCleanupAll();
-  LOG_TRACE("Destroying driver manager...");
   GDALDestroyDriverManager();
+*/
 }
 
 OgrUtilities& OgrUtilities::getInstance()

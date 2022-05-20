@@ -67,8 +67,6 @@ Hoot::Hoot()
 
 Hoot::~Hoot()
 {
-  // Shutdown the protobuf library
-  ::google::protobuf::ShutdownProtobufLibrary();
 }
 
 Hoot& Hoot::getInstance()
