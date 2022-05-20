@@ -65,12 +65,6 @@ Hoot::Hoot()
   _init();
 }
 
-Hoot::~Hoot()
-{
-  // Shutdown the protobuf library
-  ::google::protobuf::ShutdownProtobufLibrary();
-}
-
 Hoot& Hoot::getInstance()
 {
   /** Hootenanny singletons follow the Meyers' Singleton pattern seen below */
