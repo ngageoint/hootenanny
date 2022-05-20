@@ -24,10 +24,15 @@
  *
  * @copyright Copyright (C) 2013, 2014, 2021 Maxar (http://www.maxar.com/)
  */
- 
+
 //
 // MGCP Conversion
 //
+
+// include HootJs if loaded from mocha test
+if (typeof hoot === 'undefined') {
+    var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
 
 // hoot.require('config')
 hoot.require('mgcp')
@@ -74,3 +79,7 @@ function translateToOgr(tags, elementType, geometryType)
 } // End of translateToOgr
 
 
+// module method for use in Translation Server
+if (typeof exports !== 'undefined') {
+    exports.toOsm = mgcp.toOsm;
+}

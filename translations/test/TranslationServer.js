@@ -158,7 +158,7 @@ describe('TranslationServer', function () {
                 translation: 'TDSv71',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.building, 'yes')
         })
 
@@ -168,9 +168,31 @@ describe('TranslationServer', function () {
                 translation: 'TDSv70',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.building, 'yes')
         })
+
+        it('should handle translateFrom GET for TDSv71', function() {
+            //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv71
+            var attrs = server.handleInputs({
+                fcode: 'AL013',
+                translation: 'TDSv71',
+                method: 'GET',
+                path: '/translateFrom'
+            });
+            assert.equal(attrs.building, 'yes');
+        });
+
+        it('should handle translateFrom GET for TDSv70', function() {
+            //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv70
+            var attrs = server.handleInputs({
+                fcode: 'AL013',
+                translation: 'TDSv70',
+                method: 'GET',
+                path: '/translateFrom'
+            });
+            assert.equal(attrs.building, 'yes');
+        });
 
         it('should handle translateFrom GET for TDSv61', function() {
             //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
@@ -179,18 +201,18 @@ describe('TranslationServer', function () {
                 translation: 'TDSv61',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.building, 'yes');
         });
 
         it('should handle translateFrom GET for TDSv40', function() {
-            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv40
             var attrs = server.handleInputs({
                 fcode: 'AP030',
                 translation: 'TDSv40',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.highway, 'road');
         });
 
@@ -201,18 +223,18 @@ describe('TranslationServer', function () {
                 translation: 'MGCP',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.waterway, 'river');
         });
 
-        it('should handle translateFrom GET for MGCP', function() {
-            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+        it('should handle translateFrom GET for GGDMv30', function() {
+            //http://localhost:8094/tdstoosm?fcode=AL013&translation=GGDMv30
             var attrs = server.handleInputs({
                 fcode: 'BH140',
                 translation: 'GGDMv30',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.waterway, 'river');
         });
         it('should handle invalid F_CODE in translateFrom GET for MGCP', function() {
@@ -221,7 +243,7 @@ describe('TranslationServer', function () {
                 translation: 'MGCP',
                 method: 'GET',
                 path: '/translateFrom'
-            }).attrs;
+            });
             assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP');
         });
 
@@ -845,7 +867,7 @@ describe('TranslationServer', function () {
     });
 
     describe('translateFrom', function () {
-      it('should return 200', function (done) {
+      it('should return 200 with fcode and translation', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
             url: '/translateFrom',
@@ -859,13 +881,12 @@ describe('TranslationServer', function () {
         assert.equal(response.statusCode, '200');
         done();
       });
-      it('should return 200', function (done) {
+      it('should return 200 with fcode, geom and translation', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
             url: '/translateFrom',
             params: {
-                idelem: 'fcode',
-                idval: 'AL013',
+                fcode: 'AL013',
                 geom: 'Area',
                 translation: 'MGCP'
             }
