@@ -133,7 +133,7 @@ private:
   bool _forceSkipFailedRelations;
 
   void _addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                   const std::shared_ptr<geos::geom::Geometry>& g);
+                   const std::shared_ptr<geos::geom::Geometry>& g) const;
   void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f, const geos::geom::Geometry* g,
                           OGRFeature* poFeature) const;
   void _createLayer(const std::shared_ptr<const Layer>& layer);

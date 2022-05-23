@@ -195,8 +195,6 @@ void OgrWriter::close()
   {
     _ds->CommitTransaction();
     _inTransaction = false;
-    //Create the spatial index on the layer, iterate layers?
-    //_ds->ExecuteSQL("SELECT CreateSpatialIndex('the_table','GEOMETRY')", nullptr, nullptr);
   }
   _layers.clear();
   //  Allow close() to be called multiple times without causing errors
@@ -717,7 +715,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
   return _layers[layerName];
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g)
+void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g) const
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
