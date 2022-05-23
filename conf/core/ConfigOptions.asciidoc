@@ -3854,6 +3854,14 @@ hoot convert \
 When writing relations to OGR files, incomplete relations can cause errors setting this to
 true, the writer will ignore the errors and continue to output the results.
 
+=== ogr.writer.transaction.size
+
+* Data Type: int
+* Default Value: `256000`
+
+Some OGR datasources support transactions (currently GPKG), this is the size of the transactions
+before committing them.
+
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
 * Data Type: bool

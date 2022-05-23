@@ -126,12 +126,14 @@ private:
   int _maxFieldWidth;
 
   int _numWritten;
+  int _transactionSize;
+  bool _inTransaction;
   int _statusUpdateInterval;
 
   bool _forceSkipFailedRelations;
 
   void _addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                   const std::shared_ptr<geos::geom::Geometry>& g) const;
+                   const std::shared_ptr<geos::geom::Geometry>& g);
   void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f, const geos::geom::Geometry* g,
                           OGRFeature* poFeature) const;
   void _createLayer(const std::shared_ptr<const Layer>& layer);
@@ -139,6 +141,8 @@ private:
   OGRLayer* _getLayerByName(const QString& layerName);
 
   void _strictError(const QString& warning) const;
+
+  bool _usesTransactions() const;
 };
 
 }

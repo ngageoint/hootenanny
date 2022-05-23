@@ -31,7 +31,6 @@
 #include <gdal_priv.h>
 
 // hoot
-#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 using namespace std;
@@ -39,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-void OgrUtilities::loadDriverInfo()
+void OgrUtilities::_loadDriverInfo()
 {
   //  Load the extension-based driver info
   //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
@@ -83,22 +82,7 @@ void OgrUtilities::loadDriverInfo()
 OgrUtilities::OgrUtilities()
 {
   GDALAllRegister();
-  loadDriverInfo();
-  //  Turn off writing a properties file for GZIP operations in GDAL
-  CPLSetConfigOption("CPL_VSIL_GZIP_WRITE_PROPERTIES", "NO");
-
-  // Apparently, this speeds up writes. Comment in OgrWriterThread.cpp says that it doesn't
-  CPLSetConfigOption("FGDB_BULK_LOAD", "YES");
-
-  // Use all of the CPU's for processing Virtual file system files - vsizip etc
-  CPLSetConfigOption("GDAL_NUM_THREADS", "ALL_CPUS");
-
- /** Writing to GPKG files can be quite slow, these config options
- *  may help speed it up.
-  CPLSetConfigOption("OGR_SQLITE_CACHE", "512");
-  CPLSetConfigOption("OGR_SQLITE_SYNCHRONOUS", "OFF");
-  CPLSetConfigOption("SQLITE_USE_OGR_VFS", "YES");
-*/
+  _loadDriverInfo();
 }
 
 OgrUtilities::~OgrUtilities()
@@ -108,7 +92,6 @@ OgrUtilities::~OgrUtilities()
     GDALDumpOpenDatasets(stderr);
     CPLDumpSharedList(nullptr);
   }
-
 /** In certain instances these clean up functions cause a corrupt doubly-linked-list
   OGRCleanupAll();
   GDALDestroyDriverManager();
@@ -144,26 +127,6 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly) con
   return OgrDriverInfo();
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) const
-{
-  QString source = url;
-  OgrDriverInfo driverInfo = getDriverInfo(url, false);
-  if (driverInfo._driverName == nullptr)
-    throw HootException("Error getting driver info for: " + url);
-  GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverInfo._driverName);
-  if (driver == nullptr)
-    throw HootException("Error getting driver by name: " + QString(driverInfo._driverName));
-
-  // If the user specifies a shapefile, then crop off the .shp and create a directory.
-  if (url.endsWith(".shp", Qt::CaseInsensitive))
-    source = url.mid(0, url.length() - 4);
-
-  std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr));
-  if (result == nullptr)
-    throw HootException(QString("Unable to create data source: %1 (%2)").arg(source, QString(CPLGetLastErrorMsg())));
-  return result;
-}
-
 bool OgrUtilities::isReasonableUrl(const QString& url) const
 {
   QString relative_url = url;
@@ -174,6 +137,28 @@ bool OgrUtilities::isReasonableUrl(const QString& url) const
     relative_url = relative_url.left(relative_url.size() - 1);
   //  Check if there is a valid driver for this file type
   return getDriverInfo(relative_url, true)._driverName != nullptr;
+}
+
+std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) const
+{
+  QString source = url;
+  OgrDriverInfo driverInfo = getDriverInfo(url, false);
+  if (driverInfo._driverName == nullptr)
+    throw HootException("Error getting driver info for: " + url);
+  GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverInfo._driverName);
+  if (driver == nullptr)
+    throw HootException("Error getting driver by name: " + QString(driverInfo._driverName));
+
+  OgrOptions options = _getOgrOptions(url, driverInfo);
+
+  // If the user specifies a shapefile, then crop off the .shp and create a directory.
+  if (url.endsWith(".shp", Qt::CaseInsensitive))
+    source = url.mid(0, url.length() - 4);
+
+  std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, options.getCrypticOptions()));
+  if (result == nullptr)
+    throw HootException(QString("Unable to create data source: %1 (%2)").arg(source, QString(CPLGetLastErrorMsg())));
+  return result;
 }
 
 std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly) const
@@ -196,48 +181,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   const char* drivers[2] = { driverInfo._driverName, nullptr };
 
   // Setup read options for various file types
-  OgrOptions options;
-  if (QString(driverInfo._driverName) == "CSV")
-  {
-    options["X_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLonfield();
-    options["Y_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLatfield();
-    options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
-  }
-  else if (QString(driverInfo._driverName) == "OGR_OGDI")
-  {
-    // From GDAL/OGR 1.8.0 on, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option (or
-    // environment variable) to YES causes the layer names to be simplified. For example,
-    // watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'.
-    options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
-  }
-  else if (QString(driverInfo._driverName) == "LIBKML")
-  {
-    options["OSM_USE_CUSTOM_INDEXING"] = "NO";
-  }
-  else if (QString(driverInfo._driverName) == "S57")
-  {
-    // SPLIT_MULTIPOINT=ON/OFF: Should multipoint soundings be split into many single point sounding
-    // features. Multipoint geometries are not well handle by many formats, so it can be convenient
-    // to split single sounding features with many points into many single point features.Default is
-    // OFF.
-    options["SPLIT_MULTIPOINT"] = "ON";
-
-    // ADD_SOUNDG_DEPTH=ON/OFF: Should a DEPTH attribute be added on SOUNDG features and assign the
-    // depth of the sounding. This should only be enabled with SPLIT_MULTIPOINT is also enabled.
-    // Default is OFF.
-    options["ADD_SOUNDG_DEPTH"] = "ON";
-  }
-  else if (QString(driverInfo._driverName) == "ESRI Shapefile")
-  {
-    // Restore broken or absent .shx file from associated .shp file during opening
-    // NOTE: This is a GLOBAL setting, not one for the driver.
-    // Also, this setting fights with the /vsi driver.  The vsi driver can not write to the .shx
-    // file while it is reading from the zip/tar/etc
-    if (!url.startsWith("/vsi"))
-    {
-      CPLSetConfigOption("SHAPE_RESTORE_SHX", "YES");
-    }
-  }
+  OgrOptions options = _getOgrOptions(url, driverInfo);
 
   std::shared_ptr<GDALDataset> result(
       static_cast<GDALDataset*>(
@@ -306,6 +250,62 @@ QStringList OgrUtilities::getValidFilesInContainer(const QString& url) const
   }
   //  Return the list of valid files, if any
   return files;
+}
+
+OgrOptions OgrUtilities::_getOgrOptions(const QString& url, const OgrDriverInfo& driverInfo) const
+{
+  OgrOptions options;
+  //  Turn off writing a properties file for GZIP operations in GDAL
+  CPLSetConfigOption("CPL_VSIL_GZIP_WRITE_PROPERTIES", "NO");
+
+  QString driver(driverInfo._driverName);
+
+  if (driver == "CSV")
+  {
+    options["X_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLonfield();
+    options["Y_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLatfield();
+    options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
+  }
+  else if (driver == "OGR_OGDI")
+  {
+    // From GDAL/OGR 1.8.0 on, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option (or
+    // environment variable) to YES causes the layer names to be simplified. For example,
+    // watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'.
+    options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
+  }
+  else if (driver == "LIBKML")
+  {
+    CPLSetConfigOption("OSM_USE_CUSTOM_INDEXING", "NO");
+  }
+  else if (driver == "S57")
+  {
+    // SPLIT_MULTIPOINT=ON/OFF: Should multipoint soundings be split into many single point sounding
+    // features. Multipoint geometries are not well handle by many formats, so it can be convenient
+    // to split single sounding features with many points into many single point features.Default is
+    // OFF.
+    options["SPLIT_MULTIPOINT"] = "ON";
+
+    // ADD_SOUNDG_DEPTH=ON/OFF: Should a DEPTH attribute be added on SOUNDG features and assign the
+    // depth of the sounding. This should only be enabled with SPLIT_MULTIPOINT is also enabled.
+    // Default is OFF.
+    options["ADD_SOUNDG_DEPTH"] = "ON";
+  }
+  else if (driver == "ESRI Shapefile" && !url.startsWith("/vsi"))
+  {
+    // Restore broken or absent .shx file from associated .shp file during opening
+    // NOTE: This is a GLOBAL setting, not one for the driver.
+    // Also, this setting fights with the /vsi driver.  The vsi driver can not write to the .shx
+    // file while it is reading from the zip/tar/etc
+    CPLSetConfigOption("SHAPE_RESTORE_SHX", "YES");
+  }
+  else if (driver == "GPKG")
+  {
+    // Writing to GPKG files can be quite slow, these config options help speed it up.
+    CPLSetConfigOption("OGR_SQLITE_CACHE", "512");
+    CPLSetConfigOption("OGR_SQLITE_SYNCHRONOUS", "OFF");
+    CPLSetConfigOption("SQLITE_USE_OGR_VFS", "YES");
+  }
+  return options;
 }
 
 }

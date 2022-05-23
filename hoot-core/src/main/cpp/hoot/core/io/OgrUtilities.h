@@ -30,6 +30,9 @@
 // GDAL
 #include <gdal.h>
 
+// Hoot
+#include <hoot/core/io/OgrOptions.h>
+
 class GDALDataset;
 
 namespace hoot
@@ -123,6 +126,8 @@ public:
 
 private:
 
+  std::vector<OgrDriverInfo> _drivers;
+
   /** Use getInstance() instead of the constructor */
   OgrUtilities();
   ~OgrUtilities();
@@ -134,9 +139,9 @@ private:
    * @brief loadDriverInfo Loads a hard-coded set of GDAL driver information with file
    *    extensions, prefixes, and open flags used by getDriverInfo() function
    */
-  void loadDriverInfo();
+  void _loadDriverInfo();
 
-  std::vector<OgrDriverInfo> _drivers;
+  OgrOptions _getOgrOptions(const QString& url, const OgrDriverInfo& driverInfo) const;
 };
 
 }

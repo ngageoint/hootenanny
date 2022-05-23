@@ -94,18 +94,23 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 }
 
 OgrWriter::OgrWriter()
-  : _elementCache(std::make_shared<ElementCacheLRU>(
+  : _createAllLayers(ConfigOptions().getOgrWriterCreateAllLayers()),
+    _appendData(ConfigOptions().getOgrAppendData()),
+    _strictChecking(StrictOn),
+    _elementCache(std::make_shared<ElementCacheLRU>(
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
       ConfigOptions().getElementCacheSizeRelation())),
     _wgs84(),
     _failOnSkipRelation(false),
+    _maxFieldWidth(-1), // We set this if we really need to.
     _numWritten(0),
+    _transactionSize(ConfigOptions().getOgrWriterTransactionSize()),
+    _inTransaction(false),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
   setConfiguration(conf());
 
-  _maxFieldWidth = -1; // We set this if we really need to.
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
@@ -135,6 +140,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 
   _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
   _forceSkipFailedRelations = configOptions.getOgrWriterSkipFailedRelations();
+  _transactionSize = configOptions.getOgrWriterTransactionSize();
 }
 
 void OgrWriter::_strictError(const QString& warning) const
@@ -179,10 +185,19 @@ void OgrWriter::openOutput(const QString& url)
         "Creating error: \"%2\"").arg(openException.what(), createException.what()));
     }
   }
+  if (_usesTransactions())
+    _inTransaction = _ds->StartTransaction() == OGRERR_NONE;
 }
 
 void OgrWriter::close()
 {
+  if (_inTransaction)
+  {
+    _ds->CommitTransaction();
+    _inTransaction = false;
+    //Create the spatial index on the layer, iterate layers?
+    //_ds->ExecuteSQL("SELECT CreateSpatialIndex('the_table','GEOMETRY')", nullptr, nullptr);
+  }
   _layers.clear();
   //  Allow close() to be called multiple times without causing errors
   if (_ds)
@@ -327,6 +342,16 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
   {
     PROGRESS_STATUS(
       "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
+  //  Transactions should speed up the processing of larger files
+  if (_inTransaction)
+  {
+    if (_numWritten % _transactionSize == 0)
+    {
+      //  Commmit the old transaction and start a new one
+      _ds->CommitTransaction();
+      _inTransaction = _ds->StartTransaction() == OGRERR_NONE;
+    }
   }
 }
 
@@ -692,7 +717,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
   return _layers[layerName];
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g) const
+void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
@@ -804,6 +829,13 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
       QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)")
         .arg(QString::number(errCode), f->toString()));
   }
+}
+
+bool OgrWriter::_usesTransactions() const
+{
+//  return false;
+  //  Right now OgrWriter will use transactions for GPKG files
+  return (_ds && QString(_ds->GetDriverName()) == "GPKG");
 }
 
 }
