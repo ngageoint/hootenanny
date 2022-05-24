@@ -342,14 +342,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
       "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
   //  Transactions should speed up the processing of larger files
-  if (_inTransaction)
+  if (_inTransaction && _numWritten % _transactionSize == 0)
   {
-    if (_numWritten % _transactionSize == 0)
-    {
-      //  Commmit the old transaction and start a new one
-      _ds->CommitTransaction();
-      _inTransaction = _ds->StartTransaction() == OGRERR_NONE;
-    }
+    //  Commmit the old transaction and start a new one
+    _ds->CommitTransaction();
+    _inTransaction = _ds->StartTransaction() == OGRERR_NONE;
   }
 }
 
