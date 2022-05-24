@@ -1,6 +1,11 @@
 //assign query to ref
 ._->.ref;
 
+//get relations and ways referencing any of these elements
+//but leave them incomplete
+//This is just for elements that have a node inside the bbox
+(._;<;)->.parents;
+
 //get ref nodes outside of bbox
 (node(w.ref); - node(w.ref)({{bbox}});)->.oobnd;
 
@@ -11,6 +16,6 @@ way(bn.oobnd);
 (._;>;)->.connectedWays;
 
 //union ref and oob connected ways
-(.ref; .connectedWays;);
+(.ref; .parents; .connectedWays;);
 
 out meta;
