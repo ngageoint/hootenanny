@@ -415,10 +415,12 @@ public class MapResource {
         }
 
         long nodeCnt = 0;
+        JSONObject tileCounts = new JSONObject();
         for (Object aParamsArray : paramsArray) {
             JSONObject param = (JSONObject) aParamsArray;
             mapId = param.get("mapId").toString();
             bbox = (String) param.get("tile");
+            String tileId = (String) param.get("id");
 
             // OSM API database data can't be displayed on a hoot map, due to
             // differences between the display code, so we return a zero count
@@ -475,10 +477,13 @@ public class MapResource {
                 continue;
             }
 
-            nodeCnt += m.getNodesCount(queryBounds);
+            long tileCount = m.getNodesCount(queryBounds);
+            nodeCnt += tileCount;
+            tileCounts.put(tileId, tileCount);
         } // for
 
         ret.put("nodescount", nodeCnt);
+        ret.put("tilecounts", tileCounts);
         return Response.ok(new JSONObject(ret).toString()).build();
     }
 
