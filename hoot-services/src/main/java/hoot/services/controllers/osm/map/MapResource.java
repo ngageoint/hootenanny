@@ -386,6 +386,10 @@ public class MapResource {
                 return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("No map with that id exists")
                         .build();
             }
+            catch (BadRequestException ex) {
+                return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(ex.getMessage())
+                        .build();
+            }
             responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, currMap.getId());
         }
 
