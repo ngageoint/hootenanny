@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef JAVASCRIPT_SCHEMA_TRANSLATOR_H
@@ -78,9 +78,9 @@ public:
   // Filter for file names
   QString getLayerNameFilter() override;
   std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType) override;
+                                                geos::geom::GeometryTypeId geometryType) override;
   std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType) override;
+                                       geos::geom::GeometryTypeId geometryType) override;
   void setConfiguration(const Settings& conf) override;
 
   QString getScriptPath() const { return _scriptPath; }
@@ -116,12 +116,9 @@ private:
   std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm) const;
   std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
-  void _parseEnumerations(
-    std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const;
-  void _parseEnumerations(
-    std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const;
-  void _parseEnumerations(
-    std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const;
 
   std::shared_ptr<FieldDefinition> _parseFieldDefinition(const QVariant& fieldV) const;
 
@@ -131,8 +128,7 @@ private:
   qint32 _toInt32(const QVariant& v) const;
   qint64 _toInt64(const QVariant& v) const;
 
-  QVariantList _translateToOgrVariants(Tags& tags,
-    ElementType elementType, geos::geom::GeometryTypeId geometryType);
+  QVariantList _translateToOgrVariants(Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType);
 };
 
 }

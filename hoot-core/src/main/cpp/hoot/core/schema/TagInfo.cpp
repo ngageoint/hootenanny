@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "TagInfo.h"
@@ -39,45 +39,43 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 
+#include <QTextStream>
+
 namespace hoot
 {
 
-TagInfo::TagInfo(
-  const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
-  const bool caseSensitive, const bool exactKeyMatch, const bool delimitedTextOutput) :
-_tagValuesPerKeyLimit(tagValuesPerKeyLimit),
-_keys(keys),
-_keysOnly(keysOnly),
-_caseSensitive(caseSensitive),
-_exactKeyMatch(exactKeyMatch),
-_delimitedTextOutput(delimitedTextOutput),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
+                 const bool caseSensitive, const bool exactKeyMatch, const bool delimitedTextOutput)
+  : _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
+    _keys(keys),
+    _keysOnly(keysOnly),
+    _caseSensitive(caseSensitive),
+    _exactKeyMatch(exactKeyMatch),
+    _delimitedTextOutput(delimitedTextOutput),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   if (delimitedTextOutput && !keysOnly)
-  {
     throw IllegalArgumentException("Delimited text output is only valid when listing keys only.");
-  }
 }
 
 QString TagInfo::getInfo(const QStringList& inputs) const
 {
-  QString info;
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
 
   if (_delimitedTextOutput)
   {
     QSet<QString> uniqueKeys;
-    for (int i = 0; i < inputs.size(); i++)
+    for (const auto& input : qAsConst(inputs))
     {
-      info += _getInfo(inputs.at(i));
+      ts << _getInfo(input);
 
-      const QSet<QString> keys = _getInfo(inputs.at(i)).split(";").toSet();
-      for (QSet<QString>::const_iterator it = keys.begin(); it != keys.end(); ++it)
+      const QSet<QString> keys = _getInfo(input).split(";").toSet();
+      for (const auto& key : keys)
       {
-        const QString key = *it;
         if (!key.isEmpty())
-        {
           uniqueKeys.insert(key);
-        }
       }
     }
     QStringList keyList = uniqueKeys.toList();
@@ -86,25 +84,23 @@ QString TagInfo::getInfo(const QStringList& inputs) const
   }
   else
   {
-    info = "{\n";
+    ts << "{\n";
 
     for (int i = 0; i < inputs.size(); i++)
     {
-      info += QString("  \"%1\":{\n").arg(QFileInfo(inputs.at(i)).fileName());
+      ts << QString("  \"%1\":{\n").arg(QFileInfo(inputs.at(i)).fileName());
 
-      info += _getInfo(inputs.at(i));
-      info += "\n  }";
+      ts << _getInfo(inputs.at(i));
+      ts << "\n  }";
 
       // Don't add a comma to the last dataset.
       if (i != (inputs.size() - 1))
-      {
-        info += ",\n";
-      }
+        ts << ",\n";
     }
-    info += "\n}";
+    ts << "\n}";
   }
 
-  return info;
+  return ts.readAll();
 }
 
 QString TagInfo::_getInfo(const QString& input) const
@@ -118,21 +114,15 @@ QString TagInfo::_getInfo(const QString& input) const
   QString inputInfo = input;
   LOG_VARD(inputInfo);
 
+  // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
+  // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't
+  // work here.
   if (IoUtils::isSupportedOgrFormat(input))
-  {
-    // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
-    // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't
-    // work here.
     return _getInfoFromOgrInput(inputInfo);
-  }
   else if (IoUtils::isStreamableInput(input))
-  {
     return _getInfoFromStreamableInput(inputInfo);
-  }
   else
-  {
     return _getInfoFromMemoryBoundInput(inputInfo);
-  }
 }
 
 QString TagInfo::_getInfoFromOgrInput(QString& input) const
@@ -144,6 +134,7 @@ QString TagInfo::_getInfoFromOgrInput(QString& input) const
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus())));
   // We have to have a translation for the reading, so just use the simplest one.
   reader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
+  reader->setImportImpliedTags(false);
 
   QStringList layers;
   if (input.contains(";"))
@@ -153,16 +144,16 @@ QString TagInfo::_getInfoFromOgrInput(QString& input) const
     layers.append(list.at(1));
   }
   else
-  {
     layers = reader->getFilteredLayerNames(input);
-  }
 
   if (layers.empty())
   {
     LOG_WARN("Could not find any valid layers to read from in " + input + ".");
   }
 
-  QString finalText;
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   for (int i = 0; i < layers.size(); i++)
   {
     LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
@@ -178,8 +169,7 @@ QString TagInfo::_getInfoFromOgrInput(QString& input) const
       numElementsProcessed++;
       if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
       {
-        PROGRESS_INFO(
-          "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
+        PROGRESS_INFO("Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
       }
     }
 
@@ -188,31 +178,23 @@ QString TagInfo::_getInfoFromOgrInput(QString& input) const
       const QString tmpText = _printDelimitedText(result);
       // Skip empty layers.
       if (tmpText == "")
-      {
         continue;
-      }
-      finalText += tmpText;
+      ts << tmpText;
       if (i != (layers.size() - 1))
-      {
-        finalText += ";";
-      }
+        ts << ";";
     }
     else
     {
       const QString tmpText = _printJSON(layers[i], result);
       // Skip empty layers.
       if (tmpText == "")
-      {
         continue;
-      }
-      finalText += tmpText;
+      ts << tmpText;
       if (i != (layers.size() - 1))
-      {
-        finalText += ",\n";
-      }
+        ts << ",\n";
     }
   }
-  return finalText;
+  return ts.readAll();
 }
 
 QString TagInfo::_getInfoFromMemoryBoundInput(const QString& input) const
@@ -220,9 +202,8 @@ QString TagInfo::_getInfoFromMemoryBoundInput(const QString& input) const
   LOG_DEBUG("Reading: " << input << "...");
 
   OsmMapPtr map = std::make_shared<OsmMap>();
-  IoUtils::loadMap(
-    map, input, ConfigOptions().getReaderUseDataSourceIds(),
-    Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+  IoUtils::loadMap(map, input, ConfigOptions().getReaderUseDataSourceIds(),
+                   Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
   TagInfoHash result;
   int numElementsProcessed = 0;
@@ -244,13 +225,9 @@ QString TagInfo::_getInfoFromMemoryBoundInput(const QString& input) const
   }
 
   if (_delimitedTextOutput)
-  {
     return _printDelimitedText(result);
-  }
   else
-  {
     return _printJSON("osm", result);
-  }
 }
 
 QString TagInfo::_getInfoFromStreamableInput(const QString& input) const
@@ -262,8 +239,7 @@ QString TagInfo::_getInfoFromStreamableInput(const QString& input) const
       input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
   reader->open(input);
-  std::shared_ptr<ElementInputStream> streamReader =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
+  std::shared_ptr<ElementInputStream> streamReader = std::dynamic_pointer_cast<ElementInputStream>(reader);
 
   TagInfoHash result;
   int numElementsProcessed = 0;
@@ -283,42 +259,30 @@ QString TagInfo::_getInfoFromStreamableInput(const QString& input) const
         "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
     }
   }
-  std::shared_ptr<PartialOsmMapReader> partialReader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  std::shared_ptr<PartialOsmMapReader> partialReader = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
   if (partialReader.get())
-  {
     partialReader->finalizePartial();
-  }
 
   if (_delimitedTextOutput)
-  {
     return _printDelimitedText(result);
-  }
   else
-  {
     return _printJSON("osm", result);
-  }
 }
 
 bool TagInfo::_tagKeysMatch(const QString& tagKey) const
 {
   LOG_VART(tagKey);
-  const Qt::CaseSensitivity caseSensitivity =
-    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const Qt::CaseSensitivity caseSensitivity = _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
   if (_exactKeyMatch)
-  {
     return _keys.contains(tagKey, caseSensitivity);
-  }
   else
   {
-    for (int i = 0; i < _keys.size(); i++)
+    for (const auto& specifiedTagKey : qAsConst(_keys))
     {
-      const QString specifiedTagKey = _keys.at(i);
       LOG_VART(specifiedTagKey);
       if (tagKey.contains(specifiedTagKey, caseSensitivity))
-      {
         return true;
-      }
     }
   }
   return false;
@@ -332,22 +296,16 @@ void TagInfo::_parseElement(const ConstElementPtr& e, TagInfoHash& result) const
     LOG_VART(it.value());
 
     if (it.value() == "") // Drop empty values
-    {
       continue;
-    }
 
     // Drop Hoot metadata tags
     if (it.key() == MetadataTags::SourceIngestDateTime())
-    {
       continue;
-    }
 
     LOG_VART(result.value(it.key()));
     LOG_VART(result.value(it.key()).size());
     if (result.value(it.key()).size() < _tagValuesPerKeyLimit)
-    {
       result[it.key()][it.value()]++;
-    }
   }
 }
 
@@ -358,22 +316,19 @@ QString TagInfo::_printDelimitedText(const TagInfoHash& data) const
   QStringList attrKey = data.keys();
   // Skip empty layers
   if (attrKey.empty())
-  {
     return "";
-  }
 
   attrKey.sort(); // Sort the attribute list to make it look better
 
-  QString result;
-  for (int i = 0; i < attrKey.count(); i++)
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
+   for (const auto& key : qAsConst(attrKey))
   {
-    const QString key = attrKey[i];
     if (!key.isEmpty())
-    {
-      result += key + ";";
-    }
+      ts << key + ";";
   }
-  return result;
+  return ts.readAll();
 }
 
 QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data) const
@@ -381,23 +336,18 @@ QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data) const
   QStringList attrKey = data.keys();
   // Skip empty layers
   if (attrKey.empty())
-  {
     return "";
-  }
 
   attrKey.sort(); // Sort the attribute list to make it look better
 
-  QString result;
-
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   // Start the JSON
   if (!_keysOnly)
-  {
-    result += QString("    \"%1\":{\n").arg(lName);
-  }
+    ts << QString("    \"%1\":{\n").arg(lName);
   else
-  {
-    result += QString("    \"%1\":[\n").arg(lName);
-  }
+    ts << QString("    \"%1\":[\n").arg(lName);
 
   int keysParsed = 0;
   for (int i = 0; i < attrKey.count(); i++)
@@ -412,7 +362,7 @@ QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data) const
     {
       if (!_keysOnly)
       {
-        result += QString("      \"%1\":[\n").arg(key);
+        ts << QString("      \"%1\":[\n").arg(key);
 
         for (int j = 0; j < maxValues; j++)
         {
@@ -431,60 +381,40 @@ QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data) const
           // And double quotes
           tmpVal.replace("\"","\\\"");
 
-          result += QString("        \"%1\"").arg(tmpVal);
+          ts << QString("        \"%1\"").arg(tmpVal);
 
           if (j != (maxValues - 1))
-          {
-            result += ",\n";
-          }
-          else
-          {
-            // No comma after bracket
-            result += "\n";
-          }
+            ts << ",\n";
+          else  // No comma after bracket
+            ts << "\n";
         }
 
         if (i != (attrKey.count() - 1))
-        {
-          result += "        ],\n";
-        }
-        else
-        {
-          // No comma after bracket
-          result += "        ]\n";
-        }
+          ts << "        ],\n";
+        else  // No comma after bracket
+          ts << "        ]\n";
       }
       else
       {
         if (i != (attrKey.count() - 1))
-        {
-          result += QString("      \"%1\",\n").arg(key);
-        }
+          ts << QString("      \"%1\",\n").arg(key);
         else
-        {
-          result += QString("      \"%1\"\n      ]\n").arg(key);
-        }
+          ts << QString("      \"%1\"\n      ]\n").arg(key);
       }
       keysParsed++;
     }
   }
 
   if (keysParsed == 0)
-  {
     return "No keys found from input key list.";
-  }
 
+  // We have no idea if this is the last layer, so no comma on the end
   if (!_keysOnly)
-  {
-    // We have no idea if this is the last layer, so no comma on the end
-    result += "      }";
-  }
+    ts << "      }";
 
   // A bit hackish to handle the situation wher the last key enountered isn't in the specified
   // keys list and avoid an unneeded trailing comma.
-  result.replace("        ],\n      }", "        ]\n      }");
-
-  return result;
+  return ts.readAll().replace("        ],\n      }", "        ]\n      }");
 }
 
 }

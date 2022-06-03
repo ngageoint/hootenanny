@@ -119,6 +119,12 @@ public:
   void setLimit(long limit) const;
   void setSchemaTranslationScript(const QString& translate) const;
 
+  /**
+   * @brief setImportImpliedTags - Some read operations shouldn't add implied tags (i.e. tag-info)
+   * @param import True for importing implied tags
+   */
+  void setImportImpliedTags(bool import) const;
+
 private:
 
   std::shared_ptr<OgrReaderInternal> _d;
