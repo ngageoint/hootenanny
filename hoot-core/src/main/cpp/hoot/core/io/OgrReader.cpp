@@ -125,7 +125,7 @@ public:
   unsigned int getNumSteps() const override { return 1; }
 
   bool getImportImpliedTags() const { return _importImpliedTags; }
-  void setImportImpliedTags(bool import) { _importImpliedTags = import; }
+  void setImportImpliedTags(bool importImplied) { _importImpliedTags = importImplied; }
 
 private:
 
@@ -533,9 +533,9 @@ void OgrReader::setSchemaTranslationScript(const QString& translate) const
   _d->setSchemaTranslationScript(translate);
 }
 
-void OgrReader::setImportImpliedTags(bool import) const
+void OgrReader::setImportImpliedTags(bool importImplied) const
 {
-  _d->setImportImpliedTags(import);
+  _d->setImportImpliedTags(importImplied);
 }
 
 

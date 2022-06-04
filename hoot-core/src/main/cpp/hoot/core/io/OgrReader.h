@@ -123,7 +123,7 @@ public:
    * @brief setImportImpliedTags - Some read operations shouldn't add implied tags (i.e. tag-info)
    * @param import True for importing implied tags
    */
-  void setImportImpliedTags(bool import) const;
+  void setImportImpliedTags(bool importImplied) const;
 
 private:
 
