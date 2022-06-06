@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
@@ -89,36 +89,29 @@ JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
   close();
 }
 
-vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(
-  const QVariantList& list) const
+vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(const QVariantList& list) const
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());
 
-  for (int i = 0; i < list.size(); i++)
+  for (const auto& feature : qAsConst(list))
   {
     TranslatedFeature tf;
-    tf.feature = _createFeature(list[i].toMap(), tf.tableName);
+    tf.feature = _createFeature(feature.toMap(), tf.tableName);
     if (tf.feature)
-    {
       result.push_back(tf);
-    }
   }
 
   return result;
 }
 
-std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVariantMap& vm,
-                                                              QString &tableName) const
+std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVariantMap& vm, QString &tableName) const
 {
   if (vm.contains("attrs") == false)
-  {
     throw HootException("Expected translateToOgr result to contain 'attrs' property.");
-  }
+
   if (vm.contains("tableName") == false)
-  {
     throw HootException("Expected translateToOgr result to contain 'tableName' property.");
-  }
 
   tableName = vm["tableName"].toString();
   if (tableName.length() < 1)
@@ -134,49 +127,37 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
     std::shared_ptr<const Layer> l = _schema->getLayer(i);
 
     if (l->getName() == tableName)
-    {
       layer = l;
-    }
   }
 
   if (layer == nullptr)
-  {
     strictError("Table name: " + tableName + " not found in schema.");
-  }
 
   // copy the attributes into the feature.
   if (vm["attrs"].canConvert(QVariant::Map) == false)
-  {
     throw HootException("Expected attrs to be an object.");
-  }
 
   QVariantMap attrs = vm["attrs"].toMap();
 
   std::shared_ptr<Feature> result = std::make_shared<Feature>(layer->getFeatureDefinition());
 
-  for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
+  for (auto it = attrs.begin(); it != attrs.end(); ++it)
   {
     if (result->getFeatureDefinition()->hasField(it.key()) == false)
     {
       QString error("The specified field/column is not part of this table definition."
                     " table: " + tableName + " column: " + it.key());
       if (_strict == StrictOn)
-      {
         throw FieldDefinition::InvalidValueException(it.key(), error);
-      }
       else
       {
         LOG_WARN(error);
       }
     }
     else
-    {
       result->setField(it.key(), it.value());
-    }
   }
-
   result->validate(_strict);
-
   return result;
 }
 
@@ -219,18 +200,12 @@ void JavaScriptSchemaTranslator::_init()
   if (_scriptPath.isEmpty())
   {
     if (_scriptText.isEmpty())
-    {
       throw HootException("Please either specify a script path or text.");
-    }
     else
-    {
       _gContext->loadText(_scriptText);
-    }
   }
   else
-  {
     _gContext->loadScript(_scriptPath);
-  }
 
   // Less typing
   Local<Object> tObj = _gContext->getContext(current)->Global();
@@ -245,13 +220,9 @@ void JavaScriptSchemaTranslator::_init()
 
   // Sort out what the toOsm function is called
   if (tObj->Has(context, toV8("translateToOsm")).ToChecked())
-  {
     _toOsmFunctionName = "translateToOsm";
-  }
   else if (tObj->Has(context, toV8("translateAttributes")).ToChecked())
-  {
     _toOsmFunctionName = "translateAttributes";
-  }
 
   LOG_DEBUG("Translation script loaded.");
   _initialized = true;
@@ -262,9 +233,7 @@ QString JavaScriptSchemaTranslator::getLayerNameFilter()
 {
   // Just making sure
   if (!_initialized)
-  {
     _init();
-  }
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -275,13 +244,9 @@ QString JavaScriptSchemaTranslator::getLayerNameFilter()
 
   LOG_TRACE("Getting layer name filter...");
   if (tObj->Has(context, toV8("layerNameFilter")).ToChecked())
-  {
     return toCpp<QString>(_gContext->call(tObj,"layerNameFilter"));
-  }
   else
-  {
     return ScriptSchemaTranslator::getLayerNameFilter();
-  }
 }
 
 bool JavaScriptSchemaTranslator::isValidScript()
@@ -306,9 +271,7 @@ bool JavaScriptSchemaTranslator::isValidScript()
       }
     }
     else
-    {
       result = true;
-    }
   }
   return result;
 }
@@ -320,9 +283,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
   if (_schema == nullptr)
   {
     if (!_initialized)
-    {
       _init();
-    }
 
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
@@ -344,43 +305,33 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
       std::shared_ptr<Schema> schema = std::make_shared<Schema>();
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
-      for (int i = 0; i < schemaV.size(); ++i)
-      {
-        schema->addLayer(_parseLayer(schemaV[i]));
-      }
+      for (const auto& variant : qAsConst(schemaV))
+        schema->addLayer(_parseLayer(variant));
 
       _schema = schema;
     }
     else
-    {
       throw HootException("Expected a valid schema array to be returned.");
-    }
   }
-
   return _schema;
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(
-  std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const
+void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
-  {
     throw HootException("Expected enumerations to be an array of maps.");
-  }
+
   QVariantList vl = enumerations.toList();
 
-  for (int i = 0; i < vl.size(); i++)
+  for (const auto& variant : qAsConst(vl))
   {
-    if (vl[i].canConvert(QVariant::Map) == false)
-    {
+    if (variant.canConvert(QVariant::Map) == false)
       throw HootException("Expected enumerations to be an array of maps.");
-    }
-    QVariantMap vm = vl[i].toMap();
 
+    QVariantMap vm = variant.toMap();
     if (vm["value"].canConvert(QVariant::Double) == false)
-    {
       throw HootException("Expected each enumeration map to contain a valid value.");
-    }
+
     double v = vm["value"].toDouble();
 
     if (fd->hasEnumeratedValue(v))
@@ -396,35 +347,27 @@ void JavaScriptSchemaTranslator::_parseEnumerations(
       logWarnCount++;
     }
     else
-    {
       fd->addEnumeratedValue(v);
-    }
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(
-  std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const
+void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<IntegerFieldDefinition> fd,
+                                                    const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
-  {
     throw HootException("Expected enumerations to be an array of maps.");
-  }
+
   QVariantList vl = enumerations.toList();
-
-  for (int i = 0; i < vl.size(); i++)
+  for (const auto& variant : qAsConst(vl))
   {
-    if (vl[i].canConvert(QVariant::Map) == false)
-    {
+    if (variant.canConvert(QVariant::Map) == false)
       throw HootException("Expected enumerations to be an array of maps.");
-    }
-    QVariantMap vm = vl[i].toMap();
 
+    QVariantMap vm = variant.toMap();
     if (vm["value"].canConvert(QVariant::Int) == false)
-    {
       throw HootException("Expected each enumeration map to contain a valid value.");
-    }
-    int v = vm["value"].toInt();
 
+    int v = vm["value"].toInt();
     if (fd->hasEnumeratedValue(v))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -438,35 +381,28 @@ void JavaScriptSchemaTranslator::_parseEnumerations(
       logWarnCount++;
     }
     else
-    {
       fd->addEnumeratedValue(v);
-    }
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(
-  std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const
+void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<LongIntegerFieldDefinition> fd,
+                                                    const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
-  {
     throw HootException("Expected enumerations to be an array of maps.");
-  }
+
   QVariantList vl = enumerations.toList();
 
-  for (int i = 0; i < vl.size(); i++)
+  for (const auto& variant : qAsConst(vl))
   {
-    if (vl[i].canConvert(QVariant::Map) == false)
-    {
+    if (variant.canConvert(QVariant::Map) == false)
       throw HootException("Expected enumerations to be an array of maps.");
-    }
-    QVariantMap vm = vl[i].toMap();
 
+    QVariantMap vm = variant.toMap();
     if (vm["value"].canConvert(QVariant::LongLong) == false)
-    {
       throw HootException("Expected each enumeration map to contain a valid value.");
-    }
-    int v = vm["value"].toLongLong();
 
+    int v = vm["value"].toLongLong();
     if (fd->hasEnumeratedValue(v))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -480,30 +416,22 @@ void JavaScriptSchemaTranslator::_parseEnumerations(
       logWarnCount++;
     }
     else
-    {
       fd->addEnumeratedValue(v);
-    }
   }
 }
 
-std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefinition(
-  const QVariant& fieldV) const
+std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefinition(const QVariant& fieldV) const
 {
   std::shared_ptr<FieldDefinition> result;
 
   if (fieldV.canConvert(QVariant::Map) == false)
-  {
     throw HootException("Expected the column to be an object (map).");
-  }
 
   QVariantMap map = fieldV.toMap();
-
   if (map.contains("type") == false)
-  {
     throw HootException("Error parsing type in column.");
-  }
-  QString type = map["type"].toString().toLower();
 
+  QString type = map["type"].toString().toLower();
   if (type == "string")
   {
     std::shared_ptr<StringFieldDefinition> fd = std::make_shared<StringFieldDefinition>();
@@ -511,18 +439,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     if (map.contains("defValue"))
     {
       if (map["defValue"].isValid() == false)
-      {
         fd->setDefaultIsNull(true);
-      }
       else
-      {
         fd->setDefaultValue(map["defValue"].toString());
-      }
     }
     if (map.contains("length"))
-    {
       fd->setWidth(_toInt32(map["length"]));
-    }
 
     result = fd;
   }
@@ -533,27 +455,18 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     if (map.contains("defValue"))
     {
       if (map["defValue"].isValid() == false)
-      {
         fd->setDefaultIsNull(true);
-      }
       else
-      {
         fd->setDefaultValue(_toDouble(map["defValue"]));
-      }
     }
     if (map.contains("maximum"))
-    {
       fd->setMaxValue(_toDouble(map["maximum"]));
-    }
+
     if (map.contains("minimum"))
-    {
       fd->setMinValue(_toDouble(map["minimum"]));
-    }
 
     if (map.contains("enumerations"))
-    {
       _parseEnumerations(fd, map["enumerations"]);
-    }
 
     result = fd;
   }
@@ -564,27 +477,19 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     if (map.contains("defValue"))
     {
       if (map["defValue"].isValid() == false)
-      {
         fd->setDefaultIsNull(true);
-      }
       else
-      {
         fd->setDefaultValue(_toInt32(map["defValue"]));
-      }
-    }
-    if (map.contains("maximum"))
-    {
-      fd->setMaxValue(_toInt32(map["maximum"]));
-    }
-    if (map.contains("minimum"))
-    {
-      fd->setMinValue(_toInt32(map["minimum"]));
     }
 
+    if (map.contains("maximum"))
+      fd->setMaxValue(_toInt32(map["maximum"]));
+
+    if (map.contains("minimum"))
+      fd->setMinValue(_toInt32(map["minimum"]));
+
     if (map.contains("enumerations"))
-    {
       _parseEnumerations(fd, map["enumerations"]);
-    }
 
     result = fd;
   }
@@ -595,54 +500,38 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     if (map.contains("defValue"))
     {
       if (map["defValue"].isValid() == false)
-      {
         fd->setDefaultIsNull(true);
-      }
       else
-      {
         fd->setDefaultValue(_toInt64(map["defValue"]));
-      }
     }
+
     if (map.contains("maximum"))
-    {
       fd->setMaxValue(_toInt64(map["maximum"]));
-    }
+
     if (map.contains("minimum"))
-    {
       fd->setMinValue(_toInt64(map["minimum"]));
-    }
+
     if (map.contains("enumerations"))
-    {
       _parseEnumerations(fd, map["enumerations"]);
-    }
 
     result = fd;
   }
   else
-  {
     throw HootException("Unexpected column type: " + type + " for " + map["name"].toString());
-  }
 
   if (map.contains("name") == false)
-  {
     throw HootException("Error parsing name in column.");
-  }
+
   result->setName(map["name"].toString());
   if (map.contains("allowNull"))
   {
     QString s = map["allowNull"].toString().toLower();
     if (s == "true")
-    {
       result->setAllowNull(true);
-    }
     else if (s == "false")
-    {
       result->setAllowNull(false);
-    }
     else
-    {
       throw HootException("Expected a value of 'true' or 'false' for allowNull.");
-    }
   }
 
   return result;
@@ -653,65 +542,47 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
   std::shared_ptr<Layer> newLayer = std::make_shared<Layer>();
 
   if (layer.canConvert(QVariant::Map) == false)
-  {
     throw HootException("Expected the layer to be an object (map).");
-  }
 
   QVariantMap map = layer.toMap();
 
   // Parse out the name of the layer.
   if (map.contains("name") == false)
-  {
     throw HootException("Expected layer to contain a name.");
-  }
+
   newLayer->setName(map["name"].toString());
 
   // Parse out the geometry portion of the layer.
   if (map.contains("geom") == false)
-  {
     throw HootException(QString("Expected layer (%1) to contain a geom.").arg(newLayer->getName()));
-  }
+
   QString geom = map["geom"].toString().toLower();
   if (geom == "line")
-  {
     newLayer->setGeometryType(GEOS_LINESTRING);
-  }
   else if (geom == "point")
-  {
     newLayer->setGeometryType(GEOS_POINT);
-  }
   else if (geom == "area" || geom == "polygon")
-  {
     newLayer->setGeometryType(GEOS_POLYGON);
-  }
   else
-  {
-    throw HootException(QString("Expected layer (%1) to contain a valid geom.").
-      arg(newLayer->getName()));
-  }
+    throw HootException(QString("Expected layer (%1) to contain a valid geom.").arg(newLayer->getName()));
 
   if (map.contains("fdname") == true)
-  {
     newLayer->setFdName(map["fdname"].toString());
-  }
 
   // parse out the columns one at a time.
   QVariant columnsV = map["columns"];
   if (columnsV.canConvert(QVariant::List) == false)
-  {
-    throw HootException(QString("Expected layer (%1) to contain a list of columns.").
-      arg(newLayer->getName()));
-  }
+    throw HootException(QString("Expected layer (%1) to contain a list of columns.").arg(newLayer->getName()));
+
   set<QString> names;
   QVariantList columns = columnsV.toList();
   std::shared_ptr<FeatureDefinition> dfd = std::make_shared<FeatureDefinition>();
-  for (int i = 0; i < columns.size(); i++)
+  for (const auto& variant : qAsConst(columns))
   {
-    std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
+    std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(variant);
     if (names.find(fd->getName()) != names.end())
-    {
       throw HootException("Found multiple fields with the same name. (" + fd->getName() + ")");
-    }
+
     dfd->addField(fd);
     names.insert(fd->getName());
   }
@@ -723,38 +594,35 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
 qint32 JavaScriptSchemaTranslator::_toInt32(const QVariant& v) const
 {
   if (v.canConvert(QVariant::Int) == false)
-  {
     throw HootException("Error parsing int: " + v.toString());
-  }
+
   return v.toInt();
 }
 
 qint64 JavaScriptSchemaTranslator::_toInt64(const QVariant& v) const
 {
   if (v.canConvert(QVariant::LongLong) == false)
-  {
     throw HootException("Error parsing long int: " + v.toString());
-  }
+
   return v.toLongLong();
 }
 
 double JavaScriptSchemaTranslator::_toDouble(const QVariant& v) const
 {
   if (v.canConvert(QVariant::Double) == false)
-  {
     throw HootException("Error parsing double: " + v.toString());
-  }
+
   return v.toDouble();
 }
 
-vector<ScriptToOgrSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::translateToOgr(
-  Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType)
+vector<ScriptToOgrSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::translateToOgr(Tags& tags, ElementType elementType,
+                                                                                                  geos::geom::GeometryTypeId geometryType)
 {
   return _createAllFeatures(_translateToOgrVariants(tags, elementType, geometryType));
 }
 
 vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementType elementType,
-  GeometryTypeId geometryType)
+                                                            GeometryTypeId geometryType)
 {
   vector<Tags> result;
   QVariantList l = _translateToOgrVariants(tags, elementType, geometryType);
@@ -770,20 +638,16 @@ vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementT
     QVariant v = l[i].toMap()["attrs"];
 
     if (v.isNull())
-    {
       throw HootException("Expected translateToOgr result to contain 'attrs' property.");
-    }
 
     const QVariantMap& vm = l[i].toMap()["attrs"].toMap();
 
-    for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
+    for (auto it = vm.constBegin(); it != vm.constEnd(); ++it)
     {
       const QString key = it.key();
       const QString val = it.value().toString().trimmed();
       if (!val.isEmpty())
-      {
         t[key] = val;
-      }
     }
 
     result[i] = t;
@@ -792,8 +656,8 @@ vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementT
   return result;
 }
 
-QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
-  Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType)
+QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags, ElementType elementType,
+                                                                 geos::geom::GeometryTypeId geometryType)
 {
   _tags = &tags;
 
@@ -803,10 +667,8 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
   Local<Context> context = current->GetCurrentContext();
 
   Local<Object> v8tags = Object::New(current);
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-  {
+  for (auto it = tags.begin(); it != tags.end(); ++it)
     v8tags->Set(context, toV8(it.key()), toV8(it.value()));
-  }
 
   // Hardcoded to 3 arguments
   //  args << tagsJs << elementTypeJs << geometryTypeJs;
@@ -837,22 +699,16 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
 
   double start = 0.00; // to stop warnings
   if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     start = Tgs::Time::getTime();
-  }
 
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // We assume this exists. we checked during Init.
-  Local<Function> tFunc =
-    Local<Function>::Cast(tObj->Get(context, toV8("translateToOgr")).ToLocalChecked());
+  Local<Function> tFunc = Local<Function>::Cast(tObj->Get(context, toV8("translateToOgr")).ToLocalChecked());
 
   // Make sure we have a translation function. No easy way to do this earlier than now
   if (tFunc->IsUndefined())
-  {
-    throw HootException("This translation file does not support converting to OGR. "
-                        "(Missing translateToOgr)");
-  }
+    throw HootException("This translation file does not support converting to OGR. (Missing translateToOgr)");
 
   TryCatch trycatch(current);
   // Hardcoded to 3 arguments
@@ -866,9 +722,7 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
   HootExceptionJs::checkV8Exception(translated, trycatch);
 
   if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
-  }
 
   QVariantList result;
   if (translated->IsNull() || translated->IsUndefined())
@@ -880,24 +734,17 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
     QVariant v = toCpp<QVariant>(translated);
 
     if (v.type() == QVariant::Map)
-    {
       result = QVariantList() << v;
-    }
     else if (v.type() == QVariant::List)
-    {
       result = v.toList();
-    }
   }
   else
-  {
     throw HootException("convert: Expected either a null or an object as the result.");
-  }
 
   return result;
 }
 
-void JavaScriptSchemaTranslator::_translateToOsm(
-  Tags& t, const char* layerName, const char* geomType)
+void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName, const char* geomType)
 {
   LOG_VART(_toOsmFunctionName);
   LOG_VART(layerName);
@@ -911,7 +758,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(
   Local<Context> context = current->GetCurrentContext();
 
   Local<Object> tags = Object::New(current);
-  for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
+  for (auto it = t.begin(); it != t.end(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
@@ -926,8 +773,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
-  Local<Function> tFunc =
-    Local<Function>::Cast(tObj->Get(context, toV8(_toOsmFunctionName)).ToLocalChecked());
+  Local<Function> tFunc = Local<Function>::Cast(tObj->Get(context, toV8(_toOsmFunctionName)).ToLocalChecked());
   TryCatch trycatch(current);
 
   // NOTE: the "3" here is the number of arguments
@@ -940,14 +786,10 @@ void JavaScriptSchemaTranslator::_translateToOsm(
 
   double start = 0.00; // to stop warnings
   if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     start = Tgs::Time::getTime();
-  }
 
   if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
-  }
 
   t.clear();
 
@@ -972,16 +814,13 @@ void JavaScriptSchemaTranslator::_translateToOsm(
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
       if (v != Undefined(current))
-      {
         t.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
-      }
+
       LOG_VART(t);
     }
   }
   else
-  {
     throw HootException("convert: Expected either a null or an object as the result.");
-  }
 }
 
 }

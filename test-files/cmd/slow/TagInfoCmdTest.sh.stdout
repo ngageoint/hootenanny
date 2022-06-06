@@ -397,3 +397,40 @@ Display tag information for keys with partial match and case insensitivity...
 Display tag information for keys as delimited text...
 
 foot;highway;name
+
+Display tag information for non-building class...
+
+10:18:34.222 STATUS ...p/hoot/core/cmd/TagInfoCmd.cpp( 148) Displaying tag information for 1inputs...
+10:18:34.232 INFO   ...JavaScriptSchemaTranslator.cpp( 191) Loading translation script: /fouo/hoot-release-2/hoot/translations/quick.js...
+10:18:34.243 INFO   ...JavaScriptSchemaTranslator.cpp( 191) Loading translation script: /fouo/hoot-release-2/hoot/translations/quick.js...
+{
+  "class_non_building.shp":{
+    "class_non_building":{
+      "id":[
+        "1",
+        "2"
+        ]
+      }
+  }
+}
+10:18:34.345 STATUS ...p/hoot/core/cmd/TagInfoCmd.cpp( 154) Tag information collected in 00:00 total.
+
+Display tag information for building class...
+
+10:18:34.661 STATUS ...p/hoot/core/cmd/TagInfoCmd.cpp( 148) Displaying tag information for 1inputs...
+10:18:34.671 INFO   ...JavaScriptSchemaTranslator.cpp( 191) Loading translation script: /fouo/hoot-release-2/hoot/translations/quick.js...
+10:18:34.682 INFO   ...JavaScriptSchemaTranslator.cpp( 191) Loading translation script: /fouo/hoot-release-2/hoot/translations/quick.js...
+{
+  "class_building.shp":{
+    "class_building":{
+      "building":[
+        "yes"
+        ],
+      "id":[
+        "1",
+        "2"
+        ]
+      }
+  }
+}
+10:18:34.786 STATUS ...p/hoot/core/cmd/TagInfoCmd.cpp( 154) Tag information collected in 00:00 total.
