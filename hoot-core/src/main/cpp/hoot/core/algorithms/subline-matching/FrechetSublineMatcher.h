@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef FRECHETSUBLINEMATCHER_H
 #define FRECHETSUBLINEMATCHER_H
@@ -53,7 +53,7 @@ public:
    *  input ways.
    */
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
+                                  const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
   /**
    * @see Configurable

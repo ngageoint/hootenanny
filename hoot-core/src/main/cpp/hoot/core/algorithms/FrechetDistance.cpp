@@ -238,7 +238,7 @@ Radians FrechetDistance::getHeadingAvg(WayPtr way, int index) const
   return heading / count;
 }
 
-Meters FrechetDistance::distance()
+Meters FrechetDistance::distance() const
 {
   //  Since at least one endpoint in each way points to an endpoint of another a simple
   //  maximum value of all the closest distances is the non-discreet Frechet distance

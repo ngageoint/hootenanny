@@ -73,7 +73,7 @@ public:
    * @brief distance - calculate the Frechet distance between the two ways, _w1 and _w2
    * @return Frechet distance in meters
    */
-  Meters distance();
+  Meters distance() const;
 
   /**
    * @brief maxSubline - find the maximum length, in nodes, subline for the two ways
