@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DELAUNAYTRIANGULATION_H
@@ -68,17 +68,12 @@ public:
   bool operator==(const Edge& e) const
   {
     if (_ie == e._ie)
-    {
       return true;
-    }
-    if (getOriginX() == e.getOriginX() &&
-        getOriginY() == e.getOriginY() &&
-        getDestinationX() == e.getDestinationX() &&
-        getDestinationY() == e.getDestinationY())
-    {
-      return true;
-    }
-    return false;
+
+    return (getOriginX() == e.getOriginX() &&
+            getOriginY() == e.getOriginY() &&
+            getDestinationX() == e.getDestinationX() &&
+            getDestinationY() == e.getDestinationY());
   }
   bool operator!=(const Edge& e) const { return !operator==(e); }
   bool operator<(const Edge& e) const;
@@ -183,7 +178,7 @@ private:
 
   Edge _e;
   std::list<InternalEdge*> _todo;
-  const std::set<QuadEdge *>* _edges;
+  const std::set<QuadEdge*>* _edges;
   std::set<QuadEdge*>::const_iterator _it;
 
   bool _atEnd;

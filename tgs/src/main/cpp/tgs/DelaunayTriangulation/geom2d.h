@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GEOM2D_H
@@ -90,10 +90,6 @@ public:
     x = a;
     y = b;
   }
-  Point2d(const Point2d& p)
-  {
-    *this = p;
-  }
 
   Real distance(const Point2d& p) const
   {
@@ -108,13 +104,9 @@ public:
   bool operator<(const Point2d& p) const
   {
     if (x < p.x)
-    {
       return true;
-    }
     else if (x == p.x)
-    {
       return y < p.y;
-    }
     return false;
   }
   friend std::istream& operator>>(std::istream&, Point2d&);
@@ -215,9 +207,8 @@ inline std::ostream& operator<<(std::ostream& os, const Point2d& p)
 
 // Line:
 
+/** Computes the normalized line equation through the points p and q. */
 inline Line::Line(const Point2d& p, const Point2d& q)
-// Computes the normalized line equation through the
-// points p and q.
 {
   Vector2d t = q - p;
   Real len = t.norm();
@@ -226,15 +217,14 @@ inline Line::Line(const Point2d& p, const Point2d& q)
   c = -(a * p.x + b * p.y);
 }
 
+/** Plugs point p into the line equation. */
 inline Real Line::eval(const Point2d& p) const
-// Plugs point p into the line equation.
 {
   return (a * p.x + b * p.y + c);
 }
 
+/** Returns -1, 0, or 1, if p is to the left of, on, or right of the line, respectively. */
 inline int Line::classify(const Point2d& p) const
-// Returns -1, 0, or 1, if p is to the left of, on,
-// or right of the line, respectively.
 {
   Real d = eval(p);
   return (d < -EPS) ? -1 : (d > EPS ? 1 : 0);

@@ -66,6 +66,8 @@ public:
 
   bool operator==(const Box& b) const;
 
+  Box& operator=(const Box& b);
+
   std::string toString() const;
 
   bool isContained(const Box& b) const;

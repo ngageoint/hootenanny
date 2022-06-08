@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "DoubleFieldDefinition.h"
 
@@ -44,13 +44,9 @@ DoubleFieldDefinition::DoubleFieldDefinition()
 QVariant DoubleFieldDefinition::getDefaultValue() const
 {
   if (getDefaultIsNull())
-  {
     return QVariant();
-  }
   else
-  {
     return QVariant(_defaultValue);
-  }
 }
 
 bool DoubleFieldDefinition::hasDefaultValue() const
@@ -68,18 +64,15 @@ QString DoubleFieldDefinition::toString() const
 
 void DoubleFieldDefinition::validate(const QVariant& v, StrictChecking strict) const
 {
+  // the value is null, no problem.
   if (getAllowNull() && v.isValid() == false)
-  {
-    // the value is null, no problem.
     return;
-  }
 
   bool ok;
   v.toString().toDouble(&ok);
   if (ok == false)
-  {
     _reportError(getName(), "Unable to convert value to a double: " + v.toString(), strict);
-  }
+
   double d = v.toDouble();
 
   if (_enumeratedValues.find(d) != _enumeratedValues.end())
