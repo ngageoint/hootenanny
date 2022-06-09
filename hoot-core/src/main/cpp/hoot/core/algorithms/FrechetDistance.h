@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef FRECHETDISTANCE_H
 #define FRECHETDISTANCE_H
@@ -73,7 +73,7 @@ public:
    * @brief distance - calculate the Frechet distance between the two ways, _w1 and _w2
    * @return Frechet distance in meters
    */
-  Meters distance();
+  Meters distance() const;
 
   /**
    * @brief maxSubline - find the maximum length, in nodes, subline for the two ways

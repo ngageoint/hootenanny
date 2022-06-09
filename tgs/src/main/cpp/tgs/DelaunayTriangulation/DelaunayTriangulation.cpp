@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DelaunayTriangulation.h"
@@ -120,54 +120,32 @@ double Edge::getLength() const { return distance(getOriginX(), getDestinationX()
 bool Edge::operator<(const Edge& e) const
 {
   if (operator==(e))
-  {
     return false;
-  }
-  else
+  else if (getOriginX() < e.getOriginX())
+    return true;
+  else if (getOriginX() == e.getOriginX())
   {
-    if (getOriginX() < e.getOriginX())
-    {
+    if (getOriginY() < e.getOriginY())
       return true;
-    }
-    else if (getOriginX() == e.getOriginX())
+    else if (getOriginY() == e.getOriginY())
     {
-      if (getOriginY() < e.getOriginY())
-      {
+      if (getDestinationX() < e.getDestinationX())
         return true;
-      }
-      else if (getOriginY() == e.getOriginY())
+      else if (getDestinationX() == e.getDestinationX())
       {
-        if (getDestinationX() < e.getDestinationX())
-        {
+        if (getDestinationY() < e.getDestinationY())
           return true;
-        }
-        else if (getDestinationX() == e.getDestinationX())
-        {
-          if (getDestinationY() < e.getDestinationY())
-          {
-            return true;
-          }
-          else if (getDestinationY() == e.getDestinationY())
-          {
-            throw Tgs::Exception("Unexpected path.");
-          }
-        }
+        else if (getDestinationY() == e.getDestinationY())
+          throw Tgs::Exception("Unexpected path.");
       }
     }
-    return false;
   }
+  return false;
 }
 
 bool Edge::operator>(const Edge& e) const
 {
-  if (*this < e || *this == e)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
+  return !(*this < e || *this == e);
 }
 
 
@@ -176,9 +154,7 @@ std::string Edge::toString() const
   std::stringstream strm;
 
   if (_ie == nullptr)
-  {
     strm << "(null)" << endl;
-  }
   else
   {
     strm << "origin: " << getOriginX() << ", " << getOriginY() << endl;
@@ -239,69 +215,69 @@ inline QuadEdge::QuadEdge()
 }
 
 /************************* Edge Algebra *************************************/
-inline InternalEdge *InternalEdge::Rot()
 // Return the dual of the current edge, directed from its right to its left.
+inline InternalEdge *InternalEdge::Rot()
 {
   return (num < 3) ? this + 1 : this - 3;
 }
 
-inline InternalEdge *InternalEdge::invRot()
 // Return the dual of the current edge, directed from its left to its right.
 // .1 Incremental Delaunay Triangulation } 7
+inline InternalEdge *InternalEdge::invRot()
 {
   return (num > 0) ? this - 1 : this + 3;
 }
 
-inline InternalEdge *InternalEdge::Sym()
 // Return the edge from the destination to the origin of the current edge.
+inline InternalEdge *InternalEdge::Sym()
 {
   return (num < 2) ? this + 2 : this - 2;
 }
 
-inline InternalEdge *InternalEdge::Onext()
 // Return the next ccw edge around (from) the origin of the current edge.
+inline InternalEdge *InternalEdge::Onext()
 {
   return next;
 }
 
-inline InternalEdge *InternalEdge::Oprev()
 // Return the next cw edge around (from) the origin of the current edge.
+inline InternalEdge *InternalEdge::Oprev()
 {
   return Rot()->Onext()->Rot();
 }
 
-inline InternalEdge *InternalEdge::Dnext()
 // Return the next ccw edge around (into) the destination of the current edge.
+inline InternalEdge *InternalEdge::Dnext()
 {
   return Sym()->Onext()->Sym();
 }
 
-inline InternalEdge *InternalEdge::Dprev()
 // Return the next cw edge around (into) the destination of the current edge.
+inline InternalEdge *InternalEdge::Dprev()
 {
   return invRot()->Onext()->invRot();
 }
 
-inline InternalEdge *InternalEdge::Lnext()
 // Return the ccw edge around the left face following the current edge.
+inline InternalEdge *InternalEdge::Lnext()
 {
   return invRot()->Onext()->Rot();
 }
 
-inline InternalEdge *InternalEdge::Lprev()
 // Return the ccw edge around the left face before the current edge.
+inline InternalEdge *InternalEdge::Lprev()
 {
   return Onext()->Sym();
 }
 
-inline InternalEdge *InternalEdge::Rnext()
 // Return the edge around the right face ccw following the current edge.
+inline InternalEdge *InternalEdge::Rnext()
 {
   return Rot()->Onext()->invRot();
 }
 
-inline InternalEdge *InternalEdge::Rprev()
 // Return the edge around the right face ccw before the current edge.
+inline InternalEdge *InternalEdge::Rprev()
 {
   return Sym()->Onext();
 }
@@ -398,20 +374,20 @@ Subdivision::Subdivision(const Point2d & a, const Point2d & b, const Point2d & c
 
 Subdivision::~Subdivision()
 {
-  for (set<QuadEdge*>::iterator it = _edges.begin(); it != _edges.end(); ++it)
-    delete (*it);
+  for (auto edge : _edges)//set<QuadEdge*>::iterator it = _edges.begin(); it != _edges.end(); ++it)
+    delete edge;
   _edges.clear();
-  for (vector<Point2d*>::iterator it = _data.begin(); it != _data.end(); ++it)
-    delete (*it);
+  for (auto data : _data)//vector<Point2d*>::iterator it = _data.begin(); it != _data.end(); ++it)
+    delete data;
   _data.clear();
 }
 
 InternalEdge *Subdivision::Connect(InternalEdge * a, InternalEdge * b)
-// Add a new edge e connecting the destination of a to the
-// origin of b, in such a way that all three have the same
-// left face after the connection is complete.
-// Additionally, the data pointers of the new edge are set.
 {
+  // Add a new edge e connecting the destination of a to the
+  // origin of b, in such a way that all three have the same
+  // left face after the connection is complete.
+  // Additionally, the data pointers of the new edge are set.
   InternalEdge *e = MakeEdge();
   Splice(e, a->Lnext());
   Splice(e->Sym(), b);
@@ -420,9 +396,9 @@ InternalEdge *Subdivision::Connect(InternalEdge * a, InternalEdge * b)
 }
 
 void Swap(InternalEdge * e)
-// Essentially turns edge e counterclockwise inside its enclosing
-// quadrilateral. The data pointers are modified accordingly.
 {
+  // Essentially turns edge e counterclockwise inside its enclosing
+  // quadrilateral. The data pointers are modified accordingly.
   InternalEdge *a = e->Oprev();
   InternalEdge *b = e->Sym()->Oprev();
   Splice(e, a);
@@ -433,17 +409,17 @@ void Swap(InternalEdge * e)
 }
 
 int InCircle(const Point2d & a, const Point2d & b, const Point2d & c, const Point2d & d)
-// Returns TRUE if the point d is inside the circle defined by the
-// points a, b, c. See Guibas and Stolfi (1985) p.107.
 {
+  // Returns TRUE if the point d is inside the circle defined by the
+  // points a, b, c. See Guibas and Stolfi (1985) p.107.
   return (a.x * a.x + a.y * a.y) * TriArea2(b, c, d) - (b.x * b.x + b.y * b.y) * TriArea2(a, c, d) +
          (c.x * c.x + c.y * c.y) * TriArea2(a, b, d) - (d.x * d.x + d.y * d.y) * TriArea2(a, b, c) >
          0;
 }
 
 int ccw(const Point2d & a, const Point2d & b, const Point2d & c)
-// Returns TRUE if the points a, b, c are in a counterclockwise order
 {
+  // Returns TRUE if the points a, b, c are in a counterclockwise order
   return (TriArea2(a, b, c) > 0);
 }
 
@@ -458,22 +434,20 @@ int LeftOf(const Point2d & x, const InternalEdge * e)
 }
 
 int OnEdge(const Point2d & x, const InternalEdge * e)
-// A predicate that determines if the point x is on the edge e.
-// The point is considered on if it is in the EPS-neighborhood
-// of the edge.
 {
+  // A predicate that determines if the point x is on the edge e.
+  // The point is considered on if it is in the EPS-neighborhood
+  // of the edge.
   Real t1, t2, t3;
   t1 = (x - e->Org2d()).norm();
   t2 = (x - e->Dest2d()).norm();
   if (t1 < EPS || t2 < EPS)
-  {
     return TRUE;
-  }
+
   t3 = (e->Org2d() - e->Dest2d()).norm();
   if (t1 > t3 || t2 > t3)
-  {
     return FALSE;
-  }
+
   Line line(e->Org2d(), e->Dest2d());
   return (fabs(line.eval(x)) < EPS);
 }
@@ -494,25 +468,13 @@ InternalEdge *Subdivision::Locate(const Point2d & x)
     if (x == e->Org2d() || x == e->Dest2d())
     {
       if (looping > MAX_LOOPS)
-      {
         cout << "on point" << endl;
-      }
       return e;
     }
-//    else if (RightOf(x, e) == true && LeftOf(x, e) == true)
-//    {
-//      return e;
-//    }
-//    else if (RightOf(x, e) == false && LeftOf(x, e) == false)
-//    {
-//      return e;
-//    }
     else if (RightOf(x, e))
     {
       if (looping > MAX_LOOPS)
-      {
         cout << "right of " << *e << endl;
-      }
       e = e->Sym();
     }
     else if (!RightOf(x, e->Onext()))
@@ -527,24 +489,18 @@ InternalEdge *Subdivision::Locate(const Point2d & x)
     else if (!RightOf(x, e->Dprev()))
     {
       if (looping > MAX_LOOPS)
-      {
         cout << "!RightOf(x, e->Dprev()) " << *e->Dprev() << endl;
-      }
       e = e->Dprev();
     }
     else
     {
       if (looping > MAX_LOOPS)
-      {
         cout << "found face" << endl;
-      }
       return e;
     }
     looping++;
     if (looping > MAX_LOOPS)
-    {
       cout << Edge(e).toString() << endl;
-    }
     if (looping > MAX_LOOPS + 20)
     {
       cout << endl;
@@ -563,9 +519,7 @@ void Subdivision::InsertSite(const Point2d & x)
 {
   InternalEdge *e = Locate(x);
   if ((x == e->Org2d()) || (x == e->Dest2d()))	// point is already in
-  {
     return;
-  }
   else if (OnEdge(x, e))
   {
     e = e->Oprev();
@@ -587,9 +541,7 @@ void Subdivision::InsertSite(const Point2d & x)
     e = base->Oprev();
     looping++;
     if (looping > MAX_LOOPS)
-    {
       throw Exception("Looping too many times in Delaunay triangulation");
-    }
   }
   while (e->Lnext() != startingEdge);
 
@@ -603,21 +555,13 @@ void Subdivision::InsertSite(const Point2d & x)
       Swap(e);
       e = e->Oprev();
     }
-    // no more suspect edges
-    else if (e->Onext() == startingEdge)
-    {
+    else if (e->Onext() == startingEdge)  // no more suspect edges
       return;
-    }
-    // pop a suspect edge
-    else
-    {
+    else  // pop a suspect edge
       e = e->Onext()->Lprev();
-    }
     looping++;
     if (looping > MAX_LOOPS)
-    {
       throw Exception("Looping too many times in Delaunay triangulation");
-    }
   }
   while (TRUE);
 }
@@ -651,9 +595,7 @@ Edge& EdgeIterator::operator++()
     for (int i = 0; i < 4; i++)
     {
       if (qe->getInternalEdge(i).Org() != nullptr)
-      {
         _todo.push_back(&qe->getInternalEdge(i));
-      }
     }
   }
 
@@ -700,9 +642,7 @@ Face::~Face()
 {
   _id = -2;
   for (int i = 0; i < 6; i++)
-  {
     _edges[i] = Edge();
-  }
 }
 
 bool sameSide(const Point2d& p1, const Point2d& p2, const Point2d& a, const Point2d& b)
@@ -725,9 +665,7 @@ bool Face::operator==(const Face& other) const
   for (int i = 0; i < 6; i++)
   {
     if (_edges[i] != other._edges[i])
-    {
       return false;
-    }
   }
   return true;
 }
@@ -737,13 +675,9 @@ bool Face::operator<(const Face& other) const
   for (int i = 0; i < 6; i++)
   {
     if (_edges[i] < other._edges[i])
-    {
       return true;
-    }
     else if (_edges[i] > other._edges[i])
-    {
       return false;
-    }
   }
   return false;
 }
@@ -762,16 +696,12 @@ Face& Face::operator=(const Face& other)
 bool Face::overlaps(const Point2d& p) const
 {
   if (contains(p))
-  {
     return true;
-  }
 
   for (size_t i = 0; i < 6; i+=2)
   {
     if (OnEdge(p, _edges[i].getInternalEdge()))
-    {
       return true;
-    }
   }
 
   return false;
@@ -782,9 +712,8 @@ std::string Face::toString() const
   std::stringstream strm;
   strm << "Face:";
   for (int i = 0; i < 6; i+=2)
-  {
     strm << " " << _edges[i].getOriginX() << "," << _edges[i].getOriginY();
-  }
+
   return strm.str();
 }
 
@@ -808,10 +737,8 @@ FaceIterator::FaceIterator(const EdgeIterator& it, const EdgeIterator& end)
 
 FaceIterator::~FaceIterator()
 {
-  for (set<Face*, FaceCompare>::iterator it = _done.begin(); it != _done.end(); ++it)
-  {
-    delete *it;
-  }
+  for (auto ptr : _done)
+    delete ptr;
 }
 
 const Face& FaceIterator::operator*() const
@@ -829,9 +756,7 @@ Face FaceIterator::operator ++(int)
 Face& FaceIterator::operator++()
 {
   if (_it == _end)
-  {
     _atEnd = true;
-  }
   else
   {
     bool alreadyDone;
@@ -842,20 +767,13 @@ Face& FaceIterator::operator++()
 
       alreadyDone = _done.find(_f) != _done.end();
       if (alreadyDone)
-      {
         delete _f;
-      }
-
     } while (alreadyDone && _it != _end);
 
     if (!alreadyDone)
-    {
       _done.insert(_f);
-    }
     if (_it == _end)
-    {
       _atEnd = true;
-    }
   }
   return *_f;
 }
@@ -881,18 +799,12 @@ Face DelaunayTriangulation::findContainingFace(double x, double y) const
 
   Face f1(e1);
   if (f1.overlaps(p))
-  {
     return f1;
-  }
   Face f2(e2);
   if (f2.overlaps(p))
-  {
     return f2;
-  }
   else
-  {
     throw Exception("Unable to find containing face.");
-  }
 }
 
 EdgeIterator DelaunayTriangulation::getEdgeIterator() const
@@ -904,10 +816,8 @@ const vector<Face>& DelaunayTriangulation::getFaces()
 {
   if (_faces.empty())
   {
-    for (FaceIterator fi = getFaceIterator(); fi != getFaceEnd(); ++fi)
-    {
+    for (auto fi = getFaceIterator(); fi != getFaceEnd(); ++fi)
       _faces.push_back(*fi);
-    }
   }
   return _faces;
 }
@@ -920,9 +830,7 @@ FaceIterator DelaunayTriangulation::getFaceIterator() const
 Edge DelaunayTriangulation::getStartingEdge() const
 {
   if (_pointCount < 3)
-  {
     throw Exception("You must add at least three points to create a triangulation.");
-  }
   return Edge(_subdivision->getStartingEdge());
 }
 
