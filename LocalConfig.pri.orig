@@ -12,10 +12,15 @@ debug {
 
   # Runs expensive validation on several data structures to make sure everything is in sync.
   #DEFINES += VALIDATE_ON
+
+  # Use this with valgrind
+  #QMAKE_CXXFLAGS+=-g -O1
+
 }
 
 release {
   DEFINES -= DEBUG
+  QMAKE_CXXFLAGS+=-O3
 }
 
 # ccache speeds up compiling
@@ -49,9 +54,6 @@ QMAKE_CXXFLAGS+=-Wall
 # Turn warnings into errors
 QMAKE_CXXFLAGS+=-Werror
                          
-# Use this with valgrind
-#QMAKE_CXXFLAGS+=-g -O1
-
 # Temporarily turn off compiler warning for "Incompatible Function Types"
 QMAKE_CXXFLAGS+=-Wno-cast-function-type
 
