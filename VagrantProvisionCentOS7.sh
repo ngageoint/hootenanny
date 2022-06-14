@@ -90,7 +90,7 @@ else
          libphonenumber-devel \
          nodejs \
          nodejs-devel \
-	 npm \
+         npm \
          proj \
          proj-devel \
          stxxl \
