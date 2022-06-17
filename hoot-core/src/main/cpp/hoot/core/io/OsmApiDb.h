@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
@@ -30,8 +30,8 @@
 // Hoot
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -136,8 +136,7 @@ public:
    * @param tags if true; returns the corresponding element tag table name
    * @return a database table name string
    */
-  static QString elementTypeToElementTableName(
-    const ElementType& elementType, const bool historical, const bool tags);
+  static QString elementTypeToElementTableName(const ElementType& elementType, const bool historical, const bool tags);
 
   /**
    * Disables all OSM table constraints

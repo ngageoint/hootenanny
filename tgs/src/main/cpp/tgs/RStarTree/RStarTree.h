@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__R_STAR_TREE_H__
@@ -111,8 +111,8 @@ public:
     int id;
 
     BoxPair(const BoxPair& bp) = default;
-    BoxPair(const BoxInternalData& b, int id) :
-      box(b)
+    BoxPair(const BoxInternalData& b, int id)
+      : box(b)
     {
       this->id = id;
     }
@@ -130,7 +130,6 @@ protected:
 
   using BoxVector = std::vector<BoxPair>;
 
-  // TODO: store dimensions and such.
   class Header
   {
   public:

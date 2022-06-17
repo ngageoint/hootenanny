@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__RTREE_NODE_H__
@@ -77,7 +77,7 @@ public:
 
   bool isContained(const Box& b) const;
 
-  void setBounds(int d, double lower, double upper) const;
+  void setBounds(int d, double lower, double upper);
 
   /**
    * Returns the number of bytes this structure will take up with the given number of
@@ -294,9 +294,7 @@ inline std::ostream& operator<<(std::ostream & o, RTreeNode& n)
   {
     o << n.getChildId(i);
     if (i != size - 1)
-    {
       o << ", ";
-    }
   }
   o << "}";
   return o;

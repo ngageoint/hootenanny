@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ToEnglishDictionaryTranslator.h"
@@ -45,8 +45,8 @@ QSet<QString> ToEnglishDictionaryTranslator::_streetTypes;
 
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, ToEnglishDictionaryTranslator)
 
-ToEnglishDictionaryTranslator::ToEnglishDictionaryTranslator() :
-_tokenizeInput(true)
+ToEnglishDictionaryTranslator::ToEnglishDictionaryTranslator()
+  : _tokenizeInput(true)
 {
   // if this assertion isn't true then bad things will happen when converting between QString and
   // UnicodeString
@@ -70,13 +70,9 @@ QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const boo
 
   QStringList l;
   if (tokenize)
-  {
     l = input.split(_whiteSpace, QString::SkipEmptyParts);
-  }
   else
-  {
     l.append(input);
-  }
 
   const QMap<QString, QStringList>& dict = ToEnglishTranslateDictionary::getInstance().getTable();
 
@@ -111,9 +107,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
   LOG_VART(l);
   QStringList result;
   if (l.empty())
-  {
     return result;
-  }
 
   const QMap<QString, QStringList>& dict = ToEnglishTranslateDictionary::getInstance().getTable();
 
@@ -122,15 +116,13 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
   QString s = l[0].toLower();
   LOG_VART(s);
   // find the biggest list of consecutive words that match our dictionary
-  for (QMap<QString, QStringList>::const_iterator it = dict.find(s); it != dict.constEnd(); ++it)
+  for (auto it = dict.find(s); it != dict.constEnd(); ++it)
   {
     QStringList from = it.key().split(" ");
     LOG_VART(from);
     // if this no longer starts with our first word.
     if (from[0] != s)
-    {
       break;
-    }
 
     // determine if from matches our list of strings
     bool match = from.size() <= l.size();
@@ -139,9 +131,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
       for (int i = 0; i < from.size() && i < l.size(); i++)
       {
         if (from[i] != l[i].toLower())
-        {
           match = false;
-        }
       }
     }
     LOG_VART(match);
@@ -167,23 +157,17 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
   QStringList children = toEnglishAll(l.mid(biggestMatchSize));
   LOG_VART(children);
   if (children.empty())
-  {
     result = biggestMatch;
-  }
   else
   {
-    for (int i = 0; i < biggestMatch.size(); i++)
+    for (const auto& biggest : qAsConst(biggestMatch))
     {
-      for (int j = 0; j < children.size(); j++)
+      for (const auto& child : qAsConst(children))
       {
-        if (children[j].size() > 0)
-        {
-          result.push_back(biggestMatch[i] + " " + children[j]);
-        }
+        if (child.size() > 0)
+          result.push_back(biggest + " " + child);
         else
-        {
-          result.push_back(biggestMatch[i]);
-        }
+          result.push_back(biggest);
       }
     }
   }
@@ -207,13 +191,9 @@ QString ToEnglishDictionaryTranslator::translateStreet(const QString& input) con
   {
     QString s = l[i].toLower();
     if (dict.contains(s))
-    {
       l[i] = dict[s][0];
-    }
     else
-    {
       l[i] = transliterateToLatin(s);
-    }
   }
 
   if (!l.empty() && _streetTypes.contains(l[0]))
@@ -233,9 +213,7 @@ QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;
   if (!ToEnglishTranslateDictionary::getInstance().transliterationCachingEnabled())
-  {
     result = _transform(ToEnglishTranslateDictionary::getInstance().getTransliterator(), input);
-  }
   else if (!ToEnglishTranslateDictionary::getInstance().getFromTransliterationCache(input, result))
   {
     result = _transform(ToEnglishTranslateDictionary::getInstance().getTransliterator(), input);
@@ -246,11 +224,11 @@ QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input
 
 QString ToEnglishDictionaryTranslator::_transform(const shared_ptr<Transliterator>& t, const QString& input) const
 {
-  UnicodeString str((UChar*)input.constData(), input.size());
+  UnicodeString str((const UChar*)input.constData(), input.size());
 
   t->transliterate(str);
 
-  QString result((QChar*)str.getTerminatedBuffer(), str.length());
+  QString result((const QChar*)str.getTerminatedBuffer(), str.length());
   LOG_TRACE("from: " << input.toUtf8().data() << " to " << result.toUtf8().data());
 
   return result;

@@ -148,8 +148,7 @@ void ApiDb::open(const QUrl& url)
     _db.setPassword(url.password());
 
     if (_db.open() == false)
-      throw HootException(
-        QString("Error opening _db: %1").arg(_db.lastError().text()));
+      throw HootException(QString("Error opening _db: %1").arg(_db.lastError().text()));
   }
 
   if (_db.tables().empty())
@@ -200,15 +199,11 @@ long ApiDb::getUserIdByName(const QString& userName)
   if (_getUserIdByName == nullptr)
   {
     _getUserIdByName = std::make_shared<QSqlQuery>(_db);
-    _getUserIdByName->prepare(
-          QString("SELECT id FROM %1 WHERE display_name = :displayName").arg(ApiDb::getUsersTableName()));
+    _getUserIdByName->prepare(QString("SELECT id FROM %1 WHERE display_name = :displayName").arg(ApiDb::getUsersTableName()));
   }
   _getUserIdByName->bindValue(":displayName", userName);
   if (!_getUserIdByName->exec())
-  {
-    throw HootException(
-      QString("Error finding user with user name: %1 %2").arg(userName, _getUserIdByName->lastError().text()));
-  }
+    throw HootException(QString("Error finding user with user name: %1 %2").arg(userName, _getUserIdByName->lastError().text()));
 
   long userId = -1;
   //should only be one result
@@ -237,16 +232,11 @@ QString ApiDb::getUserNameById(const long userId)
   if (_getUserNameById == nullptr)
   {
     _getUserNameById = std::make_shared<QSqlQuery>(_db);
-    _getUserNameById->prepare(
-      QString("SELECT display_name FROM %1 WHERE id = :userId").arg(ApiDb::getUsersTableName()));
+    _getUserNameById->prepare(QString("SELECT display_name FROM %1 WHERE id = :userId").arg(ApiDb::getUsersTableName()));
   }
   _getUserNameById->bindValue(":userId", (qlonglong)userId);
   if (!_getUserNameById->exec())
-  {
-    throw HootException(
-      QString("Error finding user with ID: %1 %2")
-        .arg(QString::number(userId), _getUserNameById->lastError().text()));
-  }
+    throw HootException(QString("Error finding user with ID: %1 %2").arg(QString::number(userId), _getUserNameById->lastError().text()));
 
   QString userName = "";
   //should only be one result
@@ -308,15 +298,11 @@ long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
   if (_selectUserByEmail == nullptr)
   {
     _selectUserByEmail = std::make_shared<QSqlQuery>(_db);
-    _selectUserByEmail->prepare(
-      QString("SELECT email, id, display_name FROM %1 WHERE email LIKE :email").arg(ApiDb::getUsersTableName()));
+    _selectUserByEmail->prepare(QString("SELECT email, id, display_name FROM %1 WHERE email LIKE :email").arg(ApiDb::getUsersTableName()));
   }
   _selectUserByEmail->bindValue(":email", email);
   if (_selectUserByEmail->exec() == false)
-  {
-    throw HootException(
-      QString("Error finding user with the email: %1 %2").arg(email, _selectUserByEmail->lastError().text()));
-  }
+    throw HootException(QString("Error finding user with the email: %1 %2").arg(email, _selectUserByEmail->lastError().text()));
 
   long result = -1;
   if (_selectUserByEmail->next())
@@ -393,7 +379,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
   return id;
 }
 
-vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString& sql)
+vector<long> ApiDb::_selectNodeIdsForWaySql(long wayId, const QString& sql)
 {
   vector<long> result;
 
@@ -523,12 +509,11 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
     _selectNodesByBounds = std::make_shared<QSqlQuery>(_db);
     _selectNodesByBounds->setForwardOnly(true);
   }
-  QString sql =
-      QString("SELECT * FROM %1 WHERE visible = true"
-              " AND (%2)"
-              " AND longitude >= :minLon AND longitude <= :maxLon AND latitude >= :minLat "
-              " AND latitude <= :maxLat"
-              " ORDER BY id DESC").arg(tableTypeToTableName(TableType::Node), _getTileWhereCondition(tileRanges));
+  QString sql = QString("SELECT * FROM %1 WHERE visible = true"
+                        " AND (%2)"
+                        " AND longitude >= :minLon AND longitude <= :maxLon AND latitude >= :minLat "
+                        " AND latitude <= :maxLat"
+                        " ORDER BY id DESC").arg(tableTypeToTableName(TableType::Node), _getTileWhereCondition(tileRanges));
   _selectNodesByBounds->prepare(sql);
   if (!_floatingPointCoords)
   {
@@ -594,9 +579,8 @@ QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
   std::shared_ptr<QSqlQuery> wayNodeIdItr = selectWayNodeIdsByWayIds(wayIds);
   QSet<QString> wayNodeIds;
   while (wayNodeIdItr->next())
-  {
     wayNodeIds.insert((*wayNodeIdItr).value(0).toString());
-  }
+
   LOG_VART(wayNodeIds);
 
   // select all ways that contain any of the way nodes
@@ -782,15 +766,14 @@ QMap<QString, QString> ApiDb::getDbUrlParts(const QString& url)
 QString ApiDb::getPsqlString(const QString& url)
 {
   const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
-  return QString("-h %1 -p %2 -U %3 -d %4")
-      .arg(dbUrlParts["host"], dbUrlParts["port"], dbUrlParts["user"], dbUrlParts["database"]);
+  return QString("-h %1 -p %2 -U %3 -d %4").arg(dbUrlParts["host"], dbUrlParts["port"], dbUrlParts["user"], dbUrlParts["database"]);
 }
 
 void ApiDb::execSqlFile(const QString& dbUrl, const QString& sqlFile)
 {
   const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(dbUrl);
-  QString cmd = QString("export PGPASSWORD=%1; psql -v ON_ERROR_STOP=1 %2 -f %3 2>&1")
-      .arg(dbUrlParts["password"], getPsqlString(dbUrl), sqlFile);
+  QString cmd =
+      QString("export PGPASSWORD=%1; psql -v ON_ERROR_STOP=1 %2 -f %3 2>&1").arg(dbUrlParts["password"], getPsqlString(dbUrl), sqlFile);
   if (Log::getInstance().getLevel() > Log::Debug)
     cmd += " > /dev/null";
 
@@ -798,10 +781,7 @@ void ApiDb::execSqlFile(const QString& dbUrl, const QString& sqlFile)
   LOG_VART(FileUtils::readFully(sqlFile));
   const int retval = system(cmd.toStdString().c_str());
   if (retval != 0)
-  {
-    throw HootException(
-      QString("Failed executing SQL file against the database.  Status: %1").arg(QString::number(retval)));
-  }
+    throw HootException(QString("Failed executing SQL file against the database.  Status: %1").arg(QString::number(retval)));
 }
 
 Settings ApiDb::readDbConfig()

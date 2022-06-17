@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Python redefines these two macros from /usr/include/features.h
@@ -75,9 +75,8 @@ void PythonSchemaTranslator::_init()
   {
     QFileInfo info(_scriptPath);
     if (info.exists() == false)
-    {
       throw HootException("Unable to find translation module: " + _scriptPath);
-    }
+
     moduleName = info.baseName();
     pythonPath.append(info.dir().absolutePath());
     pythonPath.append("translations");
@@ -89,9 +88,7 @@ void PythonSchemaTranslator::_init()
     pythonPath.append("translations");
     pythonPath.append(QString("PYTHONPATH"));
     if (hootHome.isEmpty() == false)
-    {
       pythonPath.append(hootHome + "/translations");
-    }
   }
   LOG_INFO("Using translation script: " << _scriptPath);
 
@@ -110,13 +107,10 @@ void PythonSchemaTranslator::_init()
 
   _translateFunction = PyObject_GetAttrString(python_module, "translateToOsm");
   if (_translateFunction == nullptr)
-  {
     throw HootException("Error retrieving 'translateToOsm'");
-  }
   if (PyCallable_Check((PyObject*)_translateFunction) == 0)
-  {
     throw HootException("Error: 'translateToOsm' isn't callable");
-  }
+
   Py_DECREF(python_module);
 }
 
@@ -145,14 +139,13 @@ void PythonSchemaTranslator::_finalize()
   Py_Finalize();
 }
 
-void PythonSchemaTranslator::_translateToOsm(
-  Tags& tags, const char* layerName, const char* geomType)
+void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
   PyObject* geomTypePy = PyString_FromString(geomType);
   PyObject* attrs = PyDict_New();
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  for (auto it = tags.begin(); it != tags.end(); ++it)
   {
     QByteArray keyUtf8 = it.key().toUtf8();
     QByteArray valueUtf8 = it.value().toUtf8();
@@ -199,10 +192,7 @@ void PythonSchemaTranslator::_translateToOsm(
       PyObject* valueUnicode = PyUnicode_FromObject(value);
 
       if (keyUnicode == nullptr || valueUnicode == nullptr)
-      {
-        throw HootException("Both the key and value in the return translation must be "
-                            "convertable to strings.");
-      }
+        throw HootException("Both the key and value in the return translation must be convertable to strings.");
 
       const Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
       const Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
