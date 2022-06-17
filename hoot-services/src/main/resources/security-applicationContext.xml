@@ -4,7 +4,7 @@
 	xmlns="http://www.springframework.org/schema/security"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:oauth="http://www.springframework.org/schema/security/oauth"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/security/oauth https://raw.githubusercontent.com/ngageoint/hootenanny/master/hoot-services/src/main/resources/spring-security-oauth.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/security/oauth https://raw.githubusercontent.com/ngageoint/hootenanny/master/hoot-services/src/main/resources/spring-security-oauth.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd https://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- Spring Annotation Driven Components -->
 	<context:annotation-config />
 	<context:component-scan
@@ -28,9 +28,8 @@
 		class="org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices" />
 	<authentication-manager
 		alias="authenticationManager" />
-
-
-	<!-- OAuth 1.0 3-Legged Client -->
+		
+			<!-- OAuth 1.0 3-Legged Client -->
 	<!-- token-services-ref="hootOAuthConsumerTokenServices" -->
 
 	<oauth:consumer
@@ -61,10 +60,9 @@
 			access-token-url="https://www.openstreetmap.org/oauth/access_token"
 			user-authorization-token-param="oauth_token" />
 	</oauth:resource-details-service>
-
+		
 	<b:bean id="oauthRestTemplate"
 		class="org.springframework.security.oauth.consumer.client.OAuthRestTemplate">
 		<b:constructor-arg ref="openStreetMap" />
 	</b:bean>
-
 </b:beans>

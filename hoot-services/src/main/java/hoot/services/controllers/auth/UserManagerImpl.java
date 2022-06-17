@@ -53,6 +53,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import hoot.services.models.db.SpringSession;
 import hoot.services.models.db.Users;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -117,7 +119,20 @@ public class UserManagerImpl implements UserManager {
             return null;
         }
     }
+    
+    @Override
+    public Users parseUser(JsonNode userDetailsJson) throws InvalidUserProfileException {
+        Users user = new Users();
+        JsonNode details = userDetailsJson.get("user");
+        
+        user.setDisplayName(details.get("display_name").asText());
+        user.setId(Long.parseLong(details.get("id").asText()));
+        user.setProviderCreatedAt(parseTimestamp(details.get("account_created").asText()));
+        user.setHootservicesLastAuthorize(new Timestamp(System.currentTimeMillis()));
 
+        return user;
+    }
+    
     @Override
     public Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = new Users();
@@ -187,8 +202,35 @@ public class UserManagerImpl implements UserManager {
         userCache.put(sessionId, user);
         return user;
     }
+    
+	@Override
+	public Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws InvalidUserProfileException {
+		Users user = parseUser(userDetailsJson);
+		user.setProviderAccessKey(accessToken);
+		user.setProviderAccessKey(accessToken);
+        user.setEmail(String.format("%d@hootenanny", user.getId()));
+
+        Users existingUser = this.getUser(user.getId());
+        if (existingUser == null) {
+            this.insert(user);
+        } else {
+            // look in database for possible existing privileges set
+            user.setPrivileges(existingUser.getPrivileges());
+            
+            // look in database for existing user favorite adv. opts
+            user.setFavoriteOpts(existingUser.getFavoriteOpts());
+
+            this.update(user);
+        }
+
+        attributeSessionWithUser(sessionId, user);
+        userCache.put(sessionId, user);
+        return user;
+	}
+    
 
     public void clearCachedUser(Long userId) {
         getUserSessionId(userId).forEach(id -> userCache.remove(id));
     }
+
 }

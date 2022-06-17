@@ -44,8 +44,8 @@
         <rhino.version>1.7.13</rhino.version>
         <slf4j.version>1.7.32</slf4j.version>
         <smiley-http-proxy-servlet.version>1.12</smiley-http-proxy-servlet.version>
-        <spring.version>5.2.13.RELEASE</spring.version>
-        <spring.security.version>5.5.7</spring.security.version>
+        <spring.version>5.3.20</spring.version>
+        <spring.security.version>5.7.1</spring.security.version>
         <tika.version>1.26</tika.version>
         <xalan.version>2.7.2</xalan.version>
         <xercesImpl.version>2.12.2</xercesImpl.version>
@@ -634,6 +634,11 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth</artifactId>
             <version>2.5.1.RELEASE</version>
+        </dependency>
+        <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-oauth2-client</artifactId>
+          <version>5.7.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.session</groupId>
