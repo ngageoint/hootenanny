@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCutOnlyCreator.h"
 
@@ -30,27 +30,20 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
-
 #include <hoot/core/conflate/CookieCutter.h>
-
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-
 #include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/elements/MapProjector.h>
-
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <hoot/core/index/OsmMapIndex.h>
-
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -58,13 +51,11 @@
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
@@ -83,35 +74,29 @@ namespace hoot
 
 const QString ChangesetReplacementCreatorAbstract::JOB_SOURCE = "ChangesetDeriveReplacement";
 
-ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract() :
-_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 1.5),
-_geometryFiltersSpecified(false),
-_enableWaySnapping(false),
-_changesetId("1"),
-_numChanges(0),
-_numTotalTasks(-1),
-_currentTask(1)
+ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract()
+  : _maxFilePrintLength(static_cast<int>(ConfigOptions().getProgressVarPrintLengthMax() * 1.5)),
+    _geometryFiltersSpecified(false),
+    _enableWaySnapping(false),
+    _changesetId("1"),
+    _numChanges(0),
+    _numTotalTasks(-1),
+    _currentTask(1)
 {
 }
 
-QString ChangesetReplacementCreatorAbstract::_boundsInterpretationToString(
-  const BoundsInterpretation& boundsInterpretation) const
+QString ChangesetReplacementCreatorAbstract::_boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const
 {
   switch (boundsInterpretation)
   {
-    case BoundsInterpretation::Lenient:
-      return "lenient";
-    case BoundsInterpretation::Strict:
-      return "strict";
-    case BoundsInterpretation::Hybrid:
-      return "hybrid";
-    default:
-      return "";
+    case BoundsInterpretation::Lenient:   return "lenient";
+    case BoundsInterpretation::Strict:    return "strict";
+    case BoundsInterpretation::Hybrid:    return "hybrid";
+    default:                              return "";
   }
 }
 
-void ChangesetReplacementCreatorAbstract::setChangesetOptions(
-  const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl)
+void ChangesetReplacementCreatorAbstract::setChangesetOptions(const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl)
 {
   LOG_VARD(printStats);
   LOG_VARD(statsOutputFile);
@@ -126,25 +111,20 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
   QString waySnappingStr = "is ";
   if (!_enableWaySnapping)
-  {
     waySnappingStr += "not ";
-  }
   waySnappingStr += "enabled";
+
   QString cropDbInputOnReadStr = "is ";
   if (!ConfigOptions().getApidbReaderReadFullThenCropOnBounded())
-  {
     cropDbInputOnReadStr += "not ";
-  }
   cropDbInputOnReadStr += "enabled";
 
   QString str;
   str += "Deriving replacement output changeset:";
   str += "\nBeing replaced: ..." + FileUtils::toLogFormat(_input1, _maxFilePrintLength);
   str += "\nReplacing with ..." + FileUtils::toLogFormat(_input2, _maxFilePrintLength);
-  str +=
-    "\nAt Bounds: ..." +
-    GeometryUtils::polygonToString(_replacementBounds)
-      .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
+  str += "\nAt Bounds: ..." + GeometryUtils::polygonToString(_replacementBounds)
+                                .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   str += "\nOutput Changeset: ..." + FileUtils::toLogFormat(_output, _maxFilePrintLength);
   LOG_STATUS(str);
 
@@ -164,76 +144,51 @@ float ChangesetReplacementCreatorAbstract::_getJobPercentComplete() const
 void ChangesetReplacementCreatorAbstract::_validateInputs() const
 {
   if (!_replacementBounds)
-  {
-    throw IllegalArgumentException(
-      "Invalid replacement bounds passed to changeset replacement derivation.");
-  }
+    throw IllegalArgumentException("Invalid replacement bounds passed to changeset replacement derivation.");
 
   // Fail if the reader that supports either input doesn't implement Boundable.
   std::shared_ptr<Boundable> boundable =
     std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input1));
   if (!boundable)
-  {
-    throw IllegalArgumentException(
-      "Reader for " + _input1 + " must implement Boundable for replacement changeset derivation.");
-    }
+    throw IllegalArgumentException("Reader for " + _input1 + " must implement Boundable for replacement changeset derivation.");
+
   if (!_input2.isEmpty())
   {
     boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
     if (!boundable)
-    {
-      throw IllegalArgumentException(
-        "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
-    }
+      throw IllegalArgumentException("Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
   }
 
   // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
   // are lost when new way nodes are added to existing ways. For that reason, we can't support it
   // (or at least not sure how to yet).
   OsmGeoJsonReader geoJsonReader;
-  if (geoJsonReader.isSupported(_input1) ||
-      (!_input2.isEmpty() && geoJsonReader.isSupported(_input2)))
-  {
-    throw IllegalArgumentException(
-      "GeoJSON inputs are not supported by replacement changeset derivation.");
-  }
+  if (geoJsonReader.isSupported(_input1) || (!_input2.isEmpty() && geoJsonReader.isSupported(_input2)))
+    throw IllegalArgumentException("GeoJSON inputs are not supported by replacement changeset derivation.");
+
   QFile outputFile(_output);
   if (outputFile.exists() && !outputFile.remove())
-  {
     throw HootException("Unable to remove changeset output file: " + _output);
-  }
 
   if (!ConfigOptions().getConvertOps().empty())
-  {
-    throw IllegalArgumentException(
-      "Replacement changeset derivation does not support convert operations.");
-  }
+    throw IllegalArgumentException("Replacement changeset derivation does not support convert operations.");
 }
 
-OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
-  const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
-  const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
-  const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
-  OsmMapPtr& cachedMap) const
+OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(const QString& mapName, const QString& inputUrl, const bool useFileIds,
+                                                             const Status& status, const bool keepEntireFeaturesCrossingBounds,
+                                                             const bool keepOnlyFeaturesInsideBounds, const bool keepImmediatelyConnectedWaysOutsideBounds,
+                                                             const bool warnOnZeroVersions, OsmMapPtr& cachedMap) const
 {
-  conf().set(
-    ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(),
-    keepEntireFeaturesCrossingBounds);
-  conf().set(
-    ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(),
-   keepOnlyFeaturesInsideBounds);
-  conf().set(
-    ConfigOptions::getBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(),
-    keepImmediatelyConnectedWaysOutsideBounds);
+  conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), keepEntireFeaturesCrossingBounds);
+  conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), keepOnlyFeaturesInsideBounds);
+  conf().set(ConfigOptions::getBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), keepImmediatelyConnectedWaysOutsideBounds);
 
+  // We want to alert the user to the fact their ref versions *could* be being populated
+  // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
+  // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
+  // warn now to give the chance to back out of the replacement earlier.
   if (warnOnZeroVersions)
-  {
-    // We want to alert the user to the fact their ref versions *could* be being populated
-    // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
-    // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
-    // warn now to give the chance to back out of the replacement earlier.
     conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
-  }
 
   OsmMapPtr map;
   if (DbUtils::isDbUrl(inputUrl))
@@ -284,16 +239,13 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     "Loaded " << mapName << " map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << " with " <<
     StringUtils::formatLargeNumber(map->size()) << " features...");
 
+  // Restore default setting value.
   if (warnOnZeroVersions)
-  {
-    // Restore default setting value.
     conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
-  }
   map->setName(mapName);
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    map, className(), _changesetId + "-" + map->getName() + "-after-cropped-load");
+  OsmMapWriterFactory::writeDebugMap(map, className(), _changesetId + "-" + map->getName() + "-after-cropped-load");
 
   MemoryUsageChecker::getInstance().check();
 
@@ -312,8 +264,7 @@ void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& m
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
-void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(
-  const OsmMapPtr& map) const
+void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(const OsmMapPtr& map) const
 {
   ReportMissingElementsVisitor elementMarker;
   // Originally, this was going to add reviews for this rather than tagging elements, but there was
@@ -328,8 +279,7 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(
     "Marked " << elementMarker.getNumWaysTagged() << " ways and " <<
     elementMarker.getNumRelationsTagged() << " relations with missing child elements.");
 
-  OsmMapWriterFactory::writeDebugMap(
-    map, className(), _changesetId + "-" + map->getName() + "-after-missing-marked");
+  OsmMapWriterFactory::writeDebugMap(map, className(), _changesetId + "-" + map->getName() + "-after-missing-marked");
 }
 
 void ChangesetReplacementCreatorAbstract::_filterFeatures(
@@ -358,8 +308,8 @@ void ChangesetReplacementCreatorAbstract::_filterFeatures(
   OsmMapWriterFactory::writeDebugMap(map, className(), debugFileName);
 }
 
-OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
-  OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType) const
+OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
+                                                                const GeometryTypeCriterion::GeometryType& geometryType) const
 {
   // This logic has become extremely complicated over time to handle all the different cut
   // and replace use cases. There may be way to simplify some of this logic related to
@@ -384,8 +334,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   // them as input. That eventually needs to be dealt with, but regardless, checking node/way count
   // and not including relations in the size count is a better check for the total map size so that
   // the alpha shape gets calculated correctly.
-  const int doughMapInputSize = doughMap->getWayCount() + doughMap->getNodeCount();
-  const int cutterMapInputSize = cutterMap->getWayCount() + cutterMap->getNodeCount();
+  const long doughMapInputSize = doughMap->getWayCount() + doughMap->getNodeCount();
+  const long cutterMapInputSize = cutterMap->getWayCount() + cutterMap->getNodeCount();
 
   /*
    * lenient/overlapping - cutter shape is all overlapping sec data inside the bounds and
@@ -467,9 +417,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         OsmMapPtr cookieCutMap = std::make_shared<OsmMap>(doughMap);
         mapName = "cookie-cut";
         if (geometryType != GeometryTypeCriterion::Unknown)
-        {
           mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
-        }
+
         cookieCutMap->setName(mapName);
         MapCropper cropper;
         cropper.setBounds(_replacementBounds);
@@ -508,9 +457,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   OsmMapPtr cookieCutMap = std::make_shared<OsmMap>(doughMap);
   mapName = "cookie-cut";
   if (geometryType != GeometryTypeCriterion::Unknown)
-  {
     mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
-  }
+
   cookieCutMap->setName(mapName);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
@@ -577,8 +525,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   }
 
   LOG_VART(cutterMapToUse->size());
-  OsmMapWriterFactory::writeDebugMap(
-    cutterMapToUse, className(), _changesetId + "-cutter-map-to-use");
+  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, className(), _changesetId + "-cutter-map-to-use");
 
   LOG_STATUS(
     "Generating cutter shape map from: " << cutterMapToUse->getName() << " of size: " <<
@@ -595,8 +542,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   AlphaShapeGenerator alphaShapeGenerator(cookieCutterAlpha, cookieCutterAlphaShapeBuffer);
   // Covering stragglers here can be very slow for linear features. So far, have only needed it for
   // point passes, which don't seem to be slow.
-  alphaShapeGenerator.setManuallyCoverSmallPointClusters(
-    geometryType == GeometryTypeCriterion::Point);
+  alphaShapeGenerator.setManuallyCoverSmallPointClusters(geometryType == GeometryTypeCriterion::Point);
   try
   {
     cutterShapeOutlineMap = alphaShapeGenerator.generateMap(cutterMapToUse);
@@ -607,12 +553,9 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
     {
       QString errorMsg = "No cut shape generated from secondary data";
       if (geometryType != GeometryTypeCriterion::Unknown)
-      {
-        errorMsg +=
-          " when processing geometry type: " + GeometryTypeCriterion::typeToString(geometryType);
-      }
-      errorMsg +=
-        ". Is your secondary data empty or have you filtered it to be empty? error: " + e.getWhat();
+        errorMsg +=" when processing geometry type: " + GeometryTypeCriterion::typeToString(geometryType);
+
+      errorMsg += ". Is your secondary data empty or have you filtered it to be empty? error: " + e.getWhat();
       LOG_ERROR(errorMsg);
     }
     throw;
@@ -621,8 +564,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   // not exactly sure yet why this projection needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    cutterShapeOutlineMap, className(), _changesetId + "-cutter-shape");
+  OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, className(), _changesetId + "-cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
   LOG_STATUS(
@@ -631,10 +573,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
-  CookieCutter(
-    false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
-    _boundsOpts.cookieCutKeepOnlyInsideBounds, false)
-    .cut(cutterShapeOutlineMap, cookieCutMap);
+  CookieCutter(false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
+               _boundsOpts.cookieCutKeepOnlyInsideBounds, false).cut(cutterShapeOutlineMap, cookieCutMap);
   // not exactly sure yet why this projection needs to be done
   MapProjector::projectToWgs84(cookieCutMap);
   LOG_VARD(cookieCutMap->size());
@@ -658,8 +598,7 @@ void ChangesetReplacementCreatorAbstract::_clean(OsmMapPtr& map) const
   LOG_DEBUG("Cleaned map size: " << map->size());
 }
 
-QMap<ElementId, long> ChangesetReplacementCreatorAbstract::_getIdToVersionMappings(
-  const OsmMapPtr& map) const
+QMap<ElementId, long> ChangesetReplacementCreatorAbstract::_getIdToVersionMappings(const OsmMapPtr& map) const
 {
   LOG_INFO("Mapping element IDs to element versions for: " << map->getName() << "...");
 
@@ -699,19 +638,15 @@ void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMa
   LOG_DEBUG(childDeletionExcludeTagOp.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(
-    map, className(), _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
+  OsmMapWriterFactory::writeDebugMap(map, className(), _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
 void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map) const
 {
   if (map->size() == 0)
-  {
     return;
-  }
 
-  LOG_INFO(
-    "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
+  LOG_INFO("Marking reference features in: " << map->getName() << " for exclusion from deletion...");
 
   // Exclude ways and all their children from deletion that are not entirely within the replacement
   // bounds.
@@ -758,12 +693,11 @@ void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map) const
   // get out of orthographic
   MapProjector::projectToWgs84(map);
 
-  OsmMapWriterFactory::writeDebugMap(
-    map, className(), _changesetId + "-" + map->getName() + "-after-cleanup");
+  OsmMapWriterFactory::writeDebugMap(map, className(), _changesetId + "-" + map->getName() + "-after-cleanup");
 }
 
-void ChangesetReplacementCreatorAbstract::_synchronizeIds(
-  const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const
+void ChangesetReplacementCreatorAbstract::_synchronizeIds(const QList<OsmMapPtr>& mapsBeingReplaced,
+                                                          const QList<OsmMapPtr>& replacementMaps) const
 {
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   for (int i = 0; i < mapsBeingReplaced.size(); i++)
@@ -774,8 +708,7 @@ void ChangesetReplacementCreatorAbstract::_synchronizeIds(
   }
 }
 
-void ChangesetReplacementCreatorAbstract::_synchronizeIds(
-  OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap) const
+void ChangesetReplacementCreatorAbstract::_synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap) const
 {
   // When replacing data, we always load the replacement data without its original IDs in case there
   // are overlapping IDs in the reference data. If you were only replacing unmodified data from one

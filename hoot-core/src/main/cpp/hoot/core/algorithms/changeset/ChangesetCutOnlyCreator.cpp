@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCutOnlyCreator.h"
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
@@ -40,24 +39,17 @@
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
-
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <hoot/core/index/OsmMapIndex.h>
-
 #include <hoot/core/io/OsmMapWriterFactory.h>
-
 #include <hoot/core/ops/WayJoinerOp.h>
-
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
@@ -72,8 +64,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ChangesetReplacement, ChangesetCutOnlyCreator)
 
-ChangesetCutOnlyCreator::ChangesetCutOnlyCreator() :
-ChangesetReplacementCreatorAbstract()
+ChangesetCutOnlyCreator::ChangesetCutOnlyCreator()
+  : ChangesetReplacementCreatorAbstract()
 {
   _boundsInterpretation = BoundsInterpretation::Lenient;
   _currentChangeDerivationPassIsLinear = false;
@@ -92,16 +84,14 @@ ChangesetReplacementCreatorAbstract()
   _numTotalTasks++; // changeset derivation
 }
 
-void ChangesetCutOnlyCreator::create(
-  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-  const QString& output)
+void ChangesetCutOnlyCreator::create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+                                     const QString& output)
 {
   create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
 }
 
-void ChangesetCutOnlyCreator::create(
-  const QString& input1, const QString& input2,
-  const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output)
+void ChangesetCutOnlyCreator::create(const QString& input1, const QString& input2,
+                                     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output)
 {
   QElapsedTimer timer;
   timer.start();
@@ -127,16 +117,13 @@ void ChangesetCutOnlyCreator::create(
   _printJobDescription();
 
   // Make some adjustments to the default filters before using.
-  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _getFilters();
-  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-    _getFilters();
+  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters = _getFilters();
+  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters = _getFilters();
 
   // DIFF CALCULATION
 
   _currentTask = 1;
-  _progress =
-    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
+  _progress = std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
 
   // Since data with different geometry types require different settings, we'll calculate a separate
   // pair of before/after maps for each geometry type.
@@ -144,8 +131,7 @@ void ChangesetCutOnlyCreator::create(
   QList<OsmMapPtr> refMaps;
   QList<OsmMapPtr> conflatedMaps;
   int passCtr = 1;
-  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         refFilters.begin(); itr != refFilters.end(); ++itr)
+  for (auto itr = refFilters.begin(); itr != refFilters.end(); ++itr)
   {
     LOG_INFO("******************************************");
     LOG_STATUS(
@@ -159,9 +145,7 @@ void ChangesetCutOnlyCreator::create(
     OsmMapPtr conflatedMap;
     QStringList linearFilterClassNames;
     if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
-    {
       linearFilterClassNames = _linearFilterClassNames;
-    }
 
     ElementCriterionPtr refFilter = itr.value();
     ElementCriterionPtr secFilter = secFilters[itr.key()];
@@ -186,11 +170,10 @@ void ChangesetCutOnlyCreator::create(
     }
     if (refMap && conflatedMap)
     {
-      LOG_DEBUG(
-        "Adding ref map of size: " << StringUtils::formatLargeNumber(refMap->size()) <<
-        " and conflated map of size: " << StringUtils::formatLargeNumber(conflatedMap->size()) <<
-        " to changeset derivation queue for geometry type: " <<
-        GeometryTypeCriterion::typeToString(itr.key()) << "...");
+      LOG_DEBUG("Adding ref map of size: " << StringUtils::formatLargeNumber(refMap->size()) <<
+                " and conflated map of size: " << StringUtils::formatLargeNumber(conflatedMap->size()) <<
+                " to changeset derivation queue for geometry type: " <<
+                GeometryTypeCriterion::typeToString(itr.key()) << "...");
       refMaps.append(refMap);
       conflatedMaps.append(conflatedMap);
     }
@@ -206,9 +189,7 @@ void ChangesetCutOnlyCreator::create(
     return;
   }
   if (refMaps.size() != conflatedMaps.size())
-  {
     throw HootException("Replacement changeset derivation internal map count mismatch error.");
-  }
 
   // CLEANUP
 
@@ -250,11 +231,10 @@ void ChangesetCutOnlyCreator::create(
     StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 }
 
-void ChangesetCutOnlyCreator::_processMaps(
-  OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
-  const ElementCriterionPtr& secFeatureFilter,
-  const GeometryTypeCriterion::GeometryType& geometryType,
-  const QStringList& linearFilterClassNames)
+void ChangesetCutOnlyCreator::_processMaps(OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
+                                           const ElementCriterionPtr& secFeatureFilter,
+                                           const GeometryTypeCriterion::GeometryType& geometryType,
+                                           const QStringList& linearFilterClassNames)
 {
   LOG_VARD(toString());
 
@@ -278,16 +258,13 @@ void ChangesetCutOnlyCreator::_processMaps(
   // input somehow.
   _removeMetadataTags(refMap);
 
-  const bool markMissing =
-    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
+  // Find any elements with missing children and tag them with a custom tag, as its possible we'll
+  // break them during this process. There's really nothing that can be done about that, since we
+  // don't have access to the missing children elements. Any elements with missing children may
+  // require manual cleanup after the resulting changeset is applied.
+  const bool markMissing = ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
   if (markMissing)
-  {
-    // Find any elements with missing children and tag them with a custom tag, as its possible we'll
-    // break them during this process. There's really nothing that can be done about that, since we
-    // don't have access to the missing children elements. Any elements with missing children may
-    // require manual cleanup after the resulting changeset is applied.
     _markElementsWithMissingChildren(refMap);
-  }
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
@@ -295,12 +272,10 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   _currentChangeDerivationPassIsLinear = !linearFilterClassNames.isEmpty();
   LOG_VART(_currentChangeDerivationPassIsLinear);
+  // If we have a lenient bounds requirement and linear features, we need to exclude all ways
+  // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
   if (_currentChangeDerivationPassIsLinear)
-  {
-    // If we have a lenient bounds requirement and linear features, we need to exclude all ways
-    // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
     _addChangesetDeleteExclusionTags(refMap);
-  }
 
   // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
   // up modifying anything else.
@@ -315,22 +290,19 @@ void ChangesetCutOnlyCreator::_processMaps(
   _removeMetadataTags(secMap);
 
   if (markMissing)
-  {
     _markElementsWithMissingChildren(secMap);
-  }
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
   const Settings secFilterSettings = conf();
-  _filterFeatures(
-    secMap, secFeatureFilter, geometryType, secFilterSettings,
-    _changesetId + "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+  _filterFeatures(secMap, secFeatureFilter, geometryType, secFilterSettings,
+                  _changesetId + "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
-  const int refMapSize = refMap->size();
+  const size_t refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
   // changeset with only delete statements if the option to allow deleting reference features is
   // enabled.
-  const int secMapSize = secMap->size();
+  const size_t secMapSize = secMap->size();
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
@@ -350,18 +322,17 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   // cut the shape of the secondary data out of the reference data
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
-  const int cookieCutSize = cookieCutRefMap->size();
+  const size_t cookieCutSize = cookieCutRefMap->size();
   LOG_VARD(cookieCutSize);
-  const int dataRemoved = refMapSize - cookieCutSize;
+  const size_t dataRemoved = refMapSize - cookieCutSize;
   LOG_VARD(dataRemoved);
 
   if (!bothMapsEmpty)
   {
     // sec map size may have changed after call to _getCookieCutMap
-    LOG_STATUS(
-      "Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " " << geometryTypeStr <<
-      " feature(s) with " << StringUtils::formatLargeNumber(secMap->size()) << " " <<
-      geometryTypeStr << " feature(s)...");
+    LOG_STATUS("Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " " << geometryTypeStr <<
+               " feature(s) with " << StringUtils::formatLargeNumber(secMap->size()) << " " <<
+               geometryTypeStr << " feature(s)...");
   }
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
@@ -379,8 +350,7 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   // Combine the cookie cut ref map back with the secondary map for cleaning purposes.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
-  OsmMapWriterFactory::writeDebugMap(
-    cookieCutRefMap, className(), _changesetId + "-combined-before-conflation");
+  OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, className(), _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
@@ -399,13 +369,11 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   // CLEANUP
 
+  // If we're not allowing the changeset deriver to generate delete statements for reference
+  // features outside of the bounds, we need to mark all corresponding ref ways with a custom
+  // tag that will cause the deriver to skip deleting them.
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
-  {
-    // If we're not allowing the changeset deriver to generate delete statements for reference
-    // features outside of the bounds, we need to mark all corresponding ref ways with a custom
-    // tag that will cause the deriver to skip deleting them.
     _excludeFeaturesFromChangesetDeletion(refMap);
-  }
 
   // clean up any mistakes introduced
   _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
@@ -427,8 +395,7 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetIgnoreBoundsKey(), true);
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
-  conf().set(
-    ConfigOptions::getBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
+  conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
 
   // For this being enabled to have any effect,
   // bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
@@ -444,10 +411,8 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePreOpsKey(), RemoveMissingElementsVisitor::className());
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), RemoveMissingElementsVisitor::className());
+  ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePreOpsKey(), RemoveMissingElementsVisitor::className());
+  ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(), RemoveMissingElementsVisitor::className());
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getBoundsRemoveMissingElementsKey(), false);
@@ -458,16 +423,10 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   // they are allowed to pass through to the changeset output. See notes where
   // _markElementsWithMissingChildren is called for more info on why this tag is added.
   if (ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren())
-  {
-    conf().set(
-      ConfigOptions::getChangesetMetadataAllowedTagKeysKey(),
-      QStringList(MetadataTags::HootMissingChild()));
-  }
+    conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), QStringList(MetadataTags::HootMissingChild()));
 
   // We run a custom set of cleaning ops for changeset replacement.
-  conf().set(
-    ConfigOptions::getMapCleanerTransformsKey(),
-    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
+  conf().set(ConfigOptions::getMapCleanerTransformsKey(), conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
 
   // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
@@ -478,8 +437,7 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   _enableWaySnapping = false;
 }
 
-void ChangesetCutOnlyCreator::_parseConfigOpts(
-  const GeometryTypeCriterion::GeometryType& geometryType)
+void ChangesetCutOnlyCreator::_parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // These settings have been are customized for each geometry type and bounds handling preference.
 
@@ -558,15 +516,11 @@ void ChangesetCutOnlyCreator::_parseConfigOpts(
       _boundsOpts.inBoundsStrict = true;
     }
   }
-  else
-  {
-    // shouldn't ever get here
+  else  // shouldn't ever get here
     throw IllegalArgumentException("Invalid geometry type.");
-  }
 
-  conf().set(
-    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-    _boundsOpts.changesetAllowDeletingRefOutsideBounds);
+  conf().set(ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+             _boundsOpts.changesetAllowDeletingRefOutsideBounds);
 
   LOG_VART(_boundsOpts.loadRefKeepEntireCrossingBounds);
   LOG_VART(_boundsOpts.loadRefKeepOnlyInsideBounds);
@@ -583,8 +537,7 @@ void ChangesetCutOnlyCreator::_parseConfigOpts(
   LOG_VART(_boundsOpts.inBoundsStrict);
 }
 
-QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetCutOnlyCreator::_getDefaultGeometryFilters() const
+QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> ChangesetCutOnlyCreator::_getDefaultGeometryFilters() const
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
 
@@ -629,14 +582,12 @@ bool ChangesetCutOnlyCreator::_roadFilterExists() const
 {
   ElementCriterionPtr lineFilter = _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line];
   if (lineFilter)
-  {
     return lineFilter->toString().contains(HighwayCriterion::className());
-  }
+
   return false;
 }
 
-QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetCutOnlyCreator::_getFilters()
+QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> ChangesetCutOnlyCreator::_getFilters()
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters;
   LOG_VARD(_geometryTypeFilters.size());
@@ -650,8 +601,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
         GeometryTypeCriterion::GeometryType::Line);
   }
 
-  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-       _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+  for (auto itr = _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
   {
     GeometryTypeCriterion::GeometryType geomType = itr.key();
     LOG_VART(GeometryTypeCriterion::typeToString(geomType));
@@ -677,9 +627,8 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
           geometryCrit, std::make_shared<NotCriterion>(std::make_shared<HighwayCriterion>()));
     }
     else
-    {
       updatedGeometryCrit = geometryCrit;
-    }
+
     LOG_VART(updatedGeometryCrit->toString());
 
     filters[geomType] = updatedGeometryCrit;
@@ -689,8 +638,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   return filters;
 }
 
-OsmMapPtr ChangesetCutOnlyCreator::_loadRefMap(
-  const GeometryTypeCriterion::GeometryType& geometryType)
+OsmMapPtr ChangesetCutOnlyCreator::_loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // We only care about the zero version warning for the ref data.
   return
@@ -700,8 +648,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadRefMap(
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds, true, _input1Map);
 }
 
-OsmMapPtr ChangesetCutOnlyCreator::_loadSecMap(
-  const GeometryTypeCriterion::GeometryType& geometryType)
+OsmMapPtr ChangesetCutOnlyCreator::_loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType)
 {
   if (!_input2.isEmpty())
   {

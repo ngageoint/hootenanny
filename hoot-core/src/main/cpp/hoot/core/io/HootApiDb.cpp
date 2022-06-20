@@ -692,7 +692,6 @@ bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags,
                            long version)
 {
   assignedId = _getNextNodeId();
-
   return insertNode(assignedId, lat, lon, tags, version);
 }
 
@@ -800,7 +799,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
 }
 
 bool HootApiDb::insertRelationMember(const long relationId, const ElementType& type,
-  const long elementId, const QString& role, const int sequenceId)
+                                     const long elementId, const QString& role, const int sequenceId)
 {
   LOG_TRACE("Inserting relation member for relation: " << relationId << "...");
 
@@ -948,18 +947,10 @@ bool HootApiDb::isSupported(const QUrl& url) const
 
 void HootApiDb::_lazyFlushBulkInsert() const
 {
-  bool flush = false;
-
-  if (_nodeBulkInsert && _nodeBulkInsert->getPendingCount() > _nodesPerBulkInsert)
-    flush = true;
-  else if (_wayNodeBulkInsert && _wayNodeBulkInsert->getPendingCount() > _wayNodesPerBulkInsert)
-    flush = true;
-  else if (_wayBulkInsert && _wayBulkInsert->getPendingCount() > _waysPerBulkInsert)
-    flush = true;
-  else if (_relationBulkInsert && _relationBulkInsert->getPendingCount() > _relationsPerBulkInsert)
-    flush = true;
-
-  if (flush)
+  if ((_nodeBulkInsert && _nodeBulkInsert->getPendingCount() > _nodesPerBulkInsert) ||
+      (_wayNodeBulkInsert && _wayNodeBulkInsert->getPendingCount() > _wayNodesPerBulkInsert) ||
+      (_wayBulkInsert && _wayBulkInsert->getPendingCount() > _waysPerBulkInsert) ||
+      (_relationBulkInsert && _relationBulkInsert->getPendingCount() > _relationsPerBulkInsert))
     _flushBulkInserts();
 }
 
@@ -1076,12 +1067,7 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
       const std::set<long> mapIds = selectPublicMapIds(mapName);
       LOG_VART(mapIds);
       if (mapIds.size() > 1)
-      {
-        throw HootException(
-          QString(countMismatchErrorMsg)
-            .arg(mapName)
-            .arg(mapIds.size()));
-      }
+        throw HootException(QString(countMismatchErrorMsg).arg(mapName).arg(mapIds.size()));
       else
       {
         mapId = *mapIds.begin();
@@ -1164,8 +1150,7 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
     if (!_isUserAdmin)
     {
       _isUserAdmin = std::make_shared<QSqlQuery>(_db);
-      _isUserAdmin->prepare(
-        "SELECT (u.privileges -> 'admin')::boolean AS is_admin FROM users u WHERE id=:id;");
+      _isUserAdmin->prepare("SELECT (u.privileges -> 'admin')::boolean AS is_admin FROM users u WHERE id=:id;");
     }
     //  Query for the admin privileges of the current user
     _isUserAdmin->bindValue(":id", (qlonglong)_currUserId);
@@ -1609,9 +1594,7 @@ QString HootApiDb::getAccessTokenByUserId(const long userId)
   }
   _getAccessTokenByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenByUserId->exec())
-  {
     throw HootException(QString("Error finding access token for user ID: %1 %2").arg(QString::number(userId), _getAccessTokenByUserId->lastError().text()));
-  }
 
   //shouldn't be more than one result, but if there is we don't care
   if (_getAccessTokenByUserId->next())
@@ -1771,7 +1754,7 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
   QString sql = QString("SELECT node_id FROM %1 WHERE way_id = :wayId ORDER BY sequence_id").arg(getCurrentWayNodesTableName(mapId));
-  return ApiDb::selectNodeIdsForWay(wayId, sql);
+  return _selectNodeIdsForWaySql(wayId, sql);
 }
 
 vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)

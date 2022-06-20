@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SHAPEFILEWRITER_H
@@ -85,10 +85,10 @@ private:
 
   void _removeShapefile(const QString& path) const;
 
-  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation,
-    OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns) const;
+  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation, OGRLayer* poLayer,
+                             const QStringList& columns, const QStringList& shpColumns) const;
   void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
-    const QStringList& columns, const QStringList &shpColumns) const;
+                        const QStringList& columns, const QStringList &shpColumns) const;
 };
 
 }

@@ -195,18 +195,12 @@ QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
 {
   switch(tableType.getEnum())
   {
-  case TableType::Node:
-    return ApiDb::getCurrentNodesTableName();
-  case TableType::Way:
-    return ApiDb::getCurrentWaysTableName();
-  case TableType::Relation:
-    return ApiDb::getCurrentRelationsTableName();
-  case TableType::WayNode:
-    return ApiDb::getCurrentWayNodesTableName();
-  case TableType::RelationMember:
-    return ApiDb::getCurrentRelationMembersTableName();
-  default:
-    throw HootException("Unsupported table type.");
+  case TableType::Node:             return ApiDb::getCurrentNodesTableName();
+  case TableType::Way:              return ApiDb::getCurrentWaysTableName();
+  case TableType::Relation:         return ApiDb::getCurrentRelationsTableName();
+  case TableType::WayNode:          return ApiDb::getCurrentWayNodesTableName();
+  case TableType::RelationMember:   return ApiDb::getCurrentRelationMembersTableName();
+  default:                          throw HootException("Unsupported table type.");
   }
 }
 
@@ -272,7 +266,7 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   QString sql =  "SELECT node_id FROM " +
                   getCurrentWayNodesTableName() +
                  " WHERE way_id = :wayId ORDER BY sequence_id";
-  return ApiDb::selectNodeIdsForWay(wayId, sql);
+  return _selectNodeIdsForWaySql(wayId, sql);
 }
 
 vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
@@ -301,9 +295,8 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
   {
     _selectTagsForRelation = std::make_shared<QSqlQuery>(_db);
     _selectTagsForRelation->setForwardOnly(true);
-    QString sql =
-      "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
-      " WHERE relation_id = :relId";
+    QString sql = "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
+                  " WHERE relation_id = :relId";
     _selectTagsForRelation->prepare( sql );
   }
 
@@ -347,8 +340,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   {
     _selectTagsForNode = std::make_shared<QSqlQuery>(_db);
     _selectTagsForNode->setForwardOnly(true);
-    QString sql =
-      "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
+    QString sql = "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
     _selectTagsForNode->prepare( sql );
   }
 
@@ -397,36 +389,27 @@ long OsmApiDb::_getIdFromSequence(const QString& tableName, const QString& seque
     _seqQueries[tableName] = std::make_shared<QSqlQuery>(_db);
     _seqQueries[tableName]->setForwardOnly(true);
     //valid sequence types are "next" and "current"
-    QString sql =
-      QString("SELECT NEXTVAL('%1%2')").arg(tableName.toLower()).arg(ApiDb::getSequenceId());
+    QString sql = QString("SELECT NEXTVAL('%1%2')").arg(tableName.toLower(), ApiDb::getSequenceId());
     if (sequenceType.toLower() == "current")
-    {
       sql = sql.replace("NEXTVAL", "CURRVAL");
-    }
+
     _seqQueries[tableName]->prepare(sql);
   }
 
   std::shared_ptr<QSqlQuery> query = _seqQueries[tableName];
   if (query->exec() == false)
-  {
-    throw HootException("Error reserving IDs. type: " +
-      tableName + " Error: " + query->lastError().text());
-  }
+    throw HootException("Error reserving IDs. type: " + tableName + " Error: " + query->lastError().text());
 
   if (query->next())
   {
     bool ok;
     result = query->value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException("Did not retrieve starting reserved ID.");
-    }
   }
   else
-  {
-    throw HootException("Error retrieving sequence value. type: " +
-      tableName + " Error: " + query->lastError().text());
-  }
+    throw HootException("Error retrieving sequence value. type: " + tableName + " Error: " + query->lastError().text());
+
   query->finish();
 
   return result;
@@ -493,16 +476,12 @@ void OsmApiDb::enableConstraints()
 
 void OsmApiDb::_modifyConstraints(const QStringList& tableNames, bool disable)
 {
-  for (int i = 0; i < tableNames.size(); i++)
+  for (const auto& table : qAsConst(tableNames))
   {
     if (disable)
-    {
-      DbUtils::disableTableConstraints(getDB(), tableNames.at(i));
-    }
+      DbUtils::disableTableConstraints(getDB(), table);
     else
-    {
-      DbUtils::enableTableConstraints(getDB(), tableNames.at(i));
-    }
+      DbUtils::enableTableConstraints(getDB(), table);
   }
 }
 
@@ -511,66 +490,46 @@ void OsmApiDb::dropIndexes()
   LOG_DEBUG("Dropping OSMAPI database indexes...");
 
   //changesets
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_bbox_idx").arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_closed_at_idx").arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_created_at_idx").arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_user_id_created_at_idx").arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_user_id_id_idx").arg(ApiDb::getChangesetsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_bbox_idx").arg(ApiDb::getChangesetsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_closed_at_idx").arg(ApiDb::getChangesetsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_created_at_idx").arg(ApiDb::getChangesetsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_user_id_created_at_idx").arg(ApiDb::getChangesetsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_user_id_id_idx").arg(ApiDb::getChangesetsTableName()));
 
   //current nodes
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_tile_idx").arg(ApiDb::getCurrentNodesTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getCurrentNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_tile_idx").arg(ApiDb::getCurrentNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getCurrentNodesTableName()));
 
   //nodes
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_tile_idx").arg(ApiDb::getNodesTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getNodesTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_changeset_id_idx").arg(ApiDb::getNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_tile_idx").arg(ApiDb::getNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_changeset_id_idx").arg(ApiDb::getNodesTableName()));
 
   //current ways
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getCurrentWaysTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getCurrentWaysTableName()));
 
   //ways
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_changeset_id_idx").arg(ApiDb::getWaysTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getWaysTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_changeset_id_idx").arg(ApiDb::getWaysTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getWaysTableName()));
 
   //current way nodes
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_node_idx").arg(ApiDb::getCurrentWayNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_node_idx").arg(ApiDb::getCurrentWayNodesTableName()));
 
   //way nodes
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_node_idx").arg(ApiDb::getWayNodesTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_node_idx").arg(ApiDb::getWayNodesTableName()));
 
   //current relations
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getCurrentRelationsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getCurrentRelationsTableName()));
 
   //relations
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_changeset_id_idx").arg(ApiDb::getRelationsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getRelationsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_changeset_id_idx").arg(ApiDb::getRelationsTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_timestamp_idx").arg(ApiDb::getRelationsTableName()));
 
   //current relation members
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_member_idx").arg(ApiDb::getCurrentRelationMembersTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_member_idx").arg(ApiDb::getCurrentRelationMembersTableName()));
 
   //relation members
-  DbUtils::execNoPrepare(
-    getDB(), QString("DROP INDEX %1_member_idx").arg(ApiDb::getRelationMembersTableName()));
+  DbUtils::execNoPrepare(getDB(), QString("DROP INDEX %1_member_idx").arg(ApiDb::getRelationMembersTableName()));
 }
 
 void OsmApiDb::createIndexes()
@@ -578,105 +537,65 @@ void OsmApiDb::createIndexes()
   LOG_INFO("Creating OSMAPI database indexes...");
 
   //changesets
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_bbox_idx ON %1 USING gist (min_lat, max_lat, min_lon, max_lon)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_bbox_idx ON %1 USING gist (min_lat, max_lat, min_lon, max_lon)")
       .arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_closed_at_idx ON %1 USING btree (closed_at)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_closed_at_idx ON %1 USING btree (closed_at)")
       .arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_created_at_idx ON %1 USING btree (created_at)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_created_at_idx ON %1 USING btree (created_at)")
       .arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_user_id_created_at_idx ON %1 USING btree (user_id, created_at)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_user_id_created_at_idx ON %1 USING btree (user_id, created_at)")
       .arg(ApiDb::getChangesetsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_user_id_id_idx ON %1 USING btree (user_id, id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_user_id_id_idx ON %1 USING btree (user_id, id)")
       .arg(ApiDb::getChangesetsTableName()));
 
   //current nodes
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
       .arg(ApiDb::getCurrentNodesTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
       .arg(ApiDb::getCurrentNodesTableName()));
 
   //nodes
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
       .arg(ApiDb::getNodesTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
       .arg(ApiDb::getNodesTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_changeset_id_idx ON %1 USING btree (changeset_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_changeset_id_idx ON %1 USING btree (changeset_id)")
       .arg(ApiDb::getNodesTableName()));
 
   //current ways
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
       .arg(ApiDb::getCurrentWaysTableName()));
 
   //ways
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_changeset_id_idx ON %1 USING btree (changeset_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_changeset_id_idx ON %1 USING btree (changeset_id)")
       .arg(ApiDb::getWaysTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
       .arg(ApiDb::getWaysTableName()));
 
   //current way nodes
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_node_idx ON %1 USING btree (node_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_node_idx ON %1 USING btree (node_id)")
       .arg(ApiDb::getCurrentWayNodesTableName()));
 
   //way nodes
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_node_idx ON %1 USING btree (node_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_node_idx ON %1 USING btree (node_id)")
       .arg(ApiDb::getWayNodesTableName()));
 
   //current relations
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
       .arg(ApiDb::getCurrentRelationsTableName()));
 
   //relations
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_changeset_id_idx ON %1 USING btree (changeset_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_changeset_id_idx ON %1 USING btree (changeset_id)")
       .arg(ApiDb::getRelationsTableName()));
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_timestamp_idx ON %1 USING btree (\"timestamp\")")
       .arg(ApiDb::getRelationsTableName()));
 
   //current relation members
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_member_idx ON %1 USING btree (member_type, member_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_member_idx ON %1 USING btree (member_type, member_id)")
       .arg(ApiDb::getCurrentRelationMembersTableName()));
 
   //relation members
-  DbUtils::execNoPrepare(
-    getDB(),
-    QString("CREATE INDEX %1_member_idx ON %1 USING btree (member_type, member_id)")
+  DbUtils::execNoPrepare(getDB(), QString("CREATE INDEX %1_member_idx ON %1 USING btree (member_type, member_id)")
       .arg(ApiDb::getRelationMembersTableName()));
 }
 
