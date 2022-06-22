@@ -91,6 +91,12 @@ hoot convert $LOG_LEVEL $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTP
 hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
 
 echo ""
+echo "Multi-layer GPKG to OSM..."
+echo ""
+hoot convert $LOG_LEVEL $CONFIG test-files/BostonSubsetRoadBuilding_FromOsm.gpkg $OUTPUT_DIR/multi-layer-gpkg-out.osm
+hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gpkg-out.osm $OUTPUT_DIR/multi-layer-gpkg-out.osm
+
+echo ""
 echo "Multi-layer GDB to OSM single layer only..."
 echo ""
 hoot convert $LOG_LEVEL $CONFIG "test-files/cmd/slow/CountCmdTest/input.gdb;LAP030" \
