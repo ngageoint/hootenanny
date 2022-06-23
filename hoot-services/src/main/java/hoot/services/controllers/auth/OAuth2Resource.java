@@ -63,6 +63,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Request;
 
@@ -206,7 +207,7 @@ import javax.ws.rs.core.Request;
 	    @GET
 	    @Path("/oauth2/callback")
 	    @Produces(MediaType.APPLICATION_JSON)
-	    public Response callback(@QueryParam("state") String state, @QueryParam("code") String code) {
+	    public Response callback(@Context HttpServletRequest request, @QueryParam("state") String state, @QueryParam("code") String code) {
 
 	    	if (code == null) {
 	    		return Response.status(401).build();
@@ -218,7 +219,6 @@ import javax.ws.rs.core.Request;
 	    		states.remove(state);
 	    	};
 
-	    	HttpSession sess = getSession();
 	        Users user;
 	    	try {
 	    		ResponseEntity<String> tokenResponse = doTokenRequest(code);
@@ -242,7 +242,7 @@ import javax.ws.rs.core.Request;
 		    	JsonNode userDetailsJson = new ObjectMapper().readTree(userDetailsRequest.getBody());
 
 		        try {
-		            user = userManager.upsert(userDetailsJson, accessToken, sess.getId());
+		            user = userManager.upsert(userDetailsJson, accessToken, request.getSession().getId());
 		        } catch (InvalidUserProfileException | SAXException | IOException | ParserConfigurationException e) {
 		            logger.error("Failed to read user profile from oauth provider", e);
 		            return Response.status(502).build();
@@ -261,41 +261,9 @@ import javax.ws.rs.core.Request;
     			.build().toUri();
 
 	        return Response.status(200)
-//	        		.cookie(new NewCookie(new Cookie(
-//        	    		"SESSION", sess.getId(),
-//        	    		"/",
-//        	    		"localhost"//redirectURI.getScheme() + "://" + redirectURI.getHost() + ":" + redirectURI.getPort()
-//	        	    )))
 	        		.entity(user)
 	        		.type(MediaType.APPLICATION_JSON).build();
 	    };
 
-
-		protected HttpSession getSession() {
-	        //OAuthSecurityContext context = OAuthSecurityContextHolder.getContext();
-	        SecurityContext context = SecurityContextHolder.getContext();
-
-	        if (context == null) {
-	            throw new IllegalStateException("A security context must be established.");
-	        }
-
-	        HttpServletRequest request;
-	        try {
-	            request = (HttpServletRequest) context.getAuthentication();
-	        } catch (ClassCastException e) {
-	            throw new IllegalStateException("The security context must have the HTTP servlet request as its details.");
-	        }
-
-	        if (request == null) {
-	            throw new IllegalStateException("The security context must have the HTTP servlet request as its details.");
-	        }
-
-	        HttpSession session = request.getSession(true);
-	        if (session == null) {
-	            throw new IllegalStateException("Unable to create a session in which to store the tokens.");
-	        }
-
-	        return session;
-	    }
 
  }
