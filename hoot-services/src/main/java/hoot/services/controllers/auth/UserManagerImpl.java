@@ -164,7 +164,7 @@ public class UserManagerImpl implements UserManager {
         .where(springsessions.session_id.eq(sessionId))
         .execute();
 
-        if(affectedRows == 0) {
+        if (affectedRows == 0) {
             logger.warn("attributeSessionWithUser(): failed to attribute spring session with user.");
         }
     }
@@ -182,7 +182,6 @@ public class UserManagerImpl implements UserManager {
 	@Override
 	public Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws InvalidUserProfileException {
 		Users user = parseUser(userDetailsJson);
-		user.setProviderAccessKey(accessToken);
 		user.setProviderAccessKey(accessToken);
         user.setEmail(String.format("%d@hootenanny", user.getId()));
 
