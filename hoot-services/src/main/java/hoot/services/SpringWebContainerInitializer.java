@@ -32,18 +32,20 @@ import javax.servlet.ServletRegistration;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.session.jdbc.config.annotation.web.http.JdbcHttpSessionConfiguration;
-import org.springframework.web.WebApplicationInitializer;
+import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-// TODO: Review this initializer when Hootnanny's is upgraded to Tomcat 8.5 which supports Servlet Spec 3.0
-// WebApplicationInitializer to be implemented in Servlet 3.0+
+@Component
 @Order(1)
-public class SpringWebContainerInitializer implements WebApplicationInitializer {
+public class SpringWebContainerInitializer extends AbstractHttpSessionApplicationInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+
         registerContextLoaderListener(servletContext);
 
         // Set the Jersey used property to it won't load a ContextLoaderListener

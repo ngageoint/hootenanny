@@ -2,7 +2,6 @@ package hoot.services;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 
-@Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = {"hoot.services"})
 @PropertySource("classpath:oauth2-client.properties")
@@ -26,7 +24,7 @@ public class WebSecurityConfig {
             .csrf().disable()
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
-            .antMatchers("/**").denyAll();
+            .antMatchers("/**").authenticated();
         return http.build();
     }
 
