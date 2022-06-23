@@ -69,7 +69,6 @@ public class SpringWebContainerInitializer implements WebApplicationInitializer 
     private void registerContextLoaderListener(ServletContext servletContext) {
         WebApplicationContext webContext;
         webContext = createWebApplicationContext(
-                WebSecurityConfig.class,
                 HootServicesSpringConfig.class,
                 JdbcHttpSessionConfiguration.class
             );
