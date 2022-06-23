@@ -20,7 +20,8 @@
   "scripts": {
     "test": "mocha --reporter dot",
     "load-test": "artillery run load_test/translation_server_load_test.yml",
-    "cover": "nyc npm run test"
+    "cover": "nyc npm run test",
+    "josm-presets": "node schema2josmpreset.js"
   },
   "repository": {
     "type": "git",

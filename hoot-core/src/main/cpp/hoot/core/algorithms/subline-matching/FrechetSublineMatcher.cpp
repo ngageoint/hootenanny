@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "FrechetSublineMatcher.h"
@@ -45,13 +45,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, FrechetSublineMatcher)
 
-WaySublineMatchString FrechetSublineMatcher::findMatch(
-  const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2, double& score,
-  Meters maxRelevantDistance) const
+WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2,
+                                                       double& score, Meters maxRelevantDistance) const
 {
   score = 0;
-  Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
-    maxRelevantDistance;
+  Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() : maxRelevantDistance;
   //  Create a copy of the map and the two ways
   OsmMapPtr mapCopy = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
@@ -60,14 +58,13 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
   vector<frechet_subline> max = fd.matchingSublines(mrd);
   //  Make sure that there is a valid subline
   if (max.size() < 1)
-  {
     return WaySublineMatchString();
-  }
+
   vector<WaySublineMatch> v;
-  for (vector<frechet_subline>::iterator it = max.begin(); it != max.end(); ++it)
+  for (const auto& subline : max)
   {
     //  Create the way sublines
-    subline_entry max_subline = it->second;
+    subline_entry max_subline = subline.second;
     WaySubline subline1(WayLocation(mapCopy, way1, max_subline[0].first, 0),
                         WayLocation(mapCopy, way1, max_subline[max_subline.size() - 1].first, 0));
     WaySubline subline2(WayLocation(mapCopy, way2, max_subline[0].second, 0),
@@ -81,16 +78,14 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
       std::shared_ptr<LineString> ls1 = ElementToGeometryConverter(mapCopy).convertToLineString(sub1);
       std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(mapCopy).convertToLineString(sub2);
       if (ls1->isValid() && ls2->isValid())
-      {
         score = min(ls1->getLength(), ls2->getLength());
-      }
     }
     //  Create the match and match string
     WaySublineMatch match = WaySublineMatch(subline1, subline2);
     bool insert = true;
-    for (vector<WaySublineMatch>::size_type i = 0; i < v.size(); i++)
+    for (const auto& m : v)
     {
-      if (match.overlaps(v[i]))
+      if (match.overlaps(m))
         insert = false;
     }
     if (insert)

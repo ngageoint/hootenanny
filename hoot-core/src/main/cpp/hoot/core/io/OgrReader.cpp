@@ -124,6 +124,9 @@ public:
    */
   unsigned int getNumSteps() const override { return 1; }
 
+  bool getImportImpliedTags() const { return _importImpliedTags; }
+  void setImportImpliedTags(bool importImplied) { _importImpliedTags = importImplied; }
+
 private:
 
   // the CE value used if no CE tag is found
@@ -160,6 +163,8 @@ private:
   QString _translatePath;
 
   Progress _progress;
+
+  bool _importImpliedTags;
 
   void _addFeature(OGRFeature* f);
   void _addGeometry(OGRGeometry* g, Tags& t);
@@ -260,6 +265,7 @@ std::shared_ptr<ElementIterator> OgrReader::createIterator(const QString& path, 
   d->setDefaultCircularError(_d->getDefaultCircularError());
   d->setDefaultStatus(_d->getDefaultStatus());
   d->setSchemaTranslationScript(_d->getTranslationFile());
+  d->setImportImpliedTags(_d->getImportImpliedTags());
   d->open(path, layer);
 
   return std::make_shared<OgrElementIterator>(d);
@@ -527,6 +533,12 @@ void OgrReader::setSchemaTranslationScript(const QString& translate) const
   _d->setSchemaTranslationScript(translate);
 }
 
+void OgrReader::setImportImpliedTags(bool importImplied) const
+{
+  _d->setImportImpliedTags(importImplied);
+}
+
+
 void OgrReader::initializePartial()
 {
   _d->initializePartial();
@@ -603,7 +615,8 @@ OgrReaderInternal::OgrReaderInternal()
     _featureCount(0),
     _transform(nullptr),
     _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
-    _nodeIdFieldName(ConfigOptions().getOgrReaderNodeIdFieldName())
+    _nodeIdFieldName(ConfigOptions().getOgrReaderNodeIdFieldName()),
+    _importImpliedTags(true)
 {
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
@@ -725,6 +738,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
         break;
       case wkbMultiPoint:
       case wkbMultiLineString:
+      case wkbMultiCurve:
       case wkbGeometryCollection:
       {
         LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.): " <<
@@ -736,7 +750,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
         break;
       }
       default:
-        throw HootException("Unsupported geometry type.");
+        LOG_ERROR("Feature dropped. Unsupported geometry type: " << _toWkt(g).left(100));
       }
     }
     catch (const IllegalArgumentException& e)
@@ -821,7 +835,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
     if (exteriorRing != nullptr)
     {
       WayPtr outer = _createWay(p->getExteriorRing(), circularError);
-      if (areaCrit.isSatisfied(t, ElementType::Way) == false)
+      if (areaCrit.isSatisfied(t, ElementType::Way) == false && _importImpliedTags)
         t.setArea(true);
       outer->setTags(t);
       _map->addWay(outer);
@@ -846,7 +860,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
     RelationPtr r =
       std::make_shared<Relation>(
         _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
-    if (areaCrit.isSatisfied(t, ElementType::Relation) == false)
+    if (areaCrit.isSatisfied(t, ElementType::Relation) == false && _importImpliedTags)
       t.setArea(true);
     r->setTags(t);
     _addPolygon(p, r, circularError);

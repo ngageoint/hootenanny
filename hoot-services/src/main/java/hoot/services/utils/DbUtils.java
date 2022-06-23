@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.utils;
 
@@ -63,6 +63,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -738,7 +739,7 @@ public class DbUtils {
         }
 
         // Check if we can compare by ID
-        if (org.apache.commons.lang3.math.NumberUtils.isNumber(input)) {
+        if (StringUtils.isNumeric(input)) {
             logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
                     input, table.getTableName());
 
@@ -1148,6 +1149,23 @@ public class DbUtils {
         }
 
         return elementInfo;
+    }
+
+    public static boolean didChangesetsUpload(String jobId) {
+
+        if (jobId != null) {
+            Long noChangesetsUploaded = createQuery()
+                .selectFrom(commandStatus)
+                .where(commandStatus.stdout.like("%Total OSM Changesets Uploaded\t0%").and(commandStatus.jobId.eq(jobId)))
+                .fetchCount();
+
+            if (noChangesetsUploaded == 0) {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
     }
 
     public static List<TranslationFolder> getTranslationFoldersForUser(Long userId) {

@@ -29,6 +29,11 @@
 // Convert GGDMv30 to/from OSM+
 //
 
+// include HootJs if loaded from mocha test
+if (typeof hoot === 'undefined') {
+  var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
+
 hoot.require('SchemaTools');
 hoot.require('ggdm30');
 hoot.require('ggdm30_schema');
@@ -77,3 +82,8 @@ function translateToOgr(tags, elementType, geometryType)
 
 } // End of translateToOgr
 
+
+// module method for use in Translation Server
+if (typeof exports !== 'undefined') {
+  exports.toOsm = ggdm30.toOsm;
+}

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Box.h"
@@ -39,210 +39,209 @@
 
 namespace Tgs
 {
-  Box::Box()
-  {
-    _valid = false;
-    _dimensions = 0;
-    for (int i = 0; i < MAX_DIMENSIONS; ++i)
-      _lowerBound[i] = _upperBound[i] = 0.0;
-  }
+Box::Box()
+{
+  _valid = false;
+  _dimensions = 0;
+  for (int i = 0; i < MAX_DIMENSIONS; ++i)
+    _lowerBound[i] = _upperBound[i] = 0.0;
+}
 
-  Box::Box(const Box& b)
-  {
-    _dimensions = b._dimensions;
-    _valid = b._valid;
-    _copyArray(_lowerBound, b._lowerBound);
-    _copyArray(_upperBound, b._upperBound);
-  }
+Box::Box(const Box& b)
+{
+  _dimensions = b._dimensions;
+  _valid = b._valid;
+  _copyArray(_lowerBound, b._lowerBound);
+  _copyArray(_upperBound, b._upperBound);
+}
 
-  Box::Box(int dimensions)
-  {
-    _valid = false;
-    _dimensions = dimensions;
-    for (int i = 0; i < MAX_DIMENSIONS; ++i)
-      _lowerBound[i] = _upperBound[i] = 0.0;
-  }
+Box::Box(int dimensions)
+{
+  _valid = false;
+  _dimensions = dimensions;
+  for (int i = 0; i < MAX_DIMENSIONS; ++i)
+    _lowerBound[i] = _upperBound[i] = 0.0;
+}
 
-  double Box::calculateOverlap(const Box& b) const
+double Box::calculateOverlap(const Box& b) const
+{
+  assert(b.getDimensions() == getDimensions());
+  double result = 1.0;
+  for (int i = 0; i < _dimensions; i++)
   {
-    assert(b.getDimensions() == getDimensions());
-    double result = 1.0;
-    for (int i = 0; i < _dimensions; i++)
-    {
-      double ub = std::min(getUpperBound(i), b.getUpperBound(i));
-      double lb = std::max(getLowerBound(i), b.getLowerBound(i));
-      if (ub - lb <= 0.0)
-      {
-        return 0.0;
-      }
-      result *= ub - lb;
-    }
-    return result;
+    double ub = std::min(getUpperBound(i), b.getUpperBound(i));
+    double lb = std::max(getLowerBound(i), b.getLowerBound(i));
+    if (ub - lb <= 0.0)
+      return 0.0;
+    result *= ub - lb;
   }
+  return result;
+}
 
-  double Box::calculateOverlap(const BoxInternalData& b) const
+double Box::calculateOverlap(const BoxInternalData& b) const
+{
+  assert(b.getDimensions() == getDimensions());
+  double result = 1.0;
+  for (int i = 0; i < _dimensions; i++)
   {
-    assert(b.getDimensions() == getDimensions());
-    double result = 1.0;
-    for (int i = 0; i < _dimensions; i++)
-    {
-      double ub = std::min(getUpperBound(i), b.getUpperBound(i));
-      double lb = std::max(getLowerBound(i), b.getLowerBound(i));
-      if (ub - lb <= 0.0)
-      {
-        return 0.0;
-      }
-      result *= ub - lb;
-    }
-    return result;
+    double ub = std::min(getUpperBound(i), b.getUpperBound(i));
+    double lb = std::max(getLowerBound(i), b.getLowerBound(i));
+    if (ub - lb <= 0.0)
+      return 0.0;
+    result *= ub - lb;
   }
+  return result;
+}
 
-  double Box::calculatePerimeter() const
-  {
-    double result = 0.0;
-    for (int i = 0; i < _dimensions; i++)
-    {
-      result += getUpperBound(i) - getLowerBound(i);
-    }
-    return result * 2.0;
-  }
+double Box::calculatePerimeter() const
+{
+  double result = 0.0;
+  for (int i = 0; i < _dimensions; i++)
+    result += getUpperBound(i) - getLowerBound(i);
+  return result * 2.0;
+}
 
-  double Box::calculateVolume() const
-  {
-    double result = 1;
-    for (int i = 0; i < _dimensions; i++)
-    {
-      result *= getUpperBound(i) - getLowerBound(i);
-    }
-    return result;
-  }
+double Box::calculateVolume() const
+{
+  double result = 1;
+  for (int i = 0; i < _dimensions; i++)
+    result *= getUpperBound(i) - getLowerBound(i);
+  return result;
+}
 
-  Box& Box::expand(const BoxInternalData& b)
-  {
-    assert(getDimensions() == b.getDimensions());
-    if (isValid() == false)
-    {
-      _valid = true;
-      for (int i = 0; i < getDimensions(); i++)
-      {
-        _lowerBound[i] = b.getLowerBound(i);
-        _upperBound[i] = b.getUpperBound(i);
-      }
-    }
-    else
-    {
-      for (int i = 0; i < getDimensions(); i++)
-      {
-        _lowerBound[i] = std::min(getLowerBound(i), b.getLowerBound(i));
-        _upperBound[i] = std::max(getUpperBound(i), b.getUpperBound(i));
-      }
-    }
-    // for convenience
-    return *this;
-  }
-
-  Box& Box::expand(const Box& b)
-  {
-    assert(getDimensions() == b.getDimensions());
-    if (isValid() == false)
-    {
-      _valid = true;
-      for (int i = 0; i < getDimensions(); i++)
-      {
-        _lowerBound[i] = b.getLowerBound(i);
-        _upperBound[i] = b.getUpperBound(i);
-      }
-    }
-    else
-    {
-      for (int i = 0; i < getDimensions(); i++)
-      {
-        _lowerBound[i] = std::min(getLowerBound(i), b.getLowerBound(i));
-        _upperBound[i] = std::max(getUpperBound(i), b.getUpperBound(i));
-      }
-    }
-    // for convenience
-    return *this;
-  }
-
-  void Box::setBounds(int d, double lower, double upper)
+Box& Box::expand(const BoxInternalData& b)
+{
+  assert(getDimensions() == b.getDimensions());
+  if (isValid() == false)
   {
     _valid = true;
-    _lowerBound[d] = lower;
-    _upperBound[d] = upper;
+    for (int i = 0; i < getDimensions(); i++)
+    {
+      _lowerBound[i] = b.getLowerBound(i);
+      _upperBound[i] = b.getUpperBound(i);
+    }
   }
-
-  void Box::setDimensions(int d)
+  else
   {
-    _valid = false;
-    _dimensions = d;
+    for (int i = 0; i < getDimensions(); i++)
+    {
+      _lowerBound[i] = std::min(getLowerBound(i), b.getLowerBound(i));
+      _upperBound[i] = std::max(getUpperBound(i), b.getUpperBound(i));
+    }
   }
+  // for convenience
+  return *this;
+}
 
-  double Box::getLowerBound(int d) const
+Box& Box::expand(const Box& b)
+{
+  assert(getDimensions() == b.getDimensions());
+  if (isValid() == false)
   {
-    return std::min(_lowerBound[d], _upperBound[d]);
+    _valid = true;
+    for (int i = 0; i < getDimensions(); i++)
+    {
+      _lowerBound[i] = b.getLowerBound(i);
+      _upperBound[i] = b.getUpperBound(i);
+    }
   }
-
-  double Box::getUpperBound(int d) const
+  else
   {
-    return std::max(_lowerBound[d], _upperBound[d]);
+    for (int i = 0; i < getDimensions(); i++)
+    {
+      _lowerBound[i] = std::min(getLowerBound(i), b.getLowerBound(i));
+      _upperBound[i] = std::max(getUpperBound(i), b.getUpperBound(i));
+    }
   }
+  // for convenience
+  return *this;
+}
 
-  double Box::getLowerBoundRaw(int d) const
-  {
-    return _lowerBound[d];
-  }
+void Box::setBounds(int d, double lower, double upper)
+{
+  _valid = true;
+  _lowerBound[d] = lower;
+  _upperBound[d] = upper;
+}
 
-  double Box::getUpperBoundRaw(int d) const
-  {
-    return _upperBound[d];
-  }
+void Box::setDimensions(int d)
+{
+  _valid = false;
+  _dimensions = d;
+}
 
-  bool Box::isValid() const
-  {
-    return _valid;
-  }
+double Box::getLowerBound(int d) const
+{
+  return std::min(_lowerBound[d], _upperBound[d]);
+}
 
-  bool Box::operator==(const Box& b) const
+double Box::getUpperBound(int d) const
+{
+  return std::max(_lowerBound[d], _upperBound[d]);
+}
+
+double Box::getLowerBoundRaw(int d) const
+{
+  return _lowerBound[d];
+}
+
+double Box::getUpperBoundRaw(int d) const
+{
+  return _upperBound[d];
+}
+
+bool Box::isValid() const
+{
+  return _valid;
+}
+
+bool Box::operator==(const Box& b) const
+{
+  if (_dimensions != b._dimensions)
+    return false;
+  for (int i = 0; i < _dimensions; i++)
   {
-    if (_dimensions != b._dimensions)
+    if (getLowerBound(i) != b.getLowerBound(i) ||
+        getUpperBound(i) != b.getUpperBound(i))
     {
       return false;
     }
-    for (int i = 0; i < _dimensions; i++)
-    {
-      if (getLowerBound(i) != b.getLowerBound(i) ||
-          getUpperBound(i) != b.getUpperBound(i))
-      {
-        return false;
-      }
-    }
-    return true;
   }
+  return true;
+}
 
-  std::string Box::toString() const
-  {
-    std::stringstream lower;
-    std::stringstream upper;
-    std::string comma;
-    for (int i = 0; i < _dimensions; i++)
-    {
-      lower << comma << getLowerBoundRaw(i);
-      upper << comma << getUpperBoundRaw(i);
-      comma = ", ";
-    }
-    return "(" + lower.str() + ") - (" + upper.str() + ")";
-  }
+Box& Box::operator=(const Box& b)
+{
+  _dimensions = b._dimensions;
+  _valid = b._valid;
+  _copyArray(_lowerBound, b._lowerBound);
+  _copyArray(_upperBound, b._upperBound);
+  return *this;
+}
 
-  bool Box::isContained(const Box& b) const
+std::string Box::toString() const
+{
+  std::stringstream lower;
+  std::stringstream upper;
+  std::string comma;
+  for (int i = 0; i < _dimensions; i++)
   {
-    bool result = true;
-    for (int i = 0; i < _dimensions; i++)
-    {
-      result = result && (b.getLowerBound(i) >= getLowerBound(i));
-      result = result && (b.getUpperBound(i) <= getUpperBound(i));
-    }
-    return result;
+    lower << comma << getLowerBoundRaw(i);
+    upper << comma << getUpperBoundRaw(i);
+    comma = ", ";
   }
+  return "(" + lower.str() + ") - (" + upper.str() + ")";
+}
+
+bool Box::isContained(const Box& b) const
+{
+  bool result = true;
+  for (int i = 0; i < _dimensions; i++)
+  {
+    result = result && (b.getLowerBound(i) >= getLowerBound(i));
+    result = result && (b.getUpperBound(i) <= getUpperBound(i));
+  }
+  return result;
+}
 
 }

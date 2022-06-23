@@ -22,31 +22,30 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ReplacementSnappedWayJoiner.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(WayJoiner, ReplacementSnappedWayJoiner)
 
-ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner() :
-WayJoinerAdvanced::WayJoinerAdvanced()
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner()
+  : WayJoinerAdvanced::WayJoinerAdvanced()
 {
   _leavePid = true;
   _callingClass = className();
 }
 
-ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner(
-  const QMap<ElementId, long>& refIdToVersionMappings) :
-WayJoinerAdvanced::WayJoinerAdvanced(),
-_refIdToVersionMappings(refIdToVersionMappings)
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings)
+  : WayJoinerAdvanced::WayJoinerAdvanced(),
+    _refIdToVersionMappings(refIdToVersionMappings)
 {
   _leavePid = true;
   _callingClass = className();
@@ -61,13 +60,9 @@ long ReplacementSnappedWayJoiner::_getPid(const ConstWayPtr& way) const
 {
   long pid = WayData::PID_EMPTY;
   if (way->hasPid())
-  {
     pid = way->getPid();
-  }
   else if (way->getTags().contains(MetadataTags::HootSplitParentId()))
-  {
     pid = way->getTags()[MetadataTags::HootSplitParentId()].toLong();
-  }
   return pid;
 }
 
@@ -89,7 +84,6 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
   // inside of the bounds had the same parent...haven't seen that happen yet, so will go with this
   // for now.
   WayMap ways = _map->getWays();
-  QSet<long> pidsUsed;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;

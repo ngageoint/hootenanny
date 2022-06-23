@@ -97,11 +97,13 @@ bool OsmApiReader::isSupported(const QString& url) const
 {
   QStringList validPrefixes = supportedFormats().split(";");
   const QString checkString(url.toLower());
+  //  Check the OSM API endpoint
+  if (!checkString.endsWith(OsmApiEndpoints::API_PATH_MAP))
+    return false;
   //  Support HTTP and HTTPS URLs to OSM API servers
-  for (int i = 0; i < validPrefixes.size(); ++i)
+  for (const auto& prefix : qAsConst(validPrefixes))
   {
-    if (checkString.startsWith(validPrefixes[i]) &&
-        checkString.endsWith(OsmApiEndpoints::API_PATH_MAP))
+    if (checkString.startsWith(prefix))
       return true;
   }
   //  If we fall out of loop, no dice

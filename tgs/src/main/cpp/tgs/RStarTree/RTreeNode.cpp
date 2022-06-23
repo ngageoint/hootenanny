@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RTreeNode.h"
@@ -54,9 +54,7 @@ BoxInternalData::BoxInternalData(int dimensions, const char* data, const Box& b)
 
   assert(b.getDimensions() == _dimensions);
   for (int i = 0; i < _dimensions; i++)
-  {
     setBounds(i, b.getLowerBoundRaw(i), b.getUpperBoundRaw(i));
-  }
 }
 
 double BoxInternalData::calculateCentroidDistance(const Box& b) const
@@ -81,9 +79,8 @@ double BoxInternalData::calculateExpansion(const Box& b) const
   assert(b.getDimensions() == getDimensions());
   for (int i = 0; i < _dimensions; i++)
   {
-    v2 *=
-      std::max(getUpperBound(i), b.getUpperBound(i)) -
-      std::min(getLowerBound(i), b.getLowerBound(i));
+    v2 *= std::max(getUpperBound(i), b.getUpperBound(i)) -
+          std::min(getLowerBound(i), b.getLowerBound(i));
   }
   return v2 - v1;
 }
@@ -97,9 +94,7 @@ double BoxInternalData::calculateOverlap(const Box& b) const
     double ub = std::min(getUpperBound(i), b.getUpperBound(i));
     double lb = std::max(getLowerBound(i), b.getLowerBound(i));
     if (ub - lb <= 0)
-    {
       return 0.0;
-    }
     overlap.setBounds(i, lb, ub);
   }
   return overlap.calculateVolume();
@@ -109,9 +104,7 @@ double BoxInternalData::calculateVolume() const
 {
   double result = 1;
   for (int i = 0; i < _dimensions; i++)
-  {
     result *= getUpperBound(i) - getLowerBound(i);
-  }
   return result;
 }
 
@@ -120,7 +113,7 @@ int BoxInternalData::getDimensions() const
   return _dimensions;
 }
 
-void BoxInternalData::setBounds(int d, double lower, double upper) const
+void BoxInternalData::setBounds(int d, double lower, double upper)
 {
   double* v = (double*)_data;
   v[d * 2] = lower;
@@ -136,9 +129,7 @@ Box BoxInternalData::toBox() const
 {
   Box b(_dimensions);
   for (int i = 0; i < _dimensions; i++)
-  {         
     b.setBounds(i, getLowerBoundRaw(i), getUpperBoundRaw(i));
-  }
   return b;
 }
 double BoxInternalData::getLowerBound(int d) const
@@ -174,9 +165,7 @@ RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
 
   _maxChildCount = (_page->getDataSize() - _getHeaderSize()) / _getChildSize();
   if (_maxChildCount < 2)
-  {
     throw Exception("Internal Error: page is not large enough to support two children.");
-  }
   
   const int* childCount = (int*)_page->getData();
   _getHeader()->childCount = *childCount;
@@ -185,8 +174,7 @@ RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
 void RTreeNode::addChild(const Box& envelope, int id)
 {
   assert(getChildCount() < _maxChildCount);
-  assert(((isLeafNode() == false || getChildCount() == 0) && id < 0) ||
-    (isLeafNode() == true && id >= 0));
+  assert(((isLeafNode() == false || getChildCount() == 0) && id < 0) || (isLeafNode() == true && id >= 0));
 
   int childIndex = getChildCount();
   BoxInternalData bid(_dimensions, _getChildPtr(childIndex)->getBox(), envelope);
@@ -210,9 +198,7 @@ Box RTreeNode::calculateEnvelope() const
 {
   Box result(_dimensions);
   for (int i = 0; i < getChildCount(); i++)
-  {
     result.expand(getChildEnvelope(i));
-  }
   return result;
 }
 
@@ -305,22 +291,14 @@ int RTreeNode::getParentId() const
 
 bool RTreeNode::isLeafNode() const
 {
-  bool result = false;
-  if (getChildCount() == 0 || _getChildPtr(0)->id >= 0)
-  {
-    result = true;
-  }
-  return result;
+  return (getChildCount() == 0 || _getChildPtr(0)->id >= 0);
 }
 
 void RTreeNode::removeChild(int index)
 {
   assert(index >= 0 && index < getMaxChildCount());
   if (index < getMaxChildCount() - 1)
-  {
-    memmove(_getChildPtr(index), _getChildPtr(index + 1),
-      _getChildSize() * (getChildCount() - index - 1));
-  }
+    memmove(_getChildPtr(index), _getChildPtr(index + 1), _getChildSize() * (getChildCount() - index - 1));
   _getHeader()->childCount = getChildCount() - 1;
   _page->setDirty();
 }
@@ -335,9 +313,7 @@ void RTreeNode::removeChildren(std::vector<int>& children)
     for (unsigned int j = i + 1; j < children.size(); j++)
     {
       if (children[j] > children[i])
-      {
         children[j]--;
-      }
     }
   }
 }

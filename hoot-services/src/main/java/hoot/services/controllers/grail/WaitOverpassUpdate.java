@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -89,7 +89,9 @@ class WaitOverpassUpdate extends GrailCommand {
         DbUtils.upsertCommandStatus(commandResultStart);
         DbUtils.completeCommandStatus(commandResultStart);
 
-        if (GrailResource.isPrivateOverpassActive()) {
+        //Check if any changesets were pushed
+        //there are circumstances where no data will have changed
+        if (GrailResource.isPrivateOverpassActive() && DbUtils.didChangesetsUpload(jobId)) {
             long timeSpent = 0;
             String url = null;
             boolean elementFound = false;

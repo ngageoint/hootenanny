@@ -29,6 +29,11 @@
 // Convert TDSv4 to/from OSM+
 //
 
+// include HootJs if loaded from mocha test
+if (typeof hoot === 'undefined') {
+  var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
+
 hoot.require('tds40');
 hoot.require('tds40_schema');
 hoot.require('tds40_rules');
@@ -73,3 +78,8 @@ function translateToOgr(tags, elementType, geometryType)
 
 } // End of translateToOgr
 
+
+// module method for use in Translation Server
+if (typeof exports !== 'undefined') {
+  exports.toOsm = tds40.toOsm;
+}

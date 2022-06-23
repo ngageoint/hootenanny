@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
 #define CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Progress.h>
 
 namespace hoot
@@ -122,7 +122,7 @@ public:
   static const QString JOB_SOURCE;
 
   ChangesetReplacementCreatorAbstract();
-  virtual ~ChangesetReplacementCreatorAbstract() = default;
+  ~ChangesetReplacementCreatorAbstract() override = default;
 
   /**
    * @see ChangesetReplacement
@@ -130,7 +130,7 @@ public:
   void setChangesetOptions(const bool printStats, const QString& statsOutputFile,
                            const QString osmApiDbUrl) override;
 
-  int getNumChanges() const  override{ return _numChanges; }
+  int getNumChanges() const override { return _numChanges; }
 
   void setFullReplacement(const bool full) override { _fullReplacement = full; }
   void setBoundsInterpretation(const BoundsInterpretation& interpretation) override
@@ -202,20 +202,18 @@ protected:
   void _printJobDescription() const;
   QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
-  OsmMapPtr _loadInputMap(
-    const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
-    const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
-    const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
-    OsmMapPtr& cachedMap) const;
+  OsmMapPtr _loadInputMap(const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
+                          const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
+                          const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
+                          OsmMapPtr& cachedMap) const;
 
   /*
    * Filters features down to just those that should be replaced in the ref dataset or used to
    * replace from the sec dataset.
    */
-  void _filterFeatures(
-    const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
-    const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
-    const QString& debugFileName) const;
+  void _filterFeatures(const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+                       const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
+                       const QString& debugFileName) const;
 
   /*
    * Removes changeset replacement metadata tags which should be seen in raw input
@@ -244,9 +242,7 @@ protected:
    * Cut out of the reference map what you don't want, and if there is anything in the secondary
    * map, add that data in (not applicable in the cut only scenario).
    */
-  OsmMapPtr _getCookieCutMap(
-    OsmMapPtr doughMap, OsmMapPtr cutterMap,
-    const GeometryTypeCriterion::GeometryType& geometryType) const;
+  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType) const;
 
   /*
    * Excludes all features within the specified bounds from deletion during changeset derivation
@@ -262,8 +258,7 @@ protected:
    * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
    * being replaced with the IDs from the maps being replaced.
    */
-  void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const;
+  void _synchronizeIds(const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const;
 
   /*
    * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but

@@ -253,7 +253,7 @@ class ConflateCommand extends ExternalCommand {
                         if (optionValue.matches("\\{(.*)\\}")) {
                             options.add(optionConfig.get("key") + "=" + optionValue);
                         } else {
-                            options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+                            options.add("\"" + optionConfig.get("key") + "=" + optionValue.replaceAll("'",  "") + "\"");
                         }
                     }
                 }

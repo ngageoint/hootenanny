@@ -72,4 +72,30 @@ describe('SettingsJs', function() {
 
     }).timeout(5000);
 
+    it('Should test push, pop, and clear configuration', function() {
+
+      var origVal = hoot.get('conflate.post.ops');
+      var testVal = 'WayJoinerOp;RelationCircularRefRemover';
+
+      // Save settings
+      hoot.push();
+
+      // Now change something and verify
+      hoot.set({'conflate.post.ops': testVal});
+      var checkVal = hoot.get('conflate.post.ops');
+      assert.equal(testVal, checkVal);
+
+      // Clear Settings & verify
+      hoot.clear();
+      checkVal = hoot.get('conflate.post.ops');
+      assert.equal(undefined, checkVal);
+
+      // Set back to how it was
+      hoot.pop();
+
+      // Verify
+      checkVal = hoot.get('conflate.post.ops');
+      assert.equal(origVal, checkVal);
+    }).timeout(5000);
+
 });

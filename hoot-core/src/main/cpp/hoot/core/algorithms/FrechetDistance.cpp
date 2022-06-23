@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "FrechetDistance.h"
 
@@ -238,7 +238,7 @@ Radians FrechetDistance::getHeadingAvg(WayPtr way, int index) const
   return heading / count;
 }
 
-Meters FrechetDistance::distance()
+Meters FrechetDistance::distance() const
 {
   //  Since at least one endpoint in each way points to an endpoint of another a simple
   //  maximum value of all the closest distances is the non-discreet Frechet distance

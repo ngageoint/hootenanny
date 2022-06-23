@@ -1,18 +1,18 @@
 AC_DEFUN([JOSM_INIT],[
-  AC_SUBST(HAS_JOSM) 
+  AC_SUBST(HAS_JOSM)
 
   AC_LANG_PUSH([C++])
 
-  # Doing the JNI checks as part of the JOSM checks, since JOSM integration is the only thing using 
-  # JNI. If anything else needs to use JNI in the future, then the JNI checks may need to be broken 
+  # Doing the JNI checks as part of the JOSM checks, since JOSM integration is the only thing using
+  # JNI. If anything else needs to use JNI in the future, then the JNI checks may need to be broken
   # out of here.
 
-  CPPFLAGS="-I/usr/lib/jvm/java-1.8.0-openjdk/include -I/usr/lib/jvm/java-1.8.0-openjdk/include/linux ${CPPFLAGS}"
-  LIBS="-L/usr/lib/jvm/java-1.8.0-openjdk/jre/lib/amd64/server -ljvm ${LIBS}"
-  
+  CPPFLAGS="-I$JAVA_HOME/include -I$JAVA_HOME/include/linux ${CPPFLAGS}"
+  LIBS="-L$JAVA_HOME/jre/lib/amd64/server -ljvm ${LIBS}"
+
   AC_CHECK_HEADERS(
-    [jni.h], 
-    [hootFoundJniHeaders=yes; break;], 
+    [jni.h],
+    [hootFoundJniHeaders=yes; break;],
     [AC_MSG_FAILURE("Unable to find JNI header"); break;])
 
   AC_LINK_IFELSE(

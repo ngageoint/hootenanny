@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BaseInterpolator.h"
 
@@ -47,24 +47,22 @@ using namespace std;
 namespace Tgs
 {
 
-BaseInterpolator::BaseInterpolator() :
-_maxAllowedPerLoopOptimizationIterations(INT_MAX),
-_iterations(0)
+BaseInterpolator::BaseInterpolator()
+  : _maxAllowedPerLoopOptimizationIterations(INT_MAX),
+    _iterations(0)
 {
 }
 
 void BaseInterpolator::_checkRebuild()
 {
   if (!_indColumns.empty() && !_depColumns.empty() && _df.get() != nullptr)
-  {
     _buildModel();
-  }
 }
 
 double BaseInterpolator::estimateError()
 {
   double se = 0.0;
-  for (size_t i = 0; i < _df->getNumDataVectors(); i++)
+  for (unsigned int i = 0; i < _df->getNumDataVectors(); i++)
   {
     double e = _estimateError(i);
     se += e * e;
@@ -78,26 +76,24 @@ HilbertRTree* BaseInterpolator::_getIndex() const
   {
     const DataFrame& df = *_df;
     // 8 children was picked experimentally with two dimensions.
-    _index =
-      std::make_shared<HilbertRTree>(
-        std::make_shared<MemoryPageStore>(
-          BoxInternalData::size(_indColumns.size()) * 8 + sizeof(int) * 4),
-        _indColumns.size());
+    _index = std::make_shared<HilbertRTree>(
+               std::make_shared<MemoryPageStore>(
+                 BoxInternalData::size(static_cast<int>(_indColumns.size())) * 8 + sizeof(int) * 4),
+               _indColumns.size());
 
     vector<Box> boxes(df.getNumDataVectors());
     vector<int> fids(df.getNumDataVectors());
 
-    for (size_t i = 0; i < df.getNumDataVectors(); i++)
+    for (unsigned int i = 0; i < df.getNumDataVectors(); i++)
     {
       fids[i] = i;
-      boxes[i] = Box(_indColumns.size());
-      for (size_t j = 0; j < _indColumns.size(); j++)
+      boxes[i] = Box(static_cast<int>(_indColumns.size()));
+      for (unsigned int j = 0; j < static_cast<unsigned int>(_indColumns.size()); j++)
       {
         double v = df.getDataVector(i)[_indColumns[j]];
         boxes[i].setBounds(j, v, v);
       }
     }
-
     _index->bulkInsert(boxes, fids);
   }
 
@@ -113,9 +109,7 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   ds >> version;
 
   if (version != 0x0)
-  {
     throw Exception("Unexpected version.");
-  }
 
   quint64 s;
   ds >> s;
@@ -166,9 +160,8 @@ void BaseInterpolator::setDependentColumns(const vector<string>& labels)
   _depColumnsLabels = labels;
   _depColumns.resize(labels.size());
   for (size_t i = 0; i < _depColumns.size(); i++)
-  {
     _depColumns[i] = _df->getIndexFromFactorLabel(labels[i]);
-  }
+
   _checkRebuild();
 }
 
@@ -178,9 +171,8 @@ void BaseInterpolator::setIndependentColumns(const vector<string>& labels)
   _indColumnsLabels = labels;
   _indColumns.resize(labels.size());
   for (size_t i = 0; i < _indColumns.size(); i++)
-  {
     _indColumns[i] = _df->getIndexFromFactorLabel(labels[i]);
-  }
+
   _checkRebuild();
 }
 
@@ -193,17 +185,11 @@ void BaseInterpolator::writeInterpolator(QIODevice& os) const
 
   ds << (quint64)_indColumns.size();
   for (size_t i = 0; i < _indColumns.size(); i++)
-  {
-    ds << _indColumns[i];
-    ds << QString::fromStdString(_indColumnsLabels[i]);
-  }
+    ds << _indColumns[i] << QString::fromStdString(_indColumnsLabels[i]);
 
   ds << (quint64)_depColumns.size();
   for (size_t i = 0; i < _depColumns.size(); i++)
-  {
-    ds << _depColumns[i];
-    ds << QString::fromStdString(_depColumnsLabels[i]);
-  }
+    ds << _depColumns[i] << QString::fromStdString(_depColumnsLabels[i]);
 
   stringstream ss;
   _df->exportData(ss);

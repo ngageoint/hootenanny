@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_CUT_ONLY_CREATOR_H
 #define CHANGESET_CUT_ONLY_CREATOR_H
 
 // Hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreatorAbstract.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -56,7 +56,7 @@ public:
    * @param output the changeset file output location
    */
   void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& output) override;
+              const QString& output) override;
   /**
    * @brief create creates a changeset that replaces features in the first input.
    * @param input1 the target data file path for the changeset in which to replace features; must
@@ -66,7 +66,8 @@ public:
    * @param output the changeset file output location
    */
   void create(const QString& input1, const QString& input2,
-    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
+              const std::shared_ptr<geos::geom::Polygon>& bounds,
+              const QString& output) override;
 
   QString toString() const override { return className(); }
 
@@ -84,8 +85,7 @@ private:
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
    * are specified
    */
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-    _getDefaultGeometryFilters() const;
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getDefaultGeometryFilters() const;
   /*
    * Combines filters in _geometryTypeFilters with _replacementFilter.
    */
@@ -99,11 +99,10 @@ private:
    * Populates a reference and a conflated map based on the geometry type being replaced. The maps
    * can then used to derive the replacement changeset.
    */
-  void _processMaps(
-    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
-    const ElementCriterionPtr& secFeatureFilter,
-    const GeometryTypeCriterion::GeometryType& geometryType,
-    const QStringList& linearFilterClassNames = QStringList());
+  void _processMaps(OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
+                    const ElementCriterionPtr& secFeatureFilter,
+                    const GeometryTypeCriterion::GeometryType& geometryType,
+                    const QStringList& linearFilterClassNames = QStringList());
 };
 
 }

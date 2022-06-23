@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -80,26 +81,26 @@ public:
 
     NodePtr n6 = std::make_shared<Node>(Status::Unknown1, 6, 0, 0, 15.0);
     Tags t6;
-    t6["hoot:status"] = "Unknown2";
+    t6[MetadataTags::HootStatus()] = "Unknown2";
     n6->setTags(t6);
     map->addNode(n6);
 
     NodePtr n7 = std::make_shared<Node>(Status::Unknown1, 7, 0, 0, 15.0);
     Tags t7;
-    t7["hoot:status"] = "Unknown2";
+    t7[MetadataTags::HootStatus()] = "Unknown2";
     n7->setTags(t7);
     map->addNode(n7);
 
     NodePtr n8 = std::make_shared<Node>(Status::Unknown1, 8, 0, 0, 15.0);
     Tags t8;
-    t8["hoot:status"] = "1";
+    t8[MetadataTags::HootStatus()] = "1";
     n8->setTags(t8);
     map->addNode(n8);
 
     NodePtr n9 = std::make_shared<Node>(Status::Unknown1, 9, 0, 0, 15.0);
     Tags t9;
     t9["monitoring:water_level"] = "yes";
-    t9["hoot:status"] = "1";
+    t9[MetadataTags::HootStatus()] = "1";
     t9["note"] = "Source 2";
     t9["man_made"] = "monitoring_station";
     n9->setTags(t9);

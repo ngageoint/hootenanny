@@ -1231,11 +1231,32 @@ private:
   }
 };
 
-std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
-
 OsmSchema::OsmSchema()
   : _d(std::make_shared<OsmSchemaData>())
 {
+  loadDefault();
+  // Write this out to a temp file instead of to the log due to its size.
+  if (Log::getInstance().getLevel() == Log::Trace)
+  {
+    const QString graphvizPath = "tmp/schema-graphviz";
+    const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
+    try
+    {
+      if (FileUtils::makeDir("tmp"))
+      {
+        FileUtils::writeFully(graphvizPath, toGraphvizString());
+        LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
+      }
+      else
+      {
+        LOG_TRACE(errorMsg);
+      }
+    }
+    catch (const HootException&)
+    {
+      LOG_TRACE(errorMsg);
+    }
+  }
 }
 
 void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2) const
@@ -1264,8 +1285,9 @@ QString OsmSchema::average(const QString& kvp1, double w1, const QString& kvp2, 
   return _d->average(kvp1, w1, kvp2, w2, score);
 }
 
-void OsmSchema::createTestingGraph() const
+void OsmSchema::createTestingGraph()
 {
+  _d = std::make_shared<OsmSchemaData>();
   _d->createTestingGraph();
 }
 
@@ -1393,35 +1415,8 @@ const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const
 
 OsmSchema& OsmSchema::getInstance()
 {
-  if (_theInstance == nullptr)
-  {
-    _theInstance.reset(new OsmSchema());
-    _theInstance->loadDefault();
-
-    // Write this out to a temp file instead of to the log due to its size.
-    if (Log::getInstance().getLevel() == Log::Trace)
-    {
-      const QString graphvizPath = "tmp/schema-graphviz";
-      const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
-      try
-      {
-        if (FileUtils::makeDir("tmp"))
-        {
-          FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
-          LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
-        }
-        else
-        {
-          LOG_TRACE(errorMsg);
-        }
-      }
-      catch (const HootException&)
-      {
-        LOG_TRACE(errorMsg);
-      }
-    }
-  }
-  return *_theInstance;
+  static OsmSchema instance;
+  return instance;
 }
 
 double OsmSchema::getIsACost() const

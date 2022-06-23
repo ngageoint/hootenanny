@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_NETWORK_REQUEST_H
@@ -72,8 +72,8 @@ public:
    * @return success
    */
   bool networkRequest(const QUrl& url, int timeout,
-    QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray());
+                      QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
+                      const QByteArray& data = QByteArray());
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
@@ -84,9 +84,9 @@ public:
    * @return success
    */
   bool networkRequest(const QUrl& url, int timeout,
-    const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
-    QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray());
+                      const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                      QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
+                      const QByteArray& data = QByteArray());
   /**
    * @brief getResponseContent
    * @return HTTP response content

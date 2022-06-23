@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RequireJs.h"
 
@@ -106,6 +106,9 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     Local<String> source;
     MaybeLocal<Script> maybeScript;
+    //  Remove $HOOT_HOME from the full path before setting it as the script origin
+    QString relative_script_path = fullPath.right(fullPath.size() - hootHome.size() - 1);
+    ScriptOrigin origin(toV8(relative_script_path));
 
     LOG_TRACE("Loading script: " << fullPath);
 
@@ -113,7 +116,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     TryCatch try_catch(current);
     // Compile the source code.
-    maybeScript = Script::Compile(context, source);
+    maybeScript = Script::Compile(context, source, &origin);
 
     if (maybeScript.IsEmpty())
       HootExceptionJs::throwAsHootException(try_catch);

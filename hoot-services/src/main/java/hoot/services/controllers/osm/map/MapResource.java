@@ -32,6 +32,8 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -543,13 +545,20 @@ public class MapResource {
         JSONObject anode = currMap.retrieveANode(queryBounds);
         long nodeCnt = currMap.getNodesCount(queryBounds);
 
-        double dMinLon = (Double) extents.get("minlon");
-        double dMaxLon = (Double) extents.get("maxlon");
-        double dMinLat = (Double) extents.get("minlat");
-        double dMaxLat = (Double) extents.get("maxlat");
+        //floor and ceil to 6 decimal places
+        BigDecimal bdMinLon = new BigDecimal((Double) extents.get("minlon")).setScale(6, RoundingMode.FLOOR);
+        double dMinLon = bdMinLon.doubleValue();
+        BigDecimal bdMaxLon = new BigDecimal((Double) extents.get("maxlon")).setScale(6, RoundingMode.FLOOR);
+        double dMaxLon = bdMaxLon.doubleValue();
+        BigDecimal bdMinLat = new BigDecimal((Double) extents.get("minlat")).setScale(6, RoundingMode.CEILING);
+        double dMinLat = bdMinLat.doubleValue();
+        BigDecimal bdMaxLat = new BigDecimal((Double) extents.get("maxlat")).setScale(6, RoundingMode.CEILING);
+        double dMaxLat = bdMaxLat.doubleValue();
 
-        double dFirstLon = (Double) anode.get("lon");
-        double dFirstLat = (Double) anode.get("lat");
+        BigDecimal bdFirstLon = new BigDecimal((Double) anode.get("lon")).setScale(6, RoundingMode.HALF_UP);
+        double dFirstLon = bdFirstLon.doubleValue();
+        BigDecimal bdFirstLat = new BigDecimal((Double) anode.get("lat")).setScale(6, RoundingMode.HALF_UP);
+        double dFirstLat = bdFirstLat.doubleValue();
 
         ret.put("minlon", dMinLon);
         ret.put("maxlon", dMaxLon);

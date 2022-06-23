@@ -80,3 +80,13 @@ echo ""
 echo "Display tag information for keys as delimited text..."
 echo ""
 hoot tag-info $LOG_LEVEL $CONFIG test-files/DcTigerRoads.osm --keys-only --delimited-text
+
+echo ""
+echo "Display tag information for non-building class..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG test-files/cmd/slow/TagInfoCmdTest/class_non_building.shp
+
+echo ""
+echo "Display tag information for building class..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG test-files/cmd/slow/TagInfoCmdTest/class_building.shp

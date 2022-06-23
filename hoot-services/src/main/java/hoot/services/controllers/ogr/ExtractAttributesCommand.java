@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -59,7 +59,7 @@ class ExtractAttributesCommand extends ExternalCommand {
 
         //Technically this command now works for all data source, not just OGR, so we could move this class and associated classes out of the
         //hoot.services.controllers.ogr namespace.
-        String command = "hoot.bin tag-info --${DEBUG_LEVEL} ${INPUT_FILES}";
+        String command = "hoot.bin tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

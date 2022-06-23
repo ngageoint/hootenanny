@@ -126,6 +126,8 @@ private:
   int _maxFieldWidth;
 
   int _numWritten;
+  int _transactionSize;
+  bool _inTransaction;
   int _statusUpdateInterval;
 
   bool _forceSkipFailedRelations;
@@ -139,6 +141,8 @@ private:
   OGRLayer* _getLayerByName(const QString& layerName);
 
   void _strictError(const QString& warning) const;
+
+  bool _usesTransactions() const;
 };
 
 }

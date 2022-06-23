@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "Feature.h"
 
@@ -33,7 +33,8 @@
 namespace hoot
 {
 
-Feature::Feature(const std::shared_ptr<const FeatureDefinition>& d) : _definition(d)
+Feature::Feature(const std::shared_ptr<const FeatureDefinition>& d)
+  : _definition(d)
 {
 }
 
@@ -45,16 +46,13 @@ QString Feature::toString() const
 void Feature::validate(StrictChecking strict)
 {
   // make sure we didn't get more fields than necessary
-  for (QVariantMap::const_iterator it = _values.begin(); it != _values.end(); ++it)
+  for (auto it = _values.begin(); it != _values.end(); ++it)
   {
     if (_definition->hasField(it.key()) == false)
     {
-      QString error = QString("Returned a field name that isn't appropriate for this layer. %1")
-          .arg(it.key());
+      QString error = QString("Returned a field name that isn't appropriate for this layer. %1").arg(it.key());
       if (strict == StrictOn)
-      {
         throw FieldDefinition::InvalidValueException(it.key(), error);
-      }
       else if (strict == StrictWarn)
       {
         LOG_WARN(error);
@@ -70,26 +68,19 @@ void Feature::validate(StrictChecking strict)
     {
       if (d->hasDefaultValue() == false)
       {
-        QString error = QString("Field has no default value and no value was specified. (%1)")
-          .arg(d->getName());
+        QString error = QString("Field has no default value and no value was specified. (%1)").arg(d->getName());
         if (strict == StrictOn)
-        {
           throw FieldDefinition::InvalidValueException(d->getName(), error);
-        }
         else if (strict == StrictWarn)
         {
           LOG_WARN(error);
         }
       }
       else
-      {
         _values[d->getName()] = d->getDefaultValue();
-      }
     }
     else
-    {
       d->validate(_values[d->getName()], strict);
-    }
   }
 }
 

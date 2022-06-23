@@ -208,6 +208,20 @@ void Settings::clear()
   _settings.clear();
 }
 
+void Settings::push()
+{
+  _settingsStack.push(_settings);
+}
+
+void Settings::pop()
+{
+  if (!_settingsStack.empty())
+  {
+    _settings = _settingsStack.top();
+    _settingsStack.pop();
+  }
+}
+
 void Settings::_updateClassNamesInList(QStringList& list)
 {
   QStringList moddedList;
