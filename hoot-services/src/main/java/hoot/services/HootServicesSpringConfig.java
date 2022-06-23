@@ -51,7 +51,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:db/db.properties")
 @Profile("production")
 public class HootServicesSpringConfig {
-    private static final Logger logger = LoggerFactory.getLogger(HootServicesSpringConfig.class);;
+    private static final Logger logger = LoggerFactory.getLogger(HootServicesSpringConfig.class);
 
     @Autowired
     private Environment env;
