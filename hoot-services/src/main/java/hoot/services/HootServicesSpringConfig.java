@@ -26,8 +26,11 @@
  */
 package hoot.services;
 
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,6 +40,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -47,6 +51,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:db/db.properties")
 @Profile("production")
 public class HootServicesSpringConfig {
+    private static final Logger logger = LoggerFactory.getLogger(HootServicesSpringConfig.class);;
 
     @Autowired
     private Environment env;
@@ -56,6 +61,18 @@ public class HootServicesSpringConfig {
     @Bean
     public ApplicationContextUtils applicationContextUtils() {
         return new ApplicationContextUtils();
+    }
+
+    @Bean
+    DataSource dataSource() {
+        DataSource dataSource = null;
+        JndiTemplate jndi = new JndiTemplate();
+        try {
+            dataSource = jndi.lookup("java:comp/env/jdbc/postgres", DataSource.class);
+        } catch (NamingException e) {
+            logger.error("NamingException for java:comp/env/jdbc/postgres: " + e.getMessage());
+        }
+        return dataSource;
     }
 
     @Bean(name = "transactionManager")

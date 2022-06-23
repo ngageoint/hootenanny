@@ -41,10 +41,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.security.oauth.consumer.BaseProtectedResourceDetails;
-import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
-import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
-import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -118,17 +114,4 @@ public class HootServicesSpringTestConfig {
         return new ExternalCommandManagerImplStub();
     }
 
-    @Primary
-    @Bean
-    public OAuthRestTemplate oauthRestTemplate() {
-        BaseProtectedResourceDetails r = new BaseProtectedResourceDetails();
-        OAuthRestTemplate restTemplate = new OAuthRestTemplate(r);
-        return restTemplate;
-    }
-
-    @Primary
-    @Bean
-    public OAuthConsumerTokenServices tokenServices() {
-        return new HttpSessionBasedTokenServices();
-    }
 }

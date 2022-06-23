@@ -28,6 +28,7 @@ package hoot.services.controllers.grail;
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.HootProperties.CHANGESET_OPTIONS;
+import static hoot.services.HootProperties.DIFFERENTIAL_CHANGESET_TWOSTEP;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_LABEL;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
 import static hoot.services.HootProperties.HOME_FOLDER;
@@ -40,8 +41,6 @@ import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.replaceSensitiveData;
-import static hoot.services.HootProperties.DIFFERENTIAL_CHANGESET_TWOSTEP;
-
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,9 +87,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -98,9 +94,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth.common.signature.SharedConsumerSecret;
-import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
-import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
+//import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -147,8 +141,8 @@ public class GrailResource {
     @Autowired
     private PullApiCommandFactory apiCommandFactory;
 
-    @Autowired
-    private OAuthRestTemplate oauthRestTemplate;
+//    @Autowired
+//    private OAuthRestTemplate oauthRestTemplate;
 
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
@@ -486,9 +480,9 @@ public class GrailResource {
     private ExternalCommand createApplyWorkflow(String jobId, GrailParams pushParams, String debugLevel) {
         pushParams.setPushUrl(RAILSPORT_PUSH_URL);
 
-        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-        pushParams.setConsumerKey(oauthInfo.getConsumerKey());
-        pushParams.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+//        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+//        pushParams.setConsumerKey(oauthInfo.getConsumerKey());
+//        pushParams.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         try {
             railsOnlineCheck();
@@ -612,9 +606,9 @@ public class GrailResource {
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
 
-        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-        params.setConsumerKey(oauthInfo.getConsumerKey());
-        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+//        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+//        params.setConsumerKey(oauthInfo.getConsumerKey());
+//        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 

@@ -32,8 +32,6 @@ import java.util.Date;
 import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.security.oauth.consumer.OAuthConsumerToken;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -153,11 +151,6 @@ public class Users {
 
     public void setHootservicesCreatedAt(Timestamp hootservices_created_at) {
         this.hootservices_created_at = hootservices_created_at;
-    }
-
-    public void setProviderAccessToken(OAuthConsumerToken token) {
-        this.setProviderAccessKey(token.getValue());
-        this.setProviderAccessToken(token.getSecret());
     }
 
     @JsonProperty(value = "privileges")

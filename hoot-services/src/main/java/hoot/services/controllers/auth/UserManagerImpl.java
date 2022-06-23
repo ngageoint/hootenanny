@@ -43,7 +43,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.oauth.consumer.OAuthConsumerToken;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,12 +118,12 @@ public class UserManagerImpl implements UserManager {
             return null;
         }
     }
-    
+
     @Override
     public Users parseUser(JsonNode userDetailsJson) throws InvalidUserProfileException {
         Users user = new Users();
         JsonNode details = userDetailsJson.get("user");
-        
+
         user.setDisplayName(details.get("display_name").asText());
         user.setId(Long.parseLong(details.get("id").asText()));
         user.setProviderCreatedAt(parseTimestamp(details.get("account_created").asText()));
@@ -132,7 +131,7 @@ public class UserManagerImpl implements UserManager {
 
         return user;
     }
-    
+
     @Override
     public Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = new Users();
@@ -179,30 +178,7 @@ public class UserManagerImpl implements UserManager {
         return sess;
     }
 
-    @Override
-    public Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
-        Users user = this.parseUser(xml);
-        user.setProviderAccessToken(accessToken);
-        user.setEmail(String.format("%d@hootenanny", user.getId()));
 
-        Users existingUser = this.getUser(user.getId());
-        if (existingUser == null) {
-            this.insert(user);
-        } else {
-            // look in database for possible existing privileges set
-            user.setPrivileges(existingUser.getPrivileges());
-            
-            // look in database for existing user favorite adv. opts
-            user.setFavoriteOpts(existingUser.getFavoriteOpts());
-
-            this.update(user);
-        }
-
-        attributeSessionWithUser(sessionId, user);
-        userCache.put(sessionId, user);
-        return user;
-    }
-    
 	@Override
 	public Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws InvalidUserProfileException {
 		Users user = parseUser(userDetailsJson);
@@ -216,7 +192,7 @@ public class UserManagerImpl implements UserManager {
         } else {
             // look in database for possible existing privileges set
             user.setPrivileges(existingUser.getPrivileges());
-            
+
             // look in database for existing user favorite adv. opts
             user.setFavoriteOpts(existingUser.getFavoriteOpts());
 
@@ -227,8 +203,9 @@ public class UserManagerImpl implements UserManager {
         userCache.put(sessionId, user);
         return user;
 	}
-    
 
+
+    @Override
     public void clearCachedUser(Long userId) {
         getUserSessionId(userId).forEach(id -> userCache.remove(id));
     }

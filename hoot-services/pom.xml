@@ -20,6 +20,7 @@
         <skip.hoot.services.tests>false</skip.hoot.services.tests>
         <skip.hoot.services.integrationTests>false</skip.hoot.services.integrationTests>
         <redirect-test-output-to-file>false</redirect-test-output-to-file>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
 
         <!-- keep this alphabetized -->
 
@@ -77,6 +78,7 @@
               <artifactId>maven-war-plugin</artifactId>
               <version>2.4</version>
               <configuration>
+                <failOnMissingWebXml>false</failOnMissingWebXml>
                 <webResources>
                   <resource>
                     <directory>localDependencies</directory>
@@ -631,11 +633,6 @@
             <version>${spring.security.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth</artifactId>
-            <version>2.5.1.RELEASE</version>
-        </dependency>
-        <dependency>
           <groupId>org.springframework.security</groupId>
           <artifactId>spring-security-oauth2-client</artifactId>
           <version>5.7.1</version>
@@ -662,6 +659,10 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-jaxb</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
