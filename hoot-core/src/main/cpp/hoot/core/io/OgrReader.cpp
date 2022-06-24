@@ -478,43 +478,32 @@ void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr&
 
   map->appendSource(path);
 
-  // These are the OGR inputs types for which we need to iterate through layers. This list may
-  // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
-  // files only.
-  if (layer.trimmed().isEmpty() &&
-      (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip")))
-  {
-    LOG_DEBUG("Loading one or more layers...");
+  LOG_DEBUG("Loading layer(s)...");
 
-    QString pathCopy = path;
-    const QStringList layers = _getLayersFromPath(pathCopy);
-    const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
-    // Read each layer's data.
-    for (int j = 0; j < layers.size(); j++)
-    {
-      PROGRESS_STATUS(
-        "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
-      LOG_VART(progressWeights[j]);
-      if (!jobSource.isEmpty() && numTasks != -1)
-      {
-        setProgress(
-          Progress(
-            ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
-            (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
-      }
-      _d->open(path, layers[j]);
-      _d->read(map);
-    }
-  }
+  QString pathCopy = path;
+  QStringList layers;
+  //  Get the layers from the file/directory if a layer isn't specified
+  if (layer.trimmed().isEmpty())
+    layers = _getLayersFromPath(pathCopy);
   else
+    layers.push_back(layer);
+  const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
+  // Read each layer's data.
+  for (int j = 0; j < layers.size(); j++)
   {
-    LOG_DEBUG("Loading a single layer...");
-
-    // For other OGR types, just assume only a single layer.
-    _d->open(path, layer);
+    PROGRESS_STATUS(
+      "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
+    LOG_VART(progressWeights[j]);
+    if (!jobSource.isEmpty() && numTasks != -1)
+    {
+      setProgress(
+        Progress(
+          ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
+          (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+    }
+    _d->open(path, layers[j]);
     _d->read(map);
   }
-
   _d->close();
 }
 
@@ -663,8 +652,12 @@ QRegExp OgrReaderInternal::getNameFilter()
   QString rawFilter = ConfigOptions().getOgrImportFilter();
   // Try the translation file. This function will return "." by default.
   if (rawFilter == "")
-    rawFilter = _translator->getLayerNameFilter();
-
+  {
+    if (_translator)
+      rawFilter = _translator->getLayerNameFilter();
+    else
+      rawFilter = ".";
+  }
   return QRegExp(rawFilter);
 }
 
