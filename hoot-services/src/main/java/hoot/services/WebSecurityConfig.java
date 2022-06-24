@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @ComponentScan(basePackages = {"hoot.services"})
 @PropertySource("classpath:oauth2-client.properties")
 @Profile("production")
@@ -24,7 +24,7 @@ public class WebSecurityConfig {
             .csrf().disable()
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
-            .antMatchers("/**").authenticated();
+            .anyRequest().authenticated();
         return http.build();
     }
 
