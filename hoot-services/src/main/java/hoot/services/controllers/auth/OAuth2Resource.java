@@ -1,21 +1,19 @@
 package hoot.services.controllers.auth;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
-import java.security.Principal;
-import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -27,23 +25,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.client.AuthorizationCodeOAuth2AuthorizedClientProvider;
-import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.endpoint.DefaultOAuth2AccessTokenResponseMapConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -53,19 +41,7 @@ import org.xml.sax.SAXException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hoot.services.ApplicationContextUtils;
-import hoot.services.HootProperties;
-import hoot.services.WebSecurityConfig;
-import hoot.services.command.ExternalCommandManagerImpl;
 import hoot.services.models.db.Users;
-
-import javax.ws.rs.core.Response;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.Request;
 
 
  @Controller
@@ -101,17 +77,8 @@ import javax.ws.rs.core.Request;
 	    @Value("${spring.security.oauth2.client.provider.osm.token-uri}")
 	    private String tokenUri;
 
-	    // TODO: get this from config somewhere
-//	    private String cookiePath = "";
-
-
 	    @Autowired
 	    private UserManager userManager;
-
-//	    @Autowired
-//	    private RestTemplate restTemplate;
-
-
 
 	    private InMemoryClientRegistrationRepository clientRegistry;
 
@@ -255,10 +222,6 @@ import javax.ws.rs.core.Request;
 	    	} catch (Exception e) {
 	    		return Response.status(500).build();
 	    	}
-
-	    	URI redirectURI = UriComponentsBuilder
-    			.fromHttpUrl(clientRegistry.findByRegistrationId("osm").getRedirectUri())
-    			.build().toUri();
 
 	        return Response.status(200)
 	        		.entity(user)
