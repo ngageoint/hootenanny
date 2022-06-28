@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services;
 
@@ -52,9 +52,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Profile("production")
 public class HootServicesSpringConfig {
     private static final Logger logger = LoggerFactory.getLogger(HootServicesSpringConfig.class);
-
-    @Autowired
-    private Environment env;
 
     public HootServicesSpringConfig() {}
 

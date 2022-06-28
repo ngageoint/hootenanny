@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services;
 
@@ -48,10 +48,10 @@ public class HootServicesJerseyApplication extends ResourceConfig {
         super.register(RequestContextFilter.class);
         super.register(HootUserRequestFilter.class);
 
-		// Could not get LoggingFeature to work for some reason.  Falling back to the deprecated LoggingFilter!
-		super.registerInstances(new LoggingFeature(logger,
-		                                             Level.ALL,
-		                                             LoggingFeature.Verbosity.PAYLOAD_TEXT,
-		                                             LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
+        // Could not get LoggingFeature to work for some reason.  Falling back to the deprecated LoggingFilter!
+        super.registerInstances(new LoggingFeature(logger,
+                                     Level.ALL,
+                                     LoggingFeature.Verbosity.PAYLOAD_TEXT,
+                                     LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
     }
 }

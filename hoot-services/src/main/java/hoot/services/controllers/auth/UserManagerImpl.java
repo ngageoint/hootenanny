@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.auth;
 
@@ -179,10 +179,10 @@ public class UserManagerImpl implements UserManager {
     }
 
 
-	@Override
-	public Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws InvalidUserProfileException {
-		Users user = parseUser(userDetailsJson);
-		user.setProviderAccessKey(accessToken);
+    @Override
+    public Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws InvalidUserProfileException {
+        Users user = parseUser(userDetailsJson);
+        user.setProviderAccessKey(accessToken);
         user.setEmail(String.format("%d@hootenanny", user.getId()));
 
         Users existingUser = this.getUser(user.getId());
@@ -201,7 +201,7 @@ public class UserManagerImpl implements UserManager {
         attributeSessionWithUser(sessionId, user);
         userCache.put(sessionId, user);
         return user;
-	}
+    }
 
 
     @Override
