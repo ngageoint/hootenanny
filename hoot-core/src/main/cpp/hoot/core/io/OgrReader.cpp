@@ -499,12 +499,12 @@ void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr&
       setProgress(
         Progress(
           ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
-          (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+          static_cast<float>(j) / static_cast<float>(layers.size() * numTasks), progressWeights[j]));
     }
     _d->open(path, layers[j]);
     _d->read(map);
+    _d->close();
   }
-  _d->close();
 }
 
 void OgrReader::setDefaultStatus(const Status& s)
@@ -1012,12 +1012,15 @@ void OgrReaderInternal::open(const QString& path, const QString& layer)
 
 void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 {
+  if (_layer)
+    _layer->Dereference();
+
   _path = path;
   _layerName = layer;
   if (layer == "")
     throw HootException("Please specify a layer to open.");
   else
-    _layer = _dataSource->GetLayerByName(layer.toUtf8());
+    _layer = _dataSource->GetLayerByName(layer.toUtf8().data());
 
   if (_layer == nullptr)
     throw HootException("Failed to identify source layer from data source.");
@@ -1055,6 +1058,9 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 
 void OgrReaderInternal::_openNextLayer()
 {
+  if (_layer)
+    _layer->Dereference();
+
   _layer = nullptr;
 
   LOG_VART(_pendingLayers);
@@ -1171,7 +1177,10 @@ void OgrReaderInternal::readNext(const OsmMapPtr& map)
         done = true;
       }
       else  // if there wasn't a next feature this layer is now empty set it to null so we'll load the next layer
+      {
+        _layer->Dereference();
         _layer = nullptr;
+      }
     }
   }
 }
@@ -1204,31 +1213,15 @@ void OgrReaderInternal::_translate(Tags& t)
     {
     // Sometimes we get a layer that GDAL says has an Unknown geometry type
     // This has been seen in ENC/S57 datasets
-    case wkbUnknown:
-      geomType = "Unknown";
-      break;
-
+    case wkbUnknown:              geomType = "Unknown";       break;
     case wkbPoint:
-    case wkbMultiPoint:
-      geomType = "Point";
-      break;
-
+    case wkbMultiPoint:           geomType = "Point";         break;
     case wkbLineString:
-    case wkbMultiLineString:
-      geomType = "Line";
-      break;
-
+    case wkbMultiLineString:      geomType = "Line";          break;
     case wkbPolygon:
-    case wkbMultiPolygon:
-      geomType = "Area";
-      break;
-
-    case wkbGeometryCollection:
-      geomType = "Collection";
-      break;
-
-    default:
-      throw HootException("Translate: Unsupported geometry type.");
+    case wkbMultiPolygon:         geomType = "Area";          break;
+    case wkbGeometryCollection:   geomType = "Collection";    break;
+    default:                      throw HootException("Translate: Unsupported geometry type.");
     }
 
     LOG_TRACE("Translating tags of size: " << t.size() << " to OSM...");
@@ -1244,7 +1237,6 @@ void OgrReaderInternal::initializePartial()
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-
   _useFileId = false;
 }
 
