@@ -1,11 +1,13 @@
 package hoot.services.controllers.auth;
 
 import java.io.IOException;
-import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,11 +29,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -210,6 +216,17 @@ import hoot.services.models.db.Users;
 
 		        try {
 		            user = userManager.upsert(userDetailsJson, accessToken, request.getSession().getId());
+
+		            Map<String,Object> attributes = new HashMap<>();
+                    attributes.put("name", user.getDisplayName());
+                    attributes.put("Bearer", accessToken);
+	                SecurityContext sc = SecurityContextHolder.getContext();
+	                OAuth2User oUser = new DefaultOAuth2User(null, attributes, tokenType);
+	                Authentication auth = new OAuth2AuthenticationToken(oUser, null, clientId);
+	                sc.setAuthentication(auth);
+	                HttpSession session = request.getSession(false);
+	                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+
 		        } catch (InvalidUserProfileException | SAXException | IOException | ParserConfigurationException e) {
 		            logger.error("Failed to read user profile from oauth provider", e);
 		            return Response.status(502).build();
@@ -228,5 +245,19 @@ import hoot.services.models.db.Users;
 	        		.type(MediaType.APPLICATION_JSON).build();
 	    };
 
+	    @GET
+	    @Path("/oauth2/logout")
+	    @Produces(MediaType.TEXT_PLAIN)
+	    public Response logout(@Context HttpServletRequest request) {
+
+            SecurityContext sc = SecurityContextHolder.getContext();
+            sc.setAuthentication(null);
+
+	        // Invalidate HTTP Session
+	        HttpSession sess = request.getSession();
+	        sess.invalidate();
+
+	        return Response.ok().build();
+	    }
 
  }
