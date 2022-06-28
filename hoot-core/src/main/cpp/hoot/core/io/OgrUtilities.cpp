@@ -292,11 +292,12 @@ OgrOptions OgrUtilities::_getOgrOptions(const QString& url, const OgrDriverInfo&
   }
   else if (driver == "ESRI Shapefile" && !url.startsWith("/vsi"))
   {
-    // Restore broken or absent .shx file from associated .shp file during opening
+    // Restore broken or absent .shx file from associated .shp file during opening when the config
+    // option is set (true by default)
     // NOTE: This is a GLOBAL setting, not one for the driver.
     // Also, this setting fights with the /vsi driver.  The vsi driver can not write to the .shx
     // file while it is reading from the zip/tar/etc
-    CPLSetConfigOption("SHAPE_RESTORE_SHX", "YES");
+    CPLSetConfigOption("SHAPE_RESTORE_SHX", ConfigOptions().getOgrEsriShapeRestoreShx() ? "YES" : "NO");
   }
   else if (driver == "GPKG")
   {

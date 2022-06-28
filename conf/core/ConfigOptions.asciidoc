@@ -3636,6 +3636,14 @@ Add the ESRI specific FCSUBTYPE field to the output.
 The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
 Geodatabases.
 
+=== ogr.esri.shape.restore.shx
+
+* Data Type: bool
+* Default Value: `true`
+
+Enable OGR setting to restore SHX file when reading SHP files, this is useful for missing or
+corrupted SHX files.
+
 === ogr.import.filter
 
 * Data Type: string
