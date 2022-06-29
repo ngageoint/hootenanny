@@ -51,9 +51,9 @@ echo "#######################################################################"
 ./configure -q                   --without-newmat --with-services                                   && build
 
 echo "#######################################################################"
-echo "### 07. ./configure -q                                                #"
+echo "### 07. ./configure -q --with-services --with-uitests                 #"
 echo "#######################################################################"
-./configure -q
+./configure -q --with-services --with-uitests
 
 echo "#######################################################################"
 echo "# Success!                                                            #"
