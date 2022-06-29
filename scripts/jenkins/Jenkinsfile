@@ -16,12 +16,12 @@ pipeline {
     parameters {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
-        // TEST
-        booleanParam(name: 'Configure_Tests', defaultValue: true)
+        booleanParam(name: 'Configure_Tests', defaultValue: false)
+//TEST
         // Generating a core test coverage report slows down the core tests quite a bit, so turning
-        // it off by default.
+        // it off by default
         booleanParam(name: 'Coverage', defaultValue: true)
-        // END TEST
+//ENDTEST
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
@@ -136,6 +136,8 @@ pipeline {
             steps {
                 // Allow test coverage to be generated.
                 sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
+                // Test coverage requires a different optimization level
+                sh "sed -i 's/QMAKE_CXXFLAGS+=-O3/QMAKE_CXXFLAGS+=-O1/' LocalConfig.pri.orig"
             }
         }
         stage("Build") {
