@@ -105,7 +105,7 @@ schemaTools.generateRuleTags = function(rule) {
 
     tags = schemaTools.expandAliases(tags);
 
-    for (i in tags) {
+    for (var i in tags) {
       if (tags[i].value !== '' && tags[i].value !== '*')
       {
         var schemaScore = hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
@@ -127,7 +127,7 @@ schemaTools.generateRuleTags = function(rule) {
 
     tags = schemaTools.expandAliases(tags);
 
-    for (i in tags) {
+    for (var i in tags) {
       if (tags[i].value !== '' && tags[i].value !== '*')
       {
         tags[i].score = rule.score;
@@ -138,7 +138,7 @@ schemaTools.generateRuleTags = function(rule) {
     var tags = [hoot.OsmSchema.getTagVertex(rule.name)];
     tags = schemaTools.expandAliases(tags);
 
-    for (i in tags) {
+    for (var i in tags) {
       tags[i].score = rule.score;
       result.push(tags[i]);
     }

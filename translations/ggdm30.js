@@ -473,7 +473,7 @@ ggdm30 = {
 
     default:
       // Debug
-      hoot.logWarn('ManyFeatures: Should get to here');
+      hoot.logDebug('ManyFeatures: Should get to here');
     } // end switch
 
     // Now make new features based on what tags are left
@@ -2518,6 +2518,7 @@ ggdm30 = {
           || tags['source:imagery:earliestDate']
           || tags['source:date']
           || tags['source:geometry:date']
+          || tags['hoot:timestamp']
           || 'noInformation';
 
       // Drop the default value so that it doesn't cause issues in the UI
@@ -2757,7 +2758,7 @@ ggdm30 = {
 
     // apply the simple number and text biased rules
     // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-    translate.numToOSM(notUsedAttrs, tags, ggdm30.rules.numBiased,);
+    translate.numToOSM(notUsedAttrs, tags, ggdm30.rules.numBiased);
     translate.txtToOSM(notUsedAttrs, tags, ggdm30.rules.txtBiased);
 
     // one 2 one

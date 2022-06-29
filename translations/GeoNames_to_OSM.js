@@ -953,7 +953,7 @@ function translateToOsm(attrs, layerName, geometryType)
     // Feature Code
     if (geonames.one2many[attrs.feature_code])
     {
-      for (i in geonames.one2many[attrs.feature_code]) tags[i] = geonames.one2many[attrs.feature_code][i];
+      for (var i in geonames.one2many[attrs.feature_code]) tags[i] = geonames.one2many[attrs.feature_code][i];
 
       // If it's just a POI, add "poi=yes"
       if (tags['poi:type']) tags.poi = 'yes';

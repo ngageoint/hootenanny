@@ -68,7 +68,7 @@ translate = {
   createBoolLookup: function(list)
   {
     var lookup = {};
-    for (l in list)
+    for (var l in list)
     {
       lookup[l] = true;
     }
