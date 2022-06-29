@@ -397,7 +397,7 @@ enc311 = {
 
     // Now break up the seamark:XXX and seamark:XXX:YYY tags
     // NOTE: The next step is to split and translate these
-    for (tag in tags)
+    for (var tag in tags)
     {
       if (tag.indexOf('seamark:') == -1) continue;
 
