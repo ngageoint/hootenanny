@@ -31,92 +31,18 @@ if (typeof hoot === 'undefined') {
     if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
 }
 
-//Getting schema for fcode, geom type
-var availableTrans = {
-    TDSv40: {isavailable: true},
-    TDSv61: {isavailable: true},
-    TDSv70: {isavailable: true},
-    TDSv71: {isavailable: true},
-    MGCP: {isavailable: true},
-    GGDMv30: {isavailable: true}
-};
-
-var schemaMap = {
-    TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
-    TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
-    TDSv70: require(HOOT_HOME + '/translations/tds70_full_schema.js'),
-    TDSv71: require(HOOT_HOME + '/translations/tds71_full_schema.js'),
-    MGCP: require(HOOT_HOME + '/translations/mgcp_schema.js'),
-    GGDMv30: require(HOOT_HOME + '/translations/ggdm30_schema.js')
-};
-
-//Getting osm tags for fcode
-var fcodeLookup = {
-    TDSv40: require(HOOT_HOME + '/translations/TDSv40.js'),
-    TDSv61: require(HOOT_HOME + '/translations/TDSv61.js'),
-    TDSv70: require(HOOT_HOME + '/translations/TDSv70.js'),
-    TDSv71: require(HOOT_HOME + '/translations/TDSv71.js'),
-    MGCP: require(HOOT_HOME + '/translations/MGCP_TRD4.js'),
-    GGDMv30: require(HOOT_HOME + '/translations/GGDMv30.js')
-};
+// Setup the lists of schema
+var availableTrans = {};
+var schemaMap = {};
+var fcodeLookup = {};
 
 var translationsMap = {
-    toogr: {
-        TDSv40: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
-            'schema.translation.direction': 'toogr'
-        }),
-        TDSv61: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
-            'schema.translation.direction': 'toogr'
-        }),
-        TDSv70: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv70.js',
-            'schema.translation.direction': 'toogr'
-        }),
-        TDSv71: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv71.js',
-            'schema.translation.direction': 'toogr'
-        }),
-        MGCP: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
-            'schema.translation.direction': 'toogr'
-        }),
-        GGDMv30: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
-            'schema.translation.direction': 'toogr'
-        })
-    },
-    toosm: {
-        TDSv40: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
-            'schema.translation.direction': 'toosm'
-        }),
-        TDSv61: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
-            'schema.translation.direction': 'toosm'
-        }),
-        TDSv70: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv70.js',
-            'schema.translation.direction': 'toosm'
-        }),
-        TDSv71: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/TDSv71.js',
-            'schema.translation.direction': 'toosm'
-        }),
-        MGCP: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
-            'schema.translation.direction': 'toosm'
-        }),
-        GGDMv30: new hoot.SchemaTranslationOp({
-            'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
-            'schema.translation.direction': 'toosm'
-        })
-    }
+    toogr: {},
+    toosm: {}
 };
 
-// Check if we have a config file for 'translations-local'
-// If so, add it to the config from above
+// Get the list of directories to look for config files
+var transDirList = hoot.Settings.get('convert.translation.dir.list').split(';');
 
 // The structure of the file is very basic json:
 // {
@@ -130,30 +56,41 @@ var translationsMap = {
 // }
 
 var tLocal = {}
-try {
-    tLocal = require(HOOT_HOME + '/translations-local/translationServerConfig.json');
+var tPath = '';
+transDirList.forEach(function (dir) {
+    try {
 
-    Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
-    Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(HOOT_HOME + tLocal.schemaMap[k]); });
-    Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(HOOT_HOME + tLocal.fcodeLookup[k])});
+        tPath = HOOT_HOME + '/' + dir + '/';
+        tLocal = require(tPath + 'translationServerConfig.json');
 
-    Object.keys(tLocal.translationsMap.toogr).forEach(k => {
-        translationsMap.toogr[k] = new hoot.SchemaTranslationOp({
-                'schema.translation.script': HOOT_HOME + tLocal.translationsMap.toogr[k],
-                'schema.translation.direction': 'toogr'
-            });
-    });
+console.log('Trying: ' + tPath);
+        Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
 
-    Object.keys(tLocal.translationsMap.toosm).forEach(k => {
-        translationsMap.toosm[k] = new hoot.SchemaTranslationOp({
-                'schema.translation.script': HOOT_HOME + tLocal.translationsMap.toosm[k],
-                'schema.translation.direction': 'toosm'
-            });
-    });
-} catch (e) {
-    // Skipping the log statement due to it causing test failures when using diff on the output
-    // console.log('Skipping translations-local config');
-}
+        // Defensive coding. Previously the config file had the path embedded in the JSON
+        Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(tPath + tLocal.schemaMap[k].replace('/' + dir + '/','')); });
+        Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(tPath + tLocal.fcodeLookup[k].replace('/' + dir + '/',''))});
+
+        Object.keys(tLocal.translationsMap.toogr).forEach(k => {
+            translationsMap.toogr[k] = new hoot.SchemaTranslationOp({
+                    'schema.translation.script': tPath + tLocal.translationsMap.toogr[k].replace('/' + dir + '/',''),
+                    'schema.translation.direction': 'toogr'
+                });
+        });
+
+        Object.keys(tLocal.translationsMap.toosm).forEach(k => {
+            translationsMap.toosm[k] = new hoot.SchemaTranslationOp({
+                    'schema.translation.script': tPath + tLocal.translationsMap.toosm[k].replace('/' + dir + '/',''),
+                    'schema.translation.direction': 'toosm'
+                });
+        });
+    } catch (e) {
+console.log('Failed: ' + tPath);
+        // Skipping the log statement due to it causing test failures when using diff on the output
+        // console.log('Skipping translations-local config');
+    }
+});
+
+console.log('schemaMap: ' + JSON.stringify(schemaMap));
 
 availableTranslations = Object.keys(schemaMap);
 
