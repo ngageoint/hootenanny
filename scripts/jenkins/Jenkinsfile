@@ -134,6 +134,8 @@ pipeline {
             steps {
                 // Allow test coverage to be generated.
                 sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
+                // Test coverage requires a different optimization level
+                sh "sed -i 's/QMAKE_CXXFLAGS+=-O3/QMAKE_CXXFLAGS+=-O1/' LocalConfig.pri.orig"
             }
         }
         stage("Build") {
