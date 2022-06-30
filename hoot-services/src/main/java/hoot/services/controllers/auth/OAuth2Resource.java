@@ -143,6 +143,30 @@ import hoot.services.models.db.Users;
                 .build().encode().toString();
         }
 
+        private ResponseEntity<String> doTokenRevoke() {
+            ClientRegistration osmRegistration = clientRegistry.findByRegistrationId("osm");
+            RestTemplate restTemplate = new RestTemplate();
+
+            SecurityContext sc = SecurityContextHolder.getContext();
+            OAuth2AuthenticationToken oToken = (OAuth2AuthenticationToken)sc.getAuthentication();
+            String accessToken = oToken.getPrincipal().getAttribute("Bearer");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("content-type", "application/x-www-form-urlencoded");
+
+            HttpEntity<String> request = new HttpEntity<String>(headers);
+
+            String revokeUrl = osmRegistration.getProviderDetails().getTokenUri().replaceAll("token$", "revoke");
+            String revokeRequest = UriComponentsBuilder
+                .fromHttpUrl(revokeUrl)
+                .queryParam("client_id", osmRegistration.getClientId())
+                .queryParam("client_secret", osmRegistration.getClientSecret())
+                .queryParam("token", accessToken)
+                .build().encode().toUri().toString();
+
+            return restTemplate.postForEntity(revokeRequest, request, String.class);
+        }
+
         private ResponseEntity<String> doTokenRequest(String code) {
             ClientRegistration osmRegistration = clientRegistry.findByRegistrationId("osm");
             RestTemplate restTemplate = new RestTemplate();
@@ -275,6 +299,11 @@ import hoot.services.models.db.Users;
         @Path("/oauth2/logout")
         @Produces(MediaType.TEXT_PLAIN)
         public Response logout(@Context HttpServletRequest request) {
+            // Revoke the osm access token
+            ResponseEntity<String> revokeResponse = doTokenRevoke();
+            if (!revokeResponse.getStatusCode().equals(HttpStatus.OK)) {
+                return Response.status(500).build();
+            }
 
             // Invalidate HTTP Session
             HttpSession sess = request.getSession();
