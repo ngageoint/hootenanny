@@ -241,7 +241,7 @@ import hoot.services.models.db.Users;
                 JsonNode userDetailsJson = new ObjectMapper().readTree(userDetailsRequest.getBody());
 
                 try {
-                    user = userManager.upsert(userDetailsJson, accessToken, request.getSession().getId());
+                    user = userManager.upsert(userDetailsJson, tokenType, accessToken, request.getSession().getId());
 
                     Map<String,Object> attributes = new HashMap<>();
                     attributes.put("name", user.getDisplayName());

@@ -180,9 +180,10 @@ public class UserManagerImpl implements UserManager {
 
 
     @Override
-    public Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws InvalidUserProfileException {
+    public Users upsert(JsonNode userDetailsJson, String tokenType, String accessToken, String sessionId) throws InvalidUserProfileException {
         Users user = parseUser(userDetailsJson);
         user.setProviderAccessKey(accessToken);
+        user.setProviderAccessToken(tokenType);
         user.setEmail(String.format("%d@hootenanny", user.getId()));
 
         Users existingUser = this.getUser(user.getId());

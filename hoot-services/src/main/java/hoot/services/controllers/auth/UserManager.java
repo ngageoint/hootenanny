@@ -40,7 +40,7 @@ import hoot.services.models.db.Users;
 
 @Service
 public interface UserManager {
-    Users upsert(JsonNode userDetailsJson, String accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
+    Users upsert(JsonNode userDetailsJson, String tokenType, String accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
     Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
     Users parseUser(JsonNode userDetailsJson) throws InvalidUserProfileException;
 
