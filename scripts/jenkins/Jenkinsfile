@@ -17,11 +17,9 @@ pipeline {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
-//TEST
         // Generating a core test coverage report slows down the core tests quite a bit, so turning
-        // it off by default
-        booleanParam(name: 'Coverage', defaultValue: true)
-//ENDTEST
+        // it off by default.
+        booleanParam(name: 'Coverage', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
