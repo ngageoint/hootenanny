@@ -42,16 +42,28 @@ var translationsMap = {
 };
 
 // Get the list of directories to look for config files
-var transDirList = hoot.Settings.get('convert.translation.dir.list').split(';');
+var transDirList = hoot.Settings.get('javascript.schema.translator.path').split(';');
+// The directory list is a list of full paths. From the Config asciidoc:
+// === javascript.schema.translator.path
+// * Data Type: list
+// * Default Value:
+// ** `${HOOT_HOME}/translations`
+// ** `${HOOT_HOME}/translations-local`
+// ** `${HOOT_HOME}/rules`
 
-// The structure of the file is very basic json:
+// A list of paths to include in the javascript translator search path.
+// To change this at runtime, add a line to the $HOOT_HOME/conf/hoot.json with the list of directories.
+// E.g.  "convert.translation.dir.list":"${HOOT_HOME}/translations;${HOOT_HOME}/translations-local;${HOOT_HOME}/papaSmurf",
+
+
+// The structure of the translation config file is very basic json:
 // {
 // "availableTrans" : {"Smurf": {"isavailable": true}},
-// "schemaMap" : {"Smurf":"/translations-local/Smurf_full_schema.js"},
-// "fcodeLookup" : {"Smurf": "/translations-local/eSmurf_osm.js"},
+// "schemaMap" : {"Smurf":"/Smurf_full_schema.js"},
+// "fcodeLookup" : {"Smurf": "eSmurf_osm.js"},
 // "translationsMap" : {
-//     "toogr": {"Smurf": "/translations-local/Smurf_to_OGR.js" },
-//     "toosm": {"Smurf": "/translations-local/Smurf_to_OSM.js"}
+//     "toogr": {"Smurf": "Smurf_to_OGR.js" },
+//     "toosm": {"Smurf": "Smurf_to_OSM.js"}
 //     }
 // }
 
@@ -59,38 +71,33 @@ var tLocal = {}
 var tPath = '';
 transDirList.forEach(function (dir) {
     try {
+        tLocal = require(dir + '/translationServerConfig.json');
 
-        tPath = HOOT_HOME + '/' + dir + '/';
-        tLocal = require(tPath + 'translationServerConfig.json');
-
-console.log('Trying: ' + tPath);
         Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
 
-        // Defensive coding. Previously the config file had the path embedded in the JSON
-        Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(tPath + tLocal.schemaMap[k].replace('/' + dir + '/','')); });
-        Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(tPath + tLocal.fcodeLookup[k].replace('/' + dir + '/',''))});
+        // Defensive coding. Previously the config file had the path embedded in the JSON instead of using the path in the Hoot config
+        Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(dir + '/' + tLocal.schemaMap[k].split('/').pop()); });
+
+        Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(dir + '/' + tLocal.fcodeLookup[k].split('/').pop())});
 
         Object.keys(tLocal.translationsMap.toogr).forEach(k => {
             translationsMap.toogr[k] = new hoot.SchemaTranslationOp({
-                    'schema.translation.script': tPath + tLocal.translationsMap.toogr[k].replace('/' + dir + '/',''),
-                    'schema.translation.direction': 'toogr'
+                    'schema.translation.script': dir + '/' + tLocal.translationsMap.toogr[k].split('/').pop(),
+                    'schema.translation.direction':'toogr'
                 });
         });
 
         Object.keys(tLocal.translationsMap.toosm).forEach(k => {
             translationsMap.toosm[k] = new hoot.SchemaTranslationOp({
-                    'schema.translation.script': tPath + tLocal.translationsMap.toosm[k].replace('/' + dir + '/',''),
-                    'schema.translation.direction': 'toosm'
+                    'schema.translation.script': dir + '/' + tLocal.translationsMap.toosm[k].split('/').pop(),
+                    'schema.translation.direction':'toosm'
                 });
         });
     } catch (e) {
-console.log('Failed: ' + tPath);
         // Skipping the log statement due to it causing test failures when using diff on the output
         // console.log('Skipping translations-local config');
     }
 });
-
-console.log('schemaMap: ' + JSON.stringify(schemaMap));
 
 availableTranslations = Object.keys(schemaMap);
 

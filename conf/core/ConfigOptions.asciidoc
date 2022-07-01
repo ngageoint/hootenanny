@@ -1202,19 +1202,6 @@ information about the available operations.
 If true, an element must be classifiable as an area geometry in the schema in order to be converted
 to a GEOS polygon.
 
-=== convert.translation.dir.list
-
-* Data Type: list
-* Default Value:
-** `translations`
-** `translations-local`
-
-Specifies a list of directories for the TranslationServer to look for translation scripts. The TranslationServer.js
-script will try to load a translationServerConfig.js file from each directory specified.
-To change this at runtime, add a line to the $HOOT_HOME/conf/hoot.json with the list of directories.
-E.g.  "convert.translation.dir.list":"translations;translations-local;papaSmurf",
-NOTE: These directories are expected to be in the Hootenanny root directory ($HOOT_HOME)
-
 === convert.translate.multithreaded
 
 * Data Type: bool
@@ -2483,6 +2470,8 @@ List of way IDs to find intersecting ways for when using `IntersectingWayCriteri
 ** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
+To change this at runtime, add a line to the $HOOT_HOME/conf/hoot.json with the list of directories.
+E.g.  "convert.translation.dir.list":"${HOOT_HOME}/translations;${HOOT_HOME}/translations-local;${HOOT_HOME}/papaSmurf",
 
 === in.bounds.criterion.bounds
 
