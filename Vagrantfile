@@ -100,11 +100,14 @@ if $yumUpdate.nil?
   $yumUpdate = "no"
 end
 
+$isAWS = false
+
 Vagrant.configure(2) do |config|
 
   def aws_provider(config, os, vbox)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
+      $isAWS = true;
       override.nfs.functional = false
       if vbox == "hoot"
           aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_HOOT_AMI_ID']
@@ -193,7 +196,7 @@ Vagrant.configure(2) do |config|
           config.vm.synced_folder "/fouo", "/fouo", type: "sshfs", sshfs_opts_append: "-o nonempty"
         end
       else
-        if config.vm.provider != :aws
+        if !$isAWS
           puts '## Warning: you are not using sshfs. Please run \'vagrant plugin install vagrant-sshfs\' to enable sshfs.'
         end
         config.vm.synced_folder ".", "/home/vagrant/hoot"
