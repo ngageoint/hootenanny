@@ -193,7 +193,9 @@ Vagrant.configure(2) do |config|
           config.vm.synced_folder "/fouo", "/fouo", type: "sshfs", sshfs_opts_append: "-o nonempty"
         end
       else
-    	puts '## Warning: you are not using sshfs. Please run \'vagrant plugin install vagrant-sshfs\' to enable sshfs.'
+        if config.vm.provider != :aws
+          puts '## Warning: you are not using sshfs. Please run \'vagrant plugin install vagrant-sshfs\' to enable sshfs.'
+        end
         config.vm.synced_folder ".", "/home/vagrant/hoot"
         if $fouoShare
           config.vm.synced_folder "/fouo", "/fouo"

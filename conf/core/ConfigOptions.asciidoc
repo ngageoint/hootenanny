@@ -712,7 +712,7 @@ files
 * Data Type: string
 * Default Value: `tmp`
 
-Directory path to store debug output files in for `changeset-appy` commands.
+Directory path to store debug output files in for `changeset-apply` commands.
 
 NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
 files
