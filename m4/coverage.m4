@@ -15,6 +15,9 @@ AC_DEFUN([COVERAGE_INIT],[
       AC_CHECK_PROG(LCOV_FOUND, lcov, [yes], [no])
       AS_IF([test "x$LCOV_FOUND" != "xyes"], [AC_MSG_ERROR([Unable to find lcov])])
       AC_SUBST(HAS_COVERAGE, "coverage")
+      echo Code coverage support enabled.
+    else
+      AC_MSG_NOTICE(Code coverage support disabled.)
     fi
   fi
 

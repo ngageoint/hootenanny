@@ -21,7 +21,6 @@ debug {
 release {
   DEFINES -= DEBUG
   # Turn on release optimizations
-  # NOTE: Doesn't play well with configure setting '--with-coverage' reduce to -O1
   QMAKE_CXXFLAGS+=-O3
 }
 
