@@ -133,7 +133,7 @@ pipeline {
             }
             steps {
                 // Allow test coverage to be generated.
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/EnableCoverage.sh'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/cover/EnableCoverage.sh'"
             }
         }
         stage("Build") {

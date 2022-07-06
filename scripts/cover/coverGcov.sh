@@ -21,7 +21,7 @@ for GCOV_PATH in ${GCOV_SCAN_PATHS[@]}; do
     # Remove the old log file
     rm -f $HOOT_HOME/$GCOV_PATH/tmp/gcov.log
     # Iterate all gcda files
-    for GCDA_FILE in $HOOT_HOME/$GCOV_PATH/tmp/debug/*.gcno;
+    for GCDA_FILE in $HOOT_HOME/$GCOV_PATH/tmp/debug/*.gcda;
     do
       # Create coverage
       echo "gcov $GCDA_FILE"
