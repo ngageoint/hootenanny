@@ -1,5 +1,5 @@
 
-CONFIG += release 
+CONFIG += release
 CONFIG -= debug
 
 #CONFIG += debug
