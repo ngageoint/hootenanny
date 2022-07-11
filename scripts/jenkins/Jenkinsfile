@@ -42,7 +42,6 @@ pipeline {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
-        BUILD_DEBUG = 'no'
         HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
         HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
         HOOT_AWS_GROUP_TAG="${params.HOOT_AWS_GROUP_TAG}"
@@ -58,6 +57,10 @@ pipeline {
         }
         stage("Setup") {
             steps {
+                script {
+                    // Setup debug build as local environment variable that can be modified
+                    env.BUILD_DEBUG = 'no'
+                }
                 script {
                     if (env.BRANCH_NAME.startsWith("release")) {
                         sh '''
@@ -133,7 +136,11 @@ pipeline {
             }
             steps {
                 // Allow test coverage to be generated.
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/EnableCoverage.sh'"
+                sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
+                // Coverage must be built in debug mode
+                script {
+                    env.BUILD_DEBUG = 'yes'
+                }
             }
         }
         stage("Build") {
