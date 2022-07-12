@@ -124,7 +124,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setCreateAllLayers(configOptions.getOgrWriterCreateAllLayers());
-  setSchemaTranslationScript(configOptions.getOgrWriterScript());
+  setSchemaTranslationScript(configOptions.getSchemaTranslationScript());
   setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
   _appendData = configOptions.getOgrAppendData();

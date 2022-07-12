@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -63,16 +62,11 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     if (args.Length() != 1)
       throw IllegalArgumentException("Expected exactly one argument to 'require'.");
 
-    /*
-    The new Hoot "include" files are all under $HOOT_HOME/translations & $HOOT_HOME/translations_local
-    */
-
     const QString hootHome = ConfPath::getHootHome();
     if (hootHome.isEmpty())
       throw HootException("$HOOT_HOME is empty.");
 
-    Settings conf;
-    QStringList libPath = ConfigOptions(conf).getJavascriptSchemaTranslatorPath();
+    QStringList libPath = ConfigOptions().getJavascriptSchemaTranslatorPath();
 
     QString scriptName = toCpp<QString>(args[0]);
     QString fullPath; // the final script path
@@ -82,12 +76,12 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
       throw HootException("Error: Script name is a path: " + scriptName);
 
     for (int i = 0; i < libPath.size(); i++)
-    {
+    {  
       QString trimmed = libPath[i].trimmed();
       if (trimmed.isEmpty() == false)
       {
         // This probably should be put into a config variable...
-        fullPath = hootHome + libPath[i].trimmed() + "/" + scriptName + ".js";
+        fullPath = hootHome + "/" + trimmed + "/" + scriptName + ".js";
 
         QFileInfo info(fullPath);
         if (info.exists())
