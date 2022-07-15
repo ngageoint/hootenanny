@@ -1172,10 +1172,14 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
       !_accessToken.isEmpty() &&
       !_secretToken.isEmpty())
   {
+    // Old, remove when oauth2 works
     //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
-    request =
-      std::make_shared<HootNetworkRequest>(
-        _consumerKey, _consumerSecret, _accessToken, _secretToken);
+    //request =
+    //  std::make_shared<HootNetworkRequest>(
+    //    _consumerKey, _consumerSecret, _accessToken, _secretToken);
+
+    // Oauth2 only requires the access token
+    request = std::make_shared<HootNetworkRequest>(_accessToken);
   }
   else
   {
