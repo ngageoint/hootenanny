@@ -63,13 +63,11 @@ public:
    */
   HootNetworkRequest(const QString& consumer_key, const QString& consumer_secret,
                      const QString& access_token, const QString& access_secret);
-
   /**
    * @brief HootNetworkRequest - oauth2
-   * @param access_token - OAuth access token
+   * @param access_token - OAuth2 access token
    */
   HootNetworkRequest(const QString& access_token);
-
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
@@ -97,7 +95,7 @@ public:
   /**
    * @brief getResponseContent
    * @return HTTP response content
-   */ 
+   */
   const QByteArray& getResponseContent() const { return _content; }
   /**
    * @brief getHttpStatus
@@ -174,11 +172,9 @@ private:
 
   /**
    * @brief _setOAuth2Header Sets the "Authorization: Bearer" HTTP header for the specific request
-   * @param http_op OAuth signatures are based off of the HTTP operation type (GET/PUT/POST)
    * @param request Reference to the actual network request object
    */
-  void _setOAuth2Header(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const;
-
+  void _setOAuth2Header(QNetworkRequest& request) const;
   /** HTTP response body, if available */
   QByteArray _content;
   /** HTTP status response code  */
@@ -198,8 +194,7 @@ private:
 
   /** OAuth 2.0 flag and token */
   bool _useOAuth2;
-  QString oauth2AccessToken;
-
+  QString _oauth2AccessToken;
   /** Flag set when the timer times out */
   bool _timedOut;
 };

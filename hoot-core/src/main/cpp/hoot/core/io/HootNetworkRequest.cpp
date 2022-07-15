@@ -56,7 +56,7 @@ HootNetworkRequest::HootNetworkRequest()
 HootNetworkRequest::HootNetworkRequest(const QString& consumer_key, const QString& consumer_secret,
                                        const QString& request_token, const QString& request_secret)
   : _useOAuth1(true),
-    _useOAuth2(true),
+    _useOAuth2(false),
     _timedOut(false)
 {
   setOAuthKeys(consumer_key, consumer_secret, request_token, request_secret);
@@ -79,7 +79,7 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
 HootNetworkRequest::HootNetworkRequest(const QString& access_token)
   : _useOAuth1(false),
     _useOAuth2(true),
-    oauth2AccessToken(access_token),
+    _oauth2AccessToken(access_token),
     _timedOut(false)
 {
   // nothing
@@ -146,8 +146,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   //  Setup the OAuth header on the request object
   if (_useOAuth1 && _consumer && _tokenRequest)
     _setOAuth1Header(http_op, request);
-  else if (_useOAuth2 && oauth2AccessToken != "")
-    _setOAuth2Header(http_op, request);
+  else if (_useOAuth2 && !_oauth2AccessToken.isEmpty())
+    _setOAuth2Header(request);
   //  Setup timeout
   QEventLoop loop;
   QTimer timeoutTimer;
@@ -257,12 +257,10 @@ void HootNetworkRequest::_setOAuth1Header(QNetworkAccessManager::Operation http_
   request.setRawHeader("Authorization", QString(header.c_str()).toUtf8());
 }
 
-void HootNetworkRequest::_setOAuth2Header(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const
+void HootNetworkRequest::_setOAuth2Header(QNetworkRequest& request) const
 {
-  (void) http_op;
-
-  //  Set the Authorization header for OAuth
-  request.setRawHeader("Authorization", QString("Bearer ").append(oauth2AccessToken).toUtf8());
+  //  Set the Authorization header for OAuth2
+  request.setRawHeader("Authorization", QString("Bearer ").append(_oauth2AccessToken).toUtf8());
 }
 
 void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl& url)

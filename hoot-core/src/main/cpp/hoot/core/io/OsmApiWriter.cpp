@@ -67,6 +67,7 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _oauth2AccessToken(ConfigOptions().getHootServicesOauth2AccessToken()),
     _changesetCount(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
@@ -98,6 +99,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _oauth2AccessToken(ConfigOptions().getHootServicesOauth2AccessToken()),
     _changesetCount(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
@@ -673,6 +675,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _consumerSecret = options.getHootOsmAuthConsumerSecret();
   _accessToken = options.getHootOsmAuthAccessToken();
   _secretToken = options.getHootOsmAuthAccessTokenSecret();
+  _oauth2AccessToken = options.getHootServicesOauth2AccessToken();
   _debugOutput = options.getChangesetApidbWriterDebugOutput();
   _debugOutputPath = options.getChangesetApidbWriterDebugOutputPath();
   _throttleCgiMap = options.getChangesetApidbWritersThrottleCgimap();
@@ -1180,6 +1183,12 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
 
     // Oauth2 only requires the access token
     request = std::make_shared<HootNetworkRequest>(_accessToken);
+  }
+  else if (!_oauth2AccessToken.isEmpty())
+  {
+    //  When OAuth2 token is present and authentication is requested, pass OAuth2 crendentials
+    request =
+      std::make_shared<HootNetworkRequest>(_oauth2AccessToken);
   }
   else
   {
