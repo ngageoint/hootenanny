@@ -197,23 +197,3 @@ joshuaMaxMemory=16
 
 # path to downloaded language detection model for OpenNLP relative to resources directory
 openNlpLanguageDetectionModel=language-translation/langdetect-183.bin
-
-# oAuth Redirect URL
-# [!] Externally facing URL [!]
-# This will be used to redirect the user back to the site;
-# and should land the user at index.html to complete the oAuth process.
-# This value works for the UI running separately with node:
-oauthRedirectURL=http://localhost:8080/login.html
-# This value works for the Hoot2x UI deployed by tomcat on vagrant:
-# oauthRedirectURL=http://localhost:8888/hootenanny-id/login.html
-# This value works for the Hoot1 UI deployed by tomcat on vagrant:
-# oauthRedirectURL=http://localhost:8888/hootenanny-id-legacy/
-# This value works with hoot core OOB auth:
-# oauthRedirectURL=http://localhost:8888/hoot-services/out-of-band.html
-
-# oAuth Provider
-# Also see hoot-services/src/main/resources/security-applicationContext.xml
-oauthProviderURL=https://api.openstreetmap.org
-
-# oAuth Methods
-oauthPathsUser=/api/0.6/user/details
