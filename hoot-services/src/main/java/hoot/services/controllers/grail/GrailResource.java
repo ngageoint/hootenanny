@@ -94,7 +94,6 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -140,9 +139,6 @@ public class GrailResource {
 
     @Autowired
     private PullApiCommandFactory apiCommandFactory;
-
-//    @Autowired
-//    private OAuthRestTemplate oauthRestTemplate;
 
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
@@ -479,10 +475,6 @@ public class GrailResource {
 
     private ExternalCommand createApplyWorkflow(String jobId, GrailParams pushParams, String debugLevel) {
         pushParams.setPushUrl(RAILSPORT_PUSH_URL);
-
-//        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-//        pushParams.setConsumerKey(oauthInfo.getConsumerKey());
-//        pushParams.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         try {
             railsOnlineCheck();
