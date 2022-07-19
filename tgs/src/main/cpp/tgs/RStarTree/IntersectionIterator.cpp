@@ -38,97 +38,87 @@
 
 namespace Tgs
 {
-  IntersectionIterator::IntersectionIterator(const RStarTree* tree,
-                                             const std::vector<double>& minBounds,
-                                             const std::vector<double>& maxBounds)
-    : _tree(tree),
-      _minBounds(minBounds),
-      _maxBounds(maxBounds),
-      _done(false)
-  {
-    const RTreeNode* root = _tree->getRoot();
-    _pendingNodes.push_back(root->getId());  //Begin traversal at root
+IntersectionIterator::IntersectionIterator(const RStarTree* tree,
+                                           const std::vector<double>& minBounds,
+                                           const std::vector<double>& maxBounds)
+  : _tree(tree),
+    _minBounds(minBounds),
+    _maxBounds(maxBounds),
+    _done(false)
+{
+  const RTreeNode* root = _tree->getRoot();
+  _pendingNodes.push_back(root->getId());  //Begin traversal at root
 
-    _populateNext();  //Traverse tree to gather nodes within range
+  _populateNext();  //Traverse tree to gather nodes within range
+}
+
+bool IntersectionIterator::_determineIntesection(const Box& box)
+{
+  // calculate a simple euclidean distance in n dimensional space
+  assert((int)_maxBounds.size() == box.getDimensions());
+  for (unsigned int i = 0; i < _maxBounds.size(); i++)
+  {
+    assert(box.getUpperBound(i) >= box.getLowerBound(i));
+    if (_minBounds[i] > box.getUpperBound(i) || box.getLowerBound(i) > _maxBounds[i])
+      return false;
   }
+  return true;
+}
 
-  bool IntersectionIterator::_determineIntesection(const Box& box)
+const Box& IntersectionIterator::getBox() const
+{
+  return _currentResult.box;
+}
+
+int IntersectionIterator::getId() const
+{
+  return _currentResult.id;
+}
+
+bool IntersectionIterator::hasNext()
+{
+  _populateNext();
+  return !_done;
+}
+
+bool IntersectionIterator::next()
+{
+  bool result = false;
+  _populateNext();
+  if (!_pendingResults.empty())
   {
-    // calculate a simple euclidean distance in n dimensional space
-    assert((int)_maxBounds.size() == box.getDimensions());
+    _currentResult = _pendingResults.front();
+    _pendingResults.pop_front();
+    result = true;
+  }
+  return result;
+}
 
-    for (unsigned int i = 0; i < _maxBounds.size(); i++)
+void IntersectionIterator::_populateNext()
+{
+  while (_pendingResults.empty() && !_done)
+  {
+    if (_pendingNodes.empty()) //If the tree has been completely searched, stop
+      _done = true;
+    else
     {
-      assert(box.getUpperBound(i) >= box.getLowerBound(i));
-
-      if (_minBounds[i] > box.getUpperBound(i) || box.getLowerBound(i) > _maxBounds[i])
+      //Get the first node in the list to examine
+      const RTreeNode* node = _tree->getNode(_pendingNodes.front());
+      _pendingNodes.pop_front(); //Remove node from future consideration
+      for (int i = 0; i < node->getChildCount(); i++)
       {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  const Box& IntersectionIterator::getBox() const
-  {
-    return _currentResult.box;
-  }
-
-  int IntersectionIterator::getId() const
-  {
-    return _currentResult.id;
-  }
-
-  bool IntersectionIterator::hasNext()
-  {
-    _populateNext();
-    return !_done;
-  }
-
-  bool IntersectionIterator::next()
-  {
-    bool result = false;
-    _populateNext();
-    if (!_pendingResults.empty())
-    {
-      _currentResult = _pendingResults.front();
-      _pendingResults.pop_front();
-      result = true;
-    }
-    return result;
-  }
-
-  void IntersectionIterator::_populateNext()
-  {
-    while (_pendingResults.empty() && !_done)
-    {
-      if (_pendingNodes.empty()) //If the tree has been completely searched, stop
-      {
-        _done = true;
-      }
-      else
-      {
-        //Get the first node in the list to examine
-        const RTreeNode* node = _tree->getNode(_pendingNodes.front());
-        _pendingNodes.pop_front(); //Remove node from future consideration
-        for (int i = 0; i < node->getChildCount(); i++)
+        Box b = node->getChildEnvelope(i).toBox();
+        bool intersects = _determineIntesection(b);
+        if (intersects)
         {
-          Box b = node->getChildEnvelope(i).toBox();
-          bool intersects = _determineIntesection(b);
-          if (intersects)
-          {
-            if (node->isLeafNode())
-            {
-              _pendingResults.emplace_back(b, node->getChildUserId(i));
-            }
-            else
-            {
-              _pendingNodes.push_front(node->getChildNodeId(i));
-            }
-          }
+          if (node->isLeafNode())
+            _pendingResults.emplace_back(b, node->getChildUserId(i));
+          else
+            _pendingNodes.push_front(node->getChildNodeId(i));
         }
       }
     }
   }
 }
 
+}

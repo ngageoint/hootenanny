@@ -126,7 +126,6 @@ void DataFrame::clear()
     _nullTreatment.clear();
     _medianMaps.clear();
     _trainingEnumCnt = 1;
-
   }
   catch(const Exception & e)
   {
@@ -175,7 +174,6 @@ double DataFrame::computeBandwidthByFactor(unsigned int fIdx, std::vector<unsign
       else
         silv *= h;
 
-      //std::cout << "FIdx " << fIdx << " Name " << getFactorLabelFromIndex(fIdx) << " Var " << variance << " Silv " << silv << " Min " << minVal << " Max " << maxVal <<  " Mean " << mean << std::endl;
       return silv;
     }
     else
@@ -205,7 +203,6 @@ void DataFrame::deactivateFactor(const std::string& factor)
             break;
           }
         }
-
         break;
       }
     }
@@ -421,7 +418,7 @@ double DataFrame::getDataElement(unsigned int vIdx, int fIdx) const
   {
     if (fIdx == -1)
     {
-      map<string, int>::const_iterator it = _trainingLabelEnum.find(_trainingLabels[vIdx]);
+      auto it = _trainingLabelEnum.find(_trainingLabels[vIdx]);
       assert(it != _trainingLabelEnum.end());
       return it->second;
     }
@@ -503,7 +500,7 @@ unsigned int DataFrame::getIndexFromFactorLabel(const std::string& fLabel) const
     for (size_t i = 0; i < _factorLabels.size(); i++)
     {
       if (_factorLabels[i] == fLabel)
-        return i;
+        return static_cast<unsigned int>(i);
     }
 
     throw Exception(__LINE__, "Could not find factor label: " + fLabel);
@@ -643,9 +640,9 @@ void DataFrame::importFrame(const QDomElement & e)
       }
     }
   }
-  catch(const Exception & e)
+  catch(const Exception & ex)
   {
-    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
   }
 }
 
@@ -968,9 +965,8 @@ void DataFrame::restoreClassLabels()
     _trainingLabels = _trainingLabelsBak;
     _trainingLabelEnum.clear();
     _trainingEnumCnt = 1;
-    for (unsigned int i = 0; i < _trainingLabels.size(); i++)
+    for (const auto& label : _trainingLabels)
     {
-      const string& label = _trainingLabels[i];
       if (_trainingLabelEnum.find(label) == _trainingLabelEnum.end())
         _trainingLabelEnum[label] = _trainingEnumCnt++;
     }
@@ -1136,7 +1132,7 @@ void DataFrame::sortIndicesOnFactorValue(std::vector<unsigned int> & indices,
     //std::cout << "Fact value is " << fIdx << std::endl;
     //Set the index to use as the sort source
     if (!_data.empty() && fIdx < _data[0].size())
-      _qSortIndicesOnFactorValue(indices, 0, indices.size() - 1, fIdx);
+      _qSortIndicesOnFactorValue(indices, 0, static_cast<unsigned int>(indices.size() - 1), fIdx);
     else
     {
       std::stringstream ss;

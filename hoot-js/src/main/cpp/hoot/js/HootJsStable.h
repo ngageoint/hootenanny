@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTJSSTABLE_H
 #define HOOTJSSTABLE_H
@@ -30,9 +30,12 @@
 // hoot
 #include <hoot/core/HootCoreStable.h>
 
-//  Remove unused-parameter warnings from v8
 #pragma GCC diagnostic push
+//  Remove unused-parameter warnings from v8
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+//  Remove shadowed variable warnings from v8
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wshadow-compatible-local"
 
 // v8
 #include <v8.h>
