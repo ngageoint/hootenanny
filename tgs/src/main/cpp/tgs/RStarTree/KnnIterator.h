@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGC_KNN_ITERATOR_H__
@@ -57,23 +57,21 @@ public:
 
     LeafDistance() : distance(0.0), fid(0) { }
 
-    LeafDistance(double dist, int fid)
+    LeafDistance(double distance_, int fid_)
     {
-      this->distance = dist;
-      this->fid = fid;
+      distance = distance_;
+      fid = fid_;
     }
 
     double distance;
     int fid;
   };
 
-  struct LessLeafDistance
-    : public std::binary_function<KnnIterator::LeafDistance, KnnIterator::LeafDistance, bool>
+  struct LessLeafDistance : public std::binary_function<KnnIterator::LeafDistance, KnnIterator::LeafDistance, bool>
   {
   public:
 
-    bool operator()(const KnnIterator::LeafDistance& _Left,
-      const KnnIterator::LeafDistance& _Right) const
+    bool operator()(const KnnIterator::LeafDistance& _Left, const KnnIterator::LeafDistance& _Right) const
     {
       if (_Left.distance > _Right.distance)
         return true;
@@ -103,20 +101,17 @@ public:
     int id;
   };
 
-  struct LessNodeDistance
-    : public std::binary_function<KnnIterator::NodeDistance*, KnnIterator::NodeDistance*, bool>
+  struct LessNodeDistance : public std::binary_function<KnnIterator::NodeDistance*, KnnIterator::NodeDistance*, bool>
   {
   public:
 
-    bool operator()(KnnIterator::NodeDistance*& _Left,
-                    KnnIterator::NodeDistance*& _Right) const
+    bool operator()(KnnIterator::NodeDistance*& _Left, KnnIterator::NodeDistance*& _Right) const
     {
       return (_Left->minPossibleDistance > _Right->minPossibleDistance);
     }
   };
 
-  KnnIterator(const RStarTree* tree, const double x, const double y,
-    const Box& searchRegion = Box());
+  KnnIterator(const RStarTree* tree, const double x, const double y, const Box& searchRegion = Box());
   virtual ~KnnIterator();
 
   const Box& getBox() const override;
@@ -182,8 +177,7 @@ inline double KnnIterator::euclideanDistance(double x1, double y1, double x2, do
   return /*sqrt*/( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) );
 }
 
-inline double KnnIterator::distPtToLine(double x, double y, double s1, double t1,
-  double s2, double t2)
+inline double KnnIterator::distPtToLine(double x, double y, double s1, double t1, double s2, double t2)
 {
   double deltaX = s2 - s1;
   double deltaY = t2 - t1;

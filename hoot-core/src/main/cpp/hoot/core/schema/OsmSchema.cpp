@@ -89,11 +89,11 @@ const SchemaVertex empty;
 
 struct AverageKey
 {
-  AverageKey(VertexId vid1, double w1, VertexId vid2, double w2)
-    : vid1(vid1),
-      w1(w1),
-      vid2(vid2),
-      w2(w2)
+  AverageKey(VertexId vid1_, double w1_, VertexId vid2_, double w2_)
+    : vid1(vid1_),
+      w1(w1_),
+      vid2(vid2_),
+      w2(w2_)
   {
   }
 
@@ -120,8 +120,7 @@ template<>
   {
     size_t operator()(const hoot::AverageKey& k) const
     {
-      size_t h1 = hash<pair<hoot::VertexId, hoot::VertexId>>()(
-            pair<hoot::VertexId, hoot::VertexId>(k.vid1, k.vid2));
+      size_t h1 = hash<pair<hoot::VertexId, hoot::VertexId>>()(pair<hoot::VertexId, hoot::VertexId>(k.vid1, k.vid2));
       size_t h2 = fastHashDouble()(k.w1);
       size_t h3 = fastHashDouble()(k.w2);
       return Tgs::cantorPairing(h1, Tgs::cantorPairing(h2, h3));
@@ -136,9 +135,9 @@ struct AverageResult
 {
   AverageResult() = default;
 
-  AverageResult(VertexId vid, double score)
-    : vid(vid),
-      score(score)
+  AverageResult(VertexId vid_, double score_)
+    : vid(vid_),
+      score(score_)
   {
   }
 
@@ -962,11 +961,8 @@ private:
     {
       VertexId thisFrom = source(*ei, _graph);
       VertexId thisTo = target(*ei, _graph);
-      if (_graph[*ei].type == AssociatedWith && thisFrom == from &&
-          result.find(thisTo) == result.end())
-      {
+      if (_graph[*ei].type == AssociatedWith && thisFrom == from && result.find(thisTo) == result.end())
         result.insert(thisTo);
-      }
     }
   }
 

@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2006 Pedro Felzenszwalb
- * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef DISJOINTMAP_H
 #define DISJOINTMAP_H
@@ -71,7 +71,7 @@ public:
     _lastGroup.clear();
     for (size_t i = 0; i < _e.size(); i++)
     {
-      int p = find(i);
+      int p = find(static_cast<int>(i));
       _lastGroup[p].push_back(_e[i].user);
     }
     return _lastGroup;
@@ -85,21 +85,19 @@ public:
     join(ix, iy);
   }
 
-  int size() const { return _e.size(); }
+  int size() const { return static_cast<int>(_e.size()); }
   int toIndex(const T& x)
   {
     int result;
     typename UserMap::const_iterator it = _tMap.find(x);
     if (it == _tMap.end())
     {
-      result = _e.size();
+      result = static_cast<int>(_e.size());
       _e.push_back(Element(x, result));
       _tMap[x] = result;
     }
     else
-    {
       result = it->second;
-    }
     return result;
   }
 
@@ -109,10 +107,10 @@ private:
 
   struct Element
   {
-    Element(T u, int p)
+    Element(T user_, int p_)
     {
-      user = u;
-      this->p = p;
+      user = user_;
+      p = p_;
     }
 
     T user;
@@ -140,12 +138,9 @@ inline void DisjointSetMap<T>::join(int x, int y)
   x = find(x);
   y = find(y);
   if (x < y)
-  {
     _e[y].p = x;
-  } else
-  {
+  else
     _e[x].p = y;
-  }
 }
 
 }

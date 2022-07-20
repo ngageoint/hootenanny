@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 
@@ -59,19 +59,17 @@ namespace Tgs
     public:
 
       LeafDistance() : distance(0.0), fid(0) { }
-      LeafDistance(double dist, int fid) : distance(dist), fid(fid) { }
+      LeafDistance(double distance_, int fid_) : distance(distance_), fid(fid_) { }
 
       double distance;
       int fid;
     };
 
-    struct LessLeafDistance
-      : public std::binary_function<KnnIteratorNd::LeafDistance, KnnIteratorNd::LeafDistance, bool>
+    struct LessLeafDistance : public std::binary_function<KnnIteratorNd::LeafDistance, KnnIteratorNd::LeafDistance, bool>
     {
     public:
 
-      bool operator()(const KnnIteratorNd::LeafDistance& _Left, 
-        const KnnIteratorNd::LeafDistance& _Right) const
+      bool operator()(const KnnIteratorNd::LeafDistance& _Left, const KnnIteratorNd::LeafDistance& _Right) const
       {	
         if (_Left.distance > _Right.distance)
           return true;
@@ -100,20 +98,17 @@ namespace Tgs
       int id;
     };
 
-    struct LessNodeDistance
-      : public std::binary_function<KnnIteratorNd::NodeDistance*, KnnIteratorNd::NodeDistance*, bool>
+    struct LessNodeDistance : public std::binary_function<KnnIteratorNd::NodeDistance*, KnnIteratorNd::NodeDistance*, bool>
     {
     public:
 
-      bool operator()(/*const*/ KnnIteratorNd::NodeDistance*& _Left, 
-        /*const*/ KnnIteratorNd::NodeDistance*& _Right) const
+      bool operator()(KnnIteratorNd::NodeDistance*& _Left, KnnIteratorNd::NodeDistance*& _Right) const
       {	
         return (_Left->minPossibleDistance > _Right->minPossibleDistance);
       }
     };
 
-    KnnIteratorNd(
-      const RStarTree* tree, const std::vector<double>& point, const Box& searchRegion = Box());
+    KnnIteratorNd(const RStarTree* tree, const std::vector<double>& point, const Box& searchRegion = Box());
     ~KnnIteratorNd() override;
 
     const Box& getBox() const override;
@@ -164,8 +159,7 @@ namespace Tgs
     void _releaseNodeDistance(NodeDistance* nd);
   };
 
-  inline double KnnIteratorNd::euclideanDistance(
-    const std::vector<double>& p1, const std::vector<double>& p2)
+  inline double KnnIteratorNd::euclideanDistance(const std::vector<double>& p1, const std::vector<double>& p2)
   {
     assert(p1.size() == p2.size());
     double sum = 0.0;

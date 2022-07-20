@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SHORTESTPATH_H
@@ -57,10 +57,10 @@ private:
   {
   public:
 
-    Node(long id, double cost)
+    Node(long id_, double cost_)
     {
-      this->id = id;
-      this->cost = cost;
+      id = id_;
+      cost = cost_;
     }
 
     long id;

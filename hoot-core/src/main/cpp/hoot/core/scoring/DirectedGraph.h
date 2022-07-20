@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DIRECTEDGRAPH_H
@@ -45,11 +45,11 @@ public:
   {
   public:
 
-    Edge(long from, long to, double weight)
+    Edge(long from_, long to_, double weight_)
     {
-      this->from = from;
-      this->to = to;
-      this->weight = weight;
+      from = from_;
+      to = to_;
+      weight = weight_;
     }
 
     long from;

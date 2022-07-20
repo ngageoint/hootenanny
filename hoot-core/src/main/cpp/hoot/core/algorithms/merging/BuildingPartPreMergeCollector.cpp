@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingPartPreMergeCollector.h"
 
@@ -103,8 +103,7 @@ void BuildingPartPreMergeCollector::_processBuildingPart(const BuildingPartRelat
     _groupBuildingParts(buildingPartRelationship.building, buildingPartRelationship.buildingPartNeighbor);
     break;
   default:
-    throw IllegalArgumentException(QString("Unknown building part description relation type: ") +
-      buildingPartRelationship.relationshipType);
+    throw IllegalArgumentException(QString("Unknown building part description relation type: %1").arg(static_cast<int>(buildingPartRelationship.relationshipType)));
   }
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __PROBABLE_PATH_CALCULATOR_H__
@@ -57,11 +57,11 @@ namespace Tgs
 
     PpPoint();
 
-    PpPoint(int row, int col)
-      : row(row), col(col), cost(0.0f) { }
+    PpPoint(int row_, int col_)
+      : row(row_), col(col_), cost(0.0f) { }
 
-    PpPoint(int row, int col, const std::string& name)
-      : row(row), col(col), name(name), cost(0.0f) { }
+    PpPoint(int row_, int col_, const std::string& name_)
+      : row(row_), col(col_), name(name_), cost(0.0f) { }
 
     bool operator!=(const PpPoint& p) const
     {
@@ -179,7 +179,7 @@ namespace Tgs
     public:
       int index;
       float cost;
-      Cell(int index, float cost) { this->index = index; this->cost = cost; }
+      Cell(int index_, float cost_) : index(index_), cost(cost_) { }
       bool operator<(const Cell& c) const
       {
         return cost > c.cost;

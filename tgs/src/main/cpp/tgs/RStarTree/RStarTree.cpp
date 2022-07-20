@@ -253,7 +253,6 @@ RTreeNode* RStarTree::_getRoot()
   return _store.getNode(_rootId);
 }
 
-
 void RStarTree::insert(const Box& b, int userId)
 {
   if (userId < 0 || b.isValid() == false)
@@ -336,7 +335,7 @@ public:
 
   Child() : id(0) { }
 
-  Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
+  Child(int id_, const BoxInternalData& b_) : b(b_.toBox()), id(id_) { }
 };
 
 using DistancePair = std::pair<double, int>;

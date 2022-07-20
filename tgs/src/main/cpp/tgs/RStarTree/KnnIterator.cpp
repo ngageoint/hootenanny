@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "KnnIterator.h"
@@ -44,12 +44,9 @@
 namespace Tgs
 {
 
-static inline double min(double a, double b) { return a < b ? a : b; }
-static inline double max(double a, double b) { return a > b ? a : b; }
 static inline double sqr(double a) { return a * a; }
 
-KnnIterator::KnnIterator(const RStarTree* tree, const double x, const double y, 
-                         const Box& searchRegion)
+KnnIterator::KnnIterator(const RStarTree* tree, const double x, const double y, const Box& searchRegion)
 {
   _searchTree = tree;
   _knnX = x;
@@ -74,8 +71,7 @@ KnnIterator::~KnnIterator()
 
 double KnnIterator::_calculateDistance(const BoxInternalData& box, int) const
 {
-  return distPtToLine(_knnX, _knnY, box.getLowerBoundRaw(0), box.getLowerBoundRaw(1),
-    box.getUpperBoundRaw(0), box.getUpperBoundRaw(1));
+  return distPtToLine(_knnX, _knnY, box.getLowerBoundRaw(0), box.getLowerBoundRaw(1), box.getUpperBoundRaw(0), box.getUpperBoundRaw(1));
 }
 
 /**
@@ -110,14 +106,10 @@ void KnnIterator::_calculateNextNn()
         if (!_knnLeafHeap.empty())
           ld = _knnLeafHeap.top();
       }
-
+      // if we're all out of features
       if (_knnSearchQueue.empty() && _knnLeafHeap.empty())
-      {
-        // if we're all out of features
         break;
-      }
     }
-
     // if we already have some leaf distances calculated, check to see if they're closer than
     // the node
     if (!_knnLeafHeap.empty() && (nd == nullptr || (ld.distance <= nd->minPossibleDistance)))
@@ -130,9 +122,7 @@ void KnnIterator::_calculateNextNn()
     }
 
     if (nd == nullptr)
-    {
       throw Tgs::Exception("Internal Error: RTree::calculateNextNn This state should not occur.");
-    }
 
     ////
     // Process this nd
@@ -164,9 +154,7 @@ void KnnIterator::_calculateNextNn()
           tmpDistance = _calculateDistance(b);
           tmpId = currNode->getChildNodeId(i);
           if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
-          {
             _knnSearchQueue.push(_createNodeDistance(tmpDistance, tmpId));
-          }
         }
       }
     }
@@ -194,59 +182,32 @@ double KnnIterator::_calculateDistance(const BoxInternalData& box) const
     {
       if (y <= top)
       {
-        if (y >= bottom)
-        {
-          // inside the box
+        if (y >= bottom)  // inside the box
           return 0;
-        }
-        else
-        {
-          // directly below the box
+        else              // directly below the box
           return sqr(bottom - y);
-        }
       }
-      else
-      {
-        // directly above the box
+      else                // directly above the box
         return sqr(y - top);
-      }
     } 
     else
     {
-      if (y < bottom)
-      {
-        // lower right
+      if (y < bottom)   // lower right
         return euclideanDistance(x, y, right, bottom);
-      }
-      else if (y > top)
-      {
-        // upper right
+      else if (y > top) // upper right
         return euclideanDistance(x, y, right, top);
-      }
-      else
-      {
-        // directly right
+      else              // directly right
         return sqr(x - right);
-      }
     }
   }
   else
   {
-    if (y < bottom)
-    {
-      // lower left
+    if (y < bottom)   // lower left
       return euclideanDistance(x, y, left, bottom);
-    }
-    else if (y > top)
-    {
-      // upper left
+    else if (y > top) // upper left
       return euclideanDistance(x, y, left, top);
-    }
-    else
-    {
-      // directly left
+    else              // directly left
       return sqr(left - x);
-    }
   }
 }
 
@@ -257,9 +218,7 @@ KnnIterator::NodeDistance* KnnIterator::_createNodeDistance(double minPossibleDi
     NodeDistance* allocation = new NodeDistance[ALLOCATION_SIZE];
     _nodeDistanceAllocationPool.push_back(allocation);
     for (int i = ALLOCATION_SIZE - 1; i >= 0; i--)
-    {
       _nodeDistancePool.push_back(&(allocation[i]));
-    }
   }
 
   NodeDistance* nd = _nodeDistancePool.back();
@@ -310,9 +269,8 @@ void KnnIterator::reset(const double x, const double y)
     _knnSearchQueue.pop();
   }
   while (_knnLeafHeap.empty() == false)
-  {
     _knnLeafHeap.pop();
-  }
+
   _knnSearchQueue.push(_createNodeDistance(-1, _searchTree->getRoot()->getId()));
 }
 
