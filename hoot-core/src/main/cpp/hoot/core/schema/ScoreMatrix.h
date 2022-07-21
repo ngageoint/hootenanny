@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SCOREMATRIX_H
 #define SCOREMATRIX_H
@@ -223,7 +223,7 @@ double ScoreMatrix<_type>::meanScore(double portion) const
     }
   }
 
-  int scoreCount = std::max(1, (int)(std::min(_v.size(), _v[0].size()) * portion));
+  int scoreCount = std::max(1, static_cast<int>(static_cast<double>(std::min(_v.size(), _v[0].size())) * portion));
   int weight = scoreCount;
   double score = 0.0;
 
@@ -236,20 +236,19 @@ double ScoreMatrix<_type>::meanScore(double portion) const
 
     e = heap.top();
     heap.pop();
-    if (used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
+    if (used1.find(static_cast<int>(e.i)) == used1.end() && used2.find(static_cast<int>(e.j)) == used2.end())
     {
       LOG_TRACE("  " << e.i << ", " << e.j << " " << e.score);
       score += e.score;
-      used1.insert(e.i);
-      used2.insert(e.j);
+      used1.insert(static_cast<int>(e.i));
+      used2.insert(static_cast<int>(e.j));
       scoreCount--;
     }
   }
 
   if (weight > 0)
-  {
     score /= (double)weight;
-  }
+
   return score;
 }
 
@@ -284,28 +283,22 @@ ScoreMatrix<_type> ScoreMatrix<_type>::minSumMatrix() const
   std::set<int> used1;
   std::set<int> used2;
 
-  ScoreMatrix<_type> result(getWidth(), getHeight());
+  ScoreMatrix<_type> result(static_cast<int>(getWidth()), static_cast<int>(getHeight()));
   while (heap.size() > 0)
   {
     e = heap.top();
     heap.pop();
-    if (used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
+    if (used1.find(static_cast<int>(e.i)) == used1.end() && used2.find(static_cast<int>(e.j)) == used2.end())
     {
       score += e.score;
       result.set(e.i, e.j, 1.0);
-
       // the first row and column can be used multiple times.
       if (e.i != 0)
-      {
-        used1.insert(e.i);
-      }
+        used1.insert(static_cast<int>(e.i));
       if (e.j != 0)
-      {
-        used2.insert(e.j);
-      }
+        used2.insert(static_cast<int>(e.j));
     }
   }
-
   return result;
 }
 
@@ -313,16 +306,12 @@ template<typename _type>
 ScoreMatrix<_type> ScoreMatrix<_type>::multiplyCells(const ScoreMatrix& other) const
 {
   assert(getWidth() == other.getWidth() && getHeight() == other.getHeight());
-  ScoreMatrix result(getWidth(), getHeight());
-
+  ScoreMatrix result(static_cast<int>(getWidth()), static_cast<int>(getHeight()));
   for (size_t i = 0; i < getWidth(); i++)
   {
     for (size_t j = 0; j < getHeight(); j++)
-    {
       result.set(i, j, get(i, j) * other.get(i, j));
-    }
   }
-
   return result;
 }
 
@@ -330,15 +319,11 @@ template<typename _type>
 _type ScoreMatrix<_type>::sumCells() const
 {
   _type result = (_type)0.0;
-
   for (size_t i = 0; i < getWidth(); i++)
   {
     for (size_t j = 0; j < getHeight(); j++)
-    {
       result += get(i, j);
-    }
   }
-
   return result;
 }
 

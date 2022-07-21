@@ -32,14 +32,14 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -55,26 +55,24 @@ void BuildingOutlineRemoveOp::apply(std::shared_ptr<OsmMap>& map)
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     const std::shared_ptr<Relation>& r = it->second;
     // remove the outline
     if (r->getType() == MetadataTags::RelationBuilding())
-    {
       _removeOutline(r);
-    }
   }
 }
 
 void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation>& building)
 {
   const vector<RelationData::Entry> entries = building->getMembers();
-  for (size_t i = 0; i < entries.size(); i++)
+  for (const auto& member : entries)
   {
-    if (entries[i].getRole() == MetadataTags::RoleOutline())
+    if (member.getRole() == MetadataTags::RoleOutline())
     {
-      building->removeElement(entries[i].getRole(), entries[i].getElementId());
-      RecursiveElementRemover(entries[i].getElementId()).apply(_map);
+      building->removeElement(member.getRole(), member.getElementId());
+      RecursiveElementRemover(member.getElementId()).apply(_map);
       _numAffected++;
     }
   }

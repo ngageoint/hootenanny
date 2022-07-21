@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_DEDUPLICATOR_H
@@ -78,11 +78,8 @@ public:
    * @param hashes a collection of hashes to update
    * @param duplicates a collection of duplicate elements found
    */
-  static void calculateDuplicateElements(
-    OsmMapPtr map, QMap<QString, ElementId>& hashes,
-    QSet<std::pair<ElementId, ElementId>>& duplicates,
-    const int coordinateComparisonSensitivity =
-      ConfigOptions().getNodeComparisonCoordinateSensitivity());
+  static void calculateDuplicateElements(OsmMapPtr map, QMap<QString, ElementId>& hashes, QSet<std::pair<ElementId, ElementId>>& duplicates,
+                                         const int coordinateComparisonSensitivity = ConfigOptions().getNodeComparisonCoordinateSensitivity());
 
   int getMap1DuplicateNodesRemoved() const { return _map1DuplicateNodesRemoved; }
   int getMap1DuplicateWaysRemoved() const { return _map1DuplicateWaysRemoved; }
@@ -114,18 +111,16 @@ private:
    * Converts pairs of duplicated features' element IDs to a collection of element IDs sorted by
    * element type for removal purposes; the second element is arbitarily selected for removal
    */
-  QMap<ElementType::Type, QSet<ElementId>> _dupesToElementIds(
-    const QSet<std::pair<ElementId, ElementId>>& duplicates) const;
+  QMap<ElementType::Type, QSet<ElementId>> _dupesToElementIds(const QSet<std::pair<ElementId, ElementId>>& duplicates) const;
 
   /*
    * Similar to _dupesToElementIds except for ways if _favorMoreConnectedWays is enabled, this
    * will use way connectedness as a factor in determining which element of the pair to mark for
    * removal
    */
-  void _dupesToElementIdsCheckMap(
-    const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
-    QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
-    QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
+  void _dupesToElementIdsCheckMap(const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
+                                  QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+                                  QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
 
   /*
    * Converts element hashes of duplicated features' element IDs to a collection of element IDs
@@ -133,11 +128,10 @@ private:
    * this will use way connectedness as a factor in determining which element of the pair to mark
    * for removal
    */
-  void _dupeHashesToElementIdsCheckMap(
-    const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
-    const QMap<QString, ElementId>& map1Hashes, const QMap<QString, ElementId>& map2Hashes,
-    QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
-    QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
+  void _dupeHashesToElementIdsCheckMap(const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
+                                       const QMap<QString, ElementId>& map1Hashes, const QMap<QString, ElementId>& map2Hashes,
+                                       QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+                                       QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
 
   void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map) const;
 
@@ -145,18 +139,15 @@ private:
    * Similar to _removeElements except for ways if _favorMoreConnectedWays is enabled, this
    * will use way connectedness as a factor in determining which element of the pair to remove
    */
-  void _removeWaysCheckMap(
-    const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
-    const QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
+  void _removeWaysCheckMap(const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
+                           const QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
 
   /*
    * Determines if two elements belong to ways with different types.
    */
-  static bool _areWayNodesInWaysOfMismatchedType(
-    ElementPtr element1, ElementPtr element2, OsmMapPtr map);
+  static bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2, OsmMapPtr map);
 
-  static QSet<std::pair<ElementId, ElementId>>_filterOutNonDupeWayNodes(
-    const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map);
+  static QSet<std::pair<ElementId, ElementId>>_filterOutNonDupeWayNodes(const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map);
 };
 
 }

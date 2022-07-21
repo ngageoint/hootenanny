@@ -467,12 +467,8 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
     {
       op = Factory::getInstance().constructObject<OsmMapOperation>(operatorName);
     }
-    catch (const boost::bad_any_cast&)
-    {
-    }
-    catch (const HootException&)
-    {
-    }
+    catch (const boost::bad_any_cast&) { }
+    catch (const HootException&) { }
 
     if (!op)
     {
@@ -481,12 +477,8 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
       {
         vis = Factory::getInstance().constructObject<ElementVisitor>(operatorName);
       }
-      catch (const boost::bad_any_cast&)
-      {
-      }
-      catch (const HootException&)
-      {
-      }
+      catch (const boost::bad_any_cast&) { }
+      catch (const HootException&) { }
       if (!vis)
       {
         std::shared_ptr<ElementCriterion> crit;
@@ -494,12 +486,8 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
         {
           crit = Factory::getInstance().constructObject<ElementCriterion>(operatorName);
         }
-        catch (const boost::bad_any_cast&)
-        {
-        }
-        catch (const HootException&)
-        {
-        }
+        catch (const boost::bad_any_cast&) { }
+        catch (const HootException&) { }
         if (!crit)
           throw IllegalArgumentException(errorMsg);
       }
