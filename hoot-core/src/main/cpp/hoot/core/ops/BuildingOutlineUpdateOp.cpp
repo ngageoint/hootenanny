@@ -98,7 +98,7 @@ public:
 
       for (size_t i = 0; i < newNodes.size(); i++)
       {
-        map<long, long>::const_iterator it = _fromTo.find(newNodes[i]);
+        auto it = _fromTo.find(newNodes[i]);
         if (it != _fromTo.end())
           newNodes[i] = it->second;
       }
@@ -107,10 +107,10 @@ public:
 
       // remove any unused nodes.
       const NodeToWayMap& n2w = *_map.getIndex().getNodeToWayMap();
-      for (auto node_id : oldNodes)
+      for (auto old_node_id : oldNodes)
       {
-        if (n2w.getWaysByNode(node_id).empty() && _map.containsNode(node_id))
-          RemoveNodeByEid::removeNode(_map.shared_from_this(), node_id);
+        if (n2w.getWaysByNode(old_node_id).empty() && _map.containsNode(old_node_id))
+          RemoveNodeByEid::removeNode(_map.shared_from_this(), old_node_id);
       }
     }
   }
@@ -262,21 +262,27 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
   LOG_VART(outline->isEmpty());
   if (!outline->isEmpty())
   {
-    LOG_TRACE(
-      "Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
+    LOG_TRACE("Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
+
+    //  In some instances the outline geometry may come back as a multipolygon with holes those need to be changed
+    if (outline->getGeometryTypeId() == GEOS_POLYGON)
+    {
+      Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
+      if (polygon->getNumInteriorRing() != 0)
+        outline.reset(polygon->getExteriorRing()->clone().release());
+//        outline.reset(outline->getBoundary().release());
+    }
 
     const std::shared_ptr<Element> pOutlineElement =
       GeometryToElementConverter(_map).convertGeometryToElement(
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
     LOG_VART(pOutlineElement->getElementType());
-    // This is a bit of a hack. The GeometryToElementConverter is returning us an area here, when we want
-    // a building. There needs to be some investigation into why an area is being returned and if
-    // we can get GeometryToElementConverter to return a building instead.
+    // Some element outlines come back from the GeometryToElementConverter as an area, remove the `area=yes` tag
     if (pOutlineElement->getTags()["area"] == "yes")
-    {
       pOutlineElement->getTags().remove("area");
-      pOutlineElement->getTags()["building"] = "yes";
-    }
+    //  The OSM building relation spec indicates that the outline member must contain the `building=yes` tag
+    pOutlineElement->getTags()["building"] = "yes";
+
     LOG_VART(pOutlineElement);
     _mergeNodes(pOutlineElement, pBuilding);
 

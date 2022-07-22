@@ -81,7 +81,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
   holes.reserve(outers.size());
 
   vector<LinearRing*> noHoles;
-  for (auto outer : outers)
+  for (const auto outer : outers)
   {
     Polygon* p = gf.createPolygon(*outer, noHoles);
     tmpPolygons.push_back(p);
@@ -105,7 +105,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
         if (tmpPolygons[j]->contains(inners[i]))
         {
           contained = true;
-          polygonIndex = j;
+          polygonIndex = static_cast<int>(j);
         }
       }
       // if we haven't found an appropriate polygon, or this polygon is smaller than the best
@@ -116,7 +116,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
         if (im->isContains())
         {
           contained = true;
-          polygonIndex = j;
+          polygonIndex = static_cast<int>(j);
         }
         else if (im->isIntersects())
         {
@@ -176,7 +176,7 @@ void RelationToMultiPolygonConverter::_addWayToSequence(ConstWayPtr w, Coordinat
 
   std::vector<Coordinate> points;
   cs.toVector(points);
-  for (int i = start; i < (int)w->getNodeCount() && i >= 0; i += increment)
+  for (int i = static_cast<int>(start); i < static_cast<int>(w->getNodeCount()) && i >= 0; i += increment)
   {
     Coordinate c = _provider->getNode(w->getNodeId(i))->toCoordinate();
     if (points.empty() || c != points.operator [](points.size() - 1))
@@ -285,7 +285,7 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
   // A list of things we haven't found yet.
   deque<LinearRing*> notFound;
 
-  for (auto member : noRole)
+  for (const auto member : noRole)
   {
     MultiPolygonRelationRole status = MultiPolygonRelationRole::NoRole;
 
@@ -311,7 +311,7 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
     if (status == MultiPolygonRelationRole::NoRole)
     {
       // Look for an outer polygon
-      for (auto inner : inners)
+      for (const auto inner : inners)
       {
         status =_findRelationship(member, inner);
 
@@ -477,8 +477,7 @@ void RelationToMultiPolygonConverter::_createSingleRing(const vector<ConstWayPtr
 
   deque<ConstWayPtr> orderedWays = _orderWaysForRing(partials);
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(
-      (size_t)0, (size_t)2).release();
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create((size_t)0, (size_t)2).release();
 
   for (const auto& way : orderedWays)
     _addWayToSequence(way, *cs, false);
@@ -619,11 +618,11 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   LOG_TRACE("Converting " << w->getElementId() << " to linear ring...");
 
   const std::vector<long>& ids = w->getNodeIds();
-  int size = ids.size();
+  size_t size = ids.size();
   LOG_VART(size);
   if (size == 1)
     size = 2;
-  else if (ids[0] != ids[ids.size() - 1])
+  else if (ids[0] != ids[size - 1])
     size++;
 
   if (size <= 3)
@@ -637,7 +636,7 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   LOG_VART(cs->size());
 
   size_t i = 0;
-  for (; i < ids.size(); i++)
+  for (; i < size; i++)
   {
     ConstNodePtr n = _provider->getNode(ids[i]);
     if (n)
@@ -645,13 +644,13 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   }
   LOG_VART(cs->size());
   // A linestring cannot contain 1 point. Do this to keep it valid.
-  if (ids.size() == 1)
+  if (size == 1)
   {
     ConstNodePtr n = _provider->getNode(ids[0]);
     if (n)
       cs->setAt(n->toCoordinate(), i++);
   }
-  else if (ids[0] != ids[ids.size() - 1])
+  else if (ids[0] != ids[size - 1])
   {
     ConstNodePtr n = _provider->getNode(ids[0]);
     if (n)

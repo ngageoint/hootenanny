@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef REMOVEROUNDABOUTS_H
 #define REMOVEROUNDABOUTS_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/conflate/highway/Roundabout.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
 #include <QMultiHash>
