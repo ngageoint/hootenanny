@@ -63,8 +63,8 @@ QStringList ConfPath::_find(QStringList filters, QString path)
   QFileInfoList l = dir.entryInfoList(filters, QDir::Files);
 
   QStringList result;
-  for (const auto& path : qAsConst(l))
-    result << path.absoluteFilePath();
+  for (const auto& p : qAsConst(l))
+    result << p.absoluteFilePath();
 
   return result;
 }
