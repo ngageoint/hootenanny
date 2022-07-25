@@ -72,6 +72,9 @@ fi
 # Sanity check
 hoot version
 
+echo "### Enable SSL for Tomcat ###" | tee -a CentOS_install.txt
+sudo $HOOT_HOME/scripts/tomcat/configure_tomcat_ssl.sh
+
 echo "### Configure OAuth redirect url for port 8888 ###" | tee -a CentOS_install.txt
 sudo $HOOT_HOME/scripts/tomcat/configure_oauth_8888.sh
 
