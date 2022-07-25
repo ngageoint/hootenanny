@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -87,9 +87,7 @@ public:
     Tgs::Random::instance()->seed(0);
 
     for (size_t i = 0; i < names.size(); ++i)
-    {
       data.push_back(i);
-    }
 
     uut.setDepth(3);
     uut.buildIndex(names, data);
@@ -176,9 +174,7 @@ public:
     names.push_back("bandana");
 
     for (size_t i = 0; i < names.size(); ++i)
-    {
       data.push_back(i);
-    }
 
     uut.setDepth(3);
     uut.buildIndex(names, data);
@@ -193,13 +189,9 @@ public:
     set<int> result;
     for (size_t i = 0; i < haystack.size(); i++)
     {
-      if ((int)LevenshteinDistance::distance(needle.getMetricElement(),
-        haystack[i].getMetricElement()) <= D)
-      {
+      if ((int)LevenshteinDistance::distance(needle.getMetricElement(), haystack[i].getMetricElement()) <= D)
         result.insert((int)i);
-      }
     }
-
     return result;
   }
 
@@ -209,9 +201,7 @@ public:
   {
   public:
 
-    TestDistance()
-    {
-    }
+    TestDistance() = default;
 
     int operator() (const QString& s1, const QString& s2) const
     {
@@ -235,14 +225,14 @@ public:
     vector<FqDummyData> names;
     vector<int> data;
 
-    int i = 0;
-    for (set<QString>::iterator it = bag.begin(); it != bag.end() && names.size() < 300; ++it)
+    int index = 0;
+    for (auto it = bag.begin(); it != bag.end() && names.size() < 300; ++it)
     {
       names.push_back(*it);
-      data.push_back(i++);
+      data.push_back(index++);
     }
 
-    for (int depth = 5; depth <= 10; depth+= 5)
+    for (int depth = 5; depth <= 10; depth += 5)
     {
       FqTree<FqDummyData, int, TestDistance> uut;
       uut.setDepth(depth);

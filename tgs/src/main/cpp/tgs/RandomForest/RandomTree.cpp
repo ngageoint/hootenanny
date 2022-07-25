@@ -45,866 +45,721 @@
 
 namespace Tgs
 {
-  unsigned int RandomTree::_idCtr = 0;
 
-  RandomTree::RandomTree()
+unsigned int RandomTree::_idCtr = 0;
+
+RandomTree::RandomTree()
+{
+  try
   {
-    try
-    {
-      _nodeCounter = 0;
-      _factPerNode = 0;
-      _treeId = _idCtr;
-      _idCtr++;
-      _root.reset();
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
+    _nodeCounter = 0;
+    _factPerNode = 0;
+    _treeId = _idCtr;
+    _idCtr++;
+    _root.reset();
   }
-
-  RandomTree::~RandomTree()
+  catch(const Tgs::Exception & e)
   {
-    if (_root != nullptr)
-    {
-      _destroyTree(_root);
-      _root.reset();
-    }
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
   }
+}
 
-  void RandomTree::buildTest(const std::shared_ptr<DataFrame>& data, unsigned int numFactors)
+RandomTree::~RandomTree()
+{
+  if (_root != nullptr)
   {
-    try
-    {
-      unsigned int nodeSize = 1;
-      _factPerNode = numFactors;
-
-      std::vector<unsigned int> indices;
-      indices.resize(data->getNumDataVectors());
-
-      for (unsigned int i = 0; i < indices.size(); i++)
-        indices[i] = i;
-
-      _root = std::make_shared<TreeNode>();
-      _root->leftChild.reset();
-      _root->rightChild.reset();
-      _root->isPure = false;
-
-      _build(data, indices, _root, nodeSize);
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
+    _destroyTree(_root);
+    _root.reset();
   }
+}
 
-  unsigned int RandomTree::classifyDataVector(const std::vector<double>& dataVector,
-                                              std::string& outputClass) const
+void RandomTree::buildTest(const std::shared_ptr<DataFrame>& data, unsigned int numFactors)
+{
+  try
   {
-    try
-    {
-      std::shared_ptr<TreeNode> currentNode = _root;
-      bool isPure = false;
-      unsigned int nodeId = 0;
+    unsigned int nodeSize = 1;
+    _factPerNode = numFactors;
 
-      do
+    std::vector<unsigned int> indices;
+    indices.resize(data->getNumDataVectors());
+
+    for (unsigned int i = 0; i < indices.size(); i++)
+      indices[i] = i;
+
+    _root = std::make_shared<TreeNode>();
+    _root->leftChild.reset();
+    _root->rightChild.reset();
+    _root->isPure = false;
+
+    _build(data, indices, _root, nodeSize);
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+unsigned int RandomTree::classifyDataVector(const std::vector<double>& dataVector,
+                                            std::string& outputClass) const
+{
+  try
+  {
+    std::shared_ptr<TreeNode> currentNode = _root;
+    bool isPure = false;
+    unsigned int nodeId = 0;
+
+    do
+    {
+      isPure = currentNode->isPure;
+
+      if (isPure)  //We are at leaf node and are done
       {
-        isPure = currentNode->isPure;
+        outputClass = currentNode->classLabel;
+        nodeId = currentNode->nodeId;
+      }
+      else
+      {
+        if (dataVector.size() > currentNode->factorIndex && dataVector[currentNode->factorIndex] < currentNode->splitValue)
+          currentNode = currentNode->leftChild;
+        else
+          currentNode = currentNode->rightChild;
+      }
 
-        if (isPure)  //We are at leaf node and are done
+    } while (!isPure);
+
+    return nodeId;
+  }
+  catch(const Exception & e)
+  {
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+double RandomTree::computeErrorRate(const std::shared_ptr<DataFrame>& data) const
+{
+  try
+  {
+    unsigned int correct = 0;
+    unsigned int incorrect = 0;
+
+    std::string result;
+
+    for (auto oob : _oobSet)
+    {
+      classifyDataVector(data->getDataVector(oob), result);
+
+      if (result == data->getTrainingLabel(oob))
+        correct++;
+      else
+        incorrect++;
+    }
+
+    return static_cast<double>(incorrect) / static_cast<double>(incorrect + correct);
+  }
+  catch(const Exception & e)
+  {
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::exportTree(std::ostream& fileStream, const std::string& tabDepth)
+{
+  try
+  {
+    throw Exception(__LINE__, "This function has been deprecated.");
+
+    if (fileStream.good())
+    {
+      fileStream << tabDepth << "<RandomTree>" << std::endl;
+      _exportOobSet(fileStream, tabDepth + "\t");
+      _exportNode(fileStream, _root, tabDepth + "\t");
+      fileStream << tabDepth << "</RandomTree>" << std::endl;
+    }
+    else
+      throw Exception("File stream is not open for exporting");
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::exportTree(QDomDocument & modelDoc, QDomElement & parentNode)
+{
+  try
+  {
+    QDomElement randomTreeNode = modelDoc.createElement("RandomTree");
+    randomTreeNode.setAttribute("id", _treeId);
+
+    //Export OobSet
+    QDomElement oobSetNode = modelDoc.createElement("OobSet");
+    std::stringstream oobStream;
+    for (unsigned int i = 0; i < _oobSet.size(); i++)
+    {
+      oobStream << _oobSet[i];
+
+      if (i != _oobSet.size() - 1)
+        oobStream << " ";
+    }
+
+    QDomText oobSetText = modelDoc.createTextNode(oobStream.str().c_str());
+    oobSetNode.appendChild(oobSetText);
+    randomTreeNode.appendChild(oobSetNode);
+
+    //Export Trees Nodes
+    QDomElement treeNodesNode = modelDoc.createElement("TreeNodes");
+    _exportNode(modelDoc, treeNodesNode, _root);
+
+    randomTreeNode.appendChild(treeNodesNode);
+    parentNode.appendChild(randomTreeNode);
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::findProximity(const std::shared_ptr<DataFrame>& data,
+                               std::vector<unsigned int> & proximity) const
+{
+  try
+  {
+    std::vector<unsigned int> proxVec;
+
+    unsigned int dSize = data->getNumDataVectors();
+    proxVec.resize(dSize);
+
+    //Find out which node each vector is classified as
+    for (unsigned int i = 0; i < dSize; i++)
+    {
+      std::string resultClass;
+      unsigned int nodeId = classifyDataVector(data->getDataVector(i), resultClass);
+
+      proxVec[i] = nodeId;
+    }
+
+    for (unsigned int j = 0; j < dSize; j++)
+    {
+      unsigned int tempId = proxVec[j];
+      for (unsigned int k = j; k < dSize; k++)
+      {
+        if (proxVec[k] == tempId)
+          proximity[j * dSize + k] += 1;
+      }
+    }
+  }
+  catch(const Exception & e)
+  {
+    throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::importTree(std::istream & fileStream)
+{
+  try
+  {
+    throw Exception(__LINE__, "This function has been deprecated.");
+
+    _root.reset();
+
+    if (fileStream.good())
+    {
+      _root = std::make_shared<TreeNode>();
+      _importOobSet(fileStream);
+      _importNode(fileStream, _root);
+      //Discard end tag
+      std::string endTag;
+      std::getline(fileStream, endTag);
+      //std::cout << "Random Tree Imported" << std::endl;
+    }
+    else
+      throw Exception(__LINE__, "File stream is not open for importing");
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::importTree(const QDomElement& e)
+{
+  try
+  {
+    _root.reset();
+    _root = std::make_shared<TreeNode>();
+
+    QDomNodeList childList = e.childNodes();
+
+    for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+    {
+      if (childList.at(i).nodeType() == QDomNode::CommentNode)  //Skip comments
+        continue;
+
+      if (childList.at(i).isElement())
+      {
+        QString tag = childList.at(i).toElement().tagName().toUpper();
+
+        if (tag == "OOBSET")
         {
-          outputClass = currentNode->classLabel;
-          nodeId = currentNode->nodeId;
+          QString oobString = childList.at(i).toElement().text();
+          _importOobSet(oobString);
+        }
+        else if (tag == "TREENODES")
+        {
+          QDomElement rootDomNode = childList.at(i).firstChild().toElement();
+          _importNode(rootDomNode, _root);
+
         }
         else
         {
-          if (dataVector.size() > currentNode->factorIndex && dataVector[currentNode->factorIndex] < currentNode->splitValue)
-            currentNode = currentNode->leftChild;
-          else
-            currentNode = currentNode->rightChild;
-        }
-
-      } while (!isPure);
-
-      return nodeId;
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  double RandomTree::computeErrorRate(const std::shared_ptr<DataFrame>& data) const
-  {
-    try
-    {
-      unsigned int correct = 0;
-      unsigned int incorrect = 0;
-
-      std::string result;
-
-      for (auto oob : _oobSet)
-      {
-        classifyDataVector(data->getDataVector(oob), result);
-
-        if (result == data->getTrainingLabel(oob))
-          correct++;
-        else
-          incorrect++;
-      }
-
-      return static_cast<double>(incorrect) / static_cast<double>(incorrect + correct);
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::exportTree(std::ostream& fileStream, const std::string& tabDepth)
-  {
-    try
-    {
-      throw Exception(__LINE__, "This function has been deprecated.");
-
-      if (fileStream.good())
-      {
-        fileStream << tabDepth << "<RandomTree>" << std::endl;
-        _exportOobSet(fileStream, tabDepth + "\t");
-        _exportNode(fileStream, _root, tabDepth + "\t");
-        fileStream << tabDepth << "</RandomTree>" << std::endl;
-      }
-      else
-        throw Exception("File stream is not open for exporting");
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::exportTree(QDomDocument & modelDoc, QDomElement & parentNode)
-  {
-    try
-    {
-      QDomElement randomTreeNode = modelDoc.createElement("RandomTree");
-      randomTreeNode.setAttribute("id", _treeId);
-
-      //Export OobSet
-      QDomElement oobSetNode = modelDoc.createElement("OobSet");
-      std::stringstream oobStream;
-      for (unsigned int i = 0; i < _oobSet.size(); i++)
-      {
-        oobStream << _oobSet[i];
-
-        if (i != _oobSet.size() - 1)
-          oobStream << " ";
-      }
-
-      QDomText oobSetText = modelDoc.createTextNode(oobStream.str().c_str());
-      oobSetNode.appendChild(oobSetText);
-      randomTreeNode.appendChild(oobSetNode);
-
-      //Export Trees Nodes
-      QDomElement treeNodesNode = modelDoc.createElement("TreeNodes");
-      _exportNode(modelDoc, treeNodesNode, _root);
-
-      randomTreeNode.appendChild(treeNodesNode);
-      parentNode.appendChild(randomTreeNode);
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::findProximity(const std::shared_ptr<DataFrame>& data,
-                                 std::vector<unsigned int> & proximity) const
-  {
-    try
-    {
-      std::vector<unsigned int> proxVec;
-
-      unsigned int dSize = data->getNumDataVectors();
-      proxVec.resize(dSize);
-
-      //Find out which node each vector is classified as
-      for (unsigned int i = 0; i < dSize; i++)
-      {
-        std::string resultClass;
-        unsigned int nodeId = classifyDataVector(data->getDataVector(i), resultClass);
-
-        proxVec[i] = nodeId;
-      }
-
-      for (unsigned int j = 0; j < dSize; j++)
-      {
-        unsigned int tempId = proxVec[j];
-        for (unsigned int k = j; k < dSize; k++)
-        {
-          if (proxVec[k] == tempId)
-            proximity[j * dSize + k] += 1;
+          std::stringstream ss;
+          ss << "The tag " << tag.toLatin1().constData() <<
+            " is not supported under the tag <RandomTree>";
+          throw Exception(__LINE__, ss.str());
         }
       }
     }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
   }
-
-
-
-  void RandomTree::importTree(std::istream & fileStream)
+  catch(const Tgs::Exception & ex)
   {
-    try
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
+  }
+}
+
+void RandomTree::getFactorImportance(std::map<unsigned int, double> & purityDeltaSum)
+{
+  try
+  {
+    _calcFactorPurity(_root, purityDeltaSum);
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
+                             const std::string& /*posClass*/, unsigned int nodeSize, bool balanced)
+{
+  try
+  {
+    _factPerNode = numFactors;
+
+    //Build bootstrap and oob sets (on data vector indices)
+    std::vector<unsigned int> bootstrapSet;
+
+    if (balanced)
+      data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
+    else
+      data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
+
+    _root = std::make_shared<TreeNode>();
+    _root->leftChild.reset();
+    _root->rightChild.reset();
+    _root->isPure = false;
+
+    _build(data, bootstrapSet, _root, nodeSize);
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
+                                 unsigned int nodeSize, bool balanced)
+{
+  try
+  {
+    Tgs::Random::instance()->seed(_treeId);
+
+    _factPerNode = numFactors;
+
+    //Build bootstrap and oob sets (on data vector indices)
+    std::vector<unsigned int> bootstrapSet;
+
+    if (balanced)
+      data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
+    else
+      data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
+
+    _root = std::make_shared<TreeNode>();
+    _root->leftChild.reset();
+    _root->rightChild.reset();
+    _root->isPure = false;
+
+    _build(data, bootstrapSet, _root, nodeSize);
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
+                                 const std::string& posClass, const std::string& negClass, unsigned int nodeSize,
+                                 bool /*balanced*/)
+{
+  try
+  {
+    _factPerNode = numFactors;
+
+    //Build bootstrap and oob sets (on data vector indices)
+    std::vector<unsigned int> bootstrapSet;
+
+    data->makeBalancedRoundRobinBootstrapAndOobSets(posClass, negClass, bootstrapSet, _oobSet);
+
+    _root = std::make_shared<TreeNode>();
+    _root->leftChild.reset();
+    _root->rightChild.reset();
+    _root->isPure = false;
+
+    _build(data, bootstrapSet, _root, nodeSize);
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::_build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
+                        const std::shared_ptr<TreeNode>& node, unsigned int nodeSize)
+{
+  try
+  {
+    static unsigned int idCtr = 0;
+    node->leftChild.reset();
+    node->rightChild.reset();
+
+    if (data->isDataSetPure(dataSet) || dataSet.size() <= nodeSize)  //Data is pure
     {
-      throw Exception(__LINE__, "This function has been deprecated.");
+      //If data set is all of same class then it is pure and done
+      //Give it a class label
 
-      _root.reset();
+      node->classLabel = data->getTrainingLabel(dataSet[0]);
+      node->isPure = true;
+      node->purityDelta = 0;
+      node->rangeMin = node->rangeMax = 0;
 
-      if (fileStream.good())
+      node->dataList = dataSet;
+      idCtr++;
+      node->nodeId = idCtr;
+    }
+    else  //Data is not pure
+    {
+      std::vector<unsigned int> factors;
+      unsigned int splitIdx = 0;
+      unsigned int fIdx = 0;
+      double splitVal = 0.0;
+      double purityDelta = 0.0;
+
+      data->selectRandomFactors(_factPerNode, factors);
+
+      bool splitPossible = _igc.findDataSplit(*data, factors, dataSet, splitIdx, fIdx, splitVal, purityDelta);
+
+      if (splitPossible)  //Data is not all same value
       {
-        _root = std::make_shared<TreeNode>();
-        _importOobSet(fileStream);
-        _importNode(fileStream, _root);
-        //Discard end tag
-        std::string endTag;
-        std::getline(fileStream, endTag);
-        //std::cout << "Random Tree Imported" << std::endl;
+        node->isPure = false;
+
+        std::vector<unsigned int> leftSplit;
+        std::vector<unsigned int> rightSplit;
+        node->leftChild = std::make_shared<TreeNode>();
+        node->rightChild = std::make_shared<TreeNode>();
+
+        node->splitValue = splitVal;
+        node->factorIndex = fIdx;
+        node->purityDelta = purityDelta;
+        node->nodeId = 0;
+
+        double minVal, maxVal, mean, q1, q3;
+
+        //  bandwidth
+        data->computeBandwidthByFactor(fIdx, dataSet, minVal,
+        maxVal, mean, q1, q3);
+        double iqr = q3 - q1;
+        node->rangeMin = q1 - ( 3 * iqr);
+        node->rangeMax = q3 + (3 * iqr);
+
+        data->sortIndicesOnFactorValue(dataSet, fIdx);
+
+        for (unsigned int i = 0; i < splitIdx; i++)
+          leftSplit.push_back(dataSet[i]);
+
+        _build(data, leftSplit, node->leftChild, nodeSize);
+
+        for (unsigned int i = splitIdx; i < dataSet.size(); i++)
+          rightSplit.push_back(dataSet[i]);
+
+        _build(data, rightSplit, node->rightChild, nodeSize);
       }
-      else
-        throw Exception(__LINE__, "File stream is not open for importing");
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::importTree(const QDomElement& e)
-  {
-    try
-    {
-      _root.reset();
-      _root = std::make_shared<TreeNode>();
-
-      QDomNodeList childList = e.childNodes();
-
-      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+      else  //Data is all same value
       {
-        if (childList.at(i).nodeType() == QDomNode::CommentNode)
-        {
-          //Skip comments
-          continue;
-        }
+        //No split possible (all factors values same across all factors)
+        //Vote on classes and make pure node.
 
-        if (childList.at(i).isElement())
-        {
-          QString tag = childList.at(i).toElement().tagName().toUpper();
-
-          if (tag == "OOBSET")
-          {
-            QString oobString = childList.at(i).toElement().text();
-            _importOobSet(oobString);
-          }
-          else if (tag == "TREENODES")
-          {
-            QDomElement rootDomNode = childList.at(i).firstChild().toElement();
-            _importNode(rootDomNode, _root);
-
-          }
-          else
-          {
-            std::stringstream ss;
-            ss << "The tag " << tag.toLatin1().constData() <<
-              " is not supported under the tag <RandomTree>";
-            throw Exception(__LINE__, ss.str());
-          }
-        }
-      }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::getFactorImportance(std::map<unsigned int, double> & purityDeltaSum)
-  {
-    try
-    {
-      _calcFactorPurity(_root, purityDeltaSum);
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-                               const std::string& /*posClass*/, unsigned int nodeSize, bool balanced)
-  {
-    try
-    {
-      _factPerNode = numFactors;
-
-      //Build bootstrap and oob sets (on data vector indices)
-      std::vector<unsigned int> bootstrapSet;
-
-      if (balanced)
-        data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
-      else
-        data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
-
-      _root = std::make_shared<TreeNode>();
-      _root->leftChild.reset();
-      _root->rightChild.reset();
-      _root->isPure = false;
-
-      _build(data, bootstrapSet, _root, nodeSize);
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-                                   unsigned int nodeSize, bool balanced)
-  {
-    try
-    {
-      Tgs::Random::instance()->seed(_treeId);
-
-      _factPerNode = numFactors;
-
-      //Build bootstrap and oob sets (on data vector indices)
-      std::vector<unsigned int> bootstrapSet;
-
-      if (balanced)
-        data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
-      else
-        data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
-
-      _root = std::make_shared<TreeNode>();
-      _root->leftChild.reset();
-      _root->rightChild.reset();
-      _root->isPure = false;
-
-      _build(data, bootstrapSet, _root, nodeSize);
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-                                   const std::string& posClass, const std::string& negClass, unsigned int nodeSize,
-                                   bool /*balanced*/)
-  {
-    try
-    {
-      _factPerNode = numFactors;
-
-      //Build bootstrap and oob sets (on data vector indices)
-      std::vector<unsigned int> bootstrapSet;
-
-      data->makeBalancedRoundRobinBootstrapAndOobSets(posClass, negClass, bootstrapSet, _oobSet);
-
-      _root = std::make_shared<TreeNode>();
-      _root->leftChild.reset();
-      _root->rightChild.reset();
-      _root->isPure = false;
-
-      _build(data, bootstrapSet, _root, nodeSize);
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  void RandomTree::_build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
-                          const std::shared_ptr<TreeNode>& node, unsigned int nodeSize)
-  {
-    try
-    {
-      static unsigned int idCtr = 0;
-      node->leftChild.reset();
-      node->rightChild.reset();
-
-      if (data->isDataSetPure(dataSet) || dataSet.size() <= nodeSize)  //Data is pure
-      {
-        //If data set is all of same class then it is pure and done
-        //Give it a class label
-
-        node->classLabel = data->getTrainingLabel(dataSet[0]);
+        node->classLabel = data->getMajorityTrainingLabel(dataSet);
         node->isPure = true;
         node->purityDelta = 0;
-        node->rangeMin = node->rangeMax = 0;
 
         node->dataList = dataSet;
         idCtr++;
         node->nodeId = idCtr;
       }
-      else  //Data is not pure
-      {
-        std::vector<unsigned int> factors;
-        unsigned int splitIdx = 0;
-        unsigned int fIdx = 0;
-        double splitVal = 0.0;
-        double purityDelta = 0.0;
-
-        data->selectRandomFactors(_factPerNode, factors);
-
-        bool splitPossible = _igc.findDataSplit(*data, factors, dataSet, splitIdx, fIdx, splitVal,
-          purityDelta);
-
-        if (splitPossible)  //Data is not all same value
-        {
-          node->isPure = false;
-
-          std::vector<unsigned int> leftSplit;
-          std::vector<unsigned int> rightSplit;
-          node->leftChild = std::make_shared<TreeNode>();
-          node->rightChild = std::make_shared<TreeNode>();
-
-          node->splitValue = splitVal;
-          node->factorIndex = fIdx;
-          node->purityDelta = purityDelta;
-          node->nodeId = 0;
-
-          double minVal, maxVal, mean, q1, q3;
-
-          //  bandwidth
-          data->computeBandwidthByFactor(fIdx, dataSet, minVal,
-          maxVal, mean, q1, q3);
-          double iqr = q3 - q1;
-          node->rangeMin = q1 - ( 3 * iqr);
-          node->rangeMax = q3 + (3 * iqr);
-
-          data->sortIndicesOnFactorValue(dataSet, fIdx);
-
-          for (unsigned int i = 0; i < splitIdx; i++)
-            leftSplit.push_back(dataSet[i]);
-
-          _build(data, leftSplit, node->leftChild, nodeSize);
-
-          for (unsigned int i = splitIdx; i < dataSet.size(); i++)
-            rightSplit.push_back(dataSet[i]);
-
-          _build(data, rightSplit, node->rightChild, nodeSize);
-        }
-        else  //Data is all same value
-        {
-          //No split possible (all factors values same across all factors)
-          //Vote on classes and make pure node.
-
-          node->classLabel = data->getMajorityTrainingLabel(dataSet);
-          node->isPure = true;
-          node->purityDelta = 0;
-
-          node->dataList = dataSet;
-          idCtr++;
-          node->nodeId = idCtr;
-        }
-      }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
-
-  void RandomTree::_calcFactorPurity(const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double>& factorPurity)
+  catch(const Tgs::Exception & e)
   {
-    try
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::_calcFactorPurity(const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double>& factorPurity)
+{
+  try
+  {
+    if (!node->isPure)
     {
-      if (!node->isPure)
-      {
-        _calcFactorPurity(node->leftChild, factorPurity);
-        _calcFactorPurity(node->rightChild, factorPurity);
-        factorPurity[node->factorIndex] += node->purityDelta;
-      }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      _calcFactorPurity(node->leftChild, factorPurity);
+      _calcFactorPurity(node->rightChild, factorPurity);
+      factorPurity[node->factorIndex] += node->purityDelta;
     }
   }
-
-  void RandomTree::_destroyTree(std::shared_ptr<TreeNode> & node)
+  catch(const Tgs::Exception & e)
   {
-
-    //Perform a post order traversal of the tree
-    //Delete node after its children have been deleted
-
-    if (node.get() != nullptr)
-    {
-      _destroyTree(node->leftChild);
-      _destroyTree(node->rightChild);
-      node.reset();
-    }
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
   }
+}
 
-  void RandomTree::_exportNode(std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth)
+void RandomTree::_destroyTree(std::shared_ptr<TreeNode> & node)
+{
+
+  //Perform a post order traversal of the tree
+  //Delete node after its children have been deleted
+
+  if (node.get() != nullptr)
   {
-    try
-    {
-      throw Exception(__LINE__, "This function has been deprecated.");
-
-      if (fileStream.good())
-      {
-        if (node != nullptr)
-        {
-          fileStream << tabDepth + "<TreeNode>" << std::endl;
-
-          if (node->isPure)
-          {
-            fileStream << tabDepth + "\t<NodeType>\tPure\t</NodeType>" << std::endl;
-            fileStream << tabDepth + "\t<ClassName>\t" << node->classLabel << "\t</ClassName>" << std::endl;
-            fileStream << tabDepth + "\t<Data>\t" << node->nodeId;
-
-            for (auto data : node->dataList)
-              fileStream << "\t" << data;
-
-            fileStream << "\t</Data>" << std::endl;
-          }
-          else
-          {
-            fileStream << tabDepth + "\t<NodeType>\tSplit\t</NodeType>" << std::endl;
-            fileStream << tabDepth + "\t<Data>\t" << node->factorIndex << "\t"
-                       << node->splitValue << "\t" << node->purityDelta << "\t"
-                       << node->rangeMin << "\t" << node->rangeMax << "\t</Data>" << std::endl;
-          }
-
-          fileStream << tabDepth + "</TreeNode>" << std::endl;
-
-          _exportNode(fileStream, node->leftChild, tabDepth);
-
-          _exportNode(fileStream, node->rightChild, tabDepth);
-        }
-      }
-      else
-        throw Exception("File stream is not open for exporting");
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
+    _destroyTree(node->leftChild);
+    _destroyTree(node->rightChild);
+    node.reset();
   }
+}
 
-  void RandomTree::_exportNode(QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node)
+void RandomTree::_exportNode(std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth)
+{
+  try
   {
-    try
-    {
-      if (node)
-      {
-        QDomElement treeDomNode = modelDoc.createElement("TreeNode");
+    throw Exception(__LINE__, "This function has been deprecated.");
 
-        treeDomNode.setAttribute("id", node->nodeId);
+    if (fileStream.good())
+    {
+      if (node != nullptr)
+      {
+        fileStream << tabDepth + "<TreeNode>" << std::endl;
 
         if (node->isPure)
         {
-          //Add Node Type
-          QDomElement typeNode = modelDoc.createElement("NodeType");
-          QDomText typeText = modelDoc.createTextNode("Pure");
-          typeNode.appendChild(typeText);
-          treeDomNode.appendChild(typeNode);
+          fileStream << tabDepth + "\t<NodeType>\tPure\t</NodeType>" << std::endl;
+          fileStream << tabDepth + "\t<ClassName>\t" << node->classLabel << "\t</ClassName>" << std::endl;
+          fileStream << tabDepth + "\t<Data>\t" << node->nodeId;
 
-          //Add class label
-          QDomElement classNode = modelDoc.createElement("ClassName");
-          QDomText classText = modelDoc.createTextNode(node->classLabel.c_str());
-          classNode.appendChild(classText);
-          treeDomNode.appendChild(classNode);
+          for (auto data : node->dataList)
+            fileStream << "\t" << data;
 
-          //Add Data
-          QDomElement dataNode = modelDoc.createElement("Data");
-
-          std::stringstream dataStream;
-          for (unsigned int i = 0; i < node->dataList.size(); i++)
-          {
-            dataStream << node->dataList[i];
-            if (i != node->dataList.size() - 1)
-              dataStream << " ";
-          }
-
-          QDomText dataText = modelDoc.createTextNode(dataStream.str().c_str());
-          dataNode.appendChild(dataText);
-          treeDomNode.appendChild(dataNode);
-
+          fileStream << "\t</Data>" << std::endl;
         }
         else
         {
-          //Add Node Type
-          QDomElement typeNode = modelDoc.createElement("NodeType");
-          QDomText typeText = modelDoc.createTextNode("Split");
-          typeNode.appendChild(typeText);
-          treeDomNode.appendChild(typeNode);
-
-          //Add Data
-          QDomElement dataNode = modelDoc.createElement("Data");
-          std::stringstream dataStream;
-
-          dataStream << node->factorIndex << " " << node->splitValue << " " << node->purityDelta
-                     << " " << node->rangeMin << " " << node->rangeMax;
-
-          QDomText dataText = modelDoc.createTextNode(dataStream.str().c_str());
-          dataNode.appendChild(dataText);
-          treeDomNode.appendChild(dataNode);
+          fileStream << tabDepth + "\t<NodeType>\tSplit\t</NodeType>" << std::endl;
+          fileStream << tabDepth + "\t<Data>\t" << node->factorIndex << "\t"
+                     << node->splitValue << "\t" << node->purityDelta << "\t"
+                     << node->rangeMin << "\t" << node->rangeMax << "\t</Data>" << std::endl;
         }
 
-        parentNode.appendChild(treeDomNode);
+        fileStream << tabDepth + "</TreeNode>" << std::endl;
 
-        //Export child tree nodes
-        _exportNode(modelDoc, parentNode, node->leftChild);
+        _exportNode(fileStream, node->leftChild, tabDepth);
 
-        _exportNode(modelDoc, parentNode, node->rightChild);
+        _exportNode(fileStream, node->rightChild, tabDepth);
       }
     }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
+    else
+      throw Exception("File stream is not open for exporting");
   }
-
-  void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth) const
+  catch(const Tgs::Exception & e)
   {
-    try
-    {
-      throw Exception(__LINE__, "This function has been deprecated.");
-
-      if (fileStream.good())
-      {
-        fileStream << tabDepth << "<OobSet>";
-
-        for (auto oob : _oobSet)
-          fileStream << "\t" << oob;
-
-        fileStream << "\t</OobSet>" << std::endl;
-      }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
   }
+}
 
-  void RandomTree::_importNode(std::istream& fileStream, const std::shared_ptr<TreeNode>& node)
+void RandomTree::_exportNode(QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node)
+{
+  try
   {
-    try
+    if (node)
     {
-      throw Exception(__LINE__, "This function has been deprecated.");
+      QDomElement treeDomNode = modelDoc.createElement("TreeNode");
 
-      std::string buffer;
-      std::getline(fileStream, buffer);
-      //std::cout << "F" << buffer << std::endl;
-      std::stringstream ss(buffer);
-      std::string firstStr;
+      treeDomNode.setAttribute("id", node->nodeId);
 
-      ss >> firstStr;
-
-      if (firstStr == "<TreeNode>")
+      if (node->isPure)
       {
-        std::string buffer2;
-        std::getline(fileStream, buffer2);
+        //Add Node Type
+        QDomElement typeNode = modelDoc.createElement("NodeType");
+        QDomText typeText = modelDoc.createTextNode("Pure");
+        typeNode.appendChild(typeText);
+        treeDomNode.appendChild(typeNode);
 
-        std::string NodeType;
+        //Add class label
+        QDomElement classNode = modelDoc.createElement("ClassName");
+        QDomText classText = modelDoc.createTextNode(node->classLabel.c_str());
+        classNode.appendChild(classText);
+        treeDomNode.appendChild(classNode);
 
-        while (buffer2.find("</TreeNode>") == std::string::npos)
+        //Add Data
+        QDomElement dataNode = modelDoc.createElement("Data");
+
+        std::stringstream dataStream;
+        for (unsigned int i = 0; i < node->dataList.size(); i++)
         {
-          std::stringstream ss1(buffer2);
-          ss1 >> firstStr;
+          dataStream << node->dataList[i];
+          if (i != node->dataList.size() - 1)
+            dataStream << " ";
+        }
 
-          if (firstStr == "<NodeType>")
-            ss1 >> NodeType;
-          else if (firstStr == "<ClassName>")
+        QDomText dataText = modelDoc.createTextNode(dataStream.str().c_str());
+        dataNode.appendChild(dataText);
+        treeDomNode.appendChild(dataNode);
+
+      }
+      else
+      {
+        //Add Node Type
+        QDomElement typeNode = modelDoc.createElement("NodeType");
+        QDomText typeText = modelDoc.createTextNode("Split");
+        typeNode.appendChild(typeText);
+        treeDomNode.appendChild(typeNode);
+
+        //Add Data
+        QDomElement dataNode = modelDoc.createElement("Data");
+        std::stringstream dataStream;
+
+        dataStream << node->factorIndex << " " << node->splitValue << " " << node->purityDelta
+                   << " " << node->rangeMin << " " << node->rangeMax;
+
+        QDomText dataText = modelDoc.createTextNode(dataStream.str().c_str());
+        dataNode.appendChild(dataText);
+        treeDomNode.appendChild(dataNode);
+      }
+
+      parentNode.appendChild(treeDomNode);
+
+      //Export child tree nodes
+      _exportNode(modelDoc, parentNode, node->leftChild);
+
+      _exportNode(modelDoc, parentNode, node->rightChild);
+    }
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth) const
+{
+  try
+  {
+    throw Exception(__LINE__, "This function has been deprecated.");
+
+    if (fileStream.good())
+    {
+      fileStream << tabDepth << "<OobSet>";
+
+      for (auto oob : _oobSet)
+        fileStream << "\t" << oob;
+
+      fileStream << "\t</OobSet>" << std::endl;
+    }
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::_importNode(std::istream& fileStream, const std::shared_ptr<TreeNode>& node)
+{
+  try
+  {
+    throw Exception(__LINE__, "This function has been deprecated.");
+
+    std::string buffer;
+    std::getline(fileStream, buffer);
+    //std::cout << "F" << buffer << std::endl;
+    std::stringstream ss(buffer);
+    std::string firstStr;
+
+    ss >> firstStr;
+
+    if (firstStr == "<TreeNode>")
+    {
+      std::string buffer2;
+      std::getline(fileStream, buffer2);
+
+      std::string NodeType;
+
+      while (buffer2.find("</TreeNode>") == std::string::npos)
+      {
+        std::stringstream ss1(buffer2);
+        ss1 >> firstStr;
+
+        if (firstStr == "<NodeType>")
+          ss1 >> NodeType;
+        else if (firstStr == "<ClassName>")
+        {
+          std::string nextStr;
+          ss1 >> nextStr;
+
+          bool first = true;
+          while (nextStr != "</ClassName>")
           {
+            if (first == false)
+              node->classLabel += " ";
+            else
+              first = false;
+            node->classLabel += nextStr;
+            ss1 >> nextStr;
+          }
+        }
+        else if (firstStr == "<Data>")
+        {
+          if (NodeType == "Pure")
+          {
+            node->isPure = true;
+            ss1 >> node->nodeId;
+
             std::string nextStr;
             ss1 >> nextStr;
 
-            bool first = true;
-            while (nextStr != "</ClassName>")
+            while (nextStr != "</Data>")
             {
-              if (first == false)
-                node->classLabel += " ";
-              else
-                first = false;
-              node->classLabel += nextStr;
+              unsigned int idx;
+              std::stringstream ss2(nextStr);
+              ss2 >> idx;
+              node->dataList.push_back(idx);
               ss1 >> nextStr;
             }
           }
-          else if (firstStr == "<Data>")
+          else if (NodeType == "Split")
           {
-            if (NodeType == "Pure")
-            {
-              node->isPure = true;
-              ss1 >> node->nodeId;
-
-              std::string nextStr;
-              ss1 >> nextStr;
-
-              while (nextStr != "</Data>")
-              {
-                unsigned int idx;
-                std::stringstream ss2(nextStr);
-                ss2 >> idx;
-                node->dataList.push_back(idx);
-                ss1 >> nextStr;
-              }
-            }
-            else if (NodeType == "Split")
-            {
-              node->isPure = false;
-              node->nodeId = 0;
-              ss1 >> node->factorIndex >> node->splitValue >> node->purityDelta
-                  >> node->rangeMin >> node->rangeMax;
-            }
-          }
-
-          std::getline(fileStream, buffer2);
-        }
-
-        //Assign the nodes children
-        if (node->isPure == true)
-        {
-          node->leftChild.reset();
-          node->rightChild.reset();
-        }
-        else
-        {
-          node->leftChild = std::make_shared<TreeNode>();
-          _importNode(fileStream, node->leftChild);
-          node->rightChild = std::make_shared<TreeNode>();
-          _importNode(fileStream, node->rightChild);
-        }
-      }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
-
-  QDomElement RandomTree::_importNode(const QDomElement& treeNode, const std::shared_ptr<TreeNode>& node)
-  {
-    try
-    {
-      if (treeNode.isNull())
-        return treeNode;
-
-      bool parsedId;
-
-      QString idString = treeNode.attribute("id", "0");
-      node->nodeId = idString.toUInt(&parsedId);
-
-      if (!parsedId)
-      {
-        std::stringstream ss;
-        ss << "Unable to parse the tree node id value " << idString.toLatin1().constData();
-        throw Exception(__LINE__, ss.str());
-      }
-
-      QDomNodeList nodeList = treeNode.childNodes();
-
-      QString treeNodeType;
-
-      for (unsigned int i = 0; i < (unsigned int)nodeList.size(); i++)
-      {
-        if (nodeList.at(i).nodeType() == QDomNode::CommentNode)
-        {
-          //Skip comments
-          continue;
-        }
-
-        QString tag = nodeList.at(i).toElement().tagName().toUpper();
-        QDomElement nodeElement = nodeList.at(i).toElement();
-
-        if (tag == "NODETYPE")
-          treeNodeType = nodeElement.text().toUpper();
-        else if (tag == "CLASSNAME")
-        {
-          QStringList classList = nodeElement.text().split(" ");
-
-          for (unsigned int j = 0; j < (unsigned int)classList.size(); j++)
-          {
-            node->classLabel += classList[j].toLatin1().constData();
-            if (j != (unsigned int)classList.size() - 1)
-              node->classLabel += " ";
-          }
-        }
-        else if (tag == "DATA")
-        {
-          QStringList dataList = nodeElement.text().split(" ");
-
-          if (treeNodeType == "PURE")
-          {
-            node->isPure = true;
-
-            bool parsedOk;
-
-            for (const auto& dataIndexString : qAsConst(dataList))
-            {
-              unsigned int dataIndex = dataIndexString.toUInt(&parsedOk);
-              if (!parsedOk)
-              {
-                std::stringstream ss;
-                ss << "Error parsing index value of " << dataIndexString.toLatin1().constData()
-                   << " in TreeNode->Data from XML";
-              }
-              node->dataList.push_back(dataIndex);
-            }
-          }
-          else if (treeNodeType == "SPLIT")
-          {
-            if (dataList.size() != 5)
-            {
-              std::stringstream ss;
-              ss << "The DATA tag for each SPLIT TreeNode must have exactly 5 values.";
-              throw Exception(__LINE__, ss.str());
-            }
-
             node->isPure = false;
             node->nodeId = 0;
-
-            bool parsedOk;
-
-            unsigned int factorIndex = dataList[0].toUInt(&parsedOk);
-            double splitValue = dataList[1].toDouble(&parsedOk);
-            double purityDelta = dataList[2].toDouble(&parsedOk);
-            double rangeMin = dataList[3].toDouble(&parsedOk);
-            double rangeMax = dataList[4].toDouble(&parsedOk);
-
-            if (!parsedOk)
-            {
-              std::stringstream ss;
-              ss << "Unable to parse the DATA value for a SPLIT node "
-                 << nodeElement.text().toLatin1().constData();
-              throw Exception(__LINE__, ss.str());
-            }
-
-            node->factorIndex = factorIndex;
-            node->splitValue = splitValue;
-            node->purityDelta = purityDelta;
-            node->rangeMin = rangeMin;
-            node->rangeMax = rangeMax;
-          }
-          else
-          {
-            std::stringstream ss;
-            ss << "The tree node type " << treeNodeType.toLatin1().constData() << " is not a valid type.";
-            throw Exception(__LINE__, ss.str());
+            ss1 >> node->factorIndex >> node->splitValue >> node->purityDelta
+                >> node->rangeMin >> node->rangeMax;
           }
         }
-        else
-        {
-          std::stringstream ss;
-          ss << "The tag " << tag.toLatin1().constData()
-             << " is not supported under tag <TreeNodes>";
-          throw Exception(__LINE__, ss.str());
-        }
+
+        std::getline(fileStream, buffer2);
       }
 
       //Assign the nodes children
@@ -912,93 +767,230 @@ namespace Tgs
       {
         node->leftChild.reset();
         node->rightChild.reset();
-        QDomElement nextNode = treeNode.nextSibling().toElement();
-        return nextNode;
       }
-      else //Split Node
+      else
       {
-        QDomElement leftNode = treeNode.nextSibling().toElement();
-        if (leftNode.isNull())
-          return leftNode;
-
         node->leftChild = std::make_shared<TreeNode>();
-
-        QDomElement rightNode = _importNode(leftNode, node->leftChild);
-
-        if (rightNode.isNull())
-          return rightNode;
-
+        _importNode(fileStream, node->leftChild);
         node->rightChild = std::make_shared<TreeNode>();
-        return _importNode(rightNode, node->rightChild);
+        _importNode(fileStream, node->rightChild);
       }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
-
-  void RandomTree::_importOobSet(std::istream & fileStream)
+  catch(const Tgs::Exception & e)
   {
-    try
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+QDomElement RandomTree::_importNode(const QDomElement& treeNode, const std::shared_ptr<TreeNode>& node)
+{
+  try
+  {
+    if (treeNode.isNull())
+      return treeNode;
+
+    bool parsedId;
+
+    QString idString = treeNode.attribute("id", "0");
+    node->nodeId = idString.toUInt(&parsedId);
+
+    if (!parsedId)
     {
-      throw Exception(__LINE__, "This function has been deprecated.");
+      std::stringstream ss;
+      ss << "Unable to parse the tree node id value " << idString.toLatin1().constData();
+      throw Exception(__LINE__, ss.str());
+    }
 
-      if (fileStream.good())
+    QDomNodeList nodeList = treeNode.childNodes();
+
+    QString treeNodeType;
+
+    for (unsigned int i = 0; i < (unsigned int)nodeList.size(); i++)
+    {
+      if (nodeList.at(i).nodeType() == QDomNode::CommentNode) //Skip comments
+        continue;
+
+      QString tag = nodeList.at(i).toElement().tagName().toUpper();
+      QDomElement nodeElement = nodeList.at(i).toElement();
+
+      if (tag == "NODETYPE")
+        treeNodeType = nodeElement.text().toUpper();
+      else if (tag == "CLASSNAME")
       {
-        std::string buffer;
-        std::getline(fileStream, buffer);
-        std::stringstream ss(buffer);
-        std::string firstStr;
-        std::string nextStr;
-        ss >> firstStr;
+        QStringList classList = nodeElement.text().split(" ");
 
-        if (firstStr == "<OobSet>")
+        for (unsigned int j = 0; j < (unsigned int)classList.size(); j++)
         {
-          ss >> nextStr;
+          node->classLabel += classList[j].toLatin1().constData();
+          if (j != (unsigned int)classList.size() - 1)
+            node->classLabel += " ";
+        }
+      }
+      else if (tag == "DATA")
+      {
+        QStringList dataList = nodeElement.text().split(" ");
 
-          while (nextStr != "</OobSet>")
+        if (treeNodeType == "PURE")
+        {
+          node->isPure = true;
+
+          bool parsedOk;
+
+          for (const auto& dataIndexString : qAsConst(dataList))
           {
-            unsigned int idx;
-            std::stringstream ss2(nextStr);
-            ss2 >> idx;
-            _oobSet.push_back(idx);
-            ss >> nextStr;
+            unsigned int dataIndex = dataIndexString.toUInt(&parsedOk);
+            if (!parsedOk)
+            {
+              std::stringstream ss;
+              ss << "Error parsing index value of " << dataIndexString.toLatin1().constData()
+                 << " in TreeNode->Data from XML";
+            }
+            node->dataList.push_back(dataIndex);
           }
         }
-      }
-    }
-    catch(const Tgs::Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-  }
+        else if (treeNodeType == "SPLIT")
+        {
+          if (dataList.size() != 5)
+          {
+            std::stringstream ss;
+            ss << "The DATA tag for each SPLIT TreeNode must have exactly 5 values.";
+            throw Exception(__LINE__, ss.str());
+          }
 
-  void RandomTree::_importOobSet(const QString& oobString)
-  {
-    try
-    {
-      QStringList oobList = oobString.split(" ");
+          node->isPure = false;
+          node->nodeId = 0;
 
-      bool parseOk = true;
-      for (const auto& oob : qAsConst(oobList))
-      {
-        int oobValue = oob.toInt(&parseOk);
+          bool parsedOk;
 
-        if (!parseOk)
+          unsigned int factorIndex = dataList[0].toUInt(&parsedOk);
+          double splitValue = dataList[1].toDouble(&parsedOk);
+          double purityDelta = dataList[2].toDouble(&parsedOk);
+          double rangeMin = dataList[3].toDouble(&parsedOk);
+          double rangeMax = dataList[4].toDouble(&parsedOk);
+
+          if (!parsedOk)
+          {
+            std::stringstream ss;
+            ss << "Unable to parse the DATA value for a SPLIT node "
+               << nodeElement.text().toLatin1().constData();
+            throw Exception(__LINE__, ss.str());
+          }
+
+          node->factorIndex = factorIndex;
+          node->splitValue = splitValue;
+          node->purityDelta = purityDelta;
+          node->rangeMin = rangeMin;
+          node->rangeMax = rangeMax;
+        }
+        else
         {
           std::stringstream ss;
-          ss << "Unable to parse the OobSet from the XML file";
+          ss << "The tree node type " << treeNodeType.toLatin1().constData() << " is not a valid type.";
           throw Exception(__LINE__, ss.str());
         }
-
-        _oobSet.push_back(oobValue);
+      }
+      else
+      {
+        std::stringstream ss;
+        ss << "The tag " << tag.toLatin1().constData()
+           << " is not supported under tag <TreeNodes>";
+        throw Exception(__LINE__, ss.str());
       }
     }
-    catch(const Tgs::Exception & e)
+
+    //Assign the nodes children
+    if (node->isPure == true)
     {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      node->leftChild.reset();
+      node->rightChild.reset();
+      QDomElement nextNode = treeNode.nextSibling().toElement();
+      return nextNode;
+    }
+    else //Split Node
+    {
+      QDomElement leftNode = treeNode.nextSibling().toElement();
+      if (leftNode.isNull())
+        return leftNode;
+
+      node->leftChild = std::make_shared<TreeNode>();
+
+      QDomElement rightNode = _importNode(leftNode, node->leftChild);
+
+      if (rightNode.isNull())
+        return rightNode;
+
+      node->rightChild = std::make_shared<TreeNode>();
+      return _importNode(rightNode, node->rightChild);
     }
   }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::_importOobSet(std::istream & fileStream)
+{
+  try
+  {
+    throw Exception(__LINE__, "This function has been deprecated.");
+
+    if (fileStream.good())
+    {
+      std::string buffer;
+      std::getline(fileStream, buffer);
+      std::stringstream ss(buffer);
+      std::string firstStr;
+      std::string nextStr;
+      ss >> firstStr;
+
+      if (firstStr == "<OobSet>")
+      {
+        ss >> nextStr;
+
+        while (nextStr != "</OobSet>")
+        {
+          unsigned int idx;
+          std::stringstream ss2(nextStr);
+          ss2 >> idx;
+          _oobSet.push_back(idx);
+          ss >> nextStr;
+        }
+      }
+    }
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
+
+void RandomTree::_importOobSet(const QString& oobString)
+{
+  try
+  {
+    QStringList oobList = oobString.split(" ");
+
+    bool parseOk = true;
+    for (const auto& oob : qAsConst(oobList))
+    {
+      int oobValue = oob.toInt(&parseOk);
+
+      if (!parseOk)
+      {
+        std::stringstream ss;
+        ss << "Unable to parse the OobSet from the XML file";
+        throw Exception(__LINE__, ss.str());
+      }
+
+      _oobSet.push_back(oobValue);
+    }
+  }
+  catch(const Tgs::Exception & e)
+  {
+    throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+  }
+}
 
 } //End Namespace

@@ -76,7 +76,7 @@ public:
   public:
     int x;
     int y;
-    Pixel(int x, int y) : x(x), y(y) { }
+    Pixel(int x_, int y_) : x(x_), y(y_) { }
     Pixel() = default;
   };
 
@@ -100,11 +100,11 @@ public:
     {
     }
 
-    PixelBox(int minX, int maxX, int minY, int maxY)
-      : minX(minX),
-        minY(minY),
-        maxX(maxX),
-        maxY(maxY)
+    PixelBox(int minX_, int maxX_, int minY_, int maxY_)
+      : minX(minX_),
+        minY(minY_),
+        maxX(maxX_),
+        maxY(maxY_)
     {
     }
 

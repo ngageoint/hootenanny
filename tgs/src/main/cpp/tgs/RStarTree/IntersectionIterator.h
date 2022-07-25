@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGC__INTERSECTION_ITERATOR_H__
@@ -65,7 +65,7 @@ private:
   public:
 
     Result() : id(-1) { }
-    Result(const Box& box, int id) : box(box), id(id) { }
+    Result(const Box& box_, int id_) : box(box_), id(id_) { }
 
     Box box;
     int id;
@@ -80,7 +80,7 @@ private:
   Result _currentResult;
 
   void _populateNext();
-    bool _determineIntesection(const Box& box);
+  bool _determineIntesection(const Box& box);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -67,9 +67,7 @@ public:
   void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Node)
-    {
       allNodes.insert(e->getId());
-    }
   }
 
   QString getDescription() const override { return ""; }
@@ -100,23 +98,19 @@ public:
 
       for (size_t i = 0; i < newNodes.size(); i++)
       {
-        map<long, long>::const_iterator it = _fromTo.find(newNodes[i]);
+        auto it = _fromTo.find(newNodes[i]);
         if (it != _fromTo.end())
-        {
           newNodes[i] = it->second;
-        }
       }
 
       w->setNodes(newNodes);
 
       // remove any unused nodes.
       const NodeToWayMap& n2w = *_map.getIndex().getNodeToWayMap();
-      for (size_t i = 0; i < oldNodes.size(); i++)
+      for (auto old_node_id : oldNodes)
       {
-        if (n2w.getWaysByNode(oldNodes[i]).empty() && _map.containsNode(oldNodes[i]))
-        {
-          RemoveNodeByEid::removeNode(_map.shared_from_this(), oldNodes[i]);
-        }
+        if (n2w.getWaysByNode(old_node_id).empty() && _map.containsNode(old_node_id))
+          RemoveNodeByEid::removeNode(_map.shared_from_this(), old_node_id);
       }
     }
   }
@@ -138,14 +132,12 @@ void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
     if (BuildingCriterion().isSatisfied(r))
-    {
       _createOutline(r);
-    }
   }
 }
 
@@ -176,9 +168,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       LOG_VART(pGeometry->getGeometryTypeId());
     }
     if (!pGeometry || pGeometry->isEmpty())
-    {
       return;
-    }
 
     pOutline = pOutline->Union(pGeometry.get());
     LOG_VART(pOutline->getGeometryTypeId());
@@ -192,7 +182,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       pOutline = pOutline->Union(cleanedGeom.get());
       LOG_VART(pOutline->getGeometryTypeId());
     }
-    catch (const geos::util::TopologyException& e)
+    catch (const geos::util::TopologyException& ex)
     {
       //couldn't clean, so mark parent relation for review (eventually we'll come up with
       //cleaning that works here)
@@ -202,7 +192,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       _reviewMarker.mark(_map, pBuilding, errMsg + ".", ReviewMarker::getBadGeometryType());
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN(errMsg + ": " + QString(e.what()));
+        LOG_WARN(errMsg + ": " + QString(ex.what()));
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -220,19 +210,19 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
   std::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   const vector<RelationData::Entry> entries = pBuilding->getMembers();
 
-  for (size_t i = 0; i < entries.size(); i++)
+  for (const auto& member : entries)
   {
-    LOG_VART(entries[i].getRole());
-    if (entries[i].getRole() == MetadataTags::RoleOutline())
+    LOG_VART(member.getRole());
+    if (member.getRole() == MetadataTags::RoleOutline())
     {
-      LOG_TRACE("Removing outline role from: " << entries[i] << "...");
-      pBuilding->removeElement(entries[i].getRole(), entries[i].getElementId());
+      LOG_TRACE("Removing outline role from: " << member << "...");
+      pBuilding->removeElement(member.getRole(), member.getElementId());
     }
-    else if (entries[i].getRole() == MetadataTags::RolePart())
+    else if (member.getRole() == MetadataTags::RolePart())
     {
-      if (entries[i].getElementId().getType() == ElementType::Way)
+      if (member.getElementId().getType() == ElementType::Way)
       {
-        WayPtr way = _map->getWay(entries[i].getElementId().getId());
+        WayPtr way = _map->getWay(member.getElementId().getId());
 
         if (way->isClosedArea())
         {
@@ -240,9 +230,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
           _unionOutline(pBuilding, way, outline);
         }
       }
-      else if (entries[i].getElementId().getType() == ElementType::Relation)
+      else if (member.getElementId().getType() == ElementType::Relation)
       {
-        RelationPtr relation = _map->getRelation(entries[i].getElementId().getId());
+        RelationPtr relation = _map->getRelation(member.getElementId().getId());
         LOG_VART(relation);
         if (relation->isMultiPolygon())
         {
@@ -272,21 +262,27 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
   LOG_VART(outline->isEmpty());
   if (!outline->isEmpty())
   {
-    LOG_TRACE(
-      "Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
+    LOG_TRACE("Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
+
+    //  In some instances the outline geometry may come back as a multipolygon with holes those need to be changed
+    if (outline->getGeometryTypeId() == GEOS_POLYGON)
+    {
+      Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
+      if (polygon->getNumInteriorRing() != 0)
+        outline.reset(polygon->getExteriorRing()->clone().release());
+//        outline.reset(outline->getBoundary().release());
+    }
 
     const std::shared_ptr<Element> pOutlineElement =
       GeometryToElementConverter(_map).convertGeometryToElement(
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
     LOG_VART(pOutlineElement->getElementType());
-    // This is a bit of a hack. The GeometryToElementConverter is returning us an area here, when we want
-    // a building. There needs to be some investigation into why an area is being returned and if
-    // we can get GeometryToElementConverter to return a building instead.
+    // Some element outlines come back from the GeometryToElementConverter as an area, remove the `area=yes` tag
     if (pOutlineElement->getTags()["area"] == "yes")
-    {
       pOutlineElement->getTags().remove("area");
-      pOutlineElement->getTags()["building"] = "yes";
-    }
+    //  The OSM building relation spec indicates that the outline member must contain the `building=yes` tag
+    pOutlineElement->getTags()["building"] = "yes";
+
     LOG_VART(pOutlineElement);
     _mergeNodes(pOutlineElement, pBuilding);
 
@@ -313,8 +309,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
   LOG_TRACE("Output building: " << pBuilding);
 }
 
-void BuildingOutlineUpdateOp::_mergeNodes(
-  const std::shared_ptr<Element>& changed, const RelationPtr& reference) const
+void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed, const RelationPtr& reference) const
 {
   set<long> changedNodes;
   set<long> referenceNodes;
@@ -328,26 +323,24 @@ void BuildingOutlineUpdateOp::_mergeNodes(
   map<long, long> nodeIdMap;
 
   double epsilon = 1e-9;
-  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ++ci)
+  for (auto node_id : changedNodes)
   {
     double bestDistance = epsilon;
     // should never be used uninitialized
-    long bestMatch = -9999;
-    const NodePtr& cn = _map->getNode(*ci);
-    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ++ri)
+    long bestMatch = std::numeric_limits<long>::min();
+    const NodePtr& cn = _map->getNode(node_id);
+    for (auto reference_id : referenceNodes)
     {
-      const NodePtr& rn = _map->getNode(*ri);
+      const NodePtr& rn = _map->getNode(reference_id);
       double distance = cn->toCoordinate().distance(rn->toCoordinate());
       if (distance < bestDistance)
       {
         bestDistance = distance;
-        bestMatch = *ri;
+        bestMatch = reference_id;
       }
     }
     if (bestDistance < epsilon)
-    {
-      nodeIdMap[*ci] = bestMatch;
-    }
+      nodeIdMap[node_id] = bestMatch;
   }
 
   // replace the nodes in changed with the new nodes we found.

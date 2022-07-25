@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementDeduplicator.h"
@@ -39,14 +39,14 @@
 namespace hoot
 {
 
-ElementDeduplicator::ElementDeduplicator() :
-_favorMoreConnectedWays(false),
-_map1DuplicateNodesRemoved(0),
-_map1DuplicateWaysRemoved(0),
-_map1DuplicateRelationsRemoved(0),
-_map2DuplicateNodesRemoved(0),
-_map2DuplicateWaysRemoved(0),
-_map2DuplicateRelationsRemoved(0)
+ElementDeduplicator::ElementDeduplicator()
+  : _favorMoreConnectedWays(false),
+    _map1DuplicateNodesRemoved(0),
+    _map1DuplicateWaysRemoved(0),
+    _map1DuplicateRelationsRemoved(0),
+    _map2DuplicateNodesRemoved(0),
+    _map2DuplicateWaysRemoved(0),
+    _map2DuplicateRelationsRemoved(0)
 {
 }
 
@@ -87,8 +87,7 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   LOG_DEBUG(map->getName() << " size after de-duping: " << map->size());
   LOG_DEBUG("Removed " << _map1DuplicateNodesRemoved << " duplicate nodes from " << map->getName());
   LOG_DEBUG("Removed " << _map1DuplicateWaysRemoved << " duplicate ways from " << map->getName());
-  LOG_DEBUG(
-    "Removed " << _map1DuplicateRelationsRemoved << " duplicate relations from " << map->getName());
+  LOG_DEBUG("Removed " << _map1DuplicateRelationsRemoved << " duplicate relations from " << map->getName());
 }
 
 void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
@@ -141,20 +140,16 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   // Now, calculate the duplicates when comparing the maps between each other. We'll arbitrarily
   // remove features from the second map except where _favorMoreConnectedWays has influence, if it
   // has been enabled.
-  _dupeHashesToElementIdsCheckMap(
-    map1HashesSet.intersect(map2HashesSet), map1, map2, map1Hashes, map2Hashes, elementsToRemove,
-    elementIdsToRemoveFromMap);
+  _dupeHashesToElementIdsCheckMap(map1HashesSet.intersect(map2HashesSet), map1, map2, map1Hashes, map2Hashes, elementsToRemove,
+                                  elementIdsToRemoveFromMap);
 
   _removeElements(elementsToRemove[ElementType::Relation], map2);
   LOG_DEBUG("Removing duplicate ways...");
   if (!_favorMoreConnectedWays)
-  {
     _removeElements(elementsToRemove[ElementType::Way], map2);
-  }
   else
-  {
     _removeWaysCheckMap(elementsToRemove[ElementType::Way], map1, map2, elementIdsToRemoveFromMap);
-  }
+
   _removeElements(elementsToRemove[ElementType::Node], map2);
 
   _map1DuplicateNodesRemoved = static_cast<int>(map1NodesBefore - map1->getNodeCount());
@@ -166,24 +161,17 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
-  LOG_DEBUG(
-    "Removed " << _map1DuplicateNodesRemoved << " duplicate nodes from " << map1->getName());
-  LOG_DEBUG(
-    "Removed " << _map1DuplicateWaysRemoved << " duplicate ways from " << map1->getName());
-  LOG_DEBUG(
-    "Removed " << _map1DuplicateRelationsRemoved << " duplicate relations from " <<
-    map1->getName());
-  LOG_DEBUG(
-    "Removed " << _map2DuplicateNodesRemoved << " duplicate nodes from " << map2->getName());
+  LOG_DEBUG("Removed " << _map1DuplicateNodesRemoved << " duplicate nodes from " << map1->getName());
+  LOG_DEBUG("Removed " << _map1DuplicateWaysRemoved << " duplicate ways from " << map1->getName());
+  LOG_DEBUG("Removed " << _map1DuplicateRelationsRemoved << " duplicate relations from " << map1->getName());
+  LOG_DEBUG("Removed " << _map2DuplicateNodesRemoved << " duplicate nodes from " << map2->getName());
   LOG_DEBUG("Removed " << _map2DuplicateWaysRemoved << " duplicate ways from " << map2->getName());
-  LOG_DEBUG(
-    "Removed " << _map2DuplicateRelationsRemoved << " duplicate relations from " <<
-    map2->getName());
+  LOG_DEBUG("Removed " << _map2DuplicateRelationsRemoved << " duplicate relations from " << map2->getName());
 }
 
-void ElementDeduplicator::calculateDuplicateElements(
-  OsmMapPtr map, QMap<QString, ElementId>& hashes,
-  QSet<std::pair<ElementId, ElementId>>& duplicates, const int coordinateComparisonSensitivity)
+void ElementDeduplicator::calculateDuplicateElements(OsmMapPtr map, QMap<QString, ElementId>& hashes,
+                                                     QSet<std::pair<ElementId, ElementId>>& duplicates,
+                                                     const int coordinateComparisonSensitivity)
 {
   LOG_VARD(coordinateComparisonSensitivity);
   ElementHashVisitor hashVis;
@@ -204,20 +192,16 @@ void ElementDeduplicator::calculateDuplicateElements(
   LOG_VARD(duplicates.size());
 }
 
-QSet<std::pair<ElementId, ElementId>> ElementDeduplicator::_filterOutNonDupeWayNodes(
-  const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map)
+QSet<std::pair<ElementId, ElementId>> ElementDeduplicator::_filterOutNonDupeWayNodes(const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map)
 {
   QSet<std::pair<ElementId, ElementId>> filteredDupes;
-  for (QSet<std::pair<ElementId, ElementId>>::const_iterator dupesItr = dupes.begin();
-       dupesItr != dupes.end(); ++dupesItr)
+  for (auto dupesItr = dupes.begin(); dupesItr != dupes.end(); ++dupesItr)
   {
     std::pair<ElementId, ElementId> dupePair = *dupesItr;
     ElementPtr element1 = map->getElement(dupePair.first);
     ElementPtr element2 = map->getElement(dupePair.second);
     if (element1 && element2 && !_areWayNodesInWaysOfMismatchedType(element1, element2, map))
-    {
       filteredDupes.insert(dupePair);
-    }
     else if (element1 && element2)
     {
       LOG_TRACE(
@@ -235,11 +219,9 @@ QSet<std::pair<ElementId, ElementId>> ElementDeduplicator::_filterOutNonDupeWayN
   return filteredDupes;
 }
 
-bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
-  ElementPtr element1, ElementPtr element2, OsmMapPtr map)
+bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2, OsmMapPtr map)
 {
   // This method is similar to ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType.
-
   LOG_VART(element1->getElementId());
   LOG_VART(element2->getElementId());
 
@@ -251,51 +233,35 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
   const bool element2IdWayNode = wayNodeCrit.isSatisfied(element2);
   // If they are both way nodes,
   if (!element1IdWayNode ||!element2IdWayNode)
-  {
     return false;
-  }
 
   // get the ways that contain each.
-  const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysConst(element1->getId(), map);
+  const std::vector<ConstWayPtr> containingWays1 = WayUtils::getContainingWaysConst(element1->getId(), map);
   LOG_VART(containingWays1.size());
-  const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysConst(element2->getId(), map);
+  const std::vector<ConstWayPtr> containingWays2 = WayUtils::getContainingWaysConst(element2->getId(), map);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.
   OsmSchema& schema = OsmSchema::getInstance();
   TagCriterion adminBoundsCrit("boundary", "administrative");
-  for (std::vector<ConstWayPtr>::const_iterator containingWays1Itr = containingWays1.begin();
-       containingWays1Itr != containingWays1.end(); ++containingWays1Itr)
+  for (const auto& way1 : containingWays1)
   {
-    ConstWayPtr way1 = *containingWays1Itr;
     if (way1)
     {
       LOG_VART(way1->getElementId());
-
       // If either of our containing ways is a administrative boundary, we're going to bail on the
       // type comparison, since many different types of ways could be part of an admin boundary.
       // This may not end up being the best way to deal with this.
-      if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-            way1->getElementId(), adminBoundsCrit, map))
-      {
+      if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(way1->getElementId(), adminBoundsCrit, map))
         return false;
-      }
 
-      for (std::vector<ConstWayPtr>::const_iterator containingWays2Itr = containingWays2.begin();
-           containingWays2Itr != containingWays2.end(); ++containingWays2Itr)
+      for (const auto& way2 : containingWays2)
       {
-        ConstWayPtr way2 = *containingWays2Itr;;
         if (way2)
         {
           LOG_VART(way2->getElementId());
-
-          if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-                way2->getElementId(), adminBoundsCrit, map))
-          {
+          if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(way2->getElementId(), adminBoundsCrit, map))
             return false;
-          }
 
           // Here we check the types. TODO: The use of 1.0 score for exact match differs from the
           // lower value used in ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType. That
@@ -318,19 +284,14 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
 void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map) const
 {
   if (elementsToRemove.empty())
-  {
     return;
-  }
 
   // This works b/c we're sending in all ids of the same element type.
   const ElementId id = *elementsToRemove.begin();
-  LOG_TRACE(
-    "Removing duplicate " << id.getType().toString() << "s from " << map->getName() << "...");
+  LOG_TRACE("Removing duplicate " << id.getType().toString() << "s from " << map->getName() << "...");
 
-  for (QSet<ElementId>::const_iterator itr = elementsToRemove.begin();
-       itr != elementsToRemove.end(); ++itr)
+  for (const auto& elementId : elementsToRemove)
   {
-    const ElementId elementId = *itr;
     ConstElementPtr element = map->getElement(elementId);
     if (element)
     {
@@ -340,29 +301,22 @@ void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemov
   }
 }
 
-void ElementDeduplicator::_removeWaysCheckMap(
-  const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
-  const QMap<ElementId, QString>& elementIdsToRemoveFromMap) const
+void ElementDeduplicator::_removeWaysCheckMap(const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
+                                              const QMap<ElementId, QString>& elementIdsToRemoveFromMap) const
 {
   LOG_VARD(waysToRemove.size());
 
   int removedCtr = 0;
-  for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
-       itr != waysToRemove.end(); ++itr)
+  for (const auto& elementId : waysToRemove)
   {
-    const ElementId elementId = *itr;
     assert(elementId.getType() == ElementType::Way);
 
     OsmMapPtr mapToRemoveFrom;
     LOG_VART(elementIdsToRemoveFromMap[elementId]);
     if (elementIdsToRemoveFromMap[elementId] == "1")
-    {
       mapToRemoveFrom = map1;
-    }
     else
-    {
       mapToRemoveFrom = map2;
-    }
 
     ConstElementPtr element = mapToRemoveFrom->getElement(elementId);
     LOG_VART(element.get());
@@ -376,13 +330,11 @@ void ElementDeduplicator::_removeWaysCheckMap(
   LOG_DEBUG("Removed " << removedCtr << " ways.");
 }
 
-QMap<ElementType::Type, QSet<ElementId>> ElementDeduplicator::_dupesToElementIds(
-  const QSet<std::pair<ElementId, ElementId>>& duplicates) const
+QMap<ElementType::Type, QSet<ElementId>> ElementDeduplicator::_dupesToElementIds(const QSet<std::pair<ElementId, ElementId>>& duplicates) const
 {
   QMap<ElementType::Type, QSet<ElementId>> elementsToRemove;
 
-  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates.begin();
-       itr != duplicates.end(); ++itr)
+  for (auto itr = duplicates.begin(); itr != duplicates.end(); ++itr)
   {
     const std::pair<ElementId, ElementId> dupes = *itr;
     const ElementId dupe1 = dupes.first;
@@ -395,17 +347,14 @@ QMap<ElementType::Type, QSet<ElementId>> ElementDeduplicator::_dupesToElementIds
 
     elementsToRemove[elementType.getEnum()].insert(dupe1);
   }
-
   return elementsToRemove;
 }
 
-void ElementDeduplicator::_dupesToElementIdsCheckMap(
-  const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
-  QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
-  QMap<ElementId, QString>& elementIdsToRemoveFromMap) const
+void ElementDeduplicator::_dupesToElementIdsCheckMap(const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
+                                                     QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+                                                     QMap<ElementId, QString>& elementIdsToRemoveFromMap) const
 {
-  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates.begin();
-         itr != duplicates.end(); ++itr)
+  for (auto itr = duplicates.begin(); itr != duplicates.end(); ++itr)
   {
     const std::pair<ElementId, ElementId> dupes = *itr;
     const ElementId dupe1 = dupes.first;
@@ -444,18 +393,15 @@ void ElementDeduplicator::_dupesToElementIdsCheckMap(
   }
 }
 
-void ElementDeduplicator::_dupeHashesToElementIdsCheckMap(
-  const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
-  const QMap<QString, ElementId>& map1Hashes, const QMap<QString, ElementId>& map2Hashes,
-  QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
-  QMap<ElementId, QString>& elementIdsToRemoveFromMap) const
+void ElementDeduplicator::_dupeHashesToElementIdsCheckMap(const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
+                                                          const QMap<QString, ElementId>& map1Hashes, const QMap<QString, ElementId>& map2Hashes,
+                                                          QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+                                                          QMap<ElementId, QString>& elementIdsToRemoveFromMap) const
 {
-  LOG_DEBUG(
-    "Calculating duplicates between " << map1->getName() << " and " << map2->getName() << "...");
+  LOG_DEBUG("Calculating duplicates between " << map1->getName() << " and " << map2->getName() << "...");
   LOG_VARD(sharedHashes.size());
-  for (QSet<QString>::const_iterator itr = sharedHashes.begin(); itr != sharedHashes.end(); ++itr)
+  for (const auto& sharedHash : sharedHashes)
   {
-    const QString sharedHash = *itr;
     const ElementId toRemove1 = map1Hashes[sharedHash];
     LOG_VART(toRemove1);
     const ElementId toRemove2 = map2Hashes[sharedHash];

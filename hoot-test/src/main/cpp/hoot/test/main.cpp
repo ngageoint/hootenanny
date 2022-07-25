@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // GDAL
@@ -521,7 +521,7 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
   // suppressed from availability before this point if the option isn't enabled.
   if (t == VALIDATED_ONLY)
   {
-    const bool printValidationReportDiff = printDiff;
+    printValidationReportDiff = printDiff;
     vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/glacial/", printValidationReportDiff, GLACIAL_WAIT,
                                                        hideDisableTests, suppressFailureDetail, true));
     vTests.push_back(std::make_shared<ScriptTestSuite>("test-files/cmd/slow/", printValidationReportDiff, SLOW_WAIT,
