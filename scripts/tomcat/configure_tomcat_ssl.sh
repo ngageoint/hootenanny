@@ -2,9 +2,11 @@
 
 set -e
 
+TOMCAT_CONFIG=/etc/tomcat8
+
 # OSM OAuth2 requires redirect URLs to use https
 # Generate a keystore with a self-signed cert for localhost
-if [ -f $TOMCAT_CONFIG/localhost-rsa.jks ]; then
+if [ ! -f $TOMCAT_CONFIG/localhost-rsa.jks ]; then
 sudo keytool -genkey -keyalg RSA -noprompt -alias tomcat -dname "CN=localhost, OU=NA, O=NA, L=NA, S=NA, C=NA" -keystore $TOMCAT_CONFIG/localhost-rsa.jks -validity 9999 -storepass changeme -keypass changeme
 sudo chown root:tomcat $TOMCAT_CONFIG/localhost-rsa.jks
 fi
