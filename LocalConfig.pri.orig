@@ -18,9 +18,7 @@ debug {
   #QMAKE_CXXFLAGS+=-g -O1
 
   # Turn on ASAN
-  #QMAKE_CXXFLAGS+=-fsanitize=address
-  #QMAKE_CXXFLAGS+=-fsanitize-address-use-after-scope
-  #QMAKE_LFLAGS+=-fsanitize=address -static-libasan
+  QMAKE_LFLAGS+=-fsanitize=address -static-libasan
 }
 
 release {

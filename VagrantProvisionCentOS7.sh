@@ -171,6 +171,7 @@ sudo yum -y install \
     git-core \
     gnuplot \
     lcov \
+    devtoolset-$DEVTOOLSET_VERSION-libasan-deval \
     libffi-devel \
     libicu-devel \
     libpng-devel \
