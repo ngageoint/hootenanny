@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -54,17 +54,13 @@ public:
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     std::shared_ptr<ScriptSchemaTranslator> st =
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js");
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator("test-files/io/SampleTranslation.js");
 
     std::shared_ptr<ScriptToOgrSchemaTranslator> uut =
       std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
 
     if (!uut)
-    {
-      throw HootException("Error allocating translator. the translation script must support "
-                          "converting to OGR.");
-    }
+      throw HootException("Error allocating translator. the translation script must support converting to OGR.");
 
     std::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
@@ -74,14 +70,14 @@ public:
     Tags t;
 
     t.clear();
-    t["building"] = "yes";
+    t[MetadataTags::Building()] = "yes";
     t["name"] = "foo";
     tf = uut->translateToOgr(t, ElementType::Node, GEOS_POINT)[0];
     HOOT_STR_EQUALS("PAL015", tf.tableName);
     HOOT_STR_EQUALS("[2]{(ARA, -999999), (NAM, foo)}", tf.feature->getValues());
 
     t.clear();
-    t["building"] = "yes";
+    t[MetadataTags::Building()] = "yes";
     t["name"] = "foo";
     tf = uut->translateToOgr(t, ElementType::Way, GEOS_POLYGON)[0];
     HOOT_STR_EQUALS("AAL015", tf.tableName);
@@ -146,9 +142,7 @@ public:
         "test-files/io/SampleTranslation.js");
 
     if (!uut)
-    {
       throw HootException("Error allocating translator.");
-    }
 
     // Check that we can access a value from a Javascript function
     HOOT_STR_EQUALS("Papa Smurf", uut->getLayerNameFilter());
@@ -165,9 +159,7 @@ public:
       std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
 
     if (!uut)
-    {
       throw HootException("Error allocating translator");
-    }
 
     std::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 

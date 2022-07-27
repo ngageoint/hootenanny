@@ -48,18 +48,18 @@ public:
     AreaCriterion uut;
 
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
-    node1->getTags().set("area", "yes");
+    node1->getTags().set(MetadataTags::Area(), "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way1->getTags().set("area", "yes");
+    way1->getTags().set(MetadataTags::Area(), "yes");
     CPPUNIT_ASSERT(uut.isSatisfied(way1));
 
     WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
 
     Tags t;
-    t["area"] = "yes";
+    t[MetadataTags::Area()] = "yes";
     CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Way));
     CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Relation));
     CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Node));
@@ -91,9 +91,12 @@ public:
   {
     AreaCriterion uut;
 
-    geos::geom::Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
-                       Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
-                       Coordinate::getNull() };
+    geos::geom::Coordinate c[] =
+    {
+      Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
+      Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
+      Coordinate::getNull()
+    };
     Tags tags;
     tags.set("poi", "yes");
     OsmMapPtr map = std::make_shared<OsmMap>();

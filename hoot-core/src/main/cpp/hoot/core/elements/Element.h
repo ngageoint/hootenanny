@@ -85,10 +85,8 @@ public:
    * empty or any of the child elements are missing. The caller gets ownership of the returned
    * envelope.
    */
-  virtual geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const = 0;
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const = 0;
 
   /**
    * Applies a read only visitor to this element and all child elements. The visitor will be called
@@ -106,9 +104,7 @@ public:
    * @param visitor the visitor to visit with
    * @param recursive if true, child elements are visited
    */
-  virtual void visitRo(
-    const ElementProvider& map, ConstElementVisitor& visitor,
-    const bool recursive = true) const = 0;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) const = 0;
 
   /**
    * Applies a read write visitor to this element and all child elements. The visitor will be called
@@ -130,8 +126,7 @@ public:
    * @param visitor the visitor to visit with
    * @param recursive if true, child elements are visited
    */
-  virtual void visitRw(
-    ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) = 0;
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) = 0;
 
   /**
    * At this point only one listener is supported, but we could support more later if needed.

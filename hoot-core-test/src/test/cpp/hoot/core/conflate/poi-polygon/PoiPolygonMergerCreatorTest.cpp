@@ -79,7 +79,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 10, 10, 5);
@@ -88,8 +88,7 @@ public:
     map->addNode(n1);
 
     std::shared_ptr<PoiPolygonMatch> match1 =
-      std::make_shared<PoiPolygonMatch>(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      std::make_shared<PoiPolygonMatch>(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -116,7 +115,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("building", true);
+    w1->getTags().set(MetadataTags::Building(), true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
 
@@ -125,7 +124,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 5);
-    w2->getTags().set("building", true);
+    w2->getTags().set(MetadataTags::Building(), true);
     w2->getTags()["name"] = "goofie";
 
     NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 19, 19, 5);
@@ -136,8 +135,7 @@ public:
     vector<ConstMatchPtr> matchesV;
 
     std::shared_ptr<PoiPolygonMatch> match1 =
-      std::make_shared<PoiPolygonMatch>(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      std::make_shared<PoiPolygonMatch>(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -147,8 +145,7 @@ public:
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
     std::shared_ptr<PoiPolygonMatch> match2 =
-      std::make_shared<PoiPolygonMatch>(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      std::make_shared<PoiPolygonMatch>(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
     match2->setMatchEvidenceThreshold(3);
     match2->setReviewEvidenceThreshold(1);
     match2->calculateMatch(w2->getElementId(), n1->getElementId());
@@ -181,8 +178,8 @@ public:
     match1->_eid2 = ElementId(ElementType::Node, 1);
     matchesV.push_back(match1);
 
-    std::shared_ptr<PoiPolygonMatch> match2(
-      new PoiPolygonMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6))));
+    std::shared_ptr<PoiPolygonMatch> match2 =
+      std::make_shared<PoiPolygonMatch>(std::make_shared<const MatchThreshold>(0.6, 0.6, 0.6));
     match2->_class.setMatch();
     match2->_eid1 = ElementId(ElementType::Way, 2);
     match2->_eid2 = ElementId(ElementType::Node, 1);

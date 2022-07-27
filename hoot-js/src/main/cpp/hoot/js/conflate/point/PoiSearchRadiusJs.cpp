@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/point/PoiSearchRadius.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -48,45 +49,39 @@ void PoiSearchRadiusJs::Init(Local<Object> exports)
   Local<Context> context = current->GetCurrentContext();
   Local<Object> thisObj = Object::New(current);
   exports->Set(context, toV8("PoiSearchRadius"), thisObj);
-  thisObj->Set(
-    context, toV8("getSearchRadii"),
-    FunctionTemplate::New(current, getSearchRadii)->GetFunction(context).ToLocalChecked());
+  thisObj->Set(context, toV8("getSearchRadii"),
+               FunctionTemplate::New(current, getSearchRadii)->GetFunction(context).ToLocalChecked());
 }
 
 bool PoiSearchRadiusJs::_searchRadiiOptionIsConfigFile(const QString data)
 {
-  return
-    data.endsWith(".json", Qt::CaseInsensitive) && !data.trimmed().startsWith("{") &&
-    !data.trimmed().endsWith("}");
+  return  data.endsWith(".json", Qt::CaseInsensitive) && !data.trimmed().startsWith("{") &&
+         !data.trimmed().endsWith("}");
 }
 
 bool PoiSearchRadiusJs::_searchRadiiOptionIsJsonString(const QString data)
 {
-  return
-    !data.endsWith(".json", Qt::CaseInsensitive) && data.trimmed().startsWith("{") &&
-    data.trimmed().endsWith("}");
+  return !data.endsWith(".json", Qt::CaseInsensitive) && data.trimmed().startsWith("{") &&
+          data.trimmed().endsWith("}");
 }
 
 void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
 {
   const QString searchRadiiData = ConfigOptions().getPoiSearchRadii().trimmed();
-  if (!_searchRadiiOptionIsConfigFile(searchRadiiData) &&
-      !_searchRadiiOptionIsJsonString(searchRadiiData))
+  if (!_searchRadiiOptionIsConfigFile(searchRadiiData) && !_searchRadiiOptionIsJsonString(searchRadiiData))
   {
     throw IllegalArgumentException(
-      "Either a POI search radii config file or custom JSON must be specified by " +
-      ConfigOptions::getPoiSearchRadiiKey() + ".");
+      QString("Either a POI search radii config file or custom JSON must be specified by %1.").arg(ConfigOptions::getPoiSearchRadiiKey()));
   }
 
-  const QList<PoiSearchRadius> searchRadiiList =
-    PoiSearchRadius::readSearchRadii(searchRadiiData);
+  const QList<PoiSearchRadius> searchRadiiList = PoiSearchRadius::readSearchRadii(searchRadiiData);
 
   Isolate* current = Isolate::GetCurrent();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Array> searchRadii = Array::New(current, searchRadiiList.size());
-  searchRadii->Set(context, toV8("length"), Integer::New(current, searchRadiiList.size()));
-  for (int i = 0 ; i < searchRadiiList.size(); i++)
+  searchRadii->Set(context, toV8(MetadataTags::Length()), Integer::New(current, searchRadiiList.size()));
+  for (int i = 0 ; i < searchRadiiList.size(); ++i)
   {
     const PoiSearchRadius searchRadius = searchRadiiList.at(i);
     LOG_VART(searchRadius);
@@ -94,11 +89,8 @@ void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
     Local<Object> searchRadiusObj = Object::New(current);
     searchRadiusObj->Set(context, toV8("key"), toV8(searchRadius.getKey()));
     if (!searchRadius.getValue().isEmpty())
-    {
       searchRadiusObj->Set(context, toV8("value"), toV8(searchRadius.getValue()));
-    }
     searchRadiusObj->Set(context, toV8("distance"), toV8(searchRadius.getDistance()));
-
     searchRadii->Set(context, (uint32_t)i, searchRadiusObj);
   }
   args.GetReturnValue().Set(searchRadii);

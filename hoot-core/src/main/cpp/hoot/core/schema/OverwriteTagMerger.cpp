@@ -37,8 +37,8 @@ HOOT_FACTORY_REGISTER(TagMerger, OverwriteTagMerger)
 HOOT_FACTORY_REGISTER(TagMerger, OverwriteTag1Merger)
 HOOT_FACTORY_REGISTER(TagMerger, OverwriteTag2Merger)
 
-OverwriteTagMerger::OverwriteTagMerger(bool swap) :
-_swap(swap)
+OverwriteTagMerger::OverwriteTagMerger(bool swap)
+  : _swap(swap)
 {
 }
 
@@ -49,17 +49,9 @@ Tags OverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /
   LOG_VART(_caseSensitive);
 
   if (_swap)
-  {
-    return
-      TagComparator::getInstance().overwriteMerge(
-        t2, t1, _overwriteExcludeTagKeys, _accumulateValuesTagKeys, _caseSensitive);
-  }
+    return TagComparator::getInstance().overwriteMerge(t2, t1, _overwriteExcludeTagKeys, _accumulateValuesTagKeys, _caseSensitive);
   else
-  {
-    return
-      TagComparator::getInstance().overwriteMerge(
-        t1, t2, _overwriteExcludeTagKeys, _accumulateValuesTagKeys, _caseSensitive);
-  }
+    return TagComparator::getInstance().overwriteMerge(t1, t2, _overwriteExcludeTagKeys, _accumulateValuesTagKeys, _caseSensitive);
 }
 
 void OverwriteTagMerger::setConfiguration(const Settings& conf)

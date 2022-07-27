@@ -49,10 +49,9 @@ class PoiPolygonTypeScoreExtractorTest : public HootTestFixture
 
 public:
 
-  PoiPolygonTypeScoreExtractorTest() :
-  HootTestFixture(
-    "test-files/conflate/poi-polygon/PoiPolygonTypeScoreExtractorTest/",
-    "test-output/conflate/poi-polygon/PoiPolygonTypeScoreExtractorTest/")
+  PoiPolygonTypeScoreExtractorTest()
+    : HootTestFixture("test-files/conflate/poi-polygon/PoiPolygonTypeScoreExtractorTest/",
+                      "test-output/conflate/poi-polygon/PoiPolygonTypeScoreExtractorTest/")
   {
   }
 
@@ -84,7 +83,7 @@ public:
     NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set("amenity", "drinking_water");
     WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
-    way3->getTags().set("building", "yes");
+    way3->getTags().set(MetadataTags::Building(), "yes");
     uut.setFeatureDistance(5.1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.0);
 

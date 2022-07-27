@@ -66,7 +66,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
@@ -75,8 +75,7 @@ public:
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -94,8 +93,7 @@ public:
     n1->getTags().set("name", "foo");
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -119,7 +117,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("building", true);
+    w1->getTags().set(MetadataTags::Building(), true);
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, -1, 10, 5);
     map->addNode(n1);
     w1->getTags().set("name", "foo");
@@ -127,8 +125,7 @@ public:
     n1->getTags().set("poi", true);
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -146,8 +143,7 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-8);
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -171,7 +167,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("building", true);
+    w1->getTags().set(MetadataTags::Building(), true);
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     map->addNode(n1);
     w1->getTags().set("name", "foo");
@@ -179,8 +175,7 @@ public:
     n1->getTags().set("poi", true);
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -197,8 +192,7 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-5);
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -216,8 +210,7 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-7);
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -242,18 +235,17 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
-    n1->getTags().set("building", "yes");
+    n1->getTags().set(MetadataTags::Building(), "yes");
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -273,8 +265,7 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -294,8 +285,7 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -317,8 +307,7 @@ public:
   void badMatchDistanceInputsTest()
   {
     OsmMapPtr map;
-    PoiPolygonMatch uut(
-      map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+    PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -329,8 +318,7 @@ public:
     {
       exceptionMsg1 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg1.contains("Invalid POI/Polygon match distance configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg1.contains("Invalid POI/Polygon match distance configuration option value"));
 
     QString exceptionMsg2("");
     try
@@ -341,15 +329,13 @@ public:
     {
       exceptionMsg2 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg2.contains("Invalid POI/Polygon match distance configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg2.contains("Invalid POI/Polygon match distance configuration option value"));
   }
 
   void badReviewDistanceInputsTest()
   {
     OsmMapPtr map;
-    PoiPolygonMatch uut(
-      map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+    PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -360,8 +346,7 @@ public:
     {
       exceptionMsg1 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg1.contains("Invalid POI/Polygon review distance configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg1.contains("Invalid POI/Polygon review distance configuration option value"));
 
     QString exceptionMsg2("");
     try
@@ -372,15 +357,13 @@ public:
     {
       exceptionMsg2 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg2.contains("Invalid POI/Polygon review distance configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg2.contains("Invalid POI/Polygon review distance configuration option value"));
   }
 
   void badNameScoreThresholdInputsTest()
   {
     OsmMapPtr map;
-    PoiPolygonMatch uut(
-      map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+    PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -391,8 +374,7 @@ public:
     {
       exceptionMsg1 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg1.contains("Invalid POI/Polygon name score threshold configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg1.contains("Invalid POI/Polygon name score threshold configuration option value"));
 
     QString exceptionMsg2("");
     try
@@ -403,15 +385,13 @@ public:
     {
       exceptionMsg2 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg2.contains("Invalid POI/Polygon name score threshold configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg2.contains("Invalid POI/Polygon name score threshold configuration option value"));
   }
 
   void badTypeScoreThresholdInputsTest()
   {
     OsmMapPtr map;
-    PoiPolygonMatch uut(
-      map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+    PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -422,8 +402,7 @@ public:
     {
       exceptionMsg1 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg1.contains("Invalid POI/Polygon type score threshold configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg1.contains("Invalid POI/Polygon type score threshold configuration option value"));
 
     QString exceptionMsg2("");
     try
@@ -434,15 +413,13 @@ public:
     {
       exceptionMsg2 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg2.contains("Invalid POI/Polygon type score threshold configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg2.contains("Invalid POI/Polygon type score threshold configuration option value"));
   }
 
   void badReviewIfMatchedTypesInputsTest()
   {
     OsmMapPtr map;
-    PoiPolygonMatch uut(
-      map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+    PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     QStringList badKvp1;
@@ -456,9 +433,7 @@ public:
     {
       exceptionMsg1 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg1.contains(
-        "Invalid POI/Polygon review if matched type configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg1.contains("Invalid POI/Polygon review if matched type configuration option value"));
 
     QString exceptionMsg2("");
     QStringList badKvp2;
@@ -472,9 +447,7 @@ public:
     {
       exceptionMsg2 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg2.contains(
-        "Invalid POI/Polygon review if matched type configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg2.contains("Invalid POI/Polygon review if matched type configuration option value"));
 
     QString exceptionMsg3("");
     QStringList badKvp3;
@@ -488,9 +461,7 @@ public:
     {
       exceptionMsg3 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg3.contains(
-        "Invalid POI/Polygon review if matched type configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg3.contains("Invalid POI/Polygon review if matched type configuration option value"));
 
     QString exceptionMsg4("");
     QStringList badKvp4;
@@ -504,9 +475,7 @@ public:
     {
       exceptionMsg4 = e.what();
     }
-    CPPUNIT_ASSERT(
-      exceptionMsg4.contains(
-        "Invalid POI/Polygon review if matched type configuration option value"));
+    CPPUNIT_ASSERT(exceptionMsg4.contains("Invalid POI/Polygon review if matched type configuration option value"));
   }
 
   void exactSourceMatchDisableConflationTest()
@@ -518,7 +487,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
@@ -530,8 +499,7 @@ public:
       w1->getTags()["source"] = "mySource:a";
       n1->getTags()["source"] = "mySource:a";
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -552,8 +520,7 @@ public:
       w1->getTags()["source"] = "mySource:a";
       n1->getTags()["source"] = "mySource:b";
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -580,7 +547,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
@@ -592,8 +559,7 @@ public:
       w1->getTags()["source"] = "mySource:a";
       n1->getTags()["source"] = "mySource:b";
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -614,8 +580,7 @@ public:
       w1->getTags()["source"] = "mySource:a";
       n1->getTags()["source"] = "mySource1:a";
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -642,7 +607,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
@@ -654,8 +619,7 @@ public:
       w1->getTags()["source"] = "mySource:a";
       n1->getTags()["source"] = "mySource:a";
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -682,7 +646,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
@@ -692,8 +656,7 @@ public:
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -711,8 +674,7 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -742,8 +704,7 @@ public:
     n1->getTags().set("poi", true);
     map->addNode(n1);
 
-    PoiPolygonMatch uut(
-      map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+    PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
     uut.setConfiguration(conf());
     uut.setEnableReviewReduction(true);
     uut.setMatchDistanceThreshold(0.0);
@@ -760,7 +721,7 @@ public:
 
       WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
-      w1->getTags().set("building", "yes");
+      w1->getTags().set(MetadataTags::Building(), "yes");
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
@@ -793,7 +754,7 @@ public:
 
       WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Honey Creek Mall";
-      w1->getTags().set("building", "yes");
+      w1->getTags().set(MetadataTags::Building(), "yes");
       w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
@@ -845,7 +806,7 @@ public:
 
       WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
-      w1->getTags().set("building", "yes");
+      w1->getTags().set(MetadataTags::Building(), "yes");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
@@ -875,7 +836,7 @@ public:
 
       WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
-      w1->getTags().set("area", "yes");
+      w1->getTags().set(MetadataTags::Area(), "yes");
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
@@ -896,7 +857,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
@@ -909,8 +870,7 @@ public:
       w1->setStatus(Status::Unknown1);
       n1->setStatus(Status::Unknown1);
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -931,8 +891,7 @@ public:
       w1->setStatus(Status::Unknown1);
       n1->setStatus(Status::Unknown2);
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -953,8 +912,7 @@ public:
       w1->setStatus(Status::Unknown2);
       n1->setStatus(Status::Unknown2);
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -975,8 +933,7 @@ public:
       w1->setStatus(Status::Unknown2);
       n1->setStatus(Status::Unknown1);
 
-      PoiPolygonMatch uut(
-        map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
+      PoiPolygonMatch uut(map, std::shared_ptr<MatchThreshold>(), std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);

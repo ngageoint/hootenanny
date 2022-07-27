@@ -43,15 +43,14 @@ public:
   ~BuildingMergerCreator() override = default;
 
   /**
-   * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.
+   * If all the matches are BuildingMatches, a single BuildingMerger will be created and returned.
    */
   bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   std::vector<CreatorDescription> getAllCreators() const override;
 
-  bool isConflicting(
-    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 };
 
 }

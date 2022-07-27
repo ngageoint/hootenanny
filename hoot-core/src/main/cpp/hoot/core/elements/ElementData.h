@@ -91,11 +91,10 @@ protected:
   // Please don't add any additional constructors. Multiple constructors has lead to a large number
   // of errors in the past. If you need more parameters please just add them to the end with a
   // sensible default value.
-  ElementData(
-    long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = CIRCULAR_ERROR_EMPTY,
-    long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
-    quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
-    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
+  ElementData(long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = CIRCULAR_ERROR_EMPTY,
+              long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
+              quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+              long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
 
   long _id;
   Tags _tags;
@@ -114,19 +113,18 @@ private:
   Meters _defaultCircularError;
 };
 
-inline ElementData::ElementData(
-  long id, const Tags& tags, Meters circularError, long changeset, long version, quint64 timestamp,
-  QString user, long uid, bool visible) :
-_id(id),
-_tags(tags),
-_circularError(circularError),
-_changeset(changeset),
-_version(version),
-_timestamp(timestamp),
-_user(user),
-_uid(uid),
-_visible(visible),
-_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue())
+inline ElementData::ElementData(long id, const Tags& tags, Meters circularError, long changeset, long version, quint64 timestamp,
+                                QString user, long uid, bool visible)
+  : _id(id),
+    _tags(tags),
+    _circularError(circularError),
+    _changeset(changeset),
+    _version(version),
+    _timestamp(timestamp),
+    _user(user),
+    _uid(uid),
+    _visible(visible),
+    _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue())
 {
 }
 

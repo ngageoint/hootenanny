@@ -275,7 +275,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     keys.sort();
 
   //  Write out the tags with their key/value pairs
-  for (const auto& key : keys)
+  for (const auto& key : qAsConst(keys))
   {
     QString val = tags.get(key).trimmed();
     if (!val.isEmpty())

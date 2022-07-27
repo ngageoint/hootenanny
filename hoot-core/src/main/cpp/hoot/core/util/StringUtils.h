@@ -56,6 +56,7 @@ public:
    * @return a formatted number string
    */
   static QString formatLargeNumber(const unsigned long number);
+  static QString formatLargeDecimal(const double number);
   /**
    * Pads the front of a number string with zeroes
    *

@@ -104,7 +104,7 @@ public:
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
     WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way->getTags().set("area", "yes");
+    way->getTags().set(MetadataTags::Area(), "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
     map->addWay(way);
@@ -135,7 +135,7 @@ public:
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
     WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way->getTags().set("area", "yes");
+    way->getTags().set(MetadataTags::Area(), "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
     map->addWay(way);

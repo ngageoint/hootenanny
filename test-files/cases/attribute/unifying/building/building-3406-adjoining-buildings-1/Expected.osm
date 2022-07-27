@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="10.04559800113" minlon="-69.35742456075" maxlat="10.04770566215" maxlon="-69.3531507097"/>
-    <node visible="true" id="-193" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459119171300006" lon="-69.3552807262900046">
+    <bounds minlat="10.04559800113" minlon="-69.35742456075002" maxlat="10.04770566215" maxlon="-69.3531507097"/>
+    <node visible="true" id="-193" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459119171300024" lon="-69.3552807262900046">
         <tag k="hoot:id" v="-193"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-192" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457952706399993" lon="-69.3552298054299996">
+    <node visible="true" id="-192" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457952706400011" lon="-69.3552298054299996">
         <tag k="hoot:id" v="-192"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -13,11 +13,11 @@
         <tag k="hoot:id" v="-191"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-190" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458542665900001" lon="-69.3554151703799988">
+    <node visible="true" id="-190" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458542665899984" lon="-69.3554151703799988">
         <tag k="hoot:id" v="-190"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-189" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471854018300011" lon="-69.3547163209899935">
+    <node visible="true" id="-189" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471854018299993" lon="-69.3547163209899935">
         <tag k="hoot:id" v="-189"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -25,7 +25,7 @@
         <tag k="hoot:id" v="-188"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-187" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473961457399987" lon="-69.3544749353799972">
+    <node visible="true" id="-187" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473961457400005" lon="-69.3544749353799972">
         <tag k="hoot:id" v="-187"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -37,15 +37,15 @@
         <tag k="hoot:id" v="-185"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-184" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471539066499975" lon="-69.3548132956800032">
+    <node visible="true" id="-184" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471539066499993" lon="-69.3548132956800032">
         <tag k="hoot:id" v="-184"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-183" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472734203599980" lon="-69.3548528114099980">
+    <node visible="true" id="-183" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472734203599998" lon="-69.3548528114100122">
         <tag k="hoot:id" v="-183"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-182" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471106287999987" lon="-69.3549465494400010">
+    <node visible="true" id="-182" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471106288000005" lon="-69.3549465494400152">
         <tag k="hoot:id" v="-182"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -53,11 +53,11 @@
         <tag k="hoot:id" v="-181"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-180" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470701811699996" lon="-69.3550710887000008">
+    <node visible="true" id="-180" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470701811699996" lon="-69.3550710887000150">
         <tag k="hoot:id" v="-180"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-179" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471896948399984" lon="-69.3551106045100028">
+    <node visible="true" id="-179" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471896948400001" lon="-69.3551106045100028">
         <tag k="hoot:id" v="-179"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -65,15 +65,15 @@
         <tag k="hoot:id" v="-178"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-177" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471474267899978" lon="-69.3552407486800035">
+    <node visible="true" id="-177" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471474267899996" lon="-69.3552407486800035">
         <tag k="hoot:id" v="-177"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-176" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469830017299984" lon="-69.3553395157500034">
+    <node visible="true" id="-176" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469830017300001" lon="-69.3553395157500034">
         <tag k="hoot:id" v="-176"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-175" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471025153699962" lon="-69.3553790316500027">
+    <node visible="true" id="-175" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471025153700015" lon="-69.3553790316500027">
         <tag k="hoot:id" v="-175"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -81,11 +81,11 @@
         <tag k="hoot:id" v="-174"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-173" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470577908299976" lon="-69.3555167389500014">
+    <node visible="true" id="-173" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470577908299994" lon="-69.3555167389500014">
         <tag k="hoot:id" v="-173"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-172" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468939641300015" lon="-69.3556136632700060">
+    <node visible="true" id="-172" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468939641299997" lon="-69.3556136632700060">
         <tag k="hoot:id" v="-172"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -93,7 +93,7 @@
         <tag k="hoot:id" v="-171"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-170" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468479915499991" lon="-69.3557552128699797">
+    <node visible="true" id="-170" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468479915500009" lon="-69.3557552128699939">
         <tag k="hoot:id" v="-170"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -105,71 +105,71 @@
         <tag k="hoot:id" v="-168"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-167" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474387265300003" lon="-69.3552120143799868">
+    <node visible="true" id="-167" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474387265300020" lon="-69.3552120143800011">
         <tag k="hoot:id" v="-167"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-166" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474221485099982" lon="-69.3553493596500061">
+    <node visible="true" id="-166" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474221485100017" lon="-69.3553493596500061">
         <tag k="hoot:id" v="-166"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-165" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476050486199977" lon="-69.3553718347099988">
+    <node visible="true" id="-165" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476050486199995" lon="-69.3553718347099988">
         <tag k="hoot:id" v="-165"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-164" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470148104499977" lon="-69.3570282940900000">
+    <node visible="true" id="-164" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470148104499994" lon="-69.3570282940900000">
         <tag k="hoot:id" v="-164"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-163" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468642597199995" lon="-69.3569792019199838">
+    <node visible="true" id="-163" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468642597199995" lon="-69.3569792019199980">
         <tag k="hoot:id" v="-163"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-162" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468333549999986" lon="-69.3570756871600054">
+    <node visible="true" id="-162" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468333550000004" lon="-69.3570756871600054">
         <tag k="hoot:id" v="-162"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-161" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469839057099986" lon="-69.3571247793699968">
+    <node visible="true" id="-161" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469839057100003" lon="-69.3571247793699968">
         <tag k="hoot:id" v="-161"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-160" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472528807600003" lon="-69.3570993701499816">
+    <node visible="true" id="-160" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472528807600003" lon="-69.3570993701499958">
         <tag k="hoot:id" v="-160"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-159" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470644199099972" lon="-69.3570433067900041">
+    <node visible="true" id="-159" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470644199100008" lon="-69.3570433067900041">
         <tag k="hoot:id" v="-159"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-158" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469867246499973" lon="-69.3573091968400064">
+    <node visible="true" id="-158" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469867246499991" lon="-69.3573091968400064">
         <tag k="hoot:id" v="-158"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-157" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471751854499978" lon="-69.3573652603400035">
+    <node visible="true" id="-157" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471751854499995" lon="-69.3573652603400035">
         <tag k="hoot:id" v="-157"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-156" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463871667199971" lon="-69.3570264128200051">
+    <node visible="true" id="-156" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463871667200006" lon="-69.3570264128200051">
         <tag k="hoot:id" v="-156"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-155" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462863315099984" lon="-69.3573584816100066">
+    <node visible="true" id="-155" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462863315100002" lon="-69.3573584816100066">
         <tag k="hoot:id" v="-155"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-154" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465000859899991" lon="-69.3574245607500046">
+    <node visible="true" id="-154" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465000859900009" lon="-69.3574245607500188">
         <tag k="hoot:id" v="-154"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-153" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465877987099983" lon="-69.3571357068200030">
+    <node visible="true" id="-153" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465877987100001" lon="-69.3571357068200030">
         <tag k="hoot:id" v="-153"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-152" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465427202699988" lon="-69.3571217714999904">
+    <node visible="true" id="-152" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465427202700006" lon="-69.3571217715000046">
         <tag k="hoot:id" v="-152"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-151" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465558428200001" lon="-69.3570785564500056">
+    <node visible="true" id="-151" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465558428200019" lon="-69.3570785564500056">
         <tag k="hoot:id" v="-151"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -177,27 +177,27 @@
         <tag k="hoot:id" v="-150"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-149" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464955239800009" lon="-69.3566839247099978">
+    <node visible="true" id="-149" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464955239799991" lon="-69.3566839247099978">
         <tag k="hoot:id" v="-149"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-148" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464179918299976" lon="-69.3569537360999959">
+    <node visible="true" id="-148" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464179918299994" lon="-69.3569537360999959">
         <tag k="hoot:id" v="-148"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-147" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466232625199989" lon="-69.3570137861999996">
+    <node visible="true" id="-147" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466232625200007" lon="-69.3570137861999996">
         <tag k="hoot:id" v="-147"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-146" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466484539399978" lon="-69.3561517268500012">
+    <node visible="true" id="-146" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466484539399996" lon="-69.3561517268500012">
         <tag k="hoot:id" v="-146"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-145" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468537248000001" lon="-69.3562117764999897">
+    <node visible="true" id="-145" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468537248000001" lon="-69.3562117765000039">
         <tag k="hoot:id" v="-145"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-144" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469013845599981" lon="-69.3560459193199961">
+    <node visible="true" id="-144" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469013845599999" lon="-69.3560459193199961">
         <tag k="hoot:id" v="-144"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -205,7 +205,7 @@
         <tag k="hoot:id" v="-143"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-142" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466142375300009" lon="-69.3562708006000008">
+    <node visible="true" id="-142" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466142375299992" lon="-69.3562708006000008">
         <tag k="hoot:id" v="-142"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -213,7 +213,7 @@
         <tag k="hoot:id" v="-141"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-140" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465727685999990" lon="-69.3564151130599953">
+    <node visible="true" id="-140" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465727686000008" lon="-69.3564151130599953">
         <tag k="hoot:id" v="-140"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -221,11 +221,11 @@
         <tag k="hoot:id" v="-139"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-138" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465356441599987" lon="-69.3565443064100009">
+    <node visible="true" id="-138" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465356441600004" lon="-69.3565443064100009">
         <tag k="hoot:id" v="-138"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-137" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467409149399991" lon="-69.3566043562800019">
+    <node visible="true" id="-137" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467409149400009" lon="-69.3566043562800019">
         <tag k="hoot:id" v="-137"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -233,27 +233,27 @@
         <tag k="hoot:id" v="-136"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-135" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469328523899986" lon="-69.3568307365499948">
+    <node visible="true" id="-135" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469328523900003" lon="-69.3568307365499948">
         <tag k="hoot:id" v="-135"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-134" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468833086499973" lon="-69.3569854134699995">
+    <node visible="true" id="-134" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468833086500009" lon="-69.3569854134699995">
         <tag k="hoot:id" v="-134"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-133" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471146175299957" lon="-69.3567166934499966">
+    <node visible="true" id="-133" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471146175299992" lon="-69.3567166934499966">
         <tag k="hoot:id" v="-133"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-132" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469831156799980" lon="-69.3566738129400022">
+    <node visible="true" id="-132" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469831156799998" lon="-69.3566738129400022">
         <tag k="hoot:id" v="-132"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-131" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471533299200004" lon="-69.3565958319399982">
+    <node visible="true" id="-131" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471533299200022" lon="-69.3565958319399982">
         <tag k="hoot:id" v="-131"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-130" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470218280599983" lon="-69.3565529514699932">
+    <node visible="true" id="-130" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470218280600001" lon="-69.3565529514699932">
         <tag k="hoot:id" v="-130"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -265,7 +265,7 @@
         <tag k="hoot:id" v="-128"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-127" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471697757599987" lon="-69.3566011946499970">
+    <node visible="true" id="-127" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471697757600005" lon="-69.3566011946499970">
         <tag k="hoot:id" v="-127"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -273,19 +273,19 @@
         <tag k="hoot:id" v="-126"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-125" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471143644599987" lon="-69.3562640486999982">
+    <node visible="true" id="-125" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471143644600005" lon="-69.3562640486999982">
         <tag k="hoot:id" v="-125"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-124" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473049915700017" lon="-69.3561790446100019">
+    <node visible="true" id="-124" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473049915699999" lon="-69.3561790446100019">
         <tag k="hoot:id" v="-124"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-123" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471570438000004" lon="-69.3561308015899840">
+    <node visible="true" id="-123" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471570438000004" lon="-69.3561308015899982">
         <tag k="hoot:id" v="-123"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-122" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473453303299980" lon="-69.3560531047399991">
+    <node visible="true" id="-122" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473453303299998" lon="-69.3560531047399991">
         <tag k="hoot:id" v="-122"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -301,7 +301,7 @@
         <tag k="hoot:id" v="-119"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-118" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472458520500023" lon="-69.3558535369899829">
+    <node visible="true" id="-118" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472458520500005" lon="-69.3558535369899971">
         <tag k="hoot:id" v="-118"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -309,19 +309,19 @@
         <tag k="hoot:id" v="-117"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-116" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475748966099978" lon="-69.3554725026699970">
+    <node visible="true" id="-116" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475748966099996" lon="-69.3554725026699970">
         <tag k="hoot:id" v="-116"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-115" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473874725600005" lon="-69.3554113875699869">
+    <node visible="true" id="-115" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473874725600005" lon="-69.3554113875700011">
         <tag k="hoot:id" v="-115"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-114" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473315895299979" lon="-69.3555858586699969">
+    <node visible="true" id="-114" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473315895299997" lon="-69.3555858586699969">
         <tag k="hoot:id" v="-114"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-113" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475426922200004" lon="-69.3556546949899797">
+    <node visible="true" id="-113" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475426922200004" lon="-69.3556546949899939">
         <tag k="hoot:id" v="-113"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -329,11 +329,11 @@
         <tag k="hoot:id" v="-112"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-111" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472854691099975" lon="-69.3557298499000012">
+    <node visible="true" id="-111" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472854691099993" lon="-69.3557298499000012">
         <tag k="hoot:id" v="-111"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-110" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474512966200020" lon="-69.3559205284900031">
+    <node visible="true" id="-110" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474512966200002" lon="-69.3559205284900031">
         <tag k="hoot:id" v="-110"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -341,7 +341,7 @@
         <tag k="hoot:id" v="-109"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-108" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474571674199975" lon="-69.3550592350100032">
+    <node visible="true" id="-108" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474571674199993" lon="-69.3550592350100032">
         <tag k="hoot:id" v="-108"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -349,7 +349,7 @@
         <tag k="hoot:id" v="-107"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-106" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475499836500024" lon="-69.3546186538899860">
+    <node visible="true" id="-106" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475499836500006" lon="-69.3546186538900002">
         <tag k="hoot:id" v="-106"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -357,23 +357,23 @@
         <tag k="hoot:id" v="-105"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-104" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476769137699957" lon="-69.3547764440900067">
+    <node visible="true" id="-104" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476769137699993" lon="-69.3547764440900067">
         <tag k="hoot:id" v="-104"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-103" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476568562699988" lon="-69.3549426179900053">
+    <node visible="true" id="-103" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476568562700006" lon="-69.3549426179900053">
         <tag k="hoot:id" v="-103"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-102" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475379201299990" lon="-69.3549280030800048">
+    <node visible="true" id="-102" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475379201300008" lon="-69.3549280030800048">
         <tag k="hoot:id" v="-102"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-101" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474739561299984" lon="-69.3549201431700055">
+    <node visible="true" id="-101" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474739561300002" lon="-69.3549201431700055">
         <tag k="hoot:id" v="-101"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-100" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475579776199986" lon="-69.3547618292400045">
+    <node visible="true" id="-100" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475579776200004" lon="-69.3547618292400045">
         <tag k="hoot:id" v="-100"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -389,27 +389,27 @@
         <tag k="hoot:id" v="-97"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-96" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459789418399978" lon="-69.3567479624500010">
+    <node visible="true" id="-96" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459789418400014" lon="-69.3567479624500010">
         <tag k="hoot:id" v="-96"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-95" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458704167599997" lon="-69.3567119602400055">
+    <node visible="true" id="-95" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458704167599997" lon="-69.3567119602400197">
         <tag k="hoot:id" v="-95"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-94" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458459995099982" lon="-69.3567868910500067">
+    <node visible="true" id="-94" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458459995100000" lon="-69.3567868910500209">
         <tag k="hoot:id" v="-94"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-93" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462241063199986" lon="-69.3569123247600032">
+    <node visible="true" id="-93" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462241063200004" lon="-69.3569123247600032">
         <tag k="hoot:id" v="-93"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-92" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462467711199981" lon="-69.3568427718199985">
+    <node visible="true" id="-92" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462467711199999" lon="-69.3568427718199985">
         <tag k="hoot:id" v="-92"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-91" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461620998999983" lon="-69.3570099272699991">
+    <node visible="true" id="-91" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461620999000001" lon="-69.3570099272699991">
         <tag k="hoot:id" v="-91"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -417,19 +417,19 @@
         <tag k="hoot:id" v="-90"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-89" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458727894699980" lon="-69.3570200054199972">
+    <node visible="true" id="-89" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458727894699997" lon="-69.3570200054199972">
         <tag k="hoot:id" v="-89"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-88" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461321788399989" lon="-69.3571039976999941">
+    <node visible="true" id="-88" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461321788400006" lon="-69.3571039976999941">
         <tag k="hoot:id" v="-88"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-87" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460955135799992" lon="-69.3572440207699827">
+    <node visible="true" id="-87" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460955135799992" lon="-69.3572440207699970">
         <tag k="hoot:id" v="-87"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-86" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461301829699980" lon="-69.3571434685299977">
+    <node visible="true" id="-86" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461301829699998" lon="-69.3571434685299977">
         <tag k="hoot:id" v="-86"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -445,15 +445,15 @@
         <tag k="hoot:id" v="-83"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-82" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460598721099981" lon="-69.3572315102999966">
+    <node visible="true" id="-82" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460598721099998" lon="-69.3572315102999966">
         <tag k="hoot:id" v="-82"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-81" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462312904600015" lon="-69.3566858579700067">
+    <node visible="true" id="-81" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462312904599997" lon="-69.3566858579700209">
         <tag k="hoot:id" v="-81"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-80" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460218233100012" lon="-69.3566163691500037">
+    <node visible="true" id="-80" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460218233099994" lon="-69.3566163691500037">
         <tag k="hoot:id" v="-80"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -461,11 +461,11 @@
         <tag k="hoot:id" v="-79"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-78" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460463320699986" lon="-69.3564214757499968">
+    <node visible="true" id="-78" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460463320700004" lon="-69.3564214757499968">
         <tag k="hoot:id" v="-78"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-77" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460075812899987" lon="-69.3565495776399814">
+    <node visible="true" id="-77" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460075812900005" lon="-69.3565495776399956">
         <tag k="hoot:id" v="-77"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -473,23 +473,23 @@
         <tag k="hoot:id" v="-76"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-75" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460858123700003" lon="-69.3562909619899841">
+    <node visible="true" id="-75" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460858123700003" lon="-69.3562909619899983">
         <tag k="hoot:id" v="-75"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-74" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463201815999987" lon="-69.3563631372000060">
+    <node visible="true" id="-74" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463201816000005" lon="-69.3563631372000060">
         <tag k="hoot:id" v="-74"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-73" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463889822199981" lon="-69.3561356960599937">
+    <node visible="true" id="-73" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463889822199999" lon="-69.3561356960599937">
         <tag k="hoot:id" v="-73"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-72" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461546129300014" lon="-69.3560635209900056">
+    <node visible="true" id="-72" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461546129299997" lon="-69.3560635209900056">
         <tag k="hoot:id" v="-72"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-71" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457974173699984" lon="-69.3555477455699929">
+    <node visible="true" id="-71" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457974173700002" lon="-69.3555477455699929">
         <tag k="hoot:id" v="-71"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -497,15 +497,15 @@
         <tag k="hoot:id" v="-70"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-69" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456133452399996" lon="-69.3556540644699879">
+    <node visible="true" id="-69" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456133452399996" lon="-69.3556540644700021">
         <tag k="hoot:id" v="-69"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-68" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457299916600018" lon="-69.3557049854500036">
+    <node visible="true" id="-68" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457299916600000" lon="-69.3557049854500036">
         <tag k="hoot:id" v="-68"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-67" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461434803700005" lon="-69.3535996382399986">
+    <node visible="true" id="-67" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461434803700005" lon="-69.3535996382400128">
         <tag k="hoot:id" v="-67"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -513,23 +513,23 @@
         <tag k="hoot:id" v="-66"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-65" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463181290199977" lon="-69.3534797988399987">
+    <node visible="true" id="-65" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463181290199994" lon="-69.3534797988399987">
         <tag k="hoot:id" v="-65"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-64" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461877018099983" lon="-69.3534219895200010">
+    <node visible="true" id="-64" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461877018100001" lon="-69.3534219895200010">
         <tag k="hoot:id" v="-64"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-63" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461157153999974" lon="-69.3535873319499956">
+    <node visible="true" id="-63" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461157153999991" lon="-69.3535873319499956">
         <tag k="hoot:id" v="-63"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-62" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459712432300012" lon="-69.3551423745499847">
+    <node visible="true" id="-62" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459712432299995" lon="-69.3551423745499989">
         <tag k="hoot:id" v="-62"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-61" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458545967199981" lon="-69.3550914537299832">
+    <node visible="true" id="-61" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458545967199999" lon="-69.3550914537299974">
         <tag k="hoot:id" v="-61"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -541,11 +541,11 @@
         <tag k="hoot:id" v="-59"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-58" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460937867599984" lon="-69.3548565956400012">
+    <node visible="true" id="-58" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460937867600020" lon="-69.3548565956400154">
         <tag k="hoot:id" v="-58"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-57" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459771402100024" lon="-69.3548056749000068">
+    <node visible="true" id="-57" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459771402100007" lon="-69.3548056749000068">
         <tag k="hoot:id" v="-57"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -553,19 +553,19 @@
         <tag k="hoot:id" v="-56"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-55" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460396290999956" lon="-69.3546599467299956">
+    <node visible="true" id="-55" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460396290999991" lon="-69.3546599467299956">
         <tag k="hoot:id" v="-55"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-54" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461360823600021" lon="-69.3548750593199941">
+    <node visible="true" id="-54" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461360823600003" lon="-69.3548750593199941">
         <tag k="hoot:id" v="-54"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-53" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463668134499979" lon="-69.3543283797999948">
+    <node visible="true" id="-53" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463668134500015" lon="-69.3543283797999948">
         <tag k="hoot:id" v="-53"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-52" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462109769299985" lon="-69.3542603513700016">
+    <node visible="true" id="-52" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462109769300003" lon="-69.3542603513700158">
         <tag k="hoot:id" v="-52"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -577,7 +577,7 @@
         <tag k="hoot:id" v="-50"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-49" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462138632100011" lon="-69.3545765693800007">
+    <node visible="true" id="-49" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462138632099993" lon="-69.3545765693800007">
         <tag k="hoot:id" v="-49"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -585,15 +585,15 @@
         <tag k="hoot:id" v="-48"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-47" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462561588300012" lon="-69.3545950330299945">
+    <node visible="true" id="-47" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462561588299994" lon="-69.3545950330299945">
         <tag k="hoot:id" v="-47"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-46" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462685345899967" lon="-69.3544490718399942">
+    <node visible="true" id="-46" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462685345900002" lon="-69.3544490718399942">
         <tag k="hoot:id" v="-46"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-45" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464241114499995" lon="-69.3541947564599894">
+    <node visible="true" id="-45" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464241114499995" lon="-69.3541947564600036">
         <tag k="hoot:id" v="-45"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -601,15 +601,15 @@
         <tag k="hoot:id" v="-44"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-43" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464471835400015" lon="-69.3540324487100008">
+    <node visible="true" id="-43" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464471835399998" lon="-69.3540324487100008">
         <tag k="hoot:id" v="-43"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-42" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463305368499984" lon="-69.3539815281999950">
+    <node visible="true" id="-42" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463305368500002" lon="-69.3539815281999950">
         <tag k="hoot:id" v="-42"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-41" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464863734299978" lon="-69.3540495565199961">
+    <node visible="true" id="-41" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464863734299996" lon="-69.3540495565199961">
         <tag k="hoot:id" v="-41"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -617,11 +617,11 @@
         <tag k="hoot:id" v="-40"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-39" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463871567899989" lon="-69.3538494857800032">
+    <node visible="true" id="-39" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463871567900007" lon="-69.3538494857800032">
         <tag k="hoot:id" v="-39"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-38" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465598628499979" lon="-69.3537696710200038">
+    <node visible="true" id="-38" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465598628499997" lon="-69.3537696710200038">
         <tag k="hoot:id" v="-38"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -641,11 +641,11 @@
         <tag k="hoot:id" v="-34"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-33" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465583336799984" lon="-69.3534502859599939">
+    <node visible="true" id="-33" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465583336800002" lon="-69.3534502859599939">
         <tag k="hoot:id" v="-33"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-32" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466150788699977" lon="-69.3533179507600011">
+    <node visible="true" id="-32" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466150788699995" lon="-69.3533179507600011">
         <tag k="hoot:id" v="-32"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -653,35 +653,35 @@
         <tag k="hoot:id" v="-31"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-30" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467954652399989" lon="-69.3532202241499931">
+    <node visible="true" id="-30" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467954652400007" lon="-69.3532202241499931">
         <tag k="hoot:id" v="-30"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-29" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466362233700011" lon="-69.3531507097000031">
+    <node visible="true" id="-29" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466362233699993" lon="-69.3531507097000031">
         <tag k="hoot:id" v="-29"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-28" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465724838299977" lon="-69.3532993565799956">
+    <node visible="true" id="-28" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465724838299995" lon="-69.3532993565799956">
         <tag k="hoot:id" v="-28"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-27" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460858144399978" lon="-69.3537320883999797">
+    <node visible="true" id="-27" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460858144399996" lon="-69.3537320883999939">
         <tag k="hoot:id" v="-27"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-26" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461884766299985" lon="-69.3537775915200001">
+    <node visible="true" id="-26" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461884766300003" lon="-69.3537775915200001">
         <tag k="hoot:id" v="-26"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-25" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460227645700009" lon="-69.3538769044800034">
+    <node visible="true" id="-25" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460227645700026" lon="-69.3538769044800034">
         <tag k="hoot:id" v="-25"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-24" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461254267399980" lon="-69.3539224076299945">
+    <node visible="true" id="-24" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461254267399998" lon="-69.3539224076299945">
         <tag k="hoot:id" v="-24"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-23" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459641720799979" lon="-69.3540114824500051">
+    <node visible="true" id="-23" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459641720799997" lon="-69.3540114824500051">
         <tag k="hoot:id" v="-23"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -693,7 +693,7 @@
         <tag k="hoot:id" v="-21"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-20" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460126628299999" lon="-69.3541814088600006">
+    <node visible="true" id="-20" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460126628300017" lon="-69.3541814088600006">
         <tag k="hoot:id" v="-20"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -705,7 +705,7 @@
         <tag k="hoot:id" v="-18"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-17" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459552853399980" lon="-69.3543131958400068">
+    <node visible="true" id="-17" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459552853399998" lon="-69.3543131958400068">
         <tag k="hoot:id" v="-17"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -713,7 +713,7 @@
         <tag k="hoot:id" v="-16"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-15" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456688088099977" lon="-69.3546898839999955">
+    <node visible="true" id="-15" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456688088099995" lon="-69.3546898839999955">
         <tag k="hoot:id" v="-15"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -721,19 +721,19 @@
         <tag k="hoot:id" v="-14"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-13" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457943312899989" lon="-69.3547455198699936">
+    <node visible="true" id="-13" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457943312900007" lon="-69.3547455198699936">
         <tag k="hoot:id" v="-13"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-12" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458562127500031" lon="-69.3546033885599940">
+    <node visible="true" id="-12" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458562127499995" lon="-69.3546033885599940">
         <tag k="hoot:id" v="-12"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-11" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457306902500019" lon="-69.3545477527199949">
+    <node visible="true" id="-11" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457306902500001" lon="-69.3545477527199949">
         <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-10" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459158553599988" lon="-69.3544663993399979">
+    <node visible="true" id="-10" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459158553600005" lon="-69.3544663993399979">
         <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -741,7 +741,7 @@
         <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-8" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457006631599981" lon="-69.3548980204799932">
+    <node visible="true" id="-8" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457006631599999" lon="-69.3548980204799932">
         <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -749,19 +749,19 @@
         <tag k="hoot:id" v="-7"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-6" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468174109700001" lon="-69.3571254647499842">
+    <node visible="true" id="-6" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468174109700001" lon="-69.3571254647499984">
         <tag k="hoot:id" v="-6"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-5" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468541519199981" lon="-69.3571374453999994">
+    <node visible="true" id="-5" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468541519199999" lon="-69.3571374453999994">
         <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-4" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469785501399986" lon="-69.3572591861999967">
+    <node visible="true" id="-4" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469785501400004" lon="-69.3572591861999967">
         <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-3" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468012836800025" lon="-69.3572086179800067">
+    <node visible="true" id="-3" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468012836800007" lon="-69.3572086179800067">
         <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -769,7 +769,7 @@
         <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469632214199986" lon="-69.3573138903200004">
+    <node visible="true" id="-1" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469632214200004" lon="-69.3573138903200004">
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -779,10 +779,18 @@
         <nd ref="-191"/>
         <nd ref="-190"/>
         <nd ref="-193"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="225.749"/>
         <tag k="hoot:id" v="-72"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="16.0586"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-71" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-189"/>
@@ -791,10 +799,18 @@
         <nd ref="-186"/>
         <nd ref="-185"/>
         <nd ref="-189"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="542.924"/>
         <tag k="hoot:id" v="-71"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
+        <tag k="length" v="32.4046"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="16.7546"/>
     </way>
     <way visible="true" id="-70" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-184"/>
@@ -802,10 +818,18 @@
         <nd ref="-188"/>
         <nd ref="-189"/>
         <nd ref="-184"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="155.62"/>
         <tag k="hoot:id" v="-70"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="13.9108"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="11.1869"/>
     </way>
     <way visible="true" id="-69" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-182"/>
@@ -813,10 +837,18 @@
         <nd ref="-183"/>
         <nd ref="-184"/>
         <nd ref="-182"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="213.839"/>
         <tag k="hoot:id" v="-69"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="15.3721"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-68" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-180"/>
@@ -824,10 +856,18 @@
         <nd ref="-181"/>
         <nd ref="-182"/>
         <nd ref="-180"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="199.854"/>
         <tag k="hoot:id" v="-68"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="14.3668"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-67" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-178"/>
@@ -835,10 +875,18 @@
         <nd ref="-179"/>
         <nd ref="-180"/>
         <nd ref="-178"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="208.848"/>
         <tag k="hoot:id" v="-67"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="15.0134"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-66" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-176"/>
@@ -846,10 +894,18 @@
         <nd ref="-177"/>
         <nd ref="-178"/>
         <nd ref="-176"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="221.909"/>
         <tag k="hoot:id" v="-66"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="15.9522"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-65" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-174"/>
@@ -857,10 +913,18 @@
         <nd ref="-175"/>
         <nd ref="-176"/>
         <nd ref="-174"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="220.985"/>
         <tag k="hoot:id" v="-65"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="15.8858"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-64" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-172"/>
@@ -868,10 +932,18 @@
         <nd ref="-173"/>
         <nd ref="-174"/>
         <nd ref="-172"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="218.952"/>
         <tag k="hoot:id" v="-64"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="15.7397"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-63" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-171"/>
@@ -879,10 +951,18 @@
         <nd ref="-170"/>
         <nd ref="-169"/>
         <nd ref="-171"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="227.152"/>
         <tag k="hoot:id" v="-63"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="16.3291"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.9108"/>
     </way>
     <way visible="true" id="-62" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-168"/>
@@ -890,10 +970,18 @@
         <nd ref="-166"/>
         <nd ref="-165"/>
         <nd ref="-168"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="309.109"/>
         <tag k="hoot:id" v="-62"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="20.3797"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.1675"/>
     </way>
     <way visible="true" id="-61" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-164"/>
@@ -901,10 +989,18 @@
         <nd ref="-162"/>
         <nd ref="-161"/>
         <nd ref="-164"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="194.527"/>
         <tag k="hoot:id" v="-61"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="17.5002"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="11.1157"/>
     </way>
     <way visible="true" id="-60" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-160"/>
@@ -912,10 +1008,18 @@
         <nd ref="-158"/>
         <nd ref="-157"/>
         <nd ref="-160"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="660.411"/>
         <tag k="hoot:id" v="-60"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="30.3883"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="21.7324"/>
     </way>
     <way visible="true" id="-59" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-156"/>
@@ -925,10 +1029,18 @@
         <nd ref="-152"/>
         <nd ref="-151"/>
         <nd ref="-156"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="915.62"/>
         <tag k="hoot:id" v="-59"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="7"/>
+        <tag k="length" v="38.0729"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="24.7278"/>
     </way>
     <way visible="true" id="-58" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-150"/>
@@ -936,10 +1048,18 @@
         <nd ref="-148"/>
         <nd ref="-147"/>
         <nd ref="-150"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="728.004"/>
         <tag k="hoot:id" v="-58"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="30.7959"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="23.6397"/>
     </way>
     <way visible="true" id="-57" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-146"/>
@@ -947,10 +1067,18 @@
         <nd ref="-144"/>
         <nd ref="-143"/>
         <nd ref="-146"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="447.514"/>
         <tag k="hoot:id" v="-57"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="23.6397"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="18.9306"/>
     </way>
     <way visible="true" id="-56" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-142"/>
@@ -958,10 +1086,18 @@
         <nd ref="-145"/>
         <nd ref="-146"/>
         <nd ref="-142"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="321.284"/>
         <tag k="hoot:id" v="-56"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="23.6397"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.5909"/>
     </way>
     <way visible="true" id="-55" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-140"/>
@@ -969,10 +1105,18 @@
         <nd ref="-141"/>
         <nd ref="-142"/>
         <nd ref="-140"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="389.383"/>
         <tag k="hoot:id" v="-55"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="23.6397"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="16.4716"/>
     </way>
     <way visible="true" id="-54" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-138"/>
@@ -980,10 +1124,18 @@
         <nd ref="-139"/>
         <nd ref="-140"/>
         <nd ref="-138"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="348.589"/>
         <tag k="hoot:id" v="-54"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="23.6397"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.7459"/>
     </way>
     <way visible="true" id="-53" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-149"/>
@@ -991,10 +1143,18 @@
         <nd ref="-137"/>
         <nd ref="-138"/>
         <nd ref="-149"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="71.6"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="376.717"/>
         <tag k="hoot:id" v="-53"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="23.6397"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.9358"/>
     </way>
     <way visible="true" id="-52" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-136"/>
@@ -1002,10 +1162,18 @@
         <nd ref="-134"/>
         <nd ref="-164"/>
         <nd ref="-136"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="272.391"/>
         <tag k="hoot:id" v="-52"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="17.8198"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.2859"/>
     </way>
     <way visible="true" id="-51" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-133"/>
@@ -1013,10 +1181,18 @@
         <nd ref="-135"/>
         <nd ref="-136"/>
         <nd ref="-133"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="276.347"/>
         <tag k="hoot:id" v="-51"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="18.0786"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.2859"/>
     </way>
     <way visible="true" id="-50" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-131"/>
@@ -1024,10 +1200,18 @@
         <nd ref="-132"/>
         <nd ref="-133"/>
         <nd ref="-131"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="212.841"/>
         <tag k="hoot:id" v="-50"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="15.2859"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.924"/>
     </way>
     <way visible="true" id="-49" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-129"/>
@@ -1035,10 +1219,18 @@
         <nd ref="-130"/>
         <nd ref="-127"/>
         <nd ref="-129"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="261.371"/>
         <tag k="hoot:id" v="-49"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="17.1976"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.1981"/>
     </way>
     <way visible="true" id="-48" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-126"/>
@@ -1046,10 +1238,18 @@
         <nd ref="-128"/>
         <nd ref="-129"/>
         <nd ref="-126"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="311.023"/>
         <tag k="hoot:id" v="-48"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="18.0853"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="17.1976"/>
     </way>
     <way visible="true" id="-47" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-124"/>
@@ -1057,10 +1257,18 @@
         <nd ref="-125"/>
         <nd ref="-126"/>
         <nd ref="-124"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="263.998"/>
         <tag k="hoot:id" v="-47"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="17.1976"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.3509"/>
     </way>
     <way visible="true" id="-46" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-123"/>
@@ -1068,10 +1276,18 @@
         <nd ref="-122"/>
         <nd ref="-121"/>
         <nd ref="-123"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="249.52"/>
         <tag k="hoot:id" v="-46"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="17.1976"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.509"/>
     </way>
     <way visible="true" id="-45" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-120"/>
@@ -1081,10 +1297,18 @@
         <nd ref="-122"/>
         <nd ref="-117"/>
         <nd ref="-120"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="515.255"/>
         <tag k="hoot:id" v="-45"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="7"/>
+        <tag k="length" v="33.2372"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="17.4335"/>
     </way>
     <way visible="true" id="-44" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-116"/>
@@ -1092,10 +1316,18 @@
         <nd ref="-114"/>
         <nd ref="-113"/>
         <nd ref="-116"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="465.57"/>
         <tag k="hoot:id" v="-44"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="24.5387"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="20.1001"/>
     </way>
     <way visible="true" id="-43" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-112"/>
@@ -1103,10 +1335,18 @@
         <nd ref="-114"/>
         <nd ref="-111"/>
         <nd ref="-112"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="429.56"/>
         <tag k="hoot:id" v="-43"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="27.2509"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="16.5887"/>
     </way>
     <way visible="true" id="-42" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-119"/>
@@ -1115,14 +1355,18 @@
         <nd ref="-118"/>
         <nd ref="-110"/>
         <nd ref="-119"/>
-        <tag k="angle" v="162.2"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="410.6"/>
+        <tag k="feature_area" v="409.419"/>
         <tag k="hoot:id" v="-42"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="30.4"/>
-        <tag k="width" v="14.3"/>
+        <tag k="length" v="30.2134"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.2495"/>
     </way>
     <way visible="true" id="-41" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-109"/>
@@ -1130,14 +1374,18 @@
         <nd ref="-167"/>
         <nd ref="-168"/>
         <nd ref="-109"/>
-        <tag k="angle" v="173.1"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="344.8"/>
+        <tag k="feature_area" v="343.845"/>
         <tag k="hoot:id" v="-41"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="20.5"/>
-        <tag k="width" v="16.9"/>
+        <tag k="length" v="20.3797"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="16.8719"/>
     </way>
     <way visible="true" id="-40" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-107"/>
@@ -1145,14 +1393,18 @@
         <nd ref="-105"/>
         <nd ref="-104"/>
         <nd ref="-107"/>
-        <tag k="angle" v="173.1"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="248.7"/>
+        <tag k="feature_area" v="248.002"/>
         <tag k="hoot:id" v="-40"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.2"/>
-        <tag k="width" v="15.5"/>
+        <tag k="length" v="16.0277"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.4734"/>
     </way>
     <way visible="true" id="-39" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-103"/>
@@ -1161,14 +1413,18 @@
         <nd ref="-108"/>
         <nd ref="-109"/>
         <nd ref="-103"/>
-        <tag k="angle" v="353.1"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="313.9"/>
+        <tag k="feature_area" v="313.04"/>
         <tag k="hoot:id" v="-39"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="20.5"/>
-        <tag k="width" v="15.4"/>
+        <tag k="length" v="20.3797"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.3604"/>
     </way>
     <way visible="true" id="-38" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-104"/>
@@ -1176,14 +1432,18 @@
         <nd ref="-102"/>
         <nd ref="-103"/>
         <nd ref="-104"/>
-        <tag k="angle" v="263.0"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="243.9"/>
+        <tag k="feature_area" v="243.198"/>
         <tag k="hoot:id" v="-38"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="18.4"/>
-        <tag k="width" v="13.3"/>
+        <tag k="length" v="18.3511"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="13.2525"/>
     </way>
     <way visible="true" id="-37" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-106"/>
@@ -1191,14 +1451,18 @@
         <nd ref="-99"/>
         <nd ref="-98"/>
         <nd ref="-106"/>
-        <tag k="angle" v="173.1"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="174.1"/>
+        <tag k="feature_area" v="173.57"/>
         <tag k="hoot:id" v="-37"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.1"/>
-        <tag k="width" v="10.8"/>
+        <tag k="length" v="16.0277"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="10.8294"/>
     </way>
     <way visible="true" id="-36" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-97"/>
@@ -1208,10 +1472,18 @@
         <nd ref="-93"/>
         <nd ref="-92"/>
         <nd ref="-97"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="368.757"/>
         <tag k="hoot:id" v="-36"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="7"/>
+        <tag k="length" v="44.0242"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="8.64681"/>
     </way>
     <way visible="true" id="-35" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-91"/>
@@ -1219,10 +1491,18 @@
         <nd ref="-89"/>
         <nd ref="-88"/>
         <nd ref="-91"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="326.34"/>
         <tag k="hoot:id" v="-35"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="30.1318"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="10.8304"/>
     </way>
     <way visible="true" id="-34" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-87"/>
@@ -1232,10 +1512,18 @@
         <nd ref="-83"/>
         <nd ref="-82"/>
         <nd ref="-87"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="515.6"/>
         <tag k="hoot:id" v="-34"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="7"/>
+        <tag k="length" v="30.9961"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="17.4067"/>
     </way>
     <way visible="true" id="-33" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-96"/>
@@ -1243,10 +1531,18 @@
         <nd ref="-81"/>
         <nd ref="-80"/>
         <nd ref="-96"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="377.926"/>
         <tag k="hoot:id" v="-33"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="24.7831"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.801"/>
     </way>
     <way visible="true" id="-32" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-79"/>
@@ -1254,10 +1550,18 @@
         <nd ref="-77"/>
         <nd ref="-76"/>
         <nd ref="-79"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="397.952"/>
         <tag k="hoot:id" v="-32"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="27.1037"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.6826"/>
     </way>
     <way visible="true" id="-31" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-75"/>
@@ -1265,10 +1569,18 @@
         <nd ref="-73"/>
         <nd ref="-72"/>
         <nd ref="-75"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="706.551"/>
         <tag k="hoot:id" v="-31"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="27.1037"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="26.0684"/>
     </way>
     <way visible="true" id="-30" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-78"/>
@@ -1276,10 +1588,18 @@
         <nd ref="-74"/>
         <nd ref="-75"/>
         <nd ref="-78"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="72.9"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="405.444"/>
         <tag k="hoot:id" v="-30"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="27.1037"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.959"/>
     </way>
     <way visible="true" id="-29" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-71"/>
@@ -1287,11 +1607,18 @@
         <nd ref="-69"/>
         <nd ref="-68"/>
         <nd ref="-71"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="264.027"/>
         <tag k="hoot:id" v="-29"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="18.9"/>
+        <tag k="length" v="18.7814"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-28" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-67"/>
@@ -1300,13 +1627,18 @@
         <nd ref="-64"/>
         <nd ref="-63"/>
         <nd ref="-67"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="312.8"/>
+        <tag k="feature_area" v="311.943"/>
         <tag k="hoot:id" v="-28"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="19.9"/>
-        <tag k="width" v="15.8"/>
+        <tag k="length" v="19.7972"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.7569"/>
     </way>
     <way visible="true" id="-27" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-190"/>
@@ -1314,11 +1646,18 @@
         <nd ref="-70"/>
         <nd ref="-71"/>
         <nd ref="-190"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="222.611"/>
         <tag k="hoot:id" v="-27"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.9"/>
+        <tag k="length" v="15.8354"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-26" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-62"/>
@@ -1326,11 +1665,18 @@
         <nd ref="-192"/>
         <nd ref="-193"/>
         <nd ref="-62"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="232.311"/>
         <tag k="hoot:id" v="-26"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.6"/>
+        <tag k="length" v="16.5253"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-25" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-60"/>
@@ -1338,11 +1684,18 @@
         <nd ref="-61"/>
         <nd ref="-62"/>
         <nd ref="-60"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="227.508"/>
         <tag k="hoot:id" v="-25"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.3"/>
+        <tag k="length" v="16.1837"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-24" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-58"/>
@@ -1350,11 +1703,18 @@
         <nd ref="-59"/>
         <nd ref="-60"/>
         <nd ref="-58"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="252.351"/>
         <tag k="hoot:id" v="-24"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="18.0"/>
+        <tag k="length" v="17.9509"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-23" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-56"/>
@@ -1362,11 +1722,18 @@
         <nd ref="-57"/>
         <nd ref="-54"/>
         <nd ref="-56"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="333.422"/>
         <tag k="hoot:id" v="-23"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="19.3"/>
+        <tag k="length" v="19.1552"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="17.4064"/>
     </way>
     <way visible="true" id="-22" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-53"/>
@@ -1374,11 +1741,18 @@
         <nd ref="-51"/>
         <nd ref="-50"/>
         <nd ref="-53"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="309.122"/>
         <tag k="hoot:id" v="-22"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="19.0"/>
+        <tag k="length" v="18.7809"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="16.4594"/>
     </way>
     <way visible="true" id="-21" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-49"/>
@@ -1387,11 +1761,18 @@
         <nd ref="-56"/>
         <nd ref="-47"/>
         <nd ref="-49"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="307.27"/>
         <tag k="hoot:id" v="-21"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="19.3"/>
+        <tag k="length" v="19.1552"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="16.0411"/>
     </way>
     <way visible="true" id="-20" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-46"/>
@@ -1399,11 +1780,18 @@
         <nd ref="-48"/>
         <nd ref="-49"/>
         <nd ref="-46"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="214.085"/>
         <tag k="hoot:id" v="-20"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.3"/>
+        <tag k="length" v="15.2288"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-19" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-45"/>
@@ -1411,11 +1799,18 @@
         <nd ref="-52"/>
         <nd ref="-53"/>
         <nd ref="-45"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="299.752"/>
         <tag k="hoot:id" v="-19"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="19.0"/>
+        <tag k="length" v="18.7809"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.9605"/>
     </way>
     <way visible="true" id="-18" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-43"/>
@@ -1424,11 +1819,18 @@
         <nd ref="-45"/>
         <nd ref="-41"/>
         <nd ref="-43"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="325.722"/>
         <tag k="hoot:id" v="-18"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="19.0"/>
+        <tag k="length" v="18.7809"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="17.3433"/>
     </way>
     <way visible="true" id="-17" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-40"/>
@@ -1436,11 +1838,18 @@
         <nd ref="-42"/>
         <nd ref="-43"/>
         <nd ref="-40"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="221.716"/>
         <tag k="hoot:id" v="-17"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.9"/>
+        <tag k="length" v="15.7717"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-16" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-38"/>
@@ -1448,11 +1857,18 @@
         <nd ref="-39"/>
         <nd ref="-40"/>
         <nd ref="-38"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="219.521"/>
         <tag k="hoot:id" v="-16"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.7"/>
+        <tag k="length" v="15.6155"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-15" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-36"/>
@@ -1460,11 +1876,18 @@
         <nd ref="-37"/>
         <nd ref="-38"/>
         <nd ref="-36"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="219.854"/>
         <tag k="hoot:id" v="-15"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.7"/>
+        <tag k="length" v="15.6392"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-14" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-34"/>
@@ -1472,11 +1895,18 @@
         <nd ref="-35"/>
         <nd ref="-36"/>
         <nd ref="-34"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="230.932"/>
         <tag k="hoot:id" v="-14"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.5"/>
+        <tag k="length" v="16.4273"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0578"/>
     </way>
     <way visible="true" id="-13" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-32"/>
@@ -1485,11 +1915,18 @@
         <nd ref="-29"/>
         <nd ref="-28"/>
         <nd ref="-32"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="340.74"/>
         <tag k="hoot:id" v="-13"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="19.4"/>
+        <tag k="length" v="19.1913"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="17.755"/>
     </way>
     <way visible="true" id="-12" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-31"/>
@@ -1497,11 +1934,18 @@
         <nd ref="-33"/>
         <nd ref="-34"/>
         <nd ref="-31"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.8"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="222.207"/>
         <tag k="hoot:id" v="-12"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.9"/>
+        <tag k="length" v="15.8066"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="14.0579"/>
     </way>
     <way visible="true" id="-11" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-27"/>
@@ -1509,13 +1953,18 @@
         <nd ref="-66"/>
         <nd ref="-67"/>
         <nd ref="-27"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="197.2"/>
+        <tag k="feature_area" v="196.692"/>
         <tag k="hoot:id" v="-11"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.9"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="15.8589"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-10" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-25"/>
@@ -1523,13 +1972,18 @@
         <nd ref="-26"/>
         <nd ref="-27"/>
         <nd ref="-25"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="215.7"/>
+        <tag k="feature_area" v="215.055"/>
         <tag k="hoot:id" v="-10"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="17.4"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="17.3395"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-9" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-23"/>
@@ -1537,13 +1991,18 @@
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-23"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="200.4"/>
+        <tag k="feature_area" v="199.852"/>
         <tag k="hoot:id" v="-9"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.2"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="16.1137"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-8" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-21"/>
@@ -1551,13 +2010,18 @@
         <nd ref="-22"/>
         <nd ref="-23"/>
         <nd ref="-21"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="185.3"/>
+        <tag k="feature_area" v="184.772"/>
         <tag k="hoot:id" v="-8"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.0"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="14.8978"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-7" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-19"/>
@@ -1565,13 +2029,18 @@
         <nd ref="-17"/>
         <nd ref="-16"/>
         <nd ref="-19"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="213.1"/>
+        <tag k="feature_area" v="212.464"/>
         <tag k="hoot:id" v="-7"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="17.2"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="17.1306"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-6" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-16"/>
@@ -1579,13 +2048,18 @@
         <nd ref="-20"/>
         <nd ref="-21"/>
         <nd ref="-16"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="196.3"/>
+        <tag k="feature_area" v="195.707"/>
         <tag k="hoot:id" v="-6"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="15.9"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="15.7795"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-5" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-15"/>
@@ -1594,13 +2068,18 @@
         <nd ref="-12"/>
         <nd ref="-11"/>
         <nd ref="-15"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="258.8"/>
+        <tag k="feature_area" v="258.069"/>
         <tag k="hoot:id" v="-5"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
-        <tag k="length" v="17.1"/>
-        <tag k="width" v="15.2"/>
+        <tag k="length" v="17.0181"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.1644"/>
     </way>
     <way visible="true" id="-4" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-11"/>
@@ -1608,13 +2087,18 @@
         <nd ref="-10"/>
         <nd ref="-19"/>
         <nd ref="-11"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="249.4"/>
+        <tag k="feature_area" v="248.732"/>
         <tag k="hoot:id" v="-4"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="16.5"/>
-        <tag k="width" v="15.2"/>
+        <tag k="length" v="16.4024"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="15.1644"/>
     </way>
     <way visible="true" id="-3" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-14"/>
@@ -1622,13 +2106,18 @@
         <nd ref="-9"/>
         <nd ref="-8"/>
         <nd ref="-14"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="247.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="242.2"/>
+        <tag k="feature_area" v="241.515"/>
         <tag k="hoot:id" v="-3"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="19.6"/>
-        <tag k="width" v="12.5"/>
+        <tag k="length" v="19.4729"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="12.4026"/>
     </way>
     <way visible="true" id="-2" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-7"/>
@@ -1636,14 +2125,18 @@
         <nd ref="-6"/>
         <nd ref="-5"/>
         <nd ref="-7"/>
-        <tag k="angle" v="252.0"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="24.6"/>
+        <tag k="feature_area" v="24.4918"/>
         <tag k="hoot:id" v="-2"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="5.8"/>
-        <tag k="width" v="4.3"/>
+        <tag k="length" v="5.7347"/>
+        <tag k="name" v="Test"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="4.2708"/>
     </way>
     <way visible="true" id="-1" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-4"/>
@@ -1651,169 +2144,17 @@
         <nd ref="-2"/>
         <nd ref="-1"/>
         <nd ref="-4"/>
-        <tag k="angle" v="164.3"/>
-        <tag k="building" v="yes"/>
-        <tag k="feature_area" v="127.3"/>
-        <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:way:node:count" v="5"/>
-        <tag k="length" v="20.5"/>
-        <tag k="width" v="6.2"/>
-    </way>
-    <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-28" role="outer"/>
-        <member type="way" ref="-11" role="outer"/>
-        <member type="way" ref="-10" role="outer"/>
-        <member type="way" ref="-9" role="outer"/>
-        <member type="way" ref="-8" role="outer"/>
-        <member type="way" ref="-7" role="outer"/>
-        <member type="way" ref="-6" role="outer"/>
-        <member type="way" ref="-5" role="outer"/>
-        <member type="way" ref="-4" role="outer"/>
-        <member type="way" ref="-3" role="outer"/>
-        <tag k="aeroway" v="hangar"/>
-        <tag k="angle" v="247.7"/>
-        <tag k="building" v="yes"/>
-        <tag k="feature_area" v="2431.5"/>
-        <tag k="hoot:id" v="-6"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="length" v="166.1"/>
-        <tag k="name" v="Test"/>
-        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="15.2"/>
-    </relation>
-    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-36" role="outer"/>
-        <member type="way" ref="-35" role="outer"/>
-        <member type="way" ref="-34" role="outer"/>
-        <member type="way" ref="-33" role="outer"/>
-        <member type="way" ref="-32" role="outer"/>
-        <member type="way" ref="-31" role="outer"/>
-        <member type="way" ref="-30" role="outer"/>
-        <tag k="aeroway" v="hangar"/>
-        <tag k="angle" v="72.9"/>
-        <tag k="building" v="yes"/>
-        <tag k="feature_area" v="3885.8"/>
-        <tag k="hoot:id" v="-5"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="length" v="127.3"/>
-        <tag k="name" v="Test"/>
-        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="33.7"/>
-    </relation>
-    <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-59" role="outer"/>
-        <member type="way" ref="-58" role="outer"/>
-        <member type="way" ref="-57" role="outer"/>
-        <member type="way" ref="-56" role="outer"/>
-        <member type="way" ref="-55" role="outer"/>
-        <member type="way" ref="-54" role="outer"/>
-        <member type="way" ref="-53" role="outer"/>
-        <tag k="aeroway" v="hangar"/>
-        <tag k="angle" v="71.6"/>
-        <tag k="building" v="yes"/>
-        <tag k="feature_area" v="3988.0"/>
-        <tag k="hoot:id" v="-4"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="length" v="161.0"/>
-        <tag k="name" v="Test"/>
-        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="25.4"/>
-    </relation>
-    <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-62" role="outer"/>
-        <member type="way" ref="-61" role="outer"/>
-        <member type="way" ref="-60" role="outer"/>
-        <member type="way" ref="-52" role="outer"/>
-        <member type="way" ref="-51" role="outer"/>
-        <member type="way" ref="-50" role="outer"/>
-        <member type="way" ref="-49" role="outer"/>
-        <member type="way" ref="-48" role="outer"/>
-        <member type="way" ref="-47" role="outer"/>
-        <member type="way" ref="-46" role="outer"/>
-        <member type="way" ref="-45" role="outer"/>
-        <member type="way" ref="-44" role="outer"/>
-        <member type="way" ref="-43" role="outer"/>
-        <member type="way" ref="-42" role="outer"/>
-        <member type="way" ref="-41" role="outer"/>
-        <member type="way" ref="-40" role="outer"/>
-        <member type="way" ref="-39" role="outer"/>
-        <member type="way" ref="-38" role="outer"/>
-        <member type="way" ref="-37" role="outer"/>
-        <member type="way" ref="-2" role="outer"/>
-        <member type="way" ref="-1" role="outer"/>
         <tag k="aeroway" v="hangar"/>
         <tag k="angle" v="163.9"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="8086.9"/>
-        <tag k="hoot:id" v="-3"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="length" v="338.9"/>
-        <tag k="name" v="Test"/>
-        <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="46.3"/>
-    </relation>
-    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-71" role="outer"/>
-        <member type="way" ref="-70" role="outer"/>
-        <member type="way" ref="-69" role="outer"/>
-        <member type="way" ref="-68" role="outer"/>
-        <member type="way" ref="-67" role="outer"/>
-        <member type="way" ref="-66" role="outer"/>
-        <member type="way" ref="-65" role="outer"/>
-        <member type="way" ref="-64" role="outer"/>
-        <member type="way" ref="-63" role="outer"/>
-        <tag k="aeroway" v="hangar"/>
-        <tag k="angle" v="72.8"/>
-        <tag k="building" v="yes"/>
-        <tag k="feature_area" v="2633.6"/>
-        <tag k="hoot:id" v="-2"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="length" v="153.5"/>
-        <tag k="name" v="Test"/>
-        <tag k="source:datetime" v="2014-06-11T01:45:41Z;2019-08-16T11:05:19Z"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="20.4"/>
-    </relation>
-    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-72" role="outer"/>
-        <member type="way" ref="-29" role="outer"/>
-        <member type="way" ref="-27" role="outer"/>
-        <member type="way" ref="-26" role="outer"/>
-        <member type="way" ref="-25" role="outer"/>
-        <member type="way" ref="-24" role="outer"/>
-        <member type="way" ref="-23" role="outer"/>
-        <member type="way" ref="-22" role="outer"/>
-        <member type="way" ref="-21" role="outer"/>
-        <member type="way" ref="-20" role="outer"/>
-        <member type="way" ref="-19" role="outer"/>
-        <member type="way" ref="-18" role="outer"/>
-        <member type="way" ref="-17" role="outer"/>
-        <member type="way" ref="-16" role="outer"/>
-        <member type="way" ref="-15" role="outer"/>
-        <member type="way" ref="-14" role="outer"/>
-        <member type="way" ref="-13" role="outer"/>
-        <member type="way" ref="-12" role="outer"/>
-        <tag k="aeroway" v="hangar"/>
-        <tag k="angle" v="247.8"/>
-        <tag k="building" v="yes"/>
-        <tag k="feature_area" v="4830.3"/>
+        <tag k="feature_area" v="126.98"/>
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="length" v="298.3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="20.3757"/>
         <tag k="name" v="Test"/>
         <tag k="source:datetime" v="2014-06-10T17:30:04Z;2019-08-16T11:05:19Z"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="19.8"/>
-    </relation>
+        <tag k="width" v="6.23193"/>
+    </way>
 </osm>

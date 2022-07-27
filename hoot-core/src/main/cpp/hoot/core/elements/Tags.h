@@ -28,6 +28,7 @@
 #define TAGS_H
 
 // Hoot
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/SchemaVertex.h>
 #include <hoot/core/util/Units.h>
 
@@ -129,7 +130,7 @@ public:
    * match one or more entries in the list and return it. Each key will only be returned at most
    * once.
    */
-  QStringList getMatchingKeys(const QStringList& k);
+  QStringList getMatchingKeys(const QStringList& keys);
 
   /**
    * Return all the keys that are used in names.
@@ -264,7 +265,7 @@ public:
   /**
    * Sets the area tag to either true (is an area element), or false (is not an area element)
    */
-  void setArea(bool area) { insert("area", area ? "yes" : "no"); }
+  void setArea(bool area) { insert(MetadataTags::Area(), area ? "yes" : "no"); }
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
   void set(const QString& key, const QString& value);

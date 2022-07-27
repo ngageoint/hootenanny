@@ -33,15 +33,15 @@
 namespace hoot
 {
 
-Element::Element() :
-  _status(Status::Invalid),
-  _listener(nullptr)
+Element::Element()
+  : _status(Status::Invalid),
+    _listener(nullptr)
 {
 }
 
-Element::Element(Status s) :
-  _status(s),
-  _listener(nullptr)
+Element::Element(Status s)
+  : _status(s),
+    _listener(nullptr)
 {
 }
 
@@ -53,17 +53,13 @@ QString Element::getStatusString() const
 void Element::_postGeometryChange()
 {
   if (_listener != nullptr)
-  {
     _listener->postGeometryChange(this);
-  }
 }
 
 void Element::_preGeometryChange()
 {
   if (_listener != nullptr)
-  {
     _listener->preGeometryChange(this);
-  }
 }
 
 bool Element::hasSameNonMetadataTags(const Element& other) const

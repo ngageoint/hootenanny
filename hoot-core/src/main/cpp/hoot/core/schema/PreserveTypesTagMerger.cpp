@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PreserveTypesTagMerger.h"
 
@@ -34,8 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
-PreserveTypesTagMerger::PreserveTypesTagMerger(const QSet<QString>& skipTagKeys) :
-TypesTagMerger(skipTagKeys)
+PreserveTypesTagMerger::PreserveTypesTagMerger(const QSet<QString>& skipTagKeys)
+  : TypesTagMerger(skipTagKeys)
 {
   setPreserveTypes();
 }

@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
+#include <hoot/core/conflate/polygon/AttributeBuildingMerger.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;
@@ -48,9 +49,8 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   set<pair<ElementId, ElementId>> eids;
 
   // Go through all the matches.
-  for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  for (const auto& m : matches)
   {
-    ConstMatchPtr m = *it;
     LOG_VART(m->toString());
     const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m.get());
     // Check to make sure all the input matches are building matches.
@@ -73,8 +73,14 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   // Only add the building merge if there are elements to merge.
   if (!eids.empty())
   {
-    mergers.push_back(std::make_shared<BuildingMerger>(eids));
     result = true;
+    const QString merger_name = ConfigOptions().getBuildingDefaultMerger();
+    if (merger_name == BuildingMerger::className())
+      mergers.push_back(std::make_shared<BuildingMerger>(eids));
+    else if (merger_name == AttributeBuildingMerger::className())
+      mergers.push_back(std::make_shared<AttributeBuildingMerger>(eids));
+    else
+      return false;
   }
 
   return result;
@@ -83,28 +89,21 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
 vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.emplace_back(
-    className(),
-    "Generates mergers that merge buildings together",
-    false);
+  result.emplace_back(className(), "Generates mergers that merge buildings together", false);
   return result;
 }
 
 bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
+                                          ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm1 = dynamic_cast<const BuildingMatch*>(m1.get());
   const BuildingMatch* bm2 = dynamic_cast<const BuildingMatch*>(m2.get());
   // This shouldn't ever return true, but I'm calling the BuildingMatch::isConflicting just in
   // case the logic changes at some point.
   if (bm1 && bm2)
-  {
     return m1->isConflicting(m2, map);
-  }
   else
-  {
     return false;
-  }
 }
 
 }

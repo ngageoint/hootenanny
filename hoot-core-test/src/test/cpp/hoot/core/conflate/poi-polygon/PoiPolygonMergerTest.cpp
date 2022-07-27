@@ -63,10 +63,9 @@ class PoiPolygonMergerTest : public HootTestFixture
 
 public:
 
-  PoiPolygonMergerTest() :
-  HootTestFixture(
-    "test-files/conflate/poi-polygon/PoiPolygonMergerTest/",
-    "test-output/conflate/poi-polygon/PoiPolygonMergerTest/")
+  PoiPolygonMergerTest()
+    : HootTestFixture("test-files/conflate/poi-polygon/PoiPolygonMergerTest/",
+                      "test-output/conflate/poi-polygon/PoiPolygonMergerTest/")
   {
   }
 
@@ -79,7 +78,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("area", true);
+    w1->getTags().set(MetadataTags::Area(), true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
     NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 10, 10, 5);
@@ -193,7 +192,8 @@ public:
     PoiPolygonMerger uut(s);
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[7]{(Way(-14), Relation(-1)), (Way(-13), Relation(-1)), (Way(-12), Relation(-1)), (Way(-11), Relation(-1)), (Way(-4), Relation(-1)), (Node(-38), Relation(-1)), (Node(-83), Relation(-1))}",
+    HOOT_STR_EQUALS("[7]{(Way(-14), Relation(-1)), (Way(-13), Relation(-1)), (Way(-12), Relation(-1)), (Way(-11), Relation(-1)), (Way(-4), "
+                    "Relation(-1)), (Node(-38), Relation(-1)), (Node(-83), Relation(-1))}",
                     replaced);
 
     const QString testFileName = "toyScenario3Test.json";
@@ -290,7 +290,7 @@ private:
   {
   public:
 
-    AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) {}
+    AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) { }
 
     set<pair<ElementId, ElementId>> getPairs() const
     {
@@ -306,27 +306,20 @@ private:
       return result;
     }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementId eid = e->getElementId();
-
       ElementPtr ee = _map->getElement(eid);
 
       if (ee->getTags().get("note") == _scenario)
       {
         if (ee->getStatus() == Status::Unknown1)
-        {
           _e1.push_back(eid);
-        }
         else if (ee->getStatus() == Status::Unknown2)
-        {
           _e2.push_back(eid);
-        }
       }
       else
-      {
         RecursiveElementRemover(eid).apply(_map);
-      }
     }
 
     QString getDescription() const override {return ""; }

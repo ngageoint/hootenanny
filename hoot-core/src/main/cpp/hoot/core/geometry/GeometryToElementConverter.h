@@ -70,8 +70,8 @@ public:
     NodeFactory() = default;
     virtual ~NodeFactory() = default;
 
-    virtual NodePtr createNode(
-      const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s, double circularError) = 0;
+    virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
+                               Status s, double circularError) = 0;
   };
 
   /**
@@ -85,8 +85,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertGeometryCollection(
-    const geos::geom::GeometryCollection* gc, Status s, double circularError);
+  std::shared_ptr<Element> convertGeometryCollection(const geos::geom::GeometryCollection* gc,
+                                                     Status s, double circularError);
 
   /**
    * Calls the appropriate convert* method based on the geometry passed in and adds the resulting
@@ -103,8 +103,8 @@ public:
    * @param circularError The circular error to assign to the newly created elements.
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertGeometryToElement(
-    const geos::geom::Geometry* g, Status s, double circularError);
+  std::shared_ptr<Element> convertGeometryToElement(const geos::geom::Geometry* g,
+                                                    Status s, double circularError);
 
   /**
    * Converts a GEOS line string to an OSM way
@@ -115,8 +115,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM way
    */
-  WayPtr convertLineStringToWay(
-    const geos::geom::LineString* ls, const OsmMapPtr& map, Status s, double circularError) const;
+  WayPtr convertLineStringToWay(const geos::geom::LineString* ls, const OsmMapPtr& map,
+                                Status s, double circularError) const;
 
   /**
    * If the MultiLineString contains multiple lines a multilinestring relation is returned. If the
@@ -128,9 +128,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertMultiLineStringToElement(
-    const geos::geom::MultiLineString* mls, const OsmMapPtr& map, Status s,
-    double circularError) const;
+  std::shared_ptr<Element> convertMultiLineStringToElement(const geos::geom::MultiLineString* mls, const OsmMapPtr& map,
+                                                           Status s, double circularError) const;
 
   /**
    * Converts a GEOS multi-polygon to an OSM relation
@@ -141,8 +140,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM relation
    */
-  RelationPtr convertMultiPolygonToRelation(
-    const geos::geom::MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError) const;
+  RelationPtr convertMultiPolygonToRelation(const geos::geom::MultiPolygon* mp, const OsmMapPtr& map,
+                                            Status s, double circularError) const;
 
   /**
    * Converts the provided polygon into an element. If the polygon contains holes then a multi
@@ -154,8 +153,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertPolygonToElement(
-    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError) const;
+  std::shared_ptr<Element> convertPolygonToElement(const geos::geom::Polygon* polygon, const OsmMapPtr& map,
+                                                   Status s, double circularError) const;
 
   /**
    * Converts a GEOS polygon to an OSM relation
@@ -166,8 +165,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM relation
    */
-  RelationPtr convertPolygonToRelation(
-    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError) const;
+  RelationPtr convertPolygonToRelation(const geos::geom::Polygon* polygon, const OsmMapPtr& map,
+                                       Status s, double circularError) const;
 
   /**
    * Converts a GEOS polygon to an OSM relation
@@ -178,9 +177,8 @@ public:
    * @param s status of the returned element
    * @param circularError circular error of the returned element
    */
-  void convertPolygonToRelation(
-    const geos::geom::Polygon* polygon, const OsmMapPtr& map, const RelationPtr& r, Status s,
-    double circularError) const;
+  void convertPolygonToRelation(const geos::geom::Polygon* polygon, const OsmMapPtr& map, const RelationPtr& r,
+                                Status s, double circularError) const;
 
   /**
    * Converts a GEOS point to an OSM node
@@ -191,8 +189,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM node
    */
-  NodePtr convertPointToNode(
-    const geos::geom::Point* point, const OsmMapPtr& map, Status s, double circularError) const;
+  NodePtr convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map,
+                             Status s, double circularError) const;
 
   void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
@@ -200,8 +198,8 @@ private:
 
   static int logWarnCount;
 
-  NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
-    double circularError) const;
+  NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
+                      Status s, double circularError) const;
 
   std::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;

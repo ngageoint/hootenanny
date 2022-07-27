@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/schema/TagMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -59,22 +59,18 @@ std::shared_ptr<TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
 {
   LOG_VART(name);
   std::shared_ptr<TagMerger> result;
-  QHash<QString, std::shared_ptr<TagMerger>>::const_iterator it = _mergers.find(name);
+  auto it = _mergers.find(name);
   if (it == _mergers.end())
   {
     result = Factory::getInstance().constructObject<TagMerger>(name);
     std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(result);
     LOG_VART(configurable.get());
     if (configurable)
-    {
       configurable->setConfiguration(conf());
-    }
     _mergers.insert(name, result);
   }
   else
-  {
     result = it.value();
-  }
   return result;
 }
 
@@ -91,9 +87,7 @@ void TagMergerFactory::reset()
 
 QString TagMergerFactory::toString() const
 {
-  return QString("{ Default: %1\n  Mergers: %2 }")
-      .arg(_default ? _default->getName() : "null")
-      .arg(_mergers.keys().join(",\n"));
+  return QString("{ Default: %1\n  Mergers: %2 }").arg(_default ? _default->getName() : "null", _mergers.keys().join(",\n"));
 }
 
 }

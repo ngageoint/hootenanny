@@ -55,7 +55,7 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
-    way1->getTags().set("area", "yes");
+    way1->getTags().set(MetadataTags::Area(), "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
