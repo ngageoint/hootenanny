@@ -216,10 +216,10 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score, doubl
   for (size_t i = 0; i < n1.size(); i++)
   {
     scores[i].resize(n2.size());
-    e.i = i;
+    e.i = static_cast<int>(i);
     for (size_t j = 0; j < n2.size(); j++)
     {
-      e.j = j;
+      e.j = static_cast<int>(j);
       e.score = schema.score(n1[i], n2[j]);
       LOG_TRACE("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
       heap.push(e);
@@ -242,7 +242,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score, doubl
     }
   }
 
-  weight = used1.size();
+  weight = static_cast<double>(used1.size());
   LOG_TRACE("score: " << score);
 }
 
