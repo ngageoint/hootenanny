@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MERGER_FACTORY_H
 #define MERGER_FACTORY_H
@@ -79,9 +79,8 @@ public:
    * caching to be used in situations where duplicated match calculation is prohibitively expensive
    * @return true if the two matches are conflicting; false otherwise
    */
-  bool isConflicting(
-    const ConstOsmMapPtr& map,  const ConstMatchPtr& m1, const ConstMatchPtr& m2,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
+  bool isConflicting(const ConstOsmMapPtr& map,  const ConstMatchPtr& m1, const ConstMatchPtr& m2,
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.

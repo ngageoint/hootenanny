@@ -28,6 +28,8 @@
 #ifndef METADATA_TAGS_H
 #define METADATA_TAGS_H
 
+#include <QString>
+
 namespace hoot
 {
 
@@ -51,6 +53,7 @@ public:
   inline static QString HootTagPrefix()                 { return "hoot:"; }
   inline static QString HootNamespacePrefix()           { return "hoot::"; }
 
+  inline static QString Building()                      { return "building"; }
   inline static QString BuildingPart()                  { return "building:part"; }
   inline static QString BuildingHeight()                { return "height"; }
   inline static QString BuildingLevels()                { return "building:levels"; }
@@ -261,7 +264,11 @@ public:
   // temp tag used by BuildingMerger
   inline static QString HootMultiPolyRole()             { return "hoot:multi_poly:role"; }
 
+  inline static QString Area()                          { return "area"; }
+
+  inline static QString FeatureArea()                   { return "feature_area"; }
   inline static QString Length()                        { return "length"; }
+  inline static QString Width()                         { return "width"; }
 
   inline static QString Source()                        { return "source"; }
   inline static QString OsmApiDbScheme()                { return "osmapidb"; }

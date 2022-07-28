@@ -270,7 +270,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
       Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
       if (polygon->getNumInteriorRing() != 0)
         outline.reset(polygon->getExteriorRing()->clone().release());
-//        outline.reset(outline->getBoundary().release());
     }
 
     const std::shared_ptr<Element> pOutlineElement =
@@ -278,10 +277,10 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
     LOG_VART(pOutlineElement->getElementType());
     // Some element outlines come back from the GeometryToElementConverter as an area, remove the `area=yes` tag
-    if (pOutlineElement->getTags()["area"] == "yes")
-      pOutlineElement->getTags().remove("area");
+    if (pOutlineElement->getTags()[MetadataTags::Area()] == "yes")
+      pOutlineElement->getTags().remove(MetadataTags::Area());
     //  The OSM building relation spec indicates that the outline member must contain the `building=yes` tag
-    pOutlineElement->getTags()["building"] = "yes";
+    pOutlineElement->getTags()[MetadataTags::Building()] = "yes";
 
     LOG_VART(pOutlineElement);
     _mergeNodes(pOutlineElement, pBuilding);
@@ -292,10 +291,10 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
       Tags buildingTags = pBuilding->getTags();
       // To preserve naming of relation buildings in JOSM we copy the building's "building" and
       // "name" tags.
-      if (buildingTags.contains("name") && buildingTags.contains("building") )
+      if (buildingTags.contains("name") && buildingTags.contains(MetadataTags::Building()) )
       {
         pOutlineElement->setTag("name", buildingTags["name"]);
-        pOutlineElement->setTag("building", buildingTags["building"]);
+        pOutlineElement->setTag(MetadataTags::Building(), buildingTags[MetadataTags::Building()]);
       }
       LOG_TRACE("Adding building outline element " << pOutlineElement->getElementId());
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);

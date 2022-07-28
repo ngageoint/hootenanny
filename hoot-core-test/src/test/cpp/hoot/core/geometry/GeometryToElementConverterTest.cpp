@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -49,7 +49,7 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr w = std::make_shared<Way>(Status::Unknown1, -1, 0);
-    w->getTags()["building"] = "yes";
+    w->getTags()[MetadataTags::Building()] = "yes";
 
     ElementToGeometryConverter uut(map);
     std::shared_ptr<Geometry> g = uut.convertToGeometry(w);

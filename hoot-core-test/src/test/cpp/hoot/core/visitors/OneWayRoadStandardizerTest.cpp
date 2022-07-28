@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -121,7 +121,7 @@ public:
       WayPtr way = TestUtils::createWay(map, coords);
       // This way isn't a road, so nothing should happen to it.
       way->getTags()["oneway"] = "reverse";
-      way->getTags()["building"] = "yes";
+      way->getTags()[MetadataTags::Building()] = "yes";
 
       OneWayRoadStandardizer uut;
       uut.setOsmMap(map.get());
@@ -234,7 +234,7 @@ public:
       RelationPtr relation = TestUtils::createRelation(map, elements);
       // This relation isn't a road, so nothing should happen to it.
       relation->getTags()["oneway"] = "reverse";
-      relation->getTags()["building"] = "yes";
+      relation->getTags()[MetadataTags::Building()] = "yes";
 
       OneWayRoadStandardizer uut;
       uut.setOsmMap(map.get());

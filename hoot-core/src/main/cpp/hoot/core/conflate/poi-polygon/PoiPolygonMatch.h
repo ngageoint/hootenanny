@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/matching/MatchDetails.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonPhoneNumberScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
-#include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchDetails.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -63,10 +63,11 @@ public:
   static const QString MATCH_NAME;
 
   PoiPolygonMatch() = default;
-  PoiPolygonMatch(
-    const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-    PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
-    const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
+  PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
+                  PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
+                  const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
+  /** This constructor added primarily for testing purposes */
+  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   ~PoiPolygonMatch() override = default;
 
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
@@ -89,9 +90,8 @@ public:
   { return MatchMembers::Poi | MatchMembers::Polygon; }
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
   double getProbability() const override { return _class.getMatchP(); }
-  bool isConflicting(
-    const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/,
-    const QHash<QString, ConstMatchPtr>& /*matches*/) const override { return false; }
+  bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/,
+                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override { return false; }
   bool isWholeGroup() const override { return true; }
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
   QString explain() const override { return _explainText; }
@@ -219,9 +219,6 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
 
   int _timingThreshold;
-
-  // this constructor added primarily for testing purposes
-  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
 
   void _categorizeElementsByGeometryType();
 

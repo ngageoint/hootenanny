@@ -86,10 +86,6 @@ std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 const QString HootTestFixture::UNUSED_PATH = "";
 
-TestUtils::TestUtils()
-{
-}
-
 bool TestUtils::compareMaps(const QString& refPath, const QString& testPath)
 {
   OsmXmlReader reader;
@@ -419,8 +415,7 @@ void TestUtils::runConflateOpReductionTest(const QStringList& matchCreators, con
   // incorrectly, and we can update this list periodically if that's deemed important.
   conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
   conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-  conf().set(
-    ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
+  conf().set(ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
 
   SuperfluousConflateOpRemover::removeSuperfluousOps();
 

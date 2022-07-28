@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -44,8 +44,8 @@ class OgrWriterTest : public HootTestFixture
 
 public:
 
-  OgrWriterTest() :
-  HootTestFixture("test-files/io/", "test-output/io/")
+  OgrWriterTest()
+    : HootTestFixture("test-files/io/", "test-output/io/")
   {
   }
 
@@ -64,12 +64,12 @@ public:
     _map = map;
 
     NodePtr n1 = createNode(0.0, 0.0);
-    n1->setTag("building", "yes");
+    n1->setTag(MetadataTags::Building(), "yes");
     n1->setTag("name", "n1");
 
     WayPtr w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
-    w1->setTag("area", "yes");
-    w1->setTag("building", "yes");
+    w1->setTag(MetadataTags::Area(), "yes");
+    w1->setTag(MetadataTags::Building(), "yes");
     w1->setTag("name", "w1");
     w1->addNode(createNode(0.1, 0.0)->getId());
     w1->addNode(createNode(0.2, 0.0)->getId());
@@ -107,7 +107,7 @@ public:
 
     RelationPtr r1 =
       std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon());
-    r1->setTag("building", "yes");
+    r1->setTag(MetadataTags::Building(), "yes");
     r1->setTag("name", "r1");
     r1->addElement(MetadataTags::RoleOuter(), w4->getElementId());
     r1->addElement(MetadataTags::RoleInner(), w5->getElementId());
@@ -154,7 +154,7 @@ public:
 
     RelationPtr r2 =
       std::make_shared<Relation>(Status::Unknown1, 2, 15.0, MetadataTags::RelationMultiPolygon());
-    r2->setTag("building", "yes");
+    r2->setTag(MetadataTags::Building(), "yes");
     r2->setTag("name", "r2");
     r2->addElement(MetadataTags::RoleOuter(), ElementId(ElementType::Way, 1));
     r2->addElement(MetadataTags::RoleInner(), ElementId(ElementType::Way, 2));

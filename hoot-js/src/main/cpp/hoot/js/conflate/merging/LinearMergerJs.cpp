@@ -118,11 +118,9 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   // Modify the parameter that was passed in.
   Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
   Local<Array> arr = Local<Array>::Cast(args[3]);
-  Maybe<bool> success = arr->Set(context, toV8("length"), Integer::New(current, newArr->Length()));
+  Maybe<bool> success = arr->Set(context, toV8(MetadataTags::Length()), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
-  {
     success = arr->Set(context, i, newArr->Get(context, i).ToLocalChecked());
-  }
 
   args.GetReturnValue().SetUndefined();
 }

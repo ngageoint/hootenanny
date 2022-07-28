@@ -63,14 +63,9 @@ std::shared_ptr<Element> GeometryToElementConverter::convertGeometryCollection(c
   {
     LOG_DEBUG("Creating relation. convertGeometryCollection");
     RelationPtr r = std::make_shared<Relation>(s, _map->createNextRelationId(), circularError);
-    int count = gc->getNumGeometries();
 
-    for (int i = 0; i < count; i++)
-    {
-      const Geometry* g = gc->getGeometryN(i);
-      r->addElement("", convertGeometryToElement(g, s, circularError));
-    }
-
+    for (size_t i = 0; i < gc->getNumGeometries(); i++)
+      r->addElement("", convertGeometryToElement(gc->getGeometryN(i), s, circularError));
     return r;
   }
   else if (gc->getNumGeometries() == 1)
@@ -126,14 +121,9 @@ WayPtr GeometryToElementConverter::convertLineStringToWay(const LineString* ls, 
   WayPtr way;
   if (ls->getNumPoints() > 0)
   {
-    Coordinate c = ls->getCoordinateN(0);
     way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
-
     for (size_t i = 0; i < ls->getNumPoints(); i++)
-    {
-      c = ls->getCoordinateN(i);
-      way->addNode(_createNode(map, c, s, circularError)->getId());
-    }
+      way->addNode(_createNode(map, ls->getCoordinateN(i), s, circularError)->getId());
     map->addWay(way);
   }
 
@@ -149,10 +139,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToEle
   {
     RelationPtr r = std::make_shared<Relation>(s, map->createNextRelationId(), circularError, MetadataTags::RelationMultilineString());
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
-    {
-      WayPtr w = convertLineStringToWay(mls->getGeometryN(i), map, s, circularError);
-      r->addElement("", w);
-    }
+      r->addElement("", convertLineStringToWay(mls->getGeometryN(i), map, s, circularError));
     map->addRelation(r);
     return r;
   }
@@ -168,7 +155,6 @@ RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(const Mult
   RelationPtr r = std::make_shared<Relation>(s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
     convertPolygonToRelation(mp->getGeometryN(i), map, r, s, circularError);
-
   map->addRelation(r);
   return r;
 }
@@ -183,7 +169,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(con
   else if (polygon->getNumInteriorRing() == 0)
   {
     WayPtr result = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
-    result->getTags()["area"] = "yes";
+    result->getTags()[MetadataTags::Area()] = "yes";
     return result;
   }
   else
@@ -207,10 +193,7 @@ void GeometryToElementConverter::convertPolygonToRelation(const Polygon* polygon
   {
     r->addElement(MetadataTags::RoleOuter(), outer);
     for (size_t i = 0; i < polygon->getNumInteriorRing(); i++)
-    {
-      WayPtr inner = convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError);
-      r->addElement(MetadataTags::RoleInner(), inner);
-    }
+      r->addElement(MetadataTags::RoleInner(), convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError));
   }
 }
 

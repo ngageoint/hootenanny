@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Element.h"
@@ -33,15 +33,15 @@
 namespace hoot
 {
 
-Element::Element() :
-  _status(Status::Invalid),
-  _listener(nullptr)
+Element::Element()
+  : _status(Status::Invalid),
+    _listener(nullptr)
 {
 }
 
-Element::Element(Status s) :
-  _status(s),
-  _listener(nullptr)
+Element::Element(Status s)
+  : _status(s),
+    _listener(nullptr)
 {
 }
 
@@ -53,17 +53,13 @@ QString Element::getStatusString() const
 void Element::_postGeometryChange()
 {
   if (_listener != nullptr)
-  {
     _listener->postGeometryChange(this);
-  }
 }
 
 void Element::_preGeometryChange()
 {
   if (_listener != nullptr)
-  {
     _listener->preGeometryChange(this);
-  }
 }
 
 bool Element::hasSameNonMetadataTags(const Element& other) const

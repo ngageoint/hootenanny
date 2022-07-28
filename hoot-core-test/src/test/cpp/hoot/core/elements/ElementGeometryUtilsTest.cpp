@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/elements/MapUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
 {
@@ -67,7 +67,7 @@ public:
 
     //  The length of an area should be 0 (error)
     way->addNode(way->getNodeId(0));
-    way->setTag("building", "yes");
+    way->setTag(MetadataTags::Building(), "yes");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, ElementGeometryUtils::calculateLength(way, map), 1e-3);
   }
 
@@ -167,4 +167,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementGeometryUtilsTest, "quick");
 
 }
-
