@@ -165,7 +165,7 @@ public class GrailResource {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
         if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
-            throw new ServiceUnavailableException(Response.status(Response.Status.SERVICE_UNAVAILABLE).type(MediaType.TEXT_PLAIN).entity("The reference OSM API server is offline.").build());
+            throw new ServiceUnavailableException(Response.status(Response.Status.SERVICE_UNAVAILABLE).type(MediaType.TEXT_PLAIN).entity("The reference OSM API server is offline or unreachable.").build());
         }
 
         return railsPortCapabilities;
@@ -598,10 +598,6 @@ public class GrailResource {
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
 
-//        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-//        params.setConsumerKey(oauthInfo.getConsumerKey());
-//        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
-
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
         JSONObject json = new JSONObject();
@@ -616,11 +612,7 @@ public class GrailResource {
         }
 
         try {
-            APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-            logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-            if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline.").build();
-            }
+            railsOnlineCheck();
 
             File changesetFile = new File(workDir, "diff.osc");
             List<Command> workflow = new LinkedList<>();
@@ -1048,7 +1040,7 @@ public class GrailResource {
 
     //Used for self-signed SSL certs
     //still requires import of cert into server java keystore
-    //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+    //e.g. sudo keytool -import -alias <CertAlias> -keystore $JAVA_HOME/jre/lib/security/cacerts -file /tmp/CertFile.der
     public static InputStream getUrlInputStreamWithNullHostnameVerifier(String urlString) throws IOException {
         InputStream inputStream = null;
         String[] splitUrl = urlString.split("(?=data)"); // prevents removal of 'data' text
@@ -1076,7 +1068,14 @@ public class GrailResource {
             inputStream = conn.getInputStream();
         } catch(IOException e) {
             //read the error response body
-            String err = IOUtils.toString(conn.getErrorStream(), StandardCharsets.UTF_8);
+            InputStream errIs = conn.getErrorStream();
+
+            String err;
+            if (errIs != null) {
+                err = IOUtils.toString(errIs, StandardCharsets.UTF_8);
+            } else {
+                err = "Remote server was unreachable, check the Hoot config";
+            }
             logger.error(err);
             throw new IOException(err);
         }
@@ -1142,8 +1141,8 @@ public class GrailResource {
             }
         }
         catch (Exception e) {
-            // throw new WebApplicationException(ioe, Response.status(Response.Status.BAD_REQUEST).entity(ioe.getMessage()).build());
-            e.printStackTrace();
+            //The api capabilities request timed out or returned an error or malformed response, logged elsewhere;
+            //return an empty params object which should report to the UI that api is offline
         }
 
         return params;
