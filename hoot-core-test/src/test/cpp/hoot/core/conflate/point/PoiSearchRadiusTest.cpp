@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -47,8 +47,8 @@ class PoiSearchRadiusTest : public HootTestFixture
 
 public:
 
-  PoiSearchRadiusTest() :
-  HootTestFixture("test-files/conflate/point/PoiSearchRadiusTest/", UNUSED_PATH)
+  PoiSearchRadiusTest()
+    : HootTestFixture("test-files/conflate/point/PoiSearchRadiusTest/", UNUSED_PATH)
   {
   }
 
@@ -59,8 +59,7 @@ public:
 
   void runJsonTest()
   {
-    _validateRadii(
-      PoiSearchRadius::readSearchRadii(FileUtils::readFully(_inputPath + "input.json")));
+    _validateRadii(PoiSearchRadius::readSearchRadii(FileUtils::readFully(_inputPath + "input.json")));
   }
 
   void runToStringTest()
@@ -148,12 +147,12 @@ private:
     CPPUNIT_ASSERT_EQUAL(1000, radius2.getDistance());
 
     PoiSearchRadius radius3 = radii.at(2);
-    HOOT_STR_EQUALS("building", radius3.getKey().toStdString());
+    HOOT_STR_EQUALS(MetadataTags::Building(), radius3.getKey().toStdString());
     HOOT_STR_EQUALS("", radius3.getValue().toStdString());
     CPPUNIT_ASSERT_EQUAL(200, radius3.getDistance());
 
     PoiSearchRadius radius4 = radii.at(3);
-    HOOT_STR_EQUALS("building", radius4.getKey().toStdString());
+    HOOT_STR_EQUALS(MetadataTags::Building(), radius4.getKey().toStdString());
     HOOT_STR_EQUALS("hospital", radius4.getValue().toStdString());
     CPPUNIT_ASSERT_EQUAL(500, radius4.getDistance());
   }

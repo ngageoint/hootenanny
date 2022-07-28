@@ -216,10 +216,10 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score, doubl
   for (size_t i = 0; i < n1.size(); i++)
   {
     scores[i].resize(n2.size());
-    e.i = i;
+    e.i = static_cast<int>(i);
     for (size_t j = 0; j < n2.size(); j++)
     {
-      e.j = j;
+      e.j = static_cast<int>(j);
       e.score = schema.score(n1[i], n2[j]);
       LOG_TRACE("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
       heap.push(e);
@@ -242,7 +242,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score, doubl
     }
   }
 
-  weight = used1.size();
+  weight = static_cast<double>(used1.size());
   LOG_TRACE("score: " << score);
 }
 
@@ -367,17 +367,16 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict) c
 
 bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool caseSensitive) const
 {
-  const Qt::CaseSensitivity caseSensitivity =
-    caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
   Tags t1Filtered;
   for (auto it1 = t1.begin(); it1 != t1.end(); ++it1)
   {
     QString key = it1.key();
     QString value = it1.value();
+    //  Metadata keys are controlled by hoot and, therefore, should always be lower case, so no
+    //  case check needed.
     if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
-        //Metadata keys are controlled by hoot and, therefore, should always be lower case, so no
-        //case check needed.
         !OsmSchema::getInstance().isMetaData(key, value))
     {
       if (!caseSensitive)
@@ -465,14 +464,10 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
         QSet<QString> values2 = QSet<QString>::fromList(t2.getList(it2.key()));
         values1.intersect(values2);
         if (values1.size() == values2.size())
-        {
           keepIt = true;
-        }
       }
       else if (it2.value() == it1.value())
-      {
         keepIt = true;
-      }
 
       if (keepIt)
       {
@@ -495,8 +490,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result, const QStringLi
 
   set<QString> altNames, nonAltNames;
   set<QString> toRemove;
-  const Qt::CaseSensitivity caseSensitivity =
-    caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   LOG_VART(caseSensitive);
 
   toRemove.insert("alt_name");
@@ -602,8 +596,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result, const QStringLis
 
       // append all unique values in the existing order; don't overwrite tags in t2 that are in the
       // exclude list
-      const Qt::CaseSensitivity caseSensitivity =
-        caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+      const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
       for (const auto& value : qAsConst(values1))
       {
         //LOG_VART(values1[i]);
@@ -670,8 +663,7 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
     // if this is an unknown type
     if (schema.getTagVertex(it2.key() + "=" + it2.value()).isEmpty())
     {
-      // we know it isn't in t1, or it would have been handled in the above loop so just deal with
-      // t2
+      // we know it isn't in t1, or it would have been handled in the above loop so just deal with t2
       t2.remove(it2.key());
       result[it2.key()] = it2.value();
     }
@@ -690,8 +682,7 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwrit
   mergeText(t1, t2, result, overwriteExcludeTagKeys, caseSensitive);
 
   // use the tags in t1 first, then fall back to tags in t2
-  _overwriteRemainingTags(
-    t1, t2, result, overwriteExcludeTagKeys, accumulateValuesTagKeys, caseSensitive);
+  _overwriteRemainingTags(t1, t2, result, overwriteExcludeTagKeys, accumulateValuesTagKeys, caseSensitive);
 
   return result;
 }
@@ -706,8 +697,7 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2, const QStringLi
   // Now see if there are any configured exclusions we should keep from t2.
   if (!overwriteExcludeTagKeys.empty())
   {
-    const Qt::CaseSensitivity caseSensitivity =
-      caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
     for (auto it = t2.constBegin(); it != t2.constEnd(); ++it)
     {
       if (!it.value().isEmpty() &&
@@ -742,8 +732,7 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result, co
   //LOG_VART(result);
 
   // Add t1 tags overwriting any t2 tags in the process.
-  const Qt::CaseSensitivity caseSensitivity =
-    caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const Qt::CaseSensitivity caseSensitivity = caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   for (auto it1 = t1.constBegin(); it1 != t1.constEnd(); ++it1)
   {
     LOG_VART(it1.key());

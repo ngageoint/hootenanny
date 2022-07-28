@@ -359,14 +359,14 @@ QStringList Tags::getList(const QString& k) const
   return result;
 }
 
-QStringList Tags::getMatchingKeys(const QStringList& k)
+QStringList Tags::getMatchingKeys(const QStringList& keys)
 {
   QStringList result;
-  for (int i = 0; i < k.size(); i++)
+  for (const auto& key : qAsConst(keys))
   {
-    if (k[i].startsWith("regex?"))
+    if (key.startsWith("regex?"))
     {
-      QString regexStr = k[i].mid(6);
+      QString regexStr = key.mid(6);
       QRegExp regex(regexStr);
 
       for (auto it = constBegin(); it != constEnd(); ++it)
@@ -375,8 +375,8 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
           result.append(it.key());
       }
     }
-    else if (contains(k[i]))
-      result.append(k[i]);
+    else if (contains(key))
+      result.append(key);
   }
 
   return result;
@@ -412,7 +412,7 @@ QStringList Tags::getNames(const bool includeAltName) const
   // make sure the _nameKeys field is populated.
   getNameKeys();
 
-  for (auto key : _nameKeys)
+  for (auto key : qAsConst(_nameKeys))
   {
     if (includeAltName || (!includeAltName && key.toLower() != "alt_name"))
       readValues(key, result);
@@ -450,7 +450,6 @@ const QStringList& Tags::getNameKeys()
     for (const auto& vertex : tags)
       _nameKeys.append(vertex.getKey());
   }
-
   return _nameKeys;
 }
 
@@ -458,7 +457,7 @@ QStringList Tags::getNameKeys(const Tags& tags)
 {
   QStringList nameKeysInTags;
   const QStringList globalNameKeys = getNameKeys();
-  for (const auto& nameKey : globalNameKeys)
+  for (const auto& nameKey : qAsConst(globalNameKeys))
   {
     if (tags.contains(nameKey))
       nameKeysInTags.append(nameKey);
@@ -483,16 +482,13 @@ const QStringList& Tags::getPseudoNameKeys() const
   // getting the name tags can be a bit expensive so we'll just do it once.
   if (_pseudoNameKeys.empty())
   {
-    const vector<SchemaVertex>& tags =
-        OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());
-
+    const vector<SchemaVertex>& tags = OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());
     for (const auto& vertex : tags)
     {
       LOG_TRACE("key : " << (vertex.getKey().toStdString()));
       _pseudoNameKeys.append(vertex.getKey());
     }
   }
-
   return _pseudoNameKeys;
 }
 
@@ -687,10 +683,7 @@ void Tags::set(const QString& key, const QString& value)
 
 void Tags::set(const QString& key, bool v)
 {
-  if (v)
-    set(key, "yes");
-  else
-    set(key, "no");
+  set(key, v ? "yes" : "no");
 }
 
 void Tags::set(const Tags& other)
@@ -744,10 +737,10 @@ QStringList Tags::split(const QString& values)
 
 QString Tags::toString() const
 {
-  QString result;
+  QStringList result;
   for (auto it = constBegin(); it != constEnd(); ++it)
-    result += it.key() + " = " + it.value() + "\n";
-  return result;
+    result.append(QString("%1 = %2\n").arg(it.key(), it.value()));
+  return result.join("");
 }
 
 void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) const

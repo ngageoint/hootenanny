@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LinearTagOnlyMerger.h"
 
@@ -44,29 +44,28 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, LinearTagOnlyMerger)
 
-LinearTagOnlyMerger::LinearTagOnlyMerger() :
-LinearSnapMerger(),
-_performBridgeGeometryMerging(
-  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
-_tagMerger(TagMergerFactory::getInstance().getDefaultPtr())
+LinearTagOnlyMerger::LinearTagOnlyMerger()
+  : LinearSnapMerger(),
+    _performBridgeGeometryMerging(ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+    _tagMerger(TagMergerFactory::getInstance().getDefaultPtr())
 {
-  _removeTagsFromWayMembers = false;
+  //  Update the default setting of remove tags from way members in LinearSnapMerger
+  LinearSnapMerger::_removeTagsFromWayMembers = false;
 }
 
 LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                                         std::shared_ptr<PartialNetworkMerger> networkMerger) :
-LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
-_performBridgeGeometryMerging(
-  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
-_networkMerger(networkMerger),
-_tagMerger(TagMergerFactory::getInstance().getDefaultPtr())
+                                         std::shared_ptr<PartialNetworkMerger> networkMerger)
+  : LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
+    _performBridgeGeometryMerging(ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+    _networkMerger(networkMerger),
+    _tagMerger(TagMergerFactory::getInstance().getDefaultPtr())
 {
-  _removeTagsFromWayMembers = false;
+  //  Update the default setting of remove tags from way members in LinearSnapMerger
+  LinearSnapMerger::_removeTagsFromWayMembers = false;
 }
 
-bool LinearTagOnlyMerger::_mergePair(
-  const ElementId& eid1, const ElementId& eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+bool LinearTagOnlyMerger::_mergePair(const ElementId& eid1, const ElementId& eid2,
+                                     std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   ElementPtr e1 = _map->getElement(eid1);
   ElementPtr e2 = _map->getElement(eid2);
@@ -89,8 +88,7 @@ bool LinearTagOnlyMerger::_mergePair(
     std::vector<ConstElementPtr> elements;
     elements.push_back(e1);
     elements.push_back(e2);
-    const bool onlyOneIsABridge =
-      CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+    const bool onlyOneIsABridge = CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
     if (onlyOneIsABridge)
     {
       LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
@@ -123,19 +121,16 @@ bool LinearTagOnlyMerger::_mergePair(
   ElementPtr elementWithTagsToKeep;
   ElementPtr elementWithTagsToRemove;
   bool removeSecondaryElement;
-  _determineKeeperFeature(
-    e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
+  _determineKeeperFeature(e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
   LOG_VART(elementWithTagsToKeep->getElementId());
   LOG_VART(elementWithTagsToRemove->getElementId());
 
-  return
-    _mergeWays(
-      elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, replaced);
+  return _mergeWays(elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, replaced);
 }
 
-void LinearTagOnlyMerger::_determineKeeperFeature(
-  ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
-  bool& removeSecondaryElement) const
+void LinearTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
+                                                  ElementPtr& keeper, ElementPtr& toRemove,
+                                                  bool& removeSecondaryElement) const
 {
   removeSecondaryElement = true;
   if (element1->getStatus() == Status::Conflated && element2->getStatus() == Status::Conflated)
@@ -156,38 +151,28 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
   }
 }
 
-bool LinearTagOnlyMerger::_mergeWays(
-  ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced) const
+bool LinearTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+                                     const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced) const
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
-  {
     return false;
-  }
 
   // Reverse the way if way to remove is one way and the two ways aren't in similar directions
   _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove);
 
   // merge the tags
-  Tags mergedTags =
-    _tagMerger->mergeTags(
-      elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
+  Tags mergedTags = _tagMerger->mergeTags(elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
   // sanity check to prevent the multilinestring tag, later used to remove multilinestring
   // relations added during conflation, from being added to anything other than relations
   if (elementWithTagsToKeep->getElementType() != ElementType::Relation)
-  {
     mergedTags.remove(MetadataTags::HootMultilineString());
-  }
+
   elementWithTagsToKeep->setTags(mergedTags);
   elementWithTagsToKeep->setStatus(Status::Conflated);
   ConfigOptions conf;
   if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
-  {
     elementWithTagsToKeep->setTag(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
-  }
-  LOG_TRACE(
-    "LinearTagOnlyMerger: keeper element\n" <<
-    OsmUtils::getElementDetailString(elementWithTagsToKeep, _map));
+  LOG_TRACE("LinearTagOnlyMerger: keeper element\n" << OsmUtils::getElementDetailString(elementWithTagsToKeep, _map));
 
   _map->getIdSwap()->add(
     elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
@@ -195,15 +180,13 @@ bool LinearTagOnlyMerger::_mergeWays(
   if (removeSecondaryElement)
   {
     LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
-    replaced.emplace_back(
-      elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
+    replaced.emplace_back(elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   }
 
   return true;
 }
 
-bool LinearTagOnlyMerger::_conflictExists(
-  ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
+bool LinearTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
 {
   if (TagUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
@@ -228,8 +211,7 @@ bool LinearTagOnlyMerger::_conflictExists(
   return false;
 }
 
-void LinearTagOnlyMerger::_handleOneWayStreetReversal(
-  ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
+void LinearTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
 {
   OneWayCriterion isAOneWayStreet;
   if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
@@ -240,8 +222,7 @@ void LinearTagOnlyMerger::_handleOneWayStreetReversal(
       std::dynamic_pointer_cast<const Way>(elementWithTagsToRemove);
     if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
         // note the use of an alternative isSimilarDirection method
-        !DirectionFinder::isSimilarDirection2(
-           _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
+        !DirectionFinder::isSimilarDirection2(_map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
     {
       LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId() << "...");
       wayWithTagsToKeep->reverseOrder();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -55,7 +55,7 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
-    way1->getTags().set("area", "yes");
+    way1->getTags().set(MetadataTags::Area(), "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());

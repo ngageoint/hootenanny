@@ -538,8 +538,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
   QStringList threeDBuildingKeys;
   threeDBuildingKeys.append(MetadataTags::BuildingLevels());
   threeDBuildingKeys.append(MetadataTags::BuildingHeight());
-  const bool allAreBuildingParts =
-    TagUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
+  const bool allAreBuildingParts = TagUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
   LOG_VART(allAreBuildingParts);
   // Here, we're skipping a building relation and doing a multipoly if only some of the buildings
   // have height tags. This behavior is debatable...
@@ -611,8 +610,8 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
         parentRelation->getTags(), constituentBuilding->getTags(), ElementType::Relation);
     parentRelation->setTags(relationTags);
   }
-  if (!parentRelation->getTags().contains("building"))
-    parentRelation->getTags()["building"] = "yes";
+  if (!parentRelation->getTags().contains(MetadataTags::Building()))
+    parentRelation->getTags()[MetadataTags::Building()] = "yes";
 
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
@@ -634,7 +633,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
     {
       // leave building=* on the relation member; remove status here since it will be on the parent
       // relation as conflated
-      const bool isBuildingTag = it.key() == "building";
+      const bool isBuildingTag = it.key() == MetadataTags::Building();
       if ((!isBuildingTag || (isBuildingTag && suppressBuildingTagOnConstituents)) &&
           (constituentBuilding->getTags().contains(it.key()) ||
            it.key() == MetadataTags::HootStatus()))
@@ -650,7 +649,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
   {
     for (const auto& constituentBuilding : constituentBuildings)
     {
-      constituentBuilding->getTags().remove("building");
+      constituentBuilding->getTags().remove(MetadataTags::Building());
       constituentBuilding->getTags()[MetadataTags::BuildingPart()] = "yes";
     }
   }
@@ -720,8 +719,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
   // arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI
   // workflow lets the user select which building to keep and using complexity wouldn't make sense.
   LOG_VART(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
-  conf().set(
-    ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+  conf().set(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
   LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
   // See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to

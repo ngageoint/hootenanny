@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AreaCriterion.h"
 
@@ -51,12 +51,10 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
 
   // don't process if a node
   if (elementType == ElementType::Node)
-  {
     return false;
-  }
 
   // Putting this check here to shortcircut the criterion. If the tag is explicitly set to flase other tests don't matter.
-  if (tags.isFalse("area"))
+  if (tags.isFalse(MetadataTags::Area()))
   {
     LOG_TRACE("Found an area tag with a false value. crit failed.");
     result = false;
@@ -66,15 +64,15 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
 
   LOG_VART(BuildingCriterion(_map).isSatisfied(tags, elementType));
   LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
-  LOG_VART(tags.isTrue("area"));
+  LOG_VART(tags.isTrue(MetadataTags::Area()));
 
   result |= BuildingCriterion(_map).isSatisfied(tags, elementType);
   result |= tags.isTrue(MetadataTags::BuildingPart());
-  result |= tags.isTrue("area");
+  result |= tags.isTrue(MetadataTags::Area());
 
   // If at least one of the tags is marked as an area, but not a linestring tag then we consider
   // this to be an area feature.
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString kvp = OsmSchema::toKvp(it.key(), it.value());
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
@@ -92,9 +90,8 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
       QString msg =
         "Found area geometry (non-linestring or closed way) from kvp: " + kvp + "; crit satisfied.";
       if (!_currentElementId.isNull())
-      {
         msg += "; ID: " + _currentElementId.toString();
-      }
+
       LOG_TRACE(msg);
       result = true;
       break;

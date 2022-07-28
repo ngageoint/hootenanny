@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -61,7 +61,7 @@ public:
 
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("building", "yes"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags(MetadataTags::Building(), "yes"))));
 
     // Untyped feature are now conflatable by default, if NonConflatableCriterion is set to consider
     // the generic geometry conflate scripts.

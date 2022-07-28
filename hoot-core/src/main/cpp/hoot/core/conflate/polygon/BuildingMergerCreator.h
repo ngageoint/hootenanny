@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMERGECREATOR_H
 #define BUILDINGMERGECREATOR_H
@@ -43,15 +43,14 @@ public:
   ~BuildingMergerCreator() override = default;
 
   /**
-   * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.
+   * If all the matches are BuildingMatches, a single BuildingMerger will be created and returned.
    */
   bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   std::vector<CreatorDescription> getAllCreators() const override;
 
-  bool isConflicting(
-    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 };
 
 }

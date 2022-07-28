@@ -355,7 +355,7 @@ inline v8::Local<v8::Value> toV8(const QVariant& v)
   {
     v8::Local<v8::Object> result = v8::Object::New(current);
     QVariantHash m = v.toHash();
-    for (auto i = m.begin(); i != m.end(); i++)
+    for (auto i = m.cbegin(); i != m.cend(); i++)
       result->Set(context, toV8(i.key()),toV8(i.value()));
     return scope.Escape(result);
   }
@@ -363,7 +363,7 @@ inline v8::Local<v8::Value> toV8(const QVariant& v)
   {
     v8::Local<v8::Object> result = v8::Object::New(current);
     QVariantMap m = v.toMap();
-    for (auto i = m.begin(); i != m.end(); i++)
+    for (auto i = m.cbegin(); i != m.cend(); i++)
       result->Set(context, toV8(i.key()),toV8(i.value()));
     return scope.Escape(result);
   }

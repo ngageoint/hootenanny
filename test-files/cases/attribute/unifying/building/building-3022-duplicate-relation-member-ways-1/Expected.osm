@@ -9,7 +9,7 @@
         <tag k="hoot:id" v="-17"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0794402179899976" lon="-69.3109832734599962">
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0794402179899993" lon="-69.3109832734599962">
         <tag k="hoot:id" v="-16"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -17,11 +17,11 @@
         <tag k="hoot:id" v="-15"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0792035595999998" lon="-69.3109617131099895">
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0792035595999998" lon="-69.3109617131100038">
         <tag k="hoot:id" v="-14"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0790375195699990" lon="-69.3109465865200036">
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0790375195700008" lon="-69.3109465865200036">
         <tag k="hoot:id" v="-13"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -33,15 +33,15 @@
         <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0786640607999995" lon="-69.3120660562999831">
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0786640607999995" lon="-69.3120660562999973">
         <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0791569953999982" lon="-69.3121109657499943">
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0791569954000000" lon="-69.3121109657499943">
         <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0791524592199995" lon="-69.3121616614299825">
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0791524592199995" lon="-69.3121616614299967">
         <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -69,7 +69,7 @@
         <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0795390480900018" lon="-69.3107096061600032">
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0795390480900000" lon="-69.3107096061600032">
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </node>
@@ -89,10 +89,19 @@
         <nd ref="-16"/>
         <nd ref="-15"/>
         <nd ref="-6"/>
+        <tag k="angle" v="264.7"/>
         <tag k="building" v="yes"/>
+        <tag k="feature_area" v="10761.8"/>
         <tag k="hoot:id" v="-2"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="15"/>
+        <tag k="length" v="131.604"/>
+        <tag k="name" v="C.C. Arca"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="shop" v="department_store"/>
+        <tag k="source:datetime" v="2012-11-03T18:46:16.000Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="87.8062"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
@@ -100,26 +109,18 @@
         <nd ref="-2"/>
         <nd ref="-1"/>
         <nd ref="-4"/>
-        <tag k="building" v="yes"/>
-        <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:way:node:count" v="5"/>
-    </way>
-    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-2" role="outer"/>
-        <member type="way" ref="-1" role="outer"/>
         <tag k="angle" v="264.7"/>
         <tag k="building" v="yes"/>
-        <tag k="feature_area" v="23056.3"/>
+        <tag k="feature_area" v="79.6288"/>
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="length" v="207.5"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="length" v="12.9051"/>
         <tag k="name" v="C.C. Arca"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="shop" v="department_store"/>
         <tag k="source:datetime" v="2012-11-03T18:46:16.000Z"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="width" v="113.0"/>
-    </relation>
+        <tag k="width" v="6.17041"/>
+    </way>
 </osm>

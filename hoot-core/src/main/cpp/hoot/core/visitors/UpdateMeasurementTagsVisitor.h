@@ -22,20 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
  */
-#ifndef ADDMEASUREMENTTAGSVISITOR_H
-#define ADDMEASUREMENTTAGSVISITOR_H
+#ifndef UPDATEMEASUREMENTTAGSVISITOR_H
+#define UPDATEMEASUREMENTTAGSVISITOR_H
 
 // Hoot
 #include <hoot/core/visitors/MeasurementTagsVisitor.h>
+
+// Geos
+#include <geos/geom/Polygon.h>
 
 namespace hoot
 {
 
 /**
- * @brief The AddMeasurementTagsVisitor class is a Visitor that calculate specific measurements of a
- * way element and adds them as tags to the element.
+ * @brief The UpdateMeasurementTagsVisitor class is a Visitor that calculate specific measurements of a
+ * way element and updates them as tags to the element that already has those tags
  *
  * Currently supports:
  *  length and width of the aligned bounding box for:
@@ -46,19 +49,23 @@ namespace hoot
  *    - the combined closed way members of a relationship where outer
  *      entries are added and inner entries are subtracted
  */
-class AddMeasurementTagsVisitor : public MeasurementTagsVisitor
+class UpdateMeasurementTagsVisitor : public MeasurementTagsVisitor
 {
 public:
 
-  AddMeasurementTagsVisitor() = default;
-  AddMeasurementTagsVisitor(bool area, bool length, bool width);
-  ~AddMeasurementTagsVisitor() override = default;
+  UpdateMeasurementTagsVisitor() = default;
+  ~UpdateMeasurementTagsVisitor() override = default;
 
-  static QString className() { return "AddMeasurementTagsVisitor"; }
+  static QString className() { return "UpdateMeasurementTagsVisitor"; }
 
-  QString getInitStatusMessage() const override { return "Adding measurement tags..."; }
+  /**
+   * @see ElementVisitor
+   */
+  void visit(const ElementPtr& e) override;
+
+  QString getInitStatusMessage() const override { return "Update existing measurement tags..."; }
   QString getCompletedStatusMessage() const override
-  { return "Added tags to " + QString::number(_numAffected) + " elements"; }
+  { return "Updated tags on " + QString::number(_numAffected) + " elements"; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
@@ -66,10 +73,12 @@ public:
 
 protected:
   /** See MeasurementTagsVisitor::shouldCalculate() */
-  bool shouldCalculate(const ElementPtr& pElement) const override;
+  bool shouldCalculate(const ElementPtr& /*pElement*/) const override { return _shouldCalculate; }
+
+  bool _shouldCalculate = false;
 
 };
 
 }
 
-#endif // ADDMEASUREMENTTAGSVISITOR_H
+#endif // UPDATEMEASUREMENTTAGSVISITOR_H

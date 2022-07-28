@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "DecomposeBuildingRelationsVisitor.h"
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Relation.h>
 
 using namespace std;
 
@@ -47,9 +47,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
   {
     const std::shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == MetadataTags::RelationBuilding())
-    {
       _decomposeBuilding(r);
-    }
     _numProcessed++;
   }
 }
@@ -60,9 +58,9 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
 
   const vector<RelationData::Entry> members = r->getMembers();
 
-  for (size_t i = 0; i < members.size(); ++i)
+  for (const auto& member : members)
   {
-    ElementId eid = members[i].getElementId();
+    ElementId eid = member.getElementId();
     r->removeElement(eid);
     if (eid.getType() == ElementType::Node)
     {
@@ -78,11 +76,9 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
       continue;
     }
     // we're dropping the outline. We only care about the parts.
-    else if (members[i].getRole() == MetadataTags::RoleOutline())
-    {
+    else if (member.getRole() == MetadataTags::RoleOutline())
       continue;
-    }
-    else if (members[i].getRole() != MetadataTags::RolePart())
+    else if (member.getRole() != MetadataTags::RolePart())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -96,17 +92,15 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
     }
 
     // ok, we've got a building part. Recompose it as a building.
-    std::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
+    std::shared_ptr<Element> e = _map->getElement(member.getElementId());
 
     Tags t = baseTags;
     t.add(e->getTags());
     // don't need the building:part tag anymore.
     t.remove(MetadataTags::BuildingPart());
 
-    if (!t.contains("building"))
-    {
-      t["building"] = "yes";
-    }
+    if (!t.contains(MetadataTags::Building()))
+      t[MetadataTags::Building()] = "yes";
 
     e->setTags(t);
   }

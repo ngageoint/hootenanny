@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -49,13 +49,13 @@ public:
     Tags t1;
     t1["name"] = "foo";
     t1["lala"] = "1;2";
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["uid"] = "123";
 
     Tags t2;
     t2["name"] = "bar";
     t2["lala"] = "2;1";
-    t2["building"] = "yes";
+    t2[MetadataTags::Building()] = "yes";
     t2["uid"] = "456";
 
     Tags expected;
@@ -63,7 +63,7 @@ public:
     expected["alt_name"] = "bar";
     expected["lala"] = "1;2";
     expected["uid"] = "123;456";
-    expected["building"] = "yes";
+    expected[MetadataTags::Building()] = "yes";
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     _compareTags(expected, merged);

@@ -41,6 +41,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/UuidHelper.h>
+
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
@@ -443,8 +444,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
       else
         fd->setDefaultValue(map["defValue"].toString());
     }
-    if (map.contains("length"))
-      fd->setWidth(_toInt32(map["length"]));
+    if (map.contains(MetadataTags::Length()))
+      fd->setWidth(_toInt32(map[MetadataTags::Length()]));
 
     result = fd;
   }

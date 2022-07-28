@@ -592,6 +592,14 @@ details.
 
 Tag key used by the `building.review.if.secondary.newer` configuration option.
 
+=== building.default.merger
+
+* Data Type: string
+* Default Value: `BuildingMerger`
+
+The default merger for buildings is `BuildingMerger` but should be different when running Attribute conflation
+which does not do any merging of buildings, just merging of tags
+
 === building.force.contained.match
 
 * Data Type: bool

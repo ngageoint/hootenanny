@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -104,7 +104,7 @@ public:
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
     WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way->getTags().set("area", "yes");
+    way->getTags().set(MetadataTags::Area(), "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
     map->addWay(way);
@@ -135,7 +135,7 @@ public:
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
     WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way->getTags().set("area", "yes");
+    way->getTags().set(MetadataTags::Area(), "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
     map->addWay(way);

@@ -22,15 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
-
-const double epsilon = 1e-6;
 
 using namespace geos::geom;
 using namespace std;
@@ -133,12 +131,9 @@ public:
 
     vector<SchemaVertex> tvs = uut.getTagByCategory(OsmSchemaCategory::transportation());
     vector<QString> names;
-    for (size_t i = 0; i < tvs.size(); i++)
-    {
-      names.push_back(tvs[i].getName());
-    }
-    HOOT_STR_EQUALS("[5]{highway=road, highway=primary, highway=secondary, highway=residential, highway=service}",
-                    names);
+    for (const auto& t : tvs)
+      names.push_back(t.getName());
+    HOOT_STR_EQUALS("[5]{highway=road, highway=primary, highway=secondary, highway=residential, highway=service}", names);
   }
 
   void commonAncestorTest()
@@ -481,16 +476,16 @@ public:
     Tags tags;
 
     tags.clear();
-    tags["building"] = "yes";
+    tags[MetadataTags::Building()] = "yes";
     HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
 
     tags.clear();
-    tags["building"] = "yes";
-    tags["building"] = "fort";
+    tags[MetadataTags::Building()] = "yes";
+    tags[MetadataTags::Building()] = "fort";
     HOOT_STR_EQUALS("building=fort", uut.mostSpecificType(tags));
 
     tags.clear();
-    tags["building"] = "yes";
+    tags[MetadataTags::Building()] = "yes";
     tags["name"] = "fort";
     HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
 
@@ -508,10 +503,8 @@ private:
   QStringList _tagsToNames(const vector<SchemaVertex>& v)
   {
     QStringList l;
-    for (size_t i = 0; i < v.size(); i++)
-    {
-      l << v[i].getName();
-    }
+    for (const auto& vertex : v)
+      l << vertex.getName();
     return l;
   }
 
@@ -521,23 +514,22 @@ private:
     QString csvDistance;
     QString csvAverage;
 
-    for (size_t i = 0; i < surfaces.size(); i++)
-    {
-      csvDistance += ", " + surfaces[i].getName();
-    }
+    for (const auto& vertex : surfaces)
+      csvDistance += ", " + vertex.getName();
+
     csvDistance += "\n";
     csvAverage = csvDistance;
 
-    for (size_t i = 0; i < surfaces.size(); i++)
+    for (const auto& surface1 : surfaces)
     {
-      csvDistance += surfaces[i].getName();
-      csvAverage += surfaces[i].getName();
-      for (size_t j = 0; j < surfaces.size(); j++)
+      csvDistance += surface1.getName();
+      csvAverage += surface1.getName();
+      for (const auto& surface2 : surfaces)
       {
-        double d = schema.score(surfaces[i].getName(), surfaces[j].getName());
+        double d = schema.score(surface1.getName(), surface2.getName());
         csvDistance += QString(", %1").arg(d);
         double best;
-        QString avg = schema.average(surfaces[i].getName(), surfaces[j].getName(), best);
+        QString avg = schema.average(surface1.getName(), surface2.getName(), best);
         csvAverage += QString(", %1").arg(avg);
       }
       csvDistance += "\n";

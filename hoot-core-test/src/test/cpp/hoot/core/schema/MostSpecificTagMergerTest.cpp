@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -56,17 +56,17 @@ public:
     // building=yes shouldn't be duplicated
 
     Tags t1;
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["name"] = "Building 1";
     t1["shop"] = "supermarket";
 
     Tags t2;
-    t2["building"] = "yes";
+    t2[MetadataTags::Building()] = "yes";
     t2["name"] = "Building 2";
     t2["amenity"] = "restaurant";
 
     Tags expected;
-    expected["building"] = "yes";
+    expected[MetadataTags::Building()] = "yes";
     expected["name"] = "Building 1";
     expected["alt_name"] = "Building 2";
     expected["shop"] = "supermarket";
@@ -84,16 +84,16 @@ public:
 
     Tags t1;
     t1["name"] = "Building 1";
-    t1["building"] = "cathedral";
+    t1[MetadataTags::Building()] = "cathedral";
 
     Tags t2;
     t2["name"] = "Building 2";
-    t2["building"] = "chapel";
+    t2[MetadataTags::Building()] = "chapel";
 
     Tags expected;
     expected["name"] = "Building 1";
     expected["alt_name"] = "Building 2";
-    expected["building"] = "cathedral";
+    expected[MetadataTags::Building()] = "cathedral";
 
     MostSpecificTagMerger uut;
     uut.setOverwrite1(false);
@@ -105,12 +105,12 @@ public:
 
     Tags t3;
     t3["name"] = "Building 3";
-    t3["building"] = "church";
+    t3[MetadataTags::Building()] = "church";
 
     Tags expected2;
     expected2["name"] = "Building 1";
     expected2["alt_name"] = "Building 2;Building 3";
-    expected2["building"] = "cathedral";
+    expected2[MetadataTags::Building()] = "cathedral";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
@@ -121,17 +121,17 @@ public:
     // The first name should go in alt_name, and all types should be preserved.
 
     Tags t1;
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["name"] = "Building 1";
     t1["shop"] = "supermarket";
 
     Tags t2;
-    t2["building"] = "yes";
+    t2[MetadataTags::Building()] = "yes";
     t2["name"] = "Building 2";
     t2["amenity"] = "restaurant";
 
     Tags expected;
-    expected["building"] = "yes";
+    expected[MetadataTags::Building()] = "yes";
     expected["name"] = "Building 2";
     expected["alt_name"] = "Building 1";
     expected["shop"] = "supermarket";
@@ -149,16 +149,16 @@ public:
 
     Tags t1;
     t1["name"] = "Building 1";
-    t1["building"] = "cathedral";
+    t1[MetadataTags::Building()] = "cathedral";
 
     Tags t2;;
     t2["name"] = "Building 2";
-    t2["building"] = "chapel";
+    t2[MetadataTags::Building()] = "chapel";
 
     Tags expected;
     expected["name"] = "Building 2";
     expected["alt_name"] = "Building 1";
-    expected["building"] = "chapel";
+    expected[MetadataTags::Building()] = "chapel";
 
     MostSpecificTagMerger uut;
     uut.setOverwrite1(true);
@@ -168,12 +168,12 @@ public:
 
     Tags t3;
     t3["name"] = "Building 3";
-    t3["building"] = "church";
+    t3[MetadataTags::Building()] = "church";
 
     Tags expected2;;
     expected2["name"] = "Building 3";
     expected2["alt_name"] = "Building 1;Building 2";
-    expected2["building"] = "church";
+    expected2[MetadataTags::Building()] = "church";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
@@ -184,17 +184,17 @@ public:
     // The amenity tag should be witheld from the output.
 
     Tags t1;
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["name"] = "Building 1";
     t1["shop"] = "supermarket";
 
     Tags t2;
-    t2["building"] = "yes";
+    t2[MetadataTags::Building()] = "yes";
     t2["name"] = "Building 2";
     t2["amenity"] = "restaurant";
 
     Tags expected;
-    expected["building"] = "yes";
+    expected[MetadataTags::Building()] = "yes";
     expected["name"] = "Building 1";
     expected["alt_name"] = "Building 2";
     expected["shop"] = "supermarket";
@@ -258,14 +258,14 @@ public:
     // when calling OsmSchema::isAncestor at some point.
 
     Tags t1;
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["name"] = "Building 1";
 
     Tags t2;
-    t2["building"] = "mosque";
+    t2[MetadataTags::Building()] = "mosque";
     t2["name"] = "Building 2";
 
-    expected["building"] = "mosque";
+    expected[MetadataTags::Building()] = "mosque";
     expected["name"] = "Building 1";
     expected["alt_name"] = "Building 2";
 
@@ -274,7 +274,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(expected, merged);
 
     expected.clear();
-    expected["building"] = "mosque";
+    expected[MetadataTags::Building()] = "mosque";
     expected["name"] = "Building 2";
     expected["alt_name"] = "Building 1";
 
