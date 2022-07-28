@@ -51,26 +51,19 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, AddHilbertReviewSortOrderOp)
 bool reviewLess(const pair<ElementId, int64_t>& p1, const pair<ElementId, int64_t>& p2)
 {
   if (p1.second < p2.second)
-  {
     return true;
-  }
   else if (p1.second == p2.second)
-  {
     return p1.first < p2.first;
-  }
   else
-  {
     return false;
-  }
 }
 
 void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 {
   if (!ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    LOG_DEBUG(
-      "AddHilbertReviewSortOrderOp disabled due to " <<
-      ConfigOptions::getWriterIncludeConflateReviewDetailTagsKey() << "=false.");
+    LOG_DEBUG("AddHilbertReviewSortOrderOp disabled due to " <<
+              ConfigOptions::getWriterIncludeConflateReviewDetailTagsKey() << "=false.");
     return;
   }
 
@@ -84,7 +77,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   // reserves at least as much as we need
   reviewOrder.reserve(relations.size());
 
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr r = it->second;
     LOG_VART(r->getElementId());
@@ -104,9 +97,6 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       }
       else
       {
-        // don't think this really needs to be an exceptional situation
-//        throw HootException(
-//          "No review elements returned for relation with ID: " + r->getElementId().toString());
         LOG_WARN("No review elements returned for relation with ID: " << r->getElementId());
         if (logWarnCount < Log::getWarnMessageLimit())
         {
@@ -126,50 +116,41 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   for (size_t i = 0; i < reviewOrder.size(); ++i)
   {
     RelationPtr r = map->getRelation(reviewOrder[i].first.getId());
-
     r->getTags().set(MetadataTags::HootReviewSortOrder(), (long)i);
     _numAffected++;
   }
 }
 
-int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
-  const ConstOsmMapPtr& map, const std::set<ElementId>& eids)
+int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr& map, const std::set<ElementId>& eids)
 {
   std::shared_ptr<Envelope> env;
-  for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
+  for (const auto& eid : eids)
   {
-    ConstElementPtr element = map->getElement(*it);
+    ConstElementPtr element = map->getElement(eid);
     if (element)
     {
       std::unique_ptr<Envelope> te(element->getEnvelope(map));
       LOG_VART(env.get());
       if (env.get() == nullptr)
-      {
         env = std::make_shared<Envelope>(*te);
-      }
       else
-      {
         env->expandToInclude(te.get());
-      }
     }
   }
   if (!env)
-  {
     return -1;
-  }
+
   LOG_VART(env->toString());
 
   if (_mapEnvelope.get() == nullptr)
-  {
     _mapEnvelope = std::make_shared<Envelope>(CalculateMapBoundsVisitor::getGeosBounds(map));
-  }
 
   Coordinate center;
   env->centre(center);
 
   Meters cellSize = 10.0;
-  int xorder = max(1.0, ceil(log(_mapEnvelope->getWidth() / cellSize) / log(2.0)));
-  int yorder = max(1.0, ceil(log(_mapEnvelope->getHeight() / cellSize) / log(2.0)));
+  int xorder = static_cast<int>(max(1.0, ceil(log(_mapEnvelope->getWidth() / cellSize) / log(2.0))));
+  int yorder = static_cast<int>(max(1.0, ceil(log(_mapEnvelope->getHeight() / cellSize) / log(2.0))));
 
   // 31 bits is the most supported for 2 dimensions.
   int order = min(31, max(xorder, yorder));
@@ -178,10 +159,10 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
   int64_t maxRange = 1 << order;
   int point[2];
 
-  point[0] = max<int64_t>(0, min<int64_t>(maxRange - 1,
-    round((center.x - _mapEnvelope->getMinX()) / cellSize)));
-  point[1] = max<int64_t>(0, min<int64_t>(maxRange - 1,
-    round((center.y - _mapEnvelope->getMinY()) / cellSize)));
+  point[0] = static_cast<int>(max<int64_t>(0, min<int64_t>(maxRange - 1,
+    static_cast<int64_t>(round((center.x - _mapEnvelope->getMinX()) / cellSize)))));
+  point[1] = static_cast<int>(max<int64_t>(0, min<int64_t>(maxRange - 1,
+    static_cast<int64_t>(round((center.y - _mapEnvelope->getMinY()) / cellSize)))));
 
   // Pad with zeros to make sorting a little easier.
   return c.encode(point);

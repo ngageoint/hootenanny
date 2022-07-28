@@ -29,8 +29,8 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/DateTimeUtils.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -49,7 +49,7 @@ OsmPgCsvWriter::OsmPgCsvWriter()
 void OsmPgCsvWriter::open(const QString& url)
 {
   QFileInfo path(url);
-  QString base = QString("%1/%2").arg(path.absolutePath()).arg(path.baseName());
+  QString base = QString("%1/%2").arg(path.absolutePath(), path.baseName());
   //  Create new filenames, i.e. /path/filename.pgcsv turns into /path/filename-nodes.pgcsv
   array<QString, FileType::MaxFileType> filenames;
   filenames[FileType::Nodes] = base + QString("-nodes.") + path.completeSuffix();
@@ -156,30 +156,30 @@ void OsmPgCsvWriter::write(const ConstOsmMapPtr& map)
   QList<long> ids;
   //  Start with the nodes
   const NodeMap& nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
     ids.append(it->first);
   //  Sort the values to give consistent results.
   qSort(ids.begin(), ids.end(), qLess<long>());
-  for (int i = 0; i < ids.size(); i++)
-    writePartial(map->getNode(ids[i]));
+  for (auto id : qAsConst(ids))
+    writePartial(map->getNode(id));
   //  Next are the ways
   ids.clear();
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
     ids.append(it->first);
   //  Sort the values to give consistent results.
   qSort(ids.begin(), ids.end(), qLess<long>());
-  for (int i = 0; i < ids.size(); i++)
-    writePartial(map->getWay(ids[i]));
+  for (auto id : qAsConst(ids))
+    writePartial(map->getWay(id));
   //  Finally the relations
   ids.clear();
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
     ids.append(it->first);
   //  Sort the values to give consistent results.
   qSort(ids.begin(), ids.end(), qLess<long>());
-  for (int i = 0; i < ids.size(); i++)
-    writePartial(map->getRelation(ids[i]));
+  for (auto id : qAsConst(ids))
+    writePartial(map->getRelation(id));
 }
 
 void OsmPgCsvWriter::writePartial(const ConstNodePtr& n)
@@ -252,7 +252,7 @@ QString OsmPgCsvWriter::_getTags(const ConstElementPtr& e) const
   stream.setCodec("UTF-8");
   const Tags& tags = e->getTags();
   QRegExp regex("[\"=>, -]");
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     //  Comma separated list
     if (it != tags.constBegin())

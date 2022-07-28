@@ -54,9 +54,9 @@ namespace hoot
 int NodeMatcher::logWarnCount = 0;
 QList<std::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriteria;
 
-NodeMatcher::NodeMatcher() :
-_strictness(ConfigOptions().getNodeMatcherStrictness()),
-_delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
+NodeMatcher::NodeMatcher()
+  : _strictness(ConfigOptions().getNodeMatcherStrictness()),
+    _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
 }
 
@@ -75,28 +75,23 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
   if (_networkFeatureTypeCriteria.isEmpty())
   {
     const QStringList critClasses = getNetworkCriterionClassNames();
-    for (int i = 0; i < critClasses.size(); i++)
-    {
-      _networkFeatureTypeCriteria.append(
-        Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i)));
-    }
+    for (const auto& crit_class : qAsConst(critClasses))
+      _networkFeatureTypeCriteria.append(Factory::getInstance().constructObject<ElementCriterion>(crit_class));
   }
 
-  for (int i = 0; i < _networkFeatureTypeCriteria.size(); i++)
+  for (const auto& criteria : qAsConst(_networkFeatureTypeCriteria))
   {
-    if (_networkFeatureTypeCriteria.at(i)->isSatisfied(element))
+    if (criteria->isSatisfied(element))
     {
-      LOG_TRACE(
-        element->getElementId() << " recognized as network feature types by " <<
-        _networkFeatureTypeCriteria.at(i)->toString() << ".");
+      LOG_TRACE(element->getElementId() << " recognized as network feature types by " <<
+                criteria->toString() << ".");
       return true;
     }
   }
   return false;
 }
 
-vector<Radians> NodeMatcher::calculateAngles(
-  const OsmMap* map, long nid, const set<long>& wids, Meters delta)
+vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const set<long>& wids, Meters delta)
 {
   vector<Radians> result;
   result.reserve(wids.size());
@@ -104,10 +99,10 @@ vector<Radians> NodeMatcher::calculateAngles(
   LOG_VART(nid);
   ConstNodePtr node = map->getNode(nid);
   LOG_VART(node);
-  QSet<long> badWayIds;
-  for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+  set<long> badWayIds;
+  for (auto way_id : wids)
   {
-    const ConstWayPtr& w = map->getWay(*it);
+    const ConstWayPtr& w = map->getWay(way_id);
     LOG_VART(w->getId());
     LOG_VART(w->getLastNodeId());
     LOG_VART(w->getNodeId(0));
@@ -124,20 +119,16 @@ vector<Radians> NodeMatcher::calculateAngles(
       Radians heading = WayHeading::calculateHeading(wl, delta);
       // This is the first node so the angle is an inbound angle, reverse the value.
       if (heading < 0.0)
-      {
         heading += M_PI;
-      }
       else
-      {
         heading -= M_PI;
-      }
       LOG_VART(heading);
       result.push_back(heading);
     }
     else if (w->getLastNodeId() == nid)
     {
       LOG_TRACE("End node: " << nid);
-      WayLocation wl(map->shared_from_this(), w, w->getNodeCount() - 1, 1.0);
+      WayLocation wl(map->shared_from_this(), w, static_cast<int>(w->getNodeCount()) - 1, 1.0);
       Radians heading = WayHeading::calculateHeading(wl, delta);
       LOG_VART(heading);
       result.push_back(heading);
@@ -158,9 +149,9 @@ vector<Radians> NodeMatcher::calculateAngles(
       "Found " << badWayIds.size() << " bad spot(s) in NodeMatcher when calculating angles " <<
       "with node: " << nid);
     LOG_TRACE("wids: " << badWayIds);
-    for (QSet<long>::const_iterator it = badWayIds.begin(); it != badWayIds.end(); ++it)
+    for (auto way_id : badWayIds)
     {
-      const ConstWayPtr& w = map->getWay(*it);
+      const ConstWayPtr& w = map->getWay(way_id);
       LOG_VART(w->getId());
       LOG_VART(w->getTags().get("REF1"));
       LOG_VART(w->getTags().get("REF2"));
@@ -172,22 +163,19 @@ vector<Radians> NodeMatcher::calculateAngles(
     if (ConfigOptions().getNodeMatcherFailOnBadAngleSpots())
     {
       throw HootException(
-        QString("NodeMatcher::calculateAngles was called with a node that was not a start or ") +
-        QString("end node on the specified way."));
+        QString("NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way."));
     }
   }
 
   return result;
 }
 
-double NodeMatcher::_calculateAngleScore(const vector<Radians>& theta1,
-  const vector<Radians>& theta2, vector<bool>& exclude, size_t depth, bool debug)
+double NodeMatcher::_calculateAngleScore(const vector<Radians>& theta1, const vector<Radians>& theta2,
+                                         vector<bool>& exclude, size_t depth, bool debug)
 {
   assert(theta1.size() <= theta2.size());
   if (depth == theta1.size())
-  {
     return 1.0;
-  }
 
   double max = 0;
   for (int j = 0; j < (int)theta2.size(); j++)
@@ -197,16 +185,12 @@ double NodeMatcher::_calculateAngleScore(const vector<Radians>& theta1,
       Radians m = WayHeading::deltaMagnitude(theta1[depth], theta2[j]);
       double r = 0;
       if (m < M_PI / 2.0)
-      {
         r = pow(cos(WayHeading::deltaMagnitude(theta1[depth], theta2[j])), _strictness);
-      }
       exclude[j] = true;
       double v = r * _calculateAngleScore(theta1, theta2, exclude, depth + 1, debug);
       exclude[j] = false;
       if (v > max)
-      {
         max = v;
-      }
     }
   }
   return max;
@@ -230,14 +214,12 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   LOG_VART(wids2);
 
   double acc = 0;
-  for (set<long>::const_iterator it = wids1.begin(); it != wids1.end(); ++it)
-  {
-    acc = max(acc, _map->getWay(*it)->getCircularError());
-  }
-  for (set<long>::const_iterator it = wids2.begin(); it != wids2.end(); ++it)
-  {
-    acc = max(acc, _map->getWay(*it)->getCircularError());
-  }
+  for (auto way_id : wids1)
+    acc = max(acc, _map->getWay(way_id)->getCircularError());
+
+  for (auto way_id : wids2)
+    acc = max(acc, _map->getWay(way_id)->getCircularError());
+
   LOG_VART(acc);
 
   vector<Radians> theta1 = calculateAngles(_map.get(), nid1, wids1, _delta);
@@ -245,15 +227,13 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   vector<Radians> theta2 = calculateAngles(_map.get(), nid2, wids2, _delta);
   LOG_VART(theta2);
 
-  int s1 = theta1.size();
+  int s1 = static_cast<int>(theta1.size());
   LOG_VART(s1);
-  int s2 = theta2.size();
+  int s2 = static_cast<int>(theta2.size());
   LOG_VART(s2);
 
   if (s1 < 3 || s2 < 3)
-  {
     return 0.0;
-  }
 
   double d = n1->toCoordinate().distance(n2->toCoordinate());
 
@@ -268,9 +248,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   LOG_VART(Normal::phi(d, acc / 2.0));
 
   if (theta1.size() < theta2.size())
-  {
     swap(theta1, theta2);
-  }
 
   double thetaScore;
   // this is very unsual and will slow things down.

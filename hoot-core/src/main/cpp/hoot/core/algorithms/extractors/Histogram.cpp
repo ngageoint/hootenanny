@@ -59,52 +59,40 @@ double Histogram::diff(Histogram& other)
   assert(_bins.size() == other._bins.size());
   double diff = 0.0;
   for (size_t i = 0; i < _bins.size(); i++)
-  {
     diff += fabs(_bins[i] - other._bins[i]);
-  }
-
   return diff / 2.0;
 }
 
 size_t Histogram::getBin(Radians theta) const
 {
   while (theta < 0.0)
-  {
     theta += 2 * M_PI;
-  }
-  return (theta / (2 * M_PI)) * _bins.size();
+  return static_cast<size_t>((theta / (2 * M_PI)) * static_cast<double>(_bins.size()));
 }
 
 Radians Histogram::_getBinAngle(size_t i) const
 {
-  return 2 * M_PI / _bins.size() * i + M_PI / _bins.size();
+  return 2 * M_PI / static_cast<double>(_bins.size()) * i + M_PI / static_cast<double>(_bins.size());
 }
 
 Radians Histogram::getBinCenter(size_t bin) const
 {
   assert(bin < _bins.size());
-
   Radians binSize = 2.0 * M_PI / (double)_bins.size();
-  return bin * binSize + binSize / 2.0;
+  return static_cast<double>(bin) * binSize + binSize / 2.0;
 }
 
 void Histogram::normalize()
 {
   double sum = 0.0;
-  for (size_t i = 0; i < _bins.size(); i++)
-  {
-    sum += _bins[i];
-  }
+  for (auto val : _bins)
+    sum += val;
 
   if (sum <= 0.0)
-  {
     sum = 1.0;
-  }
 
   for (size_t i = 0; i < _bins.size(); i++)
-  {
     _bins[i] /= sum;
-  }
 }
 
 void Histogram::smooth(Radians sigma)
@@ -129,12 +117,7 @@ QString Histogram::toString() const
 {
   QStringList l;
   for (size_t i = 0; i < _bins.size(); ++i)
-  {
-    l <<
-      QString("%1°: %2")
-        .arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6))
-        .arg(QString::number(_bins[i], 'g', 6));
-  }
+    l << QString("%1°: %2").arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6), QString::number(_bins[i], 'g', 6));
   return l.join(", ");
 }
 
@@ -144,12 +127,7 @@ QString Histogram::printPositiveBins() const
   for (size_t i = 0; i < _bins.size(); ++i)
   {
     if (_bins[i] > 0.0)
-    {
-      l <<
-        QString("%1°: %2")
-          .arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6))
-          .arg(QString::number(_bins[i], 'g', 6));
-    }
+      l << QString("%1°: %2").arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6), QString::number(_bins[i], 'g', 6));
   }
   return l.join(", ");
 }

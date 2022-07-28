@@ -75,8 +75,7 @@ public:
    */
   Meters calculateDistanceOnWay() const;
 
-  static int compareLocationValues(
-    int segmentIndex0, double segmentFraction0, int segmentIndex1, double segmentFraction1);
+  static int compareLocationValues(int segmentIndex0, double segmentFraction0, int segmentIndex1, double segmentFraction1);
 
   /**
    * @brief compareTo compares this object with the specified object for order.
@@ -102,8 +101,8 @@ public:
    * @param length the length to the desired point
    * @return the Coordinate of the desired point
    */
-  static geos::geom::Coordinate pointAlongSegmentByFraction(
-    const geos::geom::Coordinate& p0, const geos::geom::Coordinate& p1, double frac);
+  static geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
+                                                            const geos::geom::Coordinate& p1, double frac);
 
   /**
    * @brief getNode returns the node at this WayLocation. If isNode() returns false, this will throw

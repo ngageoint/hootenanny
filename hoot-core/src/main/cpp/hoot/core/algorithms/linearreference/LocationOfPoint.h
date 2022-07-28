@@ -52,7 +52,7 @@ public:
   LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way);
 
   static WayLocation locate(const ConstOsmMapPtr& map, ConstWayPtr way,
-    const geos::geom::Coordinate& inputPt);
+                            const geos::geom::Coordinate& inputPt);
 
   /**
    * @brief locate finds the nearest location along a {@link Way} to a given point.
@@ -90,8 +90,8 @@ public:
    */
   bool isGreater(int i, double segFrac, const WayLocation& loc) const;
 
-  static double segmentFraction(
-    const geos::geom::LineSegment& seg, const geos::geom::Coordinate& inputPt);
+  static double segmentFraction(const geos::geom::LineSegment& seg,
+                                const geos::geom::Coordinate& inputPt);
 
 private:
 

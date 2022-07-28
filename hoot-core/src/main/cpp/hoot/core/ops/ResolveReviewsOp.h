@@ -85,9 +85,7 @@ public:
   { return "Resolving conflation reviews..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Resolved " + StringUtils::formatLargeNumber(_numAffected) +
-      " conflation review relations";
+    return "Resolved " + StringUtils::formatLargeNumber(_numAffected) + " conflation review relations";
   }
 
   ResolveType getResolveType() const { return _type; }
