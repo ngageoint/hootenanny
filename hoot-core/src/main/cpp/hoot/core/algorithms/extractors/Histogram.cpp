@@ -72,7 +72,7 @@ size_t Histogram::getBin(Radians theta) const
 
 Radians Histogram::_getBinAngle(size_t i) const
 {
-  return 2 * M_PI / static_cast<double>(_bins.size()) * i + M_PI / static_cast<double>(_bins.size());
+  return 2 * M_PI / static_cast<double>(_bins.size()) * static_cast<int>(i) + M_PI / static_cast<double>(_bins.size());
 }
 
 Radians Histogram::getBinCenter(size_t bin) const

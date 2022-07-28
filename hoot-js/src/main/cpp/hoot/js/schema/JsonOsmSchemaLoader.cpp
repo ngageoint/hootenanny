@@ -302,7 +302,7 @@ void JsonOsmSchemaLoader::_loadSimilarTo(QString fromName, const QVariant& value
     double weight2 = -1;
     bool oneway = false;
 
-    for (auto it = obj.begin(); it != obj.end(); ++it)
+    for (auto it = obj.cbegin(); it != obj.cend(); ++it)
     {
       if (it.key() == "name")
       {

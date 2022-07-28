@@ -34,11 +34,11 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
-
 // Tgs
 #include <tgs/TgsException.h>
 #include <tgs/RandomForest/RandomForestManager.h>
+
+using namespace std;
 
 namespace Tgs
 {
