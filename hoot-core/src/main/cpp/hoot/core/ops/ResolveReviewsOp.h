@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RESOLVE_REVIEWS_OP_H
 #define RESOLVE_REVIEWS_OP_H
@@ -85,9 +85,7 @@ public:
   { return "Resolving conflation reviews..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Resolved " + StringUtils::formatLargeNumber(_numAffected) +
-      " conflation review relations";
+    return "Resolved " + StringUtils::formatLargeNumber(_numAffected) + " conflation review relations";
   }
 
   ResolveType getResolveType() const { return _type; }
