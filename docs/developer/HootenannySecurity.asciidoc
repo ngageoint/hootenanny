@@ -3,28 +3,26 @@
 
 ===== OAuth Configuration
 
-Hoot services are now authenticated with OAuth1 which adds a config element for hoot-services.conf that will need to be tweaked per environment.
+Hoot services are now authenticated with OAuth2 which adds a config file oauth2-client.properties that will potentially need to be tweaked per environment.
 
-This file is found in the hoot-services.war file under the path `WEB-INF/classes/conf/hoot-services.conf` with the pertinent section below.
+This file is found in the hoot-services.war file under the path `WEB-INF/classes/oauth2-client.properties`.
 
-```
-# oAuth Redirect URL
-# [!] Externally facing URL [!]
-# This will be used to redirect the user back to the site;
-# and it should land the user at index.html to complete the oAuth process.
-oauthRedirectURL=http://localhost:8080/
-```
+The default value works for the UI running separately in development mode with webpack.
+The proper redirect-uri value for the UI deployed by tomcat on vagrant is `https://localhost:8443/hootenanny-id/login.html`.
 
-The default value works for the UI running separately with node.
-The proper value for the UI deployed by tomcat on vagrant is `http://localhost:8888/hootenanny-id`.
+There is a sed script that will update this config `scripts/tomcat/configure_oauth_8888.sh`, which is also used by the RPM-based vm defined in the Vagrantfile as `hoot_centos7_rpm`, which is the quickest way to get Hootenanny up and running.
 
-There is also a chunk of config to change the OAuth provider from public openstreetmap to another private instance.
-This will require registering a new client application with the rails app and then updating this section in hoot-services.conf, as well as the key, secret and url values in referenced `WEB-INF/classes/security-applicationContext.xml` file.
+Out of the box, the Hoot OAuth2 config uses OSM as the OAuth provider only to authenticate users.  The default client registration does not have the permission to write back to the OSM API.
+There are more config settings to change the OAuth provider from public OpenStreetMap to another private instance.  This will require registering a new client application with the rails app and then updating this section in oauth2-client.properties.
 
 ```
-# oAuth Provider
-# Also see hoot-services/src/main/resources/security-applicationContext.xml
-oauthProviderURL=https://api.openstreetmap.org
+spring.security.oauth2.client.registration.osm.client-id=
+spring.security.oauth2.client.registration.osm.client-secret=
+spring.security.oauth2.client.registration.osm.redirect-uri=
+spring.security.oauth2.client.registration.osm.scope=read_prefs+write_api
+spring.security.oauth2.client.provider.osm.user-info-uri=
+spring.security.oauth2.client.provider.osm.token-uri=
+spring.security.oauth2.client.provider.osm.authorization-uri=
 ```
 
 ===== Public vs Private Visibility
@@ -36,7 +34,7 @@ All services are now wrapped by authentication and many of the service endpoints
 * During implementation, it was decided that datasets would not have an inherent visibility.  Instead, folders have visibility and datasets inherit visibility from their containing folder.  The root folder is always public.  Data and folders that are public are read-only by non-owners with respect to modification (removing, moving, renaming folders or creating subfolders are not allowed), but public folders can be written to with map datasets by any user.
 * Public datasets can be clipped, conflated, and exported by non-owning users, but the destination output folder must be public or owned by the user.
 * The data within a public dataset, accessed through the Hoot Map API, is editable by any authenticated user.  This allows multiple users to work through conflation reviews.
-* There is a python https://github.com/ngageoint/hootenanny/blob/develop/scripts/database/UpdateFolderOwnerVisibility.py[script] for migrating existing folders and maps from the dummy user to a real user (once that user has logged in).  
+* There is a python https://github.com/ngageoint/hootenanny/blob/develop/scripts/database/UpdateFolderOwnerVisibility.py[script] for migrating existing folders and maps from the dummy user to a real user (once that user has logged in).
 * Public folders and their contents are shaded blue.  Folders and sub-folders cannot mix visibility.  A change to one affects the entire tree.
 
 :tada: Thanks to great work by @sumarlidason and @jbronn
