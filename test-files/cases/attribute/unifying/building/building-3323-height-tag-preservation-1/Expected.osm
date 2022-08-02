@@ -133,86 +133,20 @@
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-11"/>
-        <nd ref="-10"/>
-        <nd ref="-9"/>
-        <nd ref="-8"/>
-        <nd ref="-7"/>
-        <nd ref="-6"/>
-        <nd ref="-5"/>
-        <nd ref="-4"/>
-        <nd ref="-3"/>
-        <nd ref="-2"/>
-        <nd ref="-1"/>
-        <nd ref="-13"/>
-        <nd ref="-12"/>
-        <tag k="hoot:id" v="-12"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="14"/>
-    </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-15"/>
-        <nd ref="-14"/>
-        <nd ref="-17"/>
-        <nd ref="-16"/>
-        <nd ref="-15"/>
-        <tag k="hoot:id" v="-11"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-    </way>
-    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-18"/>
-        <nd ref="-21"/>
-        <nd ref="-20"/>
-        <nd ref="-19"/>
-        <nd ref="-18"/>
-        <tag k="hoot:id" v="-10"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-    </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-22"/>
-        <nd ref="-25"/>
-        <nd ref="-24"/>
-        <nd ref="-23"/>
-        <nd ref="-22"/>
-        <tag k="hoot:id" v="-9"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-    </way>
-    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-29"/>
-        <nd ref="-28"/>
-        <nd ref="-27"/>
-        <nd ref="-26"/>
-        <nd ref="-29"/>
-        <tag k="hoot:id" v="-8"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-    </way>
-    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-33"/>
-        <nd ref="-32"/>
-        <nd ref="-31"/>
-        <nd ref="-30"/>
-        <nd ref="-33"/>
-        <tag k="hoot:id" v="-7"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-    </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
         <nd ref="-32"/>
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-33"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="alt_name" v="Building 6"/>
+        <tag k="building" v="residential"/>
         <tag k="height" v="171"/>
         <tag k="hoot:id" v="-6"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="name" v="Building 7"/>
+        <tag k="source:datetime" v="2014-03-23T18:05:55Z"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29"/>
@@ -220,11 +154,14 @@
         <nd ref="-27"/>
         <nd ref="-26"/>
         <nd ref="-29"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="alt_name" v="Building 5"/>
+        <tag k="building" v="residential"/>
         <tag k="height" v="172"/>
         <tag k="hoot:id" v="-5"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="name" v="Building 7"/>
+        <tag k="source:datetime" v="2014-03-23T18:05:55Z"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
@@ -232,11 +169,14 @@
         <nd ref="-23"/>
         <nd ref="-22"/>
         <nd ref="-25"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="alt_name" v="Building 4"/>
+        <tag k="building" v="residential"/>
         <tag k="height" v="170"/>
         <tag k="hoot:id" v="-4"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="name" v="Building 7"/>
+        <tag k="source:datetime" v="2014-03-23T18:05:55Z"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
@@ -244,11 +184,14 @@
         <nd ref="-19"/>
         <nd ref="-18"/>
         <nd ref="-21"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="alt_name" v="Building 3"/>
+        <tag k="building" v="residential"/>
         <tag k="height" v="169"/>
         <tag k="hoot:id" v="-3"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="name" v="Building 7"/>
+        <tag k="source:datetime" v="2014-03-23T18:05:55Z"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
@@ -256,11 +199,14 @@
         <nd ref="-15"/>
         <nd ref="-14"/>
         <nd ref="-17"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="alt_name" v="Building 2"/>
+        <tag k="building" v="residential"/>
         <tag k="height" v="171"/>
         <tag k="hoot:id" v="-2"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="name" v="Building 7"/>
+        <tag k="source:datetime" v="2014-03-23T18:05:55Z"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
@@ -277,39 +223,13 @@
         <nd ref="-2"/>
         <nd ref="-1"/>
         <nd ref="-13"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="alt_name" v="Building 1"/>
+        <tag k="building" v="residential"/>
         <tag k="height" v="169"/>
         <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="14"/>
-    </way>
-    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-7" role="outer"/>
-        <member type="way" ref="-8" role="outer"/>
-        <member type="way" ref="-9" role="outer"/>
-        <member type="way" ref="-10" role="outer"/>
-        <member type="way" ref="-11" role="outer"/>
-        <member type="way" ref="-12" role="outer"/>
-        <tag k="building" v="residential"/>
-        <tag k="hoot:id" v="-2"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Building 7"/>
-        <tag k="type" v="multipolygon"/>
-    </relation>
-    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-6" role="part"/>
-        <member type="way" ref="-5" role="part"/>
-        <member type="way" ref="-4" role="part"/>
-        <member type="way" ref="-3" role="part"/>
-        <member type="way" ref="-2" role="part"/>
-        <member type="way" ref="-1" role="part"/>
-        <member type="relation" ref="-2" role="outline"/>
-        <tag k="alt_name" v="Building 1;Building 2;Building 3;Building 4;Building 5;Building 6"/>
-        <tag k="building" v="residential"/>
-        <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="name" v="Building 7"/>
         <tag k="source:datetime" v="2014-03-23T18:05:55Z"/>
-        <tag k="type" v="building"/>
-    </relation>
+    </way>
 </osm>

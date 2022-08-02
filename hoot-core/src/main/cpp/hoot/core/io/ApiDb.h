@@ -154,8 +154,6 @@ public:
    */
   virtual std::vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  std::vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
-
   /**
    * Returns a vector with all the relation members for a given relation
    */
@@ -433,6 +431,8 @@ protected:
   virtual void _resetQueries();
 
   std::vector<RelationData::Entry> _selectRelationMembers(const std::shared_ptr<QSqlQuery>& relation_query) const;
+
+  std::vector<long> _selectNodeIdsForWaySql(long wayId, const QString& sql);
 
 private:
 

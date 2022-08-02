@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_TAG_ONLY_MERGER_H
 #define LINEAR_TAG_ONLY_MERGER_H
@@ -54,9 +54,8 @@ public:
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to
   // deal with bridge merging. At the very least, passing in a MergerPtr would be less brittle.
   // Lots of refactoring would likely need to be done to avoid this, however.
-  LinearTagOnlyMerger(
-    const std::set<std::pair<ElementId, ElementId>>& pairs,
-    std::shared_ptr<PartialNetworkMerger> networkMerger);
+  LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                      std::shared_ptr<PartialNetworkMerger> networkMerger);
   ~LinearTagOnlyMerger() = default;
 
   QString getDescription() const override
@@ -68,9 +67,8 @@ public:
 
 protected:
 
-  bool _mergePair(
-    const ElementId& eid1, const ElementId& eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(const ElementId& eid1, const ElementId& eid2,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
 
@@ -78,20 +76,15 @@ private:
   std::shared_ptr<PartialNetworkMerger> _networkMerger;
   TagMergerPtr _tagMerger;
 
-  void _determineKeeperFeature(
-    ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
-    bool& removeSecondaryElement) const;
+  void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
+                               bool& removeSecondaryElement) const;
 
-  void _handleOneWayStreetReversal(
-    ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
+  void _handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
  
-  bool _conflictExists(
-    ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
+  bool _conflictExists(ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
 
-  bool _mergeWays(
-    ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-    const bool removeSecondaryElement,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) const;
+  bool _mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+                  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 };
 
 using LinearTagOnlyMergerPtr = std::shared_ptr<LinearTagOnlyMerger>;

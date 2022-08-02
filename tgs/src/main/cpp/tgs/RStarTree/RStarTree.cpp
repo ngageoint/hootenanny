@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RStarTree.h"
@@ -85,13 +85,9 @@ RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
 void RStarTree::_addChild(RTreeNode* parent, const Box& b, int id)
 {
   if (id < 0)
-  {
     parent->addNodeChild(_getNode(-id));
-  }
   else
-  {
     parent->addUserChild(b, id);
-  }
 }
 
 int RStarTree::_calculateNodeLevel(const RTreeNode* node) const
@@ -121,13 +117,11 @@ void RStarTree::_chooseSplitAxis(BoxVector& boxes) const
 
       unsigned int j = 0;
       for (; j < (unsigned int)((_m - 1) + k); j++)
-      {
         g1.expand(boxes[j].box);
-      }
+
       for (; j < boxes.size(); j++)
-      {
         g2.expand(boxes[j].box);
-      }
+
       thisS += g1.calculateOverlap(g2);
     }
     if (thisS < S || i == 0)
@@ -138,9 +132,7 @@ void RStarTree::_chooseSplitAxis(BoxVector& boxes) const
   }
 
   if (result != _dimensions - 1)
-  {
     _sortOnDimension(boxes, result);
-  }
 }
 
 int RStarTree::_chooseSplitIndex(const BoxVector& boxes) const
@@ -157,17 +149,14 @@ int RStarTree::_chooseSplitIndex(const BoxVector& boxes) const
 
     int j = 0; 
     for (; j < (_m - 1) + k; j++)
-    {
       g1.expand(boxes[j].box);
-    }
+
     for (; j < (int)boxes.size(); j++)
-    {
       g2.expand(boxes[j].box);
-    }
+
     double overlap = g1.calculateOverlap(g2);
     double area = g1.calculateVolume() + g2.calculateVolume();
-    if (k == 1 || 
-      (overlap < minOverlap || (_isClose(overlap, minOverlap) && area < minArea)))
+    if (k == 1 || (overlap < minOverlap || (_isClose(overlap, minOverlap) && area < minArea)))
     {
       result = (_m - 1) + k;
       minOverlap = overlap;
@@ -190,23 +179,12 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
     assert(currentLevel != 0 && N->isLeafNode() == false);
     int id;
 
-    // if the childpointers in N point to leaves
     const RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
-    if (firstChild->isLeafNode())
-    {
-      // determine the minimum overlap cost
-
-      // using this method appears to increase insert time by about 17x
+    // if the childpointers in N point to leaves
+    if (firstChild->isLeafNode()) // determine the minimum overlap cost, using this method appears to increase insert time by about 17x
       id = _findLeastOverlapEnlargement(N , b);
-      //id = _findLeastEnlargement(node, b);
-    }
-    // if the childpointers in N do not point to leaves
-    else
-    {
-      // choose the entry in N whose rectangle needs lease area enlargement to include the new data
-      // rectangle.
+    else // choose the entry in N whose rectangle needs lease area enlargement to include the new data rectangle.
       id = _findLeastEnlargement(N , b);
-    }
 
     N  = _store.getNode(id);
     currentLevel--;
@@ -244,9 +222,7 @@ int RStarTree::_findLeastOverlapEnlargement(const RTreeNode* node, const Box& b)
     for (int j = 0; j < node->getChildCount(); j++)
     {
       if (j == i)
-      {
         continue;
-      }
       const BoxInternalData& bid = node->getChildEnvelope(j);
       double pre = bid.calculateOverlap(preB);
       double post = bid.calculateOverlap(postB);
@@ -277,13 +253,10 @@ RTreeNode* RStarTree::_getRoot()
   return _store.getNode(_rootId);
 }
 
-
 void RStarTree::insert(const Box& b, int userId)
 {
   if (userId < 0 || b.isValid() == false)
-  {
     throw Exception("Internal Error: Box or id are not valid.");
-  }
   _overflowedLevels.clear();
   _insert(b, userId, 0);
 }
@@ -297,11 +270,8 @@ void RStarTree::_insert(const Box& b, int id, int level)
 
   // I2 If N has less than M entries, accomodate E in N.
   if (N->getChildCount() < N->getMaxChildCount())
-  {
     _addChild(N, b, id);
-  }
-  // I2 If N has M entries, invoke OverflowTreatement with the level of N as a parameter.
-  else
+  else  // I2 If N has M entries, invoke OverflowTreatement with the level of N as a parameter.
   {
     // splits 'node' into 'N' and 'newNode'. These nodes contain everything from N
     RTreeNode* newNode = nullptr;
@@ -321,9 +291,7 @@ void RStarTree::_insert(const Box& b, int id, int level)
         newRoot->addNodeChild(newNode);
       }
       else
-      {
         _insert(newNode->calculateEnvelope(), -newNode->getId(), level + 1);
-      }
     }
     _insert(b, id, level);
   }
@@ -343,8 +311,7 @@ int RStarTree::_overflowTreatment(RTreeNode* node, RTreeNode*& newNode, int leve
   // OT1 If the level is not the root level and this is the first call of OverflowTreatment in
   // the given level during the insertion of one data rectangle, then
   int result;
-  if (level != 0 &&
-    _overflowedLevels.find(level) == _overflowedLevels.end())
+  if (level != 0 && _overflowedLevels.find(level) == _overflowedLevels.end())
   {
     // OT1 Invoke ReInsert
     _overflowedLevels.insert(level);
@@ -368,7 +335,7 @@ public:
 
   Child() : id(0) { }
 
-  Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
+  Child(int id_, const BoxInternalData& b_) : b(b_.toBox()), id(id_) { }
 };
 
 using DistancePair = std::pair<double, int>;
@@ -384,9 +351,6 @@ public:
 
 void RStarTree::_reinsert(RTreeNode* node, int level)
 {
-  // cout << "reinserting " << node->getId() << endl;
-  // cout << "  " << *node << endl;
-
   // compute distances of child node's centroids to envelope's centroids
   std::vector<DistancePair> distances;
   distances.resize(node->getChildCount());
@@ -412,22 +376,13 @@ void RStarTree::_reinsert(RTreeNode* node, int level)
     removalIndexes[i] = index;
     removedChildren[i] = Child(node->getChildId(index), node->getChildEnvelope(index));
   }
-  // cout << "  removal indexes: " << removalIndexes << endl;
   node->removeChildren(removalIndexes);
-
-  // cout << "  " << *node << endl;
 
   _updateBounds(node);
 
-  // cout << "  " << *node << endl;
-
   // invoke insert for each of the removed children.
-  for (unsigned int i = 0; i < removedChildren.size(); i++)
-  {
-    _insert(removedChildren[i].b, removedChildren[i].id, level);
-  }
-
-  // cout << "  " << *node << endl;
+  for (const auto& child : removedChildren)
+    _insert(child.b, child.id, level);
 }
 
 void RStarTree::_setHeight(int height)
@@ -456,8 +411,8 @@ public:
   {
     // sort on lower bound then upper bound
     return (a.box.getLowerBound(_dimension) < b.box.getLowerBound(_dimension) ||
-      (a.box.getLowerBound(_dimension) == b.box.getLowerBound(_dimension) &&
-      a.box.getUpperBound(_dimension) < b.box.getUpperBound(_dimension)));
+           (a.box.getLowerBound(_dimension) == b.box.getLowerBound(_dimension) &&
+            a.box.getUpperBound(_dimension) < b.box.getUpperBound(_dimension)));
   }
 private:
   int _dimension;
@@ -472,10 +427,6 @@ void RStarTree::_sortOnDimension(BoxVector& boxes, int dim)
 
 void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
 {
-  // cout << "splitting " << node->getId() << " (" << node << ")" << endl;
-  // cout << "  " << *node << endl;
-  // cout << "  splitting parent: " << node->getParentId() << endl;
-
   assert(node->getChildCount() > 1);
   BoxVector boxes;
   boxes.reserve(node->getChildCount());
@@ -483,23 +434,14 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
   for (int i = 0; i < node->getChildCount(); i++)
   {
     if (leaf)
-    {
       boxes.emplace_back(node->getChildEnvelope(i), node->getChildUserId(i));
-    }
     else
-    {
       boxes.emplace_back(node->getChildEnvelope(i), node->getChildNodeId(i));
-    }
   }
 
   int splitIndex = _splitBoxes(boxes);
-
   newNode = _store.createNode();
-  // cout << "splitting created: " << newNode->getId() << endl;
-  // cout << "  splitting parent: " << node->getParentId() << endl;
-
   int parentId = node->getParentId();
-
   if (leaf)
   {
     std::vector<std::pair<Box, int>> tmp;
@@ -508,22 +450,17 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
     // to BoxInternal which references node. More complicated than I'd like, but it is more
     // efficient.
     for (unsigned int i = 0; i < boxes.size(); i++)
-    {
       tmp.emplace_back(boxes[i].box.toBox(), boxes[i].id);
-    }
+
     node->clear();
     node->setParentId(parentId);
     // cout << "  splitting parent: " << node->getParentId() << endl;
     for (int i = 0; i < (int)boxes.size(); i++)
     {
       if (i < splitIndex)
-      {
         node->addUserChild(tmp[i].first, tmp[i].second);
-      }
       else
-      {
         newNode->addUserChild(tmp[i].first, tmp[i].second);
-      }
     }
   }
   else
@@ -534,49 +471,18 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
     for (int i = 0; i < (int)boxes.size(); i++)
     {
       if (i < splitIndex)
-      {
         node->addNodeChild(_store.getNode(boxes[i].id));
-      }
       else
-      {
-        // cout << "  adding " << boxes[i].id << " to " << newNode->getId() << endl;
         newNode->addNodeChild(_store.getNode(boxes[i].id));
-      }
     }
   }
-
-  // cout << "  splitting parent: " << node->getParentId() << endl;
-//   for (i = 0; i < splitIndex; i++)
-//   {
-//     if (leaf)
-//     {
-//       node->addUserChild(boxes[i].box.toBox(), boxes[i].id);
-//     }
-//     else
-//     {
-//       node->addNodeChild(_store.getNode(boxes[i].id));
-//     }
-//   }
-//   for (; i < boxes.size(); i++)
-//   {
-//     if (leaf)
-//     {
-//       newNode->addUserChild(boxes[i].box.toBox(), boxes[i].id);
-//     }
-//     else
-//     {
-//       newNode->addNodeChild(_store.getNode(boxes[i].id));
-//     }
-//   }
   assert(node->getChildCount() > 0 && newNode->getChildCount() > 0);
 }
 
 int RStarTree::_splitBoxes(BoxVector& boxes)
 {
   _chooseSplitAxis(boxes);
-  //int axis = node->getId() % _dimensions;
   unsigned int splitIndex = _chooseSplitIndex(boxes);
-  //unsigned int splitIndex = boxes.size() / 2;
   return splitIndex;
 }
 
@@ -590,9 +496,7 @@ bool RStarTree::_sanityCheck(const RTreeNode* node) const
   int count = node->getChildCount();
   int maxCount = node->getMaxChildCount();
   if (count < 0 || count > maxCount)
-  {
     return false;
-  }
 
   for (int i = 0; i < count; i++)
   {
@@ -600,31 +504,21 @@ bool RStarTree::_sanityCheck(const RTreeNode* node) const
     {
       const RTreeNode* child = getNode(node->getChildNodeId(i));
       if (_sanityCheck(child) == false)
-      {
         return false;
-      }
     }
     else
     {
       RTreeNode* n = const_cast<RTreeNode*>(node);
       if (n->getChildId(i) < 0)
-      {
         return false;
-      }
     }
   }
-
   return true;
 }
 
 void RStarTree::_updateBounds(RTreeNode* node)
 {
-  // cout << "updateBounds " << node->getId() << endl;
   int parentId = node->getParentId();
-
-  //// cout << node->getId() << " -> " << node->getParentId() << " (" << node << ")" << endl;
-  // cout << *node << endl;
-
   // propagate the increased bounding box up the nodes
   while (parentId > 0)
   {
@@ -633,8 +527,6 @@ void RStarTree::_updateBounds(RTreeNode* node)
     node = _store.getNode(parentId);
     int childIndex = node->convertChildIdToIndex(childId);
     node->updateChildEnvelope(childIndex, childBox);
-    //// cout << node->getId() << " -> " << node->getParentId() << " (" << node << ")" << endl;
-    // cout << *node << endl;
     parentId = node->getParentId();
   }
 }

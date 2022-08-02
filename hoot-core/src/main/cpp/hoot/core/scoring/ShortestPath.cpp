@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ShortestPath.h"
@@ -47,10 +47,8 @@ void ShortestPath::calculateCost()
 
   LOG_TRACE("Calculating cost...");
 
-  for (QHash<long, double>::const_iterator it = _cost.begin(); it != _cost.end(); ++it)
-  {
+  for (auto it = _cost.begin(); it != _cost.end(); ++it)
     _queue.push(Node(it.key(), it.value()));
-  }
 
   const QMultiHash<long, DirectedGraph::Edge>& edges = _graph->getEdges();
   while (_queue.empty() == false)
@@ -58,8 +56,7 @@ void ShortestPath::calculateCost()
     Node top = _queue.top();
     _queue.pop();
 
-    for (QMultiHash<long, DirectedGraph::Edge>::const_iterator it = edges.find(top.id);
-         it != edges.end() && it.key() == top.id; ++it)
+    for (auto it = edges.find(top.id); it != edges.end() && it.key() == top.id; ++it)
     {
       double c = top.cost + it.value().weight;
       long nId = it.value().to;

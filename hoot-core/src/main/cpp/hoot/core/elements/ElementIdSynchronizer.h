@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_ID_SYNCHRONIZER_H
@@ -58,9 +58,8 @@ public:
    * @param elementType the type of element to synchronize the IDs of; all element types will have
    * IDs synchronized if no type is specified
    */
-  virtual void synchronize(
-    const OsmMapPtr& map1, const OsmMapPtr& map2,
-    const ElementType& elementType = ElementType::Unknown);
+  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                           const ElementType& elementType = ElementType::Unknown);
 
   int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
   int getNumWayIdsSynchronized() const { return _updatedWayCtr; }
@@ -98,9 +97,8 @@ protected:
   /*
    * Calculates the element unique hashes used for comparison
    */
-  void _calcElementHashes(
-    const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-    QMap<ElementId, QString>& elementIdsToHashes) const;
+  void _calcElementHashes(const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
+                          QMap<ElementId, QString>& elementIdsToHashes) const;
 
   /*
    * Determines if two elements (one from each input map) are way nodes which don't have a way
@@ -114,8 +112,8 @@ protected:
    */
   bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
 
-  QSet<QString> _getHashesByElementType(
-    const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const;
+  QSet<QString> _getHashesByElementType(const QMap<ElementId, QString>& hashesByElementId,
+                                        const ElementType& elementType) const;
 
 private:
 

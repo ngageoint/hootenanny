@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef STREAMUTILSJS_H
 #define STREAMUTILSJS_H
@@ -68,9 +68,7 @@ inline v8::Local<v8::Value> fromJson(QString qstr, QString fileName="")
 
     // See ReportException in http://v8.googlecode.com/svn/trunk/samples/shell.cc
     if (fileName.isEmpty())
-    {
       fileName = toString(msg->GetScriptResourceName());
-    }
 
     int lineNumber = msg->GetLineNumber(context).ToChecked();
 
@@ -82,8 +80,7 @@ inline v8::Local<v8::Value> fromJson(QString qstr, QString fileName="")
     QString blank(start,' ');
     QString wave(end - start,'^');
 
-    throw HootException(QString("%1 (%2) \n%3\n%4").arg(fileName).arg(lineNumber).arg(sourceLine).
-      arg(blank + wave));
+    throw HootException(QString("%1 (%2) \n%3\n%4").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave));
   }
 
   return scope.Escape(result);
@@ -97,17 +94,11 @@ QString toJson(const v8::Local<T> object)
 {
   QString result;
   if (object.IsEmpty())
-  {
     result = "";
-  }
   else if (object->IsNull())
-  {
     result = "null";
-  }
   else if (object->IsUndefined())
-  {
     result = "undefined";
-  }
   else
   {
     v8::Isolate* current = v8::Isolate::GetCurrent();
@@ -127,7 +118,7 @@ QString toJson(const v8::Local<T> object)
     v8::Local<v8::String> s = v8::Local<v8::String>::Cast(resultValue);
 
     size_t utf8Length = s->Utf8Length(current) + 1;
-    std::unique_ptr<char[]> buffer(new char[utf8Length]);
+    std::unique_ptr<char[]> buffer = std::make_unique<char[]>(utf8Length);
     s->WriteUtf8(current, buffer.get(), utf8Length);
 
     result = QString::fromUtf8(buffer.get());
@@ -142,26 +133,15 @@ template <class T>
 inline std::ostream& operator<<(std::ostream& o, const v8::Local<T>& v)
 {
   if (v.IsEmpty())
-  {
     o << "<empty handle>";
-  }
   else if (v->IsNull())
-  {
     o << "<null>";
-  }
   else if (v->IsUndefined())
-  {
     o << "<undefined>";
-  }
   else if (v->IsFunction())
-  {
-    v8::Local<v8::Function> f = v8::Local<v8::Function>::Cast(v);
-    o << f;
-  }
+    o << v8::Local<v8::Function>::Cast(v);
   else
-  {
     o << toJson(v).toUtf8().data();
-  }
   return o;
 }
 
@@ -169,13 +149,9 @@ inline std::ostream& operator<<(std::ostream& o, const v8::Local<v8::Function>& 
 {
   QString name = toJson(f->GetName());
   if (name != "\"\"")
-  {
     o << name << "()";
-  }
   else
-  {
     o << "<function>";
-  }
   return o;
 }
 
@@ -184,18 +160,11 @@ inline std::ostream& operator<<(std::ostream& o, const v8::TryCatch& tc)
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
-
   v8::Local<v8::Message> message = tc.Message();
   if (message.IsEmpty())
-  {
     o << tc.Exception();
-  }
   else
-  {
-    o << message->GetScriptResourceName() << ":" << message->GetLineNumber(context).ToChecked()
-      << ": " << tc.Exception();
-  }
-
+    o << message->GetScriptResourceName() << ":" << message->GetLineNumber(context).ToChecked() << ": " << tc.Exception();
   return o;
 }
 

@@ -2548,6 +2548,7 @@ tds70 = {
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
+        || tags['hoot:timestamp']
         || 'noInformation';
 
       // Drop the default value so that it doesn't cause issues in the UI

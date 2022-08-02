@@ -2426,6 +2426,7 @@ tds40 = {
             || tags['source:imagery:earliestDate']
             || tags['source:date']
             || tags['source:geometry:date']
+            || tags['hoot:timestamp']
             || '';
 
         //Map alternate source tags to ZI001_SSN in order of precedence

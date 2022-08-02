@@ -91,6 +91,12 @@ hoot convert $LOG_LEVEL $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTP
 hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
 
 echo ""
+echo "Multi-layer GPKG to OSM..."
+echo ""
+hoot convert $LOG_LEVEL $CONFIG test-files/BostonSubsetRoadBuilding_FromOsm.gpkg $OUTPUT_DIR/multi-layer-gpkg-out.osm
+hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gpkg-out.osm $OUTPUT_DIR/multi-layer-gpkg-out.osm
+
+echo ""
 echo "Multi-layer GDB to OSM single layer only..."
 echo ""
 hoot convert $LOG_LEVEL $CONFIG "test-files/cmd/slow/CountCmdTest/input.gdb;LAP030" \
@@ -109,14 +115,15 @@ hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPU
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPUT_2
 
 # TODO: This has proven unstable some of the time both locally and on Jenkins...not sure why yet.
-#echo ""
-#echo "OSM to GPKG..."
-#echo ""
-#hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv30.js" \
-#  test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
+# Just ensure that no errors show up in the command output.
+echo ""
+echo "OSM to GPKG..."
+echo ""
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv30.js" \
+  test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
 # Do it again to make sure we can overwrite an existing layer.
-#hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv30.js" \
-#  test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv30.js" \
+  test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
 #hoot diff $LOG_LEVEL $CONFIG -D map.comparator.ignore.tag.keys="UFI" \
 #  $INPUT_DIR/ToyTestA.gpkg $OUTPUT_DIR/ToyTestA.gpkg
 
@@ -140,3 +147,15 @@ echo ""
 hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
   test-files/MGCPv3.tar.gz $OUTPUT_DIR/tar_gz_convert.osm
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/tar_gz_convert.osm
+
+echo ""
+echo "DNC to OSM..."
+echo ""
+rm -rf $OUTPUT_DIR/DNC17
+unzip -q $INPUT_DIR/coa17d.zip -d $OUTPUT_DIR/
+hoot convert $LOG_LEVEL $CONFIG -D ogr.add.uuid=false -D reader.add.source.datetime=false -D schema.translation.script="translations/DNC.js" \
+  gltp:/vrf/$HOOT_HOME/$OUTPUT_DIR/DNC17/COA17D $OUTPUT_DIR/dnc_test.osm
+# NOTE: The OGDI driver doesn't produce output in the exact same way every time so don't compare
+# the outputs just ensure that no errors show up in the command output
+#hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/dnc_test.osm $OUTPUT_DIR/dnc_test.osm
+

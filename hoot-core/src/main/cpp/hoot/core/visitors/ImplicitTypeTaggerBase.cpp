@@ -29,13 +29,12 @@
 // hoot
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
+#include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-
-#include <hoot/core/schema/ImplicitTagUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -264,9 +263,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 
       LOG_VART(foundDuplicateMatch);
       if (foundDuplicateMatch)
-      {
         _updateElementForDuplicateMatch(e, matchingWords);
-      }
       else if (!tagsToAdd.isEmpty())
       {
         assert(!matchingWords.isEmpty());
@@ -277,13 +274,13 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
         //This is a little kludgy, but we'll leave it for now since it helps.
         if (tagsToAdd.isEmpty() && !_elementIsASpecificFeature && namesContainOffice)
         {
-          tagsToAdd.appendValue("building", "office");
+          tagsToAdd.appendValue(MetadataTags::Building(), "office");
           matchingWords.insert("office");
         }
         else if (tagsToAdd.isEmpty() && !_elementIsASpecificFeature && namesContainBuilding)
         {
-          tagsToAdd.appendValue("building", "yes");
-          matchingWords.insert("building");
+          tagsToAdd.appendValue(MetadataTags::Building(), "yes");
+          matchingWords.insert(MetadataTags::Building());
         }
         LOG_VART(tagsToAdd);
 
@@ -484,10 +481,10 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const
   //This logic is kind of one-off but did help a little bit with reducing false positives with
   //offices and buildings...probably need something cleaner and more extensible.
   namesContainBuilding = false;
-  if (nameTokensList.contains("building") || nameTokensList.contains("buildings"))
+  if (nameTokensList.contains(MetadataTags::Building()) || nameTokensList.contains("buildings"))
   {
     namesContainBuilding = true;
-    nameTokensList.removeAll("building");
+    nameTokensList.removeAll(MetadataTags::Building());
     nameTokensList.removeAll("buildings");
   }
   namesContainOffice = false;

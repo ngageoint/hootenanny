@@ -2228,6 +2228,7 @@ mgcp = {
         || tags['source:imagery:earliestDate']
         || tags['source:date']
         || tags['source:geometry:date']
+        || tags['hoot:timestamp']
         || 'UNK';
 
       // UNK is the default value. OGR export will populate it.

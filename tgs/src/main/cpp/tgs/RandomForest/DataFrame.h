@@ -216,12 +216,12 @@ public:
   /**
   * @return the number of data vectors in the data set
   */
-  unsigned int getNumDataVectors() const {return _data.size();}
+  unsigned int getNumDataVectors() const { return static_cast<unsigned int>(_data.size()); }
 
   /**
    * @return the number of factors in the data set
    */
-  unsigned int getNumFactors() const { return _factorLabels.size(); }
+  unsigned int getNumFactors() const { return static_cast<unsigned int>(_factorLabels.size()); }
 
   /**
   * Gets the index into the factor list based on its string

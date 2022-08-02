@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_SNAP_MERGER_H
 #define LINEAR_SNAP_MERGER_H
@@ -49,9 +49,8 @@ public:
   static QString className() { return "LinearSnapMerger"; }
 
   LinearSnapMerger();
-  LinearSnapMerger(
-    const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  LinearSnapMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                   const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   ~LinearSnapMerger() = default;
 
   QString getDescription() const override
@@ -69,9 +68,8 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
-  bool _mergePair(
-    const ElementId& eid1, const ElementId& eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(const ElementId& eid1, const ElementId& eid2,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * @see LinearMergerAbstract
@@ -98,29 +96,22 @@ private:
    * appropriately and the match and scrap are added to the replaced list and added to the map.
    * The original elements are deleted.
    */
-  void _splitElement(
-    const WaySublineCollection& s, const std::vector<bool>& reverse,
-    std::vector<std::pair<ElementId, ElementId>>& replaced,
-    const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
+  void _splitElement(const WaySublineCollection& s, const std::vector<bool>& reverse,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced,
+                     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   void _mergeElementTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const;
 
-  void _handleSplitWay(
-    const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
-    const bool swapWayIds);
-  void _handleSplitWay(
-    const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void _handleSplitWay(const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds);
+  void _handleSplitWay(const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match,
+                       std::vector<std::pair<ElementId, ElementId>>& replaced);
   void _updateScrapParent(long id, const ElementPtr& scrap);
-  void _manageElementIds(
-    const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
-    const ElementPtr& scraps2) const;
+  void _manageElementIds(const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
+                         const ElementPtr& scraps2) const;
   void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const;
-  void _swapSecondaryElementWithScraps(
-    const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps) const;
-  void _dropSecondaryElements(
-    const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
-    const ElementId& eidMatch2) const;
+  void _swapSecondaryElementWithScraps(const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps) const;
+  void _dropSecondaryElements(const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
+                              const ElementId& eidMatch2) const;
 
   void _validateMarkedMultilineStringRelations(const ElementPtr& element) const;
 };

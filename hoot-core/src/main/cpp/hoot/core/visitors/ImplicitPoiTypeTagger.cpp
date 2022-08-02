@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitPoiTypeTagger.h"
 
@@ -36,8 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiTypeTagger)
 
-ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString& databasePath) :
-ImplicitTypeTaggerBase(databasePath)
+ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString& databasePath)
+  : ImplicitTypeTaggerBase(databasePath)
 {
 }
 
@@ -48,27 +48,19 @@ bool ImplicitPoiTypeTagger::_visitElement(const ElementPtr& e)
   LOG_VART(elementIsANode);
   _elementIsASpecificFeature =
     OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
-     e->getTags().get("building") != QLatin1String("yes") &&
+     e->getTags().get(MetadataTags::Building()) != QLatin1String("yes") &&
      e->getTags().get("office") != QLatin1String("yes");
   LOG_VART(_elementIsASpecificFeature);
   const bool elementIsAGenericPoi = !_elementIsASpecificFeature;
   LOG_VART(elementIsAGenericPoi);
   LOG_VART(_getNames(e->getTags()).size());
 
-  //always allow generic elements
-  if (elementIsAGenericPoi)
-  {
+  if (elementIsAGenericPoi) //  always allow generic elements
     return true;
-  }
-  //allowing specific elements is configurable
-  else if (_elementIsASpecificFeature && _allowTaggingSpecificFeatures)
-  {
+  else if (_elementIsASpecificFeature && _allowTaggingSpecificFeatures) //  allowing specific elements is configurable
     return true;
-  }
   else if (elementIsANode && !_getNames(e->getTags()).empty())
-  {
     return true;
-  }
 
   return false;
 }

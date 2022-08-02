@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeToWayMap.h"
@@ -39,91 +39,78 @@ namespace hoot
 
 int NodeToWayMap::logWarnCount = 0;
 
-NodeToWayMap::NodeToWayMap(const OsmMap& map)
+NodeToWayMap::NodeToWayMap(const OsmMap& m)
 {
-  const WayMap& ways = map.getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    std::shared_ptr<Way> w = it->second;
-    addWay(w);
-  }
+  const WayMap& ways = m.getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
+    addWay(it->second);
 }
 
 void NodeToWayMap::addWay(const std::shared_ptr<const Way>& w)
 {
   LOG_TRACE("Adding way: " << w->getElementId() << " with nodes: "<<  w->getNodeIds() << "...");
   const std::vector<long>& nodes = w->getNodeIds();
-  for (size_t i = 0; i < nodes.size(); i++)
-  {
-    (*this)[nodes[i]].insert(w->getId());
-  }
+  for (auto node_id : nodes)
+    (*this)[node_id].insert(w->getId());
 }
 
 const set<long>& NodeToWayMap::getWaysByNode(long nid) const
 {
   NodeToWayMap::const_iterator it = this->find(nid);
   if (it == this->end())
-  {
     return _emptySet;
-  }
   else
-  {
     return it->second;
-  }
 }
 
 void NodeToWayMap::removeWay(const std::shared_ptr<const Way>& w)
 {
   LOG_TRACE("Removing way from node to way map: " << w->getElementId() << "...");
   const std::vector<long>& nodes = w->getNodeIds();
-  for (size_t i = 0; i < nodes.size(); i++)
+  for (auto node_id : nodes)
   {
-    set<long>& s = (*this)[nodes[i]];
+    set<long>& s = (*this)[node_id];
     s.erase(w->getId());
     // if we just removed the last node, then remove the entry from the map.
     if (s.empty())
-    {
-      erase(nodes[i]);
-    }
+      erase(node_id);
   }
 }
 
-bool NodeToWayMap::validate(const OsmMap& map)
+bool NodeToWayMap::validate(const OsmMap& m)
 {
   bool result = true;
   // verify that the map contains everything that it should.
-  const WayMap& ways = map.getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+#ifndef NDEBUG
+  const WayMap& ways = m.getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
     assert(w->getId() != 0);
     const std::vector<long>& nodes = w->getNodeIds();
-    for (size_t i = 0; i < nodes.size(); i++)
+    for (auto node_id : nodes)
     {
-#     ifndef NDEBUG
-        const set<long>& s = (*this)[nodes[i]];
-        assert(s.find(w->getId()) != s.end());
-#     endif
+      const set<long>& s = (*this)[node_id];
+      assert(s.find(w->getId()) != s.end());
     }
   }
+#endif
 
   // verify that the map doesn't contain anything it shouldn't.
-  for (const_iterator it = begin(); it != end(); ++it)
+  for (auto it = begin(); it != end(); ++it)
   {
     long nid = it->first;
     const set<long>& s = it->second;
-
     // this assumption causes problems when a OsmMap is incomplete (think map reduce)
     //assert(map.containsNode(nid) || s.size() == 0);
-
-    for (set<long>::const_iterator s_it = s.begin(); s_it != s.end(); ++s_it)
+    for (auto way_id : s)
     {
-      assert(*s_it != 0);
-      if (map.containsWay(*s_it) == false)
+      assert(way_id != 0);
+      if (m.containsWay(way_id) == false)
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(*s_it).arg(nid));
+          LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(way_id).arg(nid));
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -134,7 +121,6 @@ bool NodeToWayMap::validate(const OsmMap& map)
       }
     }
   }
-
   return result;
 }
 

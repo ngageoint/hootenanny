@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmXmlWriter.h"
 
@@ -275,7 +275,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     keys.sort();
 
   //  Write out the tags with their key/value pairs
-  for (const auto& key : keys)
+  for (const auto& key : qAsConst(keys))
   {
     QString val = tags.get(key).trimmed();
     if (!val.isEmpty())

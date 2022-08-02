@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SelectiveOverwriteTagMerger.h"
 
@@ -36,8 +36,8 @@ HOOT_FACTORY_REGISTER(TagMerger, SelectiveOverwriteTagMerger)
 HOOT_FACTORY_REGISTER(TagMerger, SelectiveOverwriteTag1Merger)
 HOOT_FACTORY_REGISTER(TagMerger, SelectiveOverwriteTag2Merger)
 
-SelectiveOverwriteTagMerger::SelectiveOverwriteTagMerger(bool swap) :
-_swap(swap)
+SelectiveOverwriteTagMerger::SelectiveOverwriteTagMerger(bool swap)
+  : _swap(swap)
 {
 }
 
@@ -49,8 +49,7 @@ void SelectiveOverwriteTagMerger::setConfiguration(const Settings& conf)
   setTagExcludeKeys(config.getSelectiveOverwriteTagMergerKeysExclude());
 }
 
-Tags SelectiveOverwriteTagMerger::mergeTags(
-  const Tags& t1, const Tags& t2, ElementType /*et*/) const
+Tags SelectiveOverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   LOG_VART(_tagKeys);
 
@@ -72,18 +71,13 @@ Tags SelectiveOverwriteTagMerger::mergeTags(
   // Assume all keys to be transferred if the include list is empty. In that case, this ends up
   // having the same behavior as OverwriteTagMerger.
   if (_tagKeys.isEmpty())
-  {
     _tagKeys = tagsToOverwriteWith.toKeys();
-  }
 
-  for (int i = 0; i < _tagKeys.size(); i++)
+  for (const auto& tagKey : qAsConst(_tagKeys))
   {
-    const QString tagKey = _tagKeys.at(i);
     LOG_VART(tagKey);
     if (tagsToOverwriteWith.contains(tagKey) && !_tagKeysExclude.contains(tagKey))
-    {
       tagsToBeOverwritten[tagKey] = tagsToOverwriteWith[tagKey];
-    }
   }
 
   LOG_TRACE("merged tags: " << tagsToBeOverwritten);

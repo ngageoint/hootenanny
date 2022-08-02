@@ -28,13 +28,7 @@
 #define ADDMEASUREMENTTAGSVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/ElementVisitor.h>
-
-// Geos
-#include <geos/geom/Polygon.h>
+#include <hoot/core/visitors/MeasurementTagsVisitor.h>
 
 namespace hoot
 {
@@ -52,7 +46,7 @@ namespace hoot
  *    - the combined closed way members of a relationship where outer
  *      entries are added and inner entries are subtracted
  */
-class AddMeasurementTagsVisitor : public ElementOsmMapVisitor
+class AddMeasurementTagsVisitor : public MeasurementTagsVisitor
 {
 public:
 
@@ -62,11 +56,6 @@ public:
 
   static QString className() { return "AddMeasurementTagsVisitor"; }
 
-  /**
-   * @see ElementVisitor
-   */
-  void visit(const ElementPtr& e) override;
-
   QString getInitStatusMessage() const override { return "Adding measurement tags..."; }
   QString getCompletedStatusMessage() const override
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
@@ -75,16 +64,10 @@ public:
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Modifies map geometry as specified"; }
 
-private:
+protected:
+  /** See MeasurementTagsVisitor::shouldCalculate() */
+  bool shouldCalculate(const ElementPtr& pElement) const override;
 
-  bool _addArea = true;
-  bool _addLength = true;
-  bool _addWidth = true;
-
-  void _processRelation(const RelationPtr pRelation );
-  void _processWay(const WayPtr pWay);
-
-  void _calculateExtents(geos::geom::Geometry* pGeometry, double& length, double &width) const;
 };
 
 }

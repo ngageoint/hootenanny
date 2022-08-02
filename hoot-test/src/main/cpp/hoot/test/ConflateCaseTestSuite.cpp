@@ -77,9 +77,9 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 # endif
 
   const QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
-  for (const auto& dir : dirs)
+  for (const auto& check_dir : dirs)
   {
-    const QString path = d.absoluteFilePath(dir);
+    const QString path = d.absoluteFilePath(check_dir);
 
     bool ignore = false;
     for (const auto& ignoreValue : ignoreList)

@@ -49,6 +49,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -rf test-output/*
 	rm -rf tgs/libTgs.a
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-js/tmp/debug/* hoot-test/tmp/debug/* tgs/tmp/debug/* hoot-cmd/tmp/debug/*
+	rm -rf hoot-core/tmp/release/* hoot-core-test/tmp/release/* tbs/tmp/release/* hoot-js/tmp/release/* hoot-test/tmp/release/* tgs/tmp/release/* hoot-cmd/tmp/release/*
 	rm -rf bin/*
 	rm -f translations/config.js
 	rm -f conf/core/ConfigOptions.json

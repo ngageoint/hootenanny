@@ -56,6 +56,15 @@ QString StringUtils::formatLargeNumber(const unsigned long number)
   return QLocale(QLocale::English).toString((qulonglong)number);
 }
 
+QString StringUtils::formatLargeDecimal(const double number)
+{
+  static char format = 'G';
+  QString result = QString::number(number, format);
+  if (result.contains("E"))
+    result = QString::number(number, format, 9);
+  return result.replace("+", "");
+}
+
 bool StringUtils::hasAlphabeticCharacter(const QString& input)
 {
   for (QChar c : input)

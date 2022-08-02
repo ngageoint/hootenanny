@@ -62,13 +62,9 @@ void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QString 
     {
       cout << "\"" << rows[i];
       if (i == rows.size() - 1)
-      {
         cout << "\"" << endl;
-      }
       else
-      {
         cout << "\\n\"" << endl;
-      }
     }
   }
   else
@@ -226,13 +222,13 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   std::shared_ptr<OsmMap> map = std::make_shared<OsmMap>();
 
   std::shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
-  n1->setTag("building", "yes");
+  n1->setTag(MetadataTags::Building(), "yes");
   //put a space in this tag value, since hstore dies on those if they are not esacaped properly
   n1->setTag("name", "n1 - n2");
 
   std::shared_ptr<Way> w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
-  w1->setTag("area", "yes");
-  w1->setTag("building", "yes");
+  w1->setTag(MetadataTags::Area(), "yes");
+  w1->setTag(MetadataTags::Building(), "yes");
   w1->setTag("name", "w1");
   w1->addNode(_createNode(-77.1, 38.0, map)->getId());
   w1->addNode(_createNode(-77.2, 38.0, map)->getId());
@@ -270,7 +266,7 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
 
   std::shared_ptr<Relation> r1 =
     std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon());
-  r1->setTag("building", "yes");
+  r1->setTag(MetadataTags::Building(), "yes");
   r1->setTag("name", "r1");
   r1->addElement("outer", w4->getElementId());
   r1->addElement("inner", w5->getElementId());

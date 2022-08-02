@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef DATACONVERTJS_H
 #define DATACONVERTJS_H
@@ -41,25 +41,17 @@ T toCpp(v8::Local<v8::Value> v);
 inline void toCpp(v8::Local<v8::Value> v, bool& o)
 {
   if (v->IsTrue())
-  {
     o = true;
-  }
   else if (v->IsFalse())
-  {
     o = false;
-  }
   else
-  {
     throw IllegalArgumentException("Expected a boolean. Got: (" + toJson(v) + ")");
-  }
 }
 
 inline void toCpp(v8::Local<v8::Value> v, int& o)
 {
   if (!v->IsInt32())
-  {
     throw IllegalArgumentException("Expected an integer. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -69,9 +61,7 @@ inline void toCpp(v8::Local<v8::Value> v, int& o)
 inline void toCpp(v8::Local<v8::Value> v, long& o)
 {
   if (!v->IsInt32())
-  {
     throw IllegalArgumentException("Expected an integer. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -81,9 +71,7 @@ inline void toCpp(v8::Local<v8::Value> v, long& o)
 inline void toCpp(v8::Local<v8::Value> v, Meters& o)
 {
   if (!v->IsNumber())
-  {
     throw IllegalArgumentException("Expected Meters (Number). Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -97,16 +85,10 @@ void toCpp(v8::Local<v8::Value> v, std::pair<T, U>& o)
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   if (!v->IsArray())
-  {
-    throw IllegalArgumentException("While converting a pair, expected an array. Got: (" +
-                                   toJson(v) + ")");
-  }
+    throw IllegalArgumentException("While converting a pair, expected an array. Got: (" + toJson(v) + ")");
   v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(v);
   if (arr->Length() != 2)
-  {
     throw IllegalArgumentException("Expected an array of length 2, but got (" + toJson(v) + ")");
-  }
-
   toCpp(arr->Get(context, 0).ToLocalChecked(), o.first);
   toCpp(arr->Get(context, 1).ToLocalChecked(), o.second);
 }
@@ -119,9 +101,7 @@ void toCpp(v8::Local<v8::Value> v, std::pair<T, U>& o)
 inline void toCpp(v8::Local<v8::Value> v, QString& s)
 {
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())
-  {
     throw IllegalArgumentException("Expected a string. Got an empty value.");
-  }
   if (v->IsString() || v->IsNumber() || v->IsBoolean())
   {
     v8::Isolate* current = v8::Isolate::GetCurrent();
@@ -131,17 +111,13 @@ inline void toCpp(v8::Local<v8::Value> v, QString& s)
     s = QString::fromUtf8(*param);
   }
   else
-  {
     throw IllegalArgumentException("Expected a string. Got: (" + toJson(v) + ")");
-  }
 }
 
 inline void toCpp(v8::Local<v8::Value> v, QStringList& o)
 {
   if (!v->IsArray())
-  {
     throw IllegalArgumentException("Expected an array. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -149,17 +125,13 @@ inline void toCpp(v8::Local<v8::Value> v, QStringList& o)
 
   o.reserve(arr->Length());
   for (uint32_t i = 0; i < arr->Length(); i++)
-  {
     o.append(toCpp<QString>(arr->Get(context, i).ToLocalChecked()));
-  }
 }
 
 inline void toCpp(v8::Local<v8::Value> v, QVariantList& l)
 {
   if (v.IsEmpty() || v->IsArray() == false)
-  {
     throw IllegalArgumentException("Expected to get an array. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -168,17 +140,13 @@ inline void toCpp(v8::Local<v8::Value> v, QVariantList& l)
   l.clear();
   l.reserve(arr->Length());
   for (uint32_t i = 0; i < arr->Length(); i++)
-  {
     l.append(toCpp<QVariant>(arr->Get(context, i).ToLocalChecked()));
-  }
 }
 
 inline void toCpp(v8::Local<v8::Value> v, QVariantMap& m)
 {
   if (v.IsEmpty() || v->IsObject() == false)
-  {
     throw IllegalArgumentException("Expected to get an object. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -188,10 +156,9 @@ inline void toCpp(v8::Local<v8::Value> v, QVariantMap& m)
   v8::Local<v8::Array> arr = obj->GetPropertyNames(context).ToLocalChecked();
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
-    QString k = toCpp<QString>(arr->Get(context, i).ToLocalChecked());
-    QVariant v = toCpp<QVariant>(obj->Get(context, arr->Get(context, i).ToLocalChecked()).ToLocalChecked());
-
-    m.insert(k, v);
+    QString key = toCpp<QString>(arr->Get(context, i).ToLocalChecked());
+    QVariant val = toCpp<QVariant>(obj->Get(context, arr->Get(context, i).ToLocalChecked()).ToLocalChecked());
+    m.insert(key, val);
   }
 }
 
@@ -201,25 +168,15 @@ inline void toCpp(v8::Local<v8::Value> v, QVariant& qv)
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())
-  {
     qv = QVariant();
-  }
   else if (v->IsString())
-  {
     qv = toCpp<QString>(v);
-  }
   else if (v->IsInt32())
-  {
     qv.setValue(v->Int32Value(context).ToChecked());
-  }
   else if (v->IsNumber())
-  {
     qv.setValue(v->NumberValue(context).ToChecked());
-  }
   else if (v->IsArray())
-  {
     qv = toCpp<QVariantList>(v);
-  }
   else if (v->IsObject())
   {
     QVariantMap m;
@@ -227,18 +184,14 @@ inline void toCpp(v8::Local<v8::Value> v, QVariant& qv)
     qv = m;
   }
   else
-  {
     throw IllegalArgumentException("Received unexpected data type: " + toJson(v));
-  }
 }
 
 template<typename T>
 void toCpp(v8::Local<v8::Value> v, std::vector<T>& o)
 {
   if (!v->IsArray())
-  {
     throw IllegalArgumentException("Expected an array. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -260,9 +213,7 @@ template<typename T>
 void toCpp(v8::Local<v8::Value> v, std::set<T>& o)
 {
   if (!v->IsArray())
-  {
     throw IllegalArgumentException("Expected an array. Got: (" + toJson(v) + ")");
-  }
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
@@ -305,7 +256,7 @@ inline v8::Local<v8::Value> toV8(const std::string& s)
 {
   v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
   return scope.Escape(v8::String::NewFromUtf8(
-      v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked());
+      v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, static_cast<int>(s.length())).ToLocalChecked());
 }
 
 template<typename T, typename U>
@@ -326,11 +277,9 @@ v8::Local<v8::Value> toV8(const std::vector<T>& v)
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), static_cast<int>(v.size()));
   for (uint32_t i = 0; i < v.size(); i++)
-  {
     result->Set(context, i, toV8(v[i]));
-  }
   return scope.Escape(result);
 }
 
@@ -343,12 +292,10 @@ v8::Local<v8::Value> toV8(const std::set<T>& v)
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), static_cast<int>(v.size()));
   uint32_t i = 0;
   for (typename std::set<T>::const_iterator it = v.begin(); it != v.end(); ++it)
-  {
     result->Set(context, i++, toV8(*it));
-  }
   return scope.Escape(result);
 }
 
@@ -362,9 +309,7 @@ inline v8::Local<v8::Value> toV8(const QString& s)
 {
   v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
   QByteArray utf8 = s.toUtf8();
-  return scope.Escape(v8::String::NewFromUtf8(
-      v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal,
-      utf8.length()).ToLocalChecked());
+  return scope.Escape(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked());
 }
 
 inline v8::Local<v8::Value> toV8(const QStringList& v)
@@ -374,9 +319,7 @@ inline v8::Local<v8::Value> toV8(const QStringList& v)
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   for (int i = 0; i < v.size(); i++)
-  {
     result->Set(context, i, toV8(v[i]));
-  }
   return scope.Escape(result);
 }
 
@@ -403,30 +346,25 @@ inline v8::Local<v8::Value> toV8(const QVariant& v)
   {
     QVariantList l = v.toList();
     v8::Local<v8::Array> result = v8::Array::New(current, l.size());
-    for (int i = 0; i < l.size(); i++)
-    {
-      result->Set(context, i, toV8(l[i]));
-    }
+    int i = 0;
+    for (const auto& value : qAsConst(l))
+      result->Set(context, i++, toV8(value));
     return scope.Escape(result);
   }
   case QVariant::Hash:
   {
     v8::Local<v8::Object> result = v8::Object::New(current);
     QVariantHash m = v.toHash();
-    for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
-    {
+    for (auto i = m.cbegin(); i != m.cend(); i++)
       result->Set(context, toV8(i.key()),toV8(i.value()));
-    }
     return scope.Escape(result);
   }
   case QVariant::Map:
   {
     v8::Local<v8::Object> result = v8::Object::New(current);
     QVariantMap m = v.toMap();
-    for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
-    {
+    for (auto i = m.cbegin(); i != m.cend(); i++)
       result->Set(context, toV8(i.key()),toV8(i.value()));
-    }
     return scope.Escape(result);
   }
   default:
@@ -442,11 +380,8 @@ inline v8::Local<v8::Value> toV8(const QHash<T, U>& m)
   v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
-  typename QHash<T, U>::const_iterator i;
-  for (i = m.begin(); i != m.end(); i++)
-  {
+  for (auto i = m.begin(); i != m.end(); ++i)
     result->Set(context, toV8(i.key()),toV8(i.value()));
-  }
   return scope.Escape(result);
 }
 

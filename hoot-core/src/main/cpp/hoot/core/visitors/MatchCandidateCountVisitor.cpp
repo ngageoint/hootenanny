@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
@@ -34,31 +34,24 @@ using namespace std;
 namespace hoot
 {
 
-MatchCandidateCountVisitor::MatchCandidateCountVisitor(
-  const vector<std::shared_ptr<MatchCreator>>& matchCreators) :
-_totalCandidateCount(0)
+MatchCandidateCountVisitor::MatchCandidateCountVisitor(const vector<std::shared_ptr<MatchCreator>>& matchCreators)
+  : _totalCandidateCount(0)
 {
   _setupCreators(matchCreators);
 }
 
-void MatchCandidateCountVisitor::_setupCreators(
-  const vector<std::shared_ptr<MatchCreator>>& matchCreators)
+void MatchCandidateCountVisitor::_setupCreators(const vector<std::shared_ptr<MatchCreator>>& matchCreators)
 {
   _matchCreatorsByName.clear();
   LOG_VARD(matchCreators.size());
-  for (size_t i = 0; i < matchCreators.size(); i++)
+  for (const auto& matchCreator : matchCreators)
   {
-    std::shared_ptr<MatchCreator> matchCreator = matchCreators[i];
     QString matchCreatorName;
     const QString matchCreatorDescription = matchCreator->getDescription();
     if (matchCreatorDescription.isEmpty())
-    {
       matchCreatorName = matchCreator->getAllCreators().at(0).getClassName();
-    }
     else
-    {
       matchCreatorName = matchCreatorDescription;
-    }
     LOG_VART(matchCreatorName);
 
     _matchCreatorsByName.insert(matchCreatorName, matchCreator);
@@ -70,8 +63,7 @@ void MatchCandidateCountVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   _totalCandidateCount = 0;
 
-  for (QMap<QString, std::shared_ptr<MatchCreator>>::const_iterator iterator =
-       _matchCreatorsByName.begin(); iterator != _matchCreatorsByName.end(); ++iterator)
+  for (auto iterator = _matchCreatorsByName.begin(); iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
     LOG_VART(matchCreatorName);
@@ -86,25 +78,21 @@ void MatchCandidateCountVisitor::visit(const std::shared_ptr<const Element>& e)
           _matchCandidateCountsByMatchCreator[matchCreatorName] + 1;
       }
       else
-      {
         _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
-      }
+
       LOG_VART(_matchCandidateCountsByMatchCreator[matchCreatorName]);
     }
   }
   LOG_VART(_matchCandidateCountsByMatchCreator.size());
 
-  for (QMap<QString, long>::const_iterator iterator = _matchCandidateCountsByMatchCreator.begin();
-       iterator != _matchCandidateCountsByMatchCreator.end(); ++iterator)
+  for (auto iterator = _matchCandidateCountsByMatchCreator.begin(); iterator != _matchCandidateCountsByMatchCreator.end(); ++iterator)
   {
     //We'll handle poi and building counts separately, since there could be overlap between poi,
     //building, and poi/poly match creators.
     const QString matchCreatorName = iterator.key().toLower();
     LOG_VART(matchCreatorName);
-    if (!matchCreatorName.contains("poi") && !matchCreatorName.contains("building"))
-    {
+    if (!matchCreatorName.contains("poi") && !matchCreatorName.contains(MetadataTags::Building()))
       _totalCandidateCount += iterator.value();
-    }
   }
   //If poi/poly match creator isn't present, then use each of the counts from the poi and building
   //match creators, if they're present.
@@ -113,29 +101,18 @@ void MatchCandidateCountVisitor::visit(const std::shared_ptr<const Element>& e)
   if (!_matchCandidateCountsByMatchCreator.contains("PoiPolygonMatchCreator"))
   {
     if (_matchCandidateCountsByMatchCreator.contains("BuildingMatchCreator"))
-    {
       _totalCandidateCount += _matchCandidateCountsByMatchCreator["BuildingMatchCreator"];
-    }
     if (_matchCandidateCountsByMatchCreator.contains("ScriptMatchCreator,Poi.js"))
-    {
-      _totalCandidateCount +=
-        _matchCandidateCountsByMatchCreator["ScriptMatchCreator,Poi.js"];
-    }
+      _totalCandidateCount += _matchCandidateCountsByMatchCreator["ScriptMatchCreator,Poi.js"];
   }
   //otherwise, use the poi/poly count only to avoid overlap.  it will always be >= the sum of
   //the poi and building counts
   else
-  {
     _totalCandidateCount += _matchCandidateCountsByMatchCreator["PoiPolygonMatchCreator"];
-  }
 
   _numAffected++;
   if (_numAffected % 10000 == 0)
-  {
-    PROGRESS_INFO(
-      "Checked " << StringUtils::formatLargeNumber(_numAffected) <<
-      " features for match candidates.");
-  }
+    PROGRESS_INFO("Checked " << StringUtils::formatLargeNumber(_numAffected) << " features for match candidates.");
 }
 
 }

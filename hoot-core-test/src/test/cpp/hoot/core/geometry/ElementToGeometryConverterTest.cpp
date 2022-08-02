@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/MetadataTags.h>
 
 //  Geos
@@ -76,7 +76,7 @@ public:
     geometry = ec.convertToGeometry(way);
     HOOT_STR_EQUALS("LineString", geometry->getGeometryType());
     //  Add the building tag to make it an area
-    way->setTag("building", "yes");
+    way->setTag(MetadataTags::Building(), "yes");
     geometry = ec.convertToGeometry(way);
     HOOT_STR_EQUALS("Polygon", geometry->getGeometryType());
 
@@ -88,9 +88,8 @@ public:
     nodes2.push_back(TestUtils::createNode(map, "", Status::Unknown1, 2.5, 7.5));
     nodes2.push_back(nodes2[0]);
     WayPtr way2 = TestUtils::createWay(map, nodes2);
-    way2->setTag("building", "yes");
-    RelationPtr relation =
-      TestUtils::createRelation(map, QList<ElementPtr>(), "", Status::Unknown1);
+    way2->setTag(MetadataTags::Building(), "yes");
+    RelationPtr relation = TestUtils::createRelation(map, QList<ElementPtr>(), "", Status::Unknown1);
     relation->setType(MetadataTags::RelationMultiPolygon());
     relation->addElement(MetadataTags::RelationOuter(), way);
     relation->addElement(MetadataTags::RelationInner(), way2);
@@ -161,8 +160,8 @@ public:
 
     //  Relation geometry types
     QList<ElementPtr> elements;
-    for (QList<NodePtr>::iterator it = nodes.begin(); it != nodes.end(); ++it)
-      elements.append(*it);
+    for (const auto& node : qAsConst(nodes))
+      elements.append(node);
     RelationPtr relation = TestUtils::createRelation(map, elements);
     //  Reviews are collections
     relation->setType(MetadataTags::RelationReview());
@@ -198,4 +197,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementToGeometryConverterTest, "quick");
 
 }
-

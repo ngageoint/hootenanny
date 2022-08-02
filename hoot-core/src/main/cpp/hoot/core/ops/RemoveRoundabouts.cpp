@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveRoundabouts.h"
@@ -53,7 +53,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 
   // Get a list of roundabouts in the map
   RoundaboutCriterion roundaboutCrit;
-  for (WayMap::const_iterator it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
+  for (auto it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
   {
     if (roundaboutCrit.isSatisfied(it->second))
     {
@@ -77,7 +77,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 
   // Mangle (in a good way) ways that may cross our roundabouts, provided there
   // is no 'sibling' roundabout in the secondary dataset
-  QVector<bool> foundSibling(removed.size(), false);
+  vector<bool> foundSibling(removed.size(), false);
   for (size_t i = 0; i < removed.size() - 1; i++)
   {
     //  If a sibling has already been found for this way, skip it

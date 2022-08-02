@@ -16,9 +16,17 @@ fi
 GCOV_SCAN_PATHS=("hoot-core" "tbs" "tgs" "hoot-cmd" "hoot-js" "hoot-josm")
 
 for GCOV_PATH in ${GCOV_SCAN_PATHS[@]}; do
-    pushd $GCOV_PATH
-    # Create coverage
-    gcov -o $HOOT_HOME/$GCOV_PATH/tmp/debug/ $HOOT_HOME/$GCOV_PATH/tmp/debug/*.gcda
+    echo "Processing $GCOV_PATH"
+    pushd $GCOV_PATH > /dev/null
+    # Remove the old log file
+    rm -f $HOOT_HOME/$GCOV_PATH/tmp/gcov.log
+    # Iterate all gcda files
+    for GCDA_FILE in $HOOT_HOME/$GCOV_PATH/tmp/debug/*.gcda;
+    do
+      # Create coverage
+      echo "gcov $GCDA_FILE"
+      gcov -m -o $HOOT_HOME/$GCOV_PATH/tmp/debug/ $GCDA_FILE >> $HOOT_HOME/$GCOV_PATH/tmp/gcov.log
+    done
     # Fix path
     sed -i "s|0:Source:src|0:Source:$HOOT_HOME/$GCOV_PATH/src|g" *.gcov
     mv *.gcov $HOOT_HOME/gcov

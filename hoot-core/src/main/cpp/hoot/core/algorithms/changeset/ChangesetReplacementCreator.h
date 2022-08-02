@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_H
 #define CHANGESET_REPLACEMENT_CREATOR_H
@@ -59,7 +59,7 @@ public:
    * @param output the changeset file output location
    */
   void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& output) override;
+              const QString& output) override;
   /**
    * @brief create creates a changeset that replaces features in the first input with features from
    * the second input.
@@ -70,8 +70,8 @@ public:
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  void create(const QString& input1, const QString& input2,
-    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
+  void create(const QString& input1, const QString& input2, const std::shared_ptr<geos::geom::Polygon>& bounds,
+              const QString& output) override;
 
   QString toString() const override { return className(); }
 
@@ -107,10 +107,8 @@ private:
    * @param markSnappedWays if true, snapped ways are marked with a custom metadata tag
    * @param debugFileName name prefix for any debug map files generated during snapping
    */
-  void _snapUnconnectedWays(
-    OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-    const QString& typeCriterionClassName, const bool markSnappedWays,
-    const QString& debugFileName) const;
+  void _snapUnconnectedWays(OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
+                            const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName) const;
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
@@ -119,17 +117,15 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(const OsmMapPtr& map) const;
 
   void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const;
-  void _snapUnconnectedPostChangesetMapCropping(
-    const OsmMapPtr& refMap, OsmMapPtr& combinedMap,
-    const OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
+  void _snapUnconnectedPostChangesetMapCropping(const OsmMapPtr& refMap, OsmMapPtr& combinedMap,
+                                                const OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
 
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different
    * cropping than done during initial load and cookie cutting.
    */
-  void _cropMapForChangesetDerivation(
-    OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const;
+  void _cropMapForChangesetDerivation(OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
+                                      const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const;
 
   void _generateChangeset(const OsmMapPtr& refMap, const OsmMapPtr& combinedMap);
 };

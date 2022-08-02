@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef _ELEMENT_ID_REMAPPER_H_
 #define _ELEMENT_ID_REMAPPER_H_
 
 // Hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -48,8 +48,7 @@ public:
 
   ElementIdRemapper();
   ElementIdRemapper(const ElementCriterionPtr& remapFilter);
-  ElementIdRemapper(
-    const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter);
+  ElementIdRemapper(const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter);
   ~ElementIdRemapper() override = default;
 
   /**

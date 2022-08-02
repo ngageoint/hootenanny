@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDING_PART_PRE_MERGE_COLLECTOR_H
 #define BUILDING_PART_PRE_MERGE_COLLECTOR_H
@@ -54,7 +54,7 @@ namespace hoot
  */
 struct BuildingPartRelationship
 {
-  enum BuildingPartRelationshipType
+  enum class BuildingPartRelationshipType
   {
     // This is a building that we need to check for containment within another building before
     // adding to the group.
@@ -63,12 +63,12 @@ struct BuildingPartRelationship
     Neighbor
   };
 
-  BuildingPartRelationship(const ElementPtr& building, const std::shared_ptr<geos::geom::Geometry>& buildingGeom,
-                           const WayPtr& buildingPartNeighbor, BuildingPartRelationshipType relationshipType)
-    : building(building),
-      buildingGeom(buildingGeom),
-      buildingPartNeighbor(buildingPartNeighbor),
-      relationshipType(relationshipType)
+  BuildingPartRelationship(const ElementPtr& building_, const std::shared_ptr<geos::geom::Geometry>& building_geom,
+                           const WayPtr& building_part_neighbor, BuildingPartRelationshipType relationship_type)
+    : building(building_),
+      buildingGeom(building_geom),
+      buildingPartNeighbor(building_part_neighbor),
+      relationshipType(relationship_type)
   {
   }
 

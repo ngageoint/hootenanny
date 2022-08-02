@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Standard
@@ -55,10 +55,10 @@ public:
 
   Tmp() {}
 
-  Tmp(double d, int id)
+  Tmp(double d_, int id_)
   {
-    this->d = d;
-    this->id = id;
+    d = d_;
+    id = id_;
   }
 
   bool operator<(const Tmp& t) const
@@ -287,7 +287,6 @@ public:
     int sampleSize = 100;
 
     Tgs::Random::instance()->seed(0);
-//     t.restart();
     double x, y;
     for (int i = 0; i < sampleSize; i++)
     {
@@ -297,14 +296,11 @@ public:
       KnnIterator it(&uut, x, y);
       CPPUNIT_ASSERT(it.next());
     }
-//    double searchTime = t.elapsed();
-//     printf("%.2f\t", searchTime);
 
     uut.greedyShuffle();
     validateTreeBounds(uut);
 
     Tgs::Random::instance()->seed(0);
-//    t.restart();
     for (int i = 0; i < sampleSize; i++)
     {
       x = Tgs::Random::instance()->generateInt() - 3000;
@@ -313,8 +309,6 @@ public:
       KnnIterator it(&uut, x, y);
       CPPUNIT_ASSERT(it.next());
     }
-//    searchTime = t.elapsed();
-//     printf("%.2f\t", searchTime);
   }
 
   void testRStarDistance()
@@ -341,9 +335,7 @@ public:
     else
     {
       for (int i = 0; i < testSize; i++)
-      {
         uut->insert(boxes[i], fids[i]);
-      }
     }
     _testTreeDistance(uut, testSize, sampleSize);
   }
@@ -378,8 +370,8 @@ public:
       int j = 0;
       while (it.next())
       {
-        if (bruteForceResults[j].d != it.getDistance() || 
-          bruteForceResults[j].id != it.getId())
+        if (bruteForceResults[j].d != it.getDistance() ||
+            bruteForceResults[j].id != it.getId())
         {
           std::cout << bruteForceResults[j].d << ":" << it.getDistance() << "\t" <<
             bruteForceResults[j].id << ":" << it.getId() << std::endl;
@@ -403,9 +395,7 @@ public:
     else
     {
       for (unsigned int i = 0; i < boxes.size(); i++)
-      {
         rst->insert(boxes[i], fids[i]);
-      }
     }
 
     Tgs::Random::instance()->seed(0);
@@ -496,9 +486,7 @@ public:
     std::vector<bool> found;
     found.resize(cc);
     for (unsigned int i = 0; i < found.size(); i++)
-    {
       found[i] = false;
-    }
 
     int rootId = uut.getRoot()->getId();
     std::list<const RTreeNode*> nodes;
@@ -516,26 +504,9 @@ public:
       if (n->isLeafNode())
       {
         //printf("Leaf Node %d contains: (parent %d)\n", n->getId(), n->getParentId());
-        int lastId = -100;
         for (int i = 0; i < n->getChildCount(); i++)
         {
           int id = n->getChildUserId(i);
-
-          if (i == 0)
-          {
-            //printf("  %d\n", id);
-          }
-          else if (id != lastId + 1)
-          {
-            //printf("  -> %d\n", lastId);
-            //printf("  %d\n", id);
-          }
-          else if (i == n->getChildCount() - 1)
-          {
-            //printf("  -> %d\n", id);
-          }
-          lastId = id;
-
           CPPUNIT_ASSERT(id < (int)found.size());
           CPPUNIT_ASSERT(found[id] == false);
           found[id] = true;
@@ -544,23 +515,16 @@ public:
           b.setBounds(1, id + 2, id + 1 - 2 * (id % 2));
           bounds.expand(b);
           Box tmp = n->getChildEnvelope(i).toBox();
-//           if ((b == tmp) == false)
-//           {
-//             std::cout << id << " " << b.toString() << std::endl;
-//             std::cout << tmp.toString() << std::endl;
-//           }
           CPPUNIT_ASSERT(b == tmp);
         }
         CPPUNIT_ASSERT(bounds == n->calculateEnvelope());
       }
       else
       {
-        //printf("Node %d contains: (parent %d)\n", n->getId(), n->getParentId());
         for (int i = 0; i < n->getChildCount(); i++)
         {
           int id = n->getChildNodeId(i);
           CPPUNIT_ASSERT(id >= 0);
-          //printf("  %d\n", id);
           nodes.push_back(uut.getNode(id));
           bounds.expand(uut.getNode(id)->calculateEnvelope());
         }
@@ -571,9 +535,8 @@ public:
     for (unsigned int i = 0; i < found.size(); i++)
     {
       if (found[i] != true)
-      {
         printf("Didn't find %u\n", i);
-      }
+
       CPPUNIT_ASSERT_EQUAL(true, (bool)found[i]);
     }
   }

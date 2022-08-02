@@ -125,12 +125,12 @@ POI Criterion...
 
 Check for invalid characters. You should see 3 sets of warnings.
 
-19:28:31.708 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 106) Found an invalid character in string: 'foo '
-19:28:31.708 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 107)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
-19:28:31.708 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 106) Found an invalid character in string: ''
-19:28:31.708 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 107)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
-19:28:31.708 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 106) Found an invalid character in string: '3 '
-19:28:31.708 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 107)   UCS-4 version of the string: [3]{51, 32, 1}
+16:02:23.577 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 101) Found an invalid character in string: 'foo '
+16:02:23.577 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 102)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
+16:02:23.577 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 101) Found an invalid character in string: ''
+16:02:23.577 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 102)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
+16:02:23.577 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 101) Found an invalid character in string: '3 '
+16:02:23.577 WARN   .../hoot/core/io/OsmXmlWriter.cpp( 102)   UCS-4 version of the string: [3]{51, 32, 1}
 
 Translation check...
 
@@ -138,10 +138,16 @@ Translation check...
 Multi-layer GDB to OSM...
 
 
+Multi-layer GPKG to OSM...
+
+
 Multi-layer GDB to OSM single layer only...
 
 
 Multiple formats to OSM and writing to separate outputs...
+
+
+OSM to GPKG...
 
 
 ZIP of SHP to OSM...
@@ -151,4 +157,7 @@ TAR of SHP to OSM...
 
 
 TAR GZ of SHP to OSM...
+
+
+DNC to OSM...
 

@@ -1,140 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="38.85610588520364" minlon="-104.9111797" maxlat="38.8574704852043" maxlon="-104.9089132"/>
-    <node visible="true" id="-197330" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8568526949639690" lon="-104.9105060379600047"/>
-    <node visible="true" id="-197328" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8568412233739977" lon="-104.9101616909499910"/>
-    <node visible="true" id="-197326" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8565716404038426" lon="-104.9101708980899872"/>
-    <node visible="true" id="-197324" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8565945836738891" lon="-104.9105189279499939"/>
-    <node visible="true" id="-197322" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8567723937739444" lon="-104.9104121251399988"/>
-    <node visible="true" id="-197320" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8567666579739424" lon="-104.9102887494699985"/>
-    <node visible="true" id="-197318" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8566777529738800" lon="-104.9102924323299959"/>
-    <node visible="true" id="-197316" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8566863566839160" lon="-104.9104139665700046"/>
-    <node visible="true" id="55726529" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8570395852040988" lon="-104.9100210999999945"/>
-    <node visible="true" id="55726530" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8569325852040564" lon="-104.9091884999999991"/>
-    <node visible="true" id="55726532" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8568323852039654" lon="-104.9090769999999964"/>
-    <node visible="true" id="55726534" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8566585852039239" lon="-104.9089225000000027"/>
-    <node visible="true" id="55806816" timestamp="2010-01-01T03:39:27Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8570996852041262" lon="-104.9111110999999994"/>
-    <node visible="true" id="55806819" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8569526852040354" lon="-104.9099008999999967"/>
-    <node visible="true" id="55806820" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8567721852039440" lon="-104.9097721999999919"/>
-    <node visible="true" id="55806822" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8566050852038813" lon="-104.9097120999999930"/>
-    <node visible="true" id="55806824" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8564713852037684" lon="-104.9097206999999798"/>
-    <node visible="true" id="55806826" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8563778852037345" lon="-104.9097978999999867"/>
-    <node visible="true" id="55806828" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8563043852037069" lon="-104.9099094999999977"/>
-    <node visible="true" id="55806831" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8562842852037420" lon="-104.9100640000000055"/>
-    <node visible="true" id="55806833" timestamp="2010-01-01T03:39:27Z" version="2" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8563029852037118" lon="-104.9102809999999977"/>
-    <node visible="true" id="55806834" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8561572852036505" lon="-104.9111283000000014"/>
-    <node visible="true" id="431719389" timestamp="2009-07-01T19:29:12Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8570462852041132" lon="-104.9097893999999798"/>
-    <node visible="true" id="431719390" timestamp="2009-07-01T19:29:12Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8570328852040703" lon="-104.9095489999999984"/>
-    <node visible="true" id="431719392" timestamp="2009-07-01T19:29:12Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8569994852040566" lon="-104.9093601999999947"/>
-    <node visible="true" id="431731325" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8563978852037266" lon="-104.9105016999999975"/>
-    <node visible="true" id="431731328" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8564045852037481" lon="-104.9106390999999974"/>
-    <node visible="true" id="431731332" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8563644852037626" lon="-104.9107249000000053"/>
-    <node visible="true" id="431731335" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8562909852036711" lon="-104.9108537000000041"/>
-    <node visible="true" id="431731338" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8562174852037003" lon="-104.9109823999999946"/>
-    <node visible="true" id="734793015" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571398852041270" lon="-104.9097138000000058"/>
-    <node visible="true" id="734793016" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571231852041166" lon="-104.9090003000000024"/>
-    <node visible="true" id="734793017" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572067852041272" lon="-104.9090003000000024"/>
-    <node visible="true" id="734793018" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572109852041550" lon="-104.9090915000000024"/>
-    <node visible="true" id="734793019" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571795852041433" lon="-104.9090915000000024"/>
-    <node visible="true" id="734793020" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571795852041433" lon="-104.9091504999999813"/>
-    <node visible="true" id="734793021" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150852041673" lon="-104.9091504999999813"/>
-    <node visible="true" id="734793022" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192852041951" lon="-104.9092471000000018"/>
-    <node visible="true" id="734793023" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571900852041168" lon="-104.9092471000000018"/>
-    <node visible="true" id="734793024" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571900852041097" lon="-104.9093033999999989"/>
-    <node visible="true" id="734793025" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572171852041777" lon="-104.9093033999999989"/>
-    <node visible="true" id="734793026" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192852041880" lon="-104.9094079999999991"/>
-    <node visible="true" id="734793027" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941852041789" lon="-104.9094079999999991"/>
-    <node visible="true" id="734793028" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941852041789" lon="-104.9094616999999943"/>
-    <node visible="true" id="734793029" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192852041880" lon="-104.9094616999999943"/>
-    <node visible="true" id="734793030" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192852041880" lon="-104.9095609000000024"/>
-    <node visible="true" id="734793031" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571962852041253" lon="-104.9095609000000024"/>
-    <node visible="true" id="734793032" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941852041931" lon="-104.9096172999999936"/>
-    <node visible="true" id="734793033" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572255852041835" lon="-104.9096172999999936"/>
-    <node visible="true" id="734793034" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572276852041512" lon="-104.9098022999999813"/>
-    <node visible="true" id="734793035" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572568852042011" lon="-104.9098022999999813"/>
-    <node visible="true" id="734793036" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572589852041617" lon="-104.9099846999999954"/>
-    <node visible="true" id="734793037" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572025852041349" lon="-104.9099901000000017"/>
-    <node visible="true" id="734793038" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572025852041349" lon="-104.9100384000000048"/>
-    <node visible="true" id="734793039" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571900852041168" lon="-104.9100384000000048"/>
-    <node visible="true" id="734793040" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571962852041395" lon="-104.9103199999999987"/>
-    <node visible="true" id="734793041" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150852041673" lon="-104.9103199999999987"/>
-    <node visible="true" id="734793042" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150852041602" lon="-104.9103601999999995"/>
-    <node visible="true" id="734793043" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941852041931" lon="-104.9103628999999813"/>
-    <node visible="true" id="734793044" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571962852041253" lon="-104.9105131000000029"/>
-    <node visible="true" id="734793045" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572129852041783" lon="-104.9105131000000029"/>
-    <node visible="true" id="734793046" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150852041673" lon="-104.9105641000000020"/>
-    <node visible="true" id="734793047" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572046852041666" lon="-104.9105641000000020"/>
-    <node visible="true" id="734793048" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572129852041783" lon="-104.9108511000000021"/>
-    <node visible="true" id="734793049" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572234852041731" lon="-104.9108511000000021"/>
-    <node visible="true" id="734793050" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572234852041731" lon="-104.9109153999999791"/>
-    <node visible="true" id="734793051" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8573383852042227" lon="-104.9109153999999791"/>
-    <node visible="true" id="734793052" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8573383852042227" lon="-104.9110199999999935"/>
-    <node visible="true" id="734793053" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571482852041044" lon="-104.9110280999999958"/>
-    <node visible="true" id="734793054" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571273852041159" lon="-104.9107115999999991"/>
-    <node visible="true" id="734793055" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571106852040842" lon="-104.9105212000000051"/>
-    <node visible="true" id="734793056" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571064852041275" lon="-104.9103575000000035"/>
-    <node visible="true" id="734793057" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571190852041539" lon="-104.9103575000000035"/>
-    <node visible="true" id="734793058" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571106852040842" lon="-104.9099927999999835"/>
-    <node visible="true" id="734793059" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571252852040985" lon="-104.9099927999999835"/>
-    <node visible="true" id="734793060" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571210852041062" lon="-104.9097110999999813"/>
-    <node visible="true" id="734818900" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569288852040344" lon="-104.9093864999999965"/>
-    <node visible="true" id="734818901" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568703852039903" lon="-104.9093570000000000"/>
-    <node visible="true" id="734818902" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568787852040103" lon="-104.9093381999999934"/>
-    <node visible="true" id="734818903" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568202852039732" lon="-104.9093033999999989"/>
-    <node visible="true" id="734818904" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8567784852039964" lon="-104.9094132999999829"/>
-    <node visible="true" id="734818905" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568933852039819" lon="-104.9094804000000067"/>
-    <node visible="true" id="734818906" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8566071852038704" lon="-104.9094670000000065"/>
-    <node visible="true" id="734818907" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8566176852038865" lon="-104.9094240999999954"/>
-    <node visible="true" id="734818908" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8565507852038223" lon="-104.9093998999999968"/>
-    <node visible="true" id="734818909" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8565403852038429" lon="-104.9094427999999937"/>
-    <node visible="true" id="734818912" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569476852040339" lon="-104.9097029999999791"/>
-    <node visible="true" id="734818913" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568327852039985" lon="-104.9096413000000041"/>
-    <node visible="true" id="734818914" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8567993852039564" lon="-104.9097406000000063"/>
-    <node visible="true" id="734818915" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569142852040201" lon="-104.9098103000000037"/>
-    <node visible="true" id="734818916" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569204852040215" lon="-104.9096466999999961"/>
-    <node visible="true" id="734818917" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569434852040416" lon="-104.9095635000000044"/>
-    <node visible="true" id="734818918" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568619852039845" lon="-104.9095233000000036"/>
-    <node visible="true" id="734818919" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568390852039940" lon="-104.9096011000000033"/>
-    <node visible="true" id="734818930" timestamp="2010-05-15T01:59:54Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561539852036546" lon="-104.9095930999999950"/>
-    <node visible="true" id="734818931" timestamp="2010-05-15T01:59:54Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561998852036652" lon="-104.9095099000000033"/>
-    <node visible="true" id="734818932" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561518852036514" lon="-104.9094616000000002"/>
-    <node visible="true" id="734818933" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561058852036396" lon="-104.9095448000000061"/>
-    <node visible="true" id="734818934" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564943852037885" lon="-104.9096708000000007"/>
-    <node visible="true" id="734818935" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564964852038131" lon="-104.9095609000000024"/>
-    <node visible="true" id="734818936" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564129852037681" lon="-104.9095582000000064"/>
-    <node visible="true" id="734818937" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564129852037610" lon="-104.9096708000000007"/>
-    <node visible="true" id="934200721" timestamp="2014-03-31T22:59:08Z" version="5" changeset="21429982" user="woodpeck_repair" uid="145231" lat="38.8574103852042469" lon="-104.9107627000000065">
+    <bounds minlat="38.8561058926" minlon="-104.9111797" maxlat="38.85747049260001" maxlon="-104.9089132"/>
+    <node visible="true" id="-197330" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8568527023600012" lon="-104.9105060379600047"/>
+    <node visible="true" id="-197328" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8568412307700015" lon="-104.9101616909500052"/>
+    <node visible="true" id="-197326" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8565716478000098" lon="-104.9101708980900014"/>
+    <node visible="true" id="-197324" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8565945910699995" lon="-104.9105189279499939"/>
+    <node visible="true" id="-197322" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8567724011699980" lon="-104.9104121251400130"/>
+    <node visible="true" id="-197320" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8567666653700030" lon="-104.9102887494699985"/>
+    <node visible="true" id="-197318" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8566777603699975" lon="-104.9102924323299959"/>
+    <node visible="true" id="-197316" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8566863640800051" lon="-104.9104139665700046"/>
+    <node visible="true" id="55726529" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8570395926000032" lon="-104.9100210999999945"/>
+    <node visible="true" id="55726530" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8569325926000033" lon="-104.9091884999999991"/>
+    <node visible="true" id="55726532" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8568323925999977" lon="-104.9090769999999964"/>
+    <node visible="true" id="55726534" timestamp="2010-01-01T03:20:54Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8566585925999988" lon="-104.9089225000000027"/>
+    <node visible="true" id="55806816" timestamp="2010-01-01T03:39:27Z" version="4" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8570996926000021" lon="-104.9111110999999994"/>
+    <node visible="true" id="55806819" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8569526925999966" lon="-104.9099008999999967"/>
+    <node visible="true" id="55806820" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8567721925999976" lon="-104.9097722000000061"/>
+    <node visible="true" id="55806822" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8566050925999988" lon="-104.9097120999999930"/>
+    <node visible="true" id="55806824" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8564713925999996" lon="-104.9097206999999941"/>
+    <node visible="true" id="55806826" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8563778926000012" lon="-104.9097979000000009"/>
+    <node visible="true" id="55806828" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8563043926000020" lon="-104.9099094999999977"/>
+    <node visible="true" id="55806831" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8562842926000087" lon="-104.9100640000000055"/>
+    <node visible="true" id="55806833" timestamp="2010-01-01T03:39:27Z" version="2" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8563029925999999" lon="-104.9102810000000119"/>
+    <node visible="true" id="55806834" timestamp="2010-01-01T03:39:27Z" version="3" changeset="3505150" user="woodpeck_fixbot" uid="147510" lat="38.8561572926000025" lon="-104.9111283000000014"/>
+    <node visible="true" id="431719389" timestamp="2009-07-01T19:29:12Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8570462926000033" lon="-104.9097893999999940"/>
+    <node visible="true" id="431719390" timestamp="2009-07-01T19:29:12Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8570328926000030" lon="-104.9095489999999984"/>
+    <node visible="true" id="431719392" timestamp="2009-07-01T19:29:12Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8569994926000035" lon="-104.9093601999999947"/>
+    <node visible="true" id="431731325" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8563978926000004" lon="-104.9105016999999975"/>
+    <node visible="true" id="431731328" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8564045925999935" lon="-104.9106390999999974"/>
+    <node visible="true" id="431731332" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8563644926000009" lon="-104.9107249000000053"/>
+    <node visible="true" id="431731335" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8562909926000017" lon="-104.9108537000000041"/>
+    <node visible="true" id="431731338" timestamp="2009-07-01T19:40:53Z" version="1" changeset="1703227" user="Jason R Surratt" uid="4073" lat="38.8562174926000097" lon="-104.9109823999999946"/>
+    <node visible="true" id="734793015" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571398926000029" lon="-104.9097138000000058"/>
+    <node visible="true" id="734793016" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571231925999996" lon="-104.9090003000000166"/>
+    <node visible="true" id="734793017" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572067926000031" lon="-104.9090003000000166"/>
+    <node visible="true" id="734793018" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572109926000024" lon="-104.9090915000000024"/>
+    <node visible="true" id="734793019" timestamp="2010-05-15T00:00:23Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571795925999908" lon="-104.9090915000000024"/>
+    <node visible="true" id="734793020" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571795925999979" lon="-104.9091504999999955"/>
+    <node visible="true" id="734793021" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150926000077" lon="-104.9091504999999955"/>
+    <node visible="true" id="734793022" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192926000000" lon="-104.9092471000000018"/>
+    <node visible="true" id="734793023" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571900925999998" lon="-104.9092471000000018"/>
+    <node visible="true" id="734793024" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571900925999927" lon="-104.9093033999999989"/>
+    <node visible="true" id="734793025" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572171925999967" lon="-104.9093033999999989"/>
+    <node visible="true" id="734793026" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192926000000" lon="-104.9094079999999991"/>
+    <node visible="true" id="734793027" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941925999980" lon="-104.9094079999999991"/>
+    <node visible="true" id="734793028" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941925999980" lon="-104.9094616999999943"/>
+    <node visible="true" id="734793029" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192926000000" lon="-104.9094616999999943"/>
+    <node visible="true" id="734793030" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572192926000000" lon="-104.9095609000000167"/>
+    <node visible="true" id="734793031" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571962926000012" lon="-104.9095609000000167"/>
+    <node visible="true" id="734793032" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941926000051" lon="-104.9096172999999936"/>
+    <node visible="true" id="734793033" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572255926000025" lon="-104.9096172999999936"/>
+    <node visible="true" id="734793034" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572276925999986" lon="-104.9098022999999955"/>
+    <node visible="true" id="734793035" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572568926000059" lon="-104.9098022999999955"/>
+    <node visible="true" id="734793036" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572589926000020" lon="-104.9099846999999954"/>
+    <node visible="true" id="734793037" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572025925999966" lon="-104.9099901000000017"/>
+    <node visible="true" id="734793038" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572025925999966" lon="-104.9100384000000048"/>
+    <node visible="true" id="734793039" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571900925999998" lon="-104.9100384000000048"/>
+    <node visible="true" id="734793040" timestamp="2010-05-15T00:00:24Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571962926000012" lon="-104.9103200000000129"/>
+    <node visible="true" id="734793041" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150926000006" lon="-104.9103200000000129"/>
+    <node visible="true" id="734793042" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150926000077" lon="-104.9103601999999995"/>
+    <node visible="true" id="734793043" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571941925999980" lon="-104.9103628999999955"/>
+    <node visible="true" id="734793044" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571962926000012" lon="-104.9105131000000029"/>
+    <node visible="true" id="734793045" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572129925999974" lon="-104.9105131000000029"/>
+    <node visible="true" id="734793046" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572150926000077" lon="-104.9105641000000020"/>
+    <node visible="true" id="734793047" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572046925999999" lon="-104.9105641000000020"/>
+    <node visible="true" id="734793048" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572129925999974" lon="-104.9108511000000021"/>
+    <node visible="true" id="734793049" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572234925999922" lon="-104.9108511000000021"/>
+    <node visible="true" id="734793050" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8572234925999922" lon="-104.9109153999999933"/>
+    <node visible="true" id="734793051" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8573383925999991" lon="-104.9109153999999933"/>
+    <node visible="true" id="734793052" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8573383925999991" lon="-104.9110200000000077"/>
+    <node visible="true" id="734793053" timestamp="2010-05-15T00:00:25Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571482926000016" lon="-104.9110280999999958"/>
+    <node visible="true" id="734793054" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571273925999918" lon="-104.9107115999999991"/>
+    <node visible="true" id="734793055" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571106925999956" lon="-104.9105212000000051"/>
+    <node visible="true" id="734793056" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571064926000105" lon="-104.9103575000000035"/>
+    <node visible="true" id="734793057" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571190926000014" lon="-104.9103575000000035"/>
+    <node visible="true" id="734793058" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571106926000027" lon="-104.9099927999999977"/>
+    <node visible="true" id="734793059" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571252926000099" lon="-104.9099927999999977"/>
+    <node visible="true" id="734793060" timestamp="2010-05-15T00:00:26Z" version="1" changeset="4701484" user="Jason R Surratt" uid="4073" lat="38.8571210926000106" lon="-104.9097110999999956"/>
+    <node visible="true" id="734818900" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569288926000027" lon="-104.9093864999999965"/>
+    <node visible="true" id="734818901" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568703926000012" lon="-104.9093570000000000"/>
+    <node visible="true" id="734818902" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568787925999999" lon="-104.9093381999999934"/>
+    <node visible="true" id="734818903" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568202925999984" lon="-104.9093033999999989"/>
+    <node visible="true" id="734818904" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8567784926000002" lon="-104.9094132999999971"/>
+    <node visible="true" id="734818905" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568933926000071" lon="-104.9094804000000067"/>
+    <node visible="true" id="734818906" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8566071926000021" lon="-104.9094670000000065"/>
+    <node visible="true" id="734818907" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8566176925999969" lon="-104.9094240999999954"/>
+    <node visible="true" id="734818908" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8565507925999967" lon="-104.9093998999999968"/>
+    <node visible="true" id="734818909" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8565403926000101" lon="-104.9094427999999937"/>
+    <node visible="true" id="734818912" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569476926000021" lon="-104.9097029999999933"/>
+    <node visible="true" id="734818913" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568327926000023" lon="-104.9096413000000041"/>
+    <node visible="true" id="734818914" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8567993926000099" lon="-104.9097406000000063"/>
+    <node visible="true" id="734818915" timestamp="2010-05-15T01:59:52Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569142926000026" lon="-104.9098103000000037"/>
+    <node visible="true" id="734818916" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569204925999969" lon="-104.9096466999999961"/>
+    <node visible="true" id="734818917" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8569434926000028" lon="-104.9095635000000044"/>
+    <node visible="true" id="734818918" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568619926000096" lon="-104.9095233000000036"/>
+    <node visible="true" id="734818919" timestamp="2010-05-15T01:59:53Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8568390926000049" lon="-104.9096011000000175"/>
+    <node visible="true" id="734818930" timestamp="2010-05-15T01:59:54Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561539925999995" lon="-104.9095930999999950"/>
+    <node visible="true" id="734818931" timestamp="2010-05-15T01:59:54Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561998925999958" lon="-104.9095099000000033"/>
+    <node visible="true" id="734818932" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561518926000034" lon="-104.9094616000000002"/>
+    <node visible="true" id="734818933" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8561058925999987" lon="-104.9095448000000061"/>
+    <node visible="true" id="734818934" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564943925999984" lon="-104.9096708000000007"/>
+    <node visible="true" id="734818935" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564964926000016" lon="-104.9095609000000167"/>
+    <node visible="true" id="734818936" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564129926000064" lon="-104.9095582000000064"/>
+    <node visible="true" id="734818937" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073" lat="38.8564129925999993" lon="-104.9096708000000007"/>
+    <node visible="true" id="934200721" timestamp="2014-03-31T22:59:08Z" version="5" changeset="21429982" user="woodpeck_repair" uid="145231" lat="38.8574103926000021" lon="-104.9107627000000065">
         <tag k="leisure" v="picnic_table"/>
     </node>
-    <node visible="true" id="934200739" timestamp="2010-10-02T02:51:08Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573497852042209" lon="-104.9108056999999974"/>
-    <node visible="true" id="934200741" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573372852042596" lon="-104.9105373999999955"/>
-    <node visible="true" id="934200743" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574311852042484" lon="-104.9105347999999935"/>
-    <node visible="true" id="934200744" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574395852042827" lon="-104.9106957000000051"/>
-    <node visible="true" id="934200745" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574228852042793" lon="-104.9106984000000011"/>
-    <node visible="true" id="934200746" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574249852042826" lon="-104.9108003000000053"/>
-    <node visible="true" id="934200750" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574019852042412" lon="-104.9106742000000025"/>
-    <node visible="true" id="934200753" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574082852042793" lon="-104.9106393999999796"/>
-    <node visible="true" id="934200754" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574071852042522" lon="-104.9105923999999845"/>
-    <node visible="true" id="934200755" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573956852042741" lon="-104.9105669000000063"/>
-    <node visible="true" id="934200756" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573727852042410" lon="-104.9105669000000063"/>
-    <node visible="true" id="934200757" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573654852042338" lon="-104.9105923999999845"/>
-    <node visible="true" id="934200758" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573664852042597" lon="-104.9106473999999878"/>
-    <node visible="true" id="934200759" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573748852042655" lon="-104.9106742000000025"/>
-    <node visible="true" id="988337661" timestamp="2010-11-13T23:42:40Z" version="1" changeset="6363128" user="Jason R Surratt" uid="4073" lat="38.8574557852042872" lon="-104.9111581999999885"/>
-    <node visible="true" id="988337663" timestamp="2010-11-13T23:42:40Z" version="1" changeset="6363128" user="Jason R Surratt" uid="4073" lat="38.8570589852040698" lon="-104.9111797000000053"/>
-    <node visible="true" id="988337732" timestamp="2010-11-13T23:45:36Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8574704852043027" lon="-104.9110320999999999">
+    <node visible="true" id="934200739" timestamp="2010-10-02T02:51:08Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573497925999973" lon="-104.9108056999999974"/>
+    <node visible="true" id="934200741" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573372926000005" lon="-104.9105374000000097"/>
+    <node visible="true" id="934200743" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574311926000036" lon="-104.9105347999999935"/>
+    <node visible="true" id="934200744" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574395926000022" lon="-104.9106957000000051"/>
+    <node visible="true" id="934200745" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574228925999989" lon="-104.9106984000000011"/>
+    <node visible="true" id="934200746" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574249926000022" lon="-104.9108003000000053"/>
+    <node visible="true" id="934200750" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574019926000034" lon="-104.9106742000000025"/>
+    <node visible="true" id="934200753" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574082926000060" lon="-104.9106393999999938"/>
+    <node visible="true" id="934200754" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8574071926000002" lon="-104.9105923999999987"/>
+    <node visible="true" id="934200755" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573956926000008" lon="-104.9105669000000063"/>
+    <node visible="true" id="934200756" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573727926000032" lon="-104.9105669000000063"/>
+    <node visible="true" id="934200757" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573654926000103" lon="-104.9105923999999987"/>
+    <node visible="true" id="934200758" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573664926000006" lon="-104.9106474000000020"/>
+    <node visible="true" id="934200759" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073" lat="38.8573748925999993" lon="-104.9106742000000025"/>
+    <node visible="true" id="988337661" timestamp="2010-11-13T23:42:40Z" version="1" changeset="6363128" user="Jason R Surratt" uid="4073" lat="38.8574557925999997" lon="-104.9111582000000027"/>
+    <node visible="true" id="988337663" timestamp="2010-11-13T23:42:40Z" version="1" changeset="6363128" user="Jason R Surratt" uid="4073" lat="38.8570589926000025" lon="-104.9111797000000053"/>
+    <node visible="true" id="988337732" timestamp="2010-11-13T23:45:36Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8574704926000081" lon="-104.9110320999999999">
         <tag k="power" v="pole"/>
     </node>
-    <node visible="true" id="988337734" timestamp="2010-11-13T23:45:36Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8574516852042962" lon="-104.9105466999999976">
+    <node visible="true" id="988337734" timestamp="2010-11-13T23:45:36Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8574516926000015" lon="-104.9105466999999976">
         <tag k="power" v="pole"/>
     </node>
-    <node visible="true" id="988337735" timestamp="2010-11-13T23:45:36Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8574077852042450" lon="-104.9099511999999947">
+    <node visible="true" id="988337735" timestamp="2010-11-13T23:45:36Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8574077926000072" lon="-104.9099511999999947">
         <tag k="power" v="pole"/>
     </node>
-    <node visible="true" id="988337737" timestamp="2010-11-13T23:45:38Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8573242852042213" lon="-104.9093933000000050">
+    <node visible="true" id="988337737" timestamp="2010-11-13T23:45:38Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8573242925999978" lon="-104.9093933000000050">
         <tag k="power" v="pole"/>
     </node>
-    <node visible="true" id="988337743" timestamp="2010-11-13T23:45:42Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8572991852042406" lon="-104.9089132000000006">
+    <node visible="true" id="988337743" timestamp="2010-11-13T23:45:42Z" version="2" changeset="6363140" user="Jason R Surratt" uid="4073" lat="38.8572991925999958" lon="-104.9089132000000006">
         <tag k="power" v="pole"/>
     </node>
     <way visible="true" id="-197449" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -143,9 +143,9 @@
         <nd ref="-197326"/>
         <nd ref="-197324"/>
         <nd ref="-197330"/>
+        <tag k="feature_area" v="881.992"/>
         <tag k="length" v="31.6089"/>
         <tag k="width" v="29.8885"/>
-        <tag k="area" v="881.992"/>
     </way>
     <way visible="true" id="-197448" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-197322"/>
@@ -153,9 +153,9 @@
         <nd ref="-197318"/>
         <nd ref="-197316"/>
         <nd ref="-197322"/>
+        <tag k="feature_area" v="103.405"/>
         <tag k="length" v="11.2945"/>
         <tag k="width" v="9.85821"/>
-        <tag k="area" v="103.405"/>
     </way>
     <way visible="true" id="-197447" timestamp="2017-06-04T03:40:43Z" version="5">
         <nd ref="55726529"/>
@@ -173,14 +173,14 @@
         <nd ref="431731335"/>
         <nd ref="431731338"/>
         <nd ref="55806834"/>
+        <tag k="highway" v="residential"/>
         <tag k="length" v="137.644"/>
         <tag k="name" v="Fountain Place"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:name_base" v="Fountain"/>
-        <tag k="tiger:county" v="El Paso, CO"/>
-        <tag k="tiger:name_type" v="Pl"/>
         <tag k="source:datetime" v="2017-06-04T03:40:43Z"/>
-        <tag k="highway" v="residential"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="El Paso, CO"/>
+        <tag k="tiger:name_base" v="Fountain"/>
+        <tag k="tiger:name_type" v="Pl"/>
         <tag k="width" v="65.2761"/>
     </way>
     <way visible="true" id="7674211" timestamp="2009-07-01T19:29:19Z" version="3" changeset="1703227" user="Jason R Surratt" uid="4073">
@@ -191,28 +191,28 @@
         <nd ref="55726530"/>
         <nd ref="55726532"/>
         <nd ref="55726534"/>
-        <tag k="length" v="104.318"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:tlid" v="105505984"/>
-        <tag k="tiger:county" v="El Paso, CO"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
-        <tag k="tiger:upload_uuid" v="bulk_upload.pl-02aee37f-64af-459c-83f5-0bf61b8a4ebe"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="source:datetime" v="2009-07-01T19:29:19Z"/>
         <tag k="highway" v="residential"/>
+        <tag k="length" v="104.318"/>
+        <tag k="source:datetime" v="2009-07-01T19:29:19Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="El Paso, CO"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
+        <tag k="tiger:tlid" v="105505984"/>
+        <tag k="tiger:upload_uuid" v="bulk_upload.pl-02aee37f-64af-459c-83f5-0bf61b8a4ebe"/>
         <tag k="width" v="19.1898"/>
     </way>
     <way visible="true" id="7684858" timestamp="2017-06-04T03:40:43Z" version="5">
         <nd ref="55806816"/>
         <nd ref="55726529"/>
+        <tag k="highway" v="residential"/>
         <tag k="length" v="94.8474"/>
         <tag k="name" v="Fountain Place"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:name_base" v="Fountain"/>
-        <tag k="tiger:county" v="El Paso, CO"/>
-        <tag k="tiger:name_type" v="Pl"/>
         <tag k="source:datetime" v="2017-06-04T03:40:43Z"/>
-        <tag k="highway" v="residential"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="El Paso, CO"/>
+        <tag k="tiger:name_base" v="Fountain"/>
+        <tag k="tiger:name_type" v="Pl"/>
         <tag k="width" v="0"/>
     </way>
     <way visible="true" id="59243163" timestamp="2010-10-02T02:51:14Z" version="2" changeset="5932782" user="Jason R Surratt" uid="4073">
@@ -263,16 +263,16 @@
         <nd ref="734793059"/>
         <nd ref="734793060"/>
         <nd ref="734793015"/>
+        <tag k="addr:housenumber" v="481"/>
         <tag k="addr:street" v="Manitou Avenue"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="1818.32"/>
         <tag k="length" v="176.729"/>
         <tag k="name" v="Villa Motel"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="tourism" v="motel"/>
-        <tag k="addr:housenumber" v="481"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2010-10-02T02:51:14Z"/>
+        <tag k="tourism" v="motel"/>
         <tag k="width" v="22.1853"/>
-        <tag k="area" v="1818.32"/>
     </way>
     <way visible="true" id="59244363" timestamp="2018-04-17T02:42:24Z" version="3" changeset="58155212" user="chachafish" uid="2237750">
         <nd ref="734818900"/>
@@ -282,12 +282,12 @@
         <nd ref="734818904"/>
         <nd ref="734818905"/>
         <nd ref="734818900"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="136.418"/>
         <tag k="length" v="14.2216"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2018-04-17T02:42:24Z"/>
         <tag k="width" v="10.605"/>
-        <tag k="area" v="136.418"/>
     </way>
     <way visible="true" id="59244364" timestamp="2010-05-15T01:59:51Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073">
         <nd ref="734818906"/>
@@ -295,12 +295,12 @@
         <nd ref="734818908"/>
         <nd ref="734818909"/>
         <nd ref="734818906"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="30.0717"/>
         <tag k="length" v="7.81558"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2010-05-15T01:59:51Z"/>
         <tag k="width" v="3.90044"/>
-        <tag k="area" v="30.0717"/>
     </way>
     <way visible="true" id="59244365" timestamp="2018-04-17T02:42:24Z" version="3" changeset="58155212" user="chachafish" uid="2237750">
         <nd ref="734818912"/>
@@ -308,12 +308,12 @@
         <nd ref="734818914"/>
         <nd ref="734818915"/>
         <nd ref="734818912"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="135.516"/>
         <tag k="length" v="14.4611"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2018-04-17T02:42:24Z"/>
         <tag k="width" v="10.0041"/>
-        <tag k="area" v="135.516"/>
     </way>
     <way visible="true" id="59244366" timestamp="2018-04-17T02:42:24Z" version="3" changeset="58155212" user="chachafish" uid="2237750">
         <nd ref="734818916"/>
@@ -321,12 +321,12 @@
         <nd ref="734818918"/>
         <nd ref="734818919"/>
         <nd ref="734818916"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="72.6676"/>
         <tag k="length" v="10.2461"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2018-04-17T02:42:24Z"/>
         <tag k="width" v="7.63948"/>
-        <tag k="area" v="72.6676"/>
     </way>
     <way visible="true" id="59244369" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073">
         <nd ref="734818930"/>
@@ -334,12 +334,12 @@
         <nd ref="734818932"/>
         <nd ref="734818933"/>
         <nd ref="734818930"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="59.9089"/>
         <tag k="length" v="9.19221"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2010-05-15T01:59:55Z"/>
         <tag k="width" v="6.78005"/>
-        <tag k="area" v="59.9089"/>
     </way>
     <way visible="true" id="59244370" timestamp="2010-05-15T01:59:55Z" version="1" changeset="4701916" user="Jason R Surratt" uid="4073">
         <nd ref="734818934"/>
@@ -347,12 +347,12 @@
         <nd ref="734818936"/>
         <nd ref="734818937"/>
         <nd ref="734818934"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="88.4008"/>
         <tag k="length" v="9.77382"/>
         <tag k="source" v="Yahoo"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2010-05-15T01:59:55Z"/>
         <tag k="width" v="9.26956"/>
-        <tag k="area" v="88.4008"/>
     </way>
     <way visible="true" id="80097957" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073">
         <nd ref="934200739"/>
@@ -362,11 +362,11 @@
         <nd ref="934200745"/>
         <nd ref="934200746"/>
         <nd ref="934200739"/>
-        <tag k="length" v="23.3584"/>
         <tag k="barrier" v="fence"/>
+        <tag k="feature_area" v="224.894"/>
+        <tag k="length" v="23.3584"/>
         <tag k="source:datetime" v="2010-10-02T02:51:09Z"/>
         <tag k="width" v="10.5192"/>
-        <tag k="area" v="224.894"/>
     </way>
     <way visible="true" id="80097959" timestamp="2010-10-02T02:51:09Z" version="1" changeset="5932782" user="Jason R Surratt" uid="4073">
         <nd ref="934200750"/>
@@ -378,30 +378,30 @@
         <nd ref="934200758"/>
         <nd ref="934200759"/>
         <nd ref="934200750"/>
-        <tag k="length" v="9.38648"/>
+        <tag k="feature_area" v="38.7591"/>
         <tag k="leisure" v="swimming_pool"/>
+        <tag k="length" v="9.38648"/>
         <tag k="source:datetime" v="2010-10-02T02:51:09Z"/>
         <tag k="width" v="4.65522"/>
-        <tag k="area" v="38.7591"/>
     </way>
     <way visible="true" id="85226850" timestamp="2010-12-11T16:25:10Z" version="2" changeset="6626189" user="Jason R Surratt" uid="4073">
         <nd ref="988337661"/>
         <nd ref="988337663"/>
+        <tag k="addr:housenumber" v="513"/>
         <tag k="addr:street" v="Manitou Avenue"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="44.0894"/>
         <tag k="name" v="Studio 513"/>
-        <tag k="addr:housenumber" v="513"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2010-12-11T16:25:10Z"/>
         <tag k="width" v="0"/>
     </way>
     <relation visible="true" id="-197450" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-197449" role="outer"/>
         <member type="way" ref="-197448" role="inner"/>
-        <tag k="length" v="31.6089"/>
         <tag k="building" v="yes"/>
-        <tag k="width" v="29.8885"/>
-        <tag k="area" v="778.588"/>
+        <tag k="feature_area" v="778.588"/>
+        <tag k="length" v="31.6089"/>
         <tag k="type" v="multipolygon"/>
+        <tag k="width" v="29.8885"/>
     </relation>
 </osm>

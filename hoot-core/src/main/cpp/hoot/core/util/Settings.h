@@ -183,8 +183,7 @@ public:
    * @param listReplacementEntryValues list of value replacement entries of the form:
    * "<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>..."
    */
-  static void replaceListOptionEntryValues(
-    Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues);
+  static void replaceListOptionEntryValues(Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues);
 
 private:
 

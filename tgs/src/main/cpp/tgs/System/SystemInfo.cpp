@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SystemInfo.h"
@@ -50,227 +50,215 @@
 
 namespace Tgs
 {
-  int SystemInfo::getNumberOfProcessors()
-  {
-    int result;
-#   ifdef _WIN32
-      SYSTEM_INFO info;
-      GetSystemInfo(&info);
-      result = info.dwNumberOfProcessors;
-#   elif defined(linux) || defined(__linux)
-      result = sysconf( _SC_NPROCESSORS_ONLN );
-#   else
-#     warning("Warning: SystemInfo::getNumberOfProcessors() has not been implemented for this platform.")
-      result = 1;
-#   endif
-    return result;
-  }
+int SystemInfo::getNumberOfProcessors()
+{
+  int result;
+# ifdef _WIN32
+    SYSTEM_INFO info;
+    GetSystemInfo(&info);
+    result = info.dwNumberOfProcessors;
+# elif defined(linux) || defined(__linux)
+    result = static_cast<int>(sysconf(_SC_NPROCESSORS_ONLN));
+# else
+#   warning("Warning: SystemInfo::getNumberOfProcessors() has not been implemented for this platform.")
+    result = 1;
+# endif
+  return result;
+}
 
 # ifdef _WIN32
 #   error "Memory usage stats not defined for WIN32"
 # endif
-  void SystemInfo::_getCurrentProcessMemoryUsage(long& vmUsage, long& residentSet)
-  {
-    using std::ios_base;
-    using std::ifstream;
-    using std::string;
+void SystemInfo::_getCurrentProcessMemoryUsage(long& vmUsage, long& residentSet)
+{
+  using std::ios_base;
+  using std::ifstream;
+  using std::string;
 
-    vmUsage     = 0.0;
-    residentSet = 0.0;
+  vmUsage     = 0.0;
+  residentSet = 0.0;
 
-    // 'file' stat seems to give the most reliable results
-    ifstream stat_stream("/proc/self/stat", ios_base::in);
+  // 'file' stat seems to give the most reliable results
+  ifstream stat_stream("/proc/self/stat", ios_base::in);
 
-    // dummy vars for leading entries in stat that we don't care about
-    string pid, comm, state, ppid, pgrp, session, tty_nr;
-    string tpgid, flags, minflt, cminflt, majflt, cmajflt;
-    string utime, stime, cutime, cstime, priority, nice;
-    string O, itrealvalue, starttime;
+  // dummy vars for leading entries in stat that we don't care about
+  string pid, comm, state, ppid, pgrp, session, tty_nr;
+  string tpgid, flags, minflt, cminflt, majflt, cmajflt;
+  string utime, stime, cutime, cstime, priority, nice;
+  string O, itrealvalue, starttime;
 
-    // the two fields we want
-    unsigned long vsize;
-    long rss;
+  // the two fields we want
+  unsigned long vsize;
+  long rss;
 
-    stat_stream >> pid >> comm >> state >> ppid >> pgrp >> session >> tty_nr
-               >> tpgid >> flags >> minflt >> cminflt >> majflt >> cmajflt
-               >> utime >> stime >> cutime >> cstime >> priority >> nice
-               >> O >> itrealvalue >> starttime >> vsize >> rss; // don't care about the rest
+  stat_stream >> pid >> comm >> state >> ppid >> pgrp >> session >> tty_nr
+              >> tpgid >> flags >> minflt >> cminflt >> majflt >> cmajflt
+              >> utime >> stime >> cutime >> cstime >> priority >> nice
+              >> O >> itrealvalue >> starttime >> vsize >> rss; // don't care about the rest
 
-    stat_stream.close();
+  stat_stream.close();
 
-    long page_size_kb = sysconf(_SC_PAGE_SIZE); // in case x86-64 is configured to use 2MB pages
-    vmUsage     = vsize;
-    residentSet = rss * page_size_kb;
+  long page_size_kb = sysconf(_SC_PAGE_SIZE); // in case x86-64 is configured to use 2MB pages
+  vmUsage     = vsize;
+  residentSet = rss * page_size_kb;
 
-    if (vmUsage == 0.0 && residentSet == 0.0)
-    {
-      throw Tgs::Exception("Error retrieving memory usage.");
-    }
-  }
+  if (vmUsage == 0 && residentSet == 0)
+    throw Tgs::Exception("Error retrieving memory usage.");
+}
 
-  std::string SystemInfo::humanReadableStorageSize(long bytes)
-  {
-    std::stringstream ss;
+std::string SystemInfo::humanReadableStorageSize(long bytes)
+{
+  std::stringstream ss;
 
-    ss << std::setprecision(4);
-    if (bytes >= 1024l * 1024l * 1024l * 1024l)
-    {
-      ss << (bytes / (1024.0 * 1024.0 * 1024.0 * 1024.0)) << "TB";
-    }
-    if (bytes >= 1024l * 1024l * 1024l)
-    {
-      ss << (bytes / (1024.0 * 1024.0 * 1024.0)) << "GB";
-    }
-    else if (bytes >= 1024 * 1024)
-    {
-      ss << (bytes / (1024.0 * 1024.0)) << "MB";
-    }
-    else if (bytes >= 1024)
-    {
-      ss << (bytes / 1024.0) << "KB";
-    }
-    else
-    {
-      ss << bytes << "B";
-    }
+  ss << std::setprecision(4);
+  if (bytes >= 1024l * 1024l * 1024l * 1024l)
+    ss << (static_cast<double>(bytes) / (1024.0 * 1024.0 * 1024.0 * 1024.0)) << "TB";
+  else if (bytes >= 1024l * 1024l * 1024l)
+    ss << (static_cast<double>(bytes) / (1024.0 * 1024.0 * 1024.0)) << "GB";
+  else if (bytes >= 1024l * 1024l)
+    ss << (static_cast<double>(bytes) / (1024.0 * 1024.0)) << "MB";
+  else if (bytes >= 1024l)
+    ss << (static_cast<double>(bytes) / 1024.0) << "KB";
+  else
+    ss << bytes << "B";
+  return ss.str();
+}
 
-    return ss.str();
-  }
+std::string SystemInfo::getCurrentProcessMemoryUsageString()
+{
+  std::stringstream ss;
+  long vm;
+  long rss;
+  _getCurrentProcessMemoryUsage(vm, rss);
 
-  std::string SystemInfo::getCurrentProcessMemoryUsageString()
-  {
-    std::stringstream ss;
-    long vm;
-    long rss;
-    _getCurrentProcessMemoryUsage(vm, rss);
+  ss << "Process memory usage: virtual:\t" << humanReadableStorageSize(vm) << "\tphysical:\t" <<
+        humanReadableStorageSize(rss);
 
-    ss << "Process memory usage: virtual:\t" << humanReadableStorageSize(vm) << "\tphysical:\t" <<
-          humanReadableStorageSize(rss);
+  return ss.str();
+}
 
-    return ss.str();
-  }
+std::string SystemInfo::getMemoryDetailString()
+{
+  std::stringstream ss;
 
-  std::string SystemInfo::getMemoryDetailString()
-  {
-    std::stringstream ss;
+  ss << "Total system virtual memory: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getTotalSystemVirtualMemory()) <<
+        "\n";
+  ss << "System virtual memory used: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getSystemVirtualMemoryUsed()) <<
+        "\n";
+  ss << "Current process virtual memory usage (kb): " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getCurrentProcessVirtualMemoryUsage()) <<
+        "\n";
+  ss << "Virtual memory available: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getVirtualMemoryAvailable()) << "\n";
+  ss << "Percentage of virtual memory used: " <<
+        SystemInfo::getPercentageOfVirtualMemoryUsed() << "%" << "\n";
 
-    ss << "Total system virtual memory: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getTotalSystemVirtualMemory()) <<
-          "\n";
-    ss << "System virtual memory used: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getSystemVirtualMemoryUsed()) <<
-          "\n";
-    ss << "Current process virtual memory usage (kb): " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getCurrentProcessVirtualMemoryUsage()) <<
-          "\n";
-    ss << "Virtual memory available: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getVirtualMemoryAvailable()) << "\n";
-    ss << "Percentage of virtual memory used: " <<
-          SystemInfo::getPercentageOfVirtualMemoryUsed() << "%" << "\n";
+  ss << "Total system physical memory: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getTotalSystemPhysicalMemory()) <<
+        "\n";
+  ss << "System physical memory used: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getSystemPhysicalMemoryUsed()) <<
+        "\n";
+  ss << "Current process physical memory usage: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getCurrentProcessPhysicalMemoryUsage()) <<
+        "\n";
+  ss << "Physical memory available: " <<
+        SystemInfo::humanReadableStorageSize(SystemInfo::getPhysicalMemoryAvailable()) <<
+        "\n";
+  ss << "Percentage of physical memory used: " <<
+        SystemInfo::getPercentageOfPhysicalMemoryUsed() << "%" << "\n";
 
-    ss << "Total system physical memory: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getTotalSystemPhysicalMemory()) <<
-          "\n";
-    ss << "System physical memory used: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getSystemPhysicalMemoryUsed()) <<
-          "\n";
-    ss << "Current process physical memory usage: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getCurrentProcessPhysicalMemoryUsage()) <<
-          "\n";
-    ss << "Physical memory available: " <<
-          SystemInfo::humanReadableStorageSize(SystemInfo::getPhysicalMemoryAvailable()) <<
-          "\n";
-    ss << "Percentage of physical memory used: " <<
-          SystemInfo::getPercentageOfPhysicalMemoryUsed() << "%" << "\n";
+  return ss.str();
+}
 
-    return ss.str();
-  }
+long SystemInfo::getTotalSystemVirtualMemory()
+{
+  struct sysinfo memInfo;
+  sysinfo (&memInfo);
+  long long totalVirtualMem = memInfo.totalram;
+  //Add other values in next statement to avoid int overflow on right hand side...
+  totalVirtualMem += memInfo.totalswap;
+  totalVirtualMem *= memInfo.mem_unit;
+  return (long)totalVirtualMem;
+}
 
-  long SystemInfo::getTotalSystemVirtualMemory()
-  {
-    struct sysinfo memInfo;
-    sysinfo (&memInfo);
-    long long totalVirtualMem = memInfo.totalram;
-    //Add other values in next statement to avoid int overflow on right hand side...
-    totalVirtualMem += memInfo.totalswap;
-    totalVirtualMem *= memInfo.mem_unit;
-    return (long)totalVirtualMem;
-  }
+long SystemInfo::getSystemVirtualMemoryUsed()
+{
+  struct sysinfo memInfo;
+  sysinfo (&memInfo);
+  long long virtualMemUsed = memInfo.totalram - memInfo.freeram;
+  //Add other values in next statement to avoid int overflow on right hand side...
+  virtualMemUsed += memInfo.totalswap - memInfo.freeswap;
+  virtualMemUsed *= memInfo.mem_unit;
+  return (long)virtualMemUsed;
+}
 
-  long SystemInfo::getSystemVirtualMemoryUsed()
-  {
-    struct sysinfo memInfo;
-    sysinfo (&memInfo);
-    long long virtualMemUsed = memInfo.totalram - memInfo.freeram;
-    //Add other values in next statement to avoid int overflow on right hand side...
-    virtualMemUsed += memInfo.totalswap - memInfo.freeswap;
-    virtualMemUsed *= memInfo.mem_unit;
-    return (long)virtualMemUsed;
-  }
+long SystemInfo::getCurrentProcessVirtualMemoryUsage()
+{
+  long v;
+  long rss;
+  _getCurrentProcessMemoryUsage(v, rss);
+  return v;
+}
 
-  long SystemInfo::getCurrentProcessVirtualMemoryUsage()
-  {
-    long v;
-    long rss;
-    _getCurrentProcessMemoryUsage(v, rss);
-    return v;
-  }
+long SystemInfo::getVirtualMemoryAvailable()
+{
+  return getTotalSystemVirtualMemory() - getSystemVirtualMemoryUsed();
+}
 
-  long SystemInfo::getVirtualMemoryAvailable()
-  {
-    return getTotalSystemVirtualMemory() - getSystemVirtualMemoryUsed();
-  }
+double SystemInfo::getPercentageOfVirtualMemoryUsed()
+{
+  return (double)getSystemVirtualMemoryUsed() /  (double)getTotalSystemVirtualMemory();
+}
 
-  double SystemInfo::getPercentageOfVirtualMemoryUsed()
-  {
-    return (double)getSystemVirtualMemoryUsed() /  (double)getTotalSystemVirtualMemory();
-  }
+double SystemInfo::getPercentageOfVirtualMemoryUsedByCurrentProcess()
+{
+  return (double)getCurrentProcessVirtualMemoryUsage() /  (double)getTotalSystemVirtualMemory();
+}
 
-  double SystemInfo::getPercentageOfVirtualMemoryUsedByCurrentProcess()
-  {
-    return (double)getCurrentProcessVirtualMemoryUsage() /  (double)getTotalSystemVirtualMemory();
-  }
+long SystemInfo::getTotalSystemPhysicalMemory()
+{
+  struct sysinfo memInfo;
+  sysinfo(&memInfo);
+  long long totalPhysMem = memInfo.totalram;
+  // Multiply in next statement to avoid int overflow on right hand side...
+  totalPhysMem *= memInfo.mem_unit;
+  return (long)totalPhysMem;
+}
 
-  long SystemInfo::getTotalSystemPhysicalMemory()
-  {
-    struct sysinfo memInfo;
-    sysinfo(&memInfo);
-    long long totalPhysMem = memInfo.totalram;
-    // Multiply in next statement to avoid int overflow on right hand side...
-    totalPhysMem *= memInfo.mem_unit;
-    return (long)totalPhysMem;
-  }
+long SystemInfo::getSystemPhysicalMemoryUsed()
+{
+  struct sysinfo memInfo;
+  sysinfo(&memInfo);
+  long long physMemUsed = memInfo.totalram - memInfo.freeram;
+  // Multiply in next statement to avoid int overflow on right hand side...
+  physMemUsed *= memInfo.mem_unit;
+  return (long)physMemUsed;
+}
 
-  long SystemInfo::getSystemPhysicalMemoryUsed()
-  {
-    struct sysinfo memInfo;
-    sysinfo(&memInfo);
-    long long physMemUsed = memInfo.totalram - memInfo.freeram;
-    // Multiply in next statement to avoid int overflow on right hand side...
-    physMemUsed *= memInfo.mem_unit;
-    return (long)physMemUsed;
-  }
+long SystemInfo::getCurrentProcessPhysicalMemoryUsage()
+{
+  long v;
+  long rss;
+  _getCurrentProcessMemoryUsage(v, rss);
+  return rss;
+}
 
-  long SystemInfo::getCurrentProcessPhysicalMemoryUsage()
-  {
-    long v;
-    long rss;
-    _getCurrentProcessMemoryUsage(v, rss);
-    return rss;
-  }
+long SystemInfo::getPhysicalMemoryAvailable()
+{
+  return getTotalSystemPhysicalMemory() - getSystemPhysicalMemoryUsed();
+}
 
-  long SystemInfo::getPhysicalMemoryAvailable()
-  {
-    return getTotalSystemPhysicalMemory() - getSystemPhysicalMemoryUsed();
-  }
+double SystemInfo::getPercentageOfPhysicalMemoryUsed()
+{
+  return (double)getSystemPhysicalMemoryUsed() /  (double)getTotalSystemPhysicalMemory();
+}
 
-  double SystemInfo::getPercentageOfPhysicalMemoryUsed()
-  {
-    return (double)getSystemPhysicalMemoryUsed() /  (double)getTotalSystemPhysicalMemory();
-  }
+double SystemInfo::getPercentageOfPhysicalMemoryUsedByCurrentProcess()
+{
+  return (double)getCurrentProcessPhysicalMemoryUsage() /  (double)getTotalSystemPhysicalMemory();
+}
 
-  double SystemInfo::getPercentageOfPhysicalMemoryUsedByCurrentProcess()
-  {
-    return (double)getCurrentProcessPhysicalMemoryUsage() /  (double)getTotalSystemPhysicalMemory();
-  }
 }

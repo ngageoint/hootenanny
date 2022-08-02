@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -736,7 +736,7 @@ public:
     node->getTags().set("amenity", "restaurant");
     node->getTags().set("cuisine", "italian");
     node->getTags().set("poi", "yes");
-    node->getTags().set("building", "yes");
+    node->getTags().set(MetadataTags::Building(), "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
