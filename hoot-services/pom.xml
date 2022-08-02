@@ -38,6 +38,7 @@
         <jersey.version>2.30.1</jersey.version>
         <json-simple.version>1.1.1</json-simple.version>
         <log4j2.version>2.17.1</log4j2.version>
+        <net.jodah.version>0.5.10</net.jodah.version>
         <opennlp.version>1.9.3</opennlp.version>
         <postgresql.version>42.3.3</postgresql.version>
         <querydsl.version>4.4.0</querydsl.version>
@@ -706,6 +707,12 @@
             <artifactId>antlr-runtime</artifactId>
             <version>${antlr-runtime.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>expiringmap</artifactId>
+            <version>${net.jodah.version}</version>
+        </dependency>
+
 
         <!-- language detection -->
 

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.ParserConfigurationException;
+
+import net.jodah.expiringmap.ExpiringMap;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -208,7 +211,10 @@ import hoot.services.models.db.Users;
         }
 
 
-        private ConcurrentHashMap<String, Boolean> states = new ConcurrentHashMap<>();
+        private Map<String, Boolean> states = ExpiringMap.builder()
+            .maxSize(200)
+            .expiration(2, TimeUnit.MINUTES).build();
+
         private String generateNewStateParam() {
             String stateParam = RandomStringUtils.randomAlphanumeric(32);
             states.put(stateParam, true);
