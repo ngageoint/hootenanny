@@ -44,4 +44,11 @@ class ImportCommandFactory {
         return new ImportCommand(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts, etlName, isNoneTranslation,
                                  debugLevel, uploadClassification, caller, user);
     }
+
+    ImportCommand build(String jobId, String url, String translation, String advUploadOpts, String etlName, Boolean isNoneTranslation,
+            String debugLevel, UploadClassification uploadClassification, Class<?> caller, Users user) {
+return new ImportCommand(jobId, url, translation, advUploadOpts, etlName, isNoneTranslation,
+                    debugLevel, uploadClassification, caller, user);
+}
+
 }

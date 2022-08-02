@@ -62,6 +62,28 @@ class ImportCommand extends ExternalCommand {
 
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
+        List<String> hootOptions = buildHootOptions(user, translation, isNoneTranslation, advUploadOpts);
+
+        String inputName = HOOTAPI_DB_URL + "/" + etlName;
+
+        Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT_NAME", inputName);
+        substitutionMap.put("INPUTS", inputs);
+
+        if ((classification == ZIP) && !zipsToImport.isEmpty()) {
+            //Reading a GDAL dataset in a .gz file or a .zip archive
+            inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
+            substitutionMap.put("INPUTS", inputs);
+        }
+
+        String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+
+        super.configureCommand(command, substitutionMap, caller);
+    }
+
+    private List<String> buildHootOptions(Users user, String translation, Boolean isNoneTranslation, String advUploadOpts) {
         List<String> options = new LinkedList<>();
         //TODO: always set remap ids to false??
         options.add("hootapi.db.writer.overwrite.map=true");
@@ -95,6 +117,32 @@ class ImportCommand extends ExternalCommand {
         }
 
         List<String> hootOptions = toHootOptions(options);
+        return hootOptions;
+    }
+
+    ImportCommand(String jobId, String url, String translation, String advUploadOpts,
+                  String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
+                  Class<?> caller, Users user) {
+        super(jobId);
+        this.workDir = null;
+
+        String input;
+        if (url.startsWith("s3")) {
+            input = url.replace("s3://", "");
+            input = "/vsis3/" + input;
+        } else if (url.startsWith("http")) {
+            input = "/vsicurl/" + url;
+        } else if (url.startsWith("ftp")) {
+            input = "/vsicurl/" + url;
+        } else {
+            input = url;
+        }
+
+        if ((classification == ZIP)) {
+            input = "/vsizip/" + input;
+        }
+
+        List<String> hootOptions = buildHootOptions(user, translation, isNoneTranslation, advUploadOpts);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
 
@@ -102,13 +150,8 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("INPUT_NAME", inputName);
-        substitutionMap.put("INPUTS", inputs);
+        substitutionMap.put("INPUTS", input);
 
-        if ((classification == ZIP) && !zipsToImport.isEmpty()) {
-            //Reading a GDAL dataset in a .gz file or a .zip archive
-            inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
-            substitutionMap.put("INPUTS", inputs);
-        }
 
         String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
@@ -119,13 +162,14 @@ class ImportCommand extends ExternalCommand {
     public CommandResult execute() {
         CommandResult commandResult = super.execute();
 
-        try {
-            FileUtils.forceDelete(workDir);
+        if (workDir != null) {
+            try {
+                FileUtils.forceDelete(workDir);
+            }
+            catch (IOException ioe) {
+                logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
+            }
         }
-        catch (IOException ioe) {
-            logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
-        }
-
         return commandResult;
     }
 }
