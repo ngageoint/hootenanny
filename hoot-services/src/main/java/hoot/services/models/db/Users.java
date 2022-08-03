@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.models.db;
 
@@ -31,8 +31,6 @@ import java.util.Date;
 
 import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.security.oauth.consumer.OAuthConsumerToken;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -155,11 +153,6 @@ public class Users {
         this.hootservices_created_at = hootservices_created_at;
     }
 
-    public void setProviderAccessToken(OAuthConsumerToken token) {
-        this.setProviderAccessKey(token.getValue());
-        this.setProviderAccessToken(token.getSecret());
-    }
-
     @JsonProperty(value = "privileges")
     public Object getPrivileges() {
         return privileges;
@@ -171,11 +164,11 @@ public class Users {
 
     @JsonProperty(value = "members")
     public Object getFavoriteOpts() {
-    	return favoriteOpts;
+        return favoriteOpts;
     }
 
     public void setFavoriteOpts( Object favoriteOpts ) {
-    	this.favoriteOpts = favoriteOpts;
+        this.favoriteOpts = favoriteOpts;
     }
 
     @Override

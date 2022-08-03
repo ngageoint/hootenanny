@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LOCATIONOFPOINT_H
@@ -52,7 +52,7 @@ public:
   LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way);
 
   static WayLocation locate(const ConstOsmMapPtr& map, ConstWayPtr way,
-    const geos::geom::Coordinate& inputPt);
+                            const geos::geom::Coordinate& inputPt);
 
   /**
    * @brief locate finds the nearest location along a {@link Way} to a given point.
@@ -90,8 +90,8 @@ public:
    */
   bool isGreater(int i, double segFrac, const WayLocation& loc) const;
 
-  static double segmentFraction(
-    const geos::geom::LineSegment& seg, const geos::geom::Coordinate& inputPt);
+  static double segmentFraction(const geos::geom::LineSegment& seg,
+                                const geos::geom::Coordinate& inputPt);
 
 private:
 

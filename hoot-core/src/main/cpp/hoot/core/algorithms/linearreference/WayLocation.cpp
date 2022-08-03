@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayLocation.h"
@@ -47,53 +47,48 @@ int WayLocation::logWarnCount = 0;
 
 const double WayLocation::SLOPPY_EPSILON = 1e-10;
 
-WayLocation::WayLocation() :
-_segmentIndex(-1),
-_segmentFraction(-1)
+WayLocation::WayLocation()
+  : _segmentIndex(-1),
+    _segmentFraction(-1.0)
 {
 }
 
-WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
-_map(map),
-_way(way),
-_segmentIndex(-1),
-_segmentFraction(-1)
+WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance)
+  : _map(map),
+    _way(way),
+    _segmentIndex(-1),
+    _segmentFraction(-1.0)
 {
   double d = 0.0;
-  std::shared_ptr<geos::geom::LineString> lineString =
-    ElementToGeometryConverter(map).convertToLineString(way);
+  std::shared_ptr<geos::geom::LineString> lineString = ElementToGeometryConverter(map).convertToLineString(way);
   if (lineString)
   {
     const double length = lineString->getLength();
-
     if (distance <= 0)
     {
-      _segmentIndex = 0.0;
-      _segmentFraction = 0;
+      _segmentIndex = 0;
+      _segmentFraction = 0.0;
     }
     else if (distance >= length)
     {
-      _segmentIndex = _way->getNodeCount() - 1;
+      _segmentIndex = static_cast<int>(_way->getNodeCount()) - 1;
       _segmentFraction = 0.0;
     }
     else
     {
       ConstNodePtr lastNode = _map->getNode(way->getNodeId(0));
       Coordinate last = lastNode->toCoordinate();
-
-      _segmentIndex = way->getNodeCount() - 1;
-      _segmentFraction = 0;
-
+      _segmentIndex = static_cast<int>(way->getNodeCount()) - 1;
+      _segmentFraction = 0.0;
       for (size_t i = 1; i < way->getNodeCount(); i++)
       {
         ConstNodePtr n = _map->getNode(_way->getNodeId(i));
         Coordinate next = n->toCoordinate();
         double delta = next.distance(last);
         last = next;
-
         if (d <= distance && d + delta > distance)
         {
-          _segmentIndex = i - 1;
+          _segmentIndex = static_cast<int>(i) - 1;
           _segmentFraction = (distance - d) / delta;
           // this can sometimes happen due to rounding errors.
           if (_segmentFraction >= 1.0)
@@ -116,23 +111,19 @@ _segmentFraction(-1)
   }
 }
 
-WayLocation::WayLocation(
-  ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction) :
-_map(map),
-_way(way),
-_segmentIndex(segmentIndex),
-_segmentFraction(segmentFraction)
+WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction)
+  : _map(map),
+    _way(way),
+    _segmentIndex(segmentIndex),
+    _segmentFraction(segmentFraction)
 {
   if (_segmentFraction == 1.0)
   {
     _segmentIndex++;
     _segmentFraction = 0.0;
   }
-
   if (_segmentFraction < 0.0 || _segmentFraction >= 1.0)
-  {
     throw HootException("Segment Fraction is out of range.");
-  }
 
   if (_segmentIndex < 0)
   {
@@ -142,35 +133,31 @@ _segmentFraction(segmentFraction)
 
   if (_segmentIndex >= (int)_way->getNodeCount() - 1)
   {
-    _segmentIndex = _way->getNodeCount() - 1;
+    _segmentIndex = static_cast<int>(_way->getNodeCount()) - 1;
     _segmentFraction = 0.0;
   }
 }
 
-WayLocation::WayLocation(const WayLocation& other) :
-_map(other.getMap()),
-_way(other.getWay()),
-_segmentIndex(other.getSegmentIndex()),
-_segmentFraction(other.getSegmentFraction())
+WayLocation::WayLocation(const WayLocation& other)
+  : _map(other.getMap()),
+    _way(other.getWay()),
+    _segmentIndex(other.getSegmentIndex()),
+    _segmentFraction(other.getSegmentFraction())
 {
 }
 
 Meters WayLocation::calculateDistanceFromEnd() const
 {
-  return
-    ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() -
-    calculateDistanceOnWay();
+  return ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() -
+      calculateDistanceOnWay();
 }
 
 Meters WayLocation::calculateDistanceOnWay() const
 {
   Meters result = 0.0;
-
   ConstNodePtr firstNode = _map->getNode(_way->getNodeId(0));
   if (!firstNode)
-  {
     return result;
-  }
   Coordinate last = firstNode->toCoordinate();
   for (int i = 1; i < (int)_way->getNodeCount() && i <= _segmentIndex; i++)
   {
@@ -182,7 +169,6 @@ Meters WayLocation::calculateDistanceOnWay() const
       last = next;
     }
   }
-
   if (_segmentIndex < (int)_way->getNodeCount() - 1)
   {
     ConstNodePtr n = _map->getNode(_way->getNodeId(_segmentIndex + 1));
@@ -193,7 +179,6 @@ Meters WayLocation::calculateDistanceOnWay() const
       result += d * _segmentFraction;
     }
   }
-
   return result;
 }
 
@@ -213,9 +198,7 @@ int WayLocation::compareLocationValues(int segmentIndex0, double segmentFraction
 int WayLocation::compareTo(const WayLocation& other) const
 {
   if (!isValid() || !other.isValid())
-  {
     return 1;
-  }
 
   if (!(_segmentFraction < 1.0 && other._segmentFraction < 1.0))
   {
@@ -231,41 +214,41 @@ int WayLocation::compareTo(const WayLocation& other) const
   }
   assert(_segmentFraction < 1.0 && other._segmentFraction < 1.0);
   // compare way ids
-  if (_way->getId() < other._way->getId()) return -1;
-  if (_way->getId() > other._way->getId()) return 1;
+  if (_way->getId() < other._way->getId())
+    return -1;
+  if (_way->getId() > other._way->getId())
+    return 1;
   // compare segments
-  if (_segmentIndex < other._segmentIndex) return -1;
-  if (_segmentIndex > other._segmentIndex) return 1;
+  if (_segmentIndex < other._segmentIndex)
+    return -1;
+  if (_segmentIndex > other._segmentIndex)
+    return 1;
   // same segment, so compare segment fraction
-  if (_segmentFraction < other._segmentFraction) return -1;
-  if (_segmentFraction > other._segmentFraction) return 1;
+  if (_segmentFraction < other._segmentFraction)
+    return -1;
+  if (_segmentFraction > other._segmentFraction)
+    return 1;
   // same location
   return 0;
 }
 
 WayLocation WayLocation::createAtEndOfWay(const ConstOsmMapPtr& map, const ConstWayPtr way)
 {
-  return WayLocation(map, way, way->getNodeCount() - 1, 0.0);
+  return WayLocation(map, way, static_cast<int>(way->getNodeCount()) - 1, 0.0);
 }
 
 Coordinate WayLocation::getCoordinate() const
 {
   ConstNodePtr p0 = _map->getNode(_way->getNodeId(_segmentIndex));
   if (!p0)
-  {
     return Coordinate();
-  }
-  if (_segmentFraction <= 0.0)
-  {
+  else if (_segmentFraction <= 0.0)
     return p0->toCoordinate();
-  }
   else
   {
     ConstNodePtr p1 = _map->getNode(_way->getNodeId(_segmentIndex + 1));
     if (!p1)
-    {
       return Coordinate();
-    }
     return pointAlongSegmentByFraction(p0->toCoordinate(), p1->toCoordinate(), _segmentFraction);
   }
 }
@@ -273,34 +256,18 @@ Coordinate WayLocation::getCoordinate() const
 ConstNodePtr WayLocation::getNode(double epsilon) const
 {
   if (!isNode(epsilon))
-  {
     throw IllegalArgumentException("getNode() is only valid if WayLocation is on a node.");
-  }
-
   // Round to the appropriate segment index. This may be necessary due to floating point errors.
   if (_segmentFraction >= 0.5)
-  {
     return _map->getNode(getWay()->getNodeId(_segmentIndex + 1));
-  }
   else
-  {
     return _map->getNode(getWay()->getNodeId(_segmentIndex));
-  }
 }
 
 bool WayLocation::isLast(double epsilon) const
 {
-  bool result = false;
-  if (_segmentIndex == (int)_way->getNodeCount() - 1)
-  {
-    result = true;
-  }
-  else if (_segmentIndex == (int)_way->getNodeCount() - 2 && _segmentFraction >= 1 - epsilon)
-  {
-    result = true;
-  }
-
-  return result;
+  return (_segmentIndex == (int)_way->getNodeCount() - 1) ||
+         (_segmentIndex == (int)_way->getNodeCount() - 2 && _segmentFraction >= 1 - epsilon);
 }
 
 WayLocation WayLocation::move(Meters distance) const
@@ -310,9 +277,7 @@ WayLocation WayLocation::move(Meters distance) const
   WayLocation result(*this);
   Coordinate last = result.getCoordinate();
   if (last.isNull())
-  {
     return result;
-  }
   LOG_VART(last.toString());
 
   // This odd statement helps us avoid adding irrelevantly small distances.
@@ -320,20 +285,16 @@ WayLocation WayLocation::move(Meters distance) const
   {
     // if we're at the end of the way
     if (result.isLast())
-    {
       return result;
-    }
 
     ConstNodePtr n = _map->getNode(_way->getNodeId(result.getSegmentIndex() + 1));
     LOG_VART(n.get());
+    // Missing nodes can occur in workflows where missing child refs are allowed, like Cut and
+    // Replace. This seems to be the best way to handle it so far.
     if (!n)
-    {
-      // Missing nodes can occur in workflows where missing child refs are allowed, like Cut and
-      // Replace. This seems to be the best way to handle it so far.
       return result;
-    }
-    Coordinate next = n->toCoordinate();
 
+    Coordinate next = n->toCoordinate();
     double delta = last.distance(next);
 
     // if the next node is too far
@@ -343,9 +304,7 @@ WayLocation WayLocation::move(Meters distance) const
       ConstNodePtr lastSegmentNode = _map->getNode(_way->getNodeId(result.getSegmentIndex()));
       LOG_VART(lastSegmentNode.get());
       if (!lastSegmentNode)
-      {
         return result;
-      }
       Coordinate lastSegment = lastSegmentNode->toCoordinate();
       double segmentLength = lastSegment.distance(next);
       result._segmentFraction += (distance / segmentLength);
@@ -357,7 +316,6 @@ WayLocation WayLocation::move(Meters distance) const
         result._segmentFraction = 0.0;
         result._segmentIndex = result._segmentIndex + 1;
       }
-
       distance = 0;
     }
     // if we need to go past the next node
@@ -375,18 +333,14 @@ WayLocation WayLocation::move(Meters distance) const
   {
     // if we're at the end of the way
     if (result.isFirst())
-    {
       return result;
-    }
 
     if (result._segmentFraction > 0)
     {
       ConstNodePtr nextNode = _map->getNode(_way->getNodeId(result.getSegmentIndex()));
       LOG_VART(nextNode.get());
       if (!nextNode)
-      {
         return result;
-      }
       Coordinate next = nextNode->toCoordinate();
 
       Meters delta = last.distance(next);
@@ -396,9 +350,7 @@ WayLocation WayLocation::move(Meters distance) const
         ConstNodePtr lastNode = _map->getNode(_way->getNodeId(result._segmentIndex + 1));
         LOG_VART(lastNode.get());
         if (!lastNode)
-        {
           return result;
-        }
         double segmentLength = lastNode->toCoordinate().distance(next);
         result._segmentFraction += (distance / segmentLength);
 
@@ -409,7 +361,6 @@ WayLocation WayLocation::move(Meters distance) const
           result._segmentFraction = 0.0;
           result._segmentIndex = result._segmentIndex + 1;
         }
-
         distance = 0;
       }
       else
@@ -424,9 +375,7 @@ WayLocation WayLocation::move(Meters distance) const
       ConstNodePtr nextNode = _map->getNode(_way->getNodeId(result.getSegmentIndex() - 1));
       LOG_VART(nextNode.get());
       if (!nextNode)
-      {
         return result;
-      }
       Coordinate next = nextNode->toCoordinate();
 
       Meters delta = last.distance(next);
@@ -436,9 +385,7 @@ WayLocation WayLocation::move(Meters distance) const
         ConstNodePtr lastNode = _map->getNode(_way->getNodeId(result.getSegmentIndex()));
         LOG_VART(lastNode.get());
         if (!lastNode)
-        {
           return result;
-        }
         double segmentLength = lastNode->toCoordinate().distance(next);
         result._segmentFraction = 1.0 + (distance / segmentLength);
         // if we're suffering from a floating point issue.
@@ -449,9 +396,7 @@ WayLocation WayLocation::move(Meters distance) const
           result._segmentFraction = 0;
         }
         else
-        {
           result._segmentIndex = result.getSegmentIndex() - 1;
-        }
         distance = 0;
       }
       else
@@ -473,8 +418,10 @@ Coordinate WayLocation::pointAlongSegmentByFraction(const Coordinate& p0,
                                                     const Coordinate& p1,
                                                     double frac)
 {
-  if (frac <= 0.0) return p0;
-  if (frac >= 1.0) return p1;
+  if (frac <= 0.0)
+    return p0;
+  if (frac >= 1.0)
+    return p1;
 
   double x = (p1.x - p0.x) * frac + p0.x;
   double y = (p1.y - p0.y) * frac + p0.y;
@@ -484,15 +431,9 @@ Coordinate WayLocation::pointAlongSegmentByFraction(const Coordinate& p0,
 QString WayLocation::toString() const
 {
   if (isValid())
-  {
-    return
-      QString("way(%1) index: %2 fraction: %3").arg(_way->getId()).arg(_segmentIndex).
-        arg(_segmentFraction, 0, 'g', 15);
-  }
+    return QString("way(%1) index: %2 fraction: %3").arg(_way->getId()).arg(_segmentIndex).arg(_segmentFraction, 0, 'g', 15);
   else
-  {
     return QString("way: <null> index: %1 fraction: %2").arg(_segmentIndex).arg(_segmentFraction);
-  }
 }
 
 bool WayLocation::isNode(double epsilon) const

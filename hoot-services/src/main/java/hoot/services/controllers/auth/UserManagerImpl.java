@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.auth;
 
@@ -43,7 +43,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.oauth.consumer.OAuthConsumerToken;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +51,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import hoot.services.models.db.SpringSession;
 import hoot.services.models.db.Users;
@@ -119,6 +120,19 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    public Users parseUser(JsonNode userDetailsJson) throws InvalidUserProfileException {
+        Users user = new Users();
+        JsonNode details = userDetailsJson.get("user");
+
+        user.setDisplayName(details.get("display_name").asText());
+        user.setId(Long.parseLong(details.get("id").asText()));
+        user.setProviderCreatedAt(parseTimestamp(details.get("account_created").asText()));
+        user.setHootservicesLastAuthorize(new Timestamp(System.currentTimeMillis()));
+
+        return user;
+    }
+
+    @Override
     public Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = new Users();
         Document doc = XmlDocumentBuilder.parse(xml);
@@ -150,7 +164,7 @@ public class UserManagerImpl implements UserManager {
         .where(springsessions.session_id.eq(sessionId))
         .execute();
 
-        if(affectedRows == 0) {
+        if (affectedRows == 0) {
             logger.warn("attributeSessionWithUser(): failed to attribute spring session with user.");
         }
     }
@@ -164,10 +178,12 @@ public class UserManagerImpl implements UserManager {
         return sess;
     }
 
+
     @Override
-    public Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
-        Users user = this.parseUser(xml);
-        user.setProviderAccessToken(accessToken);
+    public Users upsert(JsonNode userDetailsJson, String tokenType, String accessToken, String sessionId) throws InvalidUserProfileException {
+        Users user = parseUser(userDetailsJson);
+        user.setProviderAccessKey(accessToken);
+        user.setProviderAccessToken(tokenType);
         user.setEmail(String.format("%d@hootenanny", user.getId()));
 
         Users existingUser = this.getUser(user.getId());
@@ -176,7 +192,7 @@ public class UserManagerImpl implements UserManager {
         } else {
             // look in database for possible existing privileges set
             user.setPrivileges(existingUser.getPrivileges());
-            
+
             // look in database for existing user favorite adv. opts
             user.setFavoriteOpts(existingUser.getFavoriteOpts());
 
@@ -188,7 +204,10 @@ public class UserManagerImpl implements UserManager {
         return user;
     }
 
+
+    @Override
     public void clearCachedUser(Long userId) {
         getUserSessionId(userId).forEach(id -> userCache.remove(id));
     }
+
 }

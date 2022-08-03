@@ -16,7 +16,7 @@ else
     $winNfs = false
     puts '## Using NFS for file syncing'
   else
-    puts '## Using Windows NFS options for file syncing' 
+    puts '## Using Windows NFS options for file syncing'
   end
 end
 
@@ -78,6 +78,11 @@ $disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
 $tomcatPort = ENV['TOMCAT_PORT']
 if $tomcatPort.nil?
   $tomcatPort = 8888
+end
+
+$tomcatSslPort = ENV['TOMCAT_SSL_PORT']
+if $tomcatSslPort.nil?
+  $tomcatSslPort = 8443
 end
 
 $transPort = ENV['NODEJS_PORT']
@@ -218,6 +223,7 @@ Vagrant.configure(2) do |config|
   def set_forwarding(config)
     if $disableForwarding.nil?
       config.vm.network "forwarded_port", guest: 8080, host: $tomcatPort  # Tomcat service
+      config.vm.network "forwarded_port", guest: 8443, host: $tomcatSslPort  # Tomcat SSL service
       config.vm.network "forwarded_port", guest: 8094, host: $transPort  # NodeJS Translation service
       config.vm.network "forwarded_port", guest: 8096, host: $mergePort  # NodeJS Merge service
       config.vm.network "forwarded_port", guest: 8101, host: $nodeExportPort  # NodeJS export service
