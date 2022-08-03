@@ -22,31 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
  */
-package hoot.services.controllers.auth;
+package hoot.services;
 
-import java.io.IOException;
-import java.sql.Timestamp;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-import javax.xml.parsers.ParserConfigurationException;
+public class SecurityInitializer extends AbstractSecurityWebApplicationInitializer {
 
-import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-import hoot.services.models.db.Users;
-
-@Service
-public interface UserManager {
-    Users upsert(JsonNode userDetailsJson, String tokenType, String accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
-    Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
-    Users parseUser(JsonNode userDetailsJson) throws InvalidUserProfileException;
-
-    Timestamp parseTimestamp(String timestamp);
-
-    Users getUserBySession(String sessionId);
-
-    void clearCachedUser(Long userId);
 }

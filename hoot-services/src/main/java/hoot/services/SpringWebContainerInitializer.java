@@ -22,36 +22,64 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
-// TODO: Review this initializer when Hootnanny's is upgraded to Tomcat 8.5 which supports Servlet Spec 3.0
-// WebApplicationInitializer to be implemented in Servlet 3.0+
-//@Order(1)
-public class SpringWebContainerInitializer /*implements WebApplicationInitializer*/ {
-/*
+import org.springframework.session.jdbc.config.annotation.web.http.JdbcHttpSessionConfiguration;
+import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+
+public class SpringWebContainerInitializer extends AbstractHttpSessionApplicationInitializer {
+
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+
         registerContextLoaderListener(servletContext);
 
         // Set the Jersey used property to it won't load a ContextLoaderListener
-        servletContext.setInitParameter("contextConfigLocation", "");
+        servletContext.setInitParameter("contextConfigLocation", "<NONE>");
+
+        ServletRegistration.Dynamic jerseyServlet = servletContext.addServlet("jerseyServlet",
+                "org.glassfish.jersey.servlet.ServletContainer");
+            //note "javax.ws.rs.Application" doesn't have "core"
+            jerseyServlet.setInitParameter("javax.ws.rs.Application", HootServicesJerseyApplication.class.getName());
+            jerseyServlet.addMapping("/osm/*");
+            jerseyServlet.addMapping("/job/*");
+            jerseyServlet.addMapping("/jobs/*");
+            jerseyServlet.addMapping("/auth/*");
+            jerseyServlet.addMapping("/info/*");
+            jerseyServlet.addMapping("/ogr/*");
+            jerseyServlet.addMapping("/ingest/*");
+            jerseyServlet.addMapping("/grail/*");
+            jerseyServlet.addMapping("/language/*");
+            jerseyServlet.setLoadOnStartup(2);
+
     }
 
     private void registerContextLoaderListener(ServletContext servletContext) {
         WebApplicationContext webContext;
-        webContext = createWebAplicationContext(HootServicesSpringConfig.class);
+        webContext = createWebApplicationContext(
+                HootServicesSpringConfig.class,
+                JdbcHttpSessionConfiguration.class
+            );
         servletContext.addListener(new ContextLoaderListener(webContext));
+        servletContext.addListener(new HootServletContext());
     }
 
-    public WebApplicationContext createWebAplicationContext(Class... configClasses) {
+    public WebApplicationContext createWebApplicationContext(Class... configClasses) {
         AnnotationConfigWebApplicationContext context;
         context = new AnnotationConfigWebApplicationContext();
-        //context.getEnvironment().setActiveProfiles("production");
+        context.getEnvironment().setActiveProfiles("production");
         context.register(configClasses);
         return context;
     }
-    */
+
 }

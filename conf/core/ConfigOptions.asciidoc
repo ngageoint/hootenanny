@@ -1975,6 +1975,13 @@ OpenstreetMap OAuth Private Access Token for gaining access to the OAuth protect
 * Data Type: string
 * Default Value: ``
 
+OpenstreetMap OAuth2 Private Access Token for gaining access to the OAuth2 protected OSM API
+
+=== hoot.services.oauth2.access.token
+
+* Data Type: string
+* Default Value: ``
+
 Web Services public access token required by some commands. Use the `login` command to retrieve
 access tokens.
 

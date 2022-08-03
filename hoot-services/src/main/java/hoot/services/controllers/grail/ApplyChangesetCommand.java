@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -52,10 +52,7 @@ class ApplyChangesetCommand extends GrailCommand {
         if (params.getComment() != null) options.add("changeset.description=" + StringEscapeUtils.escapeXml(params.getComment()));
         if (params.getHashtags() != null) options.add("changeset.hashtags=" + StringEscapeUtils.escapeXml(params.getHashtags()));
         if (params.getSource() != null) options.add("changeset.source=" + StringEscapeUtils.escapeXml(params.getSource()));
-        options.add("hoot.osm.auth.access.token=" + user.getProviderAccessKey());
-        options.add("hoot.osm.auth.access.token.secret=" + user.getProviderAccessToken());
-        options.add("hoot.osm.auth.consumer.key=" + params.getConsumerKey());
-        options.add("hoot.osm.auth.consumer.secret=" + params.getConsumerSecret());
+        options.add("hoot.services.oauth2.access.token=" + user.getProviderAccessKey());
         if (HootProperties.CHANGESET_APPLY_DEBUG) {
             options.add("changeset.apidb.writer.debug.output=true");
             options.add("changeset.apidb.writer.debug.output.path=" + params.getWorkDir());
