@@ -239,11 +239,11 @@ import hoot.services.models.db.Users;
         public Response callback(@Context HttpServletRequest request, @QueryParam("state") String state, @QueryParam("code") String code) {
 
             if (code == null) {
-                return Response.status(401).build();
+                return Response.status(401).entity("code must not be null").build();
             }
 
             if (!states.containsKey(state)) {
-                return Response.status(401).build();
+                return Response.status(401).entity("state is unknown to server").build();
             } else {
                 states.remove(state);
             };
@@ -253,7 +253,7 @@ import hoot.services.models.db.Users;
                 ResponseEntity<String> tokenResponse = doTokenRequest(code);
 
                 if (!tokenResponse.getStatusCode().equals(HttpStatus.OK)) {
-                    return Response.status(401).build();
+                    return Response.status(401).entity("token request failed").build();
                 }
 
                 JsonNode tokenResponseJson = new ObjectMapper()
@@ -265,7 +265,7 @@ import hoot.services.models.db.Users;
                 ResponseEntity<String> userDetailsRequest = doUserDetailsRequest(tokenType, accessToken);
 
                 if (!userDetailsRequest.getStatusCode().equals(HttpStatus.OK)) {
-                    return Response.status(401).build();
+                    return Response.status(401).entity("user details request failed").build();
                 }
 
                 JsonNode userDetailsJson = new ObjectMapper().readTree(userDetailsRequest.getBody());
