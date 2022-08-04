@@ -325,6 +325,8 @@ public class ImportResource {
             @QueryParam("INPUT_TYPE") String inputType,
             @QueryParam("INPUT_NAME") String inputName,
             @QueryParam("URL") String url,
+            @QueryParam("USERNAME") String username,
+            @QueryParam("PASSWORD") String password,
             @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
             @QueryParam("ADV_UPLOAD_OPTS") String advUploadOpts,
             @QueryParam("FOLDER_ID") String folderId,
@@ -337,7 +339,7 @@ public class ImportResource {
 
             translation = lookupTranslation(translation, user);
 
-            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, url, translation, advUploadOpts,
+            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, url, username, password, translation, advUploadOpts,
                     inputName, noneTranslation, debugLevel, UploadClassification.ZIP, this.getClass(), user);
             workflow.add(importCommand);
 

@@ -120,16 +120,18 @@ class ImportCommand extends ExternalCommand {
         return hootOptions;
     }
 
-    ImportCommand(String jobId, String url, String translation, String advUploadOpts,
+    ImportCommand(String jobId, String url, String username, String password, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
         super(jobId);
         this.workDir = null;
 
         String input;
+        String envVars = "";
         if (url.startsWith("s3")) {
             input = url.replace("s3://", "");
             input = "/vsis3/" + input;
+            envVars = String.format("AWS_SECRET_ACCESS_KEY=%s AWS_ACCESS_KEY_ID=%s", password, username);
         } else if (url.startsWith("http")) {
             input = "/vsicurl/" + url;
         } else if (url.startsWith("ftp")) {
@@ -145,15 +147,14 @@ class ImportCommand extends ExternalCommand {
         List<String> hootOptions = buildHootOptions(user, translation, isNoneTranslation, advUploadOpts);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
-
-        Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("ENV_VARS", envVars);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", input);
 
 
-        String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String command = "${ENV_VARS} hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
