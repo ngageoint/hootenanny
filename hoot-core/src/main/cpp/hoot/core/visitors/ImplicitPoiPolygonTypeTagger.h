@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 #define IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 
 // hoot
-#include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 
 namespace hoot
 {

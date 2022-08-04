@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -133,39 +133,39 @@ public:
       wordIdQuery.bindValue(":wordId", i);
       wordIdQuery.exec();
       wordIdQuery.next();
-      int wordCount = wordIdQuery.value(0).toInt();
+      int word_count = wordIdQuery.value(0).toInt();
       switch (i)
       {
         case 1:
-          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          CPPUNIT_ASSERT_EQUAL(1, word_count);
           break;
 
         case 2:
-          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          CPPUNIT_ASSERT_EQUAL(1, word_count);
           break;
 
         case 3:
-          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          CPPUNIT_ASSERT_EQUAL(1, word_count);
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(2, wordCount);
+          CPPUNIT_ASSERT_EQUAL(2, word_count);
           break;
 
         case 5:
-          CPPUNIT_ASSERT_EQUAL(2, wordCount);
+          CPPUNIT_ASSERT_EQUAL(2, word_count);
           break;
 
         case 6:
-          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          CPPUNIT_ASSERT_EQUAL(1, word_count);
           break;
 
         case 7:
-          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          CPPUNIT_ASSERT_EQUAL(1, word_count);
           break;
 
         case 8:
-          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          CPPUNIT_ASSERT_EQUAL(1, word_count);
           break;
 
         default:
@@ -180,31 +180,31 @@ public:
       tagIdQuery.bindValue(":tagId", i);
       tagIdQuery.exec();
       tagIdQuery.next();
-      int tagCount = tagIdQuery.value(0).toInt();
+      int tag_count = tagIdQuery.value(0).toInt();
       switch (i)
       {
         case 1:
-          CPPUNIT_ASSERT_EQUAL(1, tagCount);
+          CPPUNIT_ASSERT_EQUAL(1, tag_count);
           break;
 
         case 2:
-          CPPUNIT_ASSERT_EQUAL(4, tagCount);
+          CPPUNIT_ASSERT_EQUAL(4, tag_count);
           break;
 
         case 3:
-          CPPUNIT_ASSERT_EQUAL(1, tagCount);
+          CPPUNIT_ASSERT_EQUAL(1, tag_count);
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(1, tagCount);
+          CPPUNIT_ASSERT_EQUAL(1, tag_count);
           break;
 
         case 5:
-          CPPUNIT_ASSERT_EQUAL(2, tagCount);
+          CPPUNIT_ASSERT_EQUAL(2, tag_count);
           break;
 
         case 6:
-          CPPUNIT_ASSERT_EQUAL(1, tagCount);
+          CPPUNIT_ASSERT_EQUAL(1, tag_count);
           break;
 
         default:
@@ -227,19 +227,13 @@ private:
       _db.setDatabaseName(path);
     }
     else
-    {
       _db = QSqlDatabase::database(path);
-    }
 
     if (_db.isOpen())
-    {
       return;
-    }
 
     if (!_db.open())
-    {
       throw HootException("Error opening database: " + path);
-    }
   }
 
 };

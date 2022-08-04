@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ResolveReviewsOp.h"
 
@@ -69,7 +69,7 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   //  Go through all the relations to get reviews
   const RelationMap& relations = map->getRelations();
   RelationMap reviews;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId eid = ElementId::relation(it->first);
     if (ReviewMarker::isReviewUid(map, eid))
@@ -83,14 +83,14 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   {
     LOG_INFO("ResolveReviews operator removing reviews");
     //  Remove all of the review relations one by one
-    for (RelationMap::iterator it = reviews.begin(); it != reviews.end(); ++it)
+    for (auto it = reviews.begin(); it != reviews.end(); ++it)
       RemoveElementByEid(ElementId::relation(it->first)).apply(map);
   }
   else
   {
     LOG_INFO("ResolveReviews operator resolving reviews");
     //  Iterate all reviews and resolve them
-    for (RelationMap::iterator it = reviews.begin(); it != reviews.end(); ++it)
+    for (auto it = reviews.begin(); it != reviews.end(); ++it)
     {
       ElementId rid = ElementId::relation(it->first);
       set<ElementId> elements = ReviewMarker::getReviewElements(map, rid);
@@ -103,9 +103,9 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       {
         //  Check if any elements are part of multiple reviews
         bool multipleReviews = false;
-        for (set<ElementId>::iterator it2 = elements.begin(); it2 != elements.end(); ++it2)
+        for (auto eid : elements)
         {
-          if (ReviewMarker::getReviewUids(map, *it2).size() > 1)
+          if (ReviewMarker::getReviewUids(map, eid).size() > 1)
             multipleReviews = true;
         }
         std::vector<ElementId> eids(elements.begin(), elements.end());
@@ -119,18 +119,16 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void ResolveReviewsOp::_resolveReview(
-  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
-  const ElementId& eid2)
+void ResolveReviewsOp::_resolveReview(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                                      const ElementId& eid1, const ElementId& eid2)
 {
   MatchPtr match = _getCachedMatch(map, relation_id, eid1, eid2);
   //  Resolve the match review
   _resolveMatchReview(match, map, relation_id, eid1, eid2);
 }
 
-void ResolveReviewsOp::_resolveMultipleReviews(
-  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
-  const ElementId& eid2)
+void ResolveReviewsOp::_resolveMultipleReviews(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                                               const ElementId& eid1, const ElementId& eid2)
 {
   LOG_TRACE(
     "Resolving multiple reviews for review: " << relation_id << ", elements: " <<
@@ -147,13 +145,12 @@ void ResolveReviewsOp::_resolveMultipleReviews(
   double score = match->getScore();
   std::vector<ElementId> element_ids = { eid1, eid2 };
   //  Iterate both sides of the relation looking for the best result
-  for (std::vector<ElementId>::iterator it = element_ids.begin(); it != element_ids.end(); ++it)
+  for (auto eid : element_ids)
   {
     //  Iterate all of the reviews involving this element ID looking for a score higher than the current score
-    std::set<ReviewMarker::ReviewUid> reviews_eid = ReviewMarker::getReviewUids(map, *it);
-    for (std::set<ReviewMarker::ReviewUid>::iterator rit = reviews_eid.begin(); rit != reviews_eid.end(); ++rit)
+    std::set<ReviewMarker::ReviewUid> reviews_eid = ReviewMarker::getReviewUids(map, eid);
+    for (const auto& rid : reviews_eid)
     {
-      ReviewMarker::ReviewUid rid = *rit;
       //  Ignore the current review
       if (relation_id == rid)
         continue;
@@ -201,49 +198,38 @@ void ResolveReviewsOp::_resolveMatchReview(const std::shared_ptr<Match>& match,
       eids.emplace(eid1, eid2);
       MergerFactory::getInstance().createMergers(map, matches, mergers);
 
-      for (std::vector<MergerPtr>::iterator it = mergers.begin(); it != mergers.end(); ++it)
+      for (const auto& merger : mergers)
       {
         std::vector<std::pair<ElementId, ElementId>> replaced;
-        MergerPtr merger = *it;
         merger->apply(map, replaced);
       }
     }
     //  Once the match is merged, delete the review relation or after removing all other distractions
     ReviewMarker::removeElement(map, relation_id);
   }
-  else
-  {
-    //  Manually resolve the review relation
+  else  //  Manually resolve the review relation
     _resolveManualReview(map, relation_id, eid1, eid2);
-  }
 }
 
 void ResolveReviewsOp::_resolveManualReview(
   const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
   const ElementId& eid2) const
 {
-  LOG_TRACE(
-    "Manually resolving review: " << relation_id << ", elements: " << eid1 << ", " << eid2 << "...");
+  LOG_TRACE("Manually resolving review: " << relation_id << ", elements: " << eid1 << ", " << eid2 << "...");
 
   ElementPtr element1 = map->getElement(eid1);
   ElementPtr element2 = map->getElement(eid2);
   //  Remove UNKNOWN2
   if (element1->getStatus() == Status::Unknown2)
-  {
     ReviewMarker::removeElement(map, eid1);
-  }
-
   if (element2->getStatus() == Status::Unknown2)
-  {
     ReviewMarker::removeElement(map, eid2);
-  }
   //  Remove the review relation
   ReviewMarker::removeElement(map, relation_id);
 }
 
-MatchPtr ResolveReviewsOp::_getCachedMatch(
-  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
-  const ElementId& eid2)
+MatchPtr ResolveReviewsOp::_getCachedMatch(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                                           const ElementId& eid1, const ElementId& eid2)
 {
   MatchPtr match;
   //  Check for a previously cached match

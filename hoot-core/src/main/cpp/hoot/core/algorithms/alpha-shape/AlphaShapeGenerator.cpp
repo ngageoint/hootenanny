@@ -81,7 +81,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   for (auto it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
-    r->setTag("area", "yes");
+    r->setTag(MetadataTags::Area(), "yes");
   }
 
   LOG_VART(MapProjector::toWkt(result->getProjection()));

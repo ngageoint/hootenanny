@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -39,9 +39,9 @@
 #include <hoot/core/util/Settings.h>
 
 // geos
-#include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
+#include <geos/io/WKTReader.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -67,8 +67,8 @@ class MapCropperTest : public HootTestFixture
 
 public:
 
-  MapCropperTest() :
-  HootTestFixture("test-files/ops/MapCropper", "test-output/ops/MapCropper")
+  MapCropperTest()
+    : HootTestFixture("test-files/ops/MapCropper", "test-output/ops/MapCropper")
   {
   }
 
@@ -82,8 +82,7 @@ public:
       double x = Random::instance()->generateUniform() * 360 - 180;
       double y = Random::instance()->generateUniform() * 180 - 90;
 
-      result->addNode(
-        std::make_shared<Node>(Status::Invalid, result->createNextNodeId(), x, y, 10));
+      result->addNode(std::make_shared<Node>(Status::Invalid, result->createNextNodeId(), x, y, 10));
     }
 
     return result;
@@ -93,19 +92,16 @@ public:
   {
     OsmMapPtr map = genPoints(0);
 
-    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
-      "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
+    std::shared_ptr<Geometry> g(geos::io::WKTReader().read("POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
     const NodeMap& nm = map->getNodes();
-    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+    for (auto it = nm.begin(); it != nm.end(); ++it)
     {
       Coordinate c = it->second->toCoordinate();
       std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
       if (g->intersects(p.get()))
-      {
         insideCount++;
-      }
     }
 
     {
@@ -119,14 +115,14 @@ public:
     }
 
     {
-      OsmMapPtr map = genPoints(0);
+      OsmMapPtr map2 = genPoints(0);
 
       MapCropper uut;
       uut.setBounds(g);
       uut.setInvert(true);
       uut.setRemoveSuperflousFeatures(false);
-      uut.apply(map);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
+      uut.apply(map2);
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map2->getNodes().size());
     }
   }
 
@@ -137,20 +133,17 @@ public:
 
     settings.set(ConfigOptions::getCropBoundsKey(), "12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS(
-      "Env[12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
+    HOOT_STR_EQUALS("Env[12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set(ConfigOptions::getCropBoundsKey(), "-12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS(
-      "Env[-12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
+    HOOT_STR_EQUALS("Env[-12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set(ConfigOptions::getCropBoundsKey(), "12,41.891,13,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS(
-      "Env[12:13,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
+    HOOT_STR_EQUALS("Env[12:13,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set(ConfigOptions::getCropBoundsKey(), "12,41.891,13.,42");
@@ -172,19 +165,20 @@ public:
     // compare relations
     const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
-    QString relationStr =
-      "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
-    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+    QString relationStr = "relation(-1592); type: multipolygon; members:"
+                          "   Entry: role: outer, eid: Way(-1556);"
+                          "   Entry: role: inner, eid: Way(-1552); ;"
+                          " tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
+    for (auto it = relations.begin(); it != relations.end(); ++it)
     {
-      const RelationPtr& r = it->second;
-      HOOT_STR_EQUALS(relationStr, r->toString().replace("\n","; "));
+      HOOT_STR_EQUALS(relationStr, it->second->toString().replace("\n","; "));
     }
 
     // compare ways
     int count = 0;
     const WayMap ways = map->getWays();
     HOOT_STR_EQUALS(2, ways.size());
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+    for (auto it = ways.begin(); it != ways.end(); ++it)
     {
       const WayPtr& w = it->second;
       std::shared_ptr<Polygon> pl = ElementToGeometryConverter(map).convertToPolygon(w);
@@ -210,9 +204,7 @@ public:
     QString testFileName;
     OsmMapPtr map;
     geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(bounds),
-      _outputPath + "/" + testFileNameBase + "-bounds.osm");
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), _outputPath + "/" + testFileNameBase + "-bounds.osm");
     MapCropper uut;
     uut.setBounds(bounds);
 
@@ -274,9 +266,7 @@ public:
     QString testFileName;
     OsmMapPtr map;
     geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(bounds),
-      _outputPath + "/" + testFileNameBase + "-bounds.osm");
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), _outputPath + "/" + testFileNameBase + "-bounds.osm");
     MapCropper uut;
     uut.setBounds(bounds);
 
@@ -338,9 +328,7 @@ public:
     QString testFileName;
     OsmMapPtr map;
     geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(bounds),
-      _outputPath + "/" + testFileNameBase + "-bounds.osm");
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), _outputPath + "/" + testFileNameBase + "-bounds.osm");
     MapCropper uut;
     uut.setBounds(bounds);
 
@@ -375,22 +363,18 @@ public:
     QString testFileName;
     OsmMapPtr map;
     geos::geom::Envelope bounds(38.91362, 38.915478, 15.37365, 15.37506);
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(bounds),
-      _outputPath + "/" + testFileNameBase + "-bounds.osm");
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), _outputPath + "/" + testFileNameBase + "-bounds.osm");
 
     MapCropper uut;
     uut.setBounds(bounds);
     map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);
+    OsmMapReaderFactory::read(map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);
     uut.setInvert(false);
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.setKeepOnlyFeaturesInsideBounds(false);
     // Exclude one way outside of the bounds from being cropped out of the map. The whole way and
     // its nodes should be retained.
-    uut.setInclusionCriterion(
-      std::make_shared<ElementIdCriterion>(ElementId(ElementType::Way, 1687)));
+    uut.setInclusionCriterion(std::make_shared<ElementIdCriterion>(ElementId(ElementType::Way, 1687)));
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

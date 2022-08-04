@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -75,8 +75,7 @@ public:
    */
   Meters calculateDistanceOnWay() const;
 
-  static int compareLocationValues(
-    int segmentIndex0, double segmentFraction0, int segmentIndex1, double segmentFraction1);
+  static int compareLocationValues(int segmentIndex0, double segmentFraction0, int segmentIndex1, double segmentFraction1);
 
   /**
    * @brief compareTo compares this object with the specified object for order.
@@ -102,8 +101,8 @@ public:
    * @param length the length to the desired point
    * @return the Coordinate of the desired point
    */
-  static geos::geom::Coordinate pointAlongSegmentByFraction(
-    const geos::geom::Coordinate& p0, const geos::geom::Coordinate& p1, double frac);
+  static geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
+                                                            const geos::geom::Coordinate& p1, double frac);
 
   /**
    * @brief getNode returns the node at this WayLocation. If isNode() returns false, this will throw

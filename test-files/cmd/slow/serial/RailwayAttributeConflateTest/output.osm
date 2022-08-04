@@ -2304,7 +2304,7 @@
         <tag k="source:imagery:sensor" v="Multiple"/>
         <tag k="transport:type" v="railway"/>
         <tag k="uuid" v="{fa9f6996-ff9a-48e8-b8c6-01be8ba7f022}"/>
-        <tag k="width" v="34"/>
+        <tag k="width" v="33.688"/>
     </way>
     <way visible="true" id="-95" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-721"/>
@@ -2497,7 +2497,7 @@
         <tag k="source:imagery:sensor" v="Multiple"/>
         <tag k="transport:type" v="railway"/>
         <tag k="uuid" v="{8f994ad9-8c92-4e71-81bb-b59c4021c480}"/>
-        <tag k="width" v="54"/>
+        <tag k="width" v="54.4217"/>
     </way>
     <way visible="true" id="-81" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-507"/>

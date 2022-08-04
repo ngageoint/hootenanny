@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "LocationOfPoint.h"
@@ -33,8 +33,8 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Standard
 #include <limits>
@@ -45,9 +45,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
-LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way) :
-  _map(map),
-  _way(way)
+LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way)
+  : _map(map),
+    _way(way)
 {
   _length = -1;
 }
@@ -62,18 +62,12 @@ double distance(const Node& n1, const Node& n2)
 Coordinate LocationOfPoint::locate(double d)
 {
   if (_length == -1)
-  {
     _length = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
-  }
 
   if (d <= 0)
-  {
     return _map->getNode(_way->getNodeId(0))->toCoordinate();
-  }
   else if (d >= _length)
-  {
-    return _map->getNode(_way->getNodeId(_way->getNodeCount() - 1))->toCoordinate();
-  }
+    return _map->getNode(_way->getNodeId(static_cast<int>(_way->getNodeCount() - 1)))->toCoordinate();
 
   double running = 0.0;
   double step = 0.0;
@@ -100,8 +94,7 @@ Coordinate LocationOfPoint::locate(double d)
   return result;
 }
 
-WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
-  const Coordinate& inputPt)
+WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way, const Coordinate& inputPt)
 {
   LocationOfPoint locater(map, way);
   return locater.locate(inputPt);
@@ -119,12 +112,9 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 
   if (_length == -1)
   {
-    std::shared_ptr<geos::geom::LineString> lineString =
-      ElementToGeometryConverter(_map).convertToLineString(_way);
+    std::shared_ptr<geos::geom::LineString> lineString = ElementToGeometryConverter(_map).convertToLineString(_way);
     if (lineString)
-    {
       _length = lineString->getLength();
-    }
     else
     {
       LOG_TRACE("Invalid line string. Returning empty way location...");
@@ -134,9 +124,7 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
   LOG_VART(_length);
 
   if (_length <= 0.0)
-  {
     return WayLocation(_map, _way, 0, 0);
-  }
 
   if (_way->getNodeCount() >= 1)
   {
@@ -144,33 +132,28 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
     Coordinate lastCoord = _map->getNode(_way->getNodeId(0))->toCoordinate();
     for (size_t i = 0; i < _way->getNodeCount() - 1; i++)
     {
-      ConstNodePtr node = _map->getNode(_way->getNodeId((long)(i + 1)));
+      ConstNodePtr node = _map->getNode(_way->getNodeId(static_cast<int>(i + 1)));
       Coordinate nextCoord = node->toCoordinate();
       seg.p0 = lastCoord;
       seg.p1 = nextCoord;
       lastCoord = nextCoord;
       double segDistance = seg.distance(inputPt);
       double segFrac = segmentFraction(seg, inputPt);
-
       if (segDistance < minDistance)
       {
-        minIndex = i;
+        minIndex = static_cast<int>(i);
         minFrac = segFrac;
         minDistance = segDistance;
       }
     }
   }
-
   return WayLocation(_map, _way, minIndex, minFrac);
 }
 
-WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLocation& minLocation)
-    const
+WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLocation& minLocation) const
 {
   if (minLocation.isValid() == false)
-  {
     return locate(inputPt);
-  }
 
   assert(minLocation.getWay() == _way);
 
@@ -183,13 +166,11 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
 
   for (size_t i = startIndex; i < _way->getNodeCount() - 1; i++)
   {
-    seg.p0 = _map->getNode(_way->getNodeId(i))->toCoordinate();
-    seg.p1 = _map->getNode(_way->getNodeId(i + 1))->toCoordinate();
+    seg.p0 = _map->getNode(_way->getNodeId(static_cast<int>(i)))->toCoordinate();
+    seg.p1 = _map->getNode(_way->getNodeId(static_cast<int>(i + 1)))->toCoordinate();
 
     if (i == startIndex)
-    {
       seg.p0 = minLocation.getCoordinate();
-    }
 
     double segDistance = seg.distance(inputPt);
     double segFrac = segmentFraction(seg, inputPt);
@@ -197,50 +178,36 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
     if (segDistance < minDistance)
     {
       // if this is the first case (a partial line segment)
-      if (i == startIndex)
-      {
-        // recalculate the segFrac in terms of the whole line segment.
-        segFrac =
-          minLocation.getSegmentFraction() + (1 - minLocation.getSegmentFraction()) * segFrac;
-      }
-      nextClosestLocation = WayLocation(_map, _way, i, segFrac);
+      if (i == startIndex)  // recalculate the segFrac in terms of the whole line segment.
+        segFrac = minLocation.getSegmentFraction() + (1 - minLocation.getSegmentFraction()) * segFrac;
+      nextClosestLocation = WayLocation(_map, _way, static_cast<int>(i), segFrac);
       minDistance = segDistance;
     }
   }
   // Return the minDistanceLocation found. This will not be null, since it was initialized to
   // minLocation.
   if (!(nextClosestLocation >= minLocation))
-  {
     throw HootException("Computed location is before specified minimum location");
-  }
-
   return nextClosestLocation;
 }
 
 bool LocationOfPoint::isGreater(int i, double segFrac, const WayLocation& loc) const
 {
-  return WayLocation::compareLocationValues(i, segFrac,
-      loc.getSegmentIndex(), loc.getSegmentFraction()) > 0;
+  return WayLocation::compareLocationValues(i, segFrac, loc.getSegmentIndex(), loc.getSegmentFraction()) > 0;
 }
 
 double LocationOfPoint::segmentFraction(const LineSegment& seg, const Coordinate& inputPt)
 {
   double segFrac;
   if (seg.p0.equals2D(seg.p1))
-  {
     segFrac = 0.0;
-  }
   else
   {
     segFrac = seg.projectionFactor(inputPt);
     if (segFrac < 0.000001)
-    {
       segFrac = 0.0;
-    }
     else if (segFrac > 0.999999)
-    {
       segFrac = 1.0;
-    }
   }
   return segFrac;
 }

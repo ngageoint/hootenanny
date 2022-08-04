@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DirectedGraph.h"
@@ -77,7 +77,7 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
 {
   const WayMap& ways = map->getWays();
 
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& way = it->second;
     LOG_VART(way.get());
@@ -87,18 +87,14 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
     double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
     LOG_VART(length);
     if (length == 0)
-    {
       continue;
-    }
 
     long nStart = way->getNodeId(0);
     long nEnd = way->getNodeId(way->getNodeCount() - 1);
     if (cost >= 0)
     {
       if (isOneWay(way))
-      {
         addEdge(nStart, nEnd, cost * length);
-      }
       else
       {
         addEdge(nStart, nEnd, cost * length);

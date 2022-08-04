@@ -144,8 +144,7 @@ public:
    * Converts a string into a format that can be cut/paste into c++ code.
    */
   static QString toQuotedString(QString str);
-  static void verifyStdMatchesOutputIgnoreDate(
-    const QString& stdFilePath, const QString& outFilePath);
+  static void verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath, const QString& outFilePath);
 
   /**
    * Making the map optional here, as you don't always need a test node to belong to one.
@@ -210,7 +209,7 @@ public:
 
 private:
 
-  TestUtils();
+  TestUtils() = default;
 
   QList<RegisteredReset*> _resets;
   static std::shared_ptr<TestUtils> _theInstance;

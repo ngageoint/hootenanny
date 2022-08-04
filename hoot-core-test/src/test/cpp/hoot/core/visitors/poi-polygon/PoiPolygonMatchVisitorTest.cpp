@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -57,10 +57,10 @@ private:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
-    w1->getTags().set("building", true);
+    w1->getTags().set(MetadataTags::Building(), true);
     w1->getTags().set("name", "foo");
     WayPtr w2 = TestUtils::createWay(map, c1, "w2", Status::Unknown1, 5);
-    w2->getTags().set("area", true);
+    w2->getTags().set(MetadataTags::Area(), true);
 
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);

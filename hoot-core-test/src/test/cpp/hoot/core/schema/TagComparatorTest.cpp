@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -252,11 +252,11 @@ public:
 
     {
       Tags t1;
-      t1["building"] = "yes";
+      t1[MetadataTags::Building()] = "yes";
       t1["addr:housenumber"] = "123";
 
       Tags t2;
-      t2["building"] = "yes";
+      t2[MetadataTags::Building()] = "yes";
       t2["addr:housenumber"] = "125";
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6667, uut.compareTags(t1, t2), 0.001);
@@ -266,12 +266,12 @@ public:
 
     {
       Tags t1;
-      t1["building"] = "yes";
+      t1[MetadataTags::Building()] = "yes";
       t1["addr:housenumber"] = "125";
       t1["addr:city"] = "Denver";
 
       Tags t2;
-      t2["building"] = "yes";
+      t2[MetadataTags::Building()] = "yes";
       t2["addr:housenumber"] = "125";
       t2["addr:city"] = "Denvir";
 
@@ -280,10 +280,10 @@ public:
 
     {
       Tags t1;
-      t1["building"] = "commercial";
+      t1[MetadataTags::Building()] = "commercial";
 
       Tags t2;
-      t2["building"] = "residential";
+      t2[MetadataTags::Building()] = "residential";
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compareTags(t1, t2), 0.001);
     }
@@ -343,7 +343,7 @@ public:
       t2["highway"] = "road";
       t2["surface"] = "unpaved";
       t2["all_weather"] = "fair";
-      t2["width"] = "4";
+      t2[MetadataTags::Width()] = "4";
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compareTags(t1, t2), 0.001);
     }
@@ -376,15 +376,14 @@ public:
       t1["highway"] = "secondary";
       t1["lanes"] = "2";
       t1["surface"] = "paved";
-      t1["width"] = "5.5";
+      t1[MetadataTags::Width()] = "5.5";
 
       Tags t2;
       t2["highway"] = "road";
       t2["all_weather"] = "fair";
       t2["surface"] = "unpaved";
-      t2["width"] = "3.5";
+      t2[MetadataTags::Width()] = "3.5";
 
-      //cout << uut.compareTags(t1, t2) << endl;
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.048, uut.compareTags(t1, t2), 0.001);
     }
   }
@@ -487,13 +486,13 @@ public:
       Tags t1;
       t1["name"] = "foo";
       t1["lala"] = "1;2";
-      t1["building"] = "yes";
+      t1[MetadataTags::Building()] = "yes";
       t1["uid"] = "123";
 
       Tags t2;
       t2["name"] = "bar";
       t2["lala"] = "2;1";
-      t2["building"] = "yes";
+      t2[MetadataTags::Building()] = "yes";
       t2["uid"] = "456";
 
       Tags expected;
@@ -501,7 +500,7 @@ public:
       expected["alt_name"] = "bar";
       expected["lala"] = "1;2";
       expected["uid"] = "123;456";
-      expected["building"] = "yes";
+      expected[MetadataTags::Building()] = "yes";
 
       Tags gen = uut.generalize(t1, t2);
       compareTags(expected, gen);
@@ -559,11 +558,11 @@ public:
 
     {
       Tags t1;
-      t1["building"] = "residential";
+      t1[MetadataTags::Building()] = "residential";
       t1[MetadataTags::Ref1()] = "foo";
 
       Tags t2;
-      t2["building"] = "no";
+      t2[MetadataTags::Building()] = "no";
       t2[MetadataTags::Ref1()] = "bar";
 
       Tags expected;
@@ -604,13 +603,13 @@ public:
     Tags t1;
     t1["name"] = "foo";
     t1["lala"] = "1;2";
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["uid"] = "123";
 
     Tags t2;
     t2["name"] = "FOO";
     t2["lala"] = "2;1";
-    t2["building"] = "yes";
+    t2[MetadataTags::Building()] = "yes";
     t2["uid"] = "456";
 
     //With case sensitivity on, the two name tags are considered different from one another.
@@ -620,7 +619,7 @@ public:
     expected["alt_name"] = "FOO";
     expected["lala"] = "1;2";
     expected["uid"] = "123;456";
-    expected["building"] = "yes";
+    expected[MetadataTags::Building()] = "yes";
 
     Tags gen = uut.generalize(t1, t2);
     compareTags(expected, gen);
@@ -632,13 +631,13 @@ public:
     Tags t1;
     t1["name"] = "foo";
     t1["lala"] = "1;2";
-    t1["building"] = "yes";
+    t1[MetadataTags::Building()] = "yes";
     t1["uid"] = "123";
 
     Tags t2;
     t2["name"] = "FOO";
     t2["lala"] = "2;1";
-    t2["building"] = "yes";
+    t2[MetadataTags::Building()] = "yes";
     t2["uid"] = "456";
 
     //With case sensitivity off, the two name tags are considered different from each other.  So,
@@ -647,7 +646,7 @@ public:
     expected["name"] = "foo";
     expected["lala"] = "1;2";
     expected["uid"] = "123;456";
-    expected["building"] = "yes";
+    expected[MetadataTags::Building()] = "yes";
 
     Tags gen = uut.generalize(t1, t2, false, false);
     compareTags(expected, gen);
@@ -789,7 +788,7 @@ public:
       t2["name"] = "OTTO ISKANDARDINATA (OLLSLA)";
       t2["oneway"] = "yes";
       t2["surface"] = "paved";
-      t2["width"] = "10";
+      t2[MetadataTags::Width()] = "10";
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.76, uut.compareTags(t1, t2), 0.001);
     }

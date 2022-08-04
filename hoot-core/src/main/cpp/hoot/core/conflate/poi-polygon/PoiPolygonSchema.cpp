@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonSchema.h"
 
@@ -44,9 +44,7 @@ QSet<QString> PoiPolygonSchema::_allTypeKeys;
 QMultiHash<QString, QString> PoiPolygonSchema::_getTypeToNames()
 {
   if (_typeToNames.isEmpty())
-  {
     _typeToNames = _readTypeToNames();
-  }
   return _typeToNames;
 }
 
@@ -70,20 +68,15 @@ QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
 
   QMultiHash<QString, QString> typeToNames;
   const QStringList typeToNamesRaw = ConfigOptions().getPoiPolygonTypeToNames();
-  for (int i = 0; i < typeToNamesRaw.size(); i++)
+  for (const auto& typeToNamesRawEntry : qAsConst(typeToNamesRaw))
   {
-    const QString typeToNamesRawEntry = typeToNamesRaw.at(i);
     const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split("|");
     if (typeToNamesRawEntryParts.size() != 2)
-    {
       throw HootException("Invalid POI/Polygon type to names entry: " + typeToNamesRawEntry);
-    }
     const QString kvp = typeToNamesRawEntryParts.at(0);
     const QStringList names = typeToNamesRawEntryParts.at(1).split(",");
-    for (int j = 0; j < names.size(); j++)
-    {
-      typeToNames.insert(kvp, names.at(j));
-    }
+    for (const auto& name : qAsConst(names))
+      typeToNames.insert(kvp, name);
   }
   return typeToNames;
 }
@@ -91,12 +84,10 @@ QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
 bool PoiPolygonSchema::_typeHasName(const QString& kvp, const QString& name)
 {
   const QStringList typeNames = _getTypeToNames().values(kvp);
-  for (int i = 0; i < typeNames.size(); i++)
+  for (const auto& typeName : qAsConst(typeNames))
   {
-    if (name.contains(typeNames.at(i)))
-    {
+    if (name.contains(typeName))
       return true;
-    }
   }
   return false;
 }
@@ -104,19 +95,15 @@ bool PoiPolygonSchema::_typeHasName(const QString& kvp, const QString& name)
 QString PoiPolygonSchema::_getMatchingTypeName(const QString& kvp, const QString& name)
 {
   const QStringList typeNames = _getTypeToNames().values(kvp);
-  for (int i = 0; i < typeNames.size(); i++)
+  for (const auto& typeName : qAsConst(typeNames))
   {
-    const QString typeName = typeNames.at(i);
     if (name.contains(typeName))
-    {
       return typeName;
-    }
   }
   return "";
 }
 
-bool PoiPolygonSchema::_haveMatchingTypeNames(const QString& kvp, const QString& name1,
-                                                          const QString& name2)
+bool PoiPolygonSchema::_haveMatchingTypeNames(const QString& kvp, const QString& name1, const QString& name2)
 {
   const QString typeName1 = _getMatchingTypeName(kvp, name1);
   const QString typeName2 = _getMatchingTypeName(kvp, name2);
@@ -134,11 +121,8 @@ bool PoiPolygonSchema::isSpecificSchool(const ConstElementPtr& element)
   // Schools are the only example of the concept of trying to reduce reviews between features of the
   // same type when their names indicate they are actually different types.  If this concept proves
   // useful with other types, the code could be abstracted to handle them.
-
   if (!isSchool(element))
-  {
     return false;
-  }
   return _typeHasName("amenity=school", element->getTags().getName().toLower());
 }
 
@@ -150,9 +134,7 @@ bool PoiPolygonSchema::specificSchoolMatch(const ConstElementPtr& element1,
     const QString name1 = element1->getTags().getName().toLower();
     const QString name2 = element2->getTags().getName().toLower();
     if (_haveMatchingTypeNames("amenity=school", name1, name2))
-    {
       return true;
-    }
   }
   return false;
 }
@@ -181,9 +163,8 @@ bool PoiPolygonSchema::isSport(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   if (tags.contains("sport"))
-  {
     return true;
-  }
+
   const QString leisureVal = tags.get("leisure").toLower();
   return leisureVal.contains("sport") || leisureVal == QLatin1String("pitch");
 }
@@ -197,9 +178,8 @@ bool PoiPolygonSchema::isParking(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   if (tags.contains("parking"))
-  {
     return true;
-  }
+
   const QString amenityVal = tags.get("amenity").toLower();
   return amenityVal == QLatin1String("parking") || amenityVal == QLatin1String("bicycle_parking");
 }
@@ -208,7 +188,7 @@ bool PoiPolygonSchema::isReligion(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   const QString amenityVal = tags.get("amenity").toLower();
-  const QString buildingVal = tags.get("building").toLower();
+  const QString buildingVal = tags.get(MetadataTags::Building()).toLower();
   return amenityVal == QLatin1String("place_of_worship") ||
          buildingVal == QLatin1String("church") ||
          buildingVal == QLatin1String("mosque") ||
@@ -223,25 +203,20 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
   int typeCount = 0;
   QStringList typesParsed;
   if (_allTypeKeys.empty())
-  {
     _allTypeKeys = OsmSchema::getInstance().getAllTypeKeys();
-  }
 
   const Tags elementTags = element->getTags();
-  for (Tags::const_iterator it = elementTags.begin(); it != elementTags.end(); ++it)
+  for (auto it = elementTags.begin(); it != elementTags.end(); ++it)
   {
     const QString elementTagKey = it.key();
-    //there may be duplicate keys in allTags
+    //  there may be duplicate keys in allTags
     if (_allTypeKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
     {
       LOG_TRACE("Has key: " << elementTagKey);
       typeCount++;
       if (typeCount > 1)
-      {
         return true;
-      }
     }
-
     typesParsed.append(elementTagKey);
   }
   return false;
@@ -258,9 +233,9 @@ bool PoiPolygonSchema::hasSpecificType(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   return
-    !tags.contains("poi") && tags.get("building").toLower() != QLatin1String("yes") &&
+    !tags.contains("poi") && tags.get(MetadataTags::Building()).toLower() != QLatin1String("yes") &&
     tags.get("office").toLower() != QLatin1String("yes") &&
-    tags.get("area").toLower() != QLatin1String("yes") && hasRelatedType(element);
+    tags.get(MetadataTags::Area()).toLower() != QLatin1String("yes") && hasRelatedType(element);
 }
 
 bool PoiPolygonSchema::isRestaurant(const ConstElementPtr& element)

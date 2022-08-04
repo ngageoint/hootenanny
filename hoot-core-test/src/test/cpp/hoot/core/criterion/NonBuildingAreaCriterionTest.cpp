@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -45,12 +45,12 @@ public:
     NonBuildingAreaCriterion uut;
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way1->getTags().set("building", "yes");
-    way1->getTags().set("area", "yes");
+    way1->getTags().set(MetadataTags::Building(), "yes");
+    way1->getTags().set(MetadataTags::Area(), "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
     WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
-    way2->getTags().set("area", "yes");
+    way2->getTags().set(MetadataTags::Area(), "yes");
     CPPUNIT_ASSERT(uut.isSatisfied(way2));
   }
 };

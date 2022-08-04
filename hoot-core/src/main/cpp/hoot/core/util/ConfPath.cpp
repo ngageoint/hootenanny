@@ -63,50 +63,35 @@ QStringList ConfPath::_find(QStringList filters, QString path)
   QFileInfoList l = dir.entryInfoList(filters, QDir::Files);
 
   QStringList result;
-  for (int i = 0; i < l.size(); i++)
-  {
-    result << l[i].absoluteFilePath();
-  }
+  for (const auto& p : qAsConst(l))
+    result << p.absoluteFilePath();
 
   return result;
 }
 
 QString ConfPath::getHootHome()
 {
-  QString hootHome;
   if (conf().hasKey("HOOT_HOME"))
-  {
-    hootHome = conf().getString("HOOT_HOME");
-  }
+    return conf().getString("HOOT_HOME");
   else
-  {
-    hootHome = getenv("HOOT_HOME");
-  }
-
-  return hootHome;
+    return getenv("HOOT_HOME");
 }
 
 
 QString ConfPath::_subDirSearch(QString baseName, QString searchDir)
 {
-  QDir startDir(searchDir);
-
   // Should we allow following symlinks?
+  QDir startDir(searchDir);
   startDir.setFilter(QDir::Files | QDir::NoSymLinks);
-
   startDir.setNameFilters(QStringList(baseName));
 
   QDirIterator it(startDir, QDirIterator::Subdirectories);
 
-  QString result = "";
-
   // Take the first matching file.
   if (it.hasNext())
-  {
-    result = QFileInfo(it.next()).absoluteFilePath();
-  }
-
-  return result;
+    return QFileInfo(it.next()).absoluteFilePath();
+  else
+    return "";
 }
 
 
@@ -114,24 +99,17 @@ QString ConfPath::search(QString baseName, QString searchDir)
 {
   // Try searchDir first
   if (QFileInfo(searchDir + "/" + baseName).isFile())
-  {
     return QFileInfo(searchDir + "/" + baseName).absoluteFilePath();
-  }
 
   // Now try HOOT_HOME + / + searchDir
   QString hootHome = getHootHome();
 
-  if (hootHome.isEmpty() == false && QFileInfo(hootHome + "/" + searchDir + "/" + baseName).
-      isFile())
-  {
+  if (hootHome.isEmpty() == false && QFileInfo(hootHome + "/" + searchDir + "/" + baseName).isFile())
     return QFileInfo(hootHome + "/" + searchDir + "/" + baseName).absoluteFilePath();
-  }
 
   // Now try local dir
   if (QFileInfo(baseName).isFile())
-  {
     return QFileInfo(baseName).absoluteFilePath();
-  }
 
   // If we still can't find it, try searching subdirectories.
   // Not sure if this should also have a go with "hootHome/searchDir" as well as "searchDir"
@@ -142,21 +120,15 @@ QString ConfPath::search(QString baseName, QString searchDir)
   if (hootHome.isEmpty() == false)
   {
     result = _subDirSearch(baseName, hootHome + "/" + searchDir);
-
     if (result.isEmpty() == false)
-    {
       return result;
-    }
   }
 
   // Now try searching just sub directories
   // Note: This may never occur. We _always_ have HOOT_HOME, don't we?
   result = _subDirSearch(baseName, searchDir);
-
   if (result.isEmpty() == false)
-  {
     return result;
-  }
 
   // If we can't find the file, Throw Error
   throw FileNotFoundException("Could not find specified file in any " + searchDir + " directory ("

@@ -9,6 +9,7 @@ debug {
   DEFINES += DEBUG
 
   QMAKE_CXXFLAGS+=-g -Og
+  QMAKE_CXXFLAGS+=-fno-omit-frame-pointer
 
   # Runs expensive validation on several data structures to make sure everything is in sync.
   #DEFINES += VALIDATE_ON
@@ -16,6 +17,10 @@ debug {
   # Use this with valgrind
   #QMAKE_CXXFLAGS+=-g -O1
 
+  # Turn on ASAN
+  #QMAKE_CXXFLAGS+=-fsanitize=address
+  #QMAKE_CXXFLAGS+=-fsanitize-address-use-after-scope
+  #QMAKE_LFLAGS+=-fsanitize=address -static-libasan
 }
 
 release {
@@ -28,7 +33,7 @@ release {
 QMAKE_CXX=ccache g++
 
 # Warn about uninitialized variables
-QMAKE_CXXFLAGS+=-Wuninitialized 
+QMAKE_CXXFLAGS+=-Wuninitialized
 
 # If the g++ version is 4.0 to 4.4, then don't use maybe-uninitialized.
 # I couldn't find the exact version maybe-unintialized was introduced, but
@@ -40,12 +45,12 @@ system( g++ --version | grep -q -e " 4.[0-7]" ) {
 }
 
 # Enable the gold linker for faster build times
-QMAKE_LFLAGS=-fuse-ld=gold
+QMAKE_LFLAGS+=-fuse-ld=gold
 
-# Set all uninitialized variables to their default values                                                      
-#QMAKE_CXXFLAGS+=-fno-common 
+# Set all uninitialized variables to their default values
+#QMAKE_CXXFLAGS+=-fno-common
 
-# Initialize values in BSS to zero                  
+# Initialize values in BSS to zero
 #QMAKE_CXXFLAGS+=-fzero-initialized-in-bss
 
 # Show more warnings
@@ -54,9 +59,13 @@ QMAKE_CXXFLAGS+=-Wall
 
 # Turn warnings into errors
 QMAKE_CXXFLAGS+=-Werror
-                         
+
 # Temporarily turn off compiler warning for "Incompatible Function Types"
 QMAKE_CXXFLAGS+=-Wno-cast-function-type
 
 # Enable the GEOS C++ API
 DEFINES += USE_UNSTABLE_GEOS_CPP_API
+
+# Turn on variable shadow tests
+QMAKE_CXXFLAGS+=-Wshadow
+QMAKE_CXXFLAGS+=-Wshadow-compatible-local

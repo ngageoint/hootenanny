@@ -22,11 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/TestUtils.h>
 
 namespace hoot
@@ -61,17 +66,17 @@ public:
       ConflatableElementCriterion::getConflatableCriteriaForElement(
         TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes")), map);
     CPPUNIT_ASSERT_EQUAL(2, poiConflatableCriteria.size());
-    CPPUNIT_ASSERT(poiConflatableCriteria.contains("PoiCriterion"));
-    CPPUNIT_ASSERT(poiConflatableCriteria.contains("PoiPolygonPoiCriterion"));
+    CPPUNIT_ASSERT(poiConflatableCriteria.contains(PoiCriterion::className()));
+    CPPUNIT_ASSERT(poiConflatableCriteria.contains(PoiPolygonPoiCriterion::className()));
 
     const QStringList buildingConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("building", "yes")),
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags(MetadataTags::Building(), "yes")),
         map);
     CPPUNIT_ASSERT_EQUAL(3, buildingConflatableCriteria.size());
-    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("AreaCriterion"));
-    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("BuildingCriterion"));
-    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("PoiPolygonPolyCriterion"));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains(AreaCriterion::className()));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains(BuildingCriterion::className()));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains(PoiPolygonPolyCriterion::className()));
 
     // Untyped features are now conflatable by default.
     CPPUNIT_ASSERT_EQUAL(

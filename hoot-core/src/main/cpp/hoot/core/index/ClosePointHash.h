@@ -95,10 +95,10 @@ private:
   {
     double x, y;
 
-    Point(double x, double y)
+    Point(double x_, double y_)
     {
-      this->x = x;
-      this->y = y;
+      x = x_;
+      y = y_;
     }
   };
 

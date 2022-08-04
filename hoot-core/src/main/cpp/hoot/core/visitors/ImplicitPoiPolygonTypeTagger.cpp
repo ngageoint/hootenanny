@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitPoiPolygonTypeTagger.h"
 
@@ -36,8 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTypeTagger)
 
-ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString& databasePath) :
-ImplicitPoiTypeTagger(databasePath)
+ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString& databasePath)
+  : ImplicitPoiTypeTagger(databasePath)
 {
 }
 
@@ -47,20 +47,14 @@ bool ImplicitPoiPolygonTypeTagger::_visitElement(const ElementPtr& e)
     OsmSchema::getInstance().getCategories(e->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
 
-  if (ImplicitPoiTypeTagger::_visitElement(e) || _elementIsATaggablePolygon(e))
-  {
-    return true;
-  }
-  return false;
+  return (ImplicitPoiTypeTagger::_visitElement(e) || _elementIsATaggablePolygon(e));
 }
 
 bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& e)
 {
   // see comment in OsmSchema::isPoiPolygonPoly
   if (e->getTags().contains("highway"))
-  {
     return false;
-  }
 
   const bool elementIsAWay = e->getElementType() == ElementType::Way;
   LOG_VART(elementIsAWay);
@@ -69,8 +63,8 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   const bool elementIsAPoly = _polyCrit.isSatisfied(e);
   LOG_VART(elementIsAPoly);
   const bool elementIsASpecificPoly =
-    _inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes") &&
-     e->getTags().get("area") != QLatin1String("yes") &&
+    _inABuildingOrPoiCategory && e->getTags().get(MetadataTags::Building()) != QLatin1String("yes") &&
+     e->getTags().get(MetadataTags::Area()) != QLatin1String("yes") &&
      e->getTags().get("office") != QLatin1String("yes");
   //bit of a hack
   _elementIsASpecificFeature = elementIsASpecificPoly;
@@ -79,20 +73,12 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   LOG_VART(elementIsAGenericPoly);
   LOG_VART(_getNames(e->getTags()).size());
 
-  // always allow generic elements
-  if (elementIsAGenericPoly)
-  {
+  if (elementIsAGenericPoly)  // always allow generic elements
     return true;
-  }
-  // allowing specific elements is configurable
-  else if (elementIsASpecificPoly && _allowTaggingSpecificFeatures)
-  {
+  else if (elementIsASpecificPoly && _allowTaggingSpecificFeatures) // allowing specific elements is configurable
     return true;
-  }
   else if ((elementIsAWay || elementIsARelation) && !_getNames(e->getTags()).empty())
-  {
     return true;
-  }
 
   return false;
 }

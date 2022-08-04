@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -39,8 +39,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
 
-BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map) :
-_map(map)
+BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
@@ -51,10 +51,9 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
   const std::shared_ptr<ElementToRelationMap>& e2r = _map->getIndex().getElementToRelationMap();
   const set<long>& parents = e2r->getRelationByElement(eid);
   LOG_VART(parents);
-  for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
-    ++it)
+  for (auto parent_id : parents)
   {
-    ConstElementPtr e = _map->getRelation(*it);
+    ConstElementPtr e = _map->getRelation(parent_id);
     if (isSatisfied(e))
     {
       result = true;
@@ -64,9 +63,10 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
     {
       result = isParentABuilding(e->getElementId());
       LOG_TRACE("isParentABuilding result: " << result << ";" << e->getElementId());
+      if (!result)
+        break;
     }
   }
-
   return result;
 }
 
@@ -75,14 +75,12 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
   bool result = false;
 
   LOG_VART(e->getElementId());
+  LOG_VART(e->getElementType() == ElementType::Node);
+  LOG_VART(OsmSchema::getInstance().hasCategory(e->getTags(), MetadataTags::Building()));
 
   // if it is a building
-
-  LOG_VART(e->getElementType() == ElementType::Node);
-  LOG_VART(OsmSchema::getInstance().hasCategory(e->getTags(), "building"));
-
   if ((e->getElementType() != ElementType::Node) &&
-      (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
+      (OsmSchema::getInstance().hasCategory(e->getTags(), MetadataTags::Building()) == true))
   {
     // If a map was set, then we assume the parent is to be checked as well. This is a little
     // messy but reflects how the logic worked before moving OsmSchema feature type method logic
@@ -97,7 +95,6 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
       LOG_VART(result);
     }
   }
-
   return result;
 }
 
@@ -105,12 +102,10 @@ bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& element
 {
   // There's no option to check the parent in this method, since doing so would require an element
   // ID and callers call this method, because they don't have it in certain circumstances.
-
   LOG_VART(elementType);
-  LOG_VART(OsmSchema::getInstance().hasCategory(tags, "building"));
+  LOG_VART(OsmSchema::getInstance().hasCategory(tags, MetadataTags::Building()));
 
-  return
-    elementType != ElementType::Node && OsmSchema::getInstance().hasCategory(tags, "building");
+  return elementType != ElementType::Node && OsmSchema::getInstance().hasCategory(tags, MetadataTags::Building());
 }
 
 QStringList BuildingCriterion::getChildCriteria() const

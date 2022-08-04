@@ -303,6 +303,9 @@ TOMCAT_HOME=/usr/share/tomcat8
 # Install Tomcat 8
 $HOOT_HOME/scripts/tomcat/centos7/tomcat8_install.sh
 
+# Enable SSL for Tomcat
+$HOOT_HOME/scripts/tomcat/configure_tomcat_ssl.sh
+
 # Configure Tomcat for the user
 if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
     echo "### Adding Tomcat to profile..."

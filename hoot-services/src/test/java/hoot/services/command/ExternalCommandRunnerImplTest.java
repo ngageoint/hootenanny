@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.command;
 
@@ -142,6 +142,10 @@ public class ExternalCommandRunnerImplTest {
         ExternalCommandRunnerImpl runner = new ExternalCommandRunnerImpl();
         String test = "hoot.bin changeset-apply --info -D changeset.description=test cut and replace for node snapping at edges -D changeset.hashtags=#hootenanny -D changeset.source=OSM_077953 -D hoot.osm.auth.access.token=SlN0M6VfCBsU044ug44r2nf8dW2o4pFvyTd89JeD -D hoot.osm.auth.access.token.secret=9Hz2B8PZki8UsVPLpI3NUWrAbsIkvo3qQ1i6aHKZ -D hoot.osm.auth.consumer.key=yyawGlA9IeCxK8eDgkInh3lB9EgGDyXECmlv6es6 -D hoot.osm.auth.consumer.secret=1YT1f1aLhIDCloSYkOnwZRfTVH5tl9BIKwQ300eR /home/vagrant/hoot/userfiles/changesets/grail_cdf5650285354566ac4ff7d19d54d360/diff.osc";
         String expected = "hoot.bin changeset-apply --info -D changeset.description=test cut and replace for node snapping at edges -D changeset.hashtags=#hootenanny -D changeset.source=OSM_077953 -D hoot.osm.auth.access.token=<redacted> -D hoot.osm.auth.access.token.secret=<redacted> -D hoot.osm.auth.consumer.key=<redacted> -D hoot.osm.auth.consumer.secret=<redacted> <path>/userfiles/changesets/grail_cdf5650285354566ac4ff7d19d54d360/diff.osc";
+        assertEquals(expected, runner.obfuscateConsoleLog(test));
+
+        test = "hoot.bin changeset-apply --info -D changeset.description=test cut and replace for node snapping at edges -D changeset.hashtags=#hootenanny -D changeset.source=OSM_077953 -D hoot.services.oauth2.access.token=SlN0M6VfCBsU044ug44r2nf8dW2o4pFvyTd89JeD-x_ /home/vagrant/hoot/userfiles/changesets/grail_cdf5650285354566ac4ff7d19d54d360/diff.osc";
+        expected = "hoot.bin changeset-apply --info -D changeset.description=test cut and replace for node snapping at edges -D changeset.hashtags=#hootenanny -D changeset.source=OSM_077953 -D hoot.services.oauth2.access.token=<redacted> <path>/userfiles/changesets/grail_cdf5650285354566ac4ff7d19d54d360/diff.osc";
         assertEquals(expected, runner.obfuscateConsoleLog(test));
 
         test = "STATUS Error uploading changeset: 49514460 - Error transferring http://internal-me-test-995734160.us-east-1.elb.amazonaws.com/api/0.6/changeset/49514460/upload - server replied: Conflict (409)    ";

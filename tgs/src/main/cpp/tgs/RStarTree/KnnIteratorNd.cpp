@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "KnnIteratorNd.h"
@@ -41,12 +41,7 @@
 namespace Tgs
 {
 
-static inline double min(double a, double b) { return a < b ? a : b; }
-static inline double max(double a, double b) { return a > b ? a : b; }
-static inline double sqr(double a) { return a * a; }
-
-KnnIteratorNd::KnnIteratorNd(const RStarTree* tree, const std::vector<double>& point,
-  const Box& searchRegion)
+KnnIteratorNd::KnnIteratorNd(const RStarTree* tree, const std::vector<double>& point, const Box& searchRegion)
 {
   _searchTree = tree;
 
@@ -109,10 +104,7 @@ void KnnIteratorNd::_calculateNextNn()
 
     // If we already have some leaf distances calculated, check to see if they're closer than
     // the node.
-    if (!_knnLeafHeap.empty() &&
-        (nd == nullptr ||
-         (ld.distance <= nd->minPossibleDistance && currNode != nullptr &&
-          !currNode->isLeafNode())))
+    if (!_knnLeafHeap.empty() && (nd == nullptr || (ld.distance <= nd->minPossibleDistance && currNode != nullptr && !currNode->isLeafNode())))
     {
       // if the leaf is closer than the next most likely node, return the result
       _knnLeafHeap.pop();
@@ -122,9 +114,7 @@ void KnnIteratorNd::_calculateNextNn()
     }
 
     if (nd == nullptr)
-    {
       throw Exception("Internal Error: RTree::calculateNextNn This state should not occur.");
-    }
 
     ////
     /// Process this nd
@@ -140,8 +130,7 @@ void KnnIteratorNd::_calculateNextNn()
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpId = currNode->getChildUserId(i);
-          if (_knnReturnedFids.find(tmpId) == _knnReturnedFids.end() &&
-              (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0))
+          if (_knnReturnedFids.find(tmpId) == _knnReturnedFids.end() && (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0))
           {
             tmpDistance = _calculateDistance(_knnPoint, b);
             _knnLeafHeap.push(LeafDistance(tmpDistance, tmpId));
@@ -150,15 +139,13 @@ void KnnIteratorNd::_calculateNextNn()
       }
       else
       {
-        for (int i=0; i<currNode->getChildCount(); i++)
+        for (int i = 0; i < currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpDistance = _calculateDistance(_knnPoint, b);
           tmpId = currNode->getChildNodeId(i);
           if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
-          {
             _knnSearchQueue.push(_createNodeDistance(tmpDistance, tmpId));
-          }
         }
       }
     }
@@ -170,25 +157,18 @@ void KnnIteratorNd::_calculateNextNn()
   _knnId = id;
 }
 
-double KnnIteratorNd::_calculateDistance(const std::vector<double>& point, 
-  const BoxInternalData& box) const
+double KnnIteratorNd::_calculateDistance(const std::vector<double>& point, const BoxInternalData& box) const
 {
   assert((int)point.size() == box.getDimensions());
   _tmp.resize(point.size());
   for (unsigned int i = 0; i < point.size(); i++)
   {
     if (point[i] < box.getLowerBound(i))
-    {
       _tmp[i] = box.getLowerBound(i);
-    }
     else if (point[i] > box.getUpperBound(i))
-    {
       _tmp[i] = box.getUpperBound(i);
-    }
     else
-    {
       _tmp[i] = point[i];
-    }
   }
   return euclideanDistance(point, _tmp);
 }
@@ -200,9 +180,7 @@ KnnIteratorNd::NodeDistance* KnnIteratorNd::_createNodeDistance(double minPossib
     NodeDistance* allocation = new NodeDistance[ALLOCATION_SIZE];
     _nodeDistanceAllocationPool.push_back(allocation);
     for (int i = ALLOCATION_SIZE - 1; i >= 0; i--)
-    {
       _nodeDistancePool.push_back(&(allocation[i]));
-    }
   }
 
   NodeDistance* nd = _nodeDistancePool.back();
@@ -251,9 +229,7 @@ void KnnIteratorNd::reset(const std::vector<double>& point)
     _knnSearchQueue.pop();
   }
   while (_knnLeafHeap.empty() == false)
-  {
     _knnLeafHeap.pop();
-  }
   _knnSearchQueue.push(_createNodeDistance(-1, _searchTree->getRoot()->getId()));
 }
 

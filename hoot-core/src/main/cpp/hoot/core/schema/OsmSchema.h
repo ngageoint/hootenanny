@@ -206,7 +206,7 @@ public:
   {
   }
 
-  enum EdgeType type;
+  EdgeType type;
   double similarToWeight;
   double averageWeight;
   bool show;

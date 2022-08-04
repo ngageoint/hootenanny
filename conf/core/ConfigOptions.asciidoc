@@ -592,6 +592,14 @@ details.
 
 Tag key used by the `building.review.if.secondary.newer` configuration option.
 
+=== building.default.merger
+
+* Data Type: string
+* Default Value: `BuildingMerger`
+
+The default merger for buildings is `BuildingMerger` but should be different when running Attribute conflation
+which does not do any merging of buildings, just merging of tags
+
 === building.force.contained.match
 
 * Data Type: bool
@@ -1963,6 +1971,13 @@ OpenstreetMap OAuth Access Token for gaining access to the OAuth protected OSM A
 OpenstreetMap OAuth Private Access Token for gaining access to the OAuth protected OSM API
 
 === hoot.services.auth.access.token
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth2 Private Access Token for gaining access to the OAuth2 protected OSM API
+
+=== hoot.services.oauth2.access.token
 
 * Data Type: string
 * Default Value: ``
