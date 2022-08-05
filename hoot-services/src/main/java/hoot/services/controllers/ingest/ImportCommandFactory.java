@@ -33,7 +33,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import hoot.services.models.db.Users;
-
+import hoot.services.controllers.ingest.UploadClassification;
 
 @Component
 class ImportCommandFactory {
@@ -47,7 +47,7 @@ class ImportCommandFactory {
 
     ImportCommand build(String jobId, String url, String username, String password, String translation, String advUploadOpts, String etlName, Boolean isNoneTranslation,
             String debugLevel, UploadClassification uploadClassification, Class<?> caller, Users user) {
-return new ImportCommand(jobId, url, translation, advUploadOpts, etlName, isNoneTranslation,
+return new ImportCommand(jobId, url, username, password, translation, advUploadOpts, etlName, isNoneTranslation,
                     debugLevel, uploadClassification, caller, user);
 }
 

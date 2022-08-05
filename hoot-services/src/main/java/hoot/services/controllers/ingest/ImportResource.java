@@ -322,11 +322,10 @@ public class ImportResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processRemoteFile(@Context HttpServletRequest request,
             @QueryParam("TRANSLATION") String translation,
-            @QueryParam("INPUT_TYPE") String inputType,
             @QueryParam("INPUT_NAME") String inputName,
             @QueryParam("URL") String url,
-            @QueryParam("USERNAME") String username,
-            @QueryParam("PASSWORD") String password,
+            @QueryParam("USERNAME") @DefaultValue("") String username,
+            @QueryParam("PASSWORD") @DefaultValue("") String password,
             @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
             @QueryParam("ADV_UPLOAD_OPTS") String advUploadOpts,
             @QueryParam("FOLDER_ID") String folderId,

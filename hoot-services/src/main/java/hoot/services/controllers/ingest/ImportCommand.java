@@ -33,6 +33,7 @@ import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -127,15 +128,21 @@ class ImportCommand extends ExternalCommand {
         this.workDir = null;
 
         String input;
-        String envVars = "";
+        List<String> envVars = new ArrayList<>();
+        String[] urlParts = url.split("://");
         if (url.startsWith("s3")) {
             input = url.replace("s3://", "");
             input = "/vsis3/" + input;
-            envVars = String.format("AWS_SECRET_ACCESS_KEY=%s AWS_ACCESS_KEY_ID=%s", password, username);
-        } else if (url.startsWith("http")) {
-            input = "/vsicurl/" + url;
-        } else if (url.startsWith("ftp")) {
-            input = "/vsicurl/" + url;
+            if (!username.isEmpty() && !password.isEmpty()) {
+                envVars.add(String.format("AWS_SECRET_ACCESS_KEY=%s", password));
+                envVars.add(String.format("AWS_ACCESS_KEY_ID=%s", username));
+            }
+        } else if (url.startsWith("http") || url.startsWith("ftp")) {
+            if (!username.isEmpty() && !password.isEmpty()) {
+                input = "/vsicurl/" + urlParts[0] + "://" + username + ":" + password + "@" + urlParts[1];
+            } else {
+                input = "/vsicurl/" + url;
+            }
         } else {
             input = url;
         }
@@ -147,6 +154,7 @@ class ImportCommand extends ExternalCommand {
         List<String> hootOptions = buildHootOptions(user, translation, isNoneTranslation, advUploadOpts);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
+        java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("ENV_VARS", envVars);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
@@ -154,7 +162,7 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUTS", input);
 
 
-        String command = "${ENV_VARS} hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

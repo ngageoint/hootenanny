@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +49,7 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.exec.environment.EnvironmentUtils;
 import org.apache.commons.exec.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,7 +212,15 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             //     }
             // });
 
-            exitCode = executor.execute(cmdLine);
+            if (substitutionMap.containsKey("ENV_VARS")) {
+                List<String> envVars = (List<String>) substitutionMap.get("ENV_VARS");
+                Map<String, String> procEnv = EnvironmentUtils.getProcEnvironment();
+                envVars.stream().forEach(var -> EnvironmentUtils.addVariableToEnvironment(procEnv, var));
+
+                exitCode = executor.execute(cmdLine, procEnv);
+            } else {
+                exitCode = executor.execute(cmdLine);
+            }
         }
         catch (Exception e) {
             exitCode = CommandResult.FAILURE;
