@@ -26,10 +26,8 @@
  */
 package hoot.services.controllers.auth;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -42,7 +40,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.parsers.ParserConfigurationException;
 
 import net.jodah.expiringmap.ExpiringMap;
 
@@ -55,7 +52,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -72,10 +68,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -276,7 +270,7 @@ import hoot.services.models.db.Users;
             ResponseEntity<String> userDetailsRequest;
             try {
                 userDetailsRequest = doUserDetailsRequest(tokenType, accessToken);
-            } catch (Exception e) {
+            } catch (RestClientException e) {
                 String msg = "Failed to retrieve user from OAuth provider";
                 logger.error(msg);
                 return Response.status(Response.Status.BAD_GATEWAY).entity(msg).build();
@@ -313,13 +307,10 @@ import hoot.services.models.db.Users;
         @Produces(MediaType.TEXT_PLAIN)
         public Response logout(@Context HttpServletRequest request) {
             // Revoke the osm access token
-            String errMessage = "Failed to revoke OAuth access token";
             try {
                 ResponseEntity<String> revokeResponse = doTokenRevoke();
-                if (!revokeResponse.getStatusCode().equals(HttpStatus.OK)) {
-                    return Response.status(Response.Status.BAD_GATEWAY).entity(errMessage).build();
-                }
             } catch (RestClientException ex) {
+                String errMessage = "Failed to revoke OAuth access token";
                 logger.error(errMessage);
                 return Response.status(Response.Status.BAD_GATEWAY).entity(errMessage).build();
             } finally {
