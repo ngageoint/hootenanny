@@ -1142,7 +1142,11 @@ mgcp = {
     // Roads etc have a WD1 attribute but this doesn't get translated to "width"
     if (attrs.WD1)
     {
-      if (! tags.width) tags.width = attrs.WD1;
+      if (! tags.width)
+      {
+        tags.width = attrs.WD1;
+        delete tags['width:minimum_traveled_way'];
+      }
     }
 
     // Fix up areas
