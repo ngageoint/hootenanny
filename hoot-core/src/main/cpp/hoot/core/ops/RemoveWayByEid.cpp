@@ -27,8 +27,8 @@
 #include "RemoveWayByEid.h"
 
 // hoot
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Validate.h>
 
 using namespace std;
@@ -36,15 +36,15 @@ using namespace std;
 namespace hoot
 {
 
-RemoveWayByEid::RemoveWayByEid(bool removeFully) :
-_wayIdToRemove(-std::numeric_limits<int>::max()),
-_removeFully(removeFully)
+RemoveWayByEid::RemoveWayByEid(bool removeFully)
+  : _wayIdToRemove(-std::numeric_limits<int>::max()),
+    _removeFully(removeFully)
 {
 }
 
-RemoveWayByEid::RemoveWayByEid(long wId, bool removeFully) :
-_wayIdToRemove(wId),
-_removeFully(removeFully)
+RemoveWayByEid::RemoveWayByEid(long wId, bool removeFully)
+  : _wayIdToRemove(wId),
+    _removeFully(removeFully)
 {
 }
 
@@ -57,19 +57,16 @@ void RemoveWayByEid::_removeWay(const OsmMapPtr& map, long wId) const
     map->_ways.erase(wId);
 
     LOG_VART(map->_ways.find(wId) == map->_ways.end());
-    LOG_VART(
-      map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId)).size());
+    LOG_VART(map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId)).size());
   }
 }
 
 void RemoveWayByEid::_removeWayFully(const OsmMapPtr& map, long wId) const
 {
   // copy the set because we may modify it later.
-  set<long> rid =
-    map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId));
-  for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
+  set<long> rid = map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId));
+  for (auto relationId : rid)
   {
-    const long relationId = *it;
     LOG_TRACE("Removing way: " << ElementId::way(wId) << " from relation: " << relationId << "...");
     map->getRelation(relationId)->removeElement(ElementId::way(wId));
   }
@@ -80,9 +77,7 @@ void RemoveWayByEid::_removeWayFully(const OsmMapPtr& map, long wId) const
 void RemoveWayByEid::apply(OsmMapPtr& map)
 {
   if (_wayIdToRemove == -std::numeric_limits<int>::max())
-  {
     throw IllegalArgumentException("No way ID specified for RemoveWayByEid.");
-  }
 
   if (_removeFully)
     _removeWayFully(map, _wayIdToRemove);

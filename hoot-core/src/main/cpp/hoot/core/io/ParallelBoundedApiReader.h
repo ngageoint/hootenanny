@@ -136,6 +136,13 @@ protected:
    * @brief _sleep Sleep the current thread
    */
   void _sleep() const;
+  /**
+   * @brief _isQueryError
+   * @param result
+   * @param error
+   * @return
+   */
+  bool _isQueryError(const QString& result, QString& error) const;
 
 private:
 
@@ -197,6 +204,8 @@ private:
   std::mutex _filenumberMutex;
   /** HTTP timeout in seconds */
   int _timeout;
+  /**  Allow test class to access protected members for white box testing */
+  friend class ParallelBoundedApiReaderTest;
 };
 
 }

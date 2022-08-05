@@ -342,13 +342,35 @@ public:
   void urlTest()
   {
     // Try hitting the network to get some data...
-
-    OsmMapPtr pMap;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
-    QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
-    QString urlWays  = "http://" + overpassHost + "/api/interpreter?data=[out:json];way(35.20,-120.59,35.21,-120.58);out;";
+    QString url = "http://" + overpassHost + "/api/interpreter";
     OsmJsonReader uut;
 
+    Settings s;
+
+    s.set(ConfigOptions::getBoundsKey(), "-120.59,35.20,-120.58,35.21");
+    uut.setConfiguration(s);
+
+    QString query = "[out:json][bbox];node;out;";
+    queryOverpass(uut, QString("%1?data=%2").arg(url, query));
+
+    s.set(ConfigOptions::getOverpassApiQueryPathKey(), _inputPath + "/overpass_query.oql");
+    uut.setConfiguration(s);
+
+    queryOverpass(uut, url);
+
+    // File URL
+    QString fname = QDir::currentPath() + "/test-files/nodes.json";
+    QString urlFile = "file://" + fname;
+    OsmMapPtr pMap = std::make_shared<OsmMap>();
+    CPPUNIT_ASSERT(uut.isSupported(urlFile));
+    uut.open(urlFile);
+    uut.read(pMap);
+  }
+
+  void queryOverpass(OsmJsonReader& uut, const QString& url)
+  {
+    OsmMapPtr pMap;
     const uint32_t RETRY_SECS = 30;
     const uint32_t MAX_TRIES = 5;
     uint32_t numTries = 0;
@@ -362,16 +384,12 @@ public:
         // Get clean map
         pMap = std::make_shared<OsmMap>();
 
-        // Get Nodes
-        CPPUNIT_ASSERT(uut.isSupported(urlNodes));
-        uut.open(urlNodes);
+        // Get data
+        CPPUNIT_ASSERT(uut.isSupported(url));
+        uut.open(url);
         uut.read(pMap);
 
-        // Get Ways
-        CPPUNIT_ASSERT(uut.isSupported(urlWays));
-        uut.open(urlWays);
-        uut.read(pMap);
-        success = true;
+        success = !uut.isError();
       }
       catch (const HootException& ex)
       {
@@ -381,15 +399,6 @@ public:
       }
     }
     CPPUNIT_ASSERT(success);
-
-    // File URL
-    QString fname = QDir::currentPath() + "/test-files/nodes.json";
-    QString urlFile = "file://" + fname;
-    OsmMapPtr pMap2 = std::make_shared<OsmMap>();
-    CPPUNIT_ASSERT(uut.isSupported(urlFile));
-    uut.open(urlFile);
-    uut.read(pMap2);
-
     // Not failure == success
   }
 

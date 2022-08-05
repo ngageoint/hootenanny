@@ -29,8 +29,8 @@
 #define OSMMAPINDEX_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementListener.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 
 // TGS
@@ -73,8 +73,7 @@ public:
    * Should run in approximately O(log(n)).
    * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
-  std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
-                                     bool addError = false) const;
+  std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer, bool addError = false) const;
   /**
    * Very inefficient.
    */

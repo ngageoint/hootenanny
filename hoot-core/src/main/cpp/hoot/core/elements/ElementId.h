@@ -127,8 +127,7 @@ struct hash<hoot::ElementId>
 {
   size_t operator() (const hoot::ElementId& eid) const
   {
-    size_t key = size_t(eid.getId()) ^ ((size_t)eid.getType().getEnum() << 58);
-    return key;
+    return size_t(eid.getId()) ^ ((size_t)eid.getType().getEnum() << 58);
   }
 };
 
