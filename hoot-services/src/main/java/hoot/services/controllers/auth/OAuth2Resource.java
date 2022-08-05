@@ -242,11 +242,11 @@ import hoot.services.models.db.Users;
         public Response callback(@Context HttpServletRequest request, @QueryParam("state") String state, @QueryParam("code") String code) {
 
             if (code == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Missing code parameter in URL").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("Code parameter is missing in OAuth callback URL").build();
             }
 
             if (!states.containsKey(state)) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Provided state parameter is unknown to server").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("State parameter is missing or unknown to server in OAuth callback URL").build();
             } else {
                 states.remove(state);
             };
@@ -312,15 +312,6 @@ import hoot.services.models.db.Users;
         @Path("/oauth2/logout")
         @Produces(MediaType.TEXT_PLAIN)
         public Response logout(@Context HttpServletRequest request) {
-            // Invalidate HTTP Session
-            HttpSession sess = request.getSession();
-            sess.invalidate();
-
-            // Clear the security context
-            SecurityContext sc = SecurityContextHolder.getContext();
-            sc.setAuthentication(null);
-            SecurityContextHolder.clearContext();
-
             // Revoke the osm access token
             String errMessage = "Failed to revoke OAuth access token";
             try {
@@ -331,6 +322,15 @@ import hoot.services.models.db.Users;
             } catch (RestClientException ex) {
                 logger.error(errMessage);
                 return Response.status(Response.Status.BAD_GATEWAY).entity(errMessage).build();
+            } finally {
+                // Invalidate HTTP Session
+                HttpSession sess = request.getSession();
+                sess.invalidate();
+
+                // Clear the security context
+                SecurityContext sc = SecurityContextHolder.getContext();
+                sc.setAuthentication(null);
+                SecurityContextHolder.clearContext();
             }
 
             return Response.ok().build();
