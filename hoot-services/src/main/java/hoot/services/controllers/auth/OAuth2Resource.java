@@ -69,10 +69,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -146,7 +149,7 @@ import hoot.services.models.db.Users;
                 .build().encode().toString();
         }
 
-        private ResponseEntity<String> doTokenRevoke() {
+        private ResponseEntity<String> doTokenRevoke() throws RestClientException {
             ClientRegistration osmRegistration = clientRegistry.findByRegistrationId("osm");
             RestTemplate restTemplate = new RestTemplate();
 
@@ -170,7 +173,7 @@ import hoot.services.models.db.Users;
             return restTemplate.postForEntity(revokeRequest, request, String.class);
         }
 
-        private ResponseEntity<String> doTokenRequest(String code) {
+        private ResponseEntity<String> doTokenRequest(String code) throws RestClientException {
             ClientRegistration osmRegistration = clientRegistry.findByRegistrationId("osm");
             RestTemplate restTemplate = new RestTemplate();
 
@@ -191,7 +194,7 @@ import hoot.services.models.db.Users;
             return restTemplate.postForEntity(tokenRequest, request, String.class);
         }
 
-        private ResponseEntity<String> doUserDetailsRequest(String tokenType, String accessToken) {
+        private ResponseEntity<String> doUserDetailsRequest(String tokenType, String accessToken) throws RestClientException {
             ClientRegistration osmRegistration = clientRegistry.findByRegistrationId("osm");
             RestTemplate restTemplate = new RestTemplate();
 
@@ -239,64 +242,68 @@ import hoot.services.models.db.Users;
         public Response callback(@Context HttpServletRequest request, @QueryParam("state") String state, @QueryParam("code") String code) {
 
             if (code == null) {
-                return Response.status(401).entity("code must not be null").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("Missing code parameter in URL").build();
             }
 
             if (!states.containsKey(state)) {
-                return Response.status(401).entity("state is unknown to server").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("Provided state parameter is unknown to server").build();
             } else {
                 states.remove(state);
             };
 
             Users user;
+            ResponseEntity<String> tokenResponse;
             try {
-                ResponseEntity<String> tokenResponse = doTokenRequest(code);
-
-                if (!tokenResponse.getStatusCode().equals(HttpStatus.OK)) {
-                    return Response.status(401).entity("token request failed").build();
-                }
-
-                JsonNode tokenResponseJson = new ObjectMapper()
-                    .readTree(tokenResponse.getBody());
-
-                String accessToken = tokenResponseJson.get("access_token").asText();
-                String tokenType = tokenResponseJson.get("token_type").asText();
-
-                ResponseEntity<String> userDetailsRequest = doUserDetailsRequest(tokenType, accessToken);
-
-                if (!userDetailsRequest.getStatusCode().equals(HttpStatus.OK)) {
-                    return Response.status(401).entity("user details request failed").build();
-                }
-
-                JsonNode userDetailsJson = new ObjectMapper().readTree(userDetailsRequest.getBody());
-
-                try {
-                    user = userManager.upsert(userDetailsJson, tokenType, accessToken, request.getSession().getId());
-
-                    Map<String,Object> attributes = new HashMap<>();
-                    attributes.put("name", user.getDisplayName());
-                    attributes.put("Bearer", accessToken);
-                    SecurityContext sc = SecurityContextHolder.getContext();
-                    OAuth2User oUser = new DefaultOAuth2User(null, attributes, tokenType);
-                    Authentication auth = new OAuth2AuthenticationToken(oUser, null, clientId);
-                    sc.setAuthentication(auth);
-                    HttpSession session = request.getSession(false);
-                    session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
-
-                } catch (InvalidUserProfileException | SAXException | IOException | ParserConfigurationException e) {
-                    logger.error("Failed to read user profile from oauth provider", e);
-                    return Response.status(502).build();
-                } catch (Exception e) {
-                    logger.error("Failed to store user during oauth verification", e);
-                    return Response.status(500).build();
-                }
-
-
-            } catch (Exception e) {
-                return Response.status(500).build();
+                tokenResponse = doTokenRequest(code);
+            } catch (RestClientException e) {
+                String msg = "Failed to retrieve access token from OAuth provider";
+                logger.error(msg);
+                return Response.status(Response.Status.BAD_GATEWAY).entity(msg).build();
             }
 
-            return Response.status(200)
+            JsonNode tokenResponseJson;
+            try {
+                tokenResponseJson = new ObjectMapper()
+                    .readTree(tokenResponse.getBody());
+            } catch (JsonProcessingException e) {
+                String msg = "Received invalid token response from OAuth provider";
+                logger.error(msg);
+                return Response.status(Response.Status.BAD_GATEWAY).entity(msg).build();
+            }
+
+            String accessToken = tokenResponseJson.get("access_token").asText();
+            String tokenType = tokenResponseJson.get("token_type").asText();
+            ResponseEntity<String> userDetailsRequest;
+            try {
+                userDetailsRequest = doUserDetailsRequest(tokenType, accessToken);
+            } catch (Exception e) {
+                String msg = "Failed to retrieve user from OAuth provider";
+                logger.error(msg);
+                return Response.status(Response.Status.BAD_GATEWAY).entity(msg).build();
+            }
+
+            JsonNode userDetailsJson;
+            try {
+                userDetailsJson = new ObjectMapper().readTree(userDetailsRequest.getBody());
+            } catch (JsonProcessingException e) {
+                String msg = "Received invalid user response from oauth provider";
+                logger.error(msg);
+                return Response.status(Response.Status.BAD_GATEWAY).entity(msg).build();
+            }
+
+            user = userManager.upsert(userDetailsJson, tokenType, accessToken, request.getSession().getId());
+
+            Map<String,Object> attributes = new HashMap<>();
+            attributes.put("name", user.getDisplayName());
+            attributes.put("Bearer", accessToken);
+            SecurityContext sc = SecurityContextHolder.getContext();
+            OAuth2User oUser = new DefaultOAuth2User(null, attributes, tokenType);
+            Authentication auth = new OAuth2AuthenticationToken(oUser, null, clientId);
+            sc.setAuthentication(auth);
+            HttpSession session = request.getSession(false);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+
+            return Response.status(Response.Status.OK)
                     .entity(user)
                     .type(MediaType.APPLICATION_JSON).build();
         };
@@ -305,12 +312,6 @@ import hoot.services.models.db.Users;
         @Path("/oauth2/logout")
         @Produces(MediaType.TEXT_PLAIN)
         public Response logout(@Context HttpServletRequest request) {
-            // Revoke the osm access token
-            ResponseEntity<String> revokeResponse = doTokenRevoke();
-            if (!revokeResponse.getStatusCode().equals(HttpStatus.OK)) {
-                return Response.status(500).build();
-            }
-
             // Invalidate HTTP Session
             HttpSession sess = request.getSession();
             sess.invalidate();
@@ -319,6 +320,18 @@ import hoot.services.models.db.Users;
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(null);
             SecurityContextHolder.clearContext();
+
+            // Revoke the osm access token
+            String errMessage = "Failed to revoke OAuth access token";
+            try {
+                ResponseEntity<String> revokeResponse = doTokenRevoke();
+                if (!revokeResponse.getStatusCode().equals(HttpStatus.OK)) {
+                    return Response.status(Response.Status.BAD_GATEWAY).entity(errMessage).build();
+                }
+            } catch (RestClientException ex) {
+                logger.error(errMessage);
+                return Response.status(Response.Status.BAD_GATEWAY).entity(errMessage).build();
+            }
 
             return Response.ok().build();
         }
