@@ -63,6 +63,7 @@ tds71.rules = {
   // These are for finding an FCODE for export.
   // Note: These get swapped around before being used
   fcodeOne2oneOut : [
+    ['F_CODE','AA010','landuse','surface_mining'], // Extraction Mine
     ['F_CODE','FA091','geophysical_data_track','yes'], // Geophysical Data Track Line
     ['F_CODE','GA005','airspace','yes'], // Airspace
     ['F_CODE','GA035','navaid:aeronautical','yes'], // Aeronautical Navaids
@@ -2120,8 +2121,8 @@ tds71.rules = {
     ['MZN','6','mine:type','area_strip-mine'], // Area Strip-mine
     ['MZN','8','mine:type','peatery'], // Peatery
     ['MZN','9','mine:type','below_surface'], // Below Surface
-    //['MZN','10','mine:type','quarry'], // Quarry
-    ['MZN','10','landuse','quarry'], // Quarry
+    ['MZN','10','mine:type','quarry'], // Quarry
+    // ['MZN','10','landuse','quarry'], // Quarry
     ['MZN','11','mine:type','contour_strip-mine'], // Contour Strip-mine
     ['MZN','13','mine:type','dredge'], // Dredge
     ['MZN','999','mine:type','other'], // Other
@@ -4630,6 +4631,8 @@ tds71.rules = {
     ['IWT','4','man_made','reservoir'], // Reservoir
 
     ['MCC','2','material','aluminum'], // Aluminum
+
+    ['MZN','10','landuse','quarry'], // Quarry
 
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 

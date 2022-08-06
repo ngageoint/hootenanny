@@ -965,6 +965,32 @@ tds71 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    case 'AA010': // Extraction Mine
+      switch (tags['mine:type'])
+      {
+          break;
+
+        case 'quarry':
+          tags.landuse = 'quarry';
+          delete tags['mine:type'];
+          break;
+
+        case 'peatery':
+          tags.landuse = 'quarry';
+          tags.resource = 'peat';
+          delete tags['mine:type'];
+          break;
+
+        // case undefined:
+        default:
+          if (tags.industrial) tags.landuse = 'industrial';
+          print('MZN: Default');
+          break;
+      }
+
+
+      break;
+
     // Fix oil/gas/petroleum fields
     case 'AA052':
       tags.landuse = 'industrial';
@@ -1761,12 +1787,6 @@ tds71 = {
         tags.landuse = 'built_up_area';
         break;
 
-      case 'oil':
-        tags.product = 'petroleum';
-        tags.industrial = 'hydrocarbons_field';
-        delete tags.landuse;
-        break;
-
       case 'gas':
         tags.product = 'gas';
         tags.industrial = 'hydrocarbons_field';
@@ -1774,6 +1794,16 @@ tds71 = {
         break;
 
       case 'hydrocarbons_field':
+        delete tags.landuse;
+        break;
+
+      case 'mine':
+        delete tags.landuse;
+        break;
+
+      case 'oil':
+        tags.product = 'petroleum';
+        tags.industrial = 'hydrocarbons_field';
         delete tags.landuse;
         break;
 

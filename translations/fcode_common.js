@@ -40,7 +40,7 @@ fcodeCommon = {
     // The fcodeXXX rules are for finding/setting an FCODE
     // Common rules: import and export with "unique" values
     one2one : [
-      ['F_CODE','AA010','landuse','surface_mining'], // Extraction Mine
+      ['F_CODE','AA010','industrial','mine'], // Extraction Mine
       ['F_CODE','AA011','natural','shear_wall'], // Shear Wall
       ['F_CODE','AA020','mine:superstructure','yes'], // Mine Shaft Superstructure
       ['F_CODE','AA040','man_made','rig'], // Rig/Superstructure
