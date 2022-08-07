@@ -26,6 +26,7 @@ describe('Roads', function() {
             translation: 'MGCP',
             path: '/translateTo'
         });
+
         xml2js.parseString(osm2trans, function(err, result) {
             if (err) console.error(err);
             assert.equal(result.osm.$.schema, "MGCP");
@@ -35,8 +36,8 @@ describe('Roads', function() {
             assert.equal(result.osm.way[0].tag[1].$.v, "2");
             assert.equal(result.osm.way[0].tag[2].$.k, "UID");
             assert.equal(result.osm.way[0].tag[2].$.v, "8CD72087-A7A2-43A9-8DFB-7836F2FFEA13");
-            assert.equal(result.osm.way[0].tag[3].$.k, "WD1");
-            assert.equal(result.osm.way[0].tag[3].$.v, "20");
+            assert.equal(result.osm.way[0].tag[4].$.k, "WD1");
+            assert.equal(result.osm.way[0].tag[4].$.v, "20");
         });
     });
 
