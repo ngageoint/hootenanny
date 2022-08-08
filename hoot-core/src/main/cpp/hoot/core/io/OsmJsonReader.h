@@ -176,6 +176,8 @@ public:
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
 
+  bool isError() const { return ParallelBoundedApiReader::isError(); }
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -258,6 +260,8 @@ private:
   bool _addChildRefsWhenMissing;
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
+
+  QString _queryFilepath;
 
   /**
    * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
