@@ -114,8 +114,8 @@ Examples:
 *Result*
 |======
 | key | value
-| name | Midland Expressway
-| name:en | Midland Expressway
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
 | name:ru | *улица Симоновский Вал*
 | alt_name | 24;Simonovsky Val Expy
 | bridge | yes
@@ -136,7 +136,7 @@ features are concatenated together. Implementation `ProvenanceAwareOverwriteTagM
 [[Preserve-Types-Tag-Merger]]
 *_Preserving Types Tag Merger_*
 
-This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a tying specificity is the same as used with `MostSpecificTagMerger`. Implementation: `PreserveTypesTagMerger`.
+This tag merger preserves tags from both features and is similar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a type specificity is the same as used with `MostSpecificTagMerger`. Implementation: `PreserveTypesTagMerger`.
 
 [[Replace-Tag-1-Tag-Merger]]
 *_Replacing Tag 1 Tag Merger_*

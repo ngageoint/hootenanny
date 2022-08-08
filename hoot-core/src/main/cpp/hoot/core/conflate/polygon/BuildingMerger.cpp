@@ -722,16 +722,16 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
   conf().set(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
   LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
-  // See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to
-  // handle this situation for more than two buildings yet. The logic below will fail in situations
-  // where we have more than one conflated building as input...haven't seen that in the wild yet
-  // though.
+  /* See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to
+  handle this situation for more than two buildings yet. The logic below will fail in situations
+  where we have more than one conflated building as input...haven't seen that in the wild yet
+  though.*/
   if (map->getElementCount() == 2)
     _fixStatuses(map);
 
-  // Formerly, we required that the buildings have a status other than conflated in order to be
-  // merged...can't remember exactly why...but removed that stipulation and test output still looks
-  // good.
+  /* Formerly, we required that the buildings have a status other than conflated in order to be
+  merged...can't remember exactly why...but removed that stipulation and test output still looks
+  good.*/
 
   int buildingsMerged = 0;
   BuildingCriterion buildingCrit;

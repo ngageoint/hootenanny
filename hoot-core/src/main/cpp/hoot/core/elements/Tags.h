@@ -408,7 +408,7 @@ public:
    *
    * @param tags1 first set of tags to examine
    * @param tags2 second set of tags to examine
-   * @parm strictNameMatch if true, will not consider names with the alt_name tag key
+   * @param strictNameMatch if true, will not consider names with the alt_name tag key
    * @return true if the tags have at least one matching name; false otherwise
    */
   static bool haveMatchingName(const Tags& tags1, const Tags& tags2, const bool strictNameMatch = false);

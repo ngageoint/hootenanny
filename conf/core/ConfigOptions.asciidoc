@@ -2634,7 +2634,7 @@ See also: `hoot.validators`.
 * Data Type: bool
 * Default Value: `true`
 
-Output JSON in a more specific way that includes metadata tags including `hoot:*`, `error:circluar`,
+Output JSON in a more specific way that includes metadata tags including `hoot:*`, `error:circular`,
 `type=node/way/relation`, tags in the `tags` section, etc.
 
 `Generic Format`
