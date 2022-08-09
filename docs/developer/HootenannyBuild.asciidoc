@@ -19,7 +19,7 @@ Once Hootenanny is initially configured, this command only need be re-run if the
 aclocal && autoconf && autoheader && automake
 ------------------
 
-This line needs to be re-run everytime you change configuration options:
+This line needs to be re-run every time you change configuration options:
 
 -----------------
 ./configure <options>
@@ -41,7 +41,7 @@ To build Hootenanny Core command line only code with no options:
 
 The `-s` option tells Hootenanny to run in silent mode, which suppresses all non-error logging.  Silent mode can be removed for debugging purposes.
 
-The `-j$(nproc)` tells Hootenanny to parallelize compilation and test execution where applicable, where `$(nproc)` returns the number of threads the system is configured to run on (typically the number of system CPU cores or 2x the number of CPU cores if hyperthreading is enabled). You can substitude any value you wish for `$(nproc)` or leave the `-j$(nproc)` option out all together to run within a single thread.
+The `-j$(nproc)` tells Hootenanny to parallelize compilation and test execution where applicable, where `$(nproc)` returns the number of threads the system is configured to run on (typically the number of system CPU cores or 2x the number of CPU cores if hyper-threading is enabled). You can substitute any value you wish for `$(nproc)` or leave the `-j$(nproc)` option out all together to run within a single thread.
 
 An an example, to build the Hootenanny API database, OSM API database, and Hootenanny Web Services capabilities along with Hootenanny Core:
 
@@ -61,7 +61,7 @@ To clean the Web Services database:
 make clean-db
 -------
 
-To generate Hootenanny documention:
+To generate Hootenanny documentation:
 
 ------
 make docs
