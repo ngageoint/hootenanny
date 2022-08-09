@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2006 Pedro Felzenszwalb
- * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DISJOINTMAP_H
 #define DISJOINTMAP_H
