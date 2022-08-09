@@ -110,7 +110,7 @@ $isAWS = false
 Vagrant.configure(2) do |config|
 
   def aws_provider(config, os, vbox)
-    # AWS Provider.  Set enviornment variables for values below to use
+    # AWS Provider.  Set environment variables for values below to use
     config.vm.provider :aws do |aws, override|
       $isAWS = true;
       override.nfs.functional = false
