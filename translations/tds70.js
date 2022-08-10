@@ -2896,7 +2896,6 @@ tds70 = {
       tds70.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
       tds70.configOut.OgrCompareOutput = hoot.Settings.get('ogr.compare.output')
       tds70.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds70.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
       tds70.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
       tds70.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       tds70.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');

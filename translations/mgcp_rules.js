@@ -2343,8 +2343,6 @@ mgcp.rules = {
     swapListOut : {
       'AQ040':{'HGT':'OHB'},
       'AK040':{'MCC':'SMC'},
-      'AP010':{'WID':'WD1'},
-      'AP030':{'WID':'WD1'},
       'BA050':{'MCC':'SMC'},
       'DA010':{'MCC':'SMC'},
       'DB010':{'MCC':'SMC'},

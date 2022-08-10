@@ -1142,7 +1142,11 @@ mgcp = {
     // Roads etc have a WD1 attribute but this doesn't get translated to "width"
     if (attrs.WD1)
     {
-      if (! tags.width) tags.width = attrs.WD1;
+      if (! tags.width)
+      {
+        tags.width = attrs.WD1;
+        delete tags['width:minimum_traveled_way'];
+      }
     }
 
     // Fix up areas
@@ -2079,19 +2083,18 @@ mgcp = {
         if (attrs.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
         break;
 
-      // case 'AP010': // Cart Track
-      //   if (attrs.WID && !attrs.WD1)
-      //   {
-      //     attrs.WD1 = attrs.WID;
-      //     delete attrs.WID;
-      //   }
-      //   break;
+      case 'AP010': // Cart Track
+        if (attrs.WID && !attrs.WD1) attrs.WD1 = attrs.WID;
+        break;
 
       case 'AP030': // Road
         if (tags.bridge) attrs.LOC = '45'; // Above Surface
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
         if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
         if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
+
+        // Width not width, minimum traveled way.
+        if (attrs.WID && !attrs.WD1) attrs.WD1 = attrs.WID;
 
         // Single lane roads dont have a median and are not separated
         // NOTE: This could cause problems
@@ -2116,6 +2119,8 @@ mgcp = {
           attrs.MCC = convSurf[attrs.RST];
           delete attrs.RST;
         }
+        // Width not width, minimum traveled way.
+        if (attrs.WID && !attrs.WD1) attrs.WD1 = attrs.WID;
         break;
 
       case 'AQ140': // Vehicle Lot/Vehicle Storage area: Valid NFDD/NAS FCODE but not in the MGCP spec
