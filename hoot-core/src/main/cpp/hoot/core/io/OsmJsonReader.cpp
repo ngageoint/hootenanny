@@ -34,6 +34,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
@@ -63,7 +64,7 @@ int OsmJsonReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
 OsmJsonReader::OsmJsonReader()
-  : ParallelBoundedApiReader(false, true),
+  : ParallelBoundedApiReader(true, false),
     _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
     _defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
@@ -72,10 +73,10 @@ OsmJsonReader::OsmJsonReader()
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
     _isWeb(false),
-    _keepImmediatelyConnectedWaysOutsideBounds(
-      ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
+    _keepImmediatelyConnectedWaysOutsideBounds(ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
     _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
-    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
+    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements()),
+    _queryFilepath(ConfigOptions().getOverpassApiQueryPath())
 {
 }
 
@@ -92,18 +93,12 @@ bool OsmJsonReader::isSupported(const QString& url) const
   const bool isLocalFile =  myUrl.isLocalFile();
 
   // Is it a file?
-  if ((isRelativeUrl || isLocalFile) &&
-      url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
-  {
+  if ((isRelativeUrl || isLocalFile) && url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
     return true;
-  }
 
   // Is it a web address?
-  if (myUrl.host() == ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() ||
-      "https" == myUrl.scheme()))
-  {
+  if (myUrl.host() == ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() || "https" == myUrl.scheme()))
     return true;
-  }
 
   // Default to not supported
   return false;
@@ -183,12 +178,9 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   {
     // If we're doing a web pull, ensure a rectangular bounds from the config. See a related note in
     // OsmApiReader::read.
-    if (!_isFile && !ConfigOptions().getBounds().trimmed().isEmpty() &&
-        !GeometryUtils::isEnvelopeString(ConfigOptions().getBounds()))
-    {
-      throw IllegalArgumentException(
-        "OsmJsonReader does not support a non-rectangular bounds for reading over HTTP.");
-    }
+    if (!_isFile && !ConfigOptions().getBounds().trimmed().isEmpty() && !GeometryUtils::isEnvelopeString(ConfigOptions().getBounds()))
+      throw IllegalArgumentException("OsmJsonReader does not support a non-rectangular bounds for reading over HTTP.");
+
     _bounds = GeometryUtils::boundsFromString(ConfigOptions().getBounds());
   }
   if (_bounds)
@@ -228,10 +220,7 @@ void OsmJsonReader::_readToMap()
   if (_bounds.get())
   {
     if (!_isFile)
-    {
-      IoUtils::cropToBounds(
-        _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
-    }
+      IoUtils::cropToBounds(_map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
     else
       IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
 
@@ -325,6 +314,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   _threadCount = opts.getReaderHttpBboxThreadCount();
   setBounds(GeometryUtils::boundsFromString(opts.getBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
+  _queryFilepath = opts.getOverpassApiQueryPath();
 }
 
 void OsmJsonReader::_parseOverpassJson()
@@ -503,7 +493,13 @@ void OsmJsonReader::_updateChildRefs()
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 {
   // Get info we need to construct our node
-  long id = item.get("id", id);
+  long id = 0;
+  id = item.get("id", id);
+  if (id == 0)
+  {
+    LOG_TRACE("Node parsing error, no ID found, ignoring node.");
+    return;
+  }
 
   if (_nodeIdMap.contains(id))
   {
@@ -513,8 +509,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
       return;
     }
     else
-      throw HootException(
-        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
+      throw HootException(QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
   }
 
   long newId;
@@ -571,7 +566,13 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   const long debugId = -3047;
 
   // Get info we need to construct our way
-  long id = item.get("id", id);
+  long id = 0;
+  id = item.get("id", id);
+  if (id == 0)
+  {
+    LOG_TRACE("Way parsing error, no ID found, ignoring way.");
+    return;
+  }
 
   if (_wayIdMap.contains(id))
   {
@@ -581,8 +582,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
       return;
     }
     else
-      throw HootException(
-        QString("Duplicate way id %1 in map %2 encountered.").arg(id).arg(_url));
+      throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(id).arg(_url));
   }
 
   long newId;
@@ -677,7 +677,13 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   const long debugId = 0;
 
   // Get info we need to construct our relation
-  long id = item.get("id", id);
+  long id = 0;
+  id = item.get("id", id);
+  if (id == 0)
+  {
+    LOG_TRACE("Relatioon parsing error, no ID found, ignoring relation.");
+    return;
+  }
 
   if (_relationIdMap.contains(id) && _ignoreDuplicates)
   {
@@ -687,8 +693,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   // See related note in OsmXmlReader::_createRelation.
 //  if (_relationIdMap.contains(id))
 //  {
-//    throw HootException(
-//      QString("Duplicate realtion id %1 in map %2 encountered.").arg(id).arg(_path));
+//    throw HootException(QString("Duplicate realtion id %1 in map %2 encountered.").arg(id).arg(_path));
 //  }
 
   long newId;
@@ -730,8 +735,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   if (item.not_found() != item.find("members"))
   {
     pt::ptree members = item.get_child("members");
-    pt::ptree::const_iterator memberIt = members.begin();
-    while (memberIt != members.end())
+    for (auto memberIt = members.begin(); memberIt != members.end(); ++memberIt)
     {
       string typeStr = memberIt->second.get("type", string(""));
       const long refId = memberIt->second.get("ref", -1l); // default -1 ?
@@ -740,7 +744,6 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
 
       // See related note in _parseOverpassWay about loading child refs regardless of whether they
       // have yet been parsed or not.
-
       bool okToAdd = true;
       if (typeStr == "node")
       {
@@ -794,8 +797,6 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
         pRelation->addElement(QString::fromStdString(role),
                               ElementType::fromString(QString::fromStdString(typeStr)), refIdToUse);
       }
-
-      ++memberIt;
     }
   }
 
@@ -872,19 +873,21 @@ void OsmJsonReader::_readFromHttp()
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
+  //  Load the query from a file if requested
+  if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
+  {
+    QString query = FileUtils::readFully(_queryFilepath).replace("\r", "").replace("\n", "");
+    //  Should the query be validated here?
+    urlQuery.addQueryItem("data", query);
+  }
   _sourceUrl.setQuery(urlQuery);
   geos::geom::Envelope env;
-  if (!_bounds)
-  {
-    // If no bounds was set, the read method still expects an empty one.
+
+  if (!_bounds) // If no bounds was set, the read method still expects an empty one.
     env = geos::geom::Envelope();
-  }
-  else
-  {
-    // Use the envelope of the boundsto throw away any non-retangular bounds that may have been
-    // passed.
+  else          // Use the envelope of the boundsto throw away any non-retangular bounds that may have been passed.
     env = *(_bounds->getEnvelopeInternal());
-  }
+
   //  Spin up the threads
   beginRead(_sourceUrl, env);
   //  Iterate all of the XML results

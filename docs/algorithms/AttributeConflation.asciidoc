@@ -35,9 +35,9 @@ no geometry changes to your reference dataset under any circumstance, you can di
 *_Post Conflate Re-joining_*
 
 Another option for Attribute Conflation, disabled by default, is to enable aggressive road joining.  Generally, with this option disabled
-you will end up with fewer road type and name tag transfers from the secondary layer to the reference layer for some road segements but at the
+you will end up with fewer road type and name tag transfers from the secondary layer to the reference layer for some road segments but at the
 cost of potentially more empty road segments in the output. Generally, with the option enabled you will end up with more road type and name
-tag transfers from the secondary layer to the reference layer for some road segements but at the cost of some incorrect tag transfers.  To use
+tag transfers from the secondary layer to the reference layer for some road segments but at the cost of some incorrect tag transfers.  To use
 this feature, enable the configuration option `attribute.conflation.aggressive.highway.joining`.
 
 ===== Buildings

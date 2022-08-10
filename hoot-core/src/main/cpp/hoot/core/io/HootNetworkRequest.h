@@ -56,6 +56,12 @@ public:
   HootNetworkRequest();
   /**
    * @brief HootNetworkRequest
+   * @param key_path - Path to PKCS12 SSL key
+   * @param pass_phrase - Passphrase for SSL key
+   */
+  HootNetworkRequest(const QString& key_path, const QString& pass_phrase);
+  /**
+   * @brief HootNetworkRequest - oauth1
    * @param consumer_key - OAuth consumer key
    * @param consumer_secret - OAuth consumer secret key
    * @param access_token - OAuth access token from consumer key authentication
@@ -63,6 +69,11 @@ public:
    */
   HootNetworkRequest(const QString& consumer_key, const QString& consumer_secret,
                      const QString& access_token, const QString& access_secret);
+  /**
+   * @brief HootNetworkRequest - oauth2
+   * @param access_token - OAuth2 access token
+   */
+  HootNetworkRequest(const QString& access_token);
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
@@ -90,7 +101,7 @@ public:
   /**
    * @brief getResponseContent
    * @return HTTP response content
-   */ 
+   */
   const QByteArray& getResponseContent() const { return _content; }
   /**
    * @brief getHttpStatus
@@ -159,11 +170,17 @@ private:
    */
   int _getHttpResponseCode(const QNetworkReply* reply) const;
   /**
-   * @brief _setOAuthHeader Sets the "Authorize: OAuth" HTTP header for the specific request
+   * @brief _setOAuth1Header Sets the "Authorize: OAuth" HTTP header for the specific request
    * @param http_op OAuth signatures are based off of the HTTP operation type (GET/PUT/POST)
    * @param request Reference to the actual network request object
    */
-  void _setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const;
+  void _setOAuth1Header(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const;
+
+  /**
+   * @brief _setOAuth2Header Sets the "Authorization: Bearer" HTTP header for the specific request
+   * @param request Reference to the actual network request object
+   */
+  void _setOAuth2Header(QNetworkRequest& request) const;
   /** HTTP response body, if available */
   QByteArray _content;
   /** HTTP status response code  */
@@ -175,13 +192,20 @@ private:
   /** Flag for using OAuth 1.0, all four of the keys/tokens (two in each object)
    *  below must be valid for `_useOAuth` to be true.
    */
-  bool _useOAuth;
+  bool _useOAuth1;
   /** OAuth 1.0 consumer object */
   std::shared_ptr<OAuth::Consumer> _consumer;
   /** OAuth 1.0 request token object */
   std::shared_ptr<OAuth::Token> _tokenRequest;
+  /** OAuth 2.0 flag and token */
+  bool _useOAuth2;
+  QString _oauth2AccessToken;
   /** Flag set when the timer times out */
   bool _timedOut;
+  /** Pathname for PKCS-12 SSL key */
+  QString _key_path;
+  /** Passphrase for PKCS-12 SSL key */
+  QString _pass_phrase;
 };
 
 using HootNetworkRequestPtr = std::shared_ptr<HootNetworkRequest>;

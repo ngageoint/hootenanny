@@ -171,6 +171,7 @@ sudo yum -y install \
     git-core \
     gnuplot \
     lcov \
+    devtoolset-$DEVTOOLSET_VERSION-libasan-devel \
     libffi-devel \
     libicu-devel \
     libpng-devel \
@@ -303,6 +304,9 @@ TOMCAT_HOME=/usr/share/tomcat8
 # Install Tomcat 8
 $HOOT_HOME/scripts/tomcat/centos7/tomcat8_install.sh
 
+# Enable SSL for Tomcat
+$HOOT_HOME/scripts/tomcat/configure_tomcat_ssl.sh
+
 # Configure Tomcat for the user
 if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
     echo "### Adding Tomcat to profile..."
@@ -373,7 +377,7 @@ fi
 rm -rf $HOOT_HOME/userfiles/tmp
 
 # This is defensive!
-# We do this so that Tomcat doesnt. If it does, it screws the permissions up
+# We do this so that Tomcat doesn't. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
 
 # Update the gcc location to devtoolset

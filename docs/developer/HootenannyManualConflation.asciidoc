@@ -66,7 +66,7 @@ hoot convert -D schema.translation.script=MyTranslation.py Input.shp TranslatedO
 *_Cropping Test Data (optional)_*
 
 If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM
-can be slow when dealing with very large datasets.  See the command line documenation on the crop command in the Hootenanny User Guide for
+can be slow when dealing with very large datasets.  See the command line documentation on the crop command in the Hootenanny User Guide for
 more information on cropping data.
 
 An example:
@@ -78,7 +78,7 @@ hoot crop Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 The Hootenanny clean command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point
 but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it
-may result in more intutive input data to use during the process.  See the clean command documentation for more details.
+may result in more intuitive input data to use during the process.  See the clean command documentation for more details.
 
 An example:
 -------------------------
@@ -102,7 +102,7 @@ See the Hootenanny Command Line Documentation for a complete list of the availab
 
 For more complicated data pruning tasks, you may want to use the Hootenanny Javascript interface.  Here is a Javascript example that loads in
 two datasets from two separate files and removes all features that aren't buildings or POI's.  First, the command (assumes a script called
-`RemoveIrrelevants.js`:
+`RemoveIrrelevants.js`):
 ---------------------
 node ../RemoveIrrelevants.js Input1.osm Input2.osm PrunedOutput1.osm PrunedOutput2.osm
 ---------------------
@@ -212,7 +212,7 @@ Match/Miss/Review are the main match tagging types, but some feature types have 
 
 ===== How Many Matches Do I Need to Make?
 
-As a rule of thumb, it is recommended that there are at least 200 manual matches made in the data to provide enough data to be trained on.  However, its very possible that number may fluctuate depending on the input data used.
+As a general rule, it is recommended that there are at least 200 manual matches made in the data to provide enough data to be trained on.  However, its very possible that number may fluctuate depending on the input data used.
 
 ===== Roads
 
@@ -241,7 +241,7 @@ Wherever possible divided highways should be tagged as two one way streets rathe
 
 _Names_
 
-When you have multiple different enough names in the two inputs sets the names must be merged. Rather than try and explain this in detail I'll give a few examples. In these example Road 1 is the data set we're biased towards.
+When you have multiple different enough names in the two inputs sets the names must be merged. Rather than try and explain this in detail I'll give a few examples. In these examples Road 1 is the data set we're biased towards.
 
 .*Example 1 Input*
 [width="50%"]
@@ -318,7 +318,7 @@ If you are confident that a road segment matches one or more other roads segment
 
 *Conflict*
 
-If a road segment conflicts with another road segement (e.g. one is a roundabout and the other is a four-way intersection) then populate the CONFLICT tag with the road segments that conflict.
+If a road segment conflicts with another road segment (e.g. one is a roundabout and the other is a four-way intersection) then populate the CONFLICT tag with the road segments that conflict.
 
 * Single conflict: `CONFLICT=007be5`
 * Multiple conflicts: `CONFLICT=007be5;007be6`
@@ -334,7 +334,7 @@ If part of the road conflicts and part of it matches, then the mark the whole se
 
 *Review*
 
-This is the catch all. If you aren't confident of any of the other categories. Maybe it matches, maybe it doesn't, then mark the road segment as review.
+This is the catch all. If you aren't confident about any of the other categories. Maybe it matches, maybe it doesn't, then mark the road segment as review.
 
 * Single review: `REVIEW=007be5`
 
@@ -354,7 +354,7 @@ The Hootenanny building conflation process is interested in the following things
 
 *_Building Matching Standards_*
 
-Building matching is the process of tagging building polygons with information that explicitly states the matching relationship between them.  In the OSM data model, buildings may be made up of ways and relations.  For more information on what consitutes a building in OSM terms, see taginfo.openstreetmap.org.
+Building matching is the process of tagging building polygons with information that explicitly states the matching relationship between them.  In the OSM data model, buildings may be made up of ways and relations.  For more information on what constitutes a building in OSM terms, see taginfo.openstreetmap.org.
 
 * Match - The user is confident that the two buildings represent the same entity.
 * Miss - The user is confident that the two buildings do not represent the same entity.
@@ -366,18 +366,18 @@ See the Matching Overview section for details on how to change Miss/Match/Review
 
 Here is a building specific example:
 
-You have two McDonalds mapped as nodes with the following key value pairs (KVP).
+You have two McDonald's mapped as nodes with the following key value pairs (KVP).
 
 REF1 node:
 ------
-name=McDonalds
+name=McDonald's
 amenity=restaurant
 REF1={e3eed6ac-2937-4e7b-ad6a-233a3d35a7da}
 ------
 
 REF2 node:
 ------
-name=McDonalds
+name=McDonald's
 amenity=restaurant
 cuisine=burger
 REF2=todo
@@ -396,7 +396,7 @@ REF1={ad10206a-a3e5-4575-9356-c32c2a04ce05}
 
 REF2 node:
 ------
-name=McDonalds
+name=McDonald's
 amenity=restaurant
 cuisine=burger
 REF2=todo
@@ -434,7 +434,7 @@ amenity=hospital
 REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}
 ------
 
-In this case we're confident due to geometry and names that the REF2 building matches both of the REF1 buildings so we set the `REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}`. Notice the semi-colon deliminating the two unique IDs. There is no artificial limit to the number of unique IDs that may be in a REF tag.
+In this case we're confident due to geometry and names that the REF2 building matches both of the REF1 buildings so we set the `REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}`. Notice the semi-colon delimiting the two unique IDs. There is no artificial limit to the number of unique IDs that may be in a REF tag.
 
 ===== POI's
 

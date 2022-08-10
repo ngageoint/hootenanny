@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.command;
 
@@ -92,7 +92,14 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         out = out.replaceAll("'", "''");
 
         //strip out oauth tokens
-        out = out.replaceAll("=\\w{40}\\s+", "=<redacted> ");
+        out = Pattern.compile("(hoot\\.osm\\.auth\\.\\S+)=\\w+\\s+")
+            .matcher(out)
+            .replaceAll("$1=<redacted> ");
+
+        //strip out oauth2 tokens
+        out = Pattern.compile("(hoot\\.services\\.oauth2\\.\\S+)=\\S+\\s+")
+                .matcher(out)
+                .replaceAll("$1=<redacted> ");
 
         //strip out osm api url
         out = out.replaceAll("https?://\\S+?/", "<osmapi>/");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "TagUtils.h"
@@ -33,22 +33,19 @@ namespace hoot
 bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
                                         const std::vector<ElementPtr>& elements)
 {
-  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  for (const auto& element : elements)
   {
-    ElementPtr element = *it;
     bool elementHasTagKey = false;
-    for (int i = 0; i < tagKeys.size(); i++)
+    for (const auto& key : qAsConst(tagKeys))
     {
-      if (element->getTags().contains(tagKeys.at(i)))
+      if (element->getTags().contains(key))
       {
         elementHasTagKey = true;
         break;
       }
     }
     if (!elementHasTagKey)
-    {
       return false;
-    }
   }
   return true;
 }
@@ -56,15 +53,12 @@ bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
 bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
                                         const std::vector<ElementPtr>& elements)
 {
-  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  for (const auto& element : elements)
   {
-    ElementPtr element = *it;
-    for (int i = 0; i < tagKeys.size(); i++)
+    for (const auto& key : qAsConst(tagKeys))
     {
-      if (element->getTags().contains(tagKeys.at(i)))
-      {
+      if (element->getTags().contains(key))
         return true;
-      }
     }
   }
   return false;
@@ -73,24 +67,18 @@ bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
 bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
                                      const std::vector<ElementPtr>& elements)
 {
-
-  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  for (const auto& element : elements)
   {
-    ElementPtr element = *it;
-    for (int i = 0; i < kvps.size(); i++)
+    for (const auto& kvp : qAsConst(kvps))
     {
-      const QString kvp = kvps.at(i);
       const QStringList kvpParts = kvp.split("=");
       if (kvpParts.size() != 2)
-      {
         throw IllegalArgumentException("Invalid kvp: " + kvp);
-      }
       const QString key = kvpParts[0];
       const QString val = kvpParts[1];
-      if (element->getTags()[key] == val)
-      {
+      const Tags& tags = element->getTags();
+      if (tags.contains(key) && tags.get(key) == val)
         return true;
-      }
     }
   }
   return false;
@@ -100,10 +88,8 @@ bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
                                      const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
-  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
-  {
-    elements.push_back(map->getElement(*it));
-  }
+  for (const auto& id : elementIds)
+    elements.push_back(map->getElement(id));
   return anyElementsHaveAnyKvp(kvps, elements);
 }
 
@@ -111,10 +97,8 @@ bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
                                         const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
-  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
-  {
-    elements.push_back(map->getElement(*it));
-  }
+  for (const auto& id : elementIds)
+    elements.push_back(map->getElement(id));
   return allElementsHaveAnyTagKey(tagKeys, elements);
 }
 
@@ -122,18 +106,15 @@ bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
                                         const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
-  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
-  {
-    elements.push_back(map->getElement(*it));
-  }
+  for (const auto& id : elementIds)
+    elements.push_back(map->getElement(id));
   return anyElementsHaveAnyTagKey(tagKeys, elements);
 }
 
 bool TagUtils::nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
-  return
-    element1->getTags().hasName() && element2->getTags().hasName() &&
-      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
+  return element1->getTags().hasName() && element2->getTags().hasName() &&
+         !Tags::haveMatchingName(element1->getTags(), element2->getTags());
 }
 
 }

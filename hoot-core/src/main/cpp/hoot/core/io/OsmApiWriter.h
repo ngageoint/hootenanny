@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_WRITER_H
@@ -111,7 +111,7 @@ public:
    * @return true if the response comes from CGImap
    */
   bool usingCgiMap(HootNetworkRequestPtr request) const;
-  /** 
+  /**
    * @brief getStats Get the stats object
    * @return
    */
@@ -439,7 +439,9 @@ private:
   QString _accessToken;
   /** OAuth 1.0 secret token granted through OAuth authorization */
   QString _secretToken;
-  /** Number of changesets written to API */
+  /** OAuth 2.0 access token granted through OAuth2 authorization */
+  QString _oauth2AccessToken;
+ /** Number of changesets written to API */
   int _changesetCount;
   /** Last element infomation pushed for synchonization */
   LastElementInfo _lastElement;

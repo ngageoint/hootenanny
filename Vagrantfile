@@ -16,7 +16,7 @@ else
     $winNfs = false
     puts '## Using NFS for file syncing'
   else
-    puts '## Using Windows NFS options for file syncing' 
+    puts '## Using Windows NFS options for file syncing'
   end
 end
 
@@ -80,6 +80,11 @@ if $tomcatPort.nil?
   $tomcatPort = 8888
 end
 
+$tomcatSslPort = ENV['TOMCAT_SSL_PORT']
+if $tomcatSslPort.nil?
+  $tomcatSslPort = 8443
+end
+
 $transPort = ENV['NODEJS_PORT']
 if $transPort.nil?
   $transPort = 8094
@@ -105,7 +110,7 @@ $isAWS = false
 Vagrant.configure(2) do |config|
 
   def aws_provider(config, os, vbox)
-    # AWS Provider.  Set enviornment variables for values below to use
+    # AWS Provider.  Set environment variables for values below to use
     config.vm.provider :aws do |aws, override|
       $isAWS = true;
       override.nfs.functional = false
@@ -218,6 +223,7 @@ Vagrant.configure(2) do |config|
   def set_forwarding(config)
     if $disableForwarding.nil?
       config.vm.network "forwarded_port", guest: 8080, host: $tomcatPort  # Tomcat service
+      config.vm.network "forwarded_port", guest: 8443, host: $tomcatSslPort  # Tomcat SSL service
       config.vm.network "forwarded_port", guest: 8094, host: $transPort  # NodeJS Translation service
       config.vm.network "forwarded_port", guest: 8096, host: $mergePort  # NodeJS Merge service
       config.vm.network "forwarded_port", guest: 8101, host: $nodeExportPort  # NodeJS export service

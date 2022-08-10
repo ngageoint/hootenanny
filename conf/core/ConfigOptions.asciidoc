@@ -1970,7 +1970,28 @@ OpenstreetMap OAuth Access Token for gaining access to the OAuth protected OSM A
 
 OpenstreetMap OAuth Private Access Token for gaining access to the OAuth protected OSM API
 
+=== hoot.pkcs12.key.path
+
+* Data Type: string
+* Default Value: ``
+
+File path for the PKCS-12 key used to authenticate for reading/writing to protected resources
+
+=== hoot.pkcs12.key.phrase
+
+* Data Type: string
+* Default Value: ``
+
+Passphrase for PKCS-12 key loaded from `hoot.pkcs12.key.path`, both arguments are required for authentication
+
 === hoot.services.auth.access.token
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth2 Private Access Token for gaining access to the OAuth2 protected OSM API
+
+=== hoot.services.oauth2.access.token
 
 * Data Type: string
 * Default Value: ``
@@ -2616,7 +2637,7 @@ See also: `hoot.validators`.
 * Data Type: bool
 * Default Value: `true`
 
-Output JSON in a more specific way that includes metadata tags including `hoot:*`, `error:circluar`,
+Output JSON in a more specific way that includes metadata tags including `hoot:*`, `error:circular`,
 `type=node/way/relation`, tags in the `tags` section, etc.
 
 `Generic Format`
@@ -3928,6 +3949,15 @@ Add a tag with the bounding box for each element
 
 Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
 GeoJSON web sources.
+
+=== overpass.api.query.path
+
+* Data Type: string
+* Default Value: ``
+
+Pathname of Overpass Query Language query file.
+
+NOTE: The OQL file must contain either `{{bbox}}` or `{{polygon}}` that is replaced by `bounds` value.
 
 === pbf.writer.compression.level
 

@@ -217,11 +217,24 @@ void ParallelBoundedApiReader::_process()
         {
           //  Store the result and increment the number of results received
           QString result = QString::fromUtf8(request.getResponseContent().data());
-          std::lock_guard<std::mutex> results_lock(_resultsMutex);
-          _resultsList.append(result);
-          _totalResults++;
-          //  Write out a "debug map" for each result that comes in
-          _writeDebugMap(result, "bounded-reader-result");
+          //  Check for an error
+          QString error;
+          if (_isQueryError(result, error))
+          {
+            //  Log the error
+//            LOG_DEBUG(error);
+            LOG_STATUS(error);
+            //  Split the envelope into quads and retry
+            _splitEnvelope(envelope);
+          }
+          else
+          {
+            std::lock_guard<std::mutex> results_lock(_resultsMutex);
+            _resultsList.append(result);
+            _totalResults++;
+            //  Write out a "debug map" for each result that comes in
+            _writeDebugMap(result, "bounded-reader-result");
+          }
         }
         catch(const std::bad_alloc&)
         {
@@ -233,15 +246,15 @@ void ParallelBoundedApiReader::_process()
       case HttpResponseCode::HTTP_BAD_REQUEST:
         _splitEnvelope(envelope);
         break;
-      case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:
+      case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:        //  Bandwidth for downloads has been exceeded, fail immediately
       {
-        //  Bandwidth for downloads has been exceeded, fail immediately
         std::lock_guard<std::mutex> error_lock(_errorMutex);
         LOG_ERROR(request.getErrorString());
         _fatalError = true;
         break;
       }
       case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:
+      case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:
         timeout++;
         if (timeout <= max_timeout)
         {
@@ -299,6 +312,18 @@ void ParallelBoundedApiReader::_logNetworkError(const HootNetworkRequest& reques
   std::lock_guard<std::mutex> error_lock(_errorMutex);
   request.logConnectionError();
   _fatalError = true;
+}
+
+bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& error) const
+{
+  static QRegularExpression regex("[\"|\']remark[\"|\']: *[\"|\'](.*)[\"|\']", QRegularExpression::OptimizeOnFirstUsageOption);
+  QRegularExpressionMatch match = regex.match(result);
+  if (match.hasMatch())
+  {
+    error = match.captured(1);
+    return true;
+  }
+  return false;
 }
 
 void ParallelBoundedApiReader::_splitEnvelope(const geos::geom::Envelope &envelope)

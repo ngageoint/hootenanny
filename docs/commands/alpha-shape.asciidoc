@@ -18,7 +18,7 @@ The `alpha-shape` command provides a way to generate a concave hull for a set of
 * `--buffer` - Optional buffer, in meters, to add to the alpha shape before cutting. A negative value will make the 
                shape smaller. If using the alpha shape command with the `cut` command, it is helpful to use a larger 
                negative value on complex data shapes to limit the number of holes in the output data. A negative value 
-               equal to the alpha value is a good rule of thumb.
+               equal to the alpha value is a good general rule.
 
 === Usage
 
