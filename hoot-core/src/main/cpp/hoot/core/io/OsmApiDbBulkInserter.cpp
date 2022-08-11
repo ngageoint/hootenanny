@@ -28,18 +28,18 @@
 #include "OsmApiDbBulkInserter.h"
 
 // Hoot
+#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/DbUtils.h>
-#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QStringBuilder>
-#include <QUuid>
 #include <QLatin1String>
+#include <QStringBuilder>
 #include <QTextStream>
+#include <QUuid>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>
@@ -51,10 +51,10 @@ int OsmApiDbBulkInserter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkInserter)
 
-OsmApiDbBulkInserter::OsmApiDbBulkInserter() :
-_outputDelimiter("\t"),
-_fileDataPassCtr(0),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+OsmApiDbBulkInserter::OsmApiDbBulkInserter()
+  : _outputDelimiter("\t"),
+    _fileDataPassCtr(0),
+    _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -82,24 +82,17 @@ void OsmApiDbBulkInserter::open(const QString& url)
 
   // Make sure we're not already open and the URL is valid
   if (!isSupported(url))
-  {
     throw HootException(QString("Could not open URL ") + url);
-  }
 
   _verifyStartingIds();
   _verifyOutputCopySettings();
   //early test to make sure we can write to file output locations, so we don't get a nasty
   //surprise after taking a long amount of time to write a huge output file
   if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
-  {
     _verifyFileOutputs();
-  }
   if (_destinationIsDatabase() && _database.getDB().isOpen())
-  {
-    throw HootException(
-      QString("Database already open.  Close the existing database connection before opening ") +
-      QString("a new one.  URL: ") + url);
-  }
+    throw HootException(QString("Database already open.  Close the existing database connection before opening a new one.  URL: ") + url);
+
   if (_destinationIsDatabase())
   {
     _database.open(_outputUrl);
@@ -111,38 +104,28 @@ void OsmApiDbBulkInserter::open(const QString& url)
 void OsmApiDbBulkInserter::_verifyChangesetUserId()
 {
   LOG_VARD(_changesetData.changesetUserId);
-  const QString errorMsg =
-    "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId);
+  const QString errorMsg = "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId);
   if (_changesetData.changesetUserId == -1 || !_database.userExists(_changesetData.changesetUserId))
-  {
     throw HootException(errorMsg);
-  }
 }
 
 void OsmApiDbBulkInserter::_verifyFileOutputs() const
 {
   QString finalOutput = _outputUrl;
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
-  {
     finalOutput = _outputFilesCopyLocation;
-  }
   QFile outputFile(finalOutput);
   if (outputFile.exists())
-  {
     outputFile.remove();
-  }
   if (!outputFile.open(QIODevice::WriteOnly))
-  {
     throw HootException("Could not open file for output: " + finalOutput);
-  }
   outputFile.close();
   outputFile.remove();
 }
 
 void OsmApiDbBulkInserter::_verifyStartingIds()
 {
-  if (_idMappings.startingNodeId < 1 || _idMappings.startingWayId < 1 ||
-      _idMappings.startingRelationId < 1)
+  if (_idMappings.startingNodeId < 1 || _idMappings.startingWayId < 1 || _idMappings.startingRelationId < 1)
   {
     throw HootException(
       "Invalid element starting ID specified.  IDs must be greater than or equal to 1.");
@@ -153,10 +136,9 @@ void OsmApiDbBulkInserter::_verifyStartingIds()
   {
     throw HootException("Cannot specify element starting IDs when data validation is turned off.");
   }
-  //this one may not be necessary, but haven't had time to think it through yet, so being safe for
-  //now
   else if (_reserveRecordIdsBeforeWritingData && !_validateData)
   {
+    // this one may not be necessary, but haven't had time to think it through yet, so being safe for now
     throw HootException("Cannot reserve record IDs when data validation is turned off.");
   }
 
@@ -184,9 +166,7 @@ void OsmApiDbBulkInserter::_verifyStartingIds()
 void OsmApiDbBulkInserter::_verifyDependencies() const
 {
   if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
-  {
     throw HootException("Unable to access the psql application.  Is Postgres installed?");
-  }
 }
 
 void OsmApiDbBulkInserter::_verifyOutputCopySettings() const
@@ -209,9 +189,7 @@ void OsmApiDbBulkInserter::close()
 
   _closeOutputFiles();
   if (_destinationIsDatabase())
-  {
     _database.close();
-  }
 
   _reset();
   _sectionNames = _createSectionNameList();
@@ -220,78 +198,53 @@ void OsmApiDbBulkInserter::close()
 
 void OsmApiDbBulkInserter::_closeOutputFiles()
 {
-  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
-       sectionNamesItr != _sectionNames.end(); ++sectionNamesItr)
+  for (const auto& name : qAsConst(_sectionNames))
   {
-    if (_outputSections.find(*sectionNamesItr) == _outputSections.end())
+    if (_outputSections.find(name) == _outputSections.end())
     {
-      LOG_TRACE("No data for table " + *sectionNamesItr);
+      LOG_TRACE("No data for table " + name);
       continue;
     }
 
-    if (_outputSections[*sectionNamesItr])
-    {
-      _outputSections[*sectionNamesItr]->close();
-    }
+    if (_outputSections[name])
+      _outputSections[name]->close();
   }
-
   if (_sqlOutputCombinedFile)
-  {
     _sqlOutputCombinedFile->close();
-  }
 }
 
 void OsmApiDbBulkInserter::_logStats(const bool debug) const
 {
   QStringList messages;
-  messages.append(
-    QString("\tTotal features: ") + StringUtils::formatLargeNumber(_getTotalFeaturesWritten()));
+  messages.append(QString("\tTotal features: ") + StringUtils::formatLargeNumber(_getTotalFeaturesWritten()));
   if (debug)
   {
     messages.append(QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
-    messages.append(
-      QString("\tNode tags: ") + StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
-    messages.append(
-      QString("\tMaximum node ID: ") + StringUtils::formatLargeNumber(_idMappings.currentNodeId));
+    messages.append(QString("\tNode tags: ") + StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
+    messages.append(QString("\tMaximum node ID: ") + StringUtils::formatLargeNumber(_idMappings.currentNodeId));
     messages.append(QString("\tWays: ") + StringUtils::formatLargeNumber(_writeStats.waysWritten));
-    messages.append(
-      QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
-    messages.append(
-      QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
-    messages.append(
-      QString("\tMaximum way ID: ") + StringUtils::formatLargeNumber(_idMappings.currentWayId));
-    messages.append(
-      QString("\tRelations: ") + StringUtils::formatLargeNumber(_writeStats.relationsWritten));
-    messages.append(
-      QString("\tRelation members: ") +
-      StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
-    messages.append(
-      QString("\tRelation tags: ") + StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
-    messages.append(
-      QString("\tMaximum relation ID: ") +
-      StringUtils::formatLargeNumber(_idMappings.currentRelationId));
-    messages.append(
-      QString("\tUnresolved relation members: ") +
-      StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
-    messages.append(
-      QString("\tChangesets: ") + StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
-    messages.append(
-      QString("\tChangeset change size (each): ") +
-      StringUtils::formatLargeNumber(_maxChangesetSize));
-    messages.append(
-      QString("\tExecutable SQL records: ") +
-       StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
+    messages.append(QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
+    messages.append(QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
+    messages.append(QString("\tMaximum way ID: ") + StringUtils::formatLargeNumber(_idMappings.currentWayId));
+    messages.append(QString("\tRelations: ") + StringUtils::formatLargeNumber(_writeStats.relationsWritten));
+    messages.append(QString("\tRelation members: ") + StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
+    messages.append(QString("\tRelation tags: ") + StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
+    messages.append(QString("\tMaximum relation ID: ") + StringUtils::formatLargeNumber(_idMappings.currentRelationId));
+    messages.append(QString("\tUnresolved relation members: ") + StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
+    messages.append(QString("\tChangesets: ") + StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
+    messages.append(QString("\tChangeset change size (each): ") + StringUtils::formatLargeNumber(_maxChangesetSize));
+    messages.append(QString("\tExecutable SQL records: ") + StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
   }
 
-  for (int i = 0; i < messages.size(); i++)
+  for (const auto& msg : messages)
   {
     if (debug)
     {
-      LOG_DEBUG(messages.at(i));
+      LOG_DEBUG(msg);
     }
     else
     {
-      LOG_INFO(messages.at(i));
+      LOG_INFO(msg);
     }
   }
 }
@@ -301,31 +254,25 @@ unsigned int OsmApiDbBulkInserter::_numberOfFileDataPasses() const
   //using psql always requires a minimum of two passes due to having to combine all the temp
   //sql files into one
   unsigned int numPasses = 2;
-  if (_destinationIsDatabase())
-  {
-    //writing to the database is another pass over the data
+  if (_destinationIsDatabase()) // writing to the database is another pass over the data
     numPasses++;
-  }
   return numPasses;
 }
 
 void OsmApiDbBulkInserter::_flush()
 {
-  for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
+  for (const auto& name : qAsConst(_sectionNames))
   {
-    if (_outputSections.find(*it) == _outputSections.end())
+    if (_outputSections.find(name) == _outputSections.end())
     {
-      LOG_TRACE("No data for table " + *it);
+      LOG_TRACE("No data for table " + name);
       continue;
     }
-
-    LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it]->fileName());
-    _outputSections[*it]->write(QString("\\.\n\n").toUtf8());
+    LOG_TRACE("Flushing section " << name << " to file " << _outputSections[name]->fileName());
+    _outputSections[name]->write(QString("\\.\n\n").toUtf8());
     // Flush any residual content from file
-    if (!_outputSections[*it]->flush())
-    {
-      throw HootException("Could not flush file for table " + *it);
-    }
+    if (!_outputSections[name]->flush())
+      throw HootException("Could not flush file for table " + name);
   }
 }
 
@@ -333,24 +280,20 @@ void OsmApiDbBulkInserter::_clearIdCollections()
 {
   LOG_DEBUG("Clearing out ID mappings...");
   if (_idMappings.nodeIdMap)
-  {
     _idMappings.nodeIdMap->clear();
-  }
+
   _idMappings.nodeIdMap.reset();
   if (_idMappings.wayIdMap)
-  {
     _idMappings.wayIdMap->clear();
-  }
+
   _idMappings.wayIdMap.reset();
   if (_idMappings.relationIdMap)
-  {
     _idMappings.relationIdMap->clear();
-  }
+
   _idMappings.relationIdMap.reset();
   if (_unresolvedRefs.unresolvedRelationRefs)
-  {
     _unresolvedRefs.unresolvedRelationRefs->clear();
-  }
+
   _unresolvedRefs.unresolvedRelationRefs.reset();
 }
 
@@ -373,15 +316,13 @@ void OsmApiDbBulkInserter::finalizePartial()
 
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
-  {
     _writeChangeset();
-  }
+
   //If there was only one changeset written total, this won't have yet been incremented, so do it
   //now.
   if (_changesetData.changesetsWritten == 0)
-  {
     _changesetData.changesetsWritten++;
-  }
+
   _flush();
   _closeOutputFiles();
 
@@ -411,9 +352,7 @@ void OsmApiDbBulkInserter::finalizePartial()
 
     _writeDataToDb();
     if (_outputFilesCopyLocation.isEmpty())
-    {
       _sqlOutputCombinedFile->remove();
-    }
   }
   else
   {
@@ -451,41 +390,27 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
 void OsmApiDbBulkInserter::_writeDataToDb()
 {
   if (_disableDatabaseConstraintsDuringWrite)
-  {
     _database.disableConstraints();
-  }
   if (_disableDatabaseIndexesDuringWrite)
-  {
     _database.dropIndexes();
-  }
 
   _writeDataToDbPsql();
 
   if (_disableDatabaseConstraintsDuringWrite)
-  {
     _database.enableConstraints();
-  }
   if (_disableDatabaseIndexesDuringWrite)
-  {
     _database.createIndexes();
-  }
 }
 
 QString OsmApiDbBulkInserter::_getCombinedSqlFileName() const
 {
   QString dest;
   if (!_destinationIsDatabase())
-  {
     dest = _outputUrl;
-  }
   else if (!_outputFilesCopyLocation.isEmpty())
-  {
     dest = _outputFilesCopyLocation;
-  }
   else
-  {
     dest = _tempDir + "/ApiDbBulkInserter-" + QUuid::createUuid().toString() + ".sql";
-  }
   return dest;
 }
 
@@ -498,14 +423,11 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_VART(dest);
   QFile outputFile(dest);
   if (outputFile.exists())
-  {
     outputFile.remove();
-  }
+
   _sqlOutputCombinedFile = std::make_shared<QFile>(dest);
   if (!_sqlOutputCombinedFile->open(QIODevice::WriteOnly))
-  {
     throw HootException("Could not open file for SQL output: " + dest);
-  }
 
   LOG_INFO(
     "Writing combined SQL output file to " << _sqlOutputCombinedFile->fileName() <<
@@ -578,13 +500,10 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
           LOG_VART(line.left(25));
           LOG_VART(line.length());
 
-          if (!line.trimmed().isEmpty() &&
-              line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
+          if (!line.trimmed().isEmpty() && line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
           {
             if (updateIdOffsets)
-            {
               _updateRecordLineWithIdOffset(*it, line);
-            }
             recordCtr++;
           }
 
@@ -612,9 +531,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
         _outputSections[*it].reset();
       }
       else
-      {
         throw HootException("Unable to open input file: " + tempInputFile.fileName());
-      }
     }
     catch (...)
     {
@@ -653,71 +570,47 @@ void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString& tableNam
 
   bool lineUpdated = true;
   if (tableName == ApiDb::getChangesetsTableName())
-  {
     lineParts[0] = QString::number(lineParts[0].toULong() + _changesetData.currentChangesetId);
-  }
-  else if (tableName == ApiDb::getCurrentNodesTableName() ||
-           tableName == ApiDb::getNodesTableName())
+  else if (tableName == ApiDb::getCurrentNodesTableName() || tableName == ApiDb::getNodesTableName())
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentNodeId);
     lineParts[3] = QString::number(lineParts[3].toULong() + _changesetData.currentChangesetId);
   }
-  else if (tableName == ApiDb::getCurrentWaysTableName() ||
-           tableName == ApiDb::getWaysTableName())
+  else if (tableName == ApiDb::getCurrentWaysTableName() || tableName == ApiDb::getWaysTableName())
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentWayId);
     lineParts[1] = QString::number(lineParts[1].toULong() + _changesetData.currentChangesetId);
   }
-  else if (tableName == ApiDb::getCurrentWayNodesTableName() ||
-           tableName == ApiDb::getWayNodesTableName())
+  else if (tableName == ApiDb::getCurrentWayNodesTableName() || tableName == ApiDb::getWayNodesTableName())
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentWayId);
     lineParts[1] = QString::number(lineParts[1].toULong() + _idMappings.currentNodeId);
   }
-  else if (tableName == ApiDb::getCurrentRelationsTableName() ||
-           tableName == ApiDb::getRelationsTableName())
+  else if (tableName == ApiDb::getCurrentRelationsTableName() || tableName == ApiDb::getRelationsTableName())
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentRelationId);
     lineParts[1] = QString::number(lineParts[1].toULong() + _changesetData.currentChangesetId);
   }
-  else if (tableName == ApiDb::getCurrentRelationMembersTableName() ||
-           tableName == ApiDb::getRelationMembersTableName())
+  else if (tableName == ApiDb::getCurrentRelationMembersTableName() || tableName == ApiDb::getRelationMembersTableName())
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentRelationId);
     const unsigned long memberId = lineParts[2].toULong();
     if (lineParts[1].toLower() == QLatin1String("node"))
-    {
       lineParts[2] = QString::number(memberId + _idMappings.currentNodeId);
-    }
     else if (lineParts[1].toLower() == QLatin1String("way"))
-    {
       lineParts[2] = QString::number(memberId + _idMappings.currentWayId);
-    }
   }
-  else if (tableName == ApiDb::getCurrentNodeTagsTableName() ||
-           tableName == ApiDb::getNodeTagsTableName())
-  {
+  else if (tableName == ApiDb::getCurrentNodeTagsTableName() || tableName == ApiDb::getNodeTagsTableName())
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentNodeId);
-  }
-  else if (tableName == ApiDb::getCurrentWayTagsTableName() ||
-           tableName == ApiDb::getWayTagsTableName())
-  {
+  else if (tableName == ApiDb::getCurrentWayTagsTableName() || tableName == ApiDb::getWayTagsTableName())
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentWayId);
-  }
-  else if (tableName == ApiDb::getCurrentRelationTagsTableName() ||
-           tableName == ApiDb::getRelationTagsTableName())
-  {
+  else if (tableName == ApiDb::getCurrentRelationTagsTableName() || tableName == ApiDb::getRelationTagsTableName())
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentRelationId);
-  }
   else
-  {
     lineUpdated = false;
-  }
 
   if (!lineUpdated)
-  {
     throw HootException("Bad line passed to record ID offsetter: " + recordLine.left(100));
-  }
 
   recordLine = lineParts.join(_outputDelimiter);
   LOG_TRACE("ID offset updated for line: " << recordLine.left(100));
@@ -730,8 +623,7 @@ void OsmApiDbBulkInserter::_reserveIdsInDb()
   if (_writeStats.nodesWritten == 0)
   {
     throw HootException(
-      QString("OSM API database bulk writer cannot reserve element ID range if no elements ") +
-      QString("have been parsed from the input."));
+      QString("OSM API database bulk writer cannot reserve element ID range if no elements have been parsed from the input."));
   }
 
   //get the next available id from the db for all sequence types
@@ -739,10 +631,10 @@ void OsmApiDbBulkInserter::_reserveIdsInDb()
   //generate setval statements to reserve each of the id ranges out from use by others
   QString reserveElementIdsSql;
   _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
-                                _idMappings.currentNodeId + _writeStats.nodesWritten,
-                                _idMappings.currentWayId + _writeStats.waysWritten,
-                                _idMappings.currentRelationId + _writeStats.relationsWritten,
-                                reserveElementIdsSql);
+                        _idMappings.currentNodeId + _writeStats.nodesWritten,
+                        _idMappings.currentWayId + _writeStats.waysWritten,
+                        _idMappings.currentRelationId + _writeStats.relationsWritten,
+                        reserveElementIdsSql);
   LOG_VART(reserveElementIdsSql);
 
   LOG_INFO("Writing sequence ID updates to database to reserve record IDs...");
@@ -810,9 +702,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   // Do we already know about this node?
   if (_validateData && _idMappings.nodeIdMap->contains(node->getId()))
-  {
     throw NotImplementedException("Writer class does not support update operations.");
-  }
+
   LOG_VART(node->getElementId());
   const unsigned long nodeDbId = _establishIdMapping(node->getElementId());
   LOG_VART(ElementId(ElementType::Node, nodeDbId));
@@ -833,9 +724,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   _writeStats.nodeTagsWritten += node->getTags().size();
   _incrementChangesInChangeset();
   if (_validateData)
-  {
     _checkUnresolvedReferences(node, nodeDbId);
-  }
 
   if (_writeStats.nodesWritten % (_statusUpdateInterval * 100) == 0)
   {
@@ -859,9 +748,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
 
   // Do we already know about this way?
   if (_validateData && _idMappings.wayIdMap->contains(way->getId()))
-  {
     throw NotImplementedException("Writer class does not support update operations");
-  }
   LOG_VART(way->getElementId());
   const unsigned long wayDbId = _establishIdMapping(way->getElementId());
   LOG_VART(ElementId(ElementType::Way, wayDbId));
@@ -884,9 +771,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   _writeStats.wayNodesWritten += way->getNodeIds().size();
   _incrementChangesInChangeset();
   if (_validateData)
-  {
     _checkUnresolvedReferences(way, wayDbId);
-  }
 
   if (_writeStats.waysWritten % (_statusUpdateInterval * 10) == 0)
   {
@@ -909,9 +794,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
 
   // Do we already know about this node?
   if (_validateData && _idMappings.relationIdMap->contains(relation->getId()))
-  {
     throw NotImplementedException("Writer class does not support update operations");
-  }
   LOG_VART(relation->getElementId());
   const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
@@ -937,9 +820,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   _writeStats.relationMembersWritten += relation->getMembers().size();
   _incrementChangesInChangeset();
   if (_validateData)
-  {
     _checkUnresolvedReferences(relation, relationDbId);
-  }
 
   if (_writeStats.relationsWritten % (_statusUpdateInterval * 10) == 0)
   {
@@ -958,8 +839,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
   setStatusUpdateInterval(confOptions.getTaskStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
-  setReserveRecordIdsBeforeWritingData(
-    confOptions.getOsmapidbBulkInserterReserveRecordIdsBeforeWritingData());
+  setReserveRecordIdsBeforeWritingData(confOptions.getOsmapidbBulkInserterReserveRecordIdsBeforeWritingData());
   setStartingNodeId(confOptions.getApidbBulkInserterStartingNodeId());
   setStartingWayId(confOptions.getApidbBulkInserterStartingWayId());
   setStartingRelationId(confOptions.getApidbBulkInserterStartingRelationId());
@@ -973,11 +853,9 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
     setStxxlMapMinSize(confOptions.getApidbBulkInserterStxxlMapMinSize());
     setValidateData(confOptions.getApidbBulkInserterValidateData());
   }
-  setDisableDatabaseConstraintsDuringWrite(
-    confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
+  setDisableDatabaseConstraintsDuringWrite(confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
   setTempDir(confOptions.getApidbBulkInserterTempFileDir());
-  setDisableDatabaseIndexesDuringWrite(
-    confOptions.getOsmapidbBulkInserterDisableDatabaseIndexesDuringWrite());
+  setDisableDatabaseIndexesDuringWrite(confOptions.getOsmapidbBulkInserterDisableDatabaseIndexesDuringWrite());
   setWriteIdSequenceUpdates(confOptions.getOsmapidbBulkInserterWriteSqlFileIdSequenceUpdates());
 }
 
@@ -1072,12 +950,9 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
         //long as expected
         dbIdentifier = std::abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentNodeId)
-        {
           _idMappings.currentNodeId = dbIdentifier;
-        }
       }
       break;
-
     case ElementType::Way:
       if (_validateData)
       {
@@ -1089,12 +964,9 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
       {
         dbIdentifier = std::abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentWayId)
-        {
           _idMappings.currentWayId = dbIdentifier;
-        }
       }
-    break;
-
+      break;
     case ElementType::Relation:
       if (_validateData)
       {
@@ -1106,25 +978,19 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
       {
         dbIdentifier = std::abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentRelationId)
-        {
           _idMappings.currentRelationId = dbIdentifier;
-        }
       }
-    break;
-
+      break;
     default:
       throw UnsupportedException("Unsupported element type.");
   }
-
   return dbIdentifier;
 }
 
 void OsmApiDbBulkInserter::_writeNode(const ConstNodePtr& node, const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
-  const QStringList nodeSqlStrs =
-    _sqlFormatter->nodeToSqlStrings(
-      node, nodeDbId, _changesetData.currentChangesetId, _validateData);
+  const QStringList nodeSqlStrs = _sqlFormatter->nodeToSqlStrings(node, nodeDbId, _changesetData.currentChangesetId, _validateData);
   _outputSections[ApiDb::getCurrentNodesTableName()]->write(nodeSqlStrs[0].toUtf8());
   _outputSections[ApiDb::getNodesTableName()]->write(nodeSqlStrs[1].toUtf8());
 }
@@ -1138,7 +1004,7 @@ void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
 {
   LOG_TRACE("Writing tags to stream...");
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  for (auto it = tags.begin(); it != tags.end(); ++it)
   {
     QString key = it.key();
     QString value = it.value().trimmed();
@@ -1171,8 +1037,7 @@ void OsmApiDbBulkInserter::_writeWay(const unsigned long wayDbId,
 {
   LOG_TRACE("Writing way to stream...");
 
-  const QStringList waySqlStrs =
-    _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId, version);
+  const QStringList waySqlStrs = _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId, version);
   _outputSections[ApiDb::getCurrentWaysTableName()]->write(waySqlStrs[0].toUtf8());
   _outputSections[ApiDb::getWaysTableName()]->write(waySqlStrs[1].toUtf8());
 }
@@ -1184,41 +1049,30 @@ void OsmApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
   LOG_TRACE("Writing way nodes to stream...");
 
   unsigned int wayNodeIndex = 1;
-  for (std::vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
+  for (auto way_id : wayNodeIds)
   {
     unsigned long wayNodeIdVal;
     if (!_validateData)
-    {
-      wayNodeIdVal = std::abs(*it);
-    }
-    else if (_idMappings.nodeIdMap->contains(*it))
-    {
-      wayNodeIdVal = _idMappings.nodeIdMap->at(*it);
-    }
+      wayNodeIdVal = std::abs(way_id);
+    else if (_idMappings.nodeIdMap->contains(way_id))
+      wayNodeIdVal = _idMappings.nodeIdMap->at(way_id);
     else
     {
       throw UnsupportedException(
-        "Unresolved way nodes are not supported.  " +
-        QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
+        QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId, way_id));
     }
-
-    const QStringList wayNodeSqlStrs =
-      _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex, version);
+    const QStringList wayNodeSqlStrs = _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex, version);
     _outputSections[ApiDb::getCurrentWayNodesTableName()]->write(wayNodeSqlStrs[0].toUtf8());
     _outputSections[ApiDb::getWayNodesTableName()]->write(wayNodeSqlStrs[1].toUtf8());
-
     ++wayNodeIndex;
   }
 }
 
 void OsmApiDbBulkInserter::_createRelationOutputFiles()
 {
-  const QStringList relationSqlHeaders =
-    OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings();
-  const QStringList relationTagSqlHeaders =
-    OsmApiDbSqlStatementFormatter::getRelationTagSqlHeaderStrings();
-  const QStringList relationMemberSqlHeaders =
-    OsmApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings();
+  const QStringList relationSqlHeaders = OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings();
+  const QStringList relationTagSqlHeaders = OsmApiDbSqlStatementFormatter::getRelationTagSqlHeaderStrings();
+  const QStringList relationMemberSqlHeaders = OsmApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings();
 
   _createOutputFile(ApiDb::getCurrentRelationsTableName(), relationSqlHeaders[0]);
   _createOutputFile(ApiDb::getCurrentRelationTagsTableName(), relationTagSqlHeaders[0]);
@@ -1233,8 +1087,7 @@ void OsmApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, cons
 {
   LOG_TRACE("Writing relation to stream...");
 
-  const QStringList relationSqlStrs =
-    _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId, version);
+  const QStringList relationSqlStrs = _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId, version);
   _outputSections[ApiDb::getCurrentRelationsTableName()]->write(relationSqlStrs[0].toUtf8());
   _outputSections[ApiDb::getRelationsTableName()]->write(relationSqlStrs[1].toUtf8());
 }
@@ -1250,55 +1103,38 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   std::shared_ptr<Tgs::BigMap<long, unsigned long>> knownElementMap;
 
-  for (std::vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
-       it != relationMembers.end(); ++it)
+  for (const auto& member : relationMembers)
   {
-    const ElementId memberElementId = it->getElementId();
-
+    const ElementId memberElementId = member.getElementId();
     if (_validateData)
     {
       switch (memberElementId.getType().getEnum())
       {
-        case ElementType::Node:
-          knownElementMap = _idMappings.nodeIdMap;
-          break;
-
-        case ElementType::Way:
-          knownElementMap = _idMappings.wayIdMap;
-          break;
-
-        case ElementType::Relation:
-          knownElementMap = _idMappings.relationIdMap;
-          break;
-
-        default:
-          throw HootException("Unsupported element member type");
-       }
+      case ElementType::Node:
+        knownElementMap = _idMappings.nodeIdMap;
+        break;
+      case ElementType::Way:
+        knownElementMap = _idMappings.wayIdMap;
+        break;
+      case ElementType::Relation:
+        knownElementMap = _idMappings.relationIdMap;
+        break;
+      default:
+        throw HootException("Unsupported element member type");
+      }
     }
 
     if (!_validateData)
-    {
-      unsigned long memberIdVal = std::abs(memberElementId.getId());
-      _writeRelationMember(dbRelationId, *it, memberIdVal, memberSequenceIndex, version);
-    }
+      _writeRelationMember(dbRelationId, member, std::abs(memberElementId.getId()), memberSequenceIndex, version);
     else if (knownElementMap && knownElementMap->contains(memberElementId.getId()))
-    {
-      _writeRelationMember(
-        dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex, version);
-    }
+      _writeRelationMember(dbRelationId, member, knownElementMap->at(memberElementId.getId()), memberSequenceIndex, version);
     else
     {
       if (!_unresolvedRefs.unresolvedRelationRefs)
-      {
-        _unresolvedRefs.unresolvedRelationRefs.reset(
-          new std::map<ElementId, UnresolvedRelationReference>());
-      }
-      const UnresolvedRelationReference relationRef =
-        { relationId, dbRelationId, *it, memberSequenceIndex };
-      _unresolvedRefs.unresolvedRelationRefs->insert(
-        std::pair<ElementId, UnresolvedRelationReference>(memberElementId, relationRef));
+        _unresolvedRefs.unresolvedRelationRefs.reset(new std::map<ElementId, UnresolvedRelationReference>());
+      const UnresolvedRelationReference relationRef = { relationId, dbRelationId, member, memberSequenceIndex };
+      _unresolvedRefs.unresolvedRelationRefs->insert(std::pair<ElementId, UnresolvedRelationReference>(memberElementId, relationRef));
     }
-
     ++memberSequenceIndex;
   }
 }
@@ -1309,11 +1145,8 @@ void OsmApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelati
                                                 const unsigned int memberSequenceIndex,
                                                 const unsigned long version)
 {
-  const QStringList relationMemberSqlStrs =
-    _sqlFormatter->relationMemberToSqlStrings(
-      sourceRelationDbId, memberDbId, member, memberSequenceIndex, version);
-  _outputSections[ApiDb::getCurrentRelationMembersTableName()]->write(
-    relationMemberSqlStrs[0].toUtf8());
+  const QStringList relationMemberSqlStrs = _sqlFormatter->relationMemberToSqlStrings(sourceRelationDbId, memberDbId, member, memberSequenceIndex, version);
+  _outputSections[ApiDb::getCurrentRelationMembersTableName()]->write(relationMemberSqlStrs[0].toUtf8());
   _outputSections[ApiDb::getRelationMembersTableName()]->write(relationMemberSqlStrs[1].toUtf8());
   _writeStats.relationMembersWritten++;
 }
@@ -1322,28 +1155,20 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString& tableName, const QSt
 {
   QString msg = "Creating output file " + tableName;
   if (!header.trimmed().isEmpty())
-  {
     msg += " and writing table header";
-  }
   msg += "...";
   LOG_DEBUG(msg);
 
-  _outputSections[tableName] =
-    std::make_shared<QTemporaryFile>(
-      _tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql");
+  _outputSections[tableName] = std::make_shared<QTemporaryFile>(_tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql");
   if (!_outputSections[tableName]->open())
   {
-    throw HootException(
-      "Could not open file at: " + _outputSections[tableName]->fileName() +
-      " for contents of table: " + tableName);
+    throw HootException("Could not open file at: " + _outputSections[tableName]->fileName() + " for contents of table: " + tableName);
   }
   //for debugging only
   //_outputSections[tableName]->setAutoRemove(false);
 
   if (!header.trimmed().isEmpty())
-  {
     _outputSections[tableName]->write(header.toUtf8());
-  }
 }
 
 void OsmApiDbBulkInserter::_incrementChangesInChangeset()
@@ -1377,8 +1202,8 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
       {
         LOG_WARN("Found unresolved relation member ref!:");
         LOG_WARN(QString( "Relation ID ") % QString::number(relationRef->second.sourceRelationId) %
-          QString(" (DB ID=") % QString::number(relationRef->second.sourceDbRelationId) %
-           QString(") has ref to ") % relationRef->second.relationMemberData.toString());
+                 QString(" (DB ID=") % QString::number(relationRef->second.sourceDbRelationId) %
+                 QString(") has ref to ") % relationRef->second.relationMemberData.toString());
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -1402,11 +1227,7 @@ void OsmApiDbBulkInserter::_writeChangeset()
   LOG_VART(_changesetData.currentChangesetId);
 
   if (!_outputSections[ApiDb::getChangesetsTableName()])
-  {
-    _createOutputFile(
-      ApiDb::getChangesetsTableName(),
-      OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString());
-  }
+    _createOutputFile(ApiDb::getChangesetsTableName(), OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString());
 
   _outputSections[ApiDb::getChangesetsTableName()]->write(
     _sqlFormatter->changesetToSqlString(
@@ -1423,9 +1244,7 @@ void OsmApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsigne
   LOG_DEBUG("Writing sequence updates stream...");
 
   if (changesetId <= 0) //probably can get rid of this
-  {
     changesetId = 1;
-  }
 
   QTextStream sequenceUpdatesStream(&outputStr);
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
@@ -1434,25 +1253,16 @@ void OsmApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsigne
   //and relations are optional.
 
   assert(changesetId > 0);
-  sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(), QString::number(changesetId)).toUtf8();
+  sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(), QString::number(changesetId)).toUtf8();
 
   assert(nodeId > 0);
-  sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(), QString::number(nodeId)).toUtf8();
+  sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(), QString::number(nodeId)).toUtf8();
 
   if (wayId > 0)
-  {
-    sequenceUpdatesStream <<
-      sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(wayId)).toUtf8();
-  }
+    sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(wayId)).toUtf8();
 
   if (relationId > 0)
-  {
-    sequenceUpdatesStream <<
-      sequenceUpdateFormat.arg(
-        ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)).toUtf8();
-  }
+    sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)).toUtf8();
 
   sequenceUpdatesStream << QString("\n").toUtf8();
 }

@@ -54,9 +54,9 @@ class WayJoinerConflateTest : public HootTestFixture
 
 public:
 
-  WayJoinerConflateTest() :
-  HootTestFixture(
-    "test-files/algorithms/WayJoinerConflateTest/", "test-output/algorithms/WayJoinerConflateTest/")
+  WayJoinerConflateTest()
+    : HootTestFixture("test-files/algorithms/WayJoinerConflateTest/",
+                      "test-output/algorithms/WayJoinerConflateTest/")
   {
     setResetType(ResetAll);
   }
@@ -87,7 +87,7 @@ public:
     OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
-    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    RemoveTagsVisitor hashRemover(QStringList({MetadataTags::HootHash()}));
     map->visitRw(hashRemover);
 
     OsmXmlWriter writer;
@@ -120,7 +120,7 @@ public:
     OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
-    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    RemoveTagsVisitor hashRemover(QStringList({MetadataTags::HootHash()}));
     map->visitRw(hashRemover);
 
     OsmXmlWriter writer;

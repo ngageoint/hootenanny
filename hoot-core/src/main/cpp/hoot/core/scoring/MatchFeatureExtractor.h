@@ -91,7 +91,6 @@ private:
   // If true, then make sure there is an even representation from each class and only fully
   // populated records are represented.
   bool _evenClasses;
-  bool _useNulls;
   const MatchFactory* _matchFactory;
 
   MatchType _getActualMatchType(const std::set<ElementId> &eids,

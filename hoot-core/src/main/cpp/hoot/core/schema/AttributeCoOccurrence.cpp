@@ -64,20 +64,14 @@ public:
   void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
-    if (e->getTags().contains(_ref))
-    {
-      e->getTags().readValues(_ref, refs);
-    }
+    const Tags& tags = e->getTags();
+    if (tags.contains(_ref))
+      tags.readValues(_ref, refs);
     refs.removeAll("todo");
     refs.removeAll("none");
 
-    if (!refs.empty())
-    {
-      for (int i = 0; i < refs.size(); i++)
-      {
-        _ref2Eid[refs[i]].insert(e->getElementId());
-      }
-    }
+    for (const auto& ref : qAsConst(refs))
+      _ref2Eid[ref].insert(e->getElementId());
   }
 
   QString getDescription() const override { return ""; }
@@ -97,8 +91,8 @@ class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsum
 {
 public:
 
-  CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
-  _refSet(refSet), _coOccurrence(h) { }
+  CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h)
+    : _refSet(refSet), _coOccurrence(h) { }
   ~CoOccurrenceVisitor() override = default;
 
   void setOsmMap(const OsmMap* map) override { _map = map; }
@@ -110,9 +104,10 @@ public:
   void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
-    if (e->getTags().contains(MetadataTags::Ref1()))
+    const Tags& tags = e->getTags();
+    if (tags.contains(MetadataTags::Ref1()))
     {
-      e->getTags().readValues(MetadataTags::Ref1(), refs);
+      tags.readValues(MetadataTags::Ref1(), refs);
 
       refs.removeAll("todo");
       refs.removeAll("none");
@@ -126,51 +121,42 @@ public:
         if (refId != _refSet.end())
         {
           // Loop through the element Id's in REF2
-          for (set<ElementId>::const_iterator eid = refId->second.begin();
-               eid != refId->second.end(); ++eid)
+          for (const auto& eid : refId->second)
           {
             // Loop through the Tags in REF1
-            for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end();
-                 ++tag1)
+            for (auto tag1 = tags.begin(); tag1 != tags.end(); ++tag1)
             {
-              QString kvp1 = OsmSchema::toKvp(tag1.key(),tag1.value());
+              QString kvp1 = OsmSchema::toKvp(tag1.key(), tag1.value());
 
               // We are only looking at Enumerated tags
               if (OsmSchema::getInstance().getTagVertex(kvp1).getValueType() == hoot::Enumeration)
               {
                 // Get the value from the corresponding tag in REF2
-                QString kvp2 =
-                  OsmSchema::toKvp(
-                    tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
-
+                QString kvp2 = OsmSchema::toKvp(tag1.key(), _map->getElement(eid)->getTags()[tag1.key()]);
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
                 _coOccurrence[kvp1][kvp2]++;
               }
             }
-
             // now loop through the REF2 tag list and fill in any missing tags.
-            for (Tags::const_iterator tag2 = _map->getElement(*eid)->getTags().begin();
-                 tag2 != _map->getElement(*eid)->getTags().end(); ++tag2 )
+            const Tags& tags2 = _map->getElement(eid)->getTags();
+            for (auto tag2 = tags2.begin(); tag2 != tags2.end(); ++tag2 )
             {
               QString kvp2 = OsmSchema::toKvp(tag2.key(),tag2.value());
 
               // Skip the tags that are common
-              if (e->getTags().contains(tag2.key())) continue;
+              if (tags.contains(tag2.key())) continue;
 
               if (OsmSchema::getInstance().getTagVertex(kvp2).getValueType() == hoot::Enumeration)
               {
                 // "Missing" == "" tag value
                 QString kvp1 = OsmSchema::toKvp(tag2.key(),"");
-
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
                 _coOccurrence[kvp1][kvp2]++;
               }
-
             }
-
             // now try matching up the "name" fields
-            QString name1 = e->getTags()["name"];
-            QString name2 = _map->getElement(*eid)->getTags()["name"];
+            QString name1 = tags["name"];
+            QString name2 = _map->getElement(eid)->getTags()["name"];
 
             QString kvpNull = OsmSchema::toKvp("name","<NULL>");
             QString kvpNonNull = OsmSchema::toKvp("name","<NON NULL>");
@@ -179,32 +165,19 @@ public:
             if (name1 == "")
             {
               if (name2 == "")
-              {
                 _coOccurrence[kvpNull][kvpNull]++;
-              }
               else
-              {
                 _coOccurrence[kvpNull][kvpNonNull]++;
-              }
             }
             else if (name2 == "")
-            {
               _coOccurrence[kvpNonNull][kvpNull]++;
-            }
             else
             {
               // Check if the names match
-              double nameScore = _calculateNameScore(e, _map->getElement(*eid));
-              bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonNameScoreThreshold();
-
-              if (nameMatch)
-              {
+              if (_calculateNameScore(e, _map->getElement(eid)) >= ConfigOptions().getPoiPolygonNameScoreThreshold())
                 _coOccurrence[kvpSame][kvpSame]++;
-              }
               else
-              {
                 _coOccurrence[kvpNonNull][kvpNonNull]++;
-              }
             }
           }
         }
@@ -248,14 +221,11 @@ QString AttributeCoOccurrence::printTable()
 {
   TextTable::Data data;
 
-  for (CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
+  for (auto it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
   {
     // Get the list of keys and build a reverse matrix
-    for (HashMap<QString, int>::const_iterator jt = it->second.begin();
-         jt != it->second.end(); ++jt)
-    {
+    for (auto jt = it->second.begin(); jt != it->second.end(); ++jt)
       data[jt->first][it->first] = jt->second;
-    }
   }
 
   TextTable table(data);
@@ -270,24 +240,18 @@ QString AttributeCoOccurrence::printList()
   QString result;
 
   // Build a list of REF1 keys so we can sort the table
-  for (CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
-  {
+  for (auto it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
     keyList.append(it->first);
-  }
 
   keyList.sort();
 
   // Print the Matrix as a list, sorted by REF1 keys
-  result += QString("N  : %1 -> %2\n").arg(MetadataTags::Ref1()).arg(MetadataTags::Ref2());
-
-  for (int it=0; it < keyList.size(); it++)
+  result.append(QString("N  : %1 -> %2\n").arg(MetadataTags::Ref1(), MetadataTags::Ref2()));
+  for (const auto& key : qAsConst(keyList))
   {
-    CoOccurrenceHash::const_iterator jt = _resultMatrix.find(keyList[it]);
-
-    for (HashMap<QString, int>::const_iterator kt = jt->second.begin(); kt != jt->second.end(); ++kt)
-    {
-      result += QString("%1: %2 -> %3\n").arg(kt->second,-3,10).arg(keyList[it]).arg(kt->first);
-    }
+    CoOccurrenceHash::const_iterator jt = _resultMatrix.find(key);
+    for (auto kt = jt->second.begin(); kt != jt->second.end(); ++kt)
+      result += QString("%1: %2 -> %3\n").arg(kt->second,-3,10).arg(key, kt->first);
   }
 
   return result;

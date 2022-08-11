@@ -105,22 +105,23 @@ void ReuseNodeIdsOnWayOp::apply(const std::shared_ptr<OsmMap>& map)
   std::shared_ptr<IdSwap> swap = std::make_shared<IdSwap>();
   //  For closed ways the use the unique node count
   size_t toNodeCount = to->getNodeCount();
-  if (toNodeCount > 1 && to->getNodeId(0) == to->getNodeId(toNodeCount - 1))
+  if (toNodeCount > 1 && to->getNodeId(0) == to->getNodeId(static_cast<int>(toNodeCount) - 1))
     toNodeCount--;
   size_t fromNodeCount = from->getNodeCount();
-  if (fromNodeCount > 1 && from->getNodeId(0) == from->getNodeId(fromNodeCount - 1))
+  if (fromNodeCount > 1 && from->getNodeId(0) == from->getNodeId(static_cast<int>(fromNodeCount) - 1))
     fromNodeCount--;
-  //  Iterate all of the "from" way's node IDs making sure not to iterate
-  //  off of the end of the "to" way either
-  for (size_t fromIndex = 0, toIndex = 0;
-       fromIndex < fromNodeCount && toIndex < toNodeCount;
-       ++fromIndex)
+  size_t toIndex = 0;
+  //  Iterate all of the "from" way's node IDs
+  for (size_t fromIndex = 0; fromIndex < fromNodeCount; ++fromIndex)
   {
-    long fromNodeId = from->getNodeId(fromIndex);
+    //  Make sure not to iterate off of the end of the "to" way
+    if (toIndex >= toNodeCount)
+      break;
+    long fromNodeId = from->getNodeId(static_cast<int>(fromIndex));
     //  Skip any shared node in the from way
     if (nodeToWayMap->getWaysByNode(fromNodeId).size() == 1)
     {
-      long toNodeId = to->getNodeId(toIndex);
+      long toNodeId = to->getNodeId(static_cast<int>(toIndex));
       //  Skip any shared node in the to way
       while (nodeToWayMap->getWaysByNode(toNodeId).size() > 1 && toIndex < toNodeCount)
       {

@@ -54,9 +54,9 @@ namespace hoot
 int MatchFeatureExtractor::logWarnCount = 0;
 
 MatchFeatureExtractor::MatchFeatureExtractor(bool evenClasses)
+  : _evenClasses(evenClasses),
+    _matchFactory(&MatchFactory::getInstance())
 {
-  _evenClasses = evenClasses;
-  _matchFactory = &MatchFactory::getInstance();
 }
 
 void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator>& m)
@@ -64,8 +64,8 @@ void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator>&
   _creators.push_back(m);
 }
 
-MatchType MatchFeatureExtractor::_getActualMatchType(
-  const set<ElementId> &eids, const std::shared_ptr<const OsmMap>& map) const
+MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
+                                                     const std::shared_ptr<const OsmMap>& map) const
 {
   set<QString> ref1, ref2, review;
 
@@ -84,44 +84,34 @@ MatchType MatchFeatureExtractor::_getActualMatchType(
   }
 
   // go through the set of provided elements
-  for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
+  for (const auto& eid : eids)
   {
-    const std::shared_ptr<const Element>& e = map->getElement(*it);
+    const std::shared_ptr<const Element>& e = map->getElement(eid);
+    const Tags& tags = e->getTags();
     if (e->getStatus() == Status::Unknown1)
     {
-      QString r = e->getTags()[MetadataTags::Ref1()];
-      // ignore all features that haven't been matched.
-      if (r != "todo")
-      {
+      QString r = tags[MetadataTags::Ref1()];
+      if (r != "todo")  //  ignore all features that haven't been matched.
         ref1.insert(r);
-      }
     }
     else if (e->getStatus() == Status::Unknown2)
     {
       QStringList list;
-      e->getTags().readValues(MetadataTags::Ref2(), list);
+      tags.readValues(MetadataTags::Ref2(), list);
 
-      for (int i = 0; i < list.size(); i++)
+      for (const auto& r : qAsConst(list))
       {
-        QString r = list[i];
-        // ignore all features that haven't been matched.
-        if (r != "todo")
-        {
+        if (r != "todo")  //  ignore all features that haven't been matched.
           ref2.insert(r);
-        }
       }
 
       QStringList reviewList;
-      e->getTags().readValues("REVIEW", reviewList);
+      tags.readValues("REVIEW", reviewList);
 
-      for (int i = 0; i < reviewList.size(); i++)
+      for (const auto& r : qAsConst(reviewList))
       {
-        QString r = reviewList[i];
-        // ignore all features that haven't been matched.
-        if (r != "todo")
-        {
+        if (r != "todo")  //  ignore all features that haven't been matched.
           review.insert(r);
-        }
       }
     }
     else
@@ -142,9 +132,9 @@ MatchType MatchFeatureExtractor::_getActualMatchType(
 
   // if at least one of the ways matches at least one of the other ways then this is a good match.
   MatchType result = MatchType::Miss;
-  for (set<QString>::const_iterator it = ref1.begin(); it != ref1.end(); ++it)
+  for (const auto& tag : ref1)
   {
-    if (ref2.find(*it) != ref2.end())
+    if (ref2.find(tag) != ref2.end())
     {
       if (result == MatchType::Review)
       {
@@ -160,7 +150,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(
       }
       result = MatchType::Match;
     }
-    if (review.find(*it) != review.end())
+    if (review.find(tag) != review.end())
     {
       if (result == MatchType::Match)
       {
@@ -177,72 +167,53 @@ MatchType MatchFeatureExtractor::_getActualMatchType(
       result = MatchType::Review;
     }
   }
-
   return result;
 }
 
 QString MatchFeatureExtractor::getResults(bool useNulls)
 {
   set<QString> attributes;
-
-  for (vector<Sample>::const_iterator it = _samples.begin(); it != _samples.end(); ++it)
+  for (const auto& s : _samples)
   {
-    const Sample& s = *it;
-    for (Sample::const_iterator jt = s.begin(); jt != s.end(); ++jt)
+    for (auto jt = s.begin(); jt != s.end(); ++jt)
     {
       if (jt->first != "class")
-      {
         attributes.insert(jt->first);
-      }
     }
   }
 
-  QString result;
+  QStringList result;
 
   result += QString("@RELATION manipulations\n\n");
 
   for (set<QString>::const_iterator it = attributes.begin(); it != attributes.end(); ++it)
-  {
     result += QString("@ATTRIBUTE %1 NUMERIC\n").arg(*it);
-  }
-  result += QString("@ATTRIBUTE class {match,miss,review}\n\n");
 
+  result += QString("@ATTRIBUTE class {match,miss,review}\n\n");
   result += QString("@DATA\n");
 
   if (_evenClasses)
-  {
     _resampleClasses();
-  }
 
-  for (vector<Sample>::const_iterator st = _samples.begin(); st != _samples.end(); ++st)
+  for (const auto& s : _samples)
   {
-    const Sample& s = *st;
-
     QStringList l;
-    for (set<QString>::const_iterator it = attributes.begin(); it != attributes.end(); ++it)
+    for (const auto& attribute : attributes)
     {
-      if (s.find(*it) != s.end())
-      {
-        double v = s.find(*it)->second;
-        l.append(QString("%1").arg(v));
-      }
+      if (s.find(attribute) != s.end())
+        l.append(QString("%1").arg(s.find(attribute)->second));
       else
       {
         if (useNulls)
-        {
           l.append("?");
-        }
         else
-        {
           l.append("-1");
-        }
       }
     }
     MatchType type = MatchType(s.find("class")->second);
-    result += l.join(",") + "," + type.toString().toLower() + "\n";
+    result += QString("%1,%2\n").arg(l.join(","), type.toString().toLower());
   }
-
-  return result;
+  return result.join("");
 }
 
 void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
@@ -250,18 +221,17 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
   vector<ConstMatchPtr> matches;
   // We don't want to validate the thresholds here in order to do the full match feature extraction.
   // Reviews aren't applicable here, so just use the default value.
-  std::shared_ptr<const MatchThreshold> mt =
-    std::make_shared<MatchThreshold>(0.0, 0.0, 1.0, false);
+  std::shared_ptr<const MatchThreshold> mt = std::make_shared<MatchThreshold>(0.0, 0.0, 1.0, false);
   _matchFactory->createMatches(map, matches, std::shared_ptr<geos::geom::Geometry>(), mt);
   size_t matchCount = 0;
-  for (size_t i = 0; i < matches.size(); i++)
+  for (const auto& match : matches)
   {
-    const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i].get());
+    const MatchDetails* d = dynamic_cast<const MatchDetails*>(match.get());
     if (d == nullptr)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Match does not implement MatchDetails. " << matches[i]->toString());
+        LOG_WARN("Match does not implement MatchDetails. " << match->toString());
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -276,7 +246,7 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
         Sample s = d->getFeatures(map);
         LOG_VART(s.size());
 
-        set<pair<ElementId, ElementId>> pairs = matches[i]->getMatchPairs();
+        set<pair<ElementId, ElementId>> pairs = match->getMatchPairs();
         if (pairs.size() != 1)
         {
           if (logWarnCount < Log::getWarnMessageLimit())
@@ -326,33 +296,27 @@ void MatchFeatureExtractor::_resampleClasses()
   vector<Sample> classes[3];
 
   size_t maxAttrs = 0;
-  for (size_t i = 0; i < _samples.size(); i++)
-  {
-    maxAttrs = max(maxAttrs, _samples[i].size());
-  }
+  for (const auto& sample : _samples)
+    maxAttrs = max(maxAttrs, sample.size());
 
-  for (size_t i = 0; i < _samples.size(); i++)
+  for (const auto& sample : _samples)
   {
-    if (_samples[i].size() == maxAttrs)
+    if (sample.size() == maxAttrs)
     {
-      int classId = round(_samples[i]["class"]);
+      int classId = static_cast<int>(round(sample.at("class")));
       if (classId > MatchType::Review || classId < MatchType::Miss)
       {
-        LOG_VART(_samples[i]);
-        LOG_TRACE("Got class id: " << _samples[i]["class"]);
+        LOG_VART(sample);
+        LOG_TRACE("Got class id: " << sample.at("class"));
         throw HootException("Unexpected class id");
       }
-
-      classes[classId].push_back(_samples[i]);
+      classes[classId].push_back(sample);
     }
   }
 
   size_t minSize = classes[0].size();
-
   for (size_t i = 0; i < 3; i++)
-  {
     minSize = min(minSize, classes[i].size());
-  }
 
   _samples.clear();
   _samples.reserve(minSize * 3);

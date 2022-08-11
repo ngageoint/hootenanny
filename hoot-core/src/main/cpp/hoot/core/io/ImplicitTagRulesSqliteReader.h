@@ -78,8 +78,7 @@ public:
    * @return a set of implicitly derived tags, if they exist, for the given input words; an empty
    * tag set otherwise
    */
-  Tags getImplicitTags(
-    const QSet<QString>& words, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
+  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
 
   /**
    * Return a string containing relevant info about the rule database
