@@ -36,6 +36,9 @@
 //  Qt
 #include <QUrl>
 
+//  Geos
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
