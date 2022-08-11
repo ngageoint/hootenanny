@@ -71,12 +71,12 @@ var tLocal = {}
 var tPath = '';
 transDirList.forEach(function (dir) {
     try {
-        tLocal = require(dir + '/translationServerConfig.json');
-
-        Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
-
         // Defensive coding. Previously the config file had the path embedded in the JSON instead of using the path in the Hoot config
-        Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(dir + '/' + tLocal.schemaMap[k].split('/').pop()); });
+        if (dir.indexOf(HOOT_HOME) < 0) dir = HOOT_HOME + '/' + dir;
+
+        tLocal = require(dir + '/translationServerConfig.json');
+        Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
+        Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(dir + '/' + tLocal.schemaMap[k].split('/').pop());});
 
         Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(dir + '/' + tLocal.fcodeLookup[k].split('/').pop())});
 
@@ -95,7 +95,7 @@ transDirList.forEach(function (dir) {
         });
     } catch (e) {
         // Skipping the log statement due to it causing test failures when using diff on the output
-        // console.log('Skipping translations-local config');
+        console.log('Skipping:' + dir + '/translationServerConfig.json');
     }
 });
 
