@@ -38,13 +38,17 @@
 //  Qt
 #include <QUrlQuery>
 
+//  Geos
+#include <geos/geom/GeometryFactory.h>
+
 namespace hoot
 {
 
 ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, bool addProjection)
-  : _dataType(DataType::Text),
+  : _dataType(DataType::PlainText),
     _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
+    _isPolygon(false),
     _totalResults(0),
     _totalEnvelopes(0),
     _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
@@ -222,8 +226,7 @@ void ParallelBoundedApiReader::_process()
           if (_isQueryError(result, error))
           {
             //  Log the error
-//            LOG_DEBUG(error);
-            LOG_STATUS(error);
+            LOG_DEBUG(error);
             //  Split the envelope into quads and retry
             _splitEnvelope(envelope);
           }
@@ -291,7 +294,7 @@ void ParallelBoundedApiReader::_writeDebugMap(const QString& data, const QString
     switch (_dataType)
     {
     default:
-    case DataType::Text:      ext = "txt";      break;
+    case DataType::PlainText: ext = "txt";      break;
     case DataType::OsmXml:    ext = "osm";      break;
     case DataType::Json:      ext = "json";     break;
     case DataType::GeoJson:   ext = "geojson";  break;
@@ -336,14 +339,45 @@ void ParallelBoundedApiReader::_splitEnvelope(const geos::geom::Envelope &envelo
   double lat1 = envelope.getMinY();
   double lat2 = envelope.getMinY() + envelope.getHeight() / 2.0f;
   double lat3 = envelope.getMaxY();
+  //  Create the four envelopes
+  std::vector<geos::geom::Envelope> envelopes(
+        {
+          geos::geom::Envelope(lon1, lon2, lat1, lat2),
+          geos::geom::Envelope(lon2, lon3, lat1, lat2),
+          geos::geom::Envelope(lon1, lon2, lat2, lat3),
+          geos::geom::Envelope(lon2, lon3, lat2, lat3)
+        });
+  //  Lock down the _bbox queue
   std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-  //  Split the boxes into quads and push them onto the queue
-  _bboxes.emplace(lon1, lon2, lat1, lat2);
-  _bboxes.emplace(lon2, lon3, lat1, lat2);
-  _bboxes.emplace(lon1, lon2, lat2, lat3);
-  _bboxes.emplace(lon2, lon3, lat2, lat3);
-  //  Increment by three because 1 turned into 4, i.e. 3 more were added
-  _totalEnvelopes += 3;
+  if (_isPolygon)
+  {
+    //  Split the envelope and remove any sub-envelopes that don't intersect the original polygon
+    int envelope_count = 0;
+    const geos::geom::GeometryFactory* factory = geos::geom::GeometryFactory::getDefaultInstance();
+    //  Convert all of the envelopes
+    for (const auto& e : envelopes)
+    {
+      //  Convert the envelope to a geometry
+      std::unique_ptr<geos::geom::Geometry> g = factory->toGeometry(&e);
+      //  Don't push envelopes that don't intersect the original geometry
+      if (g->intersects(_boundingPoly.get()))
+      {
+        _bboxes.emplace(e);
+        envelope_count++;
+      }
+    }
+    //  Update the number of envelopes after the split
+    if (envelope_count > 1)
+      _totalEnvelopes += (envelope_count - 1);
+  }
+  else
+  {
+    //  Split the boxes into quads and push them all onto the queue
+    for (const auto& e : envelopes)
+      _bboxes.emplace(e);
+    //  Increment by three because 1 turned into 4, i.e. 3 more were added
+    _totalEnvelopes += 3;
+  }
 }
 
 

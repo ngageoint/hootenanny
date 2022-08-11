@@ -64,7 +64,7 @@ namespace hoot
  * Also, be aware that this class can stream large datasets into an OsmMap so there is only one copy
  * of everything in memory. Be careful if you want to use it with large datasets.
  */
-class OsmJsonReader : public OsmMapReader, public Boundable, private ParallelBoundedApiReader
+class OsmJsonReader : public OsmMapReader, public Boundable, protected ParallelBoundedApiReader
 {
 public:
 
@@ -150,6 +150,10 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   bool isValidJson(const QString& jsonStr);
+
+  /** See Boundable */
+  void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override;
+  void setBounds(const geos::geom::Envelope& bounds) override;
 
   /**
    * @brief getVersion Overpass API version, if that's where JSON comes from
@@ -301,6 +305,15 @@ private:
 
   void _reset();
   void _resetIds();
+  /**
+   * @brief _loadBounds - Get either the `bounds` parameter value
+   *  or the bounds of a file listed in `bounds.file` parameter
+   * @return true if the bounds were parsed correctly
+   */
+  bool _loadBounds();
+
+  QString _boundsString;
+  QString _boundsFilename;
 
 protected:
 
