@@ -2496,6 +2496,7 @@ List of way IDs to find intersecting ways for when using `IntersectingWayCriteri
 * Default Value:
 ** `translations`
 ** `translations-local`
+** `rules`
 
 A list of paths to include in the javascript translator search path.
 NOTE: These are assumed to be under the $HOOT_HOME directory
