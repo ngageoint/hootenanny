@@ -129,6 +129,7 @@ class ImportCommand extends ExternalCommand {
 
         String input;
         List<String> envVars = new ArrayList<>();
+        envVars.add("OSM_USE_CUSTOM_INDEXING=NO"); //allows negative IDs on elements when read by OGR
         String[] urlParts = url.split("://");
         if (url.startsWith("s3")) {
             input = url.replace("s3://", "");
