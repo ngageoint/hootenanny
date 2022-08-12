@@ -47,14 +47,14 @@
 namespace hoot
 {
 
-ImplicitTagRawRulesDeriver::ImplicitTagRawRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_countFileLineCtr(0),
-_sortParallelCount(QThread::idealThreadCount()),
-_skipFiltering(false),
-_keepTempFiles(false),
-_tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
-_translateNamesToEnglish(true)
+ImplicitTagRawRulesDeriver::ImplicitTagRawRulesDeriver()
+  : _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _countFileLineCtr(0),
+    _sortParallelCount(QThread::idealThreadCount()),
+    _skipFiltering(false),
+    _keepTempFiles(false),
+    _tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
+    _translateNamesToEnglish(true)
 {
 }
 
@@ -66,9 +66,7 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   const int idealThreads = QThread::idealThreadCount();
   LOG_VART(idealThreads);
   if (_sortParallelCount < 1 || _sortParallelCount > idealThreads)
-  {
     setSortParallelCount(idealThreads);
-  }
   setSkipFiltering(options.getImplicitTaggingRawRulesDeriverSkipFiltering());
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
@@ -78,8 +76,7 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   if (_translateNamesToEnglish)
   {
     _translator =
-      Factory::getInstance().constructObject<ToEnglishTranslator>(
-        options.getLanguageTranslationTranslator());
+      Factory::getInstance().constructObject<ToEnglishTranslator>(options.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
     _translator->setId("ImplicitTagRawRulesDeriver");
@@ -88,18 +85,13 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 
 void ImplicitTagRawRulesDeriver::setElementCriterion(const QString& criterionName)
 {
-  ElementCriterionPtr criterion =
-    Factory::getInstance().constructObject<ElementCriterion>(criterionName);
+  ElementCriterionPtr criterion = Factory::getInstance().constructObject<ElementCriterion>(criterionName);
   std::shared_ptr<ImplicitTagEligibleCriterion> eligibleCrit =
     std::dynamic_pointer_cast<ImplicitTagEligibleCriterion>(criterion);
   if (eligibleCrit)
-  {
     _elementCriterion = eligibleCrit;
-  }
   else
-  {
     throw IllegalArgumentException("Invalid criterion type: " + criterionName);
-  }
 }
 
 void ImplicitTagRawRulesDeriver::_init()
@@ -113,9 +105,8 @@ void ImplicitTagRawRulesDeriver::_init()
       _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _countFile->setAutoRemove(!_keepTempFiles);
   if (!_countFile->open())
-  {
     throw HootException(QObject::tr("Error opening %1 for writing.").arg(_countFile->fileName()));
-  }
+
   LOG_DEBUG("Opened temp file: " << _countFile->fileName());
   if (_keepTempFiles)
   {
@@ -170,9 +161,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList& inputs,
         assert(!names.isEmpty());
 
         if (_translateNamesToEnglish)
-        {
           names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags(), _translator);
-        }
         LOG_VART(names);
 
         //get back only the tags that we'd be interested in applying to future elements implicitly
@@ -180,9 +169,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList& inputs,
         const QStringList kvps = _elementCriterion->getEligibleKvps(element->getTags());
         assert(!kvps.isEmpty());
         if (kvps.isEmpty())
-        {
           throw HootException("Kvps empty.");
-        }
 
         //parse whole names and token groups
         _parseNames(names, kvps);
@@ -223,13 +210,9 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList& inputs,
   LOG_INFO("Clearing word/tag associations...");
   _wordKeysToCountsValues.clear();
   if (tieCountsNeededResolved)
-  {
     _sortByWord(_tieResolvedCountFile);
-  }
   else
-  {
     _sortByWord(_dedupedCountFile);
-  }
 }
 
 void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
@@ -241,13 +224,9 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
   LOG_VARD(output);
 
   if (!_elementCriterion.get())
-  {
     throw HootException("No element type was specified.");
-  }
   if (inputs.isEmpty())
-  {
     throw HootException("No inputs were specified.");
-  }
   if (inputs.size() != translationScripts.size())
   {
     LOG_VARD(inputs.size());
@@ -256,21 +235,15 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
       "The size of the input datasets list must equal the size of the list of translation scripts.");
   }
   if (output.isEmpty())
-  {
     throw HootException("No output was specified.");
-  }
   _output = std::make_shared<QFile>();
   _output->setFileName(output);
   if (_output->exists() && !_output->remove())
-  {
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
-  }
   _output->close();
 
   if (_translateNamesToEnglish && !_translator.get())
-  {
     throw HootException("To English translation enabled but no translator was specified.");
-  }
 }
 
 void ImplicitTagRawRulesDeriver::_updateForNewWord(const QString& word, const QString& kvp)
@@ -322,9 +295,7 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
     QString translationDirection =
       conf().getString(ConfigOptions::getSchemaTranslationDirectionKey());
     if (translationDirection.trimmed().isEmpty())
-    {
       translationDirection = "toosm";
-    }
     LOG_VARD(translationDirection);
     translationVisitor->setTranslationDirection(translationDirection);
 
@@ -338,31 +309,23 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
 
 void ImplicitTagRawRulesDeriver::_parseNames(const QStringList& names, const QStringList& kvps)
 {
-  for (int i = 0; i < names.size(); i++)
+  for (auto name : qAsConst(names))
   {
-    QString name = names.at(i);
     LOG_VART(name);
 
     // '=' is used in the map key for kvps, so it needs to be escaped in the word
     if (name.contains("="))
-    {
       name = name.replace("=", "%3D");
-    }
-    for (int j = 0; j < kvps.size(); j++)
-    {
-      _updateForNewWord(name, kvps.at(j));
-    }
+    for (const auto& kvp : qAsConst(kvps))
+      _updateForNewWord(name, kvp);
 
     QStringList nameTokens = _tokenizer.tokenize(name);
     LOG_VART(nameTokens.size());
 
     // tokenization
 
-    for (int j = 0; j < nameTokens.size(); j++)
-    {
-      QString nameToken = nameTokens.at(j);
+    for (auto nameToken : qAsConst(nameTokens))
       _parseNameToken(nameToken, kvps);
-    }
 
     // going up to a token group size of two; tested up to group size three, but three didn't seem
     // to yield any better tagging results
@@ -389,15 +352,11 @@ void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStri
     const QString englishNameToken = _translator->translate(nameToken);
     LOG_VART(englishNameToken);
     if (!englishNameToken.isEmpty())
-    {
       nameToken = englishNameToken;
-    }
   }
 
-  for (int k = 0; k < kvps.size(); k++)
-  {
-    _updateForNewWord(nameToken, kvps.at(k));
-  }
+  for (const auto& kvp : qAsConst(kvps))
+    _updateForNewWord(nameToken, kvp);
 }
 
 void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
@@ -410,19 +369,14 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
       _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _sortedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_sortedCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_sortedCountFile->fileName()));
-  }
+    throw HootException(QString("Error opening %1 for writing.").arg(_sortedCountFile->fileName()));
   LOG_DEBUG("Opened sorted temp file: " << _sortedCountFile->fileName());
   if (_keepTempFiles)
   {
     LOG_WARN("Keeping temp file: " << _sortedCountFile->fileName());
   }
   if (!_countFile->exists())
-  {
     throw HootException("Unable to sort file; file doesn't exist.");
-  }
 
   //This counts each unique line occurrence, sorts by decreasing occurrence count (necessary for
   //next step which removes duplicate tag keys associated with the same word), and replaces the
@@ -457,15 +411,10 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
-  _dedupedCountFile =
-    std::make_shared<QTemporaryFile>(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
+  _dedupedCountFile = std::make_shared<QTemporaryFile>(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _dedupedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_dedupedCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_dedupedCountFile->fileName()));
-  }
+    throw HootException(QString("Error opening %1 for writing.").arg(_dedupedCountFile->fileName()));
   LOG_DEBUG("Opened dedupe temp file: " << _dedupedCountFile->fileName());
   if (_keepTempFiles)
   {
@@ -492,8 +441,7 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
     LOG_VART(tagKey);
     const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
     LOG_VART(wordTagKey);
-    const QString wordTagKeyCount =
-      word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
+    const QString wordTagKeyCount = word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
     LOG_VART(wordTagKeyCount);
     const QString tagValue = kvpParts[1];
     LOG_VART(tagValue);
@@ -509,13 +457,9 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
       _wordKeysToCountsValues[wordTagKey] = countStr % ";" % tagValue;
       //this unescaping must occur during the final temp file write
       if (word.contains("%3D"))
-      {
         word = word.replace("%3D", "=");
-      }
       else if (word.contains("%3d"))
-      {
         word = word.replace("%3d", "=");
-      }
       const QString updatedLine = countStr % "\t" % word % "\t" % kvp % "\n";
       LOG_VART(updatedLine);
       _dedupedCountFile->write(updatedLine.toUtf8());
@@ -557,15 +501,10 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     StringUtils::formatLargeNumber(_duplicatedWordTagKeyCountsToValues.size()) <<
     " duplicated word/tag key/counts...");
 
-  _tieResolvedCountFile =
-    std::make_shared<QTemporaryFile>(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
+  _tieResolvedCountFile = std::make_shared<QTemporaryFile>(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _tieResolvedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_tieResolvedCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_tieResolvedCountFile->fileName()));
-  }
+    throw HootException(QString("Error opening %1 for writing.").arg(_tieResolvedCountFile->fileName()));
   LOG_DEBUG("Opened tie resolve temp file: " << _tieResolvedCountFile->fileName());
   if (_keepTempFiles)
   {
@@ -573,8 +512,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
   }
   if (!_dedupedCountFile->open())
   {
-    throw HootException(
-      QObject::tr("Error opening %1 for reading.").arg(_dedupedCountFile->fileName()));
+    throw HootException(QString("Error opening %1 for reading.").arg(_dedupedCountFile->fileName()));
   }
 
   long lineCount = 0;
@@ -597,8 +535,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     LOG_VART(tagKey);
     const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
     LOG_VART(wordTagKey);
-    const QString wordTagKeyCount =
-      word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
+    const QString wordTagKeyCount = word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
     LOG_VART(wordTagKeyCount);
     const QString tagValue = kvpParts[1];
     LOG_VART(tagValue);
@@ -614,13 +551,11 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
       //up with a better way to handle this situation.
       QString lineWithMostSpecificKvp = line % "\n";
       const QStringList tagValues = _duplicatedWordTagKeyCountsToValues[wordTagKeyCount];
-      for (int i = 0; i < tagValues.size(); i++)
+      for (const auto& value : qAsConst(tagValues))
       {
-        const QString childKvp = tagKey % "=" % tagValues[i];
+        const QString childKvp = tagKey % "=" % value;
         if (OsmSchema::getInstance().isAncestor(childKvp, tagKey % "=" % tagValue))
-        {
           lineWithMostSpecificKvp = countStr % "\t" % word % "\t" % childKvp % "\n";
-        }
       }
       LOG_VART(lineWithMostSpecificKvp);
       _tieResolvedCountFile->write(lineWithMostSpecificKvp.toUtf8());
@@ -653,23 +588,17 @@ void ImplicitTagRawRulesDeriver::_sortByWord(const std::shared_ptr<QTemporaryFil
 {
   LOG_INFO("Sorting output by word...");
   if (!input->exists())
-  {
     throw HootException("Unable to sort file; file doesn't exist.");
-  }
 
   if (!ImplicitTagUtils::sortCommandExists())
-  {
     throw HootException("The UNIX sort command does not exist.");
-  }
 
   //sort by word, then by tag
   const QString cmd =
     "sort -t$'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
      input->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
-  {
     throw HootException("Unable to sort input file.");
-  }
 
   LOG_VARD(_output->fileName());
   LOG_INFO(

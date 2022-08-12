@@ -45,14 +45,11 @@ void ImplicitTagUtils::cleanName(QString& name)
 {
   name = name.simplified();
   if (name.startsWith("-"))
-  {
     name = name.replace(0, 1, "");
-  }
+
   _modifyUndesirableTokens(name);
   if (name.startsWith("_"))
-  {
     name = name.replace(0, 1, "");
-  }
 
   _filterOutStreets(name);
 }
@@ -60,61 +57,38 @@ void ImplicitTagUtils::cleanName(QString& name)
 void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
 {
   const QStringList nameCleaningTokens = ConfigOptions().getImplicitTaggingNameCleaningTokens();
-  for (int i = 0; i < nameCleaningTokens.size(); i++)
+  for (const auto& replacementEntry : qAsConst(nameCleaningTokens))
   {
-    const QString replacementEntry = nameCleaningTokens.at(i);
     const QStringList replacementEntryParts = replacementEntry.split("|");
     if (replacementEntryParts.size() != 2)
-    {
-      throw HootException(
-        "Invalid implicit tag rules name cleaning token entry: " + replacementEntry);
-    }
+      throw HootException("Invalid implicit tag rules name cleaning token entry: " + replacementEntry);
     const QString replaceText = replacementEntryParts.at(1);
     if (replaceText.trimmed().isEmpty())
-    {
-      throw HootException(
-        "Empty text specified for implicit tag rules name cleaning token entry.");
-    }
+      throw HootException("Empty text specified for implicit tag rules name cleaning token entry.");
     else if (replaceText == "e")
-    {
       name = name.replace(replacementEntryParts.at(0), "");
-    }
     else if (replaceText == "s")
-    {
       name = name.replace(replacementEntryParts.at(0), " ");
-    }
     else
-    {
       name = name.replace(replacementEntryParts.at(0), replaceText);
-    }
   }
 }
 
 void ImplicitTagUtils::_filterOutStreets(QString& name)
 {
   if (name.isEmpty() || !name.at(0).isDigit())
-  {
     return;
-  }
-  // This one seems kind of awkward and probably needs to be rethought or expanded somehow...
-  // apparently its to catch address parts like "2nd" or "3rd".
-  else if (name.endsWith("th") || name.endsWith("nd"))
-  {
+  else if (name.endsWith("st") || name.endsWith("nd") || name.endsWith("rd") || name.endsWith("th"))  //  Catch address parts like "2nd" or "3rd"
     name = "";
-  }
   else
   {
     // This list could be expanded.  See the note in the associated config file.
     const QStringList streetTypes = ConfigOptions().getAddressStreetTypes();
-    for (int i = 0; i < streetTypes.size(); i++)
+    for (const auto& streetTypeEntry : qAsConst(streetTypes))
     {
-      const QString streetTypeEntry = streetTypes.at(i);
       const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
-      if (streetTypeEntryParts.size() != 2)
-      {
-        // Currently we only support 1:1 street type to abbreviation pairings.
+      if (streetTypeEntryParts.size() != 2) // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
-      }
       if (name.endsWith(streetTypeEntryParts.at(0)) || name.endsWith(streetTypeEntryParts.at(1)))
       {
         name = "";
@@ -130,29 +104,22 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
   LOG_VART(translator.get());
   QStringList filteredNames;
   if (tags.contains("name:en"))
-  {
     filteredNames.append(tags.get("name:en"));
-  }
   else
   {
     QString altName = tags.get("alt_name");
     LOG_VART(altName);
-    for (int i = 0; i < names.size(); i++)
+    for (const auto& name : qAsConst(names))
     {
-      const QString name = names.at(i);
       LOG_VART(name);
       if (name != altName)
       {
         const QString englishName = translator->translate(name);
         LOG_VART(englishName);
         if (!englishName.isEmpty())
-        {
           filteredNames.append(englishName);
-        }
         else
-        {
           filteredNames.append(name);
-        }
         break;
       }
     }
@@ -161,20 +128,14 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
     if (filteredNames.isEmpty() && !altName.isEmpty())
     {
       if (altName.contains(";"))
-      {
         altName = altName.split(";")[0];
-      }
       LOG_VART(altName);
       const QString englishName = translator->translate(altName);
       LOG_VART(englishName);
       if (!englishName.isEmpty())
-      {
         filteredNames.append(englishName);
-      }
       else
-      {
         filteredNames.append(altName);
-      }
     }
   }
   LOG_VART(filteredNames.size());

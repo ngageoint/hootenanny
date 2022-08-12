@@ -45,13 +45,9 @@ ReplaceTagMerger::ReplaceTagMerger(bool swap)
 Tags ReplaceTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   if (_swap)
-  {
     return TagComparator::getInstance().replaceMerge(t2, t1, _overwriteExcludeTagKeys, _caseSensitive);
-  }
   else
-  {
     return TagComparator::getInstance().replaceMerge(t1, t2, _overwriteExcludeTagKeys, _caseSensitive);
-  }
 }
 
 void ReplaceTagMerger::setConfiguration(const Settings& conf)

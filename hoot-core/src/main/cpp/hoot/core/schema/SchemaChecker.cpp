@@ -36,16 +36,15 @@ namespace hoot
 
 int SchemaChecker::logWarnCount = 0;
 
-SchemaChecker::SchemaChecker(const OsmSchema& osmSchema) :
-_schemaVertexList(osmSchema.getAllTags())
+SchemaChecker::SchemaChecker(const OsmSchema& osmSchema)
+  : _schemaVertexList(osmSchema.getAllTags())
 {
 }
 
 void SchemaChecker::checkUnknownVertexType()
 {
-  for (unsigned int i = 0; i < _schemaVertexList.size(); i++)
+  for (const auto& schemaVertex : _schemaVertexList)
   {
-    SchemaVertex schemaVertex = _schemaVertexList[i];
     if (schemaVertex.isValid() == false)
     {
       if (logWarnCount < Log::getWarnMessageLimit())

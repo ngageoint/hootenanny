@@ -42,9 +42,8 @@ QSet<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
 
 HOOT_FACTORY_REGISTER(TagMerger, BuildingRelationMemberTagMerger)
 
-BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger(
-  const QSet<QString>& ignoreTagKeys) :
-_ignoreTagKeys(ignoreTagKeys)
+BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys)
+  : _ignoreTagKeys(ignoreTagKeys)
 {
 }
 
@@ -52,19 +51,16 @@ QSet<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
 {
   if (_buildingPartTagNames.empty())
   {
-    const std::vector<SchemaVertex>& buildingPartTags =
-      OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
-    for (size_t i = 0; i < buildingPartTags.size(); i++)
-    {
-      _buildingPartTagNames.insert(buildingPartTags[i].getName().split("=")[0]);
-    }
+    const std::vector<SchemaVertex>& buildingPartTags = OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
+    for (const auto& partTags : buildingPartTags)
+      _buildingPartTagNames.insert(partTags.getName().split("=")[0]);
     _buildingPartTagNames.insert(MetadataTags::BuildingPart());
   }
   return _buildingPartTagNames;
 }
 
-Tags BuildingRelationMemberTagMerger::mergeTags(
-  const Tags& relationTags, const Tags& constituentBuildingTags, ElementType /*elementType*/) const
+Tags BuildingRelationMemberTagMerger::mergeTags(const Tags& relationTags, const Tags& constituentBuildingTags,
+                                                ElementType /*elementType*/) const
 {
   LOG_VART(relationTags);
   LOG_VART(constituentBuildingTags);
@@ -81,45 +77,32 @@ Tags BuildingRelationMemberTagMerger::mergeTags(
 
   // go through all the tags
   const OsmSchema& schema = OsmSchema::getInstance();
-  for (Tags::const_iterator it = constituentBuildingTags.begin();
-       it != constituentBuildingTags.end(); ++it)
+  for (auto it = constituentBuildingTags.constBegin(); it != constituentBuildingTags.constEnd(); ++it)
   {
     // ignore any specified ignore keys
     if (_ignoreTagKeys.find(it.key()) == _ignoreTagKeys.end())
     {
       // If the tag isn't already in the relation, add it.
-      if (mergedTags.contains(it.key()) == false)
-      {
+      if (!mergedTags.contains(it.key()))
         mergedTags[it.key()] = it.value();
-      }
-      // If this is an arbitrary text value, then concatenate the values.
-      else if (schema.isTextTag(it.key()))
-      {
+      else if (schema.isTextTag(it.key()))  // If this is an arbitrary text value, then concatenate the values.
         mergedTags.appendValueIfUnique(it.key(), it.value());
-      }
-      // If the tag is in the relation and the tags differ, mark it empty.
-      else if (mergedTags[it.key()] != it.value())
-      {
+      else if (mergedTags[it.key()] != it.value())  // If the tag is in the relation and the tags differ, mark it empty.
         mergedTags[it.key()] = "";
-      }
     }
   }
   LOG_VART(mergedTags);
 
   // go through all the keys that were consistent for each of the parts and move them into the
   // relation.
-
   relationTagsCopy = mergedTags;
-  for (Tags::const_iterator it = relationTagsCopy.begin(); it != relationTagsCopy.end(); ++it)
+  for (auto it = relationTagsCopy.constBegin(); it != relationTagsCopy.constEnd(); ++it)
   {
     // If the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
     // parts...remove it.
-    if (it.value() == "")
-    {
+    if (it.value().isEmpty())
       mergedTags.remove(it.key());
-    }
   }
-
   LOG_VART(mergedTags);
 
   return mergedTags;

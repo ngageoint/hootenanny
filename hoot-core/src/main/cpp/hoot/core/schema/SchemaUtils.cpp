@@ -28,10 +28,10 @@
 #include "SchemaUtils.h"
 
 // Hoot
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/HasTypeCriterion.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
@@ -47,13 +47,9 @@ void SchemaUtils::validateTranslationUrl(const QString& url)
 {
   QFileInfo fileInfo(url);
   if (!fileInfo.exists())
-  {
     throw IllegalArgumentException("Translation file does not exist: " + url);
-  }
   else if (!url.endsWith(".js") && !url.endsWith(".py"))
-  {
     throw IllegalArgumentException("Invalid translation file format: " + url);
-  }
 }
 
 QString SchemaUtils::outputFormatToTranslationDirection(const QString& output)

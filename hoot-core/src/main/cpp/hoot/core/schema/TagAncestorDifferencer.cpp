@@ -26,30 +26,26 @@
  */
 #include "TagAncestorDifferencer.h"
 
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(TagDifferencer, TagAncestorDifferencer)
 
-TagAncestorDifferencer::TagAncestorDifferencer(QString ancestor) :
-  _ancestor(ancestor)
+TagAncestorDifferencer::TagAncestorDifferencer(QString ancestor)
+  : _ancestor(ancestor)
 {
   if (OsmSchema::getInstance().getTagVertex(ancestor).isEmpty())
-  {
     throw IllegalArgumentException("Please specify a valid ancestor tag.");
-  }
 }
 
 bool TagAncestorDifferencer::_isValidTag(const SchemaVertex& sv) const
 {
   if (_ancestor.isEmpty())
-  {
     throw IllegalArgumentException("Please specify a valid ancestor tag.");
-  }
   return OsmSchema::getInstance().isAncestor(sv.getName(), _ancestor);
 }
 
@@ -57,9 +53,7 @@ void TagAncestorDifferencer::setConfiguration(const Settings& conf)
 {
   _ancestor = ConfigOptions(conf).getTagAncestorDifferencerName();
   if (OsmSchema::getInstance().getTagVertex(_ancestor).isEmpty())
-  {
     throw IllegalArgumentException("Please specify a valid ancestor tag.");
-  }
 }
 
 }

@@ -82,8 +82,7 @@ public:
 
   QString getDescription() const override
   {
-    return
-      "Completely replaces tags in the secondary feature with those from the reference feature";
+    return "Completely replaces tags in the secondary feature with those from the reference feature";
   }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
@@ -104,8 +103,7 @@ public:
 
   QString getDescription() const override
   {
-    return
-      "Completely replaces tags in the reference feature with those from the secondary feature";
+    return "Completely replaces tags in the reference feature with those from the secondary feature";
   }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
