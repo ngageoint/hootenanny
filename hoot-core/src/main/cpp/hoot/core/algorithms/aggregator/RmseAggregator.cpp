@@ -38,11 +38,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, RmseAggregator)
 double RmseAggregator::aggregate(vector<double>& d) const
 {
   double sum = 0.0;
-  for (size_t i = 0; i < d.size(); i++)
-  {
-    sum += d[i] * d[i];
-  }
-  return sqrt(sum / double(d.size()));
+  for (auto val : d)
+    sum += (val * val);
+  return sqrt(sum / static_cast<double>(d.size()));
 }
 
 }

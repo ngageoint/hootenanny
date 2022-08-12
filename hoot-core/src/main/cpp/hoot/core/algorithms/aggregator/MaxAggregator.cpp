@@ -28,6 +28,8 @@
 
 #include <hoot/core/util/Factory.h>
 
+#include <algorithm>
+
 using namespace std;
 
 namespace hoot
@@ -37,12 +39,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MaxAggregator)
 
 double MaxAggregator::aggregate(vector<double>& d) const
 {
-  double result = d[0];
-  for (size_t i = 1; i < d.size(); i++)
-  {
-    result = max(d[i], result);
-  }
-  return result;
+  if (d.size() < 1)
+    throw hoot::IllegalArgumentException("Empty MaxAggregator vector");
+  return *max_element(d.begin(), d.end());
 }
 
 }

@@ -37,12 +37,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MinAggregator)
 
 double MinAggregator::aggregate(vector<double>& d) const
 {
-  double result = d[0];
-  for (size_t i = 1; i < d.size(); i++)
-  {
-    result = min(d[i], result);
-  }
-  return result;
+  if (d.size() < 1)
+    throw hoot::IllegalArgumentException("Empty MinAggregator vector");
+  return *min_element(d.begin(), d.end());
 }
 
 }
