@@ -39,35 +39,30 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 namespace hoot
 {
 
-ChangesetTaskGridReplacer::ChangesetTaskGridReplacer() :
-_originalDataSize(0),
-_reverseTaskGrid(false),
-_currentTaskGridCellId(-1),
-_killAfterNumChangesetDerivations(-1),
-_numChangesetsDerived(0),
-_totalChangesetDeriveTime(0.0),
-_averageChangesetDeriveTime(0.0),
-_tagQualityIssues(false)
+ChangesetTaskGridReplacer::ChangesetTaskGridReplacer()
+  : _originalDataSize(0),
+    _reverseTaskGrid(false),
+    _currentTaskGridCellId(-1),
+    _killAfterNumChangesetDerivations(-1),
+    _numChangesetsDerived(0),
+    _totalChangesetDeriveTime(0.0),
+    _averageChangesetDeriveTime(0.0),
+    _tagQualityIssues(false)
 {
 }
 
-OsmMapPtr ChangesetTaskGridReplacer::replace(
-  const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid)
+OsmMapPtr ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid)
 {
   if (!toReplace.startsWith("osmapidb://", Qt::CaseInsensitive))
-  {
     throw IllegalArgumentException("Data being replaced must be from an OSM API database.");
-  }
   if (!replacement.startsWith("hootapidb://", Qt::CaseInsensitive))
-  {
     throw IllegalArgumentException("Replacement data must be from a Hootenanny API database.");
-  }
 
   _opTimer.start();
   _subTaskTimer.start();
@@ -77,9 +72,7 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
   _initChangesetStats();
 
   if (_jobName.trimmed().isEmpty())
-  {
     _jobName = "job-" + UuidHelper::createUuid().toString();
-  }
 
   _initConfig();
   _taskGridBounds = taskGrid.getBounds();
@@ -157,19 +150,15 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
     // probably a cleaner way to do this reversal handling...
     if (!_reverseTaskGrid)
     {
-      for (QList<TaskGrid::TaskGridCell>::const_iterator taskGridCellItr = taskGridCells.begin();
-           taskGridCellItr != taskGridCells.end(); ++taskGridCellItr)
+      for (const auto& taskGridCell : qAsConst(taskGridCells))
       {
-        const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
         _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
         changesetCtr++;
       }
     }
     else
     {
-      for (QList<TaskGrid::TaskGridCell>::const_reverse_iterator taskGridCellItr =
-             taskGridCells.crbegin();
-           taskGridCellItr != taskGridCells.crend(); ++taskGridCellItr)
+      for (auto taskGridCellItr = taskGridCells.crbegin(); taskGridCellItr != taskGridCells.crend(); ++taskGridCellItr)
       {
         const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
         _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
@@ -194,14 +183,11 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
         StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
     }
     else
-    {
       throw;
-    }
   }
 }
 
-void ChangesetTaskGridReplacer::_replaceTaskGridCell(
-  const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
+void ChangesetTaskGridReplacer::_replaceTaskGridCell(const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
 {
   _currentTaskGridCellId = taskGridCell.id;
 
@@ -224,16 +210,12 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     QString::number(changesetNum) + " / " + StringUtils::formatLargeNumber(taskGridSize) +
     " for task grid cell: " + QString::number(taskGridCell.id);
   if (taskGridCell.replacementNodeCount != -1)
-  {
-    msg +=
-      ", replacement nodes: " + StringUtils::formatLargeNumber(taskGridCell.replacementNodeCount);
-  }
+    msg += ", replacement nodes: " + StringUtils::formatLargeNumber(taskGridCell.replacementNodeCount);
   msg+= "*********";
   LOG_STATUS(msg);
 
   _changesetCreator->setChangesetId(QString::number(taskGridCell.id));
-  _changesetCreator->create(
-    _dataToReplaceUrl, _replacementUrl, taskGridCell.bounds, changesetFile.fileName());
+  _changesetCreator->create(_dataToReplaceUrl, _replacementUrl, taskGridCell.bounds, changesetFile.fileName());
   const int numChanges = _changesetCreator->getNumChanges();
 
   _numChangesetsDerived++;
@@ -312,44 +294,32 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
   LOG_STATUS(
     "\nNode Totals:\n" <<
     "   Created: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]) << "\n" <<
     "   Modified: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]) << "\n" <<
     "   Deleted: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]) << "\n" <<
     "Way Totals:\n" <<
     "   Created: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]) << "\n" <<
     "   Modified: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]) << "\n" <<
     "   Deleted: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]) << "\n" <<
     "Relation Totals:\n" <<
     "   Created: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]) << "\n" <<
     "   Modified: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]) << "\n" <<
     "   Deleted: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]) << "\n" <<
     "Overall Totals:\n" <<
     "   Created: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY]) << "\n" <<
     "   Modified: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY]) << "\n" <<
     "   Deleted: " <<
-      StringUtils::formatLargeNumber(
-        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]) << "\n" <<
+      StringUtils::formatLargeNumber(_changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]) << "\n" <<
     "   Total Changes: " <<
       StringUtils::formatLargeNumber(
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY] +

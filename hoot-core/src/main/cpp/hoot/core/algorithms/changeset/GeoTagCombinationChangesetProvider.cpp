@@ -26,14 +26,11 @@
  */
 #include "GeoTagCombinationChangesetProvider.h"
 
-
-
 namespace hoot
 {
 
 void GeoTagCombinationChangesetProvider::close()
 {
-  // nothing to do here
 }
 
 std::shared_ptr<OGRSpatialReference> GeoTagCombinationChangesetProvider::getProjection() const

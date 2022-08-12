@@ -135,8 +135,7 @@ private:
   void _initConfig() const;
 
   void _replaceEntireTaskGrid(const TaskGrid& taskGrid);
-  void _replaceTaskGridCell(
-    const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
+  void _replaceTaskGridCell(const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
   void _initChangesetStats();
   void _printChangesetStats();
 

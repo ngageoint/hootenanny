@@ -31,7 +31,6 @@ namespace hoot
 
 void MemChangesetProvider::close()
 {
-  // nothing to do here
 }
 
 std::shared_ptr<OGRSpatialReference> MemChangesetProvider::getProjection() const

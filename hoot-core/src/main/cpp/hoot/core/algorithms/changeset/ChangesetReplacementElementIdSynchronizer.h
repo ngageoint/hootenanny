@@ -49,9 +49,8 @@ public:
   /**
    * see ElementIdSynchronizer
    */
-  void synchronize(
-    const OsmMapPtr& map1, const OsmMapPtr& map2,
-    const ElementType& elementType = ElementType::Unknown) override;
+  void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                   const ElementType& elementType = ElementType::Unknown) override;
 
 private:
 
