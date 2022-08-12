@@ -101,6 +101,8 @@ class ImportCommand extends ExternalCommand {
         //A boolean gets passed if we don't mean to translate, but the UI has a dummy translation name of None
         if (!isNoneTranslation) {
           options.add("schema.translation.script=" + translationPath);
+        } else {
+            options.add("schema.translation.script=" + new File(HOME_FOLDER, "translations/quick.js").getAbsolutePath());
         }
 
         if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
