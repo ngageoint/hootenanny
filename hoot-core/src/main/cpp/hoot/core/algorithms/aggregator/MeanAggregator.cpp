@@ -28,6 +28,8 @@
 
 #include <hoot/core/util/Factory.h>
 
+#include <algorithm>
+
 using namespace std;
 
 namespace hoot
@@ -37,12 +39,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MeanAggregator)
 
 double MeanAggregator::aggregate(vector<double>& d) const
 {
-  double sum = 0.0;
-  for (size_t i = 0; i < d.size(); i++)
-  {
-    sum += d[i];
-  }
-  return sum / double(d.size());
+  if (d.size() < 1)
+    throw hoot::IllegalArgumentException("Empty MeanAggregator vector");
+  return std::accumulate(d.begin(), d.end(), 0.0) / static_cast<double>(d.size());
 }
 
 }
