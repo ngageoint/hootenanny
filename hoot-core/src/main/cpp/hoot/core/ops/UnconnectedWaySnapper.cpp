@@ -43,6 +43,7 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -286,8 +287,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     // Ensure the way has the status we require for snapping.
     if (_wayToSnapCrit->isSatisfied(wayToSnap))
     {
-      _snapUnconnectedWayEndNodes(wayToSnap);
       _snapUnconnectedWayCrossings(wayToSnap);
+      _snapUnconnectedWayEndNodes(wayToSnap);
     }
 
     waysProcessed++;
@@ -676,8 +677,9 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
                 LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
               }
               else
-              { // Let's get wild, and just orphan the node. It should get cleaned up later.
+              { // Remove dupe node
                 testWay->removeNode(oldNodeId);
+                RemoveNodeByEid::removeNode(_map, oldNodeId, true);
                 LOG_DEBUG(QString("Orphaned old node %1").arg(oldNodeId));
               }
             }
