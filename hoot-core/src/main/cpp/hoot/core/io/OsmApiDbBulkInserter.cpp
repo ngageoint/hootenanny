@@ -185,15 +185,22 @@ void OsmApiDbBulkInserter::_verifyOutputCopySettings() const
 
 void OsmApiDbBulkInserter::close()
 {
-  LOG_TRACE("Closing writer...");
+  try
+  {
+    LOG_TRACE("Closing writer...");
 
-  _closeOutputFiles();
-  if (_destinationIsDatabase())
-    _database.close();
+    _closeOutputFiles();
+    if (_destinationIsDatabase())
+      _database.close();
 
-  _reset();
-  _sectionNames = _createSectionNameList();
-  setConfiguration(conf());
+    _reset();
+    _sectionNames = _createSectionNameList();
+    setConfiguration(conf());
+  }
+  catch (const std::exception& /*e*/)
+  {
+    //  Closing errors can be ignored
+  }
 }
 
 void OsmApiDbBulkInserter::_closeOutputFiles()
@@ -1059,7 +1066,7 @@ void OsmApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
     else
     {
       throw UnsupportedException(
-        QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId, way_id));
+        QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId).arg(way_id));
     }
     const QStringList wayNodeSqlStrs = _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex, version);
     _outputSections[ApiDb::getCurrentWayNodesTableName()]->write(wayNodeSqlStrs[0].toUtf8());
@@ -1145,7 +1152,8 @@ void OsmApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelati
                                                 const unsigned int memberSequenceIndex,
                                                 const unsigned long version)
 {
-  const QStringList relationMemberSqlStrs = _sqlFormatter->relationMemberToSqlStrings(sourceRelationDbId, memberDbId, member, memberSequenceIndex, version);
+  const QStringList relationMemberSqlStrs = _sqlFormatter->relationMemberToSqlStrings(sourceRelationDbId, memberDbId, member,
+                                                                                      memberSequenceIndex, static_cast<unsigned int>(version));
   _outputSections[ApiDb::getCurrentRelationMembersTableName()]->write(relationMemberSqlStrs[0].toUtf8());
   _outputSections[ApiDb::getRelationMembersTableName()]->write(relationMemberSqlStrs[1].toUtf8());
   _writeStats.relationMembersWritten++;

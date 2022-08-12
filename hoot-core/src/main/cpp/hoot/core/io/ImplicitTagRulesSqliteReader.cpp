@@ -479,7 +479,7 @@ void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags) c
 {
   QStringList tagValues;
   QStringList tagKeysWithDuplicatedValues;
-  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.constBegin(); tagItr != tags.constEnd(); ++tagItr)
   {
     const QString tagValue = tagItr.value();
     if (!tagValues.contains(tagValue))

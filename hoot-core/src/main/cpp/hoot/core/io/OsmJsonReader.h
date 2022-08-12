@@ -180,8 +180,6 @@ public:
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
 
-  bool isError() const { return ParallelBoundedApiReader::isError(); }
-
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -328,6 +326,8 @@ protected:
   unsigned int _getTimestamp(const std::string& field_name, const boost::property_tree::ptree& item) const;
   std::string _getUser(const std::string& field_name, const boost::property_tree::ptree& item) const;
   long _getUid(const std::string& field_name, const boost::property_tree::ptree& item) const;
+
+  friend class OsmJsonReaderTest;
 };
 
 }
