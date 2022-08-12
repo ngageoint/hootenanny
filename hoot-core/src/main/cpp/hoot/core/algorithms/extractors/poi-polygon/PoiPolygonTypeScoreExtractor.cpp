@@ -46,13 +46,13 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 std::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
 QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
 
-PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache) :
-_typeScoreThreshold(-1.0),
-_featureDistance(-1.0),
-_calculateMatchDistanceTruth(false),
-_translateTagValuesToEnglish(false),
-_noTypeFound(false),
-_infoCache(infoCache)
+PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache)
+  : _typeScoreThreshold(-1.0),
+    _featureDistance(-1.0),
+    _calculateMatchDistanceTruth(false),
+    _translateTagValuesToEnglish(false),
+    _noTypeFound(false),
+    _infoCache(infoCache)
 { 
 }
 
@@ -80,9 +80,7 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poly) const
 {
   if (!_infoCache)
-  {
     throw HootException("No cache passed to extractor.");
-  }
 
   LOG_VART(_translateTagValuesToEnglish);
 
@@ -105,9 +103,7 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
 
   double typeScore = _getTagScore(poi, poly);
   if (typeScore < 0.001)
-  {
     typeScore = 0.0;
-  }
   LOG_VART(typeScore);
   return typeScore;
 }
@@ -116,12 +112,9 @@ QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString& ca
 {
   if (_categoriesToSchemaTagValues[category].isEmpty())
   {
-    const std::vector<SchemaVertex> tags =
-      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::fromString(category));
-    for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
-         tagItr != tags.end(); ++tagItr)
+    const std::vector<SchemaVertex> tags = OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::fromString(category));
+    for (const auto& tag : tags)
     {
-      SchemaVertex tag = *tagItr;
       const QString tagVal = tag.getValue().toLower();
       if (!tagVal.contains("*"))  //skip wildcards
       {
@@ -140,11 +133,8 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString& tagKey, QSt
   LOG_VART(tagValue);
 
   //don't care about urls
-  if (tagValue.startsWith("http://", Qt::CaseInsensitive) ||
-      tagValue.startsWith("https://", Qt::CaseInsensitive))
-  {
+  if (tagValue.startsWith("http://", Qt::CaseInsensitive) || tagValue.startsWith("https://", Qt::CaseInsensitive))
     return;
-  }
 
   //If the tag key is not in the categories we're interested in, pass.
   const bool inABuildingOrPoiCategory =
@@ -154,8 +144,7 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString& tagKey, QSt
   LOG_VART(inABuildingOrPoiCategory);
   if (!inABuildingOrPoiCategory)
   {
-    LOG_TRACE(
-      "Input tag to translate: " << tagKey << "=" << tagValue << " is not a building/poi tag.");
+    LOG_TRACE("Input tag to translate: " << tagKey << "=" << tagValue << " is not a building/poi tag.");
     return;
   }
 
@@ -212,33 +201,28 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   const bool polyIsGenericPoi = polyTagList.size() == 1 && polyTagList.contains("poi=yes");
   const bool polyIsGenericBuilding = polyTagList.size() == 1 && polyTagList.contains("building=yes");
   if (!poiIsGenericPoi && !polyIsGenericPoi)
-  {
     excludeKvps.append("poi=yes");
-  }
   if (!poiIsGenericBuilding && !polyIsGenericBuilding)
-  {
     excludeKvps.append("building=yes");
-  }
   LOG_VART(poiIsGenericPoi);
   LOG_VART(poiIsGenericBuilding);
   LOG_VART(polyIsGenericPoi);
   LOG_VART(polyIsGenericBuilding);
 
   LOG_VART(excludeKvps);
-  for (int i = 0; i < excludeKvps.size(); i++)
+  for (const auto& excludeKvp : qAsConst(excludeKvps))
   {
-    const QString excludeKvp = excludeKvps.at(i);
     poiTagList.removeAll(excludeKvp);
     polyTagList.removeAll(excludeKvp);
   }
 
   // Can this be replaced with OsmSchema::score(const Tags& tags1, const Tags& tags2)?
-  for (int i = 0; i < poiTagList.size(); i++)
+  for (const auto& poi_kvp : qAsConst(poiTagList))
   {
-    const QString poiKvp = poiTagList.at(i).toLower();
-    for (int j = 0; j < polyTagList.size(); j++)
+    const QString poiKvp = poi_kvp.toLower();
+    for (const auto& poly_kvp : qAsConst(polyTagList))
     {
-      const QString polyKvp = polyTagList.at(j).toLower();
+      const QString polyKvp = poly_kvp.toLower();
       LOG_VART(poiKvp);
       LOG_VART(polyKvp);
 
@@ -266,8 +250,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
         {
           LOG_VART(_poiBestKvp);
           LOG_VART(_polyBestKvp);
-          PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-            poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
+          PoiPolygonDistanceTruthRecorder::recordDistanceTruth(poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
         }
         return result;
       }
@@ -277,10 +260,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   LOG_VART(_polyBestKvp);
 
   if (_calculateMatchDistanceTruth)
-  {
-    PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-      poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
-  }
+    PoiPolygonDistanceTruthRecorder::recordDistanceTruth(poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
 
   return result;
 }
@@ -288,18 +268,14 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) const
 {
   QStringList tagsList;
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString key = it.key();
     QStringList values = it.value().split(";");
-    for (int i = 0; i < values.size(); i++)
+    for (auto value : qAsConst(values))
     {
-      QString value = values.at(i);
-
       if (_translateTagValuesToEnglish)
-      {
         _translateTagValue(key, value);
-      }
 
       if ((OsmSchema::getInstance().getCategories(key, value) &
            (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
@@ -322,12 +298,7 @@ bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString& tagKey, c
   const bool t2HasVal = !t2Val.trimmed().isEmpty();
   tag1Val = t1Val;
   tag2Val = t2Val;
-  if (t1HasVal && t2HasVal &&
-      OsmSchema::getInstance().score(tagKey % "=" % t1Val, tagKey % "=" % t2Val) != 1.0)
-  {
-    return true;
-  }
-  return false;
+  return (t1HasVal && t2HasVal && OsmSchema::getInstance().score(tagKey % "=" % t1Val, tagKey % "=" % t2Val) != 1.0);
 }
 
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const ConstElementPtr& e1,
@@ -385,8 +356,7 @@ bool PoiPolygonTypeScoreExtractor::_failsReligionMatch(const ConstElementPtr& e1
 
     if (_haveConflictingTags("denomination", t1, t2, t1Val, t2Val))
     {
-      LOG_TRACE(
-        "Failed type match on different religious denominations: " << t1Val << ", " << t2Val);
+      LOG_TRACE("Failed type match on different religious denominations: " << t1Val << ", " << t2Val);
       return true;
     }
 

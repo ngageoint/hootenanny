@@ -28,11 +28,11 @@
 #define POIPOLYGONNAMESCOREEXTRACTOR_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/algorithms/extractors/NameExtractor.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -58,8 +58,7 @@ public:
    * @param poly the second element to examine
    * @return a name score
    */
-  double extract(
-    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
+  double extract(const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 

@@ -55,8 +55,7 @@ public:
    * @param poly a polygon element
    * @return the distance between the two elements
    */
-  double extract(
-    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
+  double extract(const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override

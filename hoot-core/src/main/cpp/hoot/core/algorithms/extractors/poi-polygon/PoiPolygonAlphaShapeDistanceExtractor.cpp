@@ -43,24 +43,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAlphaShapeDistanceExtractor)
 
-double PoiPolygonAlphaShapeDistanceExtractor::extract(
-  const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const
+double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
+                                                      const ConstElementPtr& poly) const
 {
   try
   {
     ElementToGeometryConverter elementToGeometryConverter(map.shared_from_this());
     std::shared_ptr<Geometry> polyGeom = elementToGeometryConverter.convertToGeometry(poly);
-    if (polyGeom->isEmpty() ||
-        QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
-    {
+    if (polyGeom->isEmpty() || QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
       return -1.0;
-    }
+
     std::shared_ptr<Geometry> poiGeom = elementToGeometryConverter.convertToGeometry(poi);
-    if (poiGeom->isEmpty() ||
-        QString::fromStdString(poiGeom->toString()).toUpper().contains("EMPTY"))
-    {
+    if (poiGeom->isEmpty() || QString::fromStdString(poiGeom->toString()).toUpper().contains("EMPTY"))
       return -1.0;
-    }
 
     ConstOsmMapPtr original = map.shared_from_this();
     OsmMapPtr polyMap = std::make_shared<OsmMap>();

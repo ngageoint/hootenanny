@@ -40,15 +40,13 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameScoreExtractor)
 
 std::shared_ptr<ToEnglishTranslator> PoiPolygonNameScoreExtractor::_translator;
 
-PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor() :
-_translateTagValuesToEnglish(false),
-_namesProcessed(0),
-_matchAttemptMade(false)
+PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor()
+  : _translateTagValuesToEnglish(false),
+    _namesProcessed(0),
+    _matchAttemptMade(false)
 {
   // default string comp
-  _stringComp =
-    std::make_shared<MeanWordSetDistance>(
-      std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
+  _stringComp = std::make_shared<MeanWordSetDistance>(std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
 }
 
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
@@ -60,34 +58,21 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 
   const QString stringCompClassName = config.getPoiPolygonNameStringComparer().trimmed();
   if (stringCompClassName.isEmpty())
-  {
-    throw IllegalArgumentException(
-      "No POI/Polygon string comparer specified (must implement StringDistance).");
-  }
+    throw IllegalArgumentException("No POI/Polygon string comparer specified (must implement StringDistance).");
   else
   {
     _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
     if (!_stringComp)
-    {
-      throw IllegalArgumentException(
-        "Invalid POI/Polygon string comparer (must implement StringDistance): " +
-        stringCompClassName);
-    }
-    std::shared_ptr<StringDistanceConsumer> strDistConsumer =
-      std::dynamic_pointer_cast<StringDistanceConsumer>(_stringComp);
+      throw IllegalArgumentException("Invalid POI/Polygon string comparer (must implement StringDistance): " + stringCompClassName);
+    std::shared_ptr<StringDistanceConsumer> strDistConsumer = std::dynamic_pointer_cast<StringDistanceConsumer>(_stringComp);
     if (strDistConsumer)
-    {
-      strDistConsumer->setStringDistance(
-        std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
-    }
+      strDistConsumer->setStringDistance(std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
   }
 
   setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
   {
-    _translator =
-      Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator());
+    _translator = Factory::getInstance().constructObject<ToEnglishTranslator>(config.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(className());
@@ -105,9 +90,7 @@ std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor()
     return std::make_shared<NameExtractor>(translateStringDist);
   }
   else
-  {
     return std::make_shared<NameExtractor>(_stringComp);
-  }
 }
 
 double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
@@ -119,9 +102,7 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
   _namesProcessed = nameExtractor->getNamesProcessed();
   _matchAttemptMade = nameExtractor->getMatchAttemptMade();
   if (nameScore < 0.001)
-  {
     nameScore = 0.0;
-  }
   LOG_VART(nameScore);
   return nameScore;
 }
