@@ -22,22 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDBBULKINSERTER_H
 #define OSMAPIDBBULKINSERTER_H
 
 // Hoot
-#include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/io/OsmApiDb.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
-#include <QTemporaryFile>
 #include <QElapsedTimer>
+#include <QTemporaryFile>
 
 // Tgs
 #include <tgs/BigContainers/BigMap.h>
@@ -159,25 +159,19 @@ public:
   void setStartingNodeId(long id)
   {
     if (id < 1)
-    {
       throw HootException("Invalid starting ID: " + QString::number(id));
-    }
     _idMappings.startingNodeId = id;
   }
   void setStartingWayId(long id)
   {
     if (id < 1)
-    {
       throw HootException("Invalid starting ID: " + QString::number(id));
-    }
     _idMappings.startingWayId = id;
   }
   void setStartingRelationId(long id)
   {
     if (id < 1)
-    {
       throw HootException("Invalid starting ID: " + QString::number(id));
-    }
     _idMappings.startingRelationId = id;
   }
   void setStxxlMapMinSize(long size) { _stxxlMapMinSize = size; }

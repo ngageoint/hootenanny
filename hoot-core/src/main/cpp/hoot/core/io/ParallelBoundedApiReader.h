@@ -36,6 +36,9 @@
 //  Qt
 #include <QUrl>
 
+//  Geos
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -119,7 +122,7 @@ protected:
   /** Type of data that is being downloaded, for internal use in derived classes */
   enum DataType
   {
-    Text,
+    PlainText,
     OsmXml,
     GeoJson,
     Json
@@ -131,6 +134,10 @@ protected:
   double _coordGridSize;
   /** Number of threads to process the HTTP requests */
   int _threadCount;
+  /** Is the bounds a polygon */
+  bool _isPolygon;
+  /** Value of the bounding box or polygon */
+  std::shared_ptr<geos::geom::Geometry> _boundingPoly;
 
   /**
    * @brief _sleep Sleep the current thread

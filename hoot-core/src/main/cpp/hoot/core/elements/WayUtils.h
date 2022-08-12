@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAY_UTILS_H
@@ -93,9 +93,8 @@ public:
    * @return a valid coordinate or an empty coordinate if the closest coordinate could not be
    * calculated
    */
-  static geos::geom::Coordinate closestWayCoordToNode(
-    const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
-    const double discretizationSpacing, const ConstOsmMapPtr& map);
+  static geos::geom::Coordinate closestWayCoordToNode(const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
+                                                      const double discretizationSpacing, const ConstOsmMapPtr& map);
 
   /**
    * Determines the ID of the closest way node on a way to another node not on the way
@@ -105,8 +104,7 @@ public:
    * @param map the map containing the input node and way
    * @return a way node ID
    */
-  static long closestWayNodeIdToNode(
-    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
+  static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Finds the closest way node index in a way to a specified node
@@ -116,8 +114,7 @@ public:
    * @param map map owning the node and way
    * @return closest index on the way to node or -1 if no index is found
    */
-  static long closestWayNodeIndexToNode(
-    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
+  static long closestWayNodeIndexToNode(const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Finds the closest way node insert index in a way to a specified node. The index can be used
@@ -128,8 +125,7 @@ public:
    * @param map map owning the node and way
    * @return closest insert index on the way to node or -1 if no index is found
    */
-  static long closestWayNodeInsertIndex(
-    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
+  static long closestWayNodeInsertIndex(const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Determines whether the start or end of a way is closer to a specified node
@@ -139,8 +135,7 @@ public:
    * @param map map containing the inputs way and node
    * @return true if the node is closer to the end of the way; false otherwise
    */
-  static bool endWayNodeIsCloserToNodeThanStart(
-    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
+  static bool endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Determines if two nodes belong to the same way
@@ -150,8 +145,7 @@ public:
    * @param map the map containing the nodes
    * @return true if there is at least one way that contains both nodes; false otherwise
    */
-  static bool nodesAreContainedInTheSameWay(
-    const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map);
+  static bool nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map);
 
   /**
    * Returns the IDs of all ways containing an input node
@@ -161,9 +155,8 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of way IDs
    */
-  static std::set<long> getContainingWayIds(
-    const long nodeId, const ConstOsmMapPtr& map,
-    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+  static std::set<long> getContainingWayIds(const long nodeId, const ConstOsmMapPtr& map,
+                                            const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
    * Returns all ways containing an input node
@@ -173,9 +166,8 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of const ways
    */
-  static std::vector<ConstWayPtr> getContainingWaysConst(
-    const long nodeId, const ConstOsmMapPtr& map,
-    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+  static std::vector<ConstWayPtr> getContainingWaysConst(const long nodeId, const ConstOsmMapPtr& map,
+                                                         const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
    * Returns all ways containing an input node
@@ -185,9 +177,8 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of ways
    */
-  static std::vector<WayPtr> getContainingWays(
-    const long nodeId, const ConstOsmMapPtr& map,
-    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+  static std::vector<WayPtr> getContainingWays(const long nodeId, const ConstOsmMapPtr& map,
+                                               const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
    * Returns the most specific feature types, as identified by the schema, for all ways containing
@@ -197,8 +188,7 @@ public:
    * @param map map which owns the input node
    * @return a unique collection of type key/value pair strings
    */
-  static std::set<QString> getContainingWaysMostSpecificTypes(
-    const long nodeId, const ConstOsmMapPtr& map);
+  static std::set<QString> getContainingWaysMostSpecificTypes(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
    * Determines if a specified node is contained by a way, given a list of way IDs
@@ -208,8 +198,7 @@ public:
    * @param map the map containing the nodes/ways
    * @return true if any way in the ID list contains the node; false otherwise
    */
-  static bool nodeContainedByAnyWay(
-    const long nodeId, const std::set<long>& wayIds, const ConstOsmMapPtr& map);
+  static bool nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds, const ConstOsmMapPtr& map);
 
   /**
    * Determines if a node is contained by any way in a map
@@ -265,8 +254,7 @@ public:
    * @return true if the node with ID nodeId belongs to a way that has any way nodes in common with
    * the way having ID wayId; false otherwise
    */
-  static bool nodeContainedByWaySharingNodesWithAnotherWay(
-    const long nodeId, const long wayId, const OsmMapPtr& map);
+  static bool nodeContainedByWaySharingNodesWithAnotherWay(const long nodeId, const long wayId, const OsmMapPtr& map);
 };
 
 }
