@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MANIPULATORFEATUREEXTRACTOR_H
@@ -91,7 +91,6 @@ private:
   // If true, then make sure there is an even representation from each class and only fully
   // populated records are represented.
   bool _evenClasses;
-  bool _useNulls;
   const MatchFactory* _matchFactory;
 
   MatchType _getActualMatchType(const std::set<ElementId> &eids,

@@ -171,6 +171,7 @@ sudo yum -y install \
     git-core \
     gnuplot \
     lcov \
+    devtoolset-$DEVTOOLSET_VERSION-libasan-devel \
     libffi-devel \
     libicu-devel \
     libpng-devel \
@@ -376,7 +377,7 @@ fi
 rm -rf $HOOT_HOME/userfiles/tmp
 
 # This is defensive!
-# We do this so that Tomcat doesnt. If it does, it screws the permissions up
+# We do this so that Tomcat doesn't. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
 
 # Update the gcc location to devtoolset

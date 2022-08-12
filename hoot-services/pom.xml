@@ -40,7 +40,7 @@
         <log4j2.version>2.17.1</log4j2.version>
         <net.jodah.version>0.5.10</net.jodah.version>
         <opennlp.version>1.9.3</opennlp.version>
-        <postgresql.version>42.3.3</postgresql.version>
+        <postgresql.version>42.4.1</postgresql.version>
         <querydsl.version>4.4.0</querydsl.version>
         <reflections.version>0.9.12</reflections.version>
         <rhino.version>1.7.13</rhino.version>

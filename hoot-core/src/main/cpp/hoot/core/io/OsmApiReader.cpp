@@ -44,13 +44,15 @@
 // Qt
 #include <QBuffer>
 
+//  Geos
+#include <geos/geom/GeometryFactory.h>
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiReader)
 
 OsmApiReader::OsmApiReader()
-  : _isPolygon(false)
 {
   setConfiguration(conf());
   //  When reading in from the OSM API there won't be duplicates unless we are
@@ -74,12 +76,12 @@ OsmApiReader::~OsmApiReader()
 
 void OsmApiReader::setConfiguration(const Settings& conf)
 {
-  ConfigOptions configOptions(conf);
-  setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
-  setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
-  setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
-  _boundsString = configOptions.getBounds();
-  _boundsFilename = configOptions.getBoundsInputFile();
+  ConfigOptions config(conf);
+  setMaxThreads(config.getReaderHttpBboxThreadCount());
+  setCoordGridSize(config.getReaderHttpBboxMaxSize());
+  setMaxGridSize(config.getReaderHttpBboxMaxDownloadSize());
+  _boundsString = config.getBounds();
+  _boundsFilename = config.getBoundsInputFile();
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
@@ -205,14 +207,18 @@ void OsmApiReader::close()
 
 void OsmApiReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
 {
-  _isPolygon = (bounds ? !bounds->isRectangle() : false);
-  _bounds = bounds;
+  //  Check if the bounds are rectangular
+  _isPolygon = bounds ? !bounds->isRectangle() : false;
+  _boundingPoly = bounds;
+  Boundable::setBounds(bounds);
 }
 
 void OsmApiReader::setBounds(const geos::geom::Envelope& bounds)
 {
+  //  An envelope isn't a poly bounds
   _isPolygon = false;
-  setBounds(GeometryUtils::envelopeToPolygon(bounds));
+  _boundingPoly.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release());
+  Boundable::setBounds(bounds);
 }
 
 bool OsmApiReader::_loadBounds()
@@ -221,7 +227,8 @@ bool OsmApiReader::_loadBounds()
   //  Try to read the bounds from the `bounds` string
   if (_boundsString != ConfigOptions::getBoundsDefaultValue())
   {
-    _boundingPoly =  GeometryUtils::boundsFromString(_boundsString, isEnvelope);
+    _boundingPoly = GeometryUtils::boundsFromString(_boundsString, isEnvelope);
+    _bounds = _boundingPoly;
     _isPolygon = !isEnvelope;
     return true;
   }
@@ -229,6 +236,7 @@ bool OsmApiReader::_loadBounds()
   else if (_boundsFilename != ConfigOptions::getBoundsInputFileDefaultValue())
   {
     _boundingPoly = GeometryUtils::readBoundsFromFile(_boundsFilename, isEnvelope);
+    _bounds = _boundingPoly;
     _isPolygon = !isEnvelope;
     return true;
   }

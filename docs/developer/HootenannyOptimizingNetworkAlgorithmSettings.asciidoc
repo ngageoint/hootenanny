@@ -65,7 +65,7 @@ Network options may be dependent upon each other, so testing them individually m
 desired result. You can, however, limit the range of configuration option values in which you have 
 some certainty are already close to their optimal value. Also, you may reduce the number of tests 
 you run the utility command against but at the end of the day you will need all Hootenanny tests to 
-passing against the configuration you derive. There isn't any good rule of thumb about how many 
+passing against the configuration you derive. There isn't any good general rule about how many 
 iterations to run `optimize-network-conf` yet. After some experimentation you may find that past a 
 certain number of iterations, very long amounts of time pass without another optimal configuration 
 being found, and you can use that number of iterations.

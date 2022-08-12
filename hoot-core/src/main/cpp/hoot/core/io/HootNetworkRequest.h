@@ -55,6 +55,12 @@ public:
   /** Constructor */
   HootNetworkRequest();
   /**
+   * @brief HootNetworkRequest
+   * @param key_path - Path to PKCS12 SSL key
+   * @param pass_phrase - Passphrase for SSL key
+   */
+  HootNetworkRequest(const QString& key_path, const QString& pass_phrase);
+  /**
    * @brief HootNetworkRequest - oauth1
    * @param consumer_key - OAuth consumer key
    * @param consumer_secret - OAuth consumer secret key
@@ -191,12 +197,15 @@ private:
   std::shared_ptr<OAuth::Consumer> _consumer;
   /** OAuth 1.0 request token object */
   std::shared_ptr<OAuth::Token> _tokenRequest;
-
   /** OAuth 2.0 flag and token */
   bool _useOAuth2;
   QString _oauth2AccessToken;
   /** Flag set when the timer times out */
   bool _timedOut;
+  /** Pathname for PKCS-12 SSL key */
+  QString _key_path;
+  /** Passphrase for PKCS-12 SSL key */
+  QString _pass_phrase;
 };
 
 using HootNetworkRequestPtr = std::shared_ptr<HootNetworkRequest>;
