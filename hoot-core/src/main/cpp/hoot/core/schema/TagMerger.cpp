@@ -29,8 +29,8 @@
 namespace hoot
 {
 
-TagMerger::TagMerger() :
-_caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive())
+TagMerger::TagMerger()
+  : _caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive())
 {
 }
 

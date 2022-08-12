@@ -33,8 +33,7 @@ using namespace std;
 namespace hoot
 {
 
-double TagFilteredDifferencer::diff(
-  const ConstOsmMapPtr&, const ConstElementPtr& e1, const ConstElementPtr& e2) const
+double TagFilteredDifferencer::diff(const ConstOsmMapPtr&, const ConstElementPtr& e1, const ConstElementPtr& e2) const
 {
   const OsmSchema& schema = OsmSchema::getInstance();
 
@@ -43,21 +42,17 @@ double TagFilteredDifferencer::diff(
 
   double result = 1;
 
-  for (size_t i = 0; i < v1.size(); ++i)
+  for (const auto& vertex1 : v1)
   {
-    if (_isValidTag(v1[i]))
+    if (_isValidTag(vertex1))
     {
-      for (size_t j = 0; j < v2.size(); ++j)
+      for (const auto& vertex2 : v2)
       {
-        if (_isValidTag(v2[j]))
-        {
-          const double score = 1 - schema.score(v1[i], v2[j]);
-          result = min(score, result);
-        }
+        if (_isValidTag(vertex2))
+          result = min(result, 1 - schema.score(vertex1, vertex2));
       }
     }
   } 
-
   return result;
 }
 

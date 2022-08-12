@@ -115,8 +115,7 @@ private:
   void _countTagsStreaming(const QString& input, std::map<QString, int>& tagCounts);
   void _countTagsMemoryBound(const QStringList& inputs, std::map<QString, int>& tagCounts);
   int _processElement(const ConstElementPtr& element, std::map<QString, int>& tagCounts);
-  void _processTagKey(
-    const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
+  void _processTagKey(const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
 
   QString _getPercentageStr(const double percentage) const;
 };

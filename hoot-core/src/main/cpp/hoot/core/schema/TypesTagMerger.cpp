@@ -106,8 +106,7 @@ Tags TypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*
     // we don't want to be overwritten.
     if (_skipTagKeys.find(it.key()) != _skipTagKeys.end() || _overwriteExcludeTagKeys.contains(it.key()))
     {
-      LOG_TRACE(
-        "Explicitly skipping type handling for tag: " << it.key() << "=" <<  it.value() << "...");
+      LOG_TRACE("Explicitly skipping type handling for tag: " << it.key() << "=" <<  it.value() << "...");
       skippingTagPreservation = true;
     }
     // ignore metadata tags
@@ -251,7 +250,6 @@ void TypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
       tags.set(ALT_TYPES_TAG_KEY, altTypesCopy.join(";"));
     }
   }
-
   if (tags[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
     tags.remove(ALT_TYPES_TAG_KEY);
 }

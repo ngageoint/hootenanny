@@ -64,8 +64,7 @@ public:
   /**
    * @see TagDifferencer
    */
-  double diff(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const override;
+  double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const override;
 
   void setConfiguration(const Settings& conf) override;
 
@@ -79,7 +78,7 @@ private:
   {
   public:
 
-    Comparison() : same(0), different(0) {}
+    Comparison() : same(0), different(0) { }
     int same;
     int different;
   };
@@ -87,7 +86,7 @@ private:
   Comparison _compare(const Tags& t1, const Tags& t2) const;
 
   std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
-    const ConstElementPtr& in) const;
+                                                                         const ConstElementPtr& in) const;
 
   /**
    * Does a lazy load of the translator to avoid initializing configuration options that aren't

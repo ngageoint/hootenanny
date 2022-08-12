@@ -50,50 +50,40 @@ TranslatedTagDifferencer::TranslatedTagDifferencer()
   setConfiguration(conf());
 }
 
-TranslatedTagDifferencer::Comparison TranslatedTagDifferencer::_compare(const Tags& t1,
-  const Tags& t2) const
+TranslatedTagDifferencer::Comparison TranslatedTagDifferencer::_compare(const Tags& t1, const Tags& t2) const
 {
   Comparison result;
   result.different = 0;
   result.same = 0;
   QSet<QString> touched;
 
-  for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+  for (auto it = t1.constBegin(); it != t1.constEnd(); ++it)
   {
     touched.insert(it.key());
     if (_ignoreList.contains(it.key()) == false)
     {
       if (it.value() == t2.get(it.key()))
-      {
         result.same++;
-      }
       else
-      {
         result.different++;
-      }
     }
   }
 
-  for (Tags::const_iterator it = t2.begin(); it != t2.end(); ++it)
+  for (auto it = t2.constBegin(); it != t2.constEnd(); ++it)
   {
     if (_ignoreList.contains(it.key()) == false && touched.contains(it.key()) == false)
     {
       if (it.value() == t1.get(it.key()))
-      {
         result.same++;
-      }
       else
-      {
         result.different++;
-      }
     }
   }
-
   return result;
 }
 
 double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-  const ConstElementPtr& e2) const
+                                      const ConstElementPtr& e2) const
 {
   // translate the tags for comparison
   vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf1 = _translate(map, e1);
@@ -127,28 +117,25 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
       ScriptToOgrSchemaTranslator::TranslatedFeature> ;
   Saps sap(cost);
 
-  for (size_t i = 0; i < tf1.size(); i++)
-  {
-    sap.addActor(&(tf1[i]));
-  }
-  for (size_t i = 0; i < tf2.size(); i++)
-  {
-    sap.addTask(&(tf2[i]));
-  }
+  for (const auto& feature1 : tf1)
+    sap.addActor(&feature1);
+
+  for (const auto& feature2 : tf2)
+    sap.addTask(&feature2);
 
   vector<Saps::ResultPair> pairs = sap.calculatePairing();
 
   Comparison c;
-  for (size_t i = 0; i < pairs.size(); i++)
+  for (const auto& p : pairs)
   {
-    Tags t1 = _toTags(pairs[i].actor);
-    Tags t2 = _toTags(pairs[i].task);
+    Tags t1 = _toTags(p.actor);
+    Tags t2 = _toTags(p.task);
     Comparison c1 = _compare(t1, t2);
     c.same += c1.same;
     c.different += c1.different;
   }
 
-  return 1.0 - ((double)c.same / (double)(c.same + c.different));
+  return 1.0 - (static_cast<double>(c.same) / static_cast<double>(c.same + c.different));
 }
 
 std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTranslator() const
@@ -161,13 +148,9 @@ std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTrans
     st->setErrorTreatment(StrictOff);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
     if (!_translator)
-    {
-      throw HootException("Error allocating translator, the translation script must support "
-                          "converting to OGR.");
-    }
+      throw HootException("Error allocating translator, the translation script must support converting to OGR.");
     _translator->getOgrOutputSchema();
   }
-
   return _translator;
 }
 
@@ -183,29 +166,24 @@ void TranslatedTagDifferencer::setConfiguration(const Settings& conf)
 Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrSchemaTranslator::TranslatedFeature* tf)
 {
   Tags result;
-
   if (tf)
   {
     std::shared_ptr<Feature> f = tf->feature;
     QString layer = tf->tableName;
 
     const QVariantMap& vm = f->getValues();
-    for (QVariantMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
-    {
+    for (auto it = vm.begin(); it != vm.end(); ++it)
       result[it.key()] = it.value().toString();
-    }
     result["__LAYER__"] = layer;
   }
-
   return result;
 }
 
-vector<ScriptToOgrSchemaTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
-  const ConstOsmMapPtr& map, const ConstElementPtr& e) const
+vector<ScriptToOgrSchemaTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(const ConstOsmMapPtr& map,
+                                                                                            const ConstElementPtr& e) const
 {
   std::shared_ptr<Geometry> g = ElementToGeometryConverter(map).convertToGeometry(e);
   Tags t = e->getTags();
-
   return _getTranslator()->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
 }
 

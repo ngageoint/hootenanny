@@ -52,9 +52,8 @@ public:
    * @param value tag value to apply to the filter
    * @param category schema category to apply to the filter
    */
-  TagFilter(
-    const QString& key, const QString& value,
-    const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
+  TagFilter(const QString& key, const QString& value,
+            const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
 
   /**
    * Creates a tag filter from a JSON node
