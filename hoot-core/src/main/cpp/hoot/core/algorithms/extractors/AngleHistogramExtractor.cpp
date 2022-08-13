@@ -57,20 +57,15 @@ public:
   void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
-    {
       _addWay(std::dynamic_pointer_cast<const Way>(e));
-    }
     else if (e->getElementType() == ElementType::Relation)
     {
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
       const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
-      for (size_t i = 0; i < relationMembers.size(); i++)
+      for (const auto& member : relationMembers)
       {
-        RelationData::Entry member = relationMembers[i];
         if (member.getElementId().getType() == ElementType::Way)
-        {
           _addWay(_map->getWay(member.getElementId()));
-        }
       }
     }
   }
@@ -90,14 +85,12 @@ private:
     {
       vector<long> nodes = way->getNodeIds();
       if (nodes[0] != nodes[nodes.size() - 1])
-      {
         nodes.push_back(nodes[0]);
-      }
 
       Coordinate last = _map->getNode(nodes[0])->toCoordinate();
-      for (size_t i = 1; i < nodes.size(); i++)
+      for (auto node_id : nodes)
       {
-        Coordinate c = _map->getNode(nodes[i])->toCoordinate();
+        Coordinate c = _map->getNode(node_id)->toCoordinate();
         double distance = c.distance(last);
         double theta = atan2(c.y - last.y, c.x - last.x);
         _h.addAngle(theta, distance);
@@ -112,9 +105,9 @@ AngleHistogramExtractor::AngleHistogramExtractor()
   setConfiguration(conf());
 }
 
-AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins) :
-_bins(bins),
-_smoothing(smoothing)
+AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins)
+  : _bins(bins),
+    _smoothing(smoothing)
 {
 }
 
@@ -125,8 +118,7 @@ void AngleHistogramExtractor::setConfiguration(const Settings& conf)
   _bins = options.getAngleHistogramExtractorBins();
 }
 
-shared_ptr<Histogram> AngleHistogramExtractor::_createHistogram(
-  const OsmMap& map, const ConstElementPtr& e) const
+shared_ptr<Histogram> AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e) const
 {
   shared_ptr<Histogram> result = std::make_shared<Histogram>(_bins);
   HistogramVisitor v(*result);
@@ -136,20 +128,16 @@ shared_ptr<Histogram> AngleHistogramExtractor::_createHistogram(
   return result;
 }
 
-std::shared_ptr<Histogram> AngleHistogramExtractor::getNormalizedHistogram(
-  const OsmMap& map, const ConstElementPtr& element) const
+std::shared_ptr<Histogram> AngleHistogramExtractor::getNormalizedHistogram(const OsmMap& map, const ConstElementPtr& element) const
 {
   std::shared_ptr<Histogram> hist = _createHistogram(map, element);
   if (_smoothing > 0.0)
-  {
     hist->smooth(_smoothing);
-  }
   hist->normalize();
   return hist;
 }
 
-double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
-  const ConstElementPtr& candidate) const
+double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
   std::shared_ptr<Histogram> h1 = getNormalizedHistogram(map, target);
   std::shared_ptr<Histogram> h2 = getNormalizedHistogram(map, candidate);
@@ -161,13 +149,9 @@ QString AngleHistogramExtractor::getName() const
 {
   QString result = getClassName();
   if (_smoothing > 0.0)
-  {
     result += QString(" %2").arg(_smoothing, 0, 'g', 4);
-  }
   if (_bins > 16)
-  {
     result += QString(" %2").arg(_bins, 0, 10, QChar('_'));
-  }
   return result;
 }
 

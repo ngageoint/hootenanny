@@ -40,16 +40,15 @@ using namespace std;
 namespace hoot
 {
 
-QCache<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache(
-  AddressScoreExtractor::CACHE_SIZE_DEFAULT);
+QCache<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache(AddressScoreExtractor::CACHE_SIZE_DEFAULT);
 int AddressScoreExtractor::_addressCacheHits = 0;
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AddressScoreExtractor)
 
-AddressScoreExtractor::AddressScoreExtractor() :
-_addressesProcessed(0),
-_matchAttemptMade(false),
-_cacheEnabled(true)
+AddressScoreExtractor::AddressScoreExtractor()
+  : _addressesProcessed(0),
+    _matchAttemptMade(false),
+    _cacheEnabled(true)
 {
 }
 
@@ -57,8 +56,7 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
 
-  _addressParser.setAllowLenientHouseNumberMatching(
-    config.getAddressAllowLenientHouseNumberMatching());
+  _addressParser.setAllowLenientHouseNumberMatching(config.getAddressAllowLenientHouseNumberMatching());
   _addressParser.setConfiguration(conf);
 
   bool preTranslateTagValuesToEnglish = config.getAddressTranslateToEnglish();
@@ -67,9 +65,7 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   // ToEnglishTranslator.  If the default only option is enabled, it overrides any use of the
   // ToEnglishTranslator.
   if (config.getAddressUseDefaultLanguageTranslationOnly())
-  {
     preTranslateTagValuesToEnglish = false;
-  }
   _addressParser.setPreTranslateTagValuesToEnglish(preTranslateTagValuesToEnglish, conf);
 
   _cacheEnabled = config.getAddressScorerEnableCaching();
@@ -77,13 +73,9 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   {
     const int maxCacheSize = config.getConflateInfoMaxSizePerCache();
     if (maxCacheSize > 0)
-    {
       _addressesCache.setMaxCost(maxCacheSize);
-    }
     else
-    {
       _cacheEnabled = false;
-    }
   }
 }
 
@@ -117,34 +109,25 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   _addressesProcessed += element1Addresses.size();
 
   // check for address matches
-  for (QList<Address>::const_iterator element2AddrItr = element2Addresses.begin();
-       element2AddrItr != element2Addresses.end(); ++element2AddrItr)
+  for (const auto& element2Address : qAsConst(element2Addresses))
   {
-    Address element2Address = *element2AddrItr;
-    for (QList<Address>::const_iterator element1AddrItr = element1Addresses.begin();
-         element1AddrItr != element1Addresses.end(); ++element1AddrItr)
+    for (const auto& element1Address : qAsConst(element1Addresses))
     {
-      Address element1Address = *element1AddrItr;
       if (element2Address == element1Address)
       {
         LOG_TRACE("Found address match: 1: " << element1Address << ", 2: " << element2Address);
         return 1.0;
       }
-
       const double partialMatchScore = _getPartialMatchScore(element1Address, element2Address);
       if (partialMatchScore > 0.0)
-      {
         return partialMatchScore;
-      }
     }
   }
-
   return 0.0;
 }
 
-QList<Address> AddressScoreExtractor::_getElementAddresses(
-  const OsmMap& map, const ConstElementPtr& element,
-  const ConstElementPtr& elementBeingComparedWith) const
+QList<Address> AddressScoreExtractor::_getElementAddresses(const OsmMap& map, const ConstElementPtr& element,
+                                                           const ConstElementPtr& elementBeingComparedWith) const
 {
   LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
 
@@ -162,13 +145,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
   if (elementAddresses.empty())
   {
-    //if not, try to find the address from a poly way node instead
     if (element->getElementType() == ElementType::Way)
     {
+      //if not, try to find the address from a poly way node instead
       ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
       elementAddresses =
-        _addressParser.parseAddressesFromWayNodes(
-          *way, map, elementBeingComparedWith->getElementId());
+        _addressParser.parseAddressesFromWayNodes(*way, map, elementBeingComparedWith->getElementId());
       if (!elementAddresses.empty())
       {
         LOG_TRACE(
@@ -176,13 +158,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
           element->getElementId());
       }
     }
-    //if still no luck, try to find the address from a poly way node that is a relation member
     else if (element->getElementType() == ElementType::Relation)
     {
+      //if still no luck, try to find the address from a poly way node that is a relation member
       ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
       elementAddresses =
-        _addressParser.parseAddressesFromRelationMembers(
-          *relation, map, elementBeingComparedWith->getElementId());
+        _addressParser.parseAddressesFromRelationMembers(*relation, map, elementBeingComparedWith->getElementId());
       if (!elementAddresses.empty())
       {
         LOG_TRACE(
@@ -199,15 +180,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   }
 
   if (_cacheEnabled)
-  {
     _addressesCache.insert(element->getElementId(), new QList<Address>(elementAddresses));
-  }
 
   return elementAddresses;
 }
 
-bool AddressScoreExtractor::_addressesMatchWithSuffixesRemoved(
-  const Address& address1, const Address& address2) const
+bool AddressScoreExtractor::_addressesMatchWithSuffixesRemoved(const Address& address1, const Address& address2) const
 {
   LOG_TRACE("Attempting intersection match or partial street match without suffix...");
 
@@ -221,8 +199,7 @@ bool AddressScoreExtractor::_addressesMatchWithSuffixesRemoved(
   return elementAddress2Temp == elementAddress1Temp;
 }
 
-bool AddressScoreExtractor::_intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(
-  const Address& address1, const Address& address2) const
+bool AddressScoreExtractor::_intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(const Address& address1, const Address& address2) const
 {
   LOG_TRACE("Attempting street/intersection partial match without house number...");
 
@@ -233,13 +210,9 @@ bool AddressScoreExtractor::_intersectionAndStreetAddressesMatchWithHouseNumbers
 
   QStringList intersectionParts;
   if (element1IsIntersection)
-  {
     intersectionParts = elementAddress1Temp.getIntersectionParts();
-  }
   else if (element2IsIntersection)
-  {
     intersectionParts = elementAddress2Temp.getIntersectionParts();
-  }
   LOG_VART(intersectionParts);
   QString nonIntersection;
   if (element1IsIntersection)
@@ -253,19 +226,16 @@ bool AddressScoreExtractor::_intersectionAndStreetAddressesMatchWithHouseNumbers
     nonIntersection = elementAddress1Temp.getAddressStr();
   }
   LOG_VART(nonIntersection);
-  for (int i = 0; i < intersectionParts.size(); i++)
+  for (const auto& part : qAsConst(intersectionParts))
   {
-    LOG_VART(intersectionParts.at(i).trimmed());
-    if (nonIntersection == intersectionParts.at(i).trimmed())
-    {
+    LOG_VART(part.trimmed());
+    if (nonIntersection == part.trimmed())
       return true;
-    }
   }
   return false;
 }
 
-bool AddressScoreExtractor::_addressesMatchWithNameComparisonRelaxed(
-  const Address& address1, const Address& address2) const
+bool AddressScoreExtractor::_addressesMatchWithNameComparisonRelaxed(const Address& address1, const Address& address2) const
 {
    LOG_TRACE("Attempting street partial match with looser street name comparison...");
 
@@ -293,8 +263,7 @@ double AddressScoreExtractor::_getPartialMatchScore(const Address& address1,
   const bool element1IsIntersection = Address::isStreetIntersectionAddress(address1);
   const bool element2IsIntersection = Address::isStreetIntersectionAddress(address2);
   const bool onlyOneIsIntersection =
-    (element1IsIntersection && !element2IsIntersection) ||
-    (!element1IsIntersection && element2IsIntersection);
+    (element1IsIntersection && !element2IsIntersection) || (!element1IsIntersection && element2IsIntersection);
   LOG_VART(onlyOneIsIntersection);
 
   // These partial matches (except for the first one) are getting a fairly arbitrary scores, which

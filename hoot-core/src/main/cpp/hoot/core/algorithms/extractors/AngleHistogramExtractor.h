@@ -62,9 +62,7 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  double extract(
-    const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target, const std::shared_ptr<const Element>& candidate) const override;
 
   /**
    * @brief getNormalizedHistogram creates a normalized heading variance histogram for an element.
@@ -72,8 +70,7 @@ public:
    * @param e the element for which to create the histogram
    * @return a heading variance histogram
    */
-  std::shared_ptr<Histogram> getNormalizedHistogram(
-    const OsmMap& map, const ConstElementPtr& element) const;
+  std::shared_ptr<Histogram> getNormalizedHistogram(const OsmMap& map, const ConstElementPtr& element) const;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override
@@ -87,8 +84,7 @@ protected:
 
   unsigned int _bins;
 
-  virtual std::shared_ptr<Histogram> _createHistogram(
-    const OsmMap& map, const ConstElementPtr& e) const;
+  virtual std::shared_ptr<Histogram> _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
 
 private:
 
