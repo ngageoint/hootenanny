@@ -2498,10 +2498,16 @@ List of way IDs to find intersecting ways for when using `IntersectingWayCriteri
 ** `translations-local`
 ** `rules`
 
-A list of paths to include in the javascript translator search path.
-NOTE: These are assumed to be under the $HOOT_HOME directory
-To change this at runtime, add a line to the $HOOT_HOME/conf/hoot.json with the list of directories.
-E.g.  "javascript.schema.translator.path":"translations;translations-local;papaSmurf",
+A list of paths to include in the javascript translator search path. This list is used by both the
+internal "hoot.require" command and the "TranslationServer" for schema switching
+NOTE: These are assumed to be under the $HOOT_HOME directory and will throw an error if they are not.
+To change this at runtime, add a line to the $HOOT_HOME/conf/hoot.json with the list of directories or
+just append to the default list. E.g.
+Replace the full list:  "javascript.schema.translator.path":"translations;translations-local;papaSmurf",
+Append to the list:  "javascript.schema.translator.path":"$(javascript.schema.translator.path);papaSmurf",
+
+Or when running from the commandline, add the following to the command
+"-D javascript.schema.translator.path+=papaSmurf"
 
 === in.bounds.criterion.bounds
 
