@@ -26,16 +26,16 @@
  */
 #include "DistanceScoreExtractor.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, DistanceScoreExtractor)
 
-DistanceScoreExtractor::DistanceScoreExtractor(ValueAggregatorPtr wayAgg):
-  WayFeatureExtractor(wayAgg)
+DistanceScoreExtractor::DistanceScoreExtractor(ValueAggregatorPtr wayAgg)
+  : WayFeatureExtractor(wayAgg)
 {
 }
 

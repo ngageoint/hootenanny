@@ -27,16 +27,16 @@
 
 #include "LengthScoreExtractor.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, LengthScoreExtractor)
 
-LengthScoreExtractor::LengthScoreExtractor(ValueAggregatorPtr wayAgg):
-  WayFeatureExtractor(wayAgg)
+LengthScoreExtractor::LengthScoreExtractor(ValueAggregatorPtr wayAgg)
+  : WayFeatureExtractor(wayAgg)
 {
 }
 

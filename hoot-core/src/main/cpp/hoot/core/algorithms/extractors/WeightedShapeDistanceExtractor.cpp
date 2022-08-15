@@ -34,13 +34,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedShapeDistanceExtractor)
 
-WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregatorPtr agg):
-  WayFeatureExtractor(agg)
+WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregatorPtr agg)
+  : WayFeatureExtractor(agg)
 {
 }
 
 double WeightedShapeDistanceExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
-  const ConstWayPtr& w2) const
+                                                const ConstWayPtr& w2) const
 {
   return ProbabilityOfMatch::getInstance().parallelScore(map.shared_from_this(), w1, w2);
 }

@@ -61,7 +61,7 @@ public:
    * @see FeatureExtractor
    */
   double extract(const OsmMap& map, const ConstElementPtr& target,
-    const ConstElementPtr& candidate) const override;
+                 const ConstElementPtr& candidate) const override;
 
   /**
    * @see ApiEntityInfo

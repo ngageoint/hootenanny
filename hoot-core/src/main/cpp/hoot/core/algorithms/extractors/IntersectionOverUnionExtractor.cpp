@@ -36,33 +36,27 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, IntersectionOverUnionExtractor)
 
-double IntersectionOverUnionExtractor::extract(
-  const OsmMap& map, const ConstElementPtr& target, const ConstElementPtr& candidate) const
+double IntersectionOverUnionExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
+                                               const ConstElementPtr& candidate) const
 {
   // only calc'ing this for way polys...not sure it makes sense with anything else
-
   if (target->getElementType() == ElementType::Way &&
       candidate->getElementType() == ElementType::Way)
   {
     ElementToGeometryConverter ElementToGeometryConverter(map.shared_from_this());
     std::shared_ptr<geos::geom::Geometry> targetGeom = ElementToGeometryConverter.convertToGeometry(target);
-    std::shared_ptr<geos::geom::Geometry> candidateGeom =
-      ElementToGeometryConverter.convertToGeometry(candidate);
+    std::shared_ptr<geos::geom::Geometry> candidateGeom = ElementToGeometryConverter.convertToGeometry(candidate);
     if (!targetGeom->isEmpty() && !candidateGeom->isEmpty())
     {
-      std::shared_ptr<geos::geom::Geometry> intersectionGeom(
-        targetGeom->intersection(candidateGeom.get()));
-      std::shared_ptr<geos::geom::Geometry> unionGeom(
-        targetGeom->Union(candidateGeom.get()));
+      std::shared_ptr<geos::geom::Geometry> intersectionGeom(targetGeom->intersection(candidateGeom.get()));
+      std::shared_ptr<geos::geom::Geometry> unionGeom(targetGeom->Union(candidateGeom.get()));
 
       if (intersectionGeom && unionGeom)
       {
         const double intersectionArea = intersectionGeom->getArea();
         const double unionArea = unionGeom->getArea();
         if (unionArea > 0.0 && intersectionArea >= 0.0)
-        {
           return intersectionArea / unionArea;
-        }
       }
     }
   }

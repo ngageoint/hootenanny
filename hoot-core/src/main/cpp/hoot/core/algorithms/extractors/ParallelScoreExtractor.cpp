@@ -28,8 +28,8 @@
 #include "ParallelScoreExtractor.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

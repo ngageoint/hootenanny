@@ -27,8 +27,8 @@
 #include "NameExtractor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -37,22 +37,22 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
-NameExtractor::NameExtractor() :
-_d(std::make_shared<LevenshteinDistance>()),
-_namesProcessed(0),
-_matchAttemptMade(false)
+NameExtractor::NameExtractor()
+  : _d(std::make_shared<LevenshteinDistance>()),
+    _namesProcessed(0),
+    _matchAttemptMade(false)
 {
 }
 
-NameExtractor::NameExtractor(StringDistancePtr d) :
-_d(d),
-_namesProcessed(0),
-_matchAttemptMade(false)
+NameExtractor::NameExtractor(StringDistancePtr d)
+  : _d(d),
+    _namesProcessed(0),
+    _matchAttemptMade(false)
 {
 }
 
 double NameExtractor::extract(const OsmMap& /*map*/, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+                              const std::shared_ptr<const Element>& candidate) const
 {
   return extract(target, candidate);
 }
@@ -70,30 +70,22 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
 
   double score = -1;
 
-  for (int i = 0; i < targetNames.size(); i++)
+  for (const auto& targetName : qAsConst(targetNames))
   {
-    const QString targetName = targetNames[i];
-    for (int j = 0; j < candidateNames.size(); j++)
+    for (const auto& candidateName : qAsConst(candidateNames))
     {
       _matchAttemptMade = true;
-      const QString candidateName = candidateNames[j];
       LOG_VART(targetName);
       LOG_VART(candidateName);
       const double thisScore = _d->compare(targetName, candidateName);
       score = max(thisScore, score);
       LOG_VART(score);
       if (score == 1.0)
-      {
         return score;
-      }
     }
   }
-
   if (score == -1)
-  {
     return nullValue();
-  }
-
   return score;
 }
 

@@ -51,7 +51,7 @@ public:
   ~HausdorffDistanceExtractor() = default;
 
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+                  const std::shared_ptr<const Element>& candidate) const override;
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return HausdorffDistanceExtractor::className(); }

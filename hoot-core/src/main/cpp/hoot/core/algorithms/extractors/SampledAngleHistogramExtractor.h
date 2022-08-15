@@ -62,8 +62,7 @@ public:
   QString getClassName() const override { return className(); }
   QString getDescription() const override
   {
-    return
-      "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
+    return "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
   }
 
   void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
@@ -71,8 +70,7 @@ public:
 
 protected:
 
-  std::shared_ptr<Histogram> _createHistogram(
-    const OsmMap& map, const ConstElementPtr& e) const override;
+  std::shared_ptr<Histogram> _createHistogram(const OsmMap& map, const ConstElementPtr& e) const override;
 
 private:
 

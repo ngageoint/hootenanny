@@ -46,9 +46,8 @@ public:
 
   static QString className() { return "hoot::NameExtractor"; }
 
-  double extract(
-    const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+                 const std::shared_ptr<const Element>& candidate) const override;
   virtual double extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const;
 
   void setStringDistance(const StringDistancePtr &sd) override { _d = sd; }

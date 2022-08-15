@@ -28,9 +28,9 @@
 #include "CentroidDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -40,18 +40,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, CentroidDistanceExtractor)
 
-double CentroidDistanceExtractor::distance(const OsmMap& map,
-  const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+double CentroidDistanceExtractor::distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+                                           const std::shared_ptr<const Element>& candidate) const
 {
   ElementToGeometryConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
-  {
     return -1;
-  }
 
   g1.reset(GeometryUtils::validateGeometry(g1.get()));
   g2.reset(GeometryUtils::validateGeometry(g2.get()));
@@ -59,9 +56,7 @@ double CentroidDistanceExtractor::distance(const OsmMap& map,
   std::shared_ptr<Point> cc(g2->getCentroid());
 
   if (tc.get() == nullptr || cc.get() == nullptr)
-  {
     return nullValue();
-  }
 
   return tc->distance(cc.get());
 }

@@ -54,7 +54,7 @@ public:
   static QString className() { return "hoot::OverlapExtractor"; }
 
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+                 const std::shared_ptr<const Element>& candidate) const override;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Determines the overlap between two features"; }

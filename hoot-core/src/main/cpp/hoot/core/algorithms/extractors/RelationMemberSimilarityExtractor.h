@@ -56,7 +56,7 @@ public:
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+                 const std::shared_ptr<const Element>& candidate) const override;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override
