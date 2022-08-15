@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ImplicitTagRulesSqliteReader.h"
@@ -338,12 +338,11 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
   //the WHERE IN clause is case sensitive, so OR'ing the words together with LIKE instead
   //(no wildcards)
   QString queryStr = "SELECT id, word FROM words WHERE ";
-  for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
+  for (auto word : qAsConst(words))
   {
     //LIKE is case insensitive by default, so using that instead of '='; using toUpper() with '='
     //for comparisons won't work for unicode chars in SQLite w/o quite a bit of additional setup
     //to link in special unicode libs (I think)
-    QString word = *wordItr;
     //escape '
     word = word.replace("'", "''");
     queryStr += "word LIKE '" + word + "' OR ";
@@ -354,8 +353,7 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
   {
     throw HootException(
       QString("Error executing query: %1; Error: %2")
-        .arg(selectWordIdsForWords.lastQuery())
-        .arg(selectWordIdsForWords.lastError().text()));
+        .arg(selectWordIdsForWords.lastQuery(), selectWordIdsForWords.lastError().text()));
   }
 
   while (selectWordIdsForWords.next())
@@ -382,10 +380,8 @@ void ImplicitTagRulesSqliteReader::_modifyWordIdsForMultipleRules(QSet<long>& qu
 
   long wordIdWithHighestTagOccurrenceCount = -1;
   long highestTagOccurrenceCount = -1;
-  for (QSet<long>::const_iterator wordIdItr = queriedWordIds.begin();
-       wordIdItr != queriedWordIds.end(); ++wordIdItr)
+  for (auto wordId : qAsConst(queriedWordIds))
   {
-    const long wordId = *wordIdItr;
     _tagCountsForWordIdsQuery.bindValue(":wordId", (qlonglong)wordId);
     LOG_VART(_tagCountsForWordIdsQuery.lastQuery());
     if (!_tagCountsForWordIdsQuery.exec())
@@ -423,17 +419,15 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
                                                     bool& wordsInvolvedInMultipleRules)
 {
   Tags tags;
-  for (QSet<long>::const_iterator wordIdItr = queriedWordIds.begin();
-       wordIdItr != queriedWordIds.end(); ++wordIdItr)
+  for (auto word_id : qAsConst(queriedWordIds))
   {
-    _tagsForWordIdsQuery.bindValue(":wordId", (qlonglong)*wordIdItr);
+    _tagsForWordIdsQuery.bindValue(":wordId", static_cast<qlonglong>(word_id));
     LOG_VART(_tagsForWordIdsQuery.lastQuery());
     if (!_tagsForWordIdsQuery.exec())
     {
       throw HootException(
         QString("Error executing query: %1; Error: %2")
-          .arg(_tagsForWordIdsQuery.lastQuery())
-          .arg(_tagsForWordIdsQuery.lastError().text()));
+          .arg(_tagsForWordIdsQuery.lastQuery(), _tagsForWordIdsQuery.lastError().text()));
     }
 
     Tags tags2;
@@ -446,19 +440,15 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
       const QStringList kvps = kvp.split(";");
       if (!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty()))
       {
-        for (int i = 0; i < kvps.size(); i++)
-        {
-          tags2.appendValue(kvps.at(i));
-        }
+        for (const auto& value : qAsConst(kvps))
+          tags2.appendValue(value);
       }
     }
     LOG_VART(tags);
     LOG_VART(tags2);
 
     if (tags.isEmpty())
-    {
       tags = tags2;
-    }
     else if (!tags2.isEmpty() && tags != tags2)
     {
       wordsInvolvedInMultipleRules = true;
@@ -476,8 +466,7 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
         moreTagsToCache.insert("wordsInvolvedInMultipleRules", "true");
         _cacheTags(inputWords, moreTagsToCache);
       }
-      LOG_TRACE(
-        "Words: " << matchingWords << " involved in multiple rules due to tag sets not matching.");
+      LOG_TRACE("Words: " << matchingWords << " involved in multiple rules due to tag sets not matching.");
       LOG_VART(tags);
       LOG_VART(tags2);
       return Tags();
@@ -490,22 +479,17 @@ void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags) c
 {
   QStringList tagValues;
   QStringList tagKeysWithDuplicatedValues;
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.constBegin(); tagItr != tags.constEnd(); ++tagItr)
   {
     const QString tagValue = tagItr.value();
     if (!tagValues.contains(tagValue))
-    {
       tagValues.append(tagValue);
-    }
     else
-    {
       tagKeysWithDuplicatedValues.append(tagItr.key());
-    }
   }
   LOG_VART(tagKeysWithDuplicatedValues);
-  for (int i = 0; i < tagKeysWithDuplicatedValues.size(); i++)
+  for (const auto& tagKey : qAsConst(tagKeysWithDuplicatedValues))
   {
-    const QString tagKey = tagKeysWithDuplicatedValues[i];
     tags.remove(tagKey);
     LOG_TRACE("Removed tag key: " << tagKey << " due to value duplication.");
   }

@@ -53,6 +53,9 @@
 #include <thread>
 #include <unistd.h>
 
+//  Geos
+#include <geos/geom/GeometryFactory.h>
+
 namespace pt = boost::property_tree;
 using namespace std;
 
@@ -78,6 +81,7 @@ OsmJsonReader::OsmJsonReader()
     _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements()),
     _queryFilepath(ConfigOptions().getOverpassApiQueryPath())
 {
+  setConfiguration(conf());
 }
 
 OsmJsonReader::~OsmJsonReader()
@@ -173,20 +177,12 @@ void OsmJsonReader::read(const OsmMapPtr& map)
 {
   LOG_DEBUG("Reading map...");
 
-  LOG_VART(_isFile);
-  if (!_bounds)
-  {
-    // If we're doing a web pull, ensure a rectangular bounds from the config. See a related note in
-    // OsmApiReader::read.
-    if (!_isFile && !ConfigOptions().getBounds().trimmed().isEmpty() && !GeometryUtils::isEnvelopeString(ConfigOptions().getBounds()))
-      throw IllegalArgumentException("OsmJsonReader does not support a non-rectangular bounds for reading over HTTP.");
+  //  Set the bounds once we begin the read if setBounds() hasn't already been called
+  if (_bounds == nullptr && _loadBounds())
+    setBounds(_boundingPoly);
 
-    _bounds = GeometryUtils::boundsFromString(ConfigOptions().getBounds());
-  }
-  if (_bounds)
-  {
-    LOG_VART(_bounds);
-  }
+  if (_bounds == nullptr && !_isFile)
+    throw IllegalArgumentException("OsmJsonReader requires rectangular bounds");
 
   _map = map;
   _map->appendSource(_url);
@@ -203,11 +199,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   // See related note in OsmXmlReader::read.
   if (_bounds.get())
   {
-    if (!_isFile)
-      IoUtils::cropToBounds(_map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
-    else
-      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
@@ -219,11 +211,7 @@ void OsmJsonReader::_readToMap()
 
   if (_bounds.get())
   {
-    if (!_isFile)
-      IoUtils::cropToBounds(_map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
-    else
-      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
@@ -315,6 +303,46 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   setBounds(GeometryUtils::boundsFromString(opts.getBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
   _queryFilepath = opts.getOverpassApiQueryPath();
+  _boundsString = opts.getBounds();
+  _boundsFilename = opts.getBoundsInputFile();
+}
+
+void OsmJsonReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
+{
+  //  Check if the bounds are rectangular
+  _isPolygon = bounds ? !bounds->isRectangle() : false;
+  _boundingPoly = bounds;
+  Boundable::setBounds(bounds);
+}
+
+void OsmJsonReader::setBounds(const geos::geom::Envelope& bounds)
+{
+  //  An envelope isn't a poly bounds
+  _isPolygon = false;
+  _boundingPoly.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release());
+  Boundable::setBounds(bounds);
+}
+
+bool OsmJsonReader::_loadBounds()
+{
+  bool isEnvelope = false;
+  //  Try to read the bounds from the `bounds` string
+  if (_boundsString != ConfigOptions::getBoundsDefaultValue())
+  {
+    _boundingPoly = GeometryUtils::boundsFromString(_boundsString, isEnvelope);
+    _bounds = _boundingPoly;
+    _isPolygon = !isEnvelope;
+    return true;
+  }
+  //  Try to read the bounds from the `bounds.input.file` file
+  else if (_boundsFilename != ConfigOptions::getBoundsInputFileDefaultValue())
+  {
+    _boundingPoly = GeometryUtils::readBoundsFromFile(_boundsFilename, isEnvelope);
+    _bounds = _boundingPoly;
+    _isPolygon = !isEnvelope;
+    return true;
+  }
+  return false;
 }
 
 void OsmJsonReader::_parseOverpassJson()
@@ -563,8 +591,6 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 
 void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
 {
-  const long debugId = -3047;
-
   // Get info we need to construct our way
   long id = 0;
   id = item.get("id", id);
@@ -599,15 +625,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   _wayIdMap.insert(id, newId);
 
   const QString msg = "Reading " + ElementId(ElementType::Way, newId).toString() + "...";
-  if (newId == debugId)
-  {
-    LOG_VARD(msg);
-  }
-  else
-  {
-    LOG_VART(msg);
-  }
-
   long version = _getVersion(item, ElementType::Way, newId);
   long changeset = _getChangeset(item);
   unsigned int timestamp = _getTimestamp(item);
@@ -674,8 +691,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
 
 void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
 {
-  const long debugId = 0;
-
   // Get info we need to construct our relation
   long id = 0;
   id = item.get("id", id);
@@ -710,15 +725,6 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   _relationIdMap.insert(id, newId);
 
   const QString msg = "Reading " + ElementId(ElementType::Relation, newId).toString() + "...";
-  if (newId == debugId)
-  {
-    LOG_VARD(msg);
-  }
-  else
-  {
-    LOG_VART(msg);
-  }
-
   long version = _getVersion(item, ElementType::Relation, newId);
   long changeset = _getChangeset(item);
   unsigned int timestamp = _getTimestamp(item);

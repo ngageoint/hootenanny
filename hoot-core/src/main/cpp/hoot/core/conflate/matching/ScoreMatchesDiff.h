@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SCORE_MATCHES_DIFF_H
 #define SCORE_MATCHES_DIFF_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QTextStream>
@@ -124,16 +124,15 @@ private:
    * For a given set of elements, groups them by how their match statuses changed between the two
    * inputs
    */
-  QMap<QString, QSet<ElementId>> _getMatchScoringDiff(
-    const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& actualTagMappings1,
-    const QMap<ElementId, QString>& actualTagMappings2) const;
+  QMap<QString, QSet<ElementId>> _getMatchScoringDiff(const QSet<ElementId>& elementIds,
+                                                      const QMap<ElementId, QString>& actualTagMappings1,
+                                                      const QMap<ElementId, QString>& actualTagMappings2) const;
 
   /*
    * Records element differences between the two inputs
    */
-  void _setAddedAndRemovedElements(
-    const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
-    QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved) const;
+  void _setAddedAndRemovedElements(const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
+                                   QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved) const;
 
   void _writeConflateStatusSummary(QTextStream& out);
   void _writeConflateStatusDetail(QTextStream& out);
