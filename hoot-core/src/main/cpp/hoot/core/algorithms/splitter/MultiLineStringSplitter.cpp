@@ -30,12 +30,12 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;
@@ -43,35 +43,30 @@ using namespace std;
 namespace hoot
 {
 
-MultiLineStringSplitter::MultiLineStringSplitter(const bool markAddedMultilineStringRelations) :
-_markAddedMultilineStringRelations(markAddedMultilineStringRelations)
+MultiLineStringSplitter::MultiLineStringSplitter(const bool markAddedMultilineStringRelations)
+  : _markAddedMultilineStringRelations(markAddedMultilineStringRelations)
 {
 }
 
-std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
-    const WaySublineCollection& string) const
+std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(const WaySublineCollection& string) const
 {
   std::shared_ptr<FindNodesInWayFactory> nfPtr;
 
   set<ConstWayPtr, WayPtrCompare> ways;
-  for (size_t i = 0; i < string.getSublines().size(); i++)
-  {
-    ways.insert(string.getSublines()[i].getWay());
-  }
+  for (const auto& subline : string.getSublines())
+    ways.insert(subline.getWay());
 
   nfPtr = std::make_shared<FindNodesInWayFactory>();
   // Add all the ways to the FindNodesInWayFactory/
-  for (set<ConstWayPtr, WayPtrCompare>::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    nfPtr->addWay(*it);
-  }
+  for (auto const& way : ways)
+    nfPtr->addWay(way);
 
   return nfPtr;
 }
 
-ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
-  const WaySublineCollection& string, const vector<bool>& reverse,
-  std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
+ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
+                                                   const vector<bool>& reverse,
+                                                   std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   LOG_VART(string.getSublines().size());
@@ -80,9 +75,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   vector<WayPtr> matches;
 
   if (!nf)
-  {
     nf = _createNodeFactory(string);
-  }
 
   // Extract all the sublines into ways.
   for (size_t i = 0; i < string.getSublines().size(); i++)
@@ -93,9 +86,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     w->setPid(subline.getElementId().getId());
     LOG_VART(w->getElementId());
     if (reverse[i])
-    {
       w->reverseOrder();
-    }
     if (ElementGeometryUtils::calculateLength(w, map) > 0)
     {
       matches.push_back(w);
@@ -107,56 +98,45 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
 
   // If there was one match then just return the way.
   if (matches.size() == 1)
-  {
     result = matches[0];
-  }
-  // If there were multiple matches then create a relation to contain the matches.
-  else if (matches.size() > 1)
+  else if (matches.size() > 1)  // If there were multiple matches then create a relation to contain the matches.
   {
     RelationPtr r =
       std::make_shared<Relation>(
         matches[0]->getStatus(), map->createNextRelationId(), matches[0]->getCircularError(),
         MetadataTags::RelationMultilineString());
-    for (size_t i = 0; i < matches.size(); i++)
+    for (const auto& match : matches)
     {
       LOG_TRACE(
         "multilinestring: adding multiple matches to relation with ID: " << r->getId() <<
-        " member: " << matches[i]->getElementId());
-      LOG_VART(matches[i]);
-      r->addElement("", matches[i]);
+        " member: " << match->getElementId());
+      LOG_VART(match);
+      r->addElement("", match);
       if (_markAddedMultilineStringRelations)
-      {
         r->getTags().set(MetadataTags::HootMultilineString(), "yes");
-      }
     }
     result = r;
     LOG_TRACE("Multilinestring split relation: " << result);
     map->addElement(r);
   }
-
   return result;
 }
 
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
-  const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-  std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
+                                    const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
+                                    std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 
   if (!nf)
-  {
     nf = _createNodeFactory(string);
-  }
-
   // Rename the matches to the positive subline string.
   const WaySublineCollection& positive = string;
   // Create an inversion of the WaySublineCollection.
   WaySublineCollection negative = string.invert();
-
   // Create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
-
   // Create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.
   vector<bool> reverseNegative(negative.getSublines().size(), false);
@@ -169,7 +149,6 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const MultiLineStringL
   vector<bool> reverse(splitPoint.getWaySublineString().getSublines().size(), false);
   ElementPtr scraps;
   split(map, splitPoint.getWaySublineString(), reverse, match, scraps);
-
   //delete what's in scraps from the map
   RecursiveElementRemover(scraps->getElementId()).apply(map);
 }
