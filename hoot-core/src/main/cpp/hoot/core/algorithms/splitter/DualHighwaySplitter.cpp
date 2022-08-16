@@ -28,10 +28,10 @@
 #include "DualHighwaySplitter.h"
 
 // GEOS
-#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferBuilder.h>
@@ -91,10 +91,10 @@ DualHighwaySplitter::DualHighwaySplitter()
 }
 
 DualHighwaySplitter::DualHighwaySplitter(const std::shared_ptr<const OsmMap>& map,
-                                         DrivingSide drivingSide, Meters defaultSplitSize) :
-_defaultSplitSize(defaultSplitSize),
-_drivingSide(drivingSide),
-_map(map)
+                                         DrivingSide drivingSide, Meters defaultSplitSize)
+  : _defaultSplitSize(defaultSplitSize),
+    _drivingSide(drivingSide),
+    _map(map)
 {
 }
 
@@ -120,8 +120,7 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
 
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN(
-        "Inappropriate handling of geometry.  Adding original line back in to keep things moving...");
+      LOG_WARN("Inappropriate handling of geometry.  Adding original line back in to keep things moving...");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -129,8 +128,7 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
     }
     logWarnCount++;
 
-    std::shared_ptr<Point> p(
-      GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+    std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
     std::shared_ptr<Geometry> unioned(ls->Union(p.get()));
     std::shared_ptr<Geometry> cleaned(GeometryUtils::validateGeometry(ls.get()));
     std::shared_ptr<Geometry> buffered(ls->buffer(0));
@@ -162,7 +160,6 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
       result->addNode(n->getId());
     }
   }
-
   return result;
 }
 
@@ -177,9 +174,9 @@ long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way
   const vector<long>& nids = w->getNodeIds();
   Meters best = std::numeric_limits<double>::max();
   long bestNid = -1;
-  for (size_t i = 0; i < nids.size(); i++)
+  for (auto node_id : nids)
   {
-    std::shared_ptr<Node> n = _result->getNode(nids[i]);
+    std::shared_ptr<Node> n = _result->getNode(node_id);
     Meters d = Distance::euclidean(src->toCoordinate(), n->toCoordinate());
     if (d < best)
     {
@@ -187,7 +184,6 @@ long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way
       bestNid = n->getId();
     }
   }
-
   return bestNid;
 }
 
@@ -212,7 +208,6 @@ bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Wa
                                    long leftNn, long rightNn) const
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
-  size_t inboundNodeIndex = 0;
   Coordinate vi;
   if (inbound->getNodeId(0) == intersectionId)
   {
@@ -221,33 +216,23 @@ bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Wa
   }
   else
   {
-    inboundNodeIndex = inbound->getNodeCount() - 1;
-    vi = WayHeading::calculateVector(
-      _result->getNode(inbound->getNodeId(inboundNodeIndex))->toCoordinate(),
-      _result->getNode(inbound->getNodeId(inboundNodeIndex - 1))->toCoordinate());
+    size_t inboundNodeIndex = inbound->getNodeCount() - 1;
+    vi = WayHeading::calculateVector(_result->getNode(inbound->getNodeId(inboundNodeIndex))->toCoordinate(),
+                                     _result->getNode(inbound->getNodeId(inboundNodeIndex - 1))->toCoordinate());
   }
-
   // calculate the normalized vector from intersectionId to the nearest end point on left.
   Coordinate vl = _normalizedVector(intersectionId, leftNn);
   // calculate the dot product for the left
   double dpl = _dotProduct(vl, vi);
-
-
   // calculate the normalized vector from intersectionId to the nearest end point on right.
   Coordinate vr = _normalizedVector(intersectionId, rightNn);
   // calculate the dot product for the right
   double dpr = _dotProduct(vr, vi);
-
   // if left has the larger dot product
   if (dpl > dpr)
-  {
     return false;
-  }
-  // if right has the larger dot product
-  else
-  {
+  else  // if right has the larger dot product
     return true;
-  }
 }
 
 std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll(const std::shared_ptr<const OsmMap>& map,
@@ -286,8 +271,8 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   }
 
   //  Remove the un-needed nodes from the original way that aren't part of any other way now
-  for (unordered_set<long>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-    RemoveNodeByEid::removeNode(_result, *it, true);
+  for (auto node_id : _nodes)
+    RemoveNodeByEid::removeNode(_result, node_id, true);
 
   _result.reset();
   return result;
@@ -303,13 +288,9 @@ void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w) const
   if (ok)
   {
     if (lanes <= 1)
-    {
       w->setTag("lanes", lanesStr);
-    }
     else if (lanes % 2 == 0)
-    {
       w->setTag("lanes", QString("%1").arg(lanes / 2));
-    }
     else
     {
       w->setTag("lanes", QString("%1").arg(std::max(1, lanes / 2)));
@@ -327,8 +308,7 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
 
   std::shared_ptr<const Node> first = _result->getNode(edge->getNodeId(0));
   std::shared_ptr<const Node> last = _result->getNode(edge->getLastNodeId());
-  if (first->toCoordinate().distance(centerNodeC) <
-      last->toCoordinate().distance(centerNodeC))
+  if (first->toCoordinate().distance(centerNodeC) < last->toCoordinate().distance(centerNodeC))
   {
     edgeEnd = first->toCoordinate();
     edgeEndId = first->getId();
@@ -344,12 +324,10 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
   std::shared_ptr<DistanceNodeCriterion> outerCrit =
     std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * 1.01);
   std::shared_ptr<NotCriterion> notInnerCrit =
-    std::make_shared<NotCriterion>(
-      std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * .99));
+    std::make_shared<NotCriterion>(std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * .99));
   ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
-  vector<long> nids =
-    ElementIdsVisitor::findNodes(_result, &chainCrit, centerNodeC, _splitSize * 1.02);
+  vector<long> nids = ElementIdsVisitor::findNodes(_result, &chainCrit, centerNodeC, _splitSize * 1.02);
 
   Radians bestAngle = std::numeric_limits<Radians>::max();
   long bestNid = numeric_limits<long>::max();
@@ -357,54 +335,44 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
   Radians edgeAngle = WayHeading::calculateHeading(centerNodeC, edgeEnd);
 
   // find the smallest angle from edgeEnd to any of the candidate nodes
-  for (size_t i = 0; i < nids.size(); i++)
+  for (auto node_id : nids)
   {
-    if (edgeEndId != nids[i])
+    if (edgeEndId != node_id)
     {
-      Coordinate c = _result->getNode(nids[i])->toCoordinate();
+      Coordinate c = _result->getNode(node_id)->toCoordinate();
       Radians thisAngle = WayHeading::calculateHeading(centerNodeC, c);
 
       Radians deltaMagnitude = WayHeading::deltaMagnitude(edgeAngle, thisAngle);
       if (deltaMagnitude < bestAngle)
       {
         bestAngle = deltaMagnitude;
-        bestNid = nids[i];
+        bestNid = node_id;
       }
     }
   }
-
   // if the smallest angle is less than 45 deg, then connect them.
   if (toDegrees(bestAngle) < 45)
-  {
     edge->replaceNode(edgeEndId, bestNid);
-  }
 }
 
 void DualHighwaySplitter::_splitIntersectingWays(long nid) const
 {
   std::vector<long> wids = ElementIdsVisitor::findWaysByNode(_result, nid);
-
   if (wids.size() == 1)
-  {
     return;
-  }
 
   long leftNn = _nearestNode(nid, _left);
   long rightNn = _nearestNode(nid, _right);
 
-  for (size_t i = 0; i < wids.size(); i++)
+  for (auto way_id : wids)
   {
-    if (wids[i] != _working->getId())
+    if (way_id != _working->getId())
     {
-      std::shared_ptr<Way> inbound = _result->getWay(wids[i]);
+      std::shared_ptr<Way> inbound = _result->getWay(way_id);
       if (_onRight(nid, inbound, leftNn, rightNn))
-      {
         inbound->replaceNode(nid, rightNn);
-      }
       else
-      {
         inbound->replaceNode(nid, leftNn);
-      }
     }
   }
 }
@@ -412,18 +380,13 @@ void DualHighwaySplitter::_splitIntersectingWays(long nid) const
 void DualHighwaySplitter::_splitWay(long wid)
 {
   _working = _map->getWay(wid);
-
   if (!_working || ElementToGeometryConverter(_result).convertToLineString(_working)->getLength() <= 0.0)
-  {
     return;
-  }
 
   // determine the split size
   _splitSize = _defaultSplitSize / 2.0;
   if (_working->getTags().contains("divider:width"))
-  {
     _splitSize = _working->getTags().readMeters("divider:width") / 2.0;
-  }
 
   // Create the two new ways.
   _left = _createOneWay(_working, _splitSize, true);
@@ -453,11 +416,9 @@ void DualHighwaySplitter::_splitWay(long wid)
 
   // go through each node on the old way
   const vector<long>& nids = _working->getNodeIds();
-  for (size_t i = 0; i < nids.size(); i++)
-  {
-    // If there are intersecting ways, split the way into two smaller ways
-    _splitIntersectingWays(nids[i]);
-  }
+  // If there are intersecting ways, split the way into two smaller ways
+  for (auto node_id : nids)
+    _splitIntersectingWays(node_id);
 
   _reconnectEnd(nids[0], _left);
   _reconnectEnd(nids[0], _right);
@@ -466,10 +427,8 @@ void DualHighwaySplitter::_splitWay(long wid)
 
   //  Keep track of the original nodes to remove them later
   vector<long> nodes = _working->getNodeIds();
-  for (vector<long>::iterator it = nodes.begin(); it != nodes.end(); ++it)
-  {
-    _nodes.insert(*it);
-  }
+  for (auto node_id : nodes)
+    _nodes.insert(node_id);
 
   RemoveWayByEid::removeWay(_result, wid);
 

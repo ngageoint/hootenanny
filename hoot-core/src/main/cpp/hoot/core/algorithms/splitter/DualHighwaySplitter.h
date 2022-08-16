@@ -29,8 +29,8 @@
 #define DUALHIGHWAYSPLITTER_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Units.h>
 
 // Standard
 #include <unordered_set>
