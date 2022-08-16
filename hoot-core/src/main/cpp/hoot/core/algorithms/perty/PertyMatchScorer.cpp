@@ -49,8 +49,8 @@
 namespace hoot
 {
 
-PertyMatchScorer::PertyMatchScorer() :
-_settings(conf())
+PertyMatchScorer::PertyMatchScorer()
+  : _settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
@@ -68,23 +68,18 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& r
 
   FileUtils::makeDir(outputPath);
   QFileInfo inputFileInfo(referenceMapInputPath);
-  const QString referenceMapOutputPath =
-    outputPath + "/" + inputFileInfo.baseName() + "-reference-out.osm";
+  const QString referenceMapOutputPath = outputPath + "/" + inputFileInfo.baseName() + "-reference-out.osm";
   _referenceMapOutput = referenceMapOutputPath;
-  const QString perturbedMapOutputPath =
-    outputPath + "/" + inputFileInfo.baseName() + "-perturbed-out.osm";
+  const QString perturbedMapOutputPath = outputPath + "/" + inputFileInfo.baseName() + "-perturbed-out.osm";
   _perturbedMapOutput = perturbedMapOutputPath;
-  const QString combinedMapOutputPath =
-    outputPath + "/" + inputFileInfo.baseName() + "-combined-out.osm";
-  const QString conflatedMapOutputPath =
-    outputPath + "/" + inputFileInfo.baseName() + "-conflated-out.osm";
+  const QString combinedMapOutputPath = outputPath + "/" + inputFileInfo.baseName() + "-combined-out.osm";
+  const QString conflatedMapOutputPath = outputPath + "/" + inputFileInfo.baseName() + "-conflated-out.osm";
   _conflatedMapOutput = conflatedMapOutputPath;
 
   OsmMapPtr referenceMap = _loadReferenceMap(referenceMapInputPath, referenceMapOutputPath);
   OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "ref-map");
   _loadPerturbedMap(referenceMapOutputPath, perturbedMapOutputPath);
-  OsmMapPtr combinedMap =
-    _combineMapsAndPrepareForConflation(referenceMap, perturbedMapOutputPath);
+  OsmMapPtr combinedMap = _combineMapsAndPrepareForConflation(referenceMap, perturbedMapOutputPath);
   OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "combined-map-1");
 
   MapProjector::projectToWgs84(combinedMap);
@@ -111,8 +106,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
   referenceMap->visitRw(*addRef1Visitor);
 
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor =
-    std::make_shared<SetTagValueVisitor>(
-      MetadataTags::ErrorCircular(), QString::number(_searchDistance));
+    std::make_shared<SetTagValueVisitor>(MetadataTags::ErrorCircular(), QString::number(_searchDistance));
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
   LOG_VARD(referenceMap->getWays().size());
@@ -144,8 +138,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   perturbedMap->visitRw(*tagRenameKeyVisitor);
 
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor =
-    std::make_shared<SetTagValueVisitor>(
-      MetadataTags::ErrorCircular(), QString::number(_searchDistance));
+    std::make_shared<SetTagValueVisitor>(MetadataTags::ErrorCircular(), QString::number(_searchDistance));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
@@ -164,8 +157,8 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "perturbed-map");
 }
 
-OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
-  const OsmMapPtr& referenceMap, const QString& perturbedMapInputPath) const
+OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr& referenceMap,
+                                                                const QString& perturbedMapInputPath) const
 {
   LOG_DEBUG("Combining the reference and perturbed data into a single file ...");
 
@@ -192,12 +185,11 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     LOG_VARD(combinedMap->getNodes().size());
     LOG_VARD(combinedMap->getWays().size());
   }
-
   return combinedMap;
 }
 
-std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
-  const OsmMapPtr& combinedDataToConflate, const QString& conflatedMapOutputPath) const
+std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(const OsmMapPtr& combinedDataToConflate,
+                                                                            const QString& conflatedMapOutputPath) const
 {
   LOG_DEBUG("Conflating the reference data with the perturbed data, scoring the matches, and " <<
             "saving the conflated output to: " << conflatedMapOutputPath);

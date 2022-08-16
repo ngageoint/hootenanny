@@ -58,9 +58,7 @@ Mat DirectSequentialSimulation::permute(const geos::geom::Envelope& env, int& po
     rng.seed(seed);
   }
   else
-  {
     rng.seed(_seed);
-  }
 
   Mat Ex = _gm2dPerturb2(env, _sigmaSx, rng);
   Mat Ey = _gm2dPerturb2(env, _sigmaSy, rng);
@@ -115,14 +113,10 @@ Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters s
 
   // then the rest of the rows (for the first column)
   for (int j = 1; j < rows; ++j)
-  {
     Pb.at<double>(j, 0) = s * Pb.at<double>(j - 1, 0) + N() * sigu;
-  }
   // then rest of column (for fixed 1st row)
   for (int k = 1; k < cols; ++k)
-  {
     Pb.at<double>(0, k) = r * Pb.at<double>(0, k - 1) + N() * sigu;
-  }
 
   // then fill in the rest of the grid
   for (int k = 2; k < cols; ++k)
@@ -133,7 +127,6 @@ Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters s
           r * s * Pb.at<double>(j - 1, k - 1) + N() * sigu;
     }
   }
-
   return Mat(Pb, cv::Range(3, rows - 3), cv::Range(3, cols - 3));
 }
 

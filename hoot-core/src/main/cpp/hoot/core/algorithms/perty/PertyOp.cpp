@@ -36,8 +36,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 using namespace cv;
 using namespace geos::geom;
@@ -51,11 +51,11 @@ class ShiftMapVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  ShiftMapVisitor(const Mat& EX, int cols, const Envelope& e, Meters gridSpacing) :
-    _EX(EX),
-    _cols(cols),
-    _e(e),
-    _gridSpacing(gridSpacing)
+  ShiftMapVisitor(const Mat& EX, int cols, const Envelope& e, Meters gridSpacing)
+    : _EX(EX),
+      _cols(cols),
+      _e(e),
+      _gridSpacing(gridSpacing)
   {
   }
   ~ShiftMapVisitor() = default;
@@ -114,10 +114,8 @@ public:
       double a3 = triArea2(t1, t2, p);
       double areaSum = a1 + a2 + a3;
 
-      result.val[0] = (_getX(r, c) * a1 + _getX(r, c + 1) * a2 + _getX(r + 1, c + 1) * a3) /
-          areaSum;
-      result.val[1] = (_getY(r, c) * a1 + _getY(r, c + 1) * a2 + _getY(r + 1, c + 1) * a3) /
-          areaSum;
+      result.val[0] = (_getX(r, c) * a1 + _getX(r, c + 1) * a2 + _getX(r + 1, c + 1) * a3) / areaSum;
+      result.val[1] = (_getY(r, c) * a1 + _getY(r, c + 1) * a2 + _getY(r + 1, c + 1) * a3) / areaSum;
     }
     // if we're in the upper left triangle
     else
@@ -131,19 +129,15 @@ public:
       double a4 = triArea2(t1, t3, p);
       double areaSum = a1 + a3 + a4;
 
-      result.val[0] = (_getX(r, c) * a1 + _getX(r + 1, c) * a4 + _getX(r + 1, c + 1) * a3) /
-          areaSum;
-      result.val[1] = (_getY(r, c) * a1 + _getY(r + 1, c) * a4 + _getY(r + 1, c + 1) * a3) /
-          areaSum;
+      result.val[0] = (_getX(r, c) * a1 + _getX(r + 1, c) * a4 + _getX(r + 1, c + 1) * a3) / areaSum;
+      result.val[1] = (_getY(r, c) * a1 + _getY(r + 1, c) * a4 + _getY(r + 1, c + 1) * a3) / areaSum;
     }
-
     return result;
   }
 
   Coordinate gridCoordinate(int r, int c) const
   {
-    return Coordinate((double)c * _gridSpacing + _e.getMinX(),
-      (double)r * _gridSpacing + _e.getMinY());
+    return Coordinate((double)c * _gridSpacing + _e.getMinX(), (double)r * _gridSpacing + _e.getMinY());
   }
 
   /**
@@ -172,9 +166,9 @@ private:
   }
 };
 
-PertyOp::PertyOp() :
-_permuteAlgorithm(DirectSequentialSimulation::className()),
-_settings(conf())
+PertyOp::PertyOp()
+  : _permuteAlgorithm(DirectSequentialSimulation::className()),
+    _settings(conf())
 {
   _configure();
 }
@@ -182,8 +176,7 @@ _settings(conf())
 void PertyOp::_configure()
 {
   ConfigOptions configOptions(_settings);
-  setSystematicError(
-    configOptions.getPertySystematicErrorX(), configOptions.getPertySystematicErrorY());
+  setSystematicError(configOptions.getPertySystematicErrorX(), configOptions.getPertySystematicErrorY());
   setGridSpacing(configOptions.getPertyGridSpacing());
   setCsmParameters(configOptions.getPertyCsmD());
   setSeed(configOptions.getRandomSeed());
@@ -199,9 +192,7 @@ void PertyOp::setConfiguration(const Settings& conf)
 void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 {
   if (map->size() == 0)
-  {
     throw EmptyMapInputException();
-  }
 
   _numAffected = 0;
 
@@ -218,8 +209,7 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols)
 {
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
-  _gridCalculator =
-    Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm);
+  _gridCalculator = Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm);
   _gridCalculator->setCsmParameters(_D);
   _gridCalculator->setGridSpacing(_gridSpacing);
   _gridCalculator->setSeed(_seed);
@@ -245,7 +235,7 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
 
   for (int i = 0; i < rows; ++i)
   {
-    for (int j =0; j < cols; ++j)
+    for (int j = 0; j < cols; ++j)
     {
       double x = env.getMinX() + j * _gridSpacing;
       double y = env.getMinY() + i * _gridSpacing;
@@ -254,8 +244,7 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
       double dy = EX.at<double>((i * cols + j) * 2 + 1, 0);
 
       NodePtr n1 = std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x, y, 5);
-      NodePtr n2 =
-        std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5);
+      NodePtr n2 = std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5);
       result->addNode(n1);
       result->addNode(n2);
 
@@ -267,7 +256,6 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
       result->addElement(w);
     }
   }
-
   return result;
 }
 

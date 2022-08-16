@@ -34,25 +34,24 @@ using namespace std;
 namespace hoot
 {
 
-PertyTestRunResult::PertyTestRunResult(
-  const QString& referenceInput, const QString& outputDir, const int testRunNum,
-  const QList<double> simulationScores, const double score, const double expectedScore,
-  const double scoreVariance, const double allowedScoreVariance, const bool failOnBetterScore,
-  const QStringList& dynamicVariables, const double dynamicVariableStartingValue,
-  const double dynamicVariableIncrement, const double dynamicVariableValue) :
-_referenceInput(referenceInput),
-_outputDir(outputDir),
-_testRunNum(testRunNum),
-_score(score),
-_simulationScores(simulationScores),
-_expectedScore(expectedScore),
-_scoreVariance(scoreVariance),
-_allowedScoreVariance(allowedScoreVariance),
-_failOnBetterScore(failOnBetterScore),
-_dynamicVariables(dynamicVariables),
-_dynamicVariableStartingValue(dynamicVariableStartingValue),
-_dynamicVariableIncrement(dynamicVariableIncrement),
-_dynamicVariableValue(dynamicVariableValue)
+PertyTestRunResult::PertyTestRunResult(const QString& referenceInput, const QString& outputDir, const int testRunNum,
+                                       const QList<double> simulationScores, const double score, const double expectedScore,
+                                       const double scoreVariance, const double allowedScoreVariance, const bool failOnBetterScore,
+                                       const QStringList& dynamicVariables, const double dynamicVariableStartingValue,
+                                       const double dynamicVariableIncrement, const double dynamicVariableValue)
+  : _referenceInput(referenceInput),
+    _outputDir(outputDir),
+    _testRunNum(testRunNum),
+    _score(score),
+    _simulationScores(simulationScores),
+    _expectedScore(expectedScore),
+    _scoreVariance(scoreVariance),
+    _allowedScoreVariance(allowedScoreVariance),
+    _failOnBetterScore(failOnBetterScore),
+    _dynamicVariables(dynamicVariables),
+    _dynamicVariableStartingValue(dynamicVariableStartingValue),
+    _dynamicVariableIncrement(dynamicVariableIncrement),
+    _dynamicVariableValue(dynamicVariableValue)
 {
 }
 
@@ -60,13 +59,9 @@ bool PertyTestRunResult::testPassed() const
 {
   const bool scoreWithinVariance = getScoreVariance() <= getAllowedScoreVariance();
   if (getFailOnBetterScore())
-  {
     return scoreWithinVariance;
-  }
   else
-  {
     return scoreWithinVariance || (getScore() > getExpectedScore());
-  }
 }
 
 QString PertyTestRunResult::toString() const
@@ -84,28 +79,22 @@ QString PertyTestRunResult::toString() const
   }
   str += "Simulation Scores:\n";
   for (int i = 0; i < _simulationScores.size(); i++)
-  {
     str += "     #" + QString::number(i + 1) + ": " + QString::number(_simulationScores[i]) + "\n";
-  }
+
   vector<double> scores = _simulationScores.toVector().toStdVector();
   tbs::SampleStats stats(scores);
   str += "Test Run Score (averaged): " + QString::number(_score) + "\n";
-  str += QString("Test Run CI90: %1, %2\n").arg(stats.calculateCi90Lower()).
-      arg(stats.calculateCi90Upper());
+  str += QString("Test Run CI90: %1, %2\n").arg(stats.calculateCi90Lower()).arg(stats.calculateCi90Upper());
   str += "Expected Score: " + QString::number(getExpectedScore()) + "\n";
   str += "Score Variance From Expected: " + QString::number(getScoreVariance()) + "\n";
   str += "Allowed Score Variance: " + QString::number(getAllowedScoreVariance()) + "\n";
   QString failOnBetterScoreStr = "false";
   if (getFailOnBetterScore())
-  {
     failOnBetterScoreStr = "true";
-  }
   str += "Fail On Better Score: " + failOnBetterScoreStr + "\n";
   QString testPassedStr = "false";
   if (testPassed())
-  {
     testPassedStr = "true";
-  }
   str += "Test Passed: " + testPassedStr + "\n";
   return str;
 }
