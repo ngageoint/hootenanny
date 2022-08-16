@@ -26,8 +26,6 @@
  */
 #include "IntegerProgrammingSolver.h"
 
-
-
 #include <hoot/core/util/SignalCatcher.h>
 
 namespace hoot
@@ -47,37 +45,25 @@ IntegerProgrammingSolver::~IntegerProgrammingSolver()
 double IntegerProgrammingSolver::getColumnPrimalValue(int j) const
 {
   if (isIntegerProblem())
-  {
     return glp_mip_col_val(_lp, j);
-  }
   else
-  {
     return glp_get_col_prim(_lp, j);
-  }
 }
 
 double IntegerProgrammingSolver::getObjectiveValue() const
 {
   if (isIntegerProblem())
-  {
     return glp_mip_obj_val(_lp);
-  }
   else
-  {
     return glp_get_obj_val(_lp);
-  }
 }
 
 void IntegerProgrammingSolver::solve()
 {
   if (isIntegerProblem())
-  {
     solveBranchAndCut();
-  }
   else
-  {
     solveSimplex();
-  }
 }
 
 void IntegerProgrammingSolver::solveBranchAndCut()
@@ -94,22 +80,14 @@ void IntegerProgrammingSolver::solveBranchAndCut()
   iocp.br_tech = GLP_BR_PCH;
   //  Setup the time limit if necessary
   if (_timeLimit > 0)
-  {
     iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
-  }
   //  Setup message level
   if (Log::getInstance().getLevel() <= Log::Trace)
-  {
     iocp.msg_lev = GLP_MSG_ON;
-  }
   else if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     iocp.msg_lev = GLP_MSG_ERR;
-  }
   else
-  {
     iocp.msg_lev = GLP_MSG_OFF;
-  }
 
   int result = 0;
   try
@@ -128,9 +106,7 @@ void IntegerProgrammingSolver::solveBranchAndCut()
 
   // if there was an error and the error was not a timeout or iteration limit error.
   if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
-  {
     throw HootException(QString("Error solving integer programming problem. %1").arg(result));
-  }
 }
 
 void IntegerProgrammingSolver::solveSimplex()
@@ -141,22 +117,14 @@ void IntegerProgrammingSolver::solveSimplex()
   glp_init_smcp(&smcp);
   //  Setup the time limit if necessary
   if (_timeLimit > 0)
-  {
     smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
-  }
   //  Setup message level
   if (Log::getInstance().getLevel() <= Log::Trace)
-  {
     smcp.msg_lev = GLP_MSG_ON;
-  }
   else if (Log::getInstance().getLevel() <= Log::Debug)
-  {
     smcp.msg_lev = GLP_MSG_ERR;
-  }
   else
-  {
     smcp.msg_lev = GLP_MSG_OFF;
-  }
 
   int result = 0;
   try
@@ -175,9 +143,7 @@ void IntegerProgrammingSolver::solveSimplex()
 
   // if there was an error and the error was not a timeout or iteration limit error.
   if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
-  {
     throw HootException(QString("Error solving integer programming problem. %1").arg(result));
-  }
 }
 
 }

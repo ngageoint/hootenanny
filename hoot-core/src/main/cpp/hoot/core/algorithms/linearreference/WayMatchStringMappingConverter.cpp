@@ -29,8 +29,7 @@
 namespace hoot
 {
 
-WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(
-  WayMatchStringMappingPtr mapping) const
+WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(WayMatchStringMappingPtr mapping) const
 {
   WayStringPtr wstr1 = mapping->getWayString1();
   WayStringPtr wstr2 = mapping->getWayString2();

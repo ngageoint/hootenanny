@@ -41,63 +41,49 @@ WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
     for (size_t j = 0; j < m.size(); j++)
     {
       if (i != j && m[i].overlaps(m[j]))
-      {
-        LOG_VART(m);
-        throw OverlappingMatchesException(
-          "The match collection must not contain overlapping matches.");
-      }
+        throw OverlappingMatchesException("The match collection must not contain overlapping matches.");
     }
   }
   _matches = m;
 }
 
 WaySublineMatchString::WaySublineMatchString(const WaySublineMatchString& other,
-  const OsmMapPtr& newMap)
+                                             const OsmMapPtr& newMap)
 {
   _matches.resize(other._matches.size());
-
   for (size_t i = 0; i < other.getMatches().size(); i++)
-  {
     _matches[i] = WaySublineMatch(other.getMatches()[i], newMap);
-  }
 }
 
 bool WaySublineMatchString::contains(const WaySublineMatchString& other) const
 {
   bool result = true;
-  for (size_t i = 0; i < other._matches.size(); i++)
-  {
-    result = result && contains(other._matches[i]);
-  }
-
+  for (const auto& match : other._matches)
+    result = result && contains(match);
   return result;
 }
 
 bool WaySublineMatchString::contains(const WaySublineMatch &other) const
 {
-  bool result = false;
-
-  for (size_t i = 0; i < _matches.size(); i++)
+  for (const auto& match : _matches)
   {
-    if (_matches[i].getSubline1().contains(other.getSubline1()) ||
-        _matches[i].getSubline2().contains(other.getSubline2()))
+    if (match.getSubline1().contains(other.getSubline1()) ||
+        match.getSubline2().contains(other.getSubline2()))
     {
-      result = true;
+      return true;
     }
   }
-
-  return result;
+  return false;
 }
 
 Meters WaySublineMatchString::getLength() const
 {
   Meters result = 0;
-  for (size_t i = 0; i < _matches.size(); i++)
+  for (const auto& match : _matches)
   {
-    result += _matches[i].getSubline1().getLength();
-    result += _matches[i].getSubline2().getLength();
+    result += match.getSubline1().getLength();
+    result += match.getSubline2().getLength();
   }
-
   return result / 2.0;
 }
 
@@ -111,53 +97,36 @@ vector<bool> WaySublineMatchString::getReverseVector2() const
 {
   vector<bool> result(_matches.size());
   for (size_t i = 0; i < _matches.size(); i++)
-  {
     result[i] = _matches[i].isReverseMatch();
-  }
   return result;
 }
 
 WaySublineCollection WaySublineMatchString::getSublineString1() const
 {
   WaySublineCollection result;
-  for (size_t i = 0; i < _matches.size(); i++)
-  {
-    result.addSubline(_matches[i].getSubline1());
-  }
+  for (const auto& match : _matches)
+    result.addSubline(match.getSubline1());
   return result;
 }
 
 WaySublineCollection WaySublineMatchString::getSublineString2() const
 {
   WaySublineCollection result;
-  for (size_t i = 0; i < _matches.size(); i++)
-  {
-    result.addSubline(_matches[i].getSubline2());
-  }
+  for (const auto& match : _matches)
+    result.addSubline(match.getSubline2());
   return result;
 }
 
 bool WaySublineMatchString::isValid() const
 {
-  if (_matches.size() > 0)
-  {
-    for (size_t i = 0; i < _matches.size(); i++)
-    {
-      const WaySublineMatch& m = _matches[i];
-      LOG_VART(m.getSubline1());
-      LOG_VART(m.getSubline2());
-      if (m.getSubline1().isZeroLength() || m.getSubline2().isZeroLength())
-      {
-        return false;
-      }
-    }
-
-    return true;
-  }
-  else
-  {
+  if (_matches.empty())
     return false;
+  for (const auto& m : _matches)
+  {
+    if (m.getSubline1().isZeroLength() || m.getSubline2().isZeroLength())
+      return false;
   }
+  return true;
 }
 
 void WaySublineMatchString::removeEmptyMatches()
@@ -165,13 +134,10 @@ void WaySublineMatchString::removeEmptyMatches()
   LOG_TRACE("Removing empty matches...");
   MatchCollection copy = _matches;
   _matches.clear();
-  for (size_t i = 0; i < copy.size(); i++)
+  for (const auto& m : copy)
   {
-    const WaySublineMatch& m = _matches[i];
     if (!m.getSubline1().isZeroLength() && !m.getSubline2().isZeroLength())
-    {
       _matches.push_back(m);
-    }
   }
 }
 
@@ -182,20 +148,17 @@ bool WaySublineMatchString::touches(const WaySublineMatchString& other) const
   WaySublineCollection owss1 = other.getSublineString1();
   WaySublineCollection owss2 = other.getSublineString2();
   return wss1.touches(owss1) ||
-      wss2.touches(owss2) ||
-      wss1.touches(owss2) ||
-      wss2.touches(owss1);
+         wss2.touches(owss2) ||
+         wss1.touches(owss2) ||
+         wss2.touches(owss1);
 }
 
 QString WaySublineMatchString::toString() const
 {
-  QString result;
-  result += QString("matches:\n");
+  QString result = "matches:\n";
   QStringList l;
-  for (size_t i = 0; i < _matches.size(); i++)
-  {
-    l.append(_matches[i].toString());
-  }
+  for (const auto& match : _matches)
+    l.append(match.toString());
   result += l.join("\n");
   return result;
 }

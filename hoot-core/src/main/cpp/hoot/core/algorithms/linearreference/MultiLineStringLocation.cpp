@@ -42,24 +42,14 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
                                                  const int wayIndex, const WayLocation& wayLocation)
 {
   if (relation->getMembers().empty())
-  {
-    throw HootException(
-      "Feature splitting for multi-line string relations requires that the relation has way members.");
-  }
+    throw HootException("Feature splitting for multi-line string relations requires that the relation has way members.");
   if (relation->getType() != MetadataTags::RelationMultilineString())
-  {
-    throw HootException(
-      "Invalid relation type: " + relation->getType() + " expected multiline string.");
-  }
+    throw HootException("Invalid relation type: " + relation->getType() + " expected multiline string.");
   if (wayIndex < 0 || wayIndex > (int)relation->getMembers().size() - 1)
-  {
     throw HootException("Invalid way index: " + QString::number(wayIndex));
-  }
   if (relation->getMembers().at(wayIndex).getElementId() != wayLocation.getWay()->getElementId())
   {
-    throw HootException(
-      "Feature at way index: " + QString::number(wayIndex) +
-      " does not match way assigned to way location: " +
+    throw HootException("Feature at way index: " + QString::number(wayIndex) + " does not match way assigned to way location: " +
       wayLocation.getWay()->getElementId().toString());
   }
 
@@ -74,10 +64,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
     ConstElementPtr element = map->getElement(member.getElementId());
     //there could be a relation here, but we don't handle it for now
     if (element->getElementType() != ElementType::Way)
-    {
-      throw HootException(
-        "Feature splitting for multi-line string relations may only occur on relations which contain only ways.");
-    }
+      throw HootException("Feature splitting for multi-line string relations may only occur on relations which contain only ways.");
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
     _waySublineString.addSubline(
       WaySubline(
@@ -86,8 +73,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
   }
 
   //add line from start of way where way location resides up to the split point
-  _waySublineString.addSubline(
-    WaySubline(WayLocation(map, _wayLocation.getWay(), 0, 0.0), _wayLocation));
+  _waySublineString.addSubline(WaySubline(WayLocation(map, _wayLocation.getWay(), 0, 0.0), _wayLocation));
   LOG_VART(_waySublineString.getSublines().size());
 }
 
