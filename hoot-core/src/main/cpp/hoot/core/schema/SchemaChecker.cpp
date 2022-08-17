@@ -41,7 +41,7 @@ SchemaChecker::SchemaChecker(const OsmSchema& osmSchema)
 {
 }
 
-void SchemaChecker::checkUnknownVertexType()
+void SchemaChecker::checkUnknownVertexType() const
 {
   for (const auto& schemaVertex : _schemaVertexList)
   {
@@ -60,7 +60,7 @@ void SchemaChecker::checkUnknownVertexType()
   }
 }
 
-void SchemaChecker::check()
+void SchemaChecker::check() const
 {
   checkUnknownVertexType();
 }

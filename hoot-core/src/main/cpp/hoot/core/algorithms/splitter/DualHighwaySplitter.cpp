@@ -216,7 +216,7 @@ bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Wa
   }
   else
   {
-    size_t inboundNodeIndex = inbound->getNodeCount() - 1;
+    int inboundNodeIndex = static_cast<int>(inbound->getNodeCount() - 1);
     vi = WayHeading::calculateVector(_result->getNode(inbound->getNodeId(inboundNodeIndex))->toCoordinate(),
                                      _result->getNode(inbound->getNodeId(inboundNodeIndex - 1))->toCoordinate());
   }

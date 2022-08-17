@@ -53,12 +53,12 @@ public:
    * Print out error message if schemavertex is unkonw vertex type.
    */
 
-  void checkUnknownVertexType();
+  void checkUnknownVertexType() const;
 
   /**
    * Print out error message if schemavertex has empty geometry or geometries are empty
    */
-  void check();
+  void check() const;
 
   /**
    * Retrun true if schemavertex is unknown vertex type.
