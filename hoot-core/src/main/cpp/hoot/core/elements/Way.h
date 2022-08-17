@@ -84,24 +84,21 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const geos::geom::Envelope& getApproximateEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const;
+  const geos::geom::Envelope& getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
 
   ElementType getElementType() const override { return ElementType(ElementType::Way); }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const override
-  { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
+  std::shared_ptr<geos::geom::Envelope> getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override
+  { return std::make_shared<geos::geom::Envelope>(getEnvelopeInternal(ep)); }
 
   /**
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const geos::geom::Envelope& getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
+  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const override;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node

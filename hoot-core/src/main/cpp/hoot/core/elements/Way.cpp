@@ -51,16 +51,16 @@ namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         quint64 timestamp, QString user, long uid, bool visible, long pid) :
-Element(s)
+         quint64 timestamp, QString user, long uid, bool visible, long pid)
+  : Element(s)
 {
   _wayData = std::make_shared<WayData>(id, changeset, version, timestamp, user, uid, visible, pid);
   _wayData->setCircularError(circularError);
 }
 
-Way::Way(const Way& from) :
-Element(from.getStatus()),
-_wayData(std::make_shared<WayData>(*from._wayData.get()))
+Way::Way(const Way& from)
+  : Element(from.getStatus()),
+    _wayData(std::make_shared<WayData>(*from._wayData.get()))
 {
 }
 
@@ -109,9 +109,7 @@ void Way::addNodes(const vector<long>& ids)
 bool Way::_nodeIdsAreDuplicated(const vector<long>& ids) const
 {
   if (ids.size() == 1)
-  {
     return false;
-  }
 
   LOG_VART(ids);
 
@@ -123,17 +121,11 @@ bool Way::_nodeIdsAreDuplicated(const vector<long>& ids) const
     LOG_VART(i);
     LOG_VART(idsCopy.lastIndexOf(id));
     if (!idsCopy.contains(id))
-    {
       idsCopy.append(id);
-    }
     else if (i == ids.size() - 1 && idsCopy.lastIndexOf(id) != 0)
-    {
       return true;
-    }
     else if (i != ids.size() - 1)
-    {
       return true;
-    }
   }
   return false;
 }
@@ -149,30 +141,25 @@ void Way::clear()
 bool Way::containsNodeId(long nid) const
 {
   const std::vector<long>& nids = getNodeIds();
-  for (size_t i = 0; i < nids.size(); i++)
+  for (auto node_id : nids)
   {
-    if (nids[i] == nid)
-    {
+    if (node_id == nid)
       return true;
-    }
   }
   return false;
 }
 
-void Way::visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                  const bool recursive) const
+void Way::visitRo(const ElementProvider& map, ConstElementVisitor& filter, const bool recursive) const
 {
   filter.visit(map.getWay(getId()));
 
   if (recursive)
   {
     const std::vector<long>& nids = getNodeIds();
-    for (size_t i = 0; i < nids.size(); i++)
+    for (auto node_id : nids)
     {
-      if (map.containsNode(nids[i]))
-      {
-        filter.visit(map.getNode(nids[i]));
-      }
+      if (map.containsNode(node_id))
+        filter.visit(map.getNode(node_id));
     }
   }
 }
@@ -188,15 +175,13 @@ const Envelope& Way::getApproximateEnvelope(const std::shared_ptr<const ElementP
   if (ep.get())
   {
     const std::vector<long>& ids = _wayData->getNodeIds();
-    for (size_t i = 0; i < ids.size(); i++)
+    for (auto node_id : ids)
     {
-      if (ep->containsElement(ElementId::node(ids[i])) == false)
-      {
+      if (ep->containsElement(ElementId::node(node_id)) == false)
         goodNodes = false;
-      }
       else
       {
-        std::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+        std::shared_ptr<const Element> e = ep->getElement(ElementId::node(node_id));
         ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
         assert(n.get());
         _cachedEnvelope.expandToInclude(n->getX(), n->getY());
@@ -204,18 +189,12 @@ const Envelope& Way::getApproximateEnvelope(const std::shared_ptr<const ElementP
     }
   }
   else
-  {
     goodNodes = false;
-  }
 
   if (goodNodes)
-  {
     return getEnvelopeInternal(ep);
-  }
   else
-  {
     return _cachedEnvelope;
-  }
 }
 
 const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
@@ -223,16 +202,13 @@ const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProv
   _cachedEnvelope.init();
 
   const std::vector<long>& ids = _wayData->getNodeIds();
-  for (size_t i = 0; i < ids.size(); i++)
+  for (auto node_id : ids)
   {
-    std::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+    std::shared_ptr<const Element> e = ep->getElement(ElementId::node(node_id));
     ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     if (n)
-    {
       _cachedEnvelope.expandToInclude(n->getX(), n->getY());
-    }
   }
-
   return _cachedEnvelope;
 }
 
@@ -260,11 +236,8 @@ int Way::getNodeIndex(long nodeId) const
   for (size_t i = 0; i < ids.size(); i++)
   {
     if (ids[i] == nodeId)
-    {
       return i;
-    }
   }
-
   assert(false);
   return -1;
 }
@@ -272,13 +245,10 @@ int Way::getNodeIndex(long nodeId) const
 bool Way::hasNode(long nodeId) const
 {
   const std::vector<long>& ids = _wayData->getNodeIds();
-
-  for (size_t i = 0; i < ids.size(); i++)
+  for (auto node_id : ids)
   {
-    if (ids[i] == nodeId)
-    {
+    if (node_id == nodeId)
       return true;
-    }
   }
 
   return false;
@@ -287,39 +257,23 @@ bool Way::hasNode(long nodeId) const
 bool Way::isSimpleLoop() const
 {
   if (getNodeCount() < 2)
-  {
     return false;
-  }
   return (getFirstNodeId() == getLastNodeId());
 }
 
 bool Way::isValidPolygon() const
 {
   size_t nc = getNodeCount();
-  bool result = false;
-
-  // the way must have either 0 or 4 points to be considered a valid polygon by GEOS.
-  if (nc == 0 || nc >= 4)
-  {
-    result = true;
-  }
-  // if there are only 3 points and the first/last don't match then we'll add one if the user
-  // requests a polygon.
-  else if (nc == 3 && getNodeId(0) != getLastNodeId())
-  {
-    result = true;
-  }
-
-  return result;
+  // the way must have either 0 or 4 points to be considered a valid polygon by GEOS
+  // or 3 points and first != last
+  return (nc == 0 || nc >= 4 || (nc == 3 && getNodeId(0) != getLastNodeId()));
 }
 
 void Way::_makeWritable()
 {
   // Make sure we're the only ones referencing the way data.
   if (_wayData.use_count() > 1)
-  {
     _wayData = std::make_shared<WayData>(*_wayData);
-  }
 }
 
 void Way::removeNode(long id) const
@@ -328,7 +282,6 @@ void Way::removeNode(long id) const
 
   std::vector<long>& nodes = _wayData->getNodeIds();
   size_t newCount = 0;
-
   // copy the array in place and remove the unwanted nodes.
   for (size_t i = 0; i < nodes.size(); i++)
   {
@@ -338,7 +291,6 @@ void Way::removeNode(long id) const
       newCount++;
     }
   }
-
   nodes.resize(newCount);
 }
 
@@ -359,20 +311,16 @@ void Way::replaceNode(long oldId, long newId)
   // the caller, then a different approach should be taken similar to the changes attempted before.
 
   if (oldId == newId)
-  {
     return;
-  }
 
-  LOG_TRACE(
-    "Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
+  LOG_TRACE("Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
 
   const vector<long>& ids = getNodeIds();
 
   vector<size_t> indices;
   for (size_t i = 0; i < ids.size(); i++)
   {
-    const long id = ids[i];
-    if (id == oldId)
+    if (ids[i] == oldId)
       indices.emplace_back(i);
   }
 
@@ -388,8 +336,8 @@ void Way::replaceNode(long oldId, long newId)
 
     vector<long>& newIds = _wayData->getNodeIds();
     LOG_TRACE("Replacement IDs: " << newIds);
-    for (size_t i = 0; i < indices.size(); ++i)
-      newIds[indices[i]] = newId;
+    for (auto index : indices)
+      newIds[index] = newId;
 
     _postGeometryChange();
 
@@ -415,11 +363,9 @@ void Way::reverseOrder()
 
   std::vector<long> oldOrder = getNodeIds();
   std::vector<long>& nodes = _wayData->getNodeIds();
-
   for (size_t i = 0; i < oldOrder.size(); i++)
-  {
     nodes[i] = oldOrder[oldOrder.size() - i - 1];
-  }
+
   _postGeometryChange();
 }
 
@@ -449,15 +395,20 @@ bool Way::isClosedArea() const
 
 long Way::getPid(const ConstWayPtr& p, const ConstWayPtr& c)
 {
-  if (!p && !c)   return WayData::PID_EMPTY;
-  else            return Way::getPid(p->getPid(), c->getPid());
+  if (!p && !c)
+    return WayData::PID_EMPTY;
+  else
+    return Way::getPid(p->getPid(), c->getPid());
 }
 
 long Way::getPid(long p, long c)
 {
-  if (p != WayData::PID_EMPTY)          return p;
-  else if (c != WayData::PID_EMPTY)     return c;
-  else                                  return WayData::PID_EMPTY;
+  if (p != WayData::PID_EMPTY)
+    return p;
+  else if (c != WayData::PID_EMPTY)
+    return c;
+  else
+    return WayData::PID_EMPTY;
 }
 
 bool Way::hasSameNodes(const Way& other) const

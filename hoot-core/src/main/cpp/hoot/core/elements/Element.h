@@ -42,14 +42,6 @@
 // Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
 #include <geos/geom/Envelope.h>
 
-namespace geos
-{
-  namespace geom
-  {
-    class Envelope;
-  }
-}
-
 namespace hoot
 {
 
@@ -85,7 +77,7 @@ public:
    * empty or any of the child elements are missing. The caller gets ownership of the returned
    * envelope.
    */
-  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual std::shared_ptr<geos::geom::Envelope> getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const = 0;
   virtual const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const = 0;
 
   /**

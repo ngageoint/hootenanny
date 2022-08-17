@@ -213,15 +213,15 @@ std::set<ElementId> Relation::getMemberIds(const ElementType& elementType) const
   return memberIds;
 }
 
-Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
+std::shared_ptr<Envelope> Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
   set<long> visited;
-  return new Envelope(getEnvelopeInternal(ep, visited));
+  return std::make_shared<Envelope>(getEnvelopeInternal(ep, visited));
 }
 
-geos::geom::Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const
+std::shared_ptr<Envelope> Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const
 {
-  return new Envelope(getEnvelopeInternal(ep, visited));
+  return std::make_shared<Envelope>(getEnvelopeInternal(ep, visited));
 }
 
 const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
@@ -268,9 +268,9 @@ const geos::geom::Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<
       std::shared_ptr<Envelope> childEnvelope;
       //  Relations need different handling
       if (eid.getType() == ElementType::Relation)
-        childEnvelope.reset(std::dynamic_pointer_cast<const Relation>(e)->getEnvelope(ep, visited));
+        childEnvelope = std::dynamic_pointer_cast<const Relation>(e)->getEnvelope(ep, visited);
       else
-        childEnvelope.reset(e->getEnvelope(ep));
+        childEnvelope = e->getEnvelope(ep);
       LOG_VART(childEnvelope.get());
       LOG_VART(childEnvelope->isNull());
       if (childEnvelope->isNull())

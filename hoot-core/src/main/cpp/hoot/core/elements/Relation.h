@@ -185,7 +185,7 @@ public:
   std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
   QString getRole(const ElementId& elementId) const;
 
-  geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override;
+  std::shared_ptr<geos::geom::Envelope> getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override;
   const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const override;
 
   ElementType getElementType() const override { return ElementType(ElementType::Relation); }
@@ -241,7 +241,7 @@ private:
   void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
                 QList<long>& visitedRelations, const bool recursive = true) const;
 
-  geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const;
+  std::shared_ptr<geos::geom::Envelope> getEnvelope(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const;
   const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const;
 
 };
