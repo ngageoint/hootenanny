@@ -49,11 +49,10 @@ public:
 
   static QString className() { return "Relation"; }
 
-  Relation(
-    Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY, QString type = "",
-    long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
-    quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
-    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
+  Relation(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY, QString type = "",
+           long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
+           quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+           long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   explicit Relation(const Relation& from);
   ~Relation() override = default;
 
@@ -83,8 +82,7 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(
-    const std::shared_ptr<const Element>& from, const std::shared_ptr<const Element>& to);
+  void replaceElement(const std::shared_ptr<const Element>& from, const std::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
   void replaceElement(const ElementId& from, const ElementId& to);
   /**
@@ -187,10 +185,8 @@ public:
   std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
   QString getRole(const ElementId& elementId) const;
 
-  geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
-  const geos::geom::Envelope& getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
+  geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override;
+  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const override;
 
   ElementType getElementType() const override { return ElementType(ElementType::Relation); }
 
@@ -221,15 +217,13 @@ public:
   /**
    * @see Element
    */
-  void visitRo(
-    const ElementProvider& map, ConstElementVisitor& filter,
-    const bool recursive = true) const override;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  void visitRw(
-    ElementProvider& map, ConstElementVisitor& filter, const bool recursive = true) override;
+  void visitRw(ElementProvider& map, ConstElementVisitor& filter, const bool recursive = true) override;
 
 private:
 
@@ -243,9 +237,13 @@ private:
   void _makeWritable();
 
   void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-    QList<long>& visitedRelations, const bool recursive = true) const;
+                QList<long>& visitedRelations, const bool recursive = true) const;
   void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
-    QList<long>& visitedRelations, const bool recursive = true) const;
+                QList<long>& visitedRelations, const bool recursive = true) const;
+
+  geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const;
+  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const;
+
 };
 
 template<typename IT>
