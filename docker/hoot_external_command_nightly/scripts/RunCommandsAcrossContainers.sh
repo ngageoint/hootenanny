@@ -23,10 +23,18 @@ run-split()
 
 run-translate-directory()
 {
-    for _file in ${DIR_PATH}/*.shp;
-    do
-        hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${_file} ${_file::-4}.osm
-    done
+    if [ $AFTER_SPLIT == 0 ] 
+    then
+        for _file in ${DIR_PATH}/*.shp;
+        do
+            hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${_file} ${_file::-4}.osm
+        done
+    else 
+        for _file in ${DIR_PATH}/*.osm;
+        do 
+            hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${_file} ${_file::-4}.osm
+        done
+    fi
 }
 
 case "$1" in
@@ -47,8 +55,9 @@ case "$1" in
         OUTPUT_SPLIT_OSM=$4
         run-split ;;
     -r)
-        TRANSLATION_SCRIPT=$2
-        DIR_PATH=$3
+        AFTER_SPLIT=$2
+        TRANSLATION_SCRIPT=$3
+        DIR_PATH=$4
         run-translate-directory
 esac
 
