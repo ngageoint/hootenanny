@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CHANGESET_TASK_GRID_REPLACER_H
@@ -135,8 +135,7 @@ private:
   void _initConfig() const;
 
   void _replaceEntireTaskGrid(const TaskGrid& taskGrid);
-  void _replaceTaskGridCell(
-    const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
+  void _replaceTaskGridCell(const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
   void _initChangesetStats();
   void _printChangesetStats();
 

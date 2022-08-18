@@ -69,8 +69,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   if (cutterShape->getArea() == 0.0)
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
 
-  OsmMapWriterFactory::writeDebugMap(
-    cutterShape, inputMap->getProjection(), className(), "cutter-shape-map");
+  OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), className(), "cutter-shape-map");
 
   OsmMapPtr result = std::make_shared<OsmMap>(inputMap->getProjection());
   result->appendSource(inputMap->getSource());
@@ -201,18 +200,14 @@ void AlphaShapeGenerator::_coverStragglersWorker()
       //  so all threads need their own `copy`)
       if (!copy->contains(point.get()))
       {
-        LOG_TRACE(
-          "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
+        LOG_TRACE("Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
         point = point->buffer(_buffer);
         std::lock_guard<std::mutex> stragglers_lock(_stragglersMutex);
         _stragglers.push_back(point);
       }
     }
-    else
-    {
-      //  Sleep if the node wasn't valid
+    else  //  Sleep if the node wasn't valid
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
   }
 }
 

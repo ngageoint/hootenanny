@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BoundsStringTaskGridGenerator.h"
 
@@ -33,17 +33,15 @@
 namespace hoot
 {
 
-BoundsStringTaskGridGenerator::BoundsStringTaskGridGenerator(
-  const QString& bounds, const QString& outputPath) :
-_bounds(GeometryUtils::envelopeFromString(bounds)),
-_outputPath(outputPath)
+BoundsStringTaskGridGenerator::BoundsStringTaskGridGenerator(const QString& bounds, const QString& outputPath)
+  : _bounds(GeometryUtils::envelopeFromString(bounds)),
+    _outputPath(outputPath)
 {
 }
 
 TaskGrid BoundsStringTaskGridGenerator::generateTaskGrid()
 {
-  LOG_INFO(
-    "Generating task grid for bounds: " << GeometryUtils::envelopeToString(_bounds) << "...");
+  LOG_INFO("Generating task grid for bounds: " << GeometryUtils::envelopeToString(_bounds) << "...");
 
   TaskGrid taskGrid;
   TaskGrid::TaskGridCell taskGridCell;
@@ -54,9 +52,7 @@ TaskGrid BoundsStringTaskGridGenerator::generateTaskGrid()
   taskGrid.addCell(taskGridCell);
 
   if (!_outputPath.isEmpty())
-  {
     OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(_bounds), _outputPath);
-  }
 
   return taskGrid;
 }

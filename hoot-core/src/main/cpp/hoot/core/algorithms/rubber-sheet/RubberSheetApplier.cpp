@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheetApplier.h"
@@ -40,8 +40,7 @@
 namespace hoot
 {
 
-void RubberSheetApplier::apply(
-  const QString& transform, const QString& input, const QString& output) const
+void RubberSheetApplier::apply(const QString& transform, const QString& input, const QString& output) const
 {
   LOG_STATUS(
     "Applying alignment transform from ..." << FileUtils::toLogFormat(input, 25) << " to " <<
@@ -61,9 +60,7 @@ void RubberSheetApplier::apply(
 
   QFile fp(transform);
   if (fp.open(QIODevice::ReadOnly) == false)
-  {
     throw HootException(QString("Error opening %1 for writing").arg(transform));
-  }
   rs.readTransform1to2(fp);
 
   rs.applyTransform(map);

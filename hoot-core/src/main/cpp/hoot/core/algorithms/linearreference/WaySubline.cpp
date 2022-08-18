@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WaySubline.h"
 
@@ -41,9 +41,9 @@ using namespace std;
 namespace hoot
 {
 
-WaySubline::WaySubline(const WaySubline& from) :
-_start(from.getStart()),
-_end(from.getEnd())
+WaySubline::WaySubline(const WaySubline& from)
+  : _start(from.getStart()),
+    _end(from.getEnd())
 {
 }
 
@@ -53,18 +53,14 @@ WaySubline::WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap)
   {
     ConstWayPtr oldWay = from.getStart().getWay();
     ConstWayPtr newWay = newMap->getWay(oldWay->getId());
-    _start =
-      WayLocation(
-        newMap, newWay, from.getStart().getSegmentIndex(), from.getStart().getSegmentFraction());
-    _end =
-      WayLocation(
-        newMap, newWay, from.getEnd().getSegmentIndex(), from.getEnd().getSegmentFraction());
+    _start = WayLocation(newMap, newWay, from.getStart().getSegmentIndex(), from.getStart().getSegmentFraction());
+    _end = WayLocation(newMap, newWay, from.getEnd().getSegmentIndex(), from.getEnd().getSegmentFraction());
   }
 }
 
-WaySubline::WaySubline(const WayLocation& start, const WayLocation& end) :
-_start(start),
-_end(end)
+WaySubline::WaySubline(const WayLocation& start, const WayLocation& end)
+  : _start(start),
+    _end(end)
 {
 }
 
@@ -113,9 +109,7 @@ bool WaySubline::overlaps(const WaySubline& other) const
 {
   bool overlaps = true;
   if (other.getWay() != getWay() || getStart() >= other.getEnd() || other.getStart() >= getEnd())
-  {
     overlaps = false;
-  }
   return overlaps;
 }
 
@@ -140,17 +134,14 @@ QString WaySubline::toString() const
   return "start: " + getStart().toString() + " end: " + getEnd().toString();
 }
 
-WayPtr WaySubline::toWay(
-  const OsmMapPtr& map, std::shared_ptr<GeometryToElementConverter::NodeFactory> nf,
-  bool reuse) const
+WayPtr WaySubline::toWay(const OsmMapPtr& map, std::shared_ptr<GeometryToElementConverter::NodeFactory> nf,
+                         bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
   LOG_VART(way->getElementId());
 
   if (!nf)
-  {
     nf = std::make_shared<FindNodesInWayFactory>(way);
-  }
 
   Meters ce = way->getRawCircularError();
 
@@ -167,14 +158,10 @@ WayPtr WaySubline::toWay(
 
   int includedStartIndex = _start.getSegmentIndex();
   if (_start.getSegmentFraction() > 0.0)
-  {
     includedStartIndex += 1;
-  }
   int includedEndIndex = _end.getSegmentIndex();
   if (_end.getSegmentFraction() >= 1.0)
-  {
     includedEndIndex += 1;
-  }
 
   if (!_start.isNode())
   {
@@ -185,9 +172,7 @@ WayPtr WaySubline::toWay(
   }
 
   for (int i = includedStartIndex; i <= includedEndIndex; i++)
-  {
     result->addNode(way->getNodeId(i));
-  }
 
   LOG_VART(_end.isNode());
   if (!_end.isNode())
@@ -208,9 +193,7 @@ bool WaySubline::touches(const WaySubline& other) const
 {
   bool touches = true;
   if (other.getWay() != getWay() || getStart() > other.getEnd() || other.getStart() > getEnd())
-  {
     touches = false;
-  }
   return touches;
 }
 
@@ -219,9 +202,7 @@ void WaySubline::visitRo(const ElementProvider& ep, ConstElementVisitor& visitor
   visitor.visit(_start.getWay());
 
   for (int i = getFormer().getSegmentIndex(); i <= getLatter().getSegmentIndex(); ++i)
-  {
     visitor.visit(ep.getNode(_start.getWay()->getNodeId(i)));
-  }
 }
 
 }

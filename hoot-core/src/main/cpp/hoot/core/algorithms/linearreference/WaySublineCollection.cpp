@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WaySublineCollection.h"
 
@@ -36,14 +36,12 @@ int WaySublineCollection::logWarnCount = 0;
 void WaySublineCollection::addSubline(const WaySubline& subline)
 {
   if (_sublines.size() == 0)
-  {
     _sublines.push_back(subline);
-  }
   else
   {
-    for (size_t i = 0; i < _sublines.size(); i++)
+    for (const auto& sub : _sublines)
     {
-      if (subline.overlaps(_sublines[i]))
+      if (subline.overlaps(sub))
       {
         // We used to throw here, but found a situation where what otherwise would have been a
         // perfectly good diff couldn't be generated b/c of this error. So, switched to log warnings
@@ -61,7 +59,6 @@ void WaySublineCollection::addSubline(const WaySubline& subline)
         logWarnCount++;
       }
     }
-
     _sublines.push_back(subline);
   }
 }
@@ -74,20 +71,16 @@ bool compareSublines(const WaySubline& ws1, const WaySubline& ws2)
 Meters WaySublineCollection::getLength() const
 {
   Meters result = 0;
-  for (size_t i = 0; i < _sublines.size(); i++)
-  {
-    result += _sublines[i].getLength();
-  }
+  for (const auto& subline : _sublines)
+    result += subline.getLength();
   return result;
 }
 
 WaySublineCollection WaySublineCollection::invert() const
 {
   WaySublineCollection result;
-  if (_sublines.size() == 0)
-  {
+  if (_sublines.empty())
     return result;
-  }
 
   // We are going to sort all the way sublines, so we can generate the inverted sublines starting
   // at the beginning and working on to the end. We'll maintain a simple variable for where the
@@ -100,9 +93,9 @@ WaySublineCollection WaySublineCollection::invert() const
 
   WayLocation sublineStart = WayLocation(_sublines[0].getMap(), sublines[0].getWay(), 0, 0);
   // go through all the sorted sublines
-  for (size_t i = 0; i < sublines.size(); i++)
+  for (const auto& sub : sublines)
   {
-    if (sublineStart.getWay() != sublines[i].getWay())
+    if (sublineStart.getWay() != sub.getWay())
     {
       // if this isn't an empty subline
       if (sublineStart.isLast() == false)
@@ -110,21 +103,18 @@ WaySublineCollection WaySublineCollection::invert() const
         result.addSubline(WaySubline(sublineStart,
           WayLocation::createAtEndOfWay(_sublines[0].getMap(), sublineStart.getWay())));
       }
-      sublineStart = WayLocation(_sublines[0].getMap(), sublines[i].getWay(), 0, 0);
+      sublineStart = WayLocation(_sublines[0].getMap(), sub.getWay(), 0, 0);
     }
 
-    assert(sublineStart.getWay() == sublines[i].getWay());
-    if (sublineStart == sublines[i].getStart())
-    {
-      // an empty subline at the beginning
-      sublineStart = sublines[i].getEnd();
-    }
+    assert(sublineStart.getWay() == sub.getWay());
+    if (sublineStart == sub.getStart()) // an empty subline at the beginning
+      sublineStart = sub.getEnd();
     else
     {
       // add another subline from the sublineStart to the beginning of the next subline
-      result.addSubline(WaySubline(sublineStart, sublines[i].getStart()));
+      result.addSubline(WaySubline(sublineStart, sub.getStart()));
       // the next negative subline starts at the end of this positive subline
-      sublineStart = sublines[i].getEnd();
+      sublineStart = sub.getEnd();
     }
   }
 
@@ -141,24 +131,22 @@ WaySublineCollection WaySublineCollection::invert() const
 QString WaySublineCollection::toString() const
 {
   QStringList l;
-  for (size_t i = 0; i < _sublines.size(); i++)
-  {
-    l.append(_sublines[i].toString());
-  }
+  for (const auto& subline : _sublines)
+    l.append(subline.toString());
   return l.join("\n");
 }
 
 bool WaySublineCollection::touches(const WaySublineCollection& other) const
 {
-  bool result = false;
-  for (size_t i = 0; i < _sublines.size() && result == false; i++)
+  for (const auto& sub1 : _sublines)
   {
-    for (size_t j = 0; j < other.getSublines().size() && result == false; j++)
+    for (const auto& sub2 : other.getSublines())
     {
-      result = _sublines[i].touches(other._sublines[j]);
+      if (sub1.touches(sub2))
+        return true;
     }
   }
-  return result;
+  return false;
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "TaskGrid.h"
 
@@ -37,11 +37,8 @@ namespace hoot
 geos::geom::Envelope TaskGrid::getBounds() const
 {
   geos::geom::Envelope bounds;
-  for (QList<TaskGridCell>::const_iterator cellItr = _cells.begin(); cellItr != _cells.end();
-       ++cellItr)
-  {
-    bounds.expandToInclude(&(*cellItr).bounds);
-  }
+  for (const auto& cell : qAsConst(_cells))
+    bounds.expandToInclude(&cell.bounds);
   return bounds;
 }
 

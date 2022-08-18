@@ -154,9 +154,8 @@ public:
     */
    QString getCompletedStatusMessage() const override
    {
-     return
-       "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-       StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
+     return "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+            StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
    }
 
    void setReference(bool ref) { _ref = ref; }

@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -62,8 +62,7 @@ public:
   QString getClassName() const override { return className(); }
   QString getDescription() const override
   {
-    return
-      "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
+    return "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
   }
 
   void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
@@ -71,8 +70,7 @@ public:
 
 protected:
 
-  std::shared_ptr<Histogram> _createHistogram(
-    const OsmMap& map, const ConstElementPtr& e) const override;
+  std::shared_ptr<Histogram> _createHistogram(const OsmMap& map, const ConstElementPtr& e) const override;
 
 private:
 
