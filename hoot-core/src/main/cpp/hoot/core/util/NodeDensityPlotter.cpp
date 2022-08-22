@@ -45,17 +45,15 @@
 namespace hoot
 {
 
-NodeDensityPlotter::NodeDensityPlotter() :
-_maxSize(-1.0)
+NodeDensityPlotter::NodeDensityPlotter()
+  : _maxSize(-1.0)
 {
 }
 
 void NodeDensityPlotter::plot(const QString& input, const QString& output) const
 {
   if (_maxSize < 1.0)
-  {
     throw IllegalArgumentException("Expected a number greater 1.0 for max size.");
-  }
 
   QElapsedTimer timer;
   timer.start();
@@ -64,8 +62,7 @@ void NodeDensityPlotter::plot(const QString& input, const QString& output) const
     "Plotting node density for ..." << FileUtils::toLogFormat(input, 25) <<
     " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
-  std::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::createReader(input, true);
+  std::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::createReader(input, true);
   reader->open(input);
   geos::geom::Envelope env = _getEnvelope(reader);
   LOG_DEBUG("Envelope: " << GeometryUtils::toString(env));
@@ -78,13 +75,11 @@ void NodeDensityPlotter::plot(const QString& input, const QString& output) const
 
   _writeImage(_createImage(mat), pixelSize, env, mat, output);
 
-  LOG_STATUS(
-    "Node density plotted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+  LOG_STATUS("Node density plotted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
-void NodeDensityPlotter::_writeImage(
-  const std::shared_ptr<QImage>& image, const double pixelSize, const geos::geom::Envelope& env,
-  const cv::Mat& mat, const QString& output) const
+void NodeDensityPlotter::_writeImage(const std::shared_ptr<QImage>& image, const double pixelSize, const geos::geom::Envelope& env,
+                                     const cv::Mat& mat, const QString& output) const
 {
   image->save(output);
 
@@ -104,17 +99,14 @@ void NodeDensityPlotter::_writeImage(
 
 std::shared_ptr<QImage> NodeDensityPlotter::_createImage(const cv::Mat& mat) const
 {
-  std::shared_ptr<QImage> qImage =
-    std::make_shared<QImage>(mat.size().width, mat.size().height, QImage::Format_ARGB32);
+  std::shared_ptr<QImage> qImage = std::make_shared<QImage>(mat.size().width, mat.size().height, QImage::Format_ARGB32);
 
   int32_t maxValue = 0;
   for (int y = 0; y < qImage->height(); y++)
   {
     const int32_t* row = mat.ptr<int32_t>(y);
     for (int x = 0; x < qImage->width(); x++)
-    {
       maxValue = std::max(row[x], maxValue);
-    }
   }
   QRgb rgb;
   for (int y = 0; y < qImage->height(); y++)
@@ -140,28 +132,19 @@ double NodeDensityPlotter::_getPixelSize(const geos::geom::Envelope& env) const
 {
   double pixelSize;
   if (env.getWidth() > env.getHeight())
-  {
     pixelSize = env.getWidth() / _maxSize;
-  }
   else
-  {
     pixelSize = env.getHeight() / _maxSize;
-  }
   return pixelSize;
 }
 
-geos::geom::Envelope NodeDensityPlotter::_getEnvelope(
-  const std::shared_ptr<OsmMapReader>& reader) const
+geos::geom::Envelope NodeDensityPlotter::_getEnvelope(const std::shared_ptr<OsmMapReader>& reader) const
 {
-  std::shared_ptr<EnvelopeProvider> ep =
-    std::dynamic_pointer_cast<EnvelopeProvider>(reader);
-  std::shared_ptr<PartialOsmMapReader> r =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  std::shared_ptr<EnvelopeProvider> ep = std::dynamic_pointer_cast<EnvelopeProvider>(reader);
+  std::shared_ptr<PartialOsmMapReader> r = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
   if (ep)
-  {
     return ep->calculateEnvelope();
-  }
   else if (r)
   {
     long nodeCount = 0;
@@ -171,19 +154,14 @@ geos::geom::Envelope NodeDensityPlotter::_getEnvelope(
     while (r->hasMoreElements())
     {
       ElementPtr e = r->readNextElement();
-
       if (e->getElementType() == ElementType::Node)
       {
         nodeCount++;
         NodePtr n = std::dynamic_pointer_cast<Node>(e);
         if (result.isNull())
-        {
           result = geos::geom::Envelope(n->getX(), n->getX(), n->getY(), n->getY());
-        }
         else
-        {
           result.expandToInclude(n->getX(), n->getY());
-        }
       }
     }
     LOG_VARD(nodeCount);
@@ -199,12 +177,10 @@ geos::geom::Envelope NodeDensityPlotter::_getEnvelope(
   }
 }
 
-cv::Mat NodeDensityPlotter::_calculateDensity(
-  const geos::geom::Envelope& envelope, const double pixelSize,
-  const std::shared_ptr<OsmMapReader>& reader) const
+cv::Mat NodeDensityPlotter::_calculateDensity(const geos::geom::Envelope& envelope, const double pixelSize,
+                                              const std::shared_ptr<OsmMapReader>& reader) const
 {
-  std::shared_ptr<PartialOsmMapReader> r =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  std::shared_ptr<PartialOsmMapReader> r = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
   r->setUseDataSourceIds(true);
 
   int width = ceil(envelope.getWidth() / pixelSize);
@@ -240,9 +216,7 @@ int NodeDensityPlotter::toColorBand(const QString& c) const
   bool ok;
   int result = c.toInt(&ok);
   if (!ok || result < 0 || result > 255)
-  {
     throw IllegalArgumentException("Expected the color to be a number in the range [0-255]");
-  }
   return result;
 }
 
@@ -251,9 +225,7 @@ int NodeDensityPlotter::toColorPortion(const QString& c) const
   bool ok;
   double result = c.toDouble(&ok);
   if (!ok || result < 0 || result > 255)
-  {
     throw IllegalArgumentException("Expected the color portion to be a number in the range [0-255]");
-  }
   return result;
 }
 

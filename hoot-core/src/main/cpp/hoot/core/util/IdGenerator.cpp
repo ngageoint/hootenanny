@@ -27,8 +27,8 @@
 
 #include "IdGenerator.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -40,8 +40,7 @@ std::shared_ptr<IdGenerator> IdGenerator::getInstance()
   if (!_theInstance)
   {
     LOG_VARD(ConfigOptions().getIdGenerator());
-    _theInstance =
-      Factory::getInstance().constructObject<IdGenerator>(ConfigOptions().getIdGenerator());
+    _theInstance = Factory::getInstance().constructObject<IdGenerator>(ConfigOptions().getIdGenerator());
   }
   return _theInstance;
 }

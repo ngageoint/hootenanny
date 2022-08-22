@@ -85,14 +85,12 @@ private:
   double _getPixelSize(const geos::geom::Envelope& env) const;
   geos::geom::Envelope _getEnvelope(const std::shared_ptr<OsmMapReader>& reader) const;
 
-  cv::Mat _calculateDensity(
-    const geos::geom::Envelope& envelope, const double pixelSize,
-    const std::shared_ptr<OsmMapReader>& reader) const;
+  cv::Mat _calculateDensity(const geos::geom::Envelope& envelope, const double pixelSize,
+                            const std::shared_ptr<OsmMapReader>& reader) const;
 
   std::shared_ptr<QImage> _createImage(const cv::Mat& mat) const;
-  void _writeImage(
-    const std::shared_ptr<QImage>& image, const double pixelSize, const geos::geom::Envelope& env,
-    const cv::Mat& mat, const QString& output) const;
+  void _writeImage(const std::shared_ptr<QImage>& image, const double pixelSize, const geos::geom::Envelope& env,
+                   const cv::Mat& mat, const QString& output) const;
 };
 
 }

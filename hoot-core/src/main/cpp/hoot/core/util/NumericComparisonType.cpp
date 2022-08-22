@@ -33,18 +33,18 @@
 namespace hoot
 {
 
-NumericComparisonType::NumericComparisonType() :
-_type(EqualTo)
+NumericComparisonType::NumericComparisonType()
+  : _type(EqualTo)
 {
 }
 
-NumericComparisonType::NumericComparisonType(Type type) :
-_type(type)
+NumericComparisonType::NumericComparisonType(Type type)
+  : _type(type)
 {
 }
 
-NumericComparisonType::NumericComparisonType(int type) :
-_type(intToType(type))
+NumericComparisonType::NumericComparisonType(int type)
+  : _type(intToType(type))
 {
 }
 
@@ -62,18 +62,18 @@ NumericComparisonType::Type NumericComparisonType::intToType(const int intType)
 {
   switch (intType)
   {
-    case 0:
-      return NumericComparisonType::EqualTo;
-    case 1:
-      return NumericComparisonType::LessThan;
-    case 2:
-      return NumericComparisonType::LessThanOrEqualTo;
-    case 3:
-      return NumericComparisonType::GreaterThan;
-    case 4:
-      return NumericComparisonType::GreaterThanOrEqualTo;
-    default:
-      throw IllegalArgumentException("Invalid comparison type: " + intType);
+  case 0:
+    return NumericComparisonType::EqualTo;
+  case 1:
+    return NumericComparisonType::LessThan;
+  case 2:
+    return NumericComparisonType::LessThanOrEqualTo;
+  case 3:
+    return NumericComparisonType::GreaterThan;
+  case 4:
+    return NumericComparisonType::GreaterThanOrEqualTo;
+  default:
+    throw IllegalArgumentException(QString("Invalid comparison type: %1").arg(intType));
   }
 }
 
@@ -100,48 +100,35 @@ NumericComparisonType::Type NumericComparisonType::fromString(QString typeString
 {
   typeString = typeString.toLower().trimmed();
   if (typeString == "equalto")
-  {
     return EqualTo;
-  }
   else if (typeString == "lessthan")
-  {
     return LessThan;
-  }
   else if (typeString == "lessthanorequalto")
-  {
     return LessThanOrEqualTo;
-  }
   else if (typeString == "greaterthan")
-  {
     return GreaterThan;
-  }
   else if (typeString == "greaterthanorequalto")
-  {
     return GreaterThanOrEqualTo;
-  }
   else
-  {
     throw IllegalArgumentException("Invalid numeric comparison type string: " + typeString);
-  }
 }
 
-bool NumericComparisonType::satisfiesComparison(
-  const double valueToEvaluate, const double comparisonValue) const
+bool NumericComparisonType::satisfiesComparison(const double valueToEvaluate, const double comparisonValue) const
 {
   switch (_type)
   {
-    case NumericComparisonType::EqualTo:
-      return valueToEvaluate == comparisonValue;
-    case NumericComparisonType::LessThan:
-      return valueToEvaluate < comparisonValue;
-    case NumericComparisonType::LessThanOrEqualTo:
-      return valueToEvaluate <= comparisonValue;
-    case NumericComparisonType::GreaterThan:
-      return valueToEvaluate > comparisonValue;
-    case NumericComparisonType::GreaterThanOrEqualTo:
-      return valueToEvaluate >= comparisonValue;
-    default:
-      throw IllegalArgumentException("Invalid comparison type: " + _type);
+  case NumericComparisonType::EqualTo:
+    return valueToEvaluate == comparisonValue;
+  case NumericComparisonType::LessThan:
+    return valueToEvaluate < comparisonValue;
+  case NumericComparisonType::LessThanOrEqualTo:
+    return valueToEvaluate <= comparisonValue;
+  case NumericComparisonType::GreaterThan:
+    return valueToEvaluate > comparisonValue;
+  case NumericComparisonType::GreaterThanOrEqualTo:
+    return valueToEvaluate >= comparisonValue;
+  default:
+    throw IllegalArgumentException(QString("Invalid comparison type: %1").arg(_type));
   }
 }
 

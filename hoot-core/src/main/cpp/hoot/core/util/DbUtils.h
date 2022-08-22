@@ -109,8 +109,7 @@ public:
 
 private:
 
-  static void _modifyTableConstraints(
-    const QSqlDatabase& database, const QString& tableName, const bool disable = true);
+  static void _modifyTableConstraints(const QSqlDatabase& database, const QString& tableName, const bool disable = true);
 };
 
 }

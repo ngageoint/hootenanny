@@ -113,11 +113,11 @@ public:
 
   void log(WarningLevel level, const std::string& str);
   void log(WarningLevel level, const std::string& str, const std::string& filename,
-    const std::string& prettyFunction, int lineNumber);
+           const std::string& prettyFunction, int lineNumber);
   void log(WarningLevel level, const QString& str, const QString& filename,
-    const QString& prettyFunction, int lineNumber);
+           const QString& prettyFunction, int lineNumber);
   void progress(WarningLevel level, const std::string& str, const std::string& filename,
-    const std::string& functionName, int lineNumber);
+                const std::string& functionName, int lineNumber);
 
   static int getWarnMessageLimit();
 

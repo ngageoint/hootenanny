@@ -40,13 +40,9 @@ int UuidHelper::_repeatableKey;
 QUuid UuidHelper::createUuid()
 {
   if (ConfigOptions().getUuidHelperRepeatable())
-  {
     return createUuid5(QString::number(_repeatableKey++));
-  }
   else
-  {
     return QUuid::createUuid();
-  }
 }
 
 QUuid UuidHelper::createUuid5(QString string, QUuid ns)
@@ -73,8 +69,7 @@ QUuid UuidHelper::createUuid5(QString string, QUuid ns)
 
 QByteArray UuidHelper::toByteArray(const QUuid& uuid)
 {
-  return QByteArray::fromHex(uuid.toString().toLatin1().replace("-", "").replace("{", "").
-                             replace("}", ""));
+  return QByteArray::fromHex(uuid.toString().toLatin1().replace("-", "").replace("{", "").replace("}", ""));
 }
 
 QUuid UuidHelper::toUuid(const QByteArray& bytes)

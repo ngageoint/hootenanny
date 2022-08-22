@@ -53,11 +53,9 @@ HootExceptionThrower& HootExceptionThrower::getInstance()
 
 void HootExceptionThrower::rethrowPointer(HootException* e)
 {
-  for (int i = 0; i < _throwMethods.size(); i++)
-  {
-    // try to throw the exception, if it isn't relevant nothing happens
-    _throwMethods[i](e);
-  }
+  // try to throw the exception, if it isn't relevant nothing happens
+  for (const auto& method : _throwMethods)
+    method(e);
 
   // couldn't find a specific exception type, throw the base class.
   throw HootException(*e);

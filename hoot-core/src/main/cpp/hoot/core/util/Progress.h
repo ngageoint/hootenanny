@@ -80,8 +80,7 @@ public:
    * @param logAsProgress if true; uses status logging which allows for re-uses the same output
    * line in the log display
    */
-  void setFromRelative(
-    float relativePercentComplete, JobState state, QString userMessage, bool logAsProgress = false);
+  void setFromRelative(float relativePercentComplete, JobState state, QString userMessage, bool logAsProgress = false);
   /**
    * Logs a progress status message as a child subtask of a job
    *
@@ -91,8 +90,7 @@ public:
    * @param logAsProgress if true; uses status logging which allows for re-uses the same output
    * line in the log display
    */
-  void setFromRelative(
-    float relativePercentComplete, QString userMessage, bool logAsProgress = false);
+  void setFromRelative(float relativePercentComplete, QString userMessage, bool logAsProgress = false);
 
   /**
    * Determines if a job is finished

@@ -36,11 +36,11 @@
 namespace hoot
 {
 
-MemoryUsageChecker::MemoryUsageChecker() :
-_enabled(ConfigOptions().getMemoryUsageCheckerEnabled()),
-_notificationThreshold(0.95),
-_loggedPhysicalMemNotification(false),
-_loggedVirtualMemNotification(false)
+MemoryUsageChecker::MemoryUsageChecker()
+  : _enabled(ConfigOptions().getMemoryUsageCheckerEnabled()),
+    _notificationThreshold(0.95),
+    _loggedPhysicalMemNotification(false),
+    _loggedVirtualMemNotification(false)
 {
   const int thresholdVal = ConfigOptions().getMemoryUsageCheckerThreshold();
   if (thresholdVal < 1 || thresholdVal > 100)
@@ -75,10 +75,9 @@ void MemoryUsageChecker::check()
       "Total physical memory usage has exceeded a threshold of " <<
       QString::number(_notificationThreshold * 100) << "% available. This Hootenanny process is " <<
       "using " <<
-      QString::number(
-        Tgs::SystemInfo::getPercentageOfPhysicalMemoryUsedByCurrentProcess() * 100, 'g', 2) +
+      QString::number(Tgs::SystemInfo::getPercentageOfPhysicalMemoryUsedByCurrentProcess() * 100, 'g', 2) <<
       "% of the total available physical memory.");
-    _loggedPhysicalMemNotification = true;
+      _loggedPhysicalMemNotification = true;
   }
 
   if (_enabled && !_loggedVirtualMemNotification &&
@@ -88,8 +87,7 @@ void MemoryUsageChecker::check()
       "Total virtual memory usage has exceeded a threshold of " <<
       QString::number(_notificationThreshold * 100) << "% available. This Hootenanny process is " <<
       "using " <<
-      QString::number(
-        Tgs::SystemInfo::getPercentageOfVirtualMemoryUsedByCurrentProcess() * 100, 'g', 2) +
+      QString::number(Tgs::SystemInfo::getPercentageOfVirtualMemoryUsedByCurrentProcess() * 100, 'g', 2) <<
       "% of the total available virtual memory.");
     _loggedVirtualMemNotification = true;
   }
