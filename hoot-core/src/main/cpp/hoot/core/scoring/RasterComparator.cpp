@@ -171,7 +171,7 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
     float* row = in.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
-      row[x] = qRed(qImage.pixel(x, y)) * _pixelSize;
+      row[x] = static_cast<float>(qRed(qImage.pixel(x, y)) * _pixelSize);
 
       pixelCtr++;
       if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
@@ -183,7 +183,7 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
     }
   }
 
-  int ks = ceil(_sigma / _pixelSize * 3) * 2 + 1;
+  int ks = static_cast<int>(ceil(_sigma / _pixelSize * 3) * 2 + 1);
   cv::GaussianBlur(in, image, cvSize(ks, ks), _sigma / _pixelSize, _sigma / _pixelSize, cv::BORDER_CONSTANT);
 }
 

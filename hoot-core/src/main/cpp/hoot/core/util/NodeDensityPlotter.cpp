@@ -183,8 +183,8 @@ cv::Mat NodeDensityPlotter::_calculateDensity(const geos::geom::Envelope& envelo
   std::shared_ptr<PartialOsmMapReader> r = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
   r->setUseDataSourceIds(true);
 
-  int width = ceil(envelope.getWidth() / pixelSize);
-  int height = ceil(envelope.getHeight() / pixelSize);
+  int width = static_cast<int>(ceil(envelope.getWidth() / pixelSize));
+  int height = static_cast<int>(ceil(envelope.getHeight() / pixelSize));
 
   cv::Mat c(cvSize(width, height), CV_32SC1, 0.0);
 
@@ -196,8 +196,8 @@ cv::Mat NodeDensityPlotter::_calculateDensity(const geos::geom::Envelope& envelo
     if (e.get() && e->getElementType() == ElementType::Node)
     {
       NodePtr n = std::dynamic_pointer_cast<Node>(e);
-      int px = int((n->getX() - envelope.getMinX()) / pixelSize);
-      int py = int((n->getY() - envelope.getMinY()) / pixelSize);
+      int px = static_cast<int>((n->getX() - envelope.getMinX()) / pixelSize);
+      int py = static_cast<int>((n->getY() - envelope.getMinY()) / pixelSize);
       px = std::min(width - 1, std::max(0, px));
       py = std::min(height - 1, std::max(0, py));
 
@@ -226,7 +226,7 @@ int NodeDensityPlotter::toColorPortion(const QString& c) const
   double result = c.toDouble(&ok);
   if (!ok || result < 0 || result > 255)
     throw IllegalArgumentException("Expected the color portion to be a number in the range [0-255]");
-  return result;
+  return static_cast<int>(result);
 }
 
 }

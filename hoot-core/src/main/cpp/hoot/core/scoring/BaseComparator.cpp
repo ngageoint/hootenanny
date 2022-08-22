@@ -66,7 +66,7 @@ void BaseComparator::_calculateColor(double v, double max, QRgb& c) const
     if (v == 0.0)
       c = qRgb(50, 50, 50);
     if (v < max / 3.0)
-      c = qRgb((int)((v / (max / 3.0) * 255.0)), 0, 0);
+      c = qRgb((int)(v / (max / 3.0) * 255.0), 0, 0);
     else if (v < max * 2.0 / 3.0)
       c = qRgb(255, (int)((v - (max / 3.0)) / (max / 3.0) * 255.0), 0);
     else if (v <= max)
@@ -215,8 +215,8 @@ void BaseComparator::_updateBounds()
   _projectedBounds.MaxY += _sigma * 2;
 
   // round the image width and height up
-  _width = ceil((_projectedBounds.MaxX - _projectedBounds.MinX) / _pixelSize);
-  _height = ceil((_projectedBounds.MaxY - _projectedBounds.MinY) / _pixelSize);
+  _width = static_cast<int>(ceil((_projectedBounds.MaxX - _projectedBounds.MinX) / _pixelSize));
+  _height = static_cast<int>(ceil((_projectedBounds.MaxY - _projectedBounds.MinY) / _pixelSize));
 
   // adjust the world bounds accordingly.
   _projectedBounds.MaxX = _projectedBounds.MinX + _width * _pixelSize;
