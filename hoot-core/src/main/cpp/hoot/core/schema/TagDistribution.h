@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TAG_DISTRIBUTION_H
@@ -115,8 +115,7 @@ private:
   void _countTagsStreaming(const QString& input, std::map<QString, int>& tagCounts);
   void _countTagsMemoryBound(const QStringList& inputs, std::map<QString, int>& tagCounts);
   int _processElement(const ConstElementPtr& element, std::map<QString, int>& tagCounts);
-  void _processTagKey(
-    const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
+  void _processTagKey(const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
 
   QString _getPercentageStr(const double percentage) const;
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef JOSM_MAP_CLEANER_H
 #define JOSM_MAP_CLEANER_H
@@ -55,22 +55,22 @@ public:
   static QString className() { return "JosmMapCleaner"; }
 
   JosmMapCleaner();
-  virtual ~JosmMapCleaner() = default;
+  ~JosmMapCleaner() override = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Cleaning elements with JOSM..."; }
 
   int getNumElementsCleaned() const { return _numElementsCleaned; }
@@ -96,12 +96,12 @@ protected:
   /*
    * @see JosmMapValidatorAbstract
    */
-  virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
+  OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap) override;
 
   /*
    * @see JosmMapValidatorAbstract
    */
-  virtual void _getStats();
+  void _getStats() override;
 
 private:
 
@@ -126,9 +126,8 @@ private:
   /*
    * clean the map from a file and write the cleaned map out to another file
    */
-  void _clean(
-    const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
-    const bool addDetailTags);
+  void _clean(const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
+              const bool addDetailTags);
 
   int _getNumElementsCleaned();
   QSet<ElementId> _getDeletedElementIds();
@@ -138,9 +137,8 @@ private:
   /*
    * Converts the error status info returned by hoot-josm into a readable string
    */
-  QString _errorCountsByTypeToSummaryStr(
-    const QMap<QString, int>& errorCountsByType,
-    const QMap<QString, int>& errorFixCountsByType) const;
+  QString _errorCountsByTypeToSummaryStr(const QMap<QString, int>& errorCountsByType,
+                                         const QMap<QString, int>& errorFixCountsByType) const;
 
   /*
    * Converts element ID strings used in hoot-josm code to hoot-core element IDs

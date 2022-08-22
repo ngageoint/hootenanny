@@ -166,11 +166,8 @@ QStringList IoUtils::getSupportedInputsRecursively(const QStringList& topLevelPa
     // If its a file and not a dir, go ahead and add it if its supported.
     if (!QFileInfo(path).isDir())
     {
-      if ((nameFilters.isEmpty() || StringUtils::matchesWildcard(path, nameFilters)) &&
-           isSupportedInputFormat(path))
-      {
+      if ((nameFilters.isEmpty() || StringUtils::matchesWildcard(path, nameFilters)) && isSupportedInputFormat(path))
         validInputs.append(path);
-      }
     }
     else
     {
@@ -276,13 +273,10 @@ bool IoUtils::areStreamableInputs(const QStringList& inputs, const bool logUnstr
 bool IoUtils::isStreamableInput(const QString& url)
 {
   bool result = false;
-  std::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::createReader(url, true, Status::Unknown1);
-  std::shared_ptr<ElementInputStream> eis =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
+  std::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::createReader(url, true, Status::Unknown1);
+  std::shared_ptr<ElementInputStream> eis = std::dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
     result = true;
-
   return result;
 }
 
@@ -290,11 +284,9 @@ bool IoUtils::isStreamableOutput(const QString& url)
 {
   bool result = false;
   std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(url);
-  std::shared_ptr<ElementOutputStream> streamWriter =
-    std::dynamic_pointer_cast<ElementOutputStream>(writer);
+  std::shared_ptr<ElementOutputStream> streamWriter = std::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
     result = true;
-
   return result;
 }
 
@@ -306,13 +298,11 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
   {
     if (!opName.trimmed().isEmpty())
     {
-      const QString unstreamableMsg =
-        "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
+      const QString unstreamableMsg = "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
-        ElementCriterionPtr criterion =
-          Factory::getInstance().constructObject<ElementCriterion>(opName);
+        ElementCriterionPtr criterion = Factory::getInstance().constructObject<ElementCriterion>(opName);
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != nullptr)
         {
@@ -322,8 +312,7 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
-        ElementVisitorPtr vis =
-          Factory::getInstance().constructObject<ElementVisitor>(opName);
+        ElementVisitorPtr vis = Factory::getInstance().constructObject<ElementVisitor>(opName);
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
@@ -333,8 +322,7 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
       }
       else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
       {
-        ConstElementVisitorPtr vis =
-          Factory::getInstance().constructObject<ConstElementVisitor>(opName);
+        ConstElementVisitorPtr vis = Factory::getInstance().constructObject<ConstElementVisitor>(opName);
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
@@ -350,7 +338,6 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
       }
     }
   }
-
   return true;
 }
 
@@ -367,16 +354,14 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
       if (!Factory::getInstance().hasBase<ElementVisitor>(opName) &&
           !Factory::getInstance().hasBase<ConstElementVisitor>(opName))
       {
-        throw IllegalArgumentException(
-          "Streaming operations must be an ElementVisitor or a ConstElementVisitor.");
+        throw IllegalArgumentException("Streaming operations must be an ElementVisitor or a ConstElementVisitor.");
       }
 
       // When streaming we can't provide a reliable OsmMap.
       const QString osmMapConsumerErrorMsg = "A streaming operations may not be an OsmMapConsumer.";
       if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
-        ElementVisitorPtr vis =
-          Factory::getInstance().constructObject<ElementVisitor>(opName);
+        ElementVisitorPtr vis = Factory::getInstance().constructObject<ElementVisitor>(opName);
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
           throw IllegalArgumentException(osmMapConsumerErrorMsg);
 
@@ -384,8 +369,7 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
       }
       else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
       {
-        ConstElementVisitorPtr vis =
-          Factory::getInstance().constructObject<ConstElementVisitor>(opName);
+        ConstElementVisitorPtr vis = Factory::getInstance().constructObject<ConstElementVisitor>(opName);
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
           throw IllegalArgumentException(osmMapConsumerErrorMsg);
 
@@ -393,7 +377,6 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
       }
     }
   }
-
   return opsToReturn;
 }
 
@@ -415,8 +398,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(ElementInputStreamPtr stre
       if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
         LOG_INFO("Initializing operation: " << opName << "...");
-        ElementCriterionPtr criterion =
-          Factory::getInstance().constructObject<ElementCriterion>(opName);
+        ElementCriterionPtr criterion = Factory::getInstance().constructObject<ElementCriterion>(opName);
 
         std::shared_ptr<Configurable> critConfig;
         if (criterion.get())
@@ -444,10 +426,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(ElementInputStreamPtr stre
         streamToFilter = std::make_shared<ElementVisitorInputStream>(streamToFilter, visitor);
       }
       else
-      {
-        throw HootException(
-          "An unsupported operation was passed to a streaming conversion: " + opName);
-      }
+        throw HootException("An unsupported operation was passed to a streaming conversion: " + opName);
     }
   }
 
@@ -477,11 +456,8 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
     // This reader closes itself.
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
   }
-  else
-  {
-    // This handles all non-OGR format reading.
+  else  // This handles all non-OGR format reading.
     OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
-  }
 }
 
 void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus,
@@ -490,14 +466,10 @@ void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useF
 {
   // TODO: it would be nice to allow this to take in Progress for updating
   for (const auto& path : paths)
-  {
-    loadMap(map, path, useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource,
-            numTasks);
-  }
+    loadMap(map, path, useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource, numTasks);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
 {
   cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
@@ -509,8 +481,7 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds, const bool keepConnectedOobWays)
 {
   LOG_INFO(
     "Applying bounds filtering to input data: ..." <<
@@ -520,10 +491,8 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
 
   MapCropper cropper;
   cropper.setBounds(bounds);
-  cropper.setKeepEntireFeaturesCrossingBounds(
-    ConfigOptions().getBoundsKeepEntireFeaturesCrossingBounds());
-  const bool strictBoundsHandling =
-    ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds();
+  cropper.setKeepEntireFeaturesCrossingBounds(ConfigOptions().getBoundsKeepEntireFeaturesCrossingBounds());
+  const bool strictBoundsHandling = ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
   cropper.setRemoveMissingElements(ConfigOptions().getBoundsRemoveMissingElements());
 
@@ -572,21 +541,18 @@ void IoUtils::writeOutputDir(const QString& dirName)
     throw IllegalArgumentException("Unable to create output path for: " + dirName);
 }
 
-QString IoUtils::getOutputUrlFromInput(
-  const QString& inputUrl, const QString& appendText, const QString& outputFormat)
+QString IoUtils::getOutputUrlFromInput(const QString& inputUrl, const QString& appendText, const QString& outputFormat)
 {
   if (DbUtils::isOsmApiDbUrl(inputUrl) || inputUrl.startsWith("http://"))
   {
     throw IllegalArgumentException(
-      QString("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API ") +
-      QString("web (http://) inputs."));
+      QString("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API web (http://) inputs."));
   }
   // This check prevents the overwriting of the input URL.
   if (appendText.isEmpty() && outputFormat.isEmpty())
   {
     throw IllegalArgumentException(
-      QString("Either text to append or an output format must be specified when generating an ") +
-      QString("output URL from an input URL."));
+      QString("Either text to append or an output format must be specified when generating an output URL from an input URL."));
   }
 
   LOG_VART(inputUrl);
@@ -631,10 +597,7 @@ QString IoUtils::getOutputUrlFromInput(
   LOG_VART(existingExtension);
 
   if (!existingExtension.isEmpty() && !outputFormat.isEmpty() && existingExtension == outputFormat)
-  {
-    throw IllegalArgumentException(
-      "Generated output URL for format: " + outputFormat + " will overwrite input URL: " + inputUrl);
-  }
+    throw IllegalArgumentException("Generated output URL for format: " + outputFormat + " will overwrite input URL: " + inputUrl);
 
   // Create the output url to be the input url with the custom text appended to it. This prevents
   // us from overwriting any output.
@@ -643,11 +606,8 @@ QString IoUtils::getOutputUrlFromInput(
   // If a format was passed in, then the output format is potentially different than the input
   // format. If the input URL was a file or dir format with an extension, we need to swap that
   // extension out for the output format.
-  if (!outputFormat.isEmpty() && !DbUtils::isHootApiDbUrl(outputFormat) &&
-      !existingExtension.isEmpty())
-  {
+  if (!outputFormat.isEmpty() && !DbUtils::isHootApiDbUrl(outputFormat) && !existingExtension.isEmpty())
     str = str.replace(existingExtension, outputFormat);
-  }
   return str;
 }
 

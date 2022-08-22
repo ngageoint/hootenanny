@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IMPLICITTAGRULESSQLITEREADER_H
@@ -78,8 +78,7 @@ public:
    * @return a set of implicitly derived tags, if they exist, for the given input words; an empty
    * tag set otherwise
    */
-  Tags getImplicitTags(
-    const QSet<QString>& words, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
+  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
 
   /**
    * Return a string containing relevant info about the rule database

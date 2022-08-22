@@ -36,6 +36,7 @@
 #include <QHostAddress>
 #include <QTimer>
 #include <QtNetwork/QSslConfiguration>
+#include <QtNetwork/QSslKey>
 #include <QtNetwork/QSslSocket>
 
 //  LibOAuthCpp
@@ -49,7 +50,18 @@ namespace hoot
 HootNetworkRequest::HootNetworkRequest()
   : _useOAuth1(false),
     _useOAuth2(false),
-    _timedOut(false)
+    _timedOut(false),
+    _key_path(ConfigOptions().getHootPkcs12KeyPath()),
+    _pass_phrase(ConfigOptions().getHootPkcs12KeyPhrase())
+{
+}
+
+HootNetworkRequest::HootNetworkRequest(const QString& key_path, const QString& pass_phrase)
+  : _useOAuth1(false),
+    _useOAuth2(false),
+    _timedOut(false),
+    _key_path(key_path),
+    _pass_phrase(pass_phrase)
 {
 }
 
@@ -57,7 +69,9 @@ HootNetworkRequest::HootNetworkRequest(const QString& consumer_key, const QStrin
                                        const QString& request_token, const QString& request_secret)
   : _useOAuth1(true),
     _useOAuth2(false),
-    _timedOut(false)
+    _timedOut(false),
+    _key_path(ConfigOptions().getHootPkcs12KeyPath()),
+    _pass_phrase(ConfigOptions().getHootPkcs12KeyPhrase())
 {
   setOAuthKeys(consumer_key, consumer_secret, request_token, request_secret);
 }
@@ -66,11 +80,9 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
                                       const QString& request_token, const QString& request_secret)
 {
   //  Initialize the consumer key
-  _consumer =
-    std::make_shared<OAuth::Consumer>(consumer_key.toStdString(), consumer_secret.toStdString());
+  _consumer = std::make_shared<OAuth::Consumer>(consumer_key.toStdString(), consumer_secret.toStdString());
   //  Initialize the request token
-  _tokenRequest =
-    std::make_shared<OAuth::Token>(request_token.toStdString(), request_secret.toStdString());
+  _tokenRequest = std::make_shared<OAuth::Token>(request_token.toStdString(), request_secret.toStdString());
   //  Set the OAuth flag
   _useOAuth1 = true;
   _useOAuth2 = false;
@@ -82,7 +94,6 @@ HootNetworkRequest::HootNetworkRequest(const QString& access_token)
     _oauth2AccessToken(access_token),
     _timedOut(false)
 {
-  // nothing
 }
 
 bool HootNetworkRequest::networkRequest(const QUrl& url, int timeout,
@@ -122,6 +133,28 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     QSslConfiguration config(QSslConfiguration::defaultConfiguration());
     config.setProtocol(QSsl::SslProtocol::AnyProtocol);
     config.setPeerVerifyMode(QSslSocket::VerifyNone);
+    if (!_key_path.isEmpty())
+    {
+      if (!QFile::exists(_key_path))
+      {
+        LOG_ERROR("Unknown SSL key file path specified.");
+        return false;
+      }
+      QFile file(_key_path);
+      file.open(QFile::ReadOnly);
+
+      QSslKey key;
+      QSslCertificate certificate;
+      QList<QSslCertificate> certChain;
+
+      bool imported = QSslCertificate::importPkcs12(&file, &key, &certificate, &certChain, _pass_phrase.toUtf8());
+      if (imported)
+      {
+        config.setCaCertificates(certChain);
+        config.setLocalCertificate(certificate);
+        config.setPrivateKey(key);
+      }
+    }
     request.setSslConfiguration(config);
   }
   //  Setup username/password authentication

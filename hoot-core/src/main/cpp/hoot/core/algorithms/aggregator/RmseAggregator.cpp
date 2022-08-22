@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RmseAggregator.h"
 
@@ -38,11 +38,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, RmseAggregator)
 double RmseAggregator::aggregate(vector<double>& d) const
 {
   double sum = 0.0;
-  for (size_t i = 0; i < d.size(); i++)
-  {
-    sum += d[i] * d[i];
-  }
-  return sqrt(sum / double(d.size()));
+  for (auto val : d)
+    sum += (val * val);
+  return sqrt(sum / static_cast<double>(d.size()));
 }
 
 }

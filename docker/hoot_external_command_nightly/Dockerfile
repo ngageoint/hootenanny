@@ -22,7 +22,7 @@ RUN yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x
 
 # RUN yum -y update && \
 RUN yum install -y hootenanny-core
-RUN pip3 install flask flask_shell2http flask-executor
+RUN pip3 install flask flask_shell2http flask-executor contextvars
 
 # Put the entrypoint & flask scripts into the container
 COPY scripts /home/scripts

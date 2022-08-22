@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WeightedMetricDistanceExtractor.h"
@@ -48,31 +48,28 @@ namespace hoot
 HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedMetricDistanceExtractor)
 
 WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg,
-  ValueAggregatorPtr pointAgg, Meters searchRadius) :
-  WayFeatureExtractor(wayAgg),
-  _pointAgg(pointAgg),
-  _searchRadius(searchRadius)
+                                                                 ValueAggregatorPtr pointAgg,
+                                                                 Meters searchRadius)
+  : WayFeatureExtractor(wayAgg),
+    _pointAgg(pointAgg),
+    _searchRadius(searchRadius)
 {
   if (searchRadius == -1)
-  {
     setSearchRadius(ConfigOptions().getWeightedMetricDistanceExtractorSearchRadius());
-  }
 }
 
-WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(Meters searchRadius):
-  WayFeatureExtractor(),
-  _pointAgg(),
-  _searchRadius(searchRadius)
+WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(Meters searchRadius)
+  : WayFeatureExtractor(),
+    _pointAgg(),
+    _searchRadius(searchRadius)
 {
   setPointAggregator(ConfigOptions().getWeightedMetricDistanceExtractorPointAggregator());
   if (searchRadius == -1)
-  {
     setSearchRadius(ConfigOptions().getWeightedMetricDistanceExtractorSearchRadius());
-  }
 }
 
 double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
-  const ConstWayPtr& w2) const
+                                                 const ConstWayPtr& w2) const
 {
   vector<double> distances;
 
@@ -80,8 +77,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   WayDiscretizer wd(map.shared_from_this(), w1);
   wd.discretize(2.0, v);
 
-  std::shared_ptr<LineString> ls2 =
-    ElementToGeometryConverter(map.shared_from_this()).convertToLineString(w2);
+  std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(map.shared_from_this()).convertToLineString(w2);
 
   double sigma = _searchRadius;
 
@@ -93,9 +89,9 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   }
 
   distances.reserve(v.size());
-  for (size_t i = 0; i < v.size(); i++)
+  for (const auto& coord : v)
   {
-    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(coord));
     double d = ls2->distance(point.get()) / sigma;
     distances.push_back(d);
   }

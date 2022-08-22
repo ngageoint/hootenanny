@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "Relation.h"
 
@@ -36,7 +36,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;
@@ -54,9 +53,9 @@ class AddToVisitedRelationsList
 {
 public:
 
-  AddToVisitedRelationsList(QList<long>& relationIds, long thisId) :
-    _relationIds(relationIds),
-    _thisId(thisId)
+  AddToVisitedRelationsList(QList<long>& relationIds, long thisId)
+    : _relationIds(relationIds),
+      _thisId(thisId)
   {
     relationIds.append(thisId);
   }
@@ -74,19 +73,18 @@ private:
   long _thisId;
 };
 
-Relation::Relation(
-  Status s, long id, Meters circularError, QString type, long changeset, long version,
-  quint64 timestamp, QString user, long uid, bool visible) :
-Element(s),
-_relationData(std::make_shared<RelationData>(id, changeset, version, timestamp, user, uid, visible))
+Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset, long version,
+                   quint64 timestamp, QString user, long uid, bool visible)
+  : Element(s),
+    _relationData(std::make_shared<RelationData>(id, changeset, version, timestamp, user, uid, visible))
 {
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }
 
-Relation::Relation(const Relation& from) :
-Element(from.getStatus()),
-_relationData(std::make_shared<RelationData>(*from._relationData.get()))
+Relation::Relation(const Relation& from)
+  : Element(from.getStatus()),
+    _relationData(std::make_shared<RelationData>(*from._relationData.get()))
 {
 }
 
@@ -97,6 +95,9 @@ void Relation::addElement(const QString& role, const std::shared_ptr<const Eleme
 
 void Relation::addElement(const QString& role, ElementId eid)
 {
+  //  Don't add self-references
+  if (eid.getType() == ElementType::Relation && eid.getId() == getId())
+    return;
   _preGeometryChange();
   _makeWritable();
   _relationData->addElement(role, eid);
@@ -119,10 +120,8 @@ void Relation::clear()
 RelationData::Entry Relation::getMember(const ElementId& elementId) const
 {
   const size_t index = indexOf(elementId);
-  if ((int)index == -1)
-  {
+  if (static_cast<int>(index) == -1)
     return RelationData::Entry();
-  }
   return getMembers().at(index);
 }
 
@@ -130,15 +129,13 @@ QString Relation::getRole(const ElementId& elementId) const
 {
   const RelationData::Entry member = getMember(elementId);
   if (member.getElementId().getType() == ElementType::Unknown)
-  {
     return "";
-  }
   return member.getRole();
 }
 
 bool Relation::contains(const ElementId& eid) const
 {
-  return (int)indexOf(eid) != -1;
+  return static_cast<int>(indexOf(eid)) != -1;
 }
 
 size_t Relation::indexOf(const ElementId& eid) const
@@ -147,9 +144,7 @@ size_t Relation::indexOf(const ElementId& eid) const
   for (size_t i = 0; i < members.size(); i++)
   {
     if (members[i].getElementId() == eid)
-    {
       return i;
-    }
   }
   return -1;
 }
@@ -157,10 +152,8 @@ size_t Relation::indexOf(const ElementId& eid) const
 ElementId Relation::memberIdAt(const size_t index) const
 {
   const std::vector<RelationData::Entry>& members = getMembers();
-  if ((int)index >= 0 && index < members.size())
-  {
+  if (static_cast<int>(index) >= 0 && index < members.size())
     return getMembers().at(index).getElementId();
-  }
   return ElementId();
 }
 
@@ -176,6 +169,10 @@ bool Relation::isLastMember(const ElementId& eid) const
 
 void Relation::insertElement(const QString& role, const ElementId& elementId, size_t pos)
 {
+  //  Don't add self-references
+  if (elementId.getType() == ElementType::Relation && elementId.getId() == getId())
+    return;
+
   _preGeometryChange();
   _makeWritable();
 
@@ -196,12 +193,10 @@ std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role
 {
   const vector<RelationData::Entry>& members = getMembers();
   std::vector<RelationData::Entry> membersByRole;
-  for (size_t i = 0; i < members.size(); i++)
+  for (const auto& member : members)
   {
-    if (members[i].getRole() == role)
-    {
-      membersByRole.push_back(members[i]);
-    }
+    if (member.getRole() == role)
+      membersByRole.push_back(member);
   }
   return membersByRole;
 }
@@ -210,54 +205,77 @@ std::set<ElementId> Relation::getMemberIds(const ElementType& elementType) const
 {
   std::set<ElementId> memberIds;
   const vector<RelationData::Entry>& members = getMembers();
-  for (size_t i = 0; i < members.size(); i++)
+  for (const auto& member : members)
   {
-    RelationData::Entry member = members[i];
     if (elementType == ElementType::Unknown || member.getElementId().getType() == elementType)
-    {
       memberIds.insert(member.getElementId());
-    }
   }
   return memberIds;
 }
 
-Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
+std::shared_ptr<Envelope> Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
-  return new Envelope(getEnvelopeInternal(ep));
+  set<long> visited;
+  return std::make_shared<Envelope>(getEnvelopeInternal(ep, visited));
 }
 
-const Envelope& Relation::getEnvelopeInternal(
-  const std::shared_ptr<const ElementProvider>& ep) const
+std::shared_ptr<Envelope> Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const
+{
+  return std::make_shared<Envelope>(getEnvelopeInternal(ep, visited));
+}
+
+const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
+{
+  set<long> visited;
+  return getEnvelopeInternal(ep, visited);
+}
+
+const geos::geom::Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep, std::set<long>& visited) const
 {
   LOG_VART(ep.get());
 
   _cachedEnvelope.init();
+  //  Check if we've seen
+  if (visited.find(getId()) != visited.end())
+  {
+    _cachedEnvelope.setToNull();
+    return _cachedEnvelope;
+  }
+  //  Add this relation to the visited list
+  visited.insert(getId());
 
   const vector<RelationData::Entry>& members = getMembers();
-  for (size_t i = 0; i < members.size(); i++)
+  for (const auto& m : members)
   {
-    const RelationData::Entry& m = members[i];
-    LOG_VART(m.getElementId());
+    ElementId eid = m.getElementId();
+    LOG_VART(eid);
+    //  Ignore self references and reference loops
+    if (eid.getType() == ElementType::Relation && (eid.getId() == getId() || visited.find(eid.getId()) != visited.end()))
+      continue;
 
     // If any of the elements don't exist, then return an empty envelope.
-    if (ep->containsElement(m.getElementId()) == false)
+    if (ep->containsElement(eid) == false)
     {
-      LOG_TRACE(m.getElementId() << " missing.  Returning empty envelope...");
+      LOG_TRACE(eid << " missing.  Returning empty envelope...");
       _cachedEnvelope.setToNull();
       return _cachedEnvelope;
     }
 
-    const std::shared_ptr<const Element> e = ep->getElement(m.getElementId());
+    const std::shared_ptr<const Element> e = ep->getElement(eid);
     LOG_VART(e.get());
     if (e)
     {
-      std::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
+      std::shared_ptr<Envelope> childEnvelope;
+      //  Relations need different handling
+      if (eid.getType() == ElementType::Relation)
+        childEnvelope = std::dynamic_pointer_cast<const Relation>(e)->getEnvelope(ep, visited);
+      else
+        childEnvelope = e->getEnvelope(ep);
       LOG_VART(childEnvelope.get());
       LOG_VART(childEnvelope->isNull());
       if (childEnvelope->isNull())
       {
-        LOG_TRACE(
-          "Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
+        LOG_TRACE("Child envelope for " << eid << " null.  Returning empty envelope...");
         _cachedEnvelope.setToNull();
         return _cachedEnvelope;
       }
@@ -273,9 +291,7 @@ void Relation::_makeWritable()
 {
   // Make sure we're the only one with a reference to the data before we modify it.
   if (_relationData.use_count() > 1)
-  {
     _relationData = std::make_shared<RelationData>(*_relationData);
-  }
 }
 
 void Relation::removeElement(const QString& role, const std::shared_ptr<const Element>& e)
@@ -300,7 +316,7 @@ void Relation::removeElement(ElementId eid)
 }
 
 void Relation::replaceElement(const std::shared_ptr<const Element>& from,
-  const std::shared_ptr<const Element>& to)
+                              const std::shared_ptr<const Element>& to)
 {
   _preGeometryChange();
   _makeWritable();
@@ -322,10 +338,8 @@ void Relation::replaceElement(const ConstElementPtr& from, const QList<ElementPt
   _preGeometryChange();
   _makeWritable();
   QList<ElementId> copy;
-  for (int i = 0; i < to.size(); ++i)
-  {
-    copy.append(to[i]->getElementId());
-  }
+  for (const auto& element : qAsConst(to))
+    copy.append(element->getElementId());
   _relationData->replaceElement(from->getElementId(), copy);
   _postGeometryChange();
 }
@@ -350,10 +364,8 @@ QString Relation::toString() const
   ss << "relation(" << getId() << ")" << endl;
   ss << "type: " << getType() << endl;
   ss << "members: ";
-  for (size_t i = 0; i < getMembers().size(); i++)
-  {
-    ss << "  " << getMembers()[i].toString().toUtf8().data() << endl;
-  }
+  for (const auto& member : getMembers())
+    ss << "  " << member.toString().toUtf8().data() << endl;
   ss << endl;
   ss << "tags: " << getTags().toString().toUtf8().data();
   ss << "status: " << getStatusString().toStdString() << endl;
@@ -373,7 +385,7 @@ void Relation::visitRo(const ElementProvider& map, ConstElementVisitor& filter,
 }
 
 void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-  QList<long>& visitedRelations, const bool recursive) const
+                        QList<long>& visitedRelations, const bool recursive) const
 {
   if (visitedRelations.contains(getId()))
   {
@@ -398,27 +410,24 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
   if (recursive)
   {
     const vector<RelationData::Entry>& members = getMembers();
-    for (size_t i = 0; i < members.size(); i++)
+    for (const auto& m : members)
     {
-      const RelationData::Entry& m = members[i];
       LOG_VART(m.getElementId());
       LOG_VART(map.containsElement(m.getElementId()));
       if (map.containsElement(m.getElementId()))
       {
-        if (m.getElementId().getType() == ElementType::Node)
+        switch(m.getElementId().getType().getEnum())
         {
+        case ElementType::Node:
           map.getNode(m.getElementId().getId())->visitRo(map, filter);
-        }
-        else if (m.getElementId().getType() == ElementType::Way)
-        {
+          break;
+        case ElementType::Way:
           map.getWay(m.getElementId().getId())->visitRo(map, filter);
-        }
-        else if (m.getElementId().getType() == ElementType::Relation)
-        {
+          break;
+        case ElementType::Relation:
           map.getRelation(m.getElementId().getId())->_visitRo(map, filter, visitedRelations);
-        }
-        else
-        {
+          break;
+        default:
           assert(false);
         }
       }
@@ -434,7 +443,7 @@ void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter, const 
 }
 
 void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
-  QList<long>& visitedRelations, const bool recursive) const
+                        QList<long>& visitedRelations, const bool recursive) const
 {
   if (visitedRelations.contains(getId()))
   {
@@ -457,28 +466,22 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
   if (recursive)
   {
     const vector<RelationData::Entry>& members = getMembers();
-    for (size_t i = 0; i < members.size(); i++)
+    for (const auto& m : members)
     {
-      const RelationData::Entry& m = members[i];
       if (map.containsElement(m.getElementId()))
       {
-        if (m.getElementId().getType() == ElementType::Node &&
-            map.containsNode(m.getElementId().getId()))
+        switch(m.getElementId().getType().getEnum())
         {
+        case ElementType::Node:
           map.getNode(m.getElementId().getId())->visitRw(map, filter);
-        }
-        else if (m.getElementId().getType() == ElementType::Way &&
-                 map.containsWay(m.getElementId().getId()))
-        {
+          break;
+        case ElementType::Way:
           map.getWay(m.getElementId().getId())->visitRw(map, filter);
-        }
-        else if (m.getElementId().getType() == ElementType::Relation &&
-                 map.containsRelation(m.getElementId().getId()))
-        {
+          break;
+        case ElementType::Relation:
           map.getRelation(m.getElementId().getId())->_visitRw(map, filter, visitedRelations);
-        }
-        else
-        {
+          break;
+        default:
           assert(false);
         }
       }
@@ -492,25 +495,21 @@ QList<ElementId> Relation::getAdjoiningMemberIds(const ElementId& memberId) cons
   QList<ElementId> ids;
   const size_t memberIndex = indexOf(memberId);
   LOG_VART(memberIndex);
-  if ((int)memberIndex != -1)
+  if (static_cast<int>(memberIndex) != -1)
   {
     if (!isFirstMember(memberId))
     {
       const ElementId memberBeforeId = memberIdAt(memberIndex - 1);
       LOG_VART(memberBeforeId);
       if (memberBeforeId.getType() != ElementType::Unknown)
-      {
         ids.append(memberBeforeId);
-      }
     }
     if (!isLastMember(memberId))
     {
       const ElementId memberAfterId = memberIdAt(memberIndex + 1);
       LOG_VART(memberAfterId);
       if (memberAfterId.getType() != ElementType::Unknown)
-      {
         ids.append(memberAfterId);
-      }
     }
   }
   LOG_VART(ids);

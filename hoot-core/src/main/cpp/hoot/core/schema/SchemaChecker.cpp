@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaChecker.h"
@@ -36,16 +36,15 @@ namespace hoot
 
 int SchemaChecker::logWarnCount = 0;
 
-SchemaChecker::SchemaChecker(const OsmSchema& osmSchema) :
-_schemaVertexList(osmSchema.getAllTags())
+SchemaChecker::SchemaChecker(const OsmSchema& osmSchema)
+  : _schemaVertexList(osmSchema.getAllTags())
 {
 }
 
-void SchemaChecker::checkUnknownVertexType()
+void SchemaChecker::checkUnknownVertexType() const
 {
-  for (unsigned int i = 0; i < _schemaVertexList.size(); i++)
+  for (const auto& schemaVertex : _schemaVertexList)
   {
-    SchemaVertex schemaVertex = _schemaVertexList[i];
     if (schemaVertex.isValid() == false)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -61,7 +60,7 @@ void SchemaChecker::checkUnknownVertexType()
   }
 }
 
-void SchemaChecker::check()
+void SchemaChecker::check() const
 {
   checkUnknownVertexType();
 }

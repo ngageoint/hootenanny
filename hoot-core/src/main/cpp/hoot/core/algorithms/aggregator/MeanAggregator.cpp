@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MeanAggregator.h"
 
 #include <hoot/core/util/Factory.h>
+
+#include <algorithm>
 
 using namespace std;
 
@@ -37,12 +39,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MeanAggregator)
 
 double MeanAggregator::aggregate(vector<double>& d) const
 {
-  double sum = 0.0;
-  for (size_t i = 0; i < d.size(); i++)
-  {
-    sum += d[i];
-  }
-  return sum / double(d.size());
+  if (d.size() < 1)
+    throw hoot::IllegalArgumentException("Empty MeanAggregator vector");
+  return std::accumulate(d.begin(), d.end(), 0.0) / static_cast<double>(d.size());
 }
 
 }

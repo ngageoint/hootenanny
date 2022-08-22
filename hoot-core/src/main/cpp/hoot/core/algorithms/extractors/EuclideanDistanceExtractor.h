@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef EUCLIDEANDISTANCEEXTRACTOR_H
 #define EUCLIDEANDISTANCEEXTRACTOR_H
@@ -51,7 +51,7 @@ public:
    * @return the distance between the two elements in meters
    */
   double distance(const OsmMap& map, const ConstElementPtr& target,
-    const ConstElementPtr& candidate) const override;
+                  const ConstElementPtr& candidate) const override;
   /**
    * @brief distance measures the Euclidean distance in meters between two elements in different
    * maps
@@ -61,9 +61,8 @@ public:
    * @param candidate the second element of the pair to measure
    * @return the distance between the two elements in meters
    */
-  double distance(
-    const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
-    const ConstElementPtr& candidate) const;
+  double distance(const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
+                  const ConstElementPtr& candidate) const;
 
   QString getClassName() const  override{ return className(); }
   QString getName() const override { return className(); }

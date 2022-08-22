@@ -95,14 +95,9 @@ private:
    */
   bool _loadBounds();
 
-  /** Value of the bounds envelope string */
   QString _boundsString;
-  /** Value of the bounds filename string */
   QString _boundsFilename;
-  /** Is the bounds a polygon */
-  bool _isPolygon;
-  /** Value of the bounding box or polygon */
-  std::shared_ptr<geos::geom::Geometry> _boundingPoly;
+
   /** For testing */
   friend class OsmApiReaderTest;
 };

@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BufferedOverlapExtractor.h"
 
@@ -32,10 +32,10 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -50,8 +50,8 @@ BufferedOverlapExtractor::BufferedOverlapExtractor()
   setConfiguration(conf());
 }
 
-BufferedOverlapExtractor::BufferedOverlapExtractor(double bufferPortion) :
-_bufferPortion(bufferPortion)
+BufferedOverlapExtractor::BufferedOverlapExtractor(double bufferPortion)
+  : _bufferPortion(bufferPortion)
 {
 }
 
@@ -61,19 +61,15 @@ void BufferedOverlapExtractor::setConfiguration(const Settings& conf)
 }
 
 double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
-  const ConstElementPtr& candidate) const
+                                         const ConstElementPtr& candidate) const
 {
   ElementToGeometryConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   if (g1->isEmpty())
-  {
     return nullValue();
-  }
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
   if (g2->isEmpty())
-  {
     return nullValue();
-  }
 
   double a1, a2;
   try

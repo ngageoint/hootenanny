@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayMatchStringMappingConverter.h"
 
 namespace hoot
 {
 
-WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(
-  WayMatchStringMappingPtr mapping) const
+WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(WayMatchStringMappingPtr mapping) const
 {
   WayStringPtr wstr1 = mapping->getWayString1();
   WayStringPtr wstr2 = mapping->getWayString2();

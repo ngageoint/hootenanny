@@ -291,8 +291,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     toNotModify->append(toModify, true);
     map = toNotModify;
     map->setRoundabouts(roundabouts);
-    LOG_DEBUG(
-      "Element count for result map: " << StringUtils::formatLargeNumber(map->getElementCount()));
+    LOG_DEBUG("Element count for result map: " << StringUtils::formatLargeNumber(map->getElementCount()));
     OsmMapWriterFactory::writeDebugMap(map, className(), "result-map");
   }
 }
@@ -441,8 +440,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
       bestCandidate = candidate;
       bestError = error;
     }
-    LOG_DEBUG(
-      "Max interpolator loop iterations: " << candidate->getMaxOptimizationLoopIterations());
+    LOG_DEBUG("Max interpolator loop iterations: " << candidate->getMaxOptimizationLoopIterations());
 
     LOG_INFO(
       "Rubber sheet interpolation complete in " <<
@@ -663,8 +661,7 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
 
   QString interpolatorClass;
   ds >> interpolatorClass;
-  std::shared_ptr<Interpolator> result =
-    Factory::getInstance().constructObject<Interpolator>(interpolatorClass);
+  std::shared_ptr<Interpolator> result = Factory::getInstance().constructObject<Interpolator>(interpolatorClass);
   result->readInterpolator(is);
   return result;
 }
