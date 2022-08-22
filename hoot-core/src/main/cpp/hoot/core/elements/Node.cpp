@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Node.h"
@@ -42,24 +42,24 @@ using namespace std;
 namespace hoot
 {
 
-Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
-Element(s)
+Node::Node(Status s, long id, const Coordinate& c, Meters circularError)
+  : Element(s)
 {
   _nodeData.init(id, c.x, c.y);
   _getElementData().setCircularError(circularError);
 }
 
 Node::Node(Status s, long id, double x, double y, Meters circularError, long changeset,
-           long version, unsigned int timestamp, QString user, long uid, bool visible) :
-Element(s)
+           long version, unsigned int timestamp, QString user, long uid, bool visible)
+  : Element(s)
 {
   _nodeData.init(id, x, y, changeset, version, timestamp, user, uid, visible);
   _getElementData().setCircularError(circularError);
 }
 
-Node::Node(const Node& from) :
-Element(from.getStatus()),
-_nodeData(from._nodeData)
+Node::Node(const Node& from)
+  : Element(from.getStatus()),
+    _nodeData(from._nodeData)
 {
 }
 
@@ -75,9 +75,9 @@ std::shared_ptr<Node> Node::cloneSp() const
   return result;
 }
 
-Envelope* Node::getEnvelope(const std::shared_ptr<const ElementProvider>& /*ep*/) const
+std::shared_ptr<Envelope> Node::getEnvelope(const std::shared_ptr<const ElementProvider>& /*ep*/) const
 {
-  return new Envelope(getX(), getX(), getY(), getY());
+  return std::make_shared<Envelope>(getX(), getX(), getY(), getY());
 }
 
 const Envelope& Node::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& /*ep*/) const
@@ -112,8 +112,7 @@ QString Node::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
-void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                   const bool /*recursive*/) const
+void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter, const bool /*recursive*/) const
 {
   filter.visit(map.getNode(getId()));
 }
