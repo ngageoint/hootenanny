@@ -54,13 +54,9 @@ public:
     {
       QString uuid = e->getTags()["uuid"];
       if (e->getStatus() == Status::Unknown1)
-      {
         e->setTag(MetadataTags::Ref1(), uuid);
-      }
       else if (e->getStatus() == Status::Unknown2)
-      {
         e->setTag(MetadataTags::Ref2(), uuid);
-      }
     }
   }
 
@@ -78,8 +74,7 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes) con
 
   // Redmine #5891: if the feature is marked as todo then there is no need to conflate & evaluate
   // it.
-  std::shared_ptr<TagCriterion> isTodo =
-    std::make_shared<TagCriterion>(MetadataTags::Ref2(), "todo");
+  std::shared_ptr<TagCriterion> isTodo = std::make_shared<TagCriterion>(MetadataTags::Ref2(), "todo");
   RemoveElementsVisitor remover;
   remover.setRecursive(true);
   remover.addCriterion(isTodo);

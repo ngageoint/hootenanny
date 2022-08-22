@@ -53,9 +53,8 @@ using namespace geos::operation::distance;
 namespace hoot
 {
 
-BaseComparator::BaseComparator(
-  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+BaseComparator::BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
+  : _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _init(map1, map2);
 }
@@ -65,33 +64,18 @@ void BaseComparator::_calculateColor(double v, double max, QRgb& c) const
   if (v >= 0.0)
   {
     if (v == 0.0)
-    {
       c = qRgb(50, 50, 50);
-    }
     if (v < max / 3.0)
-    {
-      int r = (int)((v / (max / 3.0) * 255.0));
-      c = qRgb(r, 0, 0);
-    }
+      c = qRgb((int)((v / (max / 3.0) * 255.0)), 0, 0);
     else if (v < max * 2.0 / 3.0)
-    {
-      int r = (int)((v - (max / 3.0)) / (max / 3.0) * 255.0);
-      c = qRgb(255, r, 0);
-    }
+      c = qRgb(255, (int)((v - (max / 3.0)) / (max / 3.0) * 255.0), 0);
     else if (v <= max)
-    {
-      int r = (int)((v - (max * 2.0 / 3.0)) / (max / 3.0) * 255.0);
-      c = qRgb(255, 255, r);
-    }
+      c = qRgb(255, 255, (int)((v - (max * 2.0 / 3.0)) / (max / 3.0) * 255.0));
     else
-    {
       c = qRgb(255, 255, 255);
-    }
   }
   else
-  {
     c = qRgba(90, 20, 20, 0);
-  }
 }
 
 double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& image2) const
@@ -117,34 +101,21 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c) const
   if (v >= 0.0)
   {
     if (m >= 0.0 && m <= 10.0)
-    {
       c = qRgb(255, 0, 255);
-    }
     if (m > 10.0 && m <= 20.0)
-    {
       c = qRgb(0, 0, 255);
-    }
     else if (m > 20.0 && m <= 30.0)
-    {
       c = qRgb(0, 255, 0);
-    }
     else if (m > 30.0 && m <= 40.0)
-    {
       c = qRgb(255, 255, 0);
-    }
     else if (m > 40.0 && m <= 50.0)
-    {
       c = qRgb(255, 0, 0);
-    }
   }
   else
-  {
     c = qRgba(90, 20, 20, 0);
-  }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(
-  const std::shared_ptr<OsmMap>& map, const Coordinate& c) const
+Coordinate BaseComparator::_findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const Coordinate& c) const
 {
   Coordinate result;
 
@@ -214,13 +185,9 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
       for (int x = 0; x < _width; x++)
       {
         if (gradient)
-        {
           _calculateColor(row[x], max, rgb);
-        }
         else
-        {
           _calculateRingColor(row[x], max, rgb);
-        }
         qImage.setPixel(x, y, rgb);
 
         pixelCtr++;

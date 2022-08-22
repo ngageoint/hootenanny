@@ -49,9 +49,8 @@ public:
    * @param confidence the confidence in the attribute comparison score
    * @param numIterations the number of scoring iterations to run
    */
-  static void getAttributeComparisonFinalScores(
-    const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean, int& confidence,
-    const int numIterations);
+  static void getAttributeComparisonFinalScores(const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean, int& confidence,
+                                                const int numIterations);
 
   /**
    * Gets a scaled attribute similarity comparison score for two maps
@@ -61,8 +60,7 @@ public:
    * @param numIterations the number of scoring iterations to run
    * @return the attribute comparison score (1 to 1000)
    */
-  static int getAttributeComparisonFinalScore(
-    const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations);
+  static int getAttributeComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations);
 
   /**
    * Gets an unscaled graph similarity comparison score with confidence for two maps
@@ -72,8 +70,7 @@ public:
    * @param mean the graph comparison score
    * @param confidence the confidence in the graph comparison score
    */
-  static void getGraphComparisonRawScores(
-    const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence);
+  static void getGraphComparisonRawScores(const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence);
 
   /**
    * Gets a scaled graph similarity comparison score for two maps
@@ -91,8 +88,7 @@ public:
    * @param map2 the second map to compare
    * @param mean the raster comparison score
    */
-  static void getRasterComparisonRawScores(
-    const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean);
+  static void getRasterComparisonRawScores(const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean);
 
   /**
    * Gets a scaled raster similarity comparison score for two maps

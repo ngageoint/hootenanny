@@ -32,20 +32,15 @@
 namespace hoot
 {
 
-QString MapMatchScoringUtils::getMatchScoringString(
-  const std::shared_ptr<const MatchComparator>& matchComparator)
+QString MapMatchScoringUtils::getMatchScoringString(const std::shared_ptr<const MatchComparator>& matchComparator)
 {
-  QString result;
-  result += matchComparator->toString() + "\n";
-  QString line =
-    QString("%1,%2,%3,%4\n").arg(-1)
+  return QString("%1\n%2,%3,%4,%5\nPERTY Score: %6\n")
+      .arg(matchComparator->toString())
+      .arg(-1)
       .arg(matchComparator->getPercentCorrect())
       .arg(matchComparator->getPercentWrong())
-      .arg(matchComparator->getPercentUnnecessaryReview());
-  result += line + "\n";
-  result += "PERTY Score: ";
-  result += QString::number(matchComparator->getPertyScore()) + "\n";
-  return result;
+      .arg(matchComparator->getPercentUnnecessaryReview())
+      .arg(QString::number(matchComparator->getPertyScore()));
 }
 
 }

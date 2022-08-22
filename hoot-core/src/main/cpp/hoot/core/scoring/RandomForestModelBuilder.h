@@ -48,8 +48,7 @@ public:
    * @param exportArffOnly if true; will build an .arff file only (.arff is a pre-req for
    * generating the .rf file)
    */
-  static void build(
-    const QStringList& trainingData, QString& output, const bool exportArffOnly = false);
+  static void build(const QStringList& trainingData, QString& output, const bool exportArffOnly = false);
 };
 
 }
