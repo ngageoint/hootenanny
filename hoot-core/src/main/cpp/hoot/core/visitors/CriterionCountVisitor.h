@@ -28,8 +28,8 @@
 #define CRITERIONCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {

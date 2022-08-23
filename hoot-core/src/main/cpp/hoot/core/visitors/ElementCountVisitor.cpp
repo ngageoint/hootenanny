@@ -34,8 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementCountVisitor)
 
-ElementCountVisitor::ElementCountVisitor() :
-_count(0)
+ElementCountVisitor::ElementCountVisitor()
+  : _count(0)
 {
 }
 

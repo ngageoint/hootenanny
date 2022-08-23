@@ -53,12 +53,10 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 
 public:
 
-  PoiPolygonMatchVisitor(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-    ElementCriterionPtr filter = ElementCriterionPtr());
-  PoiPolygonMatchVisitor(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
-    PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+                         ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
+                         PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor() override = default;
 
   /**
@@ -88,7 +86,6 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
   // used for finding surrounding polys

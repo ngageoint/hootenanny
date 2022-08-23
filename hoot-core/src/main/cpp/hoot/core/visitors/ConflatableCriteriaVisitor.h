@@ -28,9 +28,9 @@
 #define CONFLATABLE_CRITERIA_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

@@ -27,8 +27,8 @@
 #include "AddTimestampVisitor.h"
 
 // hoot
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -39,11 +39,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddTimestampVisitor)
 void AddTimestampVisitor::visit(const ElementPtr& pElement)
 {
   Tags& tags = pElement->getTags();
-
   if (tags.getNonDebugCount() > 0)
-  {
-      tags[MetadataTags::HootTimestamp()] = DateTimeUtils::toTimeString(pElement->getTimestamp());
-  }
+    tags[MetadataTags::HootTimestamp()] = DateTimeUtils::toTimeString(pElement->getTimestamp());
 }
 
 }

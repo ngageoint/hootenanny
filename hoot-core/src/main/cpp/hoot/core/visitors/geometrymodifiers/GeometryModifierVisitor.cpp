@@ -39,16 +39,14 @@ HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
 
 void GeometryModifierVisitor::visit(const ElementPtr& pElement)
 {
-  if (_actionDesc.pAction == nullptr) return;
+  if (_actionDesc.pAction == nullptr)
+    return;
 
   _numProcessed++;
 
   // apply _actionDesc filter
-  if (_actionDesc.filter.isSatisfied(pElement) &&
-      _actionDesc.pAction->processElement(pElement, _pMap))
-  {
+  if (_actionDesc.filter.isSatisfied(pElement) && _actionDesc.pAction->processElement(pElement, _pMap))
     _numAffected++;
-  }
 }
 
 }

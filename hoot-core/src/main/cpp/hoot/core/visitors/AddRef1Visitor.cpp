@@ -27,9 +27,9 @@
 #include "AddRef1Visitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -37,17 +37,15 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, AddRef1Visitor)
 
 AddRef1Visitor::AddRef1Visitor()
+  : _count(0)
 {
-  _count = 0;
   setConfiguration(conf());
 }
 
 void AddRef1Visitor::visit(const ElementPtr& e)
 {
   if (_informationOnly == false || e->getTags().getNonDebugCount() > 0)
-  {
     e->getTags()[MetadataTags::Ref1()] = _prefix + QString("%1").arg(_count++, 6, 16, QChar('0'));
-  }
 }
 
 void AddRef1Visitor::setConfiguration(const Settings& conf)

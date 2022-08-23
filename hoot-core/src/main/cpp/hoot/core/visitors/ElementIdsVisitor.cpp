@@ -26,9 +26,10 @@
  */
 
 #include "ElementIdsVisitor.h"
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+
 #include <hoot/core/criterion/ContainsNodeCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -36,55 +37,41 @@ using namespace std;
 namespace hoot
 {
 
-ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit) :
-_elementType(elementType),
-_pCrit(pCrit)
+ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit)
+  : _elementType(elementType),
+    _pCrit(pCrit)
 {
 }
 
 void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-  if ((e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType) &&
-      (_pCrit == nullptr || _pCrit->isSatisfied(e)))
-  {
+  if ((e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType) && (_pCrit == nullptr || _pCrit->isSatisfied(e)))
     _elementIds.push_back(e->getId());
-  }
 }
 
-vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
-                                             const ElementType& elementType,
-                                             ElementCriterion* pCrit)
+vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map, const ElementType& elementType, ElementCriterion* pCrit)
 {
   ElementIdsVisitor v(elementType, pCrit);
   if (elementType == ElementType::Node)
-  {
     map->visitNodesRo(v);
-  }
   else if (elementType == ElementType::Way)
-  {
     map->visitWaysRo(v);
-  }
   else
-  {
     map->visitRelationsRo(v);
-  }
   return v.getIds();
 }
 
-vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
-                                               ConstWayPtr refWay, Meters maxDistance,
-                                               bool addError)
+vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map, ConstWayPtr refWay, Meters maxDistance, bool addError)
 {
   return map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
 }
 
-vector<long> ElementIdsVisitor::_findElements(
-  const ConstOsmMapPtr& map, const ElementCriterion* pCrit, const vector<long>& closeElementIds)
+vector<long> ElementIdsVisitor::_findElements(const ConstOsmMapPtr& map, const ElementCriterion* pCrit, const vector<long>& closeElementIds)
 {
   vector<long> result;
-  for (size_t i = 0; i < closeElementIds.size(); i++)
+  for (auto element_id : closeElementIds)
   {
-    const ConstElementPtr& e = map->getElement(ElementId(ElementType::Node, closeElementIds[i]));
+    const ConstElementPtr& e = map->getElement(ElementId(ElementType::Node, element_id));
     if (pCrit->isSatisfied(e))
       result.push_back(e->getId());
   }
@@ -97,20 +84,15 @@ vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, const Eleme
   return _findElements(map, pCrit, map->getIndex().findNodes(refCoord, maxDistance));
 }
 
-vector<long> ElementIdsVisitor::findElementsByTag(const ConstOsmMapPtr& map,
-                                                  const ElementType& elementType,
+vector<long> ElementIdsVisitor::findElementsByTag(const ConstOsmMapPtr& map, const ElementType& elementType,
                                                   const QString& key, const QString& value)
 {
   TagCriterion crit(key, value);
   ElementIdsVisitor v(elementType, &crit);
   if (elementType == ElementType::Node)
-  {
     map->visitNodesRo(v);
-  }
   else
-  {
     map->visitWaysRo(v);
-  }
   return v.getIds();
 }
 

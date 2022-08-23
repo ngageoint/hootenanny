@@ -34,8 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FeatureCountVisitor)
 
-FeatureCountVisitor::FeatureCountVisitor() :
-_count(0)
+FeatureCountVisitor::FeatureCountVisitor()
+  : _count(0)
 {
 }
 
@@ -43,9 +43,7 @@ void FeatureCountVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   LOG_VART(e->getElementId());
   if (e->getTags().getInformationCount() > 0)
-  {
     _count++;
-  }
 }
 
 }

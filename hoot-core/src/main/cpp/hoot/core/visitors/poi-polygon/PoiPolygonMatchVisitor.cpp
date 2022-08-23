@@ -33,9 +33,9 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -47,34 +47,38 @@ using namespace std;
 namespace hoot
 {
 
-PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(
-  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ElementCriterionPtr filter) :
-_map(map),
-_result(result),
-_filter(filter)
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ElementCriterionPtr filter)
+  : _map(map),
+    _result(result),
+    _neighborCountMax(-1),
+    _neighborCountSum(0),
+    _elementsEvaluated(0),
+    _reviewDistanceThreshold(ConfigOptions().getPoiPolygonAdditionalSearchDistance()),
+    _numElementsVisited(0),
+    _numMatchCandidatesVisited(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
+    _filter(filter)
 {
   _timer.start();
 }
 
-PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(
-  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
-  PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter) :
-_map(map),
-_result(result),
-_neighborCountMax(-1),
-_neighborCountSum(0),
-_elementsEvaluated(0),
-_threshold(threshold),
-_numElementsVisited(0),
-_numMatchCandidatesVisited(0),
-_filter(filter),
-_infoCache(infoCache)
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
+                                               PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter)
+  : _map(map),
+    _result(result),
+    _neighborCountMax(-1),
+    _neighborCountSum(0),
+    _elementsEvaluated(0),
+    _threshold(threshold),
+    _reviewDistanceThreshold(ConfigOptions().getPoiPolygonAdditionalSearchDistance()),
+    _numElementsVisited(0),
+    _numMatchCandidatesVisited(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
+    _filter(filter),
+    _infoCache(infoCache)
 {
-  ConfigOptions opts = ConfigOptions();
-  _reviewDistanceThreshold = opts.getPoiPolygonAdditionalSearchDistance();
-  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
-  _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
-  LOG_VART(_infoCache.get());
   _timer.start();
 }
 
@@ -89,10 +93,8 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
   _elementsEvaluated++;
   int neighborCount = 0;
 
-  for (std::set<ElementId>::const_iterator it = surroundingPolyIds.begin();
-       it != surroundingPolyIds.end(); ++it)
+  for (const auto& polyId : surroundingPolyIds)
   {
-    const ElementId polyId = *it;
     LOG_VART(polyId);
     if (poiId != polyId)
     {
@@ -102,8 +104,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
       if (poly->isUnknown() && _polyCrit.isSatisfied(poly))
       {
         // score each candidate and push it on the result vector
-        LOG_TRACE(
-          "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
+        LOG_TRACE("Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
         std::shared_ptr<PoiPolygonMatch> m =
           std::make_shared<PoiPolygonMatch>(_map, _threshold, _infoCache, surroundingPolyIds);
         m->setConfiguration(conf());
@@ -118,13 +119,11 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
       }
     }
   }
-
   _neighborCountSum += neighborCount;
   _neighborCountMax = std::max(_neighborCountMax, neighborCount);
 }
 
-std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
-  const std::shared_ptr<const Element>& e)
+std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<const Element>& e)
 {
   LOG_TRACE("Collecting surrounding poly IDs for: " << e->getElementId());
 
@@ -135,15 +134,13 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
 
   // find other nearby candidates
   LOG_TRACE("Searching for neighbors...");
-  const std::set<ElementId> neighbors =
-    SpatialIndexer::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
+  const std::set<ElementId> neighbors = SpatialIndexer::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
   LOG_VART(neighbors.size());
 
   LOG_TRACE("Processing neighbors...");
   ElementId from(e->getElementType(), e->getId());
-  for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+  for (const auto& neighboringElementId : neighbors)
   {
-    ElementId neighboringElementId = *it;
     if (from != neighboringElementId)
     {
       const std::shared_ptr<const Element>& poly = _map->getElement(neighboringElementId);
@@ -163,9 +160,7 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
 
 Meters PoiPolygonMatchVisitor::_getSearchRadius(const std::shared_ptr<const Element>& e) const
 {
-  const Meters searchRadius = e->getCircularError() + _reviewDistanceThreshold;
-  //LOG_VART(searchRadius);
-  return searchRadius;
+  return e->getCircularError() + _reviewDistanceThreshold;
 }
 
 void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
@@ -196,13 +191,9 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   // poi/poly matching can be a little slow at times compared to the other types of conflation, so
   // throttle the log update interval accordingly.
   if (_timer.elapsed() > 3000 && _taskStatusUpdateInterval >= 10)
-  {
     _taskStatusUpdateInterval /= 10;
-  }
   else if (_timer.elapsed() < 250 && _taskStatusUpdateInterval < 10000)
-  {
     _taskStatusUpdateInterval *= 10;
-  }
 
   _numElementsVisited++;
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
@@ -213,17 +204,13 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _timer.restart();
   }
   if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
-  {
     MemoryUsageChecker::getInstance().check();
-  }
 }
 
 bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element) const
 {
   if (_filter && !_filter->isSatisfied(element))
-  {
     return false;
-  }
 
   // Its simpler logic to just examine each POI and check for surrounding polys, rather than check
   // both POIs and their surrounding polys and polys and their surrounding POIs; note that this is
@@ -239,23 +226,18 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     LOG_INFO("Creating POI/Polygon feature index...");
 
     // tune this? - see #3054
-    _polyIndex =
-      std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
+    _polyIndex = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
     std::shared_ptr<PoiPolygonPolyCriterion> crit = std::make_shared<PoiPolygonPolyCriterion>();
 
-    SpatialIndexer v(_polyIndex,
-                     _polyIndexToEid,
-                     crit,
+    SpatialIndexer v(_polyIndex, _polyIndexToEid, crit,
                      std::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
                      _getMap());
     _getMap()->visitWaysRo(v);
     _getMap()->visitRelationsRo(v);
     v.finalizeIndex();
 
-    LOG_INFO(
-      "POI/Polygon feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
-      " elements.");
+    LOG_INFO("POI/Polygon feature index created with " << StringUtils::formatLargeNumber(v.getSize()) << " elements.");
   }
   return _polyIndex;
 }

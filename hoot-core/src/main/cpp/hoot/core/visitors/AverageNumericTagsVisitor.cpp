@@ -38,17 +38,17 @@ int AverageNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AverageNumericTagsVisitor)
 
-AverageNumericTagsVisitor::AverageNumericTagsVisitor() :
-_sum(0.0),
-_tagCount(0)
+AverageNumericTagsVisitor::AverageNumericTagsVisitor()
+  : _sum(0.0),
+    _tagCount(0)
 {
   setConfiguration(conf());
 }
 
-AverageNumericTagsVisitor::AverageNumericTagsVisitor(const QStringList keys) :
-_keys(keys),
-_sum(0.0),
-_tagCount(0)
+AverageNumericTagsVisitor::AverageNumericTagsVisitor(const QStringList keys)
+  : _keys(keys),
+    _sum(0.0),
+    _tagCount(0)
 {
 }
 
@@ -60,9 +60,8 @@ void AverageNumericTagsVisitor::setConfiguration(const Settings& conf)
 
 void AverageNumericTagsVisitor::visit(const ConstElementPtr& e)
 {
-  for (int i = 0; i < _keys.size(); i++)
+  for (const auto& key : qAsConst(_keys))
   {
-    const QString key = _keys.at(i);
     LOG_VART(key);
     if (e->getTags().contains(key))
     {
@@ -102,9 +101,7 @@ double AverageNumericTagsVisitor::getStat() const
   LOG_VART(_sum);
   LOG_VART(_tagCount);
   if (_sum > 0.0 && _tagCount > 0)
-  {
     return _sum / _tagCount;
-  }
   return 0.0;
 }
 

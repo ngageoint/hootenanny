@@ -38,8 +38,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, CountUniqueReviewsVisitor)
 
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {
-  set<ReviewMarker::ReviewUid> reviews =
-    ReviewMarker::getReviewUids(_map->shared_from_this(), e);
+  set<ReviewMarker::ReviewUid> reviews = ReviewMarker::getReviewUids(_map->shared_from_this(), e);
   _reviews.insert(reviews.begin(), reviews.end());
 }
 

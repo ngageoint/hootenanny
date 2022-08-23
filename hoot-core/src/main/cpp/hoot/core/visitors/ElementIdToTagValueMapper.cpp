@@ -37,9 +37,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
 void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
 {
   if (_tagKey.trimmed().isEmpty())
-  {
     throw IllegalArgumentException("No keys specified for ElementIdToTagValueMapper.");
-  }
 
   if (e->getTags().contains(_tagKey))
   {

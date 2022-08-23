@@ -30,8 +30,8 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 
@@ -42,12 +42,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, CalculateAreaVisitor)
 
 void CalculateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  std::shared_ptr<Geometry> g =
-    ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false, true);
+  std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false, true);
   if (!g->isEmpty())
-  {
     _total += g->getArea();
-  }
 }
 
 }

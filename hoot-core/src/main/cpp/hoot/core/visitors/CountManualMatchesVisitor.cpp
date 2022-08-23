@@ -26,17 +26,17 @@
  */
 #include "CountManualMatchesVisitor.h"
 
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CountManualMatchesVisitor)
 
-CountManualMatchesVisitor::CountManualMatchesVisitor() :
-_numManualMatches(0)
+CountManualMatchesVisitor::CountManualMatchesVisitor()
+  : _numManualMatches(0)
 {
 }
 
@@ -48,14 +48,10 @@ void CountManualMatchesVisitor::visit(const ConstElementPtr& e)
   {
     const QString ref2Val = tags.get(MetadataTags::Ref2());
     if (ref2Val.toLower() != "todo")
-    {
       refIds += ref2Val.split(";");
-    }
   }
   if (tags.contains("REVIEW"))
-  {
     refIds += tags.get("REVIEW").split(";");
-  }
   refIds.removeAll("none");
   _numManualMatches += refIds.size();
 }

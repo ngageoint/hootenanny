@@ -27,16 +27,17 @@
 #include "AddUuidVisitor.h"
 
 // hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddUuidVisitor)
 
-AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
+AddUuidVisitor::AddUuidVisitor(QString key)
+  : _key(key)
 {
 }
 

@@ -25,10 +25,10 @@
  * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 using namespace std;
 
@@ -41,13 +41,10 @@ void CalculateMapBoundsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)
-  {
-    throw HootException("CalculateMapBoundsVisitor attempted to visit "
-                        "element that is not a node!");
-  }
+    throw HootException("CalculateMapBoundsVisitor attempted to visit element that is not a node!");
 
   // Merge node. OGREnvelope takes care of initializing & merging logic
-  const Node * pNode = dynamic_cast<const Node *>(e.get());
+  std::shared_ptr<const Node> pNode = dynamic_pointer_cast<const Node>(e);
   _envelope.Merge(pNode->getX(), pNode->getY());
 }
 
