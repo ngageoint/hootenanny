@@ -78,10 +78,14 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
 
+        //strip out basic auth user:pw@ in urls
+        //e.g. hoot:hoottest@
+        out = out.replaceAll(":\\/\\/\\w+:\\w+@", "://<basic:auth>@");
+
         //strip out db connection string
         //e.g. hootapidb://hoot:
         out = out.replaceAll("hootapidb:\\/\\/\\w+:", "");
-        // seperated because some of the status output doesnt include the above text
+        // separated because some of the status output doesnt include the above text
         //e.g. hoottest@localhost:5432/hoot
         out = out.replaceAll("\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
 
