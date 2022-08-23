@@ -42,9 +42,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, InvalidWayRemover)
 void InvalidWayRemover::visit(const ElementPtr& e)
 {
   if (!e || e->getElementType() != ElementType::Way)
-  {
     return;
-  }
   else if (_conflateInfoCache &&
            !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(e, className()))
   {

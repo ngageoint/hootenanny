@@ -29,9 +29,9 @@
 #define MEMBERS_PER_RELATION_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/criterion/RelationCriterion.h>
+#include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {

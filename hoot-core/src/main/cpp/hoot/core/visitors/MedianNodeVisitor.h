@@ -28,8 +28,8 @@
 #define MEDIANNODEVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {

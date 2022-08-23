@@ -116,8 +116,7 @@ private:
   int _numRelationMembersModified;
 
   QString _getMatchingTypeTag(const ConstElementPtr& element, bool& matchingTypeTagIsKey) const;
-  bool _hasValidType(
-    const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const;
+  bool _hasValidType(const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const;
 };
 
 }

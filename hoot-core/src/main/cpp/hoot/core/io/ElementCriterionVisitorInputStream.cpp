@@ -27,31 +27,30 @@
 
 #include "ElementCriterionVisitorInputStream.h"
 
-
 #include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
-ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
-  const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-  const ElementVisitorPtr& visitor) :
-_elementSource(elementSource),
-_criterion(criterion),
-_numFeaturesTotal(0),
-_numFeaturesPassingCriterion(0)
+ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                                                       const ElementCriterionPtr& criterion,
+                                                                       const ElementVisitorPtr& visitor)
+  : _elementSource(elementSource),
+    _criterion(criterion),
+    _numFeaturesTotal(0),
+    _numFeaturesPassingCriterion(0)
 {
   _visitors.append(visitor);
 }
 
-ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
-  const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-  const QList<ElementVisitorPtr>& visitors) :
-_elementSource(elementSource),
-_criterion(criterion),
-_numFeaturesTotal(0),
-_numFeaturesPassingCriterion(0),
-_visitors(visitors)
+ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                                                       const ElementCriterionPtr& criterion,
+                                                                       const QList<ElementVisitorPtr>& visitors)
+  : _elementSource(elementSource),
+    _criterion(criterion),
+    _numFeaturesTotal(0),
+    _numFeaturesPassingCriterion(0),
+    _visitors(visitors)
 {
 }
 
@@ -89,13 +88,8 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
     {
       _numFeaturesPassingCriterion++;
       //LOG_VART(_numFeaturesPassingCriterion);
-      for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin();
-           itr != _visitors.end(); ++itr)
-      {
-        ElementVisitorPtr visitor = *itr;
-        //LOG_VART(visitor->toString());
+      for (const auto& visitor : qAsConst(_visitors))
         visitor->visit(element);
-      }
       return element;
     }
     else

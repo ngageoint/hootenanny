@@ -35,17 +35,17 @@ namespace hoot
 
 ElementCacheLRU::ElementCacheLRU(const unsigned long maxNodeCount,
                                  const unsigned long maxWayCount,
-                                 const unsigned long maxRelationCount) :
-_maxNodeCount(maxNodeCount),
-_maxWayCount(maxWayCount),
-_maxRelationCount(maxRelationCount),
-_projection(),
-_nodes(),
-_nodesIter(_nodes.begin()),
-_ways(),
-_waysIter(_ways.begin()),
-_relations(),
-_relationsIter(_relations.begin())
+                                 const unsigned long maxRelationCount)
+  : _maxNodeCount(maxNodeCount),
+    _maxWayCount(maxWayCount),
+    _maxRelationCount(maxRelationCount),
+    _projection(),
+    _nodes(),
+    _nodesIter(_nodes.begin()),
+    _ways(),
+    _waysIter(_ways.begin()),
+    _relations(),
+    _relationsIter(_relations.begin())
 {
   LOG_TRACE(
     "New LRU cache created, " << _maxNodeCount << " max entries for nodes, " <<
@@ -78,13 +78,9 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     {
       // Do we have to replace an entry?
       if (_nodes.size() == _maxNodeCount)
-      {
         _removeOldest(ElementType::Node);
-      }
-
       _nodeList.push_front(newNode->getId());
-      _nodes.insert(std::make_pair(newNode->getId(),
-                    std::make_pair(newNode, _nodeList.begin())));
+      _nodes.insert(std::make_pair(newNode->getId(), std::make_pair(newNode, _nodeList.begin())));
     }
     break;
   case ElementType::Way:
@@ -93,14 +89,10 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     {
       // Do we have to replace an entry?
       if (_ways.size() == _maxWayCount)
-      {
         _removeOldest(ElementType::Way);
-      }
       _wayList.push_front(newWay->getId());
-      _ways.insert(std::make_pair(newWay->getId(),
-                   std::make_pair(newWay, _wayList.begin())));
+      _ways.insert(std::make_pair(newWay->getId(), std::make_pair(newWay, _wayList.begin())));
     }
-
     break;
   case ElementType::Relation:
     newRelation = std::dynamic_pointer_cast<const Relation>(newElement);
@@ -108,22 +100,15 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     {
       // Do we have to replace an entry?
       if (_relations.size() == _maxRelationCount)
-      {
         _removeOldest(ElementType::Relation);
-      }
-
       _relationList.push_front(newRelation->getId());
-      _relations.insert(std::make_pair(newRelation->getId(),
-                        std::make_pair(newRelation, _relationList.begin())));
+      _relations.insert(std::make_pair(newRelation->getId(), std::make_pair(newRelation, _relationList.begin())));
     }
     break;
   default:
-    throw HootException(QString("Unexpected element type: %1").arg(
-                          newElement->getElementType().toString()));
-
+    throw HootException(QString("Unexpected element type: %1").arg(newElement->getElementType().toString()));
     break;
   }
-
   // Reset all iterators to maintain interface contract
   resetElementIterators();
 }
@@ -136,21 +121,18 @@ void ElementCacheLRU::close()
   _wayList.clear();
   _relations.clear();
   _relationList.clear();
-
   resetElementIterators();
 }
 
 bool ElementCacheLRU::hasMoreElements()
 {
-  return
-    ((_nodesIter != _nodes.end()) || (_waysIter != _ways.end()) ||
-     (_relationsIter != _relations.end()));
+  return ((_nodesIter != _nodes.end()) || (_waysIter != _ways.end()) || (_relationsIter != _relations.end()));
 }
 
 ElementPtr ElementCacheLRU::readNextElement()
 {
   ConstElementPtr returnElement;
-  if (hasMoreElements() == true)
+  if (hasMoreElements())
   {
     if (_nodesIter != _nodes.end())
       returnElement = std::dynamic_pointer_cast<const Element>(getNextNode());
@@ -175,7 +157,6 @@ ConstNodePtr ElementCacheLRU::getNextNode()
   {
     // Update our usage
     _updateNodeAccess(_nodesIter->first);
-
     // Get return node
     returnPtr = _nodesIter->second.first;
     ++_nodesIter;
@@ -190,7 +171,6 @@ ConstWayPtr ElementCacheLRU::getNextWay()
   {
     // Update our usage
     _updateWayAccess(_waysIter->first);
-
     // Get return way
     returnPtr = _waysIter->second.first;
     ++_waysIter;
@@ -205,7 +185,6 @@ ConstRelationPtr ElementCacheLRU::getNextRelation()
   {
     // Update our usage
     _updateRelationAccess(_relationsIter->first);
-
     // Get return relation
     returnPtr = _relationsIter->second.first;
     ++_relationsIter;
@@ -259,31 +238,20 @@ bool ElementCacheLRU::containsElement(const ElementId& eid) const
 {
   const ElementType::Type type = eid.getType().getEnum();
   const long id = eid.getId();
-
   switch (type)
   {
   case ElementType::Node:
-    if (_nodes.find(id) != _nodes.end())
-    {
-      return true;
-    }
+    return (_nodes.find(id) != _nodes.end());
     break;
   case ElementType::Way:
-    if (_ways.find(id) != _ways.end())
-    {
-      return true;
-    }
+    return (_ways.find(id) != _ways.end());
     break;
   case ElementType::Relation:
-    if (_relations.find(id) != _relations.end())
-    {
-      return true;
-    }
+    return (_relations.find(id) != _relations.end());
     break;
   default:
     break;
   }
-
   // If we get to this point, it means we couldn't find it
   return false;
 }
@@ -291,22 +259,21 @@ bool ElementCacheLRU::containsElement(const ElementId& eid) const
 ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
 {
   const long id = eid.getId();
-  ConstElementPtr returnPtr;
   switch (eid.getType().getEnum())
   {
   case ElementType::Node:
-    returnPtr = getNode(id);
+    return getNode(id);
     break;
   case ElementType::Way:
-    returnPtr = getWay(id);
+    return getWay(id);
     break;
   case ElementType::Relation:
-    returnPtr = getRelation(id);
+    return getRelation(id);
     break;
   default:
     break;
   }
-  return returnPtr;
+  return ConstElementPtr();
 }
 
 // This const function kind of defeats the purpose of the LRU cache,
@@ -368,25 +335,22 @@ bool ElementCacheLRU::containsRelation(long id) const
 
 unsigned long ElementCacheLRU::typeCount(const ElementType::Type typeToCount) const
 {
-  unsigned long retVal = 0;
-
   switch (typeToCount)
   {
   case ElementType::Node:
-    retVal = _nodes.size();
+    return _nodes.size();
     break;
   case ElementType::Way:
-    retVal = _ways.size();
+    return _ways.size();
     break;
   case ElementType::Relation:
-    retVal = _relations.size();
+    return _relations.size();
     break;
   default:
     throw HootException("Invalid type passed");
     break;
   }
-
-  return retVal;
+  return 0;
 }
 
 void ElementCacheLRU::removeElement(const ElementId &eid)
@@ -409,7 +373,6 @@ void ElementCacheLRU::removeElement(const ElementId &eid)
     throw HootException("Invalid type passed");
     break;
   }
-
   resetElementIterators();
 }
 
@@ -433,14 +396,12 @@ void ElementCacheLRU::removeElements(const ElementType::Type type)
     throw HootException("Invalid type passed");
     break;
   }
-
   resetElementIterators();
 }
 
 void ElementCacheLRU::_updateNodeAccess(long id)
 {
-  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>>::iterator nodeItr =
-    _nodes.find(id);
+  auto nodeItr = _nodes.find(id);
   _nodeList.erase(nodeItr->second.second);
   _nodeList.push_front(nodeItr->first);
   nodeItr->second.second = _nodeList.begin();
@@ -448,8 +409,7 @@ void ElementCacheLRU::_updateNodeAccess(long id)
 
 void ElementCacheLRU::_updateWayAccess(long id)
 {
-  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>>::iterator wayItr =
-    _ways.find(id);
+  auto wayItr = _ways.find(id);
   _wayList.erase(wayItr->second.second);
   _wayList.push_front(wayItr->first);
   wayItr->second.second = _wayList.begin();
@@ -457,8 +417,7 @@ void ElementCacheLRU::_updateWayAccess(long id)
 
 void ElementCacheLRU::_updateRelationAccess(long id)
 {
-  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator relItr =
-    _relations.find(id);
+  auto relItr = _relations.find(id);
   _relationList.erase(relItr->second.second);
   _relationList.push_front(relItr->first);
   relItr->second.second = _relationList.begin();
@@ -470,22 +429,16 @@ std::string ElementCacheLRU::getLRUString(const ElementType::Type type)
   switch (type)
   {
   case ElementType::Node:
-    for (std::list<long>::iterator it = _nodeList.begin(); it != _nodeList.end(); ++it)
-    {
-      list << *it << ",";
-    }
+    for (auto node_id : _nodeList)
+      list << node_id << ",";
     break;
   case ElementType::Way:
-    for (std::list<long>::iterator it = _wayList.begin(); it != _wayList.end(); ++it)
-    {
-      list << *it << ",";
-    }
+    for (auto way_id : _wayList)
+      list << way_id << ",";
     break;
   case ElementType::Relation:
-    for (std::list<long>::iterator it = _relationList.begin(); it != _relationList.end(); ++it)
-    {
-      list << *it << ",";
-    }
+    for (auto relation_id : _relationList)
+      list << relation_id << ",";
     break;
   default:
     throw HootException("Invalid type passed");

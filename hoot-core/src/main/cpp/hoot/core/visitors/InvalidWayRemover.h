@@ -29,8 +29,8 @@
 #define INVALID_WAY_REMOVER_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

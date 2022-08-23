@@ -44,9 +44,9 @@ public:
   {
   public:
 
-    InvalidValueException(QString fieldName, QString message) :
-      HootException(message),
-      _fieldName(fieldName)
+    InvalidValueException(QString fieldName, QString message)
+      : HootException(message),
+        _fieldName(fieldName)
     {
     }
     ~InvalidValueException() throw() override = default;

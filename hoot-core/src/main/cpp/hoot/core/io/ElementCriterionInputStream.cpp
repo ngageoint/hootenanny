@@ -34,10 +34,9 @@
 namespace hoot
 {
 
-ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
-  const ElementCriterionPtr& criterion) :
-_elementSource(elementSource),
-_criterion(criterion)
+ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion)
+  : _elementSource(elementSource),
+    _criterion(criterion)
 {
 }
 
@@ -52,9 +51,7 @@ ElementPtr ElementCriterionInputStream::readNextElement()
   {
     ElementPtr e = _elementSource->readNextElement();
     if (_criterion->isSatisfied(e))
-    {
       return e;
-    }
   } while (hasMoreElements());
 
   return ElementPtr();

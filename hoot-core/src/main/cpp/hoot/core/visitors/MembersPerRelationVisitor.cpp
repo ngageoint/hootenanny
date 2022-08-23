@@ -28,18 +28,18 @@
 #include "MembersPerRelationVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MembersPerRelationVisitor)
 
-MembersPerRelationVisitor::MembersPerRelationVisitor() :
-_totalMembers(0),
-_minMembersPerRelation(0),
-_maxMembersPerRelation(0)
+MembersPerRelationVisitor::MembersPerRelationVisitor()
+  : _totalMembers(0),
+    _minMembersPerRelation(0),
+    _maxMembersPerRelation(0)
 {
 }
 
@@ -51,13 +51,9 @@ void MembersPerRelationVisitor::visit(const ConstElementPtr& e)
     const int numMembers = relation->getMembers().size();
     _totalMembers += numMembers;
     if (_minMembersPerRelation == 0 || numMembers < _minMembersPerRelation)
-    {
       _minMembersPerRelation = numMembers;
-    }
     if (numMembers > _maxMembersPerRelation)
-    {
       _maxMembersPerRelation = numMembers;
-    }
     _numAffected++;
   }
 }

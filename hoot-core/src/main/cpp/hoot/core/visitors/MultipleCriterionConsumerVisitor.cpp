@@ -34,10 +34,10 @@
 namespace hoot
 {
 
-MultipleCriterionConsumerVisitor::MultipleCriterionConsumerVisitor() :
-_negateCriteria(false),
-_chainCriteria(false),
-_configureChildren(true)
+MultipleCriterionConsumerVisitor::MultipleCriterionConsumerVisitor()
+  : _negateCriteria(false),
+    _chainCriteria(false),
+    _configureChildren(true)
 {
 }
 
@@ -46,25 +46,19 @@ void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& c
   LOG_VART(_negateCriteria);
   LOG_VART(crit.get());
   if (_negateCriteria)
-  {
     _criteria.push_back(std::make_shared<NotCriterion>(crit));
-  }
   else
-  {
     _criteria.push_back(ElementCriterionPtr(crit));
-  }
   LOG_VART(_criteria.size());
 }
 
-void MultipleCriterionConsumerVisitor::_addCriteria(
-  const QStringList& criteriaClassNames)
+void MultipleCriterionConsumerVisitor::_addCriteria(const QStringList& criteriaClassNames)
 {
   if (!criteriaClassNames.empty())
   {
     _criteria.clear();
-    for (int i = 0; i < criteriaClassNames.size(); i++)
+    for (const auto& critName : qAsConst(criteriaClassNames))
     {
-      const QString critName = criteriaClassNames.at(i);
       if (!critName.trimmed().isEmpty())
       {
         LOG_VART(critName);
@@ -80,10 +74,8 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
   if (!_chainCriteria)
   {
     criteriaSatisfied = false;
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
+    for (const auto& crit : _criteria)
     {
-      ElementCriterionPtr crit = *it;
       LOG_VART(crit->toString());
       if (crit->isSatisfied(e))
       {
@@ -104,10 +96,8 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
   else
   {
     criteriaSatisfied = true;
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
+    for (const auto& crit : _criteria)
     {
-      ElementCriterionPtr crit = *it;
       LOG_VART(crit->toString());
       if (!crit->isSatisfied(e))
       {
@@ -130,14 +120,10 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
 
 QString MultipleCriterionConsumerVisitor::toString() const
 {
-  QString txt;
-  for (size_t i = 0; i < _criteria.size(); i++)
-  {
-    txt += _criteria.at(i)->toString() + ";";
-  }
-  txt.chop(1);
-  return txt;
+  QStringList txt;
+  for (const auto& crit : _criteria)
+    txt.append(crit->toString());
+  return txt.join(";");
 }
 
 }
-

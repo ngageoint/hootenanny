@@ -28,22 +28,22 @@
 #include "MultilineStringMergeRelationCollapser.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MultilineStringMergeRelationCollapser)
 
-MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser() :
-_mergeAllTypes(false),
-_numRelationMembersModified(0)
+MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser()
+  : _mergeAllTypes(false),
+    _numRelationMembersModified(0)
 {
   _relationMerger.setMergeTags(false);
   // We don't want RelationMerger to auto-delete the relation we're merging in.
@@ -58,23 +58,18 @@ void MultilineStringMergeRelationCollapser::setOsmMap(OsmMap* map)
 
 void MultilineStringMergeRelationCollapser::setTypes(const QStringList& types)
 {
-  for (int i = 0; i < types.size(); i++)
+  for (const auto& t : qAsConst(types))
   {
-    const QString type = types.at(i).trimmed();
+    const QString type = t.trimmed();
     if (!type.isEmpty())
     {
       // Each list entry can either be:
 
       // a ';' delimited kvp,
       if (Tags::isValidKvp(type) && !_typeKvps.contains(type))
-      {
         _typeKvps.append(type);
-      }
-      // or just a type key.
-      else if (!_typeKeys.contains(type))
-      {
+      else if (!_typeKeys.contains(type)) // or just a type key.
         _typeKeys.append(type);
-      }
     }
   }
   LOG_VART(_typeKvps);
@@ -92,15 +87,11 @@ void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& con
   critNames.append(TagKeyCriterion::className());
   _addCriteria(critNames);
 
-  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-       it != _criteria.end(); ++it)
+  for (const auto& crit : _criteria)
   {
-    ElementCriterionPtr crit = *it;
     std::shared_ptr<TagKeyCriterion> tagCrit = std::dynamic_pointer_cast<TagKeyCriterion>(crit);
     if (tagCrit)
-    {
       tagCrit->addKey(MetadataTags::HootMultilineString());
-    }
   }
   LOG_VART(_criteria.size());
 
@@ -111,36 +102,26 @@ void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& con
   const QStringList types = opts.getMultilinestringRelationCollapserTypes();
   LOG_VART(types);
   if (types.size() == 1 && types.contains("*"))
-  {
     _mergeAllTypes = true;
-  }
   else
-  {
     setTypes(opts.getMultilinestringRelationCollapserTypes());
-  }
   LOG_VART(_mergeAllTypes);
 }
 
 void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
 {
   if (!_mergeAllTypes && _typeKeys.isEmpty() && _typeKvps.isEmpty())
-  {
-    throw IllegalArgumentException(
-      "MultilineStringMergeRelationCollapser has not been configured with any feature types.");
-  }
+    throw IllegalArgumentException("MultilineStringMergeRelationCollapser has not been configured with any feature types.");
 
   _numProcessed++;
 
   if (!element || element->getElementType() != ElementType::Relation)
-  {
     return;
-  }
 
   // The criteria used here was set up in setConfiguration.
   if (!_criteriaSatisfied(element))
   {
-    LOG_TRACE(
-      element->getElementId() << " did not satisfy criteria: " << toString() << ". Skipping...");
+    LOG_TRACE(element->getElementId() << " did not satisfy criteria: " << toString() << ". Skipping...");
     return;
   }
 
@@ -151,9 +132,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
   QString matchingTypeTag;
   bool matchingTypeTagIsKey = false;
   if (!_hasValidType(relation, matchingTypeTag, matchingTypeTagIsKey))
-  {
     return;
-  }
 
   // Get any relations which may own our relation being collapsed.
   const std::vector<ConstRelationPtr> relationsOwningMsRelation =
@@ -163,10 +142,8 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
   // For all the members of our relation being collapsed,
   QSet<ElementId> parsedOwningRelationIds;
   const std::vector<RelationData::Entry>& members = relation->getMembers();
-  for (std::vector<RelationData::Entry>::const_iterator membersItr = members.begin();
-       membersItr != members.end(); ++membersItr)
+  for (const auto& member : members)
   {
-    RelationData::Entry member = *membersItr;
     ElementPtr memberElement = _map->getElement(member.getElementId());
     if (memberElement)
     {
@@ -187,18 +164,15 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
           memberElement->setTag(Tags::kvpToKey(matchingTypeTag), Tags::kvpToVal(matchingTypeTag));
         }
       }
-
       _numRelationMembersModified++;
     }
   }
 
   // Merge the relation we're removing with any relations that own it.
-  for (std::vector<ConstRelationPtr>::const_iterator owningRelationsItr =
-         relationsOwningMsRelation.begin();
-       owningRelationsItr != relationsOwningMsRelation.end(); ++owningRelationsItr)
+  for (const auto& owningRelation : relationsOwningMsRelation)
   {
     RelationPtr relationOwningMsRelation =
-      std::const_pointer_cast<Relation>(*owningRelationsItr);
+      std::const_pointer_cast<Relation>(owningRelation);
     LOG_VART(relationOwningMsRelation.get());
     LOG_VART(parsedOwningRelationIds);
     if (relationOwningMsRelation &&
@@ -208,8 +182,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
       // Use relation merger here, as it will make the member insert indexes be correct. Prevent
       // the merger from deleting the merged ms relation, as we may need to merge it with
       // multiple parent relations within this loop. It will be deleted at the end.
-      _relationMerger.merge(
-        relationOwningMsRelation->getElementId(), relation->getElementId());
+      _relationMerger.merge(relationOwningMsRelation->getElementId(), relation->getElementId());
       parsedOwningRelationIds.insert(relationOwningMsRelation->getElementId());
     }
   }
@@ -222,8 +195,8 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
   _numAffected++;
 }
 
-bool MultilineStringMergeRelationCollapser::_hasValidType(
-  const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const
+bool MultilineStringMergeRelationCollapser::_hasValidType(const ConstRelationPtr& relation, QString& matchingTypeTag,
+                                                          bool& matchingTypeTagIsKey) const
 {
   // First check the tags for a matching type, then check the type itself. We allow for both
   // (arguably the ordering of this check could be reversed). Only type tags will be transferred to
@@ -250,8 +223,8 @@ bool MultilineStringMergeRelationCollapser::_hasValidType(
   return true;
 }
 
-QString MultilineStringMergeRelationCollapser::_getMatchingTypeTag(
-  const ConstElementPtr& element, bool& matchingTypeTagIsKey) const
+QString MultilineStringMergeRelationCollapser::_getMatchingTypeTag(const ConstElementPtr& element,
+                                                                   bool& matchingTypeTagIsKey) const
 {
   // Check the relation for any type tags matching the ones we added during configuration. This
   // doesn't handle multiple matching types. It only grabs the first one. No checking is done here
@@ -259,11 +232,8 @@ QString MultilineStringMergeRelationCollapser::_getMatchingTypeTag(
   // at this point.
 
   QString matchingTypeTag;
-  if (_mergeAllTypes)
-  {
-    // returns a kvp
+  if (_mergeAllTypes) // returns a kvp
     matchingTypeTag = OsmSchema::getInstance().getFirstType(element->getTags(), true);
-  }
   else
   {
     // Check to see whether its a key/value pair or just a type tag key.
@@ -272,9 +242,7 @@ QString MultilineStringMergeRelationCollapser::_getMatchingTypeTag(
     {
       matchingTypeTag = element->getTags().getFirstMatchingKey(_typeKeys);
       if (!matchingTypeTag.isEmpty())
-      {
         matchingTypeTagIsKey = true;
-      }
     }
   }
   LOG_VART(matchingTypeTag);

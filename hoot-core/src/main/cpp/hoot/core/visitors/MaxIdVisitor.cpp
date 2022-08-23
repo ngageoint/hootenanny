@@ -34,8 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MaxIdVisitor)
 
-MaxIdVisitor::MaxIdVisitor() :
-_maxId(-std::numeric_limits<long>::max())
+MaxIdVisitor::MaxIdVisitor()
+  : _maxId(-std::numeric_limits<long>::max())
 {
 }
 

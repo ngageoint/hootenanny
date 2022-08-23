@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/io/ArffReader.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/scoring/DataSamples.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <fstream>
@@ -55,13 +55,10 @@ void ArffToRfConverter::convert(const QString& input, const QString& output)
   LOG_INFO("Building Random Forest...");
   Tgs::RandomForest rf;
   std::shared_ptr<Tgs::DisableCout> dc;
+  // disable the printing of "Trained Tree ..."
   if (Log::getInstance().getLevel() >= Log::Warn)
-  {
-    // disable the printing of "Trained Tree ..."
     dc = std::make_shared<Tgs::DisableCout>();
-  }
-  const int numFactors =
-    std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));
+  const int numFactors = std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));
   rf.trainMulticlass(df, ConfigOptions().getRandomForestModelTrees(), numFactors);
   dc.reset();
 

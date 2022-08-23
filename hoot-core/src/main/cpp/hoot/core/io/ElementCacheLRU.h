@@ -57,9 +57,8 @@ public:
    * @param maxWayCount Total size of ways cache before items start being replaced.
    * @param maxRelationCount Total size of relation cache before items start being replaced.
    */
-  ElementCacheLRU(
-    const unsigned long maxNodeCount, const unsigned long maxWayCount,
-    const unsigned long maxRelationCount);
+  ElementCacheLRU(const unsigned long maxNodeCount, const unsigned long maxWayCount,
+                  const unsigned long maxRelationCount);
   /**
    * @brief ~ElementCache
    */

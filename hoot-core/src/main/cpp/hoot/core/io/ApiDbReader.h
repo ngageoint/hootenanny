@@ -209,8 +209,7 @@ private:
    * 
    * This will advance the results iterator *before* reading each element.
    */
-  std::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-                                              const ElementType& elementType, OsmMap& map);
+  std::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType, OsmMap& map);
 
   /*
    * the current element type being returned by the partial query; order is: node, way, and then

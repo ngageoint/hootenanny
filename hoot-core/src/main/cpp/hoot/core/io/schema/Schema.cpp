@@ -26,8 +26,6 @@
  */
 #include "Schema.h"
 
-
-
 namespace hoot
 {
 
@@ -44,7 +42,7 @@ std::shared_ptr<const Layer> Schema::getLayer(size_t i) const
 
 std::shared_ptr<const Layer> Schema::getLayer(const QString& name) const
 {
-  std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
+  auto lit = _layerNameMap.find(name);
 
   if (lit != _layerNameMap.end())
     return _layers[lit->second];
@@ -54,13 +52,7 @@ std::shared_ptr<const Layer> Schema::getLayer(const QString& name) const
 
 bool Schema::hasLayer(const QString& name) const
 {
-  std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
-
-  if (lit != _layerNameMap.end())
-    return true;
-
-  return false;
-
+  return (_layerNameMap.find(name) != _layerNameMap.end());
 }
 
 }

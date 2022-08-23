@@ -29,8 +29,8 @@
 #define MAXIDVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Standard
 #include <limits>

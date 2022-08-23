@@ -33,8 +33,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, LongestTagVisitor)
 
-LongestTagVisitor::LongestTagVisitor() :
-_longestTag(0)
+LongestTagVisitor::LongestTagVisitor()
+  : _longestTag(0)
 {
 }
 
@@ -42,7 +42,7 @@ void LongestTagVisitor::visit(const ConstElementPtr& e)
 {
   const Tags& t = e->getTags();
 
-  for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
+  for (auto it = t.begin(); it != t.end(); ++it)
   {
     if (it.value().size() > _longestTag)
     {

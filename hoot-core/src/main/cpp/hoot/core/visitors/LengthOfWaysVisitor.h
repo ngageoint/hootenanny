@@ -28,8 +28,8 @@
 #define LENGTHOFWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 namespace hoot
 {

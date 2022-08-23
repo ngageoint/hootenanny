@@ -34,12 +34,10 @@ namespace hoot
 
 bool FeatureDefinition::hasField(const QString& name) const
 {
-  for (size_t i = 0; i < _fields.size(); ++i)
+  for (const auto& field : _fields)
   {
-    if (_fields[i]->getName() == name)
-    {
+    if (field->getName() == name)
       return true;
-    }
   }
   return false;
 }

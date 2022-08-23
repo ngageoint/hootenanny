@@ -33,10 +33,8 @@ namespace hoot
 
 void MultiVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  for (size_t i = 0; i < _visitors.size(); i++)
-  {
-    _visitors[i]->visit(e);
-  }
+  for (const auto& visitor : _visitors)
+    visitor->visit(e);
 }
 
 }
