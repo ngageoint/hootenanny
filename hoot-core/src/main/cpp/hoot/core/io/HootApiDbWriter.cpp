@@ -30,11 +30,11 @@
 #include <fstream>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -174,8 +174,7 @@ long HootApiDbWriter::_openDb(const QString& urlStr)
     throw HootException("An unsupported URL was passed into HootApiDbWriter: " + urlStr);
 
   if (_userEmail.isEmpty())
-    throw HootException("Please set the user's email address via the '" +
-                        ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
+    throw HootException("Please set the user's email address via the '" + ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
 
   // URL must have name in it
   QUrl url(urlStr);
@@ -299,8 +298,7 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
     if (_nodeRemap.count(nids[i]) == 1)
       result[i] = _nodeRemap.at(nids[i]);
     else
-      throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
-        + QString(" but it did not exist in mapping table")));
+      throw HootException(QString("Requested ID remap for node %1 but it did not exist in mapping table").arg(QString::number(nids[i])));
   }
 
   return result;
@@ -442,13 +440,9 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     ElementId relationMemberElementId = e.getElementId();
 
     if (_remapIds == true)
-    {
-      relationMemberElementId =
-        ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));
-    }
+      relationMemberElementId = ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));
 
-    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
-                                 relationMemberElementId.getId(), e.getRole(), i);
+    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(), relationMemberElementId.getId(), e.getRole(), i);
   }
 
   LOG_TRACE("All members added to relation " << QString::number(relationId));

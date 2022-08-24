@@ -27,8 +27,8 @@
 #include "OsmApiDbSqlChangesetApplier.h"
 
 // hoot
-#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -53,13 +53,12 @@ const QString OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY = "total-create";
 const QString OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY = "total-modify";
 const QString OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY = "total-delete";
 
-OsmApiDbSqlChangesetApplier::OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl) :
-_precision(ConfigOptions().getWriterPrecision())
+OsmApiDbSqlChangesetApplier::OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl)
+  : _precision(ConfigOptions().getWriterPrecision())
 {
   if (!_db.isSupported(targetDatabaseUrl))
-  {
     throw HootException("Unsupported URL: " + targetDatabaseUrl.toString(QUrl::RemoveUserInfo));
-  }
+
   _db.open(targetDatabaseUrl);
 
   _initChangesetStats();
@@ -89,15 +88,10 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
   LOG_VARD(sqlParts.length());
 
   if (!sqlParts[0].toUpper().startsWith("INSERT INTO CHANGESETS"))
-  {
-    throw HootException(
-      "The first SQL statement in a changeset SQL file must create a changeset. Found: " +
-      sqlParts[0].left(25));
-  }
+    throw HootException(QString("The first SQL statement in a changeset SQL file must create a changeset. Found: %1").arg(sqlParts[0].left(25)));
 
-  for (int i = 0; i < sqlParts.size(); i++)
+  for (const auto& sqlStatement : qAsConst(sqlParts))
   {
-    const QString sqlStatement = sqlParts[i];
     LOG_VART(sqlStatement);
     QString changesetStatType;
     if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
@@ -106,9 +100,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       if (!changesetInsertStatement.isEmpty())
       {
         if (elementSqlStatements.trimmed().isEmpty())
-        {
           throw HootException("No element SQL statements changeset.");
-        }
 
         // had problems here when trying to prepare these queries (should they be?); the changeset
         // writing needs to be done before the element writing, hence the separate queries
@@ -145,8 +137,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
         _changesetDetailsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
         // need to do some extra processing here to convert the coords in the string from ints to
         // decimals
-        const QRegExp regex(
-          "min_lat=(-*[0-9]+), max_lat=(-*[0-9]+), min_lon=(-*[0-9]+), max_lon=(-*[0-9]+)");
+        const QRegExp regex("min_lat=(-*[0-9]+), max_lat=(-*[0-9]+), min_lon=(-*[0-9]+), max_lon=(-*[0-9]+)");
         const int pos = regex.indexIn(_changesetDetailsStr);
         const QStringList captures = regex.capturedTexts();
         if (pos > -1)
@@ -156,39 +147,25 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
           {
             const QString oldCoordStr = captures.at(j);
             const double newCoord = OsmApiDb::fromOsmApiDbCoord(oldCoordStr.toLong());
-            _changesetDetailsStr=
-              _changesetDetailsStr.replace(
-                oldCoordStr, QString::number(newCoord, 'g', _precision));
+            _changesetDetailsStr = _changesetDetailsStr.replace(oldCoordStr, QString::number(newCoord, 'g', _precision));
           }
         }
       }
     }
     if (_changesetStats.contains(changesetStatType))
-    {
       _changesetStats[changesetStatType] = _changesetStats[changesetStatType] + 1;
-    }
     else
-    {
       _changesetStats[changesetStatType] = 1;
-    }
   }
-  _changesetStats["total-create"] =
-    _changesetStats["node-create"] + _changesetStats["way-create"] +
-    _changesetStats["relation-create"];
-  _changesetStats["total-modify"] =
-    _changesetStats["node-modify"] + _changesetStats["way-modify"] +
-    _changesetStats["relation-modify"];
-  _changesetStats["total-delete"] =
-    _changesetStats["node-delete"] + _changesetStats["way-delete"] +
-    _changesetStats["relation-delete"];
+  _changesetStats["total-create"] = _changesetStats["node-create"] + _changesetStats["way-create"] + _changesetStats["relation-create"];
+  _changesetStats["total-modify"] = _changesetStats["node-modify"] + _changesetStats["way-modify"] + _changesetStats["relation-modify"];
+  _changesetStats["total-delete"] = _changesetStats["node-delete"] + _changesetStats["way-delete"] + _changesetStats["relation-delete"];
 
   // flush
   if (!changesetInsertStatement.isEmpty())
   {
     if (elementSqlStatements.trimmed().isEmpty())
-    {
       throw HootException("No element SQL statements changeset.");
-    }
 
     DbUtils::execNoPrepare(_db.getDB(), changesetInsertStatement);
     DbUtils::execNoPrepare(_db.getDB(), elementSqlStatements);
@@ -205,9 +182,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
 void OsmApiDbSqlChangesetApplier::write(QFile& changesetSqlFile)
 {
   if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
-  {
     throw IllegalArgumentException("Invalid file type: " + changesetSqlFile.fileName());
-  }
 
   if (changesetSqlFile.open(QIODevice::ReadOnly))
   {
@@ -225,9 +200,7 @@ void OsmApiDbSqlChangesetApplier::write(QFile& changesetSqlFile)
     }
   }
   else
-  {
     throw HootException("Unable to open changeset file: " + changesetSqlFile.fileName());
-  }
 }
 
 QString OsmApiDbSqlChangesetApplier::getChangesetStatsSummary() const

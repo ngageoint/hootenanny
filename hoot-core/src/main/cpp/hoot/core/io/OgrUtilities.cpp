@@ -275,6 +275,7 @@ OgrOptions OgrUtilities::_getOgrOptions(const QString& url, const OgrDriverInfo&
   }
   else if (driver == "LIBKML")
   {
+    //  Turn off custom indexing for KML output
     CPLSetConfigOption("OSM_USE_CUSTOM_INDEXING", "NO");
   }
   else if (driver == "S57")

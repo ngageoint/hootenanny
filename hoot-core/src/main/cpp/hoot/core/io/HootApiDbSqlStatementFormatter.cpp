@@ -48,34 +48,28 @@ HootApiDbSqlStatementFormatter::HootApiDbSqlStatementFormatter(const QString& de
 void HootApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString& delimiter)
 {
   QString formatString = HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)] = formatString.replace("\t", delimiter);
 
   formatString = HOOTAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[HootApiDb::getCurrentNodesTableName(_mapId)] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[HootApiDb::getCurrentNodesTableName(_mapId)] = formatString.replace("\t", delimiter);
 
   formatString = HOOTAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[HootApiDb::getCurrentWaysTableName(_mapId)] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[HootApiDb::getCurrentWaysTableName(_mapId)] = formatString.replace("\t", delimiter);
 
   formatString = HOOTAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[HootApiDb::getCurrentWayNodesTableName(_mapId)] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[HootApiDb::getCurrentWayNodesTableName(_mapId)] = formatString.replace("\t", delimiter);
 
   formatString = HOOTAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[HootApiDb::getCurrentRelationsTableName(_mapId)] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[HootApiDb::getCurrentRelationsTableName(_mapId)] = formatString.replace("\t", delimiter);
 
   formatString = HOOTAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)] = formatString.replace("\t", delimiter);
 }
 
 QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags) const
 {
   QString tagsStr;
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  for (auto it = tags.begin(); it != tags.end(); ++it)
   {
     QString key = it.key().trimmed();
     QString value = it.value().trimmed();
@@ -99,9 +93,8 @@ QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags) const
     }
   }
   if (tagsStr.endsWith(","))
-  {
     tagsStr.chop(1);
-  }
+
   assert(tagsStr != "''");
   return tagsStr;
 }
@@ -137,15 +130,10 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
       .arg(nodeIdStr)
       .arg(QString::number(node->getY(), 'g', _precision))
       .arg(QString::number(node->getX(), 'g', _precision))
-      .arg(changesetIdStr)
-      .arg(_dateString)
-      .arg(tileNumberString)
+      .arg(changesetIdStr, _dateString, tileNumberString)
       .arg(ver);
   if (!node->getTags().empty())
-  {
-    nodeStr.replace(
-      "\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(node->getTags())));
-  }
+    nodeStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(node->getTags())));
 
   return nodeStr;
 }
@@ -161,9 +149,7 @@ QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const l
       .arg(_dateString)
       .arg(ver);
   if (!tags.empty())
-  {
     wayStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
-  }
 
   return wayStr;
 }
@@ -175,9 +161,8 @@ QString HootApiDbSqlStatementFormatter::wayNodeToSqlString(const long wayId,
   const QString wayIdStr(QString::number(wayId));
   const QString wayNodeIdStr(QString::number(wayNodeId));
   const QString wayNodeIndexStr(QString::number(wayNodeIndex));
-  return
-    _outputFormatStrings[HootApiDb::getCurrentWayNodesTableName(_mapId)]
-      .arg(wayIdStr, wayNodeIdStr, wayNodeIndexStr);
+  return _outputFormatStrings[HootApiDb::getCurrentWayNodesTableName(_mapId)]
+          .arg(wayIdStr, wayNodeIdStr, wayNodeIndexStr);
 }
 
 QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationId,
@@ -193,9 +178,7 @@ QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationI
       .arg(_dateString)
       .arg(ver);
   if (!tags.empty())
-  {
     relationStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
-  }
 
   return relationStr;
 }
@@ -216,9 +199,8 @@ QString HootApiDbSqlStatementFormatter::relationMemberToSqlString(const long rel
 //  {
 //    memberRole = "<no role>";
 //  }
-  return
-    _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)]
-      .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr);
+  return _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)]
+          .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr);
 }
 
 }

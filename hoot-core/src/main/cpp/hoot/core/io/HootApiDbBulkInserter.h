@@ -94,16 +94,16 @@ protected:
 
   void _writeChangeset() override;
   void _writeRelation(const unsigned long relationDbId, const Tags& tags,
-                              const unsigned long version);
+                      const unsigned long version);
   void _writeRelationMember(const unsigned long sourceRelationDbId,
-                                    const RelationData::Entry& member,
-                                    const unsigned long memberDbId,
-                                    const unsigned int memberSequenceIndex,
-                                    const unsigned long version) override;
+                            const RelationData::Entry& member,
+                            const unsigned long memberDbId,
+                            const unsigned int memberSequenceIndex,
+                            const unsigned long version) override;
   void _writeWay(const unsigned long wayDbId, const Tags& tags, const unsigned long version);
   void _writeWayNodes(const unsigned long wayId,
-                              const std::vector<long>& wayNodeIds,
-                              const unsigned long version) override;
+                      const std::vector<long>& wayNodeIds,
+                      const unsigned long version) override;
   void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId) override;
 
   void _writeCombinedSqlFile() override;

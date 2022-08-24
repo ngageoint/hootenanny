@@ -33,13 +33,13 @@
 namespace hoot
 {
 
-InternalIdReserver::InternalIdReserver(QSqlDatabase& db, const QString& sequenceName, int margin) :
-  _db(db),
-  _margin(margin),
-  _sequenceName(sequenceName)
+InternalIdReserver::InternalIdReserver(QSqlDatabase& db, const QString& sequenceName, int margin)
+  : _db(db),
+    _margin(margin),
+    _nextId(1),
+    _sequenceName(sequenceName),
+    _closed(false)
 {
-  _nextId = 1;
-  _closed = false;
 }
 
 InternalIdReserver::~InternalIdReserver()
@@ -62,9 +62,7 @@ void InternalIdReserver::close()
     lock.prepare("SELECT pg_advisory_lock(:seq)");
     lock.bindValue("seq", qHash(_sequenceName));
     if (lock.exec() == false)
-    {
       throw HootException("Error acquiring lock. Error: " + lock.lastError().text());
-    }
 
     QSqlQuery query(_db);
     query.prepare(
@@ -78,17 +76,13 @@ void InternalIdReserver::close()
     query.bindValue("seq2", _sequenceName);
     query.bindValue("newValue", (qlonglong)(_nextId + _margin));
     if (query.exec() == false)
-    {
       throw HootException("Error updating sequence. Error: " + query.lastError().text());
-    }
 
     QSqlQuery unlock(_db);
     unlock.prepare("SELECT pg_advisory_unlock(:seq)");
     unlock.bindValue("seq", qHash(_sequenceName));
     if (unlock.exec() == false)
-    {
       throw HootException("Error releasing lock. Error: " + unlock.lastError().text());
-    }
 
     _closed = true;
   }
@@ -97,9 +91,7 @@ void InternalIdReserver::close()
 int InternalIdReserver::getNextId()
 {
   if (_closed)
-  {
     throw HootException("This reserver has already been closed.");
-  }
   return _nextId++;
 }
 

@@ -27,16 +27,16 @@
 
 #include "ElementVisitorInputStream.h"
 
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
 
 ElementVisitorInputStream::ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-    const ElementVisitorPtr& visitor) :
-_elementSource(elementSource),
-_visitor(visitor)
+                                                     const ElementVisitorPtr& visitor)
+  : _elementSource(elementSource),
+    _visitor(visitor)
 {
 }
 

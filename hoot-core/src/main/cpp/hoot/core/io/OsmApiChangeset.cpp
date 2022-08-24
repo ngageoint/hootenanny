@@ -150,16 +150,10 @@ void XmlChangeset::loadChangesetDirectory(const QString& changesetDirectory)
       if (QFile::exists(response))
         loadChangesetFile(filepath);
     }
-    else if (filepath.contains("-Response-") && filepath.endsWith("200.osc", Qt::CaseInsensitive))
-    {
-      //  Read in the update for new IDs
+    else if (filepath.contains("-Response-") && filepath.endsWith("200.osc", Qt::CaseInsensitive))  //  Read in the update for new IDs
       updateChangeset(FileUtils::readFully(filepath));
-    }
-    else if (filepath.endsWith("-error.osc", Qt::CaseInsensitive))
-    {
-      //  The changeset error file
+    else if (filepath.endsWith("-error.osc", Qt::CaseInsensitive)) //  The changeset error file
       loadChangesetFile(filepath);
-    }
     else
     {
       //  Output the filename to the log

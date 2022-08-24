@@ -36,9 +36,7 @@ namespace hoot
 {
 
 //These match up exclusively with the hoot api database and shouldn't be changed:
-
-static const QString HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\t%10\n";
+static const QString HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\t%10\n";
 static const QString HOOTAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\t\\N\n";
 static const QString HOOTAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\t\\N\n";
 static const QString HOOTAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
@@ -73,57 +71,52 @@ public:
 
   inline static QString getNodeSqlHeaderString(const long mapId)
   {
-    return "COPY " + HootApiDb::getCurrentNodesTableName(mapId) +
-    " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, tags) " +
-    "FROM stdin;\n";
+    return QString("COPY %1 (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, tags) FROM stdin;\n")
+            .arg(HootApiDb::getCurrentNodesTableName(mapId));
   }
 
   inline static QString getWaySqlHeaderString(const long mapId)
   {
-    return "COPY " + HootApiDb::getCurrentWaysTableName(mapId) +
-                   " (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n";
+    return QString("COPY %1 (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n")
+            .arg(HootApiDb::getCurrentWaysTableName(mapId));
   }
 
   inline static QString getWayNodeSqlHeaderString(const long mapId)
   {
-    return "COPY " + HootApiDb::getCurrentWayNodesTableName(mapId) +
-                   " (way_id, node_id, sequence_id) FROM stdin;\n";
+    return QString("COPY %1 (way_id, node_id, sequence_id) FROM stdin;\n")
+            .arg(HootApiDb::getCurrentWayNodesTableName(mapId));
   }
 
   inline static QString getRelationSqlHeaderString(const long mapId)
   {
-    return "COPY " + HootApiDb::getCurrentRelationsTableName(mapId) +
-                   " (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n";
+    return QString("COPY %1 (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n")
+            .arg(HootApiDb::getCurrentRelationsTableName(mapId));
   }
 
   inline static QString getRelationMemberSqlHeaderString(const long mapId)
   {
-    return "COPY " + HootApiDb::getCurrentRelationMembersTableName(mapId) +
-                   " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n";
+    return QString("COPY %1 (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n")
+        .arg(HootApiDb::getCurrentRelationMembersTableName(mapId));
   }
 
   inline static QString getChangesetSqlHeaderString(const long mapId)
   {
-    return "COPY " + HootApiDb::getChangesetsTableName(mapId) +
-            " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes, tags) " +
-            "FROM stdin;\n";
+    return QString("COPY %1 (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes, tags) FROM stdin;\n")
+            .arg(HootApiDb::getChangesetsTableName(mapId));
   }
 
  inline static QString getElementSqlHeaderStrings(const ElementType& elementType, const long mapId)
   {
     switch (elementType.getEnum())
     {
-      case ElementType::Node:
-        return getNodeSqlHeaderString(mapId);
-
-      case ElementType::Way:
-        return getWaySqlHeaderString(mapId);
-
-      case ElementType::Relation:
-        return getRelationSqlHeaderString(mapId);
-
-      default:
-        throw HootException("Unsupported element member type.");
+    case ElementType::Node:
+      return getNodeSqlHeaderString(mapId);
+    case ElementType::Way:
+      return getWaySqlHeaderString(mapId);
+    case ElementType::Relation:
+      return getRelationSqlHeaderString(mapId);
+    default:
+      throw HootException("Unsupported element member type.");
     }
     return "";
   }

@@ -51,9 +51,8 @@ public:
    * @param url URL of the request containing the cookies
    * @return a cookie store containing only the session cookie
    */
-  static std::shared_ptr<HootNetworkCookieJar> getUserSessionCookie(
-    const QString& userName, const QString& accessToken, const QString& accessTokenSecret,
-    const QString& url);
+  static std::shared_ptr<HootNetworkCookieJar> getUserSessionCookie(const QString& userName, const QString& accessToken,
+                                                                    const QString& accessTokenSecret, const QString& url);
 };
 
 }

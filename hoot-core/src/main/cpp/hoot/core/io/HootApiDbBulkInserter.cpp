@@ -28,11 +28,11 @@
 #include "HootApiDbBulkInserter.h"
 
 // Hoot
+#include <hoot/core/io/HootApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/io/HootApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QStringBuilder>
@@ -48,7 +48,8 @@ int HootApiDbBulkInserter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbBulkInserter)
 
-HootApiDbBulkInserter::HootApiDbBulkInserter() : OsmApiDbBulkInserter()
+HootApiDbBulkInserter::HootApiDbBulkInserter()
+  : OsmApiDbBulkInserter()
 {
   _reset();
   setConfiguration(conf());
@@ -75,18 +76,13 @@ void HootApiDbBulkInserter::open(const QString& url)
 
   // Make sure we're not already open and the URL is valid
   if (!isSupported(url))
-  {
     throw HootException(QString("Could not open URL ") + url);
-  }
 
   _verifyDependencies();
   _verifyStartingIds();
   if (_database.getDB().isOpen())
-  {
-    throw HootException(
-      QString("Database already open.  Close the existing database connection before opening ") +
-      QString("a new one.  URL: ") + _outputUrl);
-  }
+    throw HootException(QString("Database already open.  Close the existing database connection before opening a new one.  URL: ") + _outputUrl);
+
   _database.open(_outputUrl);
   _database.setCreateIndexesOnClose(false);
   _database.setFlushOnClose(false);
@@ -96,8 +92,7 @@ void HootApiDbBulkInserter::open(const QString& url)
   LOG_VART(_database.getMapId());
 
   _sectionNames = _createSectionNameList();
-  _sqlFormatter =
-    std::make_shared<HootApiDbSqlStatementFormatter>(_outputDelimiter, _database.getMapId());
+  _sqlFormatter = std::make_shared<HootApiDbSqlStatementFormatter>(_outputDelimiter, _database.getMapId());
 }
 
 void HootApiDbBulkInserter::_getOrCreateMap()
@@ -113,13 +108,10 @@ void HootApiDbBulkInserter::_getOrCreateMap()
 
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
-  {
     _database.setUserId(_database.getOrCreateUser(_userEmail, _userEmail));
-  }
   else
-  {
     _database.setUserId(_database.getUserId(_userEmail, true));
-  }
+
   _changesetData.changesetUserId = _database.getUserId(_userEmail, true);
   LOG_DEBUG("Creating changeset: " << _changesetData.currentChangesetId);
 
@@ -177,15 +169,13 @@ void HootApiDbBulkInserter::finalizePartial()
 
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
-  {
     _writeChangeset();
-  }
+
   //If there was only one changeset written total, this won't have yet been incremented, so do it
   //now.
   if (_changesetData.changesetsWritten == 0)
-  {
     _changesetData.changesetsWritten++;
-  }
+
   _flush();
   _closeOutputFiles();
 
@@ -199,9 +189,8 @@ void HootApiDbBulkInserter::finalizePartial()
 
   _writeDataToDb();
   if (_outputFilesCopyLocation.isEmpty())
-  {
     _sqlOutputCombinedFile->remove();
-  }
+
   LOG_DEBUG("Final database write stats:");
   _logStats(true);
 }
@@ -247,14 +236,11 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_VART(dest);
   QFile outputFile(dest);
   if (outputFile.exists())
-  {
     outputFile.remove();
-  }
+
   _sqlOutputCombinedFile = std::make_shared<QFile>(dest);
   if (!_sqlOutputCombinedFile->open(QIODevice::WriteOnly))
-  {
     throw HootException("Could not open file for SQL output: " + dest);
-  }
 
   LOG_INFO(
     "Writing combined SQL output file to " << _sqlOutputCombinedFile->fileName() <<
@@ -269,12 +255,12 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
   //handles sequences internally when the data is later read back out (?).
 
   long recordCtr = 0;
-  for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
+  for (const auto& name : qAsConst(_sectionNames))
   {
-    LOG_DEBUG("Parsing data for temp file " << *it);
-    if (_outputSections.find(*it) == _outputSections.end())
+    LOG_DEBUG("Parsing data for temp file " << name);
+    if (_outputSections.find(name) == _outputSections.end())
     {
-      LOG_DEBUG("No data for table " + *it);
+      LOG_DEBUG("No data for table " + name);
       continue;
     }
 
@@ -282,13 +268,13 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
 
     //This file was originally opened as write only and has already been closed by this point,
     //so create a new readonly file for reading it back in.
-    QFile tempInputFile(_outputSections[*it]->fileName());
+    QFile tempInputFile(_outputSections[name]->fileName());
     try
     {
-      LOG_DEBUG("Opening file: " << _outputSections[*it]->fileName());
+      LOG_DEBUG("Opening file: " << _outputSections[name]->fileName());
       if (tempInputFile.open(QIODevice::ReadOnly))
       {
-        LOG_DEBUG("Parsing file for table: " << *it << "...");
+        LOG_DEBUG("Parsing file for table: " << name << "...");
 
         do
         {
@@ -297,11 +283,8 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
           LOG_VART(line.left(25));
           LOG_VART(line.length());
 
-          if (!line.trimmed().isEmpty() &&
-              line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
-          {
+          if (!line.trimmed().isEmpty() && line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
             recordCtr++;
-          }
 
           _sqlOutputCombinedFile->write(line.toUtf8());
 
@@ -320,16 +303,14 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
         while (!tempInputFile.atEnd());
 
         tempInputFile.close();
-        LOG_DEBUG("Closing file for " << *it << "...");
-        _outputSections[*it]->close();
+        LOG_DEBUG("Closing file for " << name << "...");
+        _outputSections[name]->close();
         //shouldn't need to do this since its a temp file
-        _outputSections[*it]->remove();
-        _outputSections[*it].reset();
+        _outputSections[name]->remove();
+        _outputSections[name].reset();
       }
       else
-      {
         throw HootException("Unable to open input file: " + tempInputFile.fileName());
-      }
     }
     catch (...)
     {
@@ -338,7 +319,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
       throw;
     }
 
-    LOG_DEBUG("Wrote contents of section " << *it);
+    LOG_DEBUG("Wrote contents of section " << name);
   }
   LOG_DEBUG("Finished parsing temp files...");
   _sqlOutputCombinedFile->write("COMMIT;");
@@ -362,8 +343,7 @@ unsigned long HootApiDbBulkInserter::_getTotalFeaturesWritten() const
 unsigned long HootApiDbBulkInserter::_getTotalRecordsWritten() const
 {
   return
-    _writeStats.nodesWritten +
-    _writeStats.relationMembersWritten + _writeStats.relationsWritten +
+    _writeStats.nodesWritten + _writeStats.relationMembersWritten + _writeStats.relationsWritten +
     _writeStats.wayNodesWritten + _writeStats.waysWritten  + _changesetData.changesetsWritten;
 }
 
@@ -392,9 +372,7 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   // Do we already know about this node?
   if (_validateData && _idMappings.nodeIdMap->contains(node->getId()))
-  {
     throw NotImplementedException("Writer class does not support update operations.");
-  }
   LOG_VART(node->getElementId());
   const unsigned long nodeDbId = _establishIdMapping(node->getElementId());
   LOG_VART(ElementId(ElementType::Node, nodeDbId));
@@ -413,9 +391,7 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   _writeStats.nodesWritten++;
   _writeStats.nodeTagsWritten += node->getTags().size();
   if (_validateData)
-  {
     _checkUnresolvedReferences(node, nodeDbId);
-  }
 
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
@@ -439,9 +415,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
 
   // Do we already know about this way?
   if (_validateData && _idMappings.wayIdMap->contains(way->getId()))
-  {
     throw NotImplementedException("Writer class does not support update operations");
-  }
   LOG_VART(way->getElementId());
   const unsigned long wayDbId = _establishIdMapping(way->getElementId());
   LOG_VART(ElementId(ElementType::Way, wayDbId));
@@ -462,9 +436,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   _writeStats.wayTagsWritten += way->getTags().size();
   _writeStats.wayNodesWritten += way->getNodeIds().size();
   if (_validateData)
-  {
     _checkUnresolvedReferences(way, wayDbId);
-  }
 
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
@@ -487,9 +459,7 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
 
   //  Do we already know about this node?
   if (_validateData && _idMappings.relationIdMap->contains(relation->getId()))
-  {
     throw NotImplementedException("Writer class does not support update operations");
-  }
   LOG_VART(relation->getElementId());
   const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
@@ -510,9 +480,7 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   _writeStats.relationTagsWritten += relation->getTags().size();
   _writeStats.relationMembersWritten += relation->getMembers().size();
   if (_validateData)
-  {
     _checkUnresolvedReferences(relation, relationDbId);
-  }
 
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
@@ -546,27 +514,23 @@ QStringList HootApiDbBulkInserter::_createSectionNameList()
 
 void HootApiDbBulkInserter::_createNodeOutputFiles()
 {
-  _createOutputFile(
-    HootApiDb::getCurrentNodesTableName(_database.getMapId()),
-    HootApiDbSqlStatementFormatter::getNodeSqlHeaderString(_database.getMapId()));
+  _createOutputFile(HootApiDb::getCurrentNodesTableName(_database.getMapId()),
+                    HootApiDbSqlStatementFormatter::getNodeSqlHeaderString(_database.getMapId()));
 }
 
 void HootApiDbBulkInserter::_writeNode(const ConstNodePtr& node, const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
   _outputSections[HootApiDb::getCurrentNodesTableName(_database.getMapId())]->write(
-    _sqlFormatter->nodeToSqlString(
-      node, nodeDbId, _changesetData.currentChangesetId, node->getVersion(), _validateData).toUtf8());
+    _sqlFormatter->nodeToSqlString(node, nodeDbId, _changesetData.currentChangesetId, node->getVersion(), _validateData).toUtf8());
 }
 
 void HootApiDbBulkInserter::_createWayOutputFiles()
 {
-  _createOutputFile(
-    HootApiDb::getCurrentWaysTableName(_database.getMapId()),
-    HootApiDbSqlStatementFormatter::getWaySqlHeaderString(_database.getMapId()));
-  _createOutputFile(
-    HootApiDb::getCurrentWayNodesTableName(_database.getMapId()),
-    HootApiDbSqlStatementFormatter::getWayNodeSqlHeaderString(_database.getMapId()));
+  _createOutputFile(HootApiDb::getCurrentWaysTableName(_database.getMapId()),
+                    HootApiDbSqlStatementFormatter::getWaySqlHeaderString(_database.getMapId()));
+  _createOutputFile(HootApiDb::getCurrentWayNodesTableName(_database.getMapId()),
+                    HootApiDbSqlStatementFormatter::getWayNodeSqlHeaderString(_database.getMapId()));
 }
 
 void HootApiDbBulkInserter::_writeWay(const unsigned long wayDbId, const Tags& tags, const unsigned long version)
@@ -587,19 +551,11 @@ void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
   {
     unsigned long wayNodeIdVal;
     if (!_validateData)
-    {
       wayNodeIdVal = abs(*it);
-    }
     else if (_idMappings.nodeIdMap->contains(*it))
-    {
       wayNodeIdVal = _idMappings.nodeIdMap->at(*it);
-    }
     else
-    {
-      throw UnsupportedException(
-        "Unresolved way nodes are not supported.  " +
-        QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
-    }
+      throw UnsupportedException(QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
 
     _outputSections[HootApiDb::getCurrentWayNodesTableName(_database.getMapId())]->write(
       _sqlFormatter->wayNodeToSqlString(dbWayId, wayNodeIdVal, wayNodeIndex).toUtf8());
@@ -610,12 +566,10 @@ void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
 
 void HootApiDbBulkInserter::_createRelationOutputFiles()
 {
-  _createOutputFile(
-    HootApiDb::getCurrentRelationsTableName(_database.getMapId()),
-    HootApiDbSqlStatementFormatter::getRelationSqlHeaderString(_database.getMapId()));
-  _createOutputFile(
-    HootApiDb::getCurrentRelationMembersTableName(_database.getMapId()),
-    HootApiDbSqlStatementFormatter::getRelationMemberSqlHeaderString(_database.getMapId()));
+  _createOutputFile(HootApiDb::getCurrentRelationsTableName(_database.getMapId()),
+                    HootApiDbSqlStatementFormatter::getRelationSqlHeaderString(_database.getMapId()));
+  _createOutputFile(HootApiDb::getCurrentRelationMembersTableName(_database.getMapId()),
+                    HootApiDbSqlStatementFormatter::getRelationMemberSqlHeaderString(_database.getMapId()));
 }
 
 void HootApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, const Tags& tags,
@@ -633,8 +587,7 @@ void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelat
                                                  const unsigned long version)
 {
   _outputSections[HootApiDb::getCurrentRelationMembersTableName(_database.getMapId())]->write(
-    _sqlFormatter->relationMemberToSqlString(
-      sourceRelationDbId, memberDbId, member, memberSequenceIndex, version).toUtf8());
+    _sqlFormatter->relationMemberToSqlString(sourceRelationDbId, memberDbId, member, memberSequenceIndex, version).toUtf8());
   _writeStats.relationMembersWritten++;
 }
 
@@ -646,9 +599,7 @@ void HootApiDbBulkInserter::_incrementChangesInChangeset()
   //This seems to be writing double the amount of changesets needed with every other changeset
   //being empty. - #2217
   if (_changesetData.changesInChangeset ==/*>*/ 0)
-  {
     _writeChangeset();
-  }
   _changesetData.changesInChangeset++;
   if (_changesetData.changesInChangeset == _maxChangesetSize)
   {
@@ -668,17 +619,13 @@ void HootApiDbBulkInserter::_writeChangeset()
   LOG_VART(_changesetData.currentChangesetId);
 
   if (_changesetData.changesetUserId == -1)
-  {
-    throw HootException(
-      "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
-  }
+    throw HootException("Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
 
   //Rather than write the changeset as a COPY statement out to file, just going to write it directly
   //to the db.  Rhis helps this class and HootApiDbWriter play nicely when the two are mixed together
   //in a data workflow.  A downside to this is that the changeset insert isn't part of the SQL
   //transaction used with the copy statements.
-  _changesetData.currentChangesetId =
-    _database.insertChangeset(_changesetData.changesetBounds, _changesetTags, _maxChangesetSize);
+  _changesetData.currentChangesetId = _database.insertChangeset(_changesetData.changesetBounds, _changesetTags, _maxChangesetSize);
   LOG_DEBUG(
     "Inserted changeset with ID: " << _changesetData.currentChangesetId << " and " <<
     _changesetData.changesInChangeset << " changes.");

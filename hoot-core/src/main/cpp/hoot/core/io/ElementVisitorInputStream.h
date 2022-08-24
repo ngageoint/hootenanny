@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -45,8 +45,7 @@ public:
    * @param elementSource source of the element stream
    * @param visitor an element visitor to filter the stream with
    */
-  ElementVisitorInputStream(
-    const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
+  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
   ~ElementVisitorInputStream() override = default;
 
   /**
