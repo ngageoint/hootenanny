@@ -78,9 +78,7 @@ public:
       {
         LOG_VAR(args);
         cout << getHelp() << endl << endl;
-        throw HootException(
-          QString("%1 takes at least three parameters: one or more pairs of input maps and an output map")
-            .arg(getName()));
+        throw HootException(QString("%1 takes at least three parameters: one or more pairs of input maps and an output map").arg(getName()));
       }
     }
     else
@@ -89,17 +87,13 @@ public:
       {
         LOG_VAR(args);
         cout << getHelp() << endl << endl;
-        throw HootException(
-          QString("%1 takes at least two parameters: one or more pairs of input maps")
-            .arg(getName()));
+        throw HootException(QString("%1 takes at least two parameters: one or more pairs of input maps").arg(getName()));
       }
     }
 
     QString output;
     if (!optimizeThresholds)
-    {
       output = args.last();
-    }
 
     // Load the maps as pairs.
     QStringList ref1Inputs;

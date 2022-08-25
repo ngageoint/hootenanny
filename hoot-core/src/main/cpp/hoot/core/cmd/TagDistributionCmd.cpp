@@ -68,10 +68,7 @@ public:
     }
 
     if (typeKeysOnly && nameKeysOnly)
-    {
-      throw IllegalArgumentException(
-        "Only either --names or --types may be specified as an option to " + getName() + ".");
-    }
+      throw IllegalArgumentException("Only either --names or --types may be specified as an option to " + getName() + ".");
 
     QStringList tagKeys;
     if (args.contains("--tagKeys"))
@@ -82,13 +79,9 @@ public:
       args.removeAt(tagKeysIndex);
     }
     if (typeKeysOnly)
-    {
       tagKeys = OsmSchema::getInstance().getAllTypeKeys().toList();
-    }
     else if (nameKeysOnly)
-    {
       tagKeys = Tags::getNameKeys();
-    }
 
     QStringList criteriaClassNames;
     if (args.contains("--criteria"))
@@ -159,13 +152,9 @@ public:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
     LOG_VARD(inputs);
 
     LOG_STATUS("Calculating tag distribution for " << inputs.size() << " input(s)...");
@@ -181,9 +170,7 @@ public:
 
     std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
 
-    LOG_STATUS(
-      "Tag distribution calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    LOG_STATUS("Tag distribution calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

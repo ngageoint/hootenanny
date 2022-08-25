@@ -29,9 +29,9 @@
 #include <hoot/core/algorithms/MapStitcher.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -90,8 +90,7 @@ public:
     //  Save the output map
     IoUtils::saveMap(baseMap, output);
 
-    LOG_STATUS(
-      "Data stitching completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    LOG_STATUS("Data stitching completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }

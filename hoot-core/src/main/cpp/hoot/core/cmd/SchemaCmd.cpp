@@ -58,32 +58,21 @@ public:
     if (args.empty())
     {
       if (!_getSupportedTextualFormats().contains(ConfigOptions().getTagPrintingFormat()))
-      {
-        throw IllegalArgumentException(
-          "Unsupported textual output format: " + ConfigOptions().getTagPrintingFormat() + ".");
-      }
+        throw IllegalArgumentException("Unsupported textual output format: " + ConfigOptions().getTagPrintingFormat() + ".");
 
       std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
-        ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-          ConfigOptions().getTagPrintingScript());
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(ConfigOptions().getTagPrintingScript());
       if (!schemaPrinter)
-      {
-        throw IllegalArgumentException(
-          "Unable to find schema printing script: " + ConfigOptions().getTagPrintingScript());
-      }
+        throw IllegalArgumentException("Unable to find schema printing script: " + ConfigOptions().getTagPrintingScript());
     }
     else if (args.size() == 1)
     {
       QFileInfo outputFileInfo(args[0]);
       const QString outputFormat = outputFileInfo.suffix().toLower();
       if (_getSupportedImageFormats().contains(outputFormat))
-      {
         _writeGraphImage(args[0]);
-      }
       else
-      {
         throw IllegalArgumentException("Unsupported image output format: " + outputFormat + ".");
-      }
     }
     else
     {
@@ -115,15 +104,12 @@ private:
     fp.write(uut.toGraphvizString().toUtf8());
     fp.close();
 
-    QString cmd =
-      "neato -T" + outputFormat + " -Gsize=100,100\\! -GK=3 -Gratio=.5 -Gmindist=1";
+    QString cmd = "neato -T" + outputFormat + " -Gsize=100,100\\! -GK=3 -Gratio=.5 -Gmindist=1";
     cmd += " -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gdpi=100";
     cmd += " -Goverlap=false -Elen=3 -o " + outputPath + " " + dotFilePath;
     const int retval = system(cmd.toStdString().c_str());
     if (retval != 0)
-    {
       throw HootException("Failed creating schema graph image. Status: " + QString::number(retval));
-    }
   }
 
   QStringList _getSupportedTextualFormats() const

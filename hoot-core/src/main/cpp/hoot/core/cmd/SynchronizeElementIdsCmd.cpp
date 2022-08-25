@@ -96,9 +96,7 @@ public:
     LOG_STATUS("\t" << idSynchronizer.getNumNodeIdsSynchronized() << " nodes");
     LOG_STATUS("\t" << idSynchronizer.getNumWayIdsSynchronized() << " ways");
     LOG_STATUS("\t" << idSynchronizer.getNumRelationIdsSynchronized() << " relations");
-    LOG_STATUS(
-      "Synchronized element IDs in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    LOG_STATUS("Synchronized element IDs in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

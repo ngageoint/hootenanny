@@ -66,13 +66,9 @@ public:
     mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
     const QStringList mapNames = mapReader.selectMapNamesAvailableToCurrentUser();
     if (mapNames.empty())
-    {
       std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
-    }
     else
-    {
       std::cout << "Available map layers:\n\n" << mapNames.join("\n") << std::endl;
-    }
     mapReader.close();
 
     return 0;

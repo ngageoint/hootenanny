@@ -26,18 +26,18 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/algorithms/perty/PertyOp.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/algorithms/perty/PertyMatchScorer.h>
-#include <hoot/core/scoring/MapMatchScoringUtils.h>
+#include <hoot/core/algorithms/perty/PertyOp.h>
 #include <hoot/core/algorithms/perty/PertyTestRunner.h>
 #include <hoot/core/algorithms/perty/PertyTestRunResult.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/scoring/MapMatchScoringUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -95,9 +95,7 @@ public:
 
     assert(args.size() == 2);
     if (scoreOptionSpecified && testOptionSpecified)
-    {
       throw HootException("Cannot specify both the --score and --test options.");
-    }
 
     const QString input = args[0];
     const QString output = args[1];
@@ -136,10 +134,8 @@ public:
       LOG_STATUS("\n\nNumber of Test Runs: " << results.size());
       bool anyTestFailed = false;
       bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
-      for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
-           it != results.end(); ++it)
+      for (const auto& result : qAsConst(results))
       {
-        std::shared_ptr<const PertyTestRunResult> result = *it;
         LOG_STATUS(result->toString());
         anyTestFailed = !result->testPassed();
         // Just checking here for test run scores that were higher than expected but allowed to

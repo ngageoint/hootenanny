@@ -31,10 +31,10 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -71,9 +71,7 @@ public:
       bool ok = false;
       buffer = args.at(bufferIndex + 1).toDouble(&ok);
       if (!ok)
-      {
         throw IllegalArgumentException("Invalid buffer value: " + args.at(bufferIndex));
-      }
       args.removeAt(bufferIndex + 1);
       args.removeAt(bufferIndex);
     }
@@ -117,8 +115,7 @@ public:
     MapProjector::projectToWgs84(result);
     IoUtils::saveMap(result, outputPath);
 
-    LOG_STATUS(
-      "Map cookie cut in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Map cookie cut in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

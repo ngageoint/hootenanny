@@ -656,8 +656,7 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
     else if (memberElementId.getId() <= 0)
     {
       ElementId newId =
-        ElementId(
-          memberElementId.getType().getEnum(), _db.getNextId(memberElementId.getType().getEnum()));
+        ElementId(memberElementId.getType().getEnum(), _db.getNextId(memberElementId.getType().getEnum()));
       _remappedIds[memberElementId] = newId;
       memberElementId = newId;
     }

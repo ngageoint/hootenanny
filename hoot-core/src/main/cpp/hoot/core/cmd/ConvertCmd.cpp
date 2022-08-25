@@ -105,13 +105,9 @@ public:
     // Everything that's left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 
@@ -125,9 +121,8 @@ public:
     else
     {
       // writes a separate output for each input
-      for (int i = 0; i < inputs.size(); i++)
+      for (const auto& input : qAsConst(inputs))
       {
-        const QString input = inputs.at(i);
         // Write each output to the format specified by output and a similarly named path as the
         // input with some text appended to the input name. We need to re-init DataConverter here
         // each time since it sets and holds onto conversion operators based on the input type.
@@ -136,8 +131,7 @@ public:
         converter.convert(input, IoUtils::getOutputUrlFromInput(input, "-converted", output));
       }
     }
-    LOG_STATUS(
-      "Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    LOG_STATUS("Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }

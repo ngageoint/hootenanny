@@ -69,14 +69,13 @@ public:
     timer.start();
 
     const QStringList inputs = args;
-    for (int i = 0; i < inputs.size(); i++)
+    for (const auto& input : qAsConst(inputs))
     {
-      LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(inputs.at(i), 25) << "...");
-      HootApiDbWriter().deleteMap(inputs.at(i));
+      LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(input, 25) << "...");
+      HootApiDbWriter().deleteMap(input);
     }
 
-    LOG_STATUS(
-      "Map(s) deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Map(s) deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

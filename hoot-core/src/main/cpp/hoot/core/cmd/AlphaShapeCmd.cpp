@@ -127,9 +127,7 @@ public:
     // Save out the result.
     _writeOutput(result, outputPath);
 
-    LOG_STATUS(
-      "Alpha shape written to " << outputPath << " in " <<
-       StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Alpha shape written to " << outputPath << " in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

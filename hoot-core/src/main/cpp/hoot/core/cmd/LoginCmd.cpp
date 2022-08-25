@@ -26,10 +26,9 @@
  */
 
 // Hoot
+#include <hoot/core/auth/HootServicesLoginManager.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
-
-#include <hoot/core/auth/HootServicesLoginManager.h>
 
 namespace hoot
 {

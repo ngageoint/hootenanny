@@ -66,27 +66,19 @@ public:
 
     const QString invalidKvpMsg = "is not a valid key/value pair of the form: key=value.";
     if (!Tags::isValidKvp(tag1))
-    {
       throw IllegalArgumentException(tag1 + " " + invalidKvpMsg);
-    }
     if (!Tags::isValidKvp(tag2))
-    {
       throw IllegalArgumentException(tag2 + " " + invalidKvpMsg);
-    }
 
     const QString invalidTypeMsg =
       "does not correspond to a type in the Hootenanny internal schema.";
     if (!OsmSchema::getInstance().isTypeKey(tag1.split("=")[0]))
-    {
       throw IllegalArgumentException(tag1 + " " + invalidTypeMsg);
-    }
     if (!OsmSchema::getInstance().isTypeKey(tag2.split("=")[0]))
-    {
       throw IllegalArgumentException(tag2 + " " + invalidTypeMsg);
-    }
 
-    std::cout << "Type similarity score (0.0 to 1.0) for " << tag1 << " and " << tag2 << ": " <<
-                 OsmSchema::getInstance().score(tag1, tag2) << std::endl;
+    std::cout << "Type similarity score (0.0 to 1.0) for " << tag1 << " and " << tag2 << ": "
+              << OsmSchema::getInstance().score(tag1, tag2) << std::endl;
 
     return 0;
   }

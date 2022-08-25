@@ -66,17 +66,12 @@ public:
 
     const QString input = args[0];
     const bool result = SortedElementsValidator::validate(input);
-    if (result)
-    {
-      std::cout << input << " is sorted." << std::endl;
-    }
-    else
-    {
-      std::cout << input << " is not sorted." << std::endl;
-    }
+    std::cout << input << " is ";
+    if (!result)
+      std::cout << "not ";
+    std::cout << "sorted." << std::endl;
 
-    LOG_STATUS(
-      "Map sorted check ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Map sorted check ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

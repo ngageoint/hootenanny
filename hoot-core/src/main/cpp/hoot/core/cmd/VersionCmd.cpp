@@ -104,9 +104,7 @@ public:
   int runSimple(QStringList& args) override
   {
     if (!args.empty())
-    {
       throw HootException(QString("%1 takes no parameters.").arg(getName()));
-    }
 
     cout << Version::getFullVersion() << " Built By: " << Version::getBuiltBy() << endl;
     LOG_DEBUG("GEOS Version:\t" << geosversion());

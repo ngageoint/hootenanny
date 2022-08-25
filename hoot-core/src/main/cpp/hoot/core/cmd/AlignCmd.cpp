@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheeter.h>
-#include <hoot/core/algorithms/rubber-sheet/RubberSheetDeriver.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheetApplier.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetDeriver.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -62,8 +62,7 @@ public:
       if (args.size() < 3 || args.size() > 5)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --derive option takes three to five parameters.").arg(getName()));
+        throw HootException(QString("%1 with the --derive option takes three to five parameters.").arg(getName()));
       }
 
       bool ref = false;
@@ -75,14 +74,9 @@ public:
 
       QString transform1to2Path;
       if (args.size() == 4)
-      {
         transform1to2Path = args[3];
-      }
       else if (ref == false)
-      {
-        throw HootException(QString("You must specify a transform1to2.rs argument if --ref isn't "
-          "specified."));
-      }
+        throw HootException(QString("You must specify a transform1to2.rs argument if --ref isn't specified."));
 
       RubberSheetDeriver().derive(args[0], args[1], args[2], transform1to2Path, ref);
     }
@@ -92,8 +86,7 @@ public:
       if (args.size() != 3)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --apply option takes three parameters.").arg(getName()));
+        throw HootException(QString("%1 with the --apply option takes three parameters.").arg(getName()));
       }
 
       RubberSheetApplier().apply(args[0], args[1], args[2]);
@@ -113,9 +106,7 @@ public:
       RubberSheeter().rubberSheet(args[0], args[1], args[2]);
     }
 
-    LOG_STATUS(
-      "Alignment operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    LOG_STATUS("Alignment operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

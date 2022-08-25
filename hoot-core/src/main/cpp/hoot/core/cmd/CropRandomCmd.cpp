@@ -33,11 +33,11 @@
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RandomMapCropper.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/RandomMapCropper.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -75,9 +75,7 @@ public:
       ok = false;
       randomSeed = args[randomSeedIndex + 1].toInt(&ok);
       if (!ok || randomSeed < -1)
-      {
         throw HootException("Invalid random seed: " + args[randomSeedIndex]);
-      }
       args.removeAt(randomSeedIndex + 1);
       args.removeAt(randomSeedIndex);
     }
@@ -103,18 +101,14 @@ public:
     const int maxNodesIndex = args.size() - 2;
     const int maxNodes = args[maxNodesIndex].toInt(&ok);
     if (!ok || maxNodes < 1)
-    {
       throw HootException("Invalid maximum node count: " + args[maxNodesIndex]);
-    }
     args.removeAt(maxNodesIndex);
 
     ok = false;
     const int pixelSizeIndex = args.size() - 1;
     double pixelSize = args[pixelSizeIndex].toDouble(&ok);
     if (!ok || pixelSize <= 0.0)
-    {
       throw HootException("Invalid pixel size value: " + args[pixelSizeIndex]);
-    }
     args.removeAt(pixelSizeIndex);
 
     // Everything left is an input.
@@ -138,10 +132,7 @@ public:
         "option will be ignored.");
     }
     if (ConfigOptions().getCropInvert())
-    {
-      throw IllegalArgumentException(
-        "The crop.invert configuration option is not supported by " + getName() + ".");
-    }
+      throw IllegalArgumentException("The crop.invert configuration option is not supported by " + getName() + ".");
 
     LOG_STATUS(
       "Randomly cropping " << inputs.size() << " inputs and writing output to ..." <<
@@ -171,12 +162,10 @@ private:
   OsmMapPtr _readInputs(const QStringList& inputs) const
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    for (int i = 0; i < inputs.size(); i++)
+    for (const auto& input : qAsConst(inputs))
     {
-      const QString input = inputs.at(i);
       // tile alg expects inputs read in as Unknown1
-      std::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
+      std::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
 
       reader->open(input);
       reader->read(map);

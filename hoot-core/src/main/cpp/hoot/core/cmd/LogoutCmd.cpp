@@ -26,11 +26,11 @@
  */
 
 // Hoot
+#include <hoot/core/auth/HootServicesLoginManager.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/auth/HootServicesLoginManager.h>
 
 namespace hoot
 {
@@ -69,15 +69,9 @@ public:
       HootServicesLoginManager().logout(userName, accessToken, accessTokenSecret);
 
     if (success)
-    {
-      std::cout << "User: " << userName << " logged out of the Hootenanny Web Services." <<
-        std::endl;
-    }
+      std::cout << "User: " << userName << " logged out of the Hootenanny Web Services." << std::endl;
     else
-    {
-      std::cout << "Unable to log user: " << userName << " out of the Hootenanny Web Services." <<
-        std::endl;
-    }
+      std::cout << "Unable to log user: " << userName << " out of the Hootenanny Web Services." << std::endl;
 
     return 0;
   }

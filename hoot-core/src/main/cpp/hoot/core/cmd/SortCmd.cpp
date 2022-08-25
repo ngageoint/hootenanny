@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
-#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -72,9 +72,7 @@ public:
 
     const QString input = args[0];
     const QString output = args[1];
-    const bool sortingInMemory =
-      !(IoUtils::isStreamableInput(input) &&
-        ConfigOptions().getElementSorterElementBufferSize() != -1);
+    const bool sortingInMemory = !(IoUtils::isStreamableInput(input) && ConfigOptions().getElementSorterElementBufferSize() != -1);
     const QString sortingStr = sortingInMemory ? " in memory" : " externally";
 
     LOG_STATUS(
@@ -88,13 +86,9 @@ public:
     }
 
     if (!sortingInMemory)
-    {
       _sortExternally(input, output);
-    }
     else
-    {
       _sortInMemory(input, output);
-    }
 
     LOG_STATUS("Map sorted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
@@ -118,29 +112,22 @@ private:
 
   void _sortExternally(const QString& input, const QString& output) const
   {
-    std::shared_ptr<PartialOsmMapReader> reader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::createReader(input));
+    std::shared_ptr<PartialOsmMapReader> reader = std::dynamic_pointer_cast<PartialOsmMapReader>(OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
     reader->initializePartial();
 
-    std::shared_ptr<ExternalMergeElementSorter> sorted =
-      std::make_shared<ExternalMergeElementSorter>();
+    std::shared_ptr<ExternalMergeElementSorter> sorted = std::make_shared<ExternalMergeElementSorter>();
     sorted->sort(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
     reader->finalizePartial();
     reader->close();
 
-    std::shared_ptr<PartialOsmMapWriter> writer =
-      std::dynamic_pointer_cast<PartialOsmMapWriter>(
-        OsmMapWriterFactory::createWriter(output));
+    std::shared_ptr<PartialOsmMapWriter> writer = std::dynamic_pointer_cast<PartialOsmMapWriter>(OsmMapWriterFactory::createWriter(output));
     writer->open(output);
     writer->initializePartial();
     while (sorted->hasMoreElements())
-    {
       writer->writePartial(sorted->readNextElement());
-    }
     writer->finalizePartial();
     writer->close();
   }
@@ -149,4 +136,3 @@ private:
 HOOT_FACTORY_REGISTER(Command, SortCmd)
 
 }
-

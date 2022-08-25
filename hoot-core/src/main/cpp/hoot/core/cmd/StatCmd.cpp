@@ -76,18 +76,14 @@ public:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     const double stat = StatCalculator().calculateStat(inputs, visClassName, statType);
     // see note in CountCmd about the preceding endline
-    std::cout << std::endl << "Calculated statistic: " <<
-                 QString::number(stat, 'g', 3) << std::endl;
+    std::cout << std::endl << "Calculated statistic: "
+              << QString::number(stat, 'g', 3) << std::endl;
 
     return 0;
   }
@@ -96,4 +92,3 @@ public:
 HOOT_FACTORY_REGISTER(Command, StatCmd)
 
 }
-

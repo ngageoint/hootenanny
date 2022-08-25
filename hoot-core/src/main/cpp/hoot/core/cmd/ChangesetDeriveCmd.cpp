@@ -85,10 +85,7 @@ public:
     LOG_VARD(enableWaySnapping);
 
     if (!isReplacement && enableWaySnapping)
-    {
-      throw IllegalArgumentException(
-        "The --enable-way-snapping option is only valid when the --replacement option is specified.");
-    }
+      throw IllegalArgumentException("The --enable-way-snapping option is only valid when the --replacement option is specified.");
 
     QString osmApiDbUrl;
     if (args.contains("--osmApiDatabaseUrl"))
@@ -122,21 +119,12 @@ public:
     const QString output = args[2].trimmed();
 
     if (output.endsWith(".osc.sql") && osmApiDbUrl.isEmpty())
-    {
-      throw IllegalArgumentException(
-        QString("Writing SQL changeset output (*.osc.sql) requires that the ") +
-        QString("--osmApiDatabaseUrl parameter be specified."));
-    }
+      throw IllegalArgumentException(QString("Writing SQL changeset output (*.osc.sql) requires that the --osmApiDatabaseUrl parameter be specified."));
 
     if (!isReplacement)
-    {
       _deriveStandardChangeset(input1, input2, output, printStats, outputStatsFile, osmApiDbUrl);
-    }
     else
-    {
-      _deriveReplacementChangeset(
-        input1, input2, output, printStats, outputStatsFile, osmApiDbUrl, enableWaySnapping);
-    }
+      _deriveReplacementChangeset(input1, input2, output, printStats, outputStatsFile, osmApiDbUrl, enableWaySnapping);
 
     return 0;
   }
@@ -152,19 +140,14 @@ private:
       printStats = true;
       const int statsIndex = args.indexOf("--stats");
       // See similar note in ConflateCmd's parsing of --changeset-stats.
-      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-          !args[statsIndex + 1].startsWith("--"))
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) && !args[statsIndex + 1].startsWith("--"))
       {
         outputStatsFile = args[statsIndex + 1];
         QFileInfo statsInfo(outputStatsFile);
         if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
-        {
           outputStatsFile = "";
-        }
         else
-        {
           args.removeAll(outputStatsFile);
-        }
       }
       args.removeAll("--stats");
     }
@@ -172,9 +155,8 @@ private:
     LOG_VARD(outputStatsFile);
   }
 
-  void _deriveStandardChangeset(
-    const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl) const
+  void _deriveStandardChangeset(const QString& input1, const QString& input2, const QString& output, const bool printStats,
+                                const QString& outputStatsFile, const QString& osmApiDbUrl) const
   {
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     LOG_STATUS(
@@ -187,27 +169,21 @@ private:
     // oob members due to full hydration (would then need to move this code to inside
     // ChangesetCreator).
     if (ConfigUtils::boundsOptionEnabled())
-    {
       _updateConfigOptionsForBounds();
-    }
 
     // printStats = true with an empty file means stdout only
     ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
-    LOG_STATUS(
-      "Changeset generated in " << StringUtils::millisecondsToDhms(_timer.elapsed()) << " total.");
+    LOG_STATUS("Changeset generated in " << StringUtils::millisecondsToDhms(_timer.elapsed()) << " total.");
   }
 
-  void _deriveReplacementChangeset(
-    const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping) const
+  void _deriveReplacementChangeset(const QString& input1, const QString& input2, const QString& output, const bool printStats,
+                                   const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping) const
   {
     const bool isCutOnly = input2.isEmpty();
     QString implementation = ConfigOptions().getChangesetReplacementImplementation();
     if (isCutOnly)
-    {
       implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
-    }
     LOG_VARD(implementation);
     std::shared_ptr<ChangesetReplacement> changesetCreator =
       Factory::getInstance().constructObject<ChangesetReplacement>(implementation);
@@ -215,9 +191,7 @@ private:
     ChangesetReplacement::BoundsInterpretation boundInterpretation =
       ChangesetReplacement::BoundsInterpretation::Lenient;
     if (isCutOnly)
-    {
       boundInterpretation = ChangesetReplacement::BoundsInterpretation::Strict;
-    }
     LOG_VARD(boundInterpretation);
     changesetCreator->setBoundsInterpretation(boundInterpretation);
     changesetCreator->setEnableWaySnapping(enableWaySnapping);
@@ -226,13 +200,9 @@ private:
 
     std::shared_ptr<geos::geom::Polygon> bounds;
     if (ConfigUtils::boundsOptionEnabled())
-    {
       bounds = std::dynamic_pointer_cast<geos::geom::Polygon>(ConfigUtils::getBounds());
-    }
     else
-    {
       bounds = GeometryUtils::polygonFromString("-180,-90,180,90");
-    }
 
     changesetCreator->create(input1, input2, bounds, output);
   }

@@ -80,10 +80,7 @@ public:
       supportedOutputFormats.append(".json");
       supportedOutputFormats.append(".txt");
       if (!StringUtils::endsWithAny(output, supportedOutputFormats))
-      {
-        throw IllegalArgumentException(
-          "Invalid output format: ..." + FileUtils::toLogFormat(output, 25));
-      }
+        throw IllegalArgumentException("Invalid output format: ..." + FileUtils::toLogFormat(output, 25));
 
       args.removeAt(outputIndex + 1);
       args.removeAt(outputIndex);
@@ -105,13 +102,9 @@ public:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     const QString sep = "\t";
     conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);

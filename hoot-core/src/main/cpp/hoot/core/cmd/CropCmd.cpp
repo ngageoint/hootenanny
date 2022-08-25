@@ -89,13 +89,9 @@ public:
 
     int boundsIndex;
     if (args.contains("--write-bounds"))
-    {
       boundsIndex = args.size() - 2;
-    }
     else
-    {
       boundsIndex = args.size() - 1;
-    }
     _env = GeometryUtils::boundsFromString(args.at(boundsIndex));
     args.removeAt(boundsIndex);
     // This has to be done after we get the envelope.
@@ -111,13 +107,9 @@ public:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     QElapsedTimer timer;
     timer.start();
@@ -126,16 +118,10 @@ public:
       "Cropping ..." << FileUtils::toLogFormat(inputs, 25) << " and writing output to ..." <<
       FileUtils::toLogFormat(output, 25) << "...");
 
-    if (!separateOutput)
-    {
-      // combines all inputs and writes them to the same output
+    if (!separateOutput)  // combines all inputs and writes them to the same output
       _crop(inputs, output);
-    }
-    else
-    {
-      // writes a separate output for each input
+    else  // writes a separate output for each input
       _cropSeparateOutput(inputs);
-    }
 
     LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 
@@ -150,14 +136,9 @@ private:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
     if (inputs.size() == 1)
-    {
       IoUtils::loadMap(map, inputs.at(0), true);
-    }
-    else
-    {
-      // Avoid ID conflicts across multiple inputs.
+    else  // Avoid ID conflicts across multiple inputs.
       IoUtils::loadMaps(map, inputs, false);
-    }
 
     _crop(map);
 
@@ -166,10 +147,8 @@ private:
 
   void _cropSeparateOutput(const QStringList& inputs) const
   {
-    for (int i = 0; i < inputs.size(); i++)
+    for (const auto& input : qAsConst(inputs))
     {
-      const QString input = inputs.at(i);
-
       OsmMapPtr map = std::make_shared<OsmMap>();
       IoUtils::loadMap(map, input, true);
 

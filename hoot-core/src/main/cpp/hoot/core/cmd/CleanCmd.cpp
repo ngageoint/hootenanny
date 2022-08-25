@@ -103,28 +103,18 @@ public:
     // Everything that's left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     QElapsedTimer timer;
     timer.start();
     std::shared_ptr<Progress> progress = std::make_shared<Progress>();
 
-    if (!separateOutput)
-    {
-      // combines all inputs and writes them to the same output
+    if (!separateOutput)  // combines all inputs and writes them to the same output
       _clean(inputs, output, progress);
-    }
-    else
-    {
-      // writes a separate output for each input
+    else  // writes a separate output for each input
       _cleanSeparateOutput(inputs, progress);
-    }
 
     LOG_VARD(progress.get());
     progress->set(
@@ -138,8 +128,7 @@ public:
 
 private:
 
-  void _clean(
-    const QStringList& inputs, const QString& output, std::shared_ptr<Progress> progress) const
+  void _clean(const QStringList& inputs, const QString& output, std::shared_ptr<Progress> progress) const
   {
     progress =
       std::make_shared<Progress>(
@@ -157,13 +146,9 @@ private:
     // output as consistent with the input as possible. With more than one input there could be ID
     // conflicts, so we won't retain the originals.
     if (inputs.size() == 1)
-    {
       IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
-    }
     else
-    {
       IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
-    }
 
     progress->set(1.0f / 3.0f, Progress::JobState::Running, "Cleaning map(s)...");
     MapCleaner(*progress).apply(map);
@@ -186,10 +171,8 @@ private:
         0.0f, 1.0f / numTasks);
 
     float currentTask = 0.0;
-    for (int i = 0; i < inputs.size(); i++)
+    for (const auto& input : qAsConst(inputs))
     {
-      const QString input = inputs.at(i);
-
       progress->set(
         currentTask / numTasks, Progress::JobState::Running,
         "Importing: ..." + FileUtils::toLogFormat(input, 25) + "...");

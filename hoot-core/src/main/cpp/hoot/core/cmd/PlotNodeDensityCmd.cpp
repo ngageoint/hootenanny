@@ -62,10 +62,10 @@ public:
       {
         throw HootException("Expected --base-colors to be RGBA and comma delimited.");
       }
-      baseColors =
-        qRgba(
-          plotter.toColorBand(bs[0]), plotter.toColorBand(bs[1]), plotter.toColorBand(bs[2]),
-          plotter.toColorBand(bs[3]));
+      baseColors = qRgba(plotter.toColorBand(bs[0]),
+                         plotter.toColorBand(bs[1]),
+                         plotter.toColorBand(bs[2]),
+                         plotter.toColorBand(bs[3]));
       args.removeAt(baseColorIndex + 1);
       args.removeAt(baseColorIndex);
     }
@@ -77,9 +77,7 @@ public:
       const int multiplierIndex = args.indexOf("--multiplier");
       const QStringList bs = args[4].split(",");
       if (bs.size() != 4)
-      {
         throw HootException("Expected --multiplier to be RGBA and comma delimited.");
-      }
       multiplier[0] = plotter.toColorPortion(bs[0]);
       multiplier[1] = plotter.toColorPortion(bs[1]);
       multiplier[2] = plotter.toColorPortion(bs[2]);
@@ -103,9 +101,7 @@ public:
     const QString output = args[1];
     const double maxSize = args[2].toDouble(&ok);
     if (!ok || maxSize < 1.0)
-    {
       throw IllegalArgumentException("Expected a number greater 1.0 for max size.");
-    }
 
     plotter.setBaseColors(baseColors);
     plotter.setColorMultiplier(multiplier);

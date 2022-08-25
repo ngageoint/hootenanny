@@ -83,13 +83,9 @@ public:
     // The only args left are all inputs.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
     LOG_VARD(inputs);
 
     ElementCounter counter;
@@ -100,9 +96,7 @@ public:
     // Putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end.
     QString displayStr = "Total count ";
     if (!criteriaClassNames.isEmpty())
-    {
       displayStr += "(" + criteriaClassNames.join(";") + ")";
-    }
     displayStr += ": " + StringUtils::formatLargeNumber(totalCount);
     std::cout << std::endl << displayStr << std::endl;
 

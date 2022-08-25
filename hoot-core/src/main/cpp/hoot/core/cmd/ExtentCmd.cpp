@@ -73,13 +73,9 @@ public:
 
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     QElapsedTimer timer;
     timer.start();
@@ -89,12 +85,10 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMaps(map, inputs, false, Status::Invalid);
 
-    const QString bounds =
-      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    const QString bounds = GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
     std::cout << "Map extent (minx,miny,maxx,maxy): " << bounds << std::endl;
 
-    LOG_STATUS(
-      "Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -122,9 +122,7 @@ public:
 
       const QString input = args[0].trimmed();
 
-      LOG_STATUS(
-        "Calculating implicit type tag database statistics for ..." <<
-        FileUtils::toLogFormat(input, 25) << "...");
+      LOG_STATUS("Calculating implicit type tag database statistics for ..." << FileUtils::toLogFormat(input, 25) << "...");
 
       ImplicitTagRulesSqliteReader dbReader;
       dbReader.open(args[0].trimmed());
@@ -133,15 +131,12 @@ public:
     }
     else
     {
-      LOG_WARN(
-        "Must supply one of the option parameters: --create-raw, --create-db, --db-stats");
+      LOG_WARN("Must supply one of the option parameters: --create-raw, --create-db, --db-stats");
       std::cout << getHelp() << std::endl << std::endl;
       return 1;
     }
 
-    LOG_STATUS(
-      "Implicit type tag operation complated in " <<
-       StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Implicit type tag operation complated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
