@@ -36,13 +36,10 @@
 namespace hoot
 {
 
-//These match up exclusively with the v0.6 OSM API database and shouldn't be changed:
-
-static const QString OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
+// These match up exclusively with the v0.6 OSM API database and shouldn't be changed:
+static const QString OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
 static const QString OSMAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\n";
-static const QString OSMAPIDB_HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\t\\N\n";
+static const QString OSMAPIDB_HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\t\\N\n";
 static const QString OSMAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\n";
 static const QString OSMAPIDB_HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t\\N\n";
 static const QString OSMAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
@@ -50,13 +47,12 @@ static const QString OSMAPIDB_HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT 
 static const QString OSMAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\n";
 static const QString OSMAPIDB_HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t\\N\n";
 static const QString OSMAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
-static const QString OSMAPIDB_HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t%5\t%6\n";
+static const QString OSMAPIDB_HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\t%6\n";
 static const QString OSMAPIDB_CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
 static const QString OSMAPIDB_HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\n";
-//for whatever strange reason, the historical node tags table column order in the API datbase
-//is different than the other historical tags tables; this makes a difference when using the
-//offline loader, since it is sensitive to ordering
+// for whatever strange reason, the historical node tags table column order in the API datbase
+// is different than the other historical tags tables; this makes a difference when using the
+// offline loader, since it is sensitive to ordering
 static const QString OSMAPIDB_HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\n";
 
 /**
@@ -98,69 +94,67 @@ public:
   inline static QStringList getNodeSqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentNodesTableName() +
-                   " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
-                   "FROM stdin;\n");
-    sqlStrs.append("COPY " + ApiDb::getNodesTableName() +
-                   " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, " +
-                   "redaction_id) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n")
+                   .arg(ApiDb::getCurrentNodesTableName()));
+    sqlStrs.append(QString("COPY %1 (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n")
+                   .arg(ApiDb::getNodesTableName()));
     return sqlStrs;
   }
 
   inline static QStringList getWaySqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentWaysTableName() +
-                   " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-    sqlStrs.append("COPY " + ApiDb::getWaysTableName() +
-                   " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n")
+                   .arg(ApiDb::getCurrentWaysTableName()));
+    sqlStrs.append(QString("COPY %1 (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n")
+                   .arg(ApiDb::getWaysTableName()));
     return sqlStrs;
   }
 
   inline static QStringList getWayNodeSqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentWayNodesTableName() +
-                   " (way_id, node_id, sequence_id) FROM stdin;\n");
-    sqlStrs.append("COPY " + ApiDb::getWayNodesTableName() +
-                   " (way_id, node_id, version, sequence_id) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (way_id, node_id, sequence_id) FROM stdin;\n")
+                   .arg(ApiDb::getCurrentWayNodesTableName()));
+    sqlStrs.append(QString("COPY %1 (way_id, node_id, version, sequence_id) FROM stdin;\n")
+                   .arg(ApiDb::getWayNodesTableName()));
     return sqlStrs;
   }
 
   inline static QStringList getRelationSqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentRelationsTableName() +
-                   " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-    sqlStrs.append("COPY " + ApiDb::getRelationsTableName() +
-                   " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n")
+                   .arg(ApiDb::getCurrentRelationsTableName()));
+    sqlStrs.append(QString("COPY %1 (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n")
+                   .arg(ApiDb::getRelationsTableName()));
     return sqlStrs;
   }
 
   inline static QStringList getRelationMemberSqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentRelationMembersTableName() +
-                   " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
-    sqlStrs.append("COPY " + ApiDb::getRelationMembersTableName() +
-                   " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n")
+                   .arg(ApiDb::getCurrentRelationMembersTableName()));
+    sqlStrs.append(QString("COPY %1 (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n")
+                   .arg(ApiDb::getRelationMembersTableName()));
     return sqlStrs;
   }
 
   inline static QStringList getNodeTagSqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (node_id, k, v) FROM stdin;\n").arg(ApiDb::getCurrentNodeTagsTableName()));
     //yes, this one is different than the others...see explanation in header file
-    sqlStrs.append("COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (node_id, version, k, v) FROM stdin;\n").arg(ApiDb::getNodeTagsTableName()));
     return sqlStrs;
   }
 
   inline static QStringList getWayTagSqlHeaderStrings()
   {
     QStringList sqlStrs;
-    sqlStrs.append("COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n");
-    sqlStrs.append("COPY " + ApiDb::getWayTagsTableName() + " (way_id, k, v, version) FROM stdin;\n");
+    sqlStrs.append(QString("COPY %1 (way_id, k, v) FROM stdin;\n").arg(ApiDb::getCurrentWayTagsTableName()));
+    sqlStrs.append(QString("COPY %1 (way_id, k, v, version) FROM stdin;\n").arg(ApiDb::getWayTagsTableName()));
     return sqlStrs;
   }
 
@@ -168,34 +162,30 @@ public:
   {
     QStringList sqlStrs;
     sqlStrs.append(
-      "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n");
+      QString("COPY %1 (relation_id, k, v) FROM stdin;\n").arg(ApiDb::getCurrentRelationTagsTableName()));
     sqlStrs.append(
-      "COPY " + ApiDb::getRelationTagsTableName() + " (relation_id, k, v, version) FROM stdin;\n");
+      QString("COPY %1 (relation_id, k, v, version) FROM stdin;\n").arg(ApiDb::getRelationTagsTableName()));
     return sqlStrs;
   }
 
   inline static QString getChangesetSqlHeaderString()
   {
-    return "COPY " + ApiDb::getChangesetsTableName() +
-            " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
-            "FROM stdin;\n";
+    return QString("COPY %1 (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n")
+        .arg(ApiDb::getChangesetsTableName());
   }
 
  inline static QStringList getElementSqlHeaderStrings(const ElementType& elementType)
   {
     switch (elementType.getEnum())
     {
-      case ElementType::Node:
-        return getNodeSqlHeaderStrings();
-
-      case ElementType::Way:
-        return getWaySqlHeaderStrings();
-
-      case ElementType::Relation:
-        return getRelationSqlHeaderStrings();
-
-      default:
-        throw HootException("Unsupported element member type.");
+    case ElementType::Node:
+      return getNodeSqlHeaderStrings();
+    case ElementType::Way:
+      return getWaySqlHeaderStrings();
+    case ElementType::Relation:
+      return getRelationSqlHeaderStrings();
+    default:
+      throw HootException("Unsupported element member type.");
     }
     return QStringList();
   }

@@ -52,9 +52,8 @@ public:
    * @param element_type Type of the element that failed
    * @return True if the message matches and was parsed
    */
-  bool matchesPlaceholderFailure(const QString& hint,
-                                        long& member_id, ElementType::Type& member_type,
-                                        long& element_id, ElementType::Type& element_type) const;
+  bool matchesPlaceholderFailure(const QString& hint, long& member_id, ElementType::Type& member_type,
+                                 long& element_id, ElementType::Type& element_type) const;
   /**
    * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
    *        "Relation with id  cannot be saved due to Relation with id 1707699"
@@ -64,8 +63,7 @@ public:
    * @param member_type Type of the member element that caused the element to fail
    * @return True if the message matches and was parsed
    */
-  bool matchesRelationFailure(const QString& hint, long& element_id,
-                                     long& member_id, ElementType::Type& member_type) const;
+  bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type) const;
   /**
    * @brief matchesMultiElementFailure Checks the return from the API to see if it is similar to the following error message:
    *        "Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible."
@@ -77,7 +75,7 @@ public:
    * @return True if the message matches and was parsed
    */
   bool matchesMultiElementFailure(const QString& hint, long& element_id, ElementType::Type& element_type,
-                                         std::vector<long>& member_ids, ElementType::Type& member_type) const;
+                                  std::vector<long>& member_ids, ElementType::Type& member_type) const;
   /**
    * @brief matchesChangesetDeletePreconditionFailure Checks the return from the API to see if it is similar to the following error message:
    *        "Precondition failed: Node 55 is still used by ways 123"
@@ -88,8 +86,7 @@ public:
    * @param member_type Type of the member elements that caused the element to fail
    * @return True if the message matches and was parsed
    */
-  bool matchesChangesetDeletePreconditionFailure(const QString& hint,
-                                                 long& element_id, ElementType::Type& element_type,
+  bool matchesChangesetDeletePreconditionFailure(const QString& hint, long& element_id, ElementType::Type& element_type,
                                                  std::vector<long>& member_ids, ElementType::Type& member_type) const;
   /**
    * @brief matchesChangesetConflictVersionMismatchFailure Checks the return from the API to see if it is similar to the following error message:
@@ -101,8 +98,7 @@ public:
    * @param element_type Type of the element that failed
    * @return True if the message matches and was parsed
    */
-  bool matchesChangesetConflictVersionMismatchFailure(const QString& hint,
-                                                      long& element_id, ElementType::Type& element_type,
+  bool matchesChangesetConflictVersionMismatchFailure(const QString& hint, long& element_id, ElementType::Type& element_type,
                                                       long& version_old, long& version_new) const;
   /**
    * @brief matchesChangesetClosed FailureChecks the return from the API to see if it is similar to the following error message:
