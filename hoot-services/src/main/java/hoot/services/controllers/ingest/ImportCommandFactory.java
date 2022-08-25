@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -33,7 +33,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import hoot.services.models.db.Users;
-
+import hoot.services.controllers.ingest.UploadClassification;
 
 @Component
 class ImportCommandFactory {
@@ -44,4 +44,11 @@ class ImportCommandFactory {
         return new ImportCommand(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts, etlName, isNoneTranslation,
                                  debugLevel, uploadClassification, caller, user);
     }
+
+    ImportCommand build(String jobId, String url, String username, String password, String translation, String advUploadOpts, String etlName, Boolean isNoneTranslation,
+            String debugLevel, UploadClassification uploadClassification, Class<?> caller, Users user) {
+return new ImportCommand(jobId, url, username, password, translation, advUploadOpts, etlName, isNoneTranslation,
+                    debugLevel, uploadClassification, caller, user);
+}
+
 }

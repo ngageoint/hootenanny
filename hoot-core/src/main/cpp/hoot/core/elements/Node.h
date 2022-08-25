@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
@@ -109,10 +109,8 @@ public:
    */
   std::shared_ptr<Node> cloneSp() const;
 
-  geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
-  const geos::geom::Envelope& getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
+  std::shared_ptr<geos::geom::Envelope> getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override;
+  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const override;
 
   ElementType getElementType() const override { return ElementType(ElementType::Node); }
 

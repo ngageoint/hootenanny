@@ -119,8 +119,6 @@ public class ImportResource {
      *            [OSM | OGR ] OSM for osm file and OGR for shapefile.
      * @param inputName
      *            optional input name which is used in hoot db. Defaults to the file name.
-     * @param userEmail
-     *            mail address of the user requesting job
      * @param noneTranslation
      *            ?
      * @param multiPart
@@ -135,7 +133,6 @@ public class ImportResource {
                                       @QueryParam("TRANSLATION") String translation,
                                       @QueryParam("INPUT_TYPE") String inputType,
                                       @QueryParam("INPUT_NAME") String inputName,
-                                      @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
                                       @QueryParam("ADV_UPLOAD_OPTS") String advUploadOpts,
                                       @QueryParam("FOLDER_ID") String folderId,
@@ -235,16 +232,7 @@ public class ImportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            // if id is used for translation then set translation to the file path of that file
-            try {
-                long translationId = Long.parseLong(translation);
-                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId, false /*editable*/);
-                TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationFile.getFolderId());
-
-                String translationPath = File.separator + translationFile.getDisplayName();
-                translationPath = folder.getPath() != null ? folder.getPath() + translationPath : translationPath;
-                translation = translationPath + ".js";
-            } catch (NumberFormatException exc) {}
+            translation = lookupTranslation(translation, user);
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
@@ -291,5 +279,82 @@ public class ImportResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
         return Response.ok(template).build();
+    }
+
+
+    private String lookupTranslation(String translation, Users user) {
+        // if id is used for translation then set translation to the file path of that file
+        try {
+            long translationId = Long.parseLong(translation);
+            Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId, false /*editable*/);
+            TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationFile.getFolderId());
+
+            String translationPath = File.separator + translationFile.getDisplayName();
+            translationPath = folder.getPath() != null ? folder.getPath() + translationPath : translationPath;
+            return translationPath + ".js";
+        } catch (NumberFormatException exc) {
+            return translation;
+        }
+
+    }
+    /**
+     * Purpose of this service is to provide ingest service for fetching remote (http, s3, ftp) shape
+     * and osm file and performing ETL operation on the file(s).
+     *
+     * GET hoot-services/ingest/upload?TRANSLATION=NFDD.js&INPUT_TYPE=OSM&INPUT_NAME=ToyTest
+     *
+     * @param translation
+     *            Translation script used during OGR ETL process.
+     * @param advUploadOpts
+                  advanced options for importing shapefiles
+     * @param inputType
+     *            [OSM | OGR ] OSM for osm file and OGR for shapefile.
+     * @param inputName
+     *            optional input name which is used in hoot db. Defaults to the file name.
+     * @param noneTranslation
+     *            ?
+     * @param multiPart
+     *            uploaded files
+     * @return Array of job status
+     */
+    @GET
+    @Path("/remote")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response processRemoteFile(@Context HttpServletRequest request,
+            @QueryParam("TRANSLATION") String translation,
+            @QueryParam("INPUT_NAME") String inputName,
+            @QueryParam("URL") String url,
+            @QueryParam("USERNAME") @DefaultValue("") String username,
+            @QueryParam("PASSWORD") @DefaultValue("") String password,
+            @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
+            @QueryParam("ADV_UPLOAD_OPTS") String advUploadOpts,
+            @QueryParam("FOLDER_ID") String folderId,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+            Users user = Users.fromRequest(request);
+            List<Map<String,Object>> results = new ArrayList<Map<String,Object>>();
+            String jobId = UUID.randomUUID().toString();
+            List<Command> workflow = new LinkedList<>();
+
+            translation = lookupTranslation(translation, user);
+
+            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, url, username, password, translation, advUploadOpts,
+                    inputName, noneTranslation, debugLevel, UploadClassification.ZIP, this.getClass(), user);
+            workflow.add(importCommand);
+
+            long parentFolderId = folderId != null ? Long.parseLong(folderId) : 0;
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, parentFolderId, inputName, user, this.getClass());
+            workflow.add(setFolderCommand);
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+
+            Map<String, Object> res = new HashMap<String, Object>();
+            res.put("jobid", jobId);
+            res.put("input", url);
+            res.put("output", inputName);
+            res.put("status", "success");
+            results.add(res);
+
+        return Response.ok(results).build();
     }
 }
