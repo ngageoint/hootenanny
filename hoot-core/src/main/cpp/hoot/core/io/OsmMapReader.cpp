@@ -30,9 +30,9 @@
 namespace hoot
 {
 
-OsmMapReader::OsmMapReader() :
-_ignoreDuplicates(false),
-_warnOnVersionZeroElement(false)
+OsmMapReader::OsmMapReader()
+  : _ignoreDuplicates(ConfigOptions().getMapMergeIgnoreDuplicateIds()),
+    _warnOnVersionZeroElement(false)
 {
 }
 
