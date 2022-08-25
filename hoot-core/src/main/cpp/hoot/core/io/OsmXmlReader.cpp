@@ -134,8 +134,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
       return;
     }
     else
-      throw HootException(
-        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
+      throw HootException(QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
   }
 
   long newId;
@@ -191,8 +190,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
       return;
     }
     else
-      throw HootException(
-        QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_url));
+      throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_url));
   }
 
   _wayId = id;
@@ -227,9 +225,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element =
-    std::make_shared<Way>(
-      _status, newId, _defaultCircularError, changeset, version, timestamp, user, uid);
+  _element = std::make_shared<Way>(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -292,9 +288,9 @@ bool OsmXmlReader::isSupported(const QString& url) const
   QStringList validExtensions = supportedFormats().split(";");
   const QString checkString(url.toLower());
   // support compressed osm files
-  for (int i = 0; i < validExtensions.size(); ++i)
+  for (const auto& ext : qAsConst(validExtensions))
   {
-    if (checkString.endsWith(validExtensions[i]))
+    if (checkString.endsWith(ext))
       return true;
   }
   // If we fall out of loop, no dice
@@ -825,9 +821,7 @@ long OsmXmlReader::_getRelationId(long fileId)
       _relationIdMap.insert(fileId, newId);
     }
     else
-    {
       newId = _relationIdMap[fileId];
-    }
   }
   return newId;
 }
@@ -857,8 +851,7 @@ void OsmXmlReader::_uncompressInput()
     int retVal;
     if ((retVal = std::system(cmd.c_str())) != 0)
     {
-      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
-        arg(QString::fromStdString(cmd));
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).arg(QString::fromStdString(cmd));
       throw HootException(error);
     }
 
@@ -880,8 +873,7 @@ void OsmXmlReader::_uncompressInput()
     int retVal;
     if ((retVal = std::system(cmd.c_str())) != 0)
     {
-      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
-        arg(QString::fromStdString(cmd));
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).arg(QString::fromStdString(cmd));
       throw HootException(error);
     }
 
@@ -892,12 +884,8 @@ void OsmXmlReader::_uncompressInput()
 QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes) const
 {
   QXmlAttributes attributes;
-  for (const auto& streamAttribute : streamAttributes)// itr = streamAttributes.begin(); itr != streamAttributes.end(); ++itr)
-  {
-//    const QXmlStreamAttribute streamAttribute = *itr;
-    attributes.append(
-      streamAttribute.qualifiedName().toString(), "", "", streamAttribute.value().toString());
-  }
+  for (const auto& streamAttribute : streamAttributes)
+    attributes.append(streamAttribute.qualifiedName().toString(), "", "", streamAttribute.value().toString());
   return attributes;
 }
 
@@ -983,7 +971,7 @@ ElementPtr OsmXmlReader::readNextElement()
     //way nodes, or relation members...ignores the rest
     //  this attribute conversion isn't the best for performance...but will leave as is for now
     if (_streamReader.isStartElement())
-      startElement("", "", _streamReader.qualifiedName().toString(),_streamAttributesToAttributes(_streamReader.attributes()));
+      startElement("", "", _streamReader.qualifiedName().toString(), _streamAttributesToAttributes(_streamReader.attributes()));
 
     _streamReader.readNext();
   }

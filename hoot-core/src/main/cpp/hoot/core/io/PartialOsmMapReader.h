@@ -28,8 +28,8 @@
 #define PARTIALOSMMAPREADER_H
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/OsmMapReader.h>
 
 namespace hoot
 {
