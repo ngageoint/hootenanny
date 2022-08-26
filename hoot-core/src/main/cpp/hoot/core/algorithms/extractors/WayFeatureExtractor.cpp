@@ -22,22 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayFeatureExtractor.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/criterion/RelationCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-WayFeatureExtractor::WayFeatureExtractor(ValueAggregatorPtr agg):
-  _agg(agg)
+WayFeatureExtractor::WayFeatureExtractor(ValueAggregatorPtr agg)
+  : _agg(agg)
 {
   if (!_agg)
     _agg = std::make_shared<MeanAggregator>();
@@ -48,20 +48,17 @@ WayFeatureExtractor::WayFeatureExtractor()
   _agg = std::make_shared<MeanAggregator>();
 }
 
-double WayFeatureExtractor::extract(
-  const OsmMap& map, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+double WayFeatureExtractor::extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+                                    const std::shared_ptr<const Element>& candidate) const
 {
   vector<double> scores;
 
-  if (target->getElementType() == ElementType::Way &&
-      candidate->getElementType() == ElementType::Way)
+  if (target->getElementType() == ElementType::Way && candidate->getElementType() == ElementType::Way)
   {
     scores.push_back(_extract(map, std::dynamic_pointer_cast<const Way>(target),
                               std::dynamic_pointer_cast<const Way>(candidate)));
   }
-  else if (target->getElementType() == ElementType::Relation &&
-           candidate->getElementType() == ElementType::Relation)
+  else if (target->getElementType() == ElementType::Relation && candidate->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r1 = std::dynamic_pointer_cast<const Relation>(target);
     ConstRelationPtr r2 = std::dynamic_pointer_cast<const Relation>(candidate);
@@ -78,21 +75,15 @@ double WayFeatureExtractor::extract(
         ElementId eid2 = r2->getMembers()[i].getElementId();
 
         if (eid1.getType() != ElementType::Way || eid2.getType() != ElementType::Way)
-        {
           return nullValue();
-        }
         scores.push_back(_extract(map, map.getWay(eid1), map.getWay(eid2)));
       }
     }
     else
-    {
       return nullValue();
-    }
   }
   else
-  {
     return nullValue();
-  }
   return _agg->aggregate(scores);
 }
 

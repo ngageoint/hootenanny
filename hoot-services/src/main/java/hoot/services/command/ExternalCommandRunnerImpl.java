@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +49,7 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.exec.environment.EnvironmentUtils;
 import org.apache.commons.exec.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,10 +78,14 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
 
+        //strip out basic auth user:pw@ in urls
+        //e.g. hoot:hoottest@
+        out = out.replaceAll(":\\/\\/\\w+:\\w+@", "://<basic:auth>@");
+
         //strip out db connection string
         //e.g. hootapidb://hoot:
         out = out.replaceAll("hootapidb:\\/\\/\\w+:", "");
-        // seperated because some of the status output doesnt include the above text
+        // separated because some of the status output doesnt include the above text
         //e.g. hoottest@localhost:5432/hoot
         out = out.replaceAll("\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
 
@@ -101,8 +107,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 .matcher(out)
                 .replaceAll("$1=<redacted> ");
 
-        //strip out osm api url
-        out = out.replaceAll("https?://\\S+?/", "<osmapi>/");
+        //strip out osm api url, but not other remote data urls
+        out = out.replaceAll("https?://\\S+?/api/0.6/map", "<osmapi>/api/0.6/map");
 
         return out;
     }
@@ -210,7 +216,15 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             //     }
             // });
 
-            exitCode = executor.execute(cmdLine);
+            if (substitutionMap.containsKey("ENV_VARS")) {
+                List<String> envVars = (List<String>) substitutionMap.get("ENV_VARS");
+                Map<String, String> procEnv = EnvironmentUtils.getProcEnvironment();
+                envVars.stream().forEach(var -> EnvironmentUtils.addVariableToEnvironment(procEnv, var));
+
+                exitCode = executor.execute(cmdLine, procEnv);
+            } else {
+                exitCode = executor.execute(cmdLine);
+            }
         }
         catch (Exception e) {
             exitCode = CommandResult.FAILURE;

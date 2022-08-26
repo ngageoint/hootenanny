@@ -23,14 +23,14 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AttributeScoreExtractor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -39,15 +39,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AttributeScoreExtractor)
 
-AttributeScoreExtractor::AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight) :
-  WayFeatureExtractor(wayAgg),
-  _useWeight(useWeight)
+AttributeScoreExtractor::AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight)
+  : WayFeatureExtractor(wayAgg),
+    _useWeight(useWeight)
 {
 }
 
-AttributeScoreExtractor::AttributeScoreExtractor(bool useWeight) :
-  WayFeatureExtractor(),
-  _useWeight(useWeight)
+AttributeScoreExtractor::AttributeScoreExtractor(bool useWeight)
+  : WayFeatureExtractor(),
+    _useWeight(useWeight)
 {
 }
 
@@ -68,22 +68,16 @@ double AttributeScoreExtractor::_extract(const OsmMap& /*map*/, const ConstWayPt
   double weight = 0.0;
   TagComparator::getInstance().compareEnumeratedTags(w1->getTags(), w2->getTags(), score, weight);
   if (_useWeight)
-  {
     return weight * score;
-  }
   else
-  {
     return score;
-  }
 }
 
 QString AttributeScoreExtractor::getName() const
 {
   QString result = getClassName() + " agg: " + _agg->toString();
   if (_useWeight)
-  {
     result += " use weight";
-  }
   return result;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSUBLINE_H
 #define WAYSUBLINE_H
@@ -87,11 +87,9 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return the created way
    */
-  WayPtr toWay(
-    const OsmMapPtr& map,
-    std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
-      std::shared_ptr<GeometryToElementConverter::NodeFactory>(),
-    bool reuse = false) const;
+  WayPtr toWay(const OsmMapPtr& map,
+               std::shared_ptr<GeometryToElementConverter::NodeFactory> nf = std::shared_ptr<GeometryToElementConverter::NodeFactory>(),
+               bool reuse = false) const;
 
   /**
    * @brief touches returns true if the two sublines have any points in common.

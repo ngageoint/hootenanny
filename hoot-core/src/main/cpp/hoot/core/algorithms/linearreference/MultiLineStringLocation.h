@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef __MULTI_LINE_STRING_LOCATION_H__
 #define __MULTI_LINE_STRING_LOCATION_H__
@@ -52,9 +52,8 @@ public:
    * @param wayLocation the location along the way at @a wayIndex where the multi-line string
    *        location resides
    */
-  MultiLineStringLocation(
-    ConstOsmMapPtr map, ConstRelationPtr relation, const int wayIndex,
-    const WayLocation& wayLocation);
+  MultiLineStringLocation(ConstOsmMapPtr map, ConstRelationPtr relation, const int wayIndex,
+                          const WayLocation& wayLocation);
 
   /**
    * @brief getWaySublineString returns the collection of way sublines up to and including

@@ -233,17 +233,11 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // after they're split.
         _map->replace(way, newWays);
         if (ConfigOptions().getDebugMapsWriteDetailed())
-        {
-          OsmMapWriterFactory::writeDebugMap(
-            _map, className(), "after-replace-" + way->getElementId().toString());
-        }
+          OsmMapWriterFactory::writeDebugMap(_map, className(), "after-replace-" + way->getElementId().toString());
 
         _removeWayFromMap(way);
         if (ConfigOptions().getDebugMapsWriteDetailed())
-        {
-          OsmMapWriterFactory::writeDebugMap(
-            _map, className(), "after-remove-" + way->getElementId().toString());
-        }
+          OsmMapWriterFactory::writeDebugMap(_map, className(), "after-remove-" + way->getElementId().toString());
 
         // Go through all the resulting splits.
         // Add the new ways nodes just in case the way was self-intersecting.
@@ -352,8 +346,7 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(const ElementId& spli
     // splitting. Determine which is which.
     WayPtr splitWay;
     WayPtr addedWay;
-    const bool firstNewWayIsSplitWay =
-      _determineSplitWaysOrdering(newWays, splitWayId, splitWay, addedWay);
+    const bool firstNewWayIsSplitWay = _determineSplitWaysOrdering(newWays, splitWayId, splitWay, addedWay);
 
     // Get all the relations that the split way belongs to.
     const std::vector<ConstRelationPtr> containingRelations =

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
 #define RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
@@ -56,7 +56,7 @@ public:
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+                 const std::shared_ptr<const Element>& candidate) const override;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override

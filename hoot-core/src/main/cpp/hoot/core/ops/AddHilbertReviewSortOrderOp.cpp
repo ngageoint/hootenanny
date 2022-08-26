@@ -129,12 +129,12 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
     ConstElementPtr element = map->getElement(eid);
     if (element)
     {
-      std::unique_ptr<Envelope> te(element->getEnvelope(map));
+      std::shared_ptr<Envelope> te = element->getEnvelope(map);
       LOG_VART(env.get());
       if (env.get() == nullptr)
         env = std::make_shared<Envelope>(*te);
       else
-        env->expandToInclude(te.get());
+        env->expandToInclude(*te);  //  Use a reference so that the function doesn't take owership of the shared pointer
     }
   }
   if (!env)
@@ -160,9 +160,9 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
   int point[2];
 
   point[0] = static_cast<int>(max<int64_t>(0, min<int64_t>(maxRange - 1,
-    static_cast<int64_t>(round((center.x - _mapEnvelope->getMinX()) / cellSize)))));
+             static_cast<int64_t>(round((center.x - _mapEnvelope->getMinX()) / cellSize)))));
   point[1] = static_cast<int>(max<int64_t>(0, min<int64_t>(maxRange - 1,
-    static_cast<int64_t>(round((center.y - _mapEnvelope->getMinY()) / cellSize)))));
+             static_cast<int64_t>(round((center.y - _mapEnvelope->getMinY()) / cellSize)))));
 
   // Pad with zeros to make sorting a little easier.
   return c.encode(point);

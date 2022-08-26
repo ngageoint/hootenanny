@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONDISTANCEEXTRACTOR_H
 #define POIPOLYGONDISTANCEEXTRACTOR_H
@@ -55,8 +55,7 @@ public:
    * @param poly a polygon element
    * @return the distance between the two elements
    */
-  double extract(
-    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
+  double extract(const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override

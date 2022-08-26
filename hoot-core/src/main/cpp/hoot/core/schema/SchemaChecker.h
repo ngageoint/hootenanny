@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef __SCHEMA_CHECKER_H__
 #define __SCHEMA_CHECKER_H__
@@ -53,12 +53,12 @@ public:
    * Print out error message if schemavertex is unkonw vertex type.
    */
 
-  void checkUnknownVertexType();
+  void checkUnknownVertexType() const;
 
   /**
    * Print out error message if schemavertex has empty geometry or geometries are empty
    */
-  void check();
+  void check() const;
 
   /**
    * Retrun true if schemavertex is unknown vertex type.

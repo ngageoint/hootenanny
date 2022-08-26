@@ -148,8 +148,7 @@ WayLocation::WayLocation(const WayLocation& other)
 
 Meters WayLocation::calculateDistanceFromEnd() const
 {
-  return ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() -
-      calculateDistanceOnWay();
+  return ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() - calculateDistanceOnWay();
 }
 
 Meters WayLocation::calculateDistanceOnWay() const

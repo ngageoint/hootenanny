@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CompactnessExtractor.h"
 
@@ -31,8 +31,8 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 
@@ -47,15 +47,13 @@ double CompactnessExtractor::characteristic(const Geometry* g) const
   double perimeter = g->getLength();
 
   if (perimeter == 0.0)
-  {
     return 1.0;
-  }
 
   return 4 * M_PI * area / pow(perimeter, 2);
 }
 
 double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
-  const ConstElementPtr& candidate) const
+                                     const ConstElementPtr& candidate) const
 {
   ElementToGeometryConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
@@ -63,13 +61,9 @@ double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& t
 
   double result;
   if (g1->isEmpty() || g2->isEmpty())
-  {
     result = nullValue();
-  }
   else
-  {
     result = 1 - fabs(characteristic(g1.get()) - characteristic(g2.get()));
-  }
 
   return result;
 }

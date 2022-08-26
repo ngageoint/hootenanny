@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RelationMemberSimilarityExtractor.h"
 
@@ -36,19 +36,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, RelationMemberSimilarityExtractor)
 
-double RelationMemberSimilarityExtractor::extract(
-  const OsmMap& map, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+double RelationMemberSimilarityExtractor::extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+                                                  const std::shared_ptr<const Element>& candidate) const
 {
-  if (target->getElementType() != ElementType::Relation ||
-      candidate->getElementType() != ElementType::Relation)
-  {
+  if (target->getElementType() != ElementType::Relation || candidate->getElementType() != ElementType::Relation)
     return 0.0;
-  }
 
   const ConstRelationPtr targetRelation = std::dynamic_pointer_cast<const Relation>(target);
-  const ConstRelationPtr candidateRelation =
-    std::dynamic_pointer_cast<const Relation>(candidate);
+  const ConstRelationPtr candidateRelation = std::dynamic_pointer_cast<const Relation>(candidate);
   if (targetRelation && candidateRelation)
   {
     LOG_VART(targetRelation->getTags().get("name"));
@@ -56,55 +51,46 @@ double RelationMemberSimilarityExtractor::extract(
     LOG_VART(targetRelation->getType());
     LOG_VART(candidateRelation->getType());
 
-    QSet<ElementId> targetMemberIds =
-      CollectionUtils::stdSetToQSet(targetRelation->getMemberIds());
+    QSet<ElementId> targetMemberIds = CollectionUtils::stdSetToQSet(targetRelation->getMemberIds());
     LOG_VART(targetMemberIds.size());
-    QSet<ElementId> candidateMemberIds =
-      CollectionUtils::stdSetToQSet(candidateRelation->getMemberIds());
+    QSet<ElementId> candidateMemberIds = CollectionUtils::stdSetToQSet(candidateRelation->getMemberIds());
     LOG_VART(candidateMemberIds.size());
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 
     if (targetMemberIds.empty() || candidateMemberIds.empty())
-    {
       return 0.0;
-    }
 
     int numSharedMembers = 0;
 
     QSet<RelationMemberComparison> targetMemberComps;
     const std::vector<RelationData::Entry> targetMembers = targetRelation->getMembers();
-    for (size_t i = 0; i < targetMembers.size(); i++)
+    for (const auto& member : targetMembers)
     {
-      const RelationData::Entry member = targetMembers[i];
       ConstElementPtr memberElement = map.getElement(member.getElementId());
       if (memberElement)
       {
         // not sure how to get around this const cast...
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        targetMemberComps.insert(
-          RelationMemberComparison(memberElement2, map, member.getRole(), true));
+        targetMemberComps.insert(RelationMemberComparison(memberElement2, map, member.getRole(), true));
       }
     }
     LOG_VART(targetMemberComps.size());
 
     QSet<RelationMemberComparison> candidateMemberComps;
     const std::vector<RelationData::Entry> candidateMembers = candidateRelation->getMembers();
-    for (size_t i = 0; i < candidateMembers.size(); i++)
+    for (const auto& member : candidateMembers)
     {
-      const RelationData::Entry member = candidateMembers[i];
       ConstElementPtr memberElement = map.getElement(member.getElementId());
       if (memberElement)
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        candidateMemberComps.insert(
-          RelationMemberComparison(memberElement2, map, member.getRole(), true));
+        candidateMemberComps.insert(RelationMemberComparison(memberElement2, map, member.getRole(), true));
       }
     }
     LOG_VART(candidateMemberComps.size());
 
-    QSet<RelationMemberComparison> intersection =
-      targetMemberComps.intersect(candidateMemberComps);
+    QSet<RelationMemberComparison> intersection = targetMemberComps.intersect(candidateMemberComps);
     LOG_VART(intersection);
     numSharedMembers = intersection.size();
     LOG_VART(numSharedMembers);

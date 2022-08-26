@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef PERTY_MAP_SCORER_H
 #define PERTY_MAP_SCORER_H
@@ -103,8 +103,8 @@ private:
                          const QString& perturbedMapOutputPath) const;
   OsmMapPtr _combineMapsAndPrepareForConflation(const OsmMapPtr& referenceMap,
                                                 const QString& perturbedMapInputPath) const;
-  std::shared_ptr<MatchComparator> _conflateAndScoreMatches(
-    const OsmMapPtr& combinedDataToConflate, const QString& conflatedMapOutputPath) const;
+  std::shared_ptr<MatchComparator> _conflateAndScoreMatches(const OsmMapPtr& combinedDataToConflate,
+                                                            const QString& conflatedMapOutputPath) const;
 
   /**
    * Prepares map for saving and saves the map. The map will be modified.

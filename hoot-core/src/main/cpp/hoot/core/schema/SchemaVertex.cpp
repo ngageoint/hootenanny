@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaVertex.h"
@@ -35,22 +35,20 @@ using namespace std;
 namespace hoot
 {
 
-SchemaVertex::SchemaVertex() :
-_type(UnknownVertexType),
-_influence(-1.0),
-_childWeight(-1.0),
-_mismatchScore(-1.0),
-_valueType(Unknown),
-_geometries(0)
+SchemaVertex::SchemaVertex()
+  : _type(UnknownVertexType),
+    _influence(-1.0),
+    _childWeight(-1.0),
+    _mismatchScore(-1.0),
+    _valueType(Unknown),
+    _geometries(0)
 {
 }
 
 void SchemaVertex::addCompoundRule(const CompoundRule& rule)
 {
   if (_type != Compound)
-  {
     throw IllegalArgumentException("Can only add compound KVPs to compound types.");
-  }
   _compoundRules.append(rule);
 }
 
@@ -59,13 +57,12 @@ bool SchemaVertex::isCompoundMatch(const Tags& t) const
   bool matchOne = false;
 
   // go through each rule
-  for (int i = 0; i < _compoundRules.size() && matchOne == false; ++i)
+  for (const auto& r : qAsConst(_compoundRules))
   {
-    CompoundRule r = _compoundRules[i];
-
     if (isMatch(r, t))
     {
       matchOne = true;
+      break;
     }
   }
 
@@ -76,12 +73,10 @@ bool SchemaVertex::isMatch(const CompoundRule& rule, const Tags& t)
 {
   vector<bool> matches(rule.size(), false);
   int matchCount = 0;
-
-  for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
+  for (auto it = t.constBegin(); it != t.constEnd(); ++it)
   {
     QString k = it.key();
     QString v = it.value();
-
     for (int i = 0; i < rule.size(); ++i)
     {
       if (matches[i] == false && rule[i]->isMatch(k, v))
@@ -91,16 +86,13 @@ bool SchemaVertex::isMatch(const CompoundRule& rule, const Tags& t)
       }
     }
   }
-
   return matchCount == rule.size();
 }
 
 void SchemaVertex::setType(const VertexType& t)
 {
   if (t == Tag)
-  {
     _compoundRules.clear();
-  }
   _type = t;
 }
 
@@ -108,9 +100,7 @@ void SchemaVertex::setNameKvp(const QString& n)
 {
   int equalsPos = n.indexOf('=');
   if (equalsPos == 0)
-  {
     throw HootException("The name cannot start with an equals sign. " + n);
-  }
   else if (equalsPos > 0)
   {
     _key = n.left(equalsPos);
@@ -127,25 +117,15 @@ void SchemaVertex::setNameKvp(const QString& n)
 void SchemaVertex::setValueTypeString(const QString& t)
 {
   if (t == "enumeration")
-  {
     _valueType = Enumeration;
-  }
   else if (t == "text")
-  {
     _valueType = Text;
-  }
   else if (t == "int")
-  {
     _valueType = Int;
-  }
   else if (t == "real")
-  {
     _valueType = Real;
-  }
   else
-  {
     throw HootException("Unexpected type tag: " + t);
-  }
 }
 
 QString SchemaVertex::toString() const
@@ -161,14 +141,9 @@ QString SchemaVertex::toString() const
       + QString("aliases: %1\n").arg(hoot::toString(_aliases))
       + QString("geometries: %1\n").arg(_geometries)
       + QString("categories: %1\n").arg(hoot::toString(_categories));
-
   if (_type == Compound)
-  {
     result += QString("tags: %1\n").arg(hoot::toString(_compoundRules));
-  }
-
   return result;
 }
-
 
 }

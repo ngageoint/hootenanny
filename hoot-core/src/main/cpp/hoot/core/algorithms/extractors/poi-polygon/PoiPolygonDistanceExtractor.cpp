@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonDistanceExtractor.h"
 
@@ -40,8 +40,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceExtractor)
 
-PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache) :
-_infoCache(infoCache)
+PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache)
+  : _infoCache(infoCache)
 {
 }
 
@@ -49,9 +49,7 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElemen
                                             const ConstElementPtr& poly) const
 {
   if (!_infoCache)
-  {
     _infoCache = make_shared<PoiPolygonInfoCache>(map.shared_from_this());
-  }
 
   LOG_VART(poi->getElementId());
   LOG_VART(poly->getElementId());
