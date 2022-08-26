@@ -54,9 +54,8 @@ public:
 
 protected:
 
-  bool _mergePair(
-    const ElementId& eid1, const ElementId& eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(const ElementId& eid1, const ElementId& eid2,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * @see LinearMergerAbstract
@@ -70,9 +69,8 @@ private:
 
   double _getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const;
 
-  WayPtr _getMaximalNearestSubline(
-    const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
-    std::vector<WayPtr>& splits) const;
+  WayPtr _getMaximalNearestSubline(const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
+                                   std::vector<WayPtr>& splits) const;
 };
 
 }

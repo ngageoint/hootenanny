@@ -37,51 +37,39 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, MarkForReviewMerger)
 
-MarkForReviewMerger::MarkForReviewMerger(
-  const set<pair<ElementId, ElementId>>& pairs, const QString& note, const QString& reviewType,
-  double score) :
-_pairs(pairs),
-_note(note),
-_reviewType(reviewType),
-_score(score)
+MarkForReviewMerger::MarkForReviewMerger(const set<pair<ElementId, ElementId>>& pairs, const QString& note,
+                                         const QString& reviewType, double score)
+  : _pairs(pairs),
+    _note(note),
+    _reviewType(reviewType),
+    _score(score)
 {
   LOG_VART(reviewType);
 }
 
-MarkForReviewMerger::MarkForReviewMerger(
-  const set<ElementId>& eids, const QString& note, const QString& reviewType, double score) :
-_eids(eids),
-_note(note),
-_reviewType(reviewType),
-_score(score)
+MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, const QString& note, const QString& reviewType, double score)
+  : _eids(eids),
+    _note(note),
+    _reviewType(reviewType),
+    _score(score)
 {
   LOG_VART(reviewType);
 }
 
-void MarkForReviewMerger::apply(
-  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& /*replaced*/)
+void MarkForReviewMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
   assert(!(_eids.size() >=1 && _pairs.size() >= 1));
 
   if (_eids.size() >= 1)
-  {
     _reviewMarker.mark(map, _eids, _note, _reviewType, _score);
-  }
   else
   {
-    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-         ++it)
+    for (const auto& id_pair : _pairs)
     {
-      ElementId eid1 = it->first;
-      ElementId eid2 = it->second;
-
-      ElementPtr e1 = map->getElement(eid1);
-      ElementPtr e2 = map->getElement(eid2);
-
+      ElementPtr e1 = map->getElement(id_pair.first);
+      ElementPtr e2 = map->getElement(id_pair.second);
       if (e1.get() && e2.get())
-      {
         _reviewMarker.mark(map, e1, e2, _note, _reviewType, _score);
-      }
     }
   }
 }
@@ -91,17 +79,14 @@ set<ElementId> MarkForReviewMerger::getImpactedElementIds() const
   set<ElementId> result;
 
   if (_eids.size() >= 1)
-  {
     result = _eids;
-  }
   else
   {
     // Make sure the map contains all our elements and they aren't conflated.
-    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-      it != _pairs.end(); ++it)
+    for (const auto& id_pair : _pairs)
     {
-      result.insert(it->first);
-      result.insert(it->second);
+      result.insert(id_pair.first);
+      result.insert(id_pair.second);
     }
   }
 
@@ -115,7 +100,7 @@ bool MarkForReviewMerger::isValid(const ConstOsmMapPtr& /*map*/) const
 
 void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
 {
-  set<pair<ElementId, ElementId>>::iterator it = _pairs.begin();
+  auto it = _pairs.begin();
   while (it != _pairs.end())
   {
     if (it->first == oldEid)
@@ -133,9 +118,7 @@ void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
       _pairs.erase(it++);
     }
     else
-    {
       ++it;
-    }
   }
 
   set<ElementId>::iterator it2 = _eids.find(oldEid);

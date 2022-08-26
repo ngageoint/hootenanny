@@ -52,9 +52,8 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   QStringList reviewType;
   double score = 0;
   // go through all the matches
-  for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  for (const auto& match : matches)
   {
-    ConstMatchPtr match = *it;
     LOG_VART(match->toString());
     MatchType type = match->getType();
     LOG_VART(type);
@@ -69,30 +68,23 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
       LOG_VART(match->getName());
       LOG_VART(score);
       if (reviewType.contains(match->getName()) == false)
-      {
         reviewType.append(match->getName());
-      }
     }
   }
 
   if (reviewCount > 0 && reviewCount != int(matches.size()))
-  {
     throw HootException("Expected the whole set to be review matches.");
-  }
 
   // only add the mark for review merger if there are elements to merge.
   if (!eids.empty())
   {
-    mergers.push_back(
-      std::make_shared<MarkForReviewMerger>(
-        eids, matchStrings.join(","), reviewType.join(";"), score));
+    mergers.push_back(std::make_shared<MarkForReviewMerger>(eids, matchStrings.join(","), reviewType.join(";"), score));
     result = true;
   }
   else
   {
     LOG_TRACE("No elements to merge.");
   }
-
   return result;
 }
 
@@ -103,8 +95,8 @@ vector<CreatorDescription> MarkForReviewMergerCreator::getAllCreators() const
   return vector<CreatorDescription>();
 }
 
-bool MarkForReviewMergerCreator::isConflicting(
-  const ConstOsmMapPtr&, ConstMatchPtr, ConstMatchPtr, const QHash<QString, ConstMatchPtr>&) const
+bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtr&, ConstMatchPtr, ConstMatchPtr,
+                                               const QHash<QString, ConstMatchPtr>&) const
 {
   return false;
 }

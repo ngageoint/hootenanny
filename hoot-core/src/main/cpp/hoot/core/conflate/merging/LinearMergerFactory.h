@@ -60,10 +60,9 @@ public:
    * @param matchedBySubroutine name of the matching subroutine used (e.g. road median matching)
    * @return a merger
    */
-  static MergerPtr getMerger(
-    const std::set<std::pair<ElementId, ElementId>>& eids,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
-    const QString matchedBy = QString(), const QString matchedBySubroutine = QString());
+  static MergerPtr getMerger(const std::set<std::pair<ElementId, ElementId>>& eids,
+                             const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
+                             const QString matchedBy = QString(), const QString matchedBySubroutine = QString());
 
   /**
    * Creates a linear feature merger matched by the Network Algorithm.
@@ -74,10 +73,9 @@ public:
    * @param matchedBy optional text to mark a feature with the type of matcher that matched it
    * @return a merger
    */
-  static MergerPtr getMerger(
-    const std::set<std::pair<ElementId, ElementId>>& eids,
-    const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
-    const QString matchedBy = QString());
+  static MergerPtr getMerger(const std::set<std::pair<ElementId, ElementId>>& eids,
+                             const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
+                             const QString matchedBy = QString());
 
 private:
 

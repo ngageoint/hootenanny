@@ -30,50 +30,44 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/WayAverager.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 
-LinearAverageMerger::LinearAverageMerger() :
-LinearMergerAbstract()
+LinearAverageMerger::LinearAverageMerger()
+  : LinearMergerAbstract()
 {
   _matchedBy = HighwayMatch::MATCH_NAME;
 }
 
-LinearAverageMerger::LinearAverageMerger(
-  const std::set<std::pair<ElementId, ElementId>>& pairs) :
-LinearMergerAbstract(pairs, nullptr)
+LinearAverageMerger::LinearAverageMerger(const std::set<std::pair<ElementId, ElementId>>& pairs)
+  : LinearMergerAbstract(pairs, nullptr)
 {
   _matchedBy = HighwayMatch::MATCH_NAME;
 }
 
-bool LinearAverageMerger::_mergePair(
-  const ElementId& eid1, const ElementId& eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+bool LinearAverageMerger::_mergePair(const ElementId& eid1, const ElementId& eid2,
+                                     std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
-  {
     return true;
-  }
 
   WayPtr way1 = std::dynamic_pointer_cast<Way>(_map->getElement(eid1));
   WayPtr way2 = std::dynamic_pointer_cast<Way>(_map->getElement(eid2));
 
   // Not sure what needs to be done for this with relations.
   if (!way1 || !way2)
-  {
     return false;
-  }
 
   // Remove any ways that span both inputs.
   _removeSpans(way1, way2);
@@ -81,27 +75,21 @@ bool LinearAverageMerger::_mergePair(
   // Determine the split size.
   const double minSplitSize = _getMinSplitSize(way1, way2);
   if (minSplitSize == 0.0)
-  {
     return false;
-  }
 
   // Split left into its maximal nearest sublines.
   std::vector<WayPtr> splitsLeft;
   WayPtr mnsLeft = _getMaximalNearestSubline(way1, way2, minSplitSize, splitsLeft);
   LOG_VART(mnsLeft.get());
   if (!mnsLeft || splitsLeft.empty())
-  {
     return false;
-  }
 
   // Split right into its maximal nearest sublines.
   std::vector<WayPtr> splitsRight;
   WayPtr mnsRight = _getMaximalNearestSubline(way2, mnsLeft, minSplitSize, splitsRight);
   LOG_VART(mnsRight.get());
   if (!mnsRight || splitsRight.empty())
-  {
     return false;
-  }
 
   // Add the sublines to the map, as that's required in order to average them.
   _map->addWay(mnsLeft);
@@ -151,9 +139,7 @@ double LinearAverageMerger::_getMinSplitSize(const ConstWayPtr& way1, const Cons
   std::shared_ptr<geos::geom::LineString> lineString1 = geomConverter.convertToLineString(way1);
   std::shared_ptr<geos::geom::LineString> lineString2 = geomConverter.convertToLineString(way2);
   if (!lineString1 || !lineString2)
-  {
     return 0.0;
-  }
   LOG_VART(lineString1->getLength());
   LOG_VART(lineString2->getLength());
   const double lengthMultiplier = ConfigOptions().getAverageConflationMinSplitSizeMultiplier();
@@ -163,20 +149,16 @@ double LinearAverageMerger::_getMinSplitSize(const ConstWayPtr& way1, const Cons
   return minSplitSize;
 }
 
-WayPtr LinearAverageMerger::_getMaximalNearestSubline(
-  const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
-  std::vector<WayPtr>& splits) const
+WayPtr LinearAverageMerger::_getMaximalNearestSubline(const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
+                                                      std::vector<WayPtr>& splits) const
 {
-  MaximalNearestSubline maximalNearestSubline(
-    _map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
+  MaximalNearestSubline maximalNearestSubline(_map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
   int index = -1;
   splits = maximalNearestSubline.splitWay(_map, index);
   LOG_VART(index);
   LOG_VART(splits.size());
   if (splits.empty())
-  {
     return WayPtr();
-  }
   assert(index > -1);
   return splits[index];
 }
