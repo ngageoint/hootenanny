@@ -29,8 +29,8 @@
 #define ADDRESS_NORMALIZER_H
 
 // Hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

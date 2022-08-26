@@ -27,11 +27,11 @@
 #include "AddressParser.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/conflate/address/LibPostalInit.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
 // libpostal
@@ -40,12 +40,12 @@
 namespace hoot
 {
 
-AddressParser::AddressParser() :
-_allowLenientHouseNumberMatching(true),
-_preTranslateTagValuesToEnglish(false),
-_parsedFromAddressTag(true),
-_isHouseNumRange(false),
-_isSubLetter(false)
+AddressParser::AddressParser()
+  : _allowLenientHouseNumberMatching(true),
+    _preTranslateTagValuesToEnglish(false),
+    _parsedFromAddressTag(true),
+    _isHouseNumRange(false),
+    _isSubLetter(false)
 {
 }
 
@@ -58,9 +58,7 @@ void AddressParser::setPreTranslateTagValuesToEnglish(bool translate, const Sett
 {
   _preTranslateTagValuesToEnglish = translate;
   if (_preTranslateTagValuesToEnglish)
-  {
     _addressTranslator.setConfiguration(conf);
-  }
 }
 
 bool AddressParser::hasAddress(const Element& element) const
@@ -82,9 +80,7 @@ int AddressParser::numAddresses(const Element& element) const
   // count for address tags.
   const int numAddresses = parseAddresses(element, false).size();
   if (translateModified)
-  {
     _preTranslateTagValuesToEnglish = true;
-  }
   return numAddresses;
 }
 
@@ -104,9 +100,7 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   }
   QList<Address> addresses;
   if (element->getElementType() == ElementType::Node)
-  {
     return numAddresses(*std::dynamic_pointer_cast<const Node>(element));
-  }
   else if (element->getElementType() == ElementType::Way)
   {
     addresses = parseAddressesFromWayNodes(*std::dynamic_pointer_cast<const Way>(element), map);
@@ -114,14 +108,11 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   }
   else if (element->getElementType() == ElementType::Relation)
   {
-    addresses =
-      parseAddressesFromRelationMembers(*std::dynamic_pointer_cast<const Relation>(element), map);
+    addresses = parseAddressesFromRelationMembers(*std::dynamic_pointer_cast<const Relation>(element), map);
     addresses.append(parseAddresses(*element));
   }
   if (translateModified)
-  {
     _preTranslateTagValuesToEnglish = true;
-  }
   return addresses.size();
 }
 
@@ -129,9 +120,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
                                              const bool normalizeAddresses) const
 {
   if (!ConfigOptions().getAddressMatchEnabled())
-  {
     return QList<Address>();
-  }
 
   _parsedFromAddressTag = true;
   _isHouseNumRange = false;
@@ -151,10 +140,8 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
   LOG_VART(parsedAddresses);
 
   // add the parsed addresses to a collection in which they will later be compared to each other
-  for (QSet<QString>::const_iterator parsedAddressItr = parsedAddresses.begin();
-       parsedAddressItr != parsedAddresses.end(); ++parsedAddressItr)
+  for (auto parsedAddress : qAsConst(parsedAddresses))
   {
-    QString parsedAddress = *parsedAddressItr;
     LOG_VART(parsedAddress);
 
     // optional additional lang pre-normalization translation
@@ -164,13 +151,9 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
       assert(!street.isEmpty());
       const QString preTranslatedStreet = _addressTranslator.translateToEnglish(street);
       if (!preTranslatedStreet.isEmpty())
-      {
         parsedAddress = houseNum + " " + preTranslatedStreet;
-      }
       else
-      {
         parsedAddress = houseNum + " " + street;
-      }
     }
     LOG_VART(parsedAddress);
 
@@ -180,10 +163,8 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
       const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
       LOG_VART(normalizedAddresses);
 
-      for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
-           normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
+      for (const auto& normalizedAddress : qAsConst(normalizedAddresses))
       {
-        const QString normalizedAddress = *normalizedAddressItr;
         LOG_VART(normalizedAddress);
         Address address(normalizedAddress, _allowLenientHouseNumberMatching);
         address.setParsedFromAddressTag(_parsedFromAddressTag);
@@ -209,7 +190,6 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
       }
     }
   }
-
   return addresses;
 }
 
@@ -219,14 +199,12 @@ QList<Address> AddressParser::parseAddressesFromWayNodes(const Way& way, const O
   QList<Address> addresses;
   LOG_TRACE("Collecting addresses from way nodes...");
   const std::vector<long> wayNodeIds = way.getNodeIds();
-  for (size_t i = 0; i < wayNodeIds.size(); i++)
+  for (auto node_id : wayNodeIds)
   {
-    ConstElementPtr wayNode = map.getElement(ElementType::Node, wayNodeIds.at(i));
+    ConstElementPtr wayNode = map.getElement(ElementType::Node, node_id);
     // see explanation for this check in parseAddressesFromRelationMembers
     if (skipElementId.isNull() || wayNode->getElementId() != skipElementId)
-    {
       addresses = parseAddresses(*wayNode);
-    }
   }
   return addresses;
 }
@@ -238,18 +216,16 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
   QList<Address> addresses;
   LOG_TRACE("Collecting addresses from relation members...");
   const std::vector<RelationData::Entry> relationMembers = relation.getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
+  for (const auto& entry : relationMembers)
   {
-    ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
+    ConstElementPtr member = map.getElement(entry.getElementId());
     // If the poly contains the poi being compared to as a way node or relation member, then the
     // POI's address will be added to both the poly and poi group of addresses and yield a fake
     // address match.
     if (skipElementId.isNull() || member->getElementId() != skipElementId)
     {
       if (member->getElementType() == ElementType::Node)
-      {
         addresses = parseAddresses(*member);
-      }
       else if (member->getElementType() == ElementType::Way)
       {
         ConstWayPtr wayMember = std::dynamic_pointer_cast<const Way>(member);
@@ -333,15 +309,12 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
                                        const bool requireStreetTypeInIntersection) const
 {
   if (address.trimmed().isEmpty())
-  {
     return false;
-  }
   LOG_VART(address);
 
   // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
-    libpostal_parse_address(
-      address.toUtf8().data(), libpostal_get_address_parser_default_options());
+    libpostal_parse_address(address.toUtf8().data(), libpostal_get_address_parser_default_options());
   /*
     Label: house_number, Component: 781
     Label: road, Component: franklin ave
@@ -360,13 +333,9 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     LOG_VART(component);
     // we only care about the street address
     if (label == "house_number")
-    {
       houseNum = component;
-    }
     else if (label == "road")
-    {
       street = component;
-    }
   }
   libpostal_address_parser_response_destroy(parsed);
 
@@ -385,8 +354,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     return true;
   }
   // intersections won't have numbers
-  else if (!street.isEmpty() &&
-           Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection))
+  else if (!street.isEmpty() && Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection))
   {
     address = street;
     address = address.trimmed();
@@ -402,9 +370,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     return true;
   }
   else
-  {
     return false;
-  }
 }
 
 QString AddressParser::_parseFullAddress(const QString& fullAddress, QString& houseNum,
@@ -421,16 +387,12 @@ QString AddressParser::_parseFullAddress(const QString& fullAddress, QString& ho
     msg += " valid";
   }
   else
-  {
     msg += " invalid";
-  }
   msg += " address: " + parsedAddress + " from full address: " + fullAddress;
   LOG_TRACE(msg);
 
   if (validAddress)
-  {
     return parsedAddress;
-  }
   return "";
 }
 
@@ -458,22 +420,15 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
       }
 
       QString parsedAddress = houseNum + " ";
-      const QString streetPrefix =
-        _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street_prefix");
+      const QString streetPrefix = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street_prefix");
       if (!streetPrefix.isEmpty())
-      {
         parsedAddress += streetPrefix + " ";
-      }
       parsedAddress += street;
-      const QString streetSuffix =
-        _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street_suffix");
+      const QString streetSuffix = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street_suffix");
       if (!streetSuffix.isEmpty())
-      {
         parsedAddress += " " + streetPrefix;
-      }
       parsedAddresses.insert(parsedAddress);
-      LOG_TRACE(
-        "Found address by parsing address parts from component tags: " << parsedAddress << ".");
+      LOG_TRACE("Found address by parsing address parts from component tags: " << parsedAddress << ".");
     }
   }
 
@@ -490,10 +445,8 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
   // one...
   const QSet<QString> additionalTagKeys = QSet<QString>::fromList(Tags::getNameKeys());
   LOG_VART(additionalTagKeys);
-  for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
-       tagItr != additionalTagKeys.end(); ++tagItr)
+  for (const auto& tagKey : qAsConst(additionalTagKeys))
   {
-    const QString tagKey = *tagItr;
     QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street, true))
     {
@@ -502,7 +455,6 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
       break;
     }
   }
-
   return parsedAddress;
 }
 
@@ -513,8 +465,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
   QSet<QString> parsedAddresses;
 
   // look for a full address tag first
-  QString fullAddress =
-    _addressNormalizer.getAddressTagKeys()->getAddressTagValue(element.getTags(), "full_address");
+  QString fullAddress = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(element.getTags(), "full_address");
   LOG_VART(fullAddress);
   if (fullAddress.isEmpty())
   {
@@ -526,9 +477,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
     // if we do have a full address, let's parse and validate it
     const QString parsedAddress = _parseFullAddress(fullAddress, houseNum, street);
     if (!parsedAddress.isEmpty())
-    {
       parsedAddresses.insert(parsedAddress);
-    }
   }
 
   if (parsedAddresses.isEmpty())
@@ -559,13 +508,8 @@ bool AddressParser::addressesMatchDespiteSubletterDiffs(const QString& address1,
 
   const QString subletterCleanedAddress1 = _getSubLetterCleanedAddress(address1);
   const QString subletterCleanedAddress2 = _getSubLetterCleanedAddress(address2);
-  if (!subletterCleanedAddress1.isEmpty() && !subletterCleanedAddress2.isEmpty() &&
-      ExactStringDistance().compare(subletterCleanedAddress1, subletterCleanedAddress2) == 1.0)
-  {
-    return true;
-  }
-
-  return false;
+  return (!subletterCleanedAddress1.isEmpty() && !subletterCleanedAddress2.isEmpty() &&
+           ExactStringDistance().compare(subletterCleanedAddress1, subletterCleanedAddress2) == 1.0);
 }
 
 QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
@@ -574,9 +518,7 @@ QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
 
   const QStringList addressParts = address.split(QRegExp("\\s"));
   if (addressParts.length() == 0)
-  {
     return "";
-  }
 
   QString addressTemp = addressParts[0];
   const QString addressHouseNumStr = addressTemp.replace(QRegExp("[a-z]+"), "");
@@ -585,15 +527,11 @@ QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
   /*const int address1HouseNum = */addressHouseNumStr.toInt(&addressHouseNumOk);
 
   if (!addressHouseNumOk)
-  {
     return "";
-  }
 
   QString subletterCleanedAddress = addressHouseNumStr;
   for (int k = 1; k < addressParts.length(); k++)
-  {
     subletterCleanedAddress += " " + addressParts[k];
-  }
   LOG_VART(subletterCleanedAddress);
   return subletterCleanedAddress;
 }

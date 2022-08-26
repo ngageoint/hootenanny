@@ -49,8 +49,7 @@ public:
    * @param element2 the second element to examine
    * @return true if their one way tags conflict; false otherwise
    */
-  static bool oneWayConflictExists(
-    const ConstElementPtr& element1, const ConstElementPtr& element2);
+  static bool oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
@@ -69,8 +68,7 @@ public:
    * @return true if both have specific highway tags (other than highway=road) and they disagree;
    * false otherwise
    */
-  static bool nonGenericHighwayConflictExists(
-    const ConstElementPtr& element1, const ConstElementPtr& element2);
+  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
 };
 

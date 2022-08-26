@@ -29,8 +29,8 @@
 #define ROAD_CROSSING_POLY_RULE_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -71,8 +71,7 @@ public:
    * e.g. "amenity=parking;leisure=park"; the individual tag criteria are logically OR'd together
    * @return a polygon criterion filter
    */
-  static ElementCriterionPtr polyRuleFilterStringsToFilter(
-    const QString& polyCriteriaFilterStr, const QString& polyTagFilterStr);
+  static ElementCriterionPtr polyRuleFilterStringsToFilter(const QString& polyCriteriaFilterStr, const QString& polyTagFilterStr);
 
   /**
    * Converts a tag rule to a criterion filter
@@ -83,8 +82,7 @@ public:
    * filter
    * @return a tag criterion filter or an empty criterion if the input tags are empty
    */
-  static ElementCriterionPtr tagRuleStringToFilter(
-    const QString& kvpStr, const QStringList& allowedKeys = QStringList());
+  static ElementCriterionPtr tagRuleStringToFilter(const QString& kvpStr, const QStringList& allowedKeys = QStringList());
 
   /**
    * Creates the spatial index used to search for crossing roads

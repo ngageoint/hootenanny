@@ -39,10 +39,7 @@ LibPostalInit::LibPostalInit()
 {
   // failsafe
   if (!ConfigOptions().getAddressMatchEnabled())
-  {
-    throw IllegalArgumentException(
-      "libpostal cannot be initialized due to address matching being disabled.");
-  }
+    throw IllegalArgumentException("libpostal cannot be initialized due to address matching being disabled.");
 
   // This init can take up to ~5 seconds.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||

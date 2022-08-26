@@ -28,10 +28,10 @@
 #define ADDRESS_PARSER_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/ToEnglishAddressTranslator.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/language/ToEnglishAddressTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -80,9 +80,8 @@ public:
    * @param skipElementId no addresses from elements with this ID will be parsed
    * @return a collection of addresses
    */
-  QList<Address> parseAddressesFromRelationMembers(
-    const Relation& relation, const OsmMap& map,
-    const ElementId& skipElementId = ElementId()) const;
+  QList<Address> parseAddressesFromRelationMembers(const Relation& relation, const OsmMap& map,
+                                                   const ElementId& skipElementId = ElementId()) const;
 
   /**
    * @brief hasAddress determines if an element has an address.
