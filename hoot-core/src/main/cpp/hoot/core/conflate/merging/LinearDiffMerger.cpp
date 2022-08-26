@@ -40,22 +40,20 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, LinearDiffMerger)
 
-LinearDiffMerger::LinearDiffMerger() :
-LinearMergerAbstract(),
-_treatReviewsAsMatches(false)
+LinearDiffMerger::LinearDiffMerger()
+  : LinearMergerAbstract(),
+    _treatReviewsAsMatches(false)
 {
 }
 
-LinearDiffMerger::LinearDiffMerger(
-  const std::set<std::pair<ElementId, ElementId>>& pairs,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-LinearMergerAbstract(pairs, sublineMatcher),
-_treatReviewsAsMatches(false)
+LinearDiffMerger::LinearDiffMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                                   const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
+  : LinearMergerAbstract(pairs, sublineMatcher),
+    _treatReviewsAsMatches(false)
 {
 }
 
-void LinearDiffMerger::apply(
-  const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
+void LinearDiffMerger::apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   LOG_TRACE("Applying LinearDiffMerger...");
 
@@ -67,21 +65,14 @@ void LinearDiffMerger::apply(
   // part of the map in order to be merged (why?).
   std::vector<std::pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
-  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-    pairs.emplace_back(eid1, eid2);
-  }
+  for (const auto& id_pair : _pairs)
+    pairs.emplace_back(id_pair.first, id_pair.second);
 
   // This has the same behavior as LinearMergerAbstract.
   _mergeShortestPairsFirst(pairs, replaced);
 }
 
-bool LinearDiffMerger::_mergePair(
-  const ElementId& eid1, const ElementId& eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+bool LinearDiffMerger::_mergePair(const ElementId& eid1, const ElementId& eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   // Check for missing elements.
   ElementPtr e1 = _map->getElement(eid1);
@@ -89,9 +80,7 @@ bool LinearDiffMerger::_mergePair(
   LOG_VART(e1.get());
   LOG_VART(e2.get());
   if (!e1 || !e2)
-  {
     return false;
-  }
 
   bool needsReview = false;
   assert(e1->getElementType() == ElementType::Way);
@@ -106,19 +95,17 @@ bool LinearDiffMerger::_mergePair(
     needsReview = _findAndProcessMatch(way1, way2, replaced, matched);
     LOG_VART(matched);
   }
-  // For each relation member sec way, find the match between the ref and sec way, and remove the
-  // section from the sec way that matches the ref way.
   else
   {
+    // For each relation member sec way, find the match between the ref and sec way, and remove the
+    // section from the sec way that matches the ref way.
     assert(e2->getElementType() == ElementType::Relation);
     RelationPtr relation2 = std::dynamic_pointer_cast<Relation>(e2);
     LOG_VART(relation2->getMemberCount());
 
     const std::vector<RelationData::Entry> members = relation2->getMembers();
-    for (std::vector<RelationData::Entry>::const_iterator it = members.begin();
-         it != members.end(); ++it)
+    for (const auto& member : members)
     {
-      RelationData::Entry member = *it;
       LOG_VART(member.getElementId().getType());
       assert(member.getElementId().getType() == ElementType::Way);
       ElementPtr memberElement = _map->getElement(member.getElementId());
@@ -127,33 +114,22 @@ bool LinearDiffMerger::_mergePair(
       LOG_TRACE("Processing match for relation member sec: " << way2->getElementId() << "...");
       bool matched = false;
       if (_findAndProcessMatch(way1, way2, replaced, matched))
-      {
         needsReview = true;
-      }
       LOG_VART(matched);
       if (matched)
-      {
         relation2->removeElement(member.getElementId());
-      }
       LOG_VART(RelationMemberUtils::getContainingRelationCount(way2->getElementId(), _map));
     }
-
     if (relation2->getMemberCount() == 0)
-    {
       RemoveElementByEid(relation2->getElementId()).apply(_map);
-    }
   }
-
   return needsReview;
 }
 
-bool LinearDiffMerger::_findAndProcessMatch(
-  const WayPtr& way1, const WayPtr& way2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced, bool& matched)
+bool LinearDiffMerger::_findAndProcessMatch(const WayPtr& way1, const WayPtr& way2,
+                                            std::vector<std::pair<ElementId, ElementId>>& replaced, bool& matched)
 {
-  LOG_TRACE(
-    "Finding matching subline between: " << way1->getElementId() << " and " <<
-    way2->getElementId() << "...");
+  LOG_TRACE("Finding matching subline between: " << way1->getElementId() << " and " << way2->getElementId() << "...");
   matched = false;
   WaySublineMatchString match;
   try
@@ -172,9 +148,7 @@ bool LinearDiffMerger::_findAndProcessMatch(
   }
   LOG_VART(match.isValid());
   if (!match.isValid())
-  {
     return false;
-  }
   matched = true;
 
   // Get the portion of the sec way that matched the ref way.
@@ -206,18 +180,15 @@ bool LinearDiffMerger::_findAndProcessMatch(
         Status::Unknown2, _map->createNextRelationId(), way2->getCircularError(),
         MetadataTags::RelationMultilineString());
     relation->setTag(MetadataTags::HootMultilineString(), "yes");
-    for (std::vector<ElementId>::const_iterator it = newWayIds.begin(); it != newWayIds.end();
-         ++it)
+    for (const auto& elementId : newWayIds)
     {
-      const ElementId elementId = *it;
       LOG_TRACE("Adding " << elementId << " to " << relation->getElementId() << "...");
       relation->addElement("", elementId);
     }
     LOG_VART(relation->getMemberIds());
     _map->addRelation(relation);
     // Do bookkeeping to show the new relation that replaced the old sec way.
-    LOG_TRACE(
-      "Replacing " << way2->getElementId() << " with " << relation->getElementId() << "...");
+    LOG_TRACE("Replacing " << way2->getElementId() << " with " << relation->getElementId() << "...");
     replaced.emplace_back(way2->getElementId(), relation->getElementId());
   }
   if (ConfigOptions().getDebugMapsWriteDetailed())
@@ -232,8 +203,7 @@ bool LinearDiffMerger::_findAndProcessMatch(
 
 WaySublineMatchString LinearDiffMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
 {
-  LOG_TRACE(
-    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
+  LOG_TRACE("Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
   // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
   // performance reasons, but the results were unstable. See branch 3969b.
   return _sublineMatcher->findMatch(_map, e1, e2);
