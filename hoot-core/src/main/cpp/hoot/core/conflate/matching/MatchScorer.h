@@ -55,8 +55,7 @@ public:
    * @param ref2Inputs paths to the second set of inputs to conflate; should contain manual matches
    * @param output path to write conflated data; invalid if _optimizeThresholds = true.
    */
-  void score(
-    const QStringList& ref1Inputs, const QStringList& ref2Inputs, const QString output = "");
+  void score(const QStringList& ref1Inputs, const QStringList& ref2Inputs, const QString output = "");
 
   /**
    * Evaluates conflated matches against manually made matches
@@ -68,10 +67,9 @@ public:
    * @param score the computed correctness score
    * @return
    */
-  QString evaluateThreshold(
-    const std::vector<OsmMapPtr>& maps, const QString& output,
-    const std::shared_ptr<MatchThreshold>& matchThreshold, const bool showConfusion,
-    double& score) const;
+  QString evaluateThreshold(const std::vector<OsmMapPtr>& maps, const QString& output,
+                            const std::shared_ptr<MatchThreshold>& matchThreshold, const bool showConfusion,
+                            double& score) const;
 
   void setPrintConfusion(bool print) { _printConfusion = print; }
   void setOptimizeThresholds(bool optimize) { _optimizeThresholds = optimize; }
@@ -88,11 +86,9 @@ private:
 
   void _optimize(const std::vector<OsmMapPtr>& maps, const bool showConfusion);
 
-  bool _validateMatches(
-    const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const;
-  void _printIssues(
-    const QMap<ElementId, QString>& issues, const QString& type, const QString& map1Path,
-    const QString& map2Path) const;
+  bool _validateMatches(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const;
+  void _printIssues(const QMap<ElementId, QString>& issues, const QString& type, const QString& map1Path,
+                    const QString& map2Path) const;
 };
 
 }

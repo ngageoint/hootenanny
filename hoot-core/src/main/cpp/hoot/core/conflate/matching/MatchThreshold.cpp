@@ -33,8 +33,7 @@
 namespace hoot
 {
 
-MatchThreshold::MatchThreshold(
-  double matchThreshold, double missThreshold, double reviewThreshold, bool validateRange)
+MatchThreshold::MatchThreshold(double matchThreshold, double missThreshold, double reviewThreshold, bool validateRange)
 {
   if (validateRange)
   {
@@ -66,25 +65,15 @@ MatchThreshold::MatchThreshold(
 MatchType MatchThreshold::getType(const MatchClassification& mc) const
 {
   if (mc.getReviewP() >= _reviewThreshold)
-  {
     return MatchType::Review;
-  }
   else if (mc.getMatchP() >= _matchThreshold && mc.getMissP() >= _missThreshold)
-  {
     return MatchType::Review;
-  }
   else if (mc.getMatchP() >= _matchThreshold)
-  {
     return MatchType::Match;
-  }
   else if (mc.getMissP() >= _missThreshold)
-  {
     return MatchType::Miss;
-  }
   else
-  {
     return MatchType::Review;
-  }
 }
 
 QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
@@ -136,8 +125,8 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
 
 QString MatchThreshold::toString() const
 {
-  return QString("Thresholds; Match: %1 Miss: %2 Review: %3").arg(_matchThreshold).
-      arg(_missThreshold).arg(_reviewThreshold);
+  return QString("Thresholds; Match: %1 Miss: %2 Review: %3").arg(_matchThreshold)
+             .arg(_missThreshold).arg(_reviewThreshold);
 }
 
 }

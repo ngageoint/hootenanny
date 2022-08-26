@@ -39,13 +39,12 @@ namespace hoot
 {
 using namespace std;
 
-MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
-_map(map)
+MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map)
+  : _map(map)
 {
 }
 
-MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
-  const std::vector<ConstMatchPtr>& matches) const
+MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const
 {
   LOG_TRACE("Calculating element ID to index map...");
   EidIndexMap eidToMatches;
@@ -54,7 +53,7 @@ MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
   for (size_t i = 0; i < matches.size(); i++)
   {
     set<pair<ElementId, ElementId>> eids = matches[i]->getMatchPairs();
-    for (set<pair<ElementId, ElementId>>::iterator it = eids.begin(); it != eids.end(); ++it)
+    for (auto it = eids.begin(); it != eids.end(); ++it)
     {
       eidToMatches.insert(pair<ElementId, size_t>(it->first, i));
       eidToMatches.insert(pair<ElementId, size_t>(it->second, i));
@@ -65,18 +64,14 @@ MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
       PROGRESS_TRACE(i << " element ID indexes processed");
     }
   }
-
   return eidToMatches;
 }
 
-void MatchConflicts::calculateMatchConflicts(
-  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const
+void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_DEBUG(
-    "Calculating match conflicts for " << StringUtils::formatLargeNumber(matches.size()) <<
-    " matches...");
+  LOG_DEBUG("Calculating match conflicts for " << StringUtils::formatLargeNumber(matches.size()) << " matches...");
 
   conflicts.clear();
   // Go through all the matches and map from eid to the match index.
@@ -90,7 +85,7 @@ void MatchConflicts::calculateMatchConflicts(
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
   long eidToMatchCount = 0;
-  for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
+  for (auto it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
     // If we got a new Eid,
     if (it->first != lastEid)
@@ -122,9 +117,8 @@ void MatchConflicts::calculateMatchConflicts(
     StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-void MatchConflicts::_calculateSubsetConflicts(
-  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts, const vector<int>& matchSet,
-  const QHash<QString, ConstMatchPtr>& idIndexedMatches) const
+void MatchConflicts::_calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
+                                               const vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches) const
 {
   LOG_TRACE("Calculating subset conflicts...");
   LOG_VART(matches.size());
@@ -147,9 +141,7 @@ void MatchConflicts::_calculateSubsetConflicts(
       {
         // Make sure we're consistent and put the smaller one first.
         if (m2 < m1)
-        {
           swap(m1, m2);
-        }
         conflicts.insert(m1, m2);
         LOG_TRACE("Conflicting subset matches: " << matches[m1] << ", " << matches[m2]);
       }

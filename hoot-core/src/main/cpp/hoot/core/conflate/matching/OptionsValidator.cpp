@@ -61,12 +61,10 @@ bool OptionsValidator::_isGenericMatcher(const QString& matcher)
 
 bool OptionsValidator::_containsGenericMatcher(const QStringList& matchers)
 {
-  for (int i = 0; i < matchers.size(); i++)
+  for (const auto& matcher : qAsConst(matchers))
   {
-    if (_isGenericMatcher(matchers.at(i)))
-    {
+    if (_isGenericMatcher(matcher))
       return true;
-    }
   }
   return false;
 }
@@ -99,29 +97,18 @@ void OptionsValidator::fixMisc()
 
   // aligning the mergers with the matchers
   QStringList fixedMergerCreators;
-  for (int i = 0; i < matchCreators.size(); i++)
+  for (const auto& matchCreator : qAsConst(matchCreators))
   {
-    QString matchCreator = matchCreators.at(i);
     if (matchCreator == BuildingMatchCreator::className())
-    {
       fixedMergerCreators.append(BuildingMergerCreator::className());
-    }
     else if (matchCreator.contains("ScriptMatchCreator"))
-    {
       fixedMergerCreators.append("ScriptMergerCreator");
-    }
     else if (matchCreator == HighwayMatchCreator::className())
-    {
       fixedMergerCreators.append(HighwayMergerCreator::className());
-    }
     else if (matchCreator == NetworkMatchCreator::className())
-    {
       fixedMergerCreators.append(NetworkMergerCreator::className());
-    }
     else if (matchCreator == PoiPolygonMatchCreator::className())
-    {
       fixedMergerCreators.append(PoiPolygonMergerCreator::className());
-    }
   }
   mergerCreators = fixedMergerCreators;
 
@@ -134,8 +121,7 @@ void OptionsValidator::fixMisc()
   LOG_VART(ConfigOptions().getMergerCreators());
 
   // fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
-  QString highwaySublineMatcher =
-    ConfigOptions().getHighwaySublineMatcher().remove(MetadataTags::HootNamespacePrefix());
+  QString highwaySublineMatcher = ConfigOptions().getHighwaySublineMatcher().remove(MetadataTags::HootNamespacePrefix());
   if (matchCreators.contains(NetworkMatchCreator::className()) &&
       highwaySublineMatcher != FrechetSublineMatcher::className() &&
       highwaySublineMatcher != MaximalSublineMatcher::className())
@@ -146,8 +132,7 @@ void OptionsValidator::fixMisc()
            highwaySublineMatcher != FrechetSublineMatcher::className() &&
            highwaySublineMatcher != MaximalNearestSublineMatcher::className())
   {
-    conf().set(
-      ConfigOptions::getHighwaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
   }
   LOG_VART(ConfigOptions().getHighwaySublineMatcher());
 
@@ -157,14 +142,12 @@ void OptionsValidator::fixMisc()
   if (matchCreators.contains(NetworkMatchCreator::className()) &&
       conflateMatchHighwayClassifier != HighwayExpertClassifier::className())
   {
-    conf().set(
-      ConfigOptions::getConflateMatchHighwayClassifierKey(), HighwayExpertClassifier::className());
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), HighwayExpertClassifier::className());
   }
   else if (matchCreators.contains(HighwayMatchCreator::className()) &&
            conflateMatchHighwayClassifier != HighwayRfClassifier::className())
   {
-    conf().set(
-      ConfigOptions::getConflateMatchHighwayClassifierKey(), HighwayRfClassifier::className());
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), HighwayRfClassifier::className());
   }
   LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
 }
@@ -192,13 +175,11 @@ void OptionsValidator::fixGenericMatcherOrdering()
     QStringList fixedMergerCreators = mergerCreators;
     LOG_VART(fixedMatchCreators);
     LOG_VART(fixedMergerCreators);
-    for (int i = 0; i < matchCreators.size(); i++)
+    for (const auto& matchCreator : qAsConst(matchCreators))
     {
-      const QString matchCreator = matchCreators.at(i);
       LOG_VART(matchCreator);
       if (_isGenericMatcher(matchCreator))
       {
-        LOG_VART(i);
         const int fixedCreatorIndex = fixedMatchCreators.indexOf(matchCreator);
         LOG_VART(fixedCreatorIndex);
         fixedMatchCreators.move(fixedCreatorIndex, fixedMatchCreators.size() - 1);
@@ -219,8 +200,7 @@ void OptionsValidator::fixGenericMatcherOrdering()
   const QString relationScript = "Relation.js";
   if (StringUtils::containsSubstring(matchCreators, relationScript))
   {
-    const int relationScriptIndex =
-      StringUtils::indexOfSubstring(matchCreators, relationScript);
+    const int relationScriptIndex = StringUtils::indexOfSubstring(matchCreators, relationScript);
     LOG_VART(relationScriptIndex);
     if (relationScriptIndex < (matchCreators.size() - 1))
     {
@@ -244,11 +224,8 @@ void OptionsValidator::validateMatchers()
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
-  if (matchCreators.isEmpty() || mergerCreators.isEmpty())
-  {
-    // This gets fixed in fixMisc, if needed.
+  if (matchCreators.isEmpty() || mergerCreators.isEmpty())  // This gets fixed in fixMisc, if needed.
     throw IllegalArgumentException("Empty matcher or merger list specified.");
-  }
   else if (matchCreators.size() != mergerCreators.size())
   {
     // This gets fixed in fixMisc, if needed.

@@ -67,8 +67,8 @@ public:
    * were registered.
    */
   void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> &matches,
-    const std::shared_ptr<geos::geom::Geometry>& bounds,
-    std::shared_ptr<const MatchThreshold> threshold = std::shared_ptr<MatchThreshold>()) const;
+                     const std::shared_ptr<geos::geom::Geometry>& bounds,
+                     std::shared_ptr<const MatchThreshold> threshold = std::shared_ptr<MatchThreshold>()) const;
 
   /**
    * @brief Returns a description of all available match creators.
