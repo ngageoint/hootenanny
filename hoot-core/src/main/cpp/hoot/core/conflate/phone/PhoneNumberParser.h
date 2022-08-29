@@ -29,8 +29,8 @@
 #define PHONE_NUMBER_PARSER_H
 
 // Hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {

@@ -36,21 +36,20 @@ const QRegExp EdgeMatch::_portionReplaceRegEx = QRegExp("_portion: \\d+\\.\\d+")
 // certainly alleviate this.
 bool operator==(const ConstEdgeMatchPtr& em1, const ConstEdgeMatchPtr& em2)
 {
-  bool result = em1.get() == em2.get() ||
-    (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
-  return result;
+  return em1.get() == em2.get() ||
+        (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
 }
 
-EdgeMatch::EdgeMatch() :
-_edges1(std::make_shared<EdgeString>()),
-_edges2(std::make_shared<EdgeString>())
+EdgeMatch::EdgeMatch()
+  : _edges1(std::make_shared<EdgeString>()),
+    _edges2(std::make_shared<EdgeString>())
 {
   _resetHash();
 }
 
-EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2) :
-  _edges1(es1->clone()),
-  _edges2(es2->clone())
+EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2)
+  : _edges1(es1->clone()),
+    _edges2(es2->clone())
 {
   _resetHash();
 }
@@ -83,24 +82,14 @@ bool EdgeMatch::contains(ConstNetworkVertexPtr v) const
 int EdgeMatch::countPartialMatches() const
 {
   int count = 0;
-
   if (getString1()->isFromOnVertex() == false)
-  {
     count++;
-  }
   if (getString1()->isToOnVertex() == false)
-  {
     count++;
-  }
   if (getString2()->isFromOnVertex() == false)
-  {
     count++;
-  }
   if (getString2()->isToOnVertex() == false)
-  {
     count++;
-  }
-
   return count;
 }
 
@@ -130,15 +119,15 @@ QString EdgeMatch::getUid() const
 
 QString EdgeMatch::toString() const
 {
-  return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());
+  return QString("s1: %1 s2: %2").arg(_edges1->toString(), _edges2->toString());
 }
 
 QString EdgeMatch::getSimilarityString() const
 {
   return
     QString("s1: %1 s2: %2")
-      .arg(getString1()->toString().replace(_portionReplaceRegEx, ""))
-      .arg(getString2()->toString().replace(_portionReplaceRegEx, ""));
+      .arg(getString1()->toString().replace(_portionReplaceRegEx, ""),
+           getString2()->toString().replace(_portionReplaceRegEx, ""));
 }
 
 QString EdgeMatch::getFirstReversedSimilarityString() const
@@ -147,10 +136,9 @@ QString EdgeMatch::getFirstReversedSimilarityString() const
   const QString edgeStr2 = edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
 
   edgeMatch->reverse();
-  const QString edgeStr1Reversed =
-    edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+  const QString edgeStr1Reversed = edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
 
-  return QString("s1r: %1 s2: %2").arg(edgeStr1Reversed).arg(edgeStr2);
+  return QString("s1r: %1 s2: %2").arg(edgeStr1Reversed, edgeStr2);
 }
 
 QString EdgeMatch::getSecondReversedSimilarityString() const
@@ -159,10 +147,9 @@ QString EdgeMatch::getSecondReversedSimilarityString() const
   const QString edgeStr1 = edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
 
   edgeMatch->reverse();
-  const QString edgeStr2Reversed =
-    edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
+  const QString edgeStr2Reversed = edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
 
-  return QString("s1: %1 s2r: %2").arg(edgeStr1).arg(edgeStr2Reversed);
+  return QString("s1: %1 s2r: %2").arg(edgeStr1, edgeStr2Reversed);
 }
 
 }

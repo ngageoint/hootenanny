@@ -88,8 +88,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
     searchRadiusStr = "within a feature dependent search radius";
   else
   {
-    searchRadiusStr =
-      "within a feature dependent search radius plus an additional distance of ";
+    searchRadiusStr = "within a feature dependent search radius plus an additional distance of ";
     if (additionalDistance < 1000)
       searchRadiusStr += QString::number(additionalDistance, 'g', 3) + " meters";
     else
@@ -304,16 +303,16 @@ MatchMap PoiPolygonMatchCreator::_getOverlappingMatches(const QMultiMap<ElementI
   MatchMap overlappingMatches;
 
   const QList<ElementId> ids = matchesById.keys();
-  for (QList<ElementId>::const_iterator idItr = ids.begin(); idItr != ids.end(); ++idItr)
+  for (const auto& eid : qAsConst(ids))
   {
     //LOG_VART(*idItr);
-    const QList<ConstMatchPtr> matches = matchesById.values(*idItr);
+    const QList<ConstMatchPtr> matches = matchesById.values(eid);
     //LOG_VART(matches.size());
     if (matches.size() > 1)
     {
       //LOG_TRACE("Found overlapping matches: " << matches);
       LOG_TRACE("Found overlapping matches of size: " << matches.size());
-      overlappingMatches[*idItr] = matches;
+      overlappingMatches[eid] = matches;
     }
   }
 
@@ -321,8 +320,8 @@ MatchMap PoiPolygonMatchCreator::_getOverlappingMatches(const QMultiMap<ElementI
 }
 
 std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(const MatchMap& overlappingMatches,
-  const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-  const QString& matchTypeStr) const
+                                                                               const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
+                                                                               const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Filtering out non-closest " << matchTypeStr << " matches out of " <<
@@ -338,7 +337,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(c
     ConstMatchPtr closestMatch;
     double smallestDistance = DBL_MAX;
     QList<ConstMatchPtr> matchesWithSharedId = matchesItr.value();
-    for (const auto& overlappingMatch : matchesWithSharedId)
+    for (const auto& overlappingMatch : qAsConst(matchesWithSharedId))
     {
       LOG_VART(overlappingMatch->getName());
       LOG_VART(overlappingMatch);
@@ -359,10 +358,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(c
         if (comparisonElementId.getType() == ElementType::Node)
           pointCount++;
         if (pointCount != 1)
-        {
-          throw IllegalArgumentException(
-            "POI/Polygon match does not contain exactly one POI: " + overlappingMatch->toString());
-        }
+          throw IllegalArgumentException("POI/Polygon match does not contain exactly one POI: " + overlappingMatch->toString());
 
         int polyCount = 0;
         if (sharedElementId.getType() != ElementType::Node)
@@ -370,11 +366,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(c
         if (comparisonElementId.getType() != ElementType::Node)
           polyCount++;
         if (polyCount != 1)
-        {
-          throw IllegalArgumentException(
-            "POI/Polygon match does not contain exactly one Polygon: " +
-            overlappingMatch->toString());
-        }
+          throw IllegalArgumentException("POI/Polygon match does not contain exactly one Polygon: " + overlappingMatch->toString());
 
         ConstElementPtr comparisonElement = map->getElement(comparisonElementId);
 
@@ -408,7 +400,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(c
     if (closestMatch)
     {
       LOG_TRACE("Keeping closest match: " << closestMatch << "...");
-      for (const auto& match : matchesWithSharedId)
+      for (const auto& match : qAsConst(matchesWithSharedId))
       {
         if (match != closestMatch)
           matchesToRemove.append(match);
@@ -444,8 +436,7 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(std::vector<
   const QMultiMap<ElementId, ConstMatchPtr> matchesById = _indexMatchesById(matches, matchTypeStr);
 
   // find matches sharing the same element ID
-  const QMap<ElementId, QList<ConstMatchPtr>> overlappingMatches =
-    _getOverlappingMatches(matchesById, matchTypeStr);
+  const QMap<ElementId, QList<ConstMatchPtr>> overlappingMatches = _getOverlappingMatches(matchesById, matchTypeStr);
 
   // for each overlapping match, find the match in the group with the closest distance between
   // features and throw out the rest

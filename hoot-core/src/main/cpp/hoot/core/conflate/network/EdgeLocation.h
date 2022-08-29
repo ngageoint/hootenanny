@@ -120,7 +120,7 @@ inline bool operator>=(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr
 inline uint qHash(const ConstEdgeLocationPtr& el)
 {
   uint result = ::qHash(Tgs::cantorPairing(qHash(el->getEdge()),
-    ::qHash((quint64)__gnu_cxx::fastHashDouble()(el->getPortion()))));
+                ::qHash((quint64)__gnu_cxx::fastHashDouble()(el->getPortion()))));
   return result;
 }
 

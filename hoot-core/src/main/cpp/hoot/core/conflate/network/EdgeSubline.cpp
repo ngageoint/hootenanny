@@ -33,28 +33,20 @@ namespace hoot
 
 bool operator==(const ConstEdgeSublinePtr& es1, const ConstEdgeSublinePtr& es2)
 {
-  bool result = false;
-  if (es1.get() == es2.get())
-  {
-    result = true;
-  }
-  else if (es1->getStart() == es2->getStart() && es1->getEnd() == es2->getEnd())
-  {
-    result = true;
-  }
-  return result;
+  return (es1.get() == es2.get()) ||
+         (es1->getStart() == es2->getStart() && es1->getEnd() == es2->getEnd());
 }
 
-EdgeSubline::EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocationPtr& end) :
-  _start(start),
-  _end(end)
+EdgeSubline::EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocationPtr& end)
+  : _start(start),
+    _end(end)
 {
   assert(_start->getEdge() == _end->getEdge());
 }
 
-EdgeSubline::EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end) :
-  _start(std::make_shared<const EdgeLocation>(e, start)),
-  _end(std::make_shared<const EdgeLocation>(e, end))
+EdgeSubline::EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end)
+  : _start(std::make_shared<const EdgeLocation>(e, start)),
+    _end(std::make_shared<const EdgeLocation>(e, end))
 {
 }
 
@@ -71,29 +63,14 @@ EdgeSublinePtr EdgeSubline::clone() const
 
 bool EdgeSubline::contains(const ConstNetworkVertexPtr& v) const
 {
-  bool result = false;
-
-  if (getStart()->isExtreme() && getStart()->getVertex() == v)
-  {
-    result = true;
-  }
-  else if (getEnd()->isExtreme() && getEnd()->getVertex() == v)
-  {
-    result = true;
-  }
-
-  return result;
+  return (getStart()->isExtreme() && getStart()->getVertex() == v) ||
+         (getEnd()->isExtreme() && getEnd()->getVertex() == v);
 }
 
 bool EdgeSubline::contains(const ConstEdgeSublinePtr& es) const
 {
-  bool result = false;
-  if (es->getEdge() == getEdge() && getFormer() <= es->getFormer() &&
-      getLatter() >= es->getLatter())
-  {
-    result = true;
-  }
-  return result;
+  return (es->getEdge() == getEdge() && getFormer() <= es->getFormer() &&
+          getLatter() >= es->getLatter());
 }
 
 bool EdgeSubline::contains(const ConstEdgeLocationPtr& el) const
@@ -111,19 +88,12 @@ bool EdgeSubline::intersects(const ConstEdgeSublinePtr& other) const
   bool result;
 
   if (other->getEdge() != getEdge())
-  {
     result = false;
-  }
   else if (intersects(other->getFormer()) || intersects(other->getLatter()) ||
-    other->intersects(getFormer()) || other->intersects(getLatter()))
-  {
+           other->intersects(getFormer()) || other->intersects(getLatter()))
     result = true;
-  }
   else
-  {
     result = false;
-  }
-
   return result;
 }
 
@@ -137,9 +107,7 @@ bool EdgeSubline::isSameDirection(const ConstEdgeSublinePtr& other) const
 {
   // We need this & other to be on the same edge
   if (other->getEdge() != getEdge())
-  {
     throw IllegalArgumentException("Expected 'other' to belong to the same edge as this.");
-  }
 
   // TRICKY: We could probably debate whether to use getFormer & getLatter, or if we should check
   // isBackwards, or something. But this seems to produce the desired result.
@@ -149,13 +117,7 @@ bool EdgeSubline::isSameDirection(const ConstEdgeSublinePtr& other) const
   bool otherRight = other->getStart() < other->getEnd();
   bool otherLeft  = other->getStart() > other->getEnd();
 
-  bool result = false;
-  if ((thisRight && otherRight) || (thisLeft && otherLeft))
-  {
-    result = true;
-  }
-
-  return result;
+  return ((thisRight && otherRight) || (thisLeft && otherLeft));
 }
 
 bool EdgeSubline::overlaps(const ConstEdgeSublinePtr& other) const
@@ -185,7 +147,7 @@ bool EdgeSubline::overlaps(const ConstEdgeSublinePtr& other) const
 
 QString EdgeSubline::toString() const
 {
-  return QString("{ _start: %1, _end: %2 }").arg(hoot::toString(_start)).arg(hoot::toString(_end));
+  return QString("{ _start: %1, _end: %2 }").arg(hoot::toString(_start), hoot::toString(_end));
 }
 
 std::shared_ptr<EdgeSubline> EdgeSubline::unionSubline(const ConstEdgeSublinePtr& other) const
@@ -205,12 +167,9 @@ std::shared_ptr<EdgeSubline> EdgeSubline::unionSubline(const ConstEdgeSublinePtr
   }
 
   EdgeSublinePtr result =
-    std::make_shared<EdgeSubline>(
-      std::min(getFormer(), other->getFormer()), std::max(getLatter(), other->getLatter()));
+    std::make_shared<EdgeSubline>(std::min(getFormer(), other->getFormer()), std::max(getLatter(), other->getLatter()));
   if (isBackwards())
-  {
     result->reverse();
-  }
   return result;
 }
 

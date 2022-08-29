@@ -26,13 +26,13 @@
  */
 #include "OsmNetworkExtractor.h"
 
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/elements/Relation.h>
-
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/ReversedRoadCriterion.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+
 
 using namespace std;
 
@@ -63,7 +63,7 @@ private:
 };
 
 void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
-  QList<ConstElementPtr> members, bool directed) const
+                                   QList<ConstElementPtr> members, bool directed) const
 {
   ConstNetworkVertexPtr v1 = _network->getSingleVertex(from->getElementId());
   if (!v1.get())
@@ -118,9 +118,7 @@ bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r, long& lastNod
     {
       ConstWayPtr w = _map->getWay(eid);
       if (i > 0 && w->getFirstNodeId() != lastNode)
-      {
         return false;
-      }
       lastNode = w->getLastNodeId();
     }
     else if (eid.getType() == ElementType::Relation)
@@ -181,9 +179,7 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e) const
 {
   bool result = true;
   if (e->getElementType() == ElementType::Node)
-  {
     result = false;
-  }
   else if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
@@ -204,9 +200,9 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e) const
     else
     {
       const vector<RelationData::Entry>& members = r->getMembers();
-      for (size_t i = 0; i < members.size(); ++i)
+      for (const auto& member : members)
       {
-        if (members[i].getElementId().getType() != ElementType::Way)
+        if (member.getElementId().getType() != ElementType::Way)
         {
           if (logWarnCount < Log::getWarnMessageLimit())
           {
@@ -222,7 +218,6 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e) const
       }
     }
   }
-
   return result;
 }
 
@@ -245,11 +240,8 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       members.append(e);
       ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
-      if (_isContiguous(r))
-      {
-        //  Getting the first and last nodes of a relation is non-trivial
+      if (_isContiguous(r)) //  Getting the first and last nodes of a relation is non-trivial
         _getFirstLastNodes(r, from, to);
-      }
       else
       {
         // If this is a bad multi-linestring, then don't include it in the network.
@@ -276,11 +268,8 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
     {
       directed = true;
       if (ReversedRoadCriterion().isSatisfied(e))
-      {
         swap(from, to);
-      }
     }
-
     _addEdge(_map->getNode(from), _map->getNode(to), members, directed);
   }
 }

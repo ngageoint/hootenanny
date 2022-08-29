@@ -27,18 +27,18 @@
 #include "PoiPolygonReviewReducer.h"
 
 // hoot
-#include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/MultiUseCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
+#include <hoot/core/criterion/MultiUseCriterion.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // geos
 #include <geos/util/TopologyException.h>

@@ -35,11 +35,11 @@
 namespace hoot
 {
 
-PoiPolygonInfoCache::PoiPolygonInfoCache(const ConstOsmMapPtr& map) :
-ConflateInfoCache(map),
-_isTypeCache(CACHE_SIZE_DEFAULT),
-_hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
-_reviewDistanceCache(CACHE_SIZE_DEFAULT)
+PoiPolygonInfoCache::PoiPolygonInfoCache(const ConstOsmMapPtr& map)
+  : ConflateInfoCache(map),
+    _isTypeCache(CACHE_SIZE_DEFAULT),
+    _hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
+    _reviewDistanceCache(CACHE_SIZE_DEFAULT)
 {
 }
 
@@ -55,9 +55,7 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
     _reviewDistanceCache.setMaxCost(maxCacheSize);
   }
   else
-  {
     _cachingEnabled = false;
-  }
 }
 
 void PoiPolygonInfoCache::clear()
@@ -76,9 +74,7 @@ void PoiPolygonInfoCache::clear()
 bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygonSchemaType& type)
 {
   if (!element)
-  {
     throw IllegalArgumentException("The input element is null.");
-  }
 
   QString key;
 
@@ -148,9 +144,7 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
 bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
 {
   if (!element)
-  {
     throw IllegalArgumentException("The input element is null.");
-  }
 
   if (_cachingEnabled)
   {
@@ -176,9 +170,7 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
 bool PoiPolygonInfoCache::hasRelatedType(const ConstElementPtr& element) const
 {
   if (!element)
-  {
     throw IllegalArgumentException("The input element is null.");
-  }
 
   const bool hasRelatedType = PoiPolygonSchema::hasRelatedType(element);
   return hasRelatedType;
@@ -204,9 +196,7 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
   const Tags& tags = element->getTags();
   //these distances could be moved to a config
   if (tags.get("leisure") == "park")
-  {
     distance = 25.0;
-  }
   else if ((tags.get("station").toLower() == "light_rail" ||
             tags.get("railway").toLower() == "platform") &&
            (polyTags.get("subway").toLower() == "yes" ||
@@ -215,9 +205,7 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
     distance = 150.0;
   }
   else
-  {
     distance = reviewDistanceThresholdDefault;
-  }
 
   if (_cachingEnabled)
   {

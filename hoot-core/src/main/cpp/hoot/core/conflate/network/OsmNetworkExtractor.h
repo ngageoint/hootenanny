@@ -28,8 +28,8 @@
 #define OSMNETWORKEXTRACTOR_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -70,8 +70,7 @@ private:
   ConstOsmMapPtr _map;
   OsmNetworkPtr _network;
 
-  void _addEdge(ConstElementPtr from, ConstElementPtr to, QList<ConstElementPtr> members,
-    bool directed) const;
+  void _addEdge(ConstElementPtr from, ConstElementPtr to, QList<ConstElementPtr> members, bool directed) const;
 
   /**
    * This is a very strict definition of contiguous. We're looking to make sure that the first

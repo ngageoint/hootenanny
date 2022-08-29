@@ -43,9 +43,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, PoiPolygonInvalidReviewNodeRemover)
 
-PoiPolygonInvalidReviewNodeRemover::PoiPolygonInvalidReviewNodeRemover() :
-_numRelationsRemoved(0),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+PoiPolygonInvalidReviewNodeRemover::PoiPolygonInvalidReviewNodeRemover()
+  : _numRelationsRemoved(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -59,7 +59,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
 
   // make a copy here, since we may be removing some relations later
   const RelationMap relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     ConstRelationPtr relation = it->second;
     LOG_VART(relation->getType());
@@ -72,9 +72,8 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
          relation->getTags()[MetadataTags::HootReviewType()] == "POI"))
     {
       const std::vector<RelationData::Entry>& members = relation->getMembers();
-      for (size_t i = 0; i < members.size(); i++)
+      for (const auto& member : members)
       {
-        const RelationData::Entry member = members[i];
         LOG_VART(member.getElementId());
         if (member.getElementId().getType() == ElementType::Node)
         {
@@ -114,7 +113,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
   }
 
   _numProcessed = 0;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     const Relation* relation = it->second.get();
     LOG_VART(relation->getElementId());
@@ -145,7 +144,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
   // Make a copy here, since we may be removing some of these nodes.
   const NodeMap nodes = map->getNodes();
   _numProcessed = 0;
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Node* n = it->second.get();
     LOG_VART(n->getElementId());

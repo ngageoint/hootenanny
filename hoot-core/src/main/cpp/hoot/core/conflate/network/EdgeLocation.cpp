@@ -39,28 +39,21 @@ const double EdgeLocation::SLOPPY_EPSILON = WayLocation::SLOPPY_EPSILON;
 ConstNetworkVertexPtr EdgeLocation::getVertex(double epsilon) const
 {
   if (isExtreme(epsilon) == false)
-  {
-    throw IllegalArgumentException("Attempted to get a vertex on an edge location that isn't on "
-     "a vertex.");
-  }
+    throw IllegalArgumentException("Attempted to get a vertex on an edge location that isn't on a vertex.");
 
   if (_portion < 0.5)
-  {
     return _e->getFrom();
-  }
   else
-  {
     return _e->getTo();
-  }
 }
+
 
 Meters EdgeLocation::getOffset(const ConstElementProviderPtr& provider) const
 {
   return _portion * _e->calculateLength(provider);
 }
 
-std::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& provider,
-  Meters distance) const
+std::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& provider, Meters distance) const
 {
   Meters l = _e->calculateLength(provider);
 
