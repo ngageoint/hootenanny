@@ -28,10 +28,10 @@
 #define POIPOLYGONREVIEWREDUCER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -61,11 +61,10 @@ class PoiPolygonReviewReducer : public Configurable
 
 public:
 
-  PoiPolygonReviewReducer(
-    const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds, double distance,
-    double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
-    double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
-    double addressScore, bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache);
+  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds, double distance,
+                          double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
+                          double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
+                          double addressScore, bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache);
   ~PoiPolygonReviewReducer() override = default;
 
   void setConfiguration(const Settings& conf) override;
