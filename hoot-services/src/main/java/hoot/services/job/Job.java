@@ -49,10 +49,6 @@ public class Job {
         this.tags = tags;
     }
 
-    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
-        this(jobId, userId, commands, jobType, mapId, null);
-    }
-
     public Job(String jobId, Long userId, Command[] commands, JobType jobType, Map<String, Object> tags) {
         this(jobId, userId, commands, jobType, null, tags);
     }
