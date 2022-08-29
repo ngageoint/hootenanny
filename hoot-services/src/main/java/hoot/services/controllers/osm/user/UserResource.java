@@ -162,6 +162,13 @@ public class UserResource {
         return userResponse(request, user);
     }
 
+    @GET
+    @Path("/session")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getSession(@Context HttpServletRequest request) {
+        return Response.ok(request.getSession().getId()).build();
+    }
+
     /**
      * Service method endpoint for retrieving OSM user information. This rest
      * end point retrieves user based on user email. If it does not exist then it creates first.
@@ -390,7 +397,7 @@ public class UserResource {
 
             String getName = (String) json.get("name");
             String getFavorites = json.get("members").toString();
-	        tags.put(getName, getFavorites);
+            tags.put(getName, getFavorites);
 
             createQuery().update(users)
                 .where(users.id.eq(userId))
