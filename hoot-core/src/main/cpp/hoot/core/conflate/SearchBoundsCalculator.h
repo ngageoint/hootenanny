@@ -46,8 +46,7 @@ public:
 
   SearchBoundsCalculator(const std::shared_ptr<SearchRadiusProvider>& radiusProvider);
 
-  geos::geom::Envelope calculateSearchBounds(
-    const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
+  geos::geom::Envelope calculateSearchBounds(const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
 
 private:
 

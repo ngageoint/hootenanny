@@ -60,10 +60,9 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(
-    const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
-    const QString& reviewType, double score = -1,
-    const std::vector<QString>& choices = std::vector<QString>()) const;
+  void mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
+            const QString& reviewType, double score = -1,
+            const std::vector<QString>& choices = std::vector<QString>()) const;
   /**
    * Marks a set of elements as needing review and sets them to reference each other. If the score
    * is negative then the score is omitted.
@@ -72,16 +71,14 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(
-    const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
-    const QString& reviewType, double score = -1,
-    const std::vector<QString>& choices = std::vector<QString>()) const;
+  void mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
+            const QString& reviewType, double score = -1,
+            const std::vector<QString>& choices = std::vector<QString>()) const;
   /**
    * Marks a single element as needing review.
    */
-  void mark(
-    const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
-    double score = -1, const std::vector<QString>& choices = std::vector<QString>()) const;
+  void mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
+            double score = -1, const std::vector<QString>& choices = std::vector<QString>()) const;
   /**
    * Marks a vector of elements as needing review and sets them to reference each other. If the score
    * is negative then the score is omitted.
@@ -90,10 +87,9 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(
-    const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
-    const QString& reviewType, double score = -1,
-    const std::vector<QString>& choices = std::vector<QString>()) const;
+  void mark(const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
+            const QString& reviewType, double score = -1,
+            const std::vector<QString>& choices = std::vector<QString>()) const;
 
   static QString getBadGeometryType() { return _complexGeometryType; }
 
@@ -149,7 +145,7 @@ private:
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.
    */
   static int64_t _calculateHilbertValue(const ConstOsmMapPtr& map, ConstElementPtr e1,
-    ConstElementPtr e2 = ConstElementPtr());
+                                        ConstElementPtr e2 = ConstElementPtr());
 
   static std::set<ElementId> _getReviewRelations(const ConstOsmMapPtr& map, ElementId eid);
 

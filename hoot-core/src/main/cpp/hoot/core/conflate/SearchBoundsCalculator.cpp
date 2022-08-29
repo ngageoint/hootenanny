@@ -39,8 +39,7 @@ SearchBoundsCalculator::SearchBoundsCalculator(const SearchRadiusProviderPtr& ra
   _radiusProvider = radiusProvider;
 }
 
-Envelope SearchBoundsCalculator::calculateSearchBounds(
-  const ConstOsmMapPtr& map, const ConstNodePtr& n) const
+Envelope SearchBoundsCalculator::calculateSearchBounds(const ConstOsmMapPtr& map, const ConstNodePtr& n) const
 {
   LOG_INFO("Calculating search radius...");
 

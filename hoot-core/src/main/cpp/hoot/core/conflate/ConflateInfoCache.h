@@ -31,11 +31,11 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/conflate/address/AddressParser.h>
 
 // Tgs
 #include <tgs/LruCache.h>
@@ -111,8 +111,7 @@ public:
    * @return true if containingElement contains the containedElement geographicaly; false otherwise
    * or if the containment could not be calculated
    */
-  bool elementContains(
-    const ConstElementPtr& containingElement, const ConstElementPtr& containedElement);
+  bool elementContains(const ConstElementPtr& containingElement, const ConstElementPtr& containedElement);
 
   /**
    * @brief elementsIntersect determines if an element intersects another element; backed by a
@@ -175,8 +174,7 @@ public:
    * @return true if the conflate matchers are configured with at least one matcher that
    * can conflate the input element; false otherwise
    */
-  bool elementCanBeConflatedByActiveMatcher(
-    const ConstElementPtr& element, const QString& caller = QString());
+  bool elementCanBeConflatedByActiveMatcher(const ConstElementPtr& element, const QString& caller = QString());
   /**
    * @brief elementCriterionInUseByActiveMatcher determines if a ConflatableCriterion is in use by
    * any actively configured conflate matcher.

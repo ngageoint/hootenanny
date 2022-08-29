@@ -28,13 +28,13 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
@@ -54,32 +54,23 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
   // associated with the matchers.
 
   const QStringList modifiedPreConflateOps =
-    _filterOutUnneededOps(
-      matcherCrits, ConfigOptions().getConflatePreOps(), removedOps);
+    _filterOutUnneededOps(matcherCrits, ConfigOptions().getConflatePreOps(), removedOps);
   if (modifiedPreConflateOps.size() != ConfigOptions().getConflatePreOps().size())
-  {
     conf().set(ConfigOptions::getConflatePreOpsKey(), modifiedPreConflateOps);
-  }
 
   const QStringList modifiedPostConflateOps =
-    _filterOutUnneededOps(
-      matcherCrits, ConfigOptions().getConflatePostOps(), removedOps);
+    _filterOutUnneededOps(matcherCrits, ConfigOptions().getConflatePostOps(), removedOps);
   if (modifiedPostConflateOps.size() != ConfigOptions().getConflatePostOps().size())
-  {
     conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
-  }
 
   const QString mapCleanerName = MapCleaner::className();
   if (modifiedPreConflateOps.contains(mapCleanerName) ||
       modifiedPostConflateOps.contains(mapCleanerName))
   {
     const QStringList modifiedCleaningOps =
-      _filterOutUnneededOps(
-        matcherCrits, ConfigOptions().getMapCleanerTransforms(), removedOps);
+      _filterOutUnneededOps(matcherCrits, ConfigOptions().getMapCleanerTransforms(), removedOps);
     if (modifiedCleaningOps.size() != ConfigOptions().getMapCleanerTransforms().size())
-    {
       conf().set(ConfigOptions::getMapCleanerTransformsKey(), modifiedCleaningOps);
-    }
   }
 
   if (!removedOps.empty())
@@ -92,16 +83,15 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
   }
 }
 
-QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
-  const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps)
+QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(const QSet<QString>& geometryTypeCrits, const QStringList& ops,
+                                                                QSet<QString>& removedOps)
 {
   LOG_TRACE("ops before: " << ops);
 
   QStringList modifiedOps;
 
-  for (int i = 0; i < ops.size(); i++)
+  for (const auto& opName : qAsConst(ops))
   {
-    const QString opName = ops.at(i);
     LOG_VART(opName);
 
     // MapCleaner's ops are configured with map.cleaner.transforms, so don't exclude it here.
@@ -115,17 +105,9 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
     // FilteredByGeometryTypeCriteria, but we'll check anyway to be safe.
     std::shared_ptr<FilteredByGeometryTypeCriteria> op;
     if (Factory::getInstance().hasBase<OsmMapOperation>(opName))
-    {
-      op =
-        std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
-          Factory::getInstance().constructObject<OsmMapOperation>(opName));
-    }
+      op = std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(Factory::getInstance().constructObject<OsmMapOperation>(opName));
     else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
-    {
-      op =
-        std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
-          Factory::getInstance().constructObject<ElementVisitor>(opName));
-    }
+      op = std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(Factory::getInstance().constructObject<ElementVisitor>(opName));
 
     if (op)
     {
@@ -144,10 +126,8 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
       // If any of the op's crits match with those in the matchers' list, we'll use it. Otherwise,
       // we disable it.
       bool opAdded = false;
-      for (int j = 0; j < opCrits.size(); j++)
+      for (const auto& opCrit : qAsConst(opCrits))
       {
-        const QString opCrit = opCrits.at(j);
-
         // Even though we conflate relations, they RelationCriterion doesn't inherit from
         // ConflatableElementCriterion. So, we let it pass through here in order for stats to be
         // calculated correctly, but it doesn't have any effect on conflate op removal.
@@ -157,11 +137,8 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
             "FilteredByGeometryTypeCriteria::getCriteria implementation in " + opName +
             " returned a non-GeometryTypeCriterion class: " + opCrit);
         }
-
         if (!_geometryTypeClassNameCache.contains(opCrit))
-        {
           _geometryTypeClassNameCache.insert(opCrit);
-        }
 
         if (geometryTypeCrits.contains(opCrit))
         {
@@ -171,16 +148,11 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
         }
       }
       if (!opAdded)
-      {
         removedOps.insert(opName);
-      }
     }
     else
-    {
       removedOps.insert(opName);
-    }
   }
-
   LOG_TRACE("ops after: " << modifiedOps);
   LOG_VART(removedOps);
   return modifiedOps;
@@ -189,30 +161,20 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
 QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(const bool addParents)
 {
   QSet<QString> matcherCrits;
-
   // Get all of the matchers from our current config.
-  std::vector<std::shared_ptr<MatchCreator>> matchCreators =
-      MatchFactory::getInstance().getCreators();
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
-       it != matchCreators.end(); ++it)
+  std::vector<std::shared_ptr<MatchCreator>> matchCreators = MatchFactory::getInstance().getCreators();
+  for (const auto& matchCreator : matchCreators)
   {
-    std::shared_ptr<MatchCreator> matchCreator = *it;
-    std::shared_ptr<FilteredByGeometryTypeCriteria> critFilter =
-      std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(matchCreator);
+    std::shared_ptr<FilteredByGeometryTypeCriteria> critFilter = std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(matchCreator);
     const QStringList crits = critFilter->getCriteria();
 
     // Technically not sure we'd have to error out here, but it will be good to know if any
     // matchers weren't configured with crits to keep conflate bugs from sneaking in over time.
     if (crits.empty())
-    {
-      throw HootException(
-        "Match creator: " + matchCreator->getName() +
-        " does not specify any associated feature type criteria.");
-    }
+      throw HootException("Match creator: " + matchCreator->getName() + " does not specify any associated feature type criteria.");
 
-    for (int i = 0; i < crits.size(); i++)
+    for (const auto& critStr : qAsConst(crits))
     {
-      const QString critStr = crits.at(i);
       LOG_VART(critStr);
 
       // doublecheck this is a valid crit; See related note in _filterOutUnneededOps.
@@ -222,11 +184,8 @@ QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(con
           "FilteredByGeometryTypeCriteria::getCriteria implementation in " +
           matchCreator->getName() + " returned a non-GeometryTypeCriterion class: " + critStr);
       }
-
       if (!_geometryTypeClassNameCache.contains(critStr))
-      {
         _geometryTypeClassNameCache.insert(critStr);
-      }
 
       // add the crit
       matcherCrits.insert(critStr);
@@ -236,35 +195,25 @@ QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(con
         // Also, add any generic geometry crits the crit inherits from.
 
         const QStringList pointCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-            GeometryTypeCriterion::GeometryType::Point);
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(GeometryTypeCriterion::GeometryType::Point);
         LOG_VART(pointCrits);
         if (pointCrits.contains(critStr))
-        {
           matcherCrits.insert(PointCriterion::className());
-        }
 
         const QStringList lineCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-            GeometryTypeCriterion::GeometryType::Line);
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(GeometryTypeCriterion::GeometryType::Line);
         LOG_VART(lineCrits);
         if (lineCrits.contains(critStr))
-        {
           matcherCrits.insert(LinearCriterion::className());
-        }
 
         const QStringList polyCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-            GeometryTypeCriterion::GeometryType::Polygon);
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(GeometryTypeCriterion::GeometryType::Polygon);
         LOG_VART(polyCrits);
         if (polyCrits.contains(critStr))
-        {
           matcherCrits.insert(PolygonCriterion::className());
-        }
       }
     }
   }
-
   LOG_VART(matcherCrits);
   return matcherCrits;
 }
@@ -272,9 +221,7 @@ QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(con
 bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
 {
   if (_geometryTypeClassNameCache.contains(className))
-  {
     return true;
-  }
 
   // can't use hasBase with GeometryTypeCriterion here, since GeometryTypeCriterion are registered
   // as ElementCriterion
@@ -282,8 +229,7 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   if (Factory::getInstance().hasBase<ElementCriterion>(className))
   {
     crit =
-      std::dynamic_pointer_cast<GeometryTypeCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(className));
+      std::dynamic_pointer_cast<GeometryTypeCriterion>(Factory::getInstance().constructObject<ElementCriterion>(className));
     return crit.get();
   }
 

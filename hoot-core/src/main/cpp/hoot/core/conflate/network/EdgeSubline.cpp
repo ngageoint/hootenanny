@@ -26,8 +26,6 @@
  */
 #include "EdgeSubline.h"
 
-
-
 namespace hoot
 {
 

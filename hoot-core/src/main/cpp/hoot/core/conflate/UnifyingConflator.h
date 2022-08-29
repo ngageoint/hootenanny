@@ -76,4 +76,3 @@ public:
 }
 
 #endif // UNIFYINGCONFLATOR_H
-

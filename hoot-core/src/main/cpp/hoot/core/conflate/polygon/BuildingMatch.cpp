@@ -164,18 +164,15 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstEleme
     LOG_VART(refBuilding->getId());
     LOG_VART(secondaryBuilding->getId());
 
-    const QString secondaryBuildingDateStrVal =
-      secondaryBuilding->getTags().get(_dateTagKey).trimmed();
-    const QString refBuildingDateStrVal =
-      refBuilding->getTags().get(_dateTagKey).trimmed();
+    const QString secondaryBuildingDateStrVal = secondaryBuilding->getTags().get(_dateTagKey).trimmed();
+    const QString refBuildingDateStrVal = refBuilding->getTags().get(_dateTagKey).trimmed();
     if (secondaryBuildingDateStrVal.isEmpty() || refBuildingDateStrVal.isEmpty())
     {
       LOG_TRACE("Date tags not found on both buildings.");
       return description;
     }
 
-    const QDateTime secondaryBuildingDate =
-      QDateTime::fromString(secondaryBuildingDateStrVal, _dateFormat);
+    const QDateTime secondaryBuildingDate = QDateTime::fromString(secondaryBuildingDateStrVal, _dateFormat);
     LOG_VART(secondaryBuildingDate);
     if (!secondaryBuildingDate.isValid())
     {
@@ -183,8 +180,7 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstEleme
         QString("Invalid configured building date format: %1.  Expected the form: %2")
           .arg(secondaryBuildingDate.toString(), _dateFormat));
     }
-    const QDateTime refBuildingDate =
-      QDateTime::fromString(refBuildingDateStrVal, _dateFormat);
+    const QDateTime refBuildingDate = QDateTime::fromString(refBuildingDateStrVal, _dateFormat);
     LOG_VART(refBuildingDate);
     if (!refBuildingDate.isValid())
     {
@@ -251,8 +247,7 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
 
     //  Finally, check edge distance.
     const double edge =
-      EdgeDistanceExtractor(
-        std::make_shared<QuantileAggregator>(0.4)).extract(*map, element1, element2);
+      EdgeDistanceExtractor(std::make_shared<QuantileAggregator>(0.4)).extract(*map, element1, element2);
     LOG_VART(edge);
     if (edge >= 90)
       description.append("Building edges very close to each other.");

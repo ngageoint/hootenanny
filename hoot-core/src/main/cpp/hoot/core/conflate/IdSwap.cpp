@@ -24,9 +24,8 @@
  *
  * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
+
 #include "IdSwap.h"
-
-
 
 namespace hoot
 {

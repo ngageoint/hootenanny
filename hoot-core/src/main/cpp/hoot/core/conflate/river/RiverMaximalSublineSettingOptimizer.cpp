@@ -28,29 +28,28 @@
 #include "RiverMaximalSublineSettingOptimizer.h"
 
 // Hoot
-#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
-RiverMaximalSublineSettingOptimizer::RiverMaximalSublineSettingOptimizer() :
-// These values were determined empirically against a relatively small number of datasets and may
-// require additional tweaking.
-_minRiverLengthScalingValue(150000.0),
-_maxRiverLengthScalingValue(50000000.0),
-_minIterationsScalingValue(50),
-_maxIterationsScalingValue(4500)
+RiverMaximalSublineSettingOptimizer::RiverMaximalSublineSettingOptimizer()
+    // These values were determined empirically against a relatively small number of datasets and may
+    // require additional tweaking.
+  : _minRiverLengthScalingValue(150000.0),
+    _maxRiverLengthScalingValue(50000000.0),
+    _minIterationsScalingValue(50),
+    _maxIterationsScalingValue(4500)
 {
 }
 
-int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
-  const ConstOsmMapPtr& map) const
+int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(const ConstOsmMapPtr& map) const
 {
   LOG_STATUS("Determining optimal maximal subline configuration for river conflation...");
 
@@ -69,7 +68,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   // Get the total length of all the rivers in the dataset.
   // TODO: add a filter option to LengthOfWaysVisitor and use it here instead of this
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& way = it->second;
     if (way)
@@ -100,9 +99,8 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   LOG_VARD(totalRiverLength);
 
   if (riverCount == 0 || totalRiverLength == 0.0)
-  {
     return -1;
-  }
+
   LOG_VARD(totalRiverLength / (double)riverCount);
 
   // Determine the maximum maximal subline recursions allowed when finding best matches. This is

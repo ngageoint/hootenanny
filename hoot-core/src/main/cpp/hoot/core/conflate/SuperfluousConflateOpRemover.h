@@ -84,8 +84,7 @@ private:
    * @param removedOps a list of the operators removed
    * @return the input operator list with unnecessary ops filtered out
    */
-  static QStringList _filterOutUnneededOps(
-    const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
+  static QStringList _filterOutUnneededOps(const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
 
   static bool _isGeometryTypeCrit(const QString& className);
 };
