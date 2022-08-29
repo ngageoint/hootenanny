@@ -198,7 +198,7 @@ public class ExportResource {
                     }
                 }
 
-                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(rootfolder));
+                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(rootfolder), params.getOutputType());
                 workflow.add(zipCommand);
                 params.setInputType("folder");
 
@@ -214,7 +214,7 @@ public class ExportResource {
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
                 }
 
-                Command zipCommand = getZIPCommand(workDir, outputName); // zip maps into single folder...
+                Command zipCommand = getZIPCommand(workDir, outputName, params.getOutputType()); // zip maps into single folder...
                 workflow.add(zipCommand);
 
             //generates density tiles and alpha shape and clips the first with the second
@@ -246,13 +246,14 @@ public class ExportResource {
                 MapResource.getMapForUser(user, params.getInput(), false, false);
 
                 workflow.add(getCommand(user, jobId, params, debugLevel));
-                Command zipCommand = getZIPCommand(workDir, outputName);
+                Command zipCommand = getZIPCommand(workDir, outputName, params.getOutputType());
                 workflow.add(zipCommand);
             }
 
             //Record output name in job status tag so output can be retrieved from job panel
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("outputname", outputName);
+            jobStatusTags.put("outputtype", params.getOutputType());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT, jobStatusTags));
         }
@@ -343,7 +344,8 @@ public class ExportResource {
             } else {
                 responseBuilder = Response.ok(exportFile);
             }
-            responseBuilder.header("Content-Disposition", "attachment; filename="+ outFileName + ".zip");
+            responseBuilder.header("Content-Disposition", "attachment; filename=\""+ outFileName + ".zip\"");
+            responseBuilder.header("Content-Type", "application/zip");
             response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
@@ -483,8 +485,17 @@ public class ExportResource {
         return getZIPCommand(workDir, workDir, outputName);
     }
 
+    private Command getZIPCommand(File workDir, String outputName, String outputType) {
+        return getZIPCommand(workDir, workDir, outputName, outputType);
+    }
+
     private Command getZIPCommand(File workDir, File inputDir, String outputName) {
         File targetZIP = new File(workDir, outputName + ".zip");
+        return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
+    }
+
+    private Command getZIPCommand(File workDir, File inputDir, String outputName, String outputType) {
+        File targetZIP = new File(workDir, outputName + "." + outputType + ".zip");
         return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
     }
 
@@ -493,7 +504,11 @@ public class ExportResource {
         if (fileExt.equalsIgnoreCase("osc"))
             path = CHANGESETS_FOLDER;
 
-        File exportFile = new File(new File(path, jobId), outputName + "." + fileExt);
+        String outputExt = outputName.substring(outputName.lastIndexOf(".") + 1);
+        if (!fileExt.equalsIgnoreCase(outputExt))
+            outputName += "." + fileExt;
+
+        File exportFile = new File(new File(path, jobId), outputName);
 
         if (!exportFile.exists()) {
             String errorMsg = "Error exporting data.  Missing output file.";
