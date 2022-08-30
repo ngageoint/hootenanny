@@ -35,8 +35,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, LinearWayNodeCriterion)
 
-LinearWayNodeCriterion::LinearWayNodeCriterion() :
-WayNodeCriterion()
+LinearWayNodeCriterion::LinearWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<LinearCriterion>();
 }

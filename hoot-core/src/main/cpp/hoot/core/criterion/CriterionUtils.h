@@ -29,8 +29,8 @@
 #define CRITERION_UTILS_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -57,9 +57,8 @@ public:
    * @param isStreamable determines if the built criterion supports streaming I/O
    * @return an element criterion
    */
-  static ElementCriterionPtr constructCriterion(
-    const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
-    bool& isStreamable);
+  static ElementCriterionPtr constructCriterion(const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
+                                                bool& isStreamable);
   /**
    * Constructs a criterion that is the combination of multiple criterion
    *
@@ -70,8 +69,7 @@ public:
    * @return an element criterion
    * @todo may be able to use this in MultipleCriterionConsumerVisitor to simplify it
    */
-  static ElementCriterionPtr constructCriterion(
-    const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
+  static ElementCriterionPtr constructCriterion(const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
   /**
    * @brief combineCriterion combines multiple criterion into a single criteria
    * @param criteria individual criterion to combine
@@ -80,8 +78,7 @@ public:
    * @param negate if true, the entire criteria is negated by adding a logical NOT to it
    * @return an element criterion
    */
-  static ElementCriterionPtr combineCriterion(
-    const QList<ElementCriterionPtr>& criteria, const bool chain = true, const bool negate = false);
+  static ElementCriterionPtr combineCriterion(const QList<ElementCriterionPtr>& criteria, const bool chain = true, const bool negate = false);
 
   /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
@@ -94,25 +91,17 @@ public:
    * @return true if the map meets the specified criteria; false otherwise
    */
   template<class C>
-  static bool containsSatisfyingElements(
-     const ConstOsmMapPtr& map, int minCount = 1, bool exactCount = false)
+  static bool containsSatisfyingElements(const ConstOsmMapPtr& map, int minCount = 1, bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value)
-    {
-      throw IllegalArgumentException(
-        "Non-criterion passed to CriterionUtils::containsSatisfyingElements");
-    }
+      throw IllegalArgumentException("Non-criterion passed to CriterionUtils::containsSatisfyingElements");
 
     ElementCriterionPtr crit = std::make_shared<C>();
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)
-    {
       mapConsumer->setOsmMap(map.get());
-    }
 
-    const long count =
-      (long)FilteredVisitor::getStat(crit, std::make_shared<ElementCountVisitor>(), map);
+    const long count = (long)FilteredVisitor::getStat(crit, std::make_shared<ElementCountVisitor>(), map);
     LOG_VART(count);
     return exactCount ? (count == minCount) : (count >= minCount);
   }
@@ -127,32 +116,22 @@ public:
    * @return true if the elements meet the specified criterion the specified number of times
    */
   template<class C>
-  static bool containsSatisfyingElements(
-    const std::vector<ConstElementPtr>& elements, const ConstOsmMapPtr& map, int minCount = 1,
-    bool exactCount = false)
+  static bool containsSatisfyingElements(const std::vector<ConstElementPtr>& elements, const ConstOsmMapPtr& map, int minCount = 1,
+                                         bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value)
-    {
-      throw IllegalArgumentException(
-        "Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
-    }
+      throw IllegalArgumentException("Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
 
     ElementCriterionPtr crit = std::make_shared<C>();
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)
-    {
       mapConsumer->setOsmMap(map.get());
-    }
 
     int count = 0;
-    for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
-         ++itr)
+    for (const auto& element : elements)
     {
-      if (crit->isSatisfied(*itr))
-      {
+      if (crit->isSatisfied(element))
         count++;
-      }
     }
 
     LOG_VART(count);
@@ -169,18 +148,12 @@ public:
   static std::set<ElementId> getSatisfyingElementIds(const ConstOsmMapPtr& map)
   {
     if (!std::is_base_of<ElementCriterion,C>::value)
-    {
-      throw IllegalArgumentException(
-        "Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
-    }
+      throw IllegalArgumentException("Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
 
     ElementCriterionPtr crit = std::make_shared<C>();
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)
-    {
       mapConsumer->setOsmMap(map.get());
-    }
 
     std::shared_ptr<UniqueElementIdVisitor> idVis = std::make_shared<UniqueElementIdVisitor>();
     FilteredVisitor filteredVis(crit, idVis);

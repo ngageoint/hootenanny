@@ -28,17 +28,17 @@
 #include "PolygonCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/PolygonWayNodeCriterion.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
-PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map) :
-_map(map)
+PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
   // Set this to allow any on poly child member to satisfy the crit.
   _relationCrit.setAllowMixedChildren(true);
@@ -56,9 +56,7 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
 
   if (e->getElementType() == ElementType::Node)
-  {
     return false;
-  }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
@@ -74,14 +72,12 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     // We use to define poly relations using a static list of relation types. Now, we look at the
     // member contents instead. If any member is a poly, then we call it a poly relation.
-    const bool result = _relationCrit.isSatisfied(e);
-    if (result)
+    if (_relationCrit.isSatisfied(e))
     {
       LOG_TRACE("Relation has polygon members; crit satisified.");
+      return true;
     }
-    return result;
   }
-
   return false;
 }
 
@@ -91,4 +87,3 @@ QStringList PolygonCriterion::getChildCriteria() const
 }
 
 }
-

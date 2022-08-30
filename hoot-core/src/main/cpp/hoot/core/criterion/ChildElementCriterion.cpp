@@ -27,9 +27,9 @@
 #include "ChildElementCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/criterion/RelationMemberCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

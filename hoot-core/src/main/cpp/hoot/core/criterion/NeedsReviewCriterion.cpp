@@ -36,8 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
-NeedsReviewCriterion::NeedsReviewCriterion(const ConstOsmMapPtr& map) :
-_map(map)
+NeedsReviewCriterion::NeedsReviewCriterion(const ConstOsmMapPtr& map)
+  : _map(map)
 {
 }
 

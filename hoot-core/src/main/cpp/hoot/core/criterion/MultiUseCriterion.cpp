@@ -37,8 +37,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, MultiUseCriterion)
 
 bool MultiUseCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return
-    OsmSchema::getInstance().getCategories(e->getTags()).intersects(OsmSchemaCategory::multiUse());
+  return OsmSchema::getInstance().getCategories(e->getTags()).intersects(OsmSchemaCategory::multiUse());
 }
 
 }

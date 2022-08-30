@@ -39,23 +39,12 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-
-  bool result = false;
-
   // we consider all point features with a name, or part of the explicitly defined point category
   // to be POIs.
   if (e->getElementType() == ElementType::Node)
-  {
-    result =
-      OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
-      !e->getTags().getNames().empty();
-  }
-
-  if (result)
-  {
-    LOG_TRACE("crit satisfied");
-  }
-  return result;
+    return OsmSchema::getInstance().hasCategory(e->getTags(), "poi") || !e->getTags().getNames().empty();
+  else
+    return false;
 }
 
 }

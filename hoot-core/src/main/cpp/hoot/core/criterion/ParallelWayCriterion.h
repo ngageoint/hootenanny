@@ -32,9 +32,9 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -50,10 +50,8 @@ public:
   ~ParallelWayCriterion() override;
 
   Radians calculateDifference(const ConstWayPtr& w) const;
-  static bool isParallel(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
-  static bool notParallel(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override

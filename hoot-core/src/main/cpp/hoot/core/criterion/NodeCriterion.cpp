@@ -33,8 +33,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NodeCriterion)
 
-NodeCriterion::NodeCriterion() :
-ElementTypeCriterion(ElementType::Node)
+NodeCriterion::NodeCriterion()
+  : ElementTypeCriterion(ElementType::Node)
 {
 }
 

@@ -27,22 +27,22 @@
 #include "BridgeWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BridgeWayNodeCriterion)
 
-BridgeWayNodeCriterion::BridgeWayNodeCriterion() :
-WayNodeCriterion()
+BridgeWayNodeCriterion::BridgeWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<BridgeCriterion>();
 }
 
-BridgeWayNodeCriterion::BridgeWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+BridgeWayNodeCriterion::BridgeWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<BridgeCriterion>();
 }

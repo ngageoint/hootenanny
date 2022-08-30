@@ -27,22 +27,22 @@
 #include "OrCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
-OrCriterion::OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
-ChainCriterion(child1, child2)
+OrCriterion::OrCriterion(ElementCriterion* child1, ElementCriterion* child2)
+  : ChainCriterion(child1, child2)
 {
 }
 
-OrCriterion::OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2) :
-ChainCriterion(child1, child2)
+OrCriterion::OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2)
+  : ChainCriterion(child1, child2)
 {
 }
 
@@ -53,14 +53,11 @@ ElementCriterionPtr OrCriterion::clone()
 
 bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  for (size_t i = 0; i < _criteria.size(); i++)
+  for (const auto& crit : _criteria)
   {
-    ElementCriterionPtr crit = _criteria[i];
     if (crit->isSatisfied(e))
     {
-      LOG_TRACE(
-        "One OR'd criterion satisfied in: " << toString() << ". Filter: " << crit <<
-        " satisfied for: " << e);
+      LOG_TRACE("One OR'd criterion satisfied in: " << toString() << ". Filter: " << crit << " satisfied for: " << e);
       return true;
     }
   }

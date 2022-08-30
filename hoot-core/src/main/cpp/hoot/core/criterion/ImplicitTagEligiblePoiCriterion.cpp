@@ -43,9 +43,7 @@ bool ImplicitTagEligiblePoiCriterion::isSatisfied(const ConstElementPtr& e) cons
   LOG_VART(e->getElementType());
   LOG_VART(e->getTags().getNames().size());
   LOG_VART(hasEligibleKvp(e->getTags()));
-  return
-    e->getElementType() == ElementType::Node && !e->getTags().getNames().empty() &&
-    hasEligibleKvp(e->getTags());
+  return e->getElementType() == ElementType::Node && !e->getTags().getNames().empty() && hasEligibleKvp(e->getTags());
 }
 
 QStringList ImplicitTagEligiblePoiCriterion::getEligibleKvps(const Tags& tags) const
@@ -53,17 +51,14 @@ QStringList ImplicitTagEligiblePoiCriterion::getEligibleKvps(const Tags& tags) c
   LOG_TRACE("Retrieving POI kvps...");
 
   QStringList poiKvps;
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
     const QString kvp = tagItr.key() % "=" % tagItr.value();
     LOG_VART(kvp);
     LOG_VART(OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()));
     //if the tag is not generic and has anything to do with pois, we'll use it
-    if (kvp != QLatin1String("poi=yes") &&
-        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
-    {
+    if (kvp != QLatin1String("poi=yes") && OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
       poiKvps.append(kvp);
-    }
   }
   return poiKvps;
 }
@@ -72,14 +67,13 @@ bool ImplicitTagEligiblePoiCriterion::hasEligibleKvp(const Tags& tags) const
 {
   LOG_TRACE("Retrieving POI kvps...");
 
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
     const QString kvp = tagItr.key() % "=" % tagItr.value();
     LOG_VART(kvp);
     LOG_VART(OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()));
     //if the tag is not generic and has anything to do with pois, we'll use it
-    if (kvp != QLatin1String("poi=yes") &&
-        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
+    if (kvp != QLatin1String("poi=yes") && OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
     {
       LOG_TRACE("Eligible KVP: " << kvp);
       return true;

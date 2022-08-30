@@ -29,9 +29,9 @@
 #define DISTANCENODECRITERION_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {

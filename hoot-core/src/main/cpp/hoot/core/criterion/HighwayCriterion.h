@@ -28,9 +28,9 @@
 #define HIGHWAYCRITERION_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

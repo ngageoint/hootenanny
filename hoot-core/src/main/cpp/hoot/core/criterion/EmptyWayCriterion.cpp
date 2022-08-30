@@ -34,8 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, EmptyWayCriterion)
 
-EmptyWayCriterion::EmptyWayCriterion() :
-WayNodeCountCriterion(0, NumericComparisonType::EqualTo)
+EmptyWayCriterion::EmptyWayCriterion()
+  : WayNodeCountCriterion(0, NumericComparisonType::EqualTo)
 {
 }
 

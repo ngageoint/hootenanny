@@ -27,9 +27,9 @@
 #include "MultiLineStringCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -39,10 +39,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, MultiLineStringCriterion)
 bool MultiLineStringCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() == ElementType::Relation)
-  {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    return r->getType() == MetadataTags::RelationMultilineString();
-  }
+    return std::dynamic_pointer_cast<const Relation>(e)->getType() == MetadataTags::RelationMultilineString();
   return false;
 }
 

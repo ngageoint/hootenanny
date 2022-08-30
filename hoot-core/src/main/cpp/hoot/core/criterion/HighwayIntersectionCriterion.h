@@ -28,9 +28,9 @@
 #define HIGHWAYINTERSECTIONCRITERION_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

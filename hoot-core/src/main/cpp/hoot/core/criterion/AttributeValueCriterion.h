@@ -44,12 +44,10 @@ public:
   static QString className() { return "AttributeValueCriterion"; }
 
   AttributeValueCriterion();
-  AttributeValueCriterion(
-    const ElementAttributeType& attributeType, const QString& comparisonVal,
-    const TextComparisonType& comparisonType);
-  AttributeValueCriterion(
-    const ElementAttributeType& attributeType, const double comparisonVal,
-    const NumericComparisonType& comparisonType);
+  AttributeValueCriterion(const ElementAttributeType& attributeType, const QString& comparisonVal,
+                          const TextComparisonType& comparisonType);
+  AttributeValueCriterion(const ElementAttributeType& attributeType, const double comparisonVal,
+                          const NumericComparisonType& comparisonType);
   ~AttributeValueCriterion() override = default;
 
   /**

@@ -35,8 +35,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PointCriterion)
 
-PointCriterion::PointCriterion(ConstOsmMapPtr map) :
-_map(map)
+PointCriterion::PointCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
   _wayNodeCrit.setOsmMap(map.get());
 }
@@ -55,4 +55,3 @@ bool PointCriterion::isSatisfied(const ConstElementPtr& e) const
 }
 
 }
-

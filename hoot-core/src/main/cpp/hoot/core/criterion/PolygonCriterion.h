@@ -30,8 +30,8 @@
 
 // Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {

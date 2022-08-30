@@ -50,11 +50,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
-ParallelWayCriterion::ParallelWayCriterion(
-  const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel) :
-  _map(map),
-  _baseWay(baseWay),
-  _isParallel(isParallel)
+ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel)
+  : _map(map),
+    _baseWay(baseWay),
+    _isParallel(isParallel)
 {
   // Default threshold
   _threshold = 10.0;
@@ -63,9 +62,7 @@ ParallelWayCriterion::ParallelWayCriterion(
   std::vector<Coordinate> coords;
   Meters spacing = std::min(ElementGeometryUtils::calculateLength(baseWay, map) / 5, 4.0);
   if (spacing <= 0.0)
-  {
     spacing = 4.0;
-  }
   WayDiscretizer wd1(_map, baseWay);
   wd1.discretize(spacing, coords);
 
@@ -82,10 +79,8 @@ ParallelWayCriterion::ParallelWayCriterion(
 
 ParallelWayCriterion::~ParallelWayCriterion()
 {
-  for (size_t i = 0; i < _points.size(); i++)
-  {
-    delete _points[i];
-  }
+  for (auto point : _points)
+    delete point;
 }
 
 Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
@@ -103,9 +98,7 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
     if (d > 0.5)
     {
       Radians shortestHeading = WayHeading::calculateHeading(seq->getAt(0), seq->getAt(1));
-
       Radians delta = WayHeading::deltaMagnitude(_headings[i], shortestHeading);
-
       deltaSum += delta;
       count++;
     }
@@ -117,15 +110,9 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   }
 
   if (count == 0)
-  {
     return 0.0;
-  }
   else
-  {
-    Radians mean = deltaSum / (double)count;
-
-    return fabs(mean - toRadians(90));
-  }
+    return fabs(deltaSum / (double)count - toRadians(90));
 }
 
 bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -133,11 +120,8 @@ bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    double difference = calculateDifference(way);
-
     // If the mean "normals" are within 10 degrees of perpendicular.
-    bool parallel = difference < toRadians(_threshold);
-    return parallel == _isParallel;
+    return (calculateDifference(way) < toRadians(_threshold)) == _isParallel;
   }
   return false;
 }

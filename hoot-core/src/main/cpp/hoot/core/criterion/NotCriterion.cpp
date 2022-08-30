@@ -35,13 +35,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NotCriterion)
 
-NotCriterion::NotCriterion(ElementCriterion* c) :
-_child(c)
+NotCriterion::NotCriterion(ElementCriterion* c)
+  : _child(c)
 {
 }
 
-NotCriterion::NotCriterion(ElementCriterionPtr c) :
-_child(c)
+NotCriterion::NotCriterion(ElementCriterionPtr c)
+  : _child(c)
 {
 }
 
@@ -53,8 +53,7 @@ void NotCriterion::addCriterion(const ElementCriterionPtr& e)
 
 void NotCriterion::setConfiguration(const Settings& conf)
 {
-  std::shared_ptr<Configurable> configurable =
-    std::dynamic_pointer_cast<Configurable>(_child);
+  std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(_child);
   if (configurable)
   {
     configurable->setConfiguration(conf);
@@ -64,12 +63,9 @@ void NotCriterion::setConfiguration(const Settings& conf)
 
 void NotCriterion::setOsmMap(const OsmMap* map)
 {
-  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-    std::dynamic_pointer_cast<ConstOsmMapConsumer>(_child);
+  std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(_child);
   if (mapConsumer)
-  {
     mapConsumer->setOsmMap(map);
-  }
 }
 
 /**

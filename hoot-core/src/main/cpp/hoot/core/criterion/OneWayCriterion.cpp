@@ -27,8 +27,8 @@
 #include "OneWayCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -38,17 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!e)
-  {
     return false;
-  }
 
   if (e->getElementType() == ElementType::Way)
   {
     const QString oneway = e->getTags()["oneway"].toLower();
     if (e->getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
-    {
       return true;
-    }
   }
   return false;
 }

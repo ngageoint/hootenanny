@@ -27,8 +27,8 @@
 #include "BuildingWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -37,14 +37,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingWayNodeCriterion)
 
-BuildingWayNodeCriterion::BuildingWayNodeCriterion() :
-WayNodeCriterion()
+BuildingWayNodeCriterion::BuildingWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<BuildingCriterion>();
 }
 
-BuildingWayNodeCriterion::BuildingWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+BuildingWayNodeCriterion::BuildingWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<BuildingCriterion>(_map);
 }
@@ -53,9 +53,7 @@ void BuildingWayNodeCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
   if (_parentCriterion)
-  {
     _parentCriterion = std::make_shared<BuildingCriterion>(_map);
-  }
 }
 
 }

@@ -29,8 +29,8 @@
 #define HAS_PHONE_NUMBER_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

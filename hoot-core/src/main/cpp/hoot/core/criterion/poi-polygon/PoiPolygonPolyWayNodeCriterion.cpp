@@ -35,14 +35,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyWayNodeCriterion)
 
-PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion() :
-WayNodeCriterion()
+PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<PoiPolygonPolyCriterion>();
 }
 
-PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<PoiPolygonPolyCriterion>();
 }
