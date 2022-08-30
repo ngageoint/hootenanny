@@ -504,6 +504,7 @@ public class ExportResource {
         if (fileExt.equalsIgnoreCase("osc"))
             path = CHANGESETS_FOLDER;
 
+        //check if the outputName already ends in the requested outputExt
         String outputExt = outputName.substring(outputName.lastIndexOf(".") + 1);
         if (!fileExt.equalsIgnoreCase(outputExt))
             outputName += "." + fileExt;
