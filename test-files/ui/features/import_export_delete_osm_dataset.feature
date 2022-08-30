@@ -33,7 +33,7 @@ Feature: Import Export Delete OSM Dataset
         When I select the "OpenStreetMap (OSM)" option in the "File Geodatabase" combobox
         And I press "big.loud" span with text "Export"
         And I wait 30 seconds
-        Then the download file "dcpoi_clip_Cucumber.zip" should exist
+        Then the download file "dcpoi_clip_Cucumber.osm.zip" should exist
 
     Scenario: Export PBF Dataset
         When I click the "ToyTestCombined_Cucumber" Dataset
@@ -44,7 +44,7 @@ Feature: Import Export Delete OSM Dataset
         When I select the "OpenStreetMap (PBF)" option in the "File Geodatabase" combobox
         And I press "big.loud" span with text "Export"
         And I wait 30 seconds
-        Then the download file "dcpoi_clip_Cucumber.zip" should exist
+        Then the download file "dcpoi_clip_Cucumber.pbf.zip" should exist
 
     Scenario: Create Folder
         # Clean up from previous failed tests
