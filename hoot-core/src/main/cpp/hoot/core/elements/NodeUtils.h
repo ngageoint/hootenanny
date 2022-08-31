@@ -66,8 +66,8 @@ public:
     @param map the map owning the nodes with the given IDs
     @return a collection of nodes
     */
-  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(
-    const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
+  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
+                                                           const std::shared_ptr<const OsmMap>& map);
 
   /**
    * Retrieves a collection of nodes given a collection of node IDs
@@ -76,8 +76,8 @@ public:
    * @param map the map owning the nodes with the given IDs
    * @return a collection of nodes
    */
-  static std::vector<std::shared_ptr<const Node>> nodeIdsToNodes(
-    const std::vector<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
+  static std::vector<std::shared_ptr<const Node>> nodeIdsToNodes(const std::vector<long>& nodeIds,
+                                                                 const std::shared_ptr<const OsmMap>& map);
 
   /**
    * Determines if the coordinates from two collection of nodes match, given a configurable
@@ -123,8 +123,8 @@ public:
     @param map the map owning the nodes to be created
     @returns nodes
     */
-  static QList<std::shared_ptr<const Node>> coordsToNodes(
-    const QList<geos::geom::Coordinate>& coords, const std::shared_ptr<const OsmMap>& map);
+  static QList<std::shared_ptr<const Node>> coordsToNodes(const QList<geos::geom::Coordinate>& coords,
+                                                          const std::shared_ptr<const OsmMap>& map);
 };
 
 }

@@ -34,8 +34,7 @@
 namespace hoot
 {
 
-int ParentMembershipRemover::removeMemberships(
-  const ElementId& elementId, const ConstOsmMapPtr& map)
+int ParentMembershipRemover::removeMemberships(const ElementId& elementId, const ConstOsmMapPtr& map)
 {
   LOG_TRACE("Removing parent memberships for " << elementId << "...");
 
@@ -43,10 +42,8 @@ int ParentMembershipRemover::removeMemberships(
 
   std::vector<RelationPtr> relations = RelationMemberUtils::getContainingRelations(elementId, map);
   LOG_VART(relations.size());
-  for (std::vector<RelationPtr>::const_iterator itr = relations.begin(); itr != relations.end();
-       ++itr)
+  for (const auto& relation : relations)
   {
-    RelationPtr relation = *itr;
     LOG_VART(relation->contains(elementId));
     if (relation->contains(elementId))
     {
@@ -55,14 +52,12 @@ int ParentMembershipRemover::removeMemberships(
       numRemoved++;
     }
   }
-
   if (elementId.getType() == ElementType::Node)
   {
     std::vector<WayPtr> ways = WayUtils::getContainingWays(elementId.getId(), map);
     LOG_VART(ways.size());
-    for (std::vector<WayPtr>::const_iterator itr = ways.begin(); itr != ways.end(); ++itr)
+    for (const auto& way : ways)
     {
-      WayPtr way = *itr;
       LOG_VART(way->containsNodeId(elementId.getId()));
       if (way->containsNodeId(elementId.getId()))
       {
@@ -72,7 +67,6 @@ int ParentMembershipRemover::removeMemberships(
       }
     }
   }
-
   return numRemoved;
 }
 

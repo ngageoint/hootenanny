@@ -52,8 +52,7 @@ public:
    * @param map map owning the relation
    * @return a detailed relation string
    */
-  static QString getRelationDetailString(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationDetailString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
    * Constructs a detailed string for an element suitable for trace logging
@@ -71,8 +70,7 @@ public:
    * @param map map owning the elements
    * @return a string describing the elements
    */
-  static QString getElementsDetailString(
-    const std::vector<ElementPtr>& elements, const ConstOsmMapPtr& map);
+  static QString getElementsDetailString(const std::vector<ElementPtr>& elements, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is contained by any way or relation in a map

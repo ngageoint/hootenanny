@@ -28,8 +28,8 @@
 #define ELEMENT_COMPARISON_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
@@ -70,12 +70,9 @@ protected:
 inline uint qHash(const ElementComparison& elementComp)
 {
   // reuse the hash if its already there
-  const QString hashFromTag =
-    elementComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
+  const QString hashFromTag = elementComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
   if (!hashFromTag.isEmpty())
-  {
     return qHash(hashFromTag);
-  }
   return qHash(elementComp.toHashString());
 }
 

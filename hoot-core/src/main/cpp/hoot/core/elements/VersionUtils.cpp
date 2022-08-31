@@ -29,9 +29,9 @@
 
 // Hoot
 #include <hoot/core/criterion/AttributeValueCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 namespace hoot

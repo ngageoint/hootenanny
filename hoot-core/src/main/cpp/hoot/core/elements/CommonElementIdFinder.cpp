@@ -28,41 +28,35 @@
 #include "CommonElementIdFinder.h"
 
 // Hoot
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 namespace hoot
 {
 
-QSet<ElementId> CommonElementIdFinder::findCommonElementIds(
-  const OsmMapPtr& map1, const OsmMapPtr& map2)
+QSet<ElementId> CommonElementIdFinder::findCommonElementIds(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
   QSet<ElementId> idsInCommon;
   while (map1->hasNext())
   {
     ElementPtr element = map1->next();
     if (element && map2->containsElement(element->getElementId()))
-    {
       idsInCommon.insert(element->getElementId());
-    }
   }
   return idsInCommon;
 }
 
-QSet<ElementId> CommonElementIdFinder::findElementIdsInFirstAndNotSecond(
-  const OsmMapPtr& map1, const OsmMapPtr& map2)
+QSet<ElementId> CommonElementIdFinder::findElementIdsInFirstAndNotSecond(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
   return _findElementIdDiff(map1, map2, true);
 }
 
-QSet<ElementId> CommonElementIdFinder::findElementIdsInSecondAndNotFirst(
-  const OsmMapPtr& map1, const OsmMapPtr& map2)
+QSet<ElementId> CommonElementIdFinder::findElementIdsInSecondAndNotFirst(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
   return _findElementIdDiff(map1, map2, false);
 }
 
-QSet<ElementId> CommonElementIdFinder::_findElementIdDiff(
-  const OsmMapPtr& map1, const OsmMapPtr& map2, const bool keepIdsFromMap1)
+QSet<ElementId> CommonElementIdFinder::_findElementIdDiff(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool keepIdsFromMap1)
 {
   UniqueElementIdVisitor idVis1;
   map1->visitRo(idVis1);
@@ -73,13 +67,9 @@ QSet<ElementId> CommonElementIdFinder::_findElementIdDiff(
   QSet<ElementId> ids2 = CollectionUtils::stdSetToQSet(idVis2.getElementSet());
 
   if (keepIdsFromMap1)
-  {
     return ids2.subtract(ids1);
-  }
   else
-  {
     return ids1.subtract(ids2);
-  }
 }
 
 }

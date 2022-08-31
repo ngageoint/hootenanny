@@ -56,8 +56,7 @@ public:
    * @return Single geometry object that contains all geometries merged
    * (geos::geom::Geometry::union)
    */
-  GeometryPtr mergeGeometries(
-    std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope);
+  GeometryPtr mergeGeometries(std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope);
 
 private:
   /**

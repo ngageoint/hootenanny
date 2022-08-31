@@ -33,21 +33,16 @@
 namespace hoot
 {
 
-bool ConnectedRelationMemberFinder::haveConnectedWayMembers(
-  const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const
+bool ConnectedRelationMemberFinder::haveConnectedWayMembers(const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const
 {
   if (relation1 && relation2)
   {
     std::set<ElementId> relation1WayMembers = relation1->getMemberIds(ElementType::Way);
     std::set<ElementId> relation2WayMembers = relation2->getMemberIds(ElementType::Way);
-    for (std::set<ElementId>::const_iterator it = relation1WayMembers.begin();
-         it != relation1WayMembers.end(); ++it)
+    for (const auto& elementId1 : relation1WayMembers)
     {
-      const ElementId elementId1 = *it;
-      for (std::set<ElementId>::const_iterator it2 = relation2WayMembers.begin();
-           it2 != relation2WayMembers.end(); ++it2)
+      for (const auto& elementId2 : relation2WayMembers)
       {
-        const ElementId elementId2 = *it2;
         if (elementId1 != elementId2)
         {
           ConstWayPtr way1 = _map->getWay(elementId1);

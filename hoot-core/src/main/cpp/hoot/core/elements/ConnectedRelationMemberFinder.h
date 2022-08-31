@@ -29,8 +29,8 @@
 #define CONNECTED_RELATION_MEMBER_FINDER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -53,8 +53,7 @@ public:
    * @param relation2 second relation to examine
    * @return true if connected ways are found; false otherwise
    */
-  bool haveConnectedWayMembers(
-    const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
+  bool haveConnectedWayMembers(const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
 
   /**
    * @see ConstOsmMapConsumer

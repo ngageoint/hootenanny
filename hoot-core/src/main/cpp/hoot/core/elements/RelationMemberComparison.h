@@ -48,9 +48,8 @@ class RelationMemberComparison : public ElementComparison
 public:
 
   RelationMemberComparison() = default;
-  RelationMemberComparison(
-    ElementPtr element, const OsmMap& sourceMap, const QString& role,
-    const bool ignoreElementId = false);
+  RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role,
+                           const bool ignoreElementId = false);
   ~RelationMemberComparison() override = default;
 
   bool operator==(const RelationMemberComparison& memberComp) const;
@@ -66,12 +65,9 @@ private:
 
 inline uint qHash(const RelationMemberComparison& memberComp)
 {
-  const QString hashFromTag =
-    memberComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
+  const QString hashFromTag = memberComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
   if (!hashFromTag.isEmpty())
-  {
     return qHash(hashFromTag);
-  }
   return qHash(memberComp.toHashString());
 }
 

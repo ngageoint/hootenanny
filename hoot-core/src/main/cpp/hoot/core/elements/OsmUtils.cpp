@@ -40,8 +40,7 @@ namespace hoot
 QString OsmUtils::getRelationDetailString(const ConstRelationPtr& relation,
                                           const ConstOsmMapPtr& map)
 {
-  return
-    relation->toString() + RelationMemberUtils::getRelationMembersDetailString(relation, map);
+  return relation->toString() + RelationMemberUtils::getRelationMembersDetailString(relation, map);
 }
 
 QString OsmUtils::getElementDetailString(const ConstElementPtr& element, const ConstOsmMapPtr& map)
@@ -65,25 +64,15 @@ QString OsmUtils::getElementsDetailString(const std::vector<ElementPtr>& element
                                           const ConstOsmMapPtr& map)
 {
   QString str;
-  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
-  {
-    str += getElementDetailString(*it, map);
-  }
+  for (const auto& element : elements)
+    str += getElementDetailString(element, map);
   return str;
 }
 
 bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
 {
-  if (RelationMemberUtils::elementContainedByAnyRelation(elementId, map))
-  {
-    return true;
-  }
-  if (elementId.getType() == ElementType::Node &&
-      WayUtils::nodeContainedByAnyWay(elementId.getId(), map))
-  {
-    return true;
-  }
-  return false;
+  return (RelationMemberUtils::elementContainedByAnyRelation(elementId, map)) ||
+         (elementId.getType() == ElementType::Node && WayUtils::nodeContainedByAnyWay(elementId.getId(), map));
 }
 
 }

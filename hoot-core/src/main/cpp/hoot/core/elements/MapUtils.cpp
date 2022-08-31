@@ -28,23 +28,22 @@
 #include "MapUtils.h"
 
 // Hoot
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/visitors/RemoveUnknownVisitor.h>
-#include <hoot/core/visitors/RemoveTagsVisitor.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/visitors/RemoveUnknownVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 namespace hoot
 {
 
-OsmMapPtr MapUtils::getMapSubset(
-  const ConstOsmMapPtr& map, const ElementCriterionPtr& filter, const bool copyChildren)
+OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter, const bool copyChildren)
 {
   CopyMapSubsetOp mapCopier(map, filter);
   mapCopier.setCopyChildren(copyChildren);
@@ -57,9 +56,7 @@ bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
 {
   std::shared_ptr<PointCriterion> pointCrit = std::make_shared<PointCriterion>();
   pointCrit->setOsmMap(map.get());
-  return
-    (int)FilteredVisitor::getStat(
-      pointCrit, std::make_shared<ElementCountVisitor>(), map) == (int)map->getElementCount();
+  return (int)FilteredVisitor::getStat(pointCrit, std::make_shared<ElementCountVisitor>(), map) == (int)map->getElementCount();
 }
 
 void MapUtils::combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes)
@@ -82,15 +79,13 @@ void MapUtils::combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const b
   LOG_DEBUG("Combined map size: " << map1->size());
 }
 
-ElementPtr MapUtils::getFirstElementWithNote(
-  const OsmMapPtr& map, const QString& note, const ElementType& elementType)
+ElementPtr MapUtils::getFirstElementWithNote(const OsmMapPtr& map, const QString& note, const ElementType& elementType)
 {
   return getFirstElementWithTag(map, "note", note, elementType);
 }
 
-ElementPtr MapUtils::getFirstElementWithTag(
-  const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
-  const ElementType& elementType)
+ElementPtr MapUtils::getFirstElementWithTag(const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
+                                            const ElementType& elementType)
 {
   TagCriterion tc(tagKey, tagValue);
   UniqueElementIdVisitor v;
@@ -99,24 +94,17 @@ ElementPtr MapUtils::getFirstElementWithTag(
   const std::set<ElementId> elementIds = v.getElementSet();
 
   if (elementIds.empty())
-  {
     return ElementPtr();
-  }
 
   if (elementType == ElementType::Unknown)
-  {
     return map->getElement(*elementIds.begin());
-  }
   else
   {
-    for (std::set<ElementId>::const_iterator itr = elementIds.begin(); itr != elementIds.end();
-         ++itr)
+    for (const auto& eid : elementIds)
     {
-      ElementPtr element = map->getElement(*itr);
+      ElementPtr element = map->getElement(eid);
       if (element->getElementType() == elementType)
-      {
         return element;
-      }
     }
   }
   return ElementPtr();
@@ -131,13 +119,9 @@ ConstElementPtr MapUtils::getFirstElementWithStatus(const ConstOsmMapPtr& map, c
   const std::set<ElementId> elementIds = vis.getElementSet();
 
   if (elementIds.empty())
-  {
     return ElementPtr();
-  }
   else
-  {
     return map->getElement(*elementIds.begin());
-  }
 }
 
 int MapUtils::getNumReviews(const OsmMapPtr& map)

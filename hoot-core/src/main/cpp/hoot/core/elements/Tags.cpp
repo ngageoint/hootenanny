@@ -412,7 +412,7 @@ QStringList Tags::getNames(const bool includeAltName) const
   // make sure the _nameKeys field is populated.
   getNameKeys();
 
-  for (auto key : qAsConst(_nameKeys))
+  for (const auto& key : qAsConst(_nameKeys))
   {
     if (includeAltName || (!includeAltName && key.toLower() != "alt_name"))
       readValues(key, result);
@@ -445,8 +445,7 @@ const QStringList& Tags::getNameKeys()
   // Getting the name tags can be a bit expensive, so we'll just do it once.
   if (_nameKeys.empty())
   {
-    const vector<SchemaVertex>& tags =
-      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
+    const vector<SchemaVertex>& tags = OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
     for (const auto& vertex : tags)
       _nameKeys.append(vertex.getKey());
   }

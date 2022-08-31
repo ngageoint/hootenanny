@@ -61,8 +61,7 @@ public:
    * false they are assumed to point in opposite directions
    * @return
    */
-  static bool waysShareEndNode(
-    const ConstWayPtr& way1, const ConstWayPtr& way2, const bool sameDirection = true);
+  static bool waysShareEndNode(const ConstWayPtr& way1, const ConstWayPtr& way2, const bool sameDirection = true);
 
 };
 

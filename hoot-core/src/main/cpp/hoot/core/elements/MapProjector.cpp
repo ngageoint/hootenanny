@@ -113,8 +113,7 @@ MapProjector& MapProjector::getInstance()
   return instance;
 }
 
-bool MapProjector::_angleLessThan(
-  const MapProjector::PlanarTestResult& p1, const MapProjector::PlanarTestResult& p2)
+bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1, const MapProjector::PlanarTestResult& p2)
 {
   return p1.angleError < p2.angleError;
 }
@@ -355,9 +354,7 @@ OGRSpatialReferencePtr MapProjector::createSinusoidalProjection(const OGREnvelop
   OGRSpatialReferencePtr srs(new OGRSpatialReference());
   srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (srs->SetSinusoidal(centerLon, 0.0, 0.0) != OGRERR_NONE)
-  {
     throw HootException("Error creating sinusoidal projection.");
-  }
   return srs;
 }
 

@@ -34,29 +34,22 @@ int RelationMemberNodeCounter::numNodes(const ConstRelationPtr& relation) const
 {
   int count = 0;
   const std::vector<RelationData::Entry> members = relation->getMembers();
-  for (size_t i = 0; i < members.size(); i++)
+  for (const auto& member : members)
   {
-    const RelationData::Entry member = members[i];
     const ElementType type = member.getElementId().getType();
     if (type == ElementType::Node)
-    {
       count++;
-    }
     else if (type == ElementType::Way)
     {
       ConstWayPtr way = _map->getWay(member.getElementId().getId());
       if (way)
-      {
         count += way->getNodeCount();
-      }
     }
     else if (type == ElementType::Relation)
     {
       ConstRelationPtr r = _map->getRelation(member.getElementId().getId());
       if (r)
-      {
         count += numNodes(r);
-      }
     }
   }
   return count;

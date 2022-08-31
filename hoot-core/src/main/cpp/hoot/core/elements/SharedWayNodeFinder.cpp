@@ -32,10 +32,8 @@ namespace hoot
 
 QSet<long> SharedWayNodeFinder::getSharedWayNodes(const ConstWayPtr& way1, const ConstWayPtr& way2)
 {
-  QSet<long> nodeIdsSet1 =
-    QList<long>::fromVector(QVector<long>::fromStdVector(way1->getNodeIds())).toSet();
-  const QSet<long> nodeIdsSet2 =
-    QList<long>::fromVector(QVector<long>::fromStdVector(way2->getNodeIds())).toSet();
+  QSet<long> nodeIdsSet1 = QList<long>::fromVector(QVector<long>::fromStdVector(way1->getNodeIds())).toSet();
+  const QSet<long> nodeIdsSet2 = QList<long>::fromVector(QVector<long>::fromStdVector(way2->getNodeIds())).toSet();
   return nodeIdsSet1.intersect(nodeIdsSet2);
 }
 
@@ -46,9 +44,8 @@ bool SharedWayNodeFinder::waysShareEndNode(const ConstWayPtr& way1, const ConstW
   LOG_VART(way2->getElementId());
   const QSet<long> sharedNodes = getSharedWayNodes(way1, way2);
   LOG_VART(sharedNodes.size());
-  for (QSet<long>::const_iterator it = sharedNodes.begin(); it != sharedNodes.end(); ++it)
+  for (auto nodeId : qAsConst(sharedNodes))
   {
-    const long nodeId = *it;
     if (sameDirection)
     {
       if ((way1->getFirstNodeId() == nodeId && way2->getLastNodeId()) ||

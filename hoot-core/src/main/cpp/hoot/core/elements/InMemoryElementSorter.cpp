@@ -37,18 +37,16 @@ using namespace std;
 namespace hoot
 {
 
-InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
-_nodeIndex(0),
-_wayIndex(0),
-_relationIndex(0)
+InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source)
+  : _nodeIndex(0),
+    _wayIndex(0),
+    _relationIndex(0)
 {
   if (source)
   {
     // Its possible an empty map was sent back just for obtaining an empty stream...let's not
     // log that.
-    const QString msg =
-      "Sorting " + StringUtils::formatLargeNumber(source->getElementCount()) +
-      " elements in-memory...";
+    const QString msg = "Sorting " + StringUtils::formatLargeNumber(source->getElementCount()) + " elements in-memory...";
     if (source->getElementCount() > 100000)
     {
       LOG_STATUS(msg);
@@ -60,21 +58,12 @@ _relationIndex(0)
 
     _source = source;
 
-    for (NodeMap::const_iterator it = _source->getNodes().begin();
-         it != _source->getNodes().end(); ++it)
-    {
+    for (auto it = _source->getNodes().begin(); it != _source->getNodes().end(); ++it)
       _nodeIds.push_back(it->first);
-    }
-    for (WayMap::const_iterator it = _source->getWays().begin();
-         it != _source->getWays().end(); ++it)
-    {
+    for (auto it = _source->getWays().begin(); it != _source->getWays().end(); ++it)
       _wayIds.push_back(it->first);
-    }
-    for (RelationMap::const_iterator it = _source->getRelations().begin();
-         it != _source->getRelations().end(); ++it)
-    {
+    for (auto it = _source->getRelations().begin(); it != _source->getRelations().end(); ++it)
       _relationIds.push_back(it->first);
-    }
 
     std::sort(_nodeIds.begin(), _nodeIds.end());
     std::sort(_wayIds.begin(), _wayIds.end());
@@ -89,10 +78,9 @@ std::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() cons
 
 bool InMemoryElementSorter::hasMoreElements()
 {
-  return
-    _nodeIndex != _nodeIds.size() ||
-    _wayIndex != _wayIds.size() ||
-    _relationIndex != _relationIds.size();
+  return _nodeIndex != _nodeIds.size() ||
+         _wayIndex != _wayIds.size() ||
+         _relationIndex != _relationIds.size();
 }
 
 ElementPtr InMemoryElementSorter::readNextElement()
@@ -101,22 +89,14 @@ ElementPtr InMemoryElementSorter::readNextElement()
   ConstElementPtr cr;
 
   if (_nodeIndex != _nodeIds.size())
-  {
     cr = _source->getNode(_nodeIds[_nodeIndex++]);
-  }
   else if (_wayIndex != _wayIds.size())
-  {
     cr = _source->getWay(_wayIds[_wayIndex++]);
-  }
   else if (_relationIndex != _relationIds.size())
-  {
     cr = _source->getRelation(_relationIds[_relationIndex++]);
-  }
 
   if (cr.get())
-  {
     result = cr->clone();
-  }
 
   return result;
 }
@@ -126,13 +106,9 @@ bool InMemoryElementSorter::_elementCompare(const ConstElementPtr& e1, const Con
   const ElementType::Type type1 = e1->getElementType().getEnum();
   const ElementType::Type type2 = e2->getElementType().getEnum();
   if (type1 == type2)
-  {
     return e1->getId() < e2->getId();
-  }
   else
-  {
     return type1 < type2;
-  }
 }
 
 void InMemoryElementSorter::sort(std::vector<ElementPtr>& elements)

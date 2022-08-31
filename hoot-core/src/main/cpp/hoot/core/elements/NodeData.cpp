@@ -51,9 +51,8 @@ NodeData& NodeData::operator=(const NodeData& nd)
 {
   if (this != &nd)
   {
-    init(
-      nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp(),
-      nd.getUser(), nd.getUid(), nd.getVisible());
+    init(nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp(),
+         nd.getUser(), nd.getUid(), nd.getVisible());
     setTags(nd.getTags());
     if (nd.hasCircularError())
       setCircularError(nd.getCircularError());

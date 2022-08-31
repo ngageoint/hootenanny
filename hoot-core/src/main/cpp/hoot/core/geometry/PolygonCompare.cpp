@@ -51,10 +51,10 @@ using namespace Tgs;
 namespace hoot
 {
 
-PolygonCompare::PolygonCompare(const Envelope& e) :
-_e(e),
-_curve(std::make_shared<HilbertCurve>(2, 8)),
-_size((1 << 8) - 1)
+PolygonCompare::PolygonCompare(const Envelope& e)
+  : _e(e),
+    _curve(std::make_shared<HilbertCurve>(2, 8)),
+    _size((1 << 8) - 1)
 {
 }
 

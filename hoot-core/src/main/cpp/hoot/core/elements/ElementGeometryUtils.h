@@ -29,9 +29,9 @@
 #define ELEMENT_GEOMETRY_UTILS_H
 
 // Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometricRelationship.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // GEOS
 #include <geos/geom/Geometry.h>
@@ -58,22 +58,19 @@ public:
    * @return true if the two elements have the specified geometric relationship; false otherwise or
    * if the relationship could not be calculated
    */
-  static bool haveGeometricRelationship(
-    const ConstElementPtr& element1, const ConstElementPtr& element2,
-    const GeometricRelationship& relationship, ConstOsmMapPtr map);
+  static bool haveGeometricRelationship(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                                        const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
    * Calculate the length of the given way in meters. The projection must be planar.
    */
-  static Meters calculateLength(
-    const ConstElementPtr& e, const ConstElementProviderPtr& constProvider);
+  static Meters calculateLength(const ConstElementPtr& e, const ConstElementProviderPtr& constProvider);
 
 private:
 
   static int _badGeomCount;
 
-  static std::shared_ptr<geos::geom::Geometry> _getGeometry(
-    const ConstElementPtr& element, ConstOsmMapPtr map);
+  static std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element, ConstOsmMapPtr map);
 };
 
 }

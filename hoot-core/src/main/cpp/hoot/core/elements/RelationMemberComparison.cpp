@@ -31,17 +31,15 @@ namespace hoot
 {
 
 RelationMemberComparison::RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap,
-                                                   const QString& role, const bool ignoreElementId) :
-ElementComparison(element, sourceMap, ignoreElementId),
-_role(role)
+                                                   const QString& role, const bool ignoreElementId)
+  : ElementComparison(element, sourceMap, ignoreElementId),
+    _role(role)
 {
 }
 
 bool RelationMemberComparison::operator==(const RelationMemberComparison& memberComp) const
 {
-  const bool equals =
-    this->_role == memberComp.getRole() &&
-    _elementComparer.isSame(this->_element, memberComp.getElement());
+  const bool equals = _role == memberComp.getRole() && _elementComparer.isSame(this->_element, memberComp.getElement());
   if (equals)
   {
     LOG_TRACE(

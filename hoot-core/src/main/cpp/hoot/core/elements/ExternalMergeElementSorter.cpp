@@ -28,20 +28,20 @@
 #include "ExternalMergeElementSorter.h"
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
 const QString ExternalMergeElementSorter::SORT_TEMP_FILE_BASE_NAME = "element-sorter-temp-XXXXXX";
 
-ExternalMergeElementSorter::ExternalMergeElementSorter() :
-_maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
-_retainTempFiles(false),
-_logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+ExternalMergeElementSorter::ExternalMergeElementSorter()
+  : _maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
+    _retainTempFiles(false),
+    _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -54,8 +54,7 @@ void ExternalMergeElementSorter::close()
 {
   if (_sortedElements)
   {
-    std::shared_ptr<PartialOsmMapReader> sortedElementsReader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(_sortedElements);
+    std::shared_ptr<PartialOsmMapReader> sortedElementsReader = std::dynamic_pointer_cast<PartialOsmMapReader>(_sortedElements);
     sortedElementsReader->finalizePartial();
     _sortedElements->close();
   }
@@ -69,9 +68,7 @@ std::shared_ptr<OGRSpatialReference> ExternalMergeElementSorter::getProjection()
 bool ExternalMergeElementSorter::hasMoreElements()
 {
   if (!_sortedElements)
-  {
     return false;
-  }
   return _sortedElements->hasMoreElements();
 }
 
@@ -83,12 +80,8 @@ ElementPtr ExternalMergeElementSorter::readNextElement()
 void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 {
   LOG_VART(_maxElementsPerFile);
-
   if (_maxElementsPerFile < 1)
-  {
     throw HootException("Invalid buffer size value: " + QString::number(_maxElementsPerFile));
-  }
-
   _sort(input);
   _initElementStream();
 }
@@ -96,17 +89,12 @@ void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 void ExternalMergeElementSorter::_sort(ElementInputStreamPtr input)
 {
   LOG_INFO("Sorting elements on external disk...");
-
   //if only one file was written, skip merging
   _createSortedFileOutputs(input);
   if (_tempOutputFiles.size() > 1)
-  {
     _mergeSortedFiles();
-  }
   else
-  {
     _sortFinalOutput = _tempOutputFiles.at(0);
-  }
 }
 
 void ExternalMergeElementSorter::_initElementStream()
@@ -114,27 +102,21 @@ void ExternalMergeElementSorter::_initElementStream()
   LOG_DEBUG("Opening reader for element stream at " << _sortFinalOutput->fileName() << "...");
 
   std::shared_ptr<PartialOsmMapReader> sortedElementsReader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::createReader(_sortFinalOutput->fileName()));
+    std::dynamic_pointer_cast<PartialOsmMapReader>(OsmMapReaderFactory::createReader(_sortFinalOutput->fileName()));
   sortedElementsReader->setUseDataSourceIds(true);
   sortedElementsReader->open(_sortFinalOutput->fileName());
   sortedElementsReader->initializePartial();
   _sortedElements = std::dynamic_pointer_cast<ElementInputStream>(sortedElementsReader);
 }
 
-bool ExternalMergeElementSorter::_elementCompare(const ConstElementPtr& e1,
-                                                 const ConstElementPtr& e2)
+bool ExternalMergeElementSorter::_elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2)
 {
   const ElementType::Type type1 = e1->getElementType().getEnum();
   const ElementType::Type type2 = e2->getElementType().getEnum();
   if (type1 == type2)
-  {
     return e1->getId() < e2->getId();
-  }
   else
-  {
     return type1 < type2;
-  }
 }
 
 void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr input)
@@ -160,13 +142,10 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       std::shared_ptr<QTemporaryFile> tempOutputFile =
         std::make_shared<QTemporaryFile>(
-          ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
-          ".osm");
+          ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm");
       tempOutputFile->setAutoRemove(!_retainTempFiles);
       if (!tempOutputFile->open())
-      {
         throw HootException("Unable to open sort temp file: " + tempOutputFile->fileName() + ".");
-      }
       else
       {
         LOG_DEBUG("Opened temp file: " << tempOutputFile->fileName() << " for sorted output.");
@@ -174,30 +153,25 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       _tempOutputFiles.append(tempOutputFile);
 
       std::shared_ptr<PartialOsmMapWriter> writer =
-        std::dynamic_pointer_cast<PartialOsmMapWriter>(
-          OsmMapWriterFactory::createWriter(tempOutputFile->fileName()));
+        std::dynamic_pointer_cast<PartialOsmMapWriter>(OsmMapWriterFactory::createWriter(tempOutputFile->fileName()));
       writer->open(tempOutputFile->fileName());
       writer->initializePartial();
-      for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin();
-           itr != elements.end(); ++itr)
+      for (const auto& element : elements)
       {
-        writer->writePartial(*itr);
+        writer->writePartial(element);
         elementsWritten++;
-
         if (elementsWritten % _logUpdateInterval == 0)
         {
           PROGRESS_INFO("Wrote " << elementsWritten << " temporary sorted elements.");
         }
       }
       elements.clear();
-
       writer->finalizePartial();
       writer->close();
       tempOutputFile->close();
     }
   }
   // The caller should close the input.
-
   LOG_DEBUG("Finished writing sorted file outputs.");
   LOG_VART(elementCtr);
   LOG_VART(elementsWritten);
@@ -221,16 +195,16 @@ void ExternalMergeElementSorter::_mergeSortedFiles()
   {
     //for debugging only
     LOG_DEBUG("Sorted temp files: ");
-    for (int i = 0; i < _tempOutputFiles.size(); i++)
+    for (const auto& file : qAsConst(_tempOutputFiles))
     {
-      LOG_VARD(_tempOutputFiles.at(i)->fileName());
+      LOG_VARD(file->fileName());
     }
   }
 }
 
 void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& priorityQueue,
-                                              std::shared_ptr<PartialOsmMapWriter> writer,
-                                              QList<std::shared_ptr<PartialOsmMapReader>> readers) const
+                                                      std::shared_ptr<PartialOsmMapWriter> writer,
+                                                      QList<std::shared_ptr<PartialOsmMapReader>> readers) const
 {
   LOG_DEBUG("Iterating through remaining elements in sorted order...");
 
@@ -305,7 +279,7 @@ void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priori
   while (!priorityQueue.empty())
   {
     PqElement pqElement = priorityQueue.top();
-    str += pqElement.fileIndex + "," + pqElement.element->getElementId().toString() + ";";
+    str += QString("%1,%2;").arg(pqElement.fileIndex).arg(pqElement.element->getElementId().toString());
     priorityQueue.pop();
   }
   LOG_TRACE("Priority queue: " << str);
@@ -315,30 +289,25 @@ std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutput
 {
   LOG_DEBUG("Initializing final output...");
 
-  const QString tempFile =
-    ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
+  const QString tempFile = ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
   _sortFinalOutput = std::make_shared<QTemporaryFile>(tempFile);
   _sortFinalOutput->setAutoRemove(!_retainTempFiles);
   if (!_sortFinalOutput->open())
-  {
     throw HootException("Unable to open sort temp file: " + _sortFinalOutput->fileName() + ".");
-  }
   else
   {
     LOG_DEBUG(
       "Opened temp final output file: " << _sortFinalOutput->fileName() << " for sorted output.");
   }
   std::shared_ptr<PartialOsmMapWriter> writer =
-    std::dynamic_pointer_cast<PartialOsmMapWriter>(
-      OsmMapWriterFactory::createWriter(_sortFinalOutput->fileName()));
+    std::dynamic_pointer_cast<PartialOsmMapWriter>(OsmMapWriterFactory::createWriter(_sortFinalOutput->fileName()));
   writer->open(_sortFinalOutput->fileName());
   writer->initializePartial();
 
   return writer;
 }
 
-ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
-  QList<std::shared_ptr<PartialOsmMapReader>>& readers) const
+ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(QList<std::shared_ptr<PartialOsmMapReader>>& readers) const
 {
   LOG_DEBUG("Writing initial records from each temp file to priority queue...");
 
@@ -349,8 +318,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     const QString fileName = _tempOutputFiles.at(i)->fileName();
     LOG_VART(fileName);
     std::shared_ptr<PartialOsmMapReader> reader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::createReader(fileName));
+      std::dynamic_pointer_cast<PartialOsmMapReader>(OsmMapReaderFactory::createReader(fileName));
 
     //By default, OsmXmlReader will not add child references (node ref, elements members) to parent
     //elements if those elements are not present in the data.  For external sorting, where partial

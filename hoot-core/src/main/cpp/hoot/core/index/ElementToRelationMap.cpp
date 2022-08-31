@@ -56,9 +56,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
       LOG_VART(eid);
       // no need to map it to itself.
       if (eid != ElementId::relation(_rid))
-      {
         _mapping[ElementId(e->getElementType(), e->getId())].insert(_rid);
-      }
     }
 
     QString getDescription() const override { return ""; }
@@ -80,17 +78,12 @@ const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
   LOG_TRACE("Checking relation map for member: " << eid << "...");
   HashMap<ElementId, set<long>>::const_iterator it = _mapping.find(eid);
   if (it == _mapping.end())
-  {
     return _emptySet;
-  }
   else
-  {
     return it->second;
-  }
 }
 
-const set<long>& ElementToRelationMap::getRelationByElement(
-  const std::shared_ptr<const Element>& e) const
+const set<long>& ElementToRelationMap::getRelationByElement(const std::shared_ptr<const Element>& e) const
 {
   return getRelationByElement(e->getElementId());
 }
@@ -100,8 +93,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(const Element* e) co
   return getRelationByElement(e->getElementId());
 }
 
-void ElementToRelationMap::removeRelation(const OsmMap& map,
-                                          const std::shared_ptr<const Relation>& r)
+void ElementToRelationMap::removeRelation(const OsmMap& map, const std::shared_ptr<const Relation>& r)
 {
   class RemoveMemberVisitor : public ConstElementVisitor
   {
@@ -123,9 +115,7 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
       set<long>& relations = _mapping[ep];
       relations.erase(_rid);
       if (relations.empty())
-      {
         _mapping.erase(ep);
-      }
     }
 
   private:
@@ -143,11 +133,10 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   class ContainsElementVisitor : public ConstElementVisitor
   {
   public:
-
-    ContainsElementVisitor(const OsmMap& /*map*/, const ElementId& eid) :
-      _eid(eid)
+    ContainsElementVisitor(const OsmMap& /*map*/, const ElementId& eid)
+      : _eid(eid),
+        _found(false)
     {
-      _found = false;
     }
     ~ContainsElementVisitor() override = default;
 
@@ -158,9 +147,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     void visit(const ConstElementPtr& e) override
     {
       if (e->getElementId() == _eid)
-      {
         _found = true;
-      }
     }
 
     bool isFound() const { return _found; }
@@ -174,13 +161,12 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   class CheckVisitor : public ConstElementVisitor
   {
   public:
-
-    CheckVisitor(const OsmMap& map, const ElementToRelationMap& mapping) :
-      _map(map),
-      _mapping(mapping),
-      _logWarnCount(0)
+    CheckVisitor(const OsmMap& map, const ElementToRelationMap& mapping)
+      : _map(map),
+        _mapping(mapping),
+        _good(true),
+        _logWarnCount(0)
     {
-      _good = true;
     }
     ~CheckVisitor() override = default;
 
@@ -203,7 +189,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       // first check to see that this element maps to the right relations.
       const set<long>& mappedRelations = _mapping.getRelationByElement(ElementId(type, id));
       const RelationMap& relationMap = _map.getRelations();
-      for (RelationMap::const_iterator it = relationMap.begin(); it != relationMap.end(); ++it)
+      for (auto it = relationMap.begin(); it != relationMap.end(); ++it)
       {
         bool inMappedRelation = mappedRelations.find(it->first) != mappedRelations.end();
         const std::shared_ptr<const Relation>& r = it->second;
@@ -227,8 +213,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
         }
         else
         {
-          if (containsRecursive(r, ElementId(type, id)) == true &&
-            r->getElementId() != ElementId(type, id))
+          if (containsRecursive(r, ElementId(type, id)) == true && r->getElementId() != ElementId(type, id))
           {
             if (_logWarnCount < Log::getWarnMessageLimit())
             {

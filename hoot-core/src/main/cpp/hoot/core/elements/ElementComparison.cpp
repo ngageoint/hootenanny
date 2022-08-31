@@ -30,13 +30,11 @@
 namespace hoot
 {
 
-ElementComparison::ElementComparison(ElementPtr element, const OsmMap& sourceMap,
-                                     const bool ignoreElementId) :
-_element(element)
+ElementComparison::ElementComparison(ElementPtr element, const OsmMap& sourceMap, const bool ignoreElementId)
+  : _element(element)
 {
   _elementComparer.setIgnoreElementId(ignoreElementId);
-  OsmMap* map = const_cast<OsmMap*>(&sourceMap);
-  _elementComparer.setOsmMap(map);
+  _elementComparer.setOsmMap(const_cast<OsmMap*>(&sourceMap));
 }
 
 QString ElementComparison::toString() const

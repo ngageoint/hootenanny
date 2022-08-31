@@ -36,23 +36,17 @@ bool ElementIterator::hasNext()
 {
   LOG_VART(_pending.empty());
   if (_pending.empty())
-  {
     _next();
-  }
   return _pending.empty() == false;
 }
 
 const std::shared_ptr<Element>& ElementIterator::next()
 {
   if (_pending.empty())
-  {
     _next();
-  }
 
   if (_pending.empty())
-  {
     _current.reset();
-  }
   else
   {
     _current = _pending.front();

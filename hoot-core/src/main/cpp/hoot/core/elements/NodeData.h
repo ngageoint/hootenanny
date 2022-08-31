@@ -61,7 +61,7 @@ private:
 };
 
 inline void NodeData::init(long id, double x, double y, long changeset, long version,
-  quint64 timestamp, QString user, long uid, bool visible)
+                           quint64 timestamp, QString user, long uid, bool visible)
 {
   _id = id;
   _x = x;

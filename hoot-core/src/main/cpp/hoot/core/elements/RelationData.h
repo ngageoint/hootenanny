@@ -73,11 +73,10 @@ public:
     ElementId _eid;
   };
 
-  RelationData(
-    long id, long changeset = ElementData::CHANGESET_EMPTY,
-    long version = ElementData::VERSION_EMPTY,
-    unsigned int timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
-    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
+  RelationData(long id, long changeset = ElementData::CHANGESET_EMPTY,
+               long version = ElementData::VERSION_EMPTY,
+               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+               long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   RelationData(const RelationData& rd);
   ~RelationData() override = default;
 
@@ -136,11 +135,11 @@ void RelationData::replaceElements(Entry old, IT start, IT end)
   _members.reserve(oldMembers.size() + (end - start));
 
   // got through all the members.
-  for (size_t i = 0; i < oldMembers.size(); ++i)
+  for (const auto& member : oldMembers)
   {
     // if the roles match, or the old role is empty and the other attributes match.
-    if ((old.getRole().isEmpty() || old.getRole() == oldMembers[i].getRole()) &&
-        old.getElementId() == oldMembers[i].getElementId())
+    if ((old.getRole().isEmpty() || old.getRole() == member.getRole()) &&
+        old.getElementId() == member.getElementId())
     {
       // go through all the new members
       for (IT it = start; it != end; ++it)
@@ -149,20 +148,16 @@ void RelationData::replaceElements(Entry old, IT start, IT end)
         if (old.getRole().isEmpty())
         {
           Entry e = *it;
-          e.setRole(oldMembers[i].getRole());
+          e.setRole(member.getRole());
           _members.push_back(e);
         }
         // if the old role is specified then just add the child as is.
         else
-        {
           _members.push_back(*it);
-        }
       }
     }
     else
-    {
-      _members.push_back(oldMembers[i]);
-    }
+      _members.push_back(member);
   }
 }
 
