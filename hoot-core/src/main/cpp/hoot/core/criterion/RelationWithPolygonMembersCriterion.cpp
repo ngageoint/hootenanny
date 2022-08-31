@@ -28,21 +28,21 @@
 #include "RelationWithPolygonMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPolygonMembersCriterion)
 
-RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 
-RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion(ConstOsmMapPtr map) :
-RelationWithMembersOfTypeCriterion(map)
+RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion(ConstOsmMapPtr map)
+  : RelationWithMembersOfTypeCriterion(map)
 {
 }
 

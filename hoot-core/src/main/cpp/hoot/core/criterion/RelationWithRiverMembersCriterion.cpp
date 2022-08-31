@@ -28,16 +28,16 @@
 #include "RelationWithRiverMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/RiverCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithRiverMembersCriterion)
 
-RelationWithRiverMembersCriterion::RelationWithRiverMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithRiverMembersCriterion::RelationWithRiverMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 

@@ -27,24 +27,23 @@
 #include "WayNodeCountCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayNodeCountCriterion)
 
-WayNodeCountCriterion::WayNodeCountCriterion() :
-_comparisonCount(-1),
-_numericComparisonType(NumericComparisonType::EqualTo)
+WayNodeCountCriterion::WayNodeCountCriterion()
+  : _comparisonCount(-1),
+    _numericComparisonType(NumericComparisonType::EqualTo)
 {
 }
 
-WayNodeCountCriterion::WayNodeCountCriterion(
-  const int comparisonCount, const NumericComparisonType& numericComparisonType) :
-_comparisonCount(comparisonCount),
-_numericComparisonType(numericComparisonType)
+WayNodeCountCriterion::WayNodeCountCriterion(const int comparisonCount, const NumericComparisonType& numericComparisonType)
+  : _comparisonCount(comparisonCount),
+    _numericComparisonType(numericComparisonType)
 {
 }
 
@@ -52,16 +51,12 @@ bool WayNodeCountCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // A comparison count of -1 effectively bypasses this crit.
   if (_comparisonCount == -1)
-  {
     return true;
-  }
 
   if (e && e->getElementType() == ElementType::Way)
   {
     LOG_VART(e->getElementId());
-    return
-      _numericComparisonType.satisfiesComparison(
-        (std::dynamic_pointer_cast<const Way>(e))->getNodeCount(), _comparisonCount);
+    return _numericComparisonType.satisfiesComparison((std::dynamic_pointer_cast<const Way>(e))->getNodeCount(), _comparisonCount);
   }
   return false;
 }

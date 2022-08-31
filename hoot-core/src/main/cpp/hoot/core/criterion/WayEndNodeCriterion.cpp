@@ -27,39 +27,35 @@
 #include "WayEndNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayEndNodeCriterion)
 
-WayEndNodeCriterion::WayEndNodeCriterion(const bool allowShared) :
-WayNodeCriterion(),
-_allowShared(allowShared)
+WayEndNodeCriterion::WayEndNodeCriterion(const bool allowShared)
+  : WayNodeCriterion(),
+    _allowShared(allowShared)
 {
 
 }
 
-WayEndNodeCriterion::WayEndNodeCriterion(ConstOsmMapPtr map, const bool allowShared) :
-WayNodeCriterion(map),
-_allowShared(allowShared)
+WayEndNodeCriterion::WayEndNodeCriterion(ConstOsmMapPtr map, const bool allowShared)
+  : WayNodeCriterion(map),
+    _allowShared(allowShared)
 {
 }
 
 bool WayEndNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!e)
-  {
     return false;
-  }
 
   // See if its a way node first.
   if (!WayNodeCriterion::isSatisfied(e))
-  {
     return false;
-  }
   // Passing the WayNodeCriterion check tells us this element is a node.
   assert(e->getElementType() == ElementType::Node);
 
@@ -69,22 +65,16 @@ bool WayEndNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   // If we're not allowing the way node to be shared, then return false if more than one way
   // contains it.
   if (!_allowShared && containingWayIds.size() > 1)
-  {
     return false;
-  }
 
   // Otherwise, return true if this node is the end node of any way that contains it and that way
   // isn't a closed poly.
-  for (std::set<long>::const_iterator itr = containingWayIds.begin(); itr != containingWayIds.end();
-       ++itr)
+  for (auto way_id : containingWayIds)
   {
-    ConstWayPtr way = _map->getWay(*itr);
+    ConstWayPtr way = _map->getWay(way_id);
     if (way && !way->isClosedArea() && way->isEndNode(e->getId()))
-    {
       return true;
-    }
   }
-
   return false;
 }
 

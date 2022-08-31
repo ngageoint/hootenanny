@@ -28,16 +28,16 @@
 #include "RelationWithPoiMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPoiMembersCriterion)
 
-RelationWithPoiMembersCriterion::RelationWithPoiMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithPoiMembersCriterion::RelationWithPoiMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 

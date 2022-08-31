@@ -29,19 +29,19 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReviewScoreCriterion)
 
-ReviewScoreCriterion::ReviewScoreCriterion() :
-ReviewRelationCriterion(),
-_minScoreThreshold(0.0),
-_maxScoreThreshold(1.0),
-_invertThresholding(false)
+ReviewScoreCriterion::ReviewScoreCriterion()
+  : ReviewRelationCriterion(),
+    _minScoreThreshold(0.0),
+    _maxScoreThreshold(1.0),
+    _invertThresholding(false)
 {
 }
 
@@ -50,8 +50,7 @@ void ReviewScoreCriterion::setMinScoreThreshold(const double threshold)
   if (threshold < 0.0 || threshold > 1.0)
   {
     throw IllegalArgumentException(
-      "Review score threshold outside of allowed range of 0.0 to 1.0: " +
-      QString::number(threshold));
+      "Review score threshold outside of allowed range of 0.0 to 1.0: " + QString::number(threshold));
   }
   _minScoreThreshold = threshold;
 }
@@ -61,8 +60,7 @@ void ReviewScoreCriterion::setMaxScoreThreshold(const double threshold)
   if (threshold < 0.0 || threshold > 1.0)
   {
     throw IllegalArgumentException(
-      "Review score threshold outside of allowed range of 0.0 to 1.0: " +
-      QString::number(threshold));
+      "Review score threshold outside of allowed range of 0.0 to 1.0: " + QString::number(threshold));
   }
   _maxScoreThreshold = threshold;
 }
@@ -99,9 +97,7 @@ bool ReviewScoreCriterion::isSatisfied(const ConstElementPtr& e) const
     else
     {
       if (!_invertThresholding)
-      {
         criterionMet = score >= _minScoreThreshold && score <= _maxScoreThreshold;
-      }
       else
       {
         // boundary conditions
@@ -112,19 +108,13 @@ bool ReviewScoreCriterion::isSatisfied(const ConstElementPtr& e) const
           criterionMet = false;
         }
         else
-        {
           criterionMet = score < _minScoreThreshold || score > _maxScoreThreshold;
-        }
       }
     }
   }
-
   if ((!_invertThresholding && criterionMet) || (_invertThresholding && !criterionMet))
-  {
     status = "met";
-  }
   LOG_TRACE("Review " << status << " criterion: " << e->getElementId() << "...");
-
   return criterionMet;
 }
 

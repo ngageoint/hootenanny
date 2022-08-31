@@ -27,22 +27,22 @@
 #include "TunnelWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/TunnelCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TunnelWayNodeCriterion)
 
-TunnelWayNodeCriterion::TunnelWayNodeCriterion() :
-WayNodeCriterion()
+TunnelWayNodeCriterion::TunnelWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<TunnelCriterion>();
 }
 
-TunnelWayNodeCriterion::TunnelWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+TunnelWayNodeCriterion::TunnelWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<TunnelCriterion>();
 }

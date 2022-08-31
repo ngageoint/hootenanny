@@ -27,22 +27,22 @@
 #include "RailwayWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RailwayWayNodeCriterion)
 
-RailwayWayNodeCriterion::RailwayWayNodeCriterion() :
-WayNodeCriterion()
+RailwayWayNodeCriterion::RailwayWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<RailwayCriterion>();
 }
 
-RailwayWayNodeCriterion::RailwayWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+RailwayWayNodeCriterion::RailwayWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<RailwayCriterion>();
 }

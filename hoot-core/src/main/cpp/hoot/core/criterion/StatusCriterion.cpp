@@ -26,8 +26,8 @@
  */
 #include "StatusCriterion.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -39,8 +39,8 @@ StatusCriterion::StatusCriterion()
   setConfiguration(conf());
 }
 
-StatusCriterion::StatusCriterion(Status s) :
-_status(s)
+StatusCriterion::StatusCriterion(Status s)
+  : _status(s)
 {
 }
 

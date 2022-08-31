@@ -33,8 +33,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayCriterion)
 
-WayCriterion::WayCriterion() :
-ElementTypeCriterion(ElementType::Way)
+WayCriterion::WayCriterion()
+  : ElementTypeCriterion(ElementType::Way)
 {
 }
 

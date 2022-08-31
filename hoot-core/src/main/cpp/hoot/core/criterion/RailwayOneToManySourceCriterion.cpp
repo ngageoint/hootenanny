@@ -47,8 +47,7 @@ bool RailwayOneToManySourceCriterion::isSatisfied(const ConstElementPtr& e) cons
   crits.append(typeCrit);
   ElementCriterionPtr statusCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
   crits.append(statusCrit);
-  ElementCriterionPtr tagCrit =
-    std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes");
+  ElementCriterionPtr tagCrit = std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes");
   crits.append(tagCrit);
   return CriterionUtils::combineCriterion(crits)->isSatisfied(e);
 }

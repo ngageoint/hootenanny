@@ -26,6 +26,7 @@
  */
 
 #include "WayDirectionCriterion.h"
+
 #include <hoot/core/algorithms/DirectionFinder.h>
 
 namespace hoot
@@ -33,10 +34,10 @@ namespace hoot
 
 WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
                                              ConstWayPtr baseWay,
-                                             bool similarDirection) :
-  _map(map),
-  _baseWay(baseWay),
-  _similarDirection(similarDirection)
+                                             bool similarDirection)
+  : _map(map),
+    _baseWay(baseWay),
+    _similarDirection(similarDirection)
 {
 }
 
@@ -44,10 +45,7 @@ bool WayDirectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;
-
-  return
-    DirectionFinder::isSimilarDirection(
-      _map, _baseWay, std::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
+  return DirectionFinder::isSimilarDirection(_map, _baseWay, std::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
 }
 
 }

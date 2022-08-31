@@ -28,16 +28,16 @@
 #include "RelationWithRailwayMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithRailwayMembersCriterion)
 
-RelationWithRailwayMembersCriterion::RelationWithRailwayMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithRailwayMembersCriterion::RelationWithRailwayMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 

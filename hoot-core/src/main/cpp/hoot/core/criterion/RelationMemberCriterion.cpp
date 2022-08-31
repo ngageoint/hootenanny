@@ -27,26 +27,23 @@
 #include "RelationMemberCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationMemberCriterion)
 
-RelationMemberCriterion::RelationMemberCriterion(ConstOsmMapPtr map) :
-_map(map)
+RelationMemberCriterion::RelationMemberCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
 bool RelationMemberCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_map)
-  {
     throw HootException("You must set a map before calling: " + toString());
-  }
-
   return RelationMemberUtils::elementContainedByAnyRelation(e->getElementId(), _map);
 }
 

@@ -27,9 +27,9 @@
 #include "PowerLineCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -42,10 +42,7 @@ bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     const Tags& tags = e->getTags();
     const QString powerVal = tags.get("power").toLower().trimmed();
-    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
-    {
-      return true;
-    }
+    return (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable");
   }
   return false;
 }

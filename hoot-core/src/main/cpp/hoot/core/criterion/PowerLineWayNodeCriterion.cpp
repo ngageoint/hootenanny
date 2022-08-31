@@ -27,22 +27,22 @@
 #include "PowerLineWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineWayNodeCriterion)
 
-PowerLineWayNodeCriterion::PowerLineWayNodeCriterion() :
-WayNodeCriterion()
+PowerLineWayNodeCriterion::PowerLineWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<PowerLineCriterion>();
 }
 
-PowerLineWayNodeCriterion::PowerLineWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+PowerLineWayNodeCriterion::PowerLineWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<PowerLineCriterion>();
 }

@@ -28,13 +28,13 @@
 #define WAY_HEADING_VARIANCE_CRITERION_H
 
 // hoot
+#include <hoot/core/algorithms/extractors/SampledAngleHistogramExtractor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/NumericComparisonType.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Units.h>
-#include <hoot/core/algorithms/extractors/SampledAngleHistogramExtractor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/NumericComparisonType.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
@@ -46,9 +46,8 @@ public:
   static QString className() { return "WayHeadingVarianceCriterion"; }
 
   WayHeadingVarianceCriterion();
-  WayHeadingVarianceCriterion(
-    const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
-    ConstOsmMapPtr map);
+  WayHeadingVarianceCriterion(const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
+                              ConstOsmMapPtr map);
   ~WayHeadingVarianceCriterion() override = default;
 
   /**
@@ -58,9 +57,7 @@ public:
 
   ElementCriterionPtr clone() override
   {
-    return
-      std::make_shared<WayHeadingVarianceCriterion>(
-        _comparisonVariance, _numericComparisonType, _map);
+    return std::make_shared<WayHeadingVarianceCriterion>(_comparisonVariance, _numericComparisonType, _map);
   }
 
   /**

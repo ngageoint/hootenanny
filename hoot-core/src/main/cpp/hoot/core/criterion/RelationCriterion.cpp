@@ -34,13 +34,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationCriterion)
 
-RelationCriterion::RelationCriterion() : ElementTypeCriterion(ElementType::Relation)
+RelationCriterion::RelationCriterion()
+  : ElementTypeCriterion(ElementType::Relation)
 {
 }
 
-RelationCriterion::RelationCriterion(const QString& type) :
-ElementTypeCriterion(ElementType::Relation),
-_type(type.trimmed())
+RelationCriterion::RelationCriterion(const QString& type)
+  : ElementTypeCriterion(ElementType::Relation),
+    _type(type.trimmed())
 {
 }
 
@@ -55,13 +56,9 @@ bool RelationCriterion::isSatisfied(const ConstElementPtr& e) const
   if (typeMatch)
   {
     if (_type.isEmpty())
-    {
       return true;
-    }
     else
-    {
       return std::dynamic_pointer_cast<const Relation>(e)->getType() == _type;
-    }
   }
   return false;
 }

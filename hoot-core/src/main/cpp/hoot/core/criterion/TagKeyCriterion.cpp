@@ -27,8 +27,8 @@
 #include "TagKeyCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -71,12 +71,10 @@ void TagKeyCriterion::addKey(QString key)
 
 bool TagKeyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  for (int i = 0; i < _keys.size(); i++)
+  for (const auto& key : qAsConst(_keys))
   {
-    if (e->getTags().contains(_keys[i]))
-    {
+    if (e->getTags().contains(key))
       return true;
-    }
   }
   return false;
 }

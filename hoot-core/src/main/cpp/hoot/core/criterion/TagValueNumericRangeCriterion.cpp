@@ -27,9 +27,9 @@
 #include "TagValueNumericRangeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -43,10 +43,10 @@ TagValueNumericRangeCriterion::TagValueNumericRangeCriterion()
 
 TagValueNumericRangeCriterion::TagValueNumericRangeCriterion(const QStringList tagKeys,
                                                              const long rangeMin,
-                                                             const long rangeMax) :
-_tagKeys(tagKeys),
-_rangeMin(rangeMin),
-_rangeMax(rangeMax)
+                                                             const long rangeMax)
+  : _tagKeys(tagKeys),
+    _rangeMin(rangeMin),
+    _rangeMax(rangeMax)
 {
 }
 
@@ -61,21 +61,16 @@ void TagValueNumericRangeCriterion::setConfiguration(const Settings& conf)
 bool TagValueNumericRangeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e);
-  //The element must have tags for all keys passed in, and all the values for those keys must be
-  //within the specified range.
-  for (int i = 0; i < _tagKeys.size(); i++)
+  // The element must have tags for all keys passed in, and all the values for those keys must be
+  // within the specified range.
+  for (const auto& tagKey : qAsConst(_tagKeys))
   {
-    const QString tagKey = _tagKeys.at(i);
     if (!e->getTags().contains(tagKey))
-    {
       return false;
-    }
     bool ok = false;
     const long val = e->getTags().get(tagKey).toLong(&ok);
     if (!ok || val < _rangeMin || val > _rangeMax)
-    {
       return false;
-    }
   }
   return true;
 }

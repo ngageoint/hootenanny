@@ -28,21 +28,21 @@
 #include "RelationWithBuildingMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithBuildingMembersCriterion)
 
-RelationWithBuildingMembersCriterion::RelationWithBuildingMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithBuildingMembersCriterion::RelationWithBuildingMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 
-RelationWithBuildingMembersCriterion::RelationWithBuildingMembersCriterion(ConstOsmMapPtr map) :
-RelationWithMembersOfTypeCriterion(map)
+RelationWithBuildingMembersCriterion::RelationWithBuildingMembersCriterion(ConstOsmMapPtr map)
+  : RelationWithMembersOfTypeCriterion(map)
 {
 }
 

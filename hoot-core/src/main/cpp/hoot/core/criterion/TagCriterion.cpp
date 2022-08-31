@@ -28,23 +28,23 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagCriterion)
 
-TagCriterion::TagCriterion() :
-_caseSensitive(false)
+TagCriterion::TagCriterion()
+  : _caseSensitive(false)
 {
   setConfiguration(conf());
 }
 
-TagCriterion::TagCriterion(const QString& k, const QString& v) :
-_caseSensitive(false)
+TagCriterion::TagCriterion(const QString& k, const QString& v)
+  : _caseSensitive(false)
 {
   _kvps.append(k + "=" + v);
 }
@@ -52,14 +52,11 @@ _caseSensitive(false)
 void TagCriterion::setKvps(const QStringList kvps)
 {
   _kvps = kvps;
-  for (int i = 0; i < _kvps.size(); i++)
+  for (const auto& kvp : qAsConst(_kvps))
   {
-    const QString kvp = _kvps.at(i);
     const QStringList kvpParts = kvp.split("=");
     if (kvpParts.size() != 2)
-    {
       throw IllegalArgumentException("Invalid TagCriterion KVP: " + kvp);
-    }
   }
 }
 
@@ -74,17 +71,13 @@ void TagCriterion::setConfiguration(const Settings &s)
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (_kvps.empty())
-  {
-    throw IllegalArgumentException(
-      "No tag key/value pairs specified for: " + className());
-  }
+    throw IllegalArgumentException("No tag key/value pairs specified for: " + className());
 
   LOG_VART(e);
-  const Qt::CaseSensitivity caseSensitivity =
-    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-  for (int i = 0; i < _kvps.size(); i++)
+  const Qt::CaseSensitivity caseSensitivity = _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  for (const auto& kvp : qAsConst(_kvps))
   {
-    const QStringList kvpParts = _kvps.at(i).split("=");
+    const QStringList kvpParts = kvp.split("=");
     const QString key = kvpParts[0];
     const QString val = kvpParts[1];
     LOG_VART(key);

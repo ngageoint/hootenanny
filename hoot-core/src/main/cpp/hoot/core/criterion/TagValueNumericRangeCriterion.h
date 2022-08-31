@@ -28,8 +28,8 @@
 #define TAGVALUENUMERICRANGECRITERION_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {

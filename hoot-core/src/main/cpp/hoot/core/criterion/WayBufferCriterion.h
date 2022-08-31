@@ -32,9 +32,9 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -59,9 +59,8 @@ public:
    * to to the buffer on evaluation.
    * @param circularError circular error of baseLine
    */
-  WayBufferCriterion(
-    ConstOsmMapPtr map, std::shared_ptr<geos::geom::LineString> baseLine, Meters buffer,
-    Meters circularError, double matchPercent);
+  WayBufferCriterion(ConstOsmMapPtr map, std::shared_ptr<geos::geom::LineString> baseLine, Meters buffer,
+                     Meters circularError, double matchPercent);
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override

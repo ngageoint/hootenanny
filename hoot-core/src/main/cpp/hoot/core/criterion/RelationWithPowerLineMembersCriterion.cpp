@@ -28,16 +28,16 @@
 #include "RelationWithPowerLineMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPowerLineMembersCriterion)
 
-RelationWithPowerLineMembersCriterion::RelationWithPowerLineMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithPowerLineMembersCriterion::RelationWithPowerLineMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 

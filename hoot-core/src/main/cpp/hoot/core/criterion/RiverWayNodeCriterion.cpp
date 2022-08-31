@@ -27,22 +27,22 @@
 #include "RiverWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/RiverCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RiverWayNodeCriterion)
 
-RiverWayNodeCriterion::RiverWayNodeCriterion() :
-WayNodeCriterion()
+RiverWayNodeCriterion::RiverWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<RiverCriterion>();
 }
 
-RiverWayNodeCriterion::RiverWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+RiverWayNodeCriterion::RiverWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<RiverCriterion>();
 }

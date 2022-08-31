@@ -57,8 +57,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
   if (ElementType::Node == eid.getType().getEnum())
   {
     // Check ways
-    const std::set<long>& parentWays =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
+    const std::set<long>& parentWays = _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
     if (!parentWays.empty())
     {
       LOG_TRACE("UselessElementCriterion not satisified: node has parent");
