@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RoundaboutCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -41,18 +41,14 @@ bool RoundaboutCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // If it's not a highway, it's not a roundabout.
   if (!HighwayCriterion().isSatisfied(e))
-  {
     return false;
-  }
 
   // Now check some details...
   bool result = false;
-  Tags::const_iterator tagIt = e->getTags().find("junction");
+  auto tagIt = e->getTags().find("junction");
 
   if (tagIt != e->getTags().end() && tagIt.value().toLower() == "roundabout")
-  {
     result = true;
-  }
 
   if (result)
   {

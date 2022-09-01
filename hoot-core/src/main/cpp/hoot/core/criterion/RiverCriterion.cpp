@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RiverCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/RiverWayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -41,31 +41,24 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RiverCriterion)
 bool RiverCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-
   // We were taking relations here at one point too. Just not convinced that we need to if all the
   // constituent linear features are properly tagged and extra processing time was being added. If
   // we find later that we need to, the behavior can be reverted back to the original state.
   if (e->getElementType() != ElementType::Way)
-  {
     return false;
-  }
 
   bool passedTagFilter = false;
-
   const Tags& tags = e->getTags();
   if (tags.contains("waterway"))
-  {
     passedTagFilter = true;
-  }
   else
   {
     const OsmSchema& schema = OsmSchema::getInstance();
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       const QString key = it.key();
       const QString val = it.value();
-      if (schema.isAncestor(key, "waterway") ||
-          (key == "type" && schema.isAncestor("waterway=" + val, "waterway")))
+      if (schema.isAncestor(key, "waterway") || (key == "type" && schema.isAncestor("waterway=" + val, "waterway")))
       {
         LOG_TRACE("passed crit");
         passedTagFilter = true;
@@ -73,13 +66,11 @@ bool RiverCriterion::isSatisfied(const ConstElementPtr& e) const
       }
     }
   }
-
   if (passedTagFilter && !LinearCriterion().isSatisfied(e))
   {
     LOG_TRACE("failed linear crit");
     return false;
   }
-
   return passedTagFilter;
 }
 
@@ -89,4 +80,3 @@ QStringList RiverCriterion::getChildCriteria() const
 }
 
 }
-

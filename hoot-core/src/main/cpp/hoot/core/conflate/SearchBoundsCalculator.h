@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SEARCHBOUNDSCALCULATOR_H
 #define SEARCHBOUNDSCALCULATOR_H
@@ -46,8 +46,7 @@ public:
 
   SearchBoundsCalculator(const std::shared_ptr<SearchRadiusProvider>& radiusProvider);
 
-  geos::geom::Envelope calculateSearchBounds(
-    const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
+  geos::geom::Envelope calculateSearchBounds(const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
 
 private:
 

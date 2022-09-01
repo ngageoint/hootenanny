@@ -22,26 +22,24 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MapCompareUtils.h"
 
 // hoot
+#include <hoot/core/scoring/AttributeComparator.h>
 #include <hoot/core/scoring/GraphComparator.h>
 #include <hoot/core/scoring/RasterComparator.h>
-#include <hoot/core/scoring/AttributeComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
-void MapCompareUtils::getAttributeComparisonFinalScores(
-  const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean, int& confidence, const int numIterations)
+void MapCompareUtils::getAttributeComparisonFinalScores(const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean,
+                                                        int& confidence, const int numIterations)
 {
   if (map1->isEmpty() || map2->isEmpty())
-  {
     throw EmptyMapInputException();
-  }
 
   Tgs::Random::instance()->seed(100);
 
@@ -55,8 +53,7 @@ void MapCompareUtils::getAttributeComparisonFinalScores(
   mean = thisMean;
 }
 
-int MapCompareUtils::getAttributeComparisonFinalScore(
-  const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations)
+int MapCompareUtils::getAttributeComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations)
 {
   int mean = 0;
   int confidence = 0;
@@ -64,13 +61,10 @@ int MapCompareUtils::getAttributeComparisonFinalScore(
   return mean;
 }
 
-void MapCompareUtils::getGraphComparisonRawScores(
-  const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence)
+void MapCompareUtils::getGraphComparisonRawScores(const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence)
 {
   if (map1->isEmpty() || map2->isEmpty())
-  {
     throw EmptyMapInputException();
-  }
 
   Tgs::Random::instance()->seed(0);
   GraphComparator graph(map1, map2);
@@ -94,13 +88,10 @@ int MapCompareUtils::getGraphComparisonFinalScore(const OsmMapPtr& map1, const O
   return convertRawScoreToFinalScore(mean);
 }
 
-void MapCompareUtils::getRasterComparisonRawScores(
-  const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean)
+void MapCompareUtils::getRasterComparisonRawScores(const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean)
 {
   if (map1->isEmpty() || map2->isEmpty())
-  {
     throw EmptyMapInputException();
-  }
 
   RasterComparator raster(map1, map2);
   raster.setPixelSize(5);

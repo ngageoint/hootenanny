@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -76,18 +76,14 @@ public:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     const double stat = StatCalculator().calculateStat(inputs, visClassName, statType);
     // see note in CountCmd about the preceding endline
-    std::cout << std::endl << "Calculated statistic: " <<
-                 QString::number(stat, 'g', 3) << std::endl;
+    std::cout << std::endl << "Calculated statistic: "
+              << QString::number(stat, 'g', 3) << std::endl;
 
     return 0;
   }
@@ -96,4 +92,3 @@ public:
 HOOT_FACTORY_REGISTER(Command, StatCmd)
 
 }
-

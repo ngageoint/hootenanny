@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "AddressNormalizer.h"
 
 // hoot
-#include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -39,9 +39,9 @@
 namespace hoot
 {
 
-AddressNormalizer::AddressNormalizer() :
-_numNormalized(0),
-_addressTagKeys(std::make_shared<AddressTagKeys>())
+AddressNormalizer::AddressNormalizer()
+  : _numNormalized(0),
+    _addressTagKeys(std::make_shared<AddressTagKeys>())
 {
 }
 
@@ -49,37 +49,29 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const
 {
   const QSet<QString> addressTagKeys = _addressTagKeys->getAddressTagKeys(*e);
   LOG_VART(addressTagKeys);
-  for (QSet<QString>::const_iterator addressTagKeyItr = addressTagKeys.begin();
-       addressTagKeyItr != addressTagKeys.end(); ++addressTagKeyItr)
+  for (const auto& addressTagKey : qAsConst(addressTagKeys))
   {
-    const QString addressTagKey = *addressTagKeyItr;
     // normalization may find multiple addresses; we'll arbitrarily take the first one and put the
     // rest in an alt field
     const QSet<QString> normalizedAddresses = normalizeAddress(e->getTags().get(addressTagKey));
     bool firstAddressParsed = false;
     QString altAddresses;
-    for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
-         normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
+    for (const auto& normalizedAddress : qAsConst(normalizedAddresses))
     {
-      const QString normalizedAddress = *normalizedAddressItr;
       if (!firstAddressParsed)
       {
         e->getTags().set(addressTagKey, normalizedAddress);
-        LOG_TRACE(
-          "Set normalized address: " << normalizedAddress << " for tag key: " << addressTagKey);
+        LOG_TRACE("Set normalized address: " << normalizedAddress << " for tag key: " << addressTagKey);
         firstAddressParsed = true;
       }
       else
-      {
         altAddresses += normalizedAddress + ";";
-      }
     }
     if (!altAddresses.isEmpty())
     {
       altAddresses.chop(1);
       e->getTags().set("alt_address", altAddresses);
-      LOG_TRACE(
-        "Set alt normalized address(es): " << altAddresses << " for tag key: " << addressTagKey);
+      LOG_TRACE("Set alt normalized address(es): " << altAddresses << " for tag key: " << addressTagKey);
     }
   }
 }
@@ -95,23 +87,15 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 
   const QString addressToNormalize = address.trimmed().simplified();
   if (!Address::isStreetIntersectionAddress(addressToNormalize))
-  {
     return _normalizeAddressWithLibPostal(addressToNormalize);
-  }
-  else
-  {
-    // libpostal doesn't handle intersections very well, so doing intersection normalization with
-    // custom logic
+  else // libpostal doesn't handle intersections very well
     return _normalizeAddressIntersection(addressToNormalize);
-  }
 }
 
 QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& address) const
 {
   if (address.trimmed().isEmpty())
-  {
     return QSet<QString>();
-  }
 
   LOG_TRACE("Normalizing " << address << " with libpostal...");
 
@@ -127,16 +111,13 @@ QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& a
   // specifying a language in the options is optional, but could we get better performance if
   // we did specify one when we know what it is (would have to check to see if it was supported
   // first, of course)?
-  char** expansions =
-    libpostal_expand_address(
-      addressCopy.toUtf8().data(), libpostal_get_default_options(), &num_expansions);
+  char** expansions = libpostal_expand_address(addressCopy.toUtf8().data(), libpostal_get_default_options(), &num_expansions);
   // add all the normalizations libpostal finds as possible addresses
   for (size_t i = 0; i < num_expansions; i++)
   {
     const QString normalizedAddress = QString::fromUtf8(expansions[i]);
     LOG_VART(normalizedAddress);
-    if (_isValidNormalizedAddress(addressCopy, normalizedAddress) &&
-        !normalizedAddresses.contains(normalizedAddress))
+    if (_isValidNormalizedAddress(addressCopy, normalizedAddress) && !normalizedAddresses.contains(normalizedAddress))
     {
       normalizedAddresses.insert(normalizedAddress);
       LOG_TRACE("Normalized address from: " << address << " to: " << normalizedAddress);
@@ -156,17 +137,12 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
 {
   LOG_TRACE("Normalizing intersection: " << address << "...");
 
-  const QMap<QString, QString> streetTypeAbbreviationsToFullTypes =
-    Address::getStreetTypeAbbreviationsToFullTypes();
-  const QStringList addressParts =
-    StringUtils::splitOnAny(address, Address::getIntersectionSplitTokens(), 2);
+  const QMap<QString, QString> streetTypeAbbreviationsToFullTypes = Address::getStreetTypeAbbreviationsToFullTypes();
+  const QStringList addressParts = StringUtils::splitOnAny(address, Address::getIntersectionSplitTokens(), 2);
   LOG_VART(addressParts.size());
 
   if (addressParts.size() != 2)
-  {
-    throw IllegalArgumentException(
-      "A non-intersection address was passed into street intersection address normalization.");
-  }
+    throw IllegalArgumentException("A non-intersection address was passed into street intersection address normalization.");
 
   // replace all street type abbreviations in both intersection parts in the address with their full
   // name counterparts
@@ -176,8 +152,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   {
     QString addressPart = addressParts.at(i).trimmed();
     LOG_VART(addressPart);
-    for (QMap<QString, QString>::const_iterator itr = streetTypeAbbreviationsToFullTypes.begin();
-         itr != streetTypeAbbreviationsToFullTypes.end(); ++itr)
+    for (auto itr = streetTypeAbbreviationsToFullTypes.begin(); itr != streetTypeAbbreviationsToFullTypes.end(); ++itr)
     {
       const QString abbrev = itr.key().trimmed();
       LOG_VART(abbrev);
@@ -195,9 +170,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
 
     modifiedAddress += addressPart.trimmed();
     if (i == 0)
-    {
       modifiedAddress += " and ";
-    }
   }
   LOG_VART(modifiedAddress);
 
@@ -207,8 +180,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   // However, it does help with address matching and will remain in place unless its found to be
   // causing harm in some way.
 
-  QStringList modifiedAddressParts =
-    StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
+  QStringList modifiedAddressParts = StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
   assert(modifiedAddressParts.size() == 2);
   LOG_VART(modifiedAddressParts);
   QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
@@ -218,19 +190,16 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
 
   QStringList streetFullTypes;
   QStringList streetPluralTypes;
-  const QStringList streetFullTypesTemp =
-    Address::getStreetFullTypesToTypeAbbreviations().keys();
+  const QStringList streetFullTypesTemp = Address::getStreetFullTypesToTypeAbbreviations().keys();
   streetFullTypes = streetFullTypesTemp;
 
   // Sometimes intersections have plural street types (suffixes). We want to be able to handle those
   // as well, but we don't want them plural in the final normalized address.
-  for (int i = 0; i < streetFullTypesTemp.size(); i++)
+  for (const auto& fullType : qAsConst(streetFullTypesTemp))
   {
-    const QString pluralType = streetFullTypesTemp.at(i) + "s";
+    const QString pluralType = fullType + "s";
     if (!streetFullTypes.contains(pluralType))
-    {
       streetFullTypes.append(pluralType);
-    }
     streetPluralTypes.append(pluralType);
   }
   LOG_VART(streetPluralTypes);
@@ -247,9 +216,8 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     LOG_VART(secondIntersectionPart);
   }
   QStringList modifiedAddressPartsTemp;
-  for (int i = 0; i < modifiedAddressParts.size(); i++)
+  for (auto modifiedAddressPart : qAsConst(modifiedAddressParts))
   {
-    QString modifiedAddressPart = modifiedAddressParts.at(i);
     if (StringUtils::endsWithAny(modifiedAddressPart.trimmed(), streetPluralTypes))
     {
       modifiedAddressPart.chop(1);
@@ -258,35 +226,25 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     modifiedAddressPartsTemp.append(modifiedAddressPart);
   }
   modifiedAddressParts = modifiedAddressPartsTemp;
-  QString firstIntersectionEndingStreetType =
-    StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  QString firstIntersectionEndingStreetType = StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
   if (firstIntersectionEndingStreetType.endsWith('s'))
-  {
     firstIntersectionEndingStreetType.chop(1);
-  }
   LOG_VART(firstIntersectionEndingStreetType);
-  QString secondIntersectionEndingStreetType =
-    StringUtils::endsWithAnyAsStr(secondIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  QString secondIntersectionEndingStreetType = StringUtils::endsWithAnyAsStr(secondIntersectionPart.trimmed(), streetFullTypes).trimmed();
   if (secondIntersectionEndingStreetType.endsWith('s'))
-  {
     secondIntersectionEndingStreetType.chop(1);
-  }
   LOG_VART(secondIntersectionEndingStreetType);
 
-  if (!firstIntersectionEndingStreetType.isEmpty() &&
-      secondIntersectionEndingStreetType.isEmpty())
+  if (!firstIntersectionEndingStreetType.isEmpty() && secondIntersectionEndingStreetType.isEmpty())
   {
     LOG_VART(modifiedAddressParts[1]);
-    modifiedAddressParts[1] =
-      modifiedAddressParts[1].trimmed() + " " + firstIntersectionEndingStreetType.trimmed();
+    modifiedAddressParts[1] = modifiedAddressParts[1].trimmed() + " " + firstIntersectionEndingStreetType.trimmed();
     LOG_VART(modifiedAddressParts[1]);
   }
-  else if (firstIntersectionEndingStreetType.isEmpty() &&
-           !secondIntersectionEndingStreetType.isEmpty())
+  else if (firstIntersectionEndingStreetType.isEmpty() && !secondIntersectionEndingStreetType.isEmpty())
   {
     LOG_VART(modifiedAddressParts[0]);
-    modifiedAddressParts[0] =
-      modifiedAddressParts[0].trimmed() + " " + secondIntersectionEndingStreetType.trimmed();
+    modifiedAddressParts[0] = modifiedAddressParts[0].trimmed() + " " + secondIntersectionEndingStreetType.trimmed();
     LOG_VART(modifiedAddressParts[0]);
   }
   modifiedAddress = modifiedAddressParts[0].trimmed() + " and " + modifiedAddressParts[1].trimmed();
@@ -304,9 +262,7 @@ void AddressNormalizer::_prepareAddressForLibPostalNormalization(QString& addres
   // This is a nasty thing libpostal does where it changes "St" to "Saint" when it should be
   // "Street".
   if (address.endsWith("st", Qt::CaseInsensitive) && !Address::isStreetIntersectionAddress(address))
-  {
     StringUtils::replaceLastIndexOf(address, "st", "Street");
-  }
   LOG_TRACE("After normalization fix: " << address);
 }
 
@@ -315,19 +271,16 @@ bool AddressNormalizer::_isValidNormalizedAddress(const QString& inputAddress,
 {
   // force normalization of "&" to "and"
   if (normalizedAddress.contains(" & "))
-  {
     return false;
-  }
   // This is a bit of hack, but I don't like the way libpostal is turning "St" or "Street" into
   // "Saint". Should probably look into configuration of libpostal or update it for a possible fix
   // instead.
   else if (normalizedAddress.endsWith("saint", Qt::CaseInsensitive) &&
            (inputAddress.endsWith("street", Qt::CaseInsensitive) ||
             inputAddress.endsWith("st", Qt::CaseInsensitive)))
-  {
     return false;
-  }
-  return true;
+  else
+    return true;
 }
 
 }

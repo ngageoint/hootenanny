@@ -97,8 +97,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   // Only add the highway merger if there are elements to merge.
   if (!eids.empty())
   {
-    mergers.push_back(
-      LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
+    mergers.push_back(LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
     result = true;
   }
   // Use a different merger for the one-to-many median matches.
@@ -139,9 +138,7 @@ bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPt
     return conflicting;
   }
   else
-  {
     return false;
-  }
 }
 
 }

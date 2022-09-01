@@ -88,16 +88,14 @@ void OsmBaseXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmBaseXmlChangesetFileWriter::write(const QString& path,
-                                      const ChangesetProviderPtr& changesetProvider)
+void OsmBaseXmlChangesetFileWriter::write(const QString& path, const ChangesetProviderPtr& changesetProvider)
 {
   QList<ChangesetProviderPtr> changesetProviders;
   changesetProviders.append(changesetProvider);
   write(path, changesetProviders);
 }
 
-void OsmBaseXmlChangesetFileWriter::write(const QString& path,
-                                      const QList<ChangesetProviderPtr>& changesetProviders)
+void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders)
 {  
   LOG_DEBUG("Writing changeset to: " << path << "...");
 
@@ -131,9 +129,7 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path,
 
   for (int i = 0; i < changesetProviders.size(); i++)
   {
-    LOG_DEBUG(
-      "Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() <<
-      "...");
+    LOG_DEBUG("Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() << "...");
 
     // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
     // each dataset, before changes and after.
@@ -176,11 +172,8 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path,
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
-          _failsBoundsCheck(changeElement, map1, map2))
-      {
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2))
         continue;
-      }
 
       if (_change.getType() != last && last != Change::ChangeType::Unknown)
           _parsedChangeIds.append(changeElement->getElementId());
@@ -232,8 +225,7 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path,
   LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
-void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node,
-                                           ConstElementPtr previous)
+void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous)
 {
   ConstNodePtr n = dynamic_pointer_cast<const Node>(node);
   ConstNodePtr pn = dynamic_pointer_cast<const Node>(previous);
@@ -293,8 +285,7 @@ void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstEl
   writer.writeEndElement();
 }
 
-void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way,
-                                          ConstElementPtr previous)
+void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous)
 {
   ConstWayPtr w = dynamic_pointer_cast<const Way>(way);
   ConstWayPtr pw = dynamic_pointer_cast<const Way>(previous);
@@ -364,8 +355,7 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
   writer.writeEndElement();
 }
 
-void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation,
-                                               ConstElementPtr previous)
+void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation, ConstElementPtr previous)
 {
   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(relation);
   ConstRelationPtr pr = dynamic_pointer_cast<const Relation>(previous);
@@ -448,8 +438,7 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
   writer.writeEndElement();
 }
 
-void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
-                                           const Element* element)
+void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
 {
   LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootException.h"
@@ -51,13 +51,11 @@ HootExceptionThrower& HootExceptionThrower::getInstance()
   return instance;
 }
 
-void HootExceptionThrower::rethrowPointer(HootException* e)
+void HootExceptionThrower::rethrowPointer(HootException* e) const
 {
-  for (int i = 0; i < _throwMethods.size(); i++)
-  {
-    // try to throw the exception, if it isn't relevant nothing happens
-    _throwMethods[i](e);
-  }
+  // try to throw the exception, if it isn't relevant nothing happens
+  for (const auto& method : _throwMethods)
+    method(e);
 
   // couldn't find a specific exception type, throw the base class.
   throw HootException(*e);

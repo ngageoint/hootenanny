@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RFEXTRACTORCLASSIFIER_H
 #define RFEXTRACTORCLASSIFIER_H
@@ -51,14 +51,12 @@ public:
   /**
    * @brief classify classifies the match type of a building pair and returns the results.
    */
-  virtual MatchClassification classify(
-    const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2) const;
+  virtual MatchClassification classify(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2) const;
 
   /**
    * See note in MatchDetails::getFeatures about the return type of this method.
    */
-  virtual std::map<QString, double> getFeatures(
-    const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2) const;
 
   void importTree(const QDomElement& docRoot);
 

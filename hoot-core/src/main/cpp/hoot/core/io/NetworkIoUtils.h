@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NETWORK_IO_UTILS_H
@@ -51,9 +51,8 @@ public:
    * @param url URL of the request containing the cookies
    * @return a cookie store containing only the session cookie
    */
-  static std::shared_ptr<HootNetworkCookieJar> getUserSessionCookie(
-    const QString& userName, const QString& accessToken, const QString& accessTokenSecret,
-    const QString& url);
+  static std::shared_ptr<HootNetworkCookieJar> getUserSessionCookie(const QString& userName, const QString& accessToken,
+                                                                    const QString& accessTokenSecret, const QString& url);
 };
 
 }

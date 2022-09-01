@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RandomForestModelBuilder.h"
@@ -50,30 +50,23 @@
 namespace hoot
 {
 
-void RandomForestModelBuilder::build(
-  const QStringList& trainingData, QString& output, const bool exportArffOnly)
+void RandomForestModelBuilder::build(const QStringList& trainingData, QString& output, const bool exportArffOnly)
 {
   if (output.endsWith(".rf"))
-  {
     output = output.remove(output.size() - 3, 3);
-  }
 
   LOG_STATUS("Building RF model ..." << FileUtils::toLogFormat(output, 25) << "...");
 
   MatchFeatureExtractor mfe;
   QStringList creators = ConfigOptions().getMatchCreators();
-  for (int i = 0; i < creators.size(); i++)
+  for (const auto& creator : creators)
   {
-    QString creator = creators[i];
     QStringList creatorParts = creator.split(",");
     QString className = creatorParts[0];
     creatorParts.removeFirst();
-    std::shared_ptr<MatchCreator> mc =
-      Factory::getInstance().constructObject<MatchCreator>(className);
+    std::shared_ptr<MatchCreator> mc = Factory::getInstance().constructObject<MatchCreator>(className);
     if (!creatorParts.empty())
-    {
       mc->setArguments(creatorParts);
-    }
     mfe.addMatchCreator(mc);
   }
 
@@ -93,15 +86,12 @@ void RandomForestModelBuilder::build(
 
     mfe.processMap(map);
   }
-  LOG_INFO(
-    "Processed " << StringUtils::formatLargeNumber(mfe.getSamples().size()) << " total samples.");
+  LOG_INFO("Processed " << StringUtils::formatLargeNumber(mfe.getSamples().size()) << " total samples.");
 
   ArffWriter aw(output + ".arff", true);
   aw.write(mfe.getSamples());
   if (exportArffOnly)
-  {
     return;
-  }
 
   // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
   // ideally we'll circle back and update RF to use null values.
@@ -110,13 +100,10 @@ void RandomForestModelBuilder::build(
   Tgs::Random::instance()->seed(0);
   Tgs::RandomForest rf;
   std::shared_ptr<Tgs::DisableCout> dc;
+  // disable the printing of "Trained Tree ..."
   if (Log::getInstance().getLevel() >= Log::Warn)
-  {
-    // disable the printing of "Trained Tree ..."
     dc = std::make_shared<Tgs::DisableCout>();
-  }
-  const int numFactors =
-    std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));
+  const int numFactors = std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));
   LOG_INFO("Training on data with " << numFactors << " factors...");
   //make the number of trees configurable?
   rf.trainMulticlass(df, ConfigOptions().getRandomForestModelTrees(), numFactors);

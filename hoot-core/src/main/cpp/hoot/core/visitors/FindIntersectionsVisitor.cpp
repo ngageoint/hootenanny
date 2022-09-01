@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "FindIntersectionsVisitor.h"
 
@@ -53,13 +53,11 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
     _criterion = createCriterion(_map->shared_from_this());
   // find all ways that are of the criterion type
   set<long> hwids;
-  for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+  for (auto way_id : wids)
   {
-    WayPtr w = _map->getWay(*it);
+    WayPtr w = _map->getWay(way_id);
     if (_criterion->isSatisfied(w))
-    {
-      hwids.insert(*it);
-    }
+      hwids.insert(way_id);
   }
 
   if (hwids.size() >= 3) // two or more ways intersecting
@@ -69,31 +67,24 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 
     // TODO: This and the commented out minAngle/maxAngle sections below are puzzling...changing the
     // tag keys changes the number of nodes in the test output for FindIntersectionsOpTest.
-//    _map->getNode(id)->setTag(
-//      MetadataTags::HootIntersectionWayCount(), QString::number(hwids.size()));
+//    _map->getNode(id)->setTag(MetadataTags::HootIntersectionWayCount(), QString::number(hwids.size()));
     _map->getNode(id)->setTag("IntersectionWayCount", QString::number(hwids.size()));
 
     vector<Radians> angles = NodeMatcher::calculateAngles(_map, id, hwids, 10);
     vector<double> v;
-    for (uint i = 0; i < angles.size(); i++)
-    {
-      v.push_back(toDegrees(angles[i])+180);
-    }
+    for (auto angle : angles)
+      v.push_back(toDegrees(angle)+180);
     sort(v.begin(), v.end());
 
     double minAngle = 360.;
     double maxAngle = 0.;
     for (uint i = 0; i < v.size(); i++)
     {
-      double a = (i == 0) ? (v[i] + 360 - v[v.size()-1]) : v[i] - v[i-1];
+      double a = (i == 0) ? (v[i] + 360 - v[v.size() - 1]) : v[i] - v[i-1];
       if (a < minAngle)
-      {
         minAngle = a;
-      }
       if (a > maxAngle)
-      {
         maxAngle = a;
-      }
     }
     //_map->getNode(id)->setTag(MetadataTags::HootIntersectionMinAngle(), QString::number(minAngle));
     //_map->getNode(id)->setTag(MetadataTags::HootIntersectionMaxAngle(), QString::number(maxAngle));

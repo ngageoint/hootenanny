@@ -35,10 +35,8 @@ namespace hoot
 {
 
 const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_KEY = "01-similar";
-const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY =
-  "03-similar-first-reversed";
-const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY =
-  "02-similar-second-reversed";
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY = "03-similar-first-reversed";
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY = "02-similar-second-reversed";
 
 EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
                                        ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2)

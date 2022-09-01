@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "LinearCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/LinearWayNodeCriterion.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -45,9 +45,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
 
   if (e->getElementType() == ElementType::Node)
-  {
     return false;
-  }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
@@ -68,7 +66,6 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       return true;
     }
   }
-
   LOG_TRACE(e->getElementId() << " fails LinearCriterion.");
   return false;
 }
@@ -86,28 +83,22 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
   {
     return true;
   }
-
   // In case its a relation whose type we don't know about or it has an invalid type, let's sift
   // through the members to make a final determination or not whether it should be treated as being
   // linear.
   const Tags& tags = relation->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.getGeometries();
-
     LOG_VART(g & OsmGeometries::LineString);
     LOG_VART(g & OsmGeometries::Area);
-
     // We don't want to fail here if the associated schema type supports both a line and a poly.
     // We only care by this point that it does support a line. The previous closed area check
     // will take care of weeding out any polys.
     if (g & OsmGeometries::LineString)
-    {
       return true;
-    }
   }
-
   return false;
 }
 
@@ -117,4 +108,3 @@ QStringList LinearCriterion::getChildCriteria() const
 }
 
 }
-

@@ -378,12 +378,12 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
    */
   if (way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
-    throw HootException("Cannot do partial write of Way ID " + QString::number(way->getId()) +
-      " as it contains " + QString::number(way->getNodeCount()) + " nodes, but our cache can" +
-      " only hold " + QString::number(_elementCache->getNodeCacheSize()) + ".  If you have enough" +
-      " memory to load this way, you can increase the element.cache.size.node setting to" +
-      " an appropriate value larger than " + QString::number(way->getNodeCount()) +
-      " to allow for loading it.");
+    throw HootException(
+      QString("Cannot do partial write of Way ID %1 as it contains %2 nodes, but our cache can only hold %3.  "
+              "If you have enough memory to load this way, you can increase the element.cache.size.node setting to "
+              "an appropriate value larger than %4 to allow for loading it.")
+        .arg(QString::number(way->getId()), QString::number(way->getNodeCount()),
+             QString::number(_elementCache->getNodeCacheSize()), QString::number(way->getNodeCount())));
   }
 
   // Make sure all the nodes in the way are in our cache
@@ -393,10 +393,11 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
   {
     if (_elementCache->containsNode(node_id) == false)
     {
-      throw HootException("Way " + QString::number(way->getId()) + " contains node " +
-        QString::number(node_id) + ", which is not present in the cache.  If you have the " +
-          "memory to support this number of nodes, you can increase the element.cache.size.node " +
-          "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
+      throw HootException(
+        QString("Way %1 contains node %2, which is not present in the cache.  If you have the "
+                "memory to support this number of nodes, you can increase the element.cache.size.node "
+                "setting above: %3.")
+          .arg(QString::number(way->getId()), QString::number(node_id), QString::number(_elementCache->getNodeCacheSize())));
     }
     LOG_TRACE("Way " << way->getId() << " contains node " << node_id <<
                  ": " << _elementCache->getNode(node_id)->getX() << ", " <<
@@ -434,35 +435,32 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
       nodeCount++;
       if (nodeCount > _elementCache->getNodeCacheSize())
       {
-        throw HootException("Relation with ID " +
-          QString::number(newRelation->getId()) + " contains more nodes than can fit in the " +
-          "cache (" + QString::number(_elementCache->getNodeCacheSize()) + ").  If you have enough " +
-          " memory to load this relation, you can increase the element.cache.size.node setting to " +
-          " an appropriate value larger than " + QString::number(nodeCount) + " to allow for loading it.");
+        throw HootException(
+          QString("Relation with ID %1 contains more nodes than can fit in the cache (%2).  If you have enough memory to load this relation, "
+                  "you can increase the element.cache.size.node setting to an appropriate value larger than %3 to allow for loading it.")
+            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getNodeCacheSize()), QString::number(nodeCount)));
       }
       break;
     case ElementType::Way:
       wayCount++;
       if (wayCount > _elementCache->getWayCacheSize())
       {
-        throw HootException("Relation with ID " +
-          QString::number(newRelation->getId()) + " contains more ways than can fit in the " +
-          "cache (" + QString::number(_elementCache->getWayCacheSize()) + ").  If you have enough " +
-          " memory to load this relation, you can increase the element.cache.size.way setting to " +
-          " an appropriate value larger than " + QString::number(wayCount) +
-          " to allow for loading it.");
+        throw HootException(
+          QString("Relation with ID %1 contains more ways than can fit in the cache (%2).  If you have enough "
+                  " memory to load this relation, you can increase the element.cache.size.way setting to "
+                  " an appropriate value larger than %3 to allow for loading it.")
+                    .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getWayCacheSize()), QString::number(wayCount)));
       }
       break;
     case ElementType::Relation:
       relationCount++;
       if (relationCount > _elementCache->getRelationCacheSize())
       {
-        throw HootException("Relation with ID " +
-          QString::number(newRelation->getId()) + " contains more relations than can fit in the " +
-          "cache (" + QString::number(_elementCache->getRelationCacheSize()) + ").  If you have enough " +
-          " memory to load this relation, you can increase the element.cache.size.relation setting to " +
-          " to an appropriate value larger than " + QString::number(relationCount) +
-          " to allow for loading it.");
+        throw HootException(
+          QString("Relation with ID %1 contains more relations than can fit in the cache (%2).  If you have enough "
+                  " memory to load this relation, you can increase the element.cache.size.relation setting to "
+                  " to an appropriate value larger than %3 to allow for loading it.")
+            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getRelationCacheSize()), QString::number(relationCount)));
       }
       break;
     default:
@@ -828,7 +826,6 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
 
 bool OgrWriter::_usesTransactions() const
 {
-//  return false;
   //  Right now OgrWriter will use transactions for GPKG files
   return (_ds && QString(_ds->GetDriverName()) == "GPKG");
 }

@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HighwayIntersectionCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -48,9 +48,7 @@ HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
 bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Node)
-  {
     return false;
-  }
 
   std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
@@ -59,23 +57,15 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // find all ways that are highways (ie roads)
   set<long> hwids;
-  for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+  for (auto way_id : wids)
   {
-    ConstWayPtr w = _map->getWay(*it);
+    ConstWayPtr w = _map->getWay(way_id);
     if (HighwayCriterion(_map).isSatisfied(w))
-    {
-      hwids.insert(*it);
-    }
+      hwids.insert(way_id);
   }
 
-  bool result = false;
   // three or more ways meeting at a node is an intersection
-  if (hwids.size() >= 3)
-  {
-    result = true;
-  }
-
-  return result;
+  return (hwids.size() >= 3);
 }
 
 void HighwayIntersectionCriterion::setOsmMap(const OsmMap *map)

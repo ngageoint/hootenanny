@@ -337,8 +337,7 @@ void DataConverter::_fillElementCacheMT(const QString& inputUrl, ElementCachePtr
   std::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::createReader(inputUrl);
   reader->open(inputUrl);
-  std::shared_ptr<ElementInputStream> streamReader =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
+  std::shared_ptr<ElementInputStream> streamReader = std::dynamic_pointer_cast<ElementInputStream>(reader);
 
   std::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
   ProjectToGeographicVisitor visitor;
@@ -502,8 +501,7 @@ void DataConverter::_handleNonOgrOutputTranslationOpts()
   else if (_convertOps.contains(SchemaTranslationOp::className()))
   {
     //  Replacing SchemaTranslationOp with SchemaTranslationVisitor for the reason mentioned above
-    _convertOps.replaceInStrings(
-      SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
+    _convertOps.replaceInStrings(SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
   }
   LOG_VARD(_convertOps);
 }

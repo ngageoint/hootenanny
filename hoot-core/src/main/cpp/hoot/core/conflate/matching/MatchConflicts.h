@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCHCONFLICTS_H
 #define MATCHCONFLICTS_H
@@ -50,16 +50,14 @@ public:
    * Calculates all the conflicts between matches and puts the indexes to the conflicting pairs in
    * the provided conflicts set. conflicts is cleared before inserting conflicts.
    */
-  void calculateMatchConflicts(
-    const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const;
+  void calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const;
 
 private:
 
   const ConstOsmMapPtr& _map;
 
-  void _calculateSubsetConflicts(
-    const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
-    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches) const;
+  void _calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
+                                 const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches) const;
 
   EidIndexMap _calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
 };

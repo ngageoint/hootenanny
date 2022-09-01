@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "GeoNamesReader.h"
 
@@ -37,11 +37,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
-GeoNamesReader::GeoNamesReader() :
-_maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
-_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
-_useDataSourceIds(false)
-{}
+GeoNamesReader::GeoNamesReader()
+  : _maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
+  _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+  _useDataSourceIds(false)
+{
+}
 
 void GeoNamesReader::close()
 {
@@ -51,9 +52,7 @@ void GeoNamesReader::close()
 std::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
 {
   if (!_wgs84)
-  {
     _wgs84 = MapProjector::createWgs84Projection();
-  }
   return _wgs84;
 }
 
@@ -78,9 +77,7 @@ void GeoNamesReader::open(const QString& url)
   _elementsRead = 0;
 
   if (_fp.open(QFile::ReadOnly) == false)
-  {
     throw HootException("Error opening file for reading: " + url);
-  }
 
   // Now figure out what type of Geonames file we have
   QString line = QString::fromUtf8(_fp.readLine().constData());
@@ -177,47 +174,33 @@ ElementPtr GeoNamesReader::readNextElement()
   double x = fields[_LONGITUDE].toDouble(&ok);
   LOG_VART(x);
   if (ok == false)
-  {
-    throw HootException(QString("Error parsing longitude (%1): %2").arg(fields[_LONGITUDE]).
-      arg(line));
-  }
+    throw HootException(QString("Error parsing longitude (%1): %2").arg(fields[_LONGITUDE], line));
+
   double y = fields[_LATITUDE].toDouble(&ok);
   if (ok == false)
-  {
-    throw HootException(QString("Error parsing latitude (%1): %2").arg(fields[_LATITUDE]).
-      arg(line));
-  }
+    throw HootException(QString("Error parsing latitude (%1): %2").arg(fields[_LATITUDE], line));
 
   long id;
   if (_useDataSourceIds)
   {
     id = fields[_GEONAMESID].toLong(&ok);
     if (!ok)
-    {
       throw HootException("Error parsing geonames ID: " + line);
-    }
   }
   else
-  {
     id = _partialMap->createNextNodeId();
-  }
 
   NodePtr n(Node::newSp(_status, id, x, y, _defaultCircularError));
 
   if (_columns.size() != fields.size())
-  {
-    throw HootException(QString("Expected %1 fields but found %2 fields. %3").arg(_columns.size()).
-      arg(fields.size()).arg(line));
-  }
+    throw HootException(QString("Expected %1 fields but found %2 fields. %3").arg(_columns.size()).arg(fields.size()).arg(line));
 
   for (int i = 0; i < _columns.size(); i++)
   {
     int j = i; //convertColumns[i];
     QString val = fields[j].trimmed();
     if (!val.isEmpty())
-    {
       n->getTags()[_columns[j]] = _saveMemory(val);
-    }
   }
 
   LOG_VART(n);
@@ -235,14 +218,10 @@ QString GeoNamesReader::_saveMemory(const QString& s)
       _strings[s] = s;
     }
     else
-    {
       result = _strings[s];
-    }
   }
   else
-  {
     result = s;
-  }
 
   return result;
 }

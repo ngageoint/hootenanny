@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MULTILINESTRING_MERGE_RELATION_COLLAPSER_H
@@ -116,8 +116,7 @@ private:
   int _numRelationMembersModified;
 
   QString _getMatchingTypeTag(const ConstElementPtr& element, bool& matchingTypeTagIsKey) const;
-  bool _hasValidType(
-    const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const;
+  bool _hasValidType(const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const;
 };
 
 }

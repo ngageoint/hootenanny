@@ -50,8 +50,7 @@ bool NetworkTypeCriterion::isSatisfied(const ConstElementPtr& element) const
     return true;
 
   // If the element itself wasn't a network type, see if it belongs to a relation that is.
-  const std::set<long>& relations =
-    _map->getIndex().getElementToRelationMap()->getRelationByElement(element->getElementId());
+  const std::set<long>& relations = _map->getIndex().getElementToRelationMap()->getRelationByElement(element->getElementId());
   LOG_VART(relations.size());
   for (auto relationId : relations)
   {

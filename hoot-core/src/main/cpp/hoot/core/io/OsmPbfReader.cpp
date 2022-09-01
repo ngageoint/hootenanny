@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmPbfReader.h"
@@ -1054,8 +1054,8 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
     QStringList filter;
     filter << "*.pbf";
     QFileInfoList files = d.entryInfoList(filter, QDir::Files, QDir::Name);
-    for (int i = 0; i < files.size(); i++)
-      _readFile(files.at(i).filePath(), map);
+    for (const auto& file : qAsConst(files))
+      _readFile(file.filePath(), map);
   }
   else
     _readFile(path, map);
@@ -1066,8 +1066,7 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 
 void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
 {
-  std::shared_ptr<fstream> input =
-    std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
+  std::shared_ptr<fstream> input = std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
   if (input->good() == false)
     throw HootException(QString("Error reading %1").arg(path));
   parse(input, map);

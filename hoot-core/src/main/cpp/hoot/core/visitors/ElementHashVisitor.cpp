@@ -91,8 +91,7 @@ void ElementHashVisitor::insertHash(const ElementPtr& element, const QString& ha
       LOG_TRACE(
         "Marking duplicate hash: " << hash << " for " << element->getElementId() <<
         "; hash already used by " << _hashesToElementIds[hash] << "...");
-      _duplicates.insert(
-        std::pair<ElementId, ElementId>(_hashesToElementIds[hash], element->getElementId()));
+      _duplicates.insert(std::pair<ElementId, ElementId>(_hashesToElementIds[hash], element->getElementId()));
     }
     else
     {

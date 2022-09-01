@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __POLYGON_COMPARE_H__
@@ -45,9 +45,8 @@ public:
 
   PolygonCompare(const geos::geom::Envelope& e);
 
-  bool operator()(
-    const std::shared_ptr<geos::geom::Geometry>& p1,
-    const std::shared_ptr<geos::geom::Geometry>& p2) const;
+  bool operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
+                  const std::shared_ptr<geos::geom::Geometry>& p2) const;
 
 private:
 

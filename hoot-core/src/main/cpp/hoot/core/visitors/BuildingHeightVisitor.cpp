@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "BuildingHeightVisitor.h"
@@ -37,10 +37,10 @@ int BuildingHeightVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, BuildingHeightVisitor)
 
-BuildingHeightVisitor::BuildingHeightVisitor() :
-_totalHeight(0.0),
-_minHeight(0.0),
-_maxHeight(0.0)
+BuildingHeightVisitor::BuildingHeightVisitor()
+  : _totalHeight(0.0),
+    _minHeight(0.0),
+    _maxHeight(0.0)
 {
   _createFeetRegEx();
 }
@@ -81,13 +81,9 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
     {
       _totalHeight += height;
       if (_minHeight == 0 || height < _minHeight)
-      {
         _minHeight = height;
-      }
       if (height > _maxHeight)
-      {
         _maxHeight = height;
-      }
       _numAffected++;
     }
   }
@@ -103,16 +99,10 @@ Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
   {
     Meters height = 0.0;
     const QRegularExpressionMatch feetMatch = _feetRegEx.match(heightStr);
-    if (feetMatch.hasMatch())
-    {
-      // convert feet to meters
+    if (feetMatch.hasMatch()) // convert feet to meters
       height = _parseFeetVal(heightStr, feetMatch);
-    }
-    else
-    {
-      // already in meters
+    else  // already in meters
       height = _parseMetersVal(heightStr);
-    }
     LOG_VART(height);
     if (height > 0.0)
     {
@@ -143,9 +133,7 @@ Meters BuildingHeightVisitor::_parseMetersVal(const QString& heightStr) const
   bool ok = false;
   const Meters height = heightStr.toDouble(&ok);
   if (ok)
-  {
     return height;
-  }
   return 0.0;
 }
 
@@ -208,9 +196,7 @@ Meters BuildingHeightVisitor::_parseFeetToken(const QString& type,
   {
     val = regexMatch.captured(type).toDouble(&successfulParse);
     if (!successfulParse)
-    {
       val = 0.0;
-    }
   }
   return val;
 }

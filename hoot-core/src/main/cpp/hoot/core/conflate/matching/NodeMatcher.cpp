@@ -161,10 +161,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
     }
 
     if (ConfigOptions().getNodeMatcherFailOnBadAngleSpots())
-    {
-      throw HootException(
-        QString("NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way."));
-    }
+      throw HootException(QString("NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way."));
   }
 
   return result;

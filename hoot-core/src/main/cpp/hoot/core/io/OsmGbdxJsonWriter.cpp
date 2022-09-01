@@ -90,7 +90,7 @@ void OsmGbdxJsonWriter::_newOutputFile()
     while (QFile::exists(url))
     {
       inc++;
-      url = _outputDir.filePath(QString("%1_%2_%3.json").arg(_outputFileName).arg(inc,2,10,QChar('0')).arg(_fileNumber));
+      url = _outputDir.filePath(QString("%1_%2_%3.json").arg(_outputFileName).arg(inc, 2, 10, QChar('0')).arg(_fileNumber));
     }
   }
 

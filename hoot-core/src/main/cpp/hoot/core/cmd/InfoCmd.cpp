@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -30,10 +30,10 @@
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/info/ConfigOptionsDisplayer.h>
 #include <hoot/core/info/FormatsDisplayer.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 #include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QUrl>
@@ -70,9 +70,8 @@ public:
     // Only allowing one option per info command by default. Options with more than sub-option are
     // parsed separately after this.
     LOG_VART(args);
-    for (int i = 0; i < args.size(); i++)
+    for (const auto& arg : qAsConst(args))
     {
-      const QString arg = args.at(i);
       if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && !specifiedOpts.empty()))
       {
         std::cout << getHelp() << std::endl << std::endl;
@@ -93,10 +92,7 @@ public:
     if (specifiedOpts.contains("--config-options"))
     {
       if (asJson)
-      {
-        throw IllegalArgumentException(
-          "JSON format not supported for configuration options information.");
-      }
+        throw IllegalArgumentException("JSON format not supported for configuration options information.");
 
       args.removeAt(args.indexOf("--config-options"));
 
@@ -117,33 +113,24 @@ public:
       if (getNamesOnly && getDetails)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw IllegalArgumentException(
-          "Only one option can be used, either --option-names or --option-details.");
+        throw IllegalArgumentException("Only one option can be used, either --option-names or --option-details.");
       }
 
       if (args.size() > 1)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw IllegalArgumentException(
-          QString("%1 with the --config-options option takes zero to one parameters.")
-            .arg(getName()));
+        throw IllegalArgumentException(QString("%1 with the --config-options option takes zero to one parameters.").arg(getName()));
       }
 
       if (args.empty())
-      {
         std::cout << ConfigOptionsDisplayer::getAllOptionNames(getDetails).toStdString();
-      }
       else
-      {
         std::cout << ConfigOptionsDisplayer::getOptionName(args[0], getDetails).toStdString();
-      }
     }
     else if (specifiedOpts.contains("--formats"))
     {
       if (asJson)
-      {
         throw IllegalArgumentException("JSON format not supported for format information.");
-      }
 
       args.removeAt(args.indexOf("--formats"));
       if (args.size() > 2)
@@ -161,9 +148,8 @@ public:
       formatSubOptions.append("--output");
       formatSubOptions.append("--output-streamable");
       formatSubOptions.append("--ogr");
-      for (int i = 0; i < args.size(); i++)
+      for (const auto& arg : qAsConst(args))
       {
-        const QString arg = args.at(i);
         if (!formatSubOptions.contains(arg))
         {
           std::cout << getHelp() << std::endl << std::endl;
@@ -233,23 +219,15 @@ public:
         .toStdString();
     }
     else if (specifiedOpts.contains("--cleaning-operations"))
-    {
       std::cout << infoDisplayer.getDisplayInfoOps("map.cleaner.transforms").toStdString();
-    }
     else if (specifiedOpts.contains("--conflate-post-operations"))
-    {
       std::cout << infoDisplayer.getDisplayInfoOps("conflate.post.ops").toStdString();
-    }
     else if (specifiedOpts.contains("--conflate-pre-operations"))
-    {
       std::cout << infoDisplayer.getDisplayInfoOps("conflate.pre.ops").toStdString();
-    }
     else if (specifiedOpts.contains("--languages"))
     {
       if (asJson)
-      {
         throw IllegalArgumentException( "JSON format not supported for languages information.");
-      }
 
       args.removeAt(args.indexOf("--languages"));
       if (args.size() != 1)
@@ -262,11 +240,9 @@ public:
       // only allowing one option per command
       const QStringList supportedLangOpts = _getSupportedLanguageOptions();
       QStringList specifiedLangOpts;
-      for (int i = 0; i < args.size(); i++)
+      for (const auto& arg : qAsConst(args))
       {
-        const QString arg = args.at(i);
-        if (specifiedLangOpts.contains(arg) ||
-            (supportedLangOpts.contains(arg) && !specifiedLangOpts.empty()))
+        if (specifiedLangOpts.contains(arg) || (supportedLangOpts.contains(arg) && !specifiedLangOpts.empty()))
         {
           std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
@@ -276,8 +252,7 @@ public:
       if (specifiedLangOpts.empty())
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw IllegalArgumentException(
-          QString("%1 with the --languages option takes a single option.").arg(getName()));
+        throw IllegalArgumentException(QString("%1 with the --languages option takes a single option.").arg(getName()));
       }
       LOG_VARD(specifiedLangOpts.size());
 
@@ -286,45 +261,31 @@ public:
       try
       {
         std::shared_ptr<LanguageInfoProvider> client =
-          Factory::getInstance().constructObject<LanguageInfoProvider>(
-            opts.getLanguageInfoProvider());
+          Factory::getInstance().constructObject<LanguageInfoProvider>(opts.getLanguageInfoProvider());
         client->setConfiguration(conf());
 
         const QString type = args[0].replace("--", "").toLower();
 
         QString displayStr;
         if (type == "translatable" || type == "detectable")
-        {
-          displayStr =
-            HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
-              type, client->getAvailableLanguages(type));
-        }
+          displayStr = HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(type, client->getAvailableLanguages(type));
         else
-        {
-          displayStr =
-            HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
-              type, client->getAvailableApps(type));
-        }
+          displayStr = HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(type, client->getAvailableApps(type));
         std::cout << displayStr << std::endl;
       }
       catch (const HootException& e)
       {
         LOG_VART(e.getWhat());
         if (e.getWhat().contains("Access tokens for user"))
-        {
-          std::cout <<
-            "You must log in to the Hootenanny Web Services before displaying supported language information." <<
-            std::endl;
-        }
+          std::cout << "You must log in to the Hootenanny Web Services before displaying supported language information." << std::endl;
       }
     }
     // everything else
     else if (specifiedOpts.size() == 1)
     {
       QString apiEntityType;
-      for (int i = 0; i < supportedOpts.size(); i++)
+      for (auto supportedOpt : qAsConst(supportedOpts))
       {
-        QString supportedOpt = supportedOpts.at(i);
         if (args.contains(supportedOpt))
         {
           // should only be one of these
@@ -336,9 +297,7 @@ public:
       if (!args.empty())
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw IllegalArgumentException(
-          QString("%1 takes zero parameters when called with: --%2")
-            .arg(getName()).arg(apiEntityType));
+        throw IllegalArgumentException(QString("%1 takes zero parameters when called with: --%2").arg(getName()).arg(apiEntityType));
       }
 
       std::cout << infoDisplayer.getDisplayInfo(apiEntityType).toStdString();
@@ -346,8 +305,7 @@ public:
     else
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(
-        "Invalid " + getName() + " command parameters: " + specifiedOpts.join(" "));
+      throw IllegalArgumentException("Invalid " + getName() + " command parameters: " + specifiedOpts.join(" "));
     }
 
     return 0;

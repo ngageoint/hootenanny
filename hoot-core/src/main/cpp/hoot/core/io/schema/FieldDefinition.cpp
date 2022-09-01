@@ -22,27 +22,24 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "FieldDefinition.h"
 
 namespace hoot
 {
 
-FieldDefinition::FieldDefinition() :
-_width(-1),
-_allowNull(true),
-_defaultIsNull(false)
+FieldDefinition::FieldDefinition()
+  : _width(-1),
+    _allowNull(true),
+    _defaultIsNull(false)
 {
 }
 
-void FieldDefinition::_reportError(const QString& field, const QString& error,
-    StrictChecking strict) const
+void FieldDefinition::_reportError(const QString& field, const QString& error, StrictChecking strict) const
 {
   if (strict == StrictOn)
-  {
     throw InvalidValueException(field, error);
-  }
   else if (strict == StrictWarn)
   {
     LOG_WARN("Error in field: " << field << " error: " << error);

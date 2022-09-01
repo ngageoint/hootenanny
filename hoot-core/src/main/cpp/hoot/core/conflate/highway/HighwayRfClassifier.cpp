@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HighwayRfClassifier.h"
 
@@ -53,42 +53,32 @@ int HighwayRfClassifier::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
-MatchClassification HighwayRfClassifier::classify(
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-  const WaySublineMatchString& match)
+MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                                  const ElementId& eid2, const WaySublineMatchString& match)
 {
   _init();
 
   MatchClassification p;
 
   if (match.isValid() == false)
-  {
     p.setMiss();
-  }
   else
   {
     std::map<QString, double> features = getFeatures(map, eid1, eid2, match);
 
     if (features.empty())
-    {
       p.setMiss();
-    }
     else
     {
       vector<double> row;
       row.reserve(_rfFactorLabels.size());
-      for (size_t i = 0; i < (size_t)_rfFactorLabels.size(); i++)
+      for (const auto& label : qAsConst(_rfFactorLabels))
       {
-        std::map<QString, double>::const_iterator it = features.find(_rfFactorLabels[i]);
+        auto it = features.find(label);
         if (it != features.end())
-        {
           row.push_back(it->second);
-        }
-        else
-        {
-          // for now we're using -1 instead of null.
+        else  // for now we're using -1 instead of null.
           row.push_back(-1);
-        }
       }
       std::map<string, double> scores;
       _rf->classifyVector(row, scores);
@@ -98,7 +88,6 @@ MatchClassification HighwayRfClassifier::classify(
       p.setReviewP(scores["review"]);
     }
   }
-
   return p;
 }
 
@@ -108,10 +97,8 @@ void HighwayRfClassifier::_createExtractors() const
   // Order can be very important as far as matching quality is concerned. You can check the
   // resulting output arff file when these are serialized to make sure the order of these extractors
   // is maintained.
-  _extractors.push_back(
-    std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>()));
-  _extractors.push_back(
-     std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>()));
+  _extractors.push_back(std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>()));
+  _extractors.push_back(std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>()));
   _extractors.push_back(std::make_shared<AngleHistogramExtractor>());
   _extractors.push_back(
     std::make_shared<WeightedMetricDistanceExtractor>(
@@ -119,9 +106,8 @@ void HighwayRfClassifier::_createExtractors() const
       ConfigOptions().getSearchRadiusHighway()));
 }
 
-map<QString, double> HighwayRfClassifier::getFeatures(
-  const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
-  const WaySublineMatchString& match) const
+map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m, const ElementId& eid1,
+                                                      const ElementId& eid2, const WaySublineMatchString& match) const
 {
   _init();
 
@@ -141,10 +127,8 @@ map<QString, double> HighwayRfClassifier::getFeatures(
   WaySublineCollection string1 = copiedMatch.getSublineString1();
   WaySublineCollection string2 = copiedMatch.getSublineString2();
 
-  MultiLineStringSplitter().split(
-    copiedMap, string1, copiedMatch.getReverseVector1(), match1, scraps1);
-  MultiLineStringSplitter().split(
-    copiedMap, string2, copiedMatch.getReverseVector2(), match2, scraps2);
+  MultiLineStringSplitter().split(copiedMap, string1, copiedMatch.getReverseVector1(), match1, scraps1);
+  MultiLineStringSplitter().split(copiedMap, string2, copiedMatch.getReverseVector2(), match2, scraps2);
 
   if (!match1 || !match2)
   {
@@ -158,18 +142,17 @@ map<QString, double> HighwayRfClassifier::getFeatures(
   }
   else
   {
-    for (size_t i = 0; i < _extractors.size(); i++)
+    for (const auto& extractor : _extractors)
     {
-      double v = _extractors[i]->extract(*copiedMap, match1, match2);
+      double v = extractor->extract(*copiedMap, match1, match2);
       // If it isn't null, then include it.
       if (!FeatureExtractor::isNull(v))
       {
-        QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
+        QString factorName = extractor->getName().replace(QRegExp("[^\\w]"), "_");
         result[factorName] = v;
       }
     }
   }
-
   return result;
 }
 
@@ -184,9 +167,7 @@ void HighwayRfClassifier::_init() const
 
     QFile file(path.toLatin1().data());
     if (!file.open(QIODevice::ReadOnly))
-    {
       throw HootException("Error opening file: " + path);
-    }
     _rf = std::make_shared<RandomForest>();
     try
     {
@@ -203,19 +184,15 @@ void HighwayRfClassifier::_init() const
     LOG_VART(factorLabels);
 
     QStringList extractorNames;
-    for (size_t i = 0; i < _extractors.size(); i++)
-    {
-      extractorNames.append(_extractors[i]->getName().replace(QRegExp("[^\\w]"), "_"));
-    }
+    for (const auto& extractor : _extractors)
+      extractorNames.append(extractor->getName().replace(QRegExp("[^\\w]"), "_"));
 
     QStringList missingExtractors;
-    for (size_t i = 0; i < factorLabels.size(); i++)
+    for (const auto& label : factorLabels)
     {
-      QString fn = QString::fromStdString(factorLabels[i]);
-      if (extractorNames.contains(fn) == false)
-      {
+      QString fn = QString::fromStdString(label);
+      if (!extractorNames.contains(fn))
         missingExtractors.append(fn);
-      }
       _rfFactorLabels.append(fn);
     }
     LOG_VART(extractorNames);

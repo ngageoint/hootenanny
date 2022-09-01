@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Progress.h"
@@ -38,16 +38,15 @@ using namespace std;
 namespace hoot
 {
 
-Progress::Progress(QString jobId, QString source, JobState jobState, float percentComplete,
-                   float taskWeight) :
-_jobId(jobId.trimmed()),
-_source(source),
-_percentComplete(percentComplete),
-_taskStartPercentComplete(percentComplete),
-_lastPercentComplete(percentComplete),
-_taskWeight(taskWeight),
-_jobState(jobState),
-_userMessage("")
+Progress::Progress(QString jobId, QString source, JobState jobState, float percentComplete, float taskWeight)
+  : _jobId(jobId.trimmed()),
+    _source(source),
+    _percentComplete(percentComplete),
+    _taskStartPercentComplete(percentComplete),
+    _lastPercentComplete(percentComplete),
+    _taskWeight(taskWeight),
+    _jobState(jobState),
+    _userMessage("")
 {
 }
 
@@ -90,7 +89,8 @@ void Progress::set(float percentComplete, JobState jobState, QString userMessage
 void Progress::setFromRelative(float relativePercentComplete, QString userMessage,
                                bool logAsProgress)
 {
-  setFromRelative(relativePercentComplete, userMessage, logAsProgress);
+  //  Use the current job state
+  setFromRelative(relativePercentComplete, _jobState, userMessage, logAsProgress);
 }
 
 void Progress::setFromRelative(float relativePercentComplete, JobState jobState,
@@ -125,9 +125,7 @@ QString Progress::_toText() const
 {
   QString js = "";
   if (!_jobId.isEmpty())
-  {
     js.append(_jobId % " - ");
-  }
   js.append(_source);
   js.append(" (" % QString("%1").arg((int)(_percentComplete * 100.)) % "%): ");
   js.append(_userMessage);

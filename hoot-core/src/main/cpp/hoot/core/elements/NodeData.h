@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef _ELEMENTS_NODE_DATA_H_
 #define _ELEMENTS_NODE_DATA_H_
@@ -61,7 +61,7 @@ private:
 };
 
 inline void NodeData::init(long id, double x, double y, long changeset, long version,
-  quint64 timestamp, QString user, long uid, bool visible)
+                           quint64 timestamp, QString user, long uid, bool visible)
 {
   _id = id;
   _x = x;

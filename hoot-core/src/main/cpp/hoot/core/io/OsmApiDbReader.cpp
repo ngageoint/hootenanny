@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbReader.h"
 
@@ -46,8 +46,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiDbReader)
 
-OsmApiDbReader::OsmApiDbReader() :
-_database(std::make_shared<OsmApiDb>())
+OsmApiDbReader::OsmApiDbReader()
+  : _database(std::make_shared<OsmApiDb>())
 {
   setConfiguration(conf());
 }
@@ -61,9 +61,8 @@ void OsmApiDbReader::open(const QString& urlStr)
 {
   OsmMapReader::open(urlStr);
   if (!isSupported(_url))
-  {
     throw HootException("An unsupported URL was passed into OsmApiDbReader: " + _url);
-  }
+
   initializePartial();
 
   QUrl url(_url);
@@ -86,17 +85,17 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
   std::shared_ptr<QSqlQuery> tagItr;
   switch (element->getElementType().getEnum())
   {
-    case ElementType::Node:
-      tagItr = _database->selectTagsForNode(elementId.getId());
-      break;
-    case ElementType::Way:
-      tagItr = _database->selectTagsForWay(elementId.getId());
-      break;
-    case ElementType::Relation:
-      tagItr = _database->selectTagsForRelation(elementId.getId());
-      break;
-    default:
-      throw HootException("Invalid element type.");
+  case ElementType::Node:
+    tagItr = _database->selectTagsForNode(elementId.getId());
+    break;
+  case ElementType::Way:
+    tagItr = _database->selectTagsForWay(elementId.getId());
+    break;
+  case ElementType::Relation:
+    tagItr = _database->selectTagsForRelation(elementId.getId());
+    break;
+  default:
+    throw HootException("Invalid element type.");
   }
   while (tagItr->next())
   {
@@ -105,18 +104,12 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
     QString val2 = tagItr->value(2).toString();
     QString tag = "";
     if (val1!="" || val2!="")
-    {
       tag = "\""+val1+"\"=>\""+val2+"\"";
-    }
     if (tag != "")
-    {
       tags << tag;
-    }
   }
   if (!tags.empty())
-  {
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-  }
 }
 
 NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
@@ -124,10 +117,10 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   const long rawId = resultIterator.value(0).toLongLong();
   const long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
   LOG_TRACE("Reading node with ID: " << nodeId);
-  const double lat =
-    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
-  const double lon =
-    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
+  const double lat = static_cast<double>(resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()) /
+                     static_cast<double>(ApiDb::COORDINATE_SCALE);
+  const double lon = static_cast<double>(resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()) /
+                     static_cast<double>(ApiDb::COORDINATE_SCALE);
 
   // Timestamp
   QDateTime dt = resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime();
@@ -150,9 +143,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   _updateMetadataOnElement(node);
   // We want the reader's status to always override any existing status.
   if (!_keepStatusTag && _status != Status::Invalid)
-  {
     node->setStatus(_status);
-  }
 
   LOG_VART(node->getElementId());
   LOG_VART(node->getStatus());
@@ -181,9 +172,8 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   // element results are read
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
-  {
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
-  }
+
   way->addNodes(nodeIds);
 
   // See related note in _resultToNode.
@@ -191,9 +181,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   _updateMetadataOnElement(way);
   // we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
-  {
     way->setStatus(_status);
-  }
 
   LOG_VART(way->getStatus());
   LOG_VART(way->getVersion());
@@ -222,9 +210,8 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   // element results are read.
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
-  {
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
-  }
+
   relation->setMembers(members);
 
   // See related note in _resultToNode.
@@ -232,9 +219,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
-  {
     relation->setStatus(_status);
-  }
 
   LOG_VART(relation->getStatus());
   LOG_VART(relation->getVersion());

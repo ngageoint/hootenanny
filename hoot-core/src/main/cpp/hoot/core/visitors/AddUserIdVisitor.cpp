@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AddUserIdVisitor.h"
 
@@ -38,11 +38,10 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddUserIdVisitor)
 void AddUserIdVisitor::visit(const ElementPtr& pElement)
 {
   Tags& tags = pElement->getTags();
-
   if (!pElement->getUser().isEmpty() && tags.getNonDebugCount() > 0)
   {
-      tags[MetadataTags::HootUserName()] = pElement->getUser();
-      tags[MetadataTags::HootUserId()] = QString::number(pElement->getUid());
+    tags[MetadataTags::HootUserName()] = pElement->getUser();
+    tags[MetadataTags::HootUserId()] = QString::number(pElement->getUid());
   }
 }
 
