@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef EXTERNAL_MERGE_ELEMENT_SORTER_H
@@ -69,8 +69,7 @@ struct ElementComparePq
   }
 };
 
-using ElementPriorityQueue =
-  std::priority_queue<PqElement, std::vector<PqElement>, ElementComparePq>;
+using ElementPriorityQueue = std::priority_queue<PqElement, std::vector<PqElement>, ElementComparePq>;
 
 /**
   This performs element sorting outside of main memory on disk and serves the sorted results up
@@ -164,12 +163,10 @@ private:
   /*
    * Adds the first member from each temp file to the priority queue
    */
-  ElementPriorityQueue _getInitializedPriorityQueue(
-    QList<std::shared_ptr<PartialOsmMapReader>>& readers) const;
+  ElementPriorityQueue _getInitializedPriorityQueue(QList<std::shared_ptr<PartialOsmMapReader>>& readers) const;
 
-  void _mergeSortedElements(
-    ElementPriorityQueue& priorityQueue, std::shared_ptr<PartialOsmMapWriter> writer,
-    QList<std::shared_ptr<PartialOsmMapReader>> readers) const;
+  void _mergeSortedElements(ElementPriorityQueue& priorityQueue, std::shared_ptr<PartialOsmMapWriter> writer,
+                            QList<std::shared_ptr<PartialOsmMapReader>> readers) const;
 
   std::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
 

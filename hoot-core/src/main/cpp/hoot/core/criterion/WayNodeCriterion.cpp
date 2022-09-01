@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayNodeCriterion.h"
 
@@ -37,43 +37,28 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayNodeCriterion)
 
-WayNodeCriterion::WayNodeCriterion(ConstOsmMapPtr map) :
-_map(map)
+WayNodeCriterion::WayNodeCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
 bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Node)
-  {
     return false;
-  }
-
   if (!_map)
-  {
     throw HootException("You must set a map before calling: " + toString());
-  }
-
-  const std::set<long>& containingWays =
-    _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
+  const std::set<long>& containingWays = _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
   if (containingWays.empty())
-  {
     return false;
-  }
 
-  for (std::set<long>::const_iterator it = containingWays.begin(); it != containingWays.end(); ++it)
+  for (auto containingWayId : containingWays)
   {
-    const long containingWayId = *it;
     if (!_map->containsElement(ElementId(ElementType::Way, containingWayId)))
-    {
       return false;
-    }
     if (_parentCriterion && !_parentCriterion->isSatisfied(_map->getWay(containingWayId)))
-    {
       return false;
-    }
   }
-
   return true;
 }
 
@@ -82,16 +67,11 @@ long WayNodeCriterion::getFirstOwningWayId(const ConstNodePtr& node) const
   long result = 0;
 
   if (!_map)
-  {
     throw HootException("You must set a map before calling WayNodeCriterion");
-  }
 
-  const std::set<long> waysContainingNode =
-    _map->getIndex().getNodeToWayMap()->getWaysByNode(node->getId());
-  for (std::set<long>::const_iterator it = waysContainingNode.begin();
-       it != waysContainingNode.end(); ++it)
+  const std::set<long> waysContainingNode = _map->getIndex().getNodeToWayMap()->getWaysByNode(node->getId());
+  for (auto containingWayId : waysContainingNode)
   {
-    const long containingWayId = *it;
     if (_map->containsElement(ElementId(ElementType::Way, containingWayId)) &&
         (!_parentCriterion || _parentCriterion->isSatisfied(_map->getWay(containingWayId))))
     {
@@ -99,7 +79,6 @@ long WayNodeCriterion::getFirstOwningWayId(const ConstNodePtr& node) const
       break;
     }
   }
-
   return result;
 }
 

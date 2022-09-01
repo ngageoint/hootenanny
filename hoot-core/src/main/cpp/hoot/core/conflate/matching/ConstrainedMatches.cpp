@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConstrainedMatches.h"
 
@@ -36,11 +36,11 @@ namespace hoot
 //  Set EPSILON to non-zero so that no matches are dropped
 double ConstrainedMatches::EPSILON = 1e-9;
 
-ConstrainedMatches::ConstrainedMatches(const ConstOsmMapPtr& map) :
-_map(map)
+ConstrainedMatches::ConstrainedMatches(const ConstOsmMapPtr& map)
+  : _map(map),
+    _score(-1),
+    _timeLimit(-1)
 {
-  _score = -1;
-  _timeLimit = -1;
 }
 
 void ConstrainedMatches::_calculateMatchConflicts()

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_UTILS_H
@@ -52,8 +52,7 @@ public:
    * @param map map owning the relation
    * @return a detailed relation string
    */
-  static QString getRelationDetailString(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationDetailString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
    * Constructs a detailed string for an element suitable for trace logging
@@ -71,8 +70,7 @@ public:
    * @param map map owning the elements
    * @return a string describing the elements
    */
-  static QString getElementsDetailString(
-    const std::vector<ElementPtr>& elements, const ConstOsmMapPtr& map);
+  static QString getElementsDetailString(const std::vector<ElementPtr>& elements, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is contained by any way or relation in a map

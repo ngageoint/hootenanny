@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementTypeCriterion.h"
 
@@ -33,8 +33,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
 
-ElementTypeCriterion::ElementTypeCriterion(ElementType::Type eType) :
-_elementType(eType)
+ElementTypeCriterion::ElementTypeCriterion(ElementType::Type eType)
+  : _elementType(eType)
 {
 }
 

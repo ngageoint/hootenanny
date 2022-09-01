@@ -226,12 +226,8 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(ElementPtr elemen
         if (way2)
         {
           LOG_VART(way2->getElementId());
-          if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-                way2->getElementId(), adminBoundsCrit, _map2))
-          {
+          if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(way2->getElementId(), adminBoundsCrit, _map2))
             return false;
-          }
-
           // We keep our type comparison score low here to reflect that fact that you don't need
           // strict type matches to allow for snapping (the ID sync allows for snapping to occur in
           // some cases). This score may need some tweaking.
@@ -267,11 +263,9 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(ElementPtr element1,
     return false;
 
   // Get the ways that contain each.
-  const QSet<long> containingWayIds1 =
-    CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element1->getId(), _map1));
+  const QSet<long> containingWayIds1 = CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element1->getId(), _map1));
   LOG_VART(containingWayIds1);
-  const QSet<long> containingWayIds2 =
-    CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element2->getId(), _map2));
+  const QSet<long> containingWayIds2 = CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element2->getId(), _map2));
   LOG_VART(containingWayIds2);
 
   for (auto way1_id : qAsConst(containingWayIds1))

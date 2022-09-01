@@ -332,11 +332,9 @@ private:
 };
 
 HighwayMatchCreator::HighwayMatchCreator()
-  : _classifier(
-      Factory::getInstance().constructObject<HighwayClassifier>(
-        ConfigOptions().getConflateMatchHighwayClassifier())),
-    _sublineMatcher(
-      SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
+  : _classifier(Factory::getInstance().constructObject<HighwayClassifier>(
+                  ConfigOptions().getConflateMatchHighwayClassifier())),
+    _sublineMatcher(SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
     _tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
 {
   // Enable/disable road median matching and validate associated configuration options.
@@ -356,8 +354,7 @@ void HighwayMatchCreator::setRunMedianMatching(const bool runMatching, const QSt
     if (identifyingTagsTemp.empty())
     {
       throw IllegalArgumentException(
-        "No road median identifying tags specified in " +
-          ConfigOptions::getHighwayMedianIdentifyingTagsKey() + ".");
+        QString("No road median identifying tags specified in %1.").arg(ConfigOptions::getHighwayMedianIdentifyingTagsKey()));
     }
 
     QStringList transferKeysTemp = transferKeys;
@@ -365,13 +362,11 @@ void HighwayMatchCreator::setRunMedianMatching(const bool runMatching, const QSt
     if (transferKeysTemp.empty())
     {
       throw IllegalArgumentException(
-        "No road median transfer tag keys specified in " +
-        ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey() + ".");
+        QString("No road median transfer tag keys specified in %1.").arg(ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey()));
     }
 
     _medianClassifier =
-      Factory::getInstance().constructObject<HighwayClassifier>(
-        ConfigOptions().getConflateMatchHighwayMedianClassifier());
+      Factory::getInstance().constructObject<HighwayClassifier>(ConfigOptions().getConflateMatchHighwayMedianClassifier());
 
     LOG_STATUS("Running highway road median custom conflation workflow...");
   }

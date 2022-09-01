@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MEDIAN_TO_DIVIDED_ROAD_CLASSIFIER_H
 #define MEDIAN_TO_DIVIDED_ROAD_CLASSIFIER_H
@@ -57,16 +57,14 @@ public:
   /**
    * @see HighwayClassifier
    */
-  MatchClassification classify(
-    const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    const WaySublineMatchString& match) override;
+  MatchClassification classify(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+                               const WaySublineMatchString& match) override;
 
   /**
    * @see HighwayClassifier
    */
-  std::map<QString, double> getFeatures(
-    const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
-    const WaySublineMatchString& match) const override;
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
+                                        const WaySublineMatchString& match) const override;
 
 private:
 

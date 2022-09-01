@@ -22,32 +22,32 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NonConflatableCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
-NonConflatableCriterion::NonConflatableCriterion() :
-_ignoreChildren(false),
-_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
-_ignoreGenericConflators(false)
+NonConflatableCriterion::NonConflatableCriterion()
+  : _ignoreChildren(false),
+    _geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
+    _ignoreGenericConflators(false)
 {
 }
 
-NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map) :
-_map(map),
-_ignoreChildren(false),
-_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
-_ignoreGenericConflators(false)
+NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map)
+  : _map(map),
+    _ignoreChildren(false),
+    _geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
+    _ignoreGenericConflators(false)
 {
 }
 
@@ -61,10 +61,8 @@ void NonConflatableCriterion::setConfiguration(const Settings& conf)
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  const QMap<QString, ElementCriterionPtr> conflatableCriteria =
-    ConflatableElementCriterion::getConflatableCriteria();
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
-       itr != conflatableCriteria.end(); ++itr)
+  const QMap<QString, ElementCriterionPtr> conflatableCriteria = ConflatableElementCriterion::getConflatableCriteria();
+  for (auto itr = conflatableCriteria.begin(); itr != conflatableCriteria.end(); ++itr)
   {
     ElementCriterionPtr crit = itr.value();
 
@@ -72,15 +70,12 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
     {
       ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
       if (mapConsumer != nullptr)
-      {
         mapConsumer->setOsmMap(_map.get());
-      }
     }
 
     if (_ignoreGenericConflators)
     {
-      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-        std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+      std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
       assert(conflatableCrit);
       if (!conflatableCrit->supportsSpecificConflation())
       {
@@ -94,8 +89,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
     bool satisfiesGeometryFilter = true;
     if (_geometryTypeFilter != GeometryTypeCriterion::GeometryType::Unknown)
     {
-      std::shared_ptr<GeometryTypeCriterion> geometryCrit =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      std::shared_ptr<GeometryTypeCriterion> geometryCrit = std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
       satisfiesGeometryFilter = geometryCrit->getGeometryType() == _geometryTypeFilter;
       LOG_VART(_geometryTypeFilter);
       LOG_VART(satisfiesGeometryFilter);
@@ -109,7 +103,6 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       return false;
     }
   }
-
   // Technically, there could also be something like a building way with a POI child and you'd want
   // to check for ways here as well. Will wait to support that situation until an actual use case
   // is encountered.
@@ -120,9 +113,8 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
     const std::vector<RelationData::Entry>& members = relation->getMembers();
-    for (size_t i = 0; i < members.size(); i++)
+    for (const auto& member : members)
     {
-      const RelationData::Entry& member = members[i];
       ConstElementPtr memberElement = _map->getElement(member.getElementId());
       if (memberElement && isSatisfied(memberElement))
       {
@@ -135,7 +127,6 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       }
     }
   }
-
   // It is not something we can conflate.
   LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
   return true;

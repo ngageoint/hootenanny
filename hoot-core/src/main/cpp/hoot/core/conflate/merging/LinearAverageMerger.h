@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_AVERAGE_MERGER_H
 #define LINEAR_AVERAGE_MERGER_H
@@ -54,9 +54,8 @@ public:
 
 protected:
 
-  bool _mergePair(
-    const ElementId& eid1, const ElementId& eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(const ElementId& eid1, const ElementId& eid2,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * @see LinearMergerAbstract
@@ -70,9 +69,8 @@ private:
 
   double _getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const;
 
-  WayPtr _getMaximalNearestSubline(
-    const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
-    std::vector<WayPtr>& splits) const;
+  WayPtr _getMaximalNearestSubline(const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
+                                   std::vector<WayPtr>& splits) const;
 };
 
 }

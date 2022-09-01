@@ -263,9 +263,7 @@ QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
 }
 vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
 {
-  QString sql =  "SELECT node_id FROM " +
-                  getCurrentWayNodesTableName() +
-                 " WHERE way_id = :wayId ORDER BY sequence_id";
+  QString sql = QString("SELECT node_id FROM %1 WHERE way_id = :wayId ORDER BY sequence_id").arg(getCurrentWayNodesTableName());
   return _selectNodeIdsForWaySql(wayId, sql);
 }
 
@@ -276,8 +274,8 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     _selectMembersForRelation = std::make_shared<QSqlQuery>(_db);
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
-      "SELECT member_type, member_id, member_role FROM " + getCurrentRelationMembersTableName() +
-      " WHERE relation_id = :relationId ORDER BY sequence_id");
+      QString("SELECT member_type, member_id, member_role FROM %1 WHERE relation_id = :relationId ORDER BY sequence_id")
+          .arg(getCurrentRelationMembersTableName()));
   }
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
 
@@ -295,16 +293,16 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
   {
     _selectTagsForRelation = std::make_shared<QSqlQuery>(_db);
     _selectTagsForRelation->setForwardOnly(true);
-    QString sql = "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
-                  " WHERE relation_id = :relId";
-    _selectTagsForRelation->prepare( sql );
+    QString sql = QString("SELECT relation_id, k, v FROM %1 WHERE relation_id = :relId").arg(ApiDb::getCurrentRelationTagsTableName());
+    _selectTagsForRelation->prepare(sql);
   }
 
   _selectTagsForRelation->bindValue(":relId", (qlonglong)relId);
   if (_selectTagsForRelation->exec() == false)
   {
-    throw HootException("Error selecting tags for relation with ID: " + QString::number(relId) +
-      " Error: " + _selectTagsForRelation->lastError().text());
+    throw HootException(
+      QString("Error selecting tags for relation with ID: %1 Error: %2")
+        .arg(QString::number(relId), _selectTagsForRelation->lastError().text()));
   }
   LOG_VART(_selectTagsForRelation->executedQuery());
   LOG_VART(_selectTagsForRelation->numRowsAffected());
@@ -318,15 +316,16 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
   {
     _selectTagsForWay = std::make_shared<QSqlQuery>(_db);
     _selectTagsForWay->setForwardOnly(true);
-    QString sql =  "SELECT way_id, k, v FROM " + ApiDb::getCurrentWayTagsTableName() + " WHERE way_id = :wayId";
-    _selectTagsForWay->prepare( sql );
+    QString sql = QString("SELECT way_id, k, v FROM %1 WHERE way_id = :wayId").arg(ApiDb::getCurrentWayTagsTableName());
+    _selectTagsForWay->prepare(sql);
   }
 
   _selectTagsForWay->bindValue(":wayId", (qlonglong)wayId);
   if (_selectTagsForWay->exec() == false)
   {
-    throw HootException("Error selecting tags for way with ID: " + QString::number(wayId) +
-      " Error: " + _selectTagsForWay->lastError().text());
+    throw HootException(
+      QString("Error selecting tags for way with ID: %1 Error: %2")
+        .arg(QString::number(wayId), _selectTagsForWay->lastError().text()));
   }
   LOG_VART(_selectTagsForWay->executedQuery());
   LOG_VART(_selectTagsForWay->numRowsAffected());
@@ -340,15 +339,16 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   {
     _selectTagsForNode = std::make_shared<QSqlQuery>(_db);
     _selectTagsForNode->setForwardOnly(true);
-    QString sql = "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
-    _selectTagsForNode->prepare( sql );
+    QString sql = QString("SELECT node_id, k, v FROM %1 WHERE node_id = :nodeId").arg(ApiDb::getCurrentNodeTagsTableName());
+    _selectTagsForNode->prepare(sql);
   }
 
   _selectTagsForNode->bindValue(":nodeId", (qlonglong)nodeId);
   if (_selectTagsForNode->exec() == false)
   {
-    throw HootException("Error selecting tags for node with ID: " + QString::number(nodeId) +
-      " Error: " + _selectTagsForNode->lastError().text());
+    throw HootException(
+      QString("Error selecting tags for node with ID: %1 Error: %2")
+        .arg(QString::number(nodeId), _selectTagsForNode->lastError().text()));
   }
   LOG_VART(_selectTagsForNode->executedQuery());
   LOG_VART(_selectTagsForNode->numRowsAffected());
@@ -368,14 +368,13 @@ long OsmApiDb::getNextId(const QString& tableName)
 
 long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString& sequenceType)
 {
-  LOG_TRACE(
-    "Retrieving " << sequenceType << " " << elementType.toString() << " ID from sequence...");
+  LOG_TRACE("Retrieving " << sequenceType << " " << elementType.toString() << " ID from sequence...");
   switch (elementType.getEnum())
   {
     case ElementType::Node:
     case ElementType::Way:
     case ElementType::Relation:
-      return _getIdFromSequence("current_" + elementType.toString().toLower() + "s", sequenceType);
+      return _getIdFromSequence(QString("current_%1s").arg(elementType.toString().toLower()), sequenceType);
     default:
       throw HootException("Unknown element type");
   }

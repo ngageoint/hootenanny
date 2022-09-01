@@ -22,101 +22,77 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "IntersectingWayCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-const QString IntersectingWayCriterion::EMPTY_SOURCE_IDS_ERROR_MESSAGE =
-  "No way IDs were passed to IntersectingWayCriterion.";
+const QString IntersectingWayCriterion::EMPTY_SOURCE_IDS_ERROR_MESSAGE = "No way IDs were passed to IntersectingWayCriterion.";
 
 HOOT_FACTORY_REGISTER(ElementCriterion, IntersectingWayCriterion)
 
-IntersectingWayCriterion::IntersectingWayCriterion(ConstOsmMapPtr map) :
-_map(map)
+IntersectingWayCriterion::IntersectingWayCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
-IntersectingWayCriterion::IntersectingWayCriterion(
-  const QSet<long>& sourceWayIds, ConstOsmMapPtr map) :
-_sourceWayIds(sourceWayIds),
-_map(map)
+IntersectingWayCriterion::IntersectingWayCriterion(const QSet<long>& sourceWayIds, ConstOsmMapPtr map)
+  : _sourceWayIds(sourceWayIds),
+    _map(map)
 {
   if (_sourceWayIds.empty())
-  {
     throw IllegalArgumentException(EMPTY_SOURCE_IDS_ERROR_MESSAGE);
-  }
 }
 
 ElementCriterionPtr IntersectingWayCriterion::clone()
 {
   if (!_sourceWayIds.empty())
-  {
     return std::make_shared<IntersectingWayCriterion>(_sourceWayIds, _map);
-  }
   else
-  {
     return std::make_shared<IntersectingWayCriterion>(_map);
-  }
 }
 
 void IntersectingWayCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-
   const QStringList idStrs = opts.getIntersectingWayCriterionSourceWayIds();
-  for (int i = 0; i < idStrs.size(); i++)
+  for (const auto& idStr : qAsConst(idStrs))
   {
     bool converted = false;
-    const QString idStr = idStrs.at(i);
     const long id = idStr.toLong(&converted);
     if (!converted)
-    {
       throw IllegalArgumentException("Invalid way id passed to IntersectingWayCriterion: " + idStr);
-    }
     _sourceWayIds.insert(id);
   }
   if (_sourceWayIds.empty())
-  {
     throw IllegalArgumentException(EMPTY_SOURCE_IDS_ERROR_MESSAGE);
-  }
 }
 
 bool IntersectingWayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   if (_sourceWayIds.empty())
-  {
     throw IllegalArgumentException(EMPTY_SOURCE_IDS_ERROR_MESSAGE);
-  }
   if (element->getElementType() != ElementType::Way)
-  {
     return false;
-  }
-  // Don't consider any ways in our input list, as we only want to find other ways that intersect
-  // them.
+  // Don't consider any ways in our input list, as we only want to find other ways that intersect them.
   if (_sourceWayIds.find(element->getId()) != _sourceWayIds.end())
-  {
     return false;
-  }
 
   LOG_VART(element->getElementId());
   // Get all the ways that intersect the way we're examining.
   QSet<long> intersectingWayIdsSet =
-    QVector<long>::fromStdVector(
-      WayUtils::getIntersectingWayIdsConst(element->getId(), _map)).toList().toSet();
+    QVector<long>::fromStdVector(WayUtils::getIntersectingWayIdsConst(element->getId(), _map)).toList().toSet();
   LOG_VART(intersectingWayIdsSet);
   // Make a copy of our input way IDs so we don't modify them with the set intersection call.
   QSet<long> sourceWayIds = _sourceWayIds;
-  // If any of the intersecting way IDs are in our input list (_wayIds), we have an intersecting
-  // way.
+  // If any of the intersecting way IDs are in our input list (_wayIds), we have an intersecting way.
   return !sourceWayIds.intersect(intersectingWayIdsSet).empty();
 }
 
 }
-

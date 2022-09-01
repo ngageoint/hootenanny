@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithMembersOfTypeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion() :
-_allowMixedChildren(false)
+RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion()
+  : _allowMixedChildren(false)
 {
 }
 
-RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map) :
-_map(map),
-_allowMixedChildren(false)
+RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map)
+  : _map(map),
+    _allowMixedChildren(false)
 {
 }
 
@@ -51,12 +51,9 @@ void RelationWithMembersOfTypeCriterion::_initCrit() const
   _crit = Factory::getInstance().constructObject<ElementCriterion>(getCriterion());
   if (_map)
   {
-    std::shared_ptr<ConstOsmMapConsumer> consumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_crit);
+    std::shared_ptr<ConstOsmMapConsumer> consumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(_crit);
     if (consumer.get())
-    {
       consumer->setOsmMap(_map.get());
-    }
   }
 }
 
@@ -79,13 +76,9 @@ bool RelationWithMembersOfTypeCriterion::isSatisfied(const ConstElementPtr& e) c
   if (e->getElementType() == ElementType::Relation)
   {
     if (!_map)
-    {
       throw IllegalArgumentException("No map set on RelationWithMembersOfTypeCriterion.");
-    }
     if (!_crit)
-    {
       _initCrit();
-    }
 
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
     if (_allowMixedChildren)
@@ -118,4 +111,3 @@ bool RelationWithMembersOfTypeCriterion::isSatisfied(const ConstElementPtr& e) c
 }
 
 }
-

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RelationData.h"
 
@@ -31,22 +31,18 @@ using namespace std;
 namespace hoot
 {
 
-RelationData::RelationData(
-  long id, long changeset, long version, unsigned int timestamp, QString user, long uid,
-  bool visible) :
-ElementData(
-  id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible)
+RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp, QString user, long uid, bool visible)
+  : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible)
 {
 }
 
-RelationData::RelationData(const RelationData& rd) :
-ElementData(
-  rd.getId(), rd.getTags(),
-  (rd.hasCircularError() ? rd.getCircularError() : ElementData::CIRCULAR_ERROR_EMPTY),
-  rd.getChangeset(), rd.getVersion(), rd.getTimestamp(), rd.getUser(), rd.getUid(),
-  rd.getVisible()),
-_type(rd._type),
-_members(rd._members)
+RelationData::RelationData(const RelationData& rd)
+  : ElementData(rd.getId(), rd.getTags(),
+                (rd.hasCircularError() ? rd.getCircularError() : ElementData::CIRCULAR_ERROR_EMPTY),
+                rd.getChangeset(), rd.getVersion(), rd.getTimestamp(), rd.getUser(), rd.getUid(),
+                rd.getVisible()),
+    _type(rd._type),
+    _members(rd._members)
 {
 }
 
@@ -75,9 +71,7 @@ void RelationData::removeElement(const QString& role, ElementId eid)
     else
     {
       if (i != destination)
-      {
         _members[destination] = _members[i];
-      }
       destination++;
     }
   }
@@ -97,9 +91,7 @@ void RelationData::removeElement(ElementId eid)
     else
     {
       if (i != destination)
-      {
         _members[destination] = _members[i];
-      }
       destination++;
     }
   }
@@ -108,33 +100,25 @@ void RelationData::removeElement(ElementId eid)
 
 void RelationData::replaceElement(ElementId from, ElementId to)
 {
-  for (size_t i = 0; i < _members.size(); i++)
+  for (auto& e : _members)
   {
-    Entry& e = _members[i];
     if (e.getElementId() == from)
-    {
       e.setElementId(to);
-    }
   }
 }
 
 void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
 {
   vector<Entry> newCopy;
-  for (size_t i = 0; i < _members.size(); i++)
+  for (const auto& e : _members)
   {
-    const Entry& e = _members[i];
     if (e.getElementId() == from)
     {
-      for (int j = 0; j < to.size(); ++j)
-      {
-        newCopy.emplace_back(e.getRole(), to[j]);
-      }
+      for (const auto& eid : qAsConst(to))
+        newCopy.emplace_back(e.getRole(), eid);
     }
     else
-    {
       newCopy.push_back(e);
-    }
   }
   _members = newCopy;
 }

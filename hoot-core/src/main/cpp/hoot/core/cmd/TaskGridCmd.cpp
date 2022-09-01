@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -100,10 +100,8 @@ private:
     const int gridDimensionSizeIndex = args.size() - 1;
     gridDimensionSize = args[gridDimensionSizeIndex].toInt(&parseSuccess);
     if (!parseSuccess || gridDimensionSize < 2)
-    {
-      throw IllegalArgumentException(
-        "Invalid grid dimension size value: " + args[2] + ". Must be >= 2.");
-    }
+      throw IllegalArgumentException("Invalid grid dimension size value: " + args[2] + ". Must be >= 2.");
+
     args.removeLast();
     LOG_VARD(gridDimensionSize);
     LOG_VARD(gridDimensionSizeIndex);
@@ -137,7 +135,6 @@ private:
       LOG_STATUS(
         "Generating uniform task grid for " << inputs.size() <<
         " inputs and writing output to ..." << output << "...");
-      /*TaskGrid taskGrid =*/
       UniformTaskGridGenerator(inputs, gridDimensionSize, output).generateTaskGrid();
     }
   }

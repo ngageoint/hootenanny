@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONNECTED_RELATION_MEMBER_FINDER_H
 #define CONNECTED_RELATION_MEMBER_FINDER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -53,8 +53,7 @@ public:
    * @param relation2 second relation to examine
    * @return true if connected ways are found; false otherwise
    */
-  bool haveConnectedWayMembers(
-    const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
+  bool haveConnectedWayMembers(const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
 
   /**
    * @see ConstOsmMapConsumer

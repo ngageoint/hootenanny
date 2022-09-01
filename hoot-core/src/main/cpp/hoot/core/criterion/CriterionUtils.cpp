@@ -22,29 +22,28 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CriterionUtils.h"
 
 // hoot
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-ElementCriterionPtr CriterionUtils::constructCriterion(
-  const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate)
+ElementCriterionPtr CriterionUtils::constructCriterion(const QStringList& criteriaClassNames, const bool chainCriteria,
+                                                       const bool negate)
 {
   bool isStreamable = false; // This gets ignored.
   return constructCriterion(criteriaClassNames, chainCriteria, negate, isStreamable);
 }
 
-ElementCriterionPtr CriterionUtils::constructCriterion(
-  const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
-  bool& isStreamable)
+ElementCriterionPtr CriterionUtils::constructCriterion(const QStringList& criteriaClassNames, const bool chainCriteria,
+                                                       const bool negate, bool& isStreamable)
 {
   if (criteriaClassNames.isEmpty())
   {
@@ -57,20 +56,15 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
   if (criteriaClassNames.size() > 1)
   {
     if (chainCriteria)
-    {
       crit = std::make_shared<ChainCriterion>();
-    }
     else
-    {
       crit = std::make_shared<OrCriterion>();
-    }
   }
 
   ElementCriterionPtr subCrit;
   isStreamable = true;
-  for (int i = 0; i < criteriaClassNames.size(); i++)
+  for (const auto& criterionClassName : qAsConst(criteriaClassNames))
   {
-    const QString criterionClassName = criteriaClassNames.at(i);
     LOG_VART(criterionClassName);
     try
     {
@@ -84,73 +78,49 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
     const OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
     LOG_VART(omc == 0);
     if (omc)
-    {
       isStreamable = false;
-    }
     LOG_VART(isStreamable);
 
     if (negate)
-    {
       subCrit = std::make_shared<NotCriterion>(subCrit);
-    }
     LOG_VART(subCrit.get());
 
     std::shared_ptr<Configurable> critConfig;
     if (subCrit.get())
-    {
       critConfig = std::dynamic_pointer_cast<Configurable>(subCrit);
-    }
     LOG_VART(critConfig.get());
     if (critConfig.get())
-    {
       critConfig->setConfiguration(conf());
-    }
 
     if (crit)
-    {
       crit->addCriterion(subCrit);
-    }
   }
 
   if (criteriaClassNames.size() == 1)
-  {
     return subCrit;
-  }
   else
-  {
     return crit;
-  }
 }
 
-ElementCriterionPtr CriterionUtils::combineCriterion(
-  const QList<ElementCriterionPtr>& criteria, const bool chain, const bool negate)
+ElementCriterionPtr CriterionUtils::combineCriterion(const QList<ElementCriterionPtr>& criteria, const bool chain,
+                                                     const bool negate)
 {
   ElementCriterionPtr combinedCrit;
 
-  for (QList<ElementCriterionPtr>::const_iterator itr = criteria.begin(); itr != criteria.end();
-       ++itr)
+  for (const auto& crit : qAsConst(criteria))
   {
     if (!combinedCrit)
-    {
-      combinedCrit = (*itr)->clone();
-    }
+      combinedCrit = crit->clone();
     else
     {
       if (chain)
-      {
-        combinedCrit = std::make_shared<ChainCriterion>(combinedCrit->clone(), *itr);
-      }
+        combinedCrit = std::make_shared<ChainCriterion>(combinedCrit->clone(), crit);
       else
-      {
-        combinedCrit = std::make_shared<OrCriterion>(combinedCrit->clone(), *itr);
-      }
+        combinedCrit = std::make_shared<OrCriterion>(combinedCrit->clone(), crit);
     }
   }
-
   if (negate)
-  {
     combinedCrit = std::make_shared<NotCriterion>(combinedCrit->clone());
-  }
 
   return combinedCrit;
 }

@@ -135,10 +135,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
     while (QFile::exists(url))
     {
       inc++;
-      url =
-        _outputDir.filePath(QString("%1_%2_%3.xml")
-          .arg(_outputFileName).arg(inc, 2, 10, QChar('0'))
-          .arg(_fileNumber));
+      url = _outputDir.filePath(QString("%1_%2_%3.xml").arg(_outputFileName).arg(inc, 2, 10, QChar('0')).arg(_fileNumber));
     }
   }
 
@@ -425,14 +422,13 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
   }
 
   bool first = true;
-  for (size_t j = 0; j < w->getNodeCount(); j++)
+  for (auto nid : w->getNodeIds())
   {
     if (first)
       first = false;
     else
       _writer->writeCharacters(QString(", "));
 
-    const long nid = w->getNodeId(static_cast<int>(j));
     ConstNodePtr n = map->getNode(nid);
     _writer->writeCharacters(QString("%1 %2").arg(QString::number(n->getX(), 'f', _precision), QString::number(n->getY(), 'f', _precision)));
   }
@@ -462,10 +458,10 @@ void OsmGbdxXmlWriter::writePartial(const ConstWayPtr& w)
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(w->getId()));
 
-  for (size_t j = 0; j < w->getNodeCount(); j++)
+  for (auto nid : w->getNodeIds())
   {
     _writer->writeStartElement("nd");
-    _writer->writeAttribute("ref", QString::number(w->getNodeId(static_cast<int>(j))));
+    _writer->writeAttribute("ref", QString::number(nid));
     _writer->writeEndElement();
   }
 
@@ -560,14 +556,13 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
 
       _writer->writeCharacters(startBracket);
       bool firstWay = true;
-      for (size_t j = 0; j < w->getNodeCount(); j++)
+      for (auto nid : w->getNodeIds())
       {
         if (firstWay)
           firstWay = false;
         else
           _writer->writeCharacters(QString(", "));
 
-        const long nid = w->getNodeId(static_cast<int>(j));
         ConstNodePtr n = map->getNode(nid);
         _writer->writeCharacters(QString("%1 %2").arg(QString::number(n->getX(), 'f', _precision), QString::number(n->getY(), 'f', _precision)));
       }

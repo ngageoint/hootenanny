@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ArffReader.h"
@@ -40,12 +40,13 @@ using namespace std;
 namespace hoot
 {
 
-ArffReader::ArffReader(istream* strm) : _strm(strm)
+ArffReader::ArffReader(istream* strm)
+  : _strm(strm)
 {
 }
 
-ArffReader::ArffReader(QString path) :
-_autoStrm(std::make_shared<std::fstream>())
+ArffReader::ArffReader(QString path)
+  : _autoStrm(std::make_shared<std::fstream>())
 {
   LOG_DEBUG("Opening " + path + " for input.");
   _autoStrm->exceptions(fstream::badbit);
@@ -67,14 +68,9 @@ bool ArffReader::_eof() const
 {
   bool result;
   if (_bstrm.get())
-  {
     result = !(*_bstrm);
-  }
   else
-  {
     result = _strm->eof();
-  }
-
   return result;
 }
 
@@ -87,9 +83,7 @@ std::shared_ptr<DataSamples> ArffReader::read()
   QString line;
   // read until we see the first @ATTRIBUTE
   while (line.startsWith("@ATTRIBUTE") == false && !_eof())
-  {
     line = _readLine();
-  }
 
   // read in all column names
   while (line.startsWith("@ATTRIBUTE") && !_eof())
@@ -97,26 +91,18 @@ std::shared_ptr<DataSamples> ArffReader::read()
     QStringList l = line.split(" ");
     columnNames.append(l[1]);
     if (l[2] != "NUMERIC" && l[1] != "class")
-    {
       throw IoException("Got a non-numeric column. " + line);
-    }
     line = _readLine();
   }
 
   while (line.startsWith("@DATA") == false && !_eof())
-  {
     line = _readLine();
-  }
 
   if (_eof())
-  {
     throw IoException("File contains no data.");
-  }
 
   if (columnNames[columnNames.size() - 1] != "class")
-  {
     throw IoException("Expected the last column to be 'class'");
-  }
 
   line = _readLine();
   // read in each record as input
@@ -125,9 +111,7 @@ std::shared_ptr<DataSamples> ArffReader::read()
     QStringList l = line.split(",");
 
     if (l.size() != columnNames.size())
-    {
       throw IoException("Wrong number of data samples.");
-    }
 
     Sample s;
     for (int i = 0; i < l.size() - 1; i++)
@@ -137,9 +121,7 @@ std::shared_ptr<DataSamples> ArffReader::read()
         bool ok = false;
         s[columnNames[i]] = l[i].toDouble(&ok);
         if (!ok)
-        {
           throw IoException("Error parsing number: " + l[i]);
-        }
       }
     }
 

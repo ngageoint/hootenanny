@@ -110,9 +110,7 @@ public:
     input1Map->setName("map1");
     OsmMapPtr input2Map;
     if (input2.isEmpty())
-    {
       deduper.dedupe(input1Map);
-    }
     else
     {
       input2Map = std::make_shared<OsmMap>();
@@ -123,22 +121,16 @@ public:
     }
     IoUtils::saveMap(input1Map, output1);
     if (!input2.isEmpty())
-    {
       IoUtils::saveMap(input2Map, output2);
-    }
 
     LOG_STATUS(
       "De-duplicated " <<
       StringUtils::formatLargeNumber(deduper.getMap1DuplicateTotalFeaturesRemoved()) <<
       " features from ..." << FileUtils::toLogFormat(input1) << " and wrote them to: ..." <<
       FileUtils::toLogFormat(output1, 25) << ".");
-    LOG_STATUS(
-      "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateNodesRemoved()) << " nodes");
-    LOG_STATUS(
-      "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateWaysRemoved()) << " ways");
-    LOG_STATUS(
-      "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateRelationsRemoved()) <<
-      " relations");
+    LOG_STATUS("\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateNodesRemoved()) << " nodes");
+    LOG_STATUS("\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateWaysRemoved()) << " ways");
+    LOG_STATUS("\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateRelationsRemoved()) << " relations");
     if (!input2.isEmpty())
     {
       LOG_STATUS(
@@ -146,16 +138,11 @@ public:
         StringUtils::formatLargeNumber(deduper.getMap2DuplicateTotalFeaturesRemoved()) <<
         " features from ..." << FileUtils::toLogFormat(input2) << " and wrote them to: ..." <<
         FileUtils::toLogFormat(output2, 25) << ".");
-      LOG_STATUS(
-        "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateNodesRemoved()) << " nodes");
-      LOG_STATUS(
-        "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateWaysRemoved()) << " ways");
-      LOG_STATUS(
-        "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateRelationsRemoved()) <<
-        " relations");
+      LOG_STATUS("\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateNodesRemoved()) << " nodes");
+      LOG_STATUS("\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateWaysRemoved()) << " ways");
+      LOG_STATUS("\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateRelationsRemoved()) << " relations");
     }
-    LOG_STATUS(
-      "De-duplicated elements in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("De-duplicated elements in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

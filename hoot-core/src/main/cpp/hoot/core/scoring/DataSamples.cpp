@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DataSamples.h"
@@ -38,25 +38,17 @@ namespace hoot
 vector<string> DataSamples::getUniqueLabels() const
 {
   vector<string> labels;
-
   set<QString> labelSet;
-
-  for (size_t i = 0; i < size(); i++)
+  for (const auto& sample : *this)
   {
-    for (Sample::const_iterator it = get(i).begin(); it != get(i).end(); ++it)
+    for (auto it = sample.begin(); it != sample.end(); ++it)
     {
       if (it->first != "class")
-      {
         labelSet.insert(it->first);
-      }
     }
   }
-
-  for (set<QString>::const_iterator it = labelSet.begin(); it != labelSet.end(); ++it)
-  {
-    labels.push_back((*it).toStdString());
-  }
-
+  for (const auto& label : labelSet)
+    labels.push_back(label.toStdString());
   return labels;
 }
 
@@ -69,28 +61,20 @@ std::shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
   vector<double> record;
   record.resize(labels.size());
 
-  for (size_t i = 0; i < size(); i++)
+  for (const auto& s : *this)
   {
-    const Sample& s = get(i);
-
     MatchType type = MatchType(s.find("class")->second);
     string classLabel = type.toString().toLower().toStdString();
-
     for (size_t j = 0; j < labels.size(); j++)
     {
-      Sample::const_iterator it = get(i).find(QString::fromStdString(labels[j]));
-      if (it != get(i).end())
-      {
+      auto it = s.find(QString::fromStdString(labels[j]));
+      if (it != s.end())
         record[j] = it->second;
-      }
       else
-      {
         record[j] = nullValue;
-      }
     }
     result->addDataVector(classLabel, record);
   }
-
   return result;
 }
 

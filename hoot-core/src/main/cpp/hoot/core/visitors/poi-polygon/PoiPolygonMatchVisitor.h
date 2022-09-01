@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONMATCHVISITOR_H
 #define POIPOLYGONMATCHVISITOR_H
@@ -53,12 +53,10 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 
 public:
 
-  PoiPolygonMatchVisitor(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-    ElementCriterionPtr filter = ElementCriterionPtr());
-  PoiPolygonMatchVisitor(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
-    PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+                         ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
+                         PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor() override = default;
 
   /**
@@ -88,7 +86,6 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
   // used for finding surrounding polys

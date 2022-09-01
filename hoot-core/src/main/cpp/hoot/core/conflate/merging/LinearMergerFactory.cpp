@@ -22,49 +22,39 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LinearMergerFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/MedianToDividedRoadClassifier.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/schema/SelectiveOverwriteTagMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-MergerPtr LinearMergerFactory::getMerger(
-  const std::set<std::pair<ElementId, ElementId>>& eids,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy,
-  const QString matchedBySubroutine)
+MergerPtr LinearMergerFactory::getMerger(const std::set<std::pair<ElementId, ElementId>>& eids,
+                                         const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy,
+                                         const QString matchedBySubroutine)
 {
   MergerPtr merger;
   LOG_VART(matchedBy);
   LOG_VART(matchedBySubroutine);
-  if (matchedBy == HighwayMatch::MATCH_NAME &&
-      matchedBySubroutine == MedianToDividedRoadClassifier::MEDIAN_MATCHED_SUBROUTINE_NAME)
-  {
+  if (matchedBy == HighwayMatch::MATCH_NAME && matchedBySubroutine == MedianToDividedRoadClassifier::MEDIAN_MATCHED_SUBROUTINE_NAME)
     merger = _getMedianMerger();
-  }
   else
-  {
-    merger =
-      Factory::getInstance().constructObject<Merger>(
-        ConfigOptions().getGeometryLinearMergerDefault());
-  }
-  std::shared_ptr<LinearMergerAbstract> linearMerger =
-    std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
+    merger =Factory::getInstance().constructObject<Merger>(ConfigOptions().getGeometryLinearMergerDefault());
+
+  std::shared_ptr<LinearMergerAbstract> linearMerger = std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
   if (!linearMerger)
-  {
-    throw IllegalArgumentException(
-      "Invalid linear merger class name: " + ConfigOptions().getGeometryLinearMergerDefault());
-  }
+    throw IllegalArgumentException("Invalid linear merger class name: " + ConfigOptions().getGeometryLinearMergerDefault());
+
   LOG_VART(merger->getClassName());
   linearMerger->setMatchedBy(matchedBy);
   linearMerger->setPairs(eids);
@@ -72,34 +62,25 @@ MergerPtr LinearMergerFactory::getMerger(
   return merger;
 }
 
-MergerPtr LinearMergerFactory::getMerger(
-  const std::set<std::pair<ElementId, ElementId>>& eids,
-  const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
-  const QString matchedBy)
+MergerPtr LinearMergerFactory::getMerger(const std::set<std::pair<ElementId, ElementId>>& eids,
+                                         const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
+                                         const QString matchedBy)
 {
   MergerPtr merger;
 
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
-  const bool isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  const bool isAttributeConflate = ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
-  const bool isAverageConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  const bool isAverageConflate = ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (isAttributeConflate)
   {
     // This is messy, but we'll need some refactoring to get rid of it.
-    merger =
-      std::make_shared<LinearTagOnlyMerger>(
-        eids, std::make_shared<PartialNetworkMerger>(eids, edgeMatches, details));
-    std::shared_ptr<LinearMergerAbstract> linearMerger =
-      std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
+    merger = std::make_shared<LinearTagOnlyMerger>(eids, std::make_shared<PartialNetworkMerger>(eids, edgeMatches, details));
+    std::shared_ptr<LinearMergerAbstract> linearMerger = std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
     linearMerger->setMatchedBy(matchedBy);
   }
-  else if (isAverageConflate)
-  {
-    // Average Conflation doesn't use a subline matcher.
+  else if (isAverageConflate) // Average Conflation doesn't use a subline matcher.
     return getMerger(eids, std::shared_ptr<SublineStringMatcher>(), matchedBy);
-  }
   else
   {
     // Reference or Differential Network Conflation; The Network algorithm doesn't support
@@ -122,4 +103,3 @@ MergerPtr LinearMergerFactory::_getMedianMerger()
 }
 
 }
-

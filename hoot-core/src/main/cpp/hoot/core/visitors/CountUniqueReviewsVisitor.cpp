@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CountUniqueReviewsVisitor.h"
 
@@ -38,8 +38,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, CountUniqueReviewsVisitor)
 
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {
-  set<ReviewMarker::ReviewUid> reviews =
-    ReviewMarker::getReviewUids(_map->shared_from_this(), e);
+  set<ReviewMarker::ReviewUid> reviews = ReviewMarker::getReviewUids(_map->shared_from_this(), e);
   _reviews.insert(reviews.begin(), reviews.end());
 }
 

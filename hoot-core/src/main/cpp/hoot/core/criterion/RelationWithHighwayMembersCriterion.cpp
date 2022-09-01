@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithHighwayMembersCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithHighwayMembersCriterion)
 
-RelationWithHighwayMembersCriterion::RelationWithHighwayMembersCriterion() :
-RelationWithMembersOfTypeCriterion()
+RelationWithHighwayMembersCriterion::RelationWithHighwayMembersCriterion()
+  : RelationWithMembersOfTypeCriterion()
 {
 }
 
-RelationWithHighwayMembersCriterion::RelationWithHighwayMembersCriterion(ConstOsmMapPtr map) :
-RelationWithMembersOfTypeCriterion(map)
+RelationWithHighwayMembersCriterion::RelationWithHighwayMembersCriterion(ConstOsmMapPtr map)
+  : RelationWithMembersOfTypeCriterion(map)
 {
 }
 

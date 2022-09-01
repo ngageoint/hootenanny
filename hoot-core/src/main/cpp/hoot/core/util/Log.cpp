@@ -47,7 +47,8 @@ using namespace std;
 namespace hoot
 {
 
-QString Log::LOG_WARN_LIMIT_REACHED_MESSAGE = "Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...";
+QString Log::LOG_WARN_LIMIT_REACHED_MESSAGE = "Reached the maximum number of allowed warning messages for this class set by the setting "
+                                              "log.warn.message.limit.  Silencing additional warning messages for this class...";
 int Log::_warnMessageLimit = 0;
 
 Log& Log::getInstance()
@@ -218,7 +219,8 @@ bool Log::_passesFilter(const string& prettyFunction)
   {
     // split arguments from function call name
     QStringList nameParts = prettyFunctionQt.split("(");
-    if (nameParts.length() < 1) return true;
+    if (nameParts.length() < 1)
+      return true;
 
     // split class name from function name
     nameParts = nameParts[0].split("::", QString::SkipEmptyParts);

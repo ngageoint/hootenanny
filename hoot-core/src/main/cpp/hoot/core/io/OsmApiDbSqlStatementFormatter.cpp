@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbSqlStatementFormatter.h"
 
@@ -47,67 +47,50 @@ OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString& deli
 void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString& delimiter)
 {
   QString formatString = OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getChangesetsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getChangesetsTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentNodesTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentNodesTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getNodesTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getNodesTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentWaysTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWaysTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getWaysTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWayNodesTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getWayNodesTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentRelationsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentRelationsTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getRelationsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getRelationsTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getRelationMembersTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getRelationMembersTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()] = formatString.replace("\t", delimiter);
 
-  _outputFormatStrings[ApiDb::getCurrentWayTagsTableName()] =
-    formatString.replace("\t", delimiter);
-  _outputFormatStrings[ApiDb::getCurrentRelationTagsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentWayTagsTableName()] = formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getCurrentRelationTagsTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWayTagsTableName()] =
-    formatString.replace("\t", delimiter);
-  _outputFormatStrings[ApiDb::getRelationTagsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getWayTagsTableName()] = formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getRelationTagsTableName()] = formatString.replace("\t", delimiter);
 
   formatString = OSMAPIDB_HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getNodeTagsTableName()] =
-    formatString.replace("\t", delimiter);
+  _outputFormatStrings[ApiDb::getNodeTagsTableName()] = formatString.replace("\t", delimiter);
 }
 
 QString OsmApiDbSqlStatementFormatter::escapeCopyToData(const QString& stringToOutput)
@@ -143,14 +126,12 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
     if ((nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000))
     {
       throw HootException(
-        QString("Invalid latitude conversion, Y = %1 to %2").arg(
-          QString::number(node->getY()), QString::number(nodeYNanodegrees)));
+        QString("Invalid latitude conversion, Y = %1 to %2").arg(QString::number(node->getY()), QString::number(nodeYNanodegrees)));
     }
     if ((nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000))
     {
       throw HootException(
-        QString("Invalid longitude conversion, X = %1 to %2").arg(
-          QString::number(node->getX()), QString::number(nodeXNanodegrees)));
+        QString("Invalid longitude conversion, X = %1 to %2").arg(QString::number(node->getX()), QString::number(nodeXNanodegrees)));
     }
     nodeYNanodegreesStr = QString::number(nodeYNanodegrees);
     nodeXNanodegreesStr = QString::number(nodeXNanodegrees);
@@ -274,11 +255,9 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
 //  }
 
   sqlStrs.append(
-    _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()]
-      .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr));
+    _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()].arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr));
   sqlStrs.append(
-    _outputFormatStrings[ApiDb::getRelationMembersTableName()]
-      .arg(relationIdStr, memberType, memberIdStr, memberRole, versionStr, memberSequenceIndexStr));
+    _outputFormatStrings[ApiDb::getRelationMembersTableName()].arg(relationIdStr, memberType, memberIdStr, memberRole, versionStr, memberSequenceIndexStr));
 
   return sqlStrs;
 }
@@ -306,16 +285,11 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
   sqlStrs.append(currentSql);
   //all three of them are not the same for historical
   QString historicalSql;
-  if (elementType == ElementType::Node)
-  {
-    //see explanation for this silliness in the header file
+  if (elementType == ElementType::Node) // see explanation for this silliness in the header file
     historicalSql = _outputFormatStrings[ApiDb::getNodeTagsTableName()].arg(elementIdStr, versionStr, key, value);
-  }
-  else
-  {
-    //way and relation strings are the same
+  else  //  way and relation strings are the same
     historicalSql = _outputFormatStrings[ApiDb::getWayTagsTableName()].arg(elementIdStr, key, value, versionStr);
-  }
+
   sqlStrs.append(historicalSql);
 
   return sqlStrs;
@@ -346,17 +320,14 @@ QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElemen
 {
   switch (element->getElementType().getEnum())
   {
-    case ElementType::Node:
-      return nodeToSqlStrings(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
-
-    case ElementType::Way:
-      return wayToSqlStrings(elementId, changesetId, element->getVersion());
-
-    case ElementType::Relation:
-      return relationToSqlStrings(elementId, changesetId, element->getVersion());
-
-    default:
-      throw HootException("Unsupported element member type.");
+  case ElementType::Node:
+    return nodeToSqlStrings(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
+  case ElementType::Way:
+    return wayToSqlStrings(elementId, changesetId, element->getVersion());
+  case ElementType::Relation:
+    return relationToSqlStrings(elementId, changesetId, element->getVersion());
+  default:
+    throw HootException("Unsupported element member type.");
   }
   return QStringList();
 }

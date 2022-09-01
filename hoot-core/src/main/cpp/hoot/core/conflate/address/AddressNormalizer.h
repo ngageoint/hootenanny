@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ADDRESS_NORMALIZER_H
 #define ADDRESS_NORMALIZER_H
 
 // Hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

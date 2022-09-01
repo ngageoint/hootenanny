@@ -84,8 +84,7 @@ void PartialNetworkMerger::_appendSublineMappings(QList<WayMatchStringMerger::Su
   LOG_VART(_allSublineMappings.size());
 }
 
-void PartialNetworkMerger::apply(const OsmMapPtr& map,
-                                 vector<pair<ElementId, ElementId>>& replaced)
+void PartialNetworkMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   _mergerList.clear();
 

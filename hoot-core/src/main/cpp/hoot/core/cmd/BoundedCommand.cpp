@@ -60,18 +60,13 @@ void BoundedCommand::_writeBoundsFile()
   QString boundsStr = opts.getBounds().trimmed();
   if (!boundsStr.isEmpty())
   {
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromString(boundsStr)),
-      opts.getBoundsOutputFile());
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromString(boundsStr)), opts.getBoundsOutputFile());
 
     if (_writeInternalEnvelope && GeometryUtils::isEnvelopeString(boundsStr))
     {
       QString outputFile = opts.getBoundsOutputFile();
       outputFile = outputFile.replace(".osm", "-envelope-internal.osm");
-      OsmMapWriterFactory::write(
-        GeometryUtils::createMapFromBounds(
-          *(GeometryUtils::boundsFromString(boundsStr)->getEnvelopeInternal())),
-        outputFile);
+      OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(*(GeometryUtils::boundsFromString(boundsStr)->getEnvelopeInternal())), outputFile);
     }
   }
 }

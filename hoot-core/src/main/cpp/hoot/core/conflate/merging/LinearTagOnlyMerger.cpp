@@ -214,8 +214,7 @@ bool LinearTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep,
 void LinearTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
 {
   OneWayCriterion isAOneWayStreet;
-  if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
-      elementWithTagsToRemove->getElementType() == ElementType::Way)
+  if (elementWithTagsToKeep->getElementType() == ElementType::Way && elementWithTagsToRemove->getElementType() == ElementType::Way)
   {
     WayPtr wayWithTagsToKeep = std::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
     ConstWayPtr wayWithTagsToRemove =

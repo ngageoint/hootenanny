@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BuildingPartCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -42,9 +42,7 @@ bool BuildingPartCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
   if (e->getElementType() != ElementType::Node && e->getTags().isTrue(MetadataTags::BuildingPart()))
-  {
     result = true;
-  }
   return result;
 }
 

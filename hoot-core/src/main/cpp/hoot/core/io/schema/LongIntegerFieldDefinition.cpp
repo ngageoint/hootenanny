@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LongIntegerFieldDefinition.h"
 
@@ -30,27 +30,24 @@
 #include <limits>
 #include <sstream>
 
-namespace hoot
-{
 using namespace std;
 
-LongIntegerFieldDefinition::LongIntegerFieldDefinition()
+namespace hoot
 {
-  _defaultValue = -numeric_limits<long long>::max();
-  _min = -numeric_limits<long long>::max();
-  _max = numeric_limits<long long>::max();
+
+LongIntegerFieldDefinition::LongIntegerFieldDefinition()
+  : _min(-numeric_limits<long long>::max()),
+    _max(numeric_limits<long long>::max()),
+    _defaultValue(-numeric_limits<long long>::max())
+{
 }
 
 QVariant LongIntegerFieldDefinition::getDefaultValue() const
 {
   if (getDefaultIsNull())
-  {
     return QVariant();
-  }
   else
-  {
     return QVariant(_defaultValue);
-  }
 }
 
 bool LongIntegerFieldDefinition::hasDefaultValue() const
@@ -68,42 +65,28 @@ QString LongIntegerFieldDefinition::toString() const
 
 void LongIntegerFieldDefinition::validate(const QVariant& v, StrictChecking strict) const
 {
+  // the value is null, no problem.
   if (getAllowNull() && v.isValid() == false)
-  {
-    // the value is null, no problem.
     return;
-  }
 
   bool ok;
   v.toString().toLongLong(&ok);
   if (ok == false)
-  {
     _reportError(getName(), "Cannot convert value to long long integer: " + v.toString(), strict);
-  }
+
   long long vint = v.toLongLong();
 
   if (_enumeratedValues.find(vint) != _enumeratedValues.end())
-  {
-    // we're good
-  }
-  else if (_max == numeric_limits<long long>::max() && _min == -numeric_limits<long long>::max() &&
-           !_enumeratedValues.empty())
-  {
-/* Setting Strict to StrictWarn stops Hoot dieing when an enumerated value is outside what
-   is in the Schema.
-
-   _reportError(getName(),
-      "Integer value is not a valid enumeration and bounds are not set. " + v.toString(), strictWarn);
-*/
-    _reportError(getName(),
-      "Integer value is not a valid enumeration and bounds are not set. " + v.toString(), strict);
-      }
+    return;
+  else if (_max == numeric_limits<long long>::max() && _min == -numeric_limits<long long>::max() && !_enumeratedValues.empty())
+    _reportError(getName(), "Integer value is not a valid enumeration and bounds are not set. " + v.toString(), strict);
   else if (vint > _max)
   {
     _reportError(getName(), QString("Value is above max. value: %1 max: %2 (%3)")
-      .arg(v.toString())
-      .arg(_max)
-      .arg(getName()), strict);
+                 .arg(v.toString())
+                 .arg(_max)
+                 .arg(getName()),
+                 strict);
   }
   else if (vint < _min)
   {

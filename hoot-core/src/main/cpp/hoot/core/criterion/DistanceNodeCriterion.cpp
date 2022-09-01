@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DistanceNodeCriterion.h"
@@ -39,9 +39,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DistanceNodeCriterion)
 
-DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
-_center(center),
-_distance(distance)
+DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance)
+  : _center(center),
+    _distance(distance)
 {
 }
 
@@ -51,31 +51,23 @@ void DistanceNodeCriterion::setConfiguration(const Settings& s)
 
   _distance = opts.getDistanceNodeCriterionDistance();
   if (_distance < 0.0)
-  {
-    throw HootException(
-      "Invalid distance passed to DistanceNodeCriterion: " + QString::number(_distance));
-  }
+    throw HootException("Invalid distance passed to DistanceNodeCriterion: " + QString::number(_distance));
 
-  const QString errorMsg =
-    "Invalid center value passed to DistanceNodeCriterion: " +
-    opts.getDistanceNodeCriterionCenter();
+  const QString errorMsg = "Invalid center value passed to DistanceNodeCriterion: " + opts.getDistanceNodeCriterionCenter();
   const QStringList centerParts = opts.getDistanceNodeCriterionCenter().split(",");
   if (centerParts.empty())
-  {
     throw HootException(errorMsg);
-  }
+
   bool ok = false;
   const double x = centerParts[0].toDouble(&ok);
   if (!ok)
-  {
     throw HootException(errorMsg);
-  }
+
   _center.x = x;
   const double y = centerParts[1].toDouble(&ok);
   if (!ok)
-  {
      throw HootException(errorMsg);
-  }
+
   _center.y = y;
 }
 

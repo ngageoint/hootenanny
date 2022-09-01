@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonReviewReducer.h"
 
 // hoot
-#include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/MultiUseCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
+#include <hoot/core/criterion/MultiUseCriterion.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // geos
 #include <geos/util/TopologyException.h>
@@ -52,27 +52,26 @@
 namespace hoot
 {
 
-PoiPolygonReviewReducer::PoiPolygonReviewReducer(
-  const ConstOsmMapPtr& map,
-  const std::set<ElementId>& polyNeighborIds, double distance, double nameScoreThreshold,
-  double nameScore, bool nameMatch, bool exactNameMatch, double typeScoreThreshold,
-  double typeScore, bool typeMatch, double matchDistanceThreshold, double addressScore,
-  bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache) :
-_map(map),
-_polyNeighborIds(polyNeighborIds),
-_distance(distance),
-_nameScoreThreshold(nameScoreThreshold),
-_nameScore(nameScore),
-_nameMatch(nameMatch),
-_exactNameMatch(exactNameMatch),
-_typeScoreThreshold(typeScoreThreshold),
-_typeScore(typeScore),
-_typeMatch(typeMatch),
-_matchDistanceThreshold(matchDistanceThreshold),
-_addressScore(addressScore),
-_addressMatch(addressScore == 1.0),
-_addressParsingEnabled(addressParsingEnabled),
-_infoCache(infoCache)
+PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
+                                                 const std::set<ElementId>& polyNeighborIds, double distance, double nameScoreThreshold,
+                                                 double nameScore, bool nameMatch, bool exactNameMatch, double typeScoreThreshold,
+                                                 double typeScore, bool typeMatch, double matchDistanceThreshold, double addressScore,
+                                                 bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache)
+  : _map(map),
+    _polyNeighborIds(polyNeighborIds),
+    _distance(distance),
+    _nameScoreThreshold(nameScoreThreshold),
+    _nameScore(nameScore),
+    _nameMatch(nameMatch),
+    _exactNameMatch(exactNameMatch),
+    _typeScoreThreshold(typeScoreThreshold),
+    _typeScore(typeScore),
+    _typeMatch(typeMatch),
+    _matchDistanceThreshold(matchDistanceThreshold),
+    _addressScore(addressScore),
+    _addressMatch(addressScore == 1.0),
+    _addressParsingEnabled(addressParsingEnabled),
+    _infoCache(infoCache)
 {
   LOG_VART(_polyNeighborIds.size());
   LOG_VART(_distance);
@@ -119,8 +118,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   QString ruleDescription = "#1: multi-use";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
-  if (_typeScore < 0.4 &&
-      poiHasType && _infoCache->hasCriterion(poly, MultiUseCriterion::className()))
+  if (_typeScore < 0.4 && poiHasType && _infoCache->hasCriterion(poly, MultiUseCriterion::className()))
   {
     LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
     _triggeredRuleDescription = ruleDescription;
@@ -133,8 +131,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //be a little stricter on place related reviews
   ruleDescription = "#2: place";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
-  if (!polyTags.contains("place") &&
-      (poiPlaceVal == QLatin1String("neighbourhood") || poiPlaceVal == QLatin1String("suburb")))
+  if (!polyTags.contains("place") && (poiPlaceVal == QString("neighbourhood") || poiPlaceVal == QString("suburb")))
   {
     LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
     _triggeredRuleDescription = ruleDescription;
@@ -149,9 +146,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   // I think this one will eventually go away.
   ruleDescription = "#3: mine";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
-  if (poiTags.get("man_made").toLower() == QLatin1String("mine") &&
-      polyLanduseVal == QLatin1String("quarry") &&
-      polyTags.get("man_made").toLower() != QLatin1String("mine"))
+  if (poiTags.get("man_made").toLower() == QString("mine") &&
+      polyLanduseVal == QString("quarry") &&
+      polyTags.get("man_made").toLower() != QString("mine"))
   {
     LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
     _triggeredRuleDescription = ruleDescription;
@@ -162,7 +159,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   ruleDescription = "#4: island";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (!_typeMatch &&
-      (poiPlaceVal == QLatin1String("island") || polyPlaceVal == QLatin1String("island")))
+      (poiPlaceVal == QString("island") || polyPlaceVal == QString("island")))
   {
     LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
     _triggeredRuleDescription = ruleDescription;
@@ -313,6 +310,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //sport poly
   if (poiNameEndsWithField && polyIsSport)
   {
+    //  Skip
   }
   else if (!_nonDistanceSimilaritiesPresent() &&
            (poiLeisureVal == QLatin1String("pitch") || polyLeisureVal == QLatin1String("pitch")))
@@ -480,8 +478,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   bool poiOnBuilding = false;
   const bool poiIsSport = _infoCache->isType(poi, PoiPolygonSchemaType::Sport);
   LOG_VART(poiIsSport);
-  const bool poiContainedInParkPoly =
-    poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
+  const bool poiContainedInParkPoly = poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
   LOG_VART(poiContainedInParkPoly);
 
   const bool poiIsBuilding = _infoCache->hasCriterion(poi, BuildingCriterion::className());
@@ -502,18 +499,15 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     iterateOverPolyNeighbors = true;
   }
   if (!iterateOverPolyNeighbors)
-  {
     return false;
-  }
 
   //QElapsedTimer timer2;
   LOG_TRACE("Checking neighbors...");
   LOG_VART(_polyNeighborIds.size());
   // This loop becomes more expensive as the search radius is increased.
-  for (std::set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
-       polyNeighborItr != _polyNeighborIds.end(); ++polyNeighborItr)
+  for (const auto& eid : _polyNeighborIds)
   {
-    ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
+    ConstElementPtr polyNeighbor = _map->getElement(eid);
     if (polyNeighbor->getElementId() != poly->getElementId())
     { 
       try

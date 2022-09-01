@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmChangesetFileWriterFactory.h"
 
@@ -42,54 +42,44 @@ OsmChangesetFileWriterFactory& OsmChangesetFileWriterFactory::getInstance()
   return instance;
 }
 
-std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWriter(
-  const QString& url, const QString& osmApiDbUrl) const
+std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWriter(const QString& url, const QString& osmApiDbUrl) const
 {
   LOG_VARD(url);
   LOG_VARD(osmApiDbUrl);
 
-  std::vector<QString> names =
-    Factory::getInstance().getObjectNamesByBase(OsmChangesetFileWriter::className());
+  std::vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmChangesetFileWriter::className());
   std::shared_ptr<OsmChangesetFileWriter> writer;
-  for (size_t i = 0; i < names.size() && !writer; ++i)
+  for (const auto& name : names)
   {
-    LOG_VARD(names[i]);
-    writer = Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]);
+    LOG_VARD(name);
+    writer = Factory::getInstance().constructObject<OsmChangesetFileWriter>(name);
     if (writer->isSupported(url))
-    { LOG_DEBUG("Using changeset output writer: " << names[i]);
+    {
+      LOG_DEBUG("Using changeset output writer: " << name);
 
       Configurable* c = dynamic_cast<Configurable*>(writer.get());
       if (c != nullptr)
-      {
         c->setConfiguration(conf());
-      }
 
       if (url.endsWith(".osc.sql"))
       {
         if (osmApiDbUrl.isEmpty())
-        {
-          throw IllegalArgumentException(
-            "No OSM API database URL specified for OsmApiDbSqlChangesetFileWriter input.");
-        }
+          throw IllegalArgumentException("No OSM API database URL specified for OsmApiDbSqlChangesetFileWriter input.");
         else
         {
-          std::shared_ptr<OsmApiDbSqlChangesetFileWriter> dbWriter =
-            std::dynamic_pointer_cast<OsmApiDbSqlChangesetFileWriter>(writer);
+          std::shared_ptr<OsmApiDbSqlChangesetFileWriter> dbWriter = std::dynamic_pointer_cast<OsmApiDbSqlChangesetFileWriter>(writer);
           assert(dbWriter.get());
           dbWriter->setOsmApiDbUrl(osmApiDbUrl);
         }
       }
+      break;
     }
     else
-    {
       writer.reset();
-    }
   }
 
   if (!writer)
-  {
     throw IllegalArgumentException("A valid writer could not be found for the URL: " + url);
-  }
 
   return writer;
 }

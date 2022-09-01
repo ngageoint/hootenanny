@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "StringFieldDefinition.h"
 
@@ -31,20 +31,15 @@ namespace hoot
 
 QString StringFieldDefinition::toString() const
 {
-  return QString("String name: %1 default: %2")
-      .arg(getName()).arg(_defaultValue);
+  return QString("String name: %1 default: %2").arg(getName(), _defaultValue);
 }
 
 QVariant StringFieldDefinition::getDefaultValue() const
 {
   if (getDefaultIsNull())
-  {
     return QVariant();
-  }
   else
-  {
     return QVariant(_defaultValue);
-  }
 }
 
 bool StringFieldDefinition::hasDefaultValue() const
@@ -54,18 +49,12 @@ bool StringFieldDefinition::hasDefaultValue() const
 
 void StringFieldDefinition::validate(const QVariant& v, StrictChecking strict) const
 {
-  if (getAllowNull() && v.isValid() == false)
-  {
-    // the value is null, no problem.
-  }
+  if (getAllowNull() && v.isValid() == false) // the value is null, no problem.
+    return;
   else if (!getAllowNull() && v.isValid() == false)
-  {
     _reportError(getName(), "Nulls are not allowed, but field was set to null.", strict);
-  }
   else if (v.canConvert(QVariant::String) == false)
-  {
     _reportError(getName(), "Could not convert string variant to string.", strict);
-  }
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiCriterion.h"
 
@@ -39,23 +39,12 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-
-  bool result = false;
-
   // we consider all point features with a name, or part of the explicitly defined point category
   // to be POIs.
   if (e->getElementType() == ElementType::Node)
-  {
-    result =
-      OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
-      !e->getTags().getNames().empty();
-  }
-
-  if (result)
-  {
-    LOG_TRACE("crit satisfied");
-  }
-  return result;
+    return OsmSchema::getInstance().hasCategory(e->getTags(), "poi") || !e->getTags().getNames().empty();
+  else
+    return false;
 }
 
 }

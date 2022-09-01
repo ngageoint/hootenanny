@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "BuildingLevelsVisitor.h"
@@ -35,10 +35,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, BuildingLevelsVisitor)
 
-BuildingLevelsVisitor::BuildingLevelsVisitor() :
-_totalLevels(0),
-_minLevels(0),
-_maxLevels(0)
+BuildingLevelsVisitor::BuildingLevelsVisitor()
+  : _totalLevels(0),
+    _minLevels(0),
+    _maxLevels(0)
 {
 }
 
@@ -53,13 +53,9 @@ void BuildingLevelsVisitor::visit(const ConstElementPtr& e)
     {
       _totalLevels += numLevels;
       if (_minLevels == 0 || numLevels < _minLevels)
-      {
         _minLevels = numLevels;
-      }
       if (numLevels > _maxLevels)
-      {
         _maxLevels = numLevels;
-      }
       _numAffected++;
     }
   }
@@ -73,9 +69,7 @@ int BuildingLevelsVisitor::_getNumLevels(const ConstElementPtr& e) const
     bool ok = false;
     const int numLevels = e->getTags().get("building:levels").toInt(&ok);
     if (ok)
-    {
       return numLevels;
-    }
   }
   return 0;
 }

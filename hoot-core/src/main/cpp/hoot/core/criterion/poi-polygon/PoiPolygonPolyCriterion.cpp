@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonPolyCriterion.h"
 
@@ -41,8 +41,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyCriterion)
 
-PoiPolygonPolyCriterion::PoiPolygonPolyCriterion() :
-_tagIgnoreList(ConfigOptions().getPoiPolygonPolyIgnoreTags())
+PoiPolygonPolyCriterion::PoiPolygonPolyCriterion()
+  : _tagIgnoreList(ConfigOptions().getPoiPolygonPolyIgnoreTags())
 {
   LOG_VART(_tagIgnoreList);
 }
@@ -52,9 +52,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
 
   if (e->getElementType() == ElementType::Node)
-  {
     return false;
-  }
 
   const Tags& tags = e->getTags();
 
@@ -78,14 +76,12 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags)
-      .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+    OsmSchema::getInstance().getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   LOG_VART(inABuildingOrPoiCategory);
   LOG_VART(tags.getNames().size());
   LOG_VART(AreaCriterion().isSatisfied(e));
   // isArea includes building too
-  const bool isPoly =
-    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || !tags.getNames().empty());
+  const bool isPoly = AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || !tags.getNames().empty());
 
   LOG_VART(isPoly);
   return isPoly;

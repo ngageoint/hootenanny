@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RfExtractorClassifier.h"
 
@@ -46,8 +46,7 @@ namespace hoot
 
 int RfExtractorClassifier::logWarnCount = 0;
 
-MatchClassification RfExtractorClassifier::classify(
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2) const
+MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2) const
 {
   LOG_TRACE("Determining classification for match between: " << eid1 << " and " << eid2 << "...");
 
@@ -56,10 +55,8 @@ MatchClassification RfExtractorClassifier::classify(
   std::map<QString, double> features = getFeatures(map, eid1, eid2);
   vector<double> row;
   row.reserve(features.size());
-  for (std::map<QString, double>::const_iterator it = features.begin(); it != features.end(); ++it)
-  {
+  for (auto it = features.begin(); it != features.end(); ++it)
     row.push_back(it->second);
-  }
   std::map<string, double> scores;
   _rf->classifyVector(row, scores);
 
@@ -74,14 +71,11 @@ MatchClassification RfExtractorClassifier::classify(
 const vector<std::shared_ptr<const FeatureExtractor>>& RfExtractorClassifier::_getExtractors() const
 {
   if (_extractors.empty())
-  {
     _createExtractors();
-  }
   return _extractors;
 }
 
-map<QString, double> RfExtractorClassifier::getFeatures(
-  const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2) const
+map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2) const
 {
   map<QString, double> result;
 
@@ -89,13 +83,13 @@ map<QString, double> RfExtractorClassifier::getFeatures(
   const std::shared_ptr<const Element> e2 = m->getElement(eid2);
 
   _getExtractors();
-  for (size_t i = 0; i < _extractors.size(); i++)
+  for (const auto& extractor : _extractors)
   {
-    const double v = _extractors[i]->extract(*m, e1, e2);
+    const double v = extractor->extract(*m, e1, e2);
     // If it isn't null, then include it.
     if (!FeatureExtractor::isNull(v))
     {
-      QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
+      QString factorName = extractor->getName().replace(QRegExp("[^\\w]"), "_");
       result[factorName] = v;
     }
   }
@@ -112,19 +106,15 @@ void RfExtractorClassifier::importTree(const QDomElement& docRoot)
   vector<string> factorLabels = _rf->getFactorLabels();
 
   QStringList extractorNames;
-  for (size_t i = 0; i < _extractors.size(); i++)
-  {
-    extractorNames.append(_extractors[i]->getName().replace(QRegExp("[^\\w]"), "_"));
-  }
+  for (const auto& extractor : _extractors)
+    extractorNames.append(extractor->getName().replace(QRegExp("[^\\w]"), "_"));
 
   QStringList missingExtractors;
-  for (size_t i = 0; i < factorLabels.size(); i++)
+  for (const auto& label : factorLabels)
   {
-    QString fn = QString::fromUtf8(factorLabels[i].data());
-    if (extractorNames.contains(fn) == false)
-    {
+    QString fn = QString::fromUtf8(label.data());
+    if (!extractorNames.contains(fn))
       missingExtractors.append(fn);
-    }
     _rfFactorLabels.append(fn);
   }
 

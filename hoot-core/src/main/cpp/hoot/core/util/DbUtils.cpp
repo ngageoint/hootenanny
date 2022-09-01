@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DbUtils.h"
@@ -43,12 +43,8 @@ QSqlQuery DbUtils::execNoPrepare(const QSqlDatabase& database, const QString& sq
 
   LOG_VART(sql);
   if (q.exec(sql) == false)
-  {
-    throw HootException(
-      QString("Error executing query. Error: %1 ...\nSQL: %2 ...")
-        .arg(q.lastError().text().left(200))
-        .arg(sql.left(200)));
-  }
+    throw HootException(QString("Error executing query. Error: %1 ...\nSQL: %2 ...").arg(q.lastError().text().left(200), sql.left(200)));
+
   LOG_VART(q.numRowsAffected());
 
   return q;
@@ -58,12 +54,7 @@ long DbUtils::getRowCount(const QSqlDatabase& database, const QString& tableName
 {
   QSqlQuery query(database);
   if (!query.exec("SELECT COUNT(*) FROM " + tableName))
-  {
-    throw HootException(
-      QString("Error executing row count query: %1 (%2)")
-        .arg(query.lastError().text())
-        .arg(tableName));
-  }
+    throw HootException(QString("Error executing row count query: %1 (%2)").arg(query.lastError().text(), tableName));
 
   long result = -1;
   if (query.next())
@@ -71,16 +62,11 @@ long DbUtils::getRowCount(const QSqlDatabase& database, const QString& tableName
     bool ok;
     result = query.value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException("Error executing row count query for " + tableName);
-    }
   }
   else
-  {
-    throw HootException(
-      "Error retrieving table row count. type: " + tableName + " Error: " +
-      query.lastError().text());
-  }
+    throw HootException("Error retrieving table row count. type: " + tableName + " Error: " + query.lastError().text());
+
   query.finish();
 
   return result;
@@ -104,15 +90,11 @@ void DbUtils::_modifyTableConstraints(const QSqlDatabase& database, const QStrin
   // Do we want to do the style that checks constraints at the end here instead?
   QString operation = "DISABLE";
   if (!disable)
-  {
     operation = "ENABLE";
-  }
+
   LOG_DEBUG(operation << " constraints on " << tableName);
 
-  QString sql =
-    QString("ALTER TABLE %1 %2 TRIGGER ALL\n")
-      .arg(tableName)
-      .arg(operation);
+  QString sql = QString("ALTER TABLE %1 %2 TRIGGER ALL\n").arg(tableName, operation);
   LOG_VARD(sql);
 
   QSqlQuery query(database);
@@ -121,11 +103,7 @@ void DbUtils::_modifyTableConstraints(const QSqlDatabase& database, const QStrin
     QString operationStr = operation.toLower();
     operationStr.chop(1);
     operationStr += "ing";
-    throw HootException(
-      QString("Error %1 constraints: %2 (%3)")
-        .arg(operationStr)
-        .arg(query.lastError().text())
-        .arg(tableName));
+    throw HootException(QString("Error %1 constraints: %2 (%3)").arg(operationStr, query.lastError().text(), tableName));
   }
 }
 
@@ -135,25 +113,16 @@ QString DbUtils::getPostgresDbVersion(const QSqlDatabase& database)
 
   QSqlQuery query(database);
   if (!query.exec("SELECT version()"))
-  {
-    throw HootException(
-      QString("Error executing version query: %1")
-        .arg(query.lastError().text()));
-  }
+    throw HootException(QString("Error executing version query: %1").arg(query.lastError().text()));
 
   if (query.next())
   {
     version = query.value(0).toString();
     if (version.trimmed().isEmpty())
-    {
       throw HootException("Error retrieving version.");
-    }
   }
   else
-  {
-    throw HootException(
-      "Error retrieving version. Error: " + query.lastError().text());
-  }
+    throw HootException("Error retrieving version. Error: " + query.lastError().text());
   query.finish();
 
   return version;

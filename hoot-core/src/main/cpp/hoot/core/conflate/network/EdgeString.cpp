@@ -329,30 +329,17 @@ ConstNetworkVertexPtr EdgeString::getToVertex() const
 
 bool EdgeString::isEdgeClosed() const
 {
-  bool result = false;
   // if the end of the subline isn't at a vertex.
-  if (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
-      _edges.back().getSubline()->isZeroLength())
-  {
-    result = true;
-  }
-  return result;
+  return (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
+          _edges.back().getSubline()->isZeroLength());
 }
 
 bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
 {
-  bool result = false;
-
   const ConstEdgeLocationPtr& start = getFrom();
   const ConstEdgeLocationPtr& end = getTo();
 
-  if ((start->isExtreme() && start->getVertex() == v) ||
-      (end->isExtreme() && end->getVertex() == v))
-  {
-    result = true;
-  }
-
-  return result;
+  return ((start->isExtreme() && start->getVertex() == v) || (end->isExtreme() && end->getVertex() == v));
 }
 
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
