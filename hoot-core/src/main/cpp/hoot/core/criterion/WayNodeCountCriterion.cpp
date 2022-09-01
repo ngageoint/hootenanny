@@ -56,7 +56,7 @@ bool WayNodeCountCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e && e->getElementType() == ElementType::Way)
   {
     LOG_VART(e->getElementId());
-    return _numericComparisonType.satisfiesComparison((std::dynamic_pointer_cast<const Way>(e))->getNodeCount(), _comparisonCount);
+    return _numericComparisonType.satisfiesComparison(static_cast<double>((std::dynamic_pointer_cast<const Way>(e))->getNodeCount()), _comparisonCount);
   }
   return false;
 }

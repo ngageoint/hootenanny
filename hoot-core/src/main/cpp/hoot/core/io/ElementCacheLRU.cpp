@@ -423,7 +423,7 @@ void ElementCacheLRU::_updateRelationAccess(long id)
   relItr->second.second = _relationList.begin();
 }
 
-std::string ElementCacheLRU::getLRUString(const ElementType::Type type)
+std::string ElementCacheLRU::getLRUString(const ElementType::Type type) const
 {
   std::ostringstream list;
   switch (type)

@@ -47,7 +47,7 @@ public:
 
   ParallelWayCriterion() = default;
   ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
-  ~ParallelWayCriterion() override;
+  ~ParallelWayCriterion() override = default;
 
   Radians calculateDifference(const ConstWayPtr& w) const;
   static bool isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
@@ -75,7 +75,7 @@ private:
 
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
-  std::vector<geos::geom::Point*> _points;
+  std::vector<std::shared_ptr<geos::geom::Point>> _points;
   Degrees _threshold;
 };
 

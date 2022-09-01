@@ -120,7 +120,7 @@ public:
    *                            place in the map.
    * @param pMap - The map to operate on.
    */
-  void replaceRoundabout(OsmMapPtr pMap);
+  void replaceRoundabout(OsmMapPtr pMap) const;
 
   /**
    * @brief handleCrossingWays - Finds ways that cross the roundabout,

@@ -93,7 +93,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
   // If no specific conflate crit was available, then try to add a generic one.
   if (conflatableCriteriaForElement.empty())
   {
-    for (auto itr = genericConflatableCriteria.begin(); itr != genericConflatableCriteria.end(); ++itr)
+    for (auto itr = genericConflatableCriteria.cbegin(); itr != genericConflatableCriteria.cend(); ++itr)
     {
       LOG_VART(itr.key());
       std::shared_ptr<ConflatableElementCriterion> crit = itr.value();

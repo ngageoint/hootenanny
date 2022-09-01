@@ -41,7 +41,7 @@ vector<string> DataSamples::getUniqueLabels() const
   set<QString> labelSet;
   for (const auto& sample : *this)
   {
-    for (Sample::const_iterator it = sample.begin(); it != sample.end(); ++it)
+    for (auto it = sample.begin(); it != sample.end(); ++it)
     {
       if (it->first != "class")
         labelSet.insert(it->first);

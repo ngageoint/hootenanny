@@ -117,8 +117,10 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   const long rawId = resultIterator.value(0).toLongLong();
   const long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
   LOG_TRACE("Reading node with ID: " << nodeId);
-  const double lat = resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
-  const double lon = resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
+  const double lat = static_cast<double>(resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()) /
+                     static_cast<double>(ApiDb::COORDINATE_SCALE);
+  const double lon = static_cast<double>(resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()) /
+                     static_cast<double>(ApiDb::COORDINATE_SCALE);
 
   // Timestamp
   QDateTime dt = resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime();

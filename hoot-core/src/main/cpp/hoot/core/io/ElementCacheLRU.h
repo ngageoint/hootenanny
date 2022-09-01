@@ -119,7 +119,7 @@ public:
 
   // For testing - gets a comma-seperated list of IDs of the Least Recently Used
   // cache items, from most recent to least recent.
-  std::string getLRUString(const ElementType::Type type);
+  std::string getLRUString(const ElementType::Type type) const;
 
 private:
 

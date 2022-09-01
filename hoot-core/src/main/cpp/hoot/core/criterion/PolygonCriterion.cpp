@@ -55,9 +55,12 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
 
-  if (e->getElementType() == ElementType::Node)
+  switch(e->getElementType().getEnum())
+  {
+  default:
+  case ElementType::Node:
     return false;
-  else if (e->getElementType() == ElementType::Way)
+  case ElementType::Way:
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->isValidPolygon());
@@ -67,9 +70,9 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
       LOG_TRACE("Way is valid closed area; crit satisfied.");
       return true;
     }
+    break;
   }
-  else if (e->getElementType() == ElementType::Relation)
-  {
+  case ElementType::Relation:
     // We use to define poly relations using a static list of relation types. Now, we look at the
     // member contents instead. If any member is a poly, then we call it a poly relation.
     if (_relationCrit.isSatisfied(e))
@@ -77,6 +80,7 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
       LOG_TRACE("Relation has polygon members; crit satisified.");
       return true;
     }
+    break;
   }
   return false;
 }

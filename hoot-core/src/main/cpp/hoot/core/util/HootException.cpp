@@ -51,7 +51,7 @@ HootExceptionThrower& HootExceptionThrower::getInstance()
   return instance;
 }
 
-void HootExceptionThrower::rethrowPointer(HootException* e)
+void HootExceptionThrower::rethrowPointer(HootException* e) const
 {
   // try to throw the exception, if it isn't relevant nothing happens
   for (const auto& method : _throwMethods)

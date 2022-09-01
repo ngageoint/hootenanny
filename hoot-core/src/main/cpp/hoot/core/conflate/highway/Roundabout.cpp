@@ -312,7 +312,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   LOG_VART(_tempWays.size());
 }
 
-void Roundabout::replaceRoundabout(OsmMapPtr pMap)
+void Roundabout::replaceRoundabout(OsmMapPtr pMap) const
 {
   /*
    * Go through our nodes... if they are still there, check location.
@@ -362,7 +362,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       // If not found, we need to add it back to the map
       if (!found)
       {
-        NodePtr pNewNode = std::make_shared<Node>(*(thisNode));
+        NodePtr pNewNode = std::make_shared<Node>(*thisNode);
         LOG_TRACE("Node with ID: " << nodeId << " not found. Adding new node: " << pNewNode->getId() << "...");
         pMap->addNode(pNewNode);
         wayNodes.push_back(pNewNode);

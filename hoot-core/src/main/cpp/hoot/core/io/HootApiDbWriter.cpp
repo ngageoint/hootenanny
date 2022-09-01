@@ -442,7 +442,8 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     if (_remapIds == true)
       relationMemberElementId = ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));
 
-    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(), relationMemberElementId.getId(), e.getRole(), i);
+    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(), relationMemberElementId.getId(), e.getRole(),
+                                 static_cast<int>(i));
   }
 
   LOG_TRACE("All members added to relation " << QString::number(relationId));
