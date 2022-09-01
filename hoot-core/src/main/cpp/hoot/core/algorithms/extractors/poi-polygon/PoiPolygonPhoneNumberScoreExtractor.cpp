@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiPolygonPhoneNumberScoreExtractor.h"
@@ -41,9 +41,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonPhoneNumberScoreExtractor)
 
-PoiPolygonPhoneNumberScoreExtractor::PoiPolygonPhoneNumberScoreExtractor() :
-_phoneNumbersProcessed(0),
-_matchAttemptMade(false)
+PoiPolygonPhoneNumberScoreExtractor::PoiPolygonPhoneNumberScoreExtractor()
+  : _phoneNumbersProcessed(0),
+    _matchAttemptMade(false)
 {
 }
 
@@ -67,16 +67,11 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
     LOG_VART(polyPhoneNumbers.size());
   }
 
-  for (QList<ElementPhoneNumber>::const_iterator poiPhoneNumberItr = poiPhoneNumbers.constBegin();
-       poiPhoneNumberItr != poiPhoneNumbers.constEnd(); ++poiPhoneNumberItr)
+  for (const auto& poiNumber : qAsConst(poiPhoneNumbers))
   {
-    const ElementPhoneNumber poiNumber = *poiPhoneNumberItr;
-    for (QList<ElementPhoneNumber>::const_iterator polyPhoneNumberItr = polyPhoneNumbers.constBegin();
-         polyPhoneNumberItr != polyPhoneNumbers.constEnd(); ++polyPhoneNumberItr)
+    for (const auto& polyNumber : qAsConst(polyPhoneNumbers))
     {
       _matchAttemptMade = true;
-      const ElementPhoneNumber polyNumber = *polyPhoneNumberItr;
-
       PhoneNumberUtil::MatchType numberMatchType =
         PhoneNumberUtil::GetInstance()->IsNumberMatchWithTwoStrings(
           poiNumber.tagValue.toStdString(), polyNumber.tagValue.toStdString());

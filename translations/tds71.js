@@ -2883,7 +2883,6 @@ tds71 = {
       tds71.configOut.OgrCleanExport = hoot.Settings.get('ogr.clean.export')
       tds71.configOut.OgrCompareOutput = hoot.Settings.get('ogr.compare.output')
       tds71.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
-      tds71.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
       tds71.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
       tds71.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       tds71.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');

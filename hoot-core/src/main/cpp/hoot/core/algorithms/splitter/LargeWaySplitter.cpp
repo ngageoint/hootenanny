@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "LargeWaySplitter.h"
@@ -31,14 +31,14 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -60,24 +60,21 @@ void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+  for (auto it = wm.begin(); it != wm.end(); ++it)
   {
     std::shared_ptr<Way> w = it->second;
     std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
     double len = ls->getLength();
     // if the way is larger than the threshold
     if (len > _threshold)
-    {
-      int pieces = (int)(ceil(len / _threshold) + 0.1);
-      _divideWay(w, pieces);
-    }
+      _divideWay(w, static_cast<int>(ceil(len / _threshold) + 0.1));
   }
 }
 
 void LargeWaySplitter::_divideWay(const std::shared_ptr<Way>& way, int numPieces) const
 {
   double startLength = ElementToGeometryConverter(_map).convertToLineString(way)->getLength();
-  double pieceLength = startLength / (double)numPieces;
+  double pieceLength = startLength / static_cast<double>(numPieces);
 
   // iteratively carve off pieceLength sized ways from the beginning
   std::shared_ptr<Way> tmp = way;

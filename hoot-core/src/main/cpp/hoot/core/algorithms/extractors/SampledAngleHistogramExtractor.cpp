@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SampledAngleHistogramExtractor.h"
 
@@ -56,11 +56,10 @@ public:
 
   static QString className() { return "hoot::SampledAngleHistogramVisitor"; }
 
-  SampledAngleHistogramVisitor(Histogram& histogram, const double sampleDistance,
-    const double headingDelta) :
-  _angleHistogram(histogram),
-  _sampleDistance(sampleDistance),
-  _headingDelta(headingDelta)
+  SampledAngleHistogramVisitor(Histogram& histogram, const double sampleDistance, const double headingDelta)
+    : _angleHistogram(histogram),
+      _sampleDistance(sampleDistance),
+      _headingDelta(headingDelta)
   {
   }
 
@@ -69,25 +68,18 @@ public:
   void visit(const std::shared_ptr<const Element>& e) override
   {
     if (!e)
-    {
       return;
-    }
     LOG_VART(e->getElementId());
     if (e->getElementType() == ElementType::Way)
-    {
       _addWay(_map->getWay(e->getElementId()));
-    }
     else if (e->getElementType() == ElementType::Relation)
     {
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
       const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
-      for (size_t i = 0; i < relationMembers.size(); i++)
+      for (const auto& member : relationMembers)
       {
-        RelationData::Entry member = relationMembers[i];
         if (member.getElementId().getType() == ElementType::Way)
-        {
           _addWay(_map->getWay(member.getElementId()));
-        }
       }
     }
   }
@@ -109,9 +101,7 @@ private:
       vector<long> wayNodes = way->getNodeIds();
       LOG_VART(wayNodes.size());
       if (wayNodes[0] != wayNodes[wayNodes.size() - 1])
-      {
         wayNodes.push_back(wayNodes[0]);
-      }
       LOG_VART(wayNodes.size());
 
       LOG_VART(_sampleDistance);
@@ -134,9 +124,7 @@ private:
         const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
         LOG_VART(theta);
         if (! ::qIsNaN(theta))
-        {
           _angleHistogram.addAngle(theta, distance);
-        }
         lastLoc = currentLoc;
       }
       LOG_VART(_angleHistogram.numBins());
@@ -144,14 +132,14 @@ private:
   }
 };
 
-SampledAngleHistogramExtractor::SampledAngleHistogramExtractor() :
-AngleHistogramExtractor()
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()
+  : AngleHistogramExtractor()
 {
   setConfiguration(conf());
 }
 
-SampledAngleHistogramExtractor::SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins) :
-AngleHistogramExtractor(smoothing, bins)
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins)
+  : AngleHistogramExtractor(smoothing, bins)
 {
 }
 
@@ -163,8 +151,7 @@ void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
   setHeadingDelta(config.getWayMatcherHeadingDelta());
 }
 
-std::shared_ptr<Histogram> SampledAngleHistogramExtractor::_createHistogram(
-  const OsmMap& map, const ConstElementPtr& e) const
+std::shared_ptr<Histogram> SampledAngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e) const
 {
   shared_ptr<Histogram> result = std::make_shared<Histogram>(_bins);
   SampledAngleHistogramVisitor v(*result, _sampleDistance, _headingDelta);

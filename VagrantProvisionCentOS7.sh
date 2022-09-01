@@ -90,6 +90,8 @@ else
          libphonenumber-devel \
          nodejs \
          nodejs-devel \
+         nodejs-docs \
+         nodejs-libs \
          npm \
          proj \
          proj-devel \
@@ -118,6 +120,8 @@ sudo yum install -y \
      npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     nodejs-docs-$NODE_VERSION \
+     nodejs-libs-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
@@ -144,6 +148,8 @@ sudo yum versionlock add \
      npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     nodejs-docs-$NODE_VERSION \
+     nodejs-libs-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
@@ -171,6 +177,7 @@ sudo yum -y install \
     git-core \
     gnuplot \
     lcov \
+    devtoolset-$DEVTOOLSET_VERSION-libasan-devel \
     libffi-devel \
     libicu-devel \
     libpng-devel \
@@ -376,7 +383,7 @@ fi
 rm -rf $HOOT_HOME/userfiles/tmp
 
 # This is defensive!
-# We do this so that Tomcat doesnt. If it does, it screws the permissions up
+# We do this so that Tomcat doesn't. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
 
 # Update the gcc location to devtoolset

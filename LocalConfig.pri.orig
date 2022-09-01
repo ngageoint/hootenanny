@@ -17,9 +17,7 @@ debug {
   # Use this with valgrind
   #QMAKE_CXXFLAGS+=-g -O1
 
-  # Turn on ASAN
-  #QMAKE_CXXFLAGS+=-fsanitize=address
-  #QMAKE_CXXFLAGS+=-fsanitize-address-use-after-scope
+  # Enable this to turn on ASAN
   #QMAKE_LFLAGS+=-fsanitize=address -static-libasan
 }
 

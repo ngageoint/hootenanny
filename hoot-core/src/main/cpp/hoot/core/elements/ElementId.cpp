@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementId.h"
@@ -30,14 +30,15 @@
 namespace hoot
 {
 
-ElementId::ElementId() :
-_type(ElementType::Unknown),
-_id(-std::numeric_limits<int>::max())
+ElementId::ElementId()
+  : _type(ElementType::Unknown),
+    _id(-std::numeric_limits<int>::max())
 {
 }
 
-ElementId::ElementId(ElementType type, long id) :
-_type(type), _id(id)
+ElementId::ElementId(ElementType type, long id)
+  : _type(type),
+    _id(id)
 {
 }
 
@@ -51,18 +52,14 @@ ElementId::ElementId(QString str)
 
     const QStringList strParts = str.trimmed().split("(");
     if (strParts.size() != 2)
-    {
       throw IllegalArgumentException(errorMsg);
-    }
 
     _type = ElementType::fromString(strParts[0].toLower().trimmed());
 
     bool ok = false;
     _id = strParts[1].split(")")[0].trimmed().toLong(&ok);
     if (!ok)
-    {
       throw IllegalArgumentException(errorMsg);
-    }
   }
   else if (!str.isEmpty())
   {
@@ -70,23 +67,17 @@ ElementId::ElementId(QString str)
 
     const QStringList strParts = str.trimmed().split(":");
     if (strParts.size() != 2)
-    {
       throw IllegalArgumentException(errorMsg);
-    }
 
     _type = ElementType::fromString(strParts[0].toLower().trimmed());
 
     bool ok = false;
     _id = strParts[1].trimmed().toLong(&ok);
     if (!ok)
-    {
       throw IllegalArgumentException(errorMsg);
-    }
   }
   else
-  {
     throw IllegalArgumentException(errorMsg);
-  }
 }
 
 bool ElementId::isNull() const
@@ -107,17 +98,11 @@ bool ElementId::operator==(const ElementId& other) const
 bool ElementId::operator<(const ElementId& other) const
 {
   if (getType().getEnum() < other.getType().getEnum())
-  {
     return true;
-  }
   else if (getType().getEnum() > other.getType().getEnum())
-  {
     return false;
-  }
   else
-  {
     return getId() < other.getId();
-  }
 }
 
 QString ElementId::toString() const

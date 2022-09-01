@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ArffWriter.h"
@@ -37,16 +37,16 @@ using namespace std;
 namespace hoot
 {
 
-ArffWriter::ArffWriter(ostream* strm, bool useNulls) :
-_strm(strm),
-_useNulls(useNulls)
+ArffWriter::ArffWriter(ostream* strm, bool useNulls)
+  : _strm(strm),
+    _useNulls(useNulls)
 {
 }
 
-ArffWriter::ArffWriter(QString path, bool useNulls) :
-_path(path),
-_autoStrm(std::make_shared<std::fstream>()),
-_useNulls(useNulls)
+ArffWriter::ArffWriter(QString path, bool useNulls)
+  : _path(path),
+    _autoStrm(std::make_shared<std::fstream>()),
+    _useNulls(useNulls)
 {
   _autoStrm->exceptions(fstream::failbit | fstream::badbit);
   _autoStrm->open(path.toUtf8().data(), ios_base::out);
@@ -62,76 +62,55 @@ void ArffWriter::write(const vector<Sample>& samples)
 {
   QString msg = "Writing attribute-relation model file";
   if (!_path.isEmpty())
-  {
     msg += " to " + FileUtils::toLogFormat(_path, 50);
-  }
   msg += "...";
   LOG_INFO(msg);
 
   set<QString> attributes;
-
-  for (vector<Sample>::const_iterator it = samples.begin(); it != samples.end(); ++it)
+  for (const auto& s : samples)
   {
-    const Sample& s = *it;
-    for (Sample::const_iterator jt = s.begin(); jt != s.end(); ++jt)
+    for (auto jt = s.begin(); jt != s.end(); ++jt)
     {
       if (jt->first != "class")
-      {
         attributes.insert(jt->first);
-      }
     }
   }
 
   _w("@RELATION manipulations");
   _w("");
 
-  for (set<QString>::const_iterator it = attributes.begin(); it != attributes.end(); ++it)
-  {
-    _w(QString("@ATTRIBUTE %1 NUMERIC").arg(*it));
-  }
+  for (const auto& attribute : attributes)
+    _w(QString("@ATTRIBUTE %1 NUMERIC").arg(attribute));
+
   _w("@ATTRIBUTE class {match,miss,review}\n");
 
   _w("@DATA");
 
   const int precision = ConfigOptions().getArffWriterPrecision();
-  for (vector<Sample>::const_iterator st = samples.begin(); st != samples.end(); ++st)
+  for (const auto& s : samples)
   {
-    const Sample& s = *st;
-
     QStringList l;
-    for (set<QString>::const_iterator it = attributes.begin(); it != attributes.end(); ++it)
+    for (const auto& attribute : attributes)
     {
-      if (s.find(*it) != s.end())
+      if (s.find(attribute) != s.end())
       {
-        double v = s.find(*it)->second;
+        double v = s.find(attribute)->second;
         if (__isnan(v))
         {
           if (_useNulls)
-          {
             l.append("?");
-          }
           else
-          {
             l.append("-1");
-          }
         }
-        else
-        {
-          // 17 digits is guaranteed to be the same by IEEE 754
-          // http://en.wikipedia.org/wiki/Double-precision_floating-point_format
+        else  // 17 digits is guaranteed to be the same by IEEE 754 (http://en.wikipedia.org/wiki/Double-precision_floating-point_format)
           l.append(QString("%1").arg(v, 0, 'g', precision));
-        }
       }
       else
       {
         if (_useNulls)
-        {
           l.append("?");
-        }
         else
-        {
           l.append("-1");
-        }
       }
     }
     MatchType type = MatchType(s.find("class")->second);

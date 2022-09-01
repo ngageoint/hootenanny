@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICITTAGRAWRULESDERIVER_H
 #define IMPLICITTAGRAWRULESDERIVER_H
@@ -70,8 +70,7 @@ public:
    * specified by the inputs parameter
    * @param output the file to write the rules to
    */
-  void deriveRawRules(
-    const QStringList& inputs, const QStringList& translationScripts, const QString& output);
+  void deriveRawRules(const QStringList& inputs, const QStringList& translationScripts, const QString& output);
 
   void setConfiguration(const Settings& conf) override;
 

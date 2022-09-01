@@ -4,7 +4,7 @@
 
 _Hootenanny_: 
 
-1. A gathering at which folksingers entertain often with the audience joining in
+1. A gathering at which folksingers entertain often with the audience joining in.
 
 _Conflation_: 
 
@@ -25,7 +25,7 @@ Goals:
 
 [pdf](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.pdf)
 
-This documentation is also available as: part of the release package as `docs/HootenannyUserGuide.pdf`, located in `hootenanny-*.tar.gz`.
+This documentation is also available as part of the release package: `docs/HootenannyUserGuide.pdf` (located in `hootenanny-*.tar.gz`).
 
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 

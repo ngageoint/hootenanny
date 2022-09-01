@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTagCustomRules.h"
 
@@ -62,10 +62,7 @@ void ImplicitTagCustomRules::_readCustomRuleFile()
   {
     QFile customRulesFile(_customRuleFile);
     if (!customRulesFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(customRulesFile.fileName()));
-    }
+      throw HootException(QString("Error opening %1 for writing.").arg(customRulesFile.fileName()));
     _customRulesList.clear();
     while (!customRulesFile.atEnd())
     {
@@ -76,9 +73,7 @@ void ImplicitTagCustomRules::_readCustomRuleFile()
         const QStringList lineParts = line.trimmed().split("\t");
         LOG_VART(lineParts);
         if (lineParts.size() != 2)
-        {
           throw HootException("Invalid custom rule: " + line);
-        }
         _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
       }
     }

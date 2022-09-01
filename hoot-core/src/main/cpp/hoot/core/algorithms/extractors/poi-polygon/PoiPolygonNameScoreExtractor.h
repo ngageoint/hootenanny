@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONNAMESCOREEXTRACTOR_H
 #define POIPOLYGONNAMESCOREEXTRACTOR_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/algorithms/extractors/NameExtractor.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -58,8 +58,7 @@ public:
    * @param poly the second element to examine
    * @return a name score
    */
-  double extract(
-    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
+  double extract(const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 

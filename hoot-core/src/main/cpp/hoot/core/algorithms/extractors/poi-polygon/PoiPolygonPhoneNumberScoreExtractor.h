@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef POIPOLYGONPHONENUMBERSCOREEXTRACTOR_H
@@ -59,8 +59,7 @@ public:
    * @param poly the second element to examine
    * @return a score
    */
-  double extract(
-    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
+  double extract(const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 

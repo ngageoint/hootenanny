@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmMapIndex.h"
@@ -165,8 +165,7 @@ void OsmMapIndex::_buildWayTree() const
   {
     ConstWayPtr w = it->second;
 
-    std::shared_ptr<LineString> ls =
-      ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
+    std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
     if (ls)
     {
       const Envelope* e = ls->getEnvelopeInternal();
@@ -244,8 +243,7 @@ vector<long> OsmMapIndex::findNodes(const Coordinate& from, Meters maxDistance) 
   return result;
 }
 
-vector<long> OsmMapIndex::findWayNeighbors(const ConstWayPtr &way, Meters buffer,
-                                           bool addError) const
+vector<long> OsmMapIndex::findWayNeighbors(const ConstWayPtr &way, Meters buffer, bool addError) const
 {
   vector<long> result;
 
@@ -270,8 +268,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  std::shared_ptr<LineString> ls1 =
-    ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(way);
+  std::shared_ptr<LineString> ls1 = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(way);
 
   // go through all other ways
   const WayMap& ways = _map.getWays();
@@ -281,8 +278,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
     ConstWayPtr n = it->second;
     if (n != nullptr && nId != way->getId())
     {
-      std::shared_ptr<LineString> ls2 =
-        ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
+      std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = ls1->distance(ls2.get());
       if (d < buffer)
         result.push_back(nId);
@@ -307,8 +303,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
     ConstWayPtr n = it->second;
     if (n != nullptr && n->getNodeCount() > 1)
     {
-      std::shared_ptr<LineString> ls2 =
-        ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
+      std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
       if (d < bestDistance)
       {
@@ -335,8 +330,7 @@ std::vector<long> OsmMapIndex::findWayNeighbors(const Coordinate& from, Meters b
     ConstWayPtr n = it->second;
     if (n != nullptr && n->getNodeCount() > 1)
     {
-      std::shared_ptr<LineString> ls2 =
-        ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
+      std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
       if (d < buffer)
         result.push_back(nId);
@@ -563,8 +557,7 @@ void OsmMapIndex::removeWay(ConstWayPtr w)
     _nodeToWayMap->removeWay(w);
   }
 
-  if (_wayTree != nullptr &&
-      _pendingWayRemoval.size() > std::max((size_t)100, _map.getWays().size() / 8))
+  if (_wayTree != nullptr && _pendingWayRemoval.size() > std::max((size_t)100, _map.getWays().size() / 8))
   {
     LOG_DEBUG("pending removal size: " << _pendingWayRemoval.size());
     _wayTree.reset();

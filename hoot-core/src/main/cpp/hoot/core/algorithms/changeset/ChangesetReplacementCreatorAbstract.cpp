@@ -32,12 +32,12 @@
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/IoUtils.h>
@@ -57,8 +57,8 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
@@ -89,10 +89,10 @@ QString ChangesetReplacementCreatorAbstract::_boundsInterpretationToString(const
 {
   switch (boundsInterpretation)
   {
-    case BoundsInterpretation::Lenient:   return "lenient";
-    case BoundsInterpretation::Strict:    return "strict";
-    case BoundsInterpretation::Hybrid:    return "hybrid";
-    default:                              return "";
+  case BoundsInterpretation::Lenient:   return "lenient";
+  case BoundsInterpretation::Strict:    return "strict";
+  case BoundsInterpretation::Hybrid:    return "hybrid";
+  default:                              return "";
   }
 }
 
@@ -106,8 +106,7 @@ void ChangesetReplacementCreatorAbstract::setChangesetOptions(const bool printSt
 
 void ChangesetReplacementCreatorAbstract::_printJobDescription() const
 {
-  QString boundsStr = "Bounds calculation is " +
-    _boundsInterpretationToString(_boundsInterpretation);
+  QString boundsStr = "Bounds calculation is " + _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
   QString waySnappingStr = "is ";
   if (!_enableWaySnapping)
@@ -282,10 +281,9 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(const
   OsmMapWriterFactory::writeDebugMap(map, className(), _changesetId + "-" + map->getName() + "-after-missing-marked");
 }
 
-void ChangesetReplacementCreatorAbstract::_filterFeatures(
-  const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
-  const GeometryTypeCriterion::GeometryType& /*geometryType*/, const Settings& config,
-  const QString& debugFileName) const
+void ChangesetReplacementCreatorAbstract::_filterFeatures(const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+                                                          const GeometryTypeCriterion::GeometryType& /*geometryType*/,
+                                                          const Settings& config, const QString& debugFileName) const
 {
   LOG_STATUS(
     "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<

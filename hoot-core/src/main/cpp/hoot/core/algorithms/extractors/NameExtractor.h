@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef NAMEEXTRACTOR_H
 #define NAMEEXTRACTOR_H
@@ -46,9 +46,8 @@ public:
 
   static QString className() { return "hoot::NameExtractor"; }
 
-  double extract(
-    const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+                 const std::shared_ptr<const Element>& candidate) const override;
   virtual double extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const;
 
   void setStringDistance(const StringDistancePtr &sd) override { _d = sd; }

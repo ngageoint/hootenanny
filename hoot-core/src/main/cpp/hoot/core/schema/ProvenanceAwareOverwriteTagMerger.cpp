@@ -22,41 +22,34 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ProvenanceAwareOverwriteTagMerger.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(TagMerger, ProvenanceAwareOverwriteTagMerger)
 
-ProvenanceAwareOverwriteTagMerger::ProvenanceAwareOverwriteTagMerger(bool swap) :
-OverwriteTagMerger(swap)
+ProvenanceAwareOverwriteTagMerger::ProvenanceAwareOverwriteTagMerger(bool swap)
+  : OverwriteTagMerger(swap)
 {
 }
 
-Tags ProvenanceAwareOverwriteTagMerger::mergeTags(
-  const Tags& t1, const Tags& t2, ElementType et) const
+Tags ProvenanceAwareOverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType et) const
 {
   Tags tags = OverwriteTagMerger::mergeTags(t1, t2, et);
   QString sourceVal = "";
   if (t1.contains(MetadataTags::HootSource()) && t2.contains(MetadataTags::HootSource()))
-  {
     sourceVal = t1.get(MetadataTags::HootSource()) + "," + t2.get(MetadataTags::HootSource());
-  }
   else if (t1.contains(MetadataTags::HootSource()))
-  {
     sourceVal = t1.get(MetadataTags::HootSource());
-  }
   else if (t2.contains(MetadataTags::HootSource()))
-  {
     sourceVal = t2.get(MetadataTags::HootSource());
-  }
   tags.set(MetadataTags::HootSource(), sourceVal);
   return tags;
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MemChangesetProvider.h"
 
@@ -31,7 +31,6 @@ namespace hoot
 
 void MemChangesetProvider::close()
 {
-  // nothing to do here
 }
 
 std::shared_ptr<OGRSpatialReference> MemChangesetProvider::getProjection() const

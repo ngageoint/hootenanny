@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "TagCategoryDifferencer.h"
 
@@ -33,22 +33,17 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagDifferencer, TagCategoryDifferencer)
 
-TagCategoryDifferencer::TagCategoryDifferencer(OsmSchemaCategory category) :
-  _category(category)
+TagCategoryDifferencer::TagCategoryDifferencer(OsmSchemaCategory category)
+  : _category(category)
 {
   if (_category.toStringList().size() != 1)
-  {
     throw HootException("The TagCategoryDifferencer can only filter on a single category.");
-  }
 }
 
 bool TagCategoryDifferencer::_isValidTag(const SchemaVertex& sv) const
 {
   if (_category.getEnum() == OsmSchemaCategory::Empty)
-  {
-    throw IllegalArgumentException("You must specify exactly one category to the "
-      "TagCategoryDifferencer.");
-  }
+    throw IllegalArgumentException("You must specify exactly one category to the TagCategoryDifferencer.");
   return sv.getCategories().contains(_category.toString());
 }
 
@@ -56,9 +51,7 @@ void TagCategoryDifferencer::setConfiguration(const Settings& conf)
 {
   _category = OsmSchemaCategory::fromString(ConfigOptions(conf).getTagCategoryDifferencerName());
   if (_category.toStringList().size() != 1)
-  {
     throw HootException("The TagCategoryDifferencer can only filter on a single category.");
-  }
 }
 
 }

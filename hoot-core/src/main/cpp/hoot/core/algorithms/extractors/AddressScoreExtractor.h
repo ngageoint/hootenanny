@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDRESS_SCORE_EXTRACTOR_H
 #define ADDRESS_SCORE_EXTRACTOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QCache>
@@ -75,9 +75,7 @@ public:
    * for a non-match where both input elements have an address, and a score of -1.0 is returned if
    * either input element does not have an address
    */
-  double extract(
-    const OsmMap& map, const ConstElementPtr& element1,
-    const ConstElementPtr& element2) const override;
+  double extract(const OsmMap& map, const ConstElementPtr& element1, const ConstElementPtr& element2) const override;
 
   QString getClassName() const override { return className(); }
   QString getName() const override { return className(); }
@@ -130,14 +128,12 @@ private:
   /*
    * Drop the house numbers and see if we have a address string match
    */
-  bool _intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(
-    const Address& address1, const Address& address2) const;
+  bool _intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(const Address& address1, const Address& address2) const;
 
   /*
    * Go a little easier on the street name comparison; good for resolving typos in the name
    */
-  bool _addressesMatchWithNameComparisonRelaxed(
-    const Address& address1, const Address& address2) const;
+  bool _addressesMatchWithNameComparisonRelaxed(const Address& address1, const Address& address2) const;
 };
 
 }
