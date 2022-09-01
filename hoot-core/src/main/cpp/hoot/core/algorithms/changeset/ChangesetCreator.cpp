@@ -288,7 +288,7 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs, const QList<Os
 
 bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 {
-  return format.endsWith(".osc") || format.endsWith(".osc.sql");
+  return format.endsWith(".osc") || format.endsWith(".osc.sql") || format.endsWith(".osm");
 }
 
 bool ChangesetCreator::_inputIsSorted(const QString& input) const
@@ -672,7 +672,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   writer->write(output, changesetProviders);
   if (_printDetailedStats)
   {
-    if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
+    if (!output.endsWith(".osc.sql")) // detailed stats currently only implemented for non-sql output
     {
       // Get the stats output format from the file extension, or if no extension is there assume a
       // text table output to the display.
@@ -689,8 +689,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     }
     else
     {
-      LOG_INFO(
-        "Skipping changeset statistics generation, as not implemented for output: " << output);
+      LOG_INFO("Skipping changeset statistics generation, as not implemented for output: " << output);
     }
   }
 

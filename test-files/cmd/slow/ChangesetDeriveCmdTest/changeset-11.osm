@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny">
+    <node id="-21130746" version="1" action="delete" lat="39.5918538057342388" lon="-104.8049653120718006" timestamp=""/>
+    <node id="-21130734" version="1" action="delete" lat="39.5918839666917890" lon="-104.8049694320074394" timestamp=""/>
+    <node id="-21130724" version="1" action="delete" lat="39.5918855541102559" lon="-104.8048623136804309" timestamp=""/>
+    <node id="-21130716" version="1" action="delete" lat="39.5918712673428601" lon="-104.8048664336160698" timestamp=""/>
+    <node id="-21130706" version="1" action="delete" lat="39.5918744421802984" lon="-104.8047263558038367" timestamp=""/>
+    <node id="-21130694" version="1" action="delete" lat="39.5918601554105933" lon="-104.8047366556429552" timestamp=""/>
+    <node id="-21130682" version="1" action="delete" lat="39.5918617428296216" lon="-104.8047634352247144" timestamp=""/>
+    <node id="-21130674" version="1" action="delete" lat="39.5918268196031988" lon="-104.8047613752569163" timestamp=""/>
+    <node id="-21130600" version="1" action="delete" lat="39.5910470002864514" lon="-104.8048703722634372" timestamp=""/>
+    <node id="-21130589" version="1" action="delete" lat="39.5910402653585791" lon="-104.8049927281098803" timestamp=""/>
+    <node id="-21130329" version="1" action="delete" lat="39.5918132861614396" lon="-104.8045340418683224" timestamp=""/>
+    <node id="-21130320" version="1" action="delete" lat="39.5918282304716129" lon="-104.8044494796687758" timestamp=""/>
+    <node id="-21130313" version="1" action="delete" lat="39.5918267091370168" lon="-104.8043483519689971" timestamp=""/>
+    <node id="-21130302" version="1" action="delete" lat="39.5918141225920408" lon="-104.8041645223572687" timestamp=""/>
+    <node id="-21130288" version="1" action="delete" lat="39.5918253473461093" lon="-104.8042606517369109" timestamp=""/>
+    <node id="-21129803" version="1" action="delete" lat="39.5918227535863068" lon="-104.8041632446121127" timestamp=""/>
+    <node id="-21129795" version="1" action="delete" lat="39.5918139002840164" lon="-104.8042640972780504" timestamp=""/>
+    <node id="-21129787" version="1" action="delete" lat="39.5918147640879994" lon="-104.8043460390379522" timestamp=""/>
+    <node id="-21129776" version="1" action="delete" lat="39.5918175070261000" lon="-104.8044472273774375" timestamp=""/>
+    <node id="-21129767" version="1" action="delete" lat="39.5918275295324804" lon="-104.8045322894089963" timestamp=""/>
+    <node id="-21128386" version="1" action="delete" lat="39.5931191349798937" lon="-104.8065292974913660" timestamp=""/>
+    <node id="-21128384" version="1" action="delete" lat="39.5931528497740288" lon="-104.8060931452853168" timestamp=""/>
+    <node id="-21128382" version="1" action="delete" lat="39.5933066733141175" lon="-104.8061245919960953" timestamp=""/>
+    <node id="-21128381" version="1" action="delete" lat="39.5932771729356574" lon="-104.8065566424572665" timestamp=""/>
+    <node id="-21128045" version="1" action="delete" lat="39.5917678695682369" lon="-104.8066608840727696" timestamp=""/>
+    <node id="-21128043" version="1" action="delete" lat="39.5914711576245608" lon="-104.8066874362091028" timestamp=""/>
+    <node id="-21128041" version="1" action="delete" lat="39.5914386771047546" lon="-104.8069965303088082" timestamp=""/>
+    <node id="-21128040" version="1" action="delete" lat="39.5917260674373566" lon="-104.8070473857991374" timestamp=""/>
+    <node id="-21128036" version="1" action="delete" lat="39.5911643488569496" lon="-104.8058709287899717" timestamp=""/>
+    <node id="-21128034" version="1" action="delete" lat="39.5909605614554110" lon="-104.8058031214695376" timestamp=""/>
+    <node id="-21128032" version="1" action="delete" lat="39.5909631741181940" lon="-104.8062404786862061" timestamp=""/>
+    <node id="-21128031" version="1" action="delete" lat="39.5911460602684713" lon="-104.8062709919803979" timestamp=""/>
+    <node id="-21128027" version="1" action="delete" lat="39.5913550724204910" lon="-104.8062777727124342" timestamp=""/>
+    <node id="-21128025" version="1" action="delete" lat="39.5912610170301207" lon="-104.8059183939142542" timestamp=""/>
+    <node id="-21128023" version="1" action="delete" lat="39.5915248943297016" lon="-104.8058675384239393" timestamp=""/>
+    <node id="-21128022" version="1" action="delete" lat="39.5915353448951350" lon="-104.8062438690522384" timestamp=""/>
+    <node id="-21128018" version="1" action="delete" lat="39.5918880505540258" lon="-104.8058777095220080" timestamp=""/>
+    <node id="-21128016" version="1" action="delete" lat="39.5916816526456614" lon="-104.8058641480579070" timestamp=""/>
+    <node id="-21128013" version="1" action="delete" lat="39.5916576244285636" lon="-104.8062067543027354" timestamp=""/>
+    <node id="-21128012" version="1" action="delete" lat="39.5918305727172637" lon="-104.8062370883201879" timestamp=""/>
+    <node id="-21127944" version="1" action="delete" lat="39.5918985010646765" lon="-104.8061964039279133" timestamp=""/>
+    <node id="-21127942" version="1" action="delete" lat="39.5911094830770551" lon="-104.8062303075881090" timestamp=""/>
+    <node id="-21127940" version="1" action="delete" lat="39.5911042577624173" lon="-104.8066235900464847" timestamp=""/>
+    <node id="-21127939" version="1" action="delete" lat="39.5918723747851047" lon="-104.8065964671183394" timestamp=""/>
+    <node id="-21127863" version="1" action="delete" lat="39.5910792485870715" lon="-104.8052266791553677" timestamp=""/>
+    <node id="-21127861" version="1" action="delete" lat="39.5910882284857166" lon="-104.8049954826725241" timestamp=""/>
+    <node id="-21127859" version="1" action="delete" lat="39.5909358810389094" lon="-104.8048575559457305" timestamp=""/>
+    <node id="-21127857" version="1" action="delete" lat="39.5909370229654272" lon="-104.8037828099171946" timestamp=""/>
+    <node id="-21127855" version="1" action="delete" lat="39.5917973193579158" lon="-104.8037828099171946" timestamp=""/>
+    <node id="-21127853" version="1" action="delete" lat="39.5918025834933829" lon="-104.8038622197304051" timestamp=""/>
+    <node id="-21127851" version="1" action="delete" lat="39.5918623451759117" lon="-104.8038646558332658" timestamp=""/>
+    <node id="-21127849" version="1" action="delete" lat="39.5918593259945553" lon="-104.8040583838280213" timestamp=""/>
+    <node id="-21127847" version="1" action="delete" lat="39.5918184557514508" lon="-104.8040643213816736" timestamp=""/>
+    <node id="-21127845" version="1" action="delete" lat="39.5918284296655827" lon="-104.8046324666495792" timestamp=""/>
+    <node id="-21127843" version="1" action="delete" lat="39.5918168975692382" lon="-104.8046309493925747" timestamp=""/>
+    <node id="-21127842" version="1" action="delete" lat="39.5918538712206569" lon="-104.8052113027000161" timestamp=""/>
+    <node id="-18968486" version="1" action="delete" lat="39.5934971733042431" lon="-104.8050061945212263" timestamp=""/>
+    <node id="-18968484" version="1" action="delete" lat="39.5934971733042431" lon="-104.8048403015620806" timestamp=""/>
+    <node id="-18968482" version="1" action="delete" lat="39.5937003389047391" lon="-104.8048343768135453" timestamp=""/>
+    <node id="-18968480" version="1" action="delete" lat="39.5937026216609027" lon="-104.8049113985445473" timestamp=""/>
+    <node id="-18968478" version="1" action="delete" lat="39.5937665388031519" lon="-104.8049143609188434" timestamp=""/>
+    <node id="-18968477" version="1" action="delete" lat="39.5937642560490914" lon="-104.8050032321469587" timestamp=""/>
+    <node id="-18968468" version="1" action="delete" lat="39.5935816354801773" lon="-104.8043811335501374" timestamp=""/>
+    <node id="-18968466" version="1" action="delete" lat="39.5935793527200275" lon="-104.8041352564856936" timestamp=""/>
+    <node id="-18968464" version="1" action="delete" lat="39.5938121938686507" lon="-104.8041234069886087" timestamp=""/>
+    <node id="-18968463" version="1" action="delete" lat="39.5938099111160895" lon="-104.8043722464273344" timestamp=""/>
+    <node id="-18968393" version="1" action="delete" lat="39.5940359032546780" lon="-104.8041411812342432" timestamp=""/>
+    <node id="-18968391" version="1" action="delete" lat="39.5942459154902124" lon="-104.8039041912925882" timestamp=""/>
+    <node id="-18968389" version="1" action="delete" lat="39.5944194033784882" lon="-104.8041559931055815" timestamp=""/>
+    <node id="-18968388" version="1" action="delete" lat="39.5942139571476162" lon="-104.8043781711758697" timestamp=""/>
+    <node id="-1" version="0" lat="39.5942093916699989" lon="-104.8043663216800070" timestamp=""/>
+    <node id="-2" version="0" lat="39.5944262515800034" lon="-104.8041767297300026" timestamp=""/>
+    <node id="-3" version="0" lat="39.5942322190599967" lon="-104.8038923417999939" timestamp=""/>
+    <node id="-4" version="0" lat="39.5940381859999988" lon="-104.8041530307300064" timestamp=""/>
+    <node id="-5" version="0" lat="39.5938190421300007" lon="-104.8043663216800070" timestamp=""/>
+    <node id="-6" version="0" lat="39.5938099111199975" lon="-104.8041115574900033" timestamp=""/>
+    <node id="-7" version="0" lat="39.5935656561600027" lon="-104.8041352564899995" timestamp=""/>
+    <node id="-8" version="0" lat="39.5935770699599985" lon="-104.8043722464300060" timestamp=""/>
+    <node id="-9" version="0" lat="39.5918443467099976" lon="-104.8051495036699947" timestamp=""/>
+    <node id="-10" version="0" lat="39.5918365088200019" lon="-104.8046341680300060" timestamp=""/>
+    <node id="-11" version="0" lat="39.5909325330099975" lon="-104.8046409487599959" timestamp=""/>
+    <node id="-12" version="0" lat="39.5909325330099975" lon="-104.8048206381599954" timestamp=""/>
+    <node id="-13" version="0" lat="39.5910657787400027" lon="-104.8048206381599954" timestamp=""/>
+    <node id="-14" version="0" lat="39.5910631660799979" lon="-104.8051528940300017" timestamp=""/>
+    <node id="-15" version="0" lat="39.5918286709299991" lon="-104.8037526728600000" timestamp=""/>
+    <node id="-16" version="0" lat="39.5911650597000033" lon="-104.8037458921299958" timestamp=""/>
+    <node id="-17" version="0" lat="39.5911571991300022" lon="-104.8046392635500013" timestamp=""/>
+    <node id="-18" version="0" lat="39.5909403710000021" lon="-104.8037425017700031" timestamp=""/>
+    <node id="-19" version="0" lat="39.5918195893000018" lon="-104.8027241458899965" timestamp=""/>
+    <node id="-20" version="0" lat="39.5912657094299973" lon="-104.8027275362599937" timestamp=""/>
+    <node id="-21" version="0" lat="39.5912735473900028" lon="-104.8028326376000052" timestamp=""/>
+    <node id="-22" version="0" lat="39.5914146304000027" lon="-104.8028394183399996" timestamp=""/>
+    <node id="-23" version="0" lat="39.5914041798200032" lon="-104.8034564649500027" timestamp=""/>
+    <node id="-24" version="0" lat="39.5912239069999998" lon="-104.8034598553199999" timestamp=""/>
+    <node id="-25" version="0" lat="39.5912317949799970" lon="-104.8037465740300007" timestamp=""/>
+    <node id="-26" version="0" lat="39.5932776007499996" lon="-104.8065567697200038" timestamp=""/>
+    <node id="-27" version="0" lat="39.5931137011600001" lon="-104.8065277660100065" timestamp=""/>
+    <node id="-28" version="0" lat="39.5931241311499988" lon="-104.8064523563499932" timestamp=""/>
+    <node id="-29" version="0" lat="39.5931062511699992" lon="-104.8064407548600059" timestamp=""/>
+    <node id="-30" version="0" lat="39.5931137011600001" lon="-104.8064001496600071" timestamp=""/>
+    <node id="-31" version="0" lat="39.5931151911600026" lon="-104.8063479429700067" timestamp=""/>
+    <node id="-32" version="0" lat="39.5932910106900025" lon="-104.8063692123599964" timestamp=""/>
+    <node id="-33" version="0" lat="39.5933074006300032" lon="-104.8063769466800039" timestamp=""/>
+    <node id="-34" version="0" lat="39.5932790907399976" lon="-104.8064697585799934" timestamp=""/>
+    <node id="-35" version="0" lat="39.5932969706700035" lon="-104.8062512639099992" timestamp=""/>
+    <node id="-36" version="0" lat="39.5933034489699978" lon="-104.8061230577099963" timestamp=""/>
+    <node id="-37" version="0" lat="39.5931271111399994" lon="-104.8060869095200047" timestamp=""/>
+    <node id="-38" version="0" lat="39.5931238599300031" lon="-104.8061136186200031" timestamp=""/>
+    <node id="-39" version="0" lat="39.5931524411000026" lon="-104.8061255811399946" timestamp=""/>
+    <node id="-40" version="0" lat="39.5931432865099993" lon="-104.8062152723099985" timestamp=""/>
+    <node id="-41" version="0" lat="39.5931217689499988" lon="-104.8062120958900039" timestamp=""/>
+    <way id="-21128383" version="1" action="delete" timestamp="">
+        <nd ref="-21128381"/>
+        <nd ref="-21128382"/>
+        <nd ref="-21128384"/>
+        <nd ref="-21128386"/>
+        <nd ref="-21128381"/>
+        <tag k="name" v="Panera Bread"/>
+        <tag k="alt_name" v="Maid-Rite"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Panera"/>
+    </way>
+    <way id="-21128042" version="1" action="delete" timestamp="">
+        <nd ref="-21128040"/>
+        <nd ref="-21128041"/>
+        <nd ref="-21128043"/>
+        <nd ref="-21128045"/>
+        <nd ref="-21128040"/>
+        <tag k="name" v="Bad Pair"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+    </way>
+    <way id="-21128033" version="1" action="delete" timestamp="">
+        <nd ref="-21128031"/>
+        <nd ref="-21128032"/>
+        <nd ref="-21128034"/>
+        <nd ref="-21128036"/>
+        <nd ref="-21128031"/>
+        <tag k="name" v="Bad Pair"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+    </way>
+    <way id="-21128024" version="1" action="delete" timestamp="">
+        <nd ref="-21128022"/>
+        <nd ref="-21128023"/>
+        <nd ref="-21128025"/>
+        <nd ref="-21128027"/>
+        <nd ref="-21128022"/>
+        <tag k="name" v="Bad Pair"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+    </way>
+    <way id="-21128014" version="1" action="delete" timestamp="">
+        <nd ref="-21128012"/>
+        <nd ref="-21128013"/>
+        <nd ref="-21128016"/>
+        <nd ref="-21128018"/>
+        <nd ref="-21128012"/>
+        <tag k="name" v="Bad Pair"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+    </way>
+    <way id="-21127941" version="1" action="delete" timestamp="">
+        <nd ref="-21127939"/>
+        <nd ref="-21127940"/>
+        <nd ref="-21127942"/>
+        <nd ref="-21128013"/>
+        <nd ref="-21127944"/>
+        <nd ref="-21127939"/>
+        <tag k="name" v="Convoluted Example"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Convoluted No Match 1"/>
+    </way>
+    <way id="-21127844" version="1" action="delete" timestamp="">
+        <nd ref="-21127842"/>
+        <nd ref="-21130746"/>
+        <nd ref="-21130734"/>
+        <nd ref="-21130724"/>
+        <nd ref="-21130716"/>
+        <nd ref="-21130706"/>
+        <nd ref="-21130694"/>
+        <nd ref="-21130682"/>
+        <nd ref="-21130674"/>
+        <nd ref="-21127843"/>
+        <nd ref="-21127845"/>
+        <nd ref="-21129767"/>
+        <nd ref="-21130329"/>
+        <nd ref="-21129776"/>
+        <nd ref="-21130320"/>
+        <nd ref="-21130313"/>
+        <nd ref="-21129787"/>
+        <nd ref="-21129795"/>
+        <nd ref="-21130288"/>
+        <nd ref="-21129803"/>
+        <nd ref="-21130302"/>
+        <nd ref="-21127847"/>
+        <nd ref="-21127849"/>
+        <nd ref="-21127851"/>
+        <nd ref="-21127853"/>
+        <nd ref="-21127855"/>
+        <nd ref="-21127857"/>
+        <nd ref="-21127859"/>
+        <nd ref="-21130600"/>
+        <nd ref="-21130589"/>
+        <nd ref="-21127861"/>
+        <nd ref="-21127863"/>
+        <nd ref="-21127842"/>
+        <tag k="name" v="Target"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Target"/>
+    </way>
+    <way id="-18968479" version="1" action="delete" timestamp="">
+        <nd ref="-18968477"/>
+        <nd ref="-18968478"/>
+        <nd ref="-18968480"/>
+        <nd ref="-18968482"/>
+        <nd ref="-18968484"/>
+        <nd ref="-18968486"/>
+        <nd ref="-18968477"/>
+        <tag k="name" v="Freddy's"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Freddy's"/>
+    </way>
+    <way id="-18968465" version="1" action="delete" timestamp="">
+        <nd ref="-18968463"/>
+        <nd ref="-18968464"/>
+        <nd ref="-18968466"/>
+        <nd ref="-18968468"/>
+        <nd ref="-18968463"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Biondi"/>
+    </way>
+    <way id="-18968390" version="1" action="delete" timestamp="">
+        <nd ref="-18968388"/>
+        <nd ref="-18968389"/>
+        <nd ref="-18968391"/>
+        <nd ref="-18968393"/>
+        <nd ref="-18968388"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="Cheddar's Casual Cafe"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Cheddar's"/>
+    </way>
+    <way id="-1" version="0" timestamp="">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="name" v="Cheddars"/>
+        <tag k="building" v="restaurant"/>
+        <tag k="REF2" v="Cheddar's"/>
+    </way>
+    <way id="-2" version="0" timestamp="">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-5"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Biondi"/>
+    </way>
+    <way id="-3" version="0" timestamp="">
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-17"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-9"/>
+        <tag k="name" v="Target Grocery"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Target"/>
+    </way>
+    <way id="-4" version="0" timestamp="">
+        <nd ref="-10"/>
+        <nd ref="-15"/>
+        <nd ref="-25"/>
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="-10"/>
+        <tag k="name" v="Target - Aurora South"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Target"/>
+    </way>
+    <way id="-5" version="0" timestamp="">
+        <nd ref="-17"/>
+        <nd ref="-16"/>
+        <nd ref="-18"/>
+        <nd ref="-11"/>
+        <nd ref="-17"/>
+        <tag k="name" v="Target Pharmacy"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Target"/>
+    </way>
+    <way id="-6" version="0" timestamp="">
+        <nd ref="-15"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="-23"/>
+        <nd ref="-24"/>
+        <nd ref="-25"/>
+        <nd ref="-15"/>
+        <tag k="name" v="Best Buy"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way id="-7" version="0" timestamp="">
+        <nd ref="-26"/>
+        <nd ref="-27"/>
+        <nd ref="-28"/>
+        <nd ref="-29"/>
+        <nd ref="-30"/>
+        <nd ref="-31"/>
+        <nd ref="-32"/>
+        <nd ref="-33"/>
+        <nd ref="-34"/>
+        <nd ref="-26"/>
+        <tag k="name" v="Maid-Rite Diner"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Panera"/>
+    </way>
+    <way id="-8" version="0" timestamp="">
+        <nd ref="-32"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-38"/>
+        <nd ref="-39"/>
+        <nd ref="-40"/>
+        <nd ref="-41"/>
+        <nd ref="-31"/>
+        <nd ref="-32"/>
+        <tag k="name" v="Panera Bread"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Panera"/>
+    </way>
+</osm>

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
-#include "OsmXmlChangesetFileWriter.h"
+#include "OsmBaseXmlChangesetFileWriter.h"
 
 // hoot
 #include <hoot/core/conflate/ConflateUtils.h>
@@ -45,16 +45,17 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
+//  DON'T REGISTER THIS CLASS WITH THE FACTORY, REGISTER DERIVED CLASSES
+//HOOT_FACTORY_REGISTER()
 
-OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
+OsmBaseXmlChangesetFileWriter::OsmBaseXmlChangesetFileWriter()
   : OsmChangesetFileWriter(),
     _precision(ConfigOptions().getWriterPrecision()),
     _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp())
 {
 }
 
-void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
+void OsmBaseXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();
@@ -64,7 +65,7 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
   _changesetIgnoreBounds = co.getChangesetIgnoreBounds();
 }
 
-void OsmXmlChangesetFileWriter::_initStats()
+void OsmBaseXmlChangesetFileWriter::_initStats()
 {
   _stats.clear();
   _stats.resize(static_cast<size_t>(Change::ChangeType::Unknown),
@@ -74,7 +75,7 @@ void OsmXmlChangesetFileWriter::_initStats()
   _stats.setLabels(rows, columns);
 }
 
-void OsmXmlChangesetFileWriter::_initIdCounters()
+void OsmBaseXmlChangesetFileWriter::_initIdCounters()
 {
   _newElementIdCtrs.clear();
   _newElementIdCtrs[ElementType::Node] = 1;
@@ -87,7 +88,7 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(const QString& path,
+void OsmBaseXmlChangesetFileWriter::write(const QString& path,
                                       const ChangesetProviderPtr& changesetProvider)
 {
   QList<ChangesetProviderPtr> changesetProviders;
@@ -95,7 +96,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   write(path, changesetProviders);
 }
 
-void OsmXmlChangesetFileWriter::write(const QString& path,
+void OsmBaseXmlChangesetFileWriter::write(const QString& path,
                                       const QList<ChangesetProviderPtr>& changesetProviders)
 {  
   LOG_DEBUG("Writing changeset to: " << path << "...");
@@ -120,11 +121,11 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   QXmlStreamWriter writer(&f);
   writer.setCodec("UTF-8");
   writer.setAutoFormatting(true);
+
   writer.writeStartDocument();
 
-  writer.writeStartElement("osmChange");
-  writer.writeAttribute("version", "0.6");
-  writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
+  //  Write out the header
+  _writeXmlFileHeader(writer);
 
   Change::ChangeType last = Change::ChangeType::Unknown;
 
@@ -181,39 +182,14 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         continue;
       }
 
-      LOG_VART(Change::changeTypeToString(last));
-      if (_change.getType() != last)
-      {
-        if (last != Change::ChangeType::Unknown)
-        {
-          writer.writeEndElement();
+      if (_change.getType() != last && last != Change::ChangeType::Unknown)
           _parsedChangeIds.append(changeElement->getElementId());
-        }
-        switch (_change.getType())
-        {
-        case Change::ChangeType::Create:
-          LOG_TRACE("Writing create start element...");
-          writer.writeStartElement("create");
-          break;
-        case Change::ChangeType::Delete:
-          LOG_TRACE("Writing delete start element...");
-          writer.writeStartElement("delete");
-          break;
-        case Change::ChangeType::Modify:
-          LOG_TRACE("Writing modify start element...");
-          writer.writeStartElement("modify");
-          break;
-        case Change::ChangeType::Unknown:
-          //see comment in ChangesetDeriver::_nextChange() when
-          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
-          break;
-        default:
-          throw IllegalArgumentException("Unexpected change type.");
-        }
-        last = _change.getType();
-        LOG_VART(last);
-      }
 
+      _writeXmlFileSectionHeader(writer, last);
+
+      //  Update the last type to now be the current type
+      if (_change.getType() != last)
+        last = _change.getType();
       if (_change.getType() != Change::ChangeType::Unknown)
       {
         ElementType::Type type = changeElement->getElementType().getEnum();
@@ -256,7 +232,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
-void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node,
+void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node,
                                            ConstElementPtr previous)
 {
   ConstNodePtr n = dynamic_pointer_cast<const Node>(node);
@@ -297,10 +273,12 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
     version = n->getVersion();
   LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
-
+  //  Write the action attribute
+  _writeXmlActionAttribute(writer);
+  //  Write the lat/lon values
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
   writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
-
+  //  Add the timestamp if desired
   if (_addTimestamp)
   {
     if (n->getTimestamp() != 0)
@@ -315,7 +293,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way,
+void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way,
                                           ConstElementPtr previous)
 {
   ConstWayPtr w = dynamic_pointer_cast<const Way>(way);
@@ -354,6 +332,9 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
     version = w->getVersion();
   LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
+  //  Write the action attribute
+  _writeXmlActionAttribute(writer);
+  //  Add the timestamp if desired
   if (_addTimestamp)
   {
     if (w->getTimestamp() != 0)
@@ -383,7 +364,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation,
+void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation,
                                                ConstElementPtr previous)
 {
   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(relation);
@@ -422,6 +403,9 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
     version = r->getVersion();
   LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
+  //  Write the action attribute
+  _writeXmlActionAttribute(writer);
+  //  Add the timestamp if desired
   if (_addTimestamp)
   {
     if (r->getTimestamp() != 0)
@@ -464,7 +448,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
+void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
                                            const Element* element)
 {
   LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
@@ -521,7 +505,7 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
   }
 }
 
-QString OsmXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat& format) const
+QString OsmBaseXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat& format) const
 {
   switch (format.getEnum())
   {
