@@ -129,7 +129,7 @@ public class ElementMergeServiceResource extends NodejsService {
 
     public static void stopElementMergeService() {
         // This also gets called automatically from HootServletContext when
-        // service exits but should not be reliable since there are many path where it will not be invoked.
+        // service exits but should not be reliable since there are many paths where it will not be invoked.
         try {
             // Destroy the reference to the process directly here via the Java
             // API vs having the base class kill it with a unix command. Killing it via command causes

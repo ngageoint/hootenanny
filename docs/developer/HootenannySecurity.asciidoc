@@ -5,7 +5,7 @@
 
 Hoot services are now authenticated with OAuth2 which adds a config file oauth2-client.properties that will potentially need to be tweaked per environment.
 
-This file is found in the hoot-services.war file under the path `WEB-INF/classes/oauth2-client.properties`.
+This file is found in the hoot-services.war file under the path `/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/oauth2-client.properties`.
 
 The default value works for the UI running separately in development mode with webpack.
 The proper redirect-uri value for the UI deployed by tomcat on vagrant is `https://localhost:8443/hootenanny-id/login.html`.
@@ -31,12 +31,11 @@ All services are now wrapped by authentication and many of the service endpoints
 
 >The plan is for new datasets to be private to the user by default.  Existing datasets owned by the dummy test user will be public.  We will add a method for making private datasets and their review bookmarks public.
 
-* During implementation, it was decided that datasets would not have an inherent visibility.  Instead, folders have visibility and datasets inherit visibility from their containing folder.  The root folder is always public.  Data and folders that are public are read-only by non-owners with respect to modification (removing, moving, renaming folders or creating subfolders are not allowed), but public folders can be written to with map datasets by any user.
+* During implementation, it was decided that datasets would not have an inherent visibility.  Instead, folders have visibility and datasets inherit visibility from their containing folder.  The root folder is always public.  Data and folders that are public are read-only by non-owners with respect to modification (removing, moving, renaming folders or creating sub-folders are not allowed), but public folders can be written to with map datasets by any user.
 * Public datasets can be clipped, conflated, and exported by non-owning users, but the destination output folder must be public or owned by the user.
 * The data within a public dataset, accessed through the Hoot Map API, is editable by any authenticated user.  This allows multiple users to work through conflation reviews.
 * There is a python https://github.com/ngageoint/hootenanny/blob/develop/scripts/database/UpdateFolderOwnerVisibility.py[script] for migrating existing folders and maps from the dummy user to a real user (once that user has logged in).
 * Public folders and their contents are shaded blue.  Folders and sub-folders cannot mix visibility.  A change to one affects the entire tree.
 
-:tada: Thanks to great work by @sumarlidason and @jbronn
-v
+Thanks to great work by @sumarlidason and @jbronn!
 

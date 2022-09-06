@@ -429,7 +429,7 @@ image:images/id/hoot_allfavoptoptions.png[scaledwidth="50%"]
 [[HootConflictReview]]
 ==== Reviewing Conflicts in Hootenanny
 
-When conflating data it is inevitable that conflicts may arise due to the ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user in the UI through an iterative review process where further user is required. This occurance of getting reviews during a conflation is often the result of any of the following circumstances:
+When conflating data it is inevitable that conflicts may arise due to the ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user in the UI (or in JOSM via the `"Open in JOSM"` button after initial conflation) through an iterative review process where further user is required. This occurrence of getting reviews during a conflation is often the result of any of the following circumstances:
 
 * Invalid Input
 * Conflicting matches – In the core conflict refers to two matches that cannot be applied to the same map.
@@ -1028,3 +1028,7 @@ used in subline matching. Values are in meters.
 * *River Rubber Sheet Minimum Ties*: Minimum tie points to use for rubber sheeting.
 * *River Rubber Sheet Ref*: Provides a rubber sheet transform for moving input 2 towards input 1. If not enabled, both inputs are moved towards each other.
 
+==== Opening data layers in JOSM
+Datasets can be opened in JOSM using the `Open Dataset in JOSM` option when right-clicking on a dataset in the `Datasets` panel.  Make sure JOSM is up and running before selecting this option.  The dataset will open in JOSM as an editable osm.xml layer containing tags in the OSM translation schema.
+
+Similarly, Jobs can be opened in JOSM using the `Open in JOSM` option.

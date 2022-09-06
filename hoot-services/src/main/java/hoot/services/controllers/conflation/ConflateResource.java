@@ -126,7 +126,7 @@ public class ConflateResource {
             jobStatusTags.put("taskInfo", params.getTaskInfo());
             jobStatusTags.put("conflationType", params.getConflationType());
 
-            // add both jobIds related to the inputs as the parent seperated by comma if both jobs exist
+            // add both jobIds related to the inputs as the parent separated by comma if both jobs exist
             String input1JobId = DbUtils.getJobIdByMapId(Long.parseLong(params.getInput1()));
             String input2JobId = DbUtils.getJobIdByMapId(Long.parseLong(params.getInput2()));
             String parentId = null;
