@@ -1031,4 +1031,4 @@ used in subline matching. Values are in meters.
 ==== Opening data layers in JOSM
 Datasets can be opened in JOSM using the `Open Dataset in JOSM` option when right-clicking on a dataset in the `Datasets` panel.  Make sure JOSM is up and running before selecting this option.  The dataset will open in JOSM as an editable osm.xml layer containing tags in the OSM translation schema.
 
-Similarly, Jobs can be opened in JOSM using the `Open in JOSM` option.
+Similarly, Jobs can be opened in JOSM using the `open in josm` option.
