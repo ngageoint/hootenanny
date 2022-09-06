@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MatchClassification.h"
 
@@ -39,10 +39,10 @@ MatchClassification::MatchClassification()
   clear();
 }
 
-MatchClassification::MatchClassification(double match, double miss, double review) :
-  _match(match),
-  _miss(miss),
-  _review(review)
+MatchClassification::MatchClassification(double match, double miss, double review)
+  : _match(match),
+    _miss(miss),
+    _review(review)
 {
 }
 
@@ -50,7 +50,7 @@ bool MatchClassification::isValid() const
 {
   const double epsilon = 1e-5;
   return _match >= 0.0 && _miss >= 0.0 && _review >= 0.0 &&
-      fabs(1 - _match + _miss + _review) <= epsilon;
+         fabs(1 - _match + _miss + _review) <= epsilon;
 }
 
 void MatchClassification::normalize()
@@ -68,9 +68,7 @@ void MatchClassification::normalize()
     _review /= sum;
   }
   else
-  {
     throw IllegalArgumentException("MatchClassifications are not greater than zero.");
-  }
 }
 
 

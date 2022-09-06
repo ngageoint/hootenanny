@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PointCriterion.h"
@@ -35,8 +35,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PointCriterion)
 
-PointCriterion::PointCriterion(ConstOsmMapPtr map) :
-_map(map)
+PointCriterion::PointCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
   _wayNodeCrit.setOsmMap(map.get());
 }
@@ -55,4 +55,3 @@ bool PointCriterion::isSatisfied(const ConstElementPtr& e) const
 }
 
 }
-

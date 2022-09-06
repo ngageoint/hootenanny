@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MedianNodeVisitor.h"
 
@@ -45,13 +45,13 @@ ConstNodePtr MedianNodeVisitor::calculateMedianNode() const
   ConstNodePtr best;
   double bestScore = numeric_limits<double>::max();
 
-  for (int i = 0; i < _nodes.size(); ++i)
+  for (const auto& node : qAsConst(_nodes))
   {
-    double score = _calculateRmsd(_nodes[i]);
+    double score = _calculateRmsd(node);
     if (score < bestScore)
     {
       bestScore = score;
-      best = _nodes[i];
+      best = node;
     }
   }
 
@@ -63,9 +63,9 @@ double MedianNodeVisitor::_calculateRmsd(ConstNodePtr n) const
   double sum = 0.0;
 
   Coordinate c1 = n->toCoordinate();
-  for (int i = 0; i < _nodes.size(); ++i)
+  for (const auto& node : qAsConst(_nodes))
   {
-    double d = c1.distance(_nodes[i]->toCoordinate());
+    double d = c1.distance(node->toCoordinate());
     sum += d;
   }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.job;
 
@@ -47,10 +47,6 @@ public class Job {
         this.jobType = jobType;
         this.mapId = mapId;
         this.tags = tags;
-    }
-
-    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
-        this(jobId, userId, commands, jobType, mapId, null);
     }
 
     public Job(String jobId, Long userId, Command[] commands, JobType jobType, Map<String, Object> tags) {

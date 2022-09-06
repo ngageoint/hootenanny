@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOTEXCEPTION_H
@@ -31,14 +31,13 @@
 // Qt
 #include <QString>
 #include <QByteArray>
-#include <QVector>
 
 // Standard
 #include <exception>
 #include <iostream>
+#include <memory> // Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
 #include <string>
-// Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
-#include <memory>
+#include <vector>
 
 namespace hoot
 {
@@ -65,7 +64,11 @@ public:
   virtual QString getName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
-  const char* what() const throw() override { _tmp = _what.toLatin1(); return _tmp.constData(); }
+  const char* what() const throw() override
+  {
+    _tmp = _what.toLatin1();
+    return _tmp.constData();
+  }
 
 private:
 
@@ -109,18 +112,18 @@ public:
   /**
    * Registers an exception so it can be thrown. You probably want to use HOOT_REGISTER_EXCEPTION.
    */
-  void registerException(ThrowMethod m) { _throwMethods.append(m); }
+  void registerException(ThrowMethod m) { _throwMethods.push_back(m); }
 
   /**
    * Throw an exception of the appropriate type given a pointer. If the appropriate exception type
    * is not found a HootException will be thrown instead.
    */
-  void rethrowPointer(std::shared_ptr<HootException> e) { rethrowPointer(e.get()); }
-  void rethrowPointer(HootException* e);
+  void rethrowPointer(std::shared_ptr<HootException> e) const { rethrowPointer(e.get()); }
+  void rethrowPointer(HootException* e) const;
 
 private:
 
-  QVector<ThrowMethod> _throwMethods;
+  std::vector<ThrowMethod> _throwMethods;
 
   /** Default constructor/destructor */
   HootExceptionThrower() = default;
@@ -148,9 +151,7 @@ public:
   {
     T* castException = dynamic_cast<T*>(e);
     if (castException)
-    {
       throw *castException;
-    }
   }
 };
 

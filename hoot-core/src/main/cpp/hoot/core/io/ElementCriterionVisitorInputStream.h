@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
 #define ELEMENTCRITERIONVISITORINPUTSTREAM_H
@@ -51,9 +51,9 @@ public:
    * @param criterion criteria to filter the stream with
    * @param visitor an element visitor to filter the stream with
    */
-  ElementCriterionVisitorInputStream(
-    const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-    const ElementVisitorPtr& visitor);
+  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                     const ElementCriterionPtr& criterion,
+                                     const ElementVisitorPtr& visitor);
   /**
    * Creates a filtered stream of elements
    *
@@ -61,9 +61,9 @@ public:
    * @param criterion riteria to filter the stream with
    * @param visitors an element visitor to filter the stream with
    */
-  ElementCriterionVisitorInputStream(
-    const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-    const QList<ElementVisitorPtr>& visitors);
+  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                     const ElementCriterionPtr& criterion,
+                                     const QList<ElementVisitorPtr>& visitors);
   ~ElementCriterionVisitorInputStream() override;
 
   /**

@@ -22,47 +22,43 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HighwayCriterion.h"
 
 // hoot
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-HighwayCriterion::HighwayCriterion(const bool includeRelations) :
-_includeRelations(includeRelations)
+HighwayCriterion::HighwayCriterion(const bool includeRelations)
+  : _includeRelations(includeRelations)
 {
 }
 
-HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations) :
-_map(map),
-_includeRelations(includeRelations)
+HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations)
+  : _map(map),
+    _includeRelations(includeRelations)
 {
 }
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   if (!element)
-  {
     return false;
-  }
 
   LOG_VART(element->getElementId());
   const ElementType type = element->getElementType();
 
   if (type == ElementType::Node)
-  {
     return false;
-  }
 
   bool result = false;
   const Tags& tags = element->getTags();
@@ -71,8 +67,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   const bool containsHighwayTag = it != tags.end() && it.value() != "";
 
   // Is it a legit highway?
-  if ((type == ElementType::Way || (type == ElementType::Relation && _includeRelations)) &&
-      containsHighwayTag)
+  if ((type == ElementType::Way || (type == ElementType::Relation && _includeRelations)) && containsHighwayTag)
   {
     result = true;
     LOG_VART(result);

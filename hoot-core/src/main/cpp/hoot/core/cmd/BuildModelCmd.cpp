@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ArffToRfConverter.h>
 #include <hoot/core/scoring/RandomForestModelBuilder.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -75,25 +75,19 @@ public:
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(
-        QString(
-          "%1 takes an odd number of parameters and at least three parameters when converting to .rf from training data.")
-        .arg(getName()));
+        QString("%1 takes an odd number of parameters and at least three parameters when converting to .rf from training data.").arg(getName()));
     }
     else
     {
       // It must be a conversion to .rf from training data.
-      QStringList inputs;
-      for (int i = 0; i < args.size() - 1; i++)
-      {
-        inputs.append(args.at(i));
-      }
+      QStringList inputs = args;
+      //  Remove the last one because it is the output
+      inputs.removeLast();
       output = args.last();
       RandomForestModelBuilder::build(inputs, args.last(), exportArffOnly);
     }
 
-    LOG_STATUS(
-      "Model: ..." << output.right(25) << " built in " <<
-      StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Model: ..." << output.right(25) << " built in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
@@ -102,4 +96,3 @@ public:
 HOOT_FACTORY_REGISTER(Command, BuildModelCmd)
 
 }
-

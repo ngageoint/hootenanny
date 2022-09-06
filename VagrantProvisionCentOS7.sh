@@ -90,6 +90,8 @@ else
          libphonenumber-devel \
          nodejs \
          nodejs-devel \
+         nodejs-docs \
+         nodejs-libs \
          npm \
          proj \
          proj-devel \
@@ -118,6 +120,8 @@ sudo yum install -y \
      npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     nodejs-docs-$NODE_VERSION \
+     nodejs-libs-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
@@ -144,6 +148,8 @@ sudo yum versionlock add \
      npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     nodejs-docs-$NODE_VERSION \
+     nodejs-libs-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \

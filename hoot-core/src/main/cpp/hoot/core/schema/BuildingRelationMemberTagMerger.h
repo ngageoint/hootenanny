@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDING_RELATION_MEMBER_TAG_MERGER_H
 #define BUILDING_RELATION_MEMBER_TAG_MERGER_H
@@ -53,9 +53,8 @@ public:
    * @param elementType the type of element whose tags are being merged (ignored)
    * @return a merged set of tags
    */
-  Tags mergeTags(
-    const Tags& relationTags, const Tags& constituentBuildingTags,
-    ElementType elementType) const override;
+  Tags mergeTags(const Tags& relationTags, const Tags& constituentBuildingTags,
+                 ElementType elementType) const override;
 
   static QSet<QString> getBuildingPartTagNames();
 

@@ -22,18 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NonBuildingAreaCriterion.h"
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/AreaCriterion.h>
-
-// Qt
-#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -42,20 +39,11 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NonBuildingAreaCriterion)
 
 bool NonBuildingAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const bool isArea = AreaCriterion(_map).isSatisfied(e);
-  if (!isArea)
-  {
+  if (!AreaCriterion(_map).isSatisfied(e))
     return false;
-  }
-
-  const bool isBuilding = BuildingCriterion(_map).isSatisfied(e);
-  if (isBuilding)
-  {
+  if (BuildingCriterion(_map).isSatisfied(e))
     return false;
-  }
-
   LOG_TRACE("is non-building area: " << e);
-
   return true;
 }
 

@@ -343,7 +343,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(MatchSetVector& matc
   const QList<ElementId> elementIds = elementIdsToMatchTypes.keys();
   for (const auto& elementId : elementIds)
   {
-    if (elementIdsToMatchTypes.values(elementId).size() > 1)
+    if (elementIdsToMatchTypes.value(elementId).size() > 1)
       elementIdsInvolvedInOverlappingMatch.insert(elementId);
   }
   LOG_VARD(elementIdsInvolvedInOverlappingMatch.size());

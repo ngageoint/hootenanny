@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -67,10 +67,7 @@ public:
       bool ok;
       tagValuesPerKeyLimit = args.at(limitIndex + 1).trimmed().toInt(&ok);
       if (!ok)
-      {
-        throw HootException("Invalid input specified for limit: " +
-                            args.at(args.indexOf("--tag-values-limit") + 1));
-      }
+        throw HootException("Invalid input specified for limit: " + args.at(args.indexOf("--tag-values-limit") + 1));
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
     }
@@ -111,8 +108,7 @@ public:
       if (!keysOnly)
       {
         throw IllegalArgumentException(
-          QString("%1 --delimited-text option is only valid when used with --keys-only.")
-            .arg(getName()));
+          QString("%1 --delimited-text option is only valid when used with --keys-only.").arg(getName()));
       }
       delimitedTextOutput = true;
       args.removeAt(args.indexOf("--delimited-text"));
@@ -134,24 +130,17 @@ public:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     QElapsedTimer timer;
     timer.start();
 
     LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");
-    TagInfo tagInfo(
-      tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);
+    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);
     cout << tagInfo.getInfo(inputs) << endl;
-    LOG_STATUS(
-      "Tag information collected in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    LOG_STATUS("Tag information collected in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

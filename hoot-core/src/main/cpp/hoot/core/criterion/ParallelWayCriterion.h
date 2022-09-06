@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PARALLELWAYCRITERION_H
@@ -32,9 +32,9 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -47,13 +47,11 @@ public:
 
   ParallelWayCriterion() = default;
   ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
-  ~ParallelWayCriterion() override;
+  ~ParallelWayCriterion() override = default;
 
   Radians calculateDifference(const ConstWayPtr& w) const;
-  static bool isParallel(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
-  static bool notParallel(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override
@@ -77,7 +75,7 @@ private:
 
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
-  std::vector<geos::geom::Point*> _points;
+  std::vector<std::shared_ptr<geos::geom::Point>> _points;
   Degrees _threshold;
 };
 

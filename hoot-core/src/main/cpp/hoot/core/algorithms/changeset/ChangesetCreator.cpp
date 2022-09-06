@@ -428,8 +428,7 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(const QString& input1
   // _handleUnstreamableConvertOpsInMemory, as a bounded query will always prevent us from
   // streaming.
 
-  progress.set(
-    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
+  progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
   if (!_singleInput)
   {
     // Load each input into a separate map. There's no need to combine them, since we have all

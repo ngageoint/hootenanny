@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaUtils.h"
 
 // Hoot
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/HasTypeCriterion.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
@@ -39,21 +39,16 @@ namespace hoot
 bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
 {
   return
-    (int)FilteredVisitor::getStat(
-      std::make_shared<HasTypeCriterion>(), std::make_shared<ElementCountVisitor>(), map) > 0;
+    (int)FilteredVisitor::getStat(std::make_shared<HasTypeCriterion>(), std::make_shared<ElementCountVisitor>(), map) > 0;
 }
 
 void SchemaUtils::validateTranslationUrl(const QString& url)
 {
   QFileInfo fileInfo(url);
   if (!fileInfo.exists())
-  {
     throw IllegalArgumentException("Translation file does not exist: " + url);
-  }
   else if (!url.endsWith(".js") && !url.endsWith(".py"))
-  {
     throw IllegalArgumentException("Invalid translation file format: " + url);
-  }
 }
 
 QString SchemaUtils::outputFormatToTranslationDirection(const QString& output)

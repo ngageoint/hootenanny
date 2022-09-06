@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_IDS_VISITOR_H
 #define ELEMENT_IDS_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -68,8 +68,7 @@ public:
    * @return a collection of numerical element IDs
    * @todo change this to take in ElementCriterionPtr instead?
    */
-  static std::vector<long> findElements(
-    const ConstOsmMapPtr& map, const ElementType& elementType, ElementCriterion* pCrit);
+  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType, ElementCriterion* pCrit);
   /**
    * Retrieves the IDs of nodes satifying specified criteria and within a radius of a specified
    * location
@@ -81,9 +80,8 @@ public:
    * @return a collection of numerical node IDs
    * @todo change this to take in ElementCriterionPtr instead?
    */
-  static std::vector<long> findNodes(
-    const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
-    const geos::geom::Coordinate& refCoord, Meters maxDistance);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
+                                     const geos::geom::Coordinate& refCoord, Meters maxDistance);
   /**
    * Retrieves the IDs of elements of a given type having a specified tag
    *
@@ -93,9 +91,8 @@ public:
    * @param value tag value
    * @return a collection of numerical element IDs
    */
-  static std::vector<long> findElementsByTag(
-    const ConstOsmMapPtr& map, const ElementType& elementType, const QString& key,
-    const QString& value);
+  static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map, const ElementType& elementType, const QString& key,
+                                             const QString& value);
   /**
    * Retrieves the IDs of all ways owning a specified node
    *

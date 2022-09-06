@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HootApiDbReader.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QUrl>
@@ -45,8 +45,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 
-HootApiDbReader::HootApiDbReader() :
-_database(std::make_shared<HootApiDb>())
+HootApiDbReader::HootApiDbReader()
+  : _database(std::make_shared<HootApiDb>())
 {
   setConfiguration(conf());
 }
@@ -59,17 +59,15 @@ HootApiDbReader::~HootApiDbReader()
 Envelope HootApiDbReader::calculateEnvelope() const
 {
   assert(_open);
-  Envelope result = _database->calculateEnvelope();
-  return result;
+  return _database->calculateEnvelope();
 }
 
 void HootApiDbReader::open(const QString& urlStr)
 {
   OsmMapReader::open(urlStr);
   if (!isSupported(_url))
-  {
     throw HootException("An unsupported URL was passed in to HootApiDbReader: " + _url);
-  }
+
   initializePartial();
 
   QUrl url(_url);
@@ -78,9 +76,7 @@ void HootApiDbReader::open(const QString& urlStr)
 
   LOG_VARD(_email);
   if (!_email.isEmpty())
-  {
     _database->setUserId(_database->getUserId(_email, false));
-  }
 
   const long requestedMapId = _database->getMapIdFromUrl(url);
   LOG_VART(requestedMapId);
@@ -128,9 +124,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
   // We want the reader's status to always override any existing status
   // Unless, we really want to keep the status.
   if (!_keepStatusTag && _status != Status::Invalid)
-  {
     node->setStatus(_status);
-  }
 
   LOG_VART(node->getElementId());
   LOG_VART(node->getStatus());
@@ -160,9 +154,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
-  {
     way->setStatus(_status);
-  }
 
   LOG_VART(way->getStatus());
   LOG_VART(way->getVersion());
@@ -170,9 +162,8 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   // These maybe could be read out in batch at the same time the element results are read.
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
-  {
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
-  }
+
   way->addNodes(nodeIds);
 
   return way;
@@ -199,9 +190,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
-  {
     relation->setStatus(_status);
-  }
 
   LOG_VART(relation->getStatus());
   LOG_VART(relation->getVersion());
@@ -209,9 +198,8 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
-  {
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
-  }
+
   relation->setMembers(members);
 
   return relation;

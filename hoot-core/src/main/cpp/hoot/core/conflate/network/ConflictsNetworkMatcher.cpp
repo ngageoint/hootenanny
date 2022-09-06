@@ -56,12 +56,9 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
     _stubThroughWeighting(ConfigOptions().getNetworkConflictsStubThroughWeighting()),
     _weightInfluence(ConfigOptions().getNetworkConflictsWeightInfluence()),
     _outboundWeighting(ConfigOptions().getNetworkConflictsOutboundWeighting()),
-    _sanityCheckMinSeparationDistance(
-       ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
-    _sanityCheckSeparationDistanceMultiplier(
-      ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
-    _conflictingScoreThresholdModifier(
-      ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
+    _sanityCheckMinSeparationDistance(ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
+    _sanityCheckSeparationDistanceMultiplier(ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
+    _conflictingScoreThresholdModifier(ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
     _matchThreshold(ConfigOptions().getNetworkConflictsMatcherThreshold())
 {
   if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
@@ -420,11 +417,10 @@ void ConflictsNetworkMatcher::_iterateRank()
     LOG_VART(em->containsPartial());
     LOG_VART(em->containsStub());
 
-    double numerator =
-      em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
+    double numerator = em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
     double denominator = numerator;
 
-    for (const auto& r : _matchRelationships[em])
+    for (const auto& r : qAsConst(_matchRelationships[em]))
     {
       LOG_VART(r->getEdge()->containsPartial());
 
@@ -436,7 +432,7 @@ void ConflictsNetworkMatcher::_iterateRank()
 
       int supportCount = 0;
       int relationCount = 0;
-      for (const auto& sr : _matchRelationships[r->getEdge()])
+      for (const auto& sr : qAsConst(_matchRelationships[r->getEdge()]))
       {
         if (sr->isConflict() == false)
           supportCount++;
@@ -446,7 +442,6 @@ void ConflictsNetworkMatcher::_iterateRank()
       supportCount = max(1, supportCount);
       relationCount = max(1, relationCount);
 
-      //s = s / (double)supportCount;
       LOG_VART(supportCount);
       s = s / (double)relationCount;
 
@@ -495,7 +490,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     double denominator = numerator;
     LOG_VART(numerator);
 
-    for (const auto& r : _matchRelationships[em])
+    for (const auto& r : qAsConst(_matchRelationships[em]))
     {
       double childHandicap = pow(partialHandicap, r->getEdge()->countPartialMatches());
       LOG_VART(r->getEdge());
@@ -542,7 +537,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
       int supportCount = 0;
       // Number of match relationships
       int relationCount = 0;
-      for (const auto& sr : _matchRelationships[r->getEdge()])
+      for (const auto& sr : qAsConst(_matchRelationships[r->getEdge()]))
       {
         if (sr->isConflict() == false)
           supportCount++;
@@ -590,8 +585,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     LOG_TRACE("\ns1: " << em->getString1() << "\ns2: " << em->getString2() << "\n"
              << numerator << "/" << denominator << " " << newScores[em]
              << " " << newWeights[em]);
-    LOG_TRACE(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<
-             newWeights[em]);
+    LOG_TRACE(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " << newWeights[em]);
 
     count++;
     if (count % 1000 == 0)
@@ -647,7 +641,7 @@ void ConflictsNetworkMatcher::finalize()
   int total = _scores.size();
   for (const auto& em : _scores.keys())
   {
-    for (const auto& r : _matchRelationships[em])
+    for (const auto& r : qAsConst(_matchRelationships[em]))
     {
       const double myScore = _scores[em];
       const double theirScore = _scores[r->getEdge()];

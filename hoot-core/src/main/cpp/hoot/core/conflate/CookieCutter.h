@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef COOKIECUTTER_H
@@ -43,9 +43,8 @@ public:
 
   static QString className() { return "CookieCutter"; }
 
-  CookieCutter(
-    bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
-    bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
+  CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
+               bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
 
   /**
    * @brief cut uses an input map geometry to cut the shape out of another map.

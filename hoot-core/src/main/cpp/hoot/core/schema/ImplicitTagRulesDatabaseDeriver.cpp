@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTagRulesDatabaseDeriver.h"
 
@@ -40,11 +40,11 @@
 namespace hoot
 {
 
-ImplicitTagRulesDatabaseDeriver::ImplicitTagRulesDatabaseDeriver() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minTagOccurrencesPerWord(1),
-_minWordLength(1),
-_useSchemaTagValuesForWordsOnly(true)
+ImplicitTagRulesDatabaseDeriver::ImplicitTagRulesDatabaseDeriver()
+  : _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+  _minTagOccurrencesPerWord(1),
+  _minWordLength(1),
+  _useSchemaTagValuesForWordsOnly(true)
 {
 }
 
@@ -52,16 +52,13 @@ void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  setMinTagOccurrencesPerWord(
-    confOptions.getImplicitTaggingDatabaseDeriverMinimumTagOccurrencesPerWord());
+  setMinTagOccurrencesPerWord(confOptions.getImplicitTaggingDatabaseDeriverMinimumTagOccurrencesPerWord());
   setMinWordLength(confOptions.getImplicitTaggingDatabaseDeriverMinimumWordLength());
-  setUseSchemaTagValuesForWordsOnly(
-    confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
+  setUseSchemaTagValuesForWordsOnly(confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
   setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverCustomRuleFile());
 }
 
-void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(
-  const QString& input, const QString& output)
+void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, const QString& output)
 {
   _validateInputs(input, output);
 
@@ -99,9 +96,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(
   else
   {
     if (_useSchemaTagValuesForWordsOnly)
-    {
       _populateSchemaTagValues();
-    }
 
     if (_minTagOccurrencesPerWord >= 2)
     {
@@ -127,7 +122,7 @@ void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString& input, const QS
 }
 
 void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const QString& input,
-  const int minOccurrencesThreshold)
+                                                                          const int minOccurrencesThreshold)
 {
   LOG_INFO(
     "Removing tags below minimum occurrence threshold of: " +
@@ -139,19 +134,15 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
       "/implicit-tag-rules-deriver-temp-XXXXXX");
   _thresholdedCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_thresholdedCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_thresholdedCountFile->fileName()));
-  }
+    throw HootException(QString("Error opening %1 for writing.").arg(_thresholdedCountFile->fileName()));
+
   LOG_DEBUG("Opened thresholded temp file: " << _thresholdedCountFile->fileName());
   if (ConfigOptions().getImplicitTaggingKeepTempFiles())
   {
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
   if (!QFile(input).exists())
-  {
     throw HootException("Unable to clean file; file doesn't exist.");
-  }
 
   //This removes lines with occurrence counts below the specified threshold; not exactly sure why
   //one needs to be subtracted from the min occurrences here, though, for the result to be correct
@@ -160,9 +151,7 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
     " '$1 > limit{print}' > " + _thresholdedCountFile->fileName();
   LOG_DEBUG(cmd);
   if (std::system(cmd.toStdString().c_str()) != 0)
-  {
     throw HootException("Unable to clean input file.");
-  }
   _thresholdedCountFile->close();
 }
 
@@ -179,9 +168,8 @@ bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString& w
   {
     wordNotASchemaTagValue = true;
     const QStringList tokenizedWords = tokenizer.tokenize(word.toLower());
-    for (int i = 0; i < tokenizedWords.size(); i++)
+    for (const auto& tokenizedWord : qAsConst(tokenizedWords))
     {
-      const QString tokenizedWord = tokenizedWords.at(i);
       if (_schemaTagValues.contains(tokenizedWord) &&
           !_customRules.getWordIgnoreList().contains(tokenizedWord, Qt::CaseInsensitive))
       {
@@ -203,10 +191,7 @@ void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString& input, cons
   }
 
   if (!output.endsWith(".sqlite"))
-  {
-    throw HootException(
-      "Incorrect output specified: " + output + ".  Must be a .sqlite database file.");
-  }
+    throw HootException("Incorrect output specified: " + output + ".  Must be a .sqlite database file.");
 }
 
 void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
@@ -214,13 +199,10 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
   _schemaTagValues.clear();
   _wordsNotInSchema.clear();
 
-  const std::vector<SchemaVertex> tags =
-    OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
+  const std::vector<SchemaVertex> tags = OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
   StringTokenizer tokenizer;
-  for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
-       tagItr != tags.end(); ++tagItr)
+  for (const auto& tag : tags)
   {
-    SchemaVertex tag = *tagItr;
     const QString tagVal = tag.getValue().toLower().replace("_", " ");
     if (!tagVal.contains("*"))  //skip wildcards
     {
@@ -230,31 +212,22 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
         //dealing with the uk english spellings on an as seen basis; this should be expanded and
         //made more extensible
         if (tagVal == "theatre")
-        {
           _schemaTagValues.insert("theater");
-        }
         if (tagVal == "centre")
-        {
           _schemaTagValues.insert("center");
-        }
         LOG_TRACE("Appended " << tagVal << " to schema tag values.");
       }
       QStringList vals = tokenizer.tokenize(tagVal);
-      for (int i = 0; i < vals.size(); i++)
+      for (const auto& val : qAsConst(vals))
       {
-        const QString val = vals.at(i);
         if (!_customRules.getWordIgnoreList().contains(val, Qt::CaseInsensitive))
         {
           _schemaTagValues.insert(val);
           //see comment above
           if (val == "theatre")
-          {
             _schemaTagValues.insert("theater");
-          }
           if (val == "centre")
-          {
             _schemaTagValues.insert("center");
-          }
           LOG_TRACE("Appended " << val << " to schema tag values.");
         }
       }
@@ -276,10 +249,8 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
       "/implicit-tag-rules-deriver-temp-XXXXXX");
   _filteredCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_filteredCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_filteredCountFile->fileName()));
-  }
+    throw HootException(QString("Error opening %1 for writing.").arg(_filteredCountFile->fileName()));
+
   LOG_DEBUG("Opened filtered temp file: " << _filteredCountFile->fileName());
   if (ConfigOptions().getImplicitTaggingKeepTempFiles())
   {
@@ -287,9 +258,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
   }
   QFile inputFile(input);
   if (!inputFile.open(QIODevice::ReadOnly))
-  {
-    throw HootException(QObject::tr("Error opening %1 for reading.").arg(input));
-  }
+    throw HootException(QString("Error opening %1 for reading.").arg(input));
   LOG_DEBUG("Opened input file: " << input);
 
   long linesParsedCount = 0;
@@ -441,8 +410,7 @@ void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
   if (!_customRules.getCustomRulesList().empty())
   {
     const QMap<QString, QString> customRulesList = _customRules.getCustomRulesList();
-    for (QMap<QString, QString>::const_iterator customRulesItr = customRulesList.begin();
-         customRulesItr != customRulesList.end(); ++customRulesItr)
+    for (auto customRulesItr = customRulesList.begin(); customRulesItr != customRulesList.end(); ++customRulesItr)
     {
       const QString line =
         QString::number(INT_MAX) % "\t" % customRulesItr.key().trimmed() % "\t" %

@@ -368,11 +368,9 @@ void OsmPbfWriter::_writeMap()
     const ConstNodePtr& n = _map->getNode(nid);
     _writeNodeDense(n);
 
-    if (_enablePbFlushing && _tick % 100000 == 0 &&
-        (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
-    {
+    if (_enablePbFlushing && _tick % 100000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
       _writePrimitiveBlock();
-    }
+
     _tick++;
   }
 

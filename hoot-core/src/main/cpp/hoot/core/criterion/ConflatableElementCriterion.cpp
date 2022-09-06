@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConflatableElementCriterion.h"
 
@@ -41,32 +41,25 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
 {
   LOG_VART(_conflatableCriteria.isEmpty());
   if (_conflatableCriteria.isEmpty())
-  {
     _createConflatableCriteria();
-  }
   LOG_VART(_conflatableCriteria.size());
   return _conflatableCriteria;
 }
 
 void ConflatableElementCriterion::_createConflatableCriteria()
 {
-  const std::vector<QString> criterionClassNames =
-    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+  const std::vector<QString> criterionClassNames = Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
   LOG_VART(criterionClassNames);
-  for (std::vector<QString>::const_iterator itr = criterionClassNames.begin();
-       itr != criterionClassNames.end(); ++itr)
+  for (const auto& name : criterionClassNames)
   {
-    ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(*itr);
+    ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(name);
     if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != nullptr)
-    {
-      _conflatableCriteria[*itr] = crit;
-    }
+      _conflatableCriteria[name] = crit;
   }
   LOG_VART(_conflatableCriteria.size());
 }
 
-QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
-  const ConstElementPtr& e, ConstOsmMapPtr map)
+QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const ConstElementPtr& e, ConstOsmMapPtr map)
 {
   const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
 
@@ -75,20 +68,16 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
 
   // First, go through and mark only with those crits that support specific conflation.
 
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
-       itr != conflatableCriteria.end(); ++itr)
+  for (auto itr = conflatableCriteria.begin(); itr != conflatableCriteria.end(); ++itr)
   {
     LOG_VART(itr.key());
     ElementCriterionPtr crit = itr.value();
 
     ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
     if (mapConsumer != nullptr)
-    {
       mapConsumer->setOsmMap(map.get());
-    }
 
-    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-      std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
     assert(conflatableCrit);
     if (!conflatableCrit->supportsSpecificConflation())
     {
@@ -97,56 +86,42 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
     }
 
     if (crit->isSatisfied(e))
-    {
       conflatableCriteriaForElement.append(itr.key());
-    }
   }
   LOG_VART(conflatableCriteriaForElement);
 
   // If no specific conflate crit was available, then try to add a generic one.
-
   if (conflatableCriteriaForElement.empty())
   {
-    for (QMap<QString, std::shared_ptr<ConflatableElementCriterion>>::const_iterator itr =
-           genericConflatableCriteria.begin();
-         itr != genericConflatableCriteria.end(); ++itr)
+    for (auto itr = genericConflatableCriteria.cbegin(); itr != genericConflatableCriteria.cend(); ++itr)
     {
       LOG_VART(itr.key());
       std::shared_ptr<ConflatableElementCriterion> crit = itr.value();
 
+      // It is something we can conflate?
       if (crit->isSatisfied(e))
-      {
-        // It is something we can conflate?
         conflatableCriteriaForElement.append(itr.key());
-      }
     }
     LOG_VART(conflatableCriteriaForElement);
   }
-
   return conflatableCriteriaForElement;
 }
 
-QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-  const GeometryType& type)
+QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
-  std::vector<QString> classNames =
-    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+  std::vector<QString> classNames = Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
   LOG_VART(classNamesByType);
-  for (size_t i = 0; i < classNames.size(); i++)
+  for (const auto& className : classNames)
   {
-    const QString className = classNames[i];
     LOG_VART(className);
 
-    ElementCriterionPtr crit(
-      Factory::getInstance().constructObject<ElementCriterion>(className));
-    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-      std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+    ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(className));
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
     if (conflatableCrit)
     {
       LOG_TRACE("is conflatable: " << className);
-      std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit = std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
       if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
       {
         LOG_TRACE("is same geometry: " << className);
@@ -162,12 +137,9 @@ bool ConflatableElementCriterion::supportsSpecificConflation(const QString& crit
   ElementCriterionPtr crit = getConflatableCriteria()[criterionClassName];
   if (crit)
   {
-    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-      std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
     if (conflatableCrit)
-    {
       return conflatableCrit->supportsSpecificConflation();
-    }
   }
   return false;
 }

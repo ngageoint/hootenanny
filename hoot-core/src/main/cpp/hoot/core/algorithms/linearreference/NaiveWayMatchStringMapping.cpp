@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NaiveWayMatchStringMapping.h"
 
@@ -32,26 +32,21 @@
 namespace hoot
 {
 
-NaiveWayMatchStringMapping::NaiveWayMatchStringMapping(WayStringPtr str1,
-  WayStringPtr str2) :
-  _ws1(str1),
-  _ws2(str2)
+NaiveWayMatchStringMapping::NaiveWayMatchStringMapping(WayStringPtr str1, WayStringPtr str2)
+  : _ws1(str1),
+    _ws2(str2),
+    _length1(str1->calculateLength()),
+    _length2(str2->calculateLength())
 {
-  _length1 = _ws1->calculateLength();
-  _length2 = _ws2->calculateLength();
 }
 
 WayLocation NaiveWayMatchStringMapping::map1To2(const WayLocation& l1, ElementId preferredEid)
 {
   // be certain that the ends match exactly (avoid floating point rounding issues)
   if (_ws1->at(0).getStart() == l1)
-  {
     return _ws2->at(0).getStart();
-  }
   if (_ws1->back().getEnd() == l1)
-  {
     return _ws2->back().getEnd();
-  }
 
   Meters distanceOn1 = _ws1->calculateDistanceOnString(l1);
   double p = distanceOn1 / _length1;
@@ -63,13 +58,9 @@ WayLocation NaiveWayMatchStringMapping::map2To1(const WayLocation& l2, ElementId
 {
   // be certain that the ends match exactly (avoid floating point rounding issues)
   if (_ws2->at(0).getStart() == l2)
-  {
     return _ws1->at(0).getStart();
-  }
   if (_ws2->back().getEnd() == l2)
-  {
     return _ws1->back().getEnd();
-  }
 
   Meters distanceOn2 = _ws2->calculateDistanceOnString(l2);
   double p = distanceOn2 / _length2;

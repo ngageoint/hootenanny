@@ -22,33 +22,33 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayHeadingVarianceCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayHeadingVarianceCriterion)
 
-WayHeadingVarianceCriterion::WayHeadingVarianceCriterion() :
-_comparisonVariance(-1.0),
-_numericComparisonType(NumericComparisonType::EqualTo)
+WayHeadingVarianceCriterion::WayHeadingVarianceCriterion()
+  : _comparisonVariance(-1.0),
+    _numericComparisonType(NumericComparisonType::EqualTo)
 {
 }
 
-WayHeadingVarianceCriterion::WayHeadingVarianceCriterion(
-  const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
-  ConstOsmMapPtr map) :
-_comparisonVariance(comparisonVariance),
-_numericComparisonType(numericComparisonType),
-_map(map)
+WayHeadingVarianceCriterion::WayHeadingVarianceCriterion(const Degrees comparisonVariance,
+                                                         const NumericComparisonType& numericComparisonType,
+                                                         ConstOsmMapPtr map)
+  : _comparisonVariance(comparisonVariance),
+    _numericComparisonType(numericComparisonType),
+    _map(map)
 {
 }
 
@@ -80,13 +80,9 @@ Degrees WayHeadingVarianceCriterion::getLargestHeadingVariance(const ConstWayPtr
       const Degrees heading = toDegrees(hist->getBinCenter(i));
       LOG_VART(heading);
       if (lowestAngle == -1.0)
-      {
         lowestAngle = heading;
-      }
       else
-      {
         largestDiff = heading - lowestAngle;
-      }
     }
   }
   LOG_TRACE("Largest diff for " << way->getElementId() << ": " << largestDiff);
@@ -97,17 +93,11 @@ bool WayHeadingVarianceCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // A comparison variance of -1 effectively bypasses this crit.
   if (_comparisonVariance == -1.0)
-  {
     return true;
-  }
   if (!_map)
-  {
     throw IllegalArgumentException("WayHeadingVarianceCriterion requires a map.");
-  }
   if (!MapProjector::isPlanar(_map))
-  {
     throw IllegalArgumentException("Map must be in planar coordinate system.");
-  }
 
   if (e && e->getElementType() == ElementType::Way)
   {

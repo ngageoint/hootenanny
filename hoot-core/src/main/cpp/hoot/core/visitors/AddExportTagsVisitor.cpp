@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AddExportTagsVisitor.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -89,13 +89,9 @@ void AddExportTagsVisitor::overrideDebugSettings()
 QString AddExportTagsVisitor::toCompatString(Status status) const
 {
   if (status.getEnum() <= Status::EnumEnd)
-  {
     return QString::number(status.getEnum());
-  }
   else
-  {
     return status.toString();
-  }
 }
 
 }

@@ -22,39 +22,39 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "FilteredVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
-FilteredVisitor::FilteredVisitor() :
-_criterion(nullptr),
-_visitor(nullptr)
+FilteredVisitor::FilteredVisitor()
+  : _criterion(nullptr),
+    _visitor(nullptr)
 {
 }
 
-FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
-  _criterion(&criterion),
-  _visitor(&visitor),
-  _map(nullptr)
+FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor)
+  : _criterion(&criterion),
+    _visitor(&visitor),
+    _map(nullptr)
 {
 }
 
-FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
-  _criterion(criterion.get()),
-  _visitor(visitor.get()),
-  _map(nullptr)
+FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor)
+  : _criterion(criterion.get()),
+    _visitor(visitor.get()),
+    _map(nullptr)
 {
 }
 
@@ -70,9 +70,7 @@ void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
 void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
 {
   if (_visitor)
-  {
     throw IllegalArgumentException("FilteredVisitor only takes one visitor.");
-  }
   _visitor = v.get();
 }
 
@@ -80,9 +78,7 @@ void FilteredVisitor::setOsmMap(OsmMap* map)
 {
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
   if (c != nullptr)
-  {
     c->setOsmMap(map);
-  }
   _map = map;
 }
 
@@ -90,9 +86,7 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
 {
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
   if (c != nullptr)
-  {
     c->setOsmMap(map);
-  }
   _map = map;
 }
 
@@ -121,9 +115,7 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
   FilteredVisitor filteredVisitor(criterion, visitor);
   const SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
   if (stat == nullptr)
-  {
     throw HootException("Visitor does not implement SingleStatistic.");
-  }
   FilteredVisitor& filteredVis = const_cast<FilteredVisitor&>(filteredVisitor);
   map->visitRo(filteredVis);
   return stat->getStat();
@@ -141,9 +133,7 @@ double FilteredVisitor::getStat(const ElementCriterion& criterion, ElementVisito
   FilteredVisitor filteredVisitor(criterion, visitor);
   const SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
   if (stat == nullptr)
-  {
     throw HootException("Visitor does not implement SingleStatistic.");
-  }
   element->visitRo(*map, filteredVisitor);
   return stat->getStat();
 }

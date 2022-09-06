@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptSchemaTranslatorFactory.h"
 
@@ -43,39 +43,37 @@ ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
   return instance;
 }
 
-bool CompareSt(
-  const std::shared_ptr<ScriptSchemaTranslator> st1,
-  const std::shared_ptr<ScriptSchemaTranslator> st2)
+bool CompareSt(const std::shared_ptr<ScriptSchemaTranslator> st1,
+               const std::shared_ptr<ScriptSchemaTranslator> st2)
 {
   return st1->order() < st2->order();
 }
 
-std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTranslator(
-  const QString& scriptPath)
+std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTranslator(const QString& scriptPath)
 {
   LOG_VARD(scriptPath);
 
   _init();
 
   vector<std::shared_ptr<ScriptSchemaTranslator>> st;
-  for (size_t i = 0; i < _translators.size(); ++i)
+  for (const auto& translator : _translators)
   {
-    LOG_VART(_translators[i]);
-    st.push_back(Factory::getInstance().constructObject<ScriptSchemaTranslator>(_translators[i]));
+    LOG_VART(translator);
+    st.push_back(Factory::getInstance().constructObject<ScriptSchemaTranslator>(translator));
   }
   sort(st.begin(), st.end(), CompareSt);
 
   std::shared_ptr<ScriptSchemaTranslator> result;
-  for (size_t i = 0; i < st.size(); ++i)
+  for (const auto& script : st)
   {
     try
     {
-      st[i]->setScript(scriptPath);
-      LOG_VART(st[i]->isValidScript());
-      if (!result && st[i]->isValidScript())
+      script->setScript(scriptPath);
+      LOG_VART(script->isValidScript());
+      if (!result && script->isValidScript())
       {
-        result = st[i];
-        LOG_TRACE("Found a valid translator: " + _translators[i]);
+        result = script;
+        LOG_TRACE("Found a valid translator: " << script);
         break;
       }
       LOG_VART(result);
@@ -87,9 +85,7 @@ std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTra
   }
 
   if (!result)
-  {
     throw HootException("Unable to find an appropriate scripting language for: " + scriptPath);
-  }
 
   return result;
 }
@@ -97,9 +93,7 @@ std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTra
 void ScriptSchemaTranslatorFactory::_init()
 {
   if (_translators.empty())
-  {
     _translators = Factory::getInstance().getObjectNamesByBase(ScriptSchemaTranslator::className());
-  }
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCACHELRU_H
 #define ELEMENTCACHELRU_H
@@ -57,9 +57,8 @@ public:
    * @param maxWayCount Total size of ways cache before items start being replaced.
    * @param maxRelationCount Total size of relation cache before items start being replaced.
    */
-  ElementCacheLRU(
-    const unsigned long maxNodeCount, const unsigned long maxWayCount,
-    const unsigned long maxRelationCount);
+  ElementCacheLRU(const unsigned long maxNodeCount, const unsigned long maxWayCount,
+                  const unsigned long maxRelationCount);
   /**
    * @brief ~ElementCache
    */
@@ -120,7 +119,7 @@ public:
 
   // For testing - gets a comma-seperated list of IDs of the Least Recently Used
   // cache items, from most recent to least recent.
-  std::string getLRUString(const ElementType::Type type);
+  std::string getLRUString(const ElementType::Type type) const;
 
 private:
 

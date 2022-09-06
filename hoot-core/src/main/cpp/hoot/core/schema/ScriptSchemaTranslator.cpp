@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptSchemaTranslator.h"
 
@@ -56,18 +56,14 @@ void ScriptSchemaTranslator::close()
 const QString& ScriptSchemaTranslator::_saveMemory(const QString& s)
 {
   if (!_strings.contains(s))
-  {
     _strings[s] = s;
-  }
   return _strings[s];
 }
 
 void ScriptSchemaTranslator::strictError(const QString& s) const
 {
   if (_strict == StrictOn)
-  {
     throw HootException(s);
-  }
   else if (_strict == StrictWarn)
   {
     LOG_WARN(s);
@@ -83,4 +79,5 @@ void ScriptSchemaTranslator::translateToOsm(Tags& tags, const char* layerName, c
   }
   _translateToOsm(tags, layerName, geomType);
 }
+
 }

@@ -96,7 +96,7 @@ QString OsmNetwork::toString()
 
   QSet<ElementId> touchedVertices;
 
-  for (const auto& e : _edges)
+  for (const auto& e : qAsConst(_edges))
   {
     result << e->toString();
     touchedVertices.insert(e->getFrom()->getElementId());
@@ -106,7 +106,7 @@ QString OsmNetwork::toString()
   QSet<ElementId> untouchedVertices = QSet<ElementId>::fromList(_eidToVertex.keys()).
     subtract(touchedVertices);
 
-  for (const auto& eid : untouchedVertices)
+  for (const auto& eid : qAsConst(untouchedVertices))
     result << hoot::toString(_eidToVertex.values(eid));
 
   return result.join("\n");

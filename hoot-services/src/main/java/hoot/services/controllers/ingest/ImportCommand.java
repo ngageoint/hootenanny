@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -33,6 +33,7 @@ import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -62,39 +63,7 @@ class ImportCommand extends ExternalCommand {
 
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
-        List<String> options = new LinkedList<>();
-        //TODO: always set remap ids to false??
-        options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("job.id=" + jobId);
-        options.add("api.db.email=" + user.getEmail());
-
-        //Built-in translations are passed with the translations/ path in the name
-        String translationPath;
-        if (translation.startsWith("translations/")) {
-            translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
-        } else { //user submitted translations are in the customscript path
-            translationPath = new File(new File(SCRIPT_FOLDER), translation).getAbsolutePath();
-        }
-        //A boolean gets passed if we don't mean to translate, but the UI has a dummy translation name of None
-        if (!isNoneTranslation) {
-          options.add("schema.translation.script=" + translationPath);
-        }
-
-        if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
-            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
-            for (String option: getAdvOpts) {
-                String[] opt = option.split("=");
-                String key = opt[0];
-                String value = (opt.length == 2) ? "=" + opt[1] : "";
-
-                if (configOptions.containsKey(key)) { // if option key in possible values, add new option command
-                    Map<String, String> optionConfig = configOptions.get(key);
-                    options.add(optionConfig.get("key") + value);
-                }
-            }
-        }
-
-        List<String> hootOptions = toHootOptions(options);
+        List<String> hootOptions = buildHootOptions(user, translation, isNoneTranslation, advUploadOpts);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
 
@@ -115,17 +84,104 @@ class ImportCommand extends ExternalCommand {
         super.configureCommand(command, substitutionMap, caller);
     }
 
+    private List<String> buildHootOptions(Users user, String translation, Boolean isNoneTranslation, String advUploadOpts) {
+        List<String> options = new LinkedList<>();
+        //TODO: always set remap ids to false??
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("job.id=" + jobId);
+        options.add("api.db.email=" + user.getEmail());
+
+        //Built-in translations are passed with the translations/ path in the name
+        String translationPath;
+        if (translation.startsWith("translations/")) {
+            translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
+        } else { //user submitted translations are in the customscript path
+            translationPath = new File(new File(SCRIPT_FOLDER), translation).getAbsolutePath();
+        }
+        //A boolean gets passed if we don't mean to translate, but the UI has a dummy translation name of None
+        if (!isNoneTranslation) {
+          options.add("schema.translation.script=" + translationPath);
+        } else {
+            options.add("schema.translation.script=" + new File(HOME_FOLDER, "translations/quick.js").getAbsolutePath());
+        }
+
+        if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
+            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
+            for (String option: getAdvOpts) {
+                String[] opt = option.split("=");
+                String key = opt[0];
+                String value = (opt.length == 2) ? "=" + opt[1] : "";
+
+                if (configOptions.containsKey(key)) { // if option key in possible values, add new option command
+                    Map<String, String> optionConfig = configOptions.get(key);
+                    options.add(optionConfig.get("key") + value);
+                }
+            }
+        }
+
+        List<String> hootOptions = toHootOptions(options);
+        return hootOptions;
+    }
+
+    ImportCommand(String jobId, String url, String username, String password, String translation, String advUploadOpts,
+                  String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
+                  Class<?> caller, Users user) {
+        super(jobId);
+        this.workDir = null;
+
+        String input;
+        List<String> envVars = new ArrayList<>();
+        envVars.add("OSM_USE_CUSTOM_INDEXING=NO"); //allows negative IDs on elements when read by OGR
+        String[] urlParts = url.split("://");
+        if (url.startsWith("s3")) {
+            input = url.replace("s3://", "");
+            input = "/vsis3/" + input;
+            if (!username.isEmpty() && !password.isEmpty()) {
+                envVars.add(String.format("AWS_SECRET_ACCESS_KEY=%s", password));
+                envVars.add(String.format("AWS_ACCESS_KEY_ID=%s", username));
+            }
+        } else if (url.startsWith("http") || url.startsWith("ftp")) {
+            if (!username.isEmpty() && !password.isEmpty()) {
+                input = "/vsicurl/" + urlParts[0] + "://" + username + ":" + password + "@" + urlParts[1];
+            } else {
+                input = "/vsicurl/" + url;
+            }
+        } else {
+            input = url;
+        }
+
+        if ((classification == ZIP)) {
+            input = "/vsizip/" + input;
+        }
+
+        List<String> hootOptions = buildHootOptions(user, translation, isNoneTranslation, advUploadOpts);
+
+        String inputName = HOOTAPI_DB_URL + "/" + etlName;
+        java.util.Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("ENV_VARS", envVars);
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT_NAME", inputName);
+        substitutionMap.put("INPUTS", input);
+
+
+        String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+
+        super.configureCommand(command, substitutionMap, caller);
+    }
+
     @Override
     public CommandResult execute() {
         CommandResult commandResult = super.execute();
 
-        try {
-            FileUtils.forceDelete(workDir);
+        if (workDir != null) {
+            try {
+                FileUtils.forceDelete(workDir);
+            }
+            catch (IOException ioe) {
+                logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
+            }
         }
-        catch (IOException ioe) {
-            logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
-        }
-
         return commandResult;
     }
 }

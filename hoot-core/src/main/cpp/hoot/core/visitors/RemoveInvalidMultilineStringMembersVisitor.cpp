@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
@@ -41,17 +41,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidMultilineStringMembersVisitor)
 
-RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor() :
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor()
+  : _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
 void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 {
   if (!e)
-  {
     return;
-  }
 
   // Only look for relations
   if (e->getElementType() == ElementType::Relation)
@@ -65,10 +63,9 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
     {
       vector<RelationData::Entry> multi_members = r->getMembers();
       const Tags& tags = r->getTags();
-      for (vector<RelationData::Entry>::iterator it = multi_members.begin();
-           it != multi_members.end(); ++it)
+      for (const auto& member : multi_members)
       {
-        ElementPtr element = _map->getElement(it->getElementId());
+        ElementPtr element = _map->getElement(member.getElementId());
         if (element)
         {
           LOG_VART(element->getTags().getInformationCount());
@@ -82,9 +79,9 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       // Multiline strings that are a part of a review relation are what we are targeting for
       // replacement
       set<ElementId> parents = map->getParents(r->getElementId());
-      for (set<ElementId>::iterator it = parents.begin(); it != parents.end(); ++it)
+      for (const auto& eid : parents)
       {
-        ElementPtr parent = map->getElement(*it);
+        ElementPtr parent = map->getElement(eid);
         if (!parent)
           continue;
         LOG_VART(parent->getElementId());
@@ -97,26 +94,25 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
           {
             vector<RelationData::Entry> members = rev->getMembers();
             // Iterate all of the members of the review looking for non-relation entities
-            for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
+            for (const auto& member : members)
             {
-              ElementId id1 = i->getElementId();
+              ElementId id1 = member.getElementId();
               LOG_VART(id1);
               if (id1.getType() == ElementType::Relation)
                 continue;
               // Found a non-relation entity to test against
               ElementPtr element1 = map->getElement(id1);
-              Envelope* env1 = element1->getEnvelope(map);
+              std::shared_ptr<Envelope> env1 = element1->getEnvelope(map);
               env1->expandBy(expansion);
-              for (vector<RelationData::Entry>::iterator j = multi_members.begin();
-                   j != multi_members.end(); j++)
+              for (const auto& multi_member : multi_members)
               {
-                ElementId id2 = j->getElementId();
+                ElementId id2 = multi_member.getElementId();
                 LOG_VART(id2);
                 ElementPtr element2 = _map->getElement(id2);
-                Envelope* env2 = element2->getEnvelope(map);
+                std::shared_ptr<Envelope> env2 = element2->getEnvelope(map);
                 env2->expandBy(expansion);
                 //  Add the element to the review if the two envelopes intersect
-                if (env1->intersects(env2))
+                if (env1->intersects(env2.get()))
                 {
                   LOG_TRACE("Adding element as reviewee: " << id2 << "...");
                   rev->addElement(MetadataTags::RoleReviewee(), id2);
@@ -127,8 +123,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
             // There is a one-to-one relation here, replace the multilinestring with the only way
             if (rev->getMembers().size() == 1 && r->getMembers().size() == 1)
             {
-              LOG_TRACE(
-                "Adding element as reviewee: " << r->getMembers()[0].getElementId() << "...");
+              LOG_TRACE("Adding element as reviewee: " << r->getMembers()[0].getElementId() << "...");
               rev->addElement(MetadataTags::RoleReviewee(), r->getMembers()[0].getElementId());
             }
 
@@ -152,9 +147,9 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 
       // Copy tags from the multiline string tags to the children and remove from relation
       vector<RelationData::Entry> members = r->getMembers();
-      for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
+      for (const auto& member : members)
       {
-        ElementId id = i->getElementId();
+        ElementId id = member.getElementId();
         ElementPtr element = _map->getElement(id);
         if (element)
         {

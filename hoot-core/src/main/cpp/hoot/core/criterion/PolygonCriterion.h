@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef POLYGON_CRITERION_H
@@ -30,8 +30,8 @@
 
 // Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {

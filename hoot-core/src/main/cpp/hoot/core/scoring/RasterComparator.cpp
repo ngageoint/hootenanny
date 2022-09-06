@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RasterComparator.h"
@@ -31,13 +31,13 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/geometry/GeometryPainter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/WaysVisitor.h>
 
@@ -54,18 +54,17 @@ class PaintVisitor : public ConstElementVisitor
 {
 public:
 
-  PaintVisitor(OsmMapPtr map, QPainter& pt, QMatrix& m) :
-    _map(map), _pt(pt), _m(m) { }
+  PaintVisitor(OsmMapPtr map, QPainter& pt, QMatrix& m)
+    : _map(map), _pt(pt), _m(m)
+  { }
   ~PaintVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override
   {
     vector<ConstWayPtr> ways = WaysVisitor::extractWays(_map, e);
 
-    for (size_t i = 0; i < ways.size(); i++)
-    {
-      GeometryPainter::drawWay(_pt, _map.get(), ways[i].get(), _m);
-    }
+    for (const auto& way : ways)
+      GeometryPainter::drawWay(_pt, _map.get(), way.get(), _m);
   }
 
   QString getDescription() const override { return ""; }
@@ -79,9 +78,8 @@ private:
   QMatrix& _m;
 };
 
-RasterComparator::RasterComparator(
-  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
-BaseComparator(map1, map2)
+RasterComparator::RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
+  : BaseComparator(map1, map2)
 {
 }
 
@@ -123,9 +121,7 @@ double RasterComparator::compareMaps()
   float* diffData = diff.ptr<float>(0);
   size_t size = (image1.dataend - image1.datastart) / sizeof(float);
   for (size_t i = 0; i < size; i++)
-  {
     diffData[i] = fabs(image1Data[i] - image2Data[i]);
-  }
 
   _saveImage(diff, "test-output/diff.png", max);
   _saveImage(image1, "test-output/image1.png", max);
@@ -143,9 +139,7 @@ void RasterComparator::_dumpImage(cv::Mat& image) const
   {
     const float* row = image.ptr<float>(y);
     for (int x = 0; x < _width; x++)
-    {
       printf("%.2g ", row[x]);
-    }
     printf("\n");
   }
 }
@@ -177,7 +171,7 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
     float* row = in.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
-      row[x] = qRed(qImage.pixel(x, y)) * _pixelSize;
+      row[x] = static_cast<float>(qRed(qImage.pixel(x, y)) * _pixelSize);
 
       pixelCtr++;
       if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
@@ -189,9 +183,8 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
     }
   }
 
-  int ks = ceil(_sigma / _pixelSize * 3) * 2 + 1;
-  cv::GaussianBlur(
-    in, image, cvSize(ks, ks), _sigma / _pixelSize, _sigma / _pixelSize, cv::BORDER_CONSTANT);
+  int ks = static_cast<int>(ceil(_sigma / _pixelSize * 3) * 2 + 1);
+  cv::GaussianBlur(in, image, cvSize(ks, ks), _sigma / _pixelSize, _sigma / _pixelSize, cv::BORDER_CONSTANT);
 }
 
 }

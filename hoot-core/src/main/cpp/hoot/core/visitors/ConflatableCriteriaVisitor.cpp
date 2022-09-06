@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ConflatableCriteriaVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -39,18 +39,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, ConflatableCriteriaVisitor)
 void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
 {
   LOG_VART(e->getElementId());
-
-  const QStringList conflatableCriteria =
-    ConflatableElementCriterion::getConflatableCriteriaForElement(e, _map);
+  const QStringList conflatableCriteria = ConflatableElementCriterion::getConflatableCriteriaForElement(e, _map);
   LOG_VART(conflatableCriteria.size());
-  QString conflatableCriteriaStr;
-  for (int i = 0; i < conflatableCriteria.size(); i++)
-  {
-    conflatableCriteriaStr += conflatableCriteria.at(i) + ";";
-  }
-  conflatableCriteriaStr.chop(1);
-  LOG_VART(conflatableCriteriaStr);
-  e->getTags()[MetadataTags::HootConflatableCriteria()] = conflatableCriteriaStr;
+  e->getTags()[MetadataTags::HootConflatableCriteria()] = conflatableCriteria.join(";");
 }
 
 }

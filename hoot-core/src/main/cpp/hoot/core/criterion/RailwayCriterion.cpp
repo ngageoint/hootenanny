@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RailwayCriterion.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/RailwayWayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -42,23 +42,18 @@ bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // See similar note in RiverCriterion.
   if (e->getElementType() != ElementType::Way)
-  {
     return false;
-  }
 
   bool passedTagFilter = false;
 
   const Tags& tags = e->getTags();
   if (tags.contains("railway"))
-  {
     passedTagFilter = true;
-  }
   else
   {
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      const QString key = it.key();
-      if (OsmSchema::getInstance().isAncestor(key, "railway"))
+      if (OsmSchema::getInstance().isAncestor(it.key(), "railway"))
       {
         passedTagFilter = true;
         break;
@@ -67,9 +62,7 @@ bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   if (passedTagFilter && !LinearCriterion().isSatisfied(e))
-  {
     return false;
-  }
 
   return passedTagFilter;
 }

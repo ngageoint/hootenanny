@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SHARED_WAY_NODE_FINDER_H
@@ -61,8 +61,7 @@ public:
    * false they are assumed to point in opposite directions
    * @return
    */
-  static bool waysShareEndNode(
-    const ConstWayPtr& way1, const ConstWayPtr& way2, const bool sameDirection = true);
+  static bool waysShareEndNode(const ConstWayPtr& way1, const ConstWayPtr& way2, const bool sameDirection = true);
 
 };
 

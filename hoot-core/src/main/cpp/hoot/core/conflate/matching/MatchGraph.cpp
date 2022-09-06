@@ -191,8 +191,7 @@ public:
       {
         for (const auto& m2 : matches)
         {
-          if (m1 != m2 && checkForConflicts &&
-              MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
+          if (m1 != m2 && checkForConflicts && MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
           {
             LOG_TRACE(m1);
             LOG_TRACE(m2);

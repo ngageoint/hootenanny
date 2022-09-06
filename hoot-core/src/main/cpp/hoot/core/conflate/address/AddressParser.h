@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDRESS_PARSER_H
 #define ADDRESS_PARSER_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/ToEnglishAddressTranslator.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/language/ToEnglishAddressTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -80,9 +80,8 @@ public:
    * @param skipElementId no addresses from elements with this ID will be parsed
    * @return a collection of addresses
    */
-  QList<Address> parseAddressesFromRelationMembers(
-    const Relation& relation, const OsmMap& map,
-    const ElementId& skipElementId = ElementId()) const;
+  QList<Address> parseAddressesFromRelationMembers(const Relation& relation, const OsmMap& map,
+                                                   const ElementId& skipElementId = ElementId()) const;
 
   /**
    * @brief hasAddress determines if an element has an address.

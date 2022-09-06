@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HIGHWAY_UTILS_H
@@ -49,8 +49,7 @@ public:
    * @param element2 the second element to examine
    * @return true if their one way tags conflict; false otherwise
    */
-  static bool oneWayConflictExists(
-    const ConstElementPtr& element1, const ConstElementPtr& element2);
+  static bool oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
@@ -69,8 +68,7 @@ public:
    * @return true if both have specific highway tags (other than highway=road) and they disagree;
    * false otherwise
    */
-  static bool nonGenericHighwayConflictExists(
-    const ConstElementPtr& element1, const ConstElementPtr& element2);
+  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
 };
 

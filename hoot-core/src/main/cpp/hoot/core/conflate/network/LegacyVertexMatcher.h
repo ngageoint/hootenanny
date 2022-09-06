@@ -28,9 +28,9 @@
 #define LEGACYVERTEXMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -69,8 +69,7 @@ public:
 
     QString toString() const
     {
-      return QString("{ v1: \"%1\", v2: \"%2\", rawScore: %3)").arg(v1->toString())
-        .arg(v2->toString()).arg(rawScore);
+      return QString("{ v1: \"%1\", v2: \"%2\", rawScore: %3)").arg(v1->toString(), v2->toString()).arg(rawScore);
     }
   };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WeightedShapeDistanceExtractor.h"
 
@@ -34,13 +34,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedShapeDistanceExtractor)
 
-WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregatorPtr agg):
-  WayFeatureExtractor(agg)
+WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregatorPtr agg)
+  : WayFeatureExtractor(agg)
 {
 }
 
 double WeightedShapeDistanceExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
-  const ConstWayPtr& w2) const
+                                                const ConstWayPtr& w2) const
 {
   return ProbabilityOfMatch::getInstance().parallelScore(map.shared_from_this(), w1, w2);
 }

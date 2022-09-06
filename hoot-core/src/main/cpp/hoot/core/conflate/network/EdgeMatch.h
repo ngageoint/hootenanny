@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEMATCH_H
 #define EDGEMATCH_H
@@ -131,12 +131,8 @@ bool operator==(const ConstEdgeMatchPtr& em1, const ConstEdgeMatchPtr& em2);
 inline uint qHash(const ConstEdgeMatchPtr& em)
 {
   if (em->_hash == 0)
-  {
     em->_hash = qHash(em->getString1()) ^ qHash(em->getString2());
-  }
   return em->_hash;
-  //return Tgs::cantorPairing(qHash(em->getString1()), qHash(em->getString2()));
-  //return qHash(em->toString()) ^ 0xabcdefg;
 }
 
 inline uint qHash(const EdgeMatchPtr& em)

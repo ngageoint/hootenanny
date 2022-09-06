@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AddGeometryTypeVisitor.h"
 
@@ -30,8 +30,8 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -43,20 +43,14 @@ void AddGeometryTypeVisitor::visit(const std::shared_ptr<Element>& e)
   if (e->getTags().getNonDebugCount() > 0)
   {
     if (e->getElementType() == ElementType::Node)
-    {
       e->getTags()["geometry_type"] = "Point";
-    }
     else
     {
       std::shared_ptr<geos::geom::Geometry> geometry =
-        ElementToGeometryConverter(_map->shared_from_this())
-          .convertToGeometry(e);
+        ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
       LOG_VART(geometry->isEmpty());
       if (geometry && !geometry->isEmpty())
-      {
-        const QString type = QString::fromStdString(geometry->getGeometryType());
-        e->getTags()["geometry_type"] = type;
-      }
+        e->getTags()["geometry_type"] = QString::fromStdString(geometry->getGeometryType());
     }
   }
 }

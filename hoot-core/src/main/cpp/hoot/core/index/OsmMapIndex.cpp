@@ -469,8 +469,7 @@ void OsmMapIndex::_insertWay(long wid) const
 
   Box b(2);
 
-  std::shared_ptr<LineString> ls =
-    ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
   const Envelope* e = ls->getEnvelopeInternal();
 
   b.setBounds(0, e->getMinX() - _indexSlush, e->getMaxX() + _indexSlush);

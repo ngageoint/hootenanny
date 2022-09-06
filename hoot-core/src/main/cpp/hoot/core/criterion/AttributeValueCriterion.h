@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ATTRIBUTE_VALUE_CRITERION_H
 #define ATTRIBUTE_VALUE_CRITERION_H
@@ -44,12 +44,10 @@ public:
   static QString className() { return "AttributeValueCriterion"; }
 
   AttributeValueCriterion();
-  AttributeValueCriterion(
-    const ElementAttributeType& attributeType, const QString& comparisonVal,
-    const TextComparisonType& comparisonType);
-  AttributeValueCriterion(
-    const ElementAttributeType& attributeType, const double comparisonVal,
-    const NumericComparisonType& comparisonType);
+  AttributeValueCriterion(const ElementAttributeType& attributeType, const QString& comparisonVal,
+                          const TextComparisonType& comparisonType);
+  AttributeValueCriterion(const ElementAttributeType& attributeType, const double comparisonVal,
+                          const NumericComparisonType& comparisonType);
   ~AttributeValueCriterion() override = default;
 
   /**

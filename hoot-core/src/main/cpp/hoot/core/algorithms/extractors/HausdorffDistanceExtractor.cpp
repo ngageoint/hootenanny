@@ -23,14 +23,14 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HausdorffDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/VertexHausdorffDistance.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -40,23 +40,17 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, HausdorffDistanceExtractor)
 
-double HausdorffDistanceExtractor::distance(const OsmMap &map,
-  const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element> &candidate) const
+double HausdorffDistanceExtractor::distance(const OsmMap &map, const std::shared_ptr<const Element>& target,
+                                            const std::shared_ptr<const Element> &candidate) const
 {
   ElementToGeometryConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
-  {
     return nullValue();
-  }
 
-  return
-    max(
-      VertexHausdorffDistance(*g1, *g2).getDistance(),
-      VertexHausdorffDistance(*g2, *g1).getDistance());
+  return max(VertexHausdorffDistance(*g1, *g2).getDistance(), VertexHausdorffDistance(*g2, *g1).getDistance());
 }
 
 }

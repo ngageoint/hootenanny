@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -66,13 +66,9 @@ public:
     mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
     const QStringList mapNames = mapReader.selectMapNamesAvailableToCurrentUser();
     if (mapNames.empty())
-    {
       std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
-    }
     else
-    {
       std::cout << "Available map layers:\n\n" << mapNames.join("\n") << std::endl;
-    }
     mapReader.close();
 
     return 0;

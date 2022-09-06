@@ -120,7 +120,7 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public Users parseUser(JsonNode userDetailsJson) throws InvalidUserProfileException {
+    public Users parseUser(JsonNode userDetailsJson) {
         Users user = new Users();
         JsonNode details = userDetailsJson.get("user");
 
@@ -129,31 +129,6 @@ public class UserManagerImpl implements UserManager {
         user.setProviderCreatedAt(parseTimestamp(details.get("account_created").asText()));
         user.setHootservicesLastAuthorize(new Timestamp(System.currentTimeMillis()));
 
-        return user;
-    }
-
-    @Override
-    public Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
-        Users user = new Users();
-        Document doc = XmlDocumentBuilder.parse(xml);
-
-        // Get User node:
-        NodeList l = doc.getElementsByTagName("user");
-        if (l.getLength() != 1) {
-            throw new InvalidUserProfileException(xml);
-        }
-        Node userNode = l.item(0);
-
-        // Store attributes from User node:
-        Element userElement = (Element) userNode;
-        user.setDisplayName(userElement.getAttribute("display_name"));
-        user.setId(Long.parseLong(userElement.getAttribute("id")));
-        user.setProviderCreatedAt(parseTimestamp(userElement.getAttribute("account_created")));
-        user.setHootservicesLastAuthorize(new Timestamp(System.currentTimeMillis()));
-        if(user.getId() <= 0L) {
-            logger.warn("empty -or- invalid user profiles can result from misconfigured oauth, check hoot-services.conf::oauthProviderURL");
-            throw new InvalidUserProfileException(xml);
-        }
         return user;
     }
 
@@ -180,7 +155,7 @@ public class UserManagerImpl implements UserManager {
 
 
     @Override
-    public Users upsert(JsonNode userDetailsJson, String tokenType, String accessToken, String sessionId) throws InvalidUserProfileException {
+    public Users upsert(JsonNode userDetailsJson, String tokenType, String accessToken, String sessionId) {
         Users user = parseUser(userDetailsJson);
         user.setProviderAccessKey(accessToken);
         user.setProviderAccessToken(tokenType);

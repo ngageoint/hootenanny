@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CHANGESET_REPLACEMENT_ELEMENT_ID_SYNCHRONIZER_H
@@ -49,9 +49,8 @@ public:
   /**
    * see ElementIdSynchronizer
    */
-  void synchronize(
-    const OsmMapPtr& map1, const OsmMapPtr& map2,
-    const ElementType& elementType = ElementType::Unknown) override;
+  void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                   const ElementType& elementType = ElementType::Unknown) override;
 
 private:
 

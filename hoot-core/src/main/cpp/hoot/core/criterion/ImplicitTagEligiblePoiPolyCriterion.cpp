@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTagEligiblePoiPolyCriterion.h"
 
@@ -48,18 +48,16 @@ QStringList ImplicitTagEligiblePoiPolyCriterion::getEligibleKvps(const Tags& tag
   LOG_TRACE("Retrieving POI/poly kvps...");
 
   QStringList poiPolyKvps;
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
     const QString kvp = tagItr.key() % "=" % tagItr.value();
     LOG_VART(kvp);
     LOG_VART(
-      OsmSchema::getInstance().getCategories(kvp).intersects(
-        OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+      OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
     //if the tag is not generic and has anything to do with pois or buildings, we'll use it
     if (kvp != QLatin1String("poi=yes") && kvp != QLatin1String("building=yes") &&
         kvp != QLatin1String("area=yes") &&
-        OsmSchema::getInstance().getCategories(kvp).intersects(
-          OsmSchemaCategory::building() | OsmSchemaCategory::poi()))
+        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi()))
     {
       poiPolyKvps.append(kvp);
     }
@@ -71,18 +69,16 @@ bool ImplicitTagEligiblePoiPolyCriterion::hasEligibleKvp(const Tags& tags) const
 {
   LOG_TRACE("Retrieving POI/poly kvps...");
 
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (auto tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
     const QString kvp = tagItr.key() % "=" % tagItr.value();
     LOG_VART(kvp);
     LOG_VART(
-      OsmSchema::getInstance().getCategories(kvp).intersects(
-        OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+      OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
     //if the tag is not generic and has anything to do with pois or buildings, we'll use it
     if (kvp != QLatin1String("poi=yes") && kvp != QLatin1String("building=yes") &&
         kvp != QLatin1String("area=yes") &&
-        OsmSchema::getInstance().getCategories(kvp).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi()))
+        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi()))
     {
       return true;
     }

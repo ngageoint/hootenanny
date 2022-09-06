@@ -64,7 +64,6 @@ void PertyTestRunner::setNumTestRuns(int numRuns)
 {
   if (numRuns < 1)
     throw HootException("Invalid number of test runs: " + QString::number(numRuns));
-
   _numTestRuns = numRuns;
 }
 
@@ -72,7 +71,6 @@ void PertyTestRunner::setNumTestSimulations(int numSimulations)
 {
   if (numSimulations < 1)
     throw HootException("Invalid number of test simulations: " + QString::number(numSimulations));
-
   _numTestSimulations = numSimulations;
 }
 
@@ -86,7 +84,6 @@ void PertyTestRunner::setDynamicVariables(const QStringList& dynamicVariables)
     {
       if (!var.startsWith("perty."))
         throw HootException("Only PERTY variables may be manipulated during a PERTY test (config options = perty.*");
-
       _dynamicVariables.append(var);
     }
   }
@@ -112,7 +109,6 @@ void PertyTestRunner::setAllowedScoreVariance(double scoreVariance)
 {
   if (scoreVariance > 1.0 || scoreVariance < 0.0)
     throw HootException("Invalid allowed score variance: " + QString::number(scoreVariance));
-
   _allowedScoreVariance = scoreVariance;
 }
 

@@ -158,8 +158,7 @@ private:
 
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v) const;
 
-  QSet<ConstEdgeMatchPtr> _getMatchesWithSharedTermination(ConstNetworkVertexPtr v1,
-    ConstNetworkVertexPtr v2) const;
+  QSet<ConstEdgeMatchPtr> _getMatchesWithSharedTermination(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
   void _iterateSimple();
 

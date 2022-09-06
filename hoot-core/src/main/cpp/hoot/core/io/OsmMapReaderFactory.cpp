@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -46,15 +46,9 @@ namespace hoot
 
 bool OsmMapReaderFactory::supportsPartialReading(const QString& url)
 {
-  bool result = false;
   std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  std::shared_ptr<PartialOsmMapReader> pr =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-  if (pr)
-  {
-    result = true;
-  }
-  return result;
+  std::shared_ptr<PartialOsmMapReader> pr = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  return pr.operator bool();
 }
 
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& url)
@@ -69,32 +63,28 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   }
 
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
-  for (size_t i = 0; i < names.size() && !reader; ++i)
+  for (const auto& name : names)
   {
-    LOG_TRACE("Checking input " << url << " with reader " << names[i]);
-    reader = Factory::getInstance().constructObject<OsmMapReader>(names[i]);
+    LOG_TRACE("Checking input " << url << " with reader " << name);
+    reader = Factory::getInstance().constructObject<OsmMapReader>(name);
     if (reader->isSupported(url))
     {
-      LOG_DEBUG("Using input reader: " << names[i]);
+      LOG_DEBUG("Using input reader: " << name);
+      break;
     }
     else
-    {
       reader.reset();
-    }
   }
 
   if (!reader)
-  {
     throw HootException("A valid reader could not be found for the URL: " + url);
-  }
 
   reader->setConfiguration(conf());
 
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
-  const QString& url, bool useDataSourceIds, Status defaultStatus)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -106,8 +96,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
-  bool useDataSourceIds, bool useFileStatus, const QString& url)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -125,9 +114,8 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   LOG_VART(names.size());
   std::shared_ptr<OsmMapReader> reader;
-  for (size_t i = 0; i < names.size(); i++)
+  for (const auto& name : names)
   {
-    const QString name = names[i];
     LOG_VART(name);
     reader = Factory::getInstance().constructObject<OsmMapReader>(name);
     LOG_VART(url);
@@ -141,16 +129,14 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   return "";
 }
 
-void OsmMapReaderFactory::read(
-  const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
   LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::read(
-  const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
   LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
   LOG_VART(useFileStatus);
@@ -158,15 +144,13 @@ void OsmMapReaderFactory::read(
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::_read(
-  const OsmMapPtr& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url)
+void OsmMapReaderFactory::_read(const OsmMapPtr& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getBounds().trimmed().isEmpty() && !boundable.get())
   {
     throw IllegalArgumentException(
-      ConfigOptions::getBoundsKey() +
-      " configuration option used with unsupported reader for data source: " + url);
+      QString("%1 configuration option used with unsupported reader for data source: %2").arg(ConfigOptions::getBoundsKey(), url));
   }
 
   QElapsedTimer timer;

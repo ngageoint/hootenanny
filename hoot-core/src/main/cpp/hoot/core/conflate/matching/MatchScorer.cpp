@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MatchScorer.h"
 
@@ -65,20 +65,17 @@ public:
   bool _showConfusion;
 };
 
-MatchScorer::MatchScorer() :
-_printConfusion(false),
-_optimizeThresholds(false),
-_validateManualMatches(true)
+MatchScorer::MatchScorer()
+  : _printConfusion(false),
+    _optimizeThresholds(false),
+    _validateManualMatches(true)
 {
 }
 
-void MatchScorer::score(
-  const QStringList& ref1Inputs, const QStringList& ref2Inputs, const QString output)
+void MatchScorer::score(const QStringList& ref1Inputs, const QStringList& ref2Inputs, const QString output)
 {
   if (_optimizeThresholds && !output.isEmpty())
-  {
     throw IllegalArgumentException("Output path not valid when threshold optimization is enabled.");
-  }
   if (ref1Inputs.size() != ref2Inputs.size())
   {
     throw IllegalArgumentException(
@@ -112,9 +109,7 @@ void MatchScorer::score(
 
     // If any of the map files have errors, we'll print some out and terminate.
     if (_validateManualMatches && _validateMatches(map, map1Path, map2Path))
-    {
       return;
-    }
 
     MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
     maps.push_back(map);
@@ -122,9 +117,7 @@ void MatchScorer::score(
   LOG_VARD(maps.size());
 
   if (_optimizeThresholds)
-  {
     _optimize(maps, _printConfusion);
-  }
   else
   {
     double score;
@@ -135,14 +128,12 @@ void MatchScorer::score(
     std::cout << result;
   }
 
-  LOG_STATUS(
-    "Match scoring ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+  LOG_STATUS("Match scoring ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
-QString MatchScorer::evaluateThreshold(
-  const std::vector<OsmMapPtr>& maps, const QString& output,
-  const std::shared_ptr<MatchThreshold>& matchThreshold,
-  const bool showConfusion, double& score) const
+QString MatchScorer::evaluateThreshold(const std::vector<OsmMapPtr>& maps, const QString& output,
+                                       const std::shared_ptr<MatchThreshold>& matchThreshold,
+                                       const bool showConfusion, double& score) const
 {
   MatchComparator comparator;
 
@@ -181,9 +172,7 @@ QString MatchScorer::evaluateThreshold(
   if (showConfusion)
   {
     if (matchThreshold)
-    {
       std::cout << "Threshold: " << matchThreshold->toString() << std::endl;
-    }
     std::cout << comparator.toString();
     std::cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << std::endl;
   }
@@ -200,8 +189,7 @@ QString MatchScorer::evaluateThreshold(
   return result;
 }
 
-bool MatchScorer::_validateMatches(
-  const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const
+bool MatchScorer::_validateMatches(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const
 {
   QElapsedTimer timer;
   timer.start();
@@ -223,9 +211,8 @@ bool MatchScorer::_validateMatches(
   return !inputValidator.getErrors().isEmpty();
 }
 
-void MatchScorer::_printIssues(
-  const QMap<ElementId, QString>& issues, const QString& type, const QString& map1Path,
-  const QString& map2Path) const
+void MatchScorer::_printIssues(const QMap<ElementId, QString>& issues, const QString& type, const QString& map1Path,
+                               const QString& map2Path) const
 {
   if (!issues.isEmpty())
   {
@@ -236,7 +223,7 @@ void MatchScorer::_printIssues(
                  FileUtils::toLogFormat(fileInfo1.completeBaseName(), 30) <<
                  " and " << FileUtils::toLogFormat(fileInfo2.completeBaseName(), 30) << ":\n\n";
     int issueCount = 0;
-    for (QMap<ElementId, QString>::const_iterator itr = issues.begin(); itr != issues.end(); ++itr)
+    for (auto itr = issues.begin(); itr != issues.end(); ++itr)
     {
       std::cout << itr.key().toString() + ": " + itr.value() + "\n";
 

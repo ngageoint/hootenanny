@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayNodeCopier.h"
 
 // hoot
-#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 namespace hoot
 {
 
-WayNodeCopier::WayNodeCopier() :
-_duplicateNodeTolerance(0.05)
+WayNodeCopier::WayNodeCopier()
+  : _duplicateNodeTolerance(0.05)
 {
   setConfiguration(conf());
 }
@@ -54,14 +54,11 @@ void WayNodeCopier::setConfiguration(const Settings& conf)
 void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId) const
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map set on WayNodeCopier.");
-  }
   if (toReplaceWayId.getType() != ElementType::Way || replacingWayId.getType() != ElementType::Way)
   {
     throw IllegalArgumentException(
-      "WayNodeCopier only processes ways. Input IDs: " + toReplaceWayId.toString() + ", " +
-      replacingWayId.toString());
+          "WayNodeCopier only processes ways. Input IDs: " + toReplaceWayId.toString() + ", " + replacingWayId.toString());
   }
 
   bool elementsModified = false;
@@ -81,27 +78,23 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
     LOG_VART(replacingWay->getNodeCount());
     LOG_VART(replacingWay->getNodeIds());
 
-    for (size_t i = 0; i < toReplaceWay->getNodeCount(); i++)
+    for (auto node_id : toReplaceWay->getNodeIds())
     {
-      ConstNodePtr nodeToBeRemoved = _map->getNode(toReplaceWay->getNodeId(i));
+      ConstNodePtr nodeToBeRemoved = _map->getNode(node_id);
       if (!nodeToBeRemoved)
-      {
         continue;
-      }
       LOG_VART(nodeToBeRemoved->getElementId());
 
       // for each node satisfying the specifying criteria (if there is one)
       if (!_crit || _crit->isSatisfied(nodeToBeRemoved))
       {
         // get the location of the node top copy on the way being replaced
-        const WayLocation closestBeingReplacedLocToInfoNode =
-          LocationOfPoint::locate(_map, toReplaceWay, nodeToBeRemoved->toCoordinate());
+        const WayLocation closestBeingReplacedLocToInfoNode = LocationOfPoint::locate(_map, toReplaceWay, nodeToBeRemoved->toCoordinate());
         LOG_VART(closestBeingReplacedLocToInfoNode);
         if (closestBeingReplacedLocToInfoNode.isValid())
         {
           // get the same location of the node to be copied on the way we're copying the node to
-          const WayLocation closestReplacementLocToInfoNode =
-            LocationOfPoint::locate(_map, replacingWay, nodeToBeRemoved->toCoordinate());
+          const WayLocation closestReplacementLocToInfoNode = LocationOfPoint::locate(_map, replacingWay, nodeToBeRemoved->toCoordinate());
           LOG_VART(closestReplacementLocToInfoNode);
           LOG_VART(closestReplacementLocToInfoNode.isNode(_duplicateNodeTolerance));
 
@@ -110,15 +103,12 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
           {
             // find the closest way node index at the location of the node being copied to the way
             // we're copying to
-            const long index =
-              WayUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
+            const long index = WayUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
             LOG_VART(index);
             if (index != -1)
             {
               // copy the node from the way being replaced
-
-              const geos::geom::Coordinate closestCoord =
-                closestReplacementLocToInfoNode.getCoordinate();
+              const geos::geom::Coordinate closestCoord = closestReplacementLocToInfoNode.getCoordinate();
               LOG_VART(closestCoord);
               NodePtr nodeToAdd = nodeToBeRemoved->cloneSp();
               // by cloning the node being removed, we'll keep its id in the new node (?)
@@ -139,15 +129,13 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
           // if there is a node at the same location along the way, and...
           else
           {
-            ConstNodePtr closestReplacementNode =
-              closestReplacementLocToInfoNode.getNode(_duplicateNodeTolerance);
+            ConstNodePtr closestReplacementNode = closestReplacementLocToInfoNode.getNode(_duplicateNodeTolerance);
             LOG_VART(closestReplacementNode->getElementId());
             LOG_VART(nodeToBeRemoved->getTags().dataOnlyEqual(closestReplacementNode->getTags()));
 
             if (nodeToBeRemoved->hasSameNonMetadataTags(*closestReplacementNode))
             {
               // the two nodes have identical tags, don't make any changes
-
               LOG_TRACE(
                 "Nodes " << nodeToBeRemoved->getElementId() << " and " <<
                 closestReplacementNode->getElementId() << " are identical, so skipping " <<

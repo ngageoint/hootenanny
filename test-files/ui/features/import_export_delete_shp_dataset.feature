@@ -31,7 +31,7 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         And I select the "Multinational Geospatial Co-production Program (MGCP) TRD3&4" option in the "NSG Topographic Data Store (TDS) v6.1" combobox
         And I press "big.loud" span with text "Export"
         And I wait 3 "minutes" to not see "Output Name"
-        Then the download file "mgcp_shp_Cucumber.zip" should exist
+        Then the download file "mgcp_shp_Cucumber.shp.zip" should exist
 
     Scenario: Delete Dataset
         And I context click the "CucumberShp" Dataset

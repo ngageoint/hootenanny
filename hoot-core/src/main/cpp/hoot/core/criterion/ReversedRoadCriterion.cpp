@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ReversedRoadCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 
-ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map) :
-_map(map)
+ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
@@ -44,20 +44,14 @@ bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // The only time reversed road relations have been seen so far is as a result of cropping, but
   // think that it still needs to be supported.
-
   if (!HighwayCriterion(_map, true).isSatisfied(e))
-  {
     return false;
-  }
 
   const QString oneway = e->getTags()["oneway"].toLower();
   if (oneway == "-1" || oneway == "reverse")
-  {
     return true;
-  }
 
   return false;
 }
 
 }
-

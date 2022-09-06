@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WaySublineMatch.h"
 
@@ -43,10 +43,10 @@ WaySublineMatch::WaySublineMatch(const WaySublineMatch& other, const ConstOsmMap
 {
 }
 
-WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed) :
-  _ws1(ws1),
-  _ws2(ws2),
-  _reversed(reversed)
+WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed)
+  : _ws1(ws1),
+    _ws2(ws2),
+    _reversed(reversed)
 {
   assert(_ws1.getWay() != _ws2.getWay());
 }
@@ -67,16 +67,14 @@ WaySublineCollection WaySublineMatch::getSublineString2() const
 
 bool WaySublineMatch::overlaps(const WaySublineMatch& ws) const
 {
-  return (ws.getSubline1().getWay() == getSubline1().getWay() &&
-          ws.getSubline1().overlaps(getSubline1())) ||
-         (ws.getSubline2().getWay() == getSubline2().getWay() &&
-          ws.getSubline2().overlaps(getSubline2()));
+  return (ws.getSubline1().getWay() == getSubline1().getWay() && ws.getSubline1().overlaps(getSubline1())) ||
+         (ws.getSubline2().getWay() == getSubline2().getWay() && ws.getSubline2().overlaps(getSubline2()));
 }
 
 QString WaySublineMatch::toString() const
 {
   return (isReverseMatch() ? "reversed, " : "") + QString("subline 1: ") +
-    getSubline1().toString() + "\n" + "subline 2: " + getSubline2().toString();
+          getSubline1().toString() + "\n" + "subline 2: " + getSubline2().toString();
 }
 
 }

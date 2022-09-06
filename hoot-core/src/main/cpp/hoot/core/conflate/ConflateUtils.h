@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFLATE_UTILS_H
@@ -52,8 +52,7 @@ public:
    * (point, line, poly, etc.) are always considered not conflatable
    * @return the number of features written
    */
-  static int writeNonConflatable(
-    const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators = false);
+  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators = false);
 
   /**
    * @brief writeDiff writes the differential between two maps.
@@ -62,9 +61,8 @@ public:
    * @param bounds the area over which to calculate the differential
    * @param output the URL to write the data to
    */
-  static void writeDiff(
-    const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
-    const QString& output);
+  static void writeDiff(const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
+                        const QString& output);
 
   /**
    * @brief isNetworkConflate determines if the Network road conflate algorithm is activated.

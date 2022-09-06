@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ChangesetReplacementElementIdSynchronizer.h"
@@ -39,8 +39,8 @@
 namespace hoot
 {
 
-void ChangesetReplacementElementIdSynchronizer::synchronize(
-  const OsmMapPtr& map1, const OsmMapPtr& map2, const ElementType& /*elementType*/)
+void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                                                            const ElementType& /*elementType*/)
 {
   // This is convoluted, but we're going to run the ID synchronization in multiple stages. Its
   // possible eventually that it could be run in a single stage if improvements are made to
@@ -61,9 +61,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
 
   QString msg = "Synchronizing IDs for nearly identical way nodes";
   if (!_map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
-  {
     msg += " between " + _map1->getName() + " and " + _map2->getName();
-  }
   msg += "...";
   LOG_INFO(msg);
   const int numTotalIdsSyncedBefore = getNumTotalFeatureIdsSynchronized();
@@ -111,12 +109,9 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
 void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
   const QSet<QString>& identicalHashes)
 {
-  for (QSet<QString>::const_iterator itr = identicalHashes.begin(); itr != identicalHashes.end();
-       ++itr)
+  for (const auto& identicalHash : qAsConst(identicalHashes))
   {
-    const QString identicalHash = *itr;
     LOG_VART(identicalHash);
-
     // Get the element with matching hash from the ref map.
     ElementPtr map1IdenticalElement = _map1->getElement(_map1HashesToElementIds[identicalHash]);
     _wayNodeCrit.setOsmMap(_map1.get());
@@ -153,11 +148,8 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
             EuclideanDistanceExtractor().distance(
               *_map1, *_map2, map1IdenticalElement, map2IdenticalElement);
           LOG_VART(distance);
-          if (distance > 1.11)
-          {
-            // too far apart, don't sync
+          if (distance > 1.11)  //  // too far apart, don't sync
             continue;
-          }
 
           // Copy it to be safe.
           ElementPtr map2IdenticalElementCopy = map2IdenticalElement->clone();

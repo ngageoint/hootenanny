@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
 
 // Hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -45,8 +45,7 @@ public:
    * @param elementSource source of the element stream
    * @param visitor an element visitor to filter the stream with
    */
-  ElementVisitorInputStream(
-    const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
+  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
   ~ElementVisitorInputStream() override = default;
 
   /**

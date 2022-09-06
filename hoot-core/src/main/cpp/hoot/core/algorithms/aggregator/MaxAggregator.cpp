@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MaxAggregator.h"
 
 #include <hoot/core/util/Factory.h>
+
+#include <algorithm>
 
 using namespace std;
 
@@ -37,12 +39,9 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MaxAggregator)
 
 double MaxAggregator::aggregate(vector<double>& d) const
 {
-  double result = d[0];
-  for (size_t i = 1; i < d.size(); i++)
-  {
-    result = max(d[i], result);
-  }
-  return result;
+  if (d.size() < 1)
+    throw hoot::IllegalArgumentException("Empty MaxAggregator vector");
+  return *max_element(d.begin(), d.end());
 }
 
 }

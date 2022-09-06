@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REPLACE_TAG_MERGER_H
 #define REPLACE_TAG_MERGER_H
@@ -82,8 +82,7 @@ public:
 
   QString getDescription() const override
   {
-    return
-      "Completely replaces tags in the secondary feature with those from the reference feature";
+    return "Completely replaces tags in the secondary feature with those from the reference feature";
   }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
@@ -104,8 +103,7 @@ public:
 
   QString getDescription() const override
   {
-    return
-      "Completely replaces tags in the reference feature with those from the secondary feature";
+    return "Completely replaces tags in the reference feature with those from the secondary feature";
   }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

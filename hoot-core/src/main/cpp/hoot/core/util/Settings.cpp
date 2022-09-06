@@ -118,8 +118,7 @@ private:
     {
       //  Split the base configs and process them in order
       QString base = it->second.data().c_str();
-      const QStringList baseConfigs =
-        base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
+      const QStringList baseConfigs = base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
       for (const auto& value : qAsConst(baseConfigs))
       {
         LOG_DEBUG("Loading base config: " << value << "...");

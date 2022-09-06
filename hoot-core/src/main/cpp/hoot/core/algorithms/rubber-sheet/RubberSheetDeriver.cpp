@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheetDeriver.h"
@@ -40,9 +40,8 @@
 namespace hoot
 {
 
-void RubberSheetDeriver::derive(
-  const QString& input1, const QString& input2, const QString& transform2To1,
-  const QString& transform1To2, const bool ref) const
+void RubberSheetDeriver::derive(const QString& input1, const QString& input2, const QString& transform2To1,
+                                const QString& transform1To2, const bool ref) const
 {
   LOG_STATUS(
     "Deriving alignment transform for inputs ..." << FileUtils::toLogFormat(input1, 25) <<
@@ -64,18 +63,14 @@ void RubberSheetDeriver::derive(
 
   QFile fp2to1(transform2To1);
   if (fp2to1.open(QIODevice::WriteOnly) == false)
-  {
     throw HootException(QString("Error opening %1 for writing").arg(transform2To1));
-  }
   rs.writeTransform2to1(fp2to1);
   // if --ref is specified then this will just write an identity transform
   if (transform1To2 != "")
   {
     QFile fp1to2(transform1To2);
     if (fp1to2.open(QIODevice::WriteOnly) == false)
-    {
       throw HootException(QString("Error opening %1 for writing").arg(transform1To2));
-    }
     rs.writeTransform1to2(fp1to2);
   }
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MinIdVisitor.h"
 
@@ -34,8 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MinIdVisitor)
 
-MinIdVisitor::MinIdVisitor() :
-_minId(std::numeric_limits<long>::max())
+MinIdVisitor::MinIdVisitor()
+  : _minId(std::numeric_limits<long>::max())
 {
 }
 
