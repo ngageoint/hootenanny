@@ -44,13 +44,11 @@ ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStrea
 {
   LOG_VART(_from.get());
   LOG_VART(_to.get());
-  if (_from->getProjection()->IsGeographic() == false ||
-      _to->getProjection()->IsGeographic() == false)
+  if (_from->getProjection()->IsGeographic() == false || _to->getProjection()->IsGeographic() == false)
   {
     throw IllegalArgumentException(
-      "The projections must both be geographic. Input 1: " +
-      MapProjector::toWkt(_from->getProjection()) + ", Input 2: " +
-      MapProjector::toWkt(_to->getProjection()));
+      QString("The projections must both be geographic. Input 1: %1, Input 2: %2")
+        .arg(MapProjector::toWkt(_from->getProjection()), MapProjector::toWkt(_to->getProjection())));
   }
 
   _changesByType.clear();
@@ -154,8 +152,7 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE("Last from element: " << _fromE->getElementId());
     }
 
-    if (_allowDeletingReferenceFeatures &&
-        !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
+    if (_allowDeletingReferenceFeatures && !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
     {
       LOG_TRACE(
         "run out of 'to' elements; to' element null; 'from' element not null: " <<
