@@ -103,7 +103,7 @@ void KernelEstimationInterpolator::_buildModel()
     Vector result;
     result.prepare(1);
 
-    // Silverman's rule of thumb tends to over estimate and we're faster at evaluating smaller sigma
+    // silverman's rule of thumb tends to over estimate and we're faster at evaluating smaller sigma
     // so start with two smallish values to seed nelder-mead.
     _sigma = silvermans * 0.6;
     result[0] = _sigma;
