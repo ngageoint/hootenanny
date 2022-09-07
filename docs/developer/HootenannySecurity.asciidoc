@@ -5,7 +5,7 @@
 
 Hoot services are now authenticated with OAuth2 which adds a config file oauth2-client.properties that will potentially need to be tweaked per environment.
 
-This file is found in the hoot-services.war file under the path `/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/oauth2-client.properties`.
+This file is found in the hoot-services.war file under the path `WEB-INF/classes/oauth2-client.properties`.
 
 The default value works for the UI running separately in development mode with webpack.
 The proper redirect-uri value for the UI deployed by tomcat on vagrant is `https://localhost:8443/hootenanny-id/login.html`.
