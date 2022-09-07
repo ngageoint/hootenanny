@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "KernelEstimationInterpolator.h"
 
@@ -95,7 +95,7 @@ void KernelEstimationInterpolator::_buildModel()
 
     double sdx = sqrt(1.0 / (n - 1) * sumDiff);
 
-    // calculate a reasonable starting point w/ Silverman's Rule of Thumb. Put a minimum at 1m to
+    // calculate a reasonable starting point w/ silverman's rule of thumb. Put a minimum at 1m to
     // prevent some edge conditions.
     double silvermans = max(1.0, 1.06 * sdx * pow(n, -.2));
 
@@ -103,7 +103,7 @@ void KernelEstimationInterpolator::_buildModel()
     Vector result;
     result.prepare(1);
 
-    // Silverman's Rule of Thumb tends to over estimate and we're faster at evaluating smaller sigma
+    // Silverman's rule of thumb tends to over estimate and we're faster at evaluating smaller sigma
     // so start with two smallish values to seed nelder-mead.
     _sigma = silvermans * 0.6;
     result[0] = _sigma;
