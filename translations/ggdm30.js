@@ -2031,7 +2031,7 @@ ggdm30 = {
         'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
         'barrier':'AP040','tourism':'AL013','junction':'AP020',
         'mine:access':'AA010','tomb':'AL036',
-        'shop':'AL015','office':'AL015'
+        'shop':'AL013','office':'AL013'
 
       };
 
@@ -3029,17 +3029,25 @@ ggdm30 = {
         if (! attrs.F_CODE)
         {
           returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-          return returnData;
         }
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in GGDMv30'}, tableName: ''});
-          return returnData;
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in this schema'}, tableName: ''});
         }
+        return returnData;
       }
 
-      hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+      // Since we are not going to the UI, add the reason for dumping the feature to the list of 
+      // tags to help other tools.
+      if (! attrs.F_CODE)
+      {
+        tags.o2s_reason = 'Unable to assign an F_CODE';
+      }
+      else
+      {
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE;
+      }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
 
