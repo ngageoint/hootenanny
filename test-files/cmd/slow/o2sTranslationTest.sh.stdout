@@ -1,192 +1,315 @@
 ### TDSv40 ###
-13:19:31.437 DEBUG  ...pp/hoot/core/util/Settings.cpp( 513) Loading Testing.conf...
-13:19:31.438 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 109) inputFilters: [0]{}
-13:19:31.438 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 103) output: test-output/cmd/slow/o2s/tds40.osm
-13:19:31.440 STATUS ...pp/hoot/core/util/Progress.cpp(  80) Convert (0%): Converting ...cmd/slow/o2s/tds40/RIVER_C.shp to ...-output/cmd/slow/o2s/tds40.osm...
-13:19:31.440 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 295) ops: [0]{}
-13:19:31.440 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 100) url: test-output/cmd/slow/o2s/tds40.osm
-13:19:31.440 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 102) names.size(): 12
-13:19:31.447 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 211) _scriptPath.isEmpty(): 1
-13:19:31.448 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): DefaultIdGenerator
-13:19:31.448 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  72) Using input reader: OgrReader
-13:19:31.448 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 211) _scriptPath.isEmpty(): 0
-13:19:31.448 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 215) OgrUtilities::getInstance().isReasonableUrl(url): 0
-13:19:31.448 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  85) Using output writer: OsmXmlWriter
-13:19:31.448 INFO   ...n/cpp/hoot/core/io/IoUtils.cpp( 248) Unable to stream I/O due to input: .../slow/o2s/tds40/HUT_P.shp and/or output: ...ut/cmd/slow/o2s/tds40.osm. Loading entire map...
-13:19:31.448 DEBUG  ...hoot/core/io/DataConverter.cpp( 120) isStreamable: 0
-13:19:31.448 DEBUG  ...hoot/core/io/DataConverter.cpp( 184) _convert
-13:19:31.449 DEBUG  ...hoot/core/io/DataConverter.cpp( 455) _convertOps: [3]{DuplicateNodeRemover, RemoveDuplicateWayNodesVisitor, SplitLongWaysVisitor}
-13:19:31.449 INFO   ...ot/core/schema/SchemaUtils.cpp(  63) No translation direction specified. Assuming 'toosm' based on output format...
-13:19:31.449 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 295) ops: [3]{DuplicateNodeRemover, RemoveDuplicateWayNodesVisitor, SplitLongWaysVisitor}
-13:19:31.449 INFO   ...n/cpp/hoot/core/io/IoUtils.cpp( 336) Unable to stream I/O due to op: DuplicateNodeRemover. Loading entire map...
-13:19:31.449 DEBUG  ...hoot/core/io/DataConverter.cpp( 208) isStreamable: 0
-13:19:31.449 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (0%): Loading map: ...t/cmd/slow/o2s/tds40/HUT_P.shp...
-13:19:31.449 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) path: test-output/cmd/slow/o2s/tds40/HUT_P.shp
-13:19:31.449 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 484) layer: 
-13:19:31.449 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 488) Loading layer(s)...
-13:19:31.449 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 447) Retrieving layers from: test-output/cmd/slow/o2s/tds40/HUT_P.shp...
-13:19:31.449 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /data/temp/dev/hoot/translations/TDSv40.js
-13:19:31.449 INFO   ...JavaScriptSchemaTranslator.cpp( 192) Loading translation script: /data/temp/dev/hoot/translations/TDSv40.js...
-13:19:31.506 DEBUG  ...JavaScriptSchemaTranslator.cpp( 228) Translation script loaded.
-13:19:31.507 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 632) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/HUT_P.shp
-13:19:31.507 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 462) layers: [1]{HUT_P}
-13:19:31.507 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{HUT_P}
-13:19:31.507 STATUS ...cpp/hoot/core/io/OgrReader.cpp( 502) Reading layer 1 of 1: HUT_P...        13:19:31.507 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{HUT_P}
-13:19:31.523 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1126) Reading: HUT_P...
-13:19:31.536 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (6%): Loading map: ...t/cmd/slow/o2s/tds40/o2s_L.shp...
-13:19:31.536 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) path: test-output/cmd/slow/o2s/tds40/o2s_L.shp
-13:19:31.536 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 484) layer: 
-13:19:31.536 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 488) Loading layer(s)...
-13:19:31.536 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 447) Retrieving layers from: test-output/cmd/slow/o2s/tds40/o2s_L.shp...
-13:19:31.536 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /data/temp/dev/hoot/translations/TDSv40.js
-13:19:31.536 INFO   ...JavaScriptSchemaTranslator.cpp( 192) Loading translation script: /data/temp/dev/hoot/translations/TDSv40.js...
-13:19:31.547 DEBUG  ...JavaScriptSchemaTranslator.cpp( 228) Translation script loaded.
-13:19:31.547 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 632) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/o2s_L.shp
-13:19:31.548 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 462) layers: [1]{o2s_L}
-13:19:31.548 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{o2s_L}
-13:19:31.548 STATUS ...cpp/hoot/core/io/OgrReader.cpp( 502) Reading layer 1 of 1: o2s_L...        13:19:31.548 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{o2s_L}
-13:19:31.548 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1126) Reading: o2s_L...
-13:19:31.549 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (13%): Loading map: ...t/cmd/slow/o2s/tds40/o2s_P.shp...
-13:19:31.549 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) path: test-output/cmd/slow/o2s/tds40/o2s_P.shp
-13:19:31.549 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 484) layer: 
-13:19:31.549 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 488) Loading layer(s)...
-13:19:31.549 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 447) Retrieving layers from: test-output/cmd/slow/o2s/tds40/o2s_P.shp...
-13:19:31.549 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /data/temp/dev/hoot/translations/TDSv40.js
-13:19:31.549 INFO   ...JavaScriptSchemaTranslator.cpp( 192) Loading translation script: /data/temp/dev/hoot/translations/TDSv40.js...
-13:19:31.561 DEBUG  ...JavaScriptSchemaTranslator.cpp( 228) Translation script loaded.
-13:19:31.561 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 632) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/o2s_P.shp
-13:19:31.561 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 462) layers: [1]{o2s_P}
-13:19:31.561 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{o2s_P}
-13:19:31.561 STATUS ...cpp/hoot/core/io/OgrReader.cpp( 502) Reading layer 1 of 1: o2s_P...        13:19:31.562 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{o2s_P}
-13:19:31.562 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1126) Reading: o2s_P...
-13:19:31.562 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (20%): Loading map: ...d/slow/o2s/tds40/ORCHARD_S.shp...
-13:19:31.562 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) path: test-output/cmd/slow/o2s/tds40/ORCHARD_S.shp
-13:19:31.562 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 484) layer: 
-13:19:31.562 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 488) Loading layer(s)...
-13:19:31.562 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 447) Retrieving layers from: test-output/cmd/slow/o2s/tds40/ORCHARD_S.shp...
-13:19:31.562 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /data/temp/dev/hoot/translations/TDSv40.js
-13:19:31.562 INFO   ...JavaScriptSchemaTranslator.cpp( 192) Loading translation script: /data/temp/dev/hoot/translations/TDSv40.js...
-13:19:31.575 DEBUG  ...JavaScriptSchemaTranslator.cpp( 228) Translation script loaded.
-13:19:31.575 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 632) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/ORCHARD_S.shp
-13:19:31.575 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 462) layers: [1]{ORCHARD_S}
-13:19:31.575 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{ORCHARD_S}
-13:19:31.576 STATUS ...cpp/hoot/core/io/OgrReader.cpp( 502) Reading layer 1 of 1: ORCHARD_S...        13:19:31.576 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{ORCHARD_S}
-13:19:31.576 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1126) Reading: ORCHARD_S...
-13:19:31.583 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1593) Loading translation files...
-13:19:31.638 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1595) Translation files loaded.
-13:19:31.638 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (26%): Loading map: ...cmd/slow/o2s/tds40/RIVER_C.shp...
-13:19:31.638 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) path: test-output/cmd/slow/o2s/tds40/RIVER_C.shp
-13:19:31.638 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 484) layer: 
-13:19:31.638 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 488) Loading layer(s)...
-13:19:31.638 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 447) Retrieving layers from: test-output/cmd/slow/o2s/tds40/RIVER_C.shp...
-13:19:31.638 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /data/temp/dev/hoot/translations/TDSv40.js
-13:19:31.638 INFO   ...JavaScriptSchemaTranslator.cpp( 192) Loading translation script: /data/temp/dev/hoot/translations/TDSv40.js...
-13:19:31.650 DEBUG  ...JavaScriptSchemaTranslator.cpp( 228) Translation script loaded.
-13:19:31.650 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 632) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/RIVER_C.shp
-13:19:31.650 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 462) layers: [1]{RIVER_C}
-13:19:31.650 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{RIVER_C}
-13:19:31.650 STATUS ...cpp/hoot/core/io/OgrReader.cpp( 502) Reading layer 1 of 1: RIVER_C...        13:19:31.651 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1014) _pendingLayers: [1]{RIVER_C}
-13:19:31.651 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1126) Reading: RIVER_C...
-13:19:31.659 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp(  91) Applying ops...
-13:19:31.659 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 111) 	Element count before operation DuplicateNodeRemover: 17
-13:19:31.659 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (33%): Removing duplicate nodes...
-13:19:31.675 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 199) 	Element count after operation DuplicateNodeRemover: 16
-13:19:31.675 STATUS ...p/hoot/core/ops/OpExecutor.cpp( 204) 	Merged 1 node pairs. in 00:00
-13:19:31.675 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 111) 	Element count before operation RemoveDuplicateWayNodesVisitor: 16
-13:19:31.675 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (44%): Removing duplicate way nodes...
-13:19:31.676 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 199) 	Element count after operation RemoveDuplicateWayNodesVisitor: 16
-13:19:31.676 STATUS ...p/hoot/core/ops/OpExecutor.cpp( 204) 	Removed 0 duplicate way nodes in 00:00
-13:19:31.676 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 111) 	Element count before operation SplitLongWaysVisitor: 16
-13:19:31.676 DEBUG  ...itors/SplitLongWaysVisitor.cpp(  77) Max nodes per way set to 1900
-13:19:31.676 STATUS ...pp/hoot/core/util/Progress.cpp( 110) Convert (55%): Splitting ways...
-13:19:31.676 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 199) 	Element count after operation SplitLongWaysVisitor: 16
-13:19:31.676 STATUS ...p/hoot/core/ops/OpExecutor.cpp( 204) 	Split 0 ways in 00:00
-13:19:31.676 STATUS ...hoot/core/io/DataConverter.cpp( 291) Convert operations ran in 00:00 total.
-13:19:31.676 STATUS ...pp/hoot/core/util/Progress.cpp(  80) Convert (66%): Writing map: ...-output/cmd/slow/o2s/tds40.osm...
-13:19:31.676 DEBUG  ...hoot/core/io/DataConverter.cpp( 306) General conversion with: _convert (the original convert command)
-13:19:31.676 INFO   ...ore/io/OsmMapWriterFactory.cpp( 121) Writing map to test-output/cmd/slow/o2s/tds40.osm...
-13:19:31.676 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 211) _scriptPath.isEmpty(): 0
-13:19:31.676 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 215) OgrUtilities::getInstance().isReasonableUrl(url): 0
-13:19:31.676 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  85) Using output writer: OsmXmlWriter
-13:19:31.677 INFO   ...ore/io/OsmMapWriterFactory.cpp( 139) Wrote 16 elements to output in: 00:00.
-13:19:31.677 STATUS ...pp/hoot/core/util/Progress.cpp(  80) Convert (100%): Converted ...cmd/slow/o2s/tds40/RIVER_C.shp to: ...-output/cmd/slow/o2s/tds40.osm
-13:19:31.677 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 134) Data conversion completed in 00:00.
-13:19:31.933 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 112) Comparing ...ut/cmd/slow/o2s/tds40.osm and ...test-files/o2s_tds40.osm...
-13:19:31.943 STATUS ...ore/io/OsmMapReaderFactory.cpp( 176) Read 16 elements from input in: 00:00.
-13:19:32.145 STATUS ...ore/io/OsmMapReaderFactory.cpp( 176) Read 16 elements from input in: 00:00.
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 147) Tags do not match (ref: Node(-8), test: Node(-8):
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 160) < o2s_reason = Unable to assign an F_CODE
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 161) > o2s_reason = 
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 147) Tags do not match (ref: Way(-2), test: Way(-2):
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 160) < o2s_reason = Unable to assign an F_CODE
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 161) > o2s_reason = 
-13:19:32.145 WARN   ...core/scoring/MapComparator.cpp( 147) Tags do not match (ref: Way(-1), test: Way(-1):
-13:19:32.146 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 146) Map difference calculated in 00:00 total.
-10,11c10
-<         <tag k="error:circular" v="15"/>
-<         <tag k="o2s_reason" v="Unable to assign an F_CODE"/>
----
->         <tag k="source:ingest:datetime" v="2020-11-13T21:04:23.704Z"/>
-13,14c12
-<         <tag k="source" v="cartoon"/>
-<         <tag k="source:ingest:datetime" v="2022-09-08T13:19:31.562Z"/>
----
->         <tag k="error:circular" v="15"/>
-15a14
->         <tag k="source" v="cartoon"/>
-23c22
-<         <tag k="building" v="hut"/>
----
->         <tag k="source:ingest:datetime" v="2020-11-13T21:04:23.698Z"/>
-24a24
->         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
-25a26
->         <tag k="building" v="hut"/>
-27,28d27
-<         <tag k="source:ingest:datetime" v="2022-09-08T13:19:31.536Z"/>
-<         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
-32a32
->         <tag k="source:ingest:datetime" v="2020-11-13T21:04:23.771Z"/>
-34,36d33
-<         <tag k="source" v="me"/>
-<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-<         <tag k="source:ingest:datetime" v="2022-09-08T13:19:31.659Z"/>
-37a35
->         <tag k="source" v="me"/>
-38a37
->         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-44a44
->         <tag k="source:ingest:datetime" v="2020-11-13T21:04:23.707Z"/>
-46c46
-<         <tag k="landuse" v="orchard"/>
----
->         <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
-47a48
->         <tag k="landuse" v="orchard"/>
-49,50d49
-<         <tag k="source:ingest:datetime" v="2022-09-08T13:19:31.582Z"/>
-<         <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
-55,56c54
-<         <tag k="error:circular" v="15"/>
-<         <tag k="o2s_reason" v="Unable to assign an F_CODE"/>
----
->         <tag k="source:ingest:datetime" v="2020-11-13T21:04:23.701Z"/>
-58,59c56
-<         <tag k="source" v="cartoon"/>
-<         <tag k="source:ingest:datetime" v="2022-09-08T13:19:31.548Z"/>
----
->         <tag k="error:circular" v="15"/>
-60a58
->         <tag k="source" v="cartoon"/>
-67,68c65
-<         <tag k="error:circular" v="15"/>
-<         <tag k="o2s_reason" v="Unable to assign an F_CODE"/>
----
->         <tag k="source:ingest:datetime" v="2020-11-13T21:04:23.701Z"/>
-70,71c67
-<         <tag k="source" v="cartoon"/>
-<         <tag k="source:ingest:datetime" v="2022-09-08T13:19:31.548Z"/>
----
->         <tag k="error:circular" v="15"/>
-72a69
->         <tag k="source" v="cartoon"/>
+10:22:47.020 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
+10:22:47.025 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
+10:22:47.025 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/o2s/tds40.osm
+10:22:47.026 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...cmd/slow/o2s/tds40/RIVER_C.shp to ...-output/cmd/slow/o2s/tds40.osm...
+10:22:47.029 DEBUG  ...hoot/core/io/DataConverter.cpp( 329) _convertFromOgr
+10:22:47.029 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...cmd/slow/o2s/tds40/RIVER_C.shp...
+10:22:47.029 DEBUG  ...hoot/core/io/DataConverter.cpp( 348) _convertOps: [0]{}
+10:22:47.029 DEBUG  ...hoot/core/io/DataConverter.cpp( 353) _convertOps: [2]{hoot::DuplicateNodeRemover, hoot::RemoveDuplicateWayNodesVisitor}
+10:22:47.030 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
+10:22:47.030 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds40/HUT_P.shp
+10:22:47.031 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds40/HUT_P.shp
+10:22:47.031 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:47.031 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv40.js
+10:22:47.032 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv40.js...
+10:22:47.120 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:47.120 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/HUT_P.shp
+10:22:47.121 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{HUT_P}
+10:22:47.130 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: HUT_P...
+10:22:47.149 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds40/o2s_L.shp
+10:22:47.150 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds40/o2s_L.shp
+10:22:47.150 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:47.150 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv40.js
+10:22:47.150 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv40.js...
+10:22:47.175 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:47.175 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/o2s_L.shp
+10:22:47.175 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_L}
+10:22:47.177 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_L...
+10:22:47.178 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds40/o2s_P.shp
+10:22:47.179 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds40/o2s_P.shp
+10:22:47.179 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:47.179 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv40.js
+10:22:47.179 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv40.js...
+10:22:47.206 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:47.206 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/o2s_P.shp
+10:22:47.206 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_P}
+10:22:47.208 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_P...
+10:22:47.209 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds40/ORCHARD_S.shp
+10:22:47.209 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds40/ORCHARD_S.shp
+10:22:47.209 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:47.209 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv40.js
+10:22:47.209 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv40.js...
+10:22:47.232 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:47.232 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/ORCHARD_S.shp
+10:22:47.232 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{ORCHARD_S}
+10:22:47.234 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: ORCHARD_S...
+10:22:47.246 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1796) Loading translation files...
+10:22:47.511 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1798) Translation files loaded.
+10:22:47.512 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds40/RIVER_C.shp
+10:22:47.512 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds40/RIVER_C.shp
+10:22:47.512 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:47.512 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv40.js
+10:22:47.512 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv40.js...
+10:22:47.540 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:47.540 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds40/RIVER_C.shp
+10:22:47.541 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{RIVER_C}
+10:22:47.543 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: RIVER_C...
+10:22:47.550 INFO   ...hoot/core/io/DataConverter.cpp( 393) Read 17 elements from input in: 00:00.
+10:22:47.550 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp(  91) Applying ops...
+10:22:47.550 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::DuplicateNodeRemover: 17
+10:22:47.550 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (33%): Removing duplicate nodes...
+10:22:47.612 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::DuplicateNodeRemover: 16
+10:22:47.612 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Merged 1 node pairs. in 00:00
+10:22:47.612 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:22:47.612 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (50%): Removing duplicate way nodes...
+10:22:47.613 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:22:47.613 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Removed 0 duplicate way nodes in 00:00
+10:22:47.613 STATUS ...hoot/core/io/DataConverter.cpp( 409) Convert operations ran in 00:00 total.
+10:22:47.613 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (66%): Writing map: ...-output/cmd/slow/o2s/tds40.osm...
+10:22:47.613 INFO   ...ore/io/OsmMapWriterFactory.cpp( 131) Writing map to test-output/cmd/slow/o2s/tds40.osm...
+10:22:47.615 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 207) _scriptPath.isEmpty(): 0
+10:22:47.615 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 212) OgrUtilities::getInstance().isReasonableUrl(url): 0
+10:22:47.616 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OsmXmlWriter
+10:22:47.617 INFO   ...ore/io/OsmMapWriterFactory.cpp( 150) Wrote 16 elements to output in: 00:00.
+10:22:47.617 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...cmd/slow/o2s/tds40/RIVER_C.shp to: ...-output/cmd/slow/o2s/tds40.osm
+10:22:47.617 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
+10:22:48.228 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...ut/cmd/slow/o2s/tds40.osm and ...test-files/o2s_tds40.osm...
+10:22:48.240 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.
+
+### TDSv61 ###
+10:22:51.992 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
+10:22:51.997 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
+10:22:51.997 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/o2s/tds61.osm
+10:22:51.997 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...cmd/slow/o2s/tds61/RIVER_C.shp to ...-output/cmd/slow/o2s/tds61.osm...
+10:22:52.001 DEBUG  ...hoot/core/io/DataConverter.cpp( 329) _convertFromOgr
+10:22:52.001 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...cmd/slow/o2s/tds61/RIVER_C.shp...
+10:22:52.001 DEBUG  ...hoot/core/io/DataConverter.cpp( 348) _convertOps: [0]{}
+10:22:52.001 DEBUG  ...hoot/core/io/DataConverter.cpp( 353) _convertOps: [2]{hoot::DuplicateNodeRemover, hoot::RemoveDuplicateWayNodesVisitor}
+10:22:52.002 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
+10:22:52.002 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds61/HUT_P.shp
+10:22:52.003 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds61/HUT_P.shp
+10:22:52.003 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:52.003 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv61.js
+10:22:52.004 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv61.js...
+10:22:52.126 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1796) Loading translation files...
+10:22:52.394 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1798) Translation files loaded.
+10:22:52.411 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:52.411 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds61/HUT_P.shp
+10:22:52.412 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{HUT_P}
+10:22:52.421 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: HUT_P...
+10:22:52.438 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds61/o2s_L.shp
+10:22:52.439 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds61/o2s_L.shp
+10:22:52.439 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:52.439 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv61.js
+10:22:52.439 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv61.js...
+10:22:52.471 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:52.471 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds61/o2s_L.shp
+10:22:52.471 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_L}
+10:22:52.473 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_L...
+10:22:52.474 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds61/o2s_P.shp
+10:22:52.475 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds61/o2s_P.shp
+10:22:52.475 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:52.475 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv61.js
+10:22:52.475 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv61.js...
+10:22:52.508 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:52.508 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds61/o2s_P.shp
+10:22:52.509 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_P}
+10:22:52.511 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_P...
+10:22:52.511 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds61/ORCHARD_S.shp
+10:22:52.512 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds61/ORCHARD_S.shp
+10:22:52.512 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:52.512 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv61.js
+10:22:52.512 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv61.js...
+10:22:52.545 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:52.545 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds61/ORCHARD_S.shp
+10:22:52.545 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{ORCHARD_S}
+10:22:52.548 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: ORCHARD_S...
+10:22:52.558 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/tds61/RIVER_C.shp
+10:22:52.559 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/tds61/RIVER_C.shp
+10:22:52.559 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:52.559 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/TDSv61.js
+10:22:52.559 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/TDSv61.js...
+10:22:52.595 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:52.595 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/tds61/RIVER_C.shp
+10:22:52.596 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{RIVER_C}
+10:22:52.598 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: RIVER_C...
+10:22:52.604 INFO   ...hoot/core/io/DataConverter.cpp( 393) Read 17 elements from input in: 00:00.
+10:22:52.604 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp(  91) Applying ops...
+10:22:52.604 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::DuplicateNodeRemover: 17
+10:22:52.604 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (33%): Removing duplicate nodes...
+10:22:52.666 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::DuplicateNodeRemover: 16
+10:22:52.666 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Merged 1 node pairs. in 00:00
+10:22:52.666 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:22:52.666 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (50%): Removing duplicate way nodes...
+10:22:52.667 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:22:52.667 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Removed 0 duplicate way nodes in 00:00
+10:22:52.667 STATUS ...hoot/core/io/DataConverter.cpp( 409) Convert operations ran in 00:00 total.
+10:22:52.667 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (66%): Writing map: ...-output/cmd/slow/o2s/tds61.osm...
+10:22:52.667 INFO   ...ore/io/OsmMapWriterFactory.cpp( 131) Writing map to test-output/cmd/slow/o2s/tds61.osm...
+10:22:52.669 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 207) _scriptPath.isEmpty(): 0
+10:22:52.669 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 212) OgrUtilities::getInstance().isReasonableUrl(url): 0
+10:22:52.670 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OsmXmlWriter
+10:22:52.671 INFO   ...ore/io/OsmMapWriterFactory.cpp( 150) Wrote 16 elements to output in: 00:00.
+10:22:52.671 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...cmd/slow/o2s/tds61/RIVER_C.shp to: ...-output/cmd/slow/o2s/tds61.osm
+10:22:52.671 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
+10:22:53.258 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...ut/cmd/slow/o2s/tds61.osm and ...test-files/o2s_test.osm...
+10:22:53.271 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.
+
+### MGCP ###
+10:22:55.397 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
+10:22:55.402 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
+10:22:55.402 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/o2s/mgcp.osm
+10:22:55.402 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...t/cmd/slow/o2s/mgcp/LBH140.shp to ...t-output/cmd/slow/o2s/mgcp.osm...
+10:22:55.406 DEBUG  ...hoot/core/io/DataConverter.cpp( 329) _convertFromOgr
+10:22:55.406 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...t/cmd/slow/o2s/mgcp/LBH140.shp...
+10:22:55.406 DEBUG  ...hoot/core/io/DataConverter.cpp( 348) _convertOps: [0]{}
+10:22:55.406 DEBUG  ...hoot/core/io/DataConverter.cpp( 353) _convertOps: [2]{hoot::DuplicateNodeRemover, hoot::RemoveDuplicateWayNodesVisitor}
+10:22:55.407 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
+10:22:55.407 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/mgcp/PAL099.shp
+10:22:55.408 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/mgcp/PAL099.shp
+10:22:55.408 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:55.408 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/MGCP_TRD4.js
+10:22:55.409 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/MGCP_TRD4.js...
+10:22:55.465 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:55.465 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/mgcp/PAL099.shp
+10:22:55.465 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{PAL099}
+10:22:55.475 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: PAL099...
+10:22:55.486 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/mgcp/o2s_L.shp
+10:22:55.486 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/mgcp/o2s_L.shp
+10:22:55.486 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:55.486 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/MGCP_TRD4.js
+10:22:55.486 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/MGCP_TRD4.js...
+10:22:55.513 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:55.513 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/mgcp/o2s_L.shp
+10:22:55.513 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_L}
+10:22:55.515 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_L...
+10:22:55.517 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/mgcp/o2s_P.shp
+10:22:55.517 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/mgcp/o2s_P.shp
+10:22:55.517 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:55.517 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/MGCP_TRD4.js
+10:22:55.517 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/MGCP_TRD4.js...
+10:22:55.543 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:55.543 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/mgcp/o2s_P.shp
+10:22:55.544 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_P}
+10:22:55.546 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_P...
+10:22:55.546 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/mgcp/AEA040.shp
+10:22:55.547 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/mgcp/AEA040.shp
+10:22:55.547 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:55.547 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/MGCP_TRD4.js
+10:22:55.547 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/MGCP_TRD4.js...
+10:22:55.572 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:55.572 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/mgcp/AEA040.shp
+10:22:55.572 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{AEA040}
+10:22:55.574 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: AEA040...
+10:22:55.582 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1796) Loading translation files...
+10:22:55.851 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1798) Translation files loaded.
+10:22:55.851 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/mgcp/LBH140.shp
+10:22:55.851 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/mgcp/LBH140.shp
+10:22:55.851 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:22:55.851 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/MGCP_TRD4.js
+10:22:55.852 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/MGCP_TRD4.js...
+10:22:55.877 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:22:55.877 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/mgcp/LBH140.shp
+10:22:55.877 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{LBH140}
+10:22:55.880 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: LBH140...
+10:22:55.886 INFO   ...hoot/core/io/DataConverter.cpp( 393) Read 17 elements from input in: 00:00.
+10:22:55.887 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp(  91) Applying ops...
+10:22:55.887 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::DuplicateNodeRemover: 17
+10:22:55.887 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (33%): Removing duplicate nodes...
+10:22:55.949 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::DuplicateNodeRemover: 16
+10:22:55.949 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Merged 1 node pairs. in 00:00
+10:22:55.950 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:22:55.950 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (50%): Removing duplicate way nodes...
+10:22:55.950 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:22:55.950 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Removed 0 duplicate way nodes in 00:00
+10:22:55.950 STATUS ...hoot/core/io/DataConverter.cpp( 409) Convert operations ran in 00:00 total.
+10:22:55.950 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (66%): Writing map: ...t-output/cmd/slow/o2s/mgcp.osm...
+10:22:55.950 INFO   ...ore/io/OsmMapWriterFactory.cpp( 131) Writing map to test-output/cmd/slow/o2s/mgcp.osm...
+10:22:55.952 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 207) _scriptPath.isEmpty(): 0
+10:22:55.952 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 212) OgrUtilities::getInstance().isReasonableUrl(url): 0
+10:22:55.953 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OsmXmlWriter
+10:22:55.955 INFO   ...ore/io/OsmMapWriterFactory.cpp( 150) Wrote 16 elements to output in: 00:00.
+10:22:55.955 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...t/cmd/slow/o2s/mgcp/LBH140.shp to: ...t-output/cmd/slow/o2s/mgcp.osm
+10:22:55.955 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
+10:22:56.564 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...put/cmd/slow/o2s/mgcp.osm and ...test-files/o2s_test.osm...
+10:22:56.577 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.
+
+### GGDM ###
+10:23:01.670 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
+10:23:01.675 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
+10:23:01.675 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/o2s/ggdm.osm
+10:23:01.675 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting .../cmd/slow/o2s/ggdm/RIVER_C.shp to ...t-output/cmd/slow/o2s/ggdm.osm...
+10:23:01.679 DEBUG  ...hoot/core/io/DataConverter.cpp( 329) _convertFromOgr
+10:23:01.679 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: .../cmd/slow/o2s/ggdm/RIVER_C.shp...
+10:23:01.679 DEBUG  ...hoot/core/io/DataConverter.cpp( 348) _convertOps: [0]{}
+10:23:01.679 DEBUG  ...hoot/core/io/DataConverter.cpp( 353) _convertOps: [2]{hoot::DuplicateNodeRemover, hoot::RemoveDuplicateWayNodesVisitor}
+10:23:01.680 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
+10:23:01.680 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/ggdm/HUT_P.shp
+10:23:01.681 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/ggdm/HUT_P.shp
+10:23:01.681 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:23:01.681 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/GGDMv30.js
+10:23:01.681 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/GGDMv30.js...
+10:23:01.814 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1796) Loading translation files...
+10:23:02.084 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1798) Translation files loaded.
+10:23:02.100 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:23:02.101 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/ggdm/HUT_P.shp
+10:23:02.101 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{HUT_P}
+10:23:02.110 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: HUT_P...
+10:23:02.130 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/ggdm/o2s_L.shp
+10:23:02.130 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/ggdm/o2s_L.shp
+10:23:02.130 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:23:02.130 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/GGDMv30.js
+10:23:02.131 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/GGDMv30.js...
+10:23:02.166 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:23:02.167 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/ggdm/o2s_L.shp
+10:23:02.167 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_L}
+10:23:02.169 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_L...
+10:23:02.170 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/ggdm/o2s_P.shp
+10:23:02.170 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/ggdm/o2s_P.shp
+10:23:02.171 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:23:02.171 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/GGDMv30.js
+10:23:02.171 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/GGDMv30.js...
+10:23:02.207 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:23:02.207 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/ggdm/o2s_P.shp
+10:23:02.207 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{o2s_P}
+10:23:02.209 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: o2s_P...
+10:23:02.210 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/ggdm/ORCHARD_S.shp
+10:23:02.210 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/ggdm/ORCHARD_S.shp
+10:23:02.210 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:23:02.210 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/GGDMv30.js
+10:23:02.210 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/GGDMv30.js...
+10:23:02.242 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:23:02.243 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/ggdm/ORCHARD_S.shp
+10:23:02.243 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{ORCHARD_S}
+10:23:02.245 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: ORCHARD_S...
+10:23:02.258 DEBUG  ...hoot/core/io/DataConverter.cpp( 369) input: test-output/cmd/slow/o2s/ggdm/RIVER_C.shp
+10:23:02.258 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 482) path: test-output/cmd/slow/o2s/ggdm/RIVER_C.shp
+10:23:02.258 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 483) layer: 
+10:23:02.258 DEBUG  ...iptSchemaTranslatorFactory.cpp(  54) scriptPath: /home/dg/hoot/translations/GGDMv30.js
+10:23:02.258 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: /home/dg/hoot/translations/GGDMv30.js...
+10:23:02.299 DEBUG  ...JavaScriptSchemaTranslator.cpp( 261) Translation script loaded.
+10:23:02.300 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp( 629) Opening layers with geometry: test-output/cmd/slow/o2s/ggdm/RIVER_C.shp
+10:23:02.300 DEBUG  ...cpp/hoot/core/io/OgrReader.cpp(1059) _pendingLayers: [1]{RIVER_C}
+10:23:02.302 STATUS ...cpp/hoot/core/io/OgrReader.cpp(1183) Reading: RIVER_C...
+10:23:02.309 INFO   ...hoot/core/io/DataConverter.cpp( 393) Read 17 elements from input in: 00:00.
+10:23:02.309 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp(  91) Applying ops...
+10:23:02.310 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::DuplicateNodeRemover: 17
+10:23:02.310 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (33%): Removing duplicate nodes...
+10:23:02.372 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::DuplicateNodeRemover: 16
+10:23:02.372 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Merged 1 node pairs. in 00:00
+10:23:02.372 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 115) 	Element count before operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:23:02.372 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (50%): Removing duplicate way nodes...
+10:23:02.372 DEBUG  ...p/hoot/core/ops/OpExecutor.cpp( 225) 	Element count after operation hoot::RemoveDuplicateWayNodesVisitor: 16
+10:23:02.372 INFO   ...p/hoot/core/ops/OpExecutor.cpp( 230) 	Removed 0 duplicate way nodes in 00:00
+10:23:02.373 STATUS ...hoot/core/io/DataConverter.cpp( 409) Convert operations ran in 00:00 total.
+10:23:02.373 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (66%): Writing map: ...t-output/cmd/slow/o2s/ggdm.osm...
+10:23:02.373 INFO   ...ore/io/OsmMapWriterFactory.cpp( 131) Writing map to test-output/cmd/slow/o2s/ggdm.osm...
+10:23:02.375 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 207) _scriptPath.isEmpty(): 0
+10:23:02.375 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 212) OgrUtilities::getInstance().isReasonableUrl(url): 0
+10:23:02.376 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OsmXmlWriter
+10:23:02.377 INFO   ...ore/io/OsmMapWriterFactory.cpp( 150) Wrote 16 elements to output in: 00:00.
+10:23:02.377 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted .../cmd/slow/o2s/ggdm/RIVER_C.shp to: ...t-output/cmd/slow/o2s/ggdm.osm
+10:23:02.377 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
+10:23:02.963 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...put/cmd/slow/o2s/ggdm.osm and ...test-files/o2s_ggdm.osm...
+10:23:02.976 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.

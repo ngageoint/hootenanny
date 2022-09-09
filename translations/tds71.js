@@ -2712,6 +2712,9 @@ tds71 = {
     {
       tags = translate.unpackText(attrs,'tag');
 
+      // Throw out the reason for the o2s if it exists
+      delete tags.o2s_reason;
+
       // Add some metadata
       if (!tags.uuid && tds71.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
       if (!tags.source) tags.source = 'tdsv71:' + layerName.toLowerCase();

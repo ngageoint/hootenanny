@@ -2404,6 +2404,9 @@ mgcp = {
     {
       tags = translate.unpackText(attrs,'tag');
 
+      // Throw out the reason for the o2s if it exists
+      delete tags.o2s_reason;
+
       // Add some metadata
       if (! tags.uuid)
       {
