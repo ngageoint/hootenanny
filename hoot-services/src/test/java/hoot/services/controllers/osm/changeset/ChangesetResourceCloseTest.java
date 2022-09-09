@@ -51,7 +51,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.xpath.XPath;
 
-import org.apache.xpath.XPathAPI;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -73,7 +72,7 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.XmlUtils;
-
+import hoot.services.utils.XPathAPI;
 
 public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
 

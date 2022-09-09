@@ -33,7 +33,6 @@ import static org.junit.Assert.assertNotNull;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 
-import org.apache.xpath.XPathAPI;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -41,7 +40,7 @@ import org.w3c.dom.Document;
 import hoot.services.UnitTest;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.utils.XmlUtils;
-
+import hoot.services.utils.XPathAPI;
 
 public class CapabilitiesResourceTest extends OSMResourceTestAbstract {
 

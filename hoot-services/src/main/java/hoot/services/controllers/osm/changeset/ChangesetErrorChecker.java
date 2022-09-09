@@ -38,7 +38,6 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -49,7 +48,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.utils.DbUtils.EntityChangeType;
-
+import hoot.services.utils.XPathAPI;
 
 class ChangesetErrorChecker {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetErrorChecker.class);

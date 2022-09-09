@@ -45,8 +45,8 @@ import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -80,6 +80,7 @@ import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XPathAPI;
 
 
 /**

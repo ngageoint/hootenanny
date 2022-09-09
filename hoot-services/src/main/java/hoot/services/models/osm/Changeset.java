@@ -35,7 +35,6 @@ import java.util.HashMap;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.xpath.XPathAPI;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.joda.time.Seconds;
@@ -48,7 +47,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.utils.GeoUtils;
-
+import hoot.services.utils.XPathAPI;
 
 /**
  * Represents the model of an OSM changeset

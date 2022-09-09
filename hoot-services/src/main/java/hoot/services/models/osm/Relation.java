@@ -44,7 +44,6 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -65,7 +64,7 @@ import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.db.CurrentRelations;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
-
+import hoot.services.utils.XPathAPI;
 
 /**
  * Represents the model for an OSM relation

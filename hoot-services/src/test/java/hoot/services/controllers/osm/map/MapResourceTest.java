@@ -53,7 +53,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
-import org.apache.xpath.XPathAPI;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -83,7 +82,7 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
-
+import hoot.services.utils.XPathAPI;
 
 public class MapResourceTest extends OSMResourceTestAbstract {
     private void getMap(String idOrName, String multiLayerUniqueElementIdsStr,
