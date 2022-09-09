@@ -98,8 +98,7 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
       // If the median classifier was used, we'll spruce up the explain text a bit and be sure to
       // mark it as a one-to-many match so that needed matches don't get thrown out during match
       // optimization.
-      if (type == MatchType::Match &&
-          std::dynamic_pointer_cast<MedianToDividedRoadClassifier>(_classifier))
+      if (type == MatchType::Match && std::dynamic_pointer_cast<MedianToDividedRoadClassifier>(_classifier))
       {
         _explainText += " " + MedianToDividedRoadClassifier::MEDIAN_MATCHED_DESCRIPTION;
         LOG_VART(_explainText);
@@ -261,14 +260,12 @@ bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, const Elemen
 
   if (sharedEid == _eid1)
   {
-    MultiLineStringSplitter().split(
-      copiedMap, string1, match.getReverseVector1(), matchShared, scrapsShared);
+    MultiLineStringSplitter().split(copiedMap, string1, match.getReverseVector1(), matchShared, scrapsShared);
     MultiLineStringSplitter().split(copiedMap, string2, match.getReverseVector2(), match2, scraps2);
   }
   else
   {
-    MultiLineStringSplitter().split(
-      copiedMap, string2, match.getReverseVector1(), matchShared, scrapsShared);
+    MultiLineStringSplitter().split(copiedMap, string2, match.getReverseVector1(), matchShared, scrapsShared);
     MultiLineStringSplitter().split(copiedMap, string1, match.getReverseVector2(), match2, scraps2);
   }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Node.h"
@@ -51,9 +51,8 @@ NodeData& NodeData::operator=(const NodeData& nd)
 {
   if (this != &nd)
   {
-    init(
-      nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp(),
-      nd.getUser(), nd.getUid(), nd.getVisible());
+    init(nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp(),
+         nd.getUser(), nd.getUid(), nd.getVisible());
     setTags(nd.getTags());
     if (nd.hasCircularError())
       setCircularError(nd.getCircularError());

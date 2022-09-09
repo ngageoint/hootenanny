@@ -69,18 +69,12 @@ bool OsmGeoJsonReader::isSupported(const QString& url) const
   const bool isLocalFile =  myUrl.isLocalFile();
 
   //  Is it a file?
-  if ((isRelativeUrl || isLocalFile) &&
-      url.endsWith(".geojson", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
-  {
+  if ((isRelativeUrl || isLocalFile) && url.endsWith(".geojson", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
     return true;
-  }
 
   //  Is it a web address?
-  if (myUrl.host().toLower() != ConfigOptions().getOverpassApiHost() &&
-      ("http" == myUrl.scheme() || "https" == myUrl.scheme()))
-  {
+  if (myUrl.host().toLower() != ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() || "https" == myUrl.scheme()))
     return true;
-  }
 
   //  Default to not supported
   return false;

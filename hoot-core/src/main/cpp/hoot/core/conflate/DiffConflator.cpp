@@ -268,8 +268,7 @@ void DiffConflator::_cleanSecData(const QStringList& baseCriteria, const double 
   counter.setCriteria(baseCrit);
   LOG_VARD(counter.count(_map));
   // See related note in UnconnectedWaySnapper::_getTypeCriterion.
-  std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-    std::dynamic_pointer_cast<ConflatableElementCriterion>(baseCrit);
+  std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(baseCrit);
   if (!conflatableCrit)
   {
     throw IllegalArgumentException(
@@ -282,14 +281,12 @@ void DiffConflator::_cleanSecData(const QStringList& baseCriteria, const double 
   counter.setCriteria(secCrit);
   LOG_VARD(counter.count(_map));
 
-  ElementCriterionPtr notSnappedCrit =
-    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
+  ElementCriterionPtr notSnappedCrit = std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
   criteria.append(notSnappedCrit);
   counter.setCriteria(notSnappedCrit);
   LOG_VARD(counter.count(_map));
 
-  ElementCriterionPtr lengthCrit =
-    std::make_shared<WayLengthCriterion>(maxSize, NumericComparisonType::LessThanOrEqualTo, _map);
+  ElementCriterionPtr lengthCrit = std::make_shared<WayLengthCriterion>(maxSize, NumericComparisonType::LessThanOrEqualTo, _map);
   criteria.append(lengthCrit);
   counter.setCriteria(lengthCrit);
   LOG_VARD(counter.count(_map));
@@ -306,8 +303,7 @@ void DiffConflator::_cleanSecData(const QStringList& baseCriteria, const double 
   _map->visitRw(cleaner);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-cleaning-sec-elements");
 
-  LOG_DEBUG("Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
-            " secondary ways...");
+  LOG_DEBUG("Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) << " secondary ways...");
 }
 
 void DiffConflator::_discardUnconflatableElements()
@@ -316,12 +312,10 @@ void DiffConflator::_discardUnconflatableElements()
   const size_t mapSizeBefore = _map->size();
   NonConflatableElementRemover().apply(_map);
   MemoryUsageChecker::getInstance().check();
-  _stats.append(
-    SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
+  _stats.append(SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-non-conflatable");
   _numUnconflatableElementsDiscarded = (int)(mapSizeBefore - _map->size());
-  LOG_INFO("Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
-           " unconflatable elements.");
+  LOG_INFO("Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) << " unconflatable elements.");
 }
 
 void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
@@ -345,8 +339,7 @@ void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
 
   // We're storing this part off for potential use later on if any roads get snapped after
   // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
-  std::shared_ptr<NotCriterion> crit =
-    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::Ref2()));
+  std::shared_ptr<NotCriterion> crit = std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::Ref2()));
   CopyMapSubsetOp mapCopier(map, crit);
   _originalRef1Map = std::make_shared<OsmMap>();
   mapCopier.apply(_originalRef1Map);
@@ -401,8 +394,7 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
   LOG_VART(match);
   bool isMatchToRemovePartially = match->getMatchMembers() == MatchMembers::Polyline;
   // River matches are handled by their own config option, since they can be expensive to optimize.
-  const bool removeRiverPartialMatchesAsWhole =
-    ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
+  const bool removeRiverPartialMatchesAsWhole = ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
   if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "river")
     isMatchToRemovePartially = false;
 
@@ -461,8 +453,7 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(c
 
   for (const auto& match : matches)
   {
-    if (match->getType() == MatchType::Match ||
-        (allowReviews && match->getType() == MatchType::Review))
+    if (match->getType() == MatchType::Match || (allowReviews && match->getType() == MatchType::Review))
     {
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
       for (const auto& p : pairs)
@@ -485,8 +476,7 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(c
 
   for (const auto& match : matches)
   {
-    if (match->getType() == MatchType::Match ||
-        (allowReviews && match->getType() == MatchType::Review))
+    if (match->getType() == MatchType::Match || (allowReviews && match->getType() == MatchType::Review))
     {
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
       for (const auto& p : pairs)
@@ -543,8 +533,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
 
     // No point in running way joining a second time in post conflate ops since we already did it
     // here (its configured in post ops by default), so let's remove it.
-    ConfigUtils::removeListOpEntry(
-      ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+    ConfigUtils::removeListOpEntry(ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
 
     // This is getting a little kludgy, but needed to do one more round of snapping after the
     // joining to make some test output better. Only doing it in the default direction, as doing it
@@ -586,8 +575,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
   {
-    _intraDatasetMatchOnlyElementIds =
-      _getElementIdsInvolvedInOnlyIntraDatasetMatches(matchesToRemoveCompletely);
+    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(matchesToRemoveCompletely);
     _intraDatasetElementIdsPopulated = true;
   }
 
@@ -688,8 +676,7 @@ void DiffConflator::_removePartialSecondaryMatchElements()
 
 void DiffConflator::_cleanupAfterPartialMatchRemoval()
 {
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache =
-    std::make_shared<ConflateInfoCache>(_map);
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache = std::make_shared<ConflateInfoCache>(_map);
 
   RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
   dupeWayNodeRemover.setConflateInfoCache(conflateInfoCache);
@@ -724,8 +711,7 @@ void DiffConflator::_removeRefData(const bool removeSnapped)
     // Don't remove any features involved in a snap, as they are needed to properly generate the
     // changeset and keep sec ways snapped in the final output.
     ElementCriterionPtr notSnappedCrit =
-      std::make_shared<NotCriterion>(
-        std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
+      std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
     removeCrit = std::make_shared<ChainCriterion>(refCrit, notSnappedCrit);
   }
   else
@@ -963,14 +949,10 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, 
   LOG_DEBUG("Writing changeset: " << output << "...");
 
   if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException(
-      "Output to SQL changeset requires an OSM API database URL be specified.");
-  }
+    throw IllegalArgumentException("Output to SQL changeset requires an OSM API database URL be specified.");
   else if (!output.endsWith(".osc.sql") && !osmApiDbUrl.trimmed().isEmpty())
   {
-    LOG_WARN(
-      "Ignoring OSM API database URL: " << osmApiDbUrl << " for non-SQL changeset output...");
+    LOG_WARN("Ignoring OSM API database URL: " << osmApiDbUrl << " for non-SQL changeset output...");
   }
 
   LOG_VARD(output);
@@ -986,8 +968,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, const QString& output, 
   // get the changeset
   ChangesetProviderPtr geoChanges = _getChangesetFromMap(pResultMap);
 
-  std::shared_ptr<OsmChangesetFileWriter> writer =
-    OsmChangesetFileWriterFactory::getInstance().createWriter(output, osmApiDbUrl);
+  std::shared_ptr<OsmChangesetFileWriter> writer = OsmChangesetFileWriterFactory::getInstance().createWriter(output, osmApiDbUrl);
   LOG_VARD(writer.get());
   if (!_conflateTags)
   {

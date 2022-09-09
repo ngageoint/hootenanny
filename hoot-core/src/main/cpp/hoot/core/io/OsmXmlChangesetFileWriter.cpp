@@ -87,16 +87,14 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(const QString& path,
-                                      const ChangesetProviderPtr& changesetProvider)
+void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProviderPtr& changesetProvider)
 {
   QList<ChangesetProviderPtr> changesetProviders;
   changesetProviders.append(changesetProvider);
   write(path, changesetProviders);
 }
 
-void OsmXmlChangesetFileWriter::write(const QString& path,
-                                      const QList<ChangesetProviderPtr>& changesetProviders)
+void OsmXmlChangesetFileWriter::write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders)
 {  
   LOG_DEBUG("Writing changeset to: " << path << "...");
 
@@ -130,9 +128,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
   for (int i = 0; i < changesetProviders.size(); i++)
   {
-    LOG_DEBUG(
-      "Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() <<
-      "...");
+    LOG_DEBUG("Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() << "...");
 
     // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
     // each dataset, before changes and after.
@@ -175,11 +171,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
-          _failsBoundsCheck(changeElement, map1, map2))
-      {
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2))
         continue;
-      }
 
       LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)

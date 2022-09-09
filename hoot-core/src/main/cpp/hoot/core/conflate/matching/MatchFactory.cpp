@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MatchFactory.h"
 
@@ -42,8 +42,8 @@ using namespace std;
 namespace hoot
 {
 
-MatchFactory::MatchFactory() :
-_negateCritFilter(false)
+MatchFactory::MatchFactory()
+  : _negateCritFilter(false)
 {
   setConfiguration(conf());
 }
@@ -54,22 +54,19 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
   LOG_VART(eid2);
   LOG_VART(_creators.size());
 
-  for (size_t i = 0; i < _creators.size(); ++i)
+  for (const auto& creator : _creators)
   {
-    const QString name = _creators[i]->getName();
+    const QString name = creator->getName();
     LOG_VART(name);
-    MatchPtr m = _creators[i]->createMatch(map, eid1, eid2);
+    MatchPtr m = creator->createMatch(map, eid1, eid2);
     if (m)
-    {
       return m;
-    }
   }
-
   return nullptr;
 }
 
 void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-  const std::shared_ptr<Geometry>& bounds, std::shared_ptr<const MatchThreshold> threshold) const
+                                 const std::shared_ptr<Geometry>& bounds, std::shared_ptr<const MatchThreshold> threshold) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   { 
@@ -82,27 +79,20 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
         .replace("ScriptMatchCreator;", "")<< "...");
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
-    {
       matchCreator->createMatches(map, matches, threshold);
-    }
     else
-    {
       matchCreator->createMatches(map, matches, matchCreator->getMatchThreshold());
-    }
   }
 }
 
-void MatchFactory::_checkMatchCreatorBoundable(
-  const std::shared_ptr<MatchCreator>& matchCreator, const std::shared_ptr<Geometry>& bounds) const
+void MatchFactory::_checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
+                                               const std::shared_ptr<Geometry>& bounds) const
 {
   if (bounds.get())
   {
     std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(matchCreator);
     if (boundable == nullptr)
-    {
-      throw HootException("One or more match creators is not boundable and cannot be used with "
-                          "boundable match operations.");
-    }
+      throw HootException("One or more match creators is not boundable and cannot be used with boundable match operations.");
     boundable->setBounds(bounds);
   }
 }
@@ -110,19 +100,15 @@ void MatchFactory::_checkMatchCreatorBoundable(
 vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
 {
   vector<CreatorDescription> result;
-
   // Get all match creators from the factory.
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(MatchCreator::className());
-  for (size_t i = 0; i < names.size(); i++)
+  for (const auto& name : names)
   {
     // Get all names known by this creator.
-    std::shared_ptr<MatchCreator> mc =
-      Factory::getInstance().constructObject<MatchCreator>(names[i]);
-
+    std::shared_ptr<MatchCreator> mc = Factory::getInstance().constructObject<MatchCreator>(name);
     vector<CreatorDescription> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());
   }
-
   return result;
 }
 
@@ -134,16 +120,12 @@ void MatchFactory::registerCreator(const QString& c)
   if (className.length() > 0)
   {
     args.removeFirst();
-    std::shared_ptr<MatchCreator> mc =
-      Factory::getInstance().constructObject<MatchCreator>(className);
+    std::shared_ptr<MatchCreator> mc = Factory::getInstance().constructObject<MatchCreator>(className);
     mc->setFilter(_createFilter());
 
     registerCreator(mc);
-
     if (!args.empty())
-    {
       mc->setArguments(args);
-    }
   }
 }
 
@@ -155,40 +137,27 @@ ElementCriterionPtr MatchFactory::_createFilter() const
   // these can be combined into one.
 
   ElementCriterionPtr tagFilter;
+  // We're specifically checking for an option to feed this tag criterion. Additional combined
+  // criteria can be added to this match creator if needed.
   if (!_tagFilterJson.trimmed().isEmpty())
-  {
-    // We're specifically checking for an option to feed this tag criterion. Additional combined
-    // criteria can be added to this match creator if needed.
     tagFilter = std::make_shared<TagAdvancedCriterion>(_tagFilterJson);
-  }
 
   ElementCriterionPtr critFilter;
   if (!_critFilterClassName.trimmed().isEmpty())
   {
-    ElementCriterionPtr elementCrit =
-      Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName);
+    ElementCriterionPtr elementCrit = Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName);
     if (_negateCritFilter)
-    {
       critFilter = std::make_shared<NotCriterion>(elementCrit);
-    }
     else
-    {
       critFilter = elementCrit;
-    }
   }
 
   if (tagFilter && critFilter)
-  {
     filter = std::make_shared<ChainCriterion>(tagFilter, critFilter);
-  }
   else if (tagFilter)
-  {
     filter = tagFilter;
-  }
   else if (critFilter)
-  {
     filter = critFilter;
-  }
 
   return filter;
 }
@@ -198,10 +167,8 @@ void MatchFactory::_setMatchCreators(const QStringList& matchCreatorsList)
   LOG_DEBUG("MatchFactory creators: " << matchCreatorsList);
   //  Setting the match creators replaces the previous creators
   _creators.clear();
-  for (int i = 0; i < matchCreatorsList.size(); i++)
-  {
-    registerCreator(matchCreatorsList[i]);
-  }
+  for (const auto& creator : qAsConst(matchCreatorsList))
+    registerCreator(creator);
 }
 
 void MatchFactory::setConfiguration(const Settings& s)
@@ -251,7 +218,7 @@ QString MatchFactory::toString() const
   QStringList creatorList;
   for (size_t i = 0; i < _creators.size(); ++i)
     creatorList << _creators[i]->getName();
-  return QString("{ %1 }\n{ %2 }\n{ %3 }").arg(creatorList.join(",\n")).arg(_tagFilterJson).arg(_critFilterClassName);
+  return QString("{ %1 }\n{ %2 }\n{ %3 }").arg(creatorList.join(",\n"), _tagFilterJson, _critFilterClassName);
 }
 
 }

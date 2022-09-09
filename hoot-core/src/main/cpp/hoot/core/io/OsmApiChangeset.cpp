@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiChangeset.h"
@@ -150,16 +150,10 @@ void XmlChangeset::loadChangesetDirectory(const QString& changesetDirectory)
       if (QFile::exists(response))
         loadChangesetFile(filepath);
     }
-    else if (filepath.contains("-Response-") && filepath.endsWith("200.osc", Qt::CaseInsensitive))
-    {
-      //  Read in the update for new IDs
+    else if (filepath.contains("-Response-") && filepath.endsWith("200.osc", Qt::CaseInsensitive))  //  Read in the update for new IDs
       updateChangeset(FileUtils::readFully(filepath));
-    }
-    else if (filepath.endsWith("-error.osc", Qt::CaseInsensitive))
-    {
-      //  The changeset error file
+    else if (filepath.endsWith("-error.osc", Qt::CaseInsensitive)) //  The changeset error file
       loadChangesetFile(filepath);
-    }
     else
     {
       //  Output the filename to the log

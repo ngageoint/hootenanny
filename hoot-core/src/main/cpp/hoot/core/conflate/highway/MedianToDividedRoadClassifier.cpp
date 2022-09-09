@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MedianToDividedRoadClassifier.h"
 
@@ -50,25 +50,20 @@ MedianToDividedRoadClassifier::MedianToDividedRoadClassifier()
   _createExtractors();
 }
 
-MatchClassification MedianToDividedRoadClassifier::classify(
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-  const WaySublineMatchString& match)
+MatchClassification MedianToDividedRoadClassifier::classify(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                                            const ElementId& eid2, const WaySublineMatchString& match)
 {
   MatchClassification classification;
   classification.setMiss();
 
   if (!match.isValid())
-  {
     return classification;
-  }
 
   ConstElementPtr element1 = map->getElement(eid1);
   ConstElementPtr element2 = map->getElement(eid2);
   if (element1 && element2)
   {
-    for (QMap<std::shared_ptr<const FeatureExtractor>, double>::const_iterator extractorItr =
-           _extractors.begin();
-         extractorItr != _extractors.end(); ++extractorItr)
+    for (auto extractorItr = _extractors.begin(); extractorItr != _extractors.end(); ++extractorItr)
     {
       std::shared_ptr<const FeatureExtractor> featureExtractor = extractorItr.key();
       const double minScore = extractorItr.value();
@@ -97,20 +92,17 @@ void MedianToDividedRoadClassifier::_createExtractors()
   // these min score values were determined experimentally and may need tweaking over time. A better
   // long term solution is probably to train a separate model for median to divided road matching.
   _extractors.clear();
-  _extractors[
-    std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>())] = 0.955;
-  _extractors[
-     std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>())] = 0.997;
+  _extractors[std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>())] = 0.955;
+  _extractors[std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>())] = 0.997;
   _extractors[std::make_shared<AngleHistogramExtractor>()] = 1.0;
   _extractors[
-    std::make_shared<WeightedMetricDistanceExtractor>(
+      std::make_shared<WeightedMetricDistanceExtractor>(
       std::make_shared<MeanAggregator>(), std::make_shared<RmseAggregator>(),
       ConfigOptions().getSearchRadiusHighway())] = 0.695;
 }
 
-std::map<QString, double> MedianToDividedRoadClassifier::getFeatures(
-  const ConstOsmMapPtr& /*m*/, const ElementId& /*eid1*/, const ElementId& /*eid2*/,
-   const WaySublineMatchString& /*match*/) const
+std::map<QString, double> MedianToDividedRoadClassifier::getFeatures(const ConstOsmMapPtr& /*m*/, const ElementId& /*eid1*/,
+                                                                     const ElementId& /*eid2*/, const WaySublineMatchString& /*match*/) const
 {
   // not implemented
   return std::map<QString, double>();

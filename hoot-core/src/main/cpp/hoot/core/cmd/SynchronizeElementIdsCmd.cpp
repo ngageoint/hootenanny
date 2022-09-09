@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -96,9 +96,7 @@ public:
     LOG_STATUS("\t" << idSynchronizer.getNumNodeIdsSynchronized() << " nodes");
     LOG_STATUS("\t" << idSynchronizer.getNumWayIdsSynchronized() << " ways");
     LOG_STATUS("\t" << idSynchronizer.getNumRelationIdsSynchronized() << " relations");
-    LOG_STATUS(
-      "Synchronized element IDs in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    LOG_STATUS("Synchronized element IDs in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

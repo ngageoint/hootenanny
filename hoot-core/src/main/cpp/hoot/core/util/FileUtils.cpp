@@ -160,8 +160,7 @@ long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());
   //  Count the number of new lines in the file
-  size_t lineCount =
-    std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
+  size_t lineCount = std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
   //  If the file doesn't end in a new line, then add one to the total
   inFile.seekg(-1, std::ios_base::end);
   char last;

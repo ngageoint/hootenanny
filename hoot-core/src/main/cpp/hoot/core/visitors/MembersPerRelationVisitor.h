@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MEMBERS_PER_RELATION_VISITOR_H
 #define MEMBERS_PER_RELATION_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/criterion/RelationCriterion.h>
+#include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {

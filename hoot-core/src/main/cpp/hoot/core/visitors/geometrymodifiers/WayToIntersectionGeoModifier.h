@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYTOINTERSECTIONGEOMODIFIER_H
 #define WAYTOINTERSECTIONGEOMODIFIER_H
@@ -66,8 +66,7 @@ public:
 
 private:
 
-  void processIntersections(
-    OsmMap* pMap, const WayPtr pWay, const std::vector<IntersectionInfo>& inters) const;
+  void processIntersections(OsmMap* pMap, const WayPtr pWay, const std::vector<IntersectionInfo>& inters) const;
   bool assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId,
                            const std::vector<long>& nodesToAttach) const;
 };

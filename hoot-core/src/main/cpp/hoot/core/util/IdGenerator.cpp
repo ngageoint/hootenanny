@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "IdGenerator.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -40,8 +40,7 @@ std::shared_ptr<IdGenerator> IdGenerator::getInstance()
   if (!_theInstance)
   {
     LOG_VARD(ConfigOptions().getIdGenerator());
-    _theInstance =
-      Factory::getInstance().constructObject<IdGenerator>(ConfigOptions().getIdGenerator());
+    _theInstance = Factory::getInstance().constructObject<IdGenerator>(ConfigOptions().getIdGenerator());
   }
   return _theInstance;
 }

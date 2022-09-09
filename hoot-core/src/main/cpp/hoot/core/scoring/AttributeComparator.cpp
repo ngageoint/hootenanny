@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "AttributeComparator.h"
@@ -48,13 +48,13 @@ namespace hoot
 {
 
 AttributeComparator::AttributeComparator(const std::shared_ptr<OsmMap>& map1,
-                                         const std::shared_ptr<OsmMap>& map2) :
-BaseComparator(map1, map2),
-_iterations(10),
-_median(0.0),
-_mean(0.0),
-_ci(-1.0),
-_s(-1.0)
+                                         const std::shared_ptr<OsmMap>& map2)
+  : BaseComparator(map1, map2),
+    _iterations(10),
+    _median(0.0),
+    _mean(0.0),
+    _ci(-1.0),
+    _s(-1.0)
 {
 }
 
@@ -84,12 +84,10 @@ double AttributeComparator::compareMaps()
   for (int i = 0; i < totalIterations && (int)scores.size() < _iterations; i++)
   {
     // generate a random source point
-    _r.x =
-      Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
-        _projectedBounds.MinX;
-    _r.y =
-      Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
-        _projectedBounds.MinY;
+    _r.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+           _projectedBounds.MinX;
+    _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+           _projectedBounds.MinY;
 
     // pick one map as the reference map
     if (Random::instance()->coinToss())
@@ -109,13 +107,12 @@ double AttributeComparator::compareMaps()
 
     Tags t1, t2;
     double bestScore = -1.0;
-    for (size_t j = 0; j < wids1.size(); j++)
+    for (auto ref_way_id : wids1)
     {
-      WayPtr w1 = referenceMap->getWay(wids1[j]);
-
-      for (size_t k = 0; k < wids2.size(); k++)
+      WayPtr w1 = referenceMap->getWay(ref_way_id);
+      for (auto sec_way_id : wids2)
       {
-        WayPtr w2 = otherMap->getWay(wids2[k]);
+        WayPtr w2 = otherMap->getWay(sec_way_id);
         double score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
         if (score > bestScore)
         {
@@ -138,12 +135,10 @@ double AttributeComparator::compareMaps()
     if (scores.size() > 1)
     {
       double v = 0;
-      for (size_t j = 0; j < scores.size(); j++)
-      {
-        v += (scores[j] - _mean) * (scores[j] - _mean);
-      }
-      _s = sqrt(v / (scores.size() - 1));
+      for (auto score : scores)
+        v += (score - _mean) * (score - _mean);
 
+      _s = sqrt(v / (scores.size() - 1));
       _ci = zalpha * _s / sqrt(scores.size());
     }
 

@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementVisitorInputStream.h"
 
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
 
 ElementVisitorInputStream::ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-    const ElementVisitorPtr& visitor) :
-_elementSource(elementSource),
-_visitor(visitor)
+                                                     const ElementVisitorPtr& visitor)
+  : _elementSource(elementSource),
+    _visitor(visitor)
 {
 }
 

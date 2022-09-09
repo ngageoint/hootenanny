@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementIdCriterion.h"
@@ -41,17 +41,15 @@ ElementIdCriterion::ElementIdCriterion(const ElementId& id)
   _ids.insert(id);
 }
 
-ElementIdCriterion::ElementIdCriterion(const std::set<ElementId>& ids) :
-_ids(ids)
+ElementIdCriterion::ElementIdCriterion(const std::set<ElementId>& ids)
+  : _ids(ids)
 {
 }
 
 ElementIdCriterion::ElementIdCriterion(const ElementType& elementType, const std::set<long>& ids)
 {
-  for (std::set<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
-  {
-    _ids.insert(ElementId(elementType, *it));
-  }
+  for (auto id : ids)
+    _ids.insert(ElementId(elementType, id));
 }
 
 void ElementIdCriterion::setConfiguration(const Settings& conf)
@@ -59,10 +57,8 @@ void ElementIdCriterion::setConfiguration(const Settings& conf)
   ConfigOptions configOpts(conf);
   _ids.clear();
   const QStringList idStrs = configOpts.getElementIdCriterionIds();
-  for (int i = 0; i < idStrs.size(); i++)
-  {
-    _ids.insert(ElementId(idStrs.at(i)));
-  }
+  for (const auto& id : qAsConst(idStrs))
+    _ids.insert(ElementId(id));
 }
 
 bool ElementIdCriterion::isSatisfied(const ConstElementPtr& e) const

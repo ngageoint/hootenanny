@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Units.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {

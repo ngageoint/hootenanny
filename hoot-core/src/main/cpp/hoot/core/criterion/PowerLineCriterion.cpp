@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PowerLineCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -42,10 +42,7 @@ bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     const Tags& tags = e->getTags();
     const QString powerVal = tags.get("power").toLower().trimmed();
-    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
-    {
-      return true;
-    }
+    return (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable");
   }
   return false;
 }

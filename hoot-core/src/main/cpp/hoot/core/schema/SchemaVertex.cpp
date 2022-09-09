@@ -54,19 +54,13 @@ void SchemaVertex::addCompoundRule(const CompoundRule& rule)
 
 bool SchemaVertex::isCompoundMatch(const Tags& t) const
 {
-  bool matchOne = false;
-
   // go through each rule
   for (const auto& r : qAsConst(_compoundRules))
   {
     if (isMatch(r, t))
-    {
-      matchOne = true;
-      break;
-    }
+      return true;
   }
-
-  return matchOne;
+  return false;
 }
 
 bool SchemaVertex::isMatch(const CompoundRule& rule, const Tags& t)

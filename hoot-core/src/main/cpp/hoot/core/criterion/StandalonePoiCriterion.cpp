@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "StandalonePoiCriterion.h"
 
@@ -38,8 +38,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, StandalonePoiCriterion)
 
-StandalonePoiCriterion::StandalonePoiCriterion(ConstOsmMapPtr map) :
-_map(map)
+StandalonePoiCriterion::StandalonePoiCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
   _createCrit();
 }
@@ -47,9 +47,7 @@ _map(map)
 void StandalonePoiCriterion::_createCrit()
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map specified.");
-  }
   _crit =
     std::make_shared<ChainCriterion>(
       std::make_shared<PoiCriterion>(),
@@ -65,9 +63,7 @@ void StandalonePoiCriterion::setOsmMap(const OsmMap* map)
 bool StandalonePoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map specified.");
-  }
   return _crit->isSatisfied(e);
 }
 

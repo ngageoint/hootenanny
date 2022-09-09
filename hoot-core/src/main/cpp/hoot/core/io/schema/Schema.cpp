@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "Schema.h"
-
-
 
 namespace hoot
 {
@@ -44,7 +42,7 @@ std::shared_ptr<const Layer> Schema::getLayer(size_t i) const
 
 std::shared_ptr<const Layer> Schema::getLayer(const QString& name) const
 {
-  std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
+  auto lit = _layerNameMap.find(name);
 
   if (lit != _layerNameMap.end())
     return _layers[lit->second];
@@ -54,13 +52,7 @@ std::shared_ptr<const Layer> Schema::getLayer(const QString& name) const
 
 bool Schema::hasLayer(const QString& name) const
 {
-  std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
-
-  if (lit != _layerNameMap.end())
-    return true;
-
-  return false;
-
+  return (_layerNameMap.find(name) != _layerNameMap.end());
 }
 
 }

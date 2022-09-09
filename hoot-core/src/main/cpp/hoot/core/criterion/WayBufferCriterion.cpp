@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayBufferCriterion.h"
@@ -48,27 +48,27 @@ HOOT_FACTORY_REGISTER(ElementCriterion, WayBufferCriterion)
 WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
                                        ConstWayPtr baseWay,
                                        Meters buffer,
-  double matchPercent) :
-  _map(map)
+                                       double matchPercent)
+  : _buffer(buffer + baseWay->getCircularError()),
+    _baseLs(ElementToGeometryConverter(map).convertToLineString(baseWay)),
+    _baseLength(_baseLs->getLength()),
+    _bufferAccuracy(-1),
+    _map(map),
+    _matchPercent(matchPercent)
 {
-  _matchPercent = matchPercent;
-  _buffer = buffer + baseWay->getCircularError();
-  _baseLs = ElementToGeometryConverter(map).convertToLineString(baseWay);
-  _baseLength = _baseLs->getLength();
-  _bufferAccuracy = -1;
 }
 
 WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
                                        std::shared_ptr<LineString> baseLine,
                                        Meters buffer,
-  Meters circularError, double matchPercent) :
-  _map(map)
+                                       Meters circularError, double matchPercent)
+  :  _buffer(buffer + circularError),
+    _baseLs(baseLine),
+    _baseLength(_baseLs->getLength()),
+    _bufferAccuracy(-1),
+    _map(map),
+    _matchPercent(matchPercent)
 {
-  _matchPercent = matchPercent;
-  _buffer = buffer + circularError;
-  _baseLs = baseLine;
-  _baseLength = _baseLs->getLength();
-  _bufferAccuracy = -1;
 }
 
 bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -86,9 +86,7 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
     if (fabs((w->getCircularError() + _buffer) - _bufferAccuracy) > 0.1)
     {
       _bufferAccuracy = w->getCircularError() + _buffer;
-
-      _baseBuffered = _baseLs->buffer(_bufferAccuracy, 3,
-                                      geos::operation::buffer::BufferOp::CAP_ROUND);
+      _baseBuffered = _baseLs->buffer(_bufferAccuracy, 3, geos::operation::buffer::BufferOp::CAP_ROUND);
       _boundsPlus = *_baseBuffered->getEnvelopeInternal();
     }
 
@@ -100,18 +98,13 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
 
       if (ls2IntersectLength / ls2Length >= _matchPercent)
       {
-        std::shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
-                                                   geos::operation::buffer::BufferOp::CAP_ROUND));
+        std::shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3, geos::operation::buffer::BufferOp::CAP_ROUND));
         g = ls2Buffer->intersection(_baseLs.get());
         double ls1IntersectLength = g->getLength();
-
         if (ls1IntersectLength / _baseLength >= _matchPercent)
-        {
           result = false;
-        }
       }
     }
-
     return result;
   }
   catch (const geos::util::TopologyException&)

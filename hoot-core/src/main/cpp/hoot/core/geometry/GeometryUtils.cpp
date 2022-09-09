@@ -76,8 +76,7 @@ Coordinate GeometryUtils::calculateDestination(const Coordinate& start, Degrees 
   Meters R = MEAN_EARTH_RADIUS;
 
   Radians phi2 = asin(sin(phi1) * cos(d / R) + cos(phi1) * sin(d / R) * cos(theta));
-  Radians lambda2 = lambda1 + atan2(sin(theta) * sin(d / R) * cos(phi1),
-                                    cos(d / R) - sin(phi1) * sin(phi2));
+  Radians lambda2 = lambda1 + atan2(sin(theta) * sin(d / R) * cos(phi1), cos(d / R) - sin(phi1) * sin(phi2));
 
   Coordinate result;
   result.x = toDegrees(lambda2);
@@ -136,21 +135,21 @@ std::shared_ptr<OGREnvelope> GeometryUtils::toOGREnvelope(const geos::geom::Enve
 QString GeometryUtils::toString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
-  return QString("%1,%2,%3,%4").
-      arg(e.getMinX(), 0, 'f', precision).
-      arg(e.getMaxX(), 0, 'f', precision).
-      arg(e.getMinY(), 0, 'f', precision).
-      arg(e.getMaxY(), 0, 'f', precision);
+  return QString("%1,%2,%3,%4")
+          .arg(e.getMinX(), 0, 'f', precision)
+          .arg(e.getMaxX(), 0, 'f', precision)
+          .arg(e.getMinY(), 0, 'f', precision)
+          .arg(e.getMaxY(), 0, 'f', precision);
 }
 
 QString GeometryUtils::toConfigString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
-  return QString("%1,%2,%3,%4").
-      arg(e.getMinX(), 0, 'f', precision).
-      arg(e.getMinY(), 0, 'f', precision).
-      arg(e.getMaxX(), 0, 'f', precision).
-      arg(e.getMaxY(), 0, 'f', precision);
+  return QString("%1,%2,%3,%4")
+          .arg(e.getMinX(), 0, 'f', precision)
+          .arg(e.getMinY(), 0, 'f', precision)
+          .arg(e.getMaxX(), 0, 'f', precision)
+          .arg(e.getMaxY(), 0, 'f', precision);
 }
 
 bool GeometryUtils::isEnvelopeString(const QString& str)
@@ -378,8 +377,7 @@ Geometry* GeometryUtils::validateGeometryCollection(const GeometryCollection *gc
 Geometry* GeometryUtils::validateLineString(const LineString* ls)
 {
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
-  std::shared_ptr<Point> p(
-    GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
   return ls->Union(p.get()).release();
 }
 
@@ -407,8 +405,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   else
   {
     const LineString* oldShell = p->getExteriorRing();
-    std::shared_ptr<LinearRing> oldLinearRing(
-      GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
+    std::shared_ptr<LinearRing> oldLinearRing(GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<LinearRing*>* holes = new vector<LinearRing*>();
     holes->reserve(p->getNumInteriorRing());
@@ -420,7 +417,6 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
       if (ls->getGeometryTypeId() == GEOS_LINEARRING)
       {
         const LinearRing* lr = dynamic_cast<const LinearRing*>(ls);
-
         // keep any holes with three or more points.
         if (lr->getNumPoints() >= 3)
           holes->push_back(validateLinearRing(lr));
@@ -431,11 +427,9 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
         throw HootException("Interior ring is not a linear ring...");
       }
     }
-
     // GeometryFactory takes ownership of these input parameters.
     result = GeometryFactory::getDefaultInstance()->createPolygon(shell, holes);
   }
-
   return result;
 }
 
@@ -452,8 +446,7 @@ OsmMapPtr GeometryUtils::createMapFromBoundsCollection(const QMap<int, geos::geo
   for (auto boundsItr = boundsCollection.begin(); boundsItr != boundsCollection.end(); ++boundsItr)
   {
     const ElementId boundaryWayId = createBoundsInMap(boundariesMap, boundsItr.value());
-    boundariesMap->getWay(boundaryWayId.getId())->getTags()["id"] =
-      QString::number(boundsItr.key());
+    boundariesMap->getWay(boundaryWayId.getId())->getTags()["id"] = QString::number(boundsItr.key());
   }
   return boundariesMap;
 }

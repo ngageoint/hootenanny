@@ -389,11 +389,8 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
       for (const auto& entry : entries)
       {
         const QString role = entry.getRole();
-        if (entry.getElementId().getType() == ElementType::Way &&
-            (role == MetadataTags::RoleInner() || role == MetadataTags::RoleOuter()))
-        {
+        if (entry.getElementId().getType() == ElementType::Way && (role == MetadataTags::RoleInner() || role == MetadataTags::RoleOuter()))
           relationMemberIdsToRemove.insert(entry.getElementId());
-        }
       }
     }
   }
@@ -596,8 +593,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
       // If the building was originally pulled out of a relation, remove the temp role tag.
       if (constituentBuilding->getTags().contains(MetadataTags::HootMultiPolyRole()))
       {
-        parentRelation->addElement(
-          constituentBuilding->getTags()[MetadataTags::HootMultiPolyRole()], constituentBuilding);
+        parentRelation->addElement(constituentBuilding->getTags()[MetadataTags::HootMultiPolyRole()], constituentBuilding);
         constituentBuilding->getTags().remove(MetadataTags::HootMultiPolyRole());
       }
       // Otherwise, it was a matched building to be grouped together with an outer role (think this
@@ -606,8 +602,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
         parentRelation->addElement(MetadataTags::RoleOuter(), constituentBuilding);
     }
     relationTags =
-      tagMerger->mergeTags(
-        parentRelation->getTags(), constituentBuilding->getTags(), ElementType::Relation);
+      tagMerger->mergeTags(parentRelation->getTags(), constituentBuilding->getTags(), ElementType::Relation);
     parentRelation->setTags(relationTags);
   }
   if (!parentRelation->getTags().contains(MetadataTags::Building()))
@@ -616,8 +611,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(const OsmMap
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
-  const bool isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  const bool isAttributeConflate = ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Doing this for multipoly relations in Attribute Conflation only for the time being.
   const bool suppressBuildingTagOnConstituents =
     // relatively loose way to identify AC; also used in ConflateExecutor
@@ -685,8 +679,7 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
   UniqueElementIdVisitor idVis;
   map->visitRo(idVis);
   const QList<ElementId> idVisList =
-    QList<ElementId>::fromStdList(
-      std::list<ElementId>(idVis.getElementSet().begin(), idVis.getElementSet().end()));
+    QList<ElementId>::fromStdList(std::list<ElementId>(idVis.getElementSet().begin(), idVis.getElementSet().end()));
   ElementPtr firstElement = map->getElement(idVisList.at(0));
   ElementPtr secondElement = map->getElement(idVisList.at(1));
   // not handling invalid statuses here like is done in PoiPolygonMerger::mergePoiAndPolygon b/c

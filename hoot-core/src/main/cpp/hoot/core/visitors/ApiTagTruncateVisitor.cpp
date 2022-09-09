@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ApiTagTruncateVisitor.h"
 
 //  Hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -73,13 +73,9 @@ bool ApiTagTruncateVisitor::_truncateTags(Tags& tags) const
 {
   bool tagsAffected = false;
   //  Iterate all tags looking for ones that are too long or the special cases
-  for (Tags::iterator it = tags.begin(); it != tags.end(); ++it)
+  for (auto it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString& key = it.key();
-    const QString& value = it.value();
-
-    QString newValue = truncateTag(key, value);
-
+    QString newValue = truncateTag(it.key(), it.value());
     if (newValue != "")
     {
       it.value() = newValue;

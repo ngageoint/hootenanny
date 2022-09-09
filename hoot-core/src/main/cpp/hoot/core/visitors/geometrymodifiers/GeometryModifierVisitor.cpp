@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryModifierVisitor.h"
@@ -39,16 +39,14 @@ HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
 
 void GeometryModifierVisitor::visit(const ElementPtr& pElement)
 {
-  if (_actionDesc.pAction == nullptr) return;
+  if (_actionDesc.pAction == nullptr)
+    return;
 
   _numProcessed++;
 
   // apply _actionDesc filter
-  if (_actionDesc.filter.isSatisfied(pElement) &&
-      _actionDesc.pAction->processElement(pElement, _pMap))
-  {
+  if (_actionDesc.filter.isSatisfied(pElement) && _actionDesc.pAction->processElement(pElement, _pMap))
     _numAffected++;
-  }
 }
 
 }

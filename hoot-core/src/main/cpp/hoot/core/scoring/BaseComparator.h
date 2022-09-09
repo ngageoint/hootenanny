@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef BASE_COMPARATOR_H
@@ -81,8 +81,7 @@ protected:
 
   double _calculateError(const cv::Mat& image1, const cv::Mat& image2) const;
 
-  geos::geom::Coordinate _findNearestPointOnFeature(
-    const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c) const;
+  geos::geom::Coordinate _findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c) const;
 
   void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true) const;
 

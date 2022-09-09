@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PositiveIdGenerator.h"
@@ -51,9 +51,9 @@ IdGeneratorPtr PositiveIdGenerator::clone() const
 
 void PositiveIdGenerator::reset()
 {
-  _wayId = (long)ConfigOptions().getIdGeneratorWayStart();
-  _nodeId = (long)ConfigOptions().getIdGeneratorNodeStart();
-  _relationId = (long)ConfigOptions().getIdGeneratorRelationStart();
+  _wayId = static_cast<long>(ConfigOptions().getIdGeneratorWayStart());
+  _nodeId = static_cast<long>(ConfigOptions().getIdGeneratorNodeStart());
+  _relationId = static_cast<long>(ConfigOptions().getIdGeneratorRelationStart());
 }
 
 }

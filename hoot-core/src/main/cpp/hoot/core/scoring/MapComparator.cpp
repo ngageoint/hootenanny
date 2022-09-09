@@ -339,8 +339,7 @@ void MapComparator::_printIdDiff(const std::shared_ptr<OsmMap>& map1, const std:
     idsIn2AndNotIn1Limited = idsIn2AndNotIn1;
   }
 
-  const bool printFullElements =
-    ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
+  const bool printFullElements = ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
   if (!idsIn1AndNotIn2Limited.empty())
   {
     LOG_WARN(

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef COMMON_ELEMENT_ID_FINDER_H
@@ -61,8 +61,7 @@ public:
    * @param map2 the second map to examine
    * @return a collection of element IDs
    */
-  static QSet<ElementId> findElementIdsInFirstAndNotSecond(
-    const OsmMapPtr& map1, const OsmMapPtr& map2);
+  static QSet<ElementId> findElementIdsInFirstAndNotSecond(const OsmMapPtr& map1, const OsmMapPtr& map2);
 
   /**
    * Finds a collection of element IDs in that are in the second map but not in the first map
@@ -71,13 +70,11 @@ public:
    * @param map2 the second map to examine
    * @return a collection of element IDs
    */
-  static QSet<ElementId> findElementIdsInSecondAndNotFirst(
-    const OsmMapPtr& map1, const OsmMapPtr& map2);
+  static QSet<ElementId> findElementIdsInSecondAndNotFirst(const OsmMapPtr& map1, const OsmMapPtr& map2);
 
 private:
 
-  static QSet<ElementId> _findElementIdDiff(
-    const OsmMapPtr& map1, const OsmMapPtr& map2, const bool keepIdsFromMap1);
+  static QSet<ElementId> _findElementIdDiff(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool keepIdsFromMap1);
 };
 
 }

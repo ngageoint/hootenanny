@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -209,8 +209,7 @@ private:
    * 
    * This will advance the results iterator *before* reading each element.
    */
-  std::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-                                              const ElementType& elementType, OsmMap& map);
+  std::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType, OsmMap& map);
 
   /*
    * the current element type being returned by the partial query; order is: node, way, and then

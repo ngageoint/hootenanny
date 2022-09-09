@@ -96,21 +96,13 @@ void ConflateExecutor::_initConfig(const QString& output)
 
   LOG_VARD(ConfigOptions().getGeometryLinearMergerDefault());
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
-  _isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  _isAttributeConflate = ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
-  _isAverageConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  _isAverageConflate = ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (_isAttributeConflate && _isDiffConflate) // This is a little kludgy but seems useful for now.
-  {
-    throw IllegalArgumentException(
-      "Differential and Attribute Conflation configurations may not both be used at the same time.");
-  }
+    throw IllegalArgumentException("Differential and Attribute Conflation configurations may not both be used at the same time.");
   else if (_isAttributeConflate && _isAverageConflate)
-  {
-    throw IllegalArgumentException(
-      "Attribute and Average Conflation configurations may not both be used at the same time.");
-  }
+    throw IllegalArgumentException("Attribute and Average Conflation configurations may not both be used at the same time.");
   if (_isAttributeConflate)
     _updateConfigOptionsForAttributeConflation();
 
@@ -196,8 +188,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   // be getting the best conflate results in case types could be added to the input.
   if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
   {
-    msg = "No elements in the input map have a recognizable schema type. Generic conflation "
-          "routines will be used.";
+    msg = "No elements in the input map have a recognizable schema type. Generic conflation routines will be used.";
     if (ConfigOptions().getLogWarningsForCompletelyUntypedInputMaps())
     {
       LOG_WARN(msg);
@@ -336,16 +327,14 @@ void ConflateExecutor::_load(const QString& input1, const QString& input2,
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
       "Loading secondary map: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
-    IoUtils::loadMap(
-      map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
+    IoUtils::loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     _currentTask++;
 
     // read input 1
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
       "Loading reference map: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
-    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(),
-                     Status::Unknown1);
+    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
      _currentTask++;
   }
   else
@@ -472,8 +461,7 @@ void ConflateExecutor::_writeOutput(const OsmMapPtr& map, const QString& output,
       if (!_outputChangesetStatsFile.isEmpty())
       {
         QFileInfo changesetStatsFileInfo(_outputChangesetStatsFile);
-        statsFormat.setFormat(
-          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
+        statsFormat.setFormat(ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
       }
       else
         statsFormat.setFormat(ChangesetStatsFormat::TextFormat);
@@ -484,8 +472,7 @@ void ConflateExecutor::_writeOutput(const OsmMapPtr& map, const QString& output,
       _diffConflator.addChangesToMap(map, _pTagChanges);
       _currentTask++;
     }
-    _diffConflator.writeChangeset(map, output, _diffConflateSeparateOutput,
-                                  statsFormat, _osmApiDbUrl);
+    _diffConflator.writeChangeset(map, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
   }
   else
   {
@@ -527,14 +514,14 @@ void ConflateExecutor::_writeStats(const OsmMapPtr& map, const CalculateStatsOp&
   if (_outputStatsFile.isEmpty())
   {
     QString statsMsg = MapStatsWriter().statsToString(_allStats, "\t");
-    std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
-      statsMsg << std::endl;
+    std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n"
+              << statsMsg << std::endl;
   }
   else
   {
     MapStatsWriter().writeStatsToJson(_allStats, _outputStatsFile);
-    std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
-      _outputStatsFile << std::endl;
+    std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: "
+              << _outputStatsFile << std::endl;
   }
 }
 
@@ -676,13 +663,11 @@ void ConflateExecutor::_setRubberSheetElementCriteria() const
   QStringList criteriaClassNamesWithChildren;
   for (const auto& criterionClassName : qAsConst(criteriaClassNames))
   {
-    ElementCriterionPtr crit =
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
+    ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
 
     // Older clients may also pass in the way node crits here, but we don't require them anymore. We
     // auto add them in a subsequent step.
-    std::shared_ptr<WayNodeCriterion> wayNodeCrit =
-      std::dynamic_pointer_cast<WayNodeCriterion>(crit);
+    std::shared_ptr<WayNodeCriterion> wayNodeCrit = std::dynamic_pointer_cast<WayNodeCriterion>(crit);
     if (wayNodeCrit)
       continue;
 

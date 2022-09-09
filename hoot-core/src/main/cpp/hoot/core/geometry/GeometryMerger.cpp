@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryMerger.h"
@@ -34,12 +34,7 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/StringUtils.h>
-
-//  Qt
-
-
 
 //  Standard
 #include <thread>

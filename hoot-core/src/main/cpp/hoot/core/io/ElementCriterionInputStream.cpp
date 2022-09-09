@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementCriterionInputStream.h"
@@ -34,10 +34,9 @@
 namespace hoot
 {
 
-ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
-  const ElementCriterionPtr& criterion) :
-_elementSource(elementSource),
-_criterion(criterion)
+ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion)
+  : _elementSource(elementSource),
+    _criterion(criterion)
 {
 }
 
@@ -52,9 +51,7 @@ ElementPtr ElementCriterionInputStream::readNextElement()
   {
     ElementPtr e = _elementSource->readNextElement();
     if (_criterion->isSatisfied(e))
-    {
       return e;
-    }
   } while (hasMoreElements());
 
   return ElementPtr();

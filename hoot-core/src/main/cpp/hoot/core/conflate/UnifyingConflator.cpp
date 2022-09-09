@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UnifyingConflator.h"
 
 // hoot
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -38,13 +38,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
-UnifyingConflator::UnifyingConflator() :
-AbstractConflator()
+UnifyingConflator::UnifyingConflator()
+  : AbstractConflator()
 {
 }
 
-UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
-AbstractConflator::AbstractConflator(matchThreshold)
+UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold)
+  : AbstractConflator::AbstractConflator(matchThreshold)
 {
 }
 
@@ -60,11 +60,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _updateProgress(_currentStep - 1, "Matching features...");
   _createMatches();
+  // Add score tags to all matches that have some score component.
   if (ConfigOptions().getWriterIncludeConflateScoreTags())
-  {
-    // Add score tags to all matches that have some score component.
     _addConflateScoreTags();
-  }
+
   _currentStep++;
 
   if (!ConfigOptions().getConflateMatchOnly())
@@ -89,13 +88,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 unsigned int UnifyingConflator::getNumSteps() const
 {
   if (!ConfigOptions().getConflateMatchOnly())
-  {
     return 3;
-  }
   else
-  {
     return 1;
-  }
 }
 
 }

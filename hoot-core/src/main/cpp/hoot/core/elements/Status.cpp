@@ -159,5 +159,4 @@ Status::Type Status::fromString(QString statusString)
   }
 }
 
-
 }

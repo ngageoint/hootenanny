@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SortedElementsValidator.h"
@@ -30,8 +30,8 @@
 // Hoot
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/IsSortedVisitor.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/visitors/IsSortedVisitor.h>
 
 namespace hoot
 {
@@ -40,23 +40,18 @@ bool SortedElementsValidator::validate(const QString& input)
 {
   QFileInfo fileInfo(input);
   if (!fileInfo.exists())
-  {
     throw IllegalArgumentException("Specified input: " + input + " does not exist.");
-  }
 
   LOG_STATUS("Determining if ..." << FileUtils::toLogFormat(input, 25) << " is sorted...");
 
   bool result = true;
 
   if (OsmPbfReader().isSupported(input))
-  {
     result = OsmPbfReader().isSorted(input);
-  }
   else
   {
     std::shared_ptr<PartialOsmMapReader> reader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::createReader(input));
+      std::dynamic_pointer_cast<PartialOsmMapReader>(OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
     reader->initializePartial();
@@ -76,11 +71,9 @@ bool SortedElementsValidator::validate(const QString& input)
         }
       }
     }
-
     reader->finalizePartial();
     reader->close();
   }
-
   return result;
 }
 

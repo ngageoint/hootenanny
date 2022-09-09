@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCHTHRESHOLD_H
 #define MATCHTHRESHOLD_H
@@ -54,9 +54,8 @@ public:
    * generally want to honor that range for thresholds. In some instances, though, we may not want
    * to.
    */
-  MatchThreshold(
-    double matchThreshold = 0.5, double missThreshold = 0.5, double reviewThreshold = 1.0,
-    bool validateRange = true);
+  MatchThreshold(double matchThreshold = 0.5, double missThreshold = 0.5, double reviewThreshold = 1.0,
+                 bool validateRange = true);
 
   double getMatchThreshold() const { return _matchThreshold; }
   double getMissThreshold() const { return _missThreshold; }

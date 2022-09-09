@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTagRulesSqliteWriter.h"
 
 // hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QSqlError>
@@ -38,10 +38,10 @@
 namespace hoot
 {
 
-ImplicitTagRulesSqliteWriter::ImplicitTagRulesSqliteWriter() :
-_wordsToWordIds(ConfigOptions().getImplicitTaggingMaxCacheSize()),
-_tagsToTagIds(ConfigOptions().getImplicitTaggingMaxCacheSize()),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+ImplicitTagRulesSqliteWriter::ImplicitTagRulesSqliteWriter()
+  : _wordsToWordIds(ConfigOptions().getImplicitTaggingMaxCacheSize()),
+    _tagsToTagIds(ConfigOptions().getImplicitTaggingMaxCacheSize()),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -59,9 +59,7 @@ void ImplicitTagRulesSqliteWriter::open(const QString& outputUrl)
 {
   QFile outputFile(outputUrl);
   if (outputFile.exists() && !outputFile.remove())
-  {
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(outputUrl));
-  }
   outputFile.open(QIODevice::WriteOnly);
 
   if (!QSqlDatabase::contains(outputUrl))
@@ -69,19 +67,13 @@ void ImplicitTagRulesSqliteWriter::open(const QString& outputUrl)
     _db = QSqlDatabase::addDatabase("QSQLITE", outputUrl);
     _db.setDatabaseName(outputUrl);
     if (!_db.open())
-    {
       throw HootException("Error opening DB. " + outputUrl);
-    }
   }
   else
-  {
     _db = QSqlDatabase::database(outputUrl);
-  }
 
   if (!_db.isOpen())
-  {
     throw HootException("Error DB is not open. " + outputUrl);
-  }
   LOG_DEBUG("Opened: " << outputUrl << ".");
 
   _createTables();
@@ -91,9 +83,7 @@ void ImplicitTagRulesSqliteWriter::open(const QString& outputUrl)
 void ImplicitTagRulesSqliteWriter::close()
 {
   if (_db.open())
-  {
     _db.close();
-  }
 }
 
 void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
@@ -107,9 +97,7 @@ void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
   //The input is assumed sorted by word, then by kvp.
   QFile inputFile(inputUrl);
   if (!inputFile.open(QIODevice::ReadOnly))
-  {
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
-  }
 
   long ruleWordPartCtr = 0;
   while (!inputFile.atEnd())
@@ -167,9 +155,8 @@ void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
     }
     else
     {
-      //This covers a strange situation encountered.  See comments in _insertWord.
-      LOG_WARN(
-        "Skipping inserting rule word part for word: " << word << " and tag: " << kvp << "...");
+      //  This covers a strange situation encountered.  See comments in _insertWord.
+      LOG_WARN("Skipping inserting rule word part for word: " << word << " and tag: " << kvp << "...");
     }
 
     if (ruleWordPartCtr % _statusUpdateInterval == 0)
@@ -203,55 +190,38 @@ void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
 
 void ImplicitTagRulesSqliteWriter::_createTables() const
 {
-  DbUtils::execNoPrepare(
-    _db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT NOT NULL UNIQUE)");
-  DbUtils::execNoPrepare(
-    _db, "CREATE TABLE tags (id INTEGER PRIMARY KEY, kvp TEXT NOT NULL UNIQUE)");
-  DbUtils::execNoPrepare(
-    _db,
-    QString("CREATE TABLE rules (id INTEGER PRIMARY KEY, word_id INTEGER NOT NULL, ") +
-    QString("tag_id INTEGER NOT NULL, tag_count INTEGER NOT NULL, FOREIGN KEY(word_id) ") +
-    QString("REFERENCES words(id), FOREIGN KEY(tag_id) REFERENCES tags(id))"));
+  DbUtils::execNoPrepare(_db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT NOT NULL UNIQUE)");
+  DbUtils::execNoPrepare(_db, "CREATE TABLE tags (id INTEGER PRIMARY KEY, kvp TEXT NOT NULL UNIQUE)");
+  DbUtils::execNoPrepare(_db,
+    QString("CREATE TABLE rules (id INTEGER PRIMARY KEY, word_id INTEGER NOT NULL, "
+            "tag_id INTEGER NOT NULL, tag_count INTEGER NOT NULL, FOREIGN KEY(word_id) "
+            "REFERENCES words(id), FOREIGN KEY(tag_id) REFERENCES tags(id))"));
 }
 
 void ImplicitTagRulesSqliteWriter::_prepareQueries()
 {
   _insertWordQuery = QSqlQuery(_db);
   if (!_insertWordQuery.prepare("INSERT INTO words (word) VALUES(:word)"))
-  {
-    throw HootException(
-      QString("Error preparing _insertWordQuery: %1").arg(_insertWordQuery.lastError().text()));
-  }
+    throw HootException(QString("Error preparing _insertWordQuery: %1").arg(_insertWordQuery.lastError().text()));
 
   _insertTagQuery = QSqlQuery(_db);
   if (!_insertTagQuery.prepare("INSERT INTO tags (kvp) VALUES(:kvp)"))
-  {
-    throw HootException(
-      QString("Error preparing _insertTagQuery: %1").arg(_insertTagQuery.lastError().text()));
-  }
+    throw HootException(QString("Error preparing _insertTagQuery: %1").arg(_insertTagQuery.lastError().text()));
 
   _insertRuleQuery = QSqlQuery(_db);
   if (!_insertRuleQuery.prepare(
-        QString("INSERT INTO rules (word_id, tag_id, tag_count) ") +
-        QString("VALUES(:wordId, :tagId, :tagCount)")))
+        QString("INSERT INTO rules (word_id, tag_id, tag_count) VALUES(:wordId, :tagId, :tagCount)")))
   {
-    throw HootException(
-      QString("Error preparing _insertRuleQuery: %1").arg(_insertRuleQuery.lastError().text()));
+    throw HootException(QString("Error preparing _insertRuleQuery: %1").arg(_insertRuleQuery.lastError().text()));
   }
 
   _getLastWordIdQuery = QSqlQuery(_db);
   if (!_getLastWordIdQuery.prepare("SELECT last_insert_rowid() FROM words"))
-  {
-    throw HootException(
-      QString("Error preparing _getLastWordIdQuery: %1").arg(_getLastWordIdQuery.lastError().text()));
-  }
+    throw HootException(QString("Error preparing _getLastWordIdQuery: %1").arg(_getLastWordIdQuery.lastError().text()));
 
   _getLastTagIdQuery = QSqlQuery(_db);
   if (!_getLastTagIdQuery.prepare("SELECT last_insert_rowid() FROM tags"))
-  {
-    throw HootException(
-      QString("Error preparing _getLastTagIdQuery: %1").arg(_getLastTagIdQuery.lastError().text()));
-  }
+    throw HootException(QString("Error preparing _getLastTagIdQuery: %1").arg(_getLastTagIdQuery.lastError().text()));
 }
 
 long ImplicitTagRulesSqliteWriter::_insertTag(const QString& kvp)
@@ -261,16 +231,13 @@ long ImplicitTagRulesSqliteWriter::_insertTag(const QString& kvp)
   _insertTagQuery.bindValue(":kvp", kvp);
   if (!_insertTagQuery.exec())
   {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagQuery.executedQuery()).
-        arg(_insertTagQuery.lastError().text());
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagQuery.executedQuery()).arg(_insertTagQuery.lastError().text());
     throw HootException(err);
   }
 
   if (!_getLastTagIdQuery.exec())
   {
-    QString err =
-      QString("Error executing query: %1 (%2)").arg(_getLastTagIdQuery.executedQuery()).
-        arg(_getLastTagIdQuery.lastError().text());
+    QString err = QString("Error executing query: %1 (%2)").arg(_getLastTagIdQuery.executedQuery()).arg(_getLastTagIdQuery.lastError().text());
     throw HootException(err);
   }
 
@@ -278,15 +245,9 @@ long ImplicitTagRulesSqliteWriter::_insertTag(const QString& kvp)
   long id = -1;
   //get the id of the tag just inserted
   if (_getLastTagIdQuery.next())
-  {
     id = _getLastTagIdQuery.value(0).toLongLong(&ok);
-  }
   if (!ok || id == -1)
-  {
-    throw HootException(
-      "Error retrieving new ID " + _getLastTagIdQuery.lastError().text() + " Query: " +
-      _getLastTagIdQuery.executedQuery());
-  }
+    throw HootException("Error retrieving new ID " + _getLastTagIdQuery.lastError().text() + " Query: " + _getLastTagIdQuery.executedQuery());
 
   LOG_TRACE("Tag: " << kvp << " inserted with ID: " << id);
   return id;
@@ -304,8 +265,7 @@ void ImplicitTagRulesSqliteWriter::_insertRule(const long wordId, const long tag
   _insertRuleQuery.bindValue(":tagCount", qlonglong(tagOccurrenceCount));
   if (!_insertRuleQuery.exec())
   {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).
-        arg(_insertRuleQuery.lastError().text());
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).arg(_insertRuleQuery.lastError().text());
     throw HootException(err);
   }
 }
@@ -341,15 +301,9 @@ long ImplicitTagRulesSqliteWriter::_insertWord(const QString& word)
   long id = -1;
   //get the id of the word just inserted
   if (_getLastWordIdQuery.next())
-  {
     id = _getLastWordIdQuery.value(0).toLongLong(&ok);
-  }
   if (!ok || id == -1)
-  {
-    throw HootException(
-      "Error retrieving new ID " + _getLastWordIdQuery.lastError().text() + " Query: " +
-      _getLastWordIdQuery.executedQuery());
-  }
+    throw HootException("Error retrieving new ID " + _getLastWordIdQuery.lastError().text() + " Query: " + _getLastWordIdQuery.executedQuery());
 
   LOG_TRACE("Word: " << word << " inserted with ID: " << id);
   return id;

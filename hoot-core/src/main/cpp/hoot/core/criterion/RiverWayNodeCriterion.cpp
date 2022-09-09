@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RiverWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/RiverCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RiverWayNodeCriterion)
 
-RiverWayNodeCriterion::RiverWayNodeCriterion() :
-WayNodeCriterion()
+RiverWayNodeCriterion::RiverWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<RiverCriterion>();
 }
 
-RiverWayNodeCriterion::RiverWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+RiverWayNodeCriterion::RiverWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<RiverCriterion>();
 }

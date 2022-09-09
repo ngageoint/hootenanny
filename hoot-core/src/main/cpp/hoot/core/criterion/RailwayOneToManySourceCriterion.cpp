@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RailwayOneToManySourceCriterion.h"
 
@@ -47,8 +47,7 @@ bool RailwayOneToManySourceCriterion::isSatisfied(const ConstElementPtr& e) cons
   crits.append(typeCrit);
   ElementCriterionPtr statusCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
   crits.append(statusCrit);
-  ElementCriterionPtr tagCrit =
-    std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes");
+  ElementCriterionPtr tagCrit = std::make_shared<TagCriterion>(MetadataTags::HootRailwayOneToManyMatchSecondary(), "yes");
   crits.append(tagCrit);
   return CriterionUtils::combineCriterion(crits)->isSatisfied(e);
 }
