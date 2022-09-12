@@ -132,7 +132,7 @@ Vagrant.configure(2) do |config|
         end
       end
 
-      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.2xlarge')
+      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.4xlarge')
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
 
       aws.tags = {
