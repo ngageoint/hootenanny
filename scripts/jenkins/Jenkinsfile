@@ -210,19 +210,6 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
             }
         }
-// NOTE: UI 1 tests are randomly failing, push them to the last to get through UI2x and Sonar before randomly failing
-//        stage("UI Hoot 1 Tests") {
-//            when { expression { return params.UI_hoot1_tests } }
-//            steps {
-//                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
-//            }
-//        }
-        stage("UI Hoot 2 Tests") {
-            when { expression { return params.UI_hoot2_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
-            }
-        }
         stage("Sonar") {
             when {
                 anyOf {
@@ -259,6 +246,12 @@ pipeline {
             when { expression { return params.UI_hoot1_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+            }
+        }
+        stage("UI Hoot 2 Tests") {
+            when { expression { return params.UI_hoot2_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
             }
         }
     }
