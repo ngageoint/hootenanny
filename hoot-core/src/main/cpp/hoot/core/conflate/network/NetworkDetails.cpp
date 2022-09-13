@@ -70,11 +70,9 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstO
 void NetworkDetails::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _sublineMatcher =
-    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
+  _sublineMatcher = SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _classifier =
-    Factory::getInstance().constructObject<HighwayClassifier>(
-      opts.getConflateMatchHighwayClassifier());
+    Factory::getInstance().constructObject<HighwayClassifier>(opts.getConflateMatchHighwayClassifier());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
@@ -88,8 +86,7 @@ Radians NetworkDetails::calculateHeading(ConstEdgeLocationPtr el) const
   return WayHeading::calculateHeading(wl);
 }
 
-Radians NetworkDetails::calculateHeadingAtVertex(
-  ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const
+Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const
 {  
   // Is it possible if e is a relation and has one way member, then we should use that for the way
   // here? Haven't seen evidence of that yet, so not implementing it.
@@ -533,18 +530,13 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     // much noise.
     LOG_VART(e1->isPartial());
     LOG_VART(e2->isPartial());
-    if (ws1->calculateLength() < sr && ws2->calculateLength() < sr &&
-        (e1->isPartial() || e2->isPartial()))
-    {
+    if (ws1->calculateLength() < sr && ws2->calculateLength() < sr && (e1->isPartial() || e2->isPartial()))
       result = 0.0;
-    }
     else
     {
-      RelationPtr r1 =
-        std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
+      RelationPtr r1 = std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
       r1->setType(MetadataTags::RelationMultilineString());
-      RelationPtr r2 =
-        std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
+      RelationPtr r2 = std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
       r2->setType(MetadataTags::RelationMultilineString());
 
       // create a set of all the way IDs

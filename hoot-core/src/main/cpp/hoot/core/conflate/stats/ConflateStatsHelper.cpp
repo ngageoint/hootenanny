@@ -55,16 +55,13 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long ins
   if (insertIndex > statsToUpdate.size())
     throw HootException("Invalid stats list index.");
 
-  const double numInputFeaturesTotal =
-    getSingleStat("Total Features", _input1Stats) +
-    getSingleStat("Total Features", _input2Stats);
+  const double numInputFeaturesTotal = getSingleStat("Total Features", _input1Stats) + getSingleStat("Total Features", _input2Stats);
 
   if (numInputFeaturesTotal > 0.0)
   {
     const double numTotalFeaturesInOutput = getSingleStat("Total Features", _outputStats);
     LOG_VART(numTotalFeaturesInOutput);
-    const double differenceBetweenTotalInputFeaturesAndTotalOutputFeatures =
-      numTotalFeaturesInOutput - numInputFeaturesTotal;
+    const double differenceBetweenTotalInputFeaturesAndTotalOutputFeatures = numTotalFeaturesInOutput - numInputFeaturesTotal;
     statsToUpdate.insert(
       static_cast<int>(insertIndex++),
       SingleStat(
@@ -96,11 +93,9 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
   // The same thing applies to the size related stats that follow them.
 
   const double numMap1Features = getSingleStat("Total Features", _input1Stats);
-  const double numMap1UnconflatedFeatures =
-    getSingleStat("Total Unmatched Features From Map 1", _outputStats);
+  const double numMap1UnconflatedFeatures = getSingleStat("Total Unmatched Features From Map 1", _outputStats);
   const double numMap2Features = getSingleStat("Total Features", _input2Stats);
-  const double numMap2UnconflatedFeatures =
-    getSingleStat("Total Unmatched Features From Map 2", _outputStats);
+  const double numMap2UnconflatedFeatures = getSingleStat("Total Unmatched Features From Map 2", _outputStats);
   const double numConflatedFeatures = getSingleStat("Total Conflated Features", _outputStats);
   statsToUpdate.insert(
     static_cast<int>(insertIndex++),
@@ -134,18 +129,13 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
         hasSingleStat("Meters of Unmatched " + featureType + "s From Map 1", _outputStats) &&
         hasSingleStat("Meters of Unmatched " + featureType + "s From Map 2", _outputStats))
     {
-      const double map1TotalLength =
-        getSingleStat("Total Meters of " + featureType + "s", _input1Stats);
-      const double map2TotalLength =
-        getSingleStat("Total Meters of " + featureType + "s", _input2Stats);
+      const double map1TotalLength = getSingleStat("Total Meters of " + featureType + "s", _input1Stats);
+      const double map2TotalLength = getSingleStat("Total Meters of " + featureType + "s", _input2Stats);
       if (map1TotalLength > 0.0 && map2TotalLength > 0.0)
       {
-        const double map1LengthUnconflated =
-          getSingleStat("Meters of Unmatched " + featureType + "s From Map 1", _outputStats);
-        const double map2LengthUnconflated =
-          getSingleStat("Meters of Unmatched " + featureType + "s From Map 2", _outputStats);
-        const double conflatedLength =
-          getSingleStat("Meters of Conflated " + featureType + "s", _outputStats);
+        const double map1LengthUnconflated = getSingleStat("Meters of Unmatched " + featureType + "s From Map 1", _outputStats);
+        const double map2LengthUnconflated = getSingleStat("Meters of Unmatched " + featureType + "s From Map 2", _outputStats);
+        const double conflatedLength = getSingleStat("Meters of Conflated " + featureType + "s", _outputStats);
         statsToUpdate.insert(
           static_cast<int>(insertIndex++),
           SingleStat(
@@ -167,23 +157,18 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
       }
     }
     else if (hasSingleStat("Total Square Meters of " + featureType + "s", _input1Stats) &&
-        hasSingleStat("Total Square Meters of " + featureType + "s", _input2Stats) &&
-        hasSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats) &&
-        hasSingleStat("Square Meters of Unmatched " + featureType + "s From Map 1", _outputStats) &&
-        hasSingleStat("Square Meters of Unmatched " + featureType + "s From Map 2", _outputStats))
+             hasSingleStat("Total Square Meters of " + featureType + "s", _input2Stats) &&
+             hasSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats) &&
+             hasSingleStat("Square Meters of Unmatched " + featureType + "s From Map 1", _outputStats) &&
+             hasSingleStat("Square Meters of Unmatched " + featureType + "s From Map 2", _outputStats))
     {
-      const double map1TotalArea =
-        getSingleStat("Total Square Meters of " + featureType + "s", _input1Stats);
-      const double map2TotalArea =
-        getSingleStat("Total Square Meters of " + featureType + "s", _input2Stats);
+      const double map1TotalArea = getSingleStat("Total Square Meters of " + featureType + "s", _input1Stats);
+      const double map2TotalArea = getSingleStat("Total Square Meters of " + featureType + "s", _input2Stats);
       if (map1TotalArea > 0.0 && map2TotalArea > 0.0)
       {
-        const double map1AreaUnconflated =
-          getSingleStat("Square Meters of Unmatched " + featureType + "s From Map 1", _outputStats);
-        const double map2AreaUnconflated =
-          getSingleStat("Square Meters of Unmatched " + featureType + "s From Map 2", _outputStats);
-        const double conflatedArea =
-          getSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats);
+        const double map1AreaUnconflated = getSingleStat("Square Meters of Unmatched " + featureType + "s From Map 1", _outputStats);
+        const double map2AreaUnconflated = getSingleStat("Square Meters of Unmatched " + featureType + "s From Map 2", _outputStats);
+        const double conflatedArea = getSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats);
         statsToUpdate.insert(
           static_cast<int>(insertIndex++),
           SingleStat(
@@ -209,7 +194,7 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
 
 bool ConflateStatsHelper::hasSingleStat(const QString& statName, const QList<SingleStat> stats)
 {
-  for (const auto& stat : stats)
+  for (const auto& stat : qAsConst(stats))
   {
     if (stat.name == statName)
       return true;
@@ -219,7 +204,7 @@ bool ConflateStatsHelper::hasSingleStat(const QString& statName, const QList<Sin
 
 double ConflateStatsHelper::getSingleStat(const QString& statName, const QList<SingleStat> stats)
 {
-  for (const auto& stat : stats)
+  for (const auto& stat : qAsConst(stats))
   {
     if (stat.name == statName)
       return stat.value;

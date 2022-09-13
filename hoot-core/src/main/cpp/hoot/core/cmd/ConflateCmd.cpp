@@ -55,8 +55,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     displayStats = true;
     const int statsIndex = args.indexOf("--stats");
-    if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-        args[statsIndex + 1].endsWith(".json", Qt::CaseInsensitive))
+    if (statsIndex != -1 && statsIndex != (args.size() - 1) && args[statsIndex + 1].endsWith(".json", Qt::CaseInsensitive))
     {
       outputStatsFile = args[statsIndex + 1];
       args.removeAll(outputStatsFile);
@@ -76,12 +75,9 @@ int ConflateCmd::runSimple(QStringList& args)
     // Setting these diff specific properties here on ConflateExecutor feels a little kludgy. This
     // may need some refactoring.
 
-    bool removeDiffLinearPartialMatchesAsWhole =
-      ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole();
-    bool removeDiffRiverPartialMatchesAsWhole =
-      ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
-    if (ConflateUtils::isNetworkConflate() &&
-        (!removeDiffLinearPartialMatchesAsWhole || !removeDiffRiverPartialMatchesAsWhole))
+    bool removeDiffLinearPartialMatchesAsWhole = ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole();
+    bool removeDiffRiverPartialMatchesAsWhole = ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
+    if (ConflateUtils::isNetworkConflate() && (!removeDiffLinearPartialMatchesAsWhole || !removeDiffRiverPartialMatchesAsWhole))
     {
       LOG_DEBUG(
         "Removing elements partially from partial matches when using Differential Conflation is "
@@ -108,8 +104,8 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflateDifferentialTagsSeparateOutput())
   {
     const QString errorMsg =
-      QString("conflate.differential.tags.separate.output is only valid when combined with the conflate.differential and ") +
-      QString("conflate.differential.include.tags options.");
+      QString("conflate.differential.tags.separate.output is only valid when combined with the conflate.differential and "
+              "conflate.differential.include.tags options.");
     if (!isDiffConflate || !diffConflateEnableTags)
       throw IllegalArgumentException(errorMsg);
 
@@ -123,10 +119,7 @@ int ConflateCmd::runSimple(QStringList& args)
   if (args.contains("--changeset-stats"))
   {
     if (!isDiffConflate)
-    {
-      throw IllegalArgumentException(
-        "--changeset-stats is only valid when combined with the conflate.differential option.");
-    }
+      throw IllegalArgumentException("--changeset-stats is only valid when combined with the conflate.differential option.");
     else
     {
       displayChangesetStats = true;
@@ -136,8 +129,7 @@ int ConflateCmd::runSimple(QStringList& args)
       // output format, we'll just silently skip it and assume we're outputting stats to the display
       // only. This mimics how the map stats args and stats args in other commands are parsed. We
       // may want to eventually return an error or warning here instead.
-      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-          !args[statsIndex + 1].startsWith("--"))
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) && !args[statsIndex + 1].startsWith("--"))
       {
         outputChangesetStatsFile = args[statsIndex + 1];
         QFileInfo changesetStatsInfo(outputChangesetStatsFile);
@@ -182,8 +174,8 @@ int ConflateCmd::runSimple(QStringList& args)
   if (output.endsWith(".osc.sql") && osmApiDbUrl.isEmpty())
   {
     throw IllegalArgumentException(
-      QString("Writing SQL changeset output (*.osc.sql) requires that the --osmApiDatabaseUrl ") +
-      QString("parameter be specified."));
+      QString("Writing SQL changeset output (*.osc.sql) requires that the --osmApiDatabaseUrl "
+              "parameter be specified."));
   }
 
   conflator.conflate(input1, input2, output);

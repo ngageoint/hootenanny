@@ -27,11 +27,11 @@
 #include "AreaCriterion.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/AreaWayNodeCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/AreaWayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OptimalConstrainedMatches.h"
 
@@ -35,11 +35,9 @@ using namespace std;
 namespace hoot
 {
 
-OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr& map) :
-ConstrainedMatches(map)
+OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr& map)
+  : ConstrainedMatches(map)
 {
-  _score = -1;
-  _timeLimit = -1;
 }
 
 std::vector<ConstMatchPtr> OptimalConstrainedMatches::calculateSubset()
@@ -48,9 +46,7 @@ std::vector<ConstMatchPtr> OptimalConstrainedMatches::calculateSubset()
   vector<ConstMatchPtr> result;
 
   if (_matches.empty())
-  {
     return result;
-  }
 
   // figure out all the pairs of matches that conflict.
   _calculateMatchConflicts();
@@ -66,9 +62,7 @@ std::vector<ConstMatchPtr> OptimalConstrainedMatches::calculateSubset()
   IntegerProgrammingSolver solver;
   _populateSolver(solver);
   if (_timeLimit > 0)
-  {
     solver.setTimeLimit(_timeLimit);
-  }
 
   LOG_INFO("Calculating optimal match conflicts with an Integer Programming solution...");
   // solve the Integer Programming problem.
@@ -81,11 +75,8 @@ std::vector<ConstMatchPtr> OptimalConstrainedMatches::calculateSubset()
   for (int i = 0; i < solver.getNumColumns(); i++)
   {
     // if the value is close to 1 (as opposed to 0)
-    if (solver.getColumnPrimalValue(i + 1) > 0.99)
-    {
-      // it is a keeper
+    if (solver.getColumnPrimalValue(i + 1) > 0.99)  // it is a keeper
       result.push_back(_matches[i]);
-    }
     else
     {
       LOG_TRACE("Removing match: " << _matches[i]);
@@ -117,8 +108,7 @@ void OptimalConstrainedMatches::_populateSolver(IntegerProgrammingSolver& solver
   vector<int> ja(_conflicts.size() * 2 + 1);
   vector<double> ra(_conflicts.size() * 2 + 1);
   int i = 0;
-  for (MatchConflicts::ConflictMap::const_iterator it = _conflicts.constBegin();
-       it != _conflicts.constEnd(); ++it)
+  for (auto it = _conflicts.constBegin(); it != _conflicts.constEnd(); ++it)
   {
     // Set the coefficients to 1 for each of the conflicting pairs and set the max value to 1. This
     // will make it so only one of the values can be 1 at a time, or they can both be 0.

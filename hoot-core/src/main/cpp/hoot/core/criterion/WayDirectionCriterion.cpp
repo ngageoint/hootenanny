@@ -22,10 +22,11 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayDirectionCriterion.h"
+
 #include <hoot/core/algorithms/DirectionFinder.h>
 
 namespace hoot
@@ -33,10 +34,10 @@ namespace hoot
 
 WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
                                              ConstWayPtr baseWay,
-                                             bool similarDirection) :
-  _map(map),
-  _baseWay(baseWay),
-  _similarDirection(similarDirection)
+                                             bool similarDirection)
+  : _map(map),
+    _baseWay(baseWay),
+    _similarDirection(similarDirection)
 {
 }
 
@@ -44,10 +45,7 @@ bool WayDirectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;
-
-  return
-    DirectionFinder::isSimilarDirection(
-      _map, _baseWay, std::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
+  return DirectionFinder::isSimilarDirection(_map, _baseWay, std::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
 }
 
 }

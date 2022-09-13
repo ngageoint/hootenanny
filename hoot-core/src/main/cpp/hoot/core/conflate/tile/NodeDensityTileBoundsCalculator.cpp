@@ -66,8 +66,7 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
   else if (_maxNodesPerTile == 0)
   {
     throw IllegalArgumentException(
-      QString("Invalid maximum nodes per tile requirement equal to zero passed to node density " ) +
-      QString("tile calculator."));
+      QString("Invalid maximum nodes per tile requirement equal to zero passed to node density tile calculator."));
   }
 
   LOG_VARD(map->getNodeCount());
@@ -263,8 +262,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
   if (_maxNodeCountInOneTile == 0)
   {
     throw TileCalcException(
-      "The maximum node density tiles node count in one tile is zero. Try reducing the pixel "
-      "size or increasing the maximum allowed nodes per tile.");
+      "The maximum node density tiles node count in one tile is zero. Try reducing the pixel size or increasing the maximum allowed nodes per tile.");
   }
   LOG_TRACE("Tiles: " + tilesToString(_tiles));
 
@@ -303,12 +301,7 @@ void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat& r, QString output) c
 {
   QImage qImage(r.cols, r.rows, QImage::Format_RGB16);
   if (qImage.isNull())
-  {
-    throw HootException(
-      QString("Node density tiles: Unable to allocate image of size %1x%2")
-        .arg(r.cols)
-        .arg(r.rows));
-  }
+    throw HootException(QString("Node density tiles: Unable to allocate image of size %1x%2").arg(r.cols).arg(r.rows));
   QPainter pt(&qImage);
   pt.setRenderHint(QPainter::Antialiasing, false);
   pt.fillRect(pt.viewport(), Qt::black);
@@ -343,12 +336,7 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
 {
   QImage qImage(_r1.cols, _r1.rows, QImage::Format_RGB16);
   if (qImage.isNull())
-  {
-    throw HootException(
-      QString("Node density tiles: Unable to allocate image of size %1x%2")
-        .arg(_r1.cols)
-        .arg(_r1.rows));
-  }
+    throw HootException(QString("Node density tiles: Unable to allocate image of size %1x%2").arg(_r1.cols).arg(_r1.rows));
   QPainter pt(&qImage);
   pt.setRenderHint(QPainter::Antialiasing, false);
   pt.fillRect(pt.viewport(), Qt::black);
@@ -404,8 +392,7 @@ bool NodeDensityTileBoundsCalculator::_isDone(const std::vector<PixelBox>& boxes
   if (minSize == true && smallEnough == false)
   {
     throw TileCalcException(
-      "Could not find a node density tiles solution. Try reducing the pixel size or "
-      "increasing the maximum nodes allowed per tile.");
+      "Could not find a node density tiles solution. Try reducing the pixel size or increasing the maximum nodes allowed per tile.");
   }
   else
     return smallEnough;

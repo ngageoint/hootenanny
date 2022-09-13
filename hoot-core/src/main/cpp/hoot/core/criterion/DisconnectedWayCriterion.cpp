@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "DisconnectedWayCriterion.h"
 
@@ -35,17 +35,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DisconnectedWayCriterion)
 
-DisconnectedWayCriterion::DisconnectedWayCriterion(ConstOsmMapPtr map) :
-_map(map)
+DisconnectedWayCriterion::DisconnectedWayCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
 }
 
 bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map set on " + className());
-  }
 
   if (e && e->getElementType() == ElementType::Way)
   {
@@ -53,9 +51,7 @@ bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->getNodeCount());
     LOG_VART(WayUtils::hasConnectedWays(way->getId(), _map));
-    return
-      way->getNodeCount() > 0 && !way->isClosedArea() &&
-      !WayUtils::hasConnectedWays(way->getId(), _map);
+    return way->getNodeCount() > 0 && !way->isClosedArea() && !WayUtils::hasConnectedWays(way->getId(), _map);
   }
   return false;
 }

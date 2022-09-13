@@ -46,8 +46,7 @@ QString BaseCommand::getHelp() const
 
   if (fp.open(QFile::ReadOnly) == false)
   {
-    LOG_ERROR(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").
-      arg(_getHelpPath()));
+    LOG_ERROR(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").arg(_getHelpPath()));
   }
 
   return QString::fromUtf8(fp.readAll());
@@ -97,11 +96,8 @@ QStringList BaseCommand::_parseRecursiveInputParameter(QStringList& args, bool& 
     paramPresent = true;
     const int recursiveIndex = args.indexOf("--recursive");
     if (args.size() < recursiveIndex + 2)
-    {
-      throw IllegalArgumentException(
-        "The --recursive option must be followed by either \"*\" for no filtering or one or "
-        "more filters.");
-    }
+      throw IllegalArgumentException("The --recursive option must be followed by either \"*\" for no filtering or one or more filters.");
+
     const QString filter = args.at(recursiveIndex + 1).trimmed();
     // "*" denotes no filtering
     if (filter != "*")

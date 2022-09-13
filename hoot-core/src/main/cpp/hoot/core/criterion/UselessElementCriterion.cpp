@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UselessElementCriterion.h"
 
@@ -57,8 +57,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
   if (ElementType::Node == eid.getType().getEnum())
   {
     // Check ways
-    const std::set<long>& parentWays =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
+    const std::set<long>& parentWays = _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
     if (!parentWays.empty())
     {
       LOG_TRACE("UselessElementCriterion not satisified: node has parent");

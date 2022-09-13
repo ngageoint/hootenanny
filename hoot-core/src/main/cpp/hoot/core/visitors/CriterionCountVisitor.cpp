@@ -22,9 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CriterionCountVisitor.h"
+
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -32,17 +33,17 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CriterionCountVisitor)
 
-CriterionCountVisitor::CriterionCountVisitor():
-_count(0),
-_visited(0),
-_pCrit()
+CriterionCountVisitor::CriterionCountVisitor()
+  : _count(0),
+    _visited(0),
+    _pCrit()
 {
 }
 
-CriterionCountVisitor::CriterionCountVisitor(const std::shared_ptr<ElementCriterion>& pCrit):
-_count(0),
-_visited(0),
-_pCrit(pCrit)
+CriterionCountVisitor::CriterionCountVisitor(const std::shared_ptr<ElementCriterion>& pCrit)
+  : _count(0),
+    _visited(0),
+    _pCrit(pCrit)
 {
 }
 
@@ -56,9 +57,7 @@ void CriterionCountVisitor::visit(const ConstElementPtr& e)
 {
   assert(_pCrit);
   if (_pCrit->isSatisfied(e))
-  {
     ++_count;
-  }
   ++_visited;
 }
 

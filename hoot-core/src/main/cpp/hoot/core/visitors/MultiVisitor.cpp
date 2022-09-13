@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MultiVisitor.h"
 
@@ -33,10 +33,8 @@ namespace hoot
 
 void MultiVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  for (size_t i = 0; i < _visitors.size(); i++)
-  {
-    _visitors[i]->visit(e);
-  }
+  for (const auto& visitor : _visitors)
+    visitor->visit(e);
 }
 
 }

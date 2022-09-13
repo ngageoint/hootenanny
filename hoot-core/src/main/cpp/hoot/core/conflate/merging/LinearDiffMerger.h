@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_DIFF_MERGER_H
 #define LINEAR_DIFF_MERGER_H
@@ -48,9 +48,8 @@ public:
   static QString className() { return "LinearDiffMerger"; }
 
   LinearDiffMerger();
-  LinearDiffMerger(
-    const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  LinearDiffMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                   const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   ~LinearDiffMerger() override = default;
 
   /**
@@ -68,9 +67,8 @@ public:
 
 protected:
 
-  bool _mergePair(
-    const ElementId& eid1, const ElementId& eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(const ElementId& eid1, const ElementId& eid2,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * @see LinearMergerAbstract
@@ -92,9 +90,8 @@ private:
    * @param matched determines whether a match was found between way1 and way2
    * @return true if a review is required between the two features; false otherwise
    */
-  bool _findAndProcessMatch(
-    const WayPtr& way1, const WayPtr& way2, std::vector<std::pair<ElementId, ElementId>>& replaced,
-    bool& matched);
+  bool _findAndProcessMatch(const WayPtr& way1, const WayPtr& way2, std::vector<std::pair<ElementId, ElementId>>& replaced,
+                            bool& matched);
 };
 
 }

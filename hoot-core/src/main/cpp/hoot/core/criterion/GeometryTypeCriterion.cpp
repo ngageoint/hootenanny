@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "GeometryTypeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -38,22 +38,13 @@ namespace hoot
 QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
-  std::vector<QString> classNames =
-    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
-  for (size_t i = 0; i < classNames.size(); i++)
+  std::vector<QString> classNames = Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+  for (const auto& className : classNames)
   {
-    const QString className = classNames[i];
-
-    ElementCriterionPtr crit =
-      Factory::getInstance().constructObject<ElementCriterion>(className);
-    std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
-      std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
-    if (geometryTypeCrit &&
-       (geometryTypeCrit->getGeometryType() == type ||
-        (geometryTypeCrit->getGeometryType() == GeometryType::Unknown)))
-    {
+    ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(className);
+    std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit = std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+    if (geometryTypeCrit && (geometryTypeCrit->getGeometryType() == type || (geometryTypeCrit->getGeometryType() == GeometryType::Unknown)))
       classNamesByType.append(className);
-    }
   }
   return classNamesByType;
 }
@@ -62,37 +53,28 @@ QString GeometryTypeCriterion::typeToString(const GeometryType& geometryType)
 {
   switch (geometryType)
   {
-    case GeometryType::Point:
-      return "point";
-    case GeometryType::Line:
-      return "line";
-    case GeometryType::Polygon:
-      return "polygon";
-    default:
-      return "unknown";
+  case GeometryType::Point:
+    return "point";
+  case GeometryType::Line:
+    return "line";
+  case GeometryType::Polygon:
+    return "polygon";
+  default:
+    return "unknown";
   }
 }
 
-GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
-  const QString& geometryTypeStr)
+GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(const QString& geometryTypeStr)
 {
   const QString compareVal = geometryTypeStr.toLower();
   if (compareVal == "point")
-  {
     return GeometryType::Point;
-  }
   else if (compareVal == "line")
-  {
     return GeometryType::Line;
-  }
   else if (compareVal == "polygon")
-  {
     return GeometryType::Polygon;
-  }
   else
-  {
     return GeometryType::Unknown;
-  }
 }
 
 }

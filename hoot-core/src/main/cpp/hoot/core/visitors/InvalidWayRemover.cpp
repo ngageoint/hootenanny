@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "InvalidWayRemover.h"
@@ -42,9 +42,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, InvalidWayRemover)
 void InvalidWayRemover::visit(const ElementPtr& e)
 {
   if (!e || e->getElementType() != ElementType::Way)
-  {
     return;
-  }
   else if (_conflateInfoCache &&
            !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(e, className()))
   {

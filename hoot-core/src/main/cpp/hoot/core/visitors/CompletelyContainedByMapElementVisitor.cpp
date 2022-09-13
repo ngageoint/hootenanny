@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CompletelyContainedByMapElementVisitor.h"
 
@@ -43,34 +43,26 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, CompletelyContainedByMapElementVisitor)
 
 CompletelyContainedByMapElementVisitor::CompletelyContainedByMapElementVisitor()
+  : _complete(true)
 {
-  _complete = true;
 }
 
 bool CompletelyContainedByMapElementVisitor::isComplete(const OsmMap* map, ElementId eid)
 {
-  bool result;
   CompletelyContainedByMapElementVisitor v;
   v.setOsmMap(map);
   if (map->containsElement(eid))
   {
     map->getElement(eid)->visitRo(*map, v);
-    result = v.isComplete();
+    return v.isComplete();
   }
-  else
-  {
-    result = false;
-  }
-
-  return result;
+  return false;
 }
 
 void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
 {
   if (!_complete)
-  {
     return;
-  }
 
   ElementType type = e->getElementType();
   long id = e->getId();
@@ -92,17 +84,15 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
     _visit(r);
   }
   else if (type != ElementType::Node)
-  {
     assert(false);
-  }
 }
 
 void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const Way>& w)
 {
   const std::vector<long>& nids = w->getNodeIds();
-  for (size_t i = 0; i < nids.size(); i++)
+  for (auto node_id : nids)
   {
-    if (_map->containsNode(nids[i]) == false)
+    if (_map->containsNode(node_id) == false)
     {
       _complete = false;
       return;
@@ -113,10 +103,9 @@ void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const 
 void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const Relation>& r)
 {
   const vector<RelationData::Entry>& m = r->getMembers();
-
-  for (size_t i = 0; i < m.size(); i++)
+  for (const auto& member : m)
   {
-    if (_map->containsElement(m[i].getElementId()) == false)
+    if (_map->containsElement(member.getElementId()) == false)
     {
       _complete = false;
       return;

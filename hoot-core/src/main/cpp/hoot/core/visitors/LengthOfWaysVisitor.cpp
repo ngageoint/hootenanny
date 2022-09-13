@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LengthOfWaysVisitor.h"
 
@@ -30,8 +30,8 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 // Std
 #include <float.h>
@@ -41,10 +41,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, LengthOfWaysVisitor)
 
-LengthOfWaysVisitor::LengthOfWaysVisitor() :
-_total(0.0),
-_smallest(0.0),
-_largest(0.0)
+LengthOfWaysVisitor::LengthOfWaysVisitor()
+  : _total(0.0),
+    _smallest(0.0),
+    _largest(0.0)
 {
 }
 
@@ -61,19 +61,14 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
   if (e->getElementType() == ElementType::Way)
   {
     const ConstWayPtr w = _map->getWay(e->getId());
-    const Meters length =
-      ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
+    const Meters length = ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
 
     _total += length;
 
     if (_smallest == 0.0 || length < _smallest)
-    {
       _smallest = length;
-    }
     if (length > _largest)
-    {
       _largest = length;
-    }
 
     _numAffected++;
   }

@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef APITAGTRUNCATEVISITOR_H
 #define APITAGTRUNCATEVISITOR_H
 
 //  Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -65,11 +65,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Truncating tag key/value pairs for OSM API..."; }
   QString getCompletedStatusMessage() const override
-  {
-    return
-      "Truncated tag key/value pairs for " + StringUtils::formatLargeNumber(_numAffected) +
-      " elements";
-  }
+  { return "Truncated tag key/value pairs for " + StringUtils::formatLargeNumber(_numAffected) + " elements"; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

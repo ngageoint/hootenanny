@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "KeepTagsVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepTagsVisitor)
 
-KeepTagsVisitor::KeepTagsVisitor(const QStringList& keys) :
-RemoveTagsVisitor(keys)
+KeepTagsVisitor::KeepTagsVisitor(const QStringList& keys)
+  : RemoveTagsVisitor(keys)
 {
 }
 
@@ -44,22 +44,19 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
 {
   // see if the element passes the filter (if there is one)
   if (_criterion.get() && !_criterion->isSatisfied(e))
-  {
     return;
-  }
   _numAffected++;
 
   // get a copy of the tags for modifying
   Tags tags;
   tags.add(e->getTags());
-  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+  for (auto it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
     const QString key = it.key();
     bool removeTag = true;
 
-    for (int i = 0; i < _keyRegexs.size(); i++)
+    for (const auto& regex : qAsConst(_keyRegexs))
     {
-      const QRegExp regex = _keyRegexs.at(i);
       if (regex.exactMatch(key))
       {
         removeTag = false;
@@ -68,9 +65,7 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
     }
 
     if (removeTag)
-    {
       _numTagsRemoved += tags.remove(key);
-    }
   }
   e->setTags(tags);
 }

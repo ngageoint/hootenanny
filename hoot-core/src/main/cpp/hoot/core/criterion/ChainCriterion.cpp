@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ChainCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -37,8 +37,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ChainCriterion)
 
-ChainCriterion::ChainCriterion(
-  const ElementCriterionPtr& child1, const ElementCriterionPtr& child2)
+ChainCriterion::ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2)
 {
   _criteria.push_back(child1);
   _criteria.push_back(child2);
@@ -52,8 +51,8 @@ ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child
 
 ChainCriterion::ChainCriterion(const std::vector<ElementCriterionPtr>& criteria)
 {
-  for (size_t i = 0; i < criteria.size(); i++)
-    _criteria.push_back(std::shared_ptr<ElementCriterion>(criteria[i]->clone()));
+  for (const auto& crit : criteria)
+    _criteria.push_back(std::shared_ptr<ElementCriterion>(crit->clone()));
 }
 
 void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
@@ -63,36 +62,31 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
 
 void ChainCriterion::setOsmMap(const OsmMap* map)
 {
-  for (size_t i = 0; i < _criteria.size(); i++)
+  for (const auto& crit : _criteria)
   {
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_criteria[i]);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)
-    {
       mapConsumer->setOsmMap(map);
-    }
   }
 }
 
 void ChainCriterion::setConfiguration(const Settings& conf)
 {
-  for (size_t i = 0; i < _criteria.size(); i++)
+  for (const auto& crit : _criteria)
   {
-    std::shared_ptr<Configurable> configurable =
-      std::dynamic_pointer_cast<Configurable>(_criteria[i]);
+    std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(crit);
     if (configurable)
     {
       configurable->setConfiguration(conf);
-      LOG_DEBUG("Set config on: " << _criteria[i]->toString());
+      LOG_DEBUG("Set config on: " << crit->toString());
     }
   }
 }
 
 bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  for (size_t i = 0; i < _criteria.size(); i++)
+  for (const auto& crit : _criteria)
   {
-    ElementCriterionPtr crit = _criteria[i];
     if (!crit->isSatisfied(e))
     {
       LOG_TRACE(
@@ -109,10 +103,8 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 QString ChainCriterion::toString() const
 {
   QString txt = "ChainCriterion(";
-  for (size_t i = 0; i < _criteria.size(); i++)
-  {
-    txt += _criteria.at(i)->toString() + ";";
-  }
+  for (const auto& crit : _criteria)
+    txt += crit->toString() + ";";
   txt.chop(1);
   txt += ")";
   return txt;

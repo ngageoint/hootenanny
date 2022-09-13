@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -83,13 +83,9 @@ public:
     // The only args left are all inputs.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
     LOG_VARD(inputs);
 
     ElementCounter counter;
@@ -100,9 +96,7 @@ public:
     // Putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end.
     QString displayStr = "Total count ";
     if (!criteriaClassNames.isEmpty())
-    {
       displayStr += "(" + criteriaClassNames.join(";") + ")";
-    }
     displayStr += ": " + StringUtils::formatLargeNumber(totalCount);
     std::cout << std::endl << displayStr << std::endl;
 

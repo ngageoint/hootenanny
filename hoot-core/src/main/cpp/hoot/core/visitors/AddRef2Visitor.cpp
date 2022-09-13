@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AddRef2Visitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -44,9 +44,7 @@ AddRef2Visitor::AddRef2Visitor()
 void AddRef2Visitor::visit(const ElementPtr& e)
 {
   if (_informationOnly == false || e->getTags().getNonDebugCount() > 0)
-  {
     e->getTags()[MetadataTags::Ref2()] = "todo";
-  }
 }
 
 void AddRef2Visitor::setConfiguration(const Settings& conf)

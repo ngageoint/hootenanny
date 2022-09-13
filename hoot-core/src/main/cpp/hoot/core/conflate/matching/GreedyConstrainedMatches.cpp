@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "GreedyConstrainedMatches.h"
 
@@ -34,11 +34,9 @@ using namespace std;
 namespace hoot
 {
 
-GreedyConstrainedMatches::GreedyConstrainedMatches(const ConstOsmMapPtr &map) :
-  ConstrainedMatches(map)
+GreedyConstrainedMatches::GreedyConstrainedMatches(const ConstOsmMapPtr &map)
+  : ConstrainedMatches(map)
 {
-  _score = -1;
-  _timeLimit = -1;
 }
 
 class MatchComparator
@@ -74,9 +72,7 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
 
   // if there are no conflicts, then there is nothing to solve.
   if (_conflicts.size() == 0)
-  {
     return _matches;
-  }
 
   // vector of the matches that we'll keep. The value in keepers corresponds to the index in
   // _matches.
@@ -85,36 +81,30 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
   // references those indices.
   vector<size_t> matchOrder(_matches.size());
   for (size_t i = 0; i < matchOrder.size(); i++)
-  {
     matchOrder[i] = i;
-  }
 
   MatchComparator mc(_matches);
   sort(matchOrder.begin(), matchOrder.end(), mc);
 
   // make a new match conflict map that goes in both directions.
   MatchConflicts::ConflictMap cm;
-  for (MatchConflicts::ConflictMap::const_iterator it = _conflicts.constBegin();
-       it != _conflicts.constEnd(); ++it)
+  for (auto it = _conflicts.constBegin(); it != _conflicts.constEnd(); ++it)
   {
     cm.insert(it.key(), it.value());
     cm.insert(it.value(), it.key());
   }
 
   _score = 0;
-  for (size_t i = 0; i < matchOrder.size(); i++)
+  for (auto mi : matchOrder)
   {
     bool keep = true;
-    size_t mi = matchOrder[i];
-
     // see if any of our conflicting matches are already being kept
-    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi);
-         it != cm.end() && it.key() == mi; ++it)
+    for (auto it = cm.find(mi); it != cm.end(); ++it)
     {
+      if (it.key() != mi)
+        break;
       if (keepers.count(it.value()))
-      {
         keep = false;
-      }
     }
 
     if (keep)
@@ -130,7 +120,6 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
       LOG_TRACE("Removing match: " << _matches[mi]);
     }
   }
-
   return result;
 }
 

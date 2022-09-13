@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MARKFORREVIEWMERGER_H
 #define MARKFORREVIEWMERGER_H
@@ -50,19 +50,16 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  MarkForReviewMerger(
-    const std::set<std::pair<ElementId, ElementId>>& pairs, const QString& note,
-    const QString& reviewType, double score);
+  MarkForReviewMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, const QString& note,
+                      const QString& reviewType, double score);
   /**
    * Review when a whole group of elements needs to be reviewed instead of specific pairs. This
    * will create a single review that contains all the specified elements.
    */
-  MarkForReviewMerger(
-    const std::set<ElementId>& eids, const QString& note, const QString& reviewType, double score);
+  MarkForReviewMerger(const std::set<ElementId>& eids, const QString& note, const QString& reviewType, double score);
   ~MarkForReviewMerger() = default;
 
-  void apply(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   std::set<ElementId> getImpactedElementIds() const override;
 

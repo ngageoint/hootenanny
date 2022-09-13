@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "HootNetworkCookieJar.h"
@@ -30,8 +30,8 @@
 namespace hoot
 {
 
-HootNetworkCookieJar::HootNetworkCookieJar(QObject* parent) :
-QNetworkCookieJar(parent)
+HootNetworkCookieJar::HootNetworkCookieJar(QObject* parent)
+  : QNetworkCookieJar(parent)
 {
 }
 
@@ -40,11 +40,8 @@ QString HootNetworkCookieJar::toString() const
   QString str;
   const QList<QNetworkCookie> cookies = allCookies();
   LOG_VART(cookies.size());
-  for (QList<QNetworkCookie>::const_iterator itr = cookies.begin(); itr != cookies.end(); ++itr)
-  {
-    QNetworkCookie cookie = *itr;
+  for (const auto& cookie : qAsConst(cookies))
     str += "Name: " + cookie.name() + ", Value: " + cookie.value() + "\n";
-  }
   return str;
 }
 

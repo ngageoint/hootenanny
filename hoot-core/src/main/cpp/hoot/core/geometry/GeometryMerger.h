@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GEOMETRY_MERGER_H
@@ -56,8 +56,7 @@ public:
    * @return Single geometry object that contains all geometries merged
    * (geos::geom::Geometry::union)
    */
-  GeometryPtr mergeGeometries(
-    std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope);
+  GeometryPtr mergeGeometries(std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope);
 
 private:
   /**

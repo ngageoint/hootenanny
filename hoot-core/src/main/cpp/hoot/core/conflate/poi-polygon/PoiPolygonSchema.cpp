@@ -141,17 +141,15 @@ bool PoiPolygonSchema::specificSchoolMatch(const ConstElementPtr& element1,
 
 bool PoiPolygonSchema::isPark(const ConstElementPtr& element)
 {
-  return
-    element->getTags().get("leisure").toLower() == QLatin1String("park") &&
-    !BuildingCriterion().isSatisfied(element);
+  return element->getTags().get("leisure").toLower() == QLatin1String("park") &&
+          !BuildingCriterion().isSatisfied(element);
 }
 
 bool PoiPolygonSchema::isParkish(const ConstElementPtr& element)
 {
   const QString leisureVal = element->getTags().get("leisure").toLower();
-  return
-    (leisureVal == QLatin1String("garden") || leisureVal == QLatin1String("dog_park")) &&
-    !BuildingCriterion().isSatisfied(element);
+  return (leisureVal == QLatin1String("garden") || leisureVal == QLatin1String("dog_park")) &&
+          !BuildingCriterion().isSatisfied(element);
 }
 
 bool PoiPolygonSchema::isPlayground(const ConstElementPtr& element)
@@ -224,18 +222,16 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
 
 bool PoiPolygonSchema::hasRelatedType(const ConstElementPtr& element)
 {
-  return
-    OsmSchema::getInstance().getCategories(element->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  return OsmSchema::getInstance().getCategories(element->getTags()).intersects(
+          OsmSchemaCategory::building() | OsmSchemaCategory::poi());
 }
 
 bool PoiPolygonSchema::hasSpecificType(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
-  return
-    !tags.contains("poi") && tags.get(MetadataTags::Building()).toLower() != QLatin1String("yes") &&
-    tags.get("office").toLower() != QLatin1String("yes") &&
-    tags.get(MetadataTags::Area()).toLower() != QLatin1String("yes") && hasRelatedType(element);
+  return !tags.contains("poi") && tags.get(MetadataTags::Building()).toLower() != QLatin1String("yes") &&
+          tags.get("office").toLower() != QLatin1String("yes") &&
+          tags.get(MetadataTags::Area()).toLower() != QLatin1String("yes") && hasRelatedType(element);
 }
 
 bool PoiPolygonSchema::isRestaurant(const ConstElementPtr& element)
@@ -251,4 +247,3 @@ bool PoiPolygonSchema::isNatural(const ConstElementPtr& element)
 }
 
 }
-

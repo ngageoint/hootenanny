@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "TextTable.h"
 
@@ -40,15 +40,12 @@ using namespace std;
 QStringList TextTable::_calculateColumns()
 {
   QStringList columns;
-  for (Data::const_iterator it = _data.begin(); it != _data.end(); ++it)
+  for (auto it = _data.begin(); it != _data.end(); ++it)
   {
-    for (QHash<QString, QVariant>::const_iterator jt = it.value().begin(); jt != it.value().end();
-         ++jt)
+    for (auto jt = it.value().begin(); jt != it.value().end(); ++jt)
     {
       if (columns.contains(jt.key()) == false)
-      {
         columns.append(jt.key());
-      }
       _columnWidth[jt.key()] = max(_columnWidth[jt.key()], jt.key().size());
       _columnWidth[jt.key()] = max(_columnWidth[jt.key()], jt.value().toString().length());
     }
@@ -63,10 +60,8 @@ QStringList TextTable::_calculateRows()
   QStringList result(_data.keys());
 
   _rowNameWidth = 0;
-  for (int i = 0; i < result.size(); i++)
-  {
-    _rowNameWidth = max(_rowNameWidth, result[i].length());
-  }
+  for (const auto& row : qAsConst(result))
+    _rowNameWidth = max(_rowNameWidth, row.length());
 
   result.sort();
 
@@ -84,20 +79,16 @@ QString TextTable::toWikiString()
   rowTitle = "| " + QString().fill(' ', _rowNameWidth + 1);
   rowTitle += "| ";
   for (int i = 0; i < _columnWidth.size(); i++)
-  {
     rowTitle += cols[i] + " | ";
-  }
+
   result = "\n" + rowTitle + "\n";
 
-  for (int i = 0; i < rows.size(); i++)
+  for (const auto& row_val : qAsConst(rows))
   {
-    QString rowString = "| " + QString("%1").arg(rows[i], _rowNameWidth) + " | ";
+    QString rowString = "| " + QString("%1").arg(row_val, _rowNameWidth) + " | ";
 
-    for (int j = 0; j < cols.size(); j++)
-    {
-      QString cell = QString("%1").arg(_data[rows[i]][cols[j]].toString(), _columnWidth[cols[j]]);
-      rowString += cell + " | ";
-    }
+    for (const auto& col_val : qAsConst(cols))
+      rowString += QString("%1 | ").arg(_data[row_val][col_val].toString(), _columnWidth[col_val]);
 
     result += rowString + "\n";
   }
@@ -112,23 +103,23 @@ QString TextTable::toJsonString()
 
   boost::property_tree::ptree result;
 
-  for (int i = 0; i < rows.size(); i++)
+  for (const auto& row_val : qAsConst(rows))
   {
-    LOG_VART(rows[i]);
+    LOG_VART(row_val);
 
     boost::property_tree::ptree children;
-    for (int j = 0; j < cols.size(); j++)
+    for (const auto& col_val : qAsConst(cols))
     {
-      LOG_VART(cols[j]);
-      LOG_VART(_data[rows[i]][cols[j]].toString());
+      LOG_VART(col_val);
+      LOG_VART(_data[row_val][col_val].toString());
 
       boost::property_tree::ptree child;
       // Unfortunately, don't think the boost prop writer supports numerical values, so outputting
       // everything as a string, even if it should be a JSON numerical value.
-      child.put(cols[j].toStdString(), _data[rows[i]][cols[j]].toString().toStdString());
+      child.put(col_val.toStdString(), _data[row_val][col_val].toString().toStdString());
       children.push_back(std::make_pair("", child));
     }
-    result.add_child(rows[i].toStdString(), children);
+    result.add_child(row_val.toStdString(), children);
   }
 
   std::stringstream stringStrm;

@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AreaWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, AreaWayNodeCriterion)
 
-AreaWayNodeCriterion::AreaWayNodeCriterion() :
-WayNodeCriterion()
+AreaWayNodeCriterion::AreaWayNodeCriterion()
+  : WayNodeCriterion()
 {
   _parentCriterion = std::make_shared<AreaCriterion>();
 }
 
-AreaWayNodeCriterion::AreaWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
+AreaWayNodeCriterion::AreaWayNodeCriterion(ConstOsmMapPtr map)
+  : WayNodeCriterion(map)
 {
   _parentCriterion = std::make_shared<AreaCriterion>(_map);
 }
@@ -51,9 +51,7 @@ void AreaWayNodeCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
   if (_parentCriterion)
-  {
     _parentCriterion = std::make_shared<AreaCriterion>(_map);
-  }
 }
 
 }

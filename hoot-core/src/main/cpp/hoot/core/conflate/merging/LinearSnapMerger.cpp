@@ -240,9 +240,7 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
       keep = e2;
       remove = e1;
     }
-    LOG_TRACE(
-      "Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() <<
-      "...");
+    LOG_TRACE("Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() << "...");
     keep->setStatus(Status::Conflated);
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true, true).apply(_map);
@@ -257,8 +255,7 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
 
 WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
 {
-  LOG_TRACE(
-    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
+  LOG_TRACE("Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
   // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
   // performance reasons, but the results were unstable. See branch 3969b.
   return _sublineMatcher->findMatch(_map, e1, e2);
@@ -534,11 +531,8 @@ void LinearSnapMerger::_splitElement(const WaySublineCollection& s, const vector
     // With the merging switching between split ways and relations, it gets a little hard to keep
     // track of where this tag is needed, so one final check here to make sure it gets added
     // correctly.
-    if (_markAddedMultilineStringRelations && multiLineStringAdded &&
-        scrap->getElementType() == ElementType::Relation)
-    {
+    if (_markAddedMultilineStringRelations && multiLineStringAdded && scrap->getElementType() == ElementType::Relation)
       scrap->getTags().set(MetadataTags::HootMultilineString(), "yes");
-    }
 
     // Add the scraps way to whatever relations the way that was split is in.
     std::vector<RelationPtr> relationsContainingSplitWay = RelationMemberUtils::getContainingRelations(splitee->getElementId(), _map);
@@ -609,8 +603,7 @@ void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
   if (!scrap)
     return;
 
-  LOG_TRACE(
-    "Updating scrap parent: " << scrap->getElementId() << " with parent ID: " << id << "...");
+  LOG_TRACE("Updating scrap parent: " << scrap->getElementId() << " with parent ID: " << id << "...");
 
   if (scrap->getElementType() == ElementType::Way)
     std::dynamic_pointer_cast<Way>(scrap)->setPid(id);
@@ -654,9 +647,7 @@ void LinearSnapMerger::_dropSecondaryElements(const ElementId& eid1, const Eleme
   // Make the way that we're keeping have membership in whatever relations the way we're removing
   // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
   // during merging.
-  LOG_TRACE(
-    "Swapping relation membership. Adding " << eidMatch1 << " to all relations " << eid2 <<
-    " belongs in...");
+  LOG_TRACE("Swapping relation membership. Adding " << eidMatch1 << " to all relations " << eid2 << " belongs in...");
   RelationMemberSwapper::swap(eid2, eidMatch1, _map, false);
 
   // Remove reviews e2 is involved in.
@@ -678,9 +669,7 @@ void LinearSnapMerger::_swapSecondaryElementWithScraps(const ElementId& secEleme
   ReplaceElementOp(secElementId, scraps->getElementId(), true).apply(_map);
 
   if (ConfigOptions().getDebugMapsWriteDetailed())
-  {
     OsmMapWriterFactory::writeDebugMap(_map, className(), "after-swap-secondary-elements-with-scraps" + _eidLogString);
-  }
 }
 
 void LinearSnapMerger::_handleSplitWay(const ElementPtr& e1, const ElementPtr& scraps1,

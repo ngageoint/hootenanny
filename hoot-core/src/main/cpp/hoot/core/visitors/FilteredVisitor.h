@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef FILTEREDVISITOR_H
 #define FILTEREDVISITOR_H
 
 // hoot
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/visitors/ElementVisitorConsumer.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
 
 namespace hoot
 {
@@ -56,14 +56,11 @@ public:
   FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor);
   ~FilteredVisitor() override = default;
 
-  static double getStat(
-    ElementCriterionPtr criterion, ElementVisitorPtr visitor, const ConstOsmMapPtr& map);
-  static double getStat(
-    ElementCriterionPtr criterion, ElementVisitorPtr visitor, const ConstOsmMapPtr& map,
-    const ElementPtr& element);
-  static double getStat(
-    const ElementCriterion& criterion, ElementVisitor& visitor, const ConstOsmMapPtr& map,
-    const ElementPtr& element);
+  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor, const ConstOsmMapPtr& map);
+  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor, const ConstOsmMapPtr& map,
+                        const ElementPtr& element);
+  static double getStat(const ElementCriterion& criterion, ElementVisitor& visitor, const ConstOsmMapPtr& map,
+                        const ElementPtr& element);
 
   void addCriterion(const ElementCriterionPtr& e) override;
 

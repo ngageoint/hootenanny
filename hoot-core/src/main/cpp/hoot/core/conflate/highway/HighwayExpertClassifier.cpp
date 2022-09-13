@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HighwayExpertClassifier.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -40,16 +40,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayExpertClassifier)
 
-MatchClassification HighwayExpertClassifier::classify(
-  const ConstOsmMapPtr& map, const ElementId& /*eid1*/, const ElementId& /*eid2*/,
-  const WaySublineMatchString& match)
+MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map, const ElementId& /*eid1*/,
+                                                      const ElementId& /*eid2*/, const WaySublineMatchString& match)
 {
   // calculate the average classification. Is there a better approach? Max, min, mean? Dunno.
   MatchClassification result;
 
-  for (size_t i = 0; i < match.getMatches().size(); i++)
+  for (const auto& singleMatch : match.getMatches())
   {
-    MatchClassification m = classify(map, match.getMatches()[i]);
+    MatchClassification m = classify(map, singleMatch);
 
     result.setMatchP(m.getMatchP() + result.getMatchP());
     result.setMissP(m.getMissP() + result.getMissP());
@@ -57,23 +56,19 @@ MatchClassification HighwayExpertClassifier::classify(
   }
 
   if (result.getMatchP() + result.getMissP() + result.getReviewP() == 0.0)
-  {
     result.setMiss();
-  }
 
   result.normalize();
 
   return result;
 }
 
-MatchClassification HighwayExpertClassifier::classify(
-  const ConstOsmMapPtr& map, const WaySublineMatch& match) const
+MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map, const WaySublineMatch& match) const
 {
   MatchClassification result;
 
   OsmMapPtr mapCopy = std::make_shared<OsmMap>();
-  CopyMapSubsetOp(
-    map, match.getSubline1().getElementId(), match.getSubline2().getElementId()).apply(mapCopy);
+  CopyMapSubsetOp(map, match.getSubline1().getElementId(), match.getSubline2().getElementId()).apply(mapCopy);
 
   if (match.isValid() == false)
   {
@@ -87,10 +82,8 @@ MatchClassification HighwayExpertClassifier::classify(
   WayPtr sl2 = match.getSubline2().toWay(mapCopy);
 
   ElementToGeometryConverter ec(mapCopy);
-  std::shared_ptr<geos::geom::LineString> ls1 =
-    ec.convertToLineString(match.getSubline1().getWay());
-  std::shared_ptr<geos::geom::LineString> ls2 =
-    ec.convertToLineString(match.getSubline2().getWay());
+  std::shared_ptr<geos::geom::LineString> ls1 = ec.convertToLineString(match.getSubline1().getWay());
+  std::shared_ptr<geos::geom::LineString> ls2 = ec.convertToLineString(match.getSubline2().getWay());
   if (!ls1 || !ls2)
   {
     result.setMissP(1.0);
@@ -121,13 +114,9 @@ MatchClassification HighwayExpertClassifier::classify(
 
   // if either of the lines are zero in length
   if (po1 == 0 || po2 == 0)
-  {
     p = 0.0;
-  }
   else
-  {
     p = ps * ProbabilityOfMatch::getInstance().expertProbability(mapCopy, sl1, sl2);
-  }
 
   result.setMatchP(p);
   result.setMissP(1.0 - p);
@@ -135,12 +124,10 @@ MatchClassification HighwayExpertClassifier::classify(
   return result;
 }
 
-map<QString, double> HighwayExpertClassifier::getFeatures(
-  const ConstOsmMapPtr& /*m*/, const ElementId& /*eid1*/, const ElementId& /*eid2*/,
-  const WaySublineMatchString& /*match*/) const
+map<QString, double> HighwayExpertClassifier::getFeatures(const ConstOsmMapPtr& /*m*/, const ElementId& /*eid1*/,
+                                                          const ElementId& /*eid2*/, const WaySublineMatchString& /*match*/) const
 {
   return map<QString, double>();
 }
-
 
 }

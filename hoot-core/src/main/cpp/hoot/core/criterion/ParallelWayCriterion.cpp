@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ParallelWayCriterion.h"
@@ -50,11 +50,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
-ParallelWayCriterion::ParallelWayCriterion(
-  const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel) :
-  _map(map),
-  _baseWay(baseWay),
-  _isParallel(isParallel)
+ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel)
+  : _map(map),
+    _baseWay(baseWay),
+    _isParallel(isParallel)
 {
   // Default threshold
   _threshold = 10.0;
@@ -63,9 +62,7 @@ ParallelWayCriterion::ParallelWayCriterion(
   std::vector<Coordinate> coords;
   Meters spacing = std::min(ElementGeometryUtils::calculateLength(baseWay, map) / 5, 4.0);
   if (spacing <= 0.0)
-  {
     spacing = 4.0;
-  }
   WayDiscretizer wd1(_map, baseWay);
   wd1.discretize(spacing, coords);
 
@@ -75,16 +72,8 @@ ParallelWayCriterion::ParallelWayCriterion(
   for (size_t i = 0; i < coords.size(); i++)
   {
     WayLocation loc = lop.locate(coords[i]);
-    _points[i] = GeometryFactory::getDefaultInstance()->createPoint(coords[i]);
+    _points[i].reset(GeometryFactory::getDefaultInstance()->createPoint(coords[i]));
     _headings[i] = WayHeading::calculateHeading(loc);
-  }
-}
-
-ParallelWayCriterion::~ParallelWayCriterion()
-{
-  for (size_t i = 0; i < _points.size(); i++)
-  {
-    delete _points[i];
   }
 }
 
@@ -98,14 +87,12 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   for (size_t i = 0; i < _points.size(); i++)
   {
     // calculate the heading from point to the nearest point on the candidate way.
-    std::shared_ptr<CoordinateSequence> seq(DistanceOp::nearestPoints(_points[i], ls.get()));
+    std::shared_ptr<CoordinateSequence> seq(DistanceOp::nearestPoints(_points[i].get(), ls.get()));
     double d = seq->getAt(0).distance(seq->getAt(1));
     if (d > 0.5)
     {
       Radians shortestHeading = WayHeading::calculateHeading(seq->getAt(0), seq->getAt(1));
-
       Radians delta = WayHeading::deltaMagnitude(_headings[i], shortestHeading);
-
       deltaSum += delta;
       count++;
     }
@@ -117,15 +104,9 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   }
 
   if (count == 0)
-  {
     return 0.0;
-  }
   else
-  {
-    Radians mean = deltaSum / (double)count;
-
-    return fabs(mean - toRadians(90));
-  }
+    return fabs(deltaSum / (double)count - toRadians(90));
 }
 
 bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -133,11 +114,8 @@ bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    double difference = calculateDifference(way);
-
     // If the mean "normals" are within 10 degrees of perpendicular.
-    bool parallel = difference < toRadians(_threshold);
-    return parallel == _isParallel;
+    return (calculateDifference(way) < toRadians(_threshold)) == _isParallel;
   }
   return false;
 }
