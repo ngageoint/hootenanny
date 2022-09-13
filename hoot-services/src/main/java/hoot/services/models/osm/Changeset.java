@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.models.osm;
 
@@ -35,7 +35,6 @@ import java.util.HashMap;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.xpath.XPathAPI;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.joda.time.Seconds;
@@ -48,7 +47,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.utils.GeoUtils;
-
+import hoot.services.utils.XPathAPI;
 
 /**
  * Represents the model of an OSM changeset
