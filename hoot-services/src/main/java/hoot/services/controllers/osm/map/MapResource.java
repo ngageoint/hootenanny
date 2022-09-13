@@ -599,7 +599,7 @@ public class MapResource {
         Users user = Users.fromRequest(request);
 
         // handles some ACL logic for us...
-        getMapForRequest(request, mapId, false, true);
+        Map deleteMap = getMapForRequest(request, mapId, false, true);
 
         String jobId = UUID.randomUUID().toString();
         try {
@@ -609,8 +609,11 @@ public class MapResource {
                     return mapResourcesCleaner.execute();
                 }
             };
+            //Record layer name in job status
+            java.util.Map<String, Object> jobStatusTags = new HashMap<>();
+            jobStatusTags.put("layername", deleteMap.getDisplayName());
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.DELETE, DbUtils.getMapIdFromRef(mapId, user.getId())));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.DELETE, DbUtils.getMapIdFromRef(mapId, user.getId()), jobStatusTags));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;
