@@ -25,15 +25,9 @@ run-translate-directory()
 {
     if [ $AFTER_SPLIT == 0 ] 
     then
-        for _file in ${DIR_PATH}/*.shp;
-        do
-            hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${_file} ${_file::-4}.osm
-        done
-    else 
-        for _file in ${DIR_PATH}/*.osm;
-        do 
-            hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${_file} ${_file::-4}.osm
-        done
+        hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${DIR_PATH} translated.osm --recursive "*.shp" --separate-output
+    else  
+        hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT ${DIR_PATH} translated.osm --recursive "*.osm" --separate-output
     fi
 }
 
@@ -58,6 +52,6 @@ case "$1" in
         AFTER_SPLIT=$2
         TRANSLATION_SCRIPT=$3
         DIR_PATH=$4
-        run-translate-directory
+        run-translate-directory ;;
 esac
 
