@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -51,7 +51,6 @@ import java.util.Set;
 import javax.xml.xpath.XPath;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.xpath.XPathAPI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Document;
@@ -84,7 +83,7 @@ import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.XmlUtils;
-
+import hoot.services.utils.XPathAPI;
 
 /*
  * Utilities for creating test data that's common to many OSM Resource related tests.  Tests
