@@ -98,6 +98,8 @@ protected:
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;
 
+  bool _sortTags;
+
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);
   void _writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous);
@@ -111,6 +113,7 @@ protected:
   virtual void _writeXmlFileHeader(QXmlStreamWriter& writer) const = 0;
   virtual void _writeXmlFileSectionHeader(QXmlStreamWriter& writer, Change::ChangeType last) const = 0;
   virtual void _writeXmlActionAttribute(QXmlStreamWriter& writer) const = 0;
+  virtual void _getOptionalTags(Tags& tags, const Element* element) const = 0;
 };
 
 }

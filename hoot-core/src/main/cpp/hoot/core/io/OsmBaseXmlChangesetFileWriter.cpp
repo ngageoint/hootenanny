@@ -51,7 +51,8 @@ namespace hoot
 OsmBaseXmlChangesetFileWriter::OsmBaseXmlChangesetFileWriter()
   : OsmChangesetFileWriter(),
     _precision(ConfigOptions().getWriterPrecision()),
-    _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp())
+    _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
+    _sortTags(ConfigOptions().getWriterSortTagsByKey())
 {
 }
 
@@ -63,6 +64,8 @@ void OsmBaseXmlChangesetFileWriter::setConfiguration(const Settings &conf)
   _includeDebugTags = co.getWriterIncludeDebugTags();
   _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
   _changesetIgnoreBounds = co.getChangesetIgnoreBounds();
+  _sortTags = co.getWriterSortTagsByKey();
+
 }
 
 void OsmBaseXmlChangesetFileWriter::_initStats()
@@ -172,7 +175,7 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2))
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, _change.getType()))
         continue;
 
       if (_change.getType() != last && last != Change::ChangeType::Unknown)
@@ -202,7 +205,8 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
         }
         changesetProgress++;
         //  Update the stats
-        _stats(static_cast<size_t>(last), type)++;
+        if (last != Change::ChangeType::NoChange)
+          _stats(static_cast<size_t>(last), type)++;
       }
     }
 
@@ -381,8 +385,8 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
   else if (r->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a "
-              "version greater than zero: ").arg(r->getElementId().toString()));
+      QString("Elements being modified or deleted in an .osc changeset must always have a version greater than zero: ")
+        .arg(r->getElementId().toString()));
   }
   else if (pr && pr->getVersion() < r->getVersion())
   {
@@ -425,15 +429,9 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
   }
 
   Tags tags = r->getTags();
-  _writeTags(writer, tags, r.get());
-
   if (r->getType() != "")
-  {
-    writer.writeStartElement("tag");
-    writer.writeAttribute("k", "type");
-    writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(r->getType()));
-    writer.writeEndElement();
-  }
+    tags.set("type", r->getType());
+  _writeTags(writer, tags, r.get());
 
   writer.writeEndElement();
 }
@@ -442,42 +440,7 @@ void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& t
 {
   LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
 
-  if (_includeDebugTags)
-  {
-    tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
-    tags.set(MetadataTags::HootId(), QString::number(element->getId()));
-    // This just makes sifting through the xml elements a little bit easier during debugging vs
-    // having to scroll around looking for the change type for each element.
-    tags.set(MetadataTags::HootChangeType(), Change::changeTypeToString(_change.getType()));
-  }
-
-  // These should never be written in a changeset, even when debug tags are enabled, and will cause
-  // problems in ChangesetReplacementCreator if added to source data when read back out.
-  QStringList metadataAlwaysIgnore;
-  metadataAlwaysIgnore.append(MetadataTags::HootHash());
-  metadataAlwaysIgnore.append(MetadataTags::HootChangeExcludeDelete());
-  metadataAlwaysIgnore.append(MetadataTags::HootConnectedWayOutsideBounds());
-  metadataAlwaysIgnore.append(MetadataTags::HootSnapped());
-
-  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
-  {
-    const QString key = it.key();
-    const QString val = it.value();
-    if (key.isEmpty() == false && val.isEmpty() == false)
-    {
-      if (metadataAlwaysIgnore.contains(key))
-        continue;
-      else if (!_includeDebugTags && key.startsWith("hoot:", Qt::CaseInsensitive) &&
-               // There are some instances where we want to explicitly allow some metadata tags.
-               !_metadataAllowKeys.contains(key))
-        continue;
-
-      writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterHandler.removeInvalidCharacters(key));
-      writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(val));
-      writer.writeEndElement();
-    }
-  }
+  _getOptionalTags(tags, element);
 
   // Only report the circular error for changesets when debug tags are turned on, circular error
   // tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is
@@ -487,10 +450,38 @@ void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& t
       (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)) &&
       _includeDebugTags)
   {
-    writer.writeStartElement("tag");
-    writer.writeAttribute("k", MetadataTags::ErrorCircular());
-    writer.writeAttribute("v", QString("%1").arg(element->getCircularError()));
-    writer.writeEndElement();
+    tags.set(MetadataTags::ErrorCircular(), QString("%1").arg(element->getCircularError()));
+  }
+
+  //  Sort the keys for output
+  QList<QString> keys = tags.keys();
+  if (_sortTags)
+    keys.sort();
+
+  // These should never be written in a changeset, even when debug tags are enabled, and will cause
+  // problems in ChangesetReplacementCreator if added to source data when read back out.
+  QStringList metadataAlwaysIgnore;
+  metadataAlwaysIgnore.append(MetadataTags::HootHash());
+  metadataAlwaysIgnore.append(MetadataTags::HootChangeExcludeDelete());
+  metadataAlwaysIgnore.append(MetadataTags::HootConnectedWayOutsideBounds());
+  metadataAlwaysIgnore.append(MetadataTags::HootSnapped());
+
+  for (const auto& key : qAsConst(keys))
+  {
+    QString val = tags.get(key).trimmed();
+    if (!key.isEmpty() && !val.isEmpty())
+    {
+      // There are some instances where we want to explicitly allow some metadata tags.
+      if (metadataAlwaysIgnore.contains(key))
+        continue;
+      else if (!_includeDebugTags && key.startsWith("hoot:", Qt::CaseInsensitive) && !_metadataAllowKeys.contains(key))
+        continue;
+
+      writer.writeStartElement("tag");
+      writer.writeAttribute("k", _invalidCharacterHandler.removeInvalidCharacters(key));
+      writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(val));
+      writer.writeEndElement();
+    }
   }
 }
 

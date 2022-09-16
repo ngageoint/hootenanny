@@ -91,4 +91,16 @@ void OsmOscChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& /*wri
   //  OSC files don't use the action attribute
 }
 
+void OsmOscChangesetFileWriter::_getOptionalTags(Tags& tags, const Element* element) const
+{
+  if (_includeDebugTags)
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
+    tags.set(MetadataTags::HootId(), QString::number(element->getId()));
+    // This just makes sifting through the xml elements a little bit easier during debugging vs
+    // having to scroll around looking for the change type for each element.
+    tags.set(MetadataTags::HootChangeType(), Change::changeTypeToString(_change.getType()));
+  }
+}
+
 }

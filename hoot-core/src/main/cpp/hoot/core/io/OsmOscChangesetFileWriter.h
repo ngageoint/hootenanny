@@ -64,6 +64,7 @@ protected:
   void _writeXmlFileHeader(QXmlStreamWriter& writer) const override;
   void _writeXmlFileSectionHeader(QXmlStreamWriter& writer, Change::ChangeType last) const override;
   void _writeXmlActionAttribute(QXmlStreamWriter& writer) const override;
+  void _getOptionalTags(Tags& tags, const Element* element) const override;
 };
 
 }

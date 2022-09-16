@@ -41,11 +41,21 @@ Change::Change(ChangeType type, ConstElementPtr element)
 {
 }
 
-Change::Change(ChangeType type, ConstElementPtr element, ConstElementPtr reviousElement)
+Change::Change(ChangeType type, ConstElementPtr element, ConstElementPtr previousElement)
   : _type(type),
     _element(element),
-    _previousElement(reviousElement)
+    _previousElement(previousElement)
 {
+  //  Update the change status based on the two elements and the change type
+  _updateStatus(element, previousElement->getStatus());
+}
+
+Change::Change(ChangeType type, ConstElementPtr element, Status status)
+  : _type(type),
+    _element(element)
+{
+  //  Update the change status based on the two elements and the change type
+  _updateStatus(element, status);
 }
 
 QString Change::changeTypeToString(const ChangeType changeType)
@@ -60,6 +70,8 @@ QString Change::changeTypeToString(const ChangeType changeType)
     return "Delete";
   case ChangeType::Unknown:
     return "Unknown";
+  case ChangeType::NoChange:
+    return "NoChange";
   default:
     throw HootException("Invalid change type.");
   }
@@ -84,6 +96,45 @@ void Change::combineChange(const Change& tag_change)
   ElementPtr result = _element->clone();
   result->setTags(tag_change.getElement()->getTags());
   _element = result;
+}
+
+void Change::_updateStatus(ConstElementPtr element, Status status)
+{
+  Status::Type element_status = element->getStatus().getEnum();
+  Status::Type previous_status = status.getEnum();
+  switch(_type)
+  {
+  case ChangeType::Create:
+    //  Can't create anything from Unknown1
+    if (element_status == Status::Unknown1)
+      _setElementStatus(previous_status);
+    else if (previous_status == Status::Conflated)
+      _setElementStatus(previous_status);
+    break;
+  case ChangeType::Delete:
+    //  Deleted should always be Unknown1
+    if (element_status != Status::Unknown1)
+      _setElementStatus(Status::Unknown1);
+    break;
+  case ChangeType::Modify:
+    //  Modified should either be Unknown1 or Conflated
+  case ChangeType::NoChange:
+    //  This element isn't conflated but the other is, use conflated status
+    if (element_status != Status::Conflated && previous_status == Status::Conflated)
+      _setElementStatus(status);
+    else if (element_status == Status::Unknown2)  //  No change came as Unknown2, change it to Unknown1
+      _setElementStatus(Status::Unknown1);
+    break;
+  default:
+    break;
+  }
+}
+
+void Change::_setElementStatus(Status status)
+{
+  ElementPtr e = _element->clone();
+  e->setStatus(status);
+  _element = e;
 }
 
 }

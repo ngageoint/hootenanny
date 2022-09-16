@@ -36,6 +36,7 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QXmlStreamWriter>
@@ -52,6 +53,23 @@ void OsmJosmXmlChangesetFileWriter::_writeXmlFileHeader(QXmlStreamWriter& writer
   writer.writeStartElement("osm");
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
+  geos::geom::Envelope bounds;
+  if (!_map1List.empty())
+  {
+    writer.writeAttribute("srs", _map1List.at(0)->getProjectionEpsgString());
+    bounds.expandToInclude(CalculateMapBoundsVisitor::getGeosBounds(_map1List.at(0)));
+  }
+  if (!_map2List.empty())
+    bounds.expandToInclude(CalculateMapBoundsVisitor::getGeosBounds(_map2List.at(0)));
+  if (!bounds.isNull())
+  {
+    writer.writeStartElement("bounds");
+    writer.writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));
+    writer.writeAttribute("minlon", QString::number(bounds.getMinX(), 'g', _precision));
+    writer.writeAttribute("maxlat", QString::number(bounds.getMaxY(), 'g', _precision));
+    writer.writeAttribute("maxlon", QString::number(bounds.getMaxX(), 'g', _precision));
+    writer.writeEndElement();
+  }
 }
 
 void OsmJosmXmlChangesetFileWriter::_writeXmlFileSectionHeader(QXmlStreamWriter& /*writer*/, Change::ChangeType /*last*/) const
@@ -65,9 +83,9 @@ void OsmJosmXmlChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& w
   switch (_change.getType())
   {
   case Change::ChangeType::Create:
-    //  Create doesn't require an action='create' attribute
+  case Change::ChangeType::NoChange:
+    //  Create doesn't require an 'action' attribute
     return;
-    break;
   case Change::ChangeType::Delete:
     action = "delete";
     break;
@@ -80,6 +98,12 @@ void OsmJosmXmlChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& w
     throw IllegalArgumentException("Unexpected change action type.");
   }
   writer.writeAttribute("action", action);
+}
+
+void OsmJosmXmlChangesetFileWriter::_getOptionalTags(Tags& tags, const Element* element) const
+{
+  if (_includeDebugTags)
+    tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
 }
 
 }

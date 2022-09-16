@@ -24,47 +24,36 @@
  *
  * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
  */
-#ifndef OSM_JOSM_XML_CHANGESET_FILE_WRITER_H
-#define OSM_JOSM_XML_CHANGESET_FILE_WRITER_H
+#ifndef JOSM_CHANGESET_DERIVER_H
+#define JOSM_CHANGESET_DERIVER_H
 
 // Hoot
-#include <hoot/core/io/OsmBaseXmlChangesetFileWriter.h>
-
-// Qt
-class QXmlStreamWriter;
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 namespace hoot
 {
 
 /**
- * Writes a JOSM OSM changeset to an XML file.
- *
- * This file uses an 'action' attribute to describe the change
+ * @brief The JosmChangesetDeriver class calculates the changeset difference between a source and target
+ * map that
  */
-class OsmJosmXmlChangesetFileWriter : public OsmBaseXmlChangesetFileWriter
+class JosmChangesetDeriver : public ChangesetDeriver
 {
 
 public:
 
-  static QString className() { return "OsmJosmXmlChangesetFileWriter"; }
+  JosmChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
 
-  OsmJosmXmlChangesetFileWriter() = default;
-  ~OsmJosmXmlChangesetFileWriter() override = default;
+  ~JosmChangesetDeriver() = default;
 
-  /**
-   * @see ChangesetFileWriter
-   */
-  bool isSupported(const QString& output) const override { return output.endsWith(".osm", Qt::CaseInsensitive); }
+private:
 
-protected:
+  virtual Change _nextChange();
 
-  /** See OsmBaseXmlChangesetFileWriter */
-  void _writeXmlFileHeader(QXmlStreamWriter& writer) const override;
-  void _writeXmlFileSectionHeader(QXmlStreamWriter& writer, Change::ChangeType last) const override;
-  void _writeXmlActionAttribute(QXmlStreamWriter& writer) const override;
-  void _getOptionalTags(Tags& tags, const Element* element) const override;
 };
+
+using JosmChangesetDeriverPtr = std::shared_ptr<JosmChangesetDeriver>;
 
 }
 
-#endif // OSM_JOSM_XML_CHANGESET_FILE_WRITER_H
+#endif // JOSM_CHANGESET_DERIVER_H

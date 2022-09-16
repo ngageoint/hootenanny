@@ -83,11 +83,14 @@ public:
 
   void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }
 
-private:
+protected:
 
   friend class ChangesetReplacementCreatorTest;
 
-  Change _nextChange();
+  virtual Change _nextChange();
+
+  void _advanceTo();
+  void _advanceFrom();
 
   ElementInputStreamPtr _from;
   ElementInputStreamPtr _to;

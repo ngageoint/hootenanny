@@ -135,7 +135,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path, const QList<Chan
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2))
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, change.getType()))
         continue;
 
       LOG_VART(change.getType());

@@ -29,6 +29,7 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/JosmChangesetDeriver.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
@@ -627,8 +628,18 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   _numDeleteChanges = 0;
 
   QList<ChangesetProviderPtr> changesetProviders;
-  for (int i = 0; i < inputs1.size(); i++)
-    changesetProviders.append(std::make_shared<ChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
+  if (output.endsWith(".osm"))
+  {
+    //  Use the JOSM OSM changeset deriver for OSM files
+    for (int i = 0; i < inputs1.size(); i++)
+      changesetProviders.append(std::make_shared<JosmChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
+  }
+  else
+  {
+    //  Use the base changeset deriver for non-OSM files
+    for (int i = 0; i < inputs1.size(); i++)
+      changesetProviders.append(std::make_shared<ChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
+  }
 
   LOG_VARD(changesetProviders.size());
   assert(inputs1.size() == changesetProviders.size());

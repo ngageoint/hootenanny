@@ -445,6 +445,22 @@ set<ElementId> OsmMap::getParents(ElementId eid) const
   return getIndex().getParents(eid);
 }
 
+QString OsmMap::getProjectionEpsgString() const
+{
+  QString srs;
+  int epsg = getProjection()->GetEPSGGeogCS();
+  if (epsg > -1)
+    srs = QString("+epsg:%1").arg(epsg);
+  else
+  {
+    char *wkt;
+    getProjection()->exportToWkt(&wkt);
+    srs = wkt;
+    free(wkt);
+  }
+  return srs;
+}
+
 bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
 {
   for (const auto& element: l)
