@@ -114,7 +114,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
     for (const auto& name : qAsConst(list))
     {
       bool done = false;
-      for (int j = 0; j < filtered.size() && done == false; j++)
+      for (int j = 0; j < filtered.size(); j++)
       {
         if (filtered[j].compare(name, caseSensitivity) == 0)
         {
@@ -122,6 +122,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
           filtered[j] = _getBestName(filtered[j], name);
           LOG_VART(filtered[j]);
           done = true;
+          break;
         }
       }
 

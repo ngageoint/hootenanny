@@ -94,10 +94,10 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
       set<ElementId> parents = map->getIndex().getParents(*it);
 
       // Go through each of the child's direct parents.
-      for (set<ElementId>::const_iterator jt = parents.begin(); jt != parents.end(); ++jt)
+      for (const auto& parent_id : parents)
       {
-        LOG_TRACE("Checking parent: " << *jt << " of child: " << *it << "...");
-        if (toErase.find(*jt) == toErase.end())
+        LOG_TRACE("Checking parent: " << parent_id << " of child: " << *it << "...");
+        if (toErase.find(parent_id) == toErase.end())
         {
           // Remove the child b/c it is owned by an element outside _eid.
           LOG_TRACE("Removing child: " << *it);

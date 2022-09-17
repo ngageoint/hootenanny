@@ -61,7 +61,7 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   //  Bail out when keeping reviews
-  if (_type == KeepReviews)
+  if (_type == ResolveType::KeepReviews)
   {
     LOG_INFO("ResolveReviews operator keeping reviews");
     return;
@@ -79,7 +79,7 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   _numProcessed = _numAffected = reviews.size();
 
   //  Remove all of the review relations
-  if (_type == RemoveReviews)
+  if (_type == ResolveType::RemoveReviews)
   {
     LOG_INFO("ResolveReviews operator removing reviews");
     //  Remove all of the review relations one by one

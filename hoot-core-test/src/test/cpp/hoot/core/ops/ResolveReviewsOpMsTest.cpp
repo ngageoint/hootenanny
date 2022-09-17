@@ -76,7 +76,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::ResolveReviews);
+    uut.setResolveType(ResolveReviewsOp::ResolveType::ResolveReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

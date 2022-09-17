@@ -67,7 +67,7 @@ void RandomNodeDuplicator::apply(OsmMapPtr& map)
     if (uni(*_rng) < _p)
     {
       const NodePtr& n = it->second;
-      int copies = round(fabs(N() * _duplicateSigma)) + 1;
+      int copies = static_cast<int>(round(fabs(N() * _duplicateSigma)) + 1);
 
       for (int i = 0; i < copies; i++)
         duplicateNode(n, map);

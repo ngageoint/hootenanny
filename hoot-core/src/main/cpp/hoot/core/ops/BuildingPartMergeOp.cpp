@@ -316,7 +316,7 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
   for (size_t i = 1; i < way->getNodeCount(); i++)
   {
     // find all other ways that use this node (neighbors)
-    const std::set<long>& ways = _map->getIndex().getNodeToWayMap()->getWaysByNode(way->getNodeId(i));
+    const std::set<long>& ways = _map->getIndex().getNodeToWayMap()->getWaysByNode(way->getNodeId(static_cast<int>(i)));
 
     // go through each of the neighboring ways
     for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -329,14 +329,14 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
           // It seems like maybe this should be more strict and check for building parts, not just
           // buildings, but that's not how the code was originally written.
           _buildingCrit.isSatisfied(neighbor) &&
-          _hasContiguousNodes(neighbor, way->getNodeId(i), lastId) &&
+          _hasContiguousNodes(neighbor, way->getNodeId(static_cast<int>(i)), lastId) &&
           _compareTags(tags, neighbor->getTags()))
       {
         // add this to the list of neighbors
         neighborIds.insert(wayId);
       }
     }
-    lastId = way->getNodeId(i);
+    lastId = way->getNodeId(static_cast<int>(i));
   }
 
   return neighborIds;

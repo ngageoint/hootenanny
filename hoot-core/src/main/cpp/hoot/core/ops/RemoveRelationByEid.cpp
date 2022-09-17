@@ -55,8 +55,7 @@ void RemoveRelationByEid::apply(OsmMapPtr& map)
   {
     // determine if this relation is a part of any other relations
     // make a copy of the rids in case the index gets changed.
-    const set<long> rids =
-      map->_index->getElementToRelationMap()->getRelationByElement(ElementId::relation(_rIdToRemove));
+    const set<long> rids = map->_index->getElementToRelationMap()->getRelationByElement(ElementId::relation(_rIdToRemove));
 
     // remove this relation from all other parent relations.
     for (auto parentRelationId : rids)

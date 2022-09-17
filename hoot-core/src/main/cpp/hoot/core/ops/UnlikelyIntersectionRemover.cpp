@@ -82,7 +82,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   LOG_VART(wayIds);
 
   // Put the first valid way in the first group.
-  set<long>::const_iterator it = wayIds.begin();
+  auto it = wayIds.begin();
   std::shared_ptr<Way> first;
   while (!first && it != wayIds.end())
   {

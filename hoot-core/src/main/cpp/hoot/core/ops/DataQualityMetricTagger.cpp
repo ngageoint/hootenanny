@@ -70,7 +70,7 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   crit = std::make_shared<ElementIdCriterion>(ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _bounds));
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _orphanedNodes = tagVis->getNumFeaturesAffected();
+  _orphanedNodes = static_cast<int>(tagVis->getNumFeaturesAffected());
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not, so
@@ -85,27 +85,27 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   crit = std::make_shared<ChainCriterion>(std::make_shared<DisconnectedWayCriterion>(map), inBoundsCrit);
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _disconnectedWays = tagVis->getNumFeaturesAffected();
+  _disconnectedWays = static_cast<int>(tagVis->getNumFeaturesAffected());
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) << " disconnected ways in output.");
 
   tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootEmptyWay(), "yes");
   crit = std::make_shared<ChainCriterion>(std::make_shared<EmptyWayCriterion>(), inBoundsCrit);
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _emptyWays = tagVis->getNumFeaturesAffected();
+  _emptyWays = static_cast<int>(tagVis->getNumFeaturesAffected());
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
   tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootWayEndNode(), "yes");
   crit = std::make_shared<ChainCriterion>(std::make_shared<WayEndNodeCriterion>(map, false), inBoundsCrit);
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _numWayEndNodes = tagVis->getNumFeaturesAffected();
+  _numWayEndNodes = static_cast<int>(tagVis->getNumFeaturesAffected());
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_numWayEndNodes) << " way end nodes in output.");
 
   DuplicateElementMarker dupeMarker;
   dupeMarker.setCoordinateComparisonSensitivity(8);
   dupeMarker.apply(map);
-  _duplicateElementPairs = dupeMarker.getNumFeaturesAffected();
+  _duplicateElementPairs = static_cast<int>(dupeMarker.getNumFeaturesAffected());
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) << " duplicate feature pairs in output.");
   LOG_STATUS("Containing way types for duplicate way nodes: " << dupeMarker.getContainingWayTypes());
 }

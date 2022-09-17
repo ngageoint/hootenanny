@@ -124,7 +124,7 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
 {
   assert(ids.size() == 2);
 
-  set<long>::iterator it = ids.begin();
+  auto it = ids.begin();
   std::shared_ptr<Way> w1 = _map->getWay(*it);
   std::shared_ptr<Way> w2 = _map->getWay(*(++it));
 

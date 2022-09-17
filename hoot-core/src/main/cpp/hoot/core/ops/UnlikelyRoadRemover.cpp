@@ -75,7 +75,7 @@ ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& m
   ChainCriterionPtr chainedWayCrit = std::make_shared<ChainCriterion>(lengthCrit, headingCrit);
 
   // make sure only roads are removed
-  std::shared_ptr<HighwayCriterion> roadCrit = std::make_shared<HighwayCriterion>(HighwayCriterion(map));
+  std::shared_ptr<HighwayCriterion> roadCrit = std::make_shared<HighwayCriterion>(map);
   // Don't consider roundabouts, since their headings will obviously vary quite a bit as you go
   // around them.
   std::shared_ptr<NotCriterion> roundaboutCrit = std::make_shared<NotCriterion>(std::make_shared<RoundaboutCriterion>());
