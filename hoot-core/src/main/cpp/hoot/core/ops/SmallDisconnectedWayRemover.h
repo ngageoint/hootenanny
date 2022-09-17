@@ -29,11 +29,11 @@
 #define SMALL_DISCONNECTED_WAY_REMOVER_H
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -43,8 +43,7 @@ namespace hoot
  *
  * This is primarily useful for using with incompletely collected data e.g. extracted features.
  */
-class SmallDisconnectedWayRemover : public OsmMapOperation, public Configurable,
-  public ConflateInfoCacheConsumer
+class SmallDisconnectedWayRemover : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -67,8 +66,7 @@ public:
   QString getInitStatusMessage() const override { return "Removing small and disconnected ways..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Removed " + StringUtils::formatLargeNumber(_numAffected) + " small and disconnected ways.";
+    return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " small and disconnected ways.";
   }
 
   QString getDescription() const override { return "Removes small and disconnected ways"; }

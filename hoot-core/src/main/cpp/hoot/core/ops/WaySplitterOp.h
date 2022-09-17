@@ -29,9 +29,9 @@
 #define __WAY_SPLITTER_OP_H__
 
 // hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {

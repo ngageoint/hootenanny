@@ -29,9 +29,9 @@
 #define __WAY_JOINER_OP_H__
 
 //  Hoot
+#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -65,8 +65,7 @@ public:
   { return "Rejoining ways split during conflation..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways.";
+    return "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways.";
   }
 
   /**

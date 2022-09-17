@@ -29,11 +29,11 @@
 #define UNLIKELY_ROAD_REMOVER_H
 
 // Hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

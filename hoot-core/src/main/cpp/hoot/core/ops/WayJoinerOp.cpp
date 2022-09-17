@@ -28,9 +28,9 @@
 #include "WayJoinerOp.h"
 
 //  Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

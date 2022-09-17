@@ -31,21 +31,21 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/schema/TagDifferencer.h>
-#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -63,13 +63,9 @@ SmallHighwayMerger::SmallHighwayMerger(Meters threshold)
 {
   ConfigOptions opts = ConfigOptions();
   if (threshold >= 0)
-  {
     _threshold = threshold;
-  }
   else
-  {
     _threshold = opts.getSmallHighwayMergerThreshold();
-  }
   _diff = Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallHighwayMergerDiff());
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
@@ -87,7 +83,7 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
   WayMap wm = _map->getWays();
   // go through each way
   HighwayCriterion highwayCrit(_map);
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+  for (auto it = wm.begin(); it != wm.end(); ++it)
   {
     // if we haven't already merged the way
     if (_map->containsWay(it->first))
@@ -95,8 +91,7 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
       std::shared_ptr<Way> w = it->second;
 
       // if the way is smaller than the threshold, that isn't a `hoot:special` way
-      if (w && highwayCrit.isSatisfied(w) &&
-          !w->getTags().contains(MetadataTags::HootSpecial()))
+      if (w && highwayCrit.isSatisfied(w) && !w->getTags().contains(MetadataTags::HootSpecial()))
       {
         std::shared_ptr<LineString> linestring = ElementToGeometryConverter(map).convertToLineString(w);
         if (linestring && linestring->getLength() <= _threshold)
@@ -107,9 +102,7 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
     _numProcessed++;
     if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
-      PROGRESS_INFO(
-        "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
-        " highways for possible merging.");
+      PROGRESS_INFO("\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) << " highways for possible merging.");
     }
   }
 }
@@ -121,17 +114,10 @@ void SmallHighwayMerger::_mergeNeighbors(const std::shared_ptr<Way>& w)
   // is there a way on the front end that isn't an intersection
   const set<long>& front = n2w[w->getNodeId(0)];
   const set<long>& back = n2w[w->getLastNodeId()];
-  if (front.size() == 2)
-  {
-    // merge those two ways
+  if (front.size() == 2)  // merge those two ways
     _mergeWays(front);
-  }
-  // is there a way on the back end that isn't an intersection
-  else if (back.size() == 2)
-  {
-    // merge those two ways
+  else if (back.size() == 2)  // is there a way on the back end that isn't an intersection
     _mergeWays(back);
-  }
 }
 
 void SmallHighwayMerger::_mergeWays(const set<long>& ids)
@@ -145,16 +131,12 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
   HighwayCriterion highwayCrit(_map);
   // if either way is not a highway
   if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
-  {
     return;
-  }
 
   // if either one is a loop (because it's really an intersection, even though
   // "only" two ways intersect!)
   if (w1->isSimpleLoop() || w2->isSimpleLoop())
-  {
     return;
-  }
 
   // if they're from the same input sets & have effectively the same tags
   if (w1->getStatus() == w2->getStatus() && _diff->diff(_map, w1, w2) == 0.0)
@@ -173,11 +155,9 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
     BridgeCriterion bridgeCrit;
     const bool w1IsBridge = bridgeCrit.isSatisfied(w1);
     const bool w2IsBridge = bridgeCrit.isSatisfied(w2);
+    // One is a bridge and the other isn't. Don't merge.
     if ((w1IsBridge && !w2IsBridge) || (w2IsBridge && !w1IsBridge))
-    {
-      // One is a bridge and the other isn't. Don't merge.
       return;
-    }
 
     // Line the ways up so they're end to head and assign them to first and next.
     std::shared_ptr<Way> first, next;
@@ -233,12 +213,9 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
 
       // add next's nodes onto first's list.
       for (size_t i = 1; i < next->getNodeCount(); ++i)
-      {
         first->addNode(next->getNodeIds()[i]);
-      }
 
-      Tags tags = TagMergerFactory::mergeTags(first->getTags(), next->getTags(),
-        first->getElementType());
+      Tags tags = TagMergerFactory::mergeTags(first->getTags(), next->getTags(), first->getElementType());
       first->setTags(tags);
       first->setPid(Way::getPid(first, next));
 

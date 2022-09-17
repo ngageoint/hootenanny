@@ -56,14 +56,11 @@ void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
   NodeToWayMap n2w(*_result);
 
   // go through each node
-  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
+  for (auto it = n2w.begin(); it != n2w.end(); ++it)
   {
-    // if the node is part of multiple ways
+    // if the node is part of multiple ways evaluate and split the intersection
     if (it->second.size() > 1)
-    {
-      // evaluate and split the intersection
       _evaluateAndSplit(it->first, it->second);
-    }
   }
 }
 
@@ -99,24 +96,19 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   }
   LOG_VART(first.get());
   if (!first)
-  {
     return;
-  }
 
   // Go through all the other ways.
-  for (set<long>::const_iterator way_it = wayIds.begin(); way_it != wayIds.end(); ++way_it)
+  for (auto way_id : wayIds)
   {
-    std::shared_ptr<Way> w = _result->getWay(*way_it);
+    std::shared_ptr<Way> w = _result->getWay(way_id);
     _numProcessed++;
     if (!w)
-    {
       continue;
-    }
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
     // an active conflate matcher in the current conflation configuration.
-    else if (_conflateInfoCache &&
-             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << w->getElementId() << ", as it cannot be conflated by any " <<
@@ -128,17 +120,10 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     {
       const double p = _pIntersection(intersectingNode, first, w);
       // If this is a likely intersection with the first way,
-      if (p > 0.5)
-      {
-        // put it in the first group.
+      if (p > 0.5)  // put it in the first group.
         g1.push_back(w);
-      }
-      // If this is an unlikely intersection with the first way,
-      else
-      {
-        // put it in the second group.
+      else  // If this is an unlikely intersection with the first way, put it in the second group.
         g2.push_back(w);
-      }
     }
   }
 
@@ -236,15 +221,11 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   NodePtr oldNode = _result->getNode(intersectingNode);
   LOG_VART(oldNode.get());
   if (!oldNode)
-  {
     return;
-  }
   LOG_VART(oldNode->getElementId());
   // create a copy of the intersecting node
   NodePtr newNode =
-    std::make_shared<Node>(
-      oldNode->getStatus(), _result->createNextNodeId(), oldNode->toCoordinate(),
-      oldNode->getCircularError());
+    std::make_shared<Node>(oldNode->getStatus(), _result->createNextNodeId(), oldNode->toCoordinate(), oldNode->getCircularError());
   newNode->setTags(oldNode->getTags());
   LOG_VART(newNode->getElementId());
   _result->addNode(newNode);
@@ -252,10 +233,10 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   // all ways in group one are unchanged
 
   // all ways in group 2 get the intersecting node replaced by the new node.
-  for (size_t i = 0; i < g2.size(); i++)
+  for (const auto& way : g2)
   {
-    LOG_VART(g2[i]->getElementId());
-    g2[i]->replaceNode(intersectingNode, newNode->getId());
+    LOG_VART(way->getElementId());
+    way->replaceNode(intersectingNode, newNode->getId());
   }
 }
 

@@ -27,10 +27,10 @@
 #include "WaySplitterOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 
 namespace hoot
@@ -52,7 +52,7 @@ void WaySplitterOp::apply(std::shared_ptr<OsmMap>& map)
 
   // use a copy of the map since we'll be making changes
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WaySplitter::split(map, map->getWay(it->first), _maxLength);
     _numAffected++;
