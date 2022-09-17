@@ -53,9 +53,7 @@ public:
   void visit(const std::shared_ptr<const Element>& e) override
   {
     if (e->getTags().contains(MetadataTags::Ref1()) && _criterion->isSatisfied(e))
-    {
       _refs.insert(e->getTags().get(MetadataTags::Ref1()));
-    }
   }
 
   QString getDescription() const override { return ""; }
@@ -100,17 +98,14 @@ public:
   UpdateRefVisitor(const set<QString>& refs) : _refs(refs) { }
   ~UpdateRefVisitor() override = default;
 
-  QStringList _removeRef1(QStringList refs) const
+  QStringList _removeRef1(const QStringList& refs) const
   {
     QStringList result;
-    for (int i = 0; i < refs.size(); i++)
+    for (const auto& ref : qAsConst(refs))
     {
-      if (_refs.count(refs[i]) == 0)
-      {
-        result.append(refs[i]);
-      }
+      if (_refs.count(ref) == 0)
+        result.append(ref);
     }
-
     return result;
   }
 
@@ -124,13 +119,9 @@ public:
     {
       QStringList ref2 = _removeRef1(e->getTags().getList(MetadataTags::Ref2()));
       if (ref2.empty())
-      {
         e->getTags().set(MetadataTags::Ref2(), "none");
-      }
       else
-      {
         e->getTags().setList(MetadataTags::Ref2(), ref2);
-      }
     }
     e->getTags().setList("REVIEW", _removeRef1(e->getTags().getList("REVIEW")));
     e->getTags().setList("CONFLICT", _removeRef1(e->getTags().getList("CONFLICT")));

@@ -55,10 +55,8 @@ void MetadataImport::_apply()
   _importMetadataToElements();
 
   // delete dataset ways
-  for (WayPtr pDataset: _datasetWayPolys.keys())
-  {
+  for (const auto& pDataset : _datasetWayPolys.keys())
     _removeDatasetWay(pDataset);
-  }
 }
 
 void MetadataImport::_findDatasetWays()
@@ -67,7 +65,7 @@ void MetadataImport::_findDatasetWays()
   QString indiVal = _datasetIndicator.second;
   ElementToGeometryConverter ElementToGeometryConverter(_pMap);
 
-  for (WayMap::const_iterator it = _allWays.begin(); it != _allWays.end(); ++it)
+  for (auto it = _allWays.begin(); it != _allWays.end(); ++it)
   {
     const WayPtr pWay = it->second;
     const Tags& tags = pWay->getTags();
@@ -84,18 +82,17 @@ void MetadataImport::_findDatasetWays()
 
 void MetadataImport::_mergePolygonsWithMatchingMetadata()
 {
-  for (WayPtr pCheckWay : _datasetWayPolys.keys())
+  for (const auto& pCheckWay : _datasetWayPolys.keys())
   {
     bool matched = false;
 
     // check if current way matches any existing merged polys
-    for (WayPtr pMergedWay : _mergedGeoms.keys())
+    for (const auto& pMergedWay : _mergedGeoms.keys())
     {
       if (_areMetadataTagsEqual(pCheckWay, pMergedWay))
       {
         // merge polygon with existing polygon
-        _mergedGeoms[pMergedWay] = shared_ptr<Geometry>(
-              _mergedGeoms[pMergedWay]->Union(_datasetWayPolys[pCheckWay].get()));
+        _mergedGeoms[pMergedWay] = shared_ptr<Geometry>(_mergedGeoms[pMergedWay]->Union(_datasetWayPolys[pCheckWay].get()));
         matched = true;
         break;
       }
@@ -127,7 +124,7 @@ bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const
   Tags t1 = p1->getTags();
   Tags t2 = p2->getTags();
 
-  for (QString tag : _tags.keys())
+  for (const auto& tag : _tags.keys())
   {
     bool p1hasTag = t1.contains(tag);
     bool p2hasTag = t2.contains(tag);
@@ -135,15 +132,12 @@ bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const
     if (p1hasTag && p2hasTag)
     {
       // fail with mismatching tag values
-      if (t1[tag] != t2[tag]) return false;
+      if (t1[tag] != t2[tag])
+        return false;
     }
-    else if (p1hasTag != p2hasTag)
-    {
-      // fail if one has the tag but not the other
+    else if (p1hasTag != p2hasTag)  // fail if one has the tag but not the other
       return false;
-    }
   }
-
   return true;
 }
 
@@ -157,20 +151,15 @@ bool MetadataImport::_applyToElement( ElementPtr pElement )
     Tags destTags = pElement->getTags();
 
     // finally copy over the tags
-    for (QString tag : _tags.keys())
+    for (const auto& tag : _tags.keys())
     {
       if (srcTags.contains(tag))
-      {
         destTags[tag] = srcTags[tag];
-      }
       else
-      {
         destTags[tag] = _tags[tag];
-      }
     }
 
-    LOG_TRACE( "Copied metadata tags from way id " << assignedDataset->getId()
-               << " to element id " << pElement->getId());
+    LOG_TRACE( "Copied metadata tags from way id " << assignedDataset->getId() << " to element id " << pElement->getId());
 
     pElement->setTags(destTags);
     _numAffected++;

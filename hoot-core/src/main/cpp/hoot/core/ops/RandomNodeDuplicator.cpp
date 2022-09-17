@@ -32,20 +32,20 @@
 #include <boost/random/variate_generator.hpp>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RandomNodeDuplicator)
 
-RandomNodeDuplicator::RandomNodeDuplicator() :
-_localRng(std::make_shared<boost::minstd_rand>())
+RandomNodeDuplicator::RandomNodeDuplicator()
+  : _localRng(std::make_shared<boost::minstd_rand>())
 {
   _rng =_localRng.get();
 }
@@ -62,7 +62,7 @@ void RandomNodeDuplicator::apply(OsmMapPtr& map)
 
   // make a copy since we'll be modifying the map as we go.
   NodeMap nm = map->getNodes();
-  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  for (auto it = nm.begin(); it != nm.end(); ++it)
   {
     if (uni(*_rng) < _p)
     {
@@ -70,9 +70,7 @@ void RandomNodeDuplicator::apply(OsmMapPtr& map)
       int copies = round(fabs(N() * _duplicateSigma)) + 1;
 
       for (int i = 0; i < copies; i++)
-      {
         duplicateNode(n, map);
-      }
     }
   }
 }
@@ -87,8 +85,7 @@ void RandomNodeDuplicator::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;
 
-  NodePtr newNode =
-    std::make_shared<Node>(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError());
+  NodePtr newNode = std::make_shared<Node>(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError());
   map->addNode(newNode);
 
   _numAffected++;
@@ -103,13 +100,9 @@ void RandomNodeDuplicator::setConfiguration(const Settings& conf)
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
-  {
     _rng->seed(RandomNumberUtils::generateSeed());
-  }
   else
-  {
     _rng->seed(seed);
-  }
 }
 
 }

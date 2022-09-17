@@ -29,16 +29,16 @@
 #include "DualHighwayMarker.h"
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
+#include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
-#include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -54,11 +54,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DualHighwayMarker)
 
-DualHighwayMarker::DualHighwayMarker() :
-_minParallelScore(0.9),
-_markCrossingRoads(false),
-_numCrossing(0),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+DualHighwayMarker::DualHighwayMarker()
+  : _minParallelScore(0.9),
+    _markCrossingRoads(false),
+    _numCrossing(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -67,8 +67,7 @@ void DualHighwayMarker::setConfiguration(const Settings& conf)
   ConfigOptions confOpts(conf);
   _minParallelScore = confOpts.getDualHighwayMarkerParallelScoreThreshold();
   _markCrossingRoads = confOpts.getDualHighwayMarkerMarkCrossingRoads();
-  _maxCrossingRoadsParallelScore =
-    confOpts.getDualHighwayMarkerCrossingRoadsParallelScoreThreshold();
+  _maxCrossingRoadsParallelScore = confOpts.getDualHighwayMarkerCrossingRoadsParallelScoreThreshold();
 }
 
 Meters DualHighwayMarker::_getSearchRadius(const ConstElementPtr& e) const
@@ -79,9 +78,7 @@ Meters DualHighwayMarker::_getSearchRadius(const ConstElementPtr& e) const
 bool DualHighwayMarker::_isMatchCandidate(ConstElementPtr element) const
 {
   if (!element)
-  {
     return false;
-  }
   return OneWayCriterion().isSatisfied(element) && HighwayCriterion(_map).isSatisfied(element);
 }
 
@@ -93,13 +90,10 @@ void DualHighwayMarker::_createIndex()
   _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
   // Only index elements that satisfy isMatchCandidate.
-  std::function<bool (ConstElementPtr e)> f =
-    std::bind(&DualHighwayMarker::_isMatchCandidate, this, std::placeholders::_1);
+  std::function<bool (ConstElementPtr e)> f = std::bind(&DualHighwayMarker::_isMatchCandidate, this, std::placeholders::_1);
   std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
-  SpatialIndexer v(
-    _index, _indexToEid, pCrit,
-    std::bind(&DualHighwayMarker::_getSearchRadius, this, std::placeholders::_1), _map);
+  SpatialIndexer v(_index, _indexToEid, pCrit, std::bind(&DualHighwayMarker::_getSearchRadius, this, std::placeholders::_1), _map);
   _map->visitRo(v);
   v.finalizeIndex();
 }
@@ -116,28 +110,24 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
   _elementInfo = std::make_shared<ConflateInfoCache>(map);
 
   const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
+  for (auto waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     WayPtr road = waysItr->second;
     LOG_VART(road->getElementId());
 
     if (!road || !_isMatchCandidate(road))
-    {
       continue;
-    }
 
     // Get all the one way roads near the current road within our search radius.
     std::shared_ptr<geos::geom::Envelope> env(road->getEnvelope(_map));
     LOG_VART(env);
-    const std::set<ElementId> neighborIds =
-      SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
+    const std::set<ElementId> neighborIds = SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
     LOG_VART(neighborIds.size());
 
-    for (std::set<ElementId>::const_iterator neighborsItr = neighborIds.begin();
-         neighborsItr != neighborIds.end(); ++neighborsItr)
+    for (const auto& neighbor : neighborIds)
     {
-      LOG_VART(*neighborsItr);
-      WayPtr neighborRoad = std::dynamic_pointer_cast<Way>(_map->getElement(*neighborsItr));
+      LOG_VART(neighbor);
+      WayPtr neighborRoad = std::dynamic_pointer_cast<Way>(_map->getElement(neighbor));
       // No match candidate check needed here, as the index takes care of that for us.
       if (neighborRoad)
       {
@@ -147,8 +137,7 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
 
         const double parallelScore = ParallelScoreExtractor().extract(*_map, road, neighborRoad);
         LOG_VART(parallelScore);
-        const bool roadsInSameDirection =
-          DirectionFinder::isSimilarDirection2(_map, road, neighborRoad);
+        const bool roadsInSameDirection = DirectionFinder::isSimilarDirection2(_map, road, neighborRoad);
         LOG_VART(roadsInSameDirection);
 
         // If the neighboring road is parallel to our road and going in the opposite direction,
@@ -192,8 +181,7 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
   LOG_VARD(_numCrossing);
 }
 
-void DualHighwayMarker::_markRoadsCrossingDividedRoads(
-  const ConstWayPtr& divRoad1, const ConstWayPtr& divRoad2)
+void DualHighwayMarker::_markRoadsCrossingDividedRoads(const ConstWayPtr& divRoad1, const ConstWayPtr& divRoad2)
 {
   LOG_TRACE(
     "Attempting to remove roads crossing over divided roads " << divRoad1->getElementId() <<
@@ -204,10 +192,9 @@ void DualHighwayMarker::_markRoadsCrossingDividedRoads(
   // instead).
   const QSet<long> connectedWaysToRoad1 = WayUtils::getConnectedWays(divRoad1->getId(), _map);
   LOG_VART(connectedWaysToRoad1);
-  for (QSet<long>::const_iterator connectedWaysToRoad1Itr = connectedWaysToRoad1.begin();
-       connectedWaysToRoad1Itr != connectedWaysToRoad1.end(); ++connectedWaysToRoad1Itr)
+  for (auto way_id : qAsConst(connectedWaysToRoad1))
   {
-    WayPtr wayConnectedToRoad1 = _map->getWay(*connectedWaysToRoad1Itr);
+    WayPtr wayConnectedToRoad1 = _map->getWay(way_id);
     if (wayConnectedToRoad1)
     {
       LOG_VART(wayConnectedToRoad1->getElementId());
@@ -237,11 +224,8 @@ void DualHighwayMarker::_markRoadsCrossingDividedRoads(
       // divided road pair and no ends connected to the second divided road in the pair (anything
       // connected to road 2 can be dealt with in a separate call to this method pasing it in as the
       // first road parameter instead).
-      if ((road1ContainsFirstNode && road1ContainsLastNode) || road2ContainsFirstNode ||
-          road2ContainsLastNode)
-      {
+      if ((road1ContainsFirstNode && road1ContainsLastNode) || road2ContainsFirstNode || road2ContainsLastNode)
         continue;
-      }
       else if (road1ContainsFirstNode)
       {
         connectedEndId = firstNodeEndId;
@@ -255,9 +239,7 @@ void DualHighwayMarker::_markRoadsCrossingDividedRoads(
       LOG_VART(connectedEndId);
       LOG_VART(oppositeEndId);
       if (connectedEndId == 0)
-      {
         continue;
-      }
 
       // Keep only connecting roads whose opposite end is closer to the second divided road in the
       // pair than the one in the pair its connected to (its in between the two roads).
@@ -265,30 +247,22 @@ void DualHighwayMarker::_markRoadsCrossingDividedRoads(
       ConstNodePtr oppositeNodeEnd = _map->getNode(oppositeEndId);
       if (connectedNodeEnd && oppositeNodeEnd)
       {
-        const double distanceBetweenOppositeEndAndOtherDivRoad =
-          _elementInfo->getDistance(oppositeNodeEnd, divRoad2);
+        const double distanceBetweenOppositeEndAndOtherDivRoad = _elementInfo->getDistance(oppositeNodeEnd, divRoad2);
         LOG_VART(distanceBetweenOppositeEndAndOtherDivRoad);
-        const double distanceBetweenConnectedEndAndOtherDivRoad =
-          _elementInfo->getDistance(connectedNodeEnd, divRoad2);
+        const double distanceBetweenConnectedEndAndOtherDivRoad = _elementInfo->getDistance(connectedNodeEnd, divRoad2);
         LOG_VART(distanceBetweenConnectedEndAndOtherDivRoad);
         if (distanceBetweenOppositeEndAndOtherDivRoad >= distanceBetweenConnectedEndAndOtherDivRoad)
-        {
           continue;
-        }
       }
 
       // Keep only connecting roads that are mostly perpendicular with the two div roads.
-      const double parallelScoreWithRoad1 =
-        ParallelScoreExtractor().extract(*_map, divRoad1, wayConnectedToRoad1);
+      const double parallelScoreWithRoad1 = ParallelScoreExtractor().extract(*_map, divRoad1, wayConnectedToRoad1);
       LOG_VART(parallelScoreWithRoad1);
-      const double parallelScoreWithRoad2 =
-        ParallelScoreExtractor().extract(*_map, divRoad2, wayConnectedToRoad1);
+      const double parallelScoreWithRoad2 = ParallelScoreExtractor().extract(*_map, divRoad2, wayConnectedToRoad1);
       LOG_VART(parallelScoreWithRoad2);
-      if (parallelScoreWithRoad1 <= _maxCrossingRoadsParallelScore &&
-          parallelScoreWithRoad2 <= _maxCrossingRoadsParallelScore)
+      if (parallelScoreWithRoad1 <= _maxCrossingRoadsParallelScore && parallelScoreWithRoad2 <= _maxCrossingRoadsParallelScore)
       {
-        LOG_TRACE(
-          "Marking " << wayConnectedToRoad1->getElementId() << " as crossing dual highway...");
+        LOG_TRACE("Marking " << wayConnectedToRoad1->getElementId() << " as crossing dual highway...");
         wayConnectedToRoad1->getTags().set(MetadataTags::HootDualHighwayCrossing(), "yes");
         _numCrossing++;
       }

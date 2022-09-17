@@ -35,8 +35,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QThreadPool>
@@ -112,12 +112,11 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     // If the way wasn't a building, this will be null.
     if (buildingGeom && !buildingGeom->isEmpty())
     {
-      const std::vector<long>& intersectIds =
-        _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
+      const std::vector<long>& intersectIds = _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
-      for (auto intersection_it = intersectIds.begin(); intersection_it != intersectIds.end(); ++intersection_it)
+      for (auto intersection_id : intersectIds)
       {
-        WayPtr neighbor = _map->getWay(*intersection_it);
+        WayPtr neighbor = _map->getWay(intersection_id);
         // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
         if (_buildingCrit.isSatisfied(neighbor))
         {
@@ -130,9 +129,9 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
 
       const std::set<long>& neighborIds = _calculateNeighbors(way, way->getTags());
       LOG_VART(neighborIds.size());
-      for (auto neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end(); ++neighbor_it)
+      for (auto neighbor_id : neighborIds)
       {
-        WayPtr neighbor = _map->getWay(*neighbor_it);
+        WayPtr neighbor = _map->getWay(neighbor_id);
         // have already checked building status for neighbor in _calculateNeighbors
         buildingPartInput.enqueue(
           BuildingPartRelationship(
@@ -169,12 +168,11 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
     // If the relation wasn't a building, this will be null.
     if (buildingGeom && !buildingGeom->isEmpty())
     {
-      const std::vector<long>& intersectIds =
-        _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
+      const std::vector<long>& intersectIds = _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
-      for (auto intersection_it = intersectIds.begin(); intersection_it != intersectIds.end(); ++intersection_it)
+      for (auto intersection_id : intersectIds)
       {
-        WayPtr neighbor = _map->getWay(*intersection_it);
+        WayPtr neighbor = _map->getWay(intersection_id);
         // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
         if (_buildingCrit.isSatisfied(neighbor))
         {
@@ -187,9 +185,8 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
 
       const std::vector<RelationData::Entry>& members = relation->getMembers();
       LOG_VART(members.size());
-      for (size_t i = 0; i < members.size(); i++)
+      for (const auto& memberEntry : members)
       {
-        const RelationData::Entry& memberEntry = members[i];
         const ElementId memberElementId = memberEntry.getElementId();
         if (memberElementId.getType() == ElementType::Way)
         {
@@ -205,7 +202,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
                 BuildingPartRelationship::BuildingPartRelationshipType::Neighbor));
           }
         }
-        else if (members[i].getElementId().getType() == ElementType::Relation)
+        else if (memberEntry.getElementId().getType() == ElementType::Relation)
         {
           if (logWarnCount < Log::getWarnMessageLimit())
           {
@@ -285,7 +282,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
 {
   // go through each of the grouped buildings
   const Tgs::DisjointSetMap<ElementPtr>::AllGroups& groups = _buildingPartGroups.getAllGroups();
-  for (auto it = groups.begin(); it != groups.end(); it++)
+  for (auto it = groups.begin(); it != groups.end(); ++it)
   {
     // combine the group of building parts into a relation.
     std::vector<ElementPtr> parts = it->second;
@@ -319,8 +316,7 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
   for (size_t i = 1; i < way->getNodeCount(); i++)
   {
     // find all other ways that use this node (neighbors)
-    const std::set<long>& ways =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(way->getNodeId(i));
+    const std::set<long>& ways = _map->getIndex().getNodeToWayMap()->getWaysByNode(way->getNodeId(i));
 
     // go through each of the neighboring ways
     for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -349,12 +345,11 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
 bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2) const
 {
   // remove all the building tags that are building:part=yes specific.
-  const QSet<QString> buildingPartTagNames =
-    BuildingRelationMemberTagMerger::getBuildingPartTagNames();
-  for (auto it = buildingPartTagNames.begin(); it != buildingPartTagNames.end(); ++it)
+  const QSet<QString> buildingPartTagNames = BuildingRelationMemberTagMerger::getBuildingPartTagNames();
+  for (const auto& name : qAsConst(buildingPartTagNames))
   {
-    t1.remove(*it);
-    t2.remove(*it);
+    t1.remove(name);
+    t2.remove(name);
   }
 
   const double score = TagComparator::getInstance().compareTags(t1, t2);
@@ -362,17 +357,13 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2) const
   return fabs(1.0 - score) < 0.001;
 }
 
-bool BuildingPartMergeOp::_hasContiguousNodes(const ConstWayPtr& way, const long node1Id,
-                                              const long node2Id)
+bool BuildingPartMergeOp::_hasContiguousNodes(const ConstWayPtr& way, const long node1Id, const long node2Id)
 {
   const std::vector<long>& nodes = way->getNodeIds();
   for (size_t i = 0; i < nodes.size() - 1; i++)
   {
-    if ((nodes[i] == node1Id && nodes[i + 1] == node2Id) ||
-        (nodes[i] == node2Id && nodes[i + 1] == node1Id))
-    {
+    if ((nodes[i] == node1Id && nodes[i + 1] == node2Id) || (nodes[i] == node2Id && nodes[i + 1] == node1Id))
       return true;
-    }
   }
   return false;
 }
@@ -384,17 +375,12 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(const Co
   {
     switch (element->getElementType().getEnum())
     {
-      case ElementType::Way:
-        return
-          _elementToGeometryConverter->convertToGeometry(
-            std::dynamic_pointer_cast<const Way>(element));
-      case ElementType::Relation:
-        return
-          _elementToGeometryConverter->convertToGeometry(
-            std::dynamic_pointer_cast<const Relation>(element));
-      default:
-        throw IllegalArgumentException(
-          "Unexpected element type: " + element->getElementType().toString());
+    case ElementType::Way:
+      return _elementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
+    case ElementType::Relation:
+      return _elementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Relation>(element));
+    default:
+      throw IllegalArgumentException("Unexpected element type: " + element->getElementType().toString());
     }
   }
   return std::shared_ptr<geos::geom::Geometry>();

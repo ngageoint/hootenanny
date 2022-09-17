@@ -29,10 +29,10 @@
 #define RELATION_WITH_MOST_MEMBERS_OP_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot

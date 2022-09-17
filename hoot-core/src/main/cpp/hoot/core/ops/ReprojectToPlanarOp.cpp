@@ -27,9 +27,9 @@
 #include "ReprojectToPlanarOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -39,9 +39,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, ReprojectToPlanarOp)
 void ReprojectToPlanarOp::apply(std::shared_ptr<OsmMap>& map)
 {
   if (MapProjector::isGeographic(map))
-  {
     MapProjector::projectToPlanar(map);
-  }
 }
 
 }

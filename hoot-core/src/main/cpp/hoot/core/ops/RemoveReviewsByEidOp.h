@@ -28,8 +28,8 @@
 #define REMOVEREVIEWSBYEIDOP_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
@@ -63,8 +63,7 @@ public:
    * element being removed before trying to remove it. If false and clearAndRemoveElement=true, and
    * the element being removed has memberships in a relation or way, the element will not be removed.
    */
-  RemoveReviewsByEidOp(
-    ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
+  RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
   ~RemoveReviewsByEidOp() override = default;
 
   /**

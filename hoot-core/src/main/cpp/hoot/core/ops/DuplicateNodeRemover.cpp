@@ -181,25 +181,18 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               Tags tags2 = n2->getTags();
               tags2.removeMetadata();
               //  Check the tags
-              if ((tags1.empty() && tags2.empty()) ||
-                  (!tags1.empty() && tags2.empty()))
-              {
-                //  When both sets of tags are empty or the first set isn't and the second set is, replace
+              //  When both sets of tags are empty or the first set isn't and the second set is, replace
+              if ((tags1.empty() && tags2.empty()) || (!tags1.empty() && tags2.empty()))
                 replace = true;
-              }
+              //  When the first set of tags is empty but the second set isn't, don't replace the node
+              //  because a later iteration of the loop with merge the two nodes in the correct order
               else if (tags1.empty() && !tags2.empty())
-              {
-                //  When the first set of tags is empty but the second set isn't, don't replace the node
-                //  because a later iteration of the loop with merge the two nodes in the correct order
                 replace = false;
-              }
               else if (replace && tagDiff.diff(map, n1, n2) != 0.0)
               {
                 //  Both sets of tags aren't empty and the tag differencer score is non-zero they can't be merged
                 LOG_VART(tagDiff.diff(map, n1, n2));
-                LOG_TRACE(
-                  "Skipping merge for " << n1->getElementId() << " and " << n2->getElementId() <<
-                  " due to tag diff.");
+                LOG_TRACE("Skipping merge for " << n1->getElementId() << " and " << n2->getElementId() << " due to tag diff.");
                 replace = false;
               }
 
@@ -247,10 +240,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         if (Log::getInstance().getLevel() <= Log::Trace)
         {
           if (calcdDistanceSquared != -1.0)
-          {
-            _logMergeResult(matchId1, matchId2, map, replace, std::sqrt(distanceSquared),
-                            std::sqrt(calcdDistanceSquared));
-          }
+            _logMergeResult(matchId1, matchId2, map, replace, std::sqrt(distanceSquared), std::sqrt(calcdDistanceSquared));
           else
             _logMergeResult(matchId1, matchId2, map, replace);
         }
@@ -284,16 +274,16 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
 
   std::set<ElementId> wayIdsOwning1;
   const std::set<long> waysOwning1 = WayUtils::getContainingWayIds(nodeId1, map);
-  for (auto it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
-    wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
+  for (auto way_id : waysOwning1)
+    wayIdsOwning1.insert(ElementId(ElementType::Way, way_id));
 
   if (TagUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning1, map))
     return true;
 
   std::set<ElementId> wayIdsOwning2;
   const std::set<long> waysOwning2 = WayUtils::getContainingWayIds(nodeId2, map);
-  for (auto it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
-    wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
+  for (auto way_id : waysOwning2)
+    wayIdsOwning2.insert(ElementId(ElementType::Way, way_id));
 
   if (TagUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning2, map))
     return true;

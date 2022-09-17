@@ -84,9 +84,8 @@ public:
    * will be deleted. Even if isSatisfied returns false the children of that element will still
    * be searched.
    */
-  RecursiveElementRemover(
-    ElementId eid, const bool removeRefsFromParents = false,
-    const ElementCriterionPtr& criterion = ElementCriterionPtr());
+  RecursiveElementRemover(ElementId eid, const bool removeRefsFromParents = false,
+                          const ElementCriterionPtr& criterion = ElementCriterionPtr());
   ~RecursiveElementRemover() override = default;
 
   void addElement(const ConstElementPtr& e) override { _eid = e->getElementId(); }
@@ -115,8 +114,7 @@ private:
   // removes all references in parent elements to the element being removed before removing it
   bool _removeRefsFromParents;
 
-  void _remove(
-    const std::shared_ptr<OsmMap>& map, ElementId eid, const std::set<ElementId>& removeSet);
+  void _remove(const std::shared_ptr<OsmMap>& map, ElementId eid, const std::set<ElementId>& removeSet);
 };
 
 }

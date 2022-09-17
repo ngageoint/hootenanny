@@ -53,9 +53,7 @@ public:
   { return "Removing duplicate conflation review relations..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Removed " + StringUtils::formatLargeNumber(_numAffected) +
-      " duplicate conflation review relations";
+    return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " duplicate conflation review relations";
   }
 
   QString getName() const override { return className(); }

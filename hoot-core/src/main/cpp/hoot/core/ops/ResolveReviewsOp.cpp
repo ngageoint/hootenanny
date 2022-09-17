@@ -94,11 +94,8 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
     {
       ElementId rid = ElementId::relation(it->first);
       set<ElementId> elements = ReviewMarker::getReviewElements(map, rid);
-      if (elements.size() < 2)
-      {
-        //  Less than two elements, this review can be removed
+      if (elements.size() < 2)  //  Less than two elements, this review can be removed
         RemoveElementByEid(rid).apply(map);
-      }
       else
       {
         //  Check if any elements are part of multiple reviews
@@ -211,9 +208,8 @@ void ResolveReviewsOp::_resolveMatchReview(const std::shared_ptr<Match>& match,
     _resolveManualReview(map, relation_id, eid1, eid2);
 }
 
-void ResolveReviewsOp::_resolveManualReview(
-  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
-  const ElementId& eid2) const
+void ResolveReviewsOp::_resolveManualReview(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                                            const ElementId& eid1, const ElementId& eid2) const
 {
   LOG_TRACE("Manually resolving review: " << relation_id << ", elements: " << eid1 << ", " << eid2 << "...");
 

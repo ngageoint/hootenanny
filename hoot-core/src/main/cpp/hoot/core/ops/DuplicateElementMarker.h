@@ -29,8 +29,8 @@
 #define DUPLICATE_ELEMENT_MARKER_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
@@ -55,9 +55,8 @@ public:
   QString getInitStatusMessage() const override { return "Marking duplicate elements..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Marked " + QString::number(_numAffected) + " duplicate element pairs out of " +
-      QString::number(_numProcessed) + " elements total.";
+    return QString("Marked %1 duplicate element pairs out of %2 elements total.")
+            .arg(QString::number(_numAffected), QString::number(_numProcessed));
   }
 
   QString getDescription() const override { return "Adds a tag to elements who have duplicates"; }

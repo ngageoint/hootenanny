@@ -57,9 +57,7 @@ public:
   { return "Removing relation members with circular references..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Removed " + QString::number(_numAffected) +
-      " relation members involved in circular references";
+    return "Removed " + QString::number(_numAffected) + " relation members involved in circular references";
   }
 
   QString getDescription() const override

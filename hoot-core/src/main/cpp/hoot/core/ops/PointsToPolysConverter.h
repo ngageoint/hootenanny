@@ -54,9 +54,8 @@ public:
   { return "Converting non-child points to polygons..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Converted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " non-child points to polygons.";
+    return QString("Converted %1 / %2 non-child points to polygons.")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
   }
 
   QString getName() const override { return className(); }

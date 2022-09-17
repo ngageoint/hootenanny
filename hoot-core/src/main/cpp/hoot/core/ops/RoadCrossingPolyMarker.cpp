@@ -28,30 +28,30 @@
 #include "RoadCrossingPolyMarker.h"
 
 // Hoot
+#include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/geometry/GeometricRelationship.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/CriterionUtils.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RoadCrossingPolyMarker)
 
-RoadCrossingPolyMarker::RoadCrossingPolyMarker() :
-_addValidationTags(false),
-_numRoads(0),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+RoadCrossingPolyMarker::RoadCrossingPolyMarker()
+  : _addValidationTags(false),
+    _numRoads(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   setConfiguration(conf());
 }
@@ -72,8 +72,7 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
   // If there are no polygons in the input, then skip initialization of the road crossing poly
   // rules, since the road index creation can be expensive when calling conflation in a loop.
   ElementCriterionPtr polyCrit = std::make_shared<PolygonCriterion>(_map);
-  ElementCriterionPtr tagCrit =
-    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>("highway"));
+  ElementCriterionPtr tagCrit = std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>("highway"));
   ElementCriterionPtr crit = std::make_shared<ChainCriterion>(polyCrit, tagCrit);
   if (FilteredVisitor::getStat(crit, std::make_shared<ElementCountVisitor>(), _map) == 0)
   {
@@ -87,7 +86,7 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
   HighwayCriterion highwayCrit(_map);
-  for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
+  for (auto waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     WayPtr way = waysItr->second;
     LOG_VART(way->getElementId());
@@ -96,11 +95,8 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
     if (highwayCrit.isSatisfied(way))
     {
       // for each road crossing poly rule
-      for (QList<RoadCrossingPolyRule>::const_iterator rulesItr = _crossingRules.begin();
-           rulesItr != _crossingRules.end(); ++rulesItr)
+      for (const auto& rule : qAsConst(_crossingRules))
       {
-        RoadCrossingPolyRule rule = *rulesItr;
-
         // If we haven't already marked this road for review, its not in another review, and it
         // isn't allowed to cross the type of poly specified by the current rule... (actually, now
         // not sure that skipping the road if its already involved in another review is the best
@@ -114,15 +110,12 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
 
           // Get all nearby polys to the road that pass our poly filter.
           const std::set<ElementId> neighborIdsSet =
-            SpatialIndexer::findNeighbors(
-              *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
+            SpatialIndexer::findNeighbors(*env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
           LOG_VART(neighborIdsSet.size());
 
           // for each nearby poly
-          for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
-               neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
+          for (const auto& neighborId : neighborIdsSet)
           {
-            const ElementId neighborId = *neighborIdsItr;
             LOG_VART(neighborId);
             ConstElementPtr neighbor = _map->getElement(neighborId);
 
@@ -137,14 +130,9 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
               LOG_VART(rule.getAllowedRoadTagFilterString());
 
               const QString description =
-                "Road crossing polygon: " + rule.getPolyFilterString() + "; " +
-                rule.getAllowedRoadTagFilterString();
+                "Road crossing polygon: " + rule.getPolyFilterString() + "; " + rule.getAllowedRoadTagFilterString();
               if (!_addValidationTags)
-              {
-                reviewMarker.mark(
-                  _map, way, description,
-                  MetadataTags::HootReviewRoadCrossingPolygon(), 1.0);
-              }
+                reviewMarker.mark(_map, way, description, MetadataTags::HootReviewRoadCrossingPolygon(), 1.0);
               else
               {
                 way->setTag(MetadataTags::HootValidationError(), description);
@@ -180,8 +168,7 @@ QStringList RoadCrossingPolyMarker::getCriteria() const
 
 QString RoadCrossingPolyMarker::getValidationErrorMessage() const
 {
-  return
-    _numAffected == 0 ? "" : "Roads crossing polygons errors: " + QString::number(_numAffected);
+  return _numAffected == 0 ? "" : "Roads crossing polygons errors: " + QString::number(_numAffected);
 }
 
 }

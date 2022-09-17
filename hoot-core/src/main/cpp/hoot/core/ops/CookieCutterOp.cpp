@@ -27,25 +27,25 @@
 #include "CookieCutterOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, CookieCutterOp)
 
-CookieCutterOp::CookieCutterOp() :
-_alpha(1000.0),
-_alphaShapeBuffer(0.0),
-_crop(false)
+CookieCutterOp::CookieCutterOp()
+  : _alpha(1000.0),
+    _alphaShapeBuffer(0.0),
+    _crop(false)
 {
   setConfiguration(conf());
 }
@@ -89,8 +89,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 
   // Create an alpha shape based on the map with the cutter shape data to get our cookie cutter
   // shape outline.
-  std::shared_ptr<OsmMap> cutterShapeOutlineMap =
-    AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
+  std::shared_ptr<OsmMap> cutterShapeOutlineMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
 
   // Remove elements with the cutter shape status create a new map, which will be our dough map.
   std::shared_ptr<OsmMap> doughMap = std::make_shared<OsmMap>(map);

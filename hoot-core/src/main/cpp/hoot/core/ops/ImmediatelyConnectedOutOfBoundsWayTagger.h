@@ -28,10 +28,10 @@
 #define IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
 
 // Hoot
+#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Boundable.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -78,9 +78,8 @@ public:
    */
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Added " + StringUtils::formatLargeNumber(_numAffected) + " tags out of " +
-      StringUtils::formatLargeNumber(_numProcessed) + " total ways.";
+    return QString("Added %1 tags out of %2 total ways.")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
   }
 
   QString getName() const override { return className(); }
@@ -90,8 +89,7 @@ public:
    */
   QString getDescription() const override
   {
-    return
-      "Tags ways outside of a bounds but immediately connected to ways that cross the bounds";
+    return "Tags ways outside of a bounds but immediately connected to ways that cross the bounds";
   }
 
   long getNumTagged() const { return _numAffected; }

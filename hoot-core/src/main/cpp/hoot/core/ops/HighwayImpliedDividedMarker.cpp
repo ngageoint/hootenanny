@@ -28,15 +28,15 @@
 #include "HighwayImpliedDividedMarker.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -54,38 +54,26 @@ bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w
   long firstNodeId = w->getNodeId(0);
   long lastNodeId = w->getLastNodeId();
 
-  if (_hasDividerConnected(firstNodeId, w->getId()) &&
-      _hasDividerConnected(lastNodeId, w->getId()))
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return (_hasDividerConnected(firstNodeId, w->getId()) && _hasDividerConnected(lastNodeId, w->getId()));
 }
 
 bool HighwayImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId) const
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 
-  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+  for (auto way_id : wayIds)
   {
-    if (*it != excludedWayId)
+    if (way_id != excludedWayId)
     {
-      std::shared_ptr<const Way> w = _result->getWay(*it);
+      std::shared_ptr<const Way> w = _result->getWay(way_id);
       if (w->getTags()["divider"] == "yes")
-      {
         return true;
-      }
     }
   }
-
   return false;
 }
 
-std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided(
-  const std::shared_ptr<const OsmMap>& map)
+std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided(const std::shared_ptr<const OsmMap>& map)
 {
   HighwayImpliedDividedMarker t(map);
   return t.markDivided();
@@ -107,9 +95,9 @@ std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided()
   vector<long> wayIds = ElementIdsVisitor::findElements(_result, ElementType::Way, &chain);
 
   // go through each way
-  for (size_t i = 0; i < wayIds.size(); i++)
+  for (auto way_id : wayIds)
   {
-    std::shared_ptr<Way> w = _result->getWay(wayIds[i]);
+    std::shared_ptr<Way> w = _result->getWay(way_id);
     // if the way has a divided road on both ends
     if (w && _dividerSandwich(w))
     {

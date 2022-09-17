@@ -39,21 +39,21 @@ void ElementIdToVersionMapper::apply(const OsmMapPtr& map)
   _numAffected = 0;
 
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     _idToVersionMappings[it->second->getElementId()] = it->second->getVersion();
     _numAffected++;
   }
 
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     _idToVersionMappings[it->second->getElementId()] = it->second->getVersion();
     _numAffected++;
   }
 
   const NodeMap& nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     _idToVersionMappings[it->second->getElementId()] = it->second->getVersion();
     _numAffected++;

@@ -27,11 +27,11 @@
 #include "RemoveReviewsByEidOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
 using namespace std;
@@ -41,24 +41,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveReviewsByEidOp)
 
-RemoveReviewsByEidOp::RemoveReviewsByEidOp(
-  ElementId eid, bool clearAndRemoveElement, bool removeParentRefs) :
-_eid(eid),
-_clearAndRemove(clearAndRemoveElement),
-_removeParentRefs(removeParentRefs)
+RemoveReviewsByEidOp::RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement, bool removeParentRefs)
+  : _eid(eid),
+    _clearAndRemove(clearAndRemoveElement),
+    _removeParentRefs(removeParentRefs)
 {
 }
 
 void RemoveReviewsByEidOp::addElement(const ConstElementPtr& e)
 {
   if (_eid.isNull())
-  {
     _eid = e->getElementId();
-  }
   else
-  {
     throw IllegalArgumentException("Error adding element. Only one element can be added.");
-  }
 }
 
 void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
@@ -66,9 +61,7 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
   _numAffected = 0;
 
   if (_eid.isNull())
-  {
     throw IllegalArgumentException("You must specify a valid element ID.");
-  }
 
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_eid) == false)
@@ -80,19 +73,16 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
   LOG_TRACE("Removing reviews for " << _eid << " from map...");
   ElementPtr from = map->getElement(_eid);
   if (!from)
-  {
     return;
-  }
+
   set<ReviewMarker::ReviewUid> reviews = ReviewMarker::getReviewUids(map, from);
-  for (set<ReviewMarker::ReviewUid>::const_iterator it = reviews.begin(); it != reviews.end();
-    ++it)
+  for (const auto& review : reviews)
   {
     // just remove the review, not its children.
-    RemoveElementByEid::removeElement(map, *it);
+    RemoveElementByEid::removeElement(map, review);
     _numAffected++;
   }
-  LOG_TRACE(
-    "Removed " << StringUtils::formatLargeNumber(_numAffected) << " reviews for " << _eid << ".");
+  LOG_TRACE("Removed " << StringUtils::formatLargeNumber(_numAffected) << " reviews for " << _eid << ".");
 
   if (_clearAndRemove)
   {

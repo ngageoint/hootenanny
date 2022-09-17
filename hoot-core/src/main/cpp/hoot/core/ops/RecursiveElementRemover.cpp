@@ -27,13 +27,13 @@
 #include "RecursiveElementRemover.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ParentMembershipRemover.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;
@@ -43,17 +43,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveElementRemover)
 
-RecursiveElementRemover::RecursiveElementRemover() :
-_criterion(nullptr),
-_removeRefsFromParents(false)
+RecursiveElementRemover::RecursiveElementRemover()
+  : _criterion(nullptr),
+    _removeRefsFromParents(false)
 {
 }
 
-RecursiveElementRemover::RecursiveElementRemover(
-  ElementId eid, const bool removeRefsFromParents, const ElementCriterionPtr& criterion) :
-_eid(eid),
-_criterion(criterion),
-_removeRefsFromParents(removeRefsFromParents)
+RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const bool removeRefsFromParents, const ElementCriterionPtr& criterion)
+  : _eid(eid),
+    _criterion(criterion),
+    _removeRefsFromParents(removeRefsFromParents)
 {
 }
 
@@ -64,14 +63,11 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
   assert(_eid.isNull() == false);
   LOG_VART(map->containsElement(_eid));
   if (!map->containsElement(_eid))
-  {
     return;
-  }
+
   const ConstElementPtr& e = map->getElement(_eid);
   if (!e)
-  {
     return;
-  }
 
   if (_removeRefsFromParents)
   {
@@ -92,7 +88,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
   {
     foundOne = false;
     // go through all
-    for (set<ElementId>::iterator it = toErase.begin(); it != toErase.end();)
+    for (auto it = toErase.begin(); it != toErase.end();)
     {
       bool erased = false;
       set<ElementId> parents = map->getIndex().getParents(*it);
@@ -118,27 +114,20 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
 
       // If we didn't erase the element, then move the iterator forward.
       if (!erased)
-      {
         ++it;
-      }
     }
   }
 
   if (_criterion)
   {
     // Go through all remaining delete candidates.
-    for (set<ElementId>::iterator it = toErase.begin(); it != toErase.end();)
+    for (auto it = toErase.begin(); it != toErase.end();)
     {
       ConstElementPtr child = map->getElement(*it);
-      if (_criterion->isSatisfied(child))
-      {
-        // Remove the child.
+      if (_criterion->isSatisfied(child)) // Remove the child.
         toErase.erase(it++);
-      }
       else
-      {
         ++it;
-      }
     }
   }
 
@@ -146,8 +135,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(
-  const std::shared_ptr<OsmMap>& map, ElementId eid, const set<ElementId>& removeSet)
+void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, ElementId eid, const set<ElementId>& removeSet)
 {
   // if this element isn't being removed
   if (removeSet.find(eid) == removeSet.end() || map->containsElement(eid) == false)
@@ -166,10 +154,8 @@ void RecursiveElementRemover::_remove(
     // Make a copy so we can traverse it after this element is cleared.
     vector<RelationData::Entry> e = r->getMembers();
     r->clear();
-    for (size_t i = 0; i < e.size(); i++)
-    {
-      _remove(map, e[i].getElementId(), removeSet);
-    }
+    for (const auto& member : e)
+      _remove(map, member.getElementId(), removeSet);
 
 
     RemoveRelationByEid::removeRelation(map, eid.getId());
@@ -183,10 +169,8 @@ void RecursiveElementRemover::_remove(
     std::vector<long> nodes = w->getNodeIds();
     LOG_VART(nodes);
     w->clear();
-    for (size_t i = 0; i < nodes.size(); i++)
-    {
-      _remove(map, ElementId::node(nodes[i]), removeSet);
-    }
+    for (auto node_id : nodes)
+      _remove(map, ElementId::node(node_id), removeSet);
 
     RemoveWayByEid::removeWay(map, w->getId());
     LOG_VART(map->getWay(w->getId()));
@@ -199,9 +183,7 @@ void RecursiveElementRemover::_remove(
     _numAffected++;
   }
   else
-  {
     throw HootException("Unexpected element type.");
-  }
 }
 
 }

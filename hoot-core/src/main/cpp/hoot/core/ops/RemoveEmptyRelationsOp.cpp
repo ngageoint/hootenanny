@@ -27,9 +27,9 @@
 #include "RemoveEmptyRelationsOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -52,14 +52,12 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const b
   const RelationMap& relations = map->getRelations();
 
   QList<long> relationIds;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
     _numProcessed++;
     if (!relation)
-    {
       continue;
-    }
     const long relationId = relation->getId();
     const long membersSize = relation->getMembers().size();
     if (membersSize == 0)
@@ -73,24 +71,18 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const b
     }
     else
     {
-      LOG_TRACE(
-        "Relation " << relation->getElementId() << " has " << membersSize <<
-        " members. Members: " << relation->getMembers());
+      LOG_TRACE("Relation " << relation->getElementId() << " has " << membersSize << " members. Members: " << relation->getMembers());
     }
   }
   if (!reverseOrder)
-  {
     qSort(relationIds);
-  }
   else
-  {
     qSort(relationIds.end(), relationIds.begin());
-  }
   LOG_VART(relationIds);
 
-  for (QList<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
+  for (auto relation_id : qAsConst(relationIds))
   {
-    RemoveRelationByEid::removeRelation(map, *it);
+    RemoveRelationByEid::removeRelation(map, relation_id);
     _numAffected++;
   }
 }

@@ -38,8 +38,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MapCleaner)
 
-MapCleaner::MapCleaner(const Progress& progress) :
-_progress(progress)
+MapCleaner::MapCleaner(const Progress& progress)
+  : _progress(progress)
 {
 }
 

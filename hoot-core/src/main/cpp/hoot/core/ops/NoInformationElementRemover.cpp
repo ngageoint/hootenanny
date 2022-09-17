@@ -28,13 +28,13 @@
 #include "NoInformationElementRemover.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/UselessElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 namespace hoot
 {

@@ -61,8 +61,7 @@ public:
    * @param removeOnlyUnused only removes nodes that aren't a part of a way doCheck must be true and
    * removeFully false
    */
-  RemoveNodeByEid(
-    long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
+  RemoveNodeByEid(long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
   ~RemoveNodeByEid() override = default;
 
   /**

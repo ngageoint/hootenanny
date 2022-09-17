@@ -27,18 +27,18 @@
 #include "PointsToPolysConverter.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, PointsToPolysConverter)
 
-PointsToPolysConverter::PointsToPolysConverter(const double bufferSize) :
-_bufferSize(bufferSize)
+PointsToPolysConverter::PointsToPolysConverter(const double bufferSize)
+  : _bufferSize(bufferSize)
 {
 }
 
@@ -54,7 +54,7 @@ void PointsToPolysConverter::apply(OsmMapPtr& map)
   // Make a copy of the nodes here, so as we add in polys with nodes, we don't process those as
   // well.
   NodeMap nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     const long nodeId = it->first;
     LOG_VART(nodeId);
@@ -70,11 +70,8 @@ void PointsToPolysConverter::apply(OsmMapPtr& map)
 
   LOG_DEBUG("Removing points...");
   LOG_VART(_nodeIdsConverted.size());
-  for (QList<long>::const_iterator it = _nodeIdsConverted.begin(); it != _nodeIdsConverted.end();
-       ++it)
-  {
-    RemoveNodeByEid::removeNodeFully(map, *it);
-  }
+  for (auto node_id : qAsConst(_nodeIdsConverted))
+    RemoveNodeByEid::removeNodeFully(map, node_id);
 }
 
 void PointsToPolysConverter::_addPolyFromPoint(const ConstNodePtr& point, const OsmMapPtr& map)

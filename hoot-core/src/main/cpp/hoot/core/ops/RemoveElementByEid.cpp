@@ -35,11 +35,11 @@
 namespace hoot
 {
 
-RemoveElementByEid::RemoveElementByEid(ElementId eId, bool doCheck) :
-_eIdToRemove(eId),
-_doCheck(doCheck),
-_removeNodeFully(true),
-_removeOnlyUnusedNodes(false)
+RemoveElementByEid::RemoveElementByEid(ElementId eId, bool doCheck)
+  : _eIdToRemove(eId),
+    _doCheck(doCheck),
+    _removeNodeFully(true),
+    _removeOnlyUnusedNodes(false)
 {
   LOG_VART(_eIdToRemove);
   LOG_VART(_doCheck);
@@ -50,8 +50,7 @@ void RemoveElementByEid::apply(OsmMapPtr& map)
   if (ElementType::Node == _eIdToRemove.getType().getEnum())
   {
     // Remove node fully (Removes node from relations & ways, then removes node from map)
-    RemoveNodeByEid removeNode(
-      _eIdToRemove.getId(), _doCheck, _removeNodeFully, _removeOnlyUnusedNodes);
+    RemoveNodeByEid removeNode(_eIdToRemove.getId(), _doCheck, _removeNodeFully, _removeOnlyUnusedNodes);
     removeNode.apply(map);
   }
   else if (ElementType::Way == _eIdToRemove.getType().getEnum())
@@ -65,9 +64,7 @@ void RemoveElementByEid::apply(OsmMapPtr& map)
     removeRelation.apply(map);
   }
   else
-  {
     throw HootException(QString("Unexpected element type: %1").arg(_eIdToRemove.toString()));
-  }
 }
 
 void RemoveElementByEid::removeElement(OsmMapPtr map, ElementId eId)

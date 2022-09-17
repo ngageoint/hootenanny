@@ -33,10 +33,10 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -73,9 +73,8 @@ public:
   QString getInitStatusMessage() const override;
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " elements";
+    return QString("Cropped %1 / %2 elements")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
   }
 
   void setInvert(bool invert);

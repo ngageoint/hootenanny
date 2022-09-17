@@ -93,8 +93,7 @@ private:
    */
   void _substituteForContainingOps();
 
-  QString _getInitMessage(const QString& message, 
-                          const std::shared_ptr<OperationStatus>& statusInfo) const;
+  QString _getInitMessage(const QString& message, const std::shared_ptr<OperationStatus>& statusInfo) const;
   void _updateProgress(const int currentStep, const QString& message);
 };
 

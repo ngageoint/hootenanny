@@ -28,13 +28,13 @@
 #define BUILDINGPARTMERGEOP_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/merging/BuildingPartPreMergeCollector.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -46,12 +46,11 @@ namespace __gnu_cxx
 {
 
 template<>
-  struct hash<std::shared_ptr<hoot::Element>>
-  {
-    size_t
-    operator()(const std::shared_ptr<hoot::Element>& k) const
-    { return (size_t)(k.get()); }
-  };
+struct hash<std::shared_ptr<hoot::Element>>
+{
+  size_t operator()(const std::shared_ptr<hoot::Element>& k) const
+  { return (size_t)(k.get()); }
+};
 
 }
 
@@ -114,10 +113,10 @@ public:
   QString getCompletedStatusMessage() const override
   {
     return
-      "Merged " + StringUtils::formatLargeNumber(_numAffected) +
-      " building parts from " +
-      StringUtils::formatLargeNumber(_numBuildingGroupsMerged) + " valid building groups / " +
-      StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) + " total.";
+      QString("Merged %1 building parts from %2 valid building groups / %3 total.")
+        .arg(StringUtils::formatLargeNumber(_numAffected),
+             StringUtils::formatLargeNumber(_numBuildingGroupsMerged),
+             StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed));
   }
 
   int getTotalBuildingGroupsProcessed() const { return _totalBuildingGroupsProcessed; }

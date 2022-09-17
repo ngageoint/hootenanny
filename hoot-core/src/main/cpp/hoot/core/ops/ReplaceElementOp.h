@@ -28,9 +28,9 @@
 #define REPLACEELEMENTOP_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
@@ -75,8 +75,7 @@ public:
    * element being removed before trying to remove it. If false and clearAndRemove=true, and the
    * element being removed has memberships in a relation or way, the element will not be removed.
    */
-  ReplaceElementOp(
-    ElementId from, ElementId to, bool clearAndRemove = false, bool removeParentRefs = false);
+  ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove = false, bool removeParentRefs = false);
   ~ReplaceElementOp() override = default;
 
   /**

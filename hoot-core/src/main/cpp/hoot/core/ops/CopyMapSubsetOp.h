@@ -29,10 +29,10 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

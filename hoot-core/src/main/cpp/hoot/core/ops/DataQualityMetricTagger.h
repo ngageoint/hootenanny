@@ -30,8 +30,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -60,9 +60,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Calculating data quality metrics..."; }
   QString getCompletedStatusMessage() const override
-  {
-    return "Calculated data quality metrics.";
-  }
+  { return "Calculated data quality metrics."; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
