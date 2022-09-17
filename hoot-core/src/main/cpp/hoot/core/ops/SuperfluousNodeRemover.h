@@ -29,13 +29,13 @@
 #define SUPERFLUOUSNODEREMOVER_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
@@ -80,9 +80,8 @@ public:
    * @param e bounds within which to remove nodes
    * @return the number of superfluous nodes removed
    */
-  static long removeNodes(
-    std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
+  static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+                          const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * Collects superfluous nodes from a map without removing them
@@ -92,9 +91,8 @@ public:
    * @param e bounds within which to collect node IDs
    * @return the superfluous node IDs found
    */
-  static std::set<long> collectSuperfluousNodeIds(
-    std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
+  static std::set<long> collectSuperfluousNodeIds(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+                                                  const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * @see Configurable
