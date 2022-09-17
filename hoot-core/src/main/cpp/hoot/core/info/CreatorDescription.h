@@ -29,8 +29,8 @@
 #define CREATOR_DESCRIPTON_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -71,9 +71,8 @@ public:
 
   CreatorDescription();
   CreatorDescription(const QString& className, const QString& description, bool experimental);
-  CreatorDescription(
-    const QString& className, const QString& description, BaseFeatureType featureType,
-    bool experimental);
+  CreatorDescription(const QString& className, const QString& description, BaseFeatureType featureType,
+                     bool experimental);
 
   /**
    * Converts a base feature type to a string representation
@@ -120,8 +119,7 @@ public:
    * getElementCriterionName. Think if we change to AreaCriterion, however, that will throw the
    * stats off.
    */
-  static std::shared_ptr<ElementCriterion> getElementCriterion(
-    BaseFeatureType t, ConstOsmMapPtr map);
+  static std::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
 
   /**
    * Returns the name of a ConflatableElementCriterion associated with the given feature type

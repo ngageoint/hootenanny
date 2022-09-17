@@ -28,10 +28,10 @@
 #define ELEMENT_COUNTER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -87,8 +87,7 @@ private:
   QString _getMemoryBoundStatusMessage(const OsmMapPtr& map) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const;
-  ElementInputStreamPtr _getFilteredInputStream(
-    ElementInputStreamPtr inputStream, ConstElementVisitorPtr countVis) const;
+  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream, ConstElementVisitorPtr countVis) const;
   ConstElementVisitorPtr _getCountVis() const;
 
   long _countMemoryBound(const QStringList& inputs) const;

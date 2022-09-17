@@ -75,9 +75,7 @@ IoSingleStat::IoSingleStat(Type t)
   QFile fp("/proc/self/io");
 
   if (!fp.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
     throw HootException("Error opening /proc/self/io for reading. Are you running Linux?");
-  }
 
   bool found = false;
   // If you call atEnd() before a read it returns true. Maybe because it is a proc file? Dunno.
@@ -91,18 +89,13 @@ IoSingleStat::IoSingleStat(Type t)
       bool ok;
       value = l[1].trimmed().toLong(&ok);
       if (!ok)
-      {
-        throw HootException(QString("Error parsing %1 from /proc/self/io (%2).").arg(typeString).
-          arg(l[1]));
-      }
+        throw HootException(QString("Error parsing %1 from /proc/self/io (%2).").arg(typeString, l[1]));
       found = true;
     }
   } while (!fp.atEnd());
 
   if (!found)
-  {
     throw HootException(QString("Could not find (%1) in /proc/self/io.").arg(typeString));
-  }
 }
 
 }

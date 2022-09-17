@@ -44,11 +44,11 @@ public:
 
   JosmChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
 
-  ~JosmChangesetDeriver() = default;
+  ~JosmChangesetDeriver() override = default;
 
 private:
 
-  virtual Change _nextChange();
+  Change _nextChange() override;
 
 };
 

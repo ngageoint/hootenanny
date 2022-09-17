@@ -453,10 +453,10 @@ QString OsmMap::getProjectionEpsgString() const
     srs = QString("+epsg:%1").arg(epsg);
   else
   {
-    char *wkt;
+    char *wkt = nullptr;
     getProjection()->exportToWkt(&wkt);
     srs = wkt;
-    free(wkt);
+    CPLFree(wkt);
   }
   return srs;
 }

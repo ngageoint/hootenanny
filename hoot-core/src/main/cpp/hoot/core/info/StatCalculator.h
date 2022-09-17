@@ -55,8 +55,7 @@ public:
    * average
    * @return a numeric statistic
    */
-  double calculateStat(
-    const QStringList& inputs, const QString& visitorClassName, const QString& statType) const;
+  double calculateStat(const QStringList& inputs, const QString& visitorClassName, const QString& statType) const;
 
 private:
 
@@ -65,14 +64,11 @@ private:
   bool _isValidStatType(const QString& statType) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamableReader(const QString& input) const;
-  ConstElementVisitorPtr _getStatCollector(
-    const QString& statType, const QString& visClassName) const;
-  double _calcStatStreaming(
-    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
-    const QString& statType) const;
-  double _calcStatMemoryBound(
-    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
-    const QString& statType) const;
+  ConstElementVisitorPtr _getStatCollector(const QString& statType, const QString& visClassName) const;
+  double _calcStatStreaming(const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+                            const QString& statType) const;
+  double _calcStatMemoryBound(const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+                              const QString& statType) const;
 };
 
 }

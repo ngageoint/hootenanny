@@ -74,10 +74,16 @@ private:
 
   QString _apiEntityTypeForBaseClass(const QString& baseClassName) const;
 
+  /**
+   *  @param apiEntityBaseClassName
+   *  @param apiEntityType
+   *  @param displayType
+   *  @param maxNameSize - the size of the longest names plus a 3 space buffer; the value passed in
+   *  here by callers may have to be adjusted over time for some entity types
+   */
   template<typename ApiEntity, typename ApiEntityChild>
-  QString _getApiEntities(
-    const QString& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
-    const int maxNameSize) const;
+  QString _getApiEntities(const QString& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
+                          const int maxNameSize) const;
 
   template<typename ApiEntity>
   QString _getApiEntitiesForMatchMergerCreators(const QString& apiEntityClassName) const;
