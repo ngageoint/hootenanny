@@ -436,10 +436,10 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(const QStrin
   std::sort(names.begin(), names.end(), apiEntityNameComparator);
   LOG_VARD(names);
   QStringList output;
-  for (const auto& name : names)
+  for (const auto& obj_name : names)
   {
     // get all names known by this creator
-    std::shared_ptr<ApiEntity> mc = Factory::getInstance().constructObject<ApiEntity>(name);
+    std::shared_ptr<ApiEntity> mc = Factory::getInstance().constructObject<ApiEntity>(obj_name);
     std::vector<CreatorDescription> creators = mc->getAllCreators();
     LOG_VARD(creators.size());
 
