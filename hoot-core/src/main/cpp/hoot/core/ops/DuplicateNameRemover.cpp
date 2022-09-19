@@ -100,10 +100,10 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
     // remove empty names
     QStringList list2 = list;
     list.clear();
-    for (const auto& name : qAsConst(list2))
+    for (const auto& list_name : qAsConst(list2))
     {
-      if (!name.isEmpty())
-        list.append(name);
+      if (!list_name.isEmpty())
+        list.append(list_name);
     }
     LOG_VART(list);
 
@@ -111,15 +111,15 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
 
     // filter on case sensitivity and "best name"
     QStringList filtered;
-    for (const auto& name : qAsConst(list))
+    for (const auto& list_name : qAsConst(list))
     {
       bool done = false;
       for (int j = 0; j < filtered.size(); j++)
       {
-        if (filtered[j].compare(name, caseSensitivity) == 0)
+        if (filtered[j].compare(list_name, caseSensitivity) == 0)
         {
-          LOG_VART(name);
-          filtered[j] = _getBestName(filtered[j], name);
+          LOG_VART(list_name);
+          filtered[j] = _getBestName(filtered[j], list_name);
           LOG_VART(filtered[j]);
           done = true;
           break;
@@ -127,7 +127,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
       }
 
       if (done == false)
-        filtered.append(name);
+        filtered.append(list_name);
     }
     LOG_VART(filtered);
 
