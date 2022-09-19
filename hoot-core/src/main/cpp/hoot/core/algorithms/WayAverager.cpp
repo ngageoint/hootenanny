@@ -170,7 +170,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
 
     OsmMapWriterFactory::writeDebugMap(_map, className(), "after-add-node-loop-" + QString::number(index));
   }
-  LOG_VART(result->getNodeIds().size());
+  LOG_VART(result->getNodeCount());
   LOG_VART(i1);
   LOG_VART(i2);
 
@@ -179,7 +179,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   ConstNodePtr node2b = _map->getNode(ns2[i2]);
   if (node1b && node2b)
     result->addNode(_merge(node1b, weight1, node2b, weight2));
-  LOG_VART(result->getNodeIds().size());
+  LOG_VART(result->getNodeCount());
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-last-add-node");
 
   // use the default tag merging mechanism

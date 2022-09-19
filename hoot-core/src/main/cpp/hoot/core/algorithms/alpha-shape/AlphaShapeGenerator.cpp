@@ -96,7 +96,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
 
   // put all the nodes into a vector of points
   std::vector<std::pair<double, double>> points;
-  points.reserve(inputMap->getNodes().size());
+  points.reserve(inputMap->getNodeCount());
   const NodeMap& nodes = inputMap->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
