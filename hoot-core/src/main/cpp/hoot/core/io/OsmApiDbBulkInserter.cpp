@@ -772,7 +772,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
              way->getVersion());
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += way->getTags().size();
-  _writeStats.wayNodesWritten += way->getNodeIds().size();
+  _writeStats.wayNodesWritten += way->getNodeCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(way, wayDbId);

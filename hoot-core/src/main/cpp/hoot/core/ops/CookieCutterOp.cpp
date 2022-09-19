@@ -83,7 +83,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   doughRemover.setRecursive(true);
   doughRemover.addCriterion(std::make_shared<StatusCriterion>(doughMapStatus));
   cutterShapeMap->visitRw(doughRemover);
-  LOG_VARD(cutterShapeMap->getNodes().size());
+  LOG_VARD(cutterShapeMap->getNodeCount());
   LOG_VARD(MapProjector::toWkt(cutterShapeMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cutterShapeMap, className(), "cutter-shape-map");
 
@@ -108,7 +108,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   cutterShapeMap->append(cookieCutMap);
   std::shared_ptr<OsmMap> result = cutterShapeMap;
   map = std::make_shared<OsmMap>(result);
-  LOG_VARD(map->getNodes().size());
+  LOG_VARD(map->getNodeCount());
   LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, className(), "final-combined-map");
 }

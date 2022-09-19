@@ -434,7 +434,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   _writeWayNodes(wayDbId, way->getNodeIds(), way->getVersion());
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += way->getTags().size();
-  _writeStats.wayNodesWritten += way->getNodeIds().size();
+  _writeStats.wayNodesWritten += way->getNodeCount();
   if (_validateData)
     _checkUnresolvedReferences(way, wayDbId);
 

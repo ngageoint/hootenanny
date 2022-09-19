@@ -1163,8 +1163,8 @@ bool OsmPbfReader::hasMoreElements()
   else if (_blobIndex < (int)_blobs.size()) //  see if we've read all the blobs
     return true;
 
-  return (_partialNodesRead < static_cast<int>(_map->getNodes().size()) ||
-          _partialWaysRead < static_cast<int>(_map->getWays().size()) ||
+  return (_partialNodesRead < static_cast<int>(_map->getNodeCount()) ||
+          _partialWaysRead < static_cast<int>(_map->getWayCount()) ||
           _partialRelationsRead < static_cast<int>(_map->getRelations().size()));
 }
 
@@ -1175,9 +1175,9 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
 
   //if this is the first time through, or we've run out of an element buffer to read from
   if (!_firstPartialReadCompleted ||
-      (_partialNodesRead == int(_map->getNodes().size()) &&
-        _partialWaysRead == int(_map->getWays().size()) &&
-        _partialRelationsRead == int(_map->getRelations().size())))
+      (_partialNodesRead == (int)_map->getNodeCount() &&
+       _partialWaysRead == (int)_map->getWayCount() &&
+       _partialRelationsRead == (int)_map->getRelations().size()))
   {
     if (!_firstPartialReadCompleted)
     {
@@ -1221,7 +1221,7 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
   std::shared_ptr<Element> element;
-  if (_partialNodesRead < int(_map->getNodes().size()))
+  if (_partialNodesRead < (int)_map->getNodeCount())
   {
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
@@ -1231,13 +1231,13 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
     ++_nodesItr;
     _partialNodesRead++;
   }
-  else if (_partialWaysRead < int(_map->getWays().size()))
+  else if (_partialWaysRead < (int)_map->getWayCount())
   {
     element = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
     _partialWaysRead++;
   }
-  else if (_partialRelationsRead < int(_map->getRelations().size()))
+  else if (_partialRelationsRead < (int)_map->getRelationCount())
   {
     element = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;

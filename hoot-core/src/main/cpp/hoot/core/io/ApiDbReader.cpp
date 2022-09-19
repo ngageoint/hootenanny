@@ -538,8 +538,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   if (!conf.getBoundsKeepEntireFeaturesCrossingBounds() || conf.getBoundsKeepOnlyFeaturesInsideBounds())
     IoUtils::cropToBounds(map, _bounds);
 
-  LOG_VARD(map->getNodes().size());
-  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getNodeCount());
+  LOG_VARD(map->getWayCount());
   LOG_VARD(map->getRelations().size());
 }
 
@@ -615,8 +615,8 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   }
 
   LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
-  LOG_VARD(map->getNodes().size());
-  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getNodeCount());
+  LOG_VARD(map->getWayCount());
   LOG_VARD(map->getRelations().size());
 }
 

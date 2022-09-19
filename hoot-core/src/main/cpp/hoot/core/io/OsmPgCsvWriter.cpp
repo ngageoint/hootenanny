@@ -210,7 +210,7 @@ void OsmPgCsvWriter::writePartial(const ConstWayPtr& w)
       << _getTags(w) << _endl;
   //  WayNodes
   //  way_id,node_id,version,sequence_id
-  for (size_t i = 0; i < w->getNodeIds().size(); ++i)
+  for (size_t i = 0; i < w->getNodeCount(); ++i)
   {
     _streams[FileType::WayNodes]
         << w->getId() << _separator
