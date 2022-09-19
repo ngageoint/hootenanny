@@ -29,12 +29,12 @@
 #define UNCONNECTED_WAY_SNAPPER
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>

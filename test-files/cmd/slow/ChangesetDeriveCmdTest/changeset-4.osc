@@ -11,9 +11,9 @@
             <nd ref="1669731"/>
             <nd ref="-1"/>
             <nd ref="-2"/>
-            <tag k="test_key" v="test_val"/>
             <tag k="highway" v="primary"/>
             <tag k="note" v="1"/>
+            <tag k="test_key" v="test_val"/>
         </way>
     </create>
 </osmChange>

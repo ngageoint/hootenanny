@@ -113,9 +113,10 @@ protected:
    * @param element the element to check
    * @param map1 before changes map
    * @param map2 after changes map
+   * @param change_type type of change for element
    * @return true if the element passes the configured bounds requirement; false otherwise
    */
-  bool _failsBoundsCheck(const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
+  bool _failsBoundsCheck(const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2, Change::ChangeType change_type) const;
 };
 
 }

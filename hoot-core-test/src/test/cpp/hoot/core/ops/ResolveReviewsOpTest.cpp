@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -65,7 +65,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::KeepReviews);
+    uut.setResolveType(ResolveReviewsOp::ResolveType::KeepReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -89,7 +89,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::RemoveReviews);
+    uut.setResolveType(ResolveReviewsOp::ResolveType::RemoveReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -113,7 +113,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::ResolveReviews);
+    uut.setResolveType(ResolveReviewsOp::ResolveType::ResolveReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef STAT_CALCULATOR_H
 #define STAT_CALCULATOR_H
@@ -55,8 +55,7 @@ public:
    * average
    * @return a numeric statistic
    */
-  double calculateStat(
-    const QStringList& inputs, const QString& visitorClassName, const QString& statType) const;
+  double calculateStat(const QStringList& inputs, const QString& visitorClassName, const QString& statType) const;
 
 private:
 
@@ -65,14 +64,11 @@ private:
   bool _isValidStatType(const QString& statType) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamableReader(const QString& input) const;
-  ConstElementVisitorPtr _getStatCollector(
-    const QString& statType, const QString& visClassName) const;
-  double _calcStatStreaming(
-    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
-    const QString& statType) const;
-  double _calcStatMemoryBound(
-    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
-    const QString& statType) const;
+  ConstElementVisitorPtr _getStatCollector(const QString& statType, const QString& visClassName) const;
+  double _calcStatStreaming(const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+                            const QString& statType) const;
+  double _calcStatMemoryBound(const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+                              const QString& statType) const;
 };
 
 }

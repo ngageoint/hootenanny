@@ -104,8 +104,7 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
     {
       // and for each rail that is nearby the rail,
       std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
-      const std::set<ElementId> neighborIdsSet =
-        SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
+      const std::set<ElementId> neighborIdsSet = SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
       LOG_VART(neighborIdsSet.size());
       for (const auto& neighborId : neighborIdsSet)
       {
@@ -119,8 +118,7 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
           // this pair, then skip.
           const QString idStr1 = QString("%1;%2").arg(way->getElementId().toString(), neighbor->getElementId().toString());
           const QString idStr2 = QString("%1;%2").arg(neighbor->getElementId().toString(), way->getElementId().toString());
-          const bool pairNotProcessed =
-            !_markedRailways.contains(idStr1) && !_markedRailways.contains(idStr2);
+          const bool pairNotProcessed = !_markedRailways.contains(idStr1) && !_markedRailways.contains(idStr2);
 
           // This tells us if the two features were from the same input dataset *and* unmodified. If
           // either was conflated, there's not a way to tell if they were from the same dataset by
@@ -154,11 +152,8 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
           {
             // TODO: It would be helpful if we'd could also mark the points at which they cross here
             // and tag those for debugging purposes.
-            LOG_TRACE(
-              "Marking for review: " << way->getElementId() << " and " << neighborId << "...");
-            reviewMarker.mark(
-              _map, way, neighbor, "Crossing railways", MetadataTags::HootReviewCrossingRailways(),
-              1.0);
+            LOG_TRACE("Marking for review: " << way->getElementId() << " and " << neighborId << "...");
+            reviewMarker.mark(_map, way, neighbor, "Crossing railways", MetadataTags::HootReviewCrossingRailways(), 1.0);
             _markedRailways.insert(idStr1);
             _markedRailways.insert(idStr2);
             _numAffected++;
@@ -189,10 +184,7 @@ void RailwaysCrossingMarker::setTagExcludeFilter(const QStringList& excludeTags)
   {
     const QStringList kvpParts = Tags::kvpToParts(kvp);
     if (!kvpParts.empty())
-    {
-      _tagExcludeFilter->addCriterion(
-        std::make_shared<NotCriterion>(std::make_shared<TagCriterion>(kvpParts[0], kvpParts[1])));
-    }
+      _tagExcludeFilter->addCriterion(std::make_shared<NotCriterion>(std::make_shared<TagCriterion>(kvpParts[0], kvpParts[1])));
     else
     {
       LOG_WARN("Invalid exclude tag KVP: " << kvp);
@@ -210,19 +202,14 @@ void RailwaysCrossingMarker::_createIndex()
   _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
   // Only index elements that satisfy isMatchCandidate.
-  std::function<bool (ConstElementPtr e)> f =
-    std::bind(&RailwaysCrossingMarker::_isMatchCandidate, this, std::placeholders::_1);
+  std::function<bool (ConstElementPtr e)> f = std::bind(&RailwaysCrossingMarker::_isMatchCandidate, this, std::placeholders::_1);
   std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
-  SpatialIndexer v(
-    _index, _indexToEid, pCrit,
-    std::bind(&RailwaysCrossingMarker::_getSearchRadius, this, std::placeholders::_1), _map);
+  SpatialIndexer v(_index, _indexToEid, pCrit, std::bind(&RailwaysCrossingMarker::_getSearchRadius, this, std::placeholders::_1), _map);
   _map->visitRo(v);
   v.finalizeIndex();
 
-  LOG_DEBUG(
-    "\tRailways feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
-    " elements.");
+  LOG_DEBUG("\tRailways feature index created with " << StringUtils::formatLargeNumber(v.getSize()) << " elements.");
 }
 
 Meters RailwaysCrossingMarker::_getSearchRadius(const ConstElementPtr& e) const
@@ -232,9 +219,7 @@ Meters RailwaysCrossingMarker::_getSearchRadius(const ConstElementPtr& e) const
 
 bool RailwaysCrossingMarker::_isMatchCandidate(ConstElementPtr element) const
 {
-  return
-    RailwayCriterion().isSatisfied(element) &&
-    (!_tagExcludeFilter || _tagExcludeFilter->isSatisfied(element));
+  return RailwayCriterion().isSatisfied(element) && (!_tagExcludeFilter || _tagExcludeFilter->isSatisfied(element));
 }
 
 QStringList RailwaysCrossingMarker::getCriteria() const

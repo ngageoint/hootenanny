@@ -556,8 +556,8 @@ void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
       wayNodeIdVal = _idMappings.nodeIdMap->at(*it);
     else
     {
-      throw UnsupportedException(QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2")
-                                  .arg(dbWayId, static_cast<unsigned long>(*it)));
+      throw UnsupportedException(
+            QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId).arg(*it));
     }
 
     _outputSections[HootApiDb::getCurrentWayNodesTableName(_database.getMapId())]->write(

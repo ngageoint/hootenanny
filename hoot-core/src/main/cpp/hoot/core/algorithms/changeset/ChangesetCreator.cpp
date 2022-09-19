@@ -29,6 +29,7 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/JosmChangesetDeriver.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
@@ -91,9 +92,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     throw IllegalArgumentException("Output to SQL changeset requires an OSM API database URL be specified.");
   else if (!output.endsWith(".osc.sql") && !_osmApiDbUrl.isEmpty())
   {
-    LOG_WARN(
-      "Ignoring OSM API database URL: " << _osmApiDbUrl << " for non-SQL changeset output...");
+    LOG_WARN("Ignoring OSM API database URL: " << _osmApiDbUrl << " for non-SQL changeset output...");
   }
+  else if (output.endsWith(".osm"))
+    _includeReviews = true;
 
   // write the output dir now so we don't get a nasty surprise at the end of a long job that it
   // can't be written
@@ -102,11 +104,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
-  const bool useStreamingIo =
-    // TODO: may be able to move this check to IoUtils::areValidStreamingOps
-    !ConfigUtils::boundsOptionEnabled() &&
-    _inputIsStreamable(input1) &&
-    (_singleInput || _inputIsStreamable(input2));
+  const bool useStreamingIo = !ConfigUtils::boundsOptionEnabled() && _inputIsStreamable(input1) && (_singleInput || _inputIsStreamable(input2));
   LOG_VARD(useStreamingIo);
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -212,8 +210,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   _streamChangesetOutput(sortedElements1, sortedElements2, output);
   _currentTaskNum++;
 
-  progress.set(1.0, Progress::JobState::Successful,
-               "Changeset written to: ..." + FileUtils::toLogFormat(output, maxFilePrintLength));
+  progress.set(1.0, Progress::JobState::Successful, "Changeset written to: ..." + FileUtils::toLogFormat(output, maxFilePrintLength));
 }
 
 void ChangesetCreator::create(const OsmMapPtr& map1, const OsmMapPtr& map2, const QString& output)
@@ -225,8 +222,7 @@ void ChangesetCreator::create(const OsmMapPtr& map1, const OsmMapPtr& map2, cons
   create(map1Inputs, map2Inputs, output);
 }
 
-void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs,
-                              const QString& output)
+void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs, const QString& output)
 {
   if (map1Inputs.size() != map2Inputs.size())
     throw IllegalArgumentException("Changeset input data inputs are not the same size.");
@@ -246,8 +242,7 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs, const QList<Os
 
     if (!_includeReviews)
     {
-      std::shared_ptr<TagKeyCriterion> elementCriterion =
-        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
+      std::shared_ptr<TagKeyCriterion> elementCriterion = std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
       RemoveElementsVisitor removeElementsVisitor;
       removeElementsVisitor.setRecursive(false);
       removeElementsVisitor.addCriterion(elementCriterion);
@@ -288,7 +283,7 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs, const QList<Os
 
 bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 {
-  return format.endsWith(".osc") || format.endsWith(".osc.sql");
+  return format.endsWith(".osc") || format.endsWith(".osc.sql") || format.endsWith(".osm");
 }
 
 bool ChangesetCreator::_inputIsSorted(const QString& input) const
@@ -358,9 +353,8 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
       if (e.getWhat().contains("already contains"))
       {
         throw HootException(
-          QString("It is not possible to run a non-streamable map operation ") +
-          QString("(OsmMapOperation) on two data sources with overlapping element IDs: ") +
-          e.what());
+          QString("It is not possible to run a non-streamable map operation "
+                  "(OsmMapOperation) on two data sources with overlapping element IDs: %1").arg(e.what()));
       }
       //  rethrow the original exception
       throw;
@@ -496,8 +490,7 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     LOG_DEBUG("Processing inputs without convert ops...");
 
     // We didn't have any convert ops, so just load everything up.
-    progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input...");
+    progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input...");
     // Preserving source IDs is important here.
     if (!_singleInput)
     {
@@ -519,10 +512,8 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
 
   if (!_includeReviews)
   {
-    progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
-    std::shared_ptr<TagKeyCriterion> elementCriterion =
-      std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
+    progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
+    std::shared_ptr<TagKeyCriterion> elementCriterion = std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
     RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
     removeElementsVisitor.addCriterion(elementCriterion);
@@ -585,16 +576,14 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   if (!_includeReviews)
   {
     elementCriterion =
-      std::make_shared<NotCriterion>(
-        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds()));
+      std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds()));
   }
   // Tags need to be truncated if they are over max tag length characters.
   visitors.append(std::make_shared<ApiTagTruncateVisitor>());
 
   // open a stream to the input data
   std::shared_ptr<PartialOsmMapReader> reader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::createReader(input));
+    std::dynamic_pointer_cast<PartialOsmMapReader>(OsmMapReaderFactory::createReader(input));
   reader->setUseDataSourceIds(true);
   reader->open(input);
   ElementInputStreamPtr inputStream = std::dynamic_pointer_cast<ElementInputStream>(reader);
@@ -629,10 +618,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   LOG_VARD(inputs1.size());
   LOG_VARD(inputs2.size());
   if (inputs1.size() != inputs2.size())
-  {
-    throw IllegalArgumentException(
-      "Changeset input data inputs are not the same size for streaming to output.");
-  }
+    throw IllegalArgumentException("Changeset input data inputs are not the same size for streaming to output.");
 
   LOG_INFO("Streaming changeset output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
@@ -642,8 +628,18 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   _numDeleteChanges = 0;
 
   QList<ChangesetProviderPtr> changesetProviders;
-  for (int i = 0; i < inputs1.size(); i++)
-    changesetProviders.append(std::make_shared<ChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
+  if (output.endsWith(".osm"))
+  {
+    //  Use the JOSM OSM changeset deriver for OSM files
+    for (int i = 0; i < inputs1.size(); i++)
+      changesetProviders.append(std::make_shared<JosmChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
+  }
+  else
+  {
+    //  Use the base changeset deriver for non-OSM files
+    for (int i = 0; i < inputs1.size(); i++)
+      changesetProviders.append(std::make_shared<ChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
+  }
 
   LOG_VARD(changesetProviders.size());
   assert(inputs1.size() == changesetProviders.size());
@@ -658,8 +654,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   }
   LOG_VARD(changesetProviders.size());
 
-  std::shared_ptr<OsmChangesetFileWriter> writer =
-    OsmChangesetFileWriterFactory::getInstance().createWriter(output, _osmApiDbUrl);
+  std::shared_ptr<OsmChangesetFileWriter> writer = OsmChangesetFileWriterFactory::getInstance().createWriter(output, _osmApiDbUrl);
   // Changeset writing honors the bounds config opt, if specified. To do bounds checking a map is
   // needed, so pass in maps to the changeset writer.
   if (ConfigUtils::boundsOptionEnabled())
@@ -672,16 +667,13 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   writer->write(output, changesetProviders);
   if (_printDetailedStats)
   {
-    if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
+    if (!output.endsWith(".osc.sql")) // detailed stats currently only implemented for non-sql output
     {
       // Get the stats output format from the file extension, or if no extension is there assume a
       // text table output to the display.
       ChangesetStatsFormat statsFormat;
       if (!_statsOutputFile.isEmpty())
-      {
-        QFileInfo statsFileInfo(_statsOutputFile);
-        statsFormat.setFormat(ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix()));
-      }
+        statsFormat.setFormat(ChangesetStatsFormat::fromString(QFileInfo(_statsOutputFile).completeSuffix()));
       else
         statsFormat.setFormat(ChangesetStatsFormat::TextFormat);
 
@@ -689,8 +681,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     }
     else
     {
-      LOG_INFO(
-        "Skipping changeset statistics generation, as not implemented for output: " << output);
+      LOG_INFO("Skipping changeset statistics generation, as not implemented for output: " << output);
     }
   }
 
@@ -723,14 +714,12 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   {
     // close the output streams
     ElementInputStreamPtr input1 = inputs1.at(i);
-    std::shared_ptr<PartialOsmMapReader> partialReader1 =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
+    std::shared_ptr<PartialOsmMapReader> partialReader1 = std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
     if (partialReader1)
       partialReader1->finalizePartial();
     input1->close();
     ElementInputStreamPtr input2 = inputs2.at(i);
-    std::shared_ptr<PartialOsmMapReader> partialReader2 =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(input2);
+    std::shared_ptr<PartialOsmMapReader> partialReader2 = std::dynamic_pointer_cast<PartialOsmMapReader>(input2);
     if (partialReader2)
       partialReader2->finalizePartial();
     input2->close();
@@ -757,8 +746,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   }
 }
 
-void ChangesetCreator::_streamChangesetOutput(
-  ElementInputStreamPtr input1, ElementInputStreamPtr input2, const QString& output)
+void ChangesetCreator::_streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2, const QString& output)
 {
   QList<ElementInputStreamPtr> input1List;
   input1List.append(input1);

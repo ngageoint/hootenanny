@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "MapCropper.h"
@@ -76,20 +76,20 @@ int MapCropper::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MapCropper)
 
-MapCropper::MapCropper() :
-_invert(false),
-_keepEntireFeaturesCrossingBounds(false),
-_keepOnlyFeaturesInsideBounds(false),
-_removeSuperfluousFeatures(true),
-_removeMissingElements(true),
-_statusUpdateInterval(1000),
-_numWaysInBounds(0),
-_numWaysOutOfBounds(0),
-_numWaysCrossingThreshold(0),
-_numCrossingWaysKept(0),
-_numCrossingWaysRemoved(0),
-_numNodesRemoved(0),
-_logWarningsForMissingElements(true)
+MapCropper::MapCropper()
+  : _invert(false),
+    _keepEntireFeaturesCrossingBounds(false),
+    _keepOnlyFeaturesInsideBounds(false),
+    _removeSuperfluousFeatures(true),
+    _removeMissingElements(true),
+    _statusUpdateInterval(1000),
+    _numWaysInBounds(0),
+    _numWaysOutOfBounds(0),
+    _numWaysCrossingThreshold(0),
+    _numCrossingWaysKept(0),
+    _numCrossingWaysRemoved(0),
+    _numNodesRemoved(0),
+    _logWarningsForMissingElements(true)
 {
 }
 
@@ -99,17 +99,11 @@ QString MapCropper::getInitStatusMessage() const
   if (_bounds)
   {
     QString boundsStr;
-    std::shared_ptr<geos::geom::Polygon> polyBounds =
-      std::dynamic_pointer_cast<geos::geom::Polygon>(_bounds);
-    if (polyBounds)
-    {
-      // This is easier to read.
+    std::shared_ptr<geos::geom::Polygon> polyBounds = std::dynamic_pointer_cast<geos::geom::Polygon>(_bounds);
+    if (polyBounds) // This is easier to read.
       boundsStr = GeometryUtils::polygonToString(polyBounds);
-    }
     else
-    {
       boundsStr = QString::fromStdString(_bounds->toString());
-    }
     msg += "..." + boundsStr.right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   }
   msg += "...";
@@ -132,48 +126,37 @@ void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
 {
   // this option is ignored when set to invert
   if (_invert)
-  {
     _keepEntireFeaturesCrossingBounds = false;
-  }
   // this option is incomptible with the option to keep only features inside the bounds
   else if (keep && _keepOnlyFeaturesInsideBounds)
   {
     throw IllegalArgumentException(
-      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and ") +
-      QString("_keepEntireFeaturesCrossingBounds cannot both be enabled."));
+      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and _keepEntireFeaturesCrossingBounds cannot both be enabled."));
   }
   else
-  {
     _keepEntireFeaturesCrossingBounds = keep;
-  }
 }
 
 void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
 {
   // this option is ignored when set to invert
   if (_invert)
-  {
     _keepOnlyFeaturesInsideBounds = false;
-  }
   // this option is incomptible with the option to keep features crossing the bounds
   else if (keep && _keepEntireFeaturesCrossingBounds)
   {
     throw IllegalArgumentException(
-      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and ") +
-      QString("_keepEntireFeaturesCrossingBounds cannot both be enabled."));
+      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and _keepEntireFeaturesCrossingBounds cannot both be enabled."));
   }
   else
-  {
     _keepOnlyFeaturesInsideBounds = keep;
-  }
 }
 
 void MapCropper::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
 
-  std::shared_ptr<geos::geom::Geometry> bounds =
-    GeometryUtils::boundsFromString(confOpts.getCropBounds());
+  std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(confOpts.getCropBounds());
   LOG_VART(bounds.get());
   if (bounds)
   {
@@ -197,9 +180,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(map->size());
 
   if (!_bounds)
-  {
     throw IllegalArgumentException("No bounds set on MapCropper.");
-  }
 
   _numProcessed = 0;
   _numAffected = 0;
@@ -221,7 +202,7 @@ void MapCropper::apply(OsmMapPtr& map)
   // go through all the ways
   long wayCtr = 0;
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
     LOG_VART(w.get());
@@ -293,8 +274,7 @@ void MapCropper::apply(OsmMapPtr& map)
     else if (_keepOnlyFeaturesInsideBounds)
     {
       // Way isn't wholly inside and the configuration requires it to be, so remove the way.
-      LOG_TRACE(
-        "Dropping due to _keepOnlyFeaturesInsideBounds=true: " << w->getElementId() << "...");
+      LOG_TRACE("Dropping due to _keepOnlyFeaturesInsideBounds=true: " << w->getElementId() << "...");
       RemoveWayByEid::removeWayFully(map, w->getId());
       _numWaysOutOfBounds++;
       _numAffected++;
@@ -303,8 +283,7 @@ void MapCropper::apply(OsmMapPtr& map)
     {
       // Way crosses the boundary and we're not configured to keep ways that cross the bounds, so
       // do an expensive operation to decide how much to keep, if any.
-      LOG_TRACE(
-        "Cropping due to _keepEntireFeaturesCrossingBounds=false: " << w->getElementId() << "...");
+      LOG_TRACE("Cropping due to _keepEntireFeaturesCrossingBounds=false: " << w->getElementId() << "...");
       _cropWay(map, w->getId());
       _numWaysCrossingThreshold++;
     }
@@ -335,7 +314,7 @@ void MapCropper::apply(OsmMapPtr& map)
   long nodeCtr = 0;
   long nodesRemoved = 0;
   const NodeMap nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     NodePtr node = it->second;
     LOG_TRACE("Checking " << node->getElementId() << " for cropping...");
@@ -351,9 +330,7 @@ void MapCropper::apply(OsmMapPtr& map)
     if (!_inclusionCrit && _explicitlyIncludedWayIds.empty() &&
         WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
-      LOG_TRACE(
-        "Skipping delete for: " << node->getElementId() <<
-        " belonging to explicitly included way(s)...");
+      LOG_TRACE("Skipping delete for: " << node->getElementId() << " belonging to explicitly included way(s)...");
     }
     else
     {
@@ -363,26 +340,20 @@ void MapCropper::apply(OsmMapPtr& map)
       if (_invert == false)
       {
         nodeInside = _bounds->covers(p.get());
-        LOG_TRACE(
-          "Node inside check: non-inverted crop and the envelope covers the element=" <<
-          nodeInside);
+        LOG_TRACE("Node inside check: non-inverted crop and the envelope covers the element=" << nodeInside);
       }
       else
       {
         nodeInside = !_bounds->covers(p.get());
-        LOG_TRACE(
-          "Node inside check: inverted crop and the envelope covers the element=" << !nodeInside);
+        LOG_TRACE("Node inside check: inverted crop and the envelope covers the element=" << !nodeInside);
       }
       LOG_VART(nodeInside);
 
-      // If the node is outside,
-      if (!nodeInside &&
-          // the node is within the limiting bounds, and the node is not part of a way,
-          n2w->find(it->first) == n2w->end())
+      // If the node is outside and the node is within the limiting bounds, and the node is not part of a way
+      if (!nodeInside && n2w->find(it->first) == n2w->end())
       {
         // remove the node.
-        LOG_TRACE(
-          "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
+        LOG_TRACE("Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
         RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
         nodesRemoved++;
         _numAffected++;
@@ -454,13 +425,10 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   LOG_TRACE("Cropping way crossing bounds: " << wid << "...");
 
   std::shared_ptr<Way> way = map->getWay(wid);
-  std::shared_ptr<Geometry> fg =
-    ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
+  std::shared_ptr<Geometry> fg = ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
   LOG_VART(GeometryUtils::geometryTypeIdToString(fg));
   if (!fg || fg->isEmpty())
-  {
     return;
-  }
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;
@@ -489,9 +457,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   LOG_VART(e.get());
   if (!e)
   {
-    LOG_TRACE(
-      way->getElementId() <<
-      " converted geometry can't be converted to an element. Skipping cropping...");
+    LOG_TRACE(way->getElementId() << " converted geometry can't be converted to an element. Skipping cropping...");
     return;
   }
 
@@ -511,11 +477,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
   else
   {
-    LOG_TRACE(
-      "Replacing way during crop check: " << way->getElementId() << " with element: " <<
-      e->getElementId() << "...");
-    //LOG_VART(way);
-    //LOG_VART(e);
+    LOG_TRACE("Replacing way during crop check: " << way->getElementId() << " with element: " << e->getElementId() << "...");
 
     e->setTags(way->getTags());
 
@@ -529,9 +491,8 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     {
       RelationPtr newRelation = std::dynamic_pointer_cast<Relation>(e);
       const vector<RelationData::Entry>& members = newRelation->getMembers();
-      for (size_t i = 0; i < members.size(); i++)
+      for (const auto& element : members)
       {
-        RelationData::Entry element = members[i];
         if (element.getElementId().getType() == ElementType::Way)
         {
           WayPtr memberWay = map->getWay(element.getElementId().getId());
@@ -560,16 +521,13 @@ bool MapCropper::_isWhollyInside(const Envelope& e) const
   if (_invert)
   {
     result = !_bounds->getEnvelopeInternal()->intersects(e);
-    LOG_TRACE(
-      "Wholly inside way check: inverted crop and the envelope intersects with the element=" <<
-      !result);
+    LOG_TRACE("Wholly inside way check: inverted crop and the envelope intersects with the element=" << !result);
   }
   else
   {
     // If it isn't inverted, we need to do an expensive check.
     result = _bounds->getEnvelopeInternal()->covers(e);
-    LOG_TRACE(
-      "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
+    LOG_TRACE("Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
   }
   LOG_TRACE("Wholly inside way check result: " << result);
   return result;
@@ -583,15 +541,12 @@ bool MapCropper::_isWhollyOutside(const Envelope& e) const
     LOG_VART(_bounds->toString());
     LOG_VART(_bounds->getEnvelopeInternal()->toString());
     result = !_bounds->getEnvelopeInternal()->intersects(e);
-    LOG_TRACE(
-      "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
-      !result);
+    LOG_TRACE("Wholly outside way check: non-inverted crop and the envelope intersects with the element=" << !result);
   }
   else
   {
     result = _bounds->getEnvelopeInternal()->covers(e);
-    LOG_TRACE(
-      "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
+    LOG_TRACE("Wholly outside way check: inverted crop and the envelope covers the element=" << result);
   }
   LOG_TRACE("Wholly outside way check result: " << result);
   return result;
@@ -603,15 +558,12 @@ bool MapCropper::_isWhollyOutside(const Geometry& e) const
   if (!_invert)
   {
     result = !_bounds->intersects(&e);
-    LOG_TRACE(
-      "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
-      !result);
+    LOG_TRACE("Wholly outside way check: non-inverted crop and the envelope intersects with the element=" << !result);
   }
   else
   {
     result = _bounds->covers(&e);
-    LOG_TRACE(
-      "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
+    LOG_TRACE("Wholly outside way check: inverted crop and the envelope covers the element=" << result);
   }
   LOG_TRACE("Wholly outside way check result: " << result);
   return result;

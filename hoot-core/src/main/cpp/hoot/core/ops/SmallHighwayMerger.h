@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SMALLHIGHWAYMERGER_H
@@ -70,9 +70,7 @@ public:
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void mergeWays(
-    std::shared_ptr<OsmMap> map,
-    const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
+  static void mergeWays(std::shared_ptr<OsmMap> map, const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
 
   QString getInitStatusMessage() const override { return "Merging very small roads..."; }
   QString getCompletedStatusMessage() const override

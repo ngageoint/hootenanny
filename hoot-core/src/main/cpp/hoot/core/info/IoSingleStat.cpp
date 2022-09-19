@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "IoSingleStat.h"
 
@@ -75,9 +75,7 @@ IoSingleStat::IoSingleStat(Type t)
   QFile fp("/proc/self/io");
 
   if (!fp.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
     throw HootException("Error opening /proc/self/io for reading. Are you running Linux?");
-  }
 
   bool found = false;
   // If you call atEnd() before a read it returns true. Maybe because it is a proc file? Dunno.
@@ -91,18 +89,13 @@ IoSingleStat::IoSingleStat(Type t)
       bool ok;
       value = l[1].trimmed().toLong(&ok);
       if (!ok)
-      {
-        throw HootException(QString("Error parsing %1 from /proc/self/io (%2).").arg(typeString).
-          arg(l[1]));
-      }
+        throw HootException(QString("Error parsing %1 from /proc/self/io (%2).").arg(typeString, l[1]));
       found = true;
     }
   } while (!fp.atEnd());
 
   if (!found)
-  {
     throw HootException(QString("Could not find (%1) in /proc/self/io.").arg(typeString));
-  }
 }
 
 }

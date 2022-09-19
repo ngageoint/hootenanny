@@ -48,12 +48,14 @@ public:
     Create = 0,
     Modify,
     Delete,
-    Unknown
+    Unknown,
+    NoChange
   };
 
   Change();
   Change(ChangeType type, ConstElementPtr element);
-  Change(ChangeType type, ConstElementPtr element, ConstElementPtr pe);
+  Change(ChangeType type, ConstElementPtr element, ConstElementPtr previousElement);
+  Change(ChangeType type, ConstElementPtr elemment, Status status);
   Change(const Change& change) = default;
 
   static QString changeTypeToString(const ChangeType changeType);
@@ -72,6 +74,9 @@ private:
   ChangeType _type;
   ConstElementPtr _element;
   ConstElementPtr _previousElement;
+
+  void _updateStatus(ConstElementPtr element, Status status);
+  void _setElementStatus(Status status);
 };
 
 using ChangePtr = std::shared_ptr<Change>;

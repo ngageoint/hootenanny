@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SuperfluousWayRemover.h"
@@ -48,15 +48,12 @@ void SuperfluousWayRemover::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
 
   const QSet<QString> excludeIdsStrs = opts.getSuperfluousWayRemoverExcludeIds().toSet();
-  for (QSet<QString>::const_iterator it = excludeIdsStrs.begin(); it != excludeIdsStrs.end(); ++it)
+  for (const auto& id : qAsConst(excludeIdsStrs))
   {
     bool ok = false;
-    _excludeIds.insert((*it).toLong(&ok));
+    _excludeIds.insert(id.toLong(&ok));
     if (!ok)
-    {
-      throw IllegalArgumentException(
-        QString("Invalid element exclude ID passed to ") + className());
-    }
+      throw IllegalArgumentException(QString("Invalid element exclude ID passed to ") + className());
   }
   LOG_VARD(_excludeIds.size());
 }
@@ -84,16 +81,13 @@ void SuperfluousWayRemover::_removeWays(const std::shared_ptr<OsmMap>& map)
 
   // make a copy of the ways to avoid issues when removing.
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
     _numProcessed++;
     if (!w)
-    {
       continue;
-    }
-    else if (_conflateInfoCache &&
-             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << w->getElementId() << ", as it cannot be conflated by any " <<
@@ -117,9 +111,7 @@ void SuperfluousWayRemover::_removeWays(const std::shared_ptr<OsmMap>& map)
       for (size_t i = 1; i < nodeIds.size(); i++)
       {
         if (nodeIds[i] != firstId)
-        {
           same = false;
-        }
       }
     }
     LOG_VART(same);

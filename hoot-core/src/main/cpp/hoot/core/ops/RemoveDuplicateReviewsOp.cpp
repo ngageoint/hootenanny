@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
@@ -42,8 +42,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveDuplicateReviewsOp)
 
-RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp() :
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
+  : _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -58,7 +58,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   int totalMembersToReview = 0;
   const RelationMap& relations = map->getRelations();
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>> membersToReview;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId eid = ElementId::relation(it->first);
     if (ReviewMarker::isReviewUid(map, eid))
@@ -75,7 +75,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_DEBUG("Removing duplicate reviews...");
 
   ReviewMarker reviewMarker;
-  QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>>::iterator it = membersToReview.begin();
+  auto it = membersToReview.begin();
   while (it != membersToReview.end())
   {
     set<ElementId> eids = it.key();
@@ -89,9 +89,9 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
     // https://github.com/ngageoint/hootenanny/issues/81#issuecomment-162980656
     if (eids.size() == 2 && duplicateReviews.size() > 1)
     {
-      for (int i = 0; i < duplicateReviews.size(); i++)
+      for (const auto& review : qAsConst(duplicateReviews))
       {
-        ReviewMarker::removeElement(map, duplicateReviews[i]);
+        ReviewMarker::removeElement(map, review);
         _numAffected++;
       }
 
@@ -115,17 +115,12 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
         if (match->getType() == MatchType::Match)
         {
           if (explain.isEmpty())
-          {
             explain = "Multiple overlapping high confidence reviews";
-          }
           else
-          {
             explain = "Multiple overlapping high confidence reviews: " + explain;
-          }
         }
-        reviewMarker.mark(
-          map, map->getElement(beid), map->getElement(eeid), explain, match->getName(),
-          match->getClassification().getReviewP());
+        reviewMarker.mark(map, map->getElement(beid), map->getElement(eeid), explain, match->getName(),
+                          match->getClassification().getReviewP());
       }
     }
     ++it;
