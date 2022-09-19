@@ -65,7 +65,8 @@ void MetadataImport::_findDatasetWays()
   QString indiVal = _datasetIndicator.second;
   ElementToGeometryConverter ElementToGeometryConverter(_pMap);
 
-  for (auto it = _allWays.begin(); it != _allWays.end(); ++it)
+  const WayMap& ways = _pMap->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr pWay = it->second;
     const Tags& tags = pWay->getTags();
@@ -98,11 +99,8 @@ void MetadataImport::_mergePolygonsWithMatchingMetadata()
       }
     }
 
-    if (!matched)
-    {
-      // create new polygon entry
+    if (!matched) // create new polygon entry
       _mergedGeoms[pCheckWay] = _datasetWayPolys[pCheckWay];
-    }
   }
 }
 

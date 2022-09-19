@@ -66,7 +66,7 @@ void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate*
   int areasMerged = 0;
 
   NonBuildingAreaCriterion nonBuildingAreaCrit;
-
+  //  Make a copy of the way map so that the mergers can modify the original
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {

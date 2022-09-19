@@ -113,9 +113,9 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
     _splitRecursionLevel++;
     LOG_VART(_splitRecursionLevel);
 
-    const int numNodesBeforeSplit = _map->getNodes().size();
+    const int numNodesBeforeSplit = _map->getNodeCount();
     LOG_VART(numNodesBeforeSplit);
-    const int numWaysBeforeSplit = _map->getWays().size();
+    const int numWaysBeforeSplit = _map->getWayCount();
     LOG_VART(numWaysBeforeSplit);
 
     WayLocation waySplitPoint;
@@ -179,11 +179,11 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       newElementsAfterSplit.push_back(match);
     }
 
-    const int numNodesAfterSplit = _map->getNodes().size();
+    const int numNodesAfterSplit = _map->getNodeCount();
     LOG_VART(numNodesAfterSplit);
     const int numNewNodesCreatedBySplit = numNodesAfterSplit - numNodesBeforeSplit;
     LOG_VART(numNewNodesCreatedBySplit);
-    LOG_VART(_map->getWays().size());
+    LOG_VART(_map->getWayCount());
 
     if (numNewNodesCreatedBySplit > 0)
     {

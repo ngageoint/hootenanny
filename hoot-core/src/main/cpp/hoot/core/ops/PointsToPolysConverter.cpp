@@ -51,8 +51,7 @@ void PointsToPolysConverter::apply(OsmMapPtr& map)
   MapProjector::projectToPlanar(map);
 
   LOG_DEBUG("Adding polys...");
-  // Make a copy of the nodes here, so as we add in polys with nodes, we don't process those as
-  // well.
+  // Make a copy of the nodes here, so as we add in polys with nodes, we don't process those as well.
   NodeMap nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {

@@ -66,7 +66,7 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
 
   int numMerged = 0;
   RailwayCriterion crit;
-
+  //  Make a copy of the way map so that the mergers can modify the original
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {

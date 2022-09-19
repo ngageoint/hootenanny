@@ -71,6 +71,7 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
   //
   // ...then pass those pairs one at a time through the merger, since it only merges pairs
   int poisMerged = 0;
+  //  Make a copy of the node map so that the iterators work while merging
   const NodeMap nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {

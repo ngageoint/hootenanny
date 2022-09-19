@@ -369,7 +369,7 @@ cv::Mat GraphComparator::_paintGraph(const ConstOsmMapPtr& map, const DirectedGr
   {
     WayPtr w = it->second;
     LOG_VART(w.get());
-    LOG_VART(w->getNodeIds().size());
+    LOG_VART(w->getNodeCount());
     if (w->getNodeIds().empty())
       continue;
 
