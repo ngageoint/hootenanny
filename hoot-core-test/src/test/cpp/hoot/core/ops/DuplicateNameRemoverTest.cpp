@@ -59,7 +59,7 @@ public:
     dupeNameRemover.setCaseSensitive(false);
     dupeNameRemover.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     HOOT_STR_EQUALS(QString("test"), tags.get("name"));
@@ -79,7 +79,7 @@ public:
     dupeNameRemover.setCaseSensitive(true);
     dupeNameRemover.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     HOOT_STR_EQUALS(QString("test;TEST"), tags.get("name"));
@@ -100,7 +100,7 @@ public:
     dupeNameRemover.setCaseSensitive(false);
     dupeNameRemover.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(2, tags.size());
     HOOT_STR_EQUALS(QString("test"), tags.get("name"));

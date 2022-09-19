@@ -110,7 +110,7 @@ public:
   void verifyFullReadOutput(OsmMapPtr map)
   {
     //nodes
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     HOOT_STR_EQUALS(true, map->containsNode(1));
     NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
@@ -185,10 +185,10 @@ public:
     //requested bounds, one of them is referenced by a way within the bounds and the other three by a
     //relation within the bounds.  The nodes not returned is outside of the requested bounds and not
     //reference by any other element.
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeCount());
     //Two of the five ways should be returned.  The ways not returned contain nodes
     //that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     //Two of the six relations should be returned.  The relations not returned contain all
     //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
@@ -214,8 +214,8 @@ public:
     map = std::make_shared<OsmMap>();
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();
@@ -242,8 +242,8 @@ public:
 
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     NodePtr node = map->getNode(1);
@@ -273,8 +273,8 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     node = map->getNode(4);
@@ -304,8 +304,8 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     way = map->getWay(2);
@@ -341,8 +341,8 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     relation = map->getRelation(2);
@@ -386,8 +386,8 @@ public:
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
 
     // Verify timestamps look OK
@@ -411,8 +411,8 @@ public:
     map = std::make_shared<OsmMap>();
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();

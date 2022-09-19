@@ -111,7 +111,7 @@ public:
       uut.setRemoveSuperflousFeatures(false);
       uut.apply(map);
 
-      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
+      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodeCount());
     }
 
     {
@@ -122,7 +122,7 @@ public:
       uut.setInvert(true);
       uut.setRemoveSuperflousFeatures(false);
       uut.apply(map2);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map2->getNodes().size());
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map2->getNodeCount());
     }
   }
 
@@ -176,7 +176,7 @@ public:
 
     // compare ways
     int count = 0;
-    const WayMap ways = map->getWays();
+    const WayMap& ways = map->getWays();
     HOOT_STR_EQUALS(2, ways.size());
     for (auto it = ways.begin(); it != ways.end(); ++it)
     {

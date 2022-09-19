@@ -79,7 +79,7 @@ public:
 
     //the third node ref should have been removed from the way, but that node should still be in
     //the map
-    CPPUNIT_ASSERT_EQUAL((size_t)3, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1L, way->getNodeIds().at(0));
     CPPUNIT_ASSERT_EQUAL(2L, way->getNodeIds().at(1));
     CPPUNIT_ASSERT_EQUAL(3L, way->getNodeIds().at(2));
@@ -114,7 +114,7 @@ public:
 
     //the second node ref should have been removed from the way, but that node should still be in
     //the map
-    CPPUNIT_ASSERT_EQUAL((size_t)3, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1L, way->getNodeIds().at(0));
     CPPUNIT_ASSERT_EQUAL(2L, way->getNodeIds().at(1));
     CPPUNIT_ASSERT_EQUAL(3L, way->getNodeIds().at(2));
@@ -172,7 +172,7 @@ public:
     map->visitRw(v);
 
     //no nodes should be removed from the way or map
-    CPPUNIT_ASSERT_EQUAL((size_t)4, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1L, way->getNodeIds().at(0));
     CPPUNIT_ASSERT_EQUAL(2L, way->getNodeIds().at(1));
     CPPUNIT_ASSERT_EQUAL(3L, way->getNodeIds().at(2));
@@ -209,7 +209,7 @@ public:
     map->visitRw(v);
 
     //no nodes should be removed from the way or map
-    CPPUNIT_ASSERT_EQUAL((size_t)4, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1L, way->getNodeIds().at(0));
     CPPUNIT_ASSERT_EQUAL(2L, way->getNodeIds().at(1));
     CPPUNIT_ASSERT_EQUAL(3L, way->getNodeIds().at(2));

@@ -26,9 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/HootApiDbWriter.h>
@@ -36,9 +37,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 using namespace std;
@@ -130,9 +130,7 @@ public:
       LOG_DEBUG("Adding test data folder...");
       HootApiDb db;
       db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-      db.insertFolderMapMapping(
-        writer.getMapId(),
-        db.insertFolder(_testName, -1, db.getUserId(userEmail(_testName), true), folderIsPublic));
+      db.insertFolderMapMapping(writer.getMapId(), db.insertFolder(_testName, -1, db.getUserId(userEmail(_testName), true), folderIsPublic));
       db.close();
     }
 
@@ -142,8 +140,7 @@ public:
   long insertDataForBoundTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail(_testName));
@@ -158,10 +155,8 @@ public:
   vector<long> getKeys(T begin, T end)
   {
     vector<long> result;
-    for (;begin != end; ++begin)
-    {
+    for ( ;begin != end; ++begin)
       result.push_back(begin->first);
-    }
     return result;
   }
 
@@ -190,18 +185,15 @@ public:
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
 
-    HOOT_STR_EQUALS("[5]{-5, -4, -3, -2, -1}",
-      getKeys(map->getNodes().begin(), map->getNodes().end()));
-    HOOT_STR_EQUALS("[2]{-2, -1}",
-      getKeys(map->getRelations().begin(), map->getRelations().end()));
+    HOOT_STR_EQUALS("[5]{-5, -4, -3, -2, -1}", getKeys(map->getNodes().begin(), map->getNodes().end()));
+    HOOT_STR_EQUALS("[2]{-2, -1}", getKeys(map->getRelations().begin(), map->getRelations().end()));
     HOOT_STR_EQUALS("[3]{-3, -2, -1}", getKeys(map->getWays().begin(), map->getWays().end()));
 
     HOOT_STR_EQUALS("[1]{-2}", map->getWay(-3)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-2, -3}", map->getWay(-2)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-1)->getNodeIds());
     HOOT_STR_EQUALS("[1]{Entry: role: n2, eid: Node(-2)}", map->getRelation(-2)->getMembers());
-    HOOT_STR_EQUALS("[2]{Entry: role: n1, eid: Node(-1), Entry: role: w1, eid: Way(-1)}",
-      map->getRelation(-1)->getMembers());
+    HOOT_STR_EQUALS("[2]{Entry: role: n1, eid: Node(-1), Entry: role: w1, eid: Way(-1)}", map->getRelation(-1)->getMembers());
   }
 
   void runUrlInvalidMapIdTest()
@@ -214,8 +206,7 @@ public:
     try
     {
       reader.open(
-        ServicesDbTestUtils::getDbReadUrl(_mapId).toString().replace(
-          "/" + QString::number(_mapId), "/" + QString::number(invalidMapId)));
+        ServicesDbTestUtils::getDbReadUrl(_mapId).toString().replace("/" + QString::number(_mapId), "/" + QString::number(invalidMapId)));
     }
     catch (const HootException& e)
     {
@@ -230,7 +221,7 @@ public:
   {
     //nodes
 
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeCount());
 
     NodePtr node = map->getNode(1);
     HOOT_STR_EQUALS(Status::Unknown1, node->getStatus().getEnum());
@@ -292,7 +283,7 @@ public:
 
     //ways
 
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWayCount());
 
     WayPtr way = map->getWay(1);
     HOOT_STR_EQUALS(Status::Unknown1, way->getStatus().getEnum());
@@ -373,7 +364,7 @@ public:
   {
     //nodes
 
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeCount());
 
     NodePtr node = map->getNode(3);
     HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
@@ -445,8 +436,8 @@ public:
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
 
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     NodePtr node = map->getNode(1);
@@ -485,8 +476,8 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     node = map->getNode(4);
@@ -525,8 +516,8 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     way = map->getWay(2);
@@ -572,8 +563,8 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     relation = map->getRelation(2);
@@ -616,8 +607,8 @@ public:
 
     //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
     //(exact same input data)
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
     //We need to set all the element changeset tags here to empty, which will cause them
@@ -643,8 +634,8 @@ public:
     map = std::make_shared<OsmMap>();
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();
@@ -882,9 +873,7 @@ public:
     const long secondMapId = writer.getMapId();
     LOG_VARD(secondMapId);
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    db.insertFolderMapMapping(
-      secondMapId,
-      db.insertFolder(_testName, -1, db.getUserId(differentUserEmail, true), true));
+    db.insertFolderMapMapping(secondMapId, db.insertFolder(_testName, -1, db.getUserId(differentUserEmail, true), true));
     db.close();
 
     // Configure the reader for no user
@@ -943,8 +932,8 @@ public:
     //(exact same input data)
     //OsmMapWriterFactory::write(
       //map, _outputPath + "/readByBoundsLeaveConnectedOobWaysTest.osm", false, true);
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
 
     //We need to set all the element changeset tags here to empty, which will cause them
@@ -971,8 +960,8 @@ public:
     map = std::make_shared<OsmMap>();
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();

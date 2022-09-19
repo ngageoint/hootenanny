@@ -142,8 +142,8 @@ public:
     uut.apply(map);
 
     // it should remove two ways, 5 nodes and one relation
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size() - 2, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size() - 4, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount() - 2, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount() - 4, map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(base->getRelations().size() - 1, map->getRelations().size());
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(3));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(4));
@@ -158,8 +158,8 @@ public:
     uut2.apply(map);
 
     // it should remove two ways, 5 nodes and one relation
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size() - 1, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size() - 3, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount() - 1, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount() - 3, map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(base->getRelations().size() - 2, map->getRelations().size());
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(3));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(11));
@@ -179,8 +179,8 @@ public:
     uut.apply(map);
 
     // it should remove one way, but leave node 3 (shared w/ way 2)
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size() - 1, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size() - 2, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount() - 1, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount() - 2, map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(1));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(2));
     CPPUNIT_ASSERT_EQUAL(false, map->containsWay(1));
@@ -191,8 +191,8 @@ public:
     uut2.apply(map);
 
     // There should be no change
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size(), map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size(), map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount(), map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount(), map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(3));
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(4));
     CPPUNIT_ASSERT_EQUAL(true, map->containsWay(2));

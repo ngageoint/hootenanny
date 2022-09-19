@@ -195,7 +195,7 @@ public:
     map->visitRw(hashRemover);
 
     HOOT_STR_EQUALS(0, replaced.size());
-    HOOT_STR_EQUALS(1, map->getWays().size());
+    HOOT_STR_EQUALS(1, map->getWayCount());
     HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -2}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"

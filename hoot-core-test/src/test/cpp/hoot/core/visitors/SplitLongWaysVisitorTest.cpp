@@ -233,8 +233,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    WayMap ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -247,8 +246,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -260,8 +258,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -273,8 +270,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -286,8 +282,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -299,8 +294,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -312,8 +306,7 @@ private:
     _map->visitRw(splitVisitor);
 
     // Sanity checks on split
-    ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
     startNode += numNodes;
 
@@ -378,16 +371,14 @@ private:
                          const int numNodes, const int numWays)
   {
     // Pull out ways
-    WayMap ways = _map->getWays();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
+    const WayMap& ways = _map->getWays();
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numWays), _map->getWayCount());
 
     // Pull out nodes
-    NodeMap nodes = _map->getNodes();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numNodes), nodes.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(numNodes), _map->getNodeCount());
 
     // Make sure no relations
-    RelationMap relations = _map->getRelations();
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), relations.size() );
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(1), _map->getRelationCount());
 
     unsigned int nodesLeftToFind = numNodes;
     unsigned int searchId = startNode;

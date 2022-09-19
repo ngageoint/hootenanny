@@ -484,8 +484,8 @@ public:
     uut.read(map);
     uut.close();
 
-    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
   }
 
   void runBoundsLeaveConnectedOobWaysTest()

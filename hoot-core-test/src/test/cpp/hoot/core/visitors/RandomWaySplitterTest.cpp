@@ -63,9 +63,9 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "RandomWaySplitterTest-in-1.osm", map);
-    const int numNodesBeforeSplitting = map->getNodes().size();
+    const long numNodesBeforeSplitting = map->getNodeCount();
     LOG_VARD(numNodesBeforeSplitting);
-    const int numWaysBeforeSplitting = map->getWays().size();
+    const long numWaysBeforeSplitting = map->getWayCount();
     LOG_VARD(numWaysBeforeSplitting)
 
     MapProjector::projectToPlanar(map);
@@ -77,9 +77,9 @@ public:
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
     MapProjector::projectToWgs84(map);
-    const int numNewNodesCreatedBySpliting = map->getNodes().size() - numNodesBeforeSplitting;
+    const long numNewNodesCreatedBySpliting = map->getNodeCount() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySpliting);
-    const int numNewWaysCreatedBySpliting = map->getWays().size() - numWaysBeforeSplitting;
+    const long numNewWaysCreatedBySpliting = map->getWayCount() - numWaysBeforeSplitting;
     LOG_VARD(numNewWaysCreatedBySpliting);
 
     OsmXmlWriter writer;
@@ -97,9 +97,9 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "RandomWaySplitterTest-in-2.osm", map);
-    const int numNodesBeforeSplitting = map->getNodes().size();
+    const long numNodesBeforeSplitting = map->getNodeCount();
     LOG_VARD(numNodesBeforeSplitting);
-    const int numWaysBeforeSplitting = map->getWays().size();
+    const long numWaysBeforeSplitting = map->getWayCount();
     LOG_VARD(numWaysBeforeSplitting)
 
     MapProjector::projectToPlanar(map);
@@ -111,9 +111,9 @@ public:
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
     MapProjector::projectToWgs84(map);
-    const int numNewNodesCreatedBySplitting = map->getNodes().size() - numNodesBeforeSplitting;
+    const long numNewNodesCreatedBySplitting = map->getNodeCount() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySplitting);
-    const int numNewWaysCreatedBySplitting = map->getWays().size() - numWaysBeforeSplitting;
+    const long numNewWaysCreatedBySplitting = map->getWayCount() - numWaysBeforeSplitting;
     LOG_VARD(numNewWaysCreatedBySplitting);
 
     OsmXmlWriter writer;

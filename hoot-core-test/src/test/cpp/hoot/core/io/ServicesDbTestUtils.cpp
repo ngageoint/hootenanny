@@ -164,8 +164,8 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
   reader.read(map);
 
   //verify current elements
-  CPPUNIT_ASSERT_EQUAL((size_t)0, map->getNodes().size());
-  CPPUNIT_ASSERT_EQUAL((size_t)0, map->getWays().size());
+  CPPUNIT_ASSERT_EQUAL((long)0, map->getNodeCount());
+  CPPUNIT_ASSERT_EQUAL((long)0, map->getWayCount());
   CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
 
   //verify historical element table sizes

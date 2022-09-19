@@ -237,15 +237,15 @@ public:
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
     inputCoords.append(Coordinate::getNull());
     WayPtr way = TestUtils::createWay(map, inputCoords.toVector().data(), "", Status::Unknown1, 1);
-    CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeCount());
 
     RdpWayGeneralizer generalizer(0.1);
     generalizer.setRemoveNodesSharedByWays(true);
     generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)148, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)148, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((long)148, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)148, way->getNodeCount());
     const QString outFile = _outputPath + "runGeneralizeWayInput1NoInformationNodesTest-out.osm";
     writeMap(map, outFile);
     HOOT_FILE_EQUALS(_inputPath + "runGeneralizeWayInput1NoInformationNodesTest-out.osm", outFile);
@@ -259,7 +259,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
     inputCoords.append(Coordinate::getNull());
     WayPtr way = TestUtils::createWay(map, inputCoords.toVector().data(), "", Status::Unknown1, 1);
-    CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeCount());
 
     //randomly add some information tags to nodes
     const double informationCountProbability = 0.1;
@@ -283,8 +283,8 @@ public:
     generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)137, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)137, way->getNodeIds().size());
+    CPPUNIT_ASSERT_EQUAL((long)137, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)137, way->getNodeCount());
     const QString outFile = _outputPath + "runGeneralizeWayInput1WithInformationNodesTest-out.osm";
     writeMap(map, outFile);
     HOOT_FILE_EQUALS(_inputPath + "runGeneralizeWayInput1WithInformationNodesTest-out.osm", outFile);

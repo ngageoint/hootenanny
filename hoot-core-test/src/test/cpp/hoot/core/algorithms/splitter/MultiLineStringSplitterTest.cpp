@@ -108,8 +108,8 @@ public:
     relation->addElement("", way1->getElementId());
     map->addElement(relation);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((long)2, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((long)1, map->getWayCount());
 
     MultiLineStringLocation multiLineStringLocation(map, relation, 0,
       WayLocation(map, way1, 0, 0.5));
@@ -117,8 +117,8 @@ public:
     ElementPtr match;
     MultiLineStringSplitter().split(map, multiLineStringLocation, match);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)3, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((long)3, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((long)2, map->getWayCount());
 
     HOOT_STR_EQUALS("Way(-2)", match->getElementId());
     WayPtr matchWay = map->getWay(match->getId());

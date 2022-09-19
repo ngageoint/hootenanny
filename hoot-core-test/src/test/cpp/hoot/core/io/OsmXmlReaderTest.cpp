@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {
@@ -50,8 +50,9 @@ class OsmXmlReaderTest : public HootTestFixture
 
 public:
 
-  OsmXmlReaderTest() :
-  HootTestFixture("test-files/io/OsmXmlReaderTest/", "test-output/io/OsmXmlReaderTest/")
+  OsmXmlReaderTest()
+    : HootTestFixture("test-files/io/OsmXmlReaderTest/",
+                      "test-output/io/OsmXmlReaderTest/")
   {
     setResetType(ResetEnvironment);
   }
@@ -63,8 +64,8 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read("test-files/ToyTestA.osm", map);
 
-    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
   }
 
   void runUseIdTest()
@@ -75,13 +76,13 @@ public:
     uut.setUseDataSourceIds(true);
     uut.read("test-files/ToyTestA.osm", map);
 
-    CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
 
     long min = 1e9;
     long max = -1e9;
-    for (NodeMap::const_iterator it = map->getNodes().begin();
-         it != map->getNodes().end(); ++it)
+    const NodeMap& nodes = map->getNodes();
+    for (auto it = nodes.begin(); it != nodes.end(); ++it)
     {
       const ConstNodePtr& n = it->second;
       min = std::min(min, n->getId());
@@ -107,8 +108,8 @@ public:
     uut.setDefaultStatus(Status::Invalid);
     uut.read(_inputPath + "OsmXmlReaderUseStatusTest.osm", map);
 
-    CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(17, (int)map->getWayCount());
 
     HOOT_STR_EQUALS(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());
     HOOT_STR_EQUALS(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
@@ -129,19 +130,12 @@ public:
 
   void runUncompressTest()
   {
-    const std::string cmd(
-      "gzip -c test-files/ToyTestA.osm > " + _outputPath.toStdString() + "ToyTestA_compressed.osm.gz");
+    const std::string cmd("gzip -c test-files/ToyTestA.osm > " + _outputPath.toStdString() + "ToyTestA_compressed.osm.gz");
     LOG_DEBUG("Running compress command: " << cmd);
 
     int retVal;
     if ((retVal = std::system(cmd.c_str())) != 0)
-    {
-      QString error =
-        QString("Error %1 returned from compress command: %2")
-          .arg(retVal)
-          .arg(QString::fromStdString(cmd));
-      throw HootException(error);
-    }
+      throw HootException(QString("Error %1 returned from compress command: %2").arg(retVal).arg(QString::fromStdString(cmd)));
 
     OsmXmlReader uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -151,8 +145,8 @@ public:
     uut.read(_outputPath + "ToyTestA_compressed.osm.gz", map);
 
     // Check a few things
-    CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
 
     QFile f(_outputPath + "ToyTestA_compressed.osm.gz");
     CPPUNIT_ASSERT(f.exists());
@@ -170,7 +164,8 @@ public:
     uut.read(_inputPath + "runDecodeCharsTest.osm", map);
 
     int wayCtr = 0;
-    for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
+    const WayMap& ways = map->getWays();
+    for (auto it = ways.begin(); it != ways.end(); ++it)
     {
       const ConstWayPtr& w = it->second;
       if (w->getTags().get("note2") == "1")
@@ -207,8 +202,8 @@ public:
     uut.read("test-files/ToyTestA.osm", map);
     uut.close();
 
-    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
   }
 
   void runBoundsLeaveConnectedOobWaysTest()

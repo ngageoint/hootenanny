@@ -30,11 +30,11 @@
 #include <boost/random/uniform_real.hpp>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomElementRemover.h>
 
 using namespace std;
@@ -64,17 +64,14 @@ public:
     boost::uniform_real<> uni(0.0, 1000.0);
 
     for (int i = 0; i < 100; i++)
-    {
-      map->addNode(
-        std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
-    }
+      map->addNode(std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
 
     RandomElementRemover v;
     v.setConfiguration(conf());
     v.setRng(rng);
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(96, static_cast<int>(map->getNodeCount()));
   }
 
 };
