@@ -155,7 +155,7 @@ public:
   vector<long> getKeys(T begin, T end)
   {
     vector<long> result;
-    for ( ;begin != end; ++begin)
+    for ( ; begin != end; ++begin)
       result.push_back(begin->first);
     return result;
   }
@@ -205,8 +205,7 @@ public:
     const long invalidMapId = _mapId + 1;
     try
     {
-      reader.open(
-        ServicesDbTestUtils::getDbReadUrl(_mapId).toString().replace("/" + QString::number(_mapId), "/" + QString::number(invalidMapId)));
+      reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString().replace("/" + QString::number(_mapId), "/" + QString::number(invalidMapId)));
     }
     catch (const HootException& e)
     {
@@ -321,7 +320,7 @@ public:
 
     //relations
 
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelationCount());
 
     RelationPtr relation = map->getRelation(1);
     HOOT_STR_EQUALS(Status::Unknown1, relation->getStatus().getEnum());
@@ -438,7 +437,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     NodePtr node = map->getNode(1);
     HOOT_STR_EQUALS(Status::Unknown1, node->getStatus().getEnum());
@@ -478,7 +477,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     node = map->getNode(4);
     HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
@@ -518,7 +517,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
 
     way = map->getWay(2);
     HOOT_STR_EQUALS(Status::Unknown2, way->getStatus().getEnum());
@@ -565,7 +564,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
 
     relation = map->getRelation(2);
     HOOT_STR_EQUALS(Status::Unknown1, relation->getStatus().getEnum());
@@ -609,7 +608,7 @@ public:
     //(exact same input data)
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelationCount());
 
     //We need to set all the element changeset tags here to empty, which will cause them
     //to be dropped from the file output.  If they aren't dropped, they will increment with each
@@ -636,7 +635,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     reader.close();
   }
@@ -934,7 +933,7 @@ public:
       //map, _outputPath + "/readByBoundsLeaveConnectedOobWaysTest.osm", false, true);
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelationCount());
 
     //We need to set all the element changeset tags here to empty, which will cause them
     //to be dropped from the file output.  If they aren't dropped, they will increment with each
@@ -962,7 +961,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     reader.close();
   }

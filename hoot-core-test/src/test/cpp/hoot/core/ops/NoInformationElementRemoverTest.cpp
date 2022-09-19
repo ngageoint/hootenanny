@@ -58,13 +58,11 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -87,13 +85,11 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     map->addNode(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     map->addNode(node2);
 
@@ -116,13 +112,11 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -142,13 +136,11 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
@@ -169,12 +161,10 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = TestUtils::createWay(map, nodes);
@@ -195,14 +185,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -227,7 +215,7 @@ public:
     //have no info, since they are still owned by the relation.
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
@@ -237,14 +225,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -266,7 +252,7 @@ public:
     // All elements are interrelated - should not be removed
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
@@ -276,14 +262,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -305,7 +289,7 @@ public:
     // All elements are interrelated - should not be removed
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 
   void runEmptyRelationWithoutInfoTest()
@@ -315,14 +299,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -345,19 +327,17 @@ public:
     // Nodes and Ways should not be removed, but relation should be
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
   }
 
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
@@ -377,21 +357,19 @@ public:
     // All map items are unrelated, and have no info. They should be removed.
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
   }
 
   void runUnrelatedElementsWithInfoTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("name", "red house");
     map->addNode(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node2->getTags().appendValue("name", "blue house");
     map->addNode(node2);
@@ -417,7 +395,7 @@ public:
     // All map items are not related, but have info. They should not be removed.
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 };
 

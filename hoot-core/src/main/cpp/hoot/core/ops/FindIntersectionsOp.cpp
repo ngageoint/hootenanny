@@ -57,11 +57,11 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, FindRailwayIntersectionsOp)
 void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
-  LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
+  LOG_INFO(QString("%1 Relations found.").arg(map->getRelationCount()));
   std::shared_ptr<RemoveElementsVisitor> removeRelationsVis = std::make_shared<RemoveElementsVisitor>();
   removeRelationsVis->addCriterion(std::make_shared<RelationCriterion>());
   VisitorOp(removeRelationsVis).apply(map);
-  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
+  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationCount()));
 
   // pragmatically remove "bad" data in OSM afghanistan
   // TODO: this really shouldn't be here

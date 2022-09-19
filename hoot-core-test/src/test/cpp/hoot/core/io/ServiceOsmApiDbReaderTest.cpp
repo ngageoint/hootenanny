@@ -26,19 +26,19 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDb.h>
+#include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 using namespace std;
@@ -88,9 +88,7 @@ public:
   void insertDataForBoundTest()
   {
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(),
-      _scriptDir + "postgresql_forbounding_test.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "postgresql_forbounding_test.sql");
   }
 
   void populatePartialMap()
@@ -191,7 +189,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     //Two of the six relations should be returned.  The relations not returned contain all
     //members that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelationCount());
 
     // Verify timestamps look OK
     WayPtr pWay = map->getWays().begin()->second;
@@ -216,7 +214,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     reader.close();
   }
@@ -244,7 +242,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
@@ -275,7 +273,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     node = map->getNode(4);
     CPPUNIT_ASSERT_EQUAL((long)4, node->getId());
@@ -306,7 +304,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
 
     way = map->getWay(2);
     CPPUNIT_ASSERT_EQUAL((long)2, way->getId());
@@ -343,7 +341,7 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
 
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
@@ -388,7 +386,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelationCount());
 
     // Verify timestamps look OK
     WayPtr pWay = map->getWays().begin()->second;
@@ -413,7 +411,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     reader.close();
   }

@@ -93,9 +93,7 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
   _init(false);
 
   if (isSupported(urlString) == true)
-  {
     open(urlString);
-  }
 }
 
 void OsmPbfReader::_init(bool useFileId)
@@ -889,8 +887,8 @@ void OsmPbfReader::_parseBlob()
   _in->read(_getBuffer(size), size);
   if (_in->gcount() != size)
   {
-    throw HootException(QString("Did not read the expected number of bytes from blob. "
-                                "(%1 instead of %2)").arg(_in->gcount()).arg(size));
+    throw HootException(QString("Did not read the expected number of bytes from blob. (%1 instead of %2)")
+                          .arg(_in->gcount()).arg(size));
   }
   _d->blob.Clear();
   _d->blob.ParseFromArray(_buffer.data(), size);
@@ -905,8 +903,8 @@ void OsmPbfReader::_parseBlobHeader()
   _in->read(_getBuffer(size), size);
   if (_in->gcount() != size)
   {
-    throw HootException(QString("Did not read the expected number of bytes from blob header. "
-                                "(%1 instead of %2)").arg(_in->gcount()).arg(size));
+    throw HootException(QString("Did not read the expected number of bytes from blob header. (%1 instead of %2)")
+                          .arg(_in->gcount()).arg(size));
   }
   _d->blobHeader.Clear();
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
@@ -920,8 +918,8 @@ void OsmPbfReader::parseElements(std::shared_ptr<istream> strm, const OsmMapPtr&
   strm->read(_getBuffer(size), size);
   if (strm->gcount() != size)
   {
-    throw HootException(QString("Did not read the expected number of bytes from stream. "
-                                "(%1 instead of %2)").arg(strm->gcount()).arg(size));
+    throw HootException(QString("Did not read the expected number of bytes from stream. (%1 instead of %2)")
+                          .arg(strm->gcount()).arg(size));
   }
 
   _d->primitiveBlock.Clear();
@@ -1165,7 +1163,7 @@ bool OsmPbfReader::hasMoreElements()
 
   return (_partialNodesRead < static_cast<int>(_map->getNodeCount()) ||
           _partialWaysRead < static_cast<int>(_map->getWayCount()) ||
-          _partialRelationsRead < static_cast<int>(_map->getRelations().size()));
+          _partialRelationsRead < static_cast<int>(_map->getRelationCount()));
 }
 
 std::shared_ptr<Element> OsmPbfReader::readNextElement()
@@ -1177,7 +1175,7 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   if (!_firstPartialReadCompleted ||
       (_partialNodesRead == (int)_map->getNodeCount() &&
        _partialWaysRead == (int)_map->getWayCount() &&
-       _partialRelationsRead == (int)_map->getRelations().size()))
+       _partialRelationsRead == (int)_map->getRelationCount()))
   {
     if (!_firstPartialReadCompleted)
     {
@@ -1275,9 +1273,8 @@ void OsmPbfReader::close()
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
-  if (_addSourceDateTime &&
-      t.getInformationCount() > 0 &&  // Make sure we actually have attributes.
-      info.has_timestamp())
+  // Make sure we actually have attributes.
+  if (_addSourceDateTime && t.getInformationCount() > 0 && info.has_timestamp())
   {
     long timestamp = info.timestamp() * _dateGranularity;
     if (timestamp != 0)

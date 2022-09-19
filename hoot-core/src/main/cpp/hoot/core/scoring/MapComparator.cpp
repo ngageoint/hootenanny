@@ -311,9 +311,7 @@ void MapComparator::_printIdDiff(const std::shared_ptr<OsmMap>& map1, const std:
      }
   }
   else
-  {
     idsIn1AndNotIn2Limited = idsIn1AndNotIn2;
-  }
 
   QSet<long> ids2Copy = ids2;
   const QSet<long> idsIn2AndNotIn1 = ids2Copy.subtract(ids1);
@@ -330,9 +328,7 @@ void MapComparator::_printIdDiff(const std::shared_ptr<OsmMap>& map1, const std:
      }
   }
   else
-  {
     idsIn2AndNotIn1Limited = idsIn2AndNotIn1;
-  }
 
   const bool printFullElements = ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
   if (!idsIn1AndNotIn2Limited.empty())
@@ -386,11 +382,11 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     _printIdDiff(refMap, testMap, ElementType::Way);
     mismatch = true;
   }
-  else if (refMap->getRelations().size() != testMap->getRelations().size())
+  else if (refMap->getRelationCount() != testMap->getRelationCount())
   {
     LOG_WARN(
-      "Number of relations does not match (1: " << refMap->getRelations().size() << "; 2: " <<
-      testMap->getRelations().size() << ")");
+      "Number of relations does not match (1: " << refMap->getRelationCount() << "; 2: " <<
+      testMap->getRelationCount() << ")");
     _printIdDiff(refMap, testMap, ElementType::Relation);
     mismatch = true;
   }

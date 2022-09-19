@@ -28,8 +28,8 @@
 #include "ServicesDbTestUtils.h"
 
 // CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 // Hoot
 #include <hoot/core/TestUtils.h>
@@ -96,9 +96,7 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
   QString dbModifyUrl = getDbModifyUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
   //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
-  QString dbReadUrl =
-    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
-    QString::number(mapId);
+  QString dbReadUrl = dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" + QString::number(mapId);
 
   QUrl url(dbReadUrl);
   return url;
@@ -111,9 +109,8 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, cons
   QStringList modifyUrlParts = dbModifyUrl.split("/");
   //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
   QString dbReadUrl =
-    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
-      QString::number(mapId) + "?osm-element-id=" + QString::number((elemId)) +
-      "&osm-element-type=" + elemType;
+      QString("%1/%2?osm-element-id=%3&osm-element-type=%4")
+        .arg(dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]), QString::number(mapId), QString::number((elemId)), elemType);
 
   QUrl url(dbReadUrl);
   return url;
@@ -166,38 +163,20 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
   //verify current elements
   CPPUNIT_ASSERT_EQUAL((long)0, map->getNodeCount());
   CPPUNIT_ASSERT_EQUAL((long)0, map->getWayCount());
-  CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
+  CPPUNIT_ASSERT_EQUAL((long)0, map->getRelationCount());
 
   //verify historical element table sizes
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
 
   //verify changeset table size
-  CPPUNIT_ASSERT_EQUAL(
-    (long)0,
-    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+  CPPUNIT_ASSERT_EQUAL((long)0, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
   //verify sequences
   std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
@@ -211,8 +190,7 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
 
 std::shared_ptr<Node> ServicesDbTestUtils::_createNode(double x, double y, OsmMapPtr map)
 {
-  std::shared_ptr<Node> n =
-    std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10.0);
+  std::shared_ptr<Node> n = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10.0);
   map->addNode(n);
   return n;
 }
@@ -264,8 +242,7 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   w5->addNode(w5->getNodeId(0));
   map->addWay(w5);
 
-  std::shared_ptr<Relation> r1 =
-    std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon());
+  std::shared_ptr<Relation> r1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon());
   r1->setTag(MetadataTags::Building(), "yes");
   r1->setTag("name", "r1");
   r1->addElement("outer", w4->getElementId());
@@ -307,8 +284,7 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   w3->addNode(2);
   map->addWay(w3);
 
-  RelationPtr r1 =
-    std::make_shared<Relation>(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection());
+  RelationPtr r1 = std::make_shared<Relation>(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection());
   r1->addElement("n1", n1->getElementId());
   r1->addElement("w1", w1->getElementId());
   r1->setTag("note", "r1");
