@@ -82,9 +82,7 @@ Radians WayHeading::deltaMagnitude(Radians r1, Radians r2)
 {
   Radians delta = fabs(r1 - r2);
   if (delta > M_PI)
-  {
     delta = fabs(delta - M_PI * 2);
-  }
   return delta;
 }
 

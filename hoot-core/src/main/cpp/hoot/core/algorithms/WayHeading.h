@@ -49,14 +49,11 @@ public:
    * A larger delta will be less exact for the given location, but will also average out small
    * perturbations.
    */
-  static Radians calculateHeading(
-    const WayLocation& loc, Meters delta = 0.001);
-  static Radians calculateHeading(
-    const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
+  static Radians calculateHeading(const WayLocation& loc, Meters delta = 0.001);
+  static Radians calculateHeading(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
   static geos::geom::Coordinate calculateVector(const WayLocation& loc, Meters delta = 0.001);
-  static geos::geom::Coordinate calculateVector(
-    const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
+  static geos::geom::Coordinate calculateVector(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
   static Radians deltaMagnitude(Radians r1, Radians r2);
 };

@@ -53,14 +53,14 @@ namespace hoot
 
 WayAverager::WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2)
   : _map(map),
-  _meanMovement1(0.0),
-  _meanMovement2(0.0),
-  _sumMovement1(0.0),
-  _sumMovement2(0.0),
-  _maxMovement1(0.0),
-  _maxMovement2(0.0),
-  _moveCount1(0),
-  _moveCount2(0)
+    _meanMovement1(0.0),
+    _meanMovement2(0.0),
+    _sumMovement1(0.0),
+    _sumMovement2(0.0),
+    _maxMovement1(0.0),
+    _maxMovement2(0.0),
+    _moveCount1(0),
+    _moveCount2(0)
 {
   if (w1->getStatus() == Status::Unknown2 && w2->getStatus() == Status::Unknown1)
   {
@@ -92,10 +92,8 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
       _w1->reverseOrder();
   }
 
-  std::shared_ptr<const LineString> ls1 =
-    ElementToGeometryConverter(_map).convertToLineString(_w1);
-  std::shared_ptr<const LineString> ls2 =
-    ElementToGeometryConverter(_map).convertToLineString(_w2);
+  std::shared_ptr<const LineString> ls1 = ElementToGeometryConverter(_map).convertToLineString(_w1);
+  std::shared_ptr<const LineString> ls2 = ElementToGeometryConverter(_map).convertToLineString(_w2);
   if (!ls1 || !ls2)
     return WayPtr();
 
@@ -261,12 +259,10 @@ Coordinate WayAverager::_moveToLineAsCoordinate(long ni, double nWeight, const L
                                                 double lWeight) const
 {
   NodePtr n = _map->getNode(ni);
-  std::shared_ptr<Point> point(
-    GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
+  std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 
   // find the two closest points
-  std::shared_ptr<CoordinateSequence> cs(
-    DistanceOp::nearestPoints(point.get(), const_cast<LineString*>(ls)));
+  std::shared_ptr<CoordinateSequence> cs(DistanceOp::nearestPoints(point.get(), const_cast<LineString*>(ls)));
 
   Coordinate result = Coordinate(cs->getAt(0).x * nWeight + cs->getAt(1).x * lWeight,
                                  cs->getAt(0).y * nWeight + cs->getAt(1).y * lWeight);

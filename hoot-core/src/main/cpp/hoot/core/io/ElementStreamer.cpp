@@ -50,17 +50,15 @@ ElementStreamer::ElementStreamer(const QString& translationScript)
 {
 }
 
-void ElementStreamer::stream(const QStringList& inputs, const QString& out, const QStringList& convertOps, Progress progress)
+void ElementStreamer::stream(const QStringList& inputs, const QString& out, const QStringList& convertOps, Progress progress) const
 {
   QElapsedTimer timer;
   timer.start();
 
   std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
   writer->open(out);
-  std::shared_ptr<ElementOutputStream> streamWriter =
-    std::dynamic_pointer_cast<ElementOutputStream>(writer);
-  std::shared_ptr<PartialOsmMapWriter> partialWriter =
-    std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+  std::shared_ptr<ElementOutputStream> streamWriter = std::dynamic_pointer_cast<ElementOutputStream>(writer);
+  std::shared_ptr<PartialOsmMapWriter> partialWriter = std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
   partialWriter->initializePartial();
 
   std::shared_ptr<PartialOsmMapReader> partialReader;
@@ -72,10 +70,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
     // Always check for a valid task weight and that the job was set to running. Otherwise, this is
     // just an empty progress object, and we shouldn't log progress.
     if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
-    {
-      progress.setFromRelative(
-        (float)i / (float)inputs.size(), Progress::JobState::Running, message);
-    }
+      progress.setFromRelative((float)i / (float)inputs.size(), Progress::JobState::Running, message);
     else
     {
       LOG_STATUS(message);
@@ -110,8 +105,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
       // Add visitor/criterion operations if any of the convert ops are visitors.
       LOG_VARD(convertOps);
       ElementInputStreamPtr streamReader =
-        IoUtils::getFilteredInputStream(
-          std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
+        IoUtils::getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
       numFeaturesWritten += ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
     }
   }

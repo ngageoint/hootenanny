@@ -37,9 +37,9 @@
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -51,8 +51,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-bool DirectionFinder::isSimilarDirection(
-  const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
+bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
   // skip empty ways
   if (w1->getNodeIds().empty() || w2->getNodeIds().empty())
@@ -67,10 +66,8 @@ bool DirectionFinder::isSimilarDirection(
   // Pick a spacing relevant to the size of the input, or it won't get cut up into enough pieces
   // to properly make the direction comparison. We don't know that the map is in planar here before
   // checking length, so may need to check that.
-  const double spacing1 =
-    std::min(5.0, ElementToGeometryConverter(map).convertToGeometry(w1)->getLength() / 5.0);
-  const double spacing2 =
-    std::min(5.0, ElementToGeometryConverter(map).convertToGeometry(w2)->getLength() / 5.0);
+  const double spacing1 = std::min(5.0, ElementToGeometryConverter(map).convertToGeometry(w1)->getLength() / 5.0);
+  const double spacing2 = std::min(5.0, ElementToGeometryConverter(map).convertToGeometry(w2)->getLength() / 5.0);
   wd1.discretize(spacing1, cs1);
   wd2.discretize(spacing2, cs2);
 
@@ -89,9 +86,8 @@ bool DirectionFinder::isSimilarDirection(
   const bool sameDirection = dSumSame < dSumReverse;
   QString directionText = "**not the same direction**";
   if (sameDirection)
-  {
     directionText = "**same direction**";
-  }
+
   // TODO: Should this be node.comparison.coordinate.sensitivity instead?
   const int coordPrecision = ConfigOptions().getWriterPrecision();
   LOG_TRACE(
@@ -103,8 +99,7 @@ bool DirectionFinder::isSimilarDirection(
   return sameDirection;
 }
 
-bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1,
-                                          ConstWayPtr way2)
+bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2)
 {
   LOG_VART(way1->getNodeIds());
   LOG_VART(way2->getNodeIds());
@@ -121,9 +116,7 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   const double angleThreshold = ConfigOptions().getDirectionFinderAngleThreshold();
   if (diffAngle >= angleThreshold)
   {
-    LOG_TRACE(
-      "Ways have large difference in orientation angle: " << diffAngle <<
-      " degrees (threshold: " << angleThreshold << ").");
+    LOG_TRACE("Ways have large difference in orientation angle: " << diffAngle << " degrees (threshold: " << angleThreshold << ").");
     return false;
   }
   else

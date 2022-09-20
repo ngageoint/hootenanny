@@ -46,11 +46,11 @@ class VertexHausdorffFilter : public CoordinateFilter
 {
 public:
 
-  VertexHausdorffFilter(const Geometry& g) :
-  _g(g),
-  _logWarnCount(0)
+  VertexHausdorffFilter(const Geometry& g)
+    : _distance(-1),
+      _g(g),
+      _logWarnCount(0)
   {
-    _distance = -1;
   }
   ~VertexHausdorffFilter() = default;
 
@@ -73,9 +73,7 @@ public:
     }
 
     if (d > _distance || _distance == -1)
-    {
       _distance = d;
-    }
   }
 
   double getDistance() const { return _distance; }
@@ -89,8 +87,8 @@ private:
   int _logWarnCount;
 };
 
-VertexHausdorffDistance::VertexHausdorffDistance() :
-_distance(-1)
+VertexHausdorffDistance::VertexHausdorffDistance()
+  : _distance(-1)
 {
 }
 

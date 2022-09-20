@@ -111,7 +111,7 @@ void WayJoiner::_joinParentChild()
 {
   LOG_INFO("\tJoining parent ways to children...");
 
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   _totalWays = static_cast<int>(ways.size());
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -132,14 +132,14 @@ void WayJoiner::_joinParentChild()
   //  Iterate all of the ids
   for (auto way_id : ids)
   {
-    WayPtr way = ways[way_id];
+    WayPtr way = _map->getWay(way_id);
     if (way)
     {
       LOG_VART(way->getElementId());
     }
     long parent_id = way->getPid();
     LOG_VART(parent_id);
-    WayPtr parent = ways[parent_id];
+    WayPtr parent = _map->getWay(parent_id);
     if (parent)
     {
       LOG_VART(parent->getElementId());
@@ -160,7 +160,7 @@ void WayJoiner::_joinSiblings()
 {
   LOG_INFO("\tJoining way siblings...");
 
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   // Get a list of ways that still have a parent
   map<long, deque<long>> w;
   //  Find all ways that have a split parent id
@@ -198,7 +198,7 @@ void WayJoiner::_joinAtNode()
 {
   LOG_INFO("\tJoining ways at shared nodes...");
 
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   unordered_set<long> ids;
   //  Find all ways that have a split parent id
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -211,7 +211,9 @@ void WayJoiner::_joinAtNode()
   //  Iterate all of the nodes and check for compatible ways to join them to
   for (auto way_id : ids)
   {
-    WayPtr way = ways[way_id];
+    WayPtr way = _map->getWay(way_id);
+    if (way == nullptr)
+      continue;
     LOG_VART(way->getElementId());
     Tags pTags = way->getTags();
     if (way->getNodeCount() < 1)
@@ -233,8 +235,7 @@ void WayJoiner::_joinAtNode()
           //  Check for equivalent tags
           if (pTags == cTags || pTags.dataOnlyEqual(cTags))
           {
-            LOG_TRACE(
-              "Tags equal for: " << way->getElementId() << " and " << child->getElementId());
+            LOG_TRACE("Tags equal for: " << way->getElementId() << " and " << child->getElementId());
             long wid = way->getId();
             long cid = child->getId();
             //  Decide which ID to keep
@@ -284,8 +285,7 @@ void WayJoiner::_writeParentIdsToChildIds() const
     //  Use only positive IDs that haven't been used before and don't already exist
     if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid) && ways.find(pid) == ways.end())
     {
-      LOG_TRACE("Setting parent ID: " << ElementId(ElementType::Way, pid).toString() << " on: " <<
-                way->getElementId());
+      LOG_TRACE("Setting parent ID: " << ElementId(ElementType::Way, pid).toString() << " on: " << way->getElementId());
       ElementPtr newWay = way->clone();
       newWay->setId(pid);
       if (newWay->hasTag(MetadataTags::HootId()))
@@ -298,16 +298,14 @@ void WayJoiner::_writeParentIdsToChildIds() const
 
 void WayJoiner::_resetParents() const
 {
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     if (way->hasPid())
     {
-      LOG_TRACE(
-        "Removing parent ID: " << ElementId(ElementType::Way, way->getPid()) << " from: " <<
-        way->getElementId() << "...");
+      LOG_TRACE("Removing parent ID: " << ElementId(ElementType::Way, way->getPid()) << " from: " << way->getElementId() << "...");
       way->resetPid();
     }
   }
@@ -318,7 +316,6 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
   LOG_TRACE("\tRejoining siblings...");
   LOG_VART(way_ids);
 
-  WayMap ways = _map->getWays();
   WayPtr start;
   WayPtr end;
   size_t failure_count = 0;
@@ -328,7 +325,7 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
   {
     long id = way_ids[0];
     way_ids.pop_front();
-    WayPtr way = ways[id];
+    WayPtr way = _map->getWay(id);
     if (!way)
     {
       LOG_TRACE(ElementId(ElementType::Way, id) << " does not exist.");
@@ -413,15 +410,9 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
   //  Iterate the sorted ways and merge them
   if (sorted.size() > 1)
   {
-    WayPtr parent = ways[sorted[0]];
-    if (parent)
-    {
-      LOG_VART(parent->getElementId());
-    }
+    WayPtr parent = _map->getWay(sorted[0]);
     for (size_t i = 1; i < sorted.size(); ++i)
-    {
-      _joinWays(parent, ways[sorted[i]]);
-    }
+      _joinWays(parent, _map->getWay(sorted[i]));
   }
 }
 
@@ -472,10 +463,8 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   std::vector<ConstElementPtr> elements;
   elements.push_back(parent);
   elements.push_back(child);
-  const bool onlyOneIsABridge =
-    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
-  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
-      onlyOneIsABridge)
+  const bool onlyOneIsABridge = CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() && onlyOneIsABridge)
   {
     LOG_TRACE(
       "Only one of the features: " << parent->getElementId() << " and " <<
@@ -566,7 +555,7 @@ void WayJoiner::_updateParentIdMap()
 {
   // Get our map of parentIDs to ways that reference them
   _parentIDsToWays.clear();
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;

@@ -83,8 +83,8 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
   // way to do it and problems could be encountered in the future where more than one split way
   // inside of the bounds had the same parent...haven't seen that happen yet, so will go with this
   // for now.
-  WayMap ways = _map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  const WayMap& ways = _map->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     LOG_VART(way->getElementId());

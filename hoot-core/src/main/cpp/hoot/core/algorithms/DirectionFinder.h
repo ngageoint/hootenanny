@@ -40,8 +40,7 @@ public:
    * @brief isSimilarDirection returns true if these lines are generally pointed in a similar
    * direction.
    */
-  static bool isSimilarDirection(
-    const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
+  static bool isSimilarDirection(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
 
   /**
    * @brief isSimilarDirection2 Returns true if these lines are generally pointed in a similar
