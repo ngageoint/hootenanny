@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGOPTIONSDISPLAYER_H
@@ -57,8 +57,7 @@ public:
   
 private:
 
-  static QString _getAllConfigOptionsDetails(
-    const QString& optionName, const QString& configOptionsFile);
+  static QString _getAllConfigOptionsDetails(const QString& optionName, const QString& configOptionsFile);
 };
 
 }

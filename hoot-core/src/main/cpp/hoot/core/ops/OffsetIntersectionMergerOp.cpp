@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OffsetIntersectionMergerOp.h"
@@ -79,7 +79,7 @@ void OffsetIntersectionMergerOp::apply(std::shared_ptr<OsmMap>& map)
   std::shared_ptr<NodeToWayMap> nodeToWays = map->getIndex().getNodeToWayMap();
   std::set<long> intersectionWays;
   //  Iterate all of the ways looking for ways shorter or equal in length to the threshold
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     ConstWayPtr way = it->second;
     _numProcessed++;
@@ -98,9 +98,9 @@ void OffsetIntersectionMergerOp::apply(std::shared_ptr<OsmMap>& map)
   }
 
   //  Iterate all of the intersection ways found to merge the intersection
-  for (std::set<long>::iterator it = intersectionWays.begin(); it != intersectionWays.end(); ++it)
+  for (auto way_id : intersectionWays)
   {
-    WayPtr way = map->getWay(*it);
+    WayPtr way = map->getWay(way_id);
     long id1 = way->getFirstNodeId();
     long id2 = way->getLastNodeId();
     //  Remove the way recursively

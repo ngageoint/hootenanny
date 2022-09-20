@@ -99,7 +99,7 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
   {
     bool keep = true;
     // see if any of our conflicting matches are already being kept
-    for (auto it = cm.find(mi); it != cm.end(); ++it)
+    for (auto it = cm.constFind(mi); it != cm.constEnd(); ++it)
     {
       if (it.key() != mi)
         break;

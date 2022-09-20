@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RemoveNodeByEid.h"
 
@@ -37,19 +37,19 @@ using namespace std;
 namespace hoot
 {
 
-RemoveNodeByEid::RemoveNodeByEid(bool doCheck, bool removeFully) :
-_nodeIdToRemove(-std::numeric_limits<int>::max()),
-_doCheck(doCheck),
-_removeFully(removeFully),
-_removeOnlyUnused(false)
+RemoveNodeByEid::RemoveNodeByEid(bool doCheck, bool removeFully)
+  : _nodeIdToRemove(-std::numeric_limits<int>::max()),
+    _doCheck(doCheck),
+    _removeFully(removeFully),
+    _removeOnlyUnused(false)
 {
 }
 
-RemoveNodeByEid::RemoveNodeByEid(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused) :
-_nodeIdToRemove(nId),
-_doCheck(doCheck),
-_removeFully(removeFully),
-_removeOnlyUnused(removeOnlyUnused)
+RemoveNodeByEid::RemoveNodeByEid(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused)
+  : _nodeIdToRemove(nId),
+    _doCheck(doCheck),
+    _removeFully(removeFully),
+    _removeOnlyUnused(removeOnlyUnused)
 {
 }
 
@@ -84,21 +84,16 @@ void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId) const
 void RemoveNodeByEid::_removeNodeFully(const OsmMapPtr& map, long nId) const
 {
   // copy the set because we may modify it later.
-  set<long> rid =
-    map->getIndex().getElementToRelationMap()->getRelationByElement(ElementId::way(nId));
+  set<long> rid = map->getIndex().getElementToRelationMap()->getRelationByElement(ElementId::way(nId));
 
-  for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
-  {
-    map->getRelation(*it)->removeElement(ElementId::node(nId));
-  }
+  for (auto relation_id : rid)
+    map->getRelation(relation_id)->removeElement(ElementId::node(nId));
 
   const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long> ways = n2w->getWaysByNode(nId);
 
-  for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    map->getWay(*it)->removeNode(nId);
-  }
+  for (auto way_id : ways)
+    map->getWay(way_id)->removeNode(nId);
 
   _removeNodeNoCheck(map, nId);
 
@@ -108,9 +103,7 @@ void RemoveNodeByEid::_removeNodeFully(const OsmMapPtr& map, long nId) const
 void RemoveNodeByEid::apply(const OsmMapPtr& map)
 {
   if (_nodeIdToRemove == -std::numeric_limits<int>::max())
-  {
     throw IllegalArgumentException("No node ID specified for RemoveNodeByEid.");
-  }
 
   if (_removeFully)
     _removeNodeFully(map, _nodeIdToRemove);

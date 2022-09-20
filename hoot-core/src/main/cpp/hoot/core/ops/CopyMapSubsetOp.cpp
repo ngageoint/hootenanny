@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "CopyMapSubsetOp.h"
 
 // Hoot
 #include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -45,11 +45,11 @@ class AddAllVisitor : public ConstElementVisitor
 public:
 
   AddAllVisitor(ConstOsmMapPtr from, OsmMapPtr to, bool copyChildren = true,
-                ElementId exempt = ElementId()) :
-    _from(from),
-    _to(to),
-    _copyChildren(copyChildren),
-    _exempt(exempt)
+                ElementId exempt = ElementId())
+    : _from(from),
+      _to(to),
+      _copyChildren(copyChildren),
+      _exempt(exempt)
   {
     LOG_VART(_copyChildren);
   }
@@ -110,49 +110,47 @@ private:
   std::set<ElementId> _elementsAdded;
 };
 
-CopyMapSubsetOp::CopyMapSubsetOp() :
-_copyChildren(true)
+CopyMapSubsetOp::CopyMapSubsetOp()
+  : _copyChildren(true)
 {
 }
 
-CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
-_eids(eids),
-_from(from),
-_copyChildren(true)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids)
+  : _eids(eids),
+    _from(from),
+    _copyChildren(true)
 {
 }
 
-CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
-_from(from),
-_copyChildren(true)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds)
+  : _from(from),
+    _copyChildren(true)
 {
-  for (vector<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+  for (auto way_id : wayIds)
   {
-    if (from->containsWay(*it))
-    {
-      _eids.insert(ElementId(ElementType::Way, *it));
-    }
+    if (from->containsWay(way_id))
+      _eids.insert(ElementId(ElementType::Way, way_id));
   }
 }
 
-CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid) :
-_from(from),
-_copyChildren(true)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid)
+  : _from(from),
+    _copyChildren(true)
 {
   _eids.insert(eid);
 }
 
-CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
-_from(from),
-_copyChildren(true)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2)
+  : _from(from),
+    _copyChildren(true)
 {
   _eids.insert(eid1);
   _eids.insert(eid2);
 }
 
-CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit) :
-_from(from),
-_copyChildren(true)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit)
+  : _from(from),
+    _copyChildren(true)
 {
   addCriterion(crit);
 }
@@ -169,22 +167,18 @@ void CopyMapSubsetOp::setConfiguration(const Settings& conf)
 void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   if (!_from)
-  {
     throw IllegalArgumentException("No source map set on CopyMapSubsetOp.");
-  }
 
   map->setProjection(_from->getProjection());
   LOG_VART(_copyChildren);
   AddAllVisitor v(_from, map, _copyChildren);
 
   LOG_VART(_eids.size());
-  for (set<ElementId>::const_iterator it = _eids.begin(); it != _eids.end(); ++it)
+  for (const auto& eid : _eids)
   {
-    if (_from->containsElement(*it) == false)
-    {
-      throw IllegalArgumentException("Unable to find element: " + hoot::toString(*it));
-    }
-    _from->getElement(*it)->visitRo(*_from, v, _copyChildren);
+    if (_from->containsElement(eid) == false)
+      throw IllegalArgumentException("Unable to find element: " + hoot::toString(eid));
+    _from->getElement(eid)->visitRo(*_from, v, _copyChildren);
   }
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
@@ -196,9 +190,7 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
 void CopyMapSubsetOp::addCriterion(const ElementCriterionPtr& crit)
 {
   if (!_from)
-  {
     throw IllegalArgumentException("No source map set on CopyMapSubsetOp.");
-  }
   LOG_VART(crit);
 
   std::shared_ptr<UniqueElementIdVisitor> getIdVis = std::make_shared<UniqueElementIdVisitor>();

@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationCircularRefRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -40,20 +40,17 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RelationCircularRefRemover)
 void RelationCircularRefRemover::apply(OsmMapPtr& map)
 {
   RelationMap relations =  map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
     _numProcessed++;
     if (!relation)
-    {
       continue;
-    }
     const long relationId = relation->getId();
     LOG_VART(relationId);
     const std::vector<RelationData::Entry>& members = relation->getMembers();
-    for (size_t i = 0; i < members.size(); i++)
+    for (const auto& member : members)
     {
-      const RelationData::Entry member = members.at(i);
       if (member.getElementId().getType() == ElementType::Relation)
       {
         const long memberRelationId = member.getElementId().getId();
@@ -64,8 +61,7 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
 
         if (relationId == memberRelationId)
         {
-          LOG_TRACE(
-            "Removing relation that contains itself as a member: " << memberRelationId << "...");
+          LOG_TRACE("Removing relation that contains itself as a member: " << memberRelationId << "...");
           relation->removeElement(ElementId(ElementType::Relation, memberRelationId));
           _numAffected++;
         }
@@ -73,16 +69,12 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
         {
           // This could leave some empty relations, but we'll let the empty relation removal
           // op/visitor handle that elsewhere.
-          LOG_TRACE(
-            "Removing relation member element with ID: " << memberRelationId <<
-            " from relation with id: " << relationId << "...");
+          LOG_TRACE("Removing relation member element with ID: " << memberRelationId << " from relation with id: " << relationId << "...");
           relation->removeElement(ElementId(ElementType::Relation, memberRelationId));
           _numAffected++;
         }
         else
-        {
           _relationIdsToRelationMemberIds.insert(relationId, memberRelationId);
-        }
       }
     }
   }

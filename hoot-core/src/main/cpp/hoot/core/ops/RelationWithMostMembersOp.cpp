@@ -22,30 +22,30 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithMostMembersOp.h"
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RelationWithMostMembersOp)
 
-RelationWithMostMembersOp::RelationWithMostMembersOp() :
-_maxNumCritSatisifed(0),
-_totalRelations(0),
-_totalRelationMembers(0),
-_numRelationsSatisfyingCriterion(0),
-_numRelationMembersSatisfyingCriterion(0)
+RelationWithMostMembersOp::RelationWithMostMembersOp()
+  : _maxNumCritSatisifed(0),
+    _totalRelations(0),
+    _totalRelationMembers(0),
+    _numRelationsSatisfyingCriterion(0),
+    _numRelationMembersSatisfyingCriterion(0)
 {
 }
 
@@ -62,22 +62,15 @@ void RelationWithMostMembersOp::setCriterion(const QString& criterionClass, cons
   LOG_VARD(criterionClass);
   if (!criterionClass.trimmed().isEmpty())
   {
-    ElementCriterionPtr crit =
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed());
+    ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed());
     Configurable* c = dynamic_cast<Configurable*>(crit.get());
     if (c != nullptr)
-    {
       c->setConfiguration(conf);
-    }
 
     if (type == "relation")
-    {
       _relationCriterion = crit;
-    }
     else
-    {
       _memberCriterion = crit;
-    }
   }
 }
 
@@ -87,7 +80,7 @@ long RelationWithMostMembersOp::getIdOfRelationWithMaxCritSatisfactions(const Co
   long idOfRelationWithMaxCritSatisfactions = 0;
 
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     int numTimesCritSatisfied = 0;
     const RelationPtr& relation = it->second;
@@ -95,9 +88,9 @@ long RelationWithMostMembersOp::getIdOfRelationWithMaxCritSatisfactions(const Co
     {
       _numRelationsSatisfyingCriterion++;
       const std::vector<RelationData::Entry>& members = relation->getMembers();
-      for (size_t i = 0; i < members.size(); i++)
+      for (const auto& m : members)
       {
-        ConstElementPtr member = map->getElement(members[i].getElementId());
+        ConstElementPtr member = map->getElement(m.getElementId());
         if (!_memberCriterion || _memberCriterion->isSatisfied(member))
         {
           numTimesCritSatisfied++;
@@ -146,13 +139,10 @@ void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
   RelationPtr outRelation;
   // We're only interested in the relation with the most members satisfying both of the optional
   // criteria (ties thrown out).
-  const long idOfRelationWithMaxCritSatisfactions =
-    getIdOfRelationWithMaxCritSatisfactions(map, outRelation);
+  const long idOfRelationWithMaxCritSatisfactions = getIdOfRelationWithMaxCritSatisfactions(map, outRelation);
   if (idOfRelationWithMaxCritSatisfactions != 0)
   {
-    LOG_TRACE(
-      "RelationWithMostMembersOp: output relation\n" <<
-      OsmUtils::getElementDetailString(outRelation, map));
+    LOG_TRACE("RelationWithMostMembersOp: output relation\n" << OsmUtils::getElementDetailString(outRelation, map));
     // output a map with just the relation found and its members
     _setOutput(idOfRelationWithMaxCritSatisfactions, map);
   }
@@ -167,12 +157,9 @@ void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
 QString RelationWithMostMembersOp::getCompletedStatusMessage() const
 {
   if (_maxNumCritSatisifed == 0)
-  {
     return "Found no relations satisfying the specified criteria.";
-  }
-  return
-    "Found a relation with " + StringUtils::formatLargeNumber(_maxNumCritSatisifed) +
-    " criteria satisfactions.";
+
+  return "Found a relation with " + StringUtils::formatLargeNumber(_maxNumCritSatisifed) + " criteria satisfactions.";
 }
 
 }

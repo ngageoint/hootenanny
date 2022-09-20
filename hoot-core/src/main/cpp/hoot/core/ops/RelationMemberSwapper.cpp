@@ -22,32 +22,31 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationMemberSwapper.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RelationMemberSwapper)
 
-RelationMemberSwapper::RelationMemberSwapper() :
-_includeReviewRelations(true)
+RelationMemberSwapper::RelationMemberSwapper()
+  : _includeReviewRelations(true)
 {
 }
 
-RelationMemberSwapper::RelationMemberSwapper(
-  const ElementId& idToReplace, const ElementId& idToReplaceWith,
-  const bool includeReviewRelations) :
-_idToReplace(idToReplace),
-_idToReplaceWith(idToReplaceWith),
-_includeReviewRelations(includeReviewRelations)
+RelationMemberSwapper::RelationMemberSwapper(const ElementId& idToReplace, const ElementId& idToReplaceWith,
+                                             const bool includeReviewRelations)
+  : _idToReplace(idToReplace),
+    _idToReplaceWith(idToReplaceWith),
+    _includeReviewRelations(includeReviewRelations)
 {
 }
 
@@ -59,14 +58,11 @@ void RelationMemberSwapper::apply(const OsmMapPtr& map)
 
   _numAffected = 0;
 
-  const std::set<long> owningRelationIds =
-    map->getIndex().getElementToRelationMap()->getRelationByElement(_idToReplace);
-  for (std::set<long>::const_iterator it = owningRelationIds.begin(); it != owningRelationIds.end();
-       ++it)
+  const std::set<long> owningRelationIds = map->getIndex().getElementToRelationMap()->getRelationByElement(_idToReplace);
+  for (auto relation_id : owningRelationIds)
   {
-    RelationPtr owningRelation = map->getRelation(*it);
-    if (owningRelation &&
-        (!_includeReviewRelations || owningRelation->getType() != MetadataTags::RelationReview()))
+    RelationPtr owningRelation = map->getRelation(relation_id);
+    if (owningRelation && (!_includeReviewRelations || owningRelation->getType() != MetadataTags::RelationReview()))
     {
       owningRelation->replaceElement(_idToReplace, _idToReplaceWith);
       _numAffected++;
@@ -74,9 +70,8 @@ void RelationMemberSwapper::apply(const OsmMapPtr& map)
   }
 }
 
-void RelationMemberSwapper::swap(
-  const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
-  const bool includeReviewRelations)
+void RelationMemberSwapper::swap(const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
+                                 const bool includeReviewRelations)
 {
   RelationMemberSwapper(idToReplace, idToReplaceWith, includeReviewRelations).apply(map);
 }

@@ -126,7 +126,7 @@ void ReuseNodeIdsOnWayOp::apply(const std::shared_ptr<OsmMap>& map)
       while (nodeToWayMap->getWaysByNode(toNodeId).size() > 1 && toIndex < toNodeCount)
       {
         toIndex++;
-        toNodeId = to->getNodeId(toIndex);
+        toNodeId = to->getNodeId(static_cast<int>(toIndex));
       }
       //  Make sure that both the to and from node IDs are valid before modifying the nodes
       if (toIndex < toNodeCount)

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny">
+    <node id="-1" version="0" lat="39.5932776007500067" lon="-104.8065567697200038" timestamp=""/>
+    <node id="-2" version="0" lat="39.5931137011600072" lon="-104.8065277660100065" timestamp=""/>
+    <node id="-3" version="0" lat="39.5931241311499988" lon="-104.8064523563499932" timestamp=""/>
+    <node id="-4" version="0" lat="39.5931062511699992" lon="-104.8064407548600201" timestamp=""/>
+    <node id="-5" version="0" lat="39.5931137011600072" lon="-104.8064001496600071" timestamp=""/>
+    <node id="-6" version="0" lat="39.5931151911599954" lon="-104.8063479429700067" timestamp=""/>
+    <node id="-7" version="0" lat="39.5933074006300032" lon="-104.8063769466800039" timestamp=""/>
+    <node id="-8" version="0" lat="39.5932790907399976" lon="-104.8064697585799934" timestamp=""/>
+    <node id="-9" version="0" lat="39.5931238599300031" lon="-104.8061136186200031" timestamp=""/>
+    <node id="-10" version="0" lat="39.5931524411000026" lon="-104.8061255811399946" timestamp=""/>
+    <node id="-11" version="0" lat="39.5931432865100064" lon="-104.8062152723099985" timestamp=""/>
+    <node id="-12" version="0" lat="39.5931217689499988" lon="-104.8062120958900039" timestamp=""/>
+    <node id="101" version="1" action="modify" lat="39.5931271111400065" lon="-104.8060869095200047" timestamp=""/>
+    <node id="102" version="1" action="modify" lat="39.5933034489700049" lon="-104.8061230577099963" timestamp=""/>
+    <node id="103" version="1" action="modify" lat="39.5932969706700035" lon="-104.8062512639099992" timestamp=""/>
+    <node id="104" version="1" action="modify" lat="39.5932910106900096" lon="-104.8063692123599964" timestamp=""/>
+    <way id="101" version="1" action="modify" timestamp="">
+        <nd ref="104"/>
+        <nd ref="103"/>
+        <nd ref="102"/>
+        <nd ref="101"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-6"/>
+        <nd ref="-5"/>
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <nd ref="104"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Panera Bread"/>
+    </way>
+</osm>

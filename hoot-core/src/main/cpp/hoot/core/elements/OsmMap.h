@@ -273,6 +273,7 @@ public:
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */
   std::shared_ptr<OGRSpatialReference> getProjection() const override { return _srs; }
+  QString getProjectionEpsgString() const;
 
   void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
 

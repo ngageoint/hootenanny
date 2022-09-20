@@ -22,30 +22,29 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ImmediatelyConnectedOutOfBoundsWayTagger.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ImmediatelyConnectedOutOfBoundsWayTagger)
 
-ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger() :
-_strictBounds(true)
+ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger()
+  : _strictBounds(true)
 {
   _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
 
-ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(
-  const bool strictBounds) :
-_strictBounds(strictBounds)
+ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds)
+  : _strictBounds(strictBounds)
 {
   _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
@@ -59,7 +58,7 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
 
   WayMap ways = map->getWays();
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
-  for (WayMap::iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr way = wayItr->second;
     LOG_TRACE("Examining source way: " << way->getElementId() << "...");
@@ -67,36 +66,29 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
     // if the way hasn't already been tagged and falls within the bounds
     LOG_VART(directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end());
     LOG_VART(_boundsChecker.isSatisfied(way));
-    if (directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end() &&
-        _boundsChecker.isSatisfied(way))
+    if (directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end() && _boundsChecker.isSatisfied(way))
     {
       // for each node in the way
       const std::vector<long> wayNodeIds = way->getNodeIds();
       LOG_VART(wayNodeIds.size());
 
-      for (std::vector<long>::const_iterator wayNodeIdItr = wayNodeIds.begin();
-           wayNodeIdItr != wayNodeIds.end(); ++wayNodeIdItr)
+      for (auto node_id : wayNodeIds)
       {
-        LOG_VART(*wayNodeIdItr);
+        LOG_VART(node_id);
 
         // find all ways directly connected it
-        std::set<long> idsOfWaysContainingWayNode = nodeToWayMap->getWaysByNode(*wayNodeIdItr);
+        std::set<long> idsOfWaysContainingWayNode = nodeToWayMap->getWaysByNode(node_id);
         LOG_VART(idsOfWaysContainingWayNode.size());
-        for (std::set<long>::const_iterator connectedWayIdItr = idsOfWaysContainingWayNode.begin();
-             connectedWayIdItr != idsOfWaysContainingWayNode.end(); ++connectedWayIdItr)
+        for (auto connectedWayId : idsOfWaysContainingWayNode)
         {
-          const long connectedWayId = *connectedWayIdItr;
           LOG_VART(connectedWayId);
-
           // if we haven't already tagged the connected way
           LOG_VART(directlyConnectedWayIds.find(connectedWayId) == directlyConnectedWayIds.end());
           if (directlyConnectedWayIds.find(connectedWayId) == directlyConnectedWayIds.end())
           {
             WayPtr connectedWay = map->getWay(connectedWayId);
             if (!connectedWay)
-            {
               continue;
-            }
 
             // and its *not* within the bounds
             LOG_VART(_boundsChecker.isSatisfied(connectedWay));
@@ -110,25 +102,19 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
             }
             else
             {
-               LOG_TRACE(
-                 "Skipping connected way: " << connectedWay->getElementId() << " that didn't " <<
-                 "pass criterion...");
+               LOG_TRACE("Skipping connected way: " << connectedWay->getElementId() << " that didn't " << "pass criterion...");
             }
           }
           else
           {
-            LOG_TRACE(
-              "Skipping connected way: " << ElementId(ElementType::Way, connectedWayId) <<
-              " that was already tagged...");
+            LOG_TRACE("Skipping connected way: " << ElementId(ElementType::Way, connectedWayId) << " that was already tagged...");
           }
         }
       }
     }
     else
     {
-      LOG_TRACE(
-        "Skipping source way: " << way->getElementId() << " that either didn't satisfy " <<
-        "the criterion or was already tagged...");
+      LOG_TRACE("Skipping source way: " << way->getElementId() << " that either didn't satisfy " << "the criterion or was already tagged...");
     }
 
     _numProcessed++;

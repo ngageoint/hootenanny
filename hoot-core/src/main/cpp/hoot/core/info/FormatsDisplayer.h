@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef FORMATSDISPLAYER_H
@@ -50,22 +50,19 @@ public:
    * @param displayOgrOnly displays formats supported by OGR only
    * @return a string describing the requested formats
    */
-  static QString display(
-    const bool displayInputs, const bool displayInputsSupportingStreaming,
-    const bool displayInputsSupportingBounds, const bool displayOutputs,
-    const bool displayOutputsSupportingStreaming, const bool displayOgrOnly);
+  static QString display(const bool displayInputs, const bool displayInputsSupportingStreaming,
+                         const bool displayInputsSupportingBounds, const bool displayOutputs,
+                         const bool displayOutputsSupportingStreaming, const bool displayOgrOnly);
 
 private:
 
   template<typename IoClass>
-  static QString _getFormatsString(
-    const QString& className, const QStringList extraFormats = QStringList(),
-    const bool ogrOnly = false, const bool ogrReadOnly = false);
+  static QString _getFormatsString(const QString& className, const QStringList extraFormats = QStringList(),
+                                   const bool ogrOnly = false, const bool ogrReadOnly = false);
 
   template<typename IoClass>
-  static QStringList _getFormats(
-    const QString& className, const QStringList extraFormats = QStringList(),
-    const bool ogrOnly = false, const bool ogrReadOnly = false);
+  static QStringList _getFormats(const QString& className, const QStringList extraFormats = QStringList(),
+                                 const bool ogrOnly = false, const bool ogrReadOnly = false);
 
   static QString _getFormatsSupportingBoundsString(const bool ogrOnly = false);
 
