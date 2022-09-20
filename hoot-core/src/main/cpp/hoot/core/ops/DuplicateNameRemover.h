@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUPLICATENAMEREMOVER_H
 #define DUPLICATENAMEREMOVER_H
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -41,8 +41,7 @@ class OsmMap;
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
  * Any duplicates in the alt_name field will be removed.
  */
-class DuplicateNameRemover : public OsmMapOperation, public Configurable,
-  public ConflateInfoCacheConsumer
+class DuplicateNameRemover : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 

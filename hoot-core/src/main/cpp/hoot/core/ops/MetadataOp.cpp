@@ -83,10 +83,10 @@ void MetadataOp::_configure()
     _datasetIndicator.second = indicator[1];
   }
 
-  for (int i = 0; i < tags.length(); i+=2)
+  for (int i = 0; i < tags.length(); i += 2)
   {
     QString key = tags[i];
-    QString value = (i < tags.length() - 1) ? tags[i+1] : "";
+    QString value = (i < tags.length() - 1) ? tags[i + 1] : "";
     _tags[key] = value;
   }
 }
@@ -99,8 +99,8 @@ void MetadataOp::_gatherProcessElements()
 
   for (auto it = _allWays.begin(); it != _allWays.end(); ++it)
   {
-    if (!_datasetWayPolys.contains(it->second) &&        // ignore the ways providing the dataset
-        it->second->getTags().hasInformationTag())
+    // ignore the ways providing the dataset
+    if (!_datasetWayPolys.contains(it->second) && it->second->getTags().hasInformationTag())
     {
       _elementsToProcess.push_back(it->second);
       elementCount++;
@@ -128,8 +128,7 @@ void MetadataOp::_gatherProcessElements()
 
     // determine all node locations for assigning elements to datasets
     shared_ptr<Point> pPoint = shared_ptr<Point>(
-          GeometryFactory::getDefaultInstance()->createPoint(
-            Coordinate(pNode->getX(),pNode->getY())));
+          GeometryFactory::getDefaultInstance()->createPoint(Coordinate(pNode->getX(),pNode->getY())));
 
     nodeCount++;
 

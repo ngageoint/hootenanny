@@ -22,37 +22,36 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SmallDisconnectedWayRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/DisconnectedWayCriterion.h>
-#include <hoot/core/criterion/WayLengthCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/criterion/DisconnectedWayCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/WayLengthCriterion.h>
 #include <hoot/core/criterion/WayNodeCountCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallDisconnectedWayRemover)
 
-SmallDisconnectedWayRemover::SmallDisconnectedWayRemover() :
-_maxWayLength(2.0),
-_maxWayNodeCount(2)
+SmallDisconnectedWayRemover::SmallDisconnectedWayRemover()
+  : _maxWayLength(2.0),
+    _maxWayNodeCount(2)
 {
 }
 
-SmallDisconnectedWayRemover::SmallDisconnectedWayRemover(
-  const int maxWayLength, const int maxWayNodeCount) :
-_maxWayLength(maxWayLength),
-_maxWayNodeCount(maxWayNodeCount)
+SmallDisconnectedWayRemover::SmallDisconnectedWayRemover(const int maxWayLength, const int maxWayNodeCount)
+  : _maxWayLength(maxWayLength),
+    _maxWayNodeCount(maxWayNodeCount)
 {
 }
 
@@ -75,36 +74,28 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
 
   // remove ways at or below a certain size
   std::shared_ptr<WayLengthCriterion> lengthCrit =
-    std::make_shared<WayLengthCriterion>(
-      _maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map);
+    std::make_shared<WayLengthCriterion>(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map);
   // remove ways having a node count at or below a certain amount
   std::shared_ptr<WayNodeCountCriterion> nodeCountCrit =
-    std::make_shared<WayNodeCountCriterion>(
-      _maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo);
-  ChainCriterionPtr wayCrit =
-    std::make_shared<ChainCriterion>(lengthCrit, nodeCountCrit);
+    std::make_shared<WayNodeCountCriterion>(_maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo);
+  ChainCriterionPtr wayCrit = std::make_shared<ChainCriterion>(lengthCrit, nodeCountCrit);
   // require that ways be disconnected from other ways to be removed
-  std::shared_ptr<DisconnectedWayCriterion> disconnectedCrit =
-    std::make_shared<DisconnectedWayCriterion>(_map);
-  ChainCriterionPtr crit =
-    std::make_shared<ChainCriterion>(wayCrit, disconnectedCrit);
+  std::shared_ptr<DisconnectedWayCriterion> disconnectedCrit = std::make_shared<DisconnectedWayCriterion>(_map);
+  ChainCriterionPtr crit = std::make_shared<ChainCriterion>(wayCrit, disconnectedCrit);
 
   // Find the ways to remove.
   std::set<long> wayIdsToRemove;
   const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
+  for (auto waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     ConstWayPtr way = waysItr->second;
     _numProcessed++;
     if (!way)
-    {
       continue;
-    }
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
     // an active conflate matcher in the current conflation configuration.
-    else if (_conflateInfoCache &&
-             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
+    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << way->getElementId() << ", as it cannot be conflated by any " <<
@@ -117,16 +108,12 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
     LOG_VART(nodeCountCrit->isSatisfied(way));
     LOG_VART(disconnectedCrit->isSatisfied(way));
     if (crit->isSatisfied(way))
-    {
       wayIdsToRemove.insert(way->getId());
-    }
   }
 
   // Remove the ways.
-  for (std::set<long>::const_iterator wayIdsItr = wayIdsToRemove.begin();
-       wayIdsItr != wayIdsToRemove.end(); ++wayIdsItr)
+  for (auto wayId : wayIdsToRemove)
   {
-    const long wayId = *wayIdsItr;
     LOG_VART(wayId);
     RecursiveElementRemover(ElementId::way(wayId)).apply(_map);
     _numAffected++;

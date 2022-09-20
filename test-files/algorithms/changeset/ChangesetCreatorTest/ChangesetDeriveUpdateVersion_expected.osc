@@ -34,18 +34,18 @@
             <nd ref="-2"/>
             <nd ref="-1"/>
             <nd ref="-4"/>
-            <tag k="addr:country" v="US"/>
-            <tag k="feature_area" v="112.5"/>
-            <tag k="amenity" v="cafe"/>
-            <tag k="addr:street" v="Massachusetts Avenue"/>
-            <tag k="addr:state" v="MA"/>
-            <tag k="name" v="Twin Seafood"/>
-            <tag k="building" v="yes"/>
             <tag k="addr:city" v="Acton"/>
-            <tag k="width" v="8.5"/>
+            <tag k="addr:country" v="US"/>
             <tag k="addr:housenumber" v="541"/>
+            <tag k="addr:state" v="MA"/>
+            <tag k="addr:street" v="Massachusetts Avenue"/>
+            <tag k="amenity" v="cafe"/>
             <tag k="angle" v="179.5"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="112.5"/>
             <tag k="length" v="13.6"/>
+            <tag k="name" v="Twin Seafood"/>
+            <tag k="width" v="8.5"/>
         </way>
     </create>
     <modify>
@@ -56,13 +56,13 @@
             <nd ref="10"/>
             <nd ref="11"/>
             <nd ref="7"/>
-            <tag k="feature_area" v="313.5"/>
             <tag k="amenity" v="restaurant"/>
-            <tag k="name" v="New London Style Pizza"/>
-            <tag k="building" v="yes"/>
-            <tag k="width" v="16.1"/>
             <tag k="angle" v="163.8"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="313.5"/>
             <tag k="length" v="25.4"/>
+            <tag k="name" v="New London Style Pizza"/>
+            <tag k="width" v="16.1"/>
         </way>
     </modify>
     <delete>
@@ -72,11 +72,11 @@
             <nd ref="36"/>
             <nd ref="37"/>
             <nd ref="35"/>
-            <tag k="feature_area" v="57.4"/>
-            <tag k="building" v="yes"/>
-            <tag k="width" v="7.2"/>
             <tag k="angle" v="180.5"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="57.4"/>
             <tag k="length" v="8.0"/>
+            <tag k="width" v="7.2"/>
         </way>
     </delete>
     <modify>
@@ -86,18 +86,18 @@
             <nd ref="40"/>
             <nd ref="41"/>
             <nd ref="38"/>
+            <tag k="addr:city" v="Acton"/>
             <tag k="addr:country" v="US"/>
-            <tag k="feature_area" v="294.6"/>
-            <tag k="addr:street" v="Massachusetts Avenue"/>
+            <tag k="addr:housenumber" v="543"/>
             <tag k="addr:state" v="MA"/>
+            <tag k="addr:street" v="Massachusetts Avenue"/>
+            <tag k="angle" v="271.2"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="294.6"/>
+            <tag k="length" v="26.5"/>
             <tag k="name" v="Office of Michael Rosenfeld, Inc., Architects"/>
             <tag k="shop" v="architect"/>
-            <tag k="building" v="yes"/>
-            <tag k="addr:city" v="Acton"/>
             <tag k="width" v="11.7"/>
-            <tag k="addr:housenumber" v="543"/>
-            <tag k="angle" v="271.2"/>
-            <tag k="length" v="26.5"/>
         </way>
         <way id="8" version="1" timestamp="">
             <nd ref="50"/>
@@ -105,13 +105,13 @@
             <nd ref="52"/>
             <nd ref="53"/>
             <nd ref="50"/>
-            <tag k="feature_area" v="192.4"/>
             <tag k="amenity" v="fuel"/>
-            <tag k="name" v="West Acton Mobil"/>
-            <tag k="building" v="roof"/>
-            <tag k="width" v="8.1"/>
             <tag k="angle" v="271.8"/>
+            <tag k="building" v="roof"/>
+            <tag k="feature_area" v="192.4"/>
             <tag k="length" v="23.9"/>
+            <tag k="name" v="West Acton Mobil"/>
+            <tag k="width" v="8.1"/>
         </way>
         <way id="9" version="1" timestamp="">
             <nd ref="54"/>
@@ -121,12 +121,12 @@
             <nd ref="58"/>
             <nd ref="4"/>
             <nd ref="54"/>
-            <tag k="feature_area" v="124.7"/>
-            <tag k="shop" v="convenience"/>
-            <tag k="building" v="yes"/>
-            <tag k="width" v="8.3"/>
             <tag k="angle" v="180.9"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="124.7"/>
             <tag k="length" v="16.1"/>
+            <tag k="shop" v="convenience"/>
+            <tag k="width" v="8.3"/>
         </way>
     </modify>
 </osmChange>

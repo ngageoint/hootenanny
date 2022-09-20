@@ -49,7 +49,6 @@
         <spring.version>5.3.20</spring.version>
         <spring.security.version>5.7.1</spring.security.version>
         <tika.version>1.26</tika.version>
-        <xalan.version>2.7.2</xalan.version>
         <xercesImpl.version>2.12.2</xercesImpl.version>
 
         <!-- test -->
@@ -536,14 +535,7 @@
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
-
-        <!-- XPath -->
-        <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <version>${xalan.version}</version>
-        </dependency>
-
+        
         <!-- JSON -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>

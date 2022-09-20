@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ConfigOptionsDisplayer.h"
@@ -55,13 +55,9 @@ QString ConfigOptionsDisplayer::getAllOptionNames(const bool withDetails)
   QString cmd;
   LOG_VARD(withDetails);
   if (!withDetails)
-  {
     cmd = "cat " + configOptionsFile + " | grep '^===' | sed 's/=== //g'";
-  }
   else
-  {
     cmd = "cat " + configOptionsFile + " | grep -v '//'";
-  }
 
   return runProcess(cmd);
 }
@@ -74,25 +70,18 @@ QString ConfigOptionsDisplayer::getOptionName(const QString& optionName, const b
   LOG_VARD(withDetails);
   if (!withDetails)
   {
-    cmd =
-      "cat " + configOptionsFile + " | grep '^=== " + optionName.toLower().trimmed() +
-      "' | sed 's/=== //g'";
+    cmd = "cat " + configOptionsFile + " | grep '^=== " + optionName.toLower().trimmed() + "' | sed 's/=== //g'";
     return runProcess(cmd);
   }
   else
-  {
     return _getAllConfigOptionsDetails(optionName, configOptionsFile);
-  }
 }
 
-QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(
-  const QString& optionName, const QString& configOptionsFile)
+QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString& optionName, const QString& configOptionsFile)
 {
   QFile file(configOptionsFile);
   if (!file.open(QFile::ReadOnly))
-  {
     throw HootException("Error opening file for reading: " + configOptionsFile);
-  }
 
   // We could eventually replace this w/ some fancy lookahead regex called by grep...doing it by
   // brute force for now.
@@ -106,18 +95,12 @@ QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(
       const QString line = QString::fromUtf8(file.readLine().constData());
 
       if (line.startsWith("=== " + optionName))
-      {
         foundOption = true;
-      }
       else if (line.startsWith("=== "))
-      {
         foundOption = false;
-      }
 
       if (foundOption)
-      {
         ts << line;
-      }
     }
   }
   catch (...)

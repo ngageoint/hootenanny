@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SearchRadiusCalculator.h"
@@ -76,9 +76,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   {
     // no tie points found, so use CE
     _result = _circularError;
-    LOG_INFO(
-      "Unable to automatically calculate search radius. Using default search radius value = " <<
-      _result);
+    LOG_INFO("Unable to automatically calculate search radius. Using default search radius value = " << _result);
     return;
   }
 
@@ -103,19 +101,15 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) con
   }
   else
   {
-    // If a match candidate criterion was specified, filter out the remaining elements that don't
-    // fit the criterion.
-    ElementCriterionPtr candidateCrit =
-      Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion);
+    // If a match candidate criterion was specified, filter out the remaining elements that don't fit the criterion.
+    ElementCriterionPtr candidateCrit = Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion);
     crit = std::make_shared<ChainCriterion>(unknownCrit, candidateCrit);
   }
 
   // make a copy of the filtered map to do the search radius calc on
   CopyMapSubsetOp mapCopier(map, crit);
   mapCopier.apply(filteredMap);
-  LOG_DEBUG(
-    "Element count after search radius calculation filtering: " <<
-    StringUtils::formatLargeNumber(filteredMap->getElementCount()));
+  LOG_DEBUG("Element count after search radius calculation filtering: " << StringUtils::formatLargeNumber(filteredMap->getElementCount()));
 
   return filteredMap;
 }
@@ -180,25 +174,20 @@ void SearchRadiusCalculator::_calculateSearchRadius(const std::vector<double>& t
   if (tiePointDistances.size() < 2)
   {
     _result = _circularError;
-    LOG_INFO(
-      QString("Unable to automatically calculate search radius.  Not enough tie points.  ") +
-      QString("Using default search radius value = ") + QString::number(_result));
+    LOG_INFO("Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = " << QString::number(_result));
   }
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_DEBUG("Calculated search radius = " + QString::number(_result, 'g', 2));
+    LOG_DEBUG("Calculated search radius = " << QString::number(_result, 'g', 2));
   }
 }
 
 double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples) const
 {
   double sumSquares = 0.0;
-  for (size_t i = 0; i < samples.size(); i++)
-  {
-    const double v = samples[i];
+  for (auto v : samples)
     sumSquares += v * v;
-  }
   return sqrt(sumSquares / (double)(samples.size() - 1));
 }
 

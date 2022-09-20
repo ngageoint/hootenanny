@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm.element;
 
@@ -41,7 +41,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
-import org.apache.xpath.XPathAPI;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -55,7 +54,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
-
+import hoot.services.utils.XPathAPI;
 
 public class ElementResourceTest extends OSMResourceTestAbstract {
 

@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
-#ifndef OSMXMLCHANGESETFILEWRITER_H
-#define OSMXMLCHANGESETFILEWRITER_H
+#ifndef OSM_BASE_XML_CHANGESET_FILE_WRITER_H
+#define OSM_BASE_XML_CHANGESET_FILE_WRITER_H
 
 // Hoot
 #include <hoot/core/elements/Node.h>
@@ -42,21 +42,21 @@ namespace hoot
 {
 
 /**
- * Writes an OSM changeset to an XML file.
+ * Base class that writes an OSM changeset to an XML file.
  *
  * Before writing this changeset to an OSM API database, the corresponding changeset would have to
  * be created using the API.  Optionally, after writing this the changeset can be closed via the
  * API.
  */
-class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
+class OsmBaseXmlChangesetFileWriter : public OsmChangesetFileWriter
 {
 
 public:
 
   static QString className() { return "OsmXmlChangesetFileWriter"; }
 
-  OsmXmlChangesetFileWriter();
-  ~OsmXmlChangesetFileWriter() override = default;
+  OsmBaseXmlChangesetFileWriter();
+  ~OsmBaseXmlChangesetFileWriter() override = default;
 
   /**
    * @see ChangesetFileWriter
@@ -76,14 +76,9 @@ public:
   void setMap1List(const QList<ConstOsmMapPtr>& mapList) override { _map1List = mapList; }
   void setMap2List(const QList<ConstOsmMapPtr>& mapList) override { _map2List = mapList; }
 
-  /**
-   * @see ChangesetFileWriter
-   */
-  bool isSupported(const QString& output) const override { return output.endsWith(".osc", Qt::CaseInsensitive); }
-
   void setConfiguration(const Settings &conf) override;
 
-private:
+protected:
 
   /** Settings from the config file */
   int _precision;
@@ -103,6 +98,8 @@ private:
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;
 
+  bool _sortTags;
+
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);
   void _writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous);
@@ -111,8 +108,14 @@ private:
 
   void _initIdCounters();
   void _initStats();
+
+  /** Override functions to insert functionality for different output types */
+  virtual void _writeXmlFileHeader(QXmlStreamWriter& writer) const = 0;
+  virtual void _writeXmlFileSectionHeader(QXmlStreamWriter& writer, Change::ChangeType last) const = 0;
+  virtual void _writeXmlActionAttribute(QXmlStreamWriter& writer) const = 0;
+  virtual void _getOptionalTags(Tags& tags, const Element* element) const = 0;
 };
 
 }
 
-#endif // OSMXMLCHANGESETFILEWRITER_H
+#endif // OSM_BASE_XML_CHANGESET_FILE_WRITER_H

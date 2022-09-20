@@ -108,9 +108,9 @@
             <nd ref="-3"/>
             <nd ref="-4"/>
             <nd ref="-7"/>
-            <tag k="test_key" v="test_val"/>
             <tag k="highway" v="primary"/>
             <tag k="note" v="2"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-2" version="0" timestamp="">
             <nd ref="-34"/>
@@ -143,17 +143,17 @@
             <nd ref="-26"/>
             <nd ref="-27"/>
             <nd ref="-28"/>
-            <tag k="test_key" v="test_val"/>
             <tag k="highway" v="primary"/>
             <tag k="note" v="0"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-3" version="0" timestamp="">
             <nd ref="-4"/>
             <nd ref="-29"/>
             <nd ref="-30"/>
-            <tag k="test_key" v="test_val"/>
             <tag k="highway" v="primary"/>
             <tag k="note" v="3"/>
+            <tag k="test_key" v="test_val"/>
         </way>
     </create>
 </osmChange>

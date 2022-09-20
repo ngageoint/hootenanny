@@ -28,9 +28,9 @@
 #include "GeometryModifierOp.h"
 
 // Hoot
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h>
 
 namespace bpt = boost::property_tree;
@@ -122,8 +122,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
     }
 
     if (!actionDesc.pAction)
-      throw HootException(
-        QString("Invalid geometry modifier action '%1' in %2").arg(actionDesc.command, _rulesFileName));
+      throw HootException(QString("Invalid geometry modifier action '%1' in %2").arg(actionDesc.command, _rulesFileName));
 
     if (!commandLevelValue.second.empty())
     {
@@ -162,8 +161,7 @@ void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bp
   catch (const HootException& e)
   {
     QString exceptionMsg = QString(e.what());
-    throw HootException(
-      QString("Invalid filter for action '%1' in %2: '%3'").arg(actionDesc.command, _rulesFileName, exceptionMsg));
+    throw HootException(QString("Invalid filter for action '%1' in %2: '%3'").arg(actionDesc.command, _rulesFileName, exceptionMsg));
   }
 }
 
@@ -177,8 +175,7 @@ void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc,
     if (availableParameters.contains(arg))
       actionDesc.arguments[arg] = QString::fromStdString(data.second.data());
     else
-      throw HootException(
-        QString("Invalid geometry modifier argument '%1' for action '%2' in %3").arg(arg, actionDesc.command, _rulesFileName));
+      throw HootException(QString("Invalid geometry modifier argument '%1' for action '%2' in %3").arg(arg, actionDesc.command, _rulesFileName));
   }
 }
 

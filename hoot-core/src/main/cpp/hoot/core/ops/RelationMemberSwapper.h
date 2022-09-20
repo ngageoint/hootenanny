@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_MEMBER_SWAPPER_H
@@ -45,9 +45,8 @@ public:
   static QString className() { return "RelationMemberSwapper"; }
 
   RelationMemberSwapper();
-  RelationMemberSwapper(
-    const ElementId& idToReplace, const ElementId& idToReplaceWith,
-    const bool includeReviewRelations = true);
+  RelationMemberSwapper(const ElementId& idToReplace, const ElementId& idToReplaceWith,
+                        const bool includeReviewRelations = true);
   ~RelationMemberSwapper() override = default;
 
   /**
@@ -63,15 +62,13 @@ public:
    * @param map map owning the element being removed
    * @param includeReviewRelations if true, review relations are modified
    */
-  static void swap(
-    const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
-    const bool includeReviewRelations = true);
+  static void swap(const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
+                   const bool includeReviewRelations = true);
 
   QString getInitStatusMessage() const override
   {
-    return
-      "Swapping relation member references for " + _idToReplace.toString() + " with " +
-      _idToReplaceWith.toString() + " ...";
+    return QString("Swapping relation member references for %1 with %2...")
+            .arg(_idToReplace.toString(), _idToReplaceWith.toString());
   }
   QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " relation member references"; }

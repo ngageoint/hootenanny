@@ -98,7 +98,7 @@ void OpExecutor::apply(OsmMapPtr& map)
     conflateInfoCache = std::make_shared<ConflateInfoCache>(map);
 
   int opCount = 1;
-  for (auto s : _namedOps)
+  for (auto s : qAsConst(_namedOps))
   {
     s = s.remove("\"");
     if (s.isEmpty())
@@ -115,8 +115,7 @@ void OpExecutor::apply(OsmMapPtr& map)
     std::shared_ptr<OperationStatus> statusInfo;
     if (f.hasBase<OsmMapOperation>(s))
     {
-      std::shared_ptr<OsmMapOperation> op =
-        Factory::getInstance().constructObject<OsmMapOperation>(s);
+      std::shared_ptr<OsmMapOperation> op = Factory::getInstance().constructObject<OsmMapOperation>(s);
 
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
       if (_progress.getState() == Progress::JobState::Running)
@@ -142,8 +141,7 @@ void OpExecutor::apply(OsmMapPtr& map)
         // just have to be careful as we add ops to the conflate pipeline that they aren't modifying
         // feature that they shouldn't be.
 
-        ConflateInfoCacheConsumer* cacheConsumer =
-          dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
+        ConflateInfoCacheConsumer* cacheConsumer = dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
         // This info cache will allow the op to verify whether elements it operates on should be
         // modified or not based on the current conflation configuration.
         if (cacheConsumer != nullptr)
@@ -154,8 +152,7 @@ void OpExecutor::apply(OsmMapPtr& map)
     }
     else if (f.hasBase<ElementVisitor>(s))
     {
-      std::shared_ptr<ElementVisitor> vis =
-        Factory::getInstance().constructObject<ElementVisitor>(s);
+      std::shared_ptr<ElementVisitor> vis = Factory::getInstance().constructObject<ElementVisitor>(s);
 
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
       if (_progress.getState() == Progress::JobState::Running)
@@ -178,8 +175,7 @@ void OpExecutor::apply(OsmMapPtr& map)
 
       if (_operateOnlyOnConflatableElements)
       {
-        ConflateInfoCacheConsumer* cacheConsumer =
-          dynamic_cast<ConflateInfoCacheConsumer*>(vis.get());
+        ConflateInfoCacheConsumer* cacheConsumer = dynamic_cast<ConflateInfoCacheConsumer*>(vis.get());
         if (cacheConsumer != nullptr)
           cacheConsumer->setConflateInfoCache(conflateInfoCache);
       }
@@ -217,10 +213,7 @@ void OpExecutor::_updateProgress(const int currentStep, const QString& message)
   LOG_VART(_progress.getTaskWeight());
   LOG_VART(_progress.getState());
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
-  }
+    _progress.setFromRelative((float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
 }
 
 QString OpExecutor::_getInitMessage(const QString& message, const std::shared_ptr<OperationStatus>& statusInfo) const

@@ -129,7 +129,7 @@ void MetadataExport::_exportMetadataFromElements()
       Tags destTags = assignedDataset->getTags();
       Tags srcTags = _elementsToProcess[ie]->getTags();
       // assign the tags we find
-      for (QString tag : _tags.keys())
+      for (const auto& tag : _tags.keys())
       {
         if (srcTags.contains(tag))
         {
@@ -162,7 +162,7 @@ void MetadataExport::_exportMetadataFromElements()
   for (const auto& pDataset : _mergedGeoms.keys())
   {
     Tags destTags = pDataset->getTags();
-    for (QString tag : _tags.keys())
+    for (const auto& tag : _tags.keys())
     {
       if (!destTags.contains(tag))
         destTags[tag] = _tags[tag];

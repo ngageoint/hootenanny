@@ -188,9 +188,9 @@
             <nd ref="-17"/>
             <nd ref="-13"/>
             <nd ref="-2"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="name" v="Best Buy"/>
             <tag k="building" v="yes"/>
+            <tag k="name" v="Best Buy"/>
+            <tag k="test_key" v="test_val"/>
         </way>
     </create>
     <delete>
@@ -228,10 +228,10 @@
             <nd ref="-21127861"/>
             <nd ref="-21127863"/>
             <nd ref="-21127842"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="name" v="Target"/>
-            <tag k="building" v="yes"/>
             <tag k="REF1" v="Target"/>
+            <tag k="building" v="yes"/>
+            <tag k="name" v="Target"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-18968479" version="1" timestamp="">
             <nd ref="-18968477"/>
@@ -241,10 +241,10 @@
             <nd ref="-18968484"/>
             <nd ref="-18968486"/>
             <nd ref="-18968477"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="name" v="Freddy's"/>
-            <tag k="building" v="yes"/>
             <tag k="REF1" v="Freddy's"/>
+            <tag k="building" v="yes"/>
+            <tag k="name" v="Freddy's"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-18968465" version="1" timestamp="">
             <nd ref="-18968463"/>
@@ -252,9 +252,9 @@
             <nd ref="-18968466"/>
             <nd ref="-18968468"/>
             <nd ref="-18968463"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="building" v="yes"/>
             <tag k="REF1" v="Biondi"/>
+            <tag k="building" v="yes"/>
+            <tag k="test_key" v="test_val"/>
         </way>
     </delete>
     <create>
@@ -264,9 +264,9 @@
             <nd ref="-5"/>
             <nd ref="-6"/>
             <nd ref="-3"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="building" v="yes"/>
             <tag k="REF2" v="Biondi"/>
+            <tag k="building" v="yes"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-3" version="0" timestamp="">
             <nd ref="-7"/>
@@ -277,10 +277,10 @@
             <nd ref="-11"/>
             <nd ref="-12"/>
             <nd ref="-7"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="name" v="Target Grocery"/>
-            <tag k="building" v="yes"/>
             <tag k="REF2" v="Target"/>
+            <tag k="building" v="yes"/>
+            <tag k="name" v="Target Grocery"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-4" version="0" timestamp="">
             <nd ref="-8"/>
@@ -289,10 +289,10 @@
             <nd ref="-14"/>
             <nd ref="-15"/>
             <nd ref="-8"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="name" v="Target - Aurora South"/>
-            <tag k="building" v="yes"/>
             <tag k="REF2" v="Target"/>
+            <tag k="building" v="yes"/>
+            <tag k="name" v="Target - Aurora South"/>
+            <tag k="test_key" v="test_val"/>
         </way>
         <way id="-5" version="0" timestamp="">
             <nd ref="-15"/>
@@ -300,10 +300,10 @@
             <nd ref="-16"/>
             <nd ref="-9"/>
             <nd ref="-15"/>
-            <tag k="test_key" v="test_val"/>
-            <tag k="name" v="Target Pharmacy"/>
-            <tag k="building" v="yes"/>
             <tag k="REF2" v="Target"/>
+            <tag k="building" v="yes"/>
+            <tag k="name" v="Target Pharmacy"/>
+            <tag k="test_key" v="test_val"/>
         </way>
     </create>
 </osmChange>

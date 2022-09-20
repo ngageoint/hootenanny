@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef _DATA_QUALITY_METRIC_TAGGER_H_
 #define _DATA_QUALITY_METRIC_TAGGER_H_
@@ -30,8 +30,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -60,9 +60,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Calculating data quality metrics..."; }
   QString getCompletedStatusMessage() const override
-  {
-    return "Calculated data quality metrics.";
-  }
+  { return "Calculated data quality metrics."; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

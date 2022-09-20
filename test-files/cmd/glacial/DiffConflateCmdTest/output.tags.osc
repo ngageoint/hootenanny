@@ -7,11 +7,11 @@
             <nd ref="-39774"/>
             <nd ref="-39776"/>
             <nd ref="-39771"/>
+            <tag k="alt_name" v="Old Name"/>
+            <tag k="building" v="yes"/>
             <tag k="name" v="New Name"/>
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
-            <tag k="alt_name" v="Old Name"/>
-            <tag k="building" v="yes"/>
         </way>
         <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="1"/>
@@ -39,15 +39,15 @@
             <nd ref="13"/>
             <nd ref="14"/>
             <nd ref="15"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="I-15"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{23aeaf18-1427-425c-ac42-8ee203b38f65};{c535233a-4a32-4a88-acc1-27a4d5a1445b}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="source:imagery" v="Unknown"/>
             <tag k="surface" v="paved"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{23aeaf18-1427-425c-ac42-8ee203b38f65};{c535233a-4a32-4a88-acc1-27a4d5a1445b}"/>
         </way>
         <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="9"/>
@@ -102,15 +102,15 @@
             <nd ref="102"/>
             <nd ref="103"/>
             <nd ref="23"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Yellow Brick Road"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="source:imagery" v="Unknown"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
         </way>
         <way id="3" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="24"/>
@@ -141,15 +141,15 @@
             <nd ref="40"/>
             <nd ref="39"/>
             <nd ref="9"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Yellow Brick Road"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="source:imagery" v="Unknown"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
         </way>
         <way id="5" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="108"/>
@@ -157,14 +157,14 @@
             <nd ref="110"/>
             <nd ref="111"/>
             <nd ref="108"/>
-            <tag k="source" v="Unknown;osm"/>
             <tag k="amenity" v="fuel"/>
+            <tag k="attribution" v="osm"/>
+            <tag k="building" v="garage"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Joe's Garage"/>
-            <tag k="uuid" v="{d34e32bc-d084-4368-b7b9-754ef3d349d2};{af7cce29-a47d-4b42-bced-be9152dbaf77}"/>
-            <tag k="building" v="garage"/>
+            <tag k="source" v="Unknown;osm"/>
             <tag k="source:datetime" v="2018-06-11T16:49:01Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{d34e32bc-d084-4368-b7b9-754ef3d349d2};{af7cce29-a47d-4b42-bced-be9152dbaf77}"/>
         </way>
     </modify>
 </osmChange>

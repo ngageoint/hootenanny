@@ -267,7 +267,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
     //  In some instances the outline geometry may come back as a multipolygon with holes those need to be changed
     if (outline->getGeometryTypeId() == GEOS_POLYGON)
     {
-      Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
+      const Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
       if (polygon->getNumInteriorRing() != 0)
         outline.reset(polygon->getExteriorRing()->clone().release());
     }
