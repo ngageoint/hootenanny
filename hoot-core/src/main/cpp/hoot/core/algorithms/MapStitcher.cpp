@@ -127,11 +127,8 @@ void MapStitcher::stitchMap(const OsmMapPtr& map)
         else
           _stitchWay(map, _base_map, clonedWay);
       }
-      else
-      {
-        //  Try to stitch the poly if it is on the border
+      else  //  Try to stitch the poly if it is on the border
         _stitchPoly(map, _base_map, clonedWay);
-      }
     }
     //  Copy any POI nodes that haven't been copied over yet
     std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
@@ -190,8 +187,7 @@ Radians MapStitcher::_getWayEndpointHeading(const OsmMapPtr& map,
   return WayHeading::calculateHeading(geos::geom::Coordinate(p1->getX(), p1->getY()), geos::geom::Coordinate(p2->getX(), p2->getY()));
 }
 
-long MapStitcher::_copyNodeToMap(const OsmMapPtr& dest_map,
-                                 const NodePtr& node)
+long MapStitcher::_copyNodeToMap(const OsmMapPtr& dest_map, const NodePtr& node)
 {
   long nodeId = node->getId();
   long id = nodeId;
@@ -238,11 +234,8 @@ void MapStitcher::_copyWayToMap(const OsmMapPtr& source_map,
       //  If the nodes are the "same" in both maps, don't copy it
       NodePtr n = mapNodes.find(nodeId)->second;
       NodePtr baseNode = dest_map->getNode(nodeId);
-      if (n && baseNode && baseNode->coordsMatch(*n))
-      {
-        //  Set the node ID for the way
+      if (n && baseNode && baseNode->coordsMatch(*n)) //  Set the node ID for the way
         waynodeUpdates.push_back(id);
-      }
       else if (_updated_node_ids.find(nodeId) == _updated_node_ids.end())
       {
         NodePtr clonedNode = n->cloneSp();
@@ -274,11 +267,8 @@ void MapStitcher::_copyWayToMap(const OsmMapPtr& source_map,
         //  If the nodes are the "same" in both maps, don't copy it
         NodePtr n = mapNodes.find(nodeId)->second;
         NodePtr baseNode = dest_map->getNode(nodeId);
-        if (n && baseNode && baseNode->coordsMatch(*n))
-        {
-          //  Set the node ID for the way
+        if (n && baseNode && baseNode->coordsMatch(*n)) //  Set the node ID for the way
           waynodeUpdates.push_back(new_id);
-        }
         else if (_updated_node_ids.find(nodeId) == _updated_node_ids.end())
         {
           NodePtr clonedNode = n->cloneSp();
@@ -491,8 +481,7 @@ WayPtr MapStitcher::_findStitchPointWay(const OsmMapPtr& source_map,
       score += scoreValue;
       score += TagComparator::getInstance().compareTags(baseTags,secondaryTags);
       //  Save the best match score
-      if ((score == maxScore && delta < minDelta) ||
-           score > maxScore)
+      if ((score == maxScore && delta < minDelta) || score > maxScore)
       {
         maxScore = score;
         minDelta = delta;
@@ -597,13 +586,11 @@ void MapStitcher::_mergeWays(const OsmMapPtr& source_map,
     {
       //  Prepended, non-reversed, skip the last node
       //  Prepended, reversed, skip the first node
-      if ((!append && !reverse && it + 1 == source_nodes.end()) ||
-          (!append && reverse && it == source_nodes.begin()))
+      if ((!append && !reverse && it + 1 == source_nodes.end()) || (!append && reverse && it == source_nodes.begin()))
         continue;
       //  Appended, non-reversed, skip the first node
       //  Appended, reversed, skip the last node
-      if ((append && !reverse && it == source_nodes.begin()) ||
-          (append && reverse && it + 1 == source_nodes.end()))
+      if ((append && !reverse && it == source_nodes.begin()) || (append && reverse && it + 1 == source_nodes.end()))
         continue;
     }
     //  Copy the node from the source map to the destination map

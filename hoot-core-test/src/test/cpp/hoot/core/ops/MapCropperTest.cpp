@@ -163,16 +163,14 @@ public:
     uut.apply(map);
 
     // compare relations
-    const RelationMap relations = map->getRelations();
+    const RelationMap& relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
     QString relationStr = "relation(-1592); type: multipolygon; members:"
                           "   Entry: role: outer, eid: Way(-1556);"
                           "   Entry: role: inner, eid: Way(-1552); ;"
                           " tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (auto it = relations.begin(); it != relations.end(); ++it)
-    {
       HOOT_STR_EQUALS(relationStr, it->second->toString().replace("\n","; "));
-    }
 
     // compare ways
     int count = 0;

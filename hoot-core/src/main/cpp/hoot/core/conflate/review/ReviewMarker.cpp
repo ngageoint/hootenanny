@@ -179,8 +179,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const std::vector<ElementId>& ids,
   if (note.isEmpty())
     throw IllegalArgumentException("You must specify a review note.");
 
-  RelationPtr r =
-    std::make_shared<Relation>(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview());
+  RelationPtr r = std::make_shared<Relation>(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview());
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   if (_addReviewTagsToFeatures)
   {

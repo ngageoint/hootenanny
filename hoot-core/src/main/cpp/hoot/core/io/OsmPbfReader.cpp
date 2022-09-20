@@ -594,8 +594,7 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  std::shared_ptr<hoot::Relation> newRelation =
-    std::make_shared<Relation>(_status, newId, _defaultCircularError);
+  std::shared_ptr<hoot::Relation> newRelation = std::make_shared<Relation>(_status, newId, _defaultCircularError);
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {

@@ -256,8 +256,7 @@ void OsmJsonWriter::_writeNodes()
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+      PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
 }
