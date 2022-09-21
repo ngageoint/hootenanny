@@ -27,9 +27,6 @@
 #ifndef ZVALUE_H
 #define ZVALUE_H
 
-
-
-
 namespace hoot
 {
 

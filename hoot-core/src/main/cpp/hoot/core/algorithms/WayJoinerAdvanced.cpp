@@ -86,7 +86,7 @@ void WayJoinerAdvanced::_joinParentChild()
 {
   LOG_INFO("\tJoining parent ways to children...");
 
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   _totalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -106,14 +106,12 @@ void WayJoinerAdvanced::_joinParentChild()
   //  Iterate all of the ids
   for (auto id : ids)
   {
-    WayPtr way = ways[id];
-    if (way)
-    {
-      LOG_VART(way->getElementId());
-    }
+    WayPtr way = _map->getWay(id);
+    if (way == nullptr)
+      continue;
     long parent_id = way->getPid();
     LOG_VART(parent_id);
-    WayPtr parent = ways[parent_id];
+    WayPtr parent = _map->getWay(parent_id);
     Tags parentTags;
     if (parent)
     {
@@ -179,7 +177,7 @@ void WayJoinerAdvanced::_joinAtNode()
   {
     LOG_TRACE("joinAtNode iteration: " << numIterations + 1);
 
-    WayMap ways = _map->getWays();
+    const WayMap& ways = _map->getWays();
     ids.clear();
     //  Find all ways that have a split parent id
     for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -210,10 +208,8 @@ void WayJoinerAdvanced::_joinAtNode()
     //  Iterate all of the nodes and check for compatible ways to join them to
     for (auto id : ids)
     {
-      WayPtr way = ways[id];
-      LOG_VART(way->getElementId());
-
-      if (way->getNodeCount() < 1)
+      WayPtr way = _map->getWay(id);
+      if (way == nullptr || way->getNodeCount() < 1)
         continue;
 
       Tags pTags = way->getTags();
@@ -292,7 +288,6 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
   LOG_TRACE("\tRejoining siblings...");
   LOG_VART(way_ids);
 
-  WayMap ways = _map->getWays();
   WayPtr start;
   WayPtr end;
   size_t failure_count = 0;
@@ -302,17 +297,15 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
   {
     long id = way_ids[0];
     way_ids.pop_front();
-    WayPtr way = ways[id];
+    WayPtr way = _map->getWay(id);
 
     if (!way)
     {
       LOG_TRACE(ElementId(ElementType::Way, id) << " does not exist.");
       continue;
     }
-    else
-    {
-      LOG_VART(way->getElementId());
-    }
+
+    LOG_VART(way->getElementId());
 
     if (sorted.empty())
     {
@@ -390,14 +383,14 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
   //  Iterate the sorted ways and merge them
   if (sorted.size() > 1)
   {
-    WayPtr parent = ways[sorted[0]];
+    WayPtr parent = _map->getWay(sorted[0]);
     if (parent)
     {
       LOG_VART(parent->getElementId());
     }
     for (auto way_id : sorted)
     {
-      WayPtr child = ways[way_id];
+      WayPtr child = _map->getWay(way_id);
       // don't try to join if there are explicitly conflicting names; fix for #2888
       bool childHasName = false;
       Tags childTags;
@@ -522,10 +515,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
-  const bool onlyOneIsABridge =
-    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
-  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
-      onlyOneIsABridge)
+  const bool onlyOneIsABridge = CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() && onlyOneIsABridge)
   {
     LOG_TRACE(
       "Only one of the features: " << wayWithIdToKeep->getElementId() << " and " <<
@@ -708,8 +699,7 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
   toRemove = child;
   if (parent->getStatus() == Status::Unknown1)
   {
-    if (tagMergerClassName == "OverwriteTagMerger" ||
-        tagMergerClassName == "OverwriteTag2Merger")
+    if (tagMergerClassName == "OverwriteTagMerger" || tagMergerClassName == "OverwriteTag2Merger")
     {
       keeper = child;
       toRemove = parent;
@@ -723,8 +713,7 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
   else if (child->getStatus() == Status::Unknown1 ||
            (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
   {
-    if (tagMergerClassName == "OverwriteTagMerger" ||
-        tagMergerClassName == "OverwriteTag2Merger")
+    if (tagMergerClassName == "OverwriteTagMerger" || tagMergerClassName == "OverwriteTag2Merger")
     {
       keeper = parent;
       toRemove = child;

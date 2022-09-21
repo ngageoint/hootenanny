@@ -58,9 +58,7 @@ int Soundex::compareEncoded(QString encoded1, QString encoded2)
   for (int i = 0; i < 4; i++)
   {
     if (encoded1[i] != encoded2[i])
-    {
       result--;
-    }
   }
 
   return result;
@@ -85,22 +83,14 @@ QString Soundex::encode(QString s)
   {
     QString d = toDigit(s[0]);
     if (s.size() == 0)
-    {
       result.push_back("0");
-    }
-    // if the next character is a vowel
-    else if (vowels.exactMatch(s.left(1)))
-    {
-      // remove it
+    else if (vowels.exactMatch(s.left(1)))  // if the next character is a vowel remove it
       s.remove(0, 1);
-    }
     else
     {
       s.remove(0, 1);
       if (lastDigit != d)
-      {
         result.push_back(d);
-      }
     }
     lastDigit = d;
   }

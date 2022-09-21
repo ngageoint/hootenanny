@@ -30,9 +30,10 @@
 namespace hoot
 {
 
-SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString& filePath) : _reader(filePath)
+SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString& filePath)
+  : _count(1),
+    _reader(filePath)
 {
-  _count = 1;
   _nonWord.setPattern("[^\\w]");
 }
 
@@ -48,15 +49,11 @@ double SqliteWordWeightDictionary::getWeight(const QString& word) const
   {
     c = _reader.readCount(normalized);
     if (c > 0)
-    {
       _weights[normalized] = c;
-    }
     return c;
   }
   else
-  {
     c = it->second;
-  }
 
   return c / (double)_count;
 }

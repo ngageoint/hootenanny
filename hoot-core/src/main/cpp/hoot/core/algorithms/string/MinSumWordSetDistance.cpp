@@ -27,8 +27,8 @@
 #include "MinSumWordSetDistance.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/ScoreMatrix.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -37,8 +37,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, MinSumWordSetDistance)
 
-MinSumWordSetDistance::MinSumWordSetDistance(StringDistancePtr d) :
-_d(d)
+MinSumWordSetDistance::MinSumWordSetDistance(StringDistancePtr d)
+  : _d(d)
 {
 }
 
@@ -51,13 +51,9 @@ double MinSumWordSetDistance::compare(const QString& s1, const QString& s2) cons
 
   // default the unassigned col/row to have a value of 1.
   for (size_t c = 0; c < m.getWidth(); ++c)
-  {
     m.set(c, 0, 1.0);
-  }
   for (size_t r = 0; r < m.getHeight(); ++r)
-  {
     m.set(0, r, 1.0);
-  }
 
   for (int i = 0; i < sl1.size(); i++)
   {

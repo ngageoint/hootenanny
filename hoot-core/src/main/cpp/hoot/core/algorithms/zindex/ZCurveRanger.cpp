@@ -109,9 +109,9 @@ vector<std::shared_ptr<LongBox>> ZCurveRanger::decomposeBox(const std::shared_pt
     result = children;
   else  // if we've still got some decomposition to do
   {
-    for (uint i = 0; i < children.size(); i++)
+    for (const auto& child : children)
     {
-      vector<std::shared_ptr<LongBox>> aChildren = decomposeBox(children[i], level - 1);
+      vector<std::shared_ptr<LongBox>> aChildren = decomposeBox(child, level - 1);
       result.insert(result.end(), aChildren.begin(), aChildren.end());
     }
   }
@@ -158,13 +158,12 @@ vector<Range> ZCurveRanger::decomposeRange(const BBox& box, int levels)
 
 vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
 {
-  vector<std::shared_ptr<LongBox>> boxes =
-    decomposeBox(std::make_shared<LongBox>(_clipBox(box)), levels);
+  vector<std::shared_ptr<LongBox>> boxes = decomposeBox(std::make_shared<LongBox>(_clipBox(box)), levels);
 
   vector<Range> result;
   result.reserve(boxes.size());
-  for (uint i = 0; i < boxes.size(); i++)
-    result.push_back(_toRange(boxes[i]));
+  for (const auto& b : boxes)
+    result.push_back(_toRange(b));
 
   return _condenseRanges(result);
 }
@@ -189,12 +188,12 @@ vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r) const
 
   vector<Range> result;
   result.push_back(r[0]);
-  for (uint i = 1; i < r.size(); i++)
+  for (const auto& rel : r)
   {
-    if ((r[i].getMin() - result[result.size() - 1].getMax()) <= _slop)
-      result[(result.size() - 1)].set(result[(result.size() - 1)].getMin(), r[i].getMax());
+    if ((rel.getMin() - result[result.size() - 1].getMax()) <= _slop)
+      result[(result.size() - 1)].set(result[(result.size() - 1)].getMin(), rel.getMax());
     else
-      result.push_back(r[i]);
+      result.push_back(rel);
   }
   return result;
 }
@@ -238,4 +237,3 @@ LongBox ZCurveRanger::_toLongBox(const BBox& box)
 }
 
 }
-

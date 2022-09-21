@@ -30,11 +30,6 @@
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/util/Factory.h>
 
-
-
-//  Qt
-
-
 //  Standard
 #include <cmath>
 
@@ -49,18 +44,13 @@ KskipBigramDistance::KskipBigramDistance(int k)
  : _k(2)
 {
   if (k >= 0)
-  {
     setK(k);
-  }
 }
-
 
 void KskipBigramDistance::setK(int k)
 {
   if (k < 0)
-  {
     throw IllegalArgumentException("Expected k to be >= 0.");
-  }
   _k = k;
 }
 
@@ -71,13 +61,11 @@ QSet<QString> KskipBigramDistance::getBigrams(const QString& str) const
   //  Use a QMap to de-duplicate and sort on the fly
   QMap<QString, int> bigrams;
   //  Iterate all of the tokens making bi-grams within each token, don't create bi-grams between tokens
-  for (int tok = 0; tok < corpus.length(); tok++)
+  for (const auto& tok : qAsConst(corpus))
   {
-    QString token = corpus[tok].toLower();
+    QString token = tok.toLower();
     if (token.length() < 3)
-    {
       bigrams.insert(token, 1);
-    }
     else
     {
       //  Iterate the token to create k-skip bi-grams from the letters

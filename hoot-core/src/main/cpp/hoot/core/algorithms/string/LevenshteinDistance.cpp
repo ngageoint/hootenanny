@@ -44,13 +44,9 @@ HOOT_FACTORY_REGISTER(StringDistance, LevenshteinDistance)
 LevenshteinDistance::LevenshteinDistance(double alpha)
 {
   if (alpha == -1)
-  {
     setAlpha(ConfigOptions().getLevenshteinDistanceAlpha());
-  }
   else
-  {
     setAlpha(alpha);
-  }
 }
 
 double LevenshteinDistance::compare(const QString &s1, const QString &s2) const
@@ -62,9 +58,7 @@ double LevenshteinDistance::compare(const QString &s1, const QString &s2) const
 void LevenshteinDistance::setAlpha(double alpha)
 {
   if (alpha <= 0)
-  {
     throw IllegalArgumentException("Expected alpha to be > 0.");
-  }
   _alpha = alpha;
 }
 

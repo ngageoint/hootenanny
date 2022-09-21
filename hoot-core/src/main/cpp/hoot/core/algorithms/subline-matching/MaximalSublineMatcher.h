@@ -49,8 +49,8 @@ public:
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2,
+                                  double& score, Meters maxRelevantDistance = -1) const override;
 
   void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 

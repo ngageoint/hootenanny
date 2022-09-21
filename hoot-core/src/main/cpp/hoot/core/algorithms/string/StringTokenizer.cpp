@@ -38,20 +38,18 @@ StringTokenizer::StringTokenizer()
   setConfiguration(conf());
 }
 
-StringTokenizer::StringTokenizer(const QString& sepRegex) : _sep(sepRegex)
+StringTokenizer::StringTokenizer(const QString& sepRegex)
+  : _sep(sepRegex)
 {
 }
 
 bool StringTokenizer::_isNonWord(const QString& s) const
 {
-  for (int i = 0; i < s.size(); i++)
+  for (auto character : s)
   {
-    if (s.at(i).isLetterOrNumber())
-    {
+    if (character.isLetterOrNumber())
       return false;
-    }
   }
-
   return true;
 }
 
@@ -70,19 +68,12 @@ QStringList StringTokenizer::tokenize(const QString& s) const
   for (int i = 0; i < l.size();)
   {
     if (_keepNonWords == false && _isNonWord(l[i]))
-    {
       l.removeAt(i);
-    }
     else if (l[i].size() < _minSize)
-    {
       l.removeAt(i);
-    }
     else
-    {
       i++;
-    }
   }
-
   return l;
 }
 

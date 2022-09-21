@@ -28,9 +28,9 @@
 #define MAXIMALSUBLINESTRINGMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -54,9 +54,8 @@ public:
    * @throws NeedsReviewException If the multilinestring situation is too complex to handle with
    *  a reasonable set of rules.
    */
-  WaySublineMatchString findMatch(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
-    Meters maxRelevantDistance = -1) const override;
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+                                  Meters maxRelevantDistance = -1) const override;
 
   /**
    * @see Configurable
@@ -101,10 +100,8 @@ private:
       result += QString("score: %1\n").arg(score);
       result += QString("matches:\n");
       QStringList l;
-      for (size_t i = 0; i < matches.size(); i++)
-      {
-        l.append(matches[i].toString());
-      }
+      for (const auto& match : matches)
+        l.append(match.toString());
       result += l.join("\n");
       return result;
     }
@@ -118,11 +115,11 @@ private:
   int _countReverses(const std::vector<bool>& r) const;
 
   ScoredMatch _evaluateMatch(const ConstOsmMapPtr &map, Meters maxDistance,
-    const std::vector<ConstWayPtr>& ways1, const std::vector<ConstWayPtr>& ways2,
-    const std::vector<bool>& reversed1, const std::vector<bool>& reversed2) const;
+                             const std::vector<ConstWayPtr>& ways1, const std::vector<ConstWayPtr>& ways2,
+                             const std::vector<bool>& reversed1, const std::vector<bool>& reversed2) const;
   ScoredMatch _findBestMatch(const ConstOsmMapPtr& map, Meters maxDistance,
-    std::vector<ConstWayPtr>& ways1, std::vector<ConstWayPtr>& ways2, std::vector<bool>& reversed1,
-    std::vector<bool>& reversed2, size_t i = 0, size_t j = 0) const;
+                             std::vector<ConstWayPtr>& ways1, std::vector<ConstWayPtr>& ways2, std::vector<bool>& reversed1,
+                             std::vector<bool>& reversed2, size_t i = 0, size_t j = 0) const;
 
   void _insertElementIds(const std::vector<ConstWayPtr>& ways, std::set<ElementId>& elements) const;
 

@@ -60,9 +60,7 @@ ZValue::~ZValue()
 long int ZValue::calculate(vector<double> point)
 {
   for (int i = 0; i < _dimensions; i++)
-  {
     _b[i] = calculateComponent(point[i], i);
-  }
   return calculate(_b);
 }
 
@@ -87,18 +85,14 @@ long int ZValue::calculate(vector<long int> point) const
 long int ZValue::calculateComponent(double v, int d)
 {
   if (d >= (int)_min.size() || d >= (int)_max.size())
-  {
     throw HootException("Input vector size is greater than min or max size.");
-  }
   return round(((v - _min[d]) / (_max[d] - _min[d])) * _range);
 }
 
 void ZValue::decompose(long int v, vector<long int>& point) const
 {
   for (uint i = 0; i < point.size(); i++)
-  {
     point[i] = 0;
-  }
 
   long bitRead = 1 << ((_depth * _dimensions) - 1);
   for (int depth = 0; depth < _depth; depth++)

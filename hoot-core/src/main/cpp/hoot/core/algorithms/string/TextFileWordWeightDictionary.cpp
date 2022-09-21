@@ -31,8 +31,8 @@ namespace hoot
 {
 
 TextFileWordWeightDictionary::TextFileWordWeightDictionary(const QString& filePath)
+  : _count(0)
 {
-  _count = 0;
   _loadFile(filePath);
   _nonWord.setPattern("[^\\w]");
 }
@@ -41,16 +41,12 @@ double TextFileWordWeightDictionary::getWeight(const QString& word) const
 {
   QString normalized = word.toLower().normalized(QString::NormalizationForm_C);
   normalized.replace(_nonWord, "");
-  WeightHash::const_iterator it = _weights.find(normalized);
+  auto it = _weights.find(normalized);
 
   if (it == _weights.end())
-  {
     return 0;
-  }
   else
-  {
     return (double)it->second / (double)_count;
-  }
 }
 
 void TextFileWordWeightDictionary::_loadFile(const QString& path)
@@ -58,24 +54,18 @@ void TextFileWordWeightDictionary::_loadFile(const QString& path)
   QFile fp(path);
 
   if (fp.open(QIODevice::ReadOnly) == false)
-  {
     throw HootException("Error opening file: " + path);
-  }
 
   QString first = fp.readLine();
   QString totalWordCount = "Total word count: ";
   if (first.startsWith(totalWordCount) == false)
-  {
     throw HootException("Expected the '" + totalWordCount + "' to come first.");
-  }
 
   first.replace(totalWordCount, "");
   bool ok;
   _count += first.toDouble(&ok);
   if (!ok)
-  {
     throw HootException("Bad double value in total word count: " + first);
-  }
 
   while (fp.atEnd() == false)
   {
@@ -83,15 +73,11 @@ void TextFileWordWeightDictionary::_loadFile(const QString& path)
 
     QStringList kvp = line.split("\t");
     if (kvp.size() != 2)
-    {
       throw HootException("Expected the line to be <word><tab><count>. Got: " + line);
-    }
 
     int count = kvp[1].toInt(&ok);
     if (!ok)
-    {
       throw HootException("Expected count to be an integer.");
-    }
 
     _weights[kvp[0].toLower()] = count;
   }

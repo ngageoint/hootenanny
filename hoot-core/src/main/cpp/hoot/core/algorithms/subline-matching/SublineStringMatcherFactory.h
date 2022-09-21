@@ -50,10 +50,8 @@ public:
    * @return an initialized subline string matcher
    * @throws IllegalArgumentException if a map was needed for configuration and none was passed in
    */
-  static SublineStringMatcherPtr getMatcher(
-    const CreatorDescription::BaseFeatureType& featureType =
-      CreatorDescription::BaseFeatureType::Unknown,
-    const ConstOsmMapPtr& map = ConstOsmMapPtr());
+  static SublineStringMatcherPtr getMatcher(const CreatorDescription::BaseFeatureType& featureType = CreatorDescription::BaseFeatureType::Unknown,
+                                            const ConstOsmMapPtr& map = ConstOsmMapPtr());
 
 private:
 
@@ -64,9 +62,8 @@ private:
   static SublineStringMatcherPtr _getGenericLineMatcher();
   static SublineStringMatcherPtr _getDefaultMatcher();
 
-  static SublineStringMatcherPtr _getMatcher(
-    const QString& sublineStringMatcherName, const QString& sublineMatcherName,
-    const double maxAngle, const double headingDelta, const int maxRecursions);
+  static SublineStringMatcherPtr _getMatcher(const QString& sublineStringMatcherName, const QString& sublineMatcherName,
+                                             const double maxAngle, const double headingDelta, const int maxRecursions);
 };
 
 }

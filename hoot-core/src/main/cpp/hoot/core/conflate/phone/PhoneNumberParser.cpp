@@ -62,8 +62,7 @@ void PhoneNumberParser::setRegionCode(const QString& code)
   {
     std::set<std::string> regions;
     PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(_regionCode.toStdString());
-    if (it == regions.end())
+    if (regions.find(_regionCode.toStdString()) == regions.end())
       throw HootException("Invalid phone number region code: " + _regionCode);
   }
 }

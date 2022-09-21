@@ -35,15 +35,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, MeanWordSetDistance)
 
-MeanWordSetDistance::MeanWordSetDistance(StringDistancePtr d, double portion):
-  _d(d),
-  _p(portion)
+MeanWordSetDistance::MeanWordSetDistance(StringDistancePtr d, double portion)
+  : _d(d),
+    _p(portion)
 {
 }
 
 MeanWordSetDistance::MeanWordSetDistance()
+  : _p(1.0)
 {
-  _p = 1.0;
 }
 
 double MeanWordSetDistance::compare(const QString& s1, const QString& s2) const
@@ -56,17 +56,12 @@ double MeanWordSetDistance::compare(const QString& s1, const QString& s2) const
   for (int i = 0; i < sl1.size(); i++)
   {
     for (int j = 0; j < sl2.size(); j++)
-    {
       m.set(i, j, _d->compare(sl1[i], sl2[j]));
-    }
   }
 
   double score = 0;
-
   if (!sl1.empty() && !sl2.empty())
-  {
     score = m.meanScore(_p);
-  }
 
   return score;
 }

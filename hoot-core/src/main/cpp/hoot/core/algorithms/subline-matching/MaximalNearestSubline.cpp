@@ -35,12 +35,12 @@
 #include <geos/operation/distance/DistanceOp.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -50,16 +50,15 @@ namespace hoot
 
 Meters MaximalNearestSubline::_headingDelta = -1;
 
-MaximalNearestSubline::MaximalNearestSubline(
-  const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
-  Meters maxRelevantDistance, Radians maxRelevantAngle, Meters headingDelta) :
-_a(a),
-_b(b),
-_aPtLocator(map, a),
-_minSplitSize(minSplitSize),
-_map(map),
-_maxRelevantDistance(maxRelevantDistance),
-_maxRelevantAngle(maxRelevantAngle)
+MaximalNearestSubline::MaximalNearestSubline(const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
+                                             Meters maxRelevantDistance, Radians maxRelevantAngle, Meters headingDelta)
+  : _a(a),
+    _b(b),
+    _aPtLocator(map, a),
+    _minSplitSize(minSplitSize),
+    _map(map),
+    _maxRelevantDistance(maxRelevantDistance),
+    _maxRelevantAngle(maxRelevantAngle)
 {
   _maxInterval.resize(2);
   _headingDelta = headingDelta;
@@ -82,31 +81,22 @@ void MaximalNearestSubline::_expandInterval(const WayLocation& loc)
 {
   // Expand maximal interval if this point is outside it.
   if (_maxInterval[0].isValid() == false || loc.compareTo(_maxInterval[0]) < 0)
-  {
     _maxInterval[0] = loc;
-  }
 
   if (_maxInterval[1].isValid() == false || loc.compareTo(_maxInterval[1]) > 0)
-  {
     _maxInterval[1] = loc;
-  }
 }
 
-WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
-    ConstWayPtr a, ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance)
+WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map, ConstWayPtr a, ConstWayPtr b,
+                                                       Meters minSplitSize, Meters maxRelevantDistance)
 {
   MaximalNearestSubline mns(map, a, b, minSplitSize, maxRelevantDistance);
-
   vector<WayLocation> interval = mns.getInterval();
 
   if (interval[0].isValid() && interval[1].isValid())
-  {
     return WaySubline(interval[0], interval[1]).toWay(map);
-  }
   else
-  {
     return WayPtr();
-  }
 }
 
 const vector<WayLocation>& MaximalNearestSubline::getInterval()
@@ -134,9 +124,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
       WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
       LOG_VART(nearestLocationOnA.isValid());
       if (nearestLocationOnA.isValid())
-      {
         testPoints.push_back(nearestLocationOnA);
-      }
     }
   }
 
@@ -160,9 +148,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
         Coordinate bPt = bLoc.getCoordinate();
         WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
         if (nearestLocationOnA.isValid())
-        {
           testPoints.push_back(nearestLocationOnA);
-        }
       }
     }
   }
@@ -172,9 +158,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
 
   std::shared_ptr<LineString> bls = ElementToGeometryConverter(_map).convertToLineString(_b);
   if (!bls)
-  {
     return _maxInterval;
-  }
   double bestLength = -1;
   vector<WayLocation> bestInterval;
   bestInterval.resize(2);
@@ -182,14 +166,10 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   // start at the beginning and look for the longest contiguous match
   for (size_t i = 0; i < testPoints.size(); i++)
   {
-    // if the point is within the specified distance and angle
+    // if the point is within the specified distance and angle, expand the interval
     if (_isInBounds(testPoints[i], bls))
-    {
-      // expand the interval
       _expandInterval(testPoints[i]);
-    }
-    // if the point is outside the specified distance
-    else
+    else  // if the point is outside the specified distance
     {
       Meters l = _calculateIntervalLength();
       // if this interval is the best & it is at least _minSplitSize in length
@@ -219,8 +199,7 @@ bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
                                         const std::shared_ptr<LineString>& ls) const
 {
   // calculate the distance from the test point to b
-  std::shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(
-      wl.getCoordinate()));
+  std::shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(wl.getCoordinate()));
 
   geos::operation::distance::DistanceOp dop(tp.get(), ls.get());
   bool result = true;
@@ -229,9 +208,7 @@ bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
   {
     Meters d = dop.distance();
     if (d > _maxRelevantDistance)
-    {
       result = false;
-    }
   }
 
   if (result && _maxRelevantAngle >= 0)
@@ -246,12 +223,9 @@ bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
       Radians h2 = WayHeading::calculateHeading(wl2, _headingDelta);
 
       if (WayHeading::deltaMagnitude(h1, h2) > _maxRelevantAngle)
-      {
         result = false;
-      }
     }
   }
-
   return result;
 }
 
@@ -298,13 +272,9 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     double l = ElementToGeometryConverter(map).convertToLineString(way1)->getLength();
     // if the way is too short, round to the first way.
     if (l < _minSplitSize)
-    {
       start = WayLocation(map, _a, 0, 0.0);
-    }
     else
-    {
       result.push_back(way1);
-    }
   }
 
   // if this is a or b
@@ -315,13 +285,9 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     double l = ElementToGeometryConverter(map).convertToLineString(way3)->getLength();
     // if the way is too short, round to the first way.
     if (l < _minSplitSize)
-    {
       end = WayLocation(map, _a, _a->getNodeCount() - 1, 0.0);
-    }
     else
-    {
       result.push_back(way3);
-    }
   }
 
   // In all cases we add the middle line.
@@ -334,9 +300,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     result.push_back(way2);
   }
   else
-  {
     result.clear();
-  }
 
   // if we didn't split the way, return the original way.
   if (result.size() <= 1)

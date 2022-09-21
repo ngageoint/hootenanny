@@ -30,17 +30,17 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSubline.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/criterion/MultiLineStringCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/WaysVisitor.h>
-#include <hoot/core/criterion/MultiLineStringCriterion.h>
 
 // Standard
 #include <algorithm>
@@ -66,16 +66,11 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
   setMinSplitSize(co.getWayMergerMinSplitSize());
   setHeadingDelta(co.getWayMatcherHeadingDelta());
 
-  _sublineMatcher =
-    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher());
+  _sublineMatcher = Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher());
   _configureSublineMatcher();
-  std::shared_ptr<MaximalSublineMatcher> maximalSublineMatcher =
-    std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
-  if (maximalSublineMatcher)
-  {
-    // See MaximalSubline::_maxRecursions
+  std::shared_ptr<MaximalSublineMatcher> maximalSublineMatcher = std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
+  if (maximalSublineMatcher)  // See MaximalSubline::_maxRecursions
     maximalSublineMatcher->setMaxRecursions(co.getMaximalSublineMaxRecursions());
-  }
 
   LOG_VART(_sublineMatcher->getName());
   LOG_VART(_sublineMatcher->getMaxRelevantAngle());
@@ -89,9 +84,7 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN(
-        "Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-        "of radians?");
+      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead of radians?");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -120,48 +113,38 @@ void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<Sublin
   _configureSublineMatcher();
 }
 
-vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways,
-  OsmMapPtr map) const
+vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways, OsmMapPtr map) const
 {
   vector<WayPtr> result;
   result.reserve(ways.size());
-  for (size_t i = 0; i < ways.size(); ++i)
-  {
-    result.push_back(map->getWay(ways[i]->getId()));
-  }
+  for (const auto& w : ways)
+    result.push_back(map->getWay(w->getId()));
   return result;
 }
 
 void MaximalSublineStringMatcher::_configureSublineMatcher()
 {
   if (!_sublineMatcher)
-  {
     _sublineMatcher = std::make_shared<MaximalSublineMatcher>();
-  }
   _sublineMatcher->setMaxRelevantAngle(_maxAngle);
   _sublineMatcher->setMinSplitSize(_minSplitsize);
   _sublineMatcher->setHeadingDelta(_headingDelta);
 }
 
-WaySublineMatchString MaximalSublineStringMatcher::findMatch(
-  const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
-  Meters maxRelevantDistance) const
+WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+                                                             const ConstElementPtr& e2, Meters maxRelevantDistance) const
 {
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
 
   assert(_maxAngle >= 0);
   if (maxRelevantDistance == -1)
-  {
     maxRelevantDistance = e1->getCircularError() + e2->getCircularError();
-  }
   LOG_VART(maxRelevantDistance);
 
   // Make sure the inputs are legit. If either element isn't legit then skip matching.
   if (!_isValid(map, e1->getElementId()) || !_isValid(map, e2->getElementId()))
-  {
     return WaySublineMatchString();
-  }
 
   // Extract the ways from the elements. In most cases it will return a vector of 1, but
   // multilinestrings may contain multiple ways.
@@ -172,17 +155,13 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(
 
   // TODO: move these values to a config
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
-  {
-    throw NeedsReviewException(
-      "Elements contain too many ways and the computational complexity is unreasonable.");
-  }
+    throw NeedsReviewException("Elements contain too many ways and the computational complexity is unreasonable.");
 
   // Try with all combinations of forward and reversed ways. This is very expensive for
   // multilinestrings with lots of ways in them. However, those shouldn't be common.
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
   LOG_TRACE("Finding best match...");
-  ScoredMatch scoredResult =
-    _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
+  ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
   LOG_VART(scoredResult);
 
   // Convert the best match into a WaySublineStringMatch and return.
@@ -201,10 +180,9 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(
   }
 }
 
-MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateMatch(
-  const ConstOsmMapPtr& map, Meters maxDistance, const vector<ConstWayPtr>& ways1,
-  const vector<ConstWayPtr>& ways2, const vector<bool>& reversed1,
-  const vector<bool>& reversed2) const
+MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateMatch(const ConstOsmMapPtr& map, Meters maxDistance,
+                                                                                     const vector<ConstWayPtr>& ways1, const vector<ConstWayPtr>& ways2,
+                                                                                     const vector<bool>& reversed1, const vector<bool>& reversed2) const
 {
   vector<WaySublineMatch> matches;
 
@@ -229,14 +207,12 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 
   // go through and match each way against every other way
   LOG_TRACE("Matching ways...");
-  for (size_t i = 0; i < prep1.size(); i++)
+  for (const auto& p1 : prep1)
   {
-    for (size_t j = 0; j < prep2.size(); j++)
+    for (const auto& p2 : prep2)
     {
       double score;
-      WaySublineMatchString m =
-        _sublineMatcher->findMatch(copiedMap, prep1[i], prep2[j], score, maxDistance);
-
+      WaySublineMatchString m = _sublineMatcher->findMatch(copiedMap, p1, p2, score, maxDistance);
       scoreSum += score;
       matches.insert(matches.end(), m.getMatches().begin(), m.getMatches().end());
     }
@@ -246,13 +222,9 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   HashMap<long, bool> wayIdToReversed1, wayIdToReversed2;
   // create a map from way id to reverse status
   for (size_t i = 0; i < prep1.size(); i++)
-  {
     wayIdToReversed1[prep1[i]->getId()] = reversed1[i];
-  }
   for (size_t i = 0; i < prep2.size(); i++)
-  {
     wayIdToReversed2[prep2[i]->getId()] = reversed2[i];
-  }
 
   // go through all the matches
   LOG_TRACE("Scoring matches...");
@@ -270,9 +242,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
       ws1 = matches[i].getSubline1().reverse(w);
     }
     else
-    {
       ws1 = WaySubline(matches[i].getSubline1(), map);
-    }
 
     if (wayIdToReversed2[m2Id])
     {
@@ -281,34 +251,26 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
       ws2 = matches[i].getSubline2().reverse(w);
     }
     else
-    {
       ws2 = WaySubline(matches[i].getSubline2(), map);
-    }
 
     if (wayIdToReversed1[m1Id] != wayIdToReversed2[m2Id])
-    {
       matches[i] = WaySublineMatch(ws1, ws2, true);
-    }
     else
-    {
       matches[i] = WaySublineMatch(ws1, ws2, false);
-    }
   }
 
   return ScoredMatch(scoreSum, matches);
 }
 
-MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestMatch(
-  const ConstOsmMapPtr& map, Meters maxDistance, vector<ConstWayPtr>& ways1,
-  vector<ConstWayPtr>& ways2, vector<bool>& reversed1, vector<bool>& reversed2, size_t i,
-  size_t j) const
+MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestMatch(const ConstOsmMapPtr& map, Meters maxDistance,
+                                                                                     vector<ConstWayPtr>& ways1, vector<ConstWayPtr>& ways2,
+                                                                                     vector<bool>& reversed1, vector<bool>& reversed2,
+                                                                                     size_t i, size_t j) const
 {
   const double epsilon = 1e-2;
 
   if ((i == ways1.size() || ways1.size() == 1) && j == ways2.size())
-  {
     return _evaluateMatch(map, maxDistance, ways1, ways2, reversed1, reversed2);
-  }
   else if (j == ways2.size())
   {
     reversed1[i] = true;
@@ -318,13 +280,9 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestM
 
     // Only keep the reverse if it is significantly better.
     if (r1.score - r2.score > epsilon)
-    {
       return r1;
-    }
     else
-    {
       return r2;
-    }
   }
   else
   {
@@ -335,35 +293,25 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestM
 
     // Only keep the reverse if it is significantly better.
     if (r1.score - r2.score > epsilon)
-    {
       return r1;
-    }
     else
-    {
       return r2;
-    }
   }
 }
 
-void MaximalSublineStringMatcher::_insertElementIds(const vector<ConstWayPtr>& ways,
-  set<ElementId>& elements) const
+void MaximalSublineStringMatcher::_insertElementIds(const vector<ConstWayPtr>& ways, set<ElementId>& elements) const
 {
-  for (size_t i = 0; i < ways.size(); ++i)
-  {
-    elements.insert(ways[i]->getElementId());
-  }
+  for (const auto& way : ways)
+    elements.insert(way->getElementId());
 }
 
-void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr>& ways,
-  const vector<bool>& reversed) const
+void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr>& ways, const vector<bool>& reversed) const
 {
   LOG_TRACE("Reversing ways...");
   for (size_t i = 0; i < ways.size(); i++)
   {
     if (reversed[i])
-    {
       ways[i]->reverseOrder();
-    }
   }
 }
 
@@ -408,9 +356,7 @@ bool MaximalSublineStringMatcher::_isValid(const ConstOsmMapPtr& map, ElementId 
     ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
     if (w->getNodeCount() <= 1)
-    {
       return false;
-    }
   }
   return true;
 }

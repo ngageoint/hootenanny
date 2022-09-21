@@ -41,8 +41,8 @@ public:
   MaximalNearestSublineMatcher() = default;
   ~MaximalNearestSublineMatcher() = default;
 
-  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2,
+                                  double& score, Meters maxRelevantDistance) const override;
 
   QString getDescription() const override
   { return "Matches lines based on the maximal nearest subline found"; }

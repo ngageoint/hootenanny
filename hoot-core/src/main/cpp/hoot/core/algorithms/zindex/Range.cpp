@@ -26,11 +26,8 @@
  */
 #include "Range.h"
 
-//std includes
+//  std
 #include <stdio.h>
-
-//hoot includes
-
 
 namespace hoot
 {
@@ -71,9 +68,7 @@ QString Range::toString() const
 void Range::set(long int min, long int max)
 {
   if (min > max)
-  {
     throw HootException("min is greater than max: " + QString::number(min) + " " +  QString::number(max));
-  }
   _min = min;
   _max = max;
 }
