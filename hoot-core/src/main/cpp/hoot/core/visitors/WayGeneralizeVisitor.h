@@ -29,10 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
 {
@@ -71,9 +71,11 @@ public:
   QString getInitStatusMessage() const override
   { return "Generalizing ways..."; }
   QString getCompletedStatusMessage() const override
-  { return "Generalized " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-            StringUtils::formatLargeNumber(_numProcessed) + " ways. Removed " +
-            StringUtils::formatLargeNumber(_totalNodesRemoved) + " total nodes."; }
+  {
+    return QString("Generalized %1 / %2 ways. Removed %3 total nodes.")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed),
+                 StringUtils::formatLargeNumber(_totalNodesRemoved));
+  }
 
   void addCriterion(const ElementCriterionPtr& crit) override;
 

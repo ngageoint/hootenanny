@@ -35,8 +35,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, PhoneNumberCountVisitor)
 
-PhoneNumberCountVisitor::PhoneNumberCountVisitor() :
-_count(0)
+PhoneNumberCountVisitor::PhoneNumberCountVisitor()
+  : _count(0)
 {
 }
 

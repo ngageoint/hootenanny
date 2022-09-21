@@ -29,11 +29,11 @@
 #define REMOVEDUPLICATEWAYNODESVISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

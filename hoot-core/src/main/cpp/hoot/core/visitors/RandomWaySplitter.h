@@ -28,11 +28,11 @@
 #define RANDOM_WAY_SPLITTER_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/RngConsumer.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -97,9 +97,7 @@ public:
   void setWaySplitProbability(double probability)
   {
     if (probability < 0.0 || probability > 1.0)
-    {
       throw HootException("Invalid split probability: " + QString::number(probability));
-    }
     _waySplitProbability = probability;
   }
 
@@ -109,9 +107,7 @@ public:
   void setMinNodeSpacing(double spacing)
   {
     if (spacing < 0.0)
-    {
       throw HootException("Invalid minimum node spacing: " + QString::number(spacing));
-    }
     _minNodeSpacing = spacing;
   }
 

@@ -30,9 +30,9 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 
@@ -54,9 +54,7 @@ ProjectToGeographicVisitor::~ProjectToGeographicVisitor()
 
 void ProjectToGeographicVisitor::initialize(const std::shared_ptr<OGRSpatialReference>& projection)
 {
-  _transform =
-    OGRCreateCoordinateTransformation(
-      projection.get(), MapProjector::createWgs84Projection().get());
+  _transform = OGRCreateCoordinateTransformation(projection.get(), MapProjector::createWgs84Projection().get());
   _rcf = std::make_shared<ReprojectCoordinateFilter>(_transform);
 }
 

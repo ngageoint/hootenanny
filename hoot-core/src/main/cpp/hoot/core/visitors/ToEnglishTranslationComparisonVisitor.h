@@ -29,9 +29,9 @@
 #define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
 #include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/info/OperationStatus.h>
+#include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
 
 namespace hoot
 {
@@ -47,7 +47,7 @@ public:
 
   static QString className() { return "ToEnglishTranslationComparisonVisitor"; }
 
-  ToEnglishTranslationComparisonVisitor();
+  ToEnglishTranslationComparisonVisitor() = default;
   ~ToEnglishTranslationComparisonVisitor() override = default;
 
   /**
@@ -64,9 +64,8 @@ public:
   { return "Comparing to English tag translations..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Compared " + QString::number(_numProcessedTags) + " to English tag translations on " +
-      QString::number(_numProcessedElements) + " different elements";
+    return QString("Compared %1 to English tag translations on %2 different elements")
+            .arg(QString::number(_numProcessedTags), QString::number(_numProcessedElements));
   }
 
   QString getDescription() const override

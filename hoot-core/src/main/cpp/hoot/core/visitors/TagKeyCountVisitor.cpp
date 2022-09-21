@@ -26,22 +26,22 @@
  */
 #include "TagKeyCountVisitor.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TagKeyCountVisitor)
 
-TagKeyCountVisitor::TagKeyCountVisitor() :
-_keyCount(0)
+TagKeyCountVisitor::TagKeyCountVisitor()
+  : _keyCount(0)
 {
 }
 
-TagKeyCountVisitor::TagKeyCountVisitor(const QString& key) :
-_keys(QStringList(key)),
-_keyCount(0)
+TagKeyCountVisitor::TagKeyCountVisitor(const QString& key)
+  : _keys(QStringList(key)),
+    _keyCount(0)
 {
 }
 
@@ -53,13 +53,10 @@ void TagKeyCountVisitor::setConfiguration(const Settings& conf)
 
 void TagKeyCountVisitor::visit(const ConstElementPtr& e)
 {
-  for (int i = 0; i < _keys.size(); i++)
+  for (const auto& key : qAsConst(_keys))
   {
-    const QString key = _keys.at(i);
     if (e->getTags().contains(key))
-    {
       _keyCount++;
-    }
   }
 }
 

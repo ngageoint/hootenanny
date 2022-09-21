@@ -28,11 +28,11 @@
 #include "RemoveRef2VisitorMultipleCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -42,14 +42,13 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2VisitorMultipleCriterion)
 void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr& e)
 {
   //hacking use of ChainCriterion here
-  std::shared_ptr<const ChainCriterion> chainCrit =
-    std::dynamic_pointer_cast<const ChainCriterion>(e);
+  std::shared_ptr<const ChainCriterion> chainCrit = std::dynamic_pointer_cast<const ChainCriterion>(e);
   LOG_VARD(chainCrit->_criteria.size());
   if (!chainCrit.get() && chainCrit->_criteria.size() != 2)
   {
     throw HootException(
-      QString("RemoveRef2VisitorDifferentElementTypes expects a chain criterion passed to it ") +
-      QString("the first criterion as the REF1 criterion and the second as the REF2 criterion."));
+      QString("RemoveRef2VisitorDifferentElementTypes expects a chain criterion passed to it "
+              "the first criterion as the REF1 criterion and the second as the REF2 criterion."));
   }
   _ref1Criterion = chainCrit->_criteria[0];
   _ref2Criterion = chainCrit->_criteria[1];

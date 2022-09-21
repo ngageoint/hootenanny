@@ -47,8 +47,8 @@ RemoveAttributesVisitor::RemoveAttributesVisitor(const QStringList types)
   setTypes(types);
 }
 
-RemoveAttributesVisitor::RemoveAttributesVisitor(const QList<ElementAttributeType>& types) :
-_types(types)
+RemoveAttributesVisitor::RemoveAttributesVisitor(const QList<ElementAttributeType>& types)
+  : _types(types)
 {
 }
 
@@ -61,43 +61,40 @@ void RemoveAttributesVisitor::setConfiguration(const Settings& conf)
 void RemoveAttributesVisitor::setTypes(const QStringList types)
 {
   LOG_VART(types);
-  for (int i = 0; i < types.size(); i++)
-  {
-    _types.append(ElementAttributeType::fromString(types.at(i)));
-  }
+  for (const auto& type_string : qAsConst(types))
+    _types.append(ElementAttributeType::fromString(type_string));
   LOG_VART(_types);
 }
 
 void RemoveAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  for (int i = 0; i < _types.length(); i++)
+  for (const auto& attrType : qAsConst(_types))
   {
-    const ElementAttributeType attrType = _types.at(i);
     //LOG_VART(attrType.toString());
-    switch (_types.at(i).getEnum())
+    switch (attrType.getEnum())
     {
-      case ElementAttributeType::Changeset:
-        e->setChangeset(ElementData::CHANGESET_EMPTY);
-        LOG_TRACE("Removed " << attrType.toString() << ".");
-        break;
-      case ElementAttributeType::Timestamp:
-        e->setTimestamp(ElementData::TIMESTAMP_EMPTY);
-        LOG_TRACE("Removed " << attrType.toString() << ".");
-        break;
-      case ElementAttributeType::User:
-        e->setUser(ElementData::USER_EMPTY);
-        LOG_TRACE("Removed " << attrType.toString() << ".");
-        break;
-      case ElementAttributeType::Uid:
-        e->setUid(ElementData::UID_EMPTY);
-        LOG_TRACE("Removed " << attrType.toString() << ".");
-        break;
-      case ElementAttributeType::Version:
-        e->setVersion(ElementData::VERSION_EMPTY);
-        LOG_TRACE("Removed " << attrType.toString() << ".");
-        break;
-      default:
-        throw IllegalArgumentException("Invalid attribute type: " + _types.at(i).toString());
+    case ElementAttributeType::Changeset:
+      e->setChangeset(ElementData::CHANGESET_EMPTY);
+      LOG_TRACE("Removed " << attrType.toString() << ".");
+      break;
+    case ElementAttributeType::Timestamp:
+      e->setTimestamp(ElementData::TIMESTAMP_EMPTY);
+      LOG_TRACE("Removed " << attrType.toString() << ".");
+      break;
+    case ElementAttributeType::User:
+      e->setUser(ElementData::USER_EMPTY);
+      LOG_TRACE("Removed " << attrType.toString() << ".");
+      break;
+    case ElementAttributeType::Uid:
+      e->setUid(ElementData::UID_EMPTY);
+      LOG_TRACE("Removed " << attrType.toString() << ".");
+      break;
+    case ElementAttributeType::Version:
+      e->setVersion(ElementData::VERSION_EMPTY);
+      LOG_TRACE("Removed " << attrType.toString() << ".");
+      break;
+    default:
+      throw IllegalArgumentException("Invalid attribute type: " + attrType.toString());
     }
   }
 }

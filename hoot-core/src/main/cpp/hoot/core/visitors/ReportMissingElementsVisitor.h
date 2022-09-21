@@ -28,11 +28,11 @@
 #define REPORTMISSINGELEMENTSVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -51,9 +51,8 @@ public:
 
   static QString className() { return "ReportMissingElementsVisitor"; }
 
-  ReportMissingElementsVisitor(
-    const bool removeMissing = false, const Log::WarningLevel& logLevel = Log::Trace,
-    const int maxReport = Log::getWarnMessageLimit());
+  ReportMissingElementsVisitor(const bool removeMissing = false, const Log::WarningLevel& logLevel = Log::Trace,
+                               const int maxReport = Log::getWarnMessageLimit());
   ~ReportMissingElementsVisitor() override = default;
 
   /**

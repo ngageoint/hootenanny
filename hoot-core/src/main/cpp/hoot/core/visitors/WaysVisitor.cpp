@@ -31,8 +31,8 @@ using namespace std;
 namespace hoot
 {
 
-WaysVisitor::WaysVisitor(std::vector<ConstWayPtr>& w) :
-_w(w)
+WaysVisitor::WaysVisitor(std::vector<ConstWayPtr>& w)
+  : _w(w)
 {
 }
 

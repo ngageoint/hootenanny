@@ -60,10 +60,8 @@ Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtr& ma
 Meters WorstCircularErrorVisitor::getWorstCircularError(const std::vector<ElementPtr>& elements)
 {
   WorstCircularErrorVisitor v;
-  for (vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
-  {
-    v.visit(*it);
-  }
+  for (const auto& element : elements)
+    v.visit(element);
   return v.getWorstCircularError();
 }
 

@@ -37,10 +37,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueNamesVisitor)
 void UniqueNamesVisitor::visit(const ConstElementPtr& e)
 {
   const QStringList names = e->getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
-  {
-    _names.insert(names[i]);
-  }
+  for (const auto& name : qAsConst(names))
+    _names.insert(name);
 }
 
 }

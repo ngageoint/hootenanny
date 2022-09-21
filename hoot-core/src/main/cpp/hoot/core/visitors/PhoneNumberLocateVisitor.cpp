@@ -32,8 +32,8 @@
 namespace hoot
 {
 
-PhoneNumberLocateVisitor::PhoneNumberLocateVisitor() :
-_totalPhoneNumbersLocated(0)
+PhoneNumberLocateVisitor::PhoneNumberLocateVisitor()
+  : _totalPhoneNumbersLocated(0)
 {
 }
 
@@ -46,12 +46,9 @@ void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
 {
   QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(*e);
   bool anyPhoneNumberLocated = false;
-  for (QList<ElementPhoneNumber>::const_iterator phoneNumberItr = phoneNumbers.constBegin();
-       phoneNumberItr != phoneNumbers.constEnd(); ++phoneNumberItr)
+  for (const auto& phoneNumber : qAsConst(phoneNumbers))
   {
-    ElementPhoneNumber phoneNumber = *phoneNumberItr;
-    const QString locationDescription =
-      _phoneNumberLocator.getLocationDescription(phoneNumber.tagValue);
+    const QString locationDescription = _phoneNumberLocator.getLocationDescription(phoneNumber.tagValue);
     if (!locationDescription.isEmpty())
     {
       e->getTags().set(phoneNumber.tagKey + ":location", locationDescription);
@@ -61,9 +58,7 @@ void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
   }
 
   if (anyPhoneNumberLocated)
-  {
     _numAffected++;
-  }
 }
 
 }

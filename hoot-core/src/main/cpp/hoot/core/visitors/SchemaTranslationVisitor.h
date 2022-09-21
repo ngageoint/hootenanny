@@ -29,10 +29,10 @@
 
 // Hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

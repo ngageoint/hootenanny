@@ -28,8 +28,8 @@
 #define REMOVEEMPTYAREASVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

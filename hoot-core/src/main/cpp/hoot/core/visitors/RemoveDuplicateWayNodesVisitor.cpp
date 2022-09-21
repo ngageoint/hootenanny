@@ -28,13 +28,13 @@
 #include "RemoveDuplicateWayNodesVisitor.h"
 
 // Hoot
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -50,9 +50,7 @@ void RemoveDuplicateWayNodesVisitor::removeDuplicates(const WayPtr& way)
 void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 {
   if (!e)
-  {
     return;
-  }
 
   if (e->getElementType() == ElementType::Way)
   {
@@ -61,8 +59,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
     // an active conflate matcher in the current conflation configuration.
-    if (_conflateInfoCache &&
-        !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
+    if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << way->getElementId() << ", as it cannot be conflated by any " <<
@@ -84,23 +81,20 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
       return;
     }
 
-    QVector<long> parsedNodeIds;
-    QVector<long> duplicateWayNodeIds;
+    std::vector<long> parsedNodeIds;
+    std::vector<long> duplicateWayNodeIds;
     long lastNodeId = 0;
     bool foundDuplicateWayNode = false;
-    for (size_t i = 0; i < wayNodeIds.size(); i++)
+    for (auto nodeId : wayNodeIds)
     {
-      const long nodeId = wayNodeIds[i];
       // We're only removing consecutive duplicates. Other duplicate entries could be part of a
       // valid loop feature.
       if (nodeId != lastNodeId)
-      {
-        parsedNodeIds.append(nodeId);
-      }
+        parsedNodeIds.push_back(nodeId);
       else
       {
         // We've found a duplicate where both nodes aren't start and end nodes...not allowed.
-        duplicateWayNodeIds.append(nodeId);
+        duplicateWayNodeIds.push_back(nodeId);
         foundDuplicateWayNode = true;
         _numAffected++;
       }
@@ -110,7 +104,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     {
       LOG_TRACE("Removing duplicate way nodes: " << duplicateWayNodeIds);
       LOG_VART(parsedNodeIds);
-      way->setNodes(parsedNodeIds.toStdVector());
+      way->setNodes(parsedNodeIds);
     }
   }
 }

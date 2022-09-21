@@ -29,10 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -73,9 +73,8 @@ public:
   QString getInitStatusMessage() const override { return "Counting translated tags..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Counted " + StringUtils::formatLargeNumber(getTotalCount()) + " translated tags on " +
-      StringUtils::formatLargeNumber(_numAffected) + " features.";
+    return QString("Counted %1 translated tags on %2 features.")
+            .arg(StringUtils::formatLargeNumber(getTotalCount()), StringUtils::formatLargeNumber(_numAffected));
   }
 
   long getPopulatedCount() const { return _populatedCount; }

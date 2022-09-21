@@ -55,7 +55,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Standardizing one way roads..."; }
   QString getCompletedStatusMessage() const override
-  { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
+  { return QString("Standardized %1 one way roads.").arg(QString::number(_numAffected)); }
 
   /**
    * @see FilteredByGeometryTypeCriteria

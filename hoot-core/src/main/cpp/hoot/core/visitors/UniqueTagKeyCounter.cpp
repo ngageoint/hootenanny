@@ -37,10 +37,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueTagKeyCounter)
 
 void UniqueTagKeyCounter::visit(const ConstElementPtr& e)
 {
-  for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
-  {
+  for (auto tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
     _tagKeys.insert(tagItr.key());
-  }
 }
 
 }

@@ -29,8 +29,8 @@
 #define NORMALIZE_ADDRESSES_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

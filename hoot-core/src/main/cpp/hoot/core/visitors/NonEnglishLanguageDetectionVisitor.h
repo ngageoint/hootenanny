@@ -29,11 +29,10 @@
 #define NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementVisitor.h>
-
 #include <hoot/core/language/LanguageDetector.h>
 #include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

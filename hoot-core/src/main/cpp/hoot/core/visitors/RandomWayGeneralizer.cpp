@@ -31,22 +31,22 @@
 #include <boost/random/uniform_int.hpp>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/RandomNumberUtils.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomWayGeneralizer)
 
-RandomWayGeneralizer::RandomWayGeneralizer() :
-_localRng(std::make_shared<boost::minstd_rand>()),
-_epsilon(1.0),
-_removeNodesSharedByWays(false)
+RandomWayGeneralizer::RandomWayGeneralizer()
+  : _localRng(std::make_shared<boost::minstd_rand>()),
+    _epsilon(1.0),
+    _removeNodesSharedByWays(false)
 {
   _rng = _localRng.get();
 }
@@ -59,13 +59,9 @@ void RandomWayGeneralizer::setConfiguration(const Settings& conf)
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
-  {
     _rng->seed(RandomNumberUtils::generateSeed());
-  }
   else
-  {
     _rng->seed(seed);
-  }
 }
 
 void RandomWayGeneralizer::setOsmMap(OsmMap* map)
@@ -84,23 +80,17 @@ void RandomWayGeneralizer::visit(const std::shared_ptr<Element>& element)
   if (element->getElementType() == ElementType::Way)
   {
     if (!_map)
-    {
       throw IllegalArgumentException("No map passed to way generalizer.");
-    }
     else if (_map->getProjection()->IsGeographic())
-    {
       throw IllegalArgumentException("Input map must be projected to planar.");
-    }
 
     //randomly select ways to generalize
     boost::uniform_real<> randomGeneralizeDistribution(0.0, 1.0);
     const double randomNum = randomGeneralizeDistribution(*_rng);
     QString logMsg =
       QString("element: %1 %2 be generalized based on a probability of: %3 and a randomly generated number: %4 \n")
-        .arg(element->getElementId().toString())
-        .arg("*will*")
-        .arg(QString::number(_wayGeneralizeProbability))
-        .arg(QString::number(randomNum));
+        .arg(element->getElementId().toString(), QString("*will*"),
+             QString::number(_wayGeneralizeProbability), QString::number(randomNum));
     if (randomNum <= _wayGeneralizeProbability)
     {
       LOG_TRACE(logMsg);

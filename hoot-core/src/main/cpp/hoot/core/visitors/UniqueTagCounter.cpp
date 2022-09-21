@@ -38,10 +38,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueTagCounter)
 
 void UniqueTagCounter::visit(const ConstElementPtr& e)
 {
-  for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
-  {
+  for (auto tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
     _tagKvps.insert(OsmSchema::toKvp(tagItr.key(), tagItr.value()));
-  }
 }
 
 }

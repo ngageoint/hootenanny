@@ -51,14 +51,13 @@ namespace hoot
 
 int SpatialIndexer::logWarnCount = 0;
 
-SpatialIndexer::SpatialIndexer(
-  std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
-  const std::shared_ptr<ElementCriterion>& criterion,
-  const std::function<Meters (const ConstElementPtr& e)>& getSearchRadius, ConstOsmMapPtr pMap) :
-_criterion(criterion),
-_getSearchRadius(getSearchRadius),
-_index(index),
-_indexToEid(indexToEid)
+SpatialIndexer::SpatialIndexer(std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
+                               const std::shared_ptr<ElementCriterion>& criterion,
+                               const std::function<Meters (const ConstElementPtr& e)>& getSearchRadius, ConstOsmMapPtr pMap)
+  : _criterion(criterion),
+    _getSearchRadius(getSearchRadius),
+    _index(index),
+    _indexToEid(indexToEid)
 {
   _map = pMap.get();
 
@@ -121,10 +120,9 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
   _numProcessed++;
 }
 
-set<ElementId> SpatialIndexer::findNeighbors(
-  const Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
-  const deque<ElementId>& indexToEid, ConstOsmMapPtr pMap, const ElementType& elementType,
-  const bool includeContainingRelations)
+set<ElementId> SpatialIndexer::findNeighbors(const Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
+                                             const deque<ElementId>& indexToEid, ConstOsmMapPtr pMap, const ElementType& elementType,
+                                             const bool includeContainingRelations)
 {
   LOG_TRACE("Finding neighbors within env: " << env << "...");
   LOG_VART(indexToEid.size());
@@ -151,12 +149,9 @@ set<ElementId> SpatialIndexer::findNeighbors(
       if (includeContainingRelations)
       {
         // Check for relations that contain this element
-        const set<long>& relations =
-          pMap->getIndex().getElementToRelationMap()->getRelationByElement(eid);
-        for (set<long>::const_iterator relation_it = relations.begin(); relation_it != relations.end(); ++relation_it)
-        {
-          neighborIds.insert(ElementId(ElementType::Relation, *relation_it));
-        }
+        const set<long>& relations = pMap->getIndex().getElementToRelationMap()->getRelationByElement(eid);
+        for (auto relation_id : relations)
+          neighborIds.insert(ElementId(ElementType::Relation, relation_id));
       }
     }
   }
@@ -166,22 +161,19 @@ set<ElementId> SpatialIndexer::findNeighbors(
   return neighborIds;
 }
 
-QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
-  const ConstNodePtr& node, const geos::geom::Envelope& env,
-  const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
-  ConstOsmMapPtr pMap)
+QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(const ConstNodePtr& node, const geos::geom::Envelope& env,
+                                                         const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
+                                                         ConstOsmMapPtr pMap)
 {
   // find the neighboring nodes
-  const set<ElementId> neighborIds =
-    findNeighbors(env, index, indexToEid, pMap, ElementType::Node, false);
+  const set<ElementId> neighborIds = findNeighbors(env, index, indexToEid, pMap, ElementType::Node, false);
 
   // map neighbors to their distance from the input node
 
   QMultiMap<double, ElementId> neighborNodeDistances;
-  for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIds.begin();
-       neighborIdsItr != neighborIds.end(); ++neighborIdsItr)
+  for (const auto& neighbor_id : neighborIds)
   {
-    ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
+    ConstNodePtr neighborNode = pMap->getNode(neighbor_id);
     if (!neighborNode)
     {
       // This could happen either if the geospatial indices were set up improperly for the query
@@ -191,8 +183,7 @@ QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
       const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
       if (logWarnCount < logWarnMessageLimit)
       {
-        LOG_WARN(
-          "Map does not contain neighbor node: " << *neighborIdsItr << ". Skipping neighbor...");
+        LOG_WARN("Map does not contain neighbor node: " << neighbor_id << ". Skipping neighbor...");
       }
       else if (logWarnCount == logWarnMessageLimit)
       {
@@ -203,10 +194,7 @@ QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
       continue;
     }
     else
-    {
-      neighborNodeDistances.insertMulti(
-        Distance::euclidean(*node, *neighborNode), neighborNode->getElementId());
-    }
+      neighborNodeDistances.insertMulti(Distance::euclidean(*node, *neighborNode), neighborNode->getElementId());
   }
   LOG_VART(neighborNodeDistances);
 
@@ -215,14 +203,13 @@ QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
   const QList<double> sortedDistances = neighborNodeDistances.keys();
   LOG_VART(sortedDistances);
   QList<ElementId> sortedNeighborIds;
-  for (QList<double>::const_iterator distancesItr = sortedDistances.begin();
-       distancesItr != sortedDistances.end(); ++distancesItr)
+  for (auto distance : qAsConst(sortedDistances))
   {
-    const QList<ElementId> ids = neighborNodeDistances.values(*distancesItr);
-    for (int i = 0; i < ids.size(); i++)
+    const QList<ElementId> ids = neighborNodeDistances.values(distance);
+    for (const auto& eid : qAsConst(ids))
     {
-      LOG_VART(ids.at(i));
-      sortedNeighborIds.append(ids.at(i));
+      LOG_VART(eid);
+      sortedNeighborIds.append(eid);
     }
   }
 

@@ -27,25 +27,25 @@
 #include "RemoveTagsVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveTagsVisitor)
 
-RemoveTagsVisitor::RemoveTagsVisitor() :
-_numTagsRemoved(0)
+RemoveTagsVisitor::RemoveTagsVisitor()
+  : _numTagsRemoved(0)
 {
   setConfiguration(conf());
 }
 
-RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys) :
-_numTagsRemoved(0),
-_negateCriterion(false)
+RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys)
+  : _numTagsRemoved(0),
+    _negateCriterion(false)
 {
   _setKeys(keys);
 }
@@ -61,9 +61,8 @@ void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 void RemoveTagsVisitor::_setKeys(const QStringList& keys)
 {
   QSet<QString> keysParsed;
-  for (int i = 0; i < keys.size(); i++)
+  for (const auto& key : qAsConst(keys))
   {
-    const QString key = keys.at(i);
     if (!keysParsed.contains(key))
     {
       keysParsed.insert(key);
@@ -75,13 +74,9 @@ void RemoveTagsVisitor::_setKeys(const QStringList& keys)
 void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
 {
   if (!_negateCriterion)
-  {
     _criterion = e;
-  }
   else
-  {
     _criterion = std::make_shared<NotCriterion>(e);
-  }
 }
 
 void RemoveTagsVisitor::_setCriterion(const QString& criterionName)
@@ -89,8 +84,7 @@ void RemoveTagsVisitor::_setCriterion(const QString& criterionName)
   if (!criterionName.trimmed().isEmpty())
   {
     LOG_VART(criterionName);
-    addCriterion(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
+    addCriterion(Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 
@@ -98,9 +92,7 @@ void RemoveTagsVisitor::visit(const std::shared_ptr<Element>& e)
 {
   // see if the element passes the filter (if there is one)
   if (_criterion.get() && !_criterion->isSatisfied(e))
-  {
     return;
-  }
   _numAffected++;
 
   Tags tags = e->getTags();

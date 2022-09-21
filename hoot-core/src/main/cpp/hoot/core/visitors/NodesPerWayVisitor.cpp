@@ -28,20 +28,20 @@
 #include "NodesPerWayVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, NodesPerWayVisitor)
 
-NodesPerWayVisitor::NodesPerWayVisitor() :
-_totalWayNodes(0),
-_minNodesPerWay(0),
-_maxNodesPerWay(0),
-_negateCriterion(false)
+NodesPerWayVisitor::NodesPerWayVisitor()
+  : _totalWayNodes(0),
+    _minNodesPerWay(0),
+    _maxNodesPerWay(0),
+    _negateCriterion(false)
 {
 }
 
@@ -61,13 +61,9 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
 void NodesPerWayVisitor::addCriterion(const ElementCriterionPtr& e)
 {
   if (!_negateCriterion)
-  {
     _customCrit = e;
-  }
   else
-  {
     _customCrit = std::make_shared<NotCriterion>(e);
-  }
 }
 
 void NodesPerWayVisitor::_setCriterion(const QString& criterionName)
@@ -75,8 +71,7 @@ void NodesPerWayVisitor::_setCriterion(const QString& criterionName)
   if (!criterionName.trimmed().isEmpty())
   {
     LOG_VART(criterionName);
-    addCriterion(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
+    addCriterion(Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 

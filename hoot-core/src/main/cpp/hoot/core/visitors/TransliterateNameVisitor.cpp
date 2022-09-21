@@ -37,15 +37,12 @@ HOOT_FACTORY_REGISTER(ElementVisitor, TransliterateNameVisitor)
 
 bool TransliterateNameVisitor::isLatin(const QString& s)
 {
-  for (int i = 0; i < s.size(); i++)
+  for (const auto& character : s)
   {
     // if the character isn't representable in latin1 Qt returns 0
-    if (s[i].toLatin1() == 0)
-    {
+    if (character.toLatin1() == 0)
       return false;
-    }
   }
-
   return true;
 }
 
@@ -53,20 +50,17 @@ void TransliterateNameVisitor::visit(const std::shared_ptr<Element>& e)
 {
   QStringList names = e->getTags().getNames();
 
-  for (int i = 0; i < names.size(); i++)
+  for (const auto& name : qAsConst(names))
   {
     // we found a latin name, no need to do any more work.
-    if (isLatin(names[i]))
-    {
+    if (isLatin(name))
       return;
-    }
   }
 
   if (!names.empty())
   {
     // Should we be translating all of the names here?
-    e->getTags().addNote(
-      "Transliterated Name: " + ToEnglishDictionaryTranslator().toEnglish(names[0]));
+    e->getTags().addNote("Transliterated Name: " + ToEnglishDictionaryTranslator().toEnglish(names[0]));
     _numAffected++;
   }
 }

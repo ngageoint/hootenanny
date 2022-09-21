@@ -30,10 +30,10 @@
 
 // hoot
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {

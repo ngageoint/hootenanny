@@ -68,9 +68,8 @@ public:
   { return "Removing tags..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Removed " + StringUtils::formatLargeNumber(_numTagsRemoved) + " tags from " +
-      StringUtils::formatLargeNumber(_numAffected) + " different elements";
+    return QString("Removed %1 tags from %2 different elements")
+            .arg(StringUtils::formatLargeNumber(_numTagsRemoved), StringUtils::formatLargeNumber(_numAffected));
   }
 
   QString getDescription() const override { return "Removes tags by key"; }

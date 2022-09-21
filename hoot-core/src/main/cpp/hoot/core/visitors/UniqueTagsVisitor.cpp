@@ -37,10 +37,8 @@ namespace hoot
 
 void UniqueTagsVisitor::visit(const ConstElementPtr& e)
 {
-  for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
-  {
+  for (auto tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
     _uniqueKvps.insert(OsmSchema::toKvp(tagItr.key(), tagItr.value()));
-  }
 }
 
 }

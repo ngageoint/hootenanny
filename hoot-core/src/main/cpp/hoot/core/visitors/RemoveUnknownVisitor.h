@@ -50,7 +50,7 @@ public:
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getCompletedStatusMessage() const override
-  { return "Removed " + QString::number(_numAffected) + " elements."; }
+  { return QString("Removed %1 elements.").arg(QString::number(_numAffected)); }
 
   void set(Status status) { _status = status; }
 

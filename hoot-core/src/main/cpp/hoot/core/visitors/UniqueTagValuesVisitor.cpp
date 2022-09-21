@@ -32,31 +32,27 @@ namespace hoot
 // This isn't being factory registered, since there's no standard way to retrieve a set of strings
 // from a visitor
 
-UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
-_key(key),
-_bag(bag),
-_split(split)
+UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split)
+  : _key(key),
+    _bag(bag),
+    _split(split)
 {
 }
 
 void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
 {
-  Tags::const_iterator it = e->getTags().find(_key);
+  auto it = e->getTags().find(_key);
   if (it != e->getTags().end())
   {
     if (_split)
     {
       QStringList l;
       e->getTags().readValues(_key, l);
-      for (int i = 0; i < l.size(); i++)
-      {
-        _bag.insert(l[i]);
-      }
+      for (const auto& value : qAsConst(l))
+        _bag.insert(value);
     }
     else
-    {
       _bag.insert(it.value());
-    }
   }
 }
 

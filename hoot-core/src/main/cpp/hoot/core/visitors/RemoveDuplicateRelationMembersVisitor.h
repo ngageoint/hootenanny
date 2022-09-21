@@ -29,8 +29,8 @@
 #define REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/info/OperationStatus.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
