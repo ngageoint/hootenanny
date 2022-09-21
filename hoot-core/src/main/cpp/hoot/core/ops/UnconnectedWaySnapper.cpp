@@ -589,8 +589,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(const NodePtr& unconnecte
 }
 
 void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap)
-{
-  // Only snap 1 to 2, no need to snap 2 to 1
+{  // Only snap 1 to 2, no need to snap 2 to 1
   if (wayToSnap->getStatus() != Status::Unknown1)
     return;
 
@@ -674,7 +673,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
               }
               else
               { // Remove dupe node
-                testWay->removeNode(oldNodeId);
+                // crashes // testWay->removeNode(oldNodeId);
                 RemoveNodeByEid::removeNode(_map, oldNodeId, true);
                 LOG_DEBUG(QString("Orphaned old node %1").arg(oldNodeId));
               }
