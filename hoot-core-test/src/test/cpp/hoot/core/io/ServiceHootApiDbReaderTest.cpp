@@ -228,7 +228,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(10.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
     CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
     HOOT_STR_EQUALS("1", node->getTags().get(MetadataTags::HootId()));
@@ -239,7 +239,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.1, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(11.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n2b", node->getTags().get("noteb"));
     CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
     CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -251,7 +251,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(12.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n3", node->getTags().get("note"));
     CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
     CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -263,7 +263,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.3, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(13.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n4", node->getTags().get("note"));
     CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
     CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -275,7 +275,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.4, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(14.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
     CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
     HOOT_STR_EQUALS("5", node->getTags().get(MetadataTags::HootId()));
@@ -290,7 +290,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(1));
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(2, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, way->getTagCount());
     HOOT_STR_EQUALS("w1b", way->getTags().get("noteb"));
     CPPUNIT_ASSERT_EQUAL((long)1, way->getVersion());
     CPPUNIT_ASSERT(way->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -302,7 +302,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(16.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
     CPPUNIT_ASSERT(way->hasNode(3));
-    CPPUNIT_ASSERT_EQUAL(2, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, way->getTagCount());
     HOOT_STR_EQUALS("w2", way->getTags().get("note"));
     CPPUNIT_ASSERT_EQUAL((long)1, way->getVersion());
     CPPUNIT_ASSERT(way->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -313,7 +313,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)3, way->getId());
     CPPUNIT_ASSERT_EQUAL(17.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getVersion());
     CPPUNIT_ASSERT(way->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
     HOOT_STR_EQUALS("3", way->getTags().get(MetadataTags::HootId()));
@@ -337,7 +337,7 @@ public:
     const RelationData::Entry& member1 = relationMembers.at(1);
     HOOT_STR_EQUALS("w1", member1.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member1.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTagCount());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
     CPPUNIT_ASSERT(relation->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -353,7 +353,7 @@ public:
     const RelationData::Entry& member = relation->getMembers().at(0);
     HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, relation->getTagCount());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
     CPPUNIT_ASSERT(relation->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
     HOOT_STR_EQUALS("2", relation->getTags().get(MetadataTags::HootId()));
@@ -371,7 +371,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(12.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n3", node->getTags().get("note"));
     HOOT_STR_EQUALS("3", node->getTags().get(MetadataTags::HootId()));
   }
@@ -445,7 +445,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(10.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("1", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(2);
@@ -454,7 +454,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.1, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(11.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n2b", node->getTags().get("noteb"));
     HOOT_STR_EQUALS("2", node->getTags().get(MetadataTags::HootId()));
 
@@ -464,7 +464,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(12.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n3", node->getTags().get("note"));
     HOOT_STR_EQUALS("3", node->getTags().get(MetadataTags::HootId()));
 
@@ -485,7 +485,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.3, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(13.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
     HOOT_STR_EQUALS("n4", node->getTags().get("note"));
     HOOT_STR_EQUALS("4", node->getTags().get(MetadataTags::HootId()));
 
@@ -495,7 +495,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.4, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(14.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("5", node->getTags().get(MetadataTags::HootId()));
 
     WayPtr way = map->getWay(1);
@@ -504,7 +504,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(1));
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(2, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, way->getTagCount());
     HOOT_STR_EQUALS("w1b", way->getTags().get("noteb"));
     HOOT_STR_EQUALS("1", way->getTags().get(MetadataTags::HootId()));
 
@@ -525,7 +525,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(16.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
     CPPUNIT_ASSERT(way->hasNode(3));
-    CPPUNIT_ASSERT_EQUAL(2, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, way->getTagCount());
     HOOT_STR_EQUALS("w2", way->getTags().get("note"));
     HOOT_STR_EQUALS("2", way->getTags().get(MetadataTags::HootId()));
 
@@ -534,7 +534,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)3, way->getId());
     CPPUNIT_ASSERT_EQUAL(17.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
     HOOT_STR_EQUALS("3", way->getTags().get(MetadataTags::HootId()));
 
     RelationPtr relation = map->getRelation(1);
@@ -551,7 +551,7 @@ public:
     const RelationData::Entry& member1 = relation->getMembers().at(1);
     HOOT_STR_EQUALS("w1", member1.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member1.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTagCount());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
     HOOT_STR_EQUALS("1", relation->getTags().get(MetadataTags::HootId()));
 
@@ -576,7 +576,7 @@ public:
     const RelationData::Entry& member = relation->getMembers().at(0);
     HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, relation->getTagCount());
     HOOT_STR_EQUALS("2", relation->getTags().get(MetadataTags::HootId()));
 
     ctr++;

@@ -125,9 +125,9 @@ bool RemoveDuplicateAreasVisitor::_equals(const std::shared_ptr<Element>& e1, co
 void RemoveDuplicateAreasVisitor::_removeOne(const std::shared_ptr<Element>& e1,
                                             const std::shared_ptr<Element>& e2)
 {
-  if (e1->getTags().size() > e2->getTags().size())
+  if (e1->getTagCount() > e2->getTagCount())
     RecursiveElementRemover(e2->getElementId()).apply(_map->shared_from_this());
-  else if (e1->getTags().size() < e2->getTags().size())
+  else if (e1->getTagCount() < e2->getTagCount())
     RecursiveElementRemover(e1->getElementId()).apply(_map->shared_from_this());
   else if (e1->getId() < e2->getId())
     RecursiveElementRemover(e1->getElementId()).apply(_map->shared_from_this());

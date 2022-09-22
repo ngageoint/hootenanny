@@ -390,7 +390,7 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   _incrementChangesInChangeset();
   _writeNode(node, nodeDbId);
   _writeStats.nodesWritten++;
-  _writeStats.nodeTagsWritten += node->getTags().size();
+  _writeStats.nodeTagsWritten += node->getTagCount();
   if (_validateData)
     _checkUnresolvedReferences(node, nodeDbId);
 
@@ -435,7 +435,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   _writeWay(wayDbId, way->getTags(), way->getVersion());
   _writeWayNodes(wayDbId, way->getNodeIds(), way->getVersion());
   _writeStats.waysWritten++;
-  _writeStats.wayTagsWritten += way->getTags().size();
+  _writeStats.wayTagsWritten += way->getTagCount();
   _writeStats.wayNodesWritten += way->getNodeCount();
   if (_validateData)
     _checkUnresolvedReferences(way, wayDbId);
@@ -479,7 +479,7 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   _writeRelation(relationDbId, tags, relation->getVersion());
   _writeRelationMembers(relation, relationDbId, relation->getVersion());
   _writeStats.relationsWritten++;
-  _writeStats.relationTagsWritten += relation->getTags().size();
+  _writeStats.relationTagsWritten += relation->getTagCount();
   _writeStats.relationMembersWritten += relation->getMemberCount();
   if (_validateData)
     _checkUnresolvedReferences(relation, relationDbId);

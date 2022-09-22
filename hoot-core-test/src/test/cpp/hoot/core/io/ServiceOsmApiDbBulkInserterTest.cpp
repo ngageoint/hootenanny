@@ -72,12 +72,12 @@ public:
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTagCount());
 
     CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
@@ -85,7 +85,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMemberCount());
 
     //verify historical element table sizes
@@ -122,12 +122,12 @@ public:
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(1)->getTagCount());
 
     CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(2)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(2)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
@@ -135,7 +135,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMemberCount());
 
     //verify historical element table sizes
@@ -172,12 +172,12 @@ public:
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTagCount());
 
     CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(7)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(8)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(7)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(8)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(6)->getNodeCount());
@@ -185,7 +185,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(8)->getNodeCount());
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(5)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(5)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(5)->getMemberCount());
 
     //verify historical element table sizes
@@ -222,12 +222,12 @@ public:
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(3000000016)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(3000000016)->getTagCount());
 
     CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000006)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000007)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(3000000008)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000006)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000007)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(3000000008)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000004)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000005)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3000000006)->getNodeCount());
@@ -235,7 +235,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000008)->getNodeCount());
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3000000005)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3000000005)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3000000005)->getMemberCount());
 
     //verify historical element table sizes
@@ -272,12 +272,12 @@ public:
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((long)16, map->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(17)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(17)->getTagCount());
 
     CPPUNIT_ASSERT_EQUAL((long)6, map->getWayCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(5)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(7)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(5)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(7)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(5)->getNodeCount());
@@ -285,7 +285,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(7)->getNodeCount());
 
     CPPUNIT_ASSERT_EQUAL((long)2, map->getRelationCount());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3)->getMemberCount());
 
     //verify historical element table sizes

@@ -726,7 +726,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
     _outputSections[ApiDb::getNodeTagsTableName()],
     node->getVersion());
   _writeStats.nodesWritten++;
-  _writeStats.nodeTagsWritten += node->getTags().size();
+  _writeStats.nodeTagsWritten += node->getTagCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(node, nodeDbId);
@@ -772,7 +772,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
              _outputSections[ApiDb::getWayTagsTableName()],
              way->getVersion());
   _writeStats.waysWritten++;
-  _writeStats.wayTagsWritten += way->getTags().size();
+  _writeStats.wayTagsWritten += way->getTagCount();
   _writeStats.wayNodesWritten += way->getNodeCount();
   _incrementChangesInChangeset();
   if (_validateData)
@@ -821,7 +821,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
              _outputSections[ApiDb::getRelationTagsTableName()],
              version);
   _writeStats.relationsWritten++;
-  _writeStats.relationTagsWritten += relation->getTags().size();
+  _writeStats.relationTagsWritten += relation->getTagCount();
   _writeStats.relationMembersWritten += relation->getMemberCount();
   _incrementChangesInChangeset();
   if (_validateData)

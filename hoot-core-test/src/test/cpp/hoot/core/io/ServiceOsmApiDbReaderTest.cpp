@@ -115,7 +115,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
     CPPUNIT_ASSERT_EQUAL(15.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
 
     NodePtr node1 = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
@@ -130,7 +130,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
     CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
 
     //relations
     HOOT_STR_EQUALS(true, map->containsRelation(1));
@@ -248,20 +248,20 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(0, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, node->getTagCount());
 
     node = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL((long)2, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.1, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("n2b", node->getTags().get("noteb"));
 
     node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL((long)3, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("n3", node->getTags().get("note"));
 
     ctr++;
@@ -279,20 +279,20 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)4, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.3, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("n4", node->getTags().get("note"));
 
     node = map->getNode(5);
     CPPUNIT_ASSERT_EQUAL((long)5, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.4, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(0, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, node->getTagCount());
 
     WayPtr way = map->getWay(1);
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT(way->hasNode(1));
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
     HOOT_STR_EQUALS("w1b", way->getTags().get("noteb"));
 
     ctr++;
@@ -310,13 +310,13 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)2, way->getId());
     CPPUNIT_ASSERT(way->hasNode(2));
     CPPUNIT_ASSERT(way->hasNode(3));
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
     HOOT_STR_EQUALS("w2", way->getTags().get("note"));
 
     way = map->getWay(3);
     CPPUNIT_ASSERT_EQUAL((long)3, way->getId());
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(0, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, way->getTagCount());
 
     RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
@@ -329,7 +329,7 @@ public:
     member = relation->getMembers().at(1);
     HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, relation->getTagCount());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
 
     ctr++;
@@ -351,7 +351,7 @@ public:
     member = relation->getMembers().at(0);
     HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(0, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, relation->getTagCount());
 
     ctr++;
 
