@@ -112,12 +112,13 @@ void WayJoinerAdvanced::_joinParentChild()
     long parent_id = way->getPid();
     LOG_VART(parent_id);
     WayPtr parent = _map->getWay(parent_id);
-    //	TODO: Empty conditional tags
-    Tags parentTags;
+    //  Use a pointer to the tags instead of a full copy of the tags for conditional value
+    Tags empty;
+    Tags* parentTags = &empty;
     if (parent)
     {
       LOG_VART(parent->getElementId());
-      parentTags = parent->getTags();
+      parentTags = &parent->getTags();
     }
     else
     {
@@ -130,8 +131,8 @@ void WayJoinerAdvanced::_joinParentChild()
     const Tags& wayTags = way->getTags();
     // TODO: use TagUtils::nameConflictExists here instead
     const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
-    if (parent && parentTags.hasName() && wayTags.hasName() &&
-        !Tags::haveMatchingName(parentTags, wayTags, strictNameMatch))
+    if (parent && parentTags->hasName() && wayTags.hasName() &&
+        !Tags::haveMatchingName(*parentTags, wayTags, strictNameMatch))
     {
       // TODO: move this check down to _joinWays?
       LOG_TRACE(
@@ -395,16 +396,13 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       WayPtr child = _map->getWay(way_id);
       // don't try to join if there are explicitly conflicting names; fix for #2888
       bool childHasName = false;
-      //	TODO: Empty conditional tags
-      Tags childTags;
-      if (child)
-      {
-        LOG_VART((child->getElementId()));
-        childTags = child->getTags();
-        childHasName = childTags.hasName();
-      }
-      else
+      if (!child)
         break;
+
+      LOG_VART((child->getElementId()));
+      const Tags& childTags = child->getTags();
+      childHasName = childTags.hasName();
+
       const Tags& parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
       // TODO: use TagUtils::nameConflictExists here instead
