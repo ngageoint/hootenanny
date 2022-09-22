@@ -840,7 +840,7 @@ public:
       QString checkRelationship("relationtype" + QString::number(i) );
       //LOG_DEBUG("Checktype: " << checkRelationship);
       CPPUNIT_ASSERT(myRelation->getType() == checkRelationship);
-      std::vector<RelationData::Entry> entries = myRelation->getMembers();
+      const std::vector<RelationData::Entry>& entries = myRelation->getMembers();
       CPPUNIT_ASSERT(entries.size() == 2);\
 
       switch (i)

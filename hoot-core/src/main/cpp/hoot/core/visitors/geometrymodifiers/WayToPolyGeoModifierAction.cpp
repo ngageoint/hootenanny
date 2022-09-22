@@ -61,7 +61,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
     return false;
 
   // find out what width to use
-  Tags tags = pElement->getTags();
+  const Tags& tags = pElement->getTags();
   double currWidth = _width;
 
   // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag

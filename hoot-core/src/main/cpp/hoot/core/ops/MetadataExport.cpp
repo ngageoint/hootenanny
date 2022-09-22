@@ -126,8 +126,9 @@ void MetadataExport::_exportMetadataFromElements()
     WayPtr assignedDataset = _assignToDataset(element);
     if (assignedDataset)
     {
+      //  Copy the destination tags to update and replace
       Tags destTags = assignedDataset->getTags();
-      Tags srcTags = element->getTags();
+      const Tags& srcTags = element->getTags();
       // assign the tags we find
       for (const auto& tag : _tags.keys())
       {
@@ -158,6 +159,7 @@ void MetadataExport::_exportMetadataFromElements()
   // make sure all tags are set, if not, assign the default
   for (const auto& pDataset : _mergedGeoms.keys())
   {
+    //  Copy destination tags to update and replace
     Tags destTags = pDataset->getTags();
     for (const auto& tag : _tags.keys())
     {

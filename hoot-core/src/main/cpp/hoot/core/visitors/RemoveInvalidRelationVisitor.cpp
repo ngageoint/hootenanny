@@ -120,7 +120,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       r->addElement(it->second.getRole(), it->second.getElementId());
     //  Update the number of review members if we removed some of them
     if (r->getTags().contains(MetadataTags::HootReviewMembers()))
-      r->setTag(MetadataTags::HootReviewMembers(), QString("%1").arg(r->getMembers().size()));
+      r->setTag(MetadataTags::HootReviewMembers(), QString("%1").arg(r->getMemberCount()));
   }
 }
 

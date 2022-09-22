@@ -78,10 +78,9 @@ void RandomTagModifier::visit(const std::shared_ptr<Element>& e)
   boost::uniform_real<> uni(0.0, 1.0);
 
   OsmSchema& schema = OsmSchema::getInstance();
-  Tags t = e->getTags();
-  for (auto it = t.constBegin(); it != t.constEnd(); ++it)
+  const QList<QString> keys = e->getTags().keys();
+  for (const auto& tagKey : keys)
   {
-    const QString tagKey = it.key();
     if (uni(*_rng) <= _p && !_exemptTagKeys.contains(tagKey) && !schema.isMetaData(tagKey, ""))
     {
       if (!_replacementTagKeys.contains(tagKey))

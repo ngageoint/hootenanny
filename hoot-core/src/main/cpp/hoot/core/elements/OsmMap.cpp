@@ -607,6 +607,7 @@ void OsmMap::replaceNodes(const std::map<long, long>& replacements)
   {
     bool updated = false;
     RelationPtr relation = r->second;
+    //  Modify the copy of the members to replace the old members with
     vector<RelationData::Entry> members = relation->getMembers();
     //  Iterate all of the members looking for nodes from the replacements
     for (size_t i = 0; i < members.size(); ++i)

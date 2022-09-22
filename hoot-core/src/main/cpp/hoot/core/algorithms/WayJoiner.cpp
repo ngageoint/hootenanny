@@ -215,7 +215,7 @@ void WayJoiner::_joinAtNode()
     if (way == nullptr)
       continue;
     LOG_VART(way->getElementId());
-    Tags pTags = way->getTags();
+    const Tags& pTags = way->getTags();
     if (way->getNodeCount() < 1)
       continue;
     //  Check each of the endpoints for ways to merge
@@ -231,7 +231,7 @@ void WayJoiner::_joinAtNode()
         if (child && way->getId() != child->getId() && _areJoinable(way, child))
         {
           LOG_VART(child->getElementId());
-          Tags cTags = child->getTags();
+          const Tags& cTags = child->getTags();
           //  Check for equivalent tags
           if (pTags == cTags || pTags.dataOnlyEqual(cTags))
           {
@@ -274,6 +274,7 @@ bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
 
 void WayJoiner::_writeParentIdsToChildIds() const
 {
+  //  Make a copy of the ways so that it can be modified below
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
   for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -487,9 +488,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->resetPid();
 
   //  Merge the tags
-  Tags pTags = parent->getTags();
-  Tags cTags = child->getTags();
-  Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
+  Tags tags = TagMergerFactory::mergeTags(parent->getTags(), child->getTags(), ElementType::Way);
   LOG_VART(tags);
   parent->setTags(tags);
 

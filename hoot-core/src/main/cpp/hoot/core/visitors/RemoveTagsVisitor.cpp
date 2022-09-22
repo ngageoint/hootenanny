@@ -94,7 +94,7 @@ void RemoveTagsVisitor::visit(const std::shared_ptr<Element>& e)
   if (_criterion.get() && !_criterion->isSatisfied(e))
     return;
   _numAffected++;
-
+  //  TODO: Do the tags really need to by copied and then set?
   Tags tags = e->getTags();
   _numTagsRemoved += tags.removeKeys(_keyRegexs);
   e->setTags(tags);

@@ -377,7 +377,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     // add desired cluster tags
     QHashIterator<QString, QString> tagIterator(_clusterTags);
-
+    //  TODO: Do the tags really need to by copied and then set?
     Tags tags = pElem->getTags();
     while (tagIterator.hasNext())
     {

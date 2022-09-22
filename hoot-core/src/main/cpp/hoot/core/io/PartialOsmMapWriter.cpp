@@ -87,6 +87,7 @@ void PartialOsmMapWriter::writeElement(ElementPtr& element)
 Tags PartialOsmMapWriter::_getElementTags(const ConstElementPtr& element)
 {
   //  Tag order is important here, current tags first and then add export tags
+  //  Make a copy to modify and return
   Tags tags = element->getTags();
   //  Rather than cloning the element, get the export tags from the visitor
   tags.add(_addExportTagsVisitor.getExportTags(element));

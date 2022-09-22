@@ -288,7 +288,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
     // Never add outlines to multipoly relations, as it triggers JOSM errors.
     if (pBuilding->getType() != MetadataTags::RelationMultiPolygon())
     {
-      Tags buildingTags = pBuilding->getTags();
+      const Tags& buildingTags = pBuilding->getTags();
       // To preserve naming of relation buildings in JOSM we copy the building's "building" and
       // "name" tags.
       if (buildingTags.contains("name") && buildingTags.contains(MetadataTags::Building()) )

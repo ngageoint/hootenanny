@@ -171,10 +171,10 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
     RelationPtr r1 = std::dynamic_pointer_cast<Relation>(e1);
     RelationPtr r2 = std::dynamic_pointer_cast<Relation>(e2);
 
-    if (r1->getMembers().size() != r2->getMembers().size())
+    if (r1->getMemberCount() != r2->getMemberCount())
       throw InternalErrorException("Expected both relations to have the same number of children when removing spans.");
 
-    for (size_t i = 0; i < r1->getMembers().size(); i++)
+    for (size_t i = 0; i < r1->getMemberCount(); i++)
     {
       ElementId m1 = r1->getMembers()[i].getElementId();
       ElementId m2 = r2->getMembers()[i].getElementId();

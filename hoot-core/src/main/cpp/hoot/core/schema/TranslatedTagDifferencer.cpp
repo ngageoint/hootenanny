@@ -183,6 +183,7 @@ vector<ScriptToOgrSchemaTranslator::TranslatedFeature> TranslatedTagDifferencer:
                                                                                             const ConstElementPtr& e) const
 {
   std::shared_ptr<Geometry> g = ElementToGeometryConverter(map).convertToGeometry(e);
+  //  Copy the tags so that the original tags aren't translated in place
   Tags t = e->getTags();
   return _getTranslator()->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
 }

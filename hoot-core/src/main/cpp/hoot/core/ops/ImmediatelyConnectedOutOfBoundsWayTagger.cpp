@@ -56,7 +56,7 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
   std::set<long> directlyConnectedWayIds;
   _boundsChecker.setOsmMap(map.get());
 
-  WayMap ways = map->getWays();
+  const WayMap& ways = map->getWays();
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {

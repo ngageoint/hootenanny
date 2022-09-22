@@ -379,6 +379,7 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   if (_includeDebugTags)
   {
+    //  TODO: Nothing is actually happening here, right?  Add a tag to a copy of the tags and then pop them off the stack?!
     Tags tags = node->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(nodeDbId));
@@ -422,6 +423,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
 
   if (_includeDebugTags)
   {
+    //  TODO: Nothing is actually happening here, right?  Add a tag to a copy of the tags and then pop them off the stack?!
     Tags tags = way->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(wayDbId));
@@ -463,7 +465,7 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   LOG_VART(relation->getElementId());
   const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
-
+  //  Copy tags to update tag information
   Tags tags = relation->getTags();
   //  keep the hoot:id tag in sync with what could be a newly assigned id
   if (_includeDebugTags)
@@ -478,7 +480,7 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   _writeRelationMembers(relation, relationDbId, relation->getVersion());
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += relation->getTags().size();
-  _writeStats.relationMembersWritten += relation->getMembers().size();
+  _writeStats.relationMembersWritten += relation->getMemberCount();
   if (_validateData)
     _checkUnresolvedReferences(relation, relationDbId);
 

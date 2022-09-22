@@ -61,7 +61,7 @@ public:
     else if (e->getElementType() == ElementType::Relation)
     {
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-      const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+      const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
       for (const auto& member : relationMembers)
       {
         if (member.getElementId().getType() == ElementType::Way)

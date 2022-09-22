@@ -202,7 +202,7 @@ void ReportMissingElementsVisitor::_visitAndRemove(ElementType type, long id)
   {
     const RelationPtr& relation = _map->getRelation(id);
     vector<RelationData::Entry> newEntries;
-    newEntries.reserve(relation->getMembers().size());
+    newEntries.reserve(relation->getMemberCount());
     for (const auto& member : relation->getMembers())
     {
       if (_map->containsElement(member.getElementId()) == false)
@@ -214,11 +214,11 @@ void ReportMissingElementsVisitor::_visitAndRemove(ElementType type, long id)
       else
         newEntries.push_back(member);
     }
-    if (newEntries.size() != relation->getMembers().size())
+    if (newEntries.size() != relation->getMemberCount())
     {
-      LOG_TRACE("Relation members size before: " << relation->getMembers().size());
+      LOG_TRACE("Relation members size before: " << relation->getMemberCount());
       relation->setMembers(newEntries);
-      LOG_TRACE("Relation members size after: " << relation->getMembers().size());
+      LOG_TRACE("Relation members size after: " << relation->getMemberCount());
     }
 
     _updateRelation(relation, missingChildIds);

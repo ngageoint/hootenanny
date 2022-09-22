@@ -51,7 +51,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
     {
       bool invalidRelation = false;
       const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());
-      if (hasMemberCountTag && (int)r->getMembers().size() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())
+      if (hasMemberCountTag && (int)r->getMemberCount() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())
         invalidRelation = true;
       // in case the review member count tag didn't get added for some reason, go ahead and at least
       // remove empty relations

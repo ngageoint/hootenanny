@@ -233,7 +233,7 @@ void OsmPgCsvWriter::writePartial(const ConstRelationPtr& r)
       << _getTags(r) << _endl;
   //  Relation Members
   //  relation_id,member_type,member_id,member_role,version,sequence_id
-  for (size_t i = 0; i < r->getMembers().size(); ++i)
+  for (size_t i = 0; i < r->getMemberCount(); ++i)
   {
     _streams[FileType::RelationMembers]
         << r->getId() << _separator

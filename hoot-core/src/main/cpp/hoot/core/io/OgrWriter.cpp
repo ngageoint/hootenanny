@@ -303,7 +303,7 @@ void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const Co
     }
 
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
-
+    //  Copy the tags and remove any empty values from the tags
     Tags t = e->getTags();
     QStringList keys = t.keys();
     for (const auto& key : qAsConst(keys))
@@ -556,7 +556,7 @@ void OgrWriter::writeElement(ElementPtr& element)
   //  Do not attempt to write empty elements
   if (!element)
     return;
-  Tags sourceTags = element->getTags();
+  const Tags& sourceTags = element->getTags();
   Tags destTags;
   for (auto it = sourceTags.constBegin(); it != sourceTags.constEnd(); ++it)
   {

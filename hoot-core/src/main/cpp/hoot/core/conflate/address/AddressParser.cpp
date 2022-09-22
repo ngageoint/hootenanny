@@ -215,7 +215,7 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
 {
   QList<Address> addresses;
   LOG_TRACE("Collecting addresses from relation members...");
-  const std::vector<RelationData::Entry> relationMembers = relation.getMembers();
+  const std::vector<RelationData::Entry>& relationMembers = relation.getMembers();
   for (const auto& entry : relationMembers)
   {
     ConstElementPtr member = map.getElement(entry.getElementId());

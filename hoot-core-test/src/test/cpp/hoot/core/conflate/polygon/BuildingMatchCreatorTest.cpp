@@ -26,17 +26,17 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
@@ -63,7 +63,8 @@ class BuildingMatchCreatorTest : public HootTestFixture
 
 public:
 
-  BuildingMatchCreatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
+  BuildingMatchCreatorTest()
+    : HootTestFixture("test-files/", UNUSED_PATH)
   {
     setResetType(ResetEnvironment);
   }
@@ -77,23 +78,19 @@ public:
 
   bool contains(const vector<ConstMatchPtr>& matches, ElementId eid1, ElementId eid2)
   {
-    bool result = false;
-    for (size_t i = 0; i < matches.size(); i++)
+    for (const auto& match : matches)
     {
-      set<pair<ElementId, ElementId>> s = matches[i]->getMatchPairs();
-      if (matches[i]->getProbability() > 0.5)
+      set<pair<ElementId, ElementId>> s = match->getMatchPairs();
+      if (match->getProbability() > 0.5)
       {
-        for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
+        for (const auto& p : s)
         {
-          if (it->first == eid1 && it->second == eid2)
-          {
-            result = true;
-          }
+          if (p.first == eid1 && p.second == eid2)
+            return true;
         }
       }
     }
-
-    return result;
+    return false;
   }
 
   OsmMapPtr getTestMap(const bool targetWaysOnly = true)
@@ -109,19 +106,17 @@ public:
     LOG_VARD(targetWaysOnly);
     if (targetWaysOnly)
     {
-      //remove some ways we don't need for some of these tests
+      //  Make a copy of the ways to remove some later
       WayMap wm = map->getWays();
       for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
       {
         const ConstWayPtr& w = it->second;
         const Tags& t = w->getTags();
+        //remove some ways we don't need for some of these tests
         if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
-        {
           RemoveWayByEid::removeWay(map, it->first);
-        }
       }
     }
-
     return map;
   }
 
@@ -154,8 +149,7 @@ public:
 
     CPPUNIT_ASSERT(
       uut.isMatchCandidate(
-        map->getWay(
-          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Panera Bread")[0]), map));
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Panera Bread")[0]), map));
 
     map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
@@ -203,9 +197,8 @@ public:
      */
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
-    for (vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    for (const auto& match : matches)
     {
-      ConstMatchPtr match = *it;
       std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
       assert(matchPairs.size() == 1);
@@ -328,11 +321,8 @@ public:
     LOG_VARD(matches);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
-    for (vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
-    {
-      ConstMatchPtr match = *it;
+    for (const auto& match : matches)
       CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
-    }
   }
 
   void runReviewNonOneToOneMatches2Test()
@@ -364,9 +354,8 @@ public:
      */
 
     CPPUNIT_ASSERT_EQUAL(7, int(matches.size()));
-    for (vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    for (const auto& match : matches)
     {
-      ConstMatchPtr match = *it;
       std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
       assert(matchPairs.size() == 1);

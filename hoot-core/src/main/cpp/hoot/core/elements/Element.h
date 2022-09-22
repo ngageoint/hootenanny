@@ -154,10 +154,10 @@ public:
   quint64 getTimestamp() const { return _getElementData().getTimestamp(); }
   QString getUser() const { return _getElementData().getUser(); }
   long getUid() const { return _getElementData().getUid(); }
-  const Tags& getTags() const { return _getElementData().getTags(); }
-  Tags& getTags() { return _getElementData().getTags(); }
+  inline const Tags& getTags() const { return _getElementData().getTags(); }
+  inline Tags& getTags() { return _getElementData().getTags(); }
   QString getTag(const QString& key) const { return _getElementData().getTags().get(key); }
-  int getTagCount() const { return _getElementData().getTags().size(); }
+  inline int getTagCount() const { return _getElementData().getTags().size(); }
   bool getVisible() const { return _getElementData().getVisible(); }
   Status getStatus() const { return _status; }
   QString getStatusString() const;

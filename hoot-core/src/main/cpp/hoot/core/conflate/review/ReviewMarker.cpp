@@ -194,7 +194,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const std::vector<ElementId>& ids,
   }
   for (const auto& eid : ids)
     r->addElement(MetadataTags::RoleReviewee(), eid);
-  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
+  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMemberCount());
   r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
 
   LOG_VART(r->getId());

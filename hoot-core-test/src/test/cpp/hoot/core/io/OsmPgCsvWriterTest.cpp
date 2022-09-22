@@ -118,6 +118,7 @@ public:
     RelationPtr relation = TestUtils::createRelation(map, nodes);
     relation->setType("review");
     relation->getTags().appendValue("name", "Test Review");
+    //  Copy the members to update and replace
     std::vector<RelationData::Entry> members = relation->getMembers();
     members[0].setRole("reviewee");
     members[1].setRole("reviewee");

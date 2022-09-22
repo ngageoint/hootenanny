@@ -136,8 +136,8 @@ public:
     HOOT_STR_EQUALS(true, map->containsRelation(1));
     RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
-    vector<RelationData::Entry> relationData = relation->getMembers();
-    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
+    const vector<RelationData::Entry>& relationData = relation->getMembers();
+    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMemberCount());
     HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
     HOOT_STR_EQUALS("noderole",relationData[1].getRole());
     CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
@@ -320,7 +320,7 @@ public:
 
     RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
-    CPPUNIT_ASSERT_EQUAL(size_t(2), relation->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), relation->getMemberCount());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relation->getMembers().at(0);
@@ -347,7 +347,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
     HOOT_STR_EQUALS("", relation->getType());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
-    CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMemberCount());
     member = relation->getMembers().at(0);
     HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());

@@ -203,7 +203,7 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
   if (_allTypeKeys.empty())
     _allTypeKeys = OsmSchema::getInstance().getAllTypeKeys();
 
-  const Tags elementTags = element->getTags();
+  const Tags& elementTags = element->getTags();
   for (auto it = elementTags.begin(); it != elementTags.end(); ++it)
   {
     const QString elementTagKey = it.key();

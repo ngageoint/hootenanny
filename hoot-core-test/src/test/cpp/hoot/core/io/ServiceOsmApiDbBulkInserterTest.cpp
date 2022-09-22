@@ -86,7 +86,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMemberCount());
 
     //verify historical element table sizes
     CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
@@ -136,7 +136,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMemberCount());
 
     //verify historical element table sizes
     CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
@@ -186,7 +186,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(5)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(5)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(5)->getMemberCount());
 
     //verify historical element table sizes
     CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
@@ -236,7 +236,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3000000005)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3000000005)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3000000005)->getMemberCount());
 
     //verify historical element table sizes
     CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
@@ -286,7 +286,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((long)2, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3)->getMemberCount());
 
     //verify historical element table sizes
     CPPUNIT_ASSERT_EQUAL((long)16, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));

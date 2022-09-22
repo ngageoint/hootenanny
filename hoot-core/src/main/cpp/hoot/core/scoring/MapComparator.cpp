@@ -108,7 +108,7 @@ public:
 
     CHECK_MSG(_refMap->containsElement(e->getElementId()), "Did not find element: " << e->getElementId());
     const std::shared_ptr<const Element>& refElement = _refMap->getElement(e->getElementId());
-
+    //  Copy the tags so that they can be modified and compared
     Tags refTags = refElement->getTags();
     Tags testTags = e->getTags();
 
@@ -223,8 +223,7 @@ public:
     for (size_t i = 0; i < refWay->getNodeCount(); ++i)
     {
       CHECK_MSG(refWay->getNodeIds()[i] == testWay->getNodeIds()[i],
-        QString("Node IDs don't match. (%1 vs. %2)").
-        arg(hoot::toString(refWay), hoot::toString(testWay)));
+        QString("Node IDs don't match. (%1 vs. %2)").arg(hoot::toString(refWay), hoot::toString(testWay)));
     }
   }
 
@@ -234,14 +233,11 @@ public:
     ConstRelationPtr refRelation = std::dynamic_pointer_cast<const Relation>(refElement);
     ConstRelationPtr testRelation = std::dynamic_pointer_cast<const Relation>(testElement);
 
-    QString relationStr =
-      QString("%1 vs. %2").arg(hoot::toString(refRelation), hoot::toString(testRelation));
+    QString relationStr = QString("%1 vs. %2").arg(hoot::toString(refRelation), hoot::toString(testRelation));
 
-    CHECK_MSG(
-      refRelation->getType() == testRelation->getType(), "Types do not match. " + relationStr);
-    CHECK_MSG(refRelation->getMembers().size() == testRelation->getMembers().size(),
-      "Member count does not match. " + relationStr);
-    for (size_t i = 0; i < refRelation->getMembers().size(); i++)
+    CHECK_MSG(refRelation->getType() == testRelation->getType(), "Types do not match. " + relationStr);
+    CHECK_MSG(refRelation->getMemberCount() == testRelation->getMemberCount(), "Member count does not match. " + relationStr);
+    for (size_t i = 0; i < refRelation->getMemberCount(); i++)
     {
       CHECK_MSG(
         refRelation->getMembers()[i].getRole() == testRelation->getMembers()[i].getRole(),

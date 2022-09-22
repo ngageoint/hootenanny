@@ -119,8 +119,8 @@ void MetadataImport::_importMetadataToElements()
 
 bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const
 {
-  Tags t1 = p1->getTags();
-  Tags t2 = p2->getTags();
+  const Tags& t1 = p1->getTags();
+  const Tags& t2 = p2->getTags();
 
   for (const auto& tag : _tags.keys())
   {
@@ -145,7 +145,8 @@ bool MetadataImport::_applyToElement( ElementPtr pElement )
 
   if (assignedDataset)
   {
-    Tags srcTags = assignedDataset->getTags();
+    const Tags& srcTags = assignedDataset->getTags();
+    //  Copy tags to update and replace
     Tags destTags = pElement->getTags();
 
     // finally copy over the tags

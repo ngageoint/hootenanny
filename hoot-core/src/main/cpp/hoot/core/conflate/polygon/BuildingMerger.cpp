@@ -716,7 +716,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
 
   int buildingsMerged = 0;
   BuildingCriterion buildingCrit;
-
+  //  Copy the way map so the original can be modified
   const WayMap ways = map->getWays();
   for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
@@ -733,7 +733,7 @@ void BuildingMerger::merge(OsmMapPtr map, const ElementId& mergeTargetId)
       buildingsMerged++;
     }
   }
-
+  //  Copy the relation map so the original can be modified
   const RelationMap relations = map->getRelations();
   for (auto relItr = relations.begin(); relItr != relations.end(); ++relItr)
   {

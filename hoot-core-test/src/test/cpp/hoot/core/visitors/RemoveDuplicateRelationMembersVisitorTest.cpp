@@ -109,7 +109,7 @@ public:
     RemoveDuplicateRelationMembersVisitor v;
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)12, relation4->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)12, relation4->getMemberCount());
     CPPUNIT_ASSERT(relation4->contains(node1->getElementId()));
     CPPUNIT_ASSERT(relation4->contains(node2->getElementId()));
     CPPUNIT_ASSERT(relation4->contains(node3->getElementId()));
