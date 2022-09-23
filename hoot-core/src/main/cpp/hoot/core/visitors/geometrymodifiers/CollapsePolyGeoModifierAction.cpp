@@ -104,7 +104,7 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
       pNode->setTags(pWay->getTags());
       //  Copy the node IDs so that they can be removed
       //  TODO: Test if this can be deleted
-      std::vector<long> nodeIds = pWay->getNodeIds();
+      const std::vector<long>& nodeIds = pWay->getNodeIds();
 
       // replace original way with node
       pMap->replace(pWay, pNode);
