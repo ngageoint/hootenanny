@@ -270,7 +270,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
               WayPtr pWayToCheck = _pMap->getWay(wayIdToCheck);
 
               long wayToCheckNodeCount = pWayToCheck->getNodeCount();
-              vector<long> wayToCheckNodeIds = pWayToCheck->getNodeIds();
+              const vector<long>& wayToCheckNodeIds = pWayToCheck->getNodeIds();
 
               for (int checkNodeIx = 0; checkNodeIx < wayToCheckNodeCount - 1; checkNodeIx++)
               {

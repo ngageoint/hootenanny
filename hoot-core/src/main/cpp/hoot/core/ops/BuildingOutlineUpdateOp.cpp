@@ -93,6 +93,7 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       const WayPtr& w = _map.getWay(e->getId());
+      //  Make copies of the nodes so the way can be modified
       std::vector<long> oldNodes = w->getNodeIds();
       std::vector<long> newNodes = w->getNodeIds();
 

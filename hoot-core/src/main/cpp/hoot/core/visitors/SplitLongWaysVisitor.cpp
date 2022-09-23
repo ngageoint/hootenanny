@@ -169,7 +169,7 @@ void SplitLongWaysVisitor::visit(const std::shared_ptr<Element>& element)
   }
 
   //  If the way is a 'loose' way create a relation, if not just replace it with all of the old ways as members of the relation
-  const std::set<long> rids = _map->getIndex().getElementToRelationMap()->getRelationByElement(way->getElementId());
+  const std::set<long>& rids = _map->getIndex().getElementToRelationMap()->getRelationByElement(way->getElementId());
   if (rids.empty())
   {
     //  Create a new relation for all of the split ways

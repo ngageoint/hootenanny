@@ -784,7 +784,7 @@ public:
     {
       WayPtr way = iterator->second;
       LOG_TRACE(way->toString());
-      std::vector<long> nodeIds = way->getNodeIds();
+      const std::vector<long>& nodeIds = way->getNodeIds();
       CPPUNIT_ASSERT((-5 + i) == way->getId());
       if (i == 1)
       {

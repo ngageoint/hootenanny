@@ -400,14 +400,13 @@ private:
           madeProgress = true;
           // Make sure rest of nodes we want exist and are in correct order
           searchId++;
-          std::vector<long> wayIds = currWay->getNodeIds();
+          const std::vector<long>& wayIds = currWay->getNodeIds();
 
           // Start at second node, since we already checked first one
           for (auto nodeIt = wayIds.begin() + 1; nodeIt != wayIds.end(); ++nodeIt)
           {
              if (*nodeIt != searchId)
              {
-               // Throw a hissy fit
                hitError = true;
                break;
              }

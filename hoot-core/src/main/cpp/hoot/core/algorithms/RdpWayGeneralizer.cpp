@@ -65,8 +65,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 
   LOG_TRACE("Attempting to generalize: " << way->getElementId() << "...");
 
-  const QList<long> wayNodeIdsBeforeFiltering =
-    QVector<long>::fromStdVector(way->getNodeIds()).toList();
+  const QList<long> wayNodeIdsBeforeFiltering = QVector<long>::fromStdVector(way->getNodeIds()).toList();
   LOG_VART(wayNodeIdsBeforeFiltering);
 
   // filter the nodes to be generalized to those in this way and those with no information tags;
@@ -86,8 +85,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 
   // The nodes we're going to remove is the difference between the node ids before and after
   // generalization.
-  QSet<long> nodeIdsToRemove =
-    wayNodeIdsBeforeFiltering.toSet().subtract(wayNodeIdsAfterGeneralization.toSet());
+  QSet<long> nodeIdsToRemove = wayNodeIdsBeforeFiltering.toSet().subtract(wayNodeIdsAfterGeneralization.toSet());
   LOG_VART(nodeIdsToRemove);
 
   // If _removeNodesSharedByWays=true, we don't want to remove any nodes shared between ways. So,

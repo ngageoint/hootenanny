@@ -57,7 +57,7 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
   vector<long> intersectIds = pMap->getIndex().findWays(*pEnv);
 
   long myNodeCount = pMyWay->getNodeCount();
-  vector<long> myNodeIds = pMyWay->getNodeIds();
+  const vector<long>& myNodeIds = pMyWay->getNodeIds();
   vector<IntersectionInfo> allIntersections;
 
   // find actual intersection of specific way segments
@@ -66,12 +66,12 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
     WayPtr pIntersWay = pMap->getWay(intersId);
 
     long interNodeCount = pIntersWay->getNodeCount();
-    vector<long> interNodeIds = pIntersWay->getNodeIds();
+    const vector<long>& interNodeIds = pIntersWay->getNodeIds();
 
     for (int myNodeIx = 0; myNodeIx < myNodeCount - 1; ++myNodeIx)
     {
       long p1Id = myNodeIds[myNodeIx];
-      long p2Id = myNodeIds[myNodeIx+1];
+      long p2Id = myNodeIds[myNodeIx + 1];
       CoordinateExt myP1(pMap->getNode(p1Id)->toCoordinate());
       CoordinateExt myP2(pMap->getNode(p2Id)->toCoordinate());
 
@@ -116,13 +116,15 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
 
   // merge original node ids into an attached way if either end node is attached to another way
   const std::shared_ptr<NodeToWayMap>& n2w = pMap->getIndex().getNodeToWayMap();
-  vector<long> nodesToAttach = pWay->getNodeIds();
+  const vector<long>& nodesToAttach = pWay->getNodeIds();
   bool attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), nodesToAttach);
 
   if (!attached)   // if not at the beginning...
   {
-    reverse(nodesToAttach.begin(),nodesToAttach.end());
-    attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), nodesToAttach); // ...try the end
+    //  Copy the node id vector so it can be reversed
+    vector<long> reverseNodes = pWay->getNodeIds();
+    reverse(reverseNodes.begin(), reverseNodes.end());
+    attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), reverseNodes); // ...try the end
   }
 
   // remove original way
@@ -146,7 +148,7 @@ bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::
       if (myWayId != wayId)
       {
         const WayPtr pWay = pMap->getWay(wayId);
-        const vector<long> wayNodes = pWay->getNodeIds();
+        const vector<long>& wayNodes = pWay->getNodeIds();
 
         if (wayNodes.front() == nodeId)
         {
