@@ -67,6 +67,9 @@ public class ExportParams {
     @JsonProperty("append")
     private Boolean append = false;
 
+    @JsonProperty("thematic")
+    private Boolean thematic = true;
+
     @JsonProperty("hoot2")
     private Boolean hoot2;
 
@@ -150,6 +153,14 @@ public class ExportParams {
 
     public void setAppend(Boolean append) {
         this.append = append;
+    }
+
+    public Boolean getThematic() {
+        return thematic;
+    }
+
+    public void setThematic(Boolean thematic) {
+        this.thematic = thematic;
     }
 
     public String getInputType() {
