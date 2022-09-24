@@ -46,6 +46,7 @@ class SettingsTest : public HootTestFixture
   CPPUNIT_TEST(baseSettingsTest);
   CPPUNIT_TEST(invalidOptionNameTest);
   CPPUNIT_TEST(invalidOperatorsTest);
+  CPPUNIT_TEST(prependTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -211,6 +212,17 @@ public:
     }
     expectedErrorMessage = "Invalid option operator class name: blah";
     CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
+  }
+
+  void prependTest()
+  {
+    Settings uut;
+    uut.loadDefaults();
+    //  Check the original value
+    HOOT_STR_EQUALS(QString("error:circular;accuracy"), uut.getString("circular.error.tag.keys"));
+    //  Prepend a few keys and check the new value
+    uut.prepend("circular.error.tag.keys", QStringList({"first", "second", "third"}));
+    HOOT_STR_EQUALS(QString("first;second;third;error:circular;accuracy"), uut.getString("circular.error.tag.keys"));
   }
 };
 

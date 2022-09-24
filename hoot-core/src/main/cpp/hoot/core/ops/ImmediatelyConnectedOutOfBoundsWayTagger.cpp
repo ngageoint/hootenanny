@@ -69,7 +69,7 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
     if (directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end() && _boundsChecker.isSatisfied(way))
     {
       // for each node in the way
-      const std::vector<long> wayNodeIds = way->getNodeIds();
+      const std::vector<long>& wayNodeIds = way->getNodeIds();
       LOG_VART(wayNodeIds.size());
 
       for (auto node_id : wayNodeIds)
