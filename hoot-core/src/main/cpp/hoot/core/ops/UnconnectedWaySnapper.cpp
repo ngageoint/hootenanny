@@ -605,7 +605,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
     std::shared_ptr<geos::geom::Envelope> env2(testWay->getEnvelope(_map));
 
     // If envelopes intersect, they will be close
-    if (env1->intersects(*env2))
+    if (_wayToSnapCrit->isSatisfied(testWay) && env1->intersects(*env2))
     {
       // Now, do they cross?
       if (ElementGeometryUtils::haveGeometricRelationship(wayToSnap, testWay, GeometricRelationship::Crosses, _map))
