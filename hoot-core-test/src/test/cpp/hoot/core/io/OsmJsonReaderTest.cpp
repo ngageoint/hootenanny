@@ -354,7 +354,7 @@ public:
     QString query = "[out:json][bbox];node;out;";
     queryOverpass(uut, QString("%1?data=%2").arg(url, query));
 
-    s.set(ConfigOptions::getOverpassApiQueryPathKey(), _inputPath + "/overpass_query.oql");
+    s.set(ConfigOptions::getOverpassApiQueryPathKey(), _inputPath + "/overpass_query.overpassql");
     uut.setConfiguration(s);
 
     queryOverpass(uut, url);

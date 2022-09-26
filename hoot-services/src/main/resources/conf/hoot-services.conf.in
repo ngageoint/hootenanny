@@ -108,10 +108,10 @@ changesetApplyDebug=false
 changesetApplySingleThreaded=false
 
 # Grail pull overpass query file
-grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
+grailOverpassQueryPath=conf/services/grailOverpassQuery.overpassql
 
 # Grail pull connected ways overpass query file
-grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.oql
+grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.overpassql
 
 # Overpass sync polling interval and timeout
 overpassSyncTimeout=300000
