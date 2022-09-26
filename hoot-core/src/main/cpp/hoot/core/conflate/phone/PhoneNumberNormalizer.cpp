@@ -60,8 +60,7 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
   {
     std::set<std::string> regions;
     PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(code.toStdString());
-    if (it == regions.end())
+    if (regions.find(code.toStdString()) == regions.end())
       throw IllegalArgumentException("Invalid phone number region code: " + code);
     _regionCode = code;
   }
@@ -121,8 +120,7 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
             std::string formattedPhoneNumber;
             PhoneNumberUtil::GetInstance()->Format(parsedPhoneNumber, _format, &formattedPhoneNumber);
             element->getTags().set(tagKey, QString::fromStdString(formattedPhoneNumber));
-            LOG_TRACE(
-              "Normalized phone number from: " << tagValue << " to: " << formattedPhoneNumber);
+            LOG_TRACE("Normalized phone number from: " << tagValue << " to: " << formattedPhoneNumber);
             _numNormalized++;
           }
         }
@@ -156,8 +154,7 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
         if (phoneNumberCount > 0)
         {
           element->getTags().set(tagKey, phoneNumber);
-          LOG_TRACE(
-            "Normalized phone number from: " << tagValue << " to: " << phoneNumber);
+          LOG_TRACE("Normalized phone number from: " << tagValue << " to: " << phoneNumber);
           if (!altPhoneNumbers.isEmpty())
           {
             altPhoneNumbers.chop(1);

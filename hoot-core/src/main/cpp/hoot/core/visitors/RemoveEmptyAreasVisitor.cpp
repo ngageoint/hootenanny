@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RemoveEmptyAreasVisitor.h"
 
@@ -30,13 +30,13 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;
 namespace hoot
@@ -44,8 +44,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveEmptyAreasVisitor)
 
-RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor() :
-_requireAreaForPolygonConversion(true)
+RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor()
+  : _requireAreaForPolygonConversion(true)
 {
 }
 
@@ -58,9 +58,7 @@ void RemoveEmptyAreasVisitor::setConfiguration(const Settings& conf)
 void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (!e || e->getElementType() == ElementType::Node)
-  {
     return;
-  }
 
   LOG_VART(e->getElementId());
   //LOG_VARD(e);
@@ -92,16 +90,14 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
         ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
         const std::vector<RelationData::Entry>& members = relation->getMembers();
         bool anyMemberHasPositiveArea = false;
-        for (size_t i = 0; i < members.size(); i++)
+        for (const auto& member : members)
         {
-          const RelationData::Entry& member = members[i];
           // not going down more than one relation level here, but that may eventually need to be
           // done; Should we also require that each child way also satisfy AreaCriterion?
           LOG_VART(member.getElementId());
           if (member.getElementId().getType() == ElementType::Way)
           {
-            ConstWayPtr memberWay =
-              std::dynamic_pointer_cast<const Way>(_map->getElement(member.getElementId()));
+            ConstWayPtr memberWay = std::dynamic_pointer_cast<const Way>(_map->getElement(member.getElementId()));
             if (memberWay)
             {
               std::shared_ptr<Geometry> wayGeom = _ec->convertToGeometry(memberWay);
@@ -118,9 +114,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
         removeArea = !anyMemberHasPositiveArea;
       }
       else
-      {
         removeArea = true;
-      } 
     }
 
     if (removeArea)

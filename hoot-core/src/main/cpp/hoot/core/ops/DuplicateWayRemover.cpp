@@ -66,9 +66,8 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
   // create a map from nodes to ways
   std::shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
   NodeToWayMap& n2w = *n2wp;
-
-  WayMap wm = _map->getWays();
-
+  //  Make a copy of the way map so that the ways can be modified below
+  const WayMap wm = _map->getWays();
   // go through each way and remove duplicate nodes in one way
   for (auto it = wm.begin(); it != wm.end(); ++it)
   {

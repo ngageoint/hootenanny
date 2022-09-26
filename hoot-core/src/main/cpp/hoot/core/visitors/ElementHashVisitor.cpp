@@ -119,11 +119,14 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"node\",\"tags\":{";
 
-  Tags tags;
   if (_useNodeTags)
-    tags = node->getTags();
+    result += toJson(node->getTags(), node->getCircularError());
+  else
+  {
+    Tags tags;
+    result += toJson(tags, node->getCircularError());
+  }
 
-  result += toJson(tags, node->getCircularError());
   result += "},\"x\":";
   result += QString::number(node->getX(), 'f', _coordinateComparisonSensitivity);
   result += ",\"y\":";
@@ -191,8 +194,6 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
 
 QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
 {
-  QString result;
-
   // Put the tags into an ordered map that only contains the non-metadata (info) tags. As
   // implemented, this is likely quite slow.
   QMap<QString, QString> infoTags;
@@ -214,14 +215,11 @@ QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
     }
   }
 
-
   QStringList tagList;
   for (const auto& key : infoTags.keys())
     tagList.append(QString("\"%1\":\"%2\"").arg(key, infoTags[key]));
 
-  result += tagList.join(",");
-
-  return result;
+  return tagList.join(",");
 }
 
 QByteArray ElementHashVisitor::toHash(const ConstElementPtr& e) const

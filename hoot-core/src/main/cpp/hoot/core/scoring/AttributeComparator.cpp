@@ -105,7 +105,6 @@ double AttributeComparator::compareMaps()
     vector<long> wids1 = referenceMap->getIndex().findWayNeighbors(_r, buffer);
     vector<long> wids2 = otherMap->getIndex().findWayNeighbors(_r, buffer);
 
-    Tags t1, t2;
     double bestScore = -1.0;
     for (auto ref_way_id : wids1)
     {
@@ -115,11 +114,7 @@ double AttributeComparator::compareMaps()
         WayPtr w2 = otherMap->getWay(sec_way_id);
         double score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
         if (score > bestScore)
-        {
           bestScore = score;
-          t1 = w1->getTags();
-          t2 = w2->getTags();
-        }
       }
     }
 

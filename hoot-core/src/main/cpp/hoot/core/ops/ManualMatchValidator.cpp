@@ -205,6 +205,7 @@ void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString 
 {
   // It can be tough to track down problems in elements without unique tags, since the source file
   // element IDs won't necessarily match the element IDs here.
+  //  Copy tags to modify and check
   Tags tags = element->getTags();
   tags.remove(MetadataTags::Ref1());
   tags.remove(MetadataTags::Ref2());

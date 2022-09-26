@@ -126,6 +126,7 @@ void IdSwapOp::apply(const std::shared_ptr<OsmMap>& map)
 void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId) const
 {
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
+  //  Copy the list of ways because the list is invalidated when Way::setNodes() is called
   std::set<long> ways = nodeToWayMap->getWaysByNode(nodeId);
   //  Iterate all of the ways that contain this node
   for (auto wayId : ways)

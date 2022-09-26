@@ -22,22 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "TagRenameKeyVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TagRenameKeyVisitor)
 
-TagRenameKeyVisitor::TagRenameKeyVisitor(const QString& oldKey, const QString& newKey) :
-_oldKey(oldKey),
-_newKey(newKey)
+TagRenameKeyVisitor::TagRenameKeyVisitor(const QString& oldKey, const QString& newKey)
+  : _oldKey(oldKey),
+    _newKey(newKey)
 {
 }
 
@@ -47,9 +47,7 @@ void TagRenameKeyVisitor::setConfiguration(const Settings& conf)
   _oldKey = configOptions.getTagRenameVisitorOldKey();
   _newKey = configOptions.getTagRenameVisitorNewKey();
   if (_oldKey.trimmed() == "" || _newKey.trimmed() == "")
-  {
     throw HootException("Invalid configuration value(s) for the TagRenameKeyVisitor.");
-  }
 }
 
 void TagRenameKeyVisitor::visit(const ElementPtr& e)

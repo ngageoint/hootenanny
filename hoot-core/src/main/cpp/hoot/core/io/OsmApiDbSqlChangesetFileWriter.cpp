@@ -515,7 +515,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
   LOG_TRACE("Creating tags for: " << element->getElementId());
 
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
-
+  //  Copy tags to update and add additional information
   Tags tags = element->getTags();
   if (_includeDebugTags)
   {
@@ -634,7 +634,7 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
 {
   LOG_TRACE("Creating relation members for: " << relation->getElementId());
 
-  const vector<RelationData::Entry> members = relation->getMembers();
+  const vector<RelationData::Entry>& members = relation->getMembers();
   size_t sequence_id = 0;
   for (const auto& member : members)
   {

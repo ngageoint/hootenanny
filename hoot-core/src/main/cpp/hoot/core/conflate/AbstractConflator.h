@@ -130,7 +130,7 @@ protected:
   /*
    * Adds tags describing the match scores computed during matching
    */
-  void _addConflateScoreTags();
+  void _addConflateScoreTags() const;
   void _addConflateScoreTags(const ElementPtr& e, const MatchClassification& matchClassification,
                              const MatchThreshold& matchThreshold) const;
 

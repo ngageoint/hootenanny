@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -59,7 +59,7 @@ public:
     dupeNameRemover.setCaseSensitive(false);
     dupeNameRemover.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     HOOT_STR_EQUALS(QString("test"), tags.get("name"));
@@ -79,7 +79,7 @@ public:
     dupeNameRemover.setCaseSensitive(true);
     dupeNameRemover.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     HOOT_STR_EQUALS(QString("test;TEST"), tags.get("name"));
@@ -100,7 +100,7 @@ public:
     dupeNameRemover.setCaseSensitive(false);
     dupeNameRemover.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(2, tags.size());
     HOOT_STR_EQUALS(QString("test"), tags.get("name"));

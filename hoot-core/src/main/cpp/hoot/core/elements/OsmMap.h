@@ -145,10 +145,9 @@ public:
   NodePtr getNode(long id) override;
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
   NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
-  const NodeMap& getNodes() const { return _nodes; }
+  inline const NodeMap& getNodes() const { return _nodes; }
   QSet<long> getNodeIds() const;
-
-  long getNodeCount() const { return _nodes.size(); }
+  inline long getNodeCount() const { return _nodes.size(); }
 
   /**
    * Returns true if the node is in this map.
@@ -198,9 +197,9 @@ public:
    */
   ConstWayPtr getWay(long id) const override;
   ConstWayPtr getWay(ElementId eid) const;
-  const WayMap& getWays() const { return _ways; }
+  inline const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;
-  long getWayCount() const { return _ways.size(); }
+  inline long getWayCount() const { return _ways.size(); }
 
   void addWay(const WayPtr& w);
 
@@ -219,9 +218,9 @@ public:
   ConstRelationPtr getRelation(long id) const override;
   RelationPtr getRelation(long id) override;
   ConstRelationPtr getRelation(ElementId eid) const;
-  const RelationMap& getRelations() const { return _relations; }
+  inline const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
-  long getRelationCount() const { return _relations.size(); }
+  inline long getRelationCount() const { return _relations.size(); }
 
   void addRelation(const RelationPtr& r);
 

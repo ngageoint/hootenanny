@@ -167,8 +167,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   _infoCache->clear();
 }
 
-int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const
+int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const
 {
   LOG_INFO("Discarding non-closest matches...");
 

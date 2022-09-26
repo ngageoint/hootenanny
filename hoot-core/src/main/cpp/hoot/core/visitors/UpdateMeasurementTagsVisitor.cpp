@@ -28,25 +28,7 @@
 #include "UpdateMeasurementTagsVisitor.h"
 
 // Hoot
-//#include <hoot/core/elements/MapProjector.h>
-//#include <hoot/core/elements/RelationMap.h>
-//#include <hoot/core/elements/Way.h>
-//#include <hoot/core/geometry/CoordinateExt.h>
-//#include <hoot/core/geometry/ElementToGeometryConverter.h>
-//#include <hoot/core/index/ElementToRelationMap.h>
-//#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Factory.h>
-
-// Boost
-//#include <boost/shared_ptr.hpp>
-
-// Geos
-//#include <geos/algorithm/MinimumDiameter.h>
-//#include <geos/geom/GeometryFactory.h>
-//#include <geos/geom/LineString.h>
-
-//using namespace geos::geom;
-//using namespace geos::algorithm;
 
 namespace hoot
 {

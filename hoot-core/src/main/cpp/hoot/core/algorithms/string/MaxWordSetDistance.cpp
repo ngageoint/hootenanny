@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MaxWordSetDistance.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/ScoreMatrix.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -37,8 +37,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, MaxWordSetDistance)
 
-MaxWordSetDistance::MaxWordSetDistance(StringDistancePtr d):
-  _d(d)
+MaxWordSetDistance::MaxWordSetDistance(StringDistancePtr d)
+  : _d(d)
 {
 }
 
@@ -51,11 +51,11 @@ double MaxWordSetDistance::compare(const QString& s1, const QString& s2) const
 
   double maxV = -1;
 
-  for (int i = 0; i < sl1.size(); i++)
+  for (const auto& string1 : qAsConst(sl1))
   {
-    for (int j = 0; j < sl2.size(); j++)
+    for (const auto& string2 : qAsConst(sl2))
     {
-      double v = _d->compare(sl1[i], sl2[j]);
+      double v = _d->compare(string1, string2);
       maxV = max(v, maxV);
     }
   }

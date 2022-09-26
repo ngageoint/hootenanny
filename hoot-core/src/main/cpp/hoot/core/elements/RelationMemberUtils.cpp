@@ -44,7 +44,7 @@ QString RelationMemberUtils::getRelationMembersDetailString(const ConstRelationP
                                                             const ConstOsmMapPtr& map)
 {
   QString str = "\nMember Detail:\n\n";
-  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   LOG_VART(relationMembers.size());
   for (size_t i = 0; i < relationMembers.size(); i++)
   {

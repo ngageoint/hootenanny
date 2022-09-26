@@ -143,7 +143,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     StringUtils::formatLargeNumber(_numProcessed) << " total elements.");
 
   LOG_VARD(map->getNodeCount());
-  const NodeMap nodes = map->getNodes();
+  const NodeMap& nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Node* n = it->second.get();
@@ -224,8 +224,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(nodesWgs84->size());
   }
 
-  // Now, let's remove any that aren't in our do not remove list.
-
+  // Now, let's find any that aren't in our do not remove list.
   _numProcessed = 0;
   ElementToGeometryConverter elementConverter(map);
   for (auto it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
@@ -237,19 +236,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_usedNodeIds.find(nodeId) == _usedNodeIds.end())
     {
       if (!_bounds.get() || _bounds->contains(elementConverter.convertToGeometry(n).get()))
-      {
         _superfluousNodeIds.insert(nodeId);
-        if (_removeNodes)
-        {
-          LOG_TRACE("Removing superfluous node: " << n->getElementId() << "...");
-          RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
-        }
-        else
-        {
-          LOG_TRACE("Counting superfluous node: " << n->getElementId() << "...");
-        }
-        _numAffected++;
-      }
       else
       {
         LOG_TRACE("Node not in bounds: " << n->getElementId());
@@ -262,13 +249,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     _numProcessed++;
 
-    if (_numAffected > 0 && _numAffected % _taskStatusUpdateInterval == 0)
-    {
-      PROGRESS_INFO(
-        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
-        " nodes / " << StringUtils::formatLargeNumber(_usedNodeIds.size()) << " total nodes.");
-    }
-    else if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
@@ -276,11 +257,31 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
   }
 
+  //  Finally remove any nodes found above
+  for (auto node_id : _superfluousNodeIds)
+  {
+    if (_removeNodes)
+    {
+      LOG_TRACE("Removing superfluous node: " << node_id << "...");
+      RemoveNodeByEid::removeNodeNoCheck(map, node_id);
+    }
+    else
+    {
+      LOG_TRACE("Counting superfluous node: " << node_id << "...");
+    }
+    _numAffected++;
+    if (_numAffected > 0 && _numAffected % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodeIds.size()) << " total nodes.");
+    }
+  }
+
   LOG_VARD(_numExplicitlyExcluded);
 }
 
-long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
-                                         const bool ignoreInformationTags,
+long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
                                          const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeRemover;

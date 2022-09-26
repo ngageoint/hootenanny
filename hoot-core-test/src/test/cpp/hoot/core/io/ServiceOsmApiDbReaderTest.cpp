@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDb.h>
+#include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 using namespace std;
@@ -88,9 +88,7 @@ public:
   void insertDataForBoundTest()
   {
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(),
-      _scriptDir + "postgresql_forbounding_test.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "postgresql_forbounding_test.sql");
   }
 
   void populatePartialMap()
@@ -110,14 +108,14 @@ public:
   void verifyFullReadOutput(OsmMapPtr map)
   {
     //nodes
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
     HOOT_STR_EQUALS(true, map->containsNode(1));
     NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
     CPPUNIT_ASSERT_EQUAL(15.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTagCount());
 
     NodePtr node1 = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
@@ -132,14 +130,14 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
     CPPUNIT_ASSERT_EQUAL((long)2, way->getNodeId(1));
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
 
     //relations
     HOOT_STR_EQUALS(true, map->containsRelation(1));
     RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
-    vector<RelationData::Entry> relationData = relation->getMembers();
-    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
+    const vector<RelationData::Entry>& relationData = relation->getMembers();
+    CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMemberCount());
     HOOT_STR_EQUALS("wayrole", relationData[0].getRole());
     HOOT_STR_EQUALS("noderole",relationData[1].getRole());
     CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
@@ -185,13 +183,13 @@ public:
     //requested bounds, one of them is referenced by a way within the bounds and the other three by a
     //relation within the bounds.  The nodes not returned is outside of the requested bounds and not
     //reference by any other element.
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeCount());
     //Two of the five ways should be returned.  The ways not returned contain nodes
     //that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     //Two of the six relations should be returned.  The relations not returned contain all
     //members that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelationCount());
 
     // Verify timestamps look OK
     WayPtr pWay = map->getWays().begin()->second;
@@ -214,9 +212,9 @@ public:
     map = std::make_shared<OsmMap>();
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     reader.close();
   }
@@ -242,28 +240,28 @@ public:
 
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(0, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, node->getTagCount());
 
     node = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL((long)2, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.1, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("n2b", node->getTags().get("noteb"));
 
     node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL((long)3, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("n3", node->getTags().get("note"));
 
     ctr++;
@@ -273,28 +271,28 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     node = map->getNode(4);
     CPPUNIT_ASSERT_EQUAL((long)4, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.3, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTagCount());
     HOOT_STR_EQUALS("n4", node->getTags().get("note"));
 
     node = map->getNode(5);
     CPPUNIT_ASSERT_EQUAL((long)5, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.4, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
-    CPPUNIT_ASSERT_EQUAL(0, node->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, node->getTagCount());
 
     WayPtr way = map->getWay(1);
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT(way->hasNode(1));
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
     HOOT_STR_EQUALS("w1b", way->getTags().get("noteb"));
 
     ctr++;
@@ -304,25 +302,25 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
 
     way = map->getWay(2);
     CPPUNIT_ASSERT_EQUAL((long)2, way->getId());
     CPPUNIT_ASSERT(way->hasNode(2));
     CPPUNIT_ASSERT(way->hasNode(3));
-    CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, way->getTagCount());
     HOOT_STR_EQUALS("w2", way->getTags().get("note"));
 
     way = map->getWay(3);
     CPPUNIT_ASSERT_EQUAL((long)3, way->getId());
     CPPUNIT_ASSERT(way->hasNode(2));
-    CPPUNIT_ASSERT_EQUAL(0, way->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, way->getTagCount());
 
     RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
-    CPPUNIT_ASSERT_EQUAL(size_t(2), relation->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), relation->getMemberCount());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relation->getMembers().at(0);
@@ -331,7 +329,7 @@ public:
     member = relation->getMembers().at(1);
     HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, relation->getTagCount());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
 
     ctr++;
@@ -341,19 +339,19 @@ public:
     map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
 
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
     HOOT_STR_EQUALS("", relation->getType());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
-    CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMemberCount());
     member = relation->getMembers().at(0);
     HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(0, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, relation->getTagCount());
 
     ctr++;
 
@@ -386,9 +384,9 @@ public:
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelationCount());
 
     // Verify timestamps look OK
     WayPtr pWay = map->getWays().begin()->second;
@@ -411,9 +409,9 @@ public:
     map = std::make_shared<OsmMap>();
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
 
     reader.close();
   }

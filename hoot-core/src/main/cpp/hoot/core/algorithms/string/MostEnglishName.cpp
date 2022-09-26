@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MostEnglishName.h"
 
@@ -43,40 +43,36 @@ int MostEnglishName::logWarnCount = 0;
 MostEnglishNamePtr MostEnglishName::_theInstance;
 
 MostEnglishName::MostEnglishName()
+  : _initialized(false)
 {
-  _initialized = false;
   setConfiguration(conf());
 }
 
 const MostEnglishNamePtr& MostEnglishName::getInstance()
 {
   if (_theInstance.get() == nullptr)
-  {
     _theInstance.reset(new MostEnglishName());
-  }
   return _theInstance;
 }
 
 QString MostEnglishName::getMostEnglishName(const Tags& tags)
 {
   if (tags.contains("name:en") && tags.get("name:en").isEmpty() == false)
-  {
     return tags.get("name:en");
-  }
 
   QStringList names = tags.getNames();
 
   double bestScore = -numeric_limits<double>::max();
   QString bestName;
 
-  for (int i = 0; i < names.size(); i++)
+  for (const auto& name : qAsConst(names))
   {
-    double score = scoreName(names[i]);
+    double score = scoreName(name);
 
     if (score > bestScore)
     {
       bestScore = score;
-      bestName = names[i];
+      bestName = name;
     }
   }
 
@@ -88,12 +84,10 @@ const QSet<QString>& MostEnglishName::_getWords()
   if (_initialized == false)
   {
     LOG_DEBUG(_wordPaths);
-    for (int i = 0; i < _wordPaths.size(); i++)
+    for (const auto& word_path : qAsConst(_wordPaths))
     {
-      if (_loadEnglishWords(_wordPaths[i]) != 0)
-      {
+      if (_loadEnglishWords(word_path) != 0)
         break;
-      }
     }
 
     if (_englishWords.empty())
@@ -125,12 +119,10 @@ bool MostEnglishName::isInDictionary(const QString& text)
 
 bool MostEnglishName::areAllInDictionary(const QStringList& texts)
 {
-  for (int i = 0; i < texts.size(); i++)
+  for (const auto& t : qAsConst(texts))
   {
-    if (!_getWords().contains(texts.at(i).toLower()))
-    {
+    if (!_getWords().contains(t.toLower()))
       return false;
-    }
   }
   return true;
 }
@@ -183,44 +175,36 @@ double MostEnglishName::scoreName(const QString& text)
   int characters = 0;
 
   const QSet<QString>& englishWords = _getWords();
-  for (int i = 0; i < words.size(); i++)
+  for (const auto& word : qAsConst(words))
   {
-    if (englishWords.contains(words[i].toLower()))
+    if (englishWords.contains(word.toLower()))
     {
-      score += words[i].size();
-      characters += words[i].size();
+      score += word.size();
+      characters += word.size();
     }
     else
     {
-      QString s = words[i];
-
-      for (int j = 0; j < s.size(); j++)
+      for (auto character : word)
       {
-        if (s[j].toLatin1() != 0)
+        if (character.toLatin1() != 0)
         {
           // letters increase the score, numbers have no effect.
-          if (s[j].isLetter())
+          if (character.isLetter())
           {
             score += 0.5;
             characters++;
           }
         }
-        else if (s[j].isLetter())
-        {
+        else if (character.isLetter())
           characters++;
-        }
       }
     }
   }
 
   if (characters == 0)
-  {
     score = 0.0;
-  }
   else
-  {
     score = score / characters;
-  }
 
   return score;
 }
@@ -228,9 +212,7 @@ double MostEnglishName::scoreName(const QString& text)
 void MostEnglishName::setConfiguration(const Settings& conf)
 {
   if (this == _theInstance.get())
-  {
     throw HootException("Please do not set the configuration on the singleton instance.");
-  }
 
   _wordPaths = ConfigOptions(conf).getEnglishWordsFiles();
   _tokenizer.setConfiguration(conf);

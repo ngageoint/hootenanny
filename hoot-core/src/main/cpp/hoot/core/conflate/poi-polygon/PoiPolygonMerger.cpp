@@ -157,6 +157,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   // We're always keeping the building geometry, but the tags kept depends on the source status
   // of the features or the conflation workflow chosen.
+  //  Copy the tags to merge them and replace them
   Tags finalBuildingTags = finalBuilding->getTags();
   LOG_VART(finalBuildingTags);
   if (!poiTags1.empty())

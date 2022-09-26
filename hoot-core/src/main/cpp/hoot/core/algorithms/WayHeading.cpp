@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayHeading.h"
@@ -82,9 +82,7 @@ Radians WayHeading::deltaMagnitude(Radians r1, Radians r2)
 {
   Radians delta = fabs(r1 - r2);
   if (delta > M_PI)
-  {
     delta = fabs(delta - M_PI * 2);
-  }
   return delta;
 }
 

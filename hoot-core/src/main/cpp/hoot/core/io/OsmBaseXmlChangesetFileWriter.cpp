@@ -282,7 +282,7 @@ void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstEl
     else
       writer.writeAttribute("timestamp", "");
   }
-
+  //  Copy tags to allow _writeTags to add additional information
   Tags tags = n->getTags();
   _writeTags(writer, tags, n.get());
 
@@ -352,7 +352,7 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
     writer.writeAttribute("ref", QString::number(nodeRefId));
     writer.writeEndElement();
   }
-
+  //  Copy tags to allow _writeTags to add additional information
   Tags tags = w->getTags();
   _writeTags(writer, tags, w.get());
 
@@ -427,7 +427,7 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
     writer.writeAttribute("role", _invalidCharacterHandler.removeInvalidCharacters(e.getRole()));
     writer.writeEndElement();
   }
-
+  //  Copy tags to allow _writeTags to add additional information
   Tags tags = r->getTags();
   if (r->getType() != "")
     tags.set("type", r->getType());

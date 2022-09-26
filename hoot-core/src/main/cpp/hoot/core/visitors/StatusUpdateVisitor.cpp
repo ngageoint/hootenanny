@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "StatusUpdateVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -42,9 +42,9 @@ StatusUpdateVisitor::StatusUpdateVisitor()
   setConfiguration(conf());
 }
 
-StatusUpdateVisitor::StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid) :
-_status(status),
-_onlyUpdateIfStatusInvalid(onlyUpdateIfStatusInvalid)
+StatusUpdateVisitor::StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid)
+  : _status(status),
+    _onlyUpdateIfStatusInvalid(onlyUpdateIfStatusInvalid)
 {
   LOG_VART(_status);
   LOG_VART(_onlyUpdateIfStatusInvalid);
@@ -55,13 +55,9 @@ void StatusUpdateVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   _onlyUpdateIfStatusInvalid = configOptions.getStatusUpdateVisitorOnlyUpdateInvalidStatus();
   if (configOptions.getStatusUpdateVisitorStatus().trimmed().isEmpty())
-  {
     _status = Status::Invalid;
-  }
   else
-  {
     _status = Status::fromString(configOptions.getStatusUpdateVisitorStatus());
-  }
   LOG_VART(_status);
   LOG_VART(_onlyUpdateIfStatusInvalid);
 }
@@ -70,9 +66,7 @@ void StatusUpdateVisitor::visit(const ElementPtr& e)
 {
   LOG_VART(e->getStatus());
   if (_onlyUpdateIfStatusInvalid && e->getStatus() != Status::Invalid)
-  {
     return;
-  }
 
   e->setStatus(_status);
   e->getTags()[MetadataTags::HootStatus()] = _status.toString();

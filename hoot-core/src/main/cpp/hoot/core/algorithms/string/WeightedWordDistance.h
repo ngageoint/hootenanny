@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef WEIGHTEDWORDDISTANCE_H
 #define WEIGHTEDWORDDISTANCE_H
@@ -47,8 +47,7 @@ public:
 
   static QString className() { return "WeightedWordDistance"; }
 
-  WeightedWordDistance(
-    std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary);
+  WeightedWordDistance(std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary);
   WeightedWordDistance();
   ~WeightedWordDistance() = default;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MaximalSublineMatcher.h"
 
@@ -39,13 +39,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalSublineMatcher)
 
-MaximalSublineMatcher::MaximalSublineMatcher() :
-_maxRecursions(-1)
+MaximalSublineMatcher::MaximalSublineMatcher()
+  : _maxRecursions(-1)
 {
 }
 
-WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map,
-  const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
+WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2,
+                                                       double& score, Meters maxRelevantDistance) const
 {
   Meters mrd =
     maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :

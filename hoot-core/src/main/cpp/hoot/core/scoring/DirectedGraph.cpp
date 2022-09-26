@@ -81,7 +81,7 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
   {
     const std::shared_ptr<Way>& way = it->second;
     LOG_VART(way.get());
-    LOG_VART(way->getNodeIds().size());
+    LOG_VART(way->getNodeCount());
     double cost = determineCost(way);
     LOG_VART(cost);
     double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();

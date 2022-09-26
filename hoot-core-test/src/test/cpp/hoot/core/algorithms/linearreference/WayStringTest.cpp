@@ -256,11 +256,7 @@ public:
                          Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 1);
     w2->setTag("name", "w2");
-
-    vector<long> nodes = w2->getNodeIds();
-    vector<long> newNodes(nodes);
-    newNodes.push_back(w1->getLastNodeId());
-    w2->setNodes(newNodes);
+    w2->addNode(w1->getLastNodeId());
 
     map->addWay(w1);
     map->addWay(w2);

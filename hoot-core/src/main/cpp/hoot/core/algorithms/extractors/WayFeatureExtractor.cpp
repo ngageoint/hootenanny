@@ -67,9 +67,9 @@ double WayFeatureExtractor::extract(const OsmMap& map, const std::shared_ptr<con
     if (crit.isSatisfied(r1) && crit.isSatisfied(r2) &&
         // These have to be of the same size for the way by way comparison score to have any
         // meaning.
-        r1->getMembers().size() == r2->getMembers().size())
+        r1->getMemberCount() == r2->getMemberCount())
     {
-      for (size_t i = 0; i < r1->getMembers().size(); i++)
+      for (size_t i = 0; i < r1->getMemberCount(); i++)
       {
         ElementId eid1 = r1->getMembers()[i].getElementId();
         ElementId eid2 = r2->getMembers()[i].getElementId();

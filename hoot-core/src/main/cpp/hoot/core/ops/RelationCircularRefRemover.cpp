@@ -39,6 +39,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RelationCircularRefRemover)
 
 void RelationCircularRefRemover::apply(OsmMapPtr& map)
 {
+  //  Make a copy of the relation map so that the mergers can modify the original
   RelationMap relations =  map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
   {

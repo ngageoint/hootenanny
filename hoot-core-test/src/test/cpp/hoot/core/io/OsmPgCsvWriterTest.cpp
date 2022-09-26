@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include <hoot/core/TestUtils.h>
@@ -118,6 +118,7 @@ public:
     RelationPtr relation = TestUtils::createRelation(map, nodes);
     relation->setType("review");
     relation->getTags().appendValue("name", "Test Review");
+    //  Copy the members to update and replace
     std::vector<RelationData::Entry> members = relation->getMembers();
     members[0].setRole("reviewee");
     members[1].setRole("reviewee");

@@ -270,7 +270,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
               WayPtr pWayToCheck = _pMap->getWay(wayIdToCheck);
 
               long wayToCheckNodeCount = pWayToCheck->getNodeCount();
-              vector<long> wayToCheckNodeIds = pWayToCheck->getNodeIds();
+              const vector<long>& wayToCheckNodeIds = pWayToCheck->getNodeIds();
 
               for (int checkNodeIx = 0; checkNodeIx < wayToCheckNodeCount - 1; checkNodeIx++)
               {
@@ -377,15 +377,11 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     // add desired cluster tags
     QHashIterator<QString, QString> tagIterator(_clusterTags);
-
-    Tags tags = pElem->getTags();
     while (tagIterator.hasNext())
     {
       tagIterator.next();
-      tags[tagIterator.key()] = tagIterator.value();
+      pElem->getTags()[tagIterator.key()] = tagIterator.value();
     }
-
-    pElem->setTags(tags);
     _pMap->addElement(pElem);
 
     // remove cluster polys

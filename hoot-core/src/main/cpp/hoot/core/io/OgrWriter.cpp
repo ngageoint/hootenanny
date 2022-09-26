@@ -169,11 +169,18 @@ void OgrWriter::open(const QString& url)
 
 void OgrWriter::openOutput(const QString& url)
 {
+  bool retry = false;
+  QString open_except;
   try
   {
     _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
   catch (const HootException& openException)
+  {
+    retry = true;
+    open_except = openException.what();
+  }
+  if (retry)
   {
     try
     {
@@ -182,7 +189,7 @@ void OgrWriter::openOutput(const QString& url)
     catch (const HootException& createException)
     {
       throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
-        "Creating error: \"%2\"").arg(openException.what(), createException.what()));
+        "Creating error: \"%2\"").arg(open_except, createException.what()));
     }
   }
   if (_usesTransactions())
@@ -224,8 +231,7 @@ void OgrWriter::initTranslator()
   if (_translator == nullptr)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st =
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
+    std::shared_ptr<ScriptSchemaTranslator> st = ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
     st->setErrorTreatment(_strictChecking);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
   }
@@ -239,8 +245,7 @@ void OgrWriter::initTranslator()
 void OgrWriter::write(const ConstOsmMapPtr& map)
 {
   _numWritten = 0;
-  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(
-    std::dynamic_pointer_cast<const ElementProvider>(map)));
+  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(map)));
 
   const NodeMap& nm = map->getNodes();
   for (auto it = nm.begin(); it != nm.end(); ++it)
@@ -298,7 +303,7 @@ void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const Co
     }
 
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
-
+    //  Copy the tags and remove any empty values from the tags
     Tags t = e->getTags();
     QStringList keys = t.keys();
     for (const auto& key : qAsConst(keys))
@@ -449,7 +454,7 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
           QString("Relation with ID %1 contains more ways than can fit in the cache (%2).  If you have enough "
                   " memory to load this relation, you can increase the element.cache.size.way setting to "
                   " an appropriate value larger than %3 to allow for loading it.")
-                    .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getWayCacheSize()), QString::number(wayCount)));
+            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getWayCacheSize()), QString::number(wayCount)));
       }
       break;
     case ElementType::Relation:
@@ -489,9 +494,10 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
         throw HootException("Relation contains unknown type");
         break;
       }
-      const QString msg = QString("Relation (%1) element (%2: %3) does not exist in the element "
-        "cache with size = %4. You may need to increase the following settings: "
-        "element.cache.size.node, element.cache.size.way, element.cache.size.relation")
+      const QString msg =
+        QString("Relation (%1) element (%2: %3) does not exist in the element "
+                "cache with size = %4. You may need to increase the following settings: "
+                "element.cache.size.node, element.cache.size.way, element.cache.size.relation")
           .arg(QString::number(newRelation->getElementId().getId()),
                QString::number(member.getElementId().getId()),
                member.getElementId().getType().toString(),
@@ -550,7 +556,7 @@ void OgrWriter::writeElement(ElementPtr& element)
   //  Do not attempt to write empty elements
   if (!element)
     return;
-  Tags sourceTags = element->getTags();
+  const Tags& sourceTags = element->getTags();
   Tags destTags;
   for (auto it = sourceTags.constBegin(); it != sourceTags.constEnd(); ++it)
   {
@@ -603,8 +609,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
       // if we're exporting point data, then export with x/y at the front
       if (gtype == wkbPoint)
         options["GEOMETRY"] = "AS_XY";
-      // if we're exporting other geometries then export w/ WKT at the front.
-      else
+      else // if we're exporting other geometries then export w/ WKT at the front.
         options["GEOMETRY"] = "AS_WKT";
 
       options["CREATE_CSVT"] = "YES";
@@ -659,8 +664,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
     std::shared_ptr<OGRSpatialReference> projection = MapProjector::createWgs84Projection();
-    poLayer =
-      _ds->CreateLayer(layerName.toLatin1(), projection.get(), gtype, options.getCrypticOptions());
+    poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(), gtype, options.getCrypticOptions());
 
     if (poLayer == nullptr)
       throw HootException(QString("Layer creation failed. %1").arg(layerName));

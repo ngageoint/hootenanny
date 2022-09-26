@@ -657,11 +657,9 @@ vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementT
   return result;
 }
 
-QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags, ElementType elementType,
+QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(const Tags& tags, ElementType elementType,
                                                                  geos::geom::GeometryTypeId geometryType)
 {
-  _tags = &tags;
-
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
@@ -745,29 +743,27 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags, Ele
   return result;
 }
 
-void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName, const char* geomType)
+void JavaScriptSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
 {
   LOG_VART(_toOsmFunctionName);
   LOG_VART(layerName);
   LOG_VART(geomType);
-
-  _tags = &t;
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
   Local<Context> context = current->GetCurrentContext();
 
-  Local<Object> tags = Object::New(current);
-  for (auto it = t.begin(); it != t.end(); ++it)
+  Local<Object> v8Tags = Object::New(current);
+  for (auto it = tags.begin(); it != tags.end(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
-    tags->Set(context, toV8(it.key()), toV8(it.value()));
+    v8Tags->Set(context, toV8(it.key()), toV8(it.value()));
   }
 
   Local<Value> args[3];
-  args[0] = tags;
+  args[0] = v8Tags;
   args[1] = toV8(layerName);
   args[2] = toV8(geomType);
 
@@ -792,7 +788,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   if (Log::getInstance().getLevel() <= Log::Debug)
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
 
-  t.clear();
+  tags.clear();
 
   // Just making sure...
   LOG_VART(newTags.IsEmpty() || newTags->IsNull() || newTags->IsUndefined());
@@ -815,9 +811,9 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
       if (v != Undefined(current))
-        t.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
+        tags.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
 
-      LOG_VART(t);
+      LOG_VART(tags);
     }
   }
   else

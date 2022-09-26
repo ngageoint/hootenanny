@@ -22,15 +22,12 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "Range.h"
 
-//std includes
+//  std
 #include <stdio.h>
-
-//hoot includes
-
 
 namespace hoot
 {
@@ -71,9 +68,7 @@ QString Range::toString() const
 void Range::set(long int min, long int max)
 {
   if (min > max)
-  {
     throw HootException("min is greater than max: " + QString::number(min) + " " +  QString::number(max));
-  }
   _min = min;
   _max = max;
 }

@@ -78,10 +78,6 @@ protected:
 
   std::shared_ptr<OsmMap> _pMap;
 
-  WayMap _allWays;
-  NodeMap _allNodes;
-  RelationMap _allRels;
-
   QList<ElementPtr> _elementsToProcess;
   QMap<WayPtr,std::shared_ptr<geos::geom::Polygon>> _datasetWayPolys;
   QMap<WayPtr,std::shared_ptr<geos::geom::Geometry>> _mergedGeoms;

@@ -289,10 +289,9 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
   LOG_VART(waysContainingNode2);
 
   std::set<long> commonNodesBetweenWayGroups;
-  std::set_intersection(
-    waysContainingNode1.begin(), waysContainingNode1.end(),
-    waysContainingNode2.begin(), waysContainingNode2.end(),
-    std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
+  std::set_intersection(waysContainingNode1.begin(), waysContainingNode1.end(),
+                        waysContainingNode2.begin(), waysContainingNode2.end(),
+                        std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
   LOG_VART(commonNodesBetweenWayGroups);
 
   return !commonNodesBetweenWayGroups.empty();
@@ -306,12 +305,11 @@ bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& ma
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds,
                                      const ConstOsmMapPtr& map)
 {
-  std::set<long> waysContainingNode = map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
+  const std::set<long>& waysContainingNode = map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
   std::set<long> commonWayIds;
-  std::set_intersection(
-    waysContainingNode.begin(), waysContainingNode.end(),
-    wayIds.begin(), wayIds.end(),
-    std::inserter(commonWayIds, commonWayIds.begin()));
+  std::set_intersection(waysContainingNode.begin(), waysContainingNode.end(),
+                        wayIds.begin(), wayIds.end(),
+                        std::inserter(commonWayIds, commonWayIds.begin()));
   return !commonWayIds.empty();
 }
 

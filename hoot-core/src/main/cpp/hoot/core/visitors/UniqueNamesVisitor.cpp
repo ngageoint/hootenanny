@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UniqueNamesVisitor.h"
 
@@ -37,10 +37,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueNamesVisitor)
 void UniqueNamesVisitor::visit(const ConstElementPtr& e)
 {
   const QStringList names = e->getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
-  {
-    _names.insert(names[i]);
-  }
+  for (const auto& name : qAsConst(names))
+    _names.insert(name);
 }
 
 }

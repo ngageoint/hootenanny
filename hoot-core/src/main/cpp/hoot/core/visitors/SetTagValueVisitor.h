@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SETTAGVALUEVISITOR_H
 #define SETTAGVALUEVISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatus.h>
-#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
 {
@@ -61,10 +61,9 @@ public:
    * @param overwriteExistingTag overwrites any tag with a matching key
    * @param negateCriteria negates the criteria in criteriaClassNames
    */
-  SetTagValueVisitor(
-    const QStringList& keys, const QStringList& values, bool appendToExistingValue = false,
-    const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
-    const bool negateCriteria = false);
+  SetTagValueVisitor(const QStringList& keys, const QStringList& values, bool appendToExistingValue = false,
+                     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
+                     const bool negateCriteria = false);
   /**
    * @brief SetTagValueVisitor - Constructor
    * @param key the key of the tag to set
@@ -76,10 +75,9 @@ public:
    * @param overwriteExistingTag overwrites any tag with a matching key
    * @param negateCriteria negates the criteria in criteriaClassNames
    */
-  SetTagValueVisitor(
-    const QString& key, const QString& value, bool appendToExistingValue = false,
-    const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
-    const bool negateCriteria = false);
+  SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue = false,
+                     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
+                     const bool negateCriteria = false);
   ~SetTagValueVisitor() override = default;
 
   bool isValid() const { return !_keys.isEmpty() && !_vals.isEmpty(); }

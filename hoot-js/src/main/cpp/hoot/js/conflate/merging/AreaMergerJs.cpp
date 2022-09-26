@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AreaMergerJs.h"
 
@@ -53,22 +53,19 @@ void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate*
   script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
   Local<Object> global = script->getContext(current)->Global();
   if (global->Has(context, toV8("plugin")).ToChecked() == false)
-  {
     throw IllegalArgumentException("Expected the script to have exports.");
-  }
+
   Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
   Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-  {
     throw IllegalArgumentException("Expected plugin to be a valid object.");
-  }
 
   int areasMerged = 0;
 
   NonBuildingAreaCriterion nonBuildingAreaCrit;
-
+  //  Make a copy of the way map so that the mergers can modify the original
   const WayMap ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& way = it->second;
     LOG_VART(way->getId());
@@ -88,9 +85,9 @@ void AreaMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate*
       areasMerged++;
     }
   }
-
+  //  Make a copy of the way map so that the mergers can modify the original
   const RelationMap relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     const ConstRelationPtr& relation = it->second;
     LOG_VART(relation->getId());

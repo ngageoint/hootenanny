@@ -33,7 +33,7 @@ namespace hoot
 int RelationMemberNodeCounter::numNodes(const ConstRelationPtr& relation) const
 {
   int count = 0;
-  const std::vector<RelationData::Entry> members = relation->getMembers();
+  const std::vector<RelationData::Entry>& members = relation->getMembers();
   for (const auto& member : members)
   {
     const ElementType type = member.getElementId().getType();

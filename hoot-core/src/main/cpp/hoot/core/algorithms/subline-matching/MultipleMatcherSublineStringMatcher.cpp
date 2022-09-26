@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MultipleMatcherSublineStringMatcher.h"
 
@@ -30,17 +30,17 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSubline.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/criterion/MultiLineStringCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/WaysVisitor.h>
-#include <hoot/core/criterion/MultiLineStringCriterion.h>
 
 // Standard
 #include <algorithm>
@@ -54,17 +54,16 @@ int MultipleMatcherSublineStringMatcher::_numTimesBackupMatcherUsed = 0;
 
 HOOT_FACTORY_REGISTER(SublineStringMatcher, MultipleMatcherSublineStringMatcher)
 
-MultipleMatcherSublineStringMatcher::MultipleMatcherSublineStringMatcher() :
-SublineStringMatcher()
+MultipleMatcherSublineStringMatcher::MultipleMatcherSublineStringMatcher()
+  : SublineStringMatcher()
 {
 }
 
-MultipleMatcherSublineStringMatcher::MultipleMatcherSublineStringMatcher(
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher1,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher2) :
-SublineStringMatcher(),
-_sublineMatcher1(sublineMatcher1),
-_sublineMatcher2(sublineMatcher2)
+MultipleMatcherSublineStringMatcher::MultipleMatcherSublineStringMatcher(const SublineStringMatcherPtr& sublineMatcher1,
+                                                                         const SublineStringMatcherPtr& sublineMatcher2)
+  : SublineStringMatcher(),
+    _sublineMatcher1(sublineMatcher1),
+    _sublineMatcher2(sublineMatcher2)
 {
   // The subline matchers have already been initialized by the conflate script by this point.
   LOG_VART(_sublineMatcher1.get());
@@ -95,9 +94,8 @@ void MultipleMatcherSublineStringMatcher::setHeadingDelta(Meters headingDelta)
   _sublineMatcher2->setHeadingDelta(headingDelta);
 }
 
-WaySublineMatchString MultipleMatcherSublineStringMatcher::findMatch(
-  const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
-  Meters maxRelevantDistance) const
+WaySublineMatchString MultipleMatcherSublineStringMatcher::findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+                                                                     const ConstElementPtr& e2, Meters maxRelevantDistance) const
 {
   WaySublineMatchString match;
   if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node)

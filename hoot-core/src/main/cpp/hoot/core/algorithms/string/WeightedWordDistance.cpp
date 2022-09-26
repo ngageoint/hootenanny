@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WeightedWordDistance.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
 #include <hoot/core/schema/ScoreMatrix.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 // Standard
 #include <iomanip>
@@ -49,16 +49,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, WeightedWordDistance)
 
-WeightedWordDistance::WeightedWordDistance(
-  std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary) :
-_d(d),
-_dictionary(dictionary)
+WeightedWordDistance::WeightedWordDistance(std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary)
+  : _d(d),
+    _dictionary(dictionary)
 {
   setConfiguration(conf());
 }
 
-WeightedWordDistance::WeightedWordDistance() :
-_d(std::make_shared<LevenshteinDistance>(1.5))
+WeightedWordDistance::WeightedWordDistance()
+  : _d(std::make_shared<LevenshteinDistance>(1.5))
 {
   QString dictPath;
   try
@@ -73,8 +72,7 @@ _d(std::make_shared<LevenshteinDistance>(1.5))
       "or similar. You can also override the default name with the " +
       ConfigOptions::getWeightedWordDistanceDictionaryKey() + " config option.");
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceAbridgedDictionary());
-    LOG_WARN("Using abridged dictionary. This may result in reduced conflation accuracy. " +
-      dictPath);
+    LOG_WARN("Using abridged dictionary. This may result in reduced conflation accuracy. " + dictPath);
   }
   _dictionary = std::make_shared<SqliteWordWeightDictionary>(dictPath);
 
@@ -92,13 +90,9 @@ vector<double> WeightedWordDistance::_calculateWeights(QStringList l) const
     LOG_VART(w);
     // if there is no evidence of the word then just set the value to the heighest weight.
     if (w == 0)
-    {
       result[i] = 1.0 / pow(_dictionary->getMinWeight(), _p);
-    }
     else
-    {
       result[i] = 1.0 / w;
-    }
   }
 
   return result;
@@ -107,9 +101,7 @@ vector<double> WeightedWordDistance::_calculateWeights(QStringList l) const
 double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
 {
   if (!_d || ! _dictionary)
-  {
     throw HootException("You must specify both a distance function and dictionary.");
-  }
 
   LOG_VART(s1);
   LOG_VART(s2);
@@ -155,8 +147,7 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
   LOG_VART(scores.minSumMatrix().toTableString());
   LOG_VART(scores.minSumMatrix().multiplyCells(weightedScores).toTableString());
 
-  double denominator = tbs::SampleStats(w1).calculateSum() +
-    tbs::SampleStats(w2).calculateSum();
+  double denominator = tbs::SampleStats(w1).calculateSum() + tbs::SampleStats(w2).calculateSum();
   LOG_VART(denominator);
 
   double score = scores.minSumMatrix().multiplyCells(weightedScores).sumCells();

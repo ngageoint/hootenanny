@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // GEOS
@@ -174,9 +174,7 @@ public:
                           Coordinate::getNull() };
     WayPtr wg2b = TestUtils::createWay(map, cg2b, "g2", Status::Unknown2, 15.0);
 
-    RelationPtr r =
-      std::make_shared<Relation>(
-        Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
     r->getTags()["note"] = "rg2";
     r->addElement("", wg2a);
     r->addElement("", wg2b);
@@ -206,9 +204,7 @@ public:
                           Coordinate::getNull() };
     WayPtr wh2b = TestUtils::createWay(map, ch2b, "h2", Status::Unknown2, ce);
 
-    RelationPtr rh2 =
-      std::make_shared<Relation>(
-        Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
+    RelationPtr rh2 = std::make_shared<Relation>(Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
     rh2->getTags()["note"] = "rh2";
     rh2->addElement("", wh2a);
     rh2->addElement("", wh2b);
@@ -238,9 +234,7 @@ public:
                           Coordinate::getNull() };
     WayPtr wi2b = TestUtils::createWay(map, ci2b, "i2", Status::Unknown2, ce);
 
-    RelationPtr ri2 =
-      std::make_shared<Relation>(
-      Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
+    RelationPtr ri2 = std::make_shared<Relation>(Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
     ri2->getTags()["note"] = "ri2";
     ri2->addElement("", wi2a);
     ri2->addElement("", wi2b);
@@ -309,32 +303,26 @@ public:
   {
     vector<ConstWayPtr> result;
     vector<long> wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", note);
-    for (size_t i = 0; i < wids.size(); i++)
-    {
-      result.push_back(map->getWay(wids[i]));
-    }
+    for (auto way_id : wids)
+      result.push_back(map->getWay(way_id));
     return result;
   }
 
   ConstWayPtr toWay(OsmMapPtr map, QString note)
   {
     vector<long> wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", note);
-    for (size_t i = 0; i < wids.size(); i++)
-    {
-      return map->getWay(wids[i]);
-    }
+    if (!wids.empty())
+      return map->getWay(wids[0]);
     throw InternalErrorException();
   }
 
   ConstRelationPtr toRelation(OsmMapPtr map, QString note)
   {
     const RelationMap& relations = map->getRelations();
-    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+    for (auto it = relations.begin(); it != relations.end(); ++it)
     {
       if (it->second->getTags().get("note") == note)
-      {
         return it->second;
-      }
     }
     throw InternalErrorException();
   }
@@ -350,8 +338,7 @@ public:
     {
       vector<bool> reversed1(1, false), reversed2(1, false);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "a1"), toWayVector(map, "a2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "a1"), toWayVector(map, "a2"), reversed1, reversed2);
 
       HOOT_STR_EQUALS("score: 100\n"
         "matches:\n"
@@ -364,8 +351,7 @@ public:
     {
       vector<bool> reversed1(1, false), reversed2(1, true);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "a1"), toWayVector(map, "a2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "a1"), toWayVector(map, "a2"), reversed1, reversed2);
 
       HOOT_STR_EQUALS("score: 0\n"
         "matches:\n",
@@ -377,8 +363,7 @@ public:
       vector<bool> reversed1(1, false), reversed2(1, false);
 
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "b1"), toWayVector(map, "b2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "b1"), toWayVector(map, "b2"), reversed1, reversed2);
 
       // TODO: This test fails with the default subline matcher. The MaximalSublineMatcher performs
       // better, but has other flaws. Redmine 2701 should resolve this.
@@ -395,8 +380,7 @@ public:
     {
       vector<bool> reversed1(1, false), reversed2(1, false);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "c1"), toWayVector(map, "c2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "c1"), toWayVector(map, "c2"), reversed1, reversed2);
 
       HOOT_STR_EQUALS("score: 50\n"
         "matches:\n"
@@ -409,8 +393,7 @@ public:
     {
       vector<bool> reversed1(1, false), reversed2(1, false);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "d1"), toWayVector(map, "d2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "d1"), toWayVector(map, "d2"), reversed1, reversed2);
 
       HOOT_STR_EQUALS("score: 40\n"
         "matches:\n"
@@ -423,8 +406,7 @@ public:
     {
       vector<bool> reversed1(2, false), reversed2(2, false);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "e1"), toWayVector(map, "e2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "e1"), toWayVector(map, "e2"), reversed1, reversed2);
 
       HOOT_STR_EQUALS("score: 80\n"
         "matches:\n"
@@ -439,8 +421,7 @@ public:
     {
       vector<bool> reversed1(2, false), reversed2(2, false);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 10, toWayVector(map, "f1"), toWayVector(map, "f2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 10, toWayVector(map, "f1"), toWayVector(map, "f2"), reversed1, reversed2);
 
       HOOT_STR_EQUALS("score: 50\n"
         "matches:\n"
@@ -455,13 +436,10 @@ public:
     {
       vector<bool> reversed1(2, false), reversed2(2, false);
       MaximalSublineStringMatcher::ScoredMatch sm =
-          uut._evaluateMatch(map, 15, toWayVector(map, "g1"), toWayVector(map, "g2"),
-                             reversed1, reversed2);
+          uut._evaluateMatch(map, 15, toWayVector(map, "g1"), toWayVector(map, "g2"), reversed1, reversed2);
 
-      HOOT_STR_EQUALS(210,
-        sm.matches[0].getSubline1().getLength() + sm.matches[1].getSubline1().getLength());
-      HOOT_STR_EQUALS(210,
-        sm.matches[0].getSubline2().getLength() + sm.matches[1].getSubline2().getLength());
+      HOOT_STR_EQUALS(210, sm.matches[0].getSubline1().getLength() + sm.matches[1].getSubline1().getLength());
+      HOOT_STR_EQUALS(210, sm.matches[0].getSubline2().getLength() + sm.matches[1].getSubline2().getLength());
 
       HOOT_STR_EQUALS("score: 210\n"
         "matches:\n"
@@ -520,8 +498,7 @@ public:
     // test the simplest case
     {
       RelationPtr r =
-        std::make_shared<Relation>(
-          Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
+        std::make_shared<Relation>(Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
       r->addElement("", toWay(map, "a1"));
       map->addElement(r);
 

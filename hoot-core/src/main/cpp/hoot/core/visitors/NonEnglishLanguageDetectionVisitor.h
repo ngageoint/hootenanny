@@ -22,18 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
 #define NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementVisitor.h>
-
 #include <hoot/core/language/LanguageDetector.h>
 #include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveInvalidRelationVisitor.h"
@@ -46,8 +46,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidRelationVisitor)
 
-RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor() :
-_numMembersRemoved(0)
+RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor()
+  : _numMembersRemoved(0)
 {
 }
 
@@ -66,9 +66,8 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
     else if (r->getType() == MetadataTags::RelationMultilineString())
     {
       _removeDuplicates(r);
-      //  Any multilinestring that doesn't have 2 or more linestrings, isn't a multilinestring,
-      //  remove it
-      vector<RelationData::Entry> members = r->getMembers();
+      //  Any multilinestring that doesn't have 2 or more linestrings, isn't a multilinestring, remove it
+      const vector<RelationData::Entry>& members = r->getMembers();
       if (members.size() < 2)
       {
         LOG_TRACE("Removing multilinestring relation with ID: " << r->getId());
@@ -76,9 +75,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
         {
           //  Merge the relation tags back on to the single way before deleting the relation
           ElementPtr element = _map->getElement(members[0].getElementId());
-          Tags merged =
-            TagMergerFactory::mergeTags(
-              element->getTags(), r->getTags(), ElementType::Relation);
+          Tags merged = TagMergerFactory::mergeTags(element->getTags(), r->getTags(), ElementType::Relation);
           element->setTags(merged);
         }
         //  Delete the relation
@@ -94,13 +91,14 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
   //  Make sure that the relation is valid
   if (!r)
     return;
-  vector<RelationData::Entry> members = r->getMembers();
+  //  Make a copy of the members because the relation members are modified
+  const vector<RelationData::Entry> members = r->getMembers();
   unordered_set<long> total_members;
   unordered_map<long, RelationData::Entry> membersMap;
   //  Iterate all of the members and remove the duplicates
-  for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
+  for (const auto& member : members)
   {
-    ElementId eid = it->getElementId();
+    ElementId eid = member.getElementId();
     long id = eid.getId();
     if (total_members.find(id) == total_members.end())
       total_members.insert(id);
@@ -111,19 +109,18 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       //  of the ones that need to be added back in afterwards
       r->removeElement(eid);
       if (membersMap.find(id) == membersMap.end())
-        membersMap[id] = *it;
+        membersMap[id] = member;
       _numMembersRemoved++;
     }
   }
   //  Re-insert the members that were duplicates but all instances were deleted
   if (!membersMap.empty())
   {
-    for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin();
-         it != membersMap.end(); ++it)
+    for (auto it = membersMap.begin(); it != membersMap.end(); ++it)
       r->addElement(it->second.getRole(), it->second.getElementId());
     //  Update the number of review members if we removed some of them
     if (r->getTags().contains(MetadataTags::HootReviewMembers()))
-      r->setTag(MetadataTags::HootReviewMembers(), QString("%1").arg(r->getMembers().size()));
+      r->setTag(MetadataTags::HootReviewMembers(), QString("%1").arg(r->getMemberCount()));
   }
 }
 

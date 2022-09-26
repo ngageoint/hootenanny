@@ -211,9 +211,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
     if (poLayer->CreateField(&oField) != OGRERR_NONE)
-    {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
-    }
     _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
   }
 

@@ -100,8 +100,7 @@ AlphaShape::AlphaShape(double alpha)
 GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
 {
   GeometryPtr result;
-  CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2).release();
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2).release();
   LinearRing* lr;
 
   Coordinate c;

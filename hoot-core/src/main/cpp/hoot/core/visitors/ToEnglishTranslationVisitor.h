@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATION_VISITOR_H
 #define TO_ENGLISH_TRANSLATION_VISITOR_H
 
 // hoot
+#include <hoot/core/info/OperationStatus.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/info/OperationStatus.h>
 
 namespace hoot
 {
@@ -64,9 +64,8 @@ public:
   { return "Translating tags to English..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Translated " + QString::number(_numTagTranslationsMade) + " tags to English on " +
-      QString::number(_numProcessedElements) + " different elements";
+    return QString("Translated %1 tags to English on %2 different elements")
+            .arg(QString::number(_numTagTranslationsMade), QString::number(_numProcessedElements));
   }
 
   QString getName() const override { return className(); }

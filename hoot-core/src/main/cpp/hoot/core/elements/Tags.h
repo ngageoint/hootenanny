@@ -130,7 +130,7 @@ public:
    * match one or more entries in the list and return it. Each key will only be returned at most
    * once.
    */
-  QStringList getMatchingKeys(const QStringList& keys);
+  QStringList getMatchingKeys(const QStringList& keys) const;
 
   /**
    * Return all the keys that are used in names.
