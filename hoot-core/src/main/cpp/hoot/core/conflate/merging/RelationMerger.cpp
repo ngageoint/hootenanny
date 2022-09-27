@@ -103,9 +103,9 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
 
   // Load up the relation members from both relations.
 
-  const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
+  const std::vector<RelationData::Entry>& replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());
-  const std::vector<RelationData::Entry> relationBeingReplacedMembers = relationBeingReplaced->getMembers();
+  const std::vector<RelationData::Entry>& relationBeingReplacedMembers = relationBeingReplaced->getMembers();
   LOG_VART(relationBeingReplacedMembers.size());
 
   // If insertion ever proves too slow with these lists, then we can switch them over to linked
@@ -119,8 +119,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
       if (memberElement)
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        replacingRelationMemberComps.append(
-          RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
+        replacingRelationMemberComps.append(RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
       }
     }
   }
@@ -135,8 +134,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
       if (memberElement)
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        relationBeingReplacedMemberComps.append(
-          RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
+        relationBeingReplacedMemberComps.append(RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
       }
     }
   }

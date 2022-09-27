@@ -61,7 +61,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
     return false;
 
   // find out what width to use
-  Tags tags = pElement->getTags();
+  const Tags& tags = pElement->getTags();
   double currWidth = _width;
 
   // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag
@@ -73,7 +73,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   }
 
   // build poly by 'extruding' existing nodes
-  const vector<long> nodeIds = pWay->getNodeIds();
+  const vector<long>& nodeIds = pWay->getNodeIds();
   assert(nodeCount == (long)nodeIds.size());
 
   // ignore duplicate last node for loops to properly calculate merged ends
@@ -87,8 +87,8 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   for (long i = 0; i < nodeCount; i++)
   {
     long currId = nodeIds[i];
-    long prevId = (i > 0) ? nodeIds[i-1] : (isLoop ? nodeIds[nodeCount-1] : currId);
-    long nextId = (i < nodeCount-1) ? nodeIds[i+1] : (isLoop ? nodeIds[0] : currId);
+    long prevId = (i > 0) ? nodeIds[i - 1] : (isLoop ? nodeIds[nodeCount - 1] : currId);
+    long nextId = (i < nodeCount-1) ? nodeIds[i + 1] : (isLoop ? nodeIds[0] : currId);
 
     const NodePtr pCurrNode = pMap->getNode(currId);
     const NodePtr pPrevNode = pMap->getNode(prevId);
@@ -184,7 +184,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
     WayPtr pPoly = std::make_shared<Way>(Status::Unknown1, pMap->createNextWayId(), -1);
     for (long i = 0; i < nodeCount; i++)
       addNodeToPoly(polyPositions[0][i], pMap, pPoly);
-    for (long i = nodeCount-1; i >= 0; i--)
+    for (long i = nodeCount - 1; i >= 0; i--)
       addNodeToPoly(polyPositions[1][i], pMap, pPoly);
 
     // duplicate first id to close poly

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ExactStringDistance.h"
 
@@ -40,13 +40,9 @@ HOOT_FACTORY_REGISTER(StringDistance, ExactStringDistance)
 double ExactStringDistance::compare(const QString& s1, const QString& s2) const
 {
   if (s1.toLower() == s2.toLower())
-  {
     return 1.0;
-  }
   else
-  {
     return 0.0;
-  }
 }
 
 }

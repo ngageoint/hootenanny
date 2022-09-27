@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UnionPolygonsVisitor.h"
 
@@ -30,9 +30,10 @@
 #include <geos/geom/GeometryFactory.h>
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/AreaCriterion.h>
+
 using namespace geos::geom;
 
 namespace hoot
@@ -41,21 +42,18 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, UnionPolygonsVisitor)
 
 UnionPolygonsVisitor::UnionPolygonsVisitor()
+  : _result(GeometryFactory::getDefaultInstance()->createEmptyGeometry())
 {
-  _result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 }
 
 void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
-  {
     return;
-  }
 
   if (AreaCriterion().isSatisfied(e))
   {
-    std::shared_ptr<Geometry> g =
-      ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
+    std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
     if (g && !g->isEmpty())
     {
       _result = g->Union(_result.get());

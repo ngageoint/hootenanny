@@ -95,41 +95,41 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
   bool isType = false;
   switch (type.getEnum())
   {
-    case PoiPolygonSchemaType::Natural:
-      isType = PoiPolygonSchema::isNatural(element);
-      break;
-    case PoiPolygonSchemaType::Park:
-      isType = PoiPolygonSchema::isPark(element);
-      break;
-    case PoiPolygonSchemaType::Parking:
-      isType = PoiPolygonSchema::isParking(element);
-      break;
-    case PoiPolygonSchemaType::Parkish:
-      isType = PoiPolygonSchema::isParkish(element);
-      break;
-    case PoiPolygonSchemaType::Playground:
-      isType = PoiPolygonSchema::isPlayground(element);
-      break;
-    case PoiPolygonSchemaType::Restaurant:
-      isType = PoiPolygonSchema::isRestaurant(element);
-      break;
-    case PoiPolygonSchemaType::Religion:
-      isType = PoiPolygonSchema::isReligion(element);
-      break;
-    case PoiPolygonSchemaType::Restroom:
-      isType = PoiPolygonSchema::isRestroom(element);
-      break;
-    case PoiPolygonSchemaType::School:
-      isType = PoiPolygonSchema::isSchool(element);
-      break;
-    case PoiPolygonSchemaType::SpecificSchool:
-      isType = PoiPolygonSchema::isSpecificSchool(element);
-      break;
-    case PoiPolygonSchemaType::Sport:
-      isType = PoiPolygonSchema::isSport(element);
-      break;
-    default:
-      throw IllegalArgumentException("Unsupported POI/Polygon schema type.");
+  case PoiPolygonSchemaType::Natural:
+    isType = PoiPolygonSchema::isNatural(element);
+    break;
+  case PoiPolygonSchemaType::Park:
+    isType = PoiPolygonSchema::isPark(element);
+    break;
+  case PoiPolygonSchemaType::Parking:
+    isType = PoiPolygonSchema::isParking(element);
+    break;
+  case PoiPolygonSchemaType::Parkish:
+    isType = PoiPolygonSchema::isParkish(element);
+    break;
+  case PoiPolygonSchemaType::Playground:
+    isType = PoiPolygonSchema::isPlayground(element);
+    break;
+  case PoiPolygonSchemaType::Restaurant:
+    isType = PoiPolygonSchema::isRestaurant(element);
+    break;
+  case PoiPolygonSchemaType::Religion:
+    isType = PoiPolygonSchema::isReligion(element);
+    break;
+  case PoiPolygonSchemaType::Restroom:
+    isType = PoiPolygonSchema::isRestroom(element);
+    break;
+  case PoiPolygonSchemaType::School:
+    isType = PoiPolygonSchema::isSchool(element);
+    break;
+  case PoiPolygonSchemaType::SpecificSchool:
+    isType = PoiPolygonSchema::isSpecificSchool(element);
+    break;
+  case PoiPolygonSchemaType::Sport:
+    isType = PoiPolygonSchema::isSport(element);
+    break;
+  default:
+    throw IllegalArgumentException("Unsupported POI/Polygon schema type.");
   }
 
   if (_cachingEnabled)

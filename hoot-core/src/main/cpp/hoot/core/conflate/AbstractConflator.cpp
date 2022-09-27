@@ -492,7 +492,7 @@ void AbstractConflator::_addConflateScoreTags(const ElementPtr& e, const MatchCl
   }
 }
 
-void AbstractConflator::_addConflateScoreTags()
+void AbstractConflator::_addConflateScoreTags() const
 {
   for (const auto& match : _matches)
   {

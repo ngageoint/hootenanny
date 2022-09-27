@@ -198,7 +198,7 @@ QList<Address> AddressParser::parseAddressesFromWayNodes(const Way& way, const O
 {
   QList<Address> addresses;
   LOG_TRACE("Collecting addresses from way nodes...");
-  const std::vector<long> wayNodeIds = way.getNodeIds();
+  const std::vector<long>& wayNodeIds = way.getNodeIds();
   for (auto node_id : wayNodeIds)
   {
     ConstElementPtr wayNode = map.getElement(ElementType::Node, node_id);
@@ -215,7 +215,7 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
 {
   QList<Address> addresses;
   LOG_TRACE("Collecting addresses from relation members...");
-  const std::vector<RelationData::Entry> relationMembers = relation.getMembers();
+  const std::vector<RelationData::Entry>& relationMembers = relation.getMembers();
   for (const auto& entry : relationMembers)
   {
     ConstElementPtr member = map.getElement(entry.getElementId());

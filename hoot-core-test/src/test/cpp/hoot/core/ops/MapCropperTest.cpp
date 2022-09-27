@@ -111,7 +111,7 @@ public:
       uut.setRemoveSuperflousFeatures(false);
       uut.apply(map);
 
-      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
+      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodeCount());
     }
 
     {
@@ -122,7 +122,7 @@ public:
       uut.setInvert(true);
       uut.setRemoveSuperflousFeatures(false);
       uut.apply(map2);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map2->getNodes().size());
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map2->getNodeCount());
     }
   }
 
@@ -163,20 +163,18 @@ public:
     uut.apply(map);
 
     // compare relations
-    const RelationMap relations = map->getRelations();
+    const RelationMap& relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
     QString relationStr = "relation(-1592); type: multipolygon; members:"
                           "   Entry: role: outer, eid: Way(-1556);"
                           "   Entry: role: inner, eid: Way(-1552); ;"
                           " tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (auto it = relations.begin(); it != relations.end(); ++it)
-    {
       HOOT_STR_EQUALS(relationStr, it->second->toString().replace("\n","; "));
-    }
 
     // compare ways
     int count = 0;
-    const WayMap ways = map->getWays();
+    const WayMap& ways = map->getWays();
     HOOT_STR_EQUALS(2, ways.size());
     for (auto it = ways.begin(); it != ways.end(); ++it)
     {

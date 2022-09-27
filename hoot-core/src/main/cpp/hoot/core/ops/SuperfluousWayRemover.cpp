@@ -118,7 +118,7 @@ void SuperfluousWayRemover::_removeWays(const std::shared_ptr<OsmMap>& map)
 
     const bool inRelation = !e2r->getRelationByElement(w).empty();
     LOG_VART(inRelation);
-    LOG_VART(w->getTags().size());
+    LOG_VART(w->getTagCount());
 
     // if all the nodes in a way are the same or there are zero nodes
     if ((same || w->getTags().empty()) && !inRelation)

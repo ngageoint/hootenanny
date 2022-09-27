@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -55,10 +55,9 @@ class IntersectionSplitterRelationMemberOrderTest : public HootTestFixture
 
 public:
 
-  IntersectionSplitterRelationMemberOrderTest() :
-  HootTestFixture(
-    "test-files/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/",
-    "test-output/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/")
+  IntersectionSplitterRelationMemberOrderTest()
+    : HootTestFixture("test-files/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/",
+                      "test-output/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/")
   {
   }
 
@@ -69,17 +68,15 @@ public:
     // retain the ordering of the input relation.
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    OsmMapReaderFactory::read(
-      map, "test-files/cases/reference/unifying/multiple/highway-3906/Input1.osm");
+    OsmMapReaderFactory::read(map, "test-files/cases/reference/unifying/multiple/highway-3906/Input1.osm");
 
     IntersectionSplitter::splitIntersections(map);
 
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runRelationMemberOrderTestOut.osm");
 
-    HOOT_FILE_EQUALS(
-      _inputPath + "runRelationMemberOrderTestOut.osm",
-      _outputPath + "runRelationMemberOrderTestOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "runRelationMemberOrderTestOut.osm",
+                     _outputPath + "runRelationMemberOrderTestOut.osm");
   }
 
   void runRelationMemberOrder2Test()
@@ -94,9 +91,7 @@ public:
     // We're only interested in seeing the splitting done on this one relation in order to cut down
     // on processing time.
     ElementCriterionPtr relationCrit =
-      std::make_shared<ChainCriterion>(
-        std::make_shared<RelationCriterion>("route"),
-        std::make_shared<TagCriterion>("ref", "36"));
+      std::make_shared<ChainCriterion>(std::make_shared<RelationCriterion>("route"), std::make_shared<TagCriterion>("ref", "36"));
 
     // Filter the input map down to a temp map with just the relation in question.
     OsmMapPtr tempMap = std::make_shared<OsmMap>();
@@ -106,13 +101,11 @@ public:
     RelationPtr relation = relations.begin()->second;
 
     // Get all the road member IDs for the relation.
-    const QSet<long> roadMemberIds =
-      ElementIdUtils::elementIdsToIds(relation->getMemberIds(ElementType::Way));
+    const QSet<long> roadMemberIds = ElementIdUtils::elementIdsToIds(relation->getMemberIds(ElementType::Way));
     LOG_VART(roadMemberIds);
 
     // Create a criterion for finding all ways that intersect the member roads.
-    ElementCriterionPtr intersectingCrit =
-      std::make_shared<IntersectingWayCriterion>(roadMemberIds, rawMap);
+    ElementCriterionPtr intersectingCrit = std::make_shared<IntersectingWayCriterion>(roadMemberIds, rawMap);
 
     // Create a criterion for what types of features are splittable (same used by
     // IntersectionSplitter).
@@ -134,9 +127,8 @@ public:
     MapProjector::projectToWgs84(filteredMap);
     OsmMapWriterFactory::write(filteredMap, _outputPath + "runRelationMemberOrder2TestOut.osm");
 
-    HOOT_FILE_EQUALS(
-      _inputPath + "runRelationMemberOrder2TestOut.osm",
-      _outputPath + "runRelationMemberOrder2TestOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "runRelationMemberOrder2TestOut.osm",
+                     _outputPath + "runRelationMemberOrder2TestOut.osm");
   }
 };
 

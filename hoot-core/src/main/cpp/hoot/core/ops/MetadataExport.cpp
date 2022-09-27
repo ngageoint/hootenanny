@@ -121,23 +121,21 @@ void MetadataExport::_createCells()
 
 void MetadataExport::_exportMetadataFromElements()
 {
-  for (int ie = 0; ie < _elementsToProcess.length(); ie++)
+  for (const auto& element : qAsConst(_elementsToProcess))
   {
-    WayPtr assignedDataset = _assignToDataset( _elementsToProcess[ie] );
+    WayPtr assignedDataset = _assignToDataset(element);
     if (assignedDataset)
     {
+      //  Copy the destination tags to update and replace
       Tags destTags = assignedDataset->getTags();
-      Tags srcTags = _elementsToProcess[ie]->getTags();
+      const Tags& srcTags = element->getTags();
       // assign the tags we find
       for (const auto& tag : _tags.keys())
       {
         if (srcTags.contains(tag))
         {
-          if (!destTags.contains(tag))
-          {
-            // assign src tag as new tag
+          if (!destTags.contains(tag))  // assign src tag as new tag
             destTags[tag] = srcTags[tag];
-          }
           else
           {
             // attach src tag if not already assigned
@@ -161,6 +159,7 @@ void MetadataExport::_exportMetadataFromElements()
   // make sure all tags are set, if not, assign the default
   for (const auto& pDataset : _mergedGeoms.keys())
   {
+    //  Copy destination tags to update and replace
     Tags destTags = pDataset->getTags();
     for (const auto& tag : _tags.keys())
     {

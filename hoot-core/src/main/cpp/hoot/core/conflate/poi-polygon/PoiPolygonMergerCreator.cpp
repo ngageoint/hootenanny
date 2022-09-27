@@ -334,9 +334,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(MatchSetVector& matc
   }
   LOG_VARD(elementIdsToMatchTypes.size());
   if (elementIdsToMatchTypes.isEmpty())
-  {
     return;
-  }
 
   // Find all elements involved in matches of multiple types.
   QSet<ElementId> elementIdsInvolvedInOverlappingMatch;

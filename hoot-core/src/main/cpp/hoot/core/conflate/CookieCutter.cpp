@@ -53,10 +53,10 @@ CookieCutter::CookieCutter(bool crop, double outputBuffer, bool keepEntireFeatur
 
 void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) const
 {
-  LOG_VARD(cutterShapeOutlineMap->getNodes().size());
+  LOG_VARD(cutterShapeOutlineMap->getNodeCount());
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, className(), "cutter-shape-outline-map");
-  LOG_VARD(doughMap->getNodes().size());
+  LOG_VARD(doughMap->getNodeCount());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, className(), "dough-map");
 
@@ -97,7 +97,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) co
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 
   OsmMapPtr cookieCutMap = doughMap;
-  LOG_VARD(cookieCutMap->getNodes().size());
+  LOG_VARD(cookieCutMap->getNodeCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, className(), "cookie-cut-map");
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -44,9 +44,8 @@ public:
 
   static QString className() { return "RemoveMissingElementsVisitor"; }
 
-  RemoveMissingElementsVisitor(
-    const Log::WarningLevel& logLevel = Log::Trace,
-    const int maxReport = Log::getWarnMessageLimit());
+  RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
+                               const int maxReport = Log::getWarnMessageLimit());
   ~RemoveMissingElementsVisitor() override = default;
 
   void setOsmMap(OsmMap* map) override { _v->setOsmMap(map);}
@@ -62,9 +61,7 @@ public:
   { return "Removing references to elements that do not exist..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Removed " + StringUtils::formatLargeNumber(_numAffected) +
-      " missing element child references"; }
+    return QString("Removed %1 missing element child references").arg(StringUtils::formatLargeNumber(_numAffected)); }
 
   QString getDescription() const override
   { return "Removes references to any elements that do not exist"; }

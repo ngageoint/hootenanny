@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiMergerJs.h"
 
@@ -71,6 +71,7 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
   //
   // ...then pass those pairs one at a time through the merger, since it only merges pairs
   int poisMerged = 0;
+  //  Make a copy of the node map so that the iterators work while merging
   const NodeMap nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {

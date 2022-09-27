@@ -201,6 +201,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   // go through all the ways
   long wayCtr = 0;
+  //  Make a copy because the map is modified below
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
@@ -313,6 +314,7 @@ void MapCropper::apply(OsmMapPtr& map)
   // go through all the nodes
   long nodeCtr = 0;
   long nodesRemoved = 0;
+  //  Make a copy of nodes so the original can be modified
   const NodeMap nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {

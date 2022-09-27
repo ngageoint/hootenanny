@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGRENAMEKEYVISITOR_H
 #define TAGRENAMEKEYVISITOR_H
@@ -67,7 +67,7 @@ public:
 
   QString getInitStatusMessage() const override { return "Renaming tag keys..."; }
   QString getCompletedStatusMessage() const override
-  { return "Renamed " + QString::number(_numAffected) + " tag keys"; }
+  { return QString("Renamed %1 tag keys").arg(QString::number(_numAffected)); }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

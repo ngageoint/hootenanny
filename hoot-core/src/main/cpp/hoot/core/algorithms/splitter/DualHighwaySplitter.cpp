@@ -426,9 +426,8 @@ void DualHighwaySplitter::_splitWay(long wid)
   _reconnectEnd(nids[nids.size() - 1], _right);
 
   //  Keep track of the original nodes to remove them later
-  vector<long> nodes = _working->getNodeIds();
-  for (auto node_id : nodes)
-    _nodes.insert(node_id);
+  const vector<long>& nodes = _working->getNodeIds();
+  _nodes.insert(nodes.begin(), nodes.end());
 
   RemoveWayByEid::removeWay(_result, wid);
 

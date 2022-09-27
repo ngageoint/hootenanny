@@ -61,7 +61,7 @@ public:
     else if (e->getElementType() == ElementType::Relation)
     {
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-      const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+      const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
       for (const auto& member : relationMembers)
       {
         if (member.getElementId().getType() == ElementType::Way)
@@ -83,10 +83,7 @@ private:
   {
     if (way)
     {
-      vector<long> nodes = way->getNodeIds();
-      if (nodes[0] != nodes[nodes.size() - 1])
-        nodes.push_back(nodes[0]);
-
+      const vector<long>& nodes = way->getNodeIds();
       Coordinate last = _map->getNode(nodes[0])->toCoordinate();
       for (auto node_id : nodes)
       {
@@ -95,6 +92,14 @@ private:
         double theta = atan2(c.y - last.y, c.x - last.x);
         _h.addAngle(theta, distance);
         last = c;
+      }
+      //  Repeat the calculation if the way isn't closed
+      if (nodes[0] != nodes[nodes.size() - 1])
+      {
+        Coordinate c = _map->getNode(nodes[0])->toCoordinate();
+        double distance = c.distance(last);
+        double theta = atan2(c.y - last.y, c.x - last.x);
+        _h.addAngle(theta, distance);
       }
     }
   }

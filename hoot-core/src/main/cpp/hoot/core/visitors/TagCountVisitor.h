@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGCOUNTVISITOR_H
 #define TAGCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/info/OperationStatus.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -79,7 +79,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Calculating tag count statistics..."; }
   QString getCompletedStatusMessage() const override
-  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
+  { return QString("Calculated tag count statistics for %1 elements").arg(QString::number(_numAffected)); }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

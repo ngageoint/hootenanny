@@ -64,6 +64,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
 
   // TODO: make this more generic, if possible; use ElementIterator?  The next three loops are almost identical
 
+  //  Make a copy of the node map so that the map can be modified
   const NodeMap nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
@@ -81,6 +82,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
     _numAffected++;
   }
 
+  //  Make a copy of the way map so that the map can be modified
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
@@ -98,6 +100,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
     _numAffected++;
   }
 
+  //  Make a copy of the relation map so that the map can be modified
   const RelationMap relations = map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
   {
@@ -127,6 +130,7 @@ void ElementIdRemapper::restore(const OsmMapPtr& map)
 
   // TODO: make this more generic, if possible; use ElementIterator?  The next three loops are almost identical
 
+  //  Make a copy of the relation map so that the map can be modified
   const RelationMap relations = map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
   {
@@ -148,6 +152,7 @@ void ElementIdRemapper::restore(const OsmMapPtr& map)
     }
   }
 
+  //  Make a copy of the way map so that the map can be modified
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
@@ -169,6 +174,7 @@ void ElementIdRemapper::restore(const OsmMapPtr& map)
     }
   }
 
+  //  Make a copy of the node map so that the map can be modified
   const NodeMap nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {

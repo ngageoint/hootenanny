@@ -244,10 +244,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   // Create needed geospatial indexes for surrounding feature searches.
   _createFeatureIndexes();
 
-  WayMap ways = _map->getWays();
-  LOG_DEBUG(
-    "Searching for ways to snap out of " << StringUtils::formatLargeNumber(ways.size()) <<
-    " total ways...");
+  const WayMap& ways = _map->getWays();
+  LOG_DEBUG("Searching for ways to snap out of " << StringUtils::formatLargeNumber(ways.size()) << " total ways...");
   long waysProcessed = 0;
   for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
@@ -274,9 +272,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     LOG_VART(wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps));
     if (wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps))
     {
-      LOG_TRACE(
-        "Skipping processing of " << wayToSnap->getElementId() <<
-        ", as it is of an explicitly excluded type.");
+      LOG_TRACE("Skipping processing of " << wayToSnap->getElementId() << ", as it is of an explicitly excluded type.");
       continue;
     }
 
@@ -307,8 +303,7 @@ void UnconnectedWaySnapper::_createAllFeatureCriteria()
   if (_snapToExistingWayNodes)
   {
    LOG_DEBUG("Creating way node to snap to criteria...");
-    _wayNodeToSnapToCrit =
-      _createFeatureCriteria(_wayToSnapToCriteria, _snapToWayStatuses, true);
+    _wayNodeToSnapToCrit = _createFeatureCriteria(_wayToSnapToCriteria, _snapToWayStatuses, true);
   }
   // This node crit is derived from the corresponding way crit, so don't set isNode=true. Use the
   // way to snap criteria to derive it since we always snap unconnected way end nodes from the way
@@ -405,33 +400,22 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(const QString& type
     // allows us to call getChildCriteria when isNode=true.
     std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
     if (!conflatableCrit)
-    {
-      throw IllegalArgumentException(
-        "Only classes inheriting from ConflatableElementCriterion are valid as way snapping criteria.");
-    }
+      throw IllegalArgumentException("Only classes inheriting from ConflatableElementCriterion are valid as way snapping criteria.");
     if (conflatableCrit->getGeometryType() != GeometryTypeCriterion::GeometryType::Line)
-    {
-      throw IllegalArgumentException(
-        "Only classes capable of conflating linear features are valid as way snapping criteria.");
-    }
+      throw IllegalArgumentException("Only classes capable of conflating linear features are valid as way snapping criteria.");
 
     // If we're creating a node index, get the corresponding way node type from the conflatable
     // crit we just created. Assuming a single criterion returned here, which *should* be true for
     // all linear crits.
     if (isNode)
-    {
-      typeCrit =
-        Factory::getInstance().constructObject<ElementCriterion>(conflatableCrit->getChildCriteria().at(0));
-    }
+      typeCrit = Factory::getInstance().constructObject<ElementCriterion>(conflatableCrit->getChildCriteria().at(0));
 
     // configure our element criterion, in case it needs it
-    std::shared_ptr<Configurable> configurable =
-      std::dynamic_pointer_cast<Configurable>(typeCrit);
+    std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(typeCrit);
     if (configurable)
       configurable->setConfiguration(_conf);
 
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(typeCrit);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(typeCrit);
     if (mapConsumer)
       mapConsumer->setOsmMap(_map.get());
   }
@@ -464,8 +448,7 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
   LOG_DEBUG("Creating feature index of type: " << elementType << "...");
 
   // tune these indexes? - see #3054
-  featureIndex =
-    std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
+  featureIndex = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
   std::shared_ptr<SpatialIndexer> spatialIndexer;
   if (elementType == ElementType::Node)
   {
@@ -495,8 +478,7 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
 void UnconnectedWaySnapper::_snapUnconnectedWayEndNodes(const WayPtr& wayToSnap)
 {
   // Find unconnected endpoints on the way, if the way satisfies the specified crit.
-  const std::set<long> unconnectedEndNodeIds =
-    _getUnconnectedWayEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
+  const std::set<long> unconnectedEndNodeIds = _getUnconnectedWayEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
   for (auto unconnectedEndNodeId : unconnectedEndNodeIds)
   {
     bool snapOccurred = false;
@@ -602,10 +584,8 @@ std::set<long> UnconnectedWaySnapper::_getUnconnectedWayEndNodeIds(const ConstWa
   LOG_VART(secondEndNodeId);
 
   // filter all the ways containing each endpoint down by the feature crit
-  const std::set<long> filteredWaysContainingFirstEndNode =
-    WayUtils::getContainingWayIds(firstEndNodeId, _map, wayCrit);
-  const std::set<long> filteredWaysContainingSecondEndNode =
-    WayUtils::getContainingWayIds(secondEndNodeId, _map, wayCrit);
+  const std::set<long> filteredWaysContainingFirstEndNode = WayUtils::getContainingWayIds(firstEndNodeId, _map, wayCrit);
+  const std::set<long> filteredWaysContainingSecondEndNode = WayUtils::getContainingWayIds(secondEndNodeId, _map, wayCrit);
   LOG_VART(filteredWaysContainingFirstEndNode);
   LOG_VART(filteredWaysContainingSecondEndNode);
 
@@ -633,8 +613,7 @@ QList<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(const ConstNo
     env->expandBy(_getWayNodeSearchRadius(node));
     // The node neighbors must be sorted by distance to get the best way node snapping results. Not
     // sure yet if they need to be when snapping to ways.
-    neighborIds =
-      SpatialIndexer::findSortedNodeNeighbors(node, *env, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, _map);
+    neighborIds = SpatialIndexer::findSortedNodeNeighbors(node, *env, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, _map);
   }
   else
   {
@@ -754,7 +733,6 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(const NodePtr& n
       }
     }
   }
-
   return false;
 }
 
@@ -787,8 +765,7 @@ void UnconnectedWaySnapper::_snap(const NodePtr& nodeToSnap, const NodePtr& wayN
   // Skip the actual snapping if we're only marking ways that could be snapped.
   if (!_markOnly)
   {
-    LOG_TRACE(
-      "Replacing " << nodeToSnap->getElementId() << " with " << wayNodeToSnapTo->getElementId());
+    LOG_TRACE("Replacing " << nodeToSnap->getElementId() << " with " << wayNodeToSnapTo->getElementId());
     // Merge the tags.
     wayNodeToSnapTo->setTags(TagMergerFactory::mergeTags(wayNodeToSnapTo->getTags(), nodeToSnap->getTags(), ElementType::Node));
     // Replace the snapped node with the node we snapped it to.
@@ -997,9 +974,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWay(const NodePtr& nodeT
 
 bool UnconnectedWaySnapper::snapClosestWayEndpointToWay(OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo)
 {
-  LOG_TRACE(
-    "Attempting to snap " << disconnected->getElementId() << " to " << connectTo->getElementId() <<
-    "...");
+  LOG_TRACE("Attempting to snap " << disconnected->getElementId() << " to " << connectTo->getElementId() << "...");
 
   //  Create object for static call
   UnconnectedWaySnapper uws;

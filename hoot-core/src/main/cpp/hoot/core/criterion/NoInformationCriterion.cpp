@@ -49,7 +49,7 @@ NoInformationCriterion::NoInformationCriterion(bool treatReviewTagsAsMetadata)
 
 bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags tags = e->getTags();
+  const Tags& tags = e->getTags();
   const int informationCount = tags.getInformationCount();
   const int reviewTagCount = tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
 

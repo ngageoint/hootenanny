@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "LevenshteinDistance.h"
@@ -44,13 +44,9 @@ HOOT_FACTORY_REGISTER(StringDistance, LevenshteinDistance)
 LevenshteinDistance::LevenshteinDistance(double alpha)
 {
   if (alpha == -1)
-  {
     setAlpha(ConfigOptions().getLevenshteinDistanceAlpha());
-  }
   else
-  {
     setAlpha(alpha);
-  }
 }
 
 double LevenshteinDistance::compare(const QString &s1, const QString &s2) const
@@ -62,9 +58,7 @@ double LevenshteinDistance::compare(const QString &s1, const QString &s2) const
 void LevenshteinDistance::setAlpha(double alpha)
 {
   if (alpha <= 0)
-  {
     throw IllegalArgumentException("Expected alpha to be > 0.");
-  }
   _alpha = alpha;
 }
 

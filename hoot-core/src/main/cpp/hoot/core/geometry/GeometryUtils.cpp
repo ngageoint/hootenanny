@@ -510,7 +510,7 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
   QMap<int, geos::geom::Envelope> boundsById;
   OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, input);
-  const WayMap ways = map->getWays();
+  const WayMap& ways = map->getWays();
   for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     ConstWayPtr way = wayItr->second;
@@ -555,7 +555,7 @@ std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QS
   else
   {
     isEnvelope = true;
-    const NodeMap nodes = map->getNodes();
+    const NodeMap& nodes = map->getNodes();
     double min_x =  180.0,
            max_x = -180.0,
            min_y =  90.0,

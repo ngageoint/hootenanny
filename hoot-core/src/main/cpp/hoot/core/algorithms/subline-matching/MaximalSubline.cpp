@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MaximalSubline.h"
 
@@ -78,19 +78,14 @@ double MaximalSubline::ThresholdMatchCriteria::match(int index1, int index2) con
   Radians heading1, heading2;
 
   // if the line segment is zero length
+  // calculate heading based on location in way. See #4765 for the drama associated with this fix.
+  // This should find way headings appropriately even if there are one or more duplicate nodes in
+  // the way. This is done by calculating the way location before and after this node location.
+  // There may be some edge conditions when this will fail, but that seems very unlikely.
   if (ls1.p0 == ls1.p1)
-  {
-    // calculate heading based on location in way. See #4765 for the drama associated with this fix.
-    // This should find way headings appropriately even if there are one or more duplicate nodes in
-    // the way. This is done by calculating the way location before and after this node location.
-    // There may be some edge conditions when this will fail, but that seems very unlikely.
     heading1 = WayHeading::calculateHeading(WayLocation(_map, _w1, index1, 0));
-  }
-  else
-  {
-    // little faster than above and better defined.
+  else  // little faster than above and better defined.
     heading1 = ls1.angle();
-  }
 
   // if the line segment is zero length
   if (ls2.p0 == ls2.p1) // calculate heading based on location in way
@@ -273,11 +268,8 @@ vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr&
     WaySubline ws1(start1, end1);
     WaySubline ws2(start2, end2);
 
-    if (ws1.isValid() && ws1.isZeroLength() == false &&
-        ws2.isValid() && ws2.isZeroLength() == false)
-    {
+    if (ws1.isValid() && ws1.isZeroLength() == false && ws2.isValid() && ws2.isZeroLength() == false)
       result.emplace_back(ws1, ws2);
-    }
   }
 
   return result;
@@ -581,24 +573,18 @@ bool MaximalSubline::_checkForSortedSecondSubline(const vector<WaySublineMatch>&
 {
   for (size_t i = 2; i < rawSublineMatches.size(); i++)
   {
-    if (rawSublineMatches[i].getSubline2().getStart() >
-        rawSublineMatches[i - 1].getSubline2().getStart())
-    {
+    if (rawSublineMatches[i].getSubline2().getStart() > rawSublineMatches[i - 1].getSubline2().getStart())
       return false;
-    }
   }
   return true;
 }
 
 bool MaximalSubline::_rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches) const
 {
-  for (size_t i = 0; i < rawSublineMatches.size(); i++)
+  for (const auto& subline : rawSublineMatches)
   {
-    if (rawSublineMatches[i].getSubline1().getLength() < _spacing * 2 ||
-        rawSublineMatches[i].getSubline2().getLength() < _spacing * 2)
-    {
+    if (subline.getSubline1().getLength() < _spacing * 2 || subline.getSubline2().getLength() < _spacing * 2)
       return true;
-    }
   }
   return false;
 }
@@ -932,6 +918,3 @@ void MaximalSubline::_snapToTerminal(WayLocation& wl, bool startOfLines, double 
 }
 
 }
-
-
-

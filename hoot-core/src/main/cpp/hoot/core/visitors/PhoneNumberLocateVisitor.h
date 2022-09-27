@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PHONE_NUMBER_LOCATE_VISITOR_H
 #define PHONE_NUMBER_LOCATE_VISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/phone/PhoneNumberLocator.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -66,9 +66,8 @@ public:
   { return "Locating elements with phone numbers..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Located " + QString::number(_totalPhoneNumbersLocated) + " phone numbers on " +
-      QString::number(_numAffected) + " different elements";
+    return QString("Located %1 phone numbers on %2 different elements")
+            .arg(QString::number(_totalPhoneNumbersLocated), QString::number(_numAffected));
   }
 
   QString getName() const override { return className(); }

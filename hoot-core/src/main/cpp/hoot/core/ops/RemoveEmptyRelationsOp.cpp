@@ -59,7 +59,7 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const b
     if (!relation)
       continue;
     const long relationId = relation->getId();
-    const long membersSize = relation->getMembers().size();
+    const long membersSize = relation->getMemberCount();
     if (membersSize == 0)
     {
       LOG_TRACE("Removing empty relation: " << relationId);

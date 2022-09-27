@@ -56,11 +56,7 @@ void MetadataOp::apply(std::shared_ptr<OsmMap>& pMap)
   if (_datasetIndicator.first.length() == 0)
     return;
 
-  _allWays = _pMap->getWays();
-  _allNodes = _pMap->getNodes();
-  _allRels = _pMap->getRelations();
-
-  _numProcessed = _allWays.size() + _allNodes.size() + _allRels.size();
+  _numProcessed = static_cast<size_t>(_pMap->getElementCount());
 
   _apply();
 }
@@ -97,7 +93,8 @@ void MetadataOp::_gatherProcessElements()
   int nodeCount = 0;
   int nodesInDatasets = 0;
 
-  for (auto it = _allWays.begin(); it != _allWays.end(); ++it)
+  const WayMap& ways = _pMap->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     // ignore the ways providing the dataset
     if (!_datasetWayPolys.contains(it->second) && it->second->getTags().hasInformationTag())
@@ -107,7 +104,8 @@ void MetadataOp::_gatherProcessElements()
     }
   }
 
-  for (auto it = _allRels.begin(); it != _allRels.end(); ++it)
+  const RelationMap& relations = _pMap->getRelations();
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     if (it->second->getTags().hasInformationTag())
     {
@@ -116,7 +114,8 @@ void MetadataOp::_gatherProcessElements()
     }
   }
 
-  for (auto it = _allNodes.begin(); it != _allNodes.end(); ++it)
+  const NodeMap& nodes = _pMap->getNodes();
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     NodePtr pNode = it->second;
 
@@ -127,8 +126,7 @@ void MetadataOp::_gatherProcessElements()
     }
 
     // determine all node locations for assigning elements to datasets
-    shared_ptr<Point> pPoint = shared_ptr<Point>(
-          GeometryFactory::getDefaultInstance()->createPoint(Coordinate(pNode->getX(),pNode->getY())));
+    shared_ptr<Point> pPoint(GeometryFactory::getDefaultInstance()->createPoint(Coordinate(pNode->getX(),pNode->getY())));
 
     nodeCount++;
 
@@ -166,7 +164,7 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
 
   if (pw)
   {
-     vector<long> nodes = pw->getNodeIds();
+     const vector<long>& nodes = pw->getNodeIds();
      elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
   }
 
@@ -182,7 +180,7 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
         case ElementType::Way:
         {
           const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
-          vector<long> nodes = pWay->getNodeIds();
+          const vector<long>& nodes = pWay->getNodeIds();
           elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
           break;
         }

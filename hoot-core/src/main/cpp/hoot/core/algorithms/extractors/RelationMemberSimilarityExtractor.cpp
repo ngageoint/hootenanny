@@ -64,7 +64,7 @@ double RelationMemberSimilarityExtractor::extract(const OsmMap& map, const std::
     int numSharedMembers = 0;
 
     QSet<RelationMemberComparison> targetMemberComps;
-    const std::vector<RelationData::Entry> targetMembers = targetRelation->getMembers();
+    const std::vector<RelationData::Entry>& targetMembers = targetRelation->getMembers();
     for (const auto& member : targetMembers)
     {
       ConstElementPtr memberElement = map.getElement(member.getElementId());
@@ -78,7 +78,7 @@ double RelationMemberSimilarityExtractor::extract(const OsmMap& map, const std::
     LOG_VART(targetMemberComps.size());
 
     QSet<RelationMemberComparison> candidateMemberComps;
-    const std::vector<RelationData::Entry> candidateMembers = candidateRelation->getMembers();
+    const std::vector<RelationData::Entry>& candidateMembers = candidateRelation->getMembers();
     for (const auto& member : candidateMembers)
     {
       ConstElementPtr memberElement = map.getElement(member.getElementId());

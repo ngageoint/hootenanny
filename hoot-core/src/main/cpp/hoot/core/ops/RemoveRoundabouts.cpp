@@ -53,7 +53,8 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 
   // Get a list of roundabouts in the map
   RoundaboutCriterion roundaboutCrit;
-  for (auto it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
+  const WayMap& ways = _pMap->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     if (roundaboutCrit.isSatisfied(it->second))
       _todoWays.push_back(it->first);

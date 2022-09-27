@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -185,7 +185,7 @@ public:
     uut._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     map->visitRw(uut);
 
-    CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL(QString("school").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
     CPPUNIT_ASSERT_EQUAL(QString("bank").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(!map->getNode(1)->getTags().contains("hoot:implicitTags:tagsAdded"));
@@ -217,7 +217,7 @@ public:
     uut._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     map->visitRw(uut);
 
-    CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL(QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
     CPPUNIT_ASSERT_EQUAL(QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(!map->getNode(1)->getTags().contains("hoot:implicitTags:tagsAdded"));
@@ -250,7 +250,7 @@ public:
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 
-    CPPUNIT_ASSERT_EQUAL(3, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(3, map->getNode(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL(QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
     CPPUNIT_ASSERT_EQUAL(QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(map->getNode(1)->getTags().contains("hoot:implicitTags:tagsAdded"));

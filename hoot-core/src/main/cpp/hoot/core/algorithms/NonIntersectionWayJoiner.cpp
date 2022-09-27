@@ -56,7 +56,7 @@ void NonIntersectionWayJoiner::_joinAtNode()
 {
   LOG_INFO("\tJoining ways at non-intersection shared nodes...");
 
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   unordered_set<long> ids;
   std::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   HighwayCriterion highway(_map);
@@ -89,8 +89,8 @@ void NonIntersectionWayJoiner::_joinAtNode()
     const vector<long> v_way_ids(way_ids.begin(), way_ids.end());
     if (way_ids.size() != 2)
       continue;
-    WayPtr way1 = ways[v_way_ids.at(0)];
-    WayPtr way2 = ways[v_way_ids.at(1)];
+    WayPtr way1 = ways.find(v_way_ids.at(0))->second;
+    WayPtr way2 = ways.find(v_way_ids.at(1))->second;
 
     long wid1 = way1->getId();
     long wid2 = way2->getId();

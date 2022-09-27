@@ -714,8 +714,9 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   if (_includeDebugTags)
   {
+    //  TODO: Nothing is actually happening here, right?  Add a tag to a copy of the tags and then pop them off the stack?!
     Tags tags = node->getTags();
-    //keep the hoot:id tag in sync with what could be a newly assigned id
+    //  keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(nodeDbId));
   }
 
@@ -725,7 +726,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
     _outputSections[ApiDb::getNodeTagsTableName()],
     node->getVersion());
   _writeStats.nodesWritten++;
-  _writeStats.nodeTagsWritten += node->getTags().size();
+  _writeStats.nodeTagsWritten += node->getTagCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(node, nodeDbId);
@@ -771,8 +772,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
              _outputSections[ApiDb::getWayTagsTableName()],
              way->getVersion());
   _writeStats.waysWritten++;
-  _writeStats.wayTagsWritten += way->getTags().size();
-  _writeStats.wayNodesWritten += way->getNodeIds().size();
+  _writeStats.wayTagsWritten += way->getTagCount();
+  _writeStats.wayNodesWritten += way->getNodeCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(way, wayDbId);
@@ -820,8 +821,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
              _outputSections[ApiDb::getRelationTagsTableName()],
              version);
   _writeStats.relationsWritten++;
-  _writeStats.relationTagsWritten += relation->getTags().size();
-  _writeStats.relationMembersWritten += relation->getMembers().size();
+  _writeStats.relationTagsWritten += relation->getTagCount();
+  _writeStats.relationMembersWritten += relation->getMemberCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(relation, relationDbId);
@@ -1104,7 +1105,7 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
 
   unsigned int memberSequenceIndex = 1;
   const long relationId = relation->getId();
-  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   std::shared_ptr<Tgs::BigMap<long, unsigned long>> knownElementMap;
 
   for (const auto& member : relationMembers)

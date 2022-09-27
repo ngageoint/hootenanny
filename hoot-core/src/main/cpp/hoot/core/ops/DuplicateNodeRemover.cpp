@@ -176,6 +176,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                 replace = false;
               }
 
+              //  Copy the tags so that they can be modified
               Tags tags1 = n1->getTags();
               tags1.removeMetadata();
               Tags tags2 = n2->getTags();

@@ -22,17 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "LongBox.h"
 
-//std includes
+//  std
 #include <cmath>
-
-//hoot includes
-
-
 
 using namespace std;
 
@@ -60,9 +56,7 @@ long int LongBox::calculateVolume() const
 {
   long result = 1;
   for (uint i = 0; i < getMin().size(); i++)
-  {
     result *= getWidth(i);
-  }
   return result;
 }
 
@@ -97,15 +91,10 @@ LongBox LongBox::expand(int size) const
 bool LongBox::in(const vector<long int>& p) const
 {
   if (p.size() < _min.size() || p.size() < _max.size())
-  {
     throw HootException("Input vector size is less than min or max size.");
-  }
-
   bool result = true;
   for (uint i = 0; i < getMin().size(); i++)
-  {
     result = result && (p[i] >= getMin()[i]) && (p[i] <= getMax()[i]);
-  }
   return result;
 }
 
@@ -113,9 +102,7 @@ QString LongBox::toString() const
 {
   QString result = "{ ";
   for (uint i = 0; i < _min.size(); i++)
-  {
     result += "( " + QString::number(getMin()[i]) + " : " + QString::number(getMax()[i]) + ") ";
-  }
   result += "}";
   return result;
 }
@@ -123,9 +110,7 @@ QString LongBox::toString() const
 long LongBox::getWidth(int d) const
 {
   if (d > (int)getMin().size() || d > (int)getMax().size())
-  {
     throw HootException("Index is greater than min or max size.");
-  }
   return getMax()[d] - getMin()[d] + 1;
 }
 

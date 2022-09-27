@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SUBLINE_STRING_MATCHER_FACTORY_H
 #define SUBLINE_STRING_MATCHER_FACTORY_H
@@ -50,10 +50,8 @@ public:
    * @return an initialized subline string matcher
    * @throws IllegalArgumentException if a map was needed for configuration and none was passed in
    */
-  static SublineStringMatcherPtr getMatcher(
-    const CreatorDescription::BaseFeatureType& featureType =
-      CreatorDescription::BaseFeatureType::Unknown,
-    const ConstOsmMapPtr& map = ConstOsmMapPtr());
+  static SublineStringMatcherPtr getMatcher(const CreatorDescription::BaseFeatureType& featureType = CreatorDescription::BaseFeatureType::Unknown,
+                                            const ConstOsmMapPtr& map = ConstOsmMapPtr());
 
 private:
 
@@ -64,9 +62,8 @@ private:
   static SublineStringMatcherPtr _getGenericLineMatcher();
   static SublineStringMatcherPtr _getDefaultMatcher();
 
-  static SublineStringMatcherPtr _getMatcher(
-    const QString& sublineStringMatcherName, const QString& sublineMatcherName,
-    const double maxAngle, const double headingDelta, const int maxRecursions);
+  static SublineStringMatcherPtr _getMatcher(const QString& sublineStringMatcherName, const QString& sublineMatcherName,
+                                             const double maxAngle, const double headingDelta, const int maxRecursions);
 };
 
 }

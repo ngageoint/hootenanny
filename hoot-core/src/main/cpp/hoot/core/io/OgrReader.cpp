@@ -1255,11 +1255,8 @@ bool OgrReaderInternal::hasMoreElements()
     return false;
 
   // Do we have data already in map from previous reads?
-  if ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) ||
-     (_relationsItr != _map->getRelations().end()))
-  {
+  if ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) || (_relationsItr != _map->getRelations().end()))
     return true;
-  }
 
   // Let's try a read and see if that put anything into the map. Do a read if the element maps are
   // empty.

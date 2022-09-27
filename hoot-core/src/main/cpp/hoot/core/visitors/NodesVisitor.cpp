@@ -22,24 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NodesVisitor.h"
 
 namespace hoot
 {
 
-NodesVisitor::NodesVisitor(QList<ConstNodePtr>& n) :
-_n(n)
+NodesVisitor::NodesVisitor(QList<ConstNodePtr>& n)
+  : _n(n)
 {
 }
 
 void NodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
-  {
     _n.append(std::dynamic_pointer_cast<const Node>(e));
-  }
 }
 
 }

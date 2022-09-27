@@ -29,9 +29,9 @@
 #include <gdal.h>
 
 // GEOS
+#include <geos/version.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
-#include <geos/version.h>
 
 // CPP Unit
 #include <cppunit/Exception.h>
@@ -131,8 +131,7 @@ public:
     cout << endl << "Failure: " << failure.failedTest()->getName() << endl;
     if (!_suppressFailureDetail)
     {
-      cout << "  " << failure.sourceLine().fileName() << "("
-           << failure.sourceLine().lineNumber() << ") ";
+      cout << "  " << failure.sourceLine().fileName() << "(" << failure.sourceLine().lineNumber() << ") ";
       CppUnit::Exception* e = failure.thrownException();
       if (e != nullptr && QString::fromStdString(e->message().details()).trimmed() != "")
         cout << "  " << e->message().details();
@@ -152,10 +151,7 @@ public:
     if (_showTestName)
       cout << test->getName() << " - " << elapsed << endl;
     if (elapsed > _testTimeout && _testTimeout >= 0.0)
-    {
-      cout << "Test " << test->getName().data() << " ran longer than expected -- "
-           << elapsed << endl;
-    }
+      cout << "Test " << test->getName().data() << " ran longer than expected -- " << elapsed << endl;
     cout.flush();
 
     _start = Tgs::Time::getTime();
@@ -367,19 +363,14 @@ const QMap<QString, QMap<QString, QString>>& getAllOptions()
     test_list["--slow-only"] = "Run the 'slow' level tests only";
     // Don't show this option if we're not configured to validate test output.
     if (ConfigOptions().getTestValidationEnable())
-    {
       test_list["--validated-only"] = "Run only tests where some or all of the output is validated";
-    }
     test_list["--single [test name]"] = "Run only the test specified";
-    test_list["--exclude=[regex]"] =
-      "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
-    test_list["--include=[regex]"] =
-      "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
+    test_list["--exclude=[regex]"] = "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
+    test_list["--include=[regex]"] = "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
     options["Test List"] = test_list;
 
     QMap<QString, QString> run_parallel;
-    run_parallel["--parallel [process count]"] =
-      "Run the specified tests in parallel with the specified number of processes";
+    run_parallel["--parallel [process count]"] = "Run the specified tests in parallel with the specified number of processes";
     options["Run in parallel"] = run_parallel;
 
     QMap<QString, QString> advanced;
@@ -388,8 +379,7 @@ const QMap<QString, QMap<QString, QString>>& getAllOptions()
     advanced["--diff"] = "Print a diff when a script test fails";
     advanced["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
     advanced["--names"] = "Show the names of all the tests as they run";
-    advanced["--suppress-failure-detail"] =
-      "Do not show test failure detailed messages; disables --diff for script tests";
+    advanced["--suppress-failure-detail"] = "Do not show test failure detailed messages; disables --diff for script tests";
     options["Advanced"] = advanced;
   }
   return options;

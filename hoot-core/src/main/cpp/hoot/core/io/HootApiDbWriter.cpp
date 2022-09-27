@@ -332,7 +332,7 @@ void HootApiDbWriter::_startNewChangeSet()
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());
-
+  //  Copy tags to update and add additional information
   Tags tags = n->getTags();
   _addElementTags(n, tags);
 
@@ -369,7 +369,7 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   LOG_TRACE("Writing way: " << w->getElementId());
 
   long wayId;
-
+  //  Copy tags to update and add additional information
   Tags tags = w->getTags();
   _addElementTags(w, tags);
 
@@ -409,7 +409,7 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
   LOG_TRACE("Writing relation: " << r->getElementId());
 
   long relationId;
-
+  //  Copy tags to update and add additional information
   Tags tags = r->getTags();
   _addElementTags(r, tags);
 
@@ -432,9 +432,9 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     relationId = r->getId();
   }
 
-  for (size_t i = 0; i < r->getMembers().size(); ++i)
+  for (size_t i = 0; i < r->getMemberCount(); ++i)
   {
-    RelationData::Entry e = r->getMembers()[i];
+    const RelationData::Entry& e = r->getMembers()[i];
 
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();

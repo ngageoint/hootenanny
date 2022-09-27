@@ -22,25 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ToEnglishTranslationComparisonVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ToEnglishTranslationComparisonVisitor)
-
-ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor() :
-ToEnglishTranslationVisitor()
-{
-}
 
 void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& conf)
 {
@@ -50,8 +45,8 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
       opts.getLanguageTranslationSourceLanguages().contains("detect", Qt::CaseInsensitive))
   {
     throw HootException(
-      QString("ToEnglishTranslationComparisonVisitor supports only one source language ") +
-      QString("and does not support detect mode."));
+      QString("ToEnglishTranslationComparisonVisitor supports only one source language "
+              "and does not support detect mode."));
   }
 
   ToEnglishTranslationVisitor::setConfiguration(conf);
@@ -68,8 +63,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
   }
 
   _translationScorer =
-    Factory::getInstance().constructObject<StringDistance>(
-      opts.getLanguageTranslationComparisonScorer());
+    Factory::getInstance().constructObject<StringDistance>(opts.getLanguageTranslationComparisonScorer());
 
   //use a different collection of tag keys here as a list and ignore the parse names option, since
   //we need to retain the key ordering to be in sync with _preTranslatedTagKeys and don't care
@@ -80,8 +74,8 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
   if (_preTranslatedTagKeys.size() != opts.getLanguageTagKeys().size())
   {
     throw HootException(
-      QString("When performing language translation comparison, the number of pre-translated ") +
-      QString("tag keys must match that of the keys of the tags to be translated."));
+      QString("When performing language translation comparison, the number of pre-translated "
+              "tag keys must match that of the keys of the tags to be translated."));
   }
 }
 
@@ -105,21 +99,17 @@ void ToEnglishTranslationComparisonVisitor::visit(const std::shared_ptr<Element>
 
       if (ToEnglishTranslationVisitor::_translate(e, toTranslateTagKey))
       {
-        const double similarityScore =
-          _translationScorer->compare(_preTranslatedVal, _translatedText);
+        const double similarityScore = _translationScorer->compare(_preTranslatedVal, _translatedText);
         LOG_VARD(similarityScore);
-        _element->getTags().appendValue(
-          "hoot:translated:similarity:score:" + _toTranslateTagKey + ":en",
-          QString::number(similarityScore));
+        _element->getTags().appendValue("hoot:translated:similarity:score:" + _toTranslateTagKey + ":en",
+                                        QString::number(similarityScore));
         _numProcessedTags++;
       }
     }
   }
 
   if (atLeastOneTranslationCompared)
-  {
     _numProcessedElements++;
-  }
   _numTotalElements++;
 }
 

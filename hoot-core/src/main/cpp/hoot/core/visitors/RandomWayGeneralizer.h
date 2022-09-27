@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RANDOM_WAY_GENERALIZER_H
 #define RANDOM_WAY_GENERALIZER_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/RngConsumer.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -79,16 +79,14 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
-   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
   /**
     the probability that any way will be generalized
    */
   void setWayGeneralizeProbability(double probability)
   {
     if (probability < 0.0 || probability > 1.0)
-    {
       throw HootException("Invalid generalize probability: " + QString::number(probability));
-    }
     _wayGeneralizeProbability = probability;
   }
 

@@ -58,12 +58,12 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, _inputPath + "jakarta_raya_coastline.shp", true);
     MapProjector::projectToOrthographic(map);
-    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeCount());
 
     // Merge all nodes within a meter.
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
-    CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodeCount());
   }
 
   void runMetadataTest()
@@ -77,7 +77,7 @@ public:
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeCount());
 
     // uuid is a metadata tag and should be ignored, so no removal here
     map->clear();
@@ -89,7 +89,7 @@ public:
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeCount());
 
     // hoot:* tags are metadata tags and should be ignored, so no removal here
     map->clear();
@@ -101,7 +101,7 @@ public:
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeCount());
 
     // The nodes are inside of the proximity threshold but have different names, so aren't
     // duplicates.
@@ -114,7 +114,7 @@ public:
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
   }
 
   void runInvalidDistanceTest()
@@ -144,7 +144,7 @@ public:
 
     DuplicateNodeRemover::removeNodes(map, 1.0, true);
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeCount());
   }
 };
 

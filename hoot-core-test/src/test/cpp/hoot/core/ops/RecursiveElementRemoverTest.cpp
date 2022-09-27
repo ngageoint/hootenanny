@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 
 namespace hoot
 {
@@ -50,19 +50,13 @@ public:
     OsmMapPtr result = std::make_shared<OsmMap>();
 
     for (long nid = 1; nid <= 13; nid++)
-    {
       result->addNode(std::make_shared<Node>(Status::Unknown1, nid, 0.0, 0.0, -1));
-    }
 
     for (long wid = 1; wid <= 5; wid++)
-    {
       result->addWay(std::make_shared<Way>(Status::Unknown1, wid, -1));
-    }
 
     for (long rid = 1; rid <= 4; rid++)
-    {
       result->addRelation(std::make_shared<Relation>(Status::Unknown1, rid, -1));
-    }
 
     WayPtr w1 = result->getWay(1);
     w1->addNode(1);
@@ -142,9 +136,9 @@ public:
     uut.apply(map);
 
     // it should remove two ways, 5 nodes and one relation
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size() - 2, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size() - 4, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(base->getRelations().size() - 1, map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount() - 2, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount() - 4, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(base->getRelationCount() - 1, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(3));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(4));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(5));
@@ -158,9 +152,9 @@ public:
     uut2.apply(map);
 
     // it should remove two ways, 5 nodes and one relation
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size() - 1, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size() - 3, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(base->getRelations().size() - 2, map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount() - 1, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount() - 3, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(base->getRelationCount() - 2, map->getRelationCount());
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(3));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(11));
     CPPUNIT_ASSERT_EQUAL(true, map->containsWay(4));
@@ -179,8 +173,8 @@ public:
     uut.apply(map);
 
     // it should remove one way, but leave node 3 (shared w/ way 2)
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size() - 1, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size() - 2, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount() - 1, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount() - 2, map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(1));
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(2));
     CPPUNIT_ASSERT_EQUAL(false, map->containsWay(1));
@@ -191,8 +185,8 @@ public:
     uut2.apply(map);
 
     // There should be no change
-    CPPUNIT_ASSERT_EQUAL(base->getWays().size(), map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(base->getNodes().size(), map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(base->getWayCount(), map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(base->getNodeCount(), map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(3));
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(4));
     CPPUNIT_ASSERT_EQUAL(true, map->containsWay(2));
