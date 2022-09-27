@@ -244,7 +244,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translateFrom'
             });
-            assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP TRD4');
+            assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP');
         });
 
         it('should handle translateTo TDSv61 POST', function() {
