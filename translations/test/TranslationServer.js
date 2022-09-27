@@ -244,7 +244,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translateFrom'
             });
-            assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP');
+            assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP TRD4');
         });
 
         it('should handle translateTo TDSv61 POST', function() {
@@ -501,7 +501,7 @@ describe('TranslationServer', function () {
               if (err) console.log(err)
               // tree that cannot be translated...
               assert.equal(result.osm.way[4].tag[0].$.k, 'error')
-              assert.equal(result.osm.way[4].tag[0].$.v, 'Line geometry is not valid for EC005 in this schema')
+              assert.equal(result.osm.way[4].tag[0].$.v, 'Line geometry is not valid for EC005 in TDSv61')
             })
         });
 
@@ -538,7 +538,7 @@ describe('TranslationServer', function () {
             assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "MGCP");
 
             var tags = gj.features[0].properties;
-            assert.equal(tags["error"], 'Point geometry is not valid for AK120 in this schema');
+            assert.equal(tags["error"], 'Point geometry is not valid for AK120 in MGCP TRD4');
         });
 
         it('should handle bad translation schema value in translateTo POST', function() {

@@ -2759,7 +2759,7 @@ mgcp = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in MGCP TRD4.'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in MGCP TRD4'}, tableName: ''});
         }
         return returnData;
       }

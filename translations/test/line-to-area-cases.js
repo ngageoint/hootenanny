@@ -53,7 +53,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(trans2mgcp, function(err, result) {
                 if (err) console.log(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "error");
-                assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for BD100 in this schema");
+                assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for BD100 in MGCP TRD4");
             });
         });
         it('should handle OSM to GGDMv30', function() {
@@ -114,7 +114,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(trans2mgcp, function(err, result) {
                 if (err) console.log(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "error");
-                assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AA012 in this schema");
+                assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AA012 in MGCP TRD4");
             });
         });
         it('should handle OSM to GGDMv30', function() {
@@ -159,7 +159,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(trans2tds61, function(err, result) {
                 if (err) console.log(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "error");
-                assert.equal(result.osm.way[0].tag[0].$.v, 'Line geometry is not valid for AQ111 in this schema');
+                assert.equal(result.osm.way[0].tag[0].$.v, 'Line geometry is not valid for AQ111 in TDSv61');
             });
         });
         // AQ111 is not a valid MGCP F_CODE
@@ -187,7 +187,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(trans2ggdmv30, function(err, result) {
               if (err) console.log(err);
               assert.equal(result.osm.way[0].tag[0].$.k, "error");
-              assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AQ111 in this schema");
+              assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AQ111 in GGDMv30");
             })
         })
     })

@@ -2938,7 +2938,7 @@ tds40 = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv4.0.'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv40'}, tableName: ''});
         }
         return returnData;
       }
