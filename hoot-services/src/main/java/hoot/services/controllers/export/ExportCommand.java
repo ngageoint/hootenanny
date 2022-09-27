@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.export;
 
@@ -167,6 +167,11 @@ class ExportCommand extends ExternalCommand {
         // Add the option to append to a gdb template
         if (params.getAppend()) {
             options.add("ogr.append.data=true");
+        }
+
+        // Add the option to export thematic groups
+        if (!params.getThematic()) {
+            options.add("ogr.thematic.structure=false");
         }
 
         //Add the orders convert operations
