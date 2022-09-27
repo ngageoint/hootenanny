@@ -41,6 +41,9 @@ var assert = require('assert'),
 parser = new DOMParser();
 
 var HOOT_HOME = process.env.HOOT_HOME;
+
+console.log('HOOT_HOME is ' + HOOT_HOME);
+
 var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var server = require(HOOT_HOME + '/translations/TranslationServer.js');
@@ -122,6 +125,59 @@ function makeJson(OSM)
   // return JSON.stringify(osmJson,Object.keys(osmJson).sort());
   return osmJson;
 };
+
+function getTranslationsList()
+{
+  try {
+    var feature = server.handleInputs({
+      method: 'GET',
+      path: '/getTranslations'
+    });
+    // console.log(schema + ': ' + code + ' ' + geo + ' ' + feature.name + '  ' + feature.desc);
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+}; // End getTranslationsList
+
+// Wrapper for 'capabilities', 'translations','version' etc'
+function getThing(thing)
+{
+  try {
+    var feature = server.handleInputs({
+      method: 'GET',
+      path: '/' + thing
+    });
+    // console.log(schema + ': ' + code + ' ' + geo + ' ' + feature.name + '  ' + feature.desc);
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+}; // End thing
+
+
+function schemaFromFcode(F_CODE,geometry,schema)
+{
+  try {
+    var feature = server.handleInputs({
+      idelem: 'fcode',
+      idval: F_CODE,
+      geom: geometry,
+      translation: schema,
+      method: 'GET',
+      path: '/translateTo'
+    });
+    // console.log(schema + ': ' + code + ' ' + geo + ' ' + feature.name + '  ' + feature.desc);
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+}; // End osmToOge
+
+
 
 
 // From the schema:
@@ -426,4 +482,5 @@ if (typeof exports !== 'undefined') {
     exports.testOSM = testOSM;
     exports.testSchema = testSchema;
     exports.dumpValues = dumpValues;
+    exports.getThing = getThing;
 }
