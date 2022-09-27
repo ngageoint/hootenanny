@@ -129,13 +129,19 @@ tds71 = {
       });
     }
 
-    // Create a lookup table of Thematic structure attributes. Note this is <GLOBAL>
-    tds71.thematicLookup = translate.makeThematicAttrLookup(tds71.thematicSchema);
+    // Create a lookup table of thematic attributes. Note this is <GLOBAL>
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
+    {
+      tds71.thematicLookup = translate.makeThematicAttrLookup(translate.addTagFeatures(tds71.thematicSchema));
+    }
+    else
+    {
+      tds71.thematicLookup = translate.makeThematicAttrLookup(translate.addSingleTagFeature(tds71.thematicSchema));
+    }
     // Debug:
     // print("tds71.thematicLookup");
     // translate.dumpLookup(tds71.thematicLookup);
     // print('##########');
-
 
     // Build a lookup table  of F_CODE to Thematic layer names
     tds71.thematicGroupList = {}
@@ -152,7 +158,7 @@ tds71 = {
     if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
-      tds71.thematicSchema = translate.addO2sFeatures(translate.addTagFeatures(tds71.thematicSchema));
+      tds71.thematicSchema = translate.addO2sFeatures(tds71.thematicSchema);
     }
     else
     {
@@ -164,7 +170,7 @@ tds71 = {
       else
       {
         // Add O2S and OSMTAGS
-      tds71.thematicSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(tds71.thematicSchema));
+      tds71.thematicSchema = translate.addSingleO2sFeature(tds71.thematicSchema);
       }
     }
 
@@ -2940,13 +2946,13 @@ tds71 = {
       // Make the fuzzy lookup table
       tds71.fuzzy = schemaTools.generateToOgrTable(tds71.rules.fuzzyTable);
       // Debug
-      //             for (var k1 in tds71.fuzzy)
-      //             {
-      //                 for (var v1 in tds71.fuzzy[k1])
-      //                 {
-      //                     print(JSON.stringify([k1, v1, tds71.fuzzy[k1][v1][0], tds71.fuzzy[k1][v1][1], tds71.fuzzy[k1][v1][2]]));
-      //                 }
-      //             }
+      // for (var k1 in tds71.fuzzy)
+      // {
+      //     for (var v1 in tds71.fuzzy[k1])
+      //     {
+      //         print(JSON.stringify([k1, v1, tds71.fuzzy[k1][v1][0], tds71.fuzzy[k1][v1][1], tds71.fuzzy[k1][v1][2]]));
+      //     }
+      // }
     } // End tds71.lookup Undefined
 
     // Doing this early to help the debug output
@@ -3115,7 +3121,7 @@ tds71 = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in this schema'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv7.1.'}, tableName: ''});
         }
         return returnData;
       }

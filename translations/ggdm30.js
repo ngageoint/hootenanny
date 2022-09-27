@@ -2800,6 +2800,13 @@ ggdm30 = {
   // This is the main routine to convert _TO_ GGDM
   toOgr : function(tags, elementType, geometryType)
   {
+    // The Nuke Option: If we have a relation, drop the feature and carry on
+    if (tags['building:part']) return null;
+
+    // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line
+    // There is no way we can translate these to a single GGDM30 feature
+    if (geometryType == 'Collection') return null;
+
     var tableName = ''; // The final table name
     var returnData = []; // The array of features to return
     var transMap = {}; // A map of translated attributes
@@ -2832,17 +2839,6 @@ ggdm30 = {
       var tmp_schema = ggdm30.getDbSchema();
     }
 
-    // The Nuke Option: If we have a relation, drop the feature and carry on
-    if (tags['building:part']) return null;
-
-    // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line
-    // There is no way we can translate these to a single GGDM30 feature
-    if (geometryType == 'Collection') return null;
-
-    // Start processing here
-    // Debug:
-    if (ggdm30.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
-
     // Set up the fcode translation rules. We need this due to clashes between the one2one and
     // the fcode one2one rules
     if (ggdm30.fcodeLookup == undefined)
@@ -2872,14 +2868,18 @@ ggdm30 = {
       ggdm30.fuzzy = schemaTools.generateToOgrTable(ggdm30.rules.fuzzyTable);
 
       // Debug
-      //             for (var k1 in ggdm30.fuzzy)
-      //             {
-      //                 for (var v1 in ggdm30.fuzzy[k1])
-      //                 {
-      //                     print(JSON.stringify([k1, v1, ggdm30.fuzzy[k1][v1][0], ggdm30.fuzzy[k1][v1][1], ggdm30.fuzzy[k1][v1][2]]));
-      //                 }
-      //             }
+      // for (var k1 in ggdm30.fuzzy)
+      // {
+      //     for (var v1 in ggdm30.fuzzy[k1])
+      //     {
+      //         print(JSON.stringify([k1, v1, ggdm30.fuzzy[k1][v1][0], ggdm30.fuzzy[k1][v1][1], ggdm30.fuzzy[k1][v1][2]]));
+      //     }
+      // }
     } // End ggdm30.lookup Undefined
+
+    // Start processing here
+    // Debug:
+    if (ggdm30.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // Override values if appropriate
     translate.overrideValues(tags,ggdm30.toChange);
@@ -3036,7 +3036,7 @@ ggdm30 = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in this schema'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in GGDMv3.0.'}, tableName: ''});
         }
         return returnData;
       }
