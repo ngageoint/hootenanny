@@ -162,20 +162,6 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[0].$.v, 'Line geometry is not valid for AQ111 in TDSv61');
             });
         });
-        // AQ111 is not a valid MGCP F_CODE
-        // it('should handle OSM to MGCP', function() {
-        //     var trans2mgcp = server.handleInputs({
-        //         osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='natural' v='volcano' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
-        //         method: 'POST',
-        //         translation: 'MGCP',
-        //         path: '/translateTo'
-        //     });
-        //     xml2js.parseString(trans2mgcp, function(err, result) {
-        //         if (err) console.log(err);
-        //         assert.equal(result.osm.way[0].tag[0].$.k, "error");
-        //         assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for DB180 in this schema");
-        //     });
-        // });
         it('should handle OSM to GGDMv30', function() {
             var trans2ggdmv30 = server.handleInputs({
                 osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
