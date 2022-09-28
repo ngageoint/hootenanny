@@ -125,15 +125,15 @@ function validateExportParams(req, res) {
     var message;
     // check the datasource
     if (!config.datasources[req.params.datasource]) {
-        message = 'Datasource not found';
+        message = `Datasource "${req.params.datasource}" not found`;
     }
     // check the schema
     if (!config.schemas[req.params.schema]) {
-        message = 'Schema not found';
+        message = `Schema "${req.params.schema}" not found`;
     }
     // check the format
     if (!config.formats[req.params.format]) {
-        message = 'Format not found';
+        message = `Format "${req.params.format}" not found`;
     }
     if (message) {
         res.status(400);
@@ -544,7 +544,7 @@ function doExport(req, res, hash, input) {
         var child = null;
         var id = uuid.v4();
         var output = 'export_' + id;
-        var isFile = req.params.format === 'OSM XML';
+        var isFile = ['OSM XML', 'GeoPackage'].includes(req.params.format);
         var outDir = appDir + output;
         var outFile = outDir + config.formats[req.params.format];
         if (req.params.format === 'File Geodatabase') outDir = outFile;
