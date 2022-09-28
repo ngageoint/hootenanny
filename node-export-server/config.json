@@ -13,7 +13,8 @@
   "formats": {
     "OSM XML": ".osm",
     "Shapefile": ".shp",
-    "File Geodatabase": ".gdb"
+    "File Geodatabase": ".gdb",
+    "GeoPackage": ".gpkg"
   },
   "schemas": {
     "OSM": "translations/RenderDb.js",

@@ -112,6 +112,9 @@ app.get('/job/:hash', function(req, res) {
 /* Post export */
 // export/Overpass/OSM/Shapefile
 app.post('/export/:datasource/:schema/:format', function(req, res) {
+    //validate the params
+    if (!validateExportParams(req, res)) return;
+
     writeExportFile(req, function(jobHash, input) {
         doExport(req, res, jobHash, input);
     })
@@ -135,6 +138,9 @@ function validateExportParams(req, res) {
     if (message) {
         res.status(400);
         res.send(message);
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -142,7 +148,7 @@ function validateExportParams(req, res) {
 app.get('/export/:datasource/:schema/:format', function(req, res) {
 
     //validate the params
-    validateExportParams(req, res);
+    if (!validateExportParams(req, res)) return;
 
     //Build a hash for the input params using base64
     var params = req.params.datasource
@@ -407,7 +413,7 @@ function buildCommand(params, queryOverrideTags, querybbox, querypoly, isFile, i
         if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
     }
 
-    //prevent negative id collision when mering multipolygon rings
+    //prevent negative id collision when merging multipolygon rings
     if (ignoreSourceIds)
         command += ' -D reader.use.data.source.ids=false'
 
