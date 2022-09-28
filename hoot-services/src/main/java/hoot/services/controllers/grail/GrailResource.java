@@ -265,6 +265,8 @@ public class GrailResource {
         GrailParams getRailsParams = new GrailParams(reqParams);
         GrailParams getOverpassParams = new GrailParams(reqParams);
 
+        String outputFileName = "diff.osc";
+
         if (deriveType.equals("Adds only")) {
             if (input1 == null) {
                 InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
@@ -339,12 +341,15 @@ public class GrailResource {
                     grailCommandClass = RunDiffCommand.class;
                 }
             } else {
+                if (deriveType.equals("Open in JOSM")) {
+                    outputFileName = "diff.osm";
+                }
                 grailCommandClass = DeriveChangesetCommand.class;
             }
         }
 
         // create output file
-        File geomDiffFile = new File(workDir, "diff.osc");
+        File geomDiffFile = new File(workDir, outputFileName);
         if (geomDiffFile.exists()) geomDiffFile.delete();
         try {
             geomDiffFile.createNewFile();
