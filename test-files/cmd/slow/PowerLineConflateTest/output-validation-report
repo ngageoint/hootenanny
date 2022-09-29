@@ -1,6 +1,6 @@
 Input: test-output/cmd/slow/PowerLineConflateTest/output.osm
 
-Found 1,890 validation errors in 3,407 features with JOSM.
+Found 1,890 validation errors in 3,403 features with JOSM.
 Addresses errors: 1
 Duplicated nodes errors: 11
 Duplicated way nodes errors: 2
@@ -10,5 +10,5 @@ Relation checker errors: 2
 Tag checker (MapCSS based) errors: 10
 Total failing JOSM validators: 0
 
-Found 0 validation errors in 317 features with Hootenanny.
+Found 0 validation errors in 314 features with Hootenanny.
 Total failing Hootenanny validators: 0

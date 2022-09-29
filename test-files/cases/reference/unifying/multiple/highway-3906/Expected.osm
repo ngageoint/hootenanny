@@ -1050,91 +1050,6 @@
     <node visible="true" id="4881737315" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074600000000004" lon="-75.4278910000000025"/>
     <node visible="true" id="4881737326" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081260000000029" lon="-75.4289430000000038"/>
     <node visible="true" id="4881737431" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075100000000020" lon="-75.4359070000000003"/>
-    <way visible="true" id="-1785" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881729070"/>
-        <nd ref="4881729742"/>
-        <tag k="alt_name" v="Southwest Front Street"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:a9af99752ce77eb619ed731723a9b00a677f654a;sha1sum:ecaef1961edc9589b69ddd0e8be44c4e3d419389"/>
-        <tag k="layer" v="1"/>
-        <tag k="name" v="Front Street"/>
-        <tag k="source:datetime" v="2013-04-21T11:00:17.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Front"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1782" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881729621"/>
-        <nd ref="4881729086"/>
-        <tag k="alt_name" v="South Church Street"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:42d24a4948db12292ffa80c19e5b682df942f43e;sha1sum:3036dace0f70ad518eaf7ddcf85138e007a43c5f"/>
-        <tag k="layer" v="1"/>
-        <tag k="name" v="South Church Avenue"/>
-        <tag k="source:datetime" v="2013-04-21T11:00:17.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Church"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1779" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881733165"/>
-        <nd ref="4881733094"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:790673f107919b12ab10749855d54c224ab7df10;sha1sum:315b4d8ea3ee1651d18c5a665e4630d0e2581857"/>
-        <tag k="layer" v="1"/>
-        <tag k="name" v="Maple Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T14:33:51.000Z;2013-04-20T14:33:51Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Kent, DE"/>
-        <tag k="tiger:name_base" v="Maple"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-    </way>
-    <way visible="true" id="-1776" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36"/>
-        <nd ref="4881732999"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:22efcfec5f60a198c9e96f9c8badff37a369e57e;sha1sum:bbba4e686903105e167bb38b930d35a5d408b466"/>
-        <tag k="name" v="Southeast 3rd Street"/>
-        <tag k="source:datetime" v="2013-04-20T14:58:04.000Z;2019-04-02T13:01:38Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="3rd"/>
-        <tag k="tiger:name_direction_prefix" v="SE"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1770" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-29"/>
-        <nd ref="4881735246"/>
-        <nd ref="4881726044"/>
-        <nd ref="4881735267"/>
-        <nd ref="4881726046"/>
-        <nd ref="4881735243"/>
-        <nd ref="4881735296"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:hash" v="sha1sum:7c2cb1e1b0f253d3a815da862fa16f1e4c581d9d;sha1sum:bcf7cdc18a037fdae138cefe0c54a3566ec707c4;sha1sum:e5637d95907c52006d83693aec99a6d4f0ca0f29"/>
-        <tag k="name" v="Lakeview Apts"/>
-        <tag k="source:datetime" v="2015-04-27T15:16:24.000Z;2015-04-27T15:16:24Z"/>
-    </way>
     <way visible="true" id="-1768" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="4881732116"/>
         <nd ref="-445"/>
@@ -1162,228 +1077,6 @@
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1739" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881729772"/>
-        <nd ref="-15"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:08bc70f4dd4f749c0bd6388ff93f4b2c67910b79;sha1sum:d7a5d67e0992f3e72f770d9b058a6a0af2982486"/>
-        <tag k="name" v="Caulk Road"/>
-        <tag k="source:datetime" v="2013-04-20T14:52:29.000Z;2019-04-02T11:40:18Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Caulk"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1729" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-27"/>
-        <nd ref="4881727795"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:2e74dc54e3eb84e22173b9fb8b7de8e4035208c1;sha1sum:ffc3b1f25363109e34e849071c41e874206b1cf8"/>
-        <tag k="name" v="Southeast 4th Street"/>
-        <tag k="source:datetime" v="2013-04-20T14:52:13.000Z;2013-04-20T14:52:13Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="4th"/>
-        <tag k="tiger:name_direction_prefix" v="SE"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1723" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881727158"/>
-        <nd ref="-1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:66096f1d0a7d124b80b7602845a36a0edf76f08d;sha1sum:7bd2964637447132fa14002890f221d0a4bd0fc9"/>
-        <tag k="name" v="North Walnut Street"/>
-        <tag k="name_1" v="County Road 213"/>
-        <tag k="source:datetime" v="2013-04-22T15:49:25.000Z;2019-09-25T16:43:21Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Walnut"/>
-        <tag k="tiger:name_base_1" v="County Road 213"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1710" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
-        <nd ref="4881735239"/>
-        <nd ref="4881735242"/>
-        <nd ref="4881735251"/>
-        <nd ref="-31"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:hash" v="sha1sum:2ddcce261af6c9aabde7d92ff02ad583ec2f27e7;sha1sum:a689b4fa958dfa9718c5adbd633771c4c94e01f3"/>
-        <tag k="source:datetime" v="2015-04-27T15:16:29.000Z;2015-04-27T15:16:29Z"/>
-    </way>
-    <way visible="true" id="-1707" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-33"/>
-        <nd ref="4881734728"/>
-        <nd ref="-1335"/>
-        <nd ref="4881736041"/>
-        <nd ref="4881733488"/>
-        <nd ref="4881737431"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:74153cb230992f0be5b7844dde224dd435114b0a;sha1sum:0b5610ddd39e2921622cdd5e4d3e8d704d72f686;sha1sum:479850b7265c7f2ddeabd718bc973f40288d86b5;sha1sum:5e63c0bcf1ff2245a5fb8f15e35587e5f2f2a734;sha1sum:54d3e63b0742669a1095137af591c6a8197f6f68;sha1sum:dbe0e30733495e9123310dfb0589fa6d190a98b3;sha1sum:215e134befcec8cd15b0fc4136af3e80d37183a5"/>
-        <tag k="name" v="West Clarke Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T15:01:35.000Z;2019-03-29T03:41:34Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Clarke"/>
-        <tag k="tiger:name_direction_prefix" v="W"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1701" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725477"/>
-        <nd ref="4881727145"/>
-        <nd ref="4881727146"/>
-        <nd ref="4881727159"/>
-        <nd ref="4881727157"/>
-        <nd ref="4881727158"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="North Walnut Street"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2014-12-20T06:02:00.000Z;2019-03-29T02:01:52Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Walnut"/>
-        <tag k="tiger:name_base_1" v="County Road 213"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1698" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735985"/>
-        <nd ref="4881733148"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:5a1e5d7d866f966ea570d6a0c045b7a97932b6ac;sha1sum:f7b1713851710b679e38722af9ddd3314e2a993a"/>
-        <tag k="name" v="South Maple Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T14:53:15.000Z;2013-04-20T14:53:15Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Maple"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1692" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="4881729880"/>
-        <nd ref="4881729893"/>
-        <nd ref="4881727158"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Southeast Front Street"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2015-04-27T15:16:27.000Z;2019-09-25T16:43:21Z"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="E Front"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1668" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735994"/>
-        <nd ref="4881729682"/>
-        <nd ref="4881735985"/>
-        <nd ref="4881735998"/>
-        <nd ref="4881735999"/>
-        <nd ref="4881735996"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:cc6e5607fe0d7c0f4c7b2f8c214e838a183644c2;sha1sum:5561db0d105066841cdc7f88eed4b53cf227387f;sha1sum:4f93911cc3dc14d34be0187ed57530bf1f705208"/>
-        <tag k="name" v="Causey Avenue"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Causey"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1665" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735996"/>
-        <nd ref="4881729621"/>
-        <tag k="alt_name" v="South Church Street"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:e6eb335b0b7db45d7837415fe3f7c622e5dee64a;sha1sum:6d7ad13df2bd9116c0720382a60998ffa6984d51"/>
-        <tag k="name" v="South Church Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T15:01:21.000Z;2019-04-03T12:36:05Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Church"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1651" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881732962"/>
-        <nd ref="4881735886"/>
-        <nd ref="4881735866"/>
-        <nd ref="4881726094"/>
-        <nd ref="4881735865"/>
-        <nd ref="-26"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:hash" v="sha1sum:6b6cfdef4aa84667b67c6b8af6c459c990964658;sha1sum:93790ca301f554706467441fe1386135797dd748"/>
-        <tag k="name" v="Ball Park Lane"/>
-        <tag k="name_1" v="Buzzard Alley"/>
-        <tag k="service" v="alley"/>
-        <tag k="source:datetime" v="2015-04-27T15:16:22.000Z;2015-04-27T15:16:22Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Ball Park"/>
-        <tag k="tiger:name_base_1" v="Buzzard"/>
-        <tag k="tiger:name_type" v="Ln"/>
-        <tag k="tiger:name_type_1" v="Aly"/>
-    </way>
-    <way visible="true" id="-1648" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881726968"/>
-        <nd ref="4881733435"/>
-        <nd ref="4881731157"/>
-        <nd ref="4881733436"/>
-        <nd ref="4881732088"/>
-        <nd ref="-1357"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:0d4290e4f37f93328f7d5919160c5568054cb74e;sha1sum:bfaaaa5b49cffa3fc1048ae8a31f87fecc1937c0;sha1sum:2f54c44c96f46ddbf3df1a882be6e1fe909d7aa2;sha1sum:7ff4fd57e156ab020939089eea2e07337f6719bd;sha1sum:5c315c6725495a1cefe6186ef4d5283c0aab1765;sha1sum:f884f0496ea3ea6f9f4320ff7f690d4ea296bb7d"/>
-        <tag k="name" v="Jefferson Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T14:58:25.000Z;2019-04-02T11:40:19Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Jefferson"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
     <way visible="true" id="-1646" timestamp="2020-02-28T16:47:46Z" version="1">
         <nd ref="4881725255"/>
         <nd ref="-119"/>
@@ -1399,441 +1092,26 @@
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1644" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725242"/>
-        <nd ref="4881725255"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Grier Lane"/>
-        <tag k="source:datetime" v="2013-04-20T14:46:16.000Z;2019-04-02T11:40:19Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Grier"/>
-        <tag k="tiger:name_type" v="Ln"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1634" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-21"/>
-        <nd ref="4881726363"/>
-        <nd ref="4881726355"/>
-        <nd ref="4881726353"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:27297cab007479ae670fa41d80943ff376b13839;sha1sum:9055d8c711014b6fb07d081e45099ae3fd872cdb"/>
-        <tag k="name" v="Southeast 2nd Street"/>
-        <tag k="source:datetime" v="2013-04-20T14:46:58.000Z;2019-04-02T13:01:37Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="2nd"/>
-        <tag k="tiger:name_direction_prefix" v="SE"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1621" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2"/>
-        <nd ref="4881729789"/>
-        <tag k="alt_name" v="North Church Street"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:a825e2cd1fe1ea174109bf0d239a728d6fe9278c;sha1sum:2c6d1fb6c2dad1f872d753f4a4c631604fc2e49a"/>
-        <tag k="name" v="North Church Avenue"/>
-        <tag k="source:datetime" v="2014-04-28T23:37:13.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Kent, DE"/>
-        <tag k="tiger:name_base" v="Church"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1599" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1596" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730483"/>
         <nd ref="-1337"/>
         <nd ref="4881730482"/>
         <nd ref="4881730533"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:292325bcef7bf45dae08c18cbd96de02bdf0aa4b;sha1sum:640b99361e09e7a711367d8b6e75194bebdb8892;sha1sum:bbdb31a206958fcec0a7148baed0f23363f0973f;sha1sum:923b84df30c9104b8004dd4c41d52e0d9a00ca1c;sha1sum:cad6764a1de72a5b4a9ca89f54929afb782cba21"/>
-        <tag k="name" v="Kings Highway"/>
-        <tag k="source:datetime" v="2013-04-20T14:48:37.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Kings"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1592" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-16"/>
-        <nd ref="4881724996"/>
-        <nd ref="4881730539"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Regent Road"/>
-        <tag k="source:datetime" v="2013-04-20T14:53:43.000Z;2019-04-02T11:40:18Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Regent"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1589" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881731157"/>
-        <nd ref="4881730482"/>
-        <nd ref="-1327"/>
-        <nd ref="4881731158"/>
-        <nd ref="4881731155"/>
-        <nd ref="4881731148"/>
-        <nd ref="-35"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:fc0dc958a39d2899363683967180f56b130bbcb8;sha1sum:2e9187df9236781aac121bf4b7ba0303971ed94d;sha1sum:097b440bbce55a87f0db8b4a0846ebb1ef3a6643;sha1sum:5070633bdc6e8ad5b46105a84c9f32e903a517b0;sha1sum:433a47441e51e6f3362abd2a742d868c9a7699aa"/>
-        <tag k="name" v="Plum Street"/>
-        <tag k="service" v="alley"/>
-        <tag k="source:datetime" v="2013-04-20T14:57:17.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Plum"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1543" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725317"/>
-        <nd ref="4881736189"/>
-        <nd ref="4881726688"/>
-        <nd ref="4881735996"/>
-        <tag k="alt_name" v="South Church Street"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:f6a92ba32ef02e19f20923e4c074a055c127955a;sha1sum:d7084577db55a70b7ae7df95780ff64e80b4314b;sha1sum:e31d2dadd8c1d7547251d4ef18c6505d2b6700c3"/>
-        <tag k="name" v="South Church Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T15:01:21.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Church"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1529" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="-1339"/>
+        <nd ref="4881732097"/>
+        <nd ref="-1343"/>
         <nd ref="4881730547"/>
-        <nd ref="4881736053"/>
-        <nd ref="4881733423"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Williams Street"/>
-        <tag k="source:datetime" v="2013-04-20T15:01:22.000Z;2019-03-29T03:41:30Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Williams"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1526" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881727342"/>
-        <nd ref="4881727865"/>
-        <nd ref="4881727352"/>
-        <nd ref="4881727340"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="service"/>
-        <tag k="source:datetime" v="2012-11-23T22:14:16.000Z;2019-04-02T13:01:38Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-    </way>
-    <way visible="true" id="-1523" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881737315"/>
-        <nd ref="4881737314"/>
-        <nd ref="4881737312"/>
-        <nd ref="4881737326"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Jefferson Avenue"/>
-        <tag k="source:datetime" v="2007-12-19T16:06:37.000Z;2019-03-29T02:01:51Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1520" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881733488"/>
-        <nd ref="4881733499"/>
+        <nd ref="4881730543"/>
         <nd ref="4881730541"/>
         <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:83c9f162973397197d25b2420ef541f0803f94ad;sha1sum:7c4057637f69ede798bbc317e5041f74102d0e30;sha1sum:3568fd53ff390cd59f1fa778e5dc67857590f795"/>
-        <tag k="name" v="Lakeview Avenue"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2015-09-14T06:08:20Z"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Lakeview"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1517" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881727825"/>
-        <nd ref="4881727823"/>
-        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:0e94d4ad5f52882f60fd9fe4ba7abdb877e7bc4e;sha1sum:9d5359d828ac595a121e5a7e30c162869cf6cee6"/>
-        <tag k="name" v="Sussex Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T14:55:31.000Z;2013-04-20T14:55:31Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Sussex"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1514" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-22"/>
-        <nd ref="4881732967"/>
-        <nd ref="4881732964"/>
-        <nd ref="4881732965"/>
-        <nd ref="4881732962"/>
-        <nd ref="4881737315"/>
-        <nd ref="4881732963"/>
-        <nd ref="4881727795"/>
-        <nd ref="4881732960"/>
-        <nd ref="4881727340"/>
-        <nd ref="4881732999"/>
-        <nd ref="-23"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:8aeddd9407f89871bf33a9938a3f1b23e8b53ee3;sha1sum:07a1c880c3980482b473fd3b8415adc5d92b0b06;sha1sum:da013f6643a2b4819a8fc3e7f594ef8fd74a6a18;sha1sum:6e1357edb9f3b495acb708c0f2d4e3af59240c91;sha1sum:ce884f2d0195f77c8a5a484663be03e644eac377;sha1sum:39532a27e3bbdfc5255648f0982496c5125e61cf;sha1sum:ed5b5414b19abb96b194d3ad032ac4fa67703161;sha1sum:46d5932d6ff7cb1f333e9f852e7b7edb99f26099;sha1sum:e11c2ae0aa37aeb1e974e088d9fd9229cb98ecb5"/>
-        <tag k="name" v="South Washington Street"/>
-        <tag k="source:datetime" v="2013-04-20T14:49:32.000Z;2019-09-25T16:43:21Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Washington"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1511" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881730541"/>
-        <nd ref="4881735994"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:3e4e2c212b52475064e64d7634be8315f0db3b13;sha1sum:82f66e39bcbaf6a06240bf9dd5ee63a5c67428d9"/>
-        <tag k="name" v="Lakeview Avenue"/>
-        <tag k="name_1" v="Shawnee Rd"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:30.000Z;2015-09-14T06:08:30Z"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="tiger:name_base_1" v="Lakeview"/>
-        <tag k="tiger:name_base_2" v="Shawnee"/>
-        <tag k="tiger:name_type_1" v="Ave"/>
-        <tag k="tiger:name_type_2" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1505" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881734728"/>
-        <nd ref="4881727823"/>
-        <nd ref="-1361"/>
-        <nd ref="4881734719"/>
-        <nd ref="4881733083"/>
-        <nd ref="4881730533"/>
-        <nd ref="4881733436"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:2657de1cacb5b20b3c453e1cc0226eeabb70576f;sha1sum:eb345554e8ba863c561b3a1a5533f2d87dffa152;sha1sum:22213f6230f9b4289d5d0876ba1c57bb4dcb002c;sha1sum:fc63c2f37da82efb4d5d61827f6051af858af1dc;sha1sum:dfe6ba9f4203b942e6bdac6359697e98347a46e3;sha1sum:a0102b278b127ec8470094bc7abeb9c3a0d55cf6"/>
-        <tag k="name" v="Polk Avenue"/>
-        <tag k="source:datetime" v="2015-07-08T21:29:23.000Z;2019-03-29T03:41:34Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Polk"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1492" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881727793"/>
-        <nd ref="4881725317"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:4dde686929e646a032e8360cb9df130f6ad21c89;sha1sum:2c603b88636adc7eb88b8c6abf982d336ce9b119"/>
-        <tag k="name" v="South Maple Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T14:53:15.000Z;2013-04-20T14:53:15Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Maple"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1486" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881733094"/>
-        <nd ref="4881728056"/>
-        <nd ref="4881728043"/>
-        <nd ref="4881728037"/>
-        <nd ref="4881728042"/>
-        <nd ref="4881727385"/>
-        <nd ref="-28"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:e08e301a4556cb32efee9820ee17963e762a629e;sha1sum:7ddd1b898b749762d78117c3406970bcc89de421"/>
-        <tag k="name" v="Maple Avenue"/>
-        <tag k="source:datetime" v="2013-04-21T11:00:18.000Z;2019-03-29T03:59:46Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Kent, DE"/>
-        <tag k="tiger:name_base" v="Maple"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-    </way>
-    <way visible="true" id="-1483" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735996"/>
-        <nd ref="4881725477"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:5287c51843ce80d1e7b7b6ba506c3c701812f2e4;sha1sum:f188c3bb918bc4b7ec8c2f282055e56da44a2a7b"/>
-        <tag k="name" v="Causey Avenue"/>
-        <tag k="name_1" v="Shawnee Rd"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z;2014-12-20T08:06:40Z"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="tiger:name_base_1" v="Causey"/>
-        <tag k="tiger:name_base_2" v="Shawnee"/>
-        <tag k="tiger:name_type_1" v="Ave"/>
-        <tag k="tiger:name_type_2" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
-        <tag k="tiger:zip_left_2" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:zip_right_1" v="19963"/>
-        <tag k="tiger:zip_right_2" v="19963"/>
-    </way>
-    <way visible="true" id="-1480" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-37"/>
-        <nd ref="4881733488"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:8bc1b4fe7c0815950b0f0824c929f85c11d7f15a;sha1sum:585ef9c5ec5e23bc1720c8d6eea1c8713d43009e"/>
-        <tag k="name" v="Shawnee Road"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2014-10-01T07:34:03Z"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="tiger:name_base_1" v="Shawnee"/>
-        <tag k="tiger:name_type_1" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1477" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725317"/>
-        <nd ref="4881731173"/>
-        <nd ref="4881731174"/>
-        <nd ref="4881731171"/>
-        <nd ref="4881731172"/>
-        <nd ref="4881731185"/>
-        <nd ref="4881735985"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Shawnee Road"/>
-        <tag k="name_1" v="S Maple Ave"/>
-        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2019-03-29T03:41:35Z"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="tiger:name_base_1" v="Shawnee"/>
-        <tag k="tiger:name_base_2" v="Maple"/>
-        <tag k="tiger:name_direction_prefix_2" v="S"/>
-        <tag k="tiger:name_type_1" v="Rd"/>
-        <tag k="tiger:name_type_2" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1468" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881730541"/>
-        <nd ref="4881730539"/>
-        <nd ref="-19"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:de13174f07ce68e69ca3db480c7f84cdf54bdd87;sha1sum:469f43cadf918f19040f94a9af72312d54eab480"/>
+        <tag k="hoot:hash" v="sha1sum:292325bcef7bf45dae08c18cbd96de02bdf0aa4b;sha1sum:640b99361e09e7a711367d8b6e75194bebdb8892;sha1sum:bbdb31a206958fcec0a7148baed0f23363f0973f;sha1sum:923b84df30c9104b8004dd4c41d52e0d9a00ca1c;sha1sum:cad6764a1de72a5b4a9ca89f54929afb782cba21;sha1sum:c3cc25bb6e115d3da071749d7936b4defd25a6bf;sha1sum:5ad4bd49967e10a3d183aa2071913f8522eb9fb5;sha1sum:14cb80488651d473dad7d803c35547c74af2026d;sha1sum:a0d29d9b0304f1ffc6911eee5e116b6815176c3d;sha1sum:0347d98bfcecc41be003036d26db96b1cf16a571;sha1sum:105c57d5cf8caf527bd5d4a7c4cd96001fbbc332"/>
         <tag k="name" v="Kings Highway"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:17.000Z;2019-04-02T11:40:19Z"/>
+        <tag k="source:datetime" v="2013-04-20T14:48:37.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z;2019-03-29T03:41:34Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Kings"/>
         <tag k="tiger:name_type" v="Hwy"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1465" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881729086"/>
-        <nd ref="4881729789"/>
-        <tag k="alt_name" v="North Church Street"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:453bc8368209b1503c277f519f3539956b428869;sha1sum:83d11e85254a138f4d7fce6ad2285ce891fb9c9c"/>
-        <tag k="layer" v="1"/>
-        <tag k="name" v="North Church Avenue"/>
-        <tag k="source:datetime" v="2013-04-20T14:30:10.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Kent, DE"/>
-        <tag k="tiger:name_base" v="Church"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-17"/>
-        <nd ref="4881726970"/>
-        <nd ref="4881730483"/>
-        <nd ref="4881726968"/>
-        <nd ref="4881726965"/>
-        <nd ref="4881737326"/>
-        <nd ref="4881727793"/>
-        <nd ref="4881725480"/>
-        <nd ref="-1325"/>
-        <nd ref="4881726353"/>
-        <nd ref="4881725481"/>
-        <nd ref="4881725477"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:eebe18582e910a1b5a189fd851989645b64ea264;sha1sum:677c081c29a68812940bea595a5f1b530041549b;sha1sum:533cdb9f7cbc13c819decf36295dd76b176224f8;sha1sum:31801d8da14f3b49a0b0f0b54dc66a268c5e80cf;sha1sum:de0ddd67511ed3d22fc4b59bab715f3ce0032d40;sha1sum:aae3aab716db01b25219924007b80c434345a437;sha1sum:8361d0ae0028b726c5d8293772dcf21cb5458d7e;sha1sum:8eaf0a6dfcaef6fbc821d281f88829e42530032b;sha1sum:14750aefa7055f28f8f41faf7ac5dff54da86a7a;sha1sum:f2e8c245e0dacf4d64281ac77017ef2e823a3018;sha1sum:a4427ae0d40df91862b0552bf337f4dea2d3ff4f;sha1sum:f617041d3e241a5c434a3294d3a3390c249c8922"/>
-        <tag k="name" v="South Walnut Street"/>
-        <tag k="name_1" v="County Road 213"/>
-        <tag k="ref" v="CR 213"/>
-        <tag k="source:datetime" v="2014-04-23T00:12:33.000Z;2019-07-27T01:20:36Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Walnut"/>
-        <tag k="tiger:name_base_1" v="County Road 213"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
@@ -1867,27 +1145,6 @@
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Jefferson"/>
         <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-194" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881730533"/>
-        <nd ref="-1339"/>
-        <nd ref="4881732097"/>
-        <nd ref="-1343"/>
-        <nd ref="4881730547"/>
-        <nd ref="4881730543"/>
-        <nd ref="4881730541"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:c3cc25bb6e115d3da071749d7936b4defd25a6bf;sha1sum:5ad4bd49967e10a3d183aa2071913f8522eb9fb5;sha1sum:14cb80488651d473dad7d803c35547c74af2026d;sha1sum:a0d29d9b0304f1ffc6911eee5e116b6815176c3d;sha1sum:0347d98bfcecc41be003036d26db96b1cf16a571;sha1sum:105c57d5cf8caf527bd5d4a7c4cd96001fbbc332"/>
-        <tag k="name" v="Kings Highway"/>
-        <tag k="source:datetime" v="2013-04-20T14:48:37.000Z;2019-04-02T11:40:15Z;2019-03-29T03:41:34Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Kings"/>
-        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
@@ -3196,6 +2453,61 @@
         <tag k="source:datetime" v="2019-09-25T16:27:15Z"/>
         <tag k="waterway" v="stream"/>
     </way>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="4881733488"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:8bc1b4fe7c0815950b0f0824c929f85c11d7f15a;sha1sum:585ef9c5ec5e23bc1720c8d6eea1c8713d43009e"/>
+        <tag k="name" v="Shawnee Road"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2014-10-01T07:34:03Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="4881732999"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:22efcfec5f60a198c9e96f9c8badff37a369e57e;sha1sum:bbba4e686903105e167bb38b930d35a5d408b466"/>
+        <tag k="name" v="Southeast 3rd Street"/>
+        <tag k="source:datetime" v="2013-04-20T14:58:04.000Z;2019-04-02T13:01:38Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="3rd"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881731157"/>
+        <nd ref="4881730482"/>
+        <nd ref="-1327"/>
+        <nd ref="4881731158"/>
+        <nd ref="4881731155"/>
+        <nd ref="4881731148"/>
+        <nd ref="-35"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:fc0dc958a39d2899363683967180f56b130bbcb8;sha1sum:2e9187df9236781aac121bf4b7ba0303971ed94d;sha1sum:097b440bbce55a87f0db8b4a0846ebb1ef3a6643;sha1sum:5070633bdc6e8ad5b46105a84c9f32e903a517b0;sha1sum:433a47441e51e6f3362abd2a742d868c9a7699aa"/>
+        <tag k="name" v="Plum Street"/>
+        <tag k="service" v="alley"/>
+        <tag k="source:datetime" v="2013-04-20T14:57:17.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Plum"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729742"/>
         <nd ref="-34"/>
@@ -3209,6 +2521,25 @@
         <tag k="tiger:county" v="Kent, DE"/>
         <tag k="tiger:name_base" v="Front"/>
         <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-33"/>
+        <nd ref="4881734728"/>
+        <nd ref="-1335"/>
+        <nd ref="4881736041"/>
+        <nd ref="4881733488"/>
+        <nd ref="4881737431"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:74153cb230992f0be5b7844dde224dd435114b0a;sha1sum:0b5610ddd39e2921622cdd5e4d3e8d704d72f686;sha1sum:479850b7265c7f2ddeabd718bc973f40288d86b5;sha1sum:5e63c0bcf1ff2245a5fb8f15e35587e5f2f2a734;sha1sum:54d3e63b0742669a1095137af591c6a8197f6f68;sha1sum:dbe0e30733495e9123310dfb0589fa6d190a98b3;sha1sum:215e134befcec8cd15b0fc4136af3e80d37183a5"/>
+        <tag k="name" v="West Clarke Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T15:01:35.000Z;2019-03-29T03:41:34Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Clarke"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3227,6 +2558,89 @@
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Pearl"/>
         <tag k="tiger:name_type" v="Aly"/>
+    </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="4881735239"/>
+        <nd ref="4881735242"/>
+        <nd ref="4881735251"/>
+        <nd ref="-31"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:hash" v="sha1sum:2ddcce261af6c9aabde7d92ff02ad583ec2f27e7;sha1sum:a689b4fa958dfa9718c5adbd633771c4c94e01f3"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:29.000Z;2015-04-27T15:16:29Z"/>
+    </way>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="4881735246"/>
+        <nd ref="4881726044"/>
+        <nd ref="4881735267"/>
+        <nd ref="4881726046"/>
+        <nd ref="4881735243"/>
+        <nd ref="4881735296"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:hash" v="sha1sum:7c2cb1e1b0f253d3a815da862fa16f1e4c581d9d;sha1sum:bcf7cdc18a037fdae138cefe0c54a3566ec707c4;sha1sum:e5637d95907c52006d83693aec99a6d4f0ca0f29"/>
+        <tag k="name" v="Lakeview Apts"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:24.000Z;2015-04-27T15:16:24Z"/>
+    </way>
+    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881733094"/>
+        <nd ref="4881728056"/>
+        <nd ref="4881728043"/>
+        <nd ref="4881728037"/>
+        <nd ref="4881728042"/>
+        <nd ref="4881727385"/>
+        <nd ref="-28"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:e08e301a4556cb32efee9820ee17963e762a629e;sha1sum:7ddd1b898b749762d78117c3406970bcc89de421"/>
+        <tag k="name" v="Maple Avenue"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:18.000Z;2019-03-29T03:59:46Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+    </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27"/>
+        <nd ref="4881727795"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:2e74dc54e3eb84e22173b9fb8b7de8e4035208c1;sha1sum:ffc3b1f25363109e34e849071c41e874206b1cf8"/>
+        <tag k="name" v="Southeast 4th Street"/>
+        <tag k="source:datetime" v="2013-04-20T14:52:13.000Z;2013-04-20T14:52:13Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="4th"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881732962"/>
+        <nd ref="4881735886"/>
+        <nd ref="4881735866"/>
+        <nd ref="4881726094"/>
+        <nd ref="4881735865"/>
+        <nd ref="-26"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:hash" v="sha1sum:6b6cfdef4aa84667b67c6b8af6c459c990964658;sha1sum:93790ca301f554706467441fe1386135797dd748"/>
+        <tag k="name" v="Ball Park Lane"/>
+        <tag k="name_1" v="Buzzard Alley"/>
+        <tag k="service" v="alley"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:22.000Z;2015-04-27T15:16:22Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Ball Park"/>
+        <tag k="tiger:name_base_1" v="Buzzard"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="tiger:name_type_1" v="Aly"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
@@ -3251,6 +2665,52 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="tiger:reviewed" v="no"/>
     </way>
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="4881732967"/>
+        <nd ref="4881732964"/>
+        <nd ref="4881732965"/>
+        <nd ref="4881732962"/>
+        <nd ref="4881737315"/>
+        <nd ref="4881732963"/>
+        <nd ref="4881727795"/>
+        <nd ref="4881732960"/>
+        <nd ref="4881727340"/>
+        <nd ref="4881732999"/>
+        <nd ref="-23"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:8aeddd9407f89871bf33a9938a3f1b23e8b53ee3;sha1sum:07a1c880c3980482b473fd3b8415adc5d92b0b06;sha1sum:da013f6643a2b4819a8fc3e7f594ef8fd74a6a18;sha1sum:6e1357edb9f3b495acb708c0f2d4e3af59240c91;sha1sum:ce884f2d0195f77c8a5a484663be03e644eac377;sha1sum:39532a27e3bbdfc5255648f0982496c5125e61cf;sha1sum:ed5b5414b19abb96b194d3ad032ac4fa67703161;sha1sum:46d5932d6ff7cb1f333e9f852e7b7edb99f26099;sha1sum:e11c2ae0aa37aeb1e974e088d9fd9229cb98ecb5"/>
+        <tag k="name" v="South Washington Street"/>
+        <tag k="source:datetime" v="2013-04-20T14:49:32.000Z;2019-09-25T16:43:21Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Washington"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="4881726363"/>
+        <nd ref="4881726355"/>
+        <nd ref="4881726353"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:27297cab007479ae670fa41d80943ff376b13839;sha1sum:9055d8c711014b6fb07d081e45099ae3fd872cdb"/>
+        <tag k="name" v="Southeast 2nd Street"/>
+        <tag k="source:datetime" v="2013-04-20T14:46:58.000Z;2019-04-02T13:01:37Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="2nd"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="4881736844"/>
@@ -3263,6 +2723,23 @@
         <tag k="source" v="county_import_v0.1_20080508235458"/>
         <tag k="source:datetime" v="2014-02-12T09:54:39.000Z"/>
     </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881730541"/>
+        <nd ref="4881730539"/>
+        <nd ref="-19"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="hoot:hash" v="sha1sum:de13174f07ce68e69ca3db480c7f84cdf54bdd87;sha1sum:469f43cadf918f19040f94a9af72312d54eab480"/>
+        <tag k="name" v="Kings Highway"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:17.000Z;2019-04-02T11:40:19Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Kings"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18"/>
         <nd ref="4881727385"/>
@@ -3272,6 +2749,68 @@
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
         <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-17"/>
+        <nd ref="4881726970"/>
+        <nd ref="4881730483"/>
+        <nd ref="4881726968"/>
+        <nd ref="4881726965"/>
+        <nd ref="4881737326"/>
+        <nd ref="4881727793"/>
+        <nd ref="4881725480"/>
+        <nd ref="-1325"/>
+        <nd ref="4881726353"/>
+        <nd ref="4881725481"/>
+        <nd ref="4881725477"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:533cdb9f7cbc13c819decf36295dd76b176224f8;sha1sum:31801d8da14f3b49a0b0f0b54dc66a268c5e80cf;sha1sum:de0ddd67511ed3d22fc4b59bab715f3ce0032d40;sha1sum:aae3aab716db01b25219924007b80c434345a437;sha1sum:8361d0ae0028b726c5d8293772dcf21cb5458d7e;sha1sum:8eaf0a6dfcaef6fbc821d281f88829e42530032b;sha1sum:14750aefa7055f28f8f41faf7ac5dff54da86a7a;sha1sum:f2e8c245e0dacf4d64281ac77017ef2e823a3018;sha1sum:a4427ae0d40df91862b0552bf337f4dea2d3ff4f;sha1sum:f617041d3e241a5c434a3294d3a3390c249c8922;sha1sum:eebe18582e910a1b5a189fd851989645b64ea264;sha1sum:677c081c29a68812940bea595a5f1b530041549b"/>
+        <tag k="name" v="South Walnut Street"/>
+        <tag k="name_1" v="County Road 213"/>
+        <tag k="ref" v="CR 213"/>
+        <tag k="source:datetime" v="2014-04-23T00:12:33.000Z;2019-07-27T01:20:36Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="4881724996"/>
+        <nd ref="4881730539"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Regent Road"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:43.000Z;2019-04-02T11:40:18Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Regent"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881729772"/>
+        <nd ref="-15"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:08bc70f4dd4f749c0bd6388ff93f4b2c67910b79;sha1sum:d7a5d67e0992f3e72f770d9b058a6a0af2982486"/>
+        <tag k="name" v="Caulk Road"/>
+        <tag k="source:datetime" v="2013-04-20T14:52:29.000Z;2019-04-02T11:40:18Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Caulk"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14"/>
@@ -3489,6 +3028,26 @@
         <tag k="error:circular" v="15"/>
         <tag k="source:datetime" v="2020-02-28T16:41:52Z"/>
     </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="4881729880"/>
+        <nd ref="4881729893"/>
+        <nd ref="4881727158"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Southeast Front Street"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:27.000Z;2019-09-25T16:43:21Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="E Front"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881736380"/>
         <nd ref="4881736376"/>
@@ -3509,6 +3068,52 @@
         <tag k="source" v="Yahoo"/>
         <tag k="source:datetime" v="2014-10-01T04:16:46.000Z"/>
         <tag k="waterway" v="river"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="4881729789"/>
+        <tag k="alt_name" v="North Church Street"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:a825e2cd1fe1ea174109bf0d239a728d6fe9278c;sha1sum:2c6d1fb6c2dad1f872d753f4a4c631604fc2e49a"/>
+        <tag k="name" v="North Church Avenue"/>
+        <tag k="source:datetime" v="2014-04-28T23:37:13.000Z;2019-04-03T12:36:06Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881727158"/>
+        <nd ref="-1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:66096f1d0a7d124b80b7602845a36a0edf76f08d;sha1sum:7bd2964637447132fa14002890f221d0a4bd0fc9"/>
+        <tag k="name" v="North Walnut Street"/>
+        <tag k="name_1" v="County Road 213"/>
+        <tag k="source:datetime" v="2013-04-22T15:49:25.000Z;2019-09-25T16:43:21Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849264" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881727342"/>
+        <nd ref="4881727865"/>
+        <nd ref="4881727352"/>
+        <nd ref="4881727340"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="service"/>
+        <tag k="source:datetime" v="2012-11-23T22:14:16.000Z;2019-04-02T13:01:38Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
     </way>
     <way visible="true" id="496849570" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881729718"/>
@@ -3584,6 +3189,62 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
     </way>
+    <way visible="true" id="496849585" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735994"/>
+        <nd ref="4881729682"/>
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
+        <nd ref="4881735996"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:cc6e5607fe0d7c0f4c7b2f8c214e838a183644c2;sha1sum:5561db0d105066841cdc7f88eed4b53cf227387f;sha1sum:4f93911cc3dc14d34be0187ed57530bf1f705208"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Causey"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849616" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881727793"/>
+        <nd ref="4881725317"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:4dde686929e646a032e8360cb9df130f6ad21c89;sha1sum:2c603b88636adc7eb88b8c6abf982d336ce9b119"/>
+        <tag k="name" v="South Maple Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:15.000Z;2013-04-20T14:53:15Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849617" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735985"/>
+        <nd ref="4881733148"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:5a1e5d7d866f966ea570d6a0c045b7a97932b6ac;sha1sum:f7b1713851710b679e38722af9ddd3314e2a993a"/>
+        <tag k="name" v="South Maple Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:15.000Z;2013-04-20T14:53:15Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="496849653" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727158"/>
         <nd ref="4881727099"/>
@@ -3599,6 +3260,44 @@
         <tag k="tiger:name_base" v="Front"/>
         <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="496849655" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725477"/>
+        <nd ref="4881727145"/>
+        <nd ref="4881727146"/>
+        <nd ref="4881727159"/>
+        <nd ref="4881727157"/>
+        <nd ref="4881727158"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="North Walnut Street"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-12-20T06:02:00.000Z;2019-03-29T02:01:52Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849682" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881727825"/>
+        <nd ref="4881727823"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0e94d4ad5f52882f60fd9fe4ba7abdb877e7bc4e;sha1sum:9d5359d828ac595a121e5a7e30c162869cf6cee6"/>
+        <tag k="name" v="Sussex Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T14:55:31.000Z;2013-04-20T14:55:31Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496849685" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="-1363"/>
@@ -3631,6 +3330,26 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="tiger:reviewed" v="no"/>
     </way>
+    <way visible="true" id="496849786" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881733488"/>
+        <nd ref="4881733499"/>
+        <nd ref="4881730541"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:83c9f162973397197d25b2420ef541f0803f94ad;sha1sum:7c4057637f69ede798bbc317e5041f74102d0e30;sha1sum:3568fd53ff390cd59f1fa778e5dc67857590f795"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2015-09-14T06:08:20Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="496849840" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881732116"/>
         <nd ref="-1371"/>
@@ -3654,6 +3373,54 @@
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
     </way>
+    <way visible="true" id="496849849" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725242"/>
+        <nd ref="4881725255"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Grier Lane"/>
+        <tag k="source:datetime" v="2013-04-20T14:46:16.000Z;2019-04-02T11:40:19Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Grier"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849852" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881737315"/>
+        <nd ref="4881737314"/>
+        <nd ref="4881737312"/>
+        <nd ref="4881737326"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Jefferson Avenue"/>
+        <tag k="source:datetime" v="2007-12-19T16:06:37.000Z;2019-03-29T02:01:51Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="496849856" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881729621"/>
+        <nd ref="4881729086"/>
+        <tag k="alt_name" v="South Church Street"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:42d24a4948db12292ffa80c19e5b682df942f43e;sha1sum:3036dace0f70ad518eaf7ddcf85138e007a43c5f"/>
+        <tag k="layer" v="1"/>
+        <tag k="name" v="South Church Avenue"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:17.000Z;2019-04-03T12:36:06Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="496849877" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881733148"/>
         <nd ref="4881733165"/>
@@ -3672,6 +3439,40 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849917" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881729070"/>
+        <nd ref="4881729742"/>
+        <tag k="alt_name" v="Southwest Front Street"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:a9af99752ce77eb619ed731723a9b00a677f654a;sha1sum:ecaef1961edc9589b69ddd0e8be44c4e3d419389"/>
+        <tag k="layer" v="1"/>
+        <tag k="name" v="Front Street"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:17.000Z;2019-04-03T12:36:06Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Front"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="496850009" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881733165"/>
+        <nd ref="4881733094"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:790673f107919b12ab10749855d54c224ab7df10;sha1sum:315b4d8ea3ee1651d18c5a665e4630d0e2581857"/>
+        <tag k="layer" v="1"/>
+        <tag k="name" v="Maple Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T14:33:51.000Z;2013-04-20T14:33:51Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
     </way>
     <way visible="true" id="496850206" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881732960"/>
@@ -3696,6 +3497,8 @@
         <nd ref="4881736054"/>
         <nd ref="4881736055"/>
         <nd ref="4881730547"/>
+        <nd ref="4881736053"/>
+        <nd ref="4881733423"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:a248c9c1cbd8ff92ab4d0c9f0e4432df89a45abd;sha1sum:e8ae78c62f99eab0500a4704bef65c643c84b47f;sha1sum:28223ebfc4a0a4e44322039164709d28dc16f75e;sha1sum:5bf5498ca24bd3471d1aff8009b8d154944f7a3f"/>
@@ -3705,6 +3508,27 @@
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Williams"/>
         <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850208" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725317"/>
+        <nd ref="4881736189"/>
+        <nd ref="4881726688"/>
+        <nd ref="4881735996"/>
+        <nd ref="4881729621"/>
+        <tag k="alt_name" v="South Church Street"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:f6a92ba32ef02e19f20923e4c074a055c127955a;sha1sum:d7084577db55a70b7ae7df95780ff64e80b4314b;sha1sum:e31d2dadd8c1d7547251d4ef18c6505d2b6700c3;sha1sum:e6eb335b0b7db45d7837415fe3f7c622e5dee64a;sha1sum:6d7ad13df2bd9116c0720382a60998ffa6984d51"/>
+        <tag k="name" v="South Church Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T15:01:21.000Z;2019-04-03T12:36:06Z;2019-04-03T12:36:05Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
@@ -3722,6 +3546,136 @@
         <tag k="tiger:name_base" v="Cherry"/>
         <tag k="tiger:name_type" v="Aly"/>
         <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="496850238" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881734728"/>
+        <nd ref="4881727823"/>
+        <nd ref="-1361"/>
+        <nd ref="4881734719"/>
+        <nd ref="4881733083"/>
+        <nd ref="4881730533"/>
+        <nd ref="4881733436"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:2657de1cacb5b20b3c453e1cc0226eeabb70576f;sha1sum:eb345554e8ba863c561b3a1a5533f2d87dffa152;sha1sum:22213f6230f9b4289d5d0876ba1c57bb4dcb002c;sha1sum:fc63c2f37da82efb4d5d61827f6051af858af1dc;sha1sum:dfe6ba9f4203b942e6bdac6359697e98347a46e3;sha1sum:a0102b278b127ec8470094bc7abeb9c3a0d55cf6"/>
+        <tag k="name" v="Polk Avenue"/>
+        <tag k="source:datetime" v="2015-07-08T21:29:23.000Z;2019-03-29T03:41:34Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Polk"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850273" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735996"/>
+        <nd ref="4881725477"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:5287c51843ce80d1e7b7b6ba506c3c701812f2e4;sha1sum:f188c3bb918bc4b7ec8c2f282055e56da44a2a7b"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z;2014-12-20T08:06:40Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Causey"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_left_2" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_right_1" v="19963"/>
+        <tag k="tiger:zip_right_2" v="19963"/>
+    </way>
+    <way visible="true" id="496850274" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725317"/>
+        <nd ref="4881731173"/>
+        <nd ref="4881731174"/>
+        <nd ref="4881731171"/>
+        <nd ref="4881731172"/>
+        <nd ref="4881731185"/>
+        <nd ref="4881735985"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Shawnee Road"/>
+        <tag k="name_1" v="S Maple Ave"/>
+        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2019-03-29T03:41:35Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="tiger:name_base_2" v="Maple"/>
+        <tag k="tiger:name_direction_prefix_2" v="S"/>
+        <tag k="tiger:name_type_1" v="Rd"/>
+        <tag k="tiger:name_type_2" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850292" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881729086"/>
+        <nd ref="4881729789"/>
+        <tag k="alt_name" v="North Church Street"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:453bc8368209b1503c277f519f3539956b428869;sha1sum:83d11e85254a138f4d7fce6ad2285ce891fb9c9c"/>
+        <tag k="layer" v="1"/>
+        <tag k="name" v="North Church Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T14:30:10.000Z;2019-04-03T12:36:06Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="496850334" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881730541"/>
+        <nd ref="4881735994"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:3e4e2c212b52475064e64d7634be8315f0db3b13;sha1sum:82f66e39bcbaf6a06240bf9dd5ee63a5c67428d9"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:30.000Z;2015-09-14T06:08:30Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Lakeview"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850356" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881726968"/>
+        <nd ref="4881733435"/>
+        <nd ref="4881731157"/>
+        <nd ref="4881733436"/>
+        <nd ref="4881732088"/>
+        <nd ref="-1357"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0d4290e4f37f93328f7d5919160c5568054cb74e;sha1sum:bfaaaa5b49cffa3fc1048ae8a31f87fecc1937c0;sha1sum:2f54c44c96f46ddbf3df1a882be6e1fe909d7aa2;sha1sum:7ff4fd57e156ab020939089eea2e07337f6719bd;sha1sum:5c315c6725495a1cefe6186ef4d5283c0aab1765;sha1sum:f884f0496ea3ea6f9f4320ff7f690d4ea296bb7d"/>
+        <tag k="name" v="Jefferson Avenue"/>
+        <tag k="source:datetime" v="2013-04-20T14:58:25.000Z;2019-04-02T11:40:19Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Jefferson"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <relation visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="496849840" role="reviewee"/>
@@ -3765,9 +3719,9 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-9" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-1723" role=""/>
-        <member type="way" ref="-1701" role=""/>
-        <member type="way" ref="-256" role=""/>
+        <member type="way" ref="-1" role=""/>
+        <member type="way" ref="496849655" role=""/>
+        <member type="way" ref="-14" role=""/>
         <tag k="error:circular" v="15"/>
         <tag k="fixme" v="verify route in Dover, Ellendale, Georgetown, Milford"/>
         <tag k="name" v="DART 303"/>
@@ -3802,13 +3756,13 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-6" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-1692" role=""/>
-        <member type="way" ref="-1701" role=""/>
-        <member type="way" ref="-1483" role=""/>
-        <member type="way" ref="-1668" role=""/>
-        <member type="way" ref="-1511" role=""/>
-        <member type="way" ref="-1520" role=""/>
-        <member type="way" ref="-1480" role=""/>
+        <member type="way" ref="-4" role=""/>
+        <member type="way" ref="496849655" role=""/>
+        <member type="way" ref="496850273" role=""/>
+        <member type="way" ref="496849585" role=""/>
+        <member type="way" ref="496850334" role=""/>
+        <member type="way" ref="496849786" role=""/>
+        <member type="way" ref="-31" role=""/>
         <tag k="FIXME" v="verify east end"/>
         <tag k="error:circular" v="15"/>
         <tag k="network" v="US:DE"/>
@@ -3900,8 +3854,8 @@
         <tag k="wikipedia" v="en:Sussex County, Delaware"/>
     </relation>
     <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-1668" role=""/>
-        <member type="way" ref="-1520" role=""/>
+        <member type="way" ref="496849585" role=""/>
+        <member type="way" ref="496849786" role=""/>
         <tag k="FIXME" v="verify east end"/>
         <tag k="error:circular" v="15"/>
         <tag k="network" v="US:DE"/>
