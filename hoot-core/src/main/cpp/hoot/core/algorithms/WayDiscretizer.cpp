@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayDiscretizer.h"
@@ -43,9 +43,9 @@ using namespace std;
 namespace hoot
 {
 
-WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way) :
-_map(map),
-_way(way)
+WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way)
+  : _map(map),
+    _way(way)
 {
   LOG_TRACE("Preparing way for discretization: " << _way);
 
@@ -54,29 +54,22 @@ _way(way)
   const std::vector<long>& nodeIds = _way->getNodeIds();
   LOG_VART(nodeIds.size());
   if (nodeIds.empty())
-  {
     throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
-  }
+
   ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
   LOG_VART(lastNode.get());
-  if (!lastNode)
-  {
-    // can't recover from this; let's declare discretization impossible
+  if (!lastNode)  // can't recover from this; let's declare discretization impossible
     _way.reset();
-  }
   else
   {
     LOG_VART(lastNode->getElementId());
-    for (size_t i = 0; i < nodeIds.size(); i++)
+    for (auto node_id : nodeIds)
     {
       // calculate the distance from the last node to this node.
-      ConstNodePtr n = _map->getNode(nodeIds[i]);
+      ConstNodePtr n = _map->getNode(node_id);
       LOG_VART(n.get());
-      if (!n)
-      {
-        // can't recover from this; let's declare discretization impossible
+      if (!n) // can't recover from this; let's declare discretization impossible
         _way.reset();
-      }
       else if (_way)
       {
         LOG_VART(n->getElementId());
@@ -97,13 +90,9 @@ _way(way)
 bool WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
 {
   if (!_way)
-  {
     return false;
-  }
   if (spacing <= 0.0)
-  {
     throw IllegalArgumentException("Way discretization spacing must be greater than zero.");
-  }
 
   LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
 
@@ -121,13 +110,9 @@ bool WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
 bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result) const
 {
   if (!_way)
-  {
     return false;
-  }
   if (spacing <= 0.0)
-  {
     throw IllegalArgumentException("Way discretization spacing must be greater than zero.");
-  }
 
   LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
 
@@ -143,9 +128,8 @@ bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result) con
   LOG_VART(result.size());
 
   for (int i = 0; i <= count; i++)
-  {
     result[i] = WayLocation(_map, _way, double(i) * spacing);
-  }
+
   LOG_VART(result.size());
 
   return true;

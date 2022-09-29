@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVE_UNKNOWN_VISITOR_H
 #define REMOVE_UNKNOWN_VISITOR_H
@@ -50,7 +50,7 @@ public:
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getCompletedStatusMessage() const override
-  { return "Removed " + QString::number(_numAffected) + " elements."; }
+  { return QString("Removed %1 elements.").arg(QString::number(_numAffected)); }
 
   void set(Status status) { _status = status; }
 

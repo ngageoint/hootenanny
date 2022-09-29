@@ -209,17 +209,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
 
   // The coord sys and schema entries don't get written to streamed output b/c we don't have
   // the map object to read the coord sys from.
-
-  int epsg = map->getProjection()->GetEPSGGeogCS();
-  if (epsg > -1)
-    _writer->writeAttribute("srs", QString("+epsg:%1").arg(epsg));
-  else
-  {
-    char *wkt;
-    map->getProjection()->exportToWkt(&wkt);
-    _writer->writeAttribute("srs", wkt);
-    free(wkt);
-  }
+  _writer->writeAttribute("srs", map->getProjectionEpsgString());
 
   if (_osmSchema != "")
     _writer->writeAttribute("schema", _osmSchema);
@@ -381,8 +371,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_STATUS(
-      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 
@@ -457,8 +446,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_STATUS(
-      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 
@@ -489,8 +477,7 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_STATUS(
-      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 

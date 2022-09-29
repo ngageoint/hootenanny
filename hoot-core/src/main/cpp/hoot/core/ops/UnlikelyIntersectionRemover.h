@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
 #define UNLIKELYINTERSECTIONREMOVER_H
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {

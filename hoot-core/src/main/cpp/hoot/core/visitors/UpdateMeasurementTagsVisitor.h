@@ -65,7 +65,7 @@ public:
 
   QString getInitStatusMessage() const override { return "Update existing measurement tags..."; }
   QString getCompletedStatusMessage() const override
-  { return "Updated tags on " + QString::number(_numAffected) + " elements"; }
+  { return QString("Updated tags on %1 elements").arg(QString::number(_numAffected)); }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

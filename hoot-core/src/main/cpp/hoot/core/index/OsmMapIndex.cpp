@@ -530,8 +530,7 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());
 
-    if (_pendingNodeRemoval.size() > std::max((size_t)100, _map.getNodes().size() / 8) &&
-        _nodeTree != nullptr)
+    if (_pendingNodeRemoval.size() > std::max(static_cast<size_t>(100), static_cast<size_t>(_map.getNodeCount() / 8)) && _nodeTree != nullptr)
     {
       LOG_DEBUG("pending removal size: " << _pendingNodeRemoval.size());
       _nodeTree.reset();
@@ -556,7 +555,7 @@ void OsmMapIndex::removeWay(ConstWayPtr w)
     _nodeToWayMap->removeWay(w);
   }
 
-  if (_wayTree != nullptr && _pendingWayRemoval.size() > std::max((size_t)100, _map.getWays().size() / 8))
+  if (_wayTree != nullptr && _pendingWayRemoval.size() > std::max(static_cast<size_t>(100), static_cast<size_t>(_map.getWayCount() / 8)))
   {
     LOG_DEBUG("pending removal size: " << _pendingWayRemoval.size());
     _wayTree.reset();

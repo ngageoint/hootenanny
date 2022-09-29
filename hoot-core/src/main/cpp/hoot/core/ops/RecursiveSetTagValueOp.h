@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RECURSIVE_SET_TAG_VALUE_OP_H
 #define RECURSIVE_SET_TAG_VALUE_OP_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
@@ -49,12 +49,10 @@ public:
   // We have some of the constructor signatures from SetTagValueVisitor here, as well as a signature
   // that allows passing in an already configured, possibly complex, criterion. We may want to
   // extend that capability to SetTagValueVisitor at some point.
-  RecursiveSetTagValueOp(
-    const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
-    bool appendToExistingValue = false, const bool overwriteExistingTag = true);
-  RecursiveSetTagValueOp(
-    const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
-    bool appendToExistingValue = false, const bool overwriteExistingTag = true);
+  RecursiveSetTagValueOp(const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
+                         bool appendToExistingValue = false, const bool overwriteExistingTag = true);
+  RecursiveSetTagValueOp(const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
+                         bool appendToExistingValue = false, const bool overwriteExistingTag = true);
   ~RecursiveSetTagValueOp() override = default;
 
   /**

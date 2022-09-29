@@ -354,7 +354,7 @@ public:
     QString query = "[out:json][bbox];node;out;";
     queryOverpass(uut, QString("%1?data=%2").arg(url, query));
 
-    s.set(ConfigOptions::getOverpassApiQueryPathKey(), _inputPath + "/overpass_query.oql");
+    s.set(ConfigOptions::getOverpassApiQueryPathKey(), _inputPath + "/overpass_query.overpassql");
     uut.setConfiguration(s);
 
     queryOverpass(uut, url);
@@ -484,8 +484,8 @@ public:
     uut.read(map);
     uut.close();
 
-    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
   }
 
   void runBoundsLeaveConnectedOobWaysTest()

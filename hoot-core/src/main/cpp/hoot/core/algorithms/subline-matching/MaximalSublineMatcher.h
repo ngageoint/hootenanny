@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MAXIMALSUBLINEMATCHER_H
 #define MAXIMALSUBLINEMATCHER_H
@@ -49,8 +49,8 @@ public:
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2,
+                                  double& score, Meters maxRelevantDistance = -1) const override;
 
   void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 

@@ -2,12 +2,12 @@
 <osmChange version="0.6" generator="hootenanny">
     <create>
         <node id="-1" version="0" lat="8.6548851891999998" lon="28.1463268213400006" timestamp="2018-06-11T16:50:55Z">
-            <tag k="source" v="Unknown;osm"/>
+            <tag k="attribution" v="osm"/>
+            <tag k="building" v="retail"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Lana's House of Coffee"/>
+            <tag k="source" v="Unknown;osm"/>
             <tag k="uuid" v="{dd5f81c2-e249-467e-985a-914a76ef121e}"/>
-            <tag k="building" v="retail"/>
-            <tag k="attribution" v="osm"/>
         </node>
         <node id="-2" version="0" lat="8.6541474185900000" lon="28.1392570135800000" timestamp="2018-06-11T16:50:55Z"/>
         <node id="-3" version="0" lat="8.6548074607699998" lon="28.1410811127400002" timestamp="2018-06-11T16:50:55Z"/>
@@ -443,13 +443,13 @@
             <nd ref="-3"/>
             <nd ref="-2"/>
             <nd ref="-5"/>
-            <tag k="source" v="Unknown;osm"/>
+            <tag k="attribution" v="osm"/>
+            <tag k="building" v="cowshed"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="cow house"/>
-            <tag k="uuid" v="{0d08da24-e6ac-416c-a724-6fa8181e892d}"/>
-            <tag k="building" v="cowshed"/>
+            <tag k="source" v="Unknown;osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{0d08da24-e6ac-416c-a724-6fa8181e892d}"/>
         </way>
         <way id="-2" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-275"/>
@@ -476,12 +476,12 @@
             <nd ref="-8"/>
             <nd ref="-7"/>
             <nd ref="-6"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{e7522392-3887-4ebd-9ddc-ab3e16c6b8ab}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{e7522392-3887-4ebd-9ddc-ab3e16c6b8ab}"/>
         </way>
         <way id="-3" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-276"/>
@@ -505,12 +505,12 @@
             <nd ref="-31"/>
             <nd ref="-30"/>
             <nd ref="-29"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{2264796f-c585-4f5c-a4b0-251b32c0f621}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{2264796f-c585-4f5c-a4b0-251b32c0f621}"/>
         </way>
         <way id="-4" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-281"/>
@@ -534,12 +534,12 @@
             <nd ref="-51"/>
             <nd ref="-50"/>
             <nd ref="-49"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{21c4ddf3-5098-47ed-b444-bc12fc96afdb}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{21c4ddf3-5098-47ed-b444-bc12fc96afdb}"/>
         </way>
         <way id="-5" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-282"/>
@@ -563,12 +563,12 @@
             <nd ref="-71"/>
             <nd ref="-70"/>
             <nd ref="-69"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{a26a619d-8667-4213-8baa-5e2c45a3f5bf}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{a26a619d-8667-4213-8baa-5e2c45a3f5bf}"/>
         </way>
         <way id="-6" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-283"/>
@@ -587,12 +587,12 @@
             <nd ref="-91"/>
             <nd ref="-90"/>
             <nd ref="-89"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{e32f5297-905f-4642-bb1d-cfb0d20317aa}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{e32f5297-905f-4642-bb1d-cfb0d20317aa}"/>
         </way>
         <way id="-7" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-272"/>
@@ -604,12 +604,12 @@
             <nd ref="-106"/>
             <nd ref="-105"/>
             <nd ref="-104"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{aeb6e690-2363-4822-9ed8-c9490e0b613c}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{aeb6e690-2363-4822-9ed8-c9490e0b613c}"/>
         </way>
         <way id="-8" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-273"/>
@@ -621,12 +621,12 @@
             <nd ref="-114"/>
             <nd ref="-113"/>
             <nd ref="-112"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{f873302e-09c8-4f54-9c01-daed4e8dedd2}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{f873302e-09c8-4f54-9c01-daed4e8dedd2}"/>
         </way>
         <way id="-9" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-274"/>
@@ -638,12 +638,12 @@
             <nd ref="-122"/>
             <nd ref="-121"/>
             <nd ref="-120"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{2a2df218-8328-4365-9fa0-6def406348a4}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{2a2df218-8328-4365-9fa0-6def406348a4}"/>
         </way>
         <way id="-10" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-269"/>
@@ -656,12 +656,12 @@
             <nd ref="-130"/>
             <nd ref="-129"/>
             <nd ref="-128"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{c647f086-6340-4536-82e9-f314197d7112}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{c647f086-6340-4536-82e9-f314197d7112}"/>
         </way>
         <way id="-11" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-270"/>
@@ -675,12 +675,12 @@
             <nd ref="-139"/>
             <nd ref="-138"/>
             <nd ref="-137"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{ba8c54d0-f868-4563-bc0c-25f924120578}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{ba8c54d0-f868-4563-bc0c-25f924120578}"/>
         </way>
         <way id="-12" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-271"/>
@@ -694,12 +694,12 @@
             <nd ref="-149"/>
             <nd ref="-148"/>
             <nd ref="-147"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{6e82b20c-fba5-46dc-a8ca-a5b1a87cb667}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{6e82b20c-fba5-46dc-a8ca-a5b1a87cb667}"/>
         </way>
         <way id="-13" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-284"/>
@@ -721,12 +721,12 @@
             <nd ref="-159"/>
             <nd ref="-158"/>
             <nd ref="-157"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{86cac9dc-fe53-42bc-87d1-8da997cf2794}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{86cac9dc-fe53-42bc-87d1-8da997cf2794}"/>
         </way>
         <way id="-14" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-285"/>
@@ -751,12 +751,12 @@
             <nd ref="-177"/>
             <nd ref="-176"/>
             <nd ref="-175"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{35122dc3-f42d-4279-b49e-03dcb520df42}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{35122dc3-f42d-4279-b49e-03dcb520df42}"/>
         </way>
         <way id="-15" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-280"/>
@@ -776,12 +776,12 @@
             <nd ref="-198"/>
             <nd ref="-197"/>
             <nd ref="-196"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{e16cdb69-37c9-4244-868c-e9ba32cb002a}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{e16cdb69-37c9-4244-868c-e9ba32cb002a}"/>
         </way>
         <way id="-16" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-277"/>
@@ -794,12 +794,12 @@
             <nd ref="-214"/>
             <nd ref="-213"/>
             <nd ref="-212"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{787eb69d-3b19-42fe-b043-798290c16dab}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{787eb69d-3b19-42fe-b043-798290c16dab}"/>
         </way>
         <way id="-17" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-278"/>
@@ -818,12 +818,12 @@
             <nd ref="-223"/>
             <nd ref="-222"/>
             <nd ref="-221"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{2523d0e3-0802-42c5-ad5b-671ab3601071}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{2523d0e3-0802-42c5-ad5b-671ab3601071}"/>
         </way>
         <way id="-18" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-286"/>
@@ -844,12 +844,12 @@
             <nd ref="-238"/>
             <nd ref="-237"/>
             <nd ref="-236"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{04c74d80-ae4c-45bb-b623-13a61329dde5}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{04c74d80-ae4c-45bb-b623-13a61329dde5}"/>
         </way>
         <way id="-19" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-279"/>
@@ -869,12 +869,12 @@
             <nd ref="-258"/>
             <nd ref="-259"/>
             <nd ref="-260"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="residential"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="uuid" v="{a82d8db0-9b03-498d-b90b-738aefc26dc6}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{a82d8db0-9b03-498d-b90b-738aefc26dc6}"/>
         </way>
         <way id="-20" version="0" timestamp="">
             <nd ref="-295"/>
@@ -897,10 +897,10 @@
             <nd ref="-298"/>
             <nd ref="-297"/>
             <nd ref="-296"/>
+            <tag k="operator" v="Polar Express Industries, Ltd."/>
             <tag k="railway" v="rail"/>
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
-            <tag k="operator" v="Polar Express Industries, Ltd."/>
         </way>
         <way id="-22" version="0" timestamp="">
             <nd ref="-314"/>
@@ -937,11 +937,11 @@
             <nd ref="-320"/>
             <nd ref="-319"/>
             <nd ref="-322"/>
+            <tag k="alt_name" v="Old Name"/>
+            <tag k="building" v="yes"/>
             <tag k="name" v="New Name"/>
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
-            <tag k="alt_name" v="Old Name"/>
-            <tag k="building" v="yes"/>
         </way>
         <way id="-25" version="0" timestamp="2018-06-11T16:49:01Z">
             <nd ref="-323"/>
@@ -969,15 +969,15 @@
             <nd ref="-335"/>
             <nd ref="-336"/>
             <nd ref="-337"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="I-15"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{23aeaf18-1427-425c-ac42-8ee203b38f65};{c535233a-4a32-4a88-acc1-27a4d5a1445b}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="source:imagery" v="Unknown"/>
             <tag k="surface" v="paved"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{23aeaf18-1427-425c-ac42-8ee203b38f65};{c535233a-4a32-4a88-acc1-27a4d5a1445b}"/>
         </way>
         <way id="-26" version="0" timestamp="2018-06-11T16:49:01Z">
             <nd ref="-331"/>
@@ -1032,15 +1032,15 @@
             <nd ref="-424"/>
             <nd ref="-425"/>
             <nd ref="-345"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Yellow Brick Road"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="source:imagery" v="Unknown"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
         </way>
         <way id="-27" version="0" timestamp="2018-06-11T16:49:01Z">
             <nd ref="-346"/>
@@ -1071,15 +1071,15 @@
             <nd ref="-362"/>
             <nd ref="-361"/>
             <nd ref="-331"/>
-            <tag k="source" v="osm"/>
+            <tag k="attribution" v="osm"/>
             <tag k="highway" v="primary"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Yellow Brick Road"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
+            <tag k="source" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="source:imagery" v="Unknown"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
         </way>
         <way id="-28" version="0" timestamp="2018-06-11T16:49:01Z">
             <nd ref="-426"/>
@@ -1087,14 +1087,14 @@
             <nd ref="-428"/>
             <nd ref="-429"/>
             <nd ref="-426"/>
-            <tag k="source" v="Unknown;osm"/>
             <tag k="amenity" v="fuel"/>
+            <tag k="attribution" v="osm"/>
+            <tag k="building" v="garage"/>
             <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
             <tag k="name" v="Joe's Garage"/>
-            <tag k="uuid" v="{d34e32bc-d084-4368-b7b9-754ef3d349d2};{af7cce29-a47d-4b42-bced-be9152dbaf77}"/>
-            <tag k="building" v="garage"/>
+            <tag k="source" v="Unknown;osm"/>
             <tag k="source:datetime" v="2018-06-11T16:49:01Z"/>
-            <tag k="attribution" v="osm"/>
+            <tag k="uuid" v="{d34e32bc-d084-4368-b7b9-754ef3d349d2};{af7cce29-a47d-4b42-bced-be9152dbaf77}"/>
         </way>
     </create>
 </osmChange>

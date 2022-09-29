@@ -72,7 +72,7 @@ import hoot.services.geo.BoundingBox;
 public class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
 
-    public static Pattern oqlFilterPattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
+    public static Pattern overpassqlFilterPattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
 
     private final GrailParams params;
     private final String jobId;
@@ -200,7 +200,7 @@ public class PullApiCommand implements InternalCommand {
             newQuery = query;
             //check for any filters in custom query
             //find the first term within square brackets
-            Matcher matcher = oqlFilterPattern.matcher(query);
+            Matcher matcher = overpassqlFilterPattern.matcher(query);
 
             while (matcher.find()) {
                 filterList.add(matcher.group(1));

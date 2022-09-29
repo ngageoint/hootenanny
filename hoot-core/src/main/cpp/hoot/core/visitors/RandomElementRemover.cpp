@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RandomElementRemover.h"
 
@@ -30,20 +30,20 @@
 #include <boost/random/uniform_real.hpp>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomElementRemover)
 
-RandomElementRemover::RandomElementRemover() :
-_localRng(std::make_shared<boost::minstd_rand>())
+RandomElementRemover::RandomElementRemover()
+  : _localRng(std::make_shared<boost::minstd_rand>())
 {
   _rng = _localRng.get();
 }
@@ -55,13 +55,9 @@ void RandomElementRemover::setConfiguration(const Settings& conf)
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
-  {
     _rng->seed(RandomNumberUtils::generateSeed());
-  }
   else
-  {
     _rng->seed(seed);
-  }
 }
 
 void RandomElementRemover::visit(const ConstElementPtr& e)
@@ -69,8 +65,7 @@ void RandomElementRemover::visit(const ConstElementPtr& e)
   boost::uniform_real<> uni(0.0, 1.0);
   if (uni(*_rng) <= _p)
   {
-    RecursiveElementRemover(
-      ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
+    RecursiveElementRemover(ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
     _numAffected++;
   }
 }

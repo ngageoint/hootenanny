@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SublineStringMatcherFactory.h"
 
@@ -36,26 +36,25 @@
 namespace hoot
 {
 
-SublineStringMatcherPtr SublineStringMatcherFactory::getMatcher(
-  const CreatorDescription::BaseFeatureType& featureType, const ConstOsmMapPtr& map)
+SublineStringMatcherPtr SublineStringMatcherFactory::getMatcher(const CreatorDescription::BaseFeatureType& featureType,
+                                                                const ConstOsmMapPtr& map)
 {
   switch (featureType)
   {
-    case CreatorDescription::BaseFeatureType::Highway:
-      return _getHighwayMatcher();
-    case CreatorDescription::BaseFeatureType::Line:
-      return _getGenericLineMatcher();
-    case CreatorDescription::BaseFeatureType::Railway:
-      return _getRailwayMatcher();
-    case CreatorDescription::BaseFeatureType::PowerLine:
-      return _getPowerLineMatcher();
-    case CreatorDescription::BaseFeatureType::River:
-      return _getRiverMatcher(map);
-    case CreatorDescription::BaseFeatureType::Unknown:
-      return _getDefaultMatcher();
-    default:
-      throw IllegalArgumentException(
-        "Invalid feature type: " + CreatorDescription::baseFeatureTypeToString(featureType));
+  case CreatorDescription::BaseFeatureType::Highway:
+    return _getHighwayMatcher();
+  case CreatorDescription::BaseFeatureType::Line:
+    return _getGenericLineMatcher();
+  case CreatorDescription::BaseFeatureType::Railway:
+    return _getRailwayMatcher();
+  case CreatorDescription::BaseFeatureType::PowerLine:
+    return _getPowerLineMatcher();
+  case CreatorDescription::BaseFeatureType::River:
+    return _getRiverMatcher(map);
+  case CreatorDescription::BaseFeatureType::Unknown:
+    return _getDefaultMatcher();
+  default:
+    throw IllegalArgumentException("Invalid feature type: " + CreatorDescription::baseFeatureTypeToString(featureType));
   }
 }
 
@@ -71,17 +70,12 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getHighwayMatcher()
 SublineStringMatcherPtr SublineStringMatcherFactory::_getRiverMatcher(const ConstOsmMapPtr& map)
 {
   if (!map)
-  {
-    throw IllegalArgumentException(
-      "No map passed to river subline string matcher initialization.");
-  }
+    throw IllegalArgumentException("No map passed to river subline string matcher initialization.");
 
   ConfigOptions opts;
   int maxRecursions = -1; // default value
   if (opts.getRiverMaximalSublineAutoOptimize())
-  {
     maxRecursions = RiverMaximalSublineSettingOptimizer().getFindBestMatchesMaxRecursions(map);
-  }
   return
     _getMatcher(
       MaximalSublineStringMatcher::className(), opts.getRiverSublineMatcher(),
@@ -124,13 +118,11 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getDefaultMatcher()
       opts.getWayMatcherMaxAngle(), opts.getWayMatcherHeadingDelta(), 1e7);
 }
 
-SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(
-  const QString& sublineStringMatcherName, const QString& sublineMatcherName,
-  const double maxAngle, const double headingDelta, const int maxRecursions)
+SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(const QString& sublineStringMatcherName, const QString& sublineMatcherName,
+                                                                 const double maxAngle, const double headingDelta, const int maxRecursions)
 {
   // Create the primary matcher. This one will always be used.
-  std::shared_ptr<SublineStringMatcher> primaryMatcher =
-    Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName);
+  std::shared_ptr<SublineStringMatcher> primaryMatcher = Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName);
   Settings settings = conf();
   settings.set(ConfigOptions::getWaySublineMatcherKey(), sublineMatcherName);
   settings.set(ConfigOptions::getWayMatcherMaxAngleKey(), maxAngle);
@@ -142,8 +134,7 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(
   if (sublineMatcherName != secondarySublineMatcher)
   {
     // Create a secondary, more performant matcher as a backup. This one may not end up being used.
-    std::shared_ptr<SublineStringMatcher> secondaryMatcher(
-      Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName));
+    std::shared_ptr<SublineStringMatcher> secondaryMatcher(Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName));
     Settings secondarySettings = settings;
     secondarySettings.set(ConfigOptions::getWaySublineMatcherKey(), secondarySublineMatcher);
     secondaryMatcher->setConfiguration(secondarySettings);
@@ -151,8 +142,7 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(
     // Wrap use of the two matchers with MultipleMatcherSublineStringMatcher. Don't call
     // setConfiguration here, as we've already set a separate configuration on each of the matchers
     // being passed in.
-    return
-      std::make_shared<MultipleMatcherSublineStringMatcher>(primaryMatcher, secondaryMatcher);
+    return std::make_shared<MultipleMatcherSublineStringMatcher>(primaryMatcher, secondaryMatcher);
   }
   else
   {

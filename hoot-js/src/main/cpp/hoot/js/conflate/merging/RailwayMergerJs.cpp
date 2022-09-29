@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RailwayMergerJs.h"
 
@@ -66,7 +66,7 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
 
   int numMerged = 0;
   RailwayCriterion crit;
-
+  //  Make a copy of the way map so that the mergers can modify the original
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {

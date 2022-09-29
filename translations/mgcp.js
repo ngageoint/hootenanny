@@ -2404,6 +2404,9 @@ mgcp = {
     {
       tags = translate.unpackText(attrs,'tag');
 
+      // Throw out the reason for the o2s if it exists
+      delete tags.o2s_reason;
+
       // Add some metadata
       if (! tags.uuid)
       {
@@ -2752,17 +2755,25 @@ mgcp = {
         if (! attrs.F_CODE)
         {
           returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-          return returnData;
         }
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
           returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in MGCP TRD4'}, tableName: ''});
-          return returnData;
         }
+        return returnData;
       }
 
-      hoot.logTrace('FCODE and Geometry: ' + tableName + ' is not in the schema');
+      // Since we are not going to the UI, add the reason for dumping the feature to the list of 
+      // tags to help other tools.
+      if (! attrs.F_CODE)
+      {
+        tags.o2s_reason = 'Unable to assign an F_CODE';
+      }
+      else
+      {
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE;
+      }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "UniqueTagCounter.h"
@@ -38,10 +38,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueTagCounter)
 
 void UniqueTagCounter::visit(const ConstElementPtr& e)
 {
-  for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
-  {
+  for (auto tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
     _tagKvps.insert(OsmSchema::toKvp(tagItr.key(), tagItr.value()));
-  }
 }
 
 }

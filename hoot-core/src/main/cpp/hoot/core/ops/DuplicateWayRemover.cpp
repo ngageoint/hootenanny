@@ -30,16 +30,16 @@
 // Hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
@@ -66,9 +66,8 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
   // create a map from nodes to ways
   std::shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
   NodeToWayMap& n2w = *n2wp;
-
-  WayMap wm = _map->getWays();
-
+  //  Make a copy of the way map so that the ways can be modified below
+  const WayMap wm = _map->getWays();
   // go through each way and remove duplicate nodes in one way
   for (auto it = wm.begin(); it != wm.end(); ++it)
   {
@@ -78,8 +77,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
     // and active conflate matcher in the current conflation configuration.
-    else if (_conflateInfoCache &&
-             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
@@ -186,14 +184,12 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
   OneWayCriterion oneWayCrit;
   if (length > 1)
   {
-    const Tags mergedTags =
-      TagMergerFactory::mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+    const Tags mergedTags = TagMergerFactory::mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
     const vector<long>& nodes1 = w1->getNodeIds();
     const vector<long>& nodes2 = w2->getNodeIds();
     // _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2), so the following
     // logic works
-    if (nodes1.size() == nodes2.size() &&
-        nodes1.size() == static_cast<size_t>(length))
+    if (nodes1.size() == nodes2.size() && nodes1.size() == static_cast<size_t>(length))
     {
       //  Merge the two ways' tags
       w1->setTags(mergedTags);
@@ -222,8 +218,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
     }
     else
     {
-      vector<long> newNodes(
-        nodes1.begin() + lcs.getW1Index(), nodes1.begin() + lcs.getW1Index() + length);
+      vector<long> newNodes(nodes1.begin() + lcs.getW1Index(), nodes1.begin() + lcs.getW1Index() + length);
       //  Split w1 with all new ids for the results
       vector<WayPtr> ways1 = _splitWay(w1, lcs.getW1Index(), length, true);
       //  Split w2 using the old id and new id(s)
@@ -308,8 +303,7 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
   if (newIds)
   {
     //  Create a new way, update it, and add it to the map
-    WayPtr newWay =
-     std::make_shared<Way>(way->getStatus(), _map->createNextWayId(), way->getRawCircularError());
+    WayPtr newWay = std::make_shared<Way>(way->getStatus(), _map->createNextWayId(), way->getRawCircularError());
     newWay->addNodes(nodes);
     newWay->setPid(way->getId());
     newWay->setTags(way->getTags());
@@ -328,8 +322,7 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
   }
 }
 
-void DuplicateWayRemover::_replaceMultiple(
-  const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways)
+void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways)
 {
   _numAffected += ways.size(); // *think* this is right...not sure
 

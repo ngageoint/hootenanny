@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SUM_NUMERIC_TAGS_VISITOR_H
 #define SUM_NUMERIC_TAGS_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -79,9 +79,8 @@ public:
   QString getInitStatusMessage() const override { return "Summing values of numeric tags..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Summed " + StringUtils::formatLargeNumber(_numAffected) + " numeric tags on " +
-      StringUtils::formatLargeNumber(_numProcessed) + " features.";
+    return QString("Summed %1 numeric tags on %2 features.")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
   }
 
 private:

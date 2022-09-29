@@ -85,7 +85,8 @@ void HighwayCornerSplitter::splitCorners()
 
   // Get a list of ways (that look like roads) in the map
   HighwayCriterion highwayCrit(_map);
-  for (auto it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
+  const WayMap& ways =  _map->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     if (highwayCrit.isSatisfied(it->second))
       _todoWays.push_back(it->first);
@@ -142,7 +143,8 @@ void HighwayCornerSplitter::_splitRoundedCorners()
   _todoWays.clear();
   //  Get a list of ways (that look like roads) in the map
   HighwayCriterion highwayCriterion(_map);
-  for (auto it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
+  const WayMap& ways = _map->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     if (highwayCriterion.isSatisfied(it->second))
       _todoWays.push_back(it->first);
@@ -202,8 +204,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
         //  Find the middle of the threshold to split at
         double mid_point = max_total_delta / 2.0;
         double total = 0.0;
-        for (int index = max_start_index + 1;
-             index < max_start_index + _roundedMaxNodeCount && index < headings.size(); ++index)
+        for (int index = max_start_index + 1; index < max_start_index + _roundedMaxNodeCount && index < headings.size(); ++index)
         {
           double delta = headings[index] - headings[index - 1];
           total += delta;
@@ -221,8 +222,7 @@ void HighwayCornerSplitter::_splitRoundedCorners()
         QString buffer;
         QTextStream ts(&buffer);
         for (int j = 0; j < headings.size(); ++j)
-          ts << QString().setNum(headings[j], 'f') << "\t| " <<
-                QString().setNum(distances[j], 'f') << "\n";
+          ts << QString().setNum(headings[j], 'f') << "\t| " << QString().setNum(distances[j], 'f') << "\n";
         //  Output a bunch of stuff here to help develop the algorithm
         LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
                   "\nHeadings\t| Distances" <<
@@ -269,8 +269,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
         return false;
     }
   }
-  LOG_TRACE("Splitting way: " << pWay->getElementId() << " at node: " <<
-            ElementId(ElementType::Node, nodeId));
+  LOG_TRACE("Splitting way: " << pWay->getElementId() << " at node: " << ElementId(ElementType::Node, nodeId));
 
   // split the way and remove it from the map
   WayLocation wayLoc(_map, pWay, static_cast<int>(nodeIdx), 0.0);

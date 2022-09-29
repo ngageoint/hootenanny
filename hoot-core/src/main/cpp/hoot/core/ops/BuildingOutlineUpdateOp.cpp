@@ -93,6 +93,7 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       const WayPtr& w = _map.getWay(e->getId());
+      //  Make copies of the nodes so the way can be modified
       std::vector<long> oldNodes = w->getNodeIds();
       std::vector<long> newNodes = w->getNodeIds();
 
@@ -267,7 +268,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
     //  In some instances the outline geometry may come back as a multipolygon with holes those need to be changed
     if (outline->getGeometryTypeId() == GEOS_POLYGON)
     {
-      Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
+      const Polygon* polygon = dynamic_cast<Polygon*>(outline.get());
       if (polygon->getNumInteriorRing() != 0)
         outline.reset(polygon->getExteriorRing()->clone().release());
     }
@@ -288,7 +289,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
     // Never add outlines to multipoly relations, as it triggers JOSM errors.
     if (pBuilding->getType() != MetadataTags::RelationMultiPolygon())
     {
-      Tags buildingTags = pBuilding->getTags();
+      const Tags& buildingTags = pBuilding->getTags();
       // To preserve naming of relation buildings in JOSM we copy the building's "building" and
       // "name" tags.
       if (buildingTags.contains("name") && buildingTags.contains(MetadataTags::Building()) )

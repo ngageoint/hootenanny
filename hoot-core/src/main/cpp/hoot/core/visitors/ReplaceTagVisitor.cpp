@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ReplaceTagVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -40,13 +40,12 @@ ReplaceTagVisitor::ReplaceTagVisitor()
   setConfiguration(conf());
 }
 
-ReplaceTagVisitor::ReplaceTagVisitor(
-  const QString& matchKey, const QString& matchValue, const QString& replaceKey,
-  const QString& replaceValue) :
-_matchKey(matchKey),
-_matchValue(matchValue),
-_replaceKey(replaceKey),
-_replaceValue(replaceValue)
+ReplaceTagVisitor::ReplaceTagVisitor(const QString& matchKey, const QString& matchValue, const QString& replaceKey,
+                                     const QString& replaceValue)
+  : _matchKey(matchKey),
+    _matchValue(matchValue),
+    _replaceKey(replaceKey),
+    _replaceValue(replaceValue)
 {
 }
 
@@ -59,26 +58,18 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
   if (!matchTag.trimmed().isEmpty() && !replaceTag.trimmed().isEmpty())
   {
     if (!matchTag.contains("="))
-    {
       throw IllegalArgumentException("Invalid match tag: " + matchTag);
-    }
     const QStringList matchTagParts = matchTag.split("=");
     if (matchTagParts.size() != 2)
-    {
       throw IllegalArgumentException("Invalid match tag: " + matchTag);
-    }
     _matchKey = matchTagParts[0];
     _matchValue = matchTagParts[1];
 
     if (!replaceTag.contains("="))
-    {
       throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
-    }
     const QStringList replaceTagParts = replaceTag.split("=");
     if (replaceTagParts.size() != 2)
-    {
       throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
-    }
     _replaceKey = replaceTagParts[0];
     _replaceValue = replaceTagParts[1];
   }
@@ -87,7 +78,7 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
 void ReplaceTagVisitor::visit(const std::shared_ptr<Element>& e)
 {
   // Key and Value must match exactly. Then we replace.
-  Tags::iterator it = e->getTags().find(_matchKey);
+  auto it = e->getTags().find(_matchKey);
   if (it != e->getTags().end() && (0 == it.value().compare(_matchValue)))
   {
     e->getTags().remove(_matchKey);

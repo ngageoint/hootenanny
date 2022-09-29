@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // GCC
@@ -30,16 +30,14 @@
 
 // GEOS
 #include <geos/geom/Envelope.h>
-using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/Hoot.h>
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/cmd/Command.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/js/v8Engine.h>
-using namespace hoot;
 
 // Qt
 #include <QCoreApplication>
@@ -49,6 +47,8 @@ using namespace hoot;
 // Standard
 #include <exception>
 
+using namespace geos::geom;
+using namespace hoot;
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -60,18 +60,14 @@ int main(int argc, char *argv[])
 
   vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
   std::shared_ptr<Command> command;
-  for (size_t i = 0; i < cmds.size(); i++)
+  for (const auto& cmd : cmds)
   {
-    command = Factory::getInstance().constructObject<Command>(cmds[i]);
+    command = Factory::getInstance().constructObject<Command>(cmd);
     QString argName = command->getName();
     if (QString(argv[1]) == argName)
-    {
       break;
-    }
     else
-    {
       command.reset();
-    }
   }
 
   if (command != nullptr)

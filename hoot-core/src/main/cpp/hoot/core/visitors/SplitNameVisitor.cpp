@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SplitNameVisitor.h"
 
@@ -36,8 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitNameVisitor)
 
-SplitNameVisitor::SplitNameVisitor() :
-_maxSize(ConfigOptions().getMaxTagLength())
+SplitNameVisitor::SplitNameVisitor()
+  : _maxSize(ConfigOptions().getMaxTagLength())
 {
 }
 
@@ -52,9 +52,9 @@ void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames) co
   int size = 0;
   QStringList names;
 
-  for (int i = 0; i < extraNames.size(); i++)
+  for (const auto& name : qAsConst(extraNames))
   {
-    int thisSize = extraNames[i].size();
+    int thisSize = name.size();
     if (size + thisSize > _maxSize)
     {
       lastNameId = _getNextNameId(t, lastNameId);
@@ -64,7 +64,7 @@ void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames) co
       size = 0;
     }
 
-    names.append(extraNames[i]);
+    names.append(name);
     size += thisSize + 1;
   }
 
@@ -81,13 +81,9 @@ int SplitNameVisitor::_getNextNameId(const Tags& t, int lastId) const
   for (int i = lastId + 1; i < lastId + 100; i++)
   {
     QString k = QString("name:%1").arg(i);
-
     if (t.contains(k) == false)
-    {
       return i;
-    }
   }
-
   throw InternalErrorException("Unable to find a valid key for a new extra name.");
 }
 
@@ -102,9 +98,7 @@ QStringList SplitNameVisitor::_splitNames(const QString& v, QStringList& extras)
   for (; i < allNames.size(); i++)
   {
     if (allNames[i].size() > _maxSize)
-    {
       allNames[i] = allNames[i].left(_maxSize - 3) + "...";
-    }
 
     int thisSize = allNames[i].size();
     if (size + thisSize <= _maxSize)
@@ -113,20 +107,14 @@ QStringList SplitNameVisitor::_splitNames(const QString& v, QStringList& extras)
       size += thisSize + 1;
     }
     else
-    {
       break;
-    }
   }
-
   for (; i < allNames.size(); i++)
   {
     if (allNames[i].size() > _maxSize)
-    {
       allNames[i] = allNames[i].left(_maxSize - 3) + "...";
-    }
     extras.append(allNames[i]);
   }
-
   return result;
 }
 
@@ -134,22 +122,15 @@ QStringList SplitNameVisitor::_splitNames(const QString& v, QStringList& extras)
 void SplitNameVisitor::visit(const std::shared_ptr<Element>& e)
 {
   Tags& t = e->getTags();
-
   QStringList extraNames;
-
   Tags copy = t;
-  for (Tags::const_iterator it = copy.begin(); it != copy.end(); ++it)
+  for (auto it = copy.begin(); it != copy.end(); ++it)
   {
     const QString& k = it.key();
     const QString& v = it.value();
-    if (v.size() > _maxSize &&
-        OsmSchema::getInstance().getCategories(it.key()).intersects(OsmSchemaCategory::name()))
-    {
-      QStringList l = _splitNames(v, extraNames);
-      t.setList(k, l);
-    }
+    if (v.size() > _maxSize && OsmSchema::getInstance().getCategories(it.key()).intersects(OsmSchemaCategory::name()))
+      t.setList(k, _splitNames(v, extraNames));
   }
-
   _addExtraNames(t, extraNames);
 }
 

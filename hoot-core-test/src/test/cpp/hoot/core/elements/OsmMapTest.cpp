@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -83,8 +83,9 @@ class OsmMapTest : public HootTestFixture
 
 public:
 
-  OsmMapTest() :
-  HootTestFixture("test-files/elements/OsmMapTest/", "test-output/elements/OsmMapTest/")
+  OsmMapTest()
+    : HootTestFixture("test-files/elements/OsmMapTest/",
+                      "test-output/elements/OsmMapTest/")
   {
   }
 
@@ -94,7 +95,7 @@ public:
 
     ElementToGeometryConverter ec(map);
     const WayMap& ways = map->getWays();
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); ++itw)
+    for (auto itw = ways.begin(); itw != ways.end(); ++itw)
     {
       const WayPtr& w = itw->second;
       std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
@@ -133,8 +134,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    RelationPtr r =
-      std::make_shared<Relation>(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon());
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon());
     r->addElement(MetadataTags::RoleOuter(), ElementId::way(-1669799));
     map->addRelation(r);
 
@@ -255,8 +255,7 @@ public:
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
-    relation->addElement(
-      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
+    relation->addElement("", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
@@ -345,8 +344,7 @@ public:
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
-    relation->addElement(
-      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
+    relation->addElement("", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
@@ -433,8 +431,7 @@ public:
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
-    relation->addElement(
-      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
+    relation->addElement("", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
@@ -512,12 +509,12 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
 
     LOG_INFO("Finished reading file. " << t.elapsed() << "ms");
-    LOG_INFO("Map size: " << map->getWays().size());
+    LOG_INFO("Map size: " << map->getWayCount());
 
     t.restart();
 
     MapProjector::projectToOrthographic(map);
-    const WayMap& ways = map ->getWays();
+    const WayMap& ways = map->getWays();
 
     LOG_INFO("Finished reprojecting. " << t.elapsed() << "ms");
 
@@ -526,15 +523,13 @@ public:
     // build the tree before the benchmark.
     map->getIndex().getWayTree();
     if (Log::getInstance().isDebugEnabled())
-    {
       RStarTreePrinter::print(map->getIndex().getWayTree());
-    }
 
     LOG_INFO("Index build elapsed: " << t.elapsed() << "ms");
 
     t.restart();
     int i = 0;
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
+    for (auto itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       const WayPtr& w = itw->second;
       std::vector<long> wids = map->getIndex().findWayNeighbors(w, 30.0);
@@ -545,7 +540,7 @@ public:
 
     t.restart();
     i = 0;
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
+    for (auto itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       WayPtr w = itw->second;
       std::vector<long> wids = map->getIndex().findWayNeighborsBruteForce(w, 30.0);
@@ -598,20 +593,16 @@ public:
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
 
-    RemoveWayByEid::removeWay(
-      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "0")[0]);
+    RemoveWayByEid::removeWay(map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "0")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayByEid::removeWay(
-      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]);
+    RemoveWayByEid::removeWay(map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayByEid::removeWay(
-      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
+    RemoveWayByEid::removeWay(map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayByEid::removeWay(
-      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "3")[0]);
+    RemoveWayByEid::removeWay(map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "3")[0]);
     _checkKnnWayIterator(map);
   }
 
@@ -753,13 +744,10 @@ public:
       map->addRelation(relations[i]);
     }
 
-    WayMap waysBeforeReplacement = map->getWays();
+    const WayMap& waysBeforeReplacement = map->getWays();
     LOG_TRACE("Ways before replacement:");
-    for (WayMap::const_iterator iterator = waysBeforeReplacement.begin();
-         iterator != waysBeforeReplacement.end(); ++iterator)
-    {
+    for (auto iterator = waysBeforeReplacement.begin(); iterator != waysBeforeReplacement.end(); ++iterator)
       LOG_VART(iterator->second->getNodeIds());
-    }
 
     // Replace selected nodes
     for (int i = -2; i > -22; i -= 2)
@@ -771,9 +759,9 @@ public:
     // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
     //  -20 are gone
 
-    const NodeMap nodes = map->getNodes();
+    const NodeMap& nodes = map->getNodes();
     CPPUNIT_ASSERT_EQUAL(26, (int)nodes.size());
-    for (NodeMap::const_iterator nodeIter = nodes.begin(); nodeIter != nodes.end(); ++nodeIter)
+    for (auto nodeIter = nodes.begin(); nodeIter != nodes.end(); ++nodeIter)
     {
       const ConstNodePtr n = nodeIter->second;
       LOG_TRACE("Node: " << n->getId());
@@ -788,15 +776,15 @@ public:
     }
 
     // Make sure replacement did correct thing with ways
-    WayMap ways = map->getWays();
+    const WayMap& ways = map->getWays();
     CPPUNIT_ASSERT(4 == ways.size());
 
     int i = 1;
-    for (WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); ++iterator)
+    for (auto iterator = ways.begin(); iterator != ways.end(); ++iterator)
     {
       WayPtr way = iterator->second;
       LOG_TRACE(way->toString());
-      std::vector<long> nodeIds = way->getNodeIds();
+      const std::vector<long>& nodeIds = way->getNodeIds();
       CPPUNIT_ASSERT((-5 + i) == way->getId());
       if (i == 1)
       {
@@ -839,12 +827,11 @@ public:
     }
 
     // Make sure relations were updated properly
-    RelationMap checkRelations = map->getRelations();
+    const RelationMap& checkRelations = map->getRelations();
     i = 0;
     CPPUNIT_ASSERT(5 == checkRelations.size());
 
-    for ( RelationMap::const_iterator iterator = checkRelations.begin();
-          iterator != checkRelations.end(); ++iterator )
+    for (auto iterator = checkRelations.begin(); iterator != checkRelations.end(); ++iterator )
     {
       RelationPtr myRelation = iterator->second;
       //LOG_DEBUG(myRelation->toString());
@@ -853,7 +840,7 @@ public:
       QString checkRelationship("relationtype" + QString::number(i) );
       //LOG_DEBUG("Checktype: " << checkRelationship);
       CPPUNIT_ASSERT(myRelation->getType() == checkRelationship);
-      std::vector<RelationData::Entry> entries = myRelation->getMembers();
+      const std::vector<RelationData::Entry>& entries = myRelation->getMembers();
       CPPUNIT_ASSERT(entries.size() == 2);\
 
       switch (i)
@@ -862,28 +849,23 @@ public:
         CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-30));
         CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-11));
         break;
-
       case 1:
         CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-11));
         CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-22));
         break;
-
       case 2:
         CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-22));
         CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-13));
         break;
-
       case 3:
         CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-13));
         CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-24));
         break;
-
       case 4:
         CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-24));
         CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-15));
         break;
       }
-
       i++;
     }
   }

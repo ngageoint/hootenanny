@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEELEMENTBYEID_H
 #define REMOVEELEMENTBYEID_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WorstCircularErrorVisitor.h"
 
@@ -60,10 +60,8 @@ Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtr& ma
 Meters WorstCircularErrorVisitor::getWorstCircularError(const std::vector<ElementPtr>& elements)
 {
   WorstCircularErrorVisitor v;
-  for (vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
-  {
-    v.visit(*it);
-  }
+  for (const auto& element : elements)
+    v.visit(element);
   return v.getWorstCircularError();
 }
 

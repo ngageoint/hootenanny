@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -70,9 +70,7 @@ public:
       double y = Tgs::Random::instance()->generateUniform() * outerRadius * 2.0 - outerRadius;
       double r = sqrt(x * x + y * y);
       if (r >= innerRadius && r <= outerRadius)
-      {
         p.push_back(pair<double, double>(centerX + x, centerY + y));
-      }
     }
   }
 
@@ -81,26 +79,18 @@ public:
     vector<pair<double, double>> points;
 
     createDonut(points, 0, 35, 10, 0, 250);
-    //createDonut(points, 15, 20, 20, 0, 2000);
 
     AlphaShape uut(16.0);
     uut.insert(points);
 
     OsmMapPtr map = uut._toOsmMap();
 
-    const WayMap ways = map->getWays();
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-    {
-      const WayPtr& w = it->second;
-      w->setTag("highway", "motorway");
-    }
+    const WayMap& ways = map->getWays();
+    for (auto it = ways.begin(); it != ways.end(); ++it)
+      it->second->setTag("highway", "motorway");
 
-    for (size_t i = 0; i < points.size(); i++)
-    {
-      map->addNode(
-        std::make_shared<Node>(
-          Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
-    }
+    for (const auto& p : points)
+      map->addNode(std::make_shared<Node>(Status::Invalid, map->createNextNodeId(), p.first, p.second, -1));
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "AlphaDonut.osm");
@@ -149,19 +139,12 @@ public:
 
     OsmMapPtr map = uut._toOsmMap();
 
-    const WayMap ways = map->getWays();
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-    {
-      const WayPtr& w = it->second;
-      w->setTag("highway", "motorway");
-    }
+    const WayMap& ways = map->getWays();
+    for (auto it = ways.begin(); it != ways.end(); ++it)
+      it->second->setTag("highway", "motorway");
 
-    for (size_t i = 0; i < points.size(); i++)
-    {
-      map->addNode(
-        std::make_shared<Node>(
-          Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
-    }
+    for (const auto& p : points)
+      map->addNode(std::make_shared<Node>(Status::Invalid, map->createNextNodeId(), p.first, p.second, -1));
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "AutoAlphaDonut.osm");

@@ -1871,6 +1871,67 @@ translate = {
   }, // End attributeUntangle
 
 
+  // Find a general FCODE
+  // When specific rules fail, try something generic
+  findGeneralFCODE: function (attrs,tags)
+  {
+    // Some tags imply that they are buildings but don't actually say so
+    // Most of these are taken from raw OSM and the OSM Wiki
+    // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that are not buildings
+    // Taking "place_of_worship" out of this and making it a building
+    // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
+    var notBuildingList = [
+      'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+      'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+      'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+      'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+      'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+      'waste_basket','waste_disposal','water','water_point','watering_place','yes',
+      'fuel' // NOTE: Fuel goes to a different F_CODE
+    ]; // End notBuildingList
+
+    if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1))
+    {
+       attrs.F_CODE = 'AL013';
+       return;
+    }
+
+    // Look at roads
+    // var notRoad = [''];
+    // if (tags.highway && (![''].includes(tags.highway)))
+    //   {
+    //     attrs.F_CODE = 'AP030';
+    //     return;
+    //   }
+
+    // Very general groups.
+    var fcodeMap = {
+      'railway':'AN010',
+      'railway:in_road':'AN010',
+      'tourism':'AL013',
+      'shop':'AL013',
+      'office':'AL013',
+      'ford':'BH070',
+      'waterway':'BH140',
+      'bridge':'AQ040',
+      'barrier':'AP040',
+      'junction':'AP020',
+      'mine:access':'AA010',
+      'tomb':'AL036',
+      'building':'AL013'
+    };
+
+    for (var i in fcodeMap)
+    {
+      if (i in tags)
+      {
+        attrs.F_CODE = fcodeMap[i];
+        break; // Just grab the first match
+      }
+    }
+  }, // End findGeneralFCODE
+
+
   // Converting country codes to names to URN's
   // possible From/To values:
   //  n = name

@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "NonConflatableElementRemover.h"
 
 // Hoot
+#include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
 
 namespace hoot
 {

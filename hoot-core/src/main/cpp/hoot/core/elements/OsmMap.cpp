@@ -437,12 +437,28 @@ ElementPtr OsmMap::getElement(ElementType type, long id)
 
 size_t OsmMap::getElementCount() const
 {
-  return getNodes().size() + getWays().size() + getRelations().size();
+  return _nodes.size() + _ways.size() + _relations.size();
 }
 
 set<ElementId> OsmMap::getParents(ElementId eid) const
 {
-  return getIndex().getParents(eid);
+  return _index->getParents(eid);
+}
+
+QString OsmMap::getProjectionEpsgString() const
+{
+  QString srs;
+  int epsg = getProjection()->GetEPSGGeogCS();
+  if (epsg > -1)
+    srs = QString("+epsg:%1").arg(epsg);
+  else
+  {
+    char *wkt = nullptr;
+    getProjection()->exportToWkt(&wkt);
+    srs = wkt;
+    CPLFree(wkt);
+  }
+  return srs;
 }
 
 bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
@@ -591,6 +607,7 @@ void OsmMap::replaceNodes(const std::map<long, long>& replacements)
   {
     bool updated = false;
     RelationPtr relation = r->second;
+    //  Modify the copy of the members to replace the old members with
     vector<RelationData::Entry> members = relation->getMembers();
     //  Iterate all of the members looking for nodes from the replacements
     for (size_t i = 0; i < members.size(); ++i)
@@ -645,7 +662,7 @@ bool OsmMap::validate(bool strict) const
   bool result = true;
   result &= getIndex().getNodeToWayMap()->validate(*this);
 
-  const WayMap& allWays = (*this).getWays();
+  const WayMap& allWays = getWays();
   for (auto it = allWays.begin(); it != allWays.end(); ++it)
   {
     const ConstWayPtr& way = it->second;
@@ -1041,42 +1058,42 @@ QSet<long> OsmMap::getRelationIds() const
 
 void OsmMap::resetIterator()
 {
-  _currentNodeItr = getNodes().begin();
+  _currentNodeItr = _nodes.begin();
 }
 
 void OsmMap::_next()
 {
   if (_currentElementId.isNull())
   {
-    if (getNodes().size() > 0)
-      _currentNodeItr = getNodes().begin();
-    else if (getWays().size() > 0)
-      _currentWayItr = getWays().begin();
-    else if (getRelations().size() > 0)
-      _currentRelationItr = getRelations().begin();
+    if (_nodes.size() > 0)
+      _currentNodeItr = _nodes.begin();
+    else if (_ways.size() > 0)
+      _currentWayItr = _ways.begin();
+    else if (_relations.size() > 0)
+      _currentRelationItr = _relations.begin();
   }
 
-  if (getNodes().size() > 0 && _currentNodeItr != getNodes().end())
+  if (_nodes.size() > 0 && _currentNodeItr != _nodes.end())
   {
     const ElementId nodeId = ElementId(ElementType::Node, _currentNodeItr->first);
     LOG_VART(nodeId);
     _addElement(getNode(nodeId.getId()));
     _currentElementId = nodeId;
     _currentNodeItr++;
-    if (_currentNodeItr == getNodes().end())
-      _currentWayItr = getWays().begin();
+    if (_currentNodeItr == _nodes.end())
+      _currentWayItr = _ways.begin();
   }
-  else if (getWays().size() > 0 && _currentWayItr != getWays().end())
+  else if (_ways.size() > 0 && _currentWayItr != _ways.end())
   {
     const ElementId wayId = ElementId(ElementType::Way, _currentWayItr->first);
     LOG_VART(wayId);
     _addElement(getWay(wayId.getId()));
     _currentElementId = wayId;
     _currentWayItr++;
-    if (_currentWayItr == getWays().end())
-      _currentRelationItr = getRelations().begin();
+    if (_currentWayItr == _ways.end())
+      _currentRelationItr = _relations.begin();
   }
-  else if (getRelations().size() > 0 && _currentRelationItr != getRelations().end())
+  else if (_relations.size() > 0 && _currentRelationItr != _relations.end())
   {
     const ElementId relationId = ElementId(ElementType::Relation, _currentRelationItr->first);
     LOG_VART(relationId);

@@ -45,8 +45,8 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-#include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/visitors/SchemaTranslatedTagCountVisitor.h>
+#include <hoot/core/visitors/SumNumericTagsVisitor.h>
 
 #include <math.h>
 
@@ -75,8 +75,7 @@ CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutp
   _readGenericStatsConfiguration();
 }
 
-CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName,
-                                   bool inputIsConflatedMapOutput)
+CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName, bool inputIsConflatedMapOutput)
   : _criterion(criterion),
     _mapName(mapName),
     _quick(false),
@@ -193,12 +192,8 @@ MatchCreatorPtr CalculateStatsOp::_getMatchCreator(const vector<MatchCreatorPtr>
 
 void CalculateStatsOp::_initConflatableFeatureCounts()
 {
-  for (auto ft = CreatorDescription::POI;
-       ft < CreatorDescription::Unknown;
-       ft = CreatorDescription::BaseFeatureType(ft + 1))
-  {
+  for (auto ft = CreatorDescription::POI; ft < CreatorDescription::Unknown; ft = CreatorDescription::BaseFeatureType(ft + 1))
     _conflatableFeatureCounts[ft] = 0.0;
-  }
 }
 
 int CalculateStatsOp::_getNumStatsPassingFilter(const QList<StatData>& stats) const
@@ -585,11 +580,8 @@ void CalculateStatsOp::_interpretStatData(const shared_ptr<const OsmMap>& constM
     return;
 
   // Don't collect translation related stats if no translation script has been specified.
-  if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className() &&
-      ConfigOptions().getStatsTranslateScript().isEmpty())
-  {
+  if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className() && ConfigOptions().getStatsTranslateScript().isEmpty())
     return;
-  }
 
   ElementCriterionPtr pCrit;
 
@@ -611,8 +603,7 @@ void CalculateStatsOp::_interpretStatData(const shared_ptr<const OsmMap>& constM
       catch (...)
       {
         throw HootException(
-          QString("Unable to construct criterion '%1' in stats data entry '%2'")
-            .arg(d.getCriterion(), d.getName()) );
+          QString("Unable to construct criterion '%1' in stats data entry '%2'").arg(d.getCriterion(), d.getName()) );
       }
 
       _criterionCache[d.getCriterion()] = pCrit;
@@ -633,14 +624,12 @@ void CalculateStatsOp::_interpretStatData(const shared_ptr<const OsmMap>& constM
       {
         // create visitor to set in FilteredVisitor
         pCriterionVisitor =
-          std::static_pointer_cast<ConstElementVisitor>(
-            Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
+          std::static_pointer_cast<ConstElementVisitor>(Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
       }
       catch (...)
       {
         throw HootException(
-          QString("Unable to construct visitor '%1' in stats data entry '%2'")
-            .arg(d.getVisitor(), d.getName()) );
+          QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.getVisitor(), d.getName()));
       }
 
       if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className())
@@ -649,12 +638,10 @@ void CalculateStatsOp::_interpretStatData(const shared_ptr<const OsmMap>& constM
         {
           assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
           _schemaTranslator =
-            ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-              ConfigOptions().getStatsTranslateScript());
+            ScriptSchemaTranslatorFactory::getInstance().createTranslator(ConfigOptions().getStatsTranslateScript());
           _schemaTranslator->setErrorTreatment(StrictOff);
         }
-        shared_ptr<SchemaTranslatedTagCountVisitor> translatedVis =
-          std::dynamic_pointer_cast<SchemaTranslatedTagCountVisitor>(pCriterionVisitor);
+        shared_ptr<SchemaTranslatedTagCountVisitor> translatedVis = std::dynamic_pointer_cast<SchemaTranslatedTagCountVisitor>(pCriterionVisitor);
         translatedVis->setTranslator(_schemaTranslator);
       }
 
@@ -684,14 +671,12 @@ void CalculateStatsOp::_interpretStatData(const shared_ptr<const OsmMap>& constM
         try
         {
           pVisitor =
-            std::static_pointer_cast<ConstElementVisitor>(
-              Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
+            std::static_pointer_cast<ConstElementVisitor>(Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
         }
         catch (...)
         {
           throw HootException(
-            QString("Unable to construct visitor '%1' in stats data entry '%2'")
-              .arg(d.getVisitor(), d.getName()));
+            QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.getVisitor(), d.getName()));
         }
 
         // without criterion, apply the visitor directly and interpret as NumericStatistic
@@ -722,16 +707,16 @@ double CalculateStatsOp::_getRequestedStatValue(const ElementVisitor* pVisitor, 
 
   switch (call)
   {
-    case StatData::StatCall::Stat:        return ns->getStat();
-    case StatData::StatCall::Min:         return ns->getMin();
-    case StatData::StatCall::Max:         return ns->getMax();
-    case StatData::StatCall::Average:     return ns->getAverage();
-    case StatData::StatCall::InfoCount:   return static_cast<double>(ns->getInformationCount());
-    case StatData::StatCall::InfoMin:     return static_cast<double>(ns->getInformationMin());
-    case StatData::StatCall::InfoMax:     return static_cast<double>(ns->getInformationMax());
-    case StatData::StatCall::InfoAverage: return ns->getInformationAverage();
-    case StatData::StatCall::InfoDiff:    return static_cast<double>(ns->getInformationCountDiff());
-    default:                              return 0;
+  case StatData::StatCall::Stat:        return ns->getStat();
+  case StatData::StatCall::Min:         return ns->getMin();
+  case StatData::StatCall::Max:         return ns->getMax();
+  case StatData::StatCall::Average:     return ns->getAverage();
+  case StatData::StatCall::InfoCount:   return static_cast<double>(ns->getInformationCount());
+  case StatData::StatCall::InfoMin:     return static_cast<double>(ns->getInformationMin());
+  case StatData::StatCall::InfoMax:     return static_cast<double>(ns->getInformationMax());
+  case StatData::StatCall::InfoAverage: return ns->getInformationAverage();
+  case StatData::StatCall::InfoDiff:    return static_cast<double>(ns->getInformationCountDiff());
+  default:                              return 0;
   }
 }
 

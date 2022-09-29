@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RemoveRelationByEid.h"
 
 // hoot
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Validate.h>
 
 using namespace std;
@@ -36,35 +36,30 @@ using namespace std;
 namespace hoot
 {
 
-RemoveRelationByEid::RemoveRelationByEid() :
-_rIdToRemove(-std::numeric_limits<int>::max())
+RemoveRelationByEid::RemoveRelationByEid()
+  : _rIdToRemove(-std::numeric_limits<int>::max())
 {
 }
 
-RemoveRelationByEid::RemoveRelationByEid(long rId):
-_rIdToRemove(rId)
+RemoveRelationByEid::RemoveRelationByEid(long rId)
+  : _rIdToRemove(rId)
 {
 }
 
 void RemoveRelationByEid::apply(OsmMapPtr& map)
 {
   if (_rIdToRemove == -std::numeric_limits<int>::max())
-  {
     throw IllegalArgumentException("No relation ID specified for RemoveRelationByEid.");
-  }
 
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {
     // determine if this relation is a part of any other relations
     // make a copy of the rids in case the index gets changed.
-    const set<long> rids =
-      map->_index->getElementToRelationMap()->getRelationByElement(
-        ElementId::relation(_rIdToRemove));
+    const set<long> rids = map->_index->getElementToRelationMap()->getRelationByElement(ElementId::relation(_rIdToRemove));
 
     // remove this relation from all other parent relations.
-    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
+    for (auto parentRelationId : rids)
     {
-      const long parentRelationId = *it;
       LOG_TRACE("Removing relation: " << _rIdToRemove << " from relation: " << parentRelationId);
       map->getRelation(parentRelationId)->removeElement(ElementId::relation(_rIdToRemove));
     }

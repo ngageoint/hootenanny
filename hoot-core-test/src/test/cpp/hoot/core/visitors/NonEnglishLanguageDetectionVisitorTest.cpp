@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -30,9 +30,9 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/language/HootServicesLanguageDetectorMockClient.h>
 #include <hoot/core/language/HootServicesLanguageInfoMockClient.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/NonEnglishLanguageDetectionVisitor.h>
 
 namespace hoot
@@ -62,10 +62,7 @@ public:
   {
     const QString testName = "runDetectTest";
     Settings conf = _getDefaultConfig();
-    _runDetectTest(
-      conf,
-      _outputPath + testName + ".osm",
-      _inputPath + testName + "-gold.osm");
+    _runDetectTest(conf, _outputPath + testName + ".osm", _inputPath + testName + "-gold.osm");
   }
 
   void runIgnorePreTranslatedTagsTest()
@@ -74,18 +71,12 @@ public:
     Settings conf = _getDefaultConfig();
     conf.set(ConfigOptions::getLanguageIgnorePreTranslatedTagsKey(), true);
     std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
-      _runDetectTest(
-        conf,
-        _outputPath + testName + ".osm",
-        _inputPath + testName + "-gold.osm");
+      _runDetectTest(conf, _outputPath + testName + ".osm", _inputPath + testName + "-gold.osm");
 
-    const QString detectionSummaryFile =
-      _outputPath + "runIgnorePreTranslatedTagsTest-DetectionSummary-out";
+    const QString detectionSummaryFile = _outputPath + "runIgnorePreTranslatedTagsTest-DetectionSummary-out";
     LOG_VART(visitor->_getLangCountsSortedByLangName());
     FileUtils::writeFully(detectionSummaryFile, visitor->_getLangCountsSortedByLangName() + "\n");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runIgnorePreTranslatedTagsTest-DetectionSummary-gold",
-      detectionSummaryFile);
+    HOOT_FILE_EQUALS(_inputPath + "runIgnorePreTranslatedTagsTest-DetectionSummary-gold", detectionSummaryFile);
   }
 
   void runNoTagKeysTest()
@@ -96,10 +87,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      _runDetectTest(
-        conf,
-        _outputPath + testName + ".osm",
-        _inputPath + testName + "-gold.osm");
+      _runDetectTest(conf, _outputPath + testName + ".osm", _inputPath + testName + "-gold.osm");
     }
     catch (const HootException& e)
     {
@@ -113,10 +101,7 @@ public:
     const QString testName = "runNamesTest";
     Settings conf = _getDefaultConfig();
     conf.set(ConfigOptions::getLanguageParseNamesKey(), true);
-    _runDetectTest(
-      conf,
-      _outputPath + testName + ".osm",
-      _inputPath + testName + "-gold.osm");
+    _runDetectTest(conf, _outputPath + testName + ".osm", _inputPath + testName + "-gold.osm");
   }
 
   void runNamesTestWithAdditionalTagKeys()
@@ -125,10 +110,7 @@ public:
     Settings conf = _getDefaultConfig();
     conf.set(ConfigOptions::getLanguageParseNamesKey(), true);
     conf.set(ConfigOptions::getLanguageTagKeysKey(), "tag1;tag2");
-    _runDetectTest(
-      conf,
-      _outputPath + testName + ".osm",
-      _inputPath + testName + "-gold.osm");
+    _runDetectTest(conf, _outputPath + testName + ".osm", _inputPath + testName + "-gold.osm");
   }
 
 private:
@@ -143,11 +125,8 @@ private:
     tagKeys.append("name");
     tagKeys.append("alt_name");
     conf.set(ConfigOptions::getLanguageTagKeysKey(), tagKeys);
-    conf.set(
-      ConfigOptions::getLanguageDetectionDetectorKey(),
-      HootServicesLanguageDetectorMockClient::className());
-    conf.set(
-      ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
+    conf.set(ConfigOptions::getLanguageDetectionDetectorKey(), HootServicesLanguageDetectorMockClient::className());
+    conf.set(ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
     conf.set(ConfigOptions::getLanguageHootServicesDetectionMinConfidenceThresholdKey(), "none");
     conf.set(ConfigOptions::getLanguageDetectionWriteDetectedLangTagsKey(), "true");
 
@@ -163,8 +142,7 @@ private:
       map, "test-files/visitors/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest.osm",
       false, Status::Unknown1);
 
-    std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
-      std::make_shared<NonEnglishLanguageDetectionVisitor>();
+    std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor = std::make_shared<NonEnglishLanguageDetectionVisitor>();
     visitor->setConfiguration(config);
 
     map->visitRw(*visitor);

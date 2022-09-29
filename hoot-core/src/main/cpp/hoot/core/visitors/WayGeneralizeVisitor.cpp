@@ -22,25 +22,25 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayGeneralizeVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, WayGeneralizeVisitor)
 
-WayGeneralizeVisitor::WayGeneralizeVisitor() :
-_epsilon(1.0),
-_removeNodesSharedByWays(false),
-_totalNodesRemoved(0)
+WayGeneralizeVisitor::WayGeneralizeVisitor()
+  : _epsilon(1.0),
+    _removeNodesSharedByWays(false),
+    _totalNodesRemoved(0)
 {
 }
 
@@ -51,9 +51,7 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
   _removeNodesSharedByWays = configOptions.getWayGeneralizerRemoveNodesSharedByWays();
   const QString critClass = configOptions.getWayGeneralizerCriterion().trimmed();
   if (!critClass.isEmpty())
-  {
     addCriterion(Factory::getInstance().constructObject<ElementCriterion>(critClass));
-  }
 }
 
 void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
@@ -77,13 +75,9 @@ void WayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
   if (element->getElementType() == ElementType::Way && (!_crit || _crit->isSatisfied(element)))
   {
     if (!_map)
-    {
       throw IllegalArgumentException("No map passed to way generalizer.");
-    }
     else if (_map->getProjection()->IsGeographic())
-    {
       throw IllegalArgumentException("Input map must be projected to planar.");
-    }
 
     const int numNodesRemoved = _generalizer->generalize(std::dynamic_pointer_cast<Way>(element));
     if (numNodesRemoved > 0)

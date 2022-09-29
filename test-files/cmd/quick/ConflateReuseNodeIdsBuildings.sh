@@ -21,3 +21,5 @@ hoot diff $HOOT_OPTS $OUT_DIR/BuildingsConflated.osm $IN_DIR/BuildingsConflatedE
 hoot changeset-derive $HOOT_OPTS $IN_DIR/BuildingsA.osm $OUT_DIR/BuildingsConflated.osm $OUT_DIR/BuildingsConflated.osc
 diff $OUT_DIR/BuildingsConflated.osc $IN_DIR/BuildingsConflatedExpected.osc
 
+hoot changeset-derive $HOOT_OPTS $IN_DIR/BuildingsA.osm $OUT_DIR/BuildingsConflated.osm $OUT_DIR/BuildingsConflatedJosm.osm
+diff $OUT_DIR/BuildingsConflatedJosm.osm $IN_DIR/BuildingsConflatedJosmExpected.osm

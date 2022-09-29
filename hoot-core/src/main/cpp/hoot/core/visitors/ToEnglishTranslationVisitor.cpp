@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ToEnglishTranslationVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 
 // std
@@ -40,16 +40,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ToEnglishTranslationVisitor)
 
-ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
-_ignorePreTranslatedTags(false),
-_parseNames(false),
-_numTotalElements(0),
-_numProcessedTags(0),
-_numProcessedElements(0),
-_currentElementHasSuccessfulTagTranslation(false),
-_numTagTranslationsMade(0),
-_numElementsWithSuccessfulTagTranslation(0),
-_taskStatusUpdateInterval(10000)
+ToEnglishTranslationVisitor::ToEnglishTranslationVisitor()
+  : _ignorePreTranslatedTags(false),
+    _parseNames(false),
+    _numTotalElements(0),
+    _numProcessedTags(0),
+    _numProcessedElements(0),
+    _currentElementHasSuccessfulTagTranslation(false),
+    _numTagTranslationsMade(0),
+    _numElementsWithSuccessfulTagTranslation(0),
+    _taskStatusUpdateInterval(10000)
 {
 }
 
@@ -57,9 +57,7 @@ ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
 {
   //check the last element parsed to see if it had any successful tag translations
   if (_currentElementHasSuccessfulTagTranslation)
-  {
     _numElementsWithSuccessfulTagTranslation++;
-  }
 
   LOG_INFO(
     _numTagTranslationsMade << " successful tag translations made on " <<
@@ -77,8 +75,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
 
   _translatorClient =
-    Factory::getInstance().constructObject<ToEnglishTranslator>(
-      opts.getLanguageTranslationTranslator());
+    Factory::getInstance().constructObject<ToEnglishTranslator>(opts.getLanguageTranslationTranslator());
   _translatorClient->setConfiguration(conf);
   _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
@@ -86,34 +83,26 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _ignorePreTranslatedTags = opts.getLanguageIgnorePreTranslatedTags();
   _parseNames = opts.getLanguageParseNames();
   if (_parseNames)
-  {
     _tagKeys = _tagKeys.unite(Tags::getNameKeys().toSet());
-  }
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
 void ToEnglishTranslationVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (_tagKeys.isEmpty())
-  {
     throw HootException("No tag keys specified for language translation.");
-  }
 
   LOG_VART(e);
 
   //if this var was set while parsing the previous element, increment the counter now
   if (_currentElementHasSuccessfulTagTranslation)
-  {
     _numElementsWithSuccessfulTagTranslation++;
-  }
   _currentElementHasSuccessfulTagTranslation = false;
 
   const Tags& tags = e->getTags();
   bool elementProcessed = false;
-  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin();
-       tagKeysItr != _tagKeys.end(); ++tagKeysItr)
+  for (const auto& toTranslateTagKey : qAsConst(_tagKeys))
   {
-    const QString toTranslateTagKey = *tagKeysItr;
     if (tags.contains(toTranslateTagKey))
     {     
       //making skipping tags that already have an english translated tag optional, b/c a many of the
@@ -122,9 +111,7 @@ void ToEnglishTranslationVisitor::visit(const std::shared_ptr<Element>& e)
       const QString preTranslatedTagKey = toTranslateTagKey + ":en";
       if (!_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
       {
-        LOG_TRACE(
-          "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
-          tags.get(toTranslateTagKey).trimmed());
+        LOG_TRACE("Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" << tags.get(toTranslateTagKey).trimmed());
       }
       else
       {
@@ -150,8 +137,7 @@ void ToEnglishTranslationVisitor::visit(const std::shared_ptr<Element>& e)
   }
 }
 
-bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
-                                             const QString& toTranslateTagKey)
+bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e, const QString& toTranslateTagKey)
 {
   bool translationMade = false;
 
@@ -170,8 +156,7 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   {
     LOG_TRACE("Translated: " << _toTranslateVal << " to: " << _translatedText);
 
-    _element->getTags()
-      .appendValue("hoot:translated:" + _toTranslateTagKey + ":en", _translatedText);
+    _element->getTags().appendValue("hoot:translated:" + _toTranslateTagKey + ":en", _translatedText);
 
     QString sourceLang;
     LOG_VART(_translatorClient->getSourceLanguages().size());
@@ -182,11 +167,9 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       sourceLang = _translatorClient->getSourceLanguages().at(0);
     }
     else
-    {
       sourceLang = _translatorClient->getDetectedLanguage();
-    }
-    _element->getTags()
-      .appendValue("hoot:translated:" + _toTranslateTagKey + ":en:source:language", sourceLang);
+
+    _element->getTags().appendValue("hoot:translated:" + _toTranslateTagKey + ":en:source:language", sourceLang);
 
     _numTagTranslationsMade++;
     if (_numTagTranslationsMade % _taskStatusUpdateInterval == 0)

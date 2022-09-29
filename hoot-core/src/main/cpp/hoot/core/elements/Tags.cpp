@@ -359,7 +359,7 @@ QStringList Tags::getList(const QString& k) const
   return result;
 }
 
-QStringList Tags::getMatchingKeys(const QStringList& keys)
+QStringList Tags::getMatchingKeys(const QStringList& keys) const
 {
   QStringList result;
   for (const auto& key : qAsConst(keys))

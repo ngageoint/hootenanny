@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
@@ -63,8 +63,7 @@ public:
    * element being removed before trying to remove it. If false and clearAndRemoveElement=true, and
    * the element being removed has memberships in a relation or way, the element will not be removed.
    */
-  RemoveReviewsByEidOp(
-    ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
+  RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
   ~RemoveReviewsByEidOp() override = default;
 
   /**

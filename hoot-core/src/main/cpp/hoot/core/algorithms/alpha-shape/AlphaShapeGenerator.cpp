@@ -73,8 +73,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 
   OsmMapPtr result = std::make_shared<OsmMap>(inputMap->getProjection());
   result->appendSource(inputMap->getSource());
-  GeometryToElementConverter(result)
-    .convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
+  GeometryToElementConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 
   const RelationMap& rm = result->getRelations();
   for (auto it = rm.begin(); it != rm.end(); ++it)
@@ -96,7 +95,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
 
   // put all the nodes into a vector of points
   std::vector<std::pair<double, double>> points;
-  points.reserve(inputMap->getNodes().size());
+  points.reserve(inputMap->getNodeCount());
   const NodeMap& nodes = inputMap->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
@@ -194,8 +193,7 @@ void AlphaShapeGenerator::_coverStragglersWorker()
     if (node)
     {
       GeometryPtr point(
-        GeometryFactory::getDefaultInstance()->createPoint(
-          geos::geom::Coordinate(node->getX(), node->getY())));
+        GeometryFactory::getDefaultInstance()->createPoint(geos::geom::Coordinate(node->getX(), node->getY())));
       //  Geometry::contains() is a time consuming function call (and not thread safe
       //  so all threads need their own `copy`)
       if (!copy->contains(point.get()))

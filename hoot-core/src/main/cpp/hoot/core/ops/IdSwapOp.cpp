@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "IdSwapOp.h"
 
@@ -38,13 +38,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IdSwapOp)
 
-IdSwapOp::IdSwapOp(const IdSwapPtr& idSwap) :
-_idSwap(idSwap)
+IdSwapOp::IdSwapOp(const IdSwapPtr& idSwap)
+  : _idSwap(idSwap)
 {
 }
 
-IdSwapOp::IdSwapOp(ElementId e1, ElementId e2) :
-_idSwap(std::make_shared<IdSwap>(e1, e2))
+IdSwapOp::IdSwapOp(ElementId e1, ElementId e2)
+  : _idSwap(std::make_shared<IdSwap>(e1, e2))
 {
 }
 
@@ -59,7 +59,7 @@ void IdSwapOp::apply(const std::shared_ptr<OsmMap>& map)
   else
     return;
   //  Iterate all of the entries to swap
-  for (IdSwap::iterator it = swap->begin(); it != swap->end(); ++it)
+  for (auto it = swap->begin(); it != swap->end(); ++it)
   {
     ElementPtr element1 = map->getElement(it->first);
     ElementPtr element2 = map->getElement(it->second);
@@ -126,11 +126,11 @@ void IdSwapOp::apply(const std::shared_ptr<OsmMap>& map)
 void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId) const
 {
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
+  //  Copy the list of ways because the list is invalidated when Way::setNodes() is called
   std::set<long> ways = nodeToWayMap->getWaysByNode(nodeId);
   //  Iterate all of the ways that contain this node
-  for (std::set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto wayId : ways)
   {
-    long wayId = *it;
     WayPtr way = map->getWay(wayId);
     if (!way)
       continue;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef DIRECTIONFINDER_H
 #define DIRECTIONFINDER_H
@@ -40,8 +40,7 @@ public:
    * @brief isSimilarDirection returns true if these lines are generally pointed in a similar
    * direction.
    */
-  static bool isSimilarDirection(
-    const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
+  static bool isSimilarDirection(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
 
   /**
    * @brief isSimilarDirection2 Returns true if these lines are generally pointed in a similar

@@ -22,26 +22,26 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SumNumericTagsVisitor.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SumNumericTagsVisitor)
 
-SumNumericTagsVisitor::SumNumericTagsVisitor() :
-_sum(0.0)
+SumNumericTagsVisitor::SumNumericTagsVisitor()
+  : _sum(0.0)
 {
 }
 
-SumNumericTagsVisitor::SumNumericTagsVisitor(const QStringList keys) :
-_keys(keys),
-_sum(0.0)
+SumNumericTagsVisitor::SumNumericTagsVisitor(const QStringList keys)
+  : _keys(keys),
+    _sum(0.0)
 {
 }
 
@@ -53,11 +53,9 @@ void SumNumericTagsVisitor::setConfiguration(const Settings& conf)
 
 void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
 {
-  for (int i = 0; i < _keys.size(); i++)
+  for (const auto& key : qAsConst(_keys))
   {
-    const QString key = _keys.at(i);
     LOG_VART(key);
-
     if (e->getTags().contains(key))
     {
       bool parsed = false;

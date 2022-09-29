@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
 #define REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/info/OperationStatus.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {

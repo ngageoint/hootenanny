@@ -93,7 +93,7 @@ void OsmGeoJsonWriterBase::_writeGeometry(ConstWayPtr w)
 
 void OsmGeoJsonWriterBase::_writeGeometry(ConstRelationPtr r)
 {
-  vector<RelationData::Entry> members = r->getMembers();
+  const vector<RelationData::Entry>& members = r->getMembers();
   _writeKvp("type", "GeometryCollection"); _write(",");
   _write("\"geometries\": [");
   bool first = true;

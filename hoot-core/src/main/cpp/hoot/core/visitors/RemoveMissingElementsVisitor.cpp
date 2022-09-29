@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveMissingElementsVisitor.h"
@@ -36,8 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMissingElementsVisitor)
 
-RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(
-  const Log::WarningLevel& logLevel, const int maxReport)
+RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel, const int maxReport)
 {
   _v = std::make_shared<ReportMissingElementsVisitor>(true, logLevel, maxReport);
 }

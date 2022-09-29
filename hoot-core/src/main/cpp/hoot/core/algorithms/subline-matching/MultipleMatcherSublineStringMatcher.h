@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIPLE_MATCHER_SUBLINE_STRING_MATCHER_H
 #define MULTIPLE_MATCHER_SUBLINE_STRING_MATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -53,17 +53,15 @@ public:
   static QString className() { return "MultipleMatcherSublineStringMatcher"; }
 
   MultipleMatcherSublineStringMatcher();
-  MultipleMatcherSublineStringMatcher(
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher1,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
+  MultipleMatcherSublineStringMatcher(const std::shared_ptr<SublineStringMatcher>& sublineMatcher1,
+                                      const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
   ~MultipleMatcherSublineStringMatcher() override = default;
 
   /**
    * @see SublineStringMatcher
    */
-  WaySublineMatchString findMatch(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
-    Meters maxRelevantDistance = -1) const override;
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+                                  const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const override;
 
   /**
    * @see Configurable
@@ -78,16 +76,16 @@ public:
   void setHeadingDelta(Meters headingDelta) override;
   QString getSublineMatcherName() const override
   {
-    return
-      _sublineMatcher1->getName() + "," + _sublineMatcher1->getSublineMatcherName() + ";" +
-      _sublineMatcher2->getName() + "," + _sublineMatcher2->getSublineMatcherName();
+    return QString("%1,%2;%3,%4")
+            .arg(_sublineMatcher1->getName(), _sublineMatcher1->getSublineMatcherName(),
+                 _sublineMatcher2->getName(), _sublineMatcher2->getSublineMatcherName());
   }
 
   QString getDescription() const override
   {
     return
-      QString("Matches lines based on the maximal subline string found using a different") +
-      QString("matcher for more complex features");
+      QString("Matches lines based on the maximal subline string found using a different"
+              "matcher for more complex features");
   }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

@@ -61,7 +61,7 @@ public:
    * @param progress optional for tracking I/O job progress
    */
   void stream(const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
-              Progress progress = Progress());
+              Progress progress = Progress()) const;
 
 private:
 

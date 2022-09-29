@@ -45,7 +45,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
     throw HootException("Feature splitting for multi-line string relations requires that the relation has way members.");
   if (relation->getType() != MetadataTags::RelationMultilineString())
     throw HootException("Invalid relation type: " + relation->getType() + " expected multiline string.");
-  if (wayIndex < 0 || wayIndex > (int)relation->getMembers().size() - 1)
+  if (wayIndex < 0 || wayIndex > (int)relation->getMemberCount() - 1)
     throw HootException("Invalid way index: " + QString::number(wayIndex));
   if (relation->getMembers().at(wayIndex).getElementId() != wayLocation.getWay()->getElementId())
   {

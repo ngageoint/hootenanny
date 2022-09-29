@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVENODEBYEID_H
 #define REMOVENODEBYEID_H
@@ -61,8 +61,7 @@ public:
    * @param removeOnlyUnused only removes nodes that aren't a part of a way doCheck must be true and
    * removeFully false
    */
-  RemoveNodeByEid(
-    long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
+  RemoveNodeByEid(long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
   ~RemoveNodeByEid() override = default;
 
   /**

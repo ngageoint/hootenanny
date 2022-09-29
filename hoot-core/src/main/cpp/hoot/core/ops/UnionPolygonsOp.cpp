@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UnionPolygonsOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // geos
@@ -44,8 +44,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnionPolygonsOp)
 
-UnionPolygonsOp::UnionPolygonsOp() :
-_combiner(std::make_shared<UnionPolygonsVisitor>())
+UnionPolygonsOp::UnionPolygonsOp()
+  : _combiner(std::make_shared<UnionPolygonsVisitor>())
 {
 }
 
@@ -58,8 +58,7 @@ void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_VART(g.get());
 
   OsmMapPtr result = std::make_shared<OsmMap>();
-  GeometryToElementConverter(result).convertGeometryToElement(
-    g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
+  GeometryToElementConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
 
   map = std::make_shared<OsmMap>(result);
   LOG_VART(map.get());

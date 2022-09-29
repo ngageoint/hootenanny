@@ -42,12 +42,12 @@ int WayMatchStringMerger::logWarnCount = 0;
 QString WayMatchStringMerger::SublineMapping::toString() const
 {
   return QString("{start: %1, end: %2, newWay1: %3, way2: %4, subline2: %5, newWay2: %6}")
-    .arg(hoot::toString(_start))
-    .arg(hoot::toString(_end))
-    .arg(hoot::toString(_newWay1 ? _newWay1->getElementId() : ElementId()))
-    .arg(hoot::toString(_way2 ? _way2->getElementId() : ElementId()))
-    .arg(hoot::toString(_subline2))
-    .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
+    .arg(hoot::toString(_start),
+         hoot::toString(_end),
+         hoot::toString(_newWay1 ? _newWay1->getElementId() : ElementId()),
+         hoot::toString(_way2 ? _way2->getElementId() : ElementId()),
+         hoot::toString(_subline2),
+         _newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
 }
 
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map, WayMatchStringMappingPtr mapping,
@@ -129,8 +129,8 @@ void WayMatchStringMerger::_createWayMappings(const WayLocation& splitStart,
     // check our assumptions.
     if (ws1->at(i).getStart().getWay() != lastSm->getStart1().getWay())
     {
-      throw InternalErrorException(QString("Not a way match %1, %2").arg(i).arg(
-        hoot::toString(ws1->at(i).getStart().getWay()->getElementId())));
+      throw InternalErrorException(
+            QString("Not a way match %1, %2").arg(i).arg(hoot::toString(ws1->at(i).getStart().getWay()->getElementId())));
     }
     // if we found the end of the match
     if (ws1->at(i).getEnd().getWay() == splitEnd.getWay())
@@ -171,8 +171,7 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
       WaySubline subline = ws->at(i);
       ConstWayPtr w = subline.getWay();
       // go through all the segments that are part of this subline
-      for (int j = subline.getFormer().getSegmentIndex();
-           j <= subline.getLatter().getSegmentIndex(); ++j)
+      for (int j = subline.getFormer().getSegmentIndex(); j <= subline.getLatter().getSegmentIndex(); ++j)
       {
         WayLocation wl(_map, w, j, 0.0);
         if (subline.contains(wl) && !_nodeToWayLocation2.contains(ElementId::node(w->getNodeId(j))))
@@ -336,7 +335,7 @@ void WayMatchStringMerger::_rebuildWayString(WayNumber way)
 {
   WayStringPtr ws = std::make_shared<WayString>();
 
-  for (const auto& sm : qAsConst(_sublineMappingOrder))//int i = 0; i < _sublineMappingOrder.size(); ++i)
+  for (const auto& sm : qAsConst(_sublineMappingOrder))
   {
     WayPtr w = sm->getNewWay(way);
     if (sm->getStart(way) <= sm->getEnd(way))
@@ -378,8 +377,8 @@ void WayMatchStringMerger::replaceScraps()
     it.key()->getTags().clear();
     RecursiveElementRemover(it.key()->getElementId()).apply(_map);
 
-    for (int i = 0; i < it.value().size(); ++i)
-      _replaced.emplace_back(it.key()->getElementId(), it.value()[i]->getElementId());
+    for (const auto& v : it.value())
+      _replaced.emplace_back(it.key()->getElementId(), v->getElementId());
   }
 }
 
@@ -422,7 +421,7 @@ void WayMatchStringMerger::_splitPrimary()
 
   WayStringPtr ws2 = _mapping->getWayString2();
 
-  QList<ConstWayPtr> order2;
+  QVector<ConstWayPtr> order2;
 
   // Create mappings from the sublines in s2 to sublines in s1
   for (int i = 0; i < ws2->getSize(); ++i)
@@ -434,10 +433,7 @@ void WayMatchStringMerger::_splitPrimary()
     _createWayMappings(splitStart, splitEnd, s2);
 
     if (order2.contains(s2.getWay()))
-    {
-      throw NotImplementedException("A single way inserted multiple times in one way is not"
-        " yet supported.");
-    }
+      throw NotImplementedException("A single way inserted multiple times in one way is not yet supported.");
 
     order2.append(s2.getWay());
   }

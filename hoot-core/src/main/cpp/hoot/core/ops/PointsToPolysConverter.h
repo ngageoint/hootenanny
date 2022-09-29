@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef _POINTS_TO_POLYS_CONVERTER_H_
 #define _POINTS_TO_POLYS_CONVERTER_H_
@@ -54,9 +54,8 @@ public:
   { return "Converting non-child points to polygons..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Converted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " non-child points to polygons.";
+    return QString("Converted %1 / %2 non-child points to polygons.")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
   }
 
   QString getName() const override { return className(); }

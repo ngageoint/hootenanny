@@ -475,7 +475,7 @@ QString Roundabout::toString() const
       .arg(_status.toString())
       .arg(_otherStatus.toString())
       .arg(QString::number(_roundaboutNodes.size()))
-      .arg(QString::number(_roundaboutWay->getNodeIds().size()))
+      .arg(QString::number(_roundaboutWay->getNodeCount()))
       .arg(_pCenterNode->getId())
       .arg(QString::number(_tempWays.size()))
       .arg(QString::number(_connectingWays.size()))
@@ -489,7 +489,7 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
 
   str += ", Original nodes size: " + QString::number(_roundaboutNodes.size());
   if (_roundaboutWay)
-    str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeIds().size());
+    str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeCount());
 
   bool nodeIdsMatch = false;
   const std::vector<ConstNodePtr> originalNodes = _roundaboutNodes;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
@@ -38,18 +38,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
 
-ReportMissingElementsVisitor::ReportMissingElementsVisitor(
-  const bool removeMissing, const Log::WarningLevel& logLevel, const int maxReport) :
-_logLevel(logLevel),
-_maxReport(maxReport),
-_missingCount(0),
-_removeMissing(removeMissing),
-_markWaysForReview(false),
-_numWaysMarkedForReview(0),
-_markRelationsForReview(false),
-_numRelationsMarkedForReview(0),
-_numWaysTagged(0),
-_numRelationsTagged(0)
+ReportMissingElementsVisitor::ReportMissingElementsVisitor(const bool removeMissing, const Log::WarningLevel& logLevel,
+                                                           const int maxReport)
+  : _logLevel(logLevel),
+    _maxReport(maxReport),
+    _missingCount(0),
+    _removeMissing(removeMissing),
+    _markWaysForReview(false),
+    _numWaysMarkedForReview(0),
+    _markRelationsForReview(false),
+    _numRelationsMarkedForReview(0),
+    _numWaysTagged(0),
+    _numRelationsTagged(0)
 {
 }
 
@@ -62,13 +62,9 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
 {
   QString msg;
   if (_removeMissing)
-  {
-    msg = "Removing missing " + missing.toString() + " in " + referer.toString() + ".";
-  }
+    msg = QString("Removing missing %1 in %2.").arg(missing.toString(), referer.toString());
   else
-  {
-    msg = "Missing " + missing.toString() + " in " + referer.toString() + ".";
-  }
+    msg = QString("Missing %1 in %2.").arg(missing.toString(), referer.toString());
 
   if (_missingCount < _maxReport)
   {
@@ -81,23 +77,16 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_LEVEL(
-      _logLevel,
-      "Reached maximum number of missing element reports (" << _maxReport <<
-      "). No longer reporting.");
+    LOG_LEVEL(_logLevel, "Reached maximum number of missing element reports (" << _maxReport << "). No longer reporting.");
   }
 }
 
 void ReportMissingElementsVisitor::visit(const ConstElementPtr& e)
 {    
   if (_removeMissing)
-  {
     _visitAndRemove(e->getElementType(), e->getId());
-  }
   else
-  {
     _visitAndReport(e->getElementType(), e->getId());
-  }
 }
 
 void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringList& missingChildIds)
@@ -121,13 +110,11 @@ void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringLi
   }
 }
 
-void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
-                                                   const QStringList& missingChildIds)
+void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation, const QStringList& missingChildIds)
 {
   if (!missingChildIds.empty())
   {
-    if (_markRelationsForReview &&
-          !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
+    if (_markRelationsForReview && !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
     {
       _reviewMarker.mark(
         _map->shared_from_this(), relation,
@@ -153,11 +140,11 @@ void ReportMissingElementsVisitor::_visitAndReport(ElementType type, long id)
   if (type == ElementType::Way)
   {
     const WayPtr& way = _map->getWay(id);
-    for (size_t i = 0; i < way->getNodeCount(); i++)
+    for (auto node_id : way->getNodeIds())
     {
-      if (_map->containsNode(way->getNodeIds()[i]) == false)
+      if (_map->containsNode(node_id) == false)
       {
-        const ElementId missingChildId = ElementId::node(way->getNodeIds()[i]);
+        const ElementId missingChildId = ElementId::node(node_id);
         _reportMissing(ElementId(type, id), missingChildId);
         missingChildIds.append(missingChildId.toString());
       }
@@ -168,9 +155,8 @@ void ReportMissingElementsVisitor::_visitAndReport(ElementType type, long id)
   else if (type == ElementType::Relation)
   {
     const RelationPtr& relation = _map->getRelation(id);
-    for (size_t i = 0; i < relation->getMembers().size(); i++)
+    for (const auto& e : relation->getMembers())
     {
-      const RelationData::Entry& e = relation->getMembers()[i];
       if (_map->containsElement(e.getElementId()) == false)
       {
         const ElementId missingChildId = e.getElementId();
@@ -192,18 +178,16 @@ void ReportMissingElementsVisitor::_visitAndRemove(ElementType type, long id)
     const WayPtr& way = _map->getWay(id);
     vector<long> newNids;
     newNids.reserve(way->getNodeCount());
-    for (size_t i = 0; i < way->getNodeCount(); i++)
+    for (auto node_id : way->getNodeIds())
     {
-      if (_map->containsNode(way->getNodeIds()[i]) == false)
+      if (_map->containsNode(node_id) == false)
       {
-        const ElementId missingChildId = ElementId::node(way->getNodeIds()[i]);
+        const ElementId missingChildId = ElementId::node(node_id);
         _reportMissing(ElementId(type, id), missingChildId);
         missingChildIds.append(missingChildId.toString());
       }
       else
-      {
-        newNids.push_back(way->getNodeIds()[i]);
-      }
+        newNids.push_back(node_id);
     }
     if (newNids.size() != way->getNodeCount())
     {
@@ -218,26 +202,23 @@ void ReportMissingElementsVisitor::_visitAndRemove(ElementType type, long id)
   {
     const RelationPtr& relation = _map->getRelation(id);
     vector<RelationData::Entry> newEntries;
-    newEntries.reserve(relation->getMembers().size());
-    for (size_t i = 0; i < relation->getMembers().size(); i++)
+    newEntries.reserve(relation->getMemberCount());
+    for (const auto& member : relation->getMembers())
     {
-      const RelationData::Entry& e = relation->getMembers()[i];
-      if (_map->containsElement(e.getElementId()) == false)
+      if (_map->containsElement(member.getElementId()) == false)
       {
-        const ElementId missingChildId = e.getElementId();
+        const ElementId missingChildId = member.getElementId();
         _reportMissing(ElementId(type, id), missingChildId);
         missingChildIds.append(missingChildId.toString());
       }
       else
-      {
-        newEntries.push_back(e);
-      }
+        newEntries.push_back(member);
     }
-    if (newEntries.size() != relation->getMembers().size())
+    if (newEntries.size() != relation->getMemberCount())
     {
-      LOG_TRACE("Relation members size before: " << relation->getMembers().size());
+      LOG_TRACE("Relation members size before: " << relation->getMemberCount());
       relation->setMembers(newEntries);
-      LOG_TRACE("Relation members size after: " << relation->getMembers().size());
+      LOG_TRACE("Relation members size after: " << relation->getMemberCount());
     }
 
     _updateRelation(relation, missingChildIds);

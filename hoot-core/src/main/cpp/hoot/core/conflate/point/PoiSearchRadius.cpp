@@ -104,7 +104,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
 QString PoiSearchRadius::toString() const
 {
-  return "Key: " + _key + ", Value: " + _value + ", distance: " + QString::number(_distance);
+  return QString("Key: %1, Value: %2, distance: %3").arg(_key, _value, QString::number(_distance));
 }
 
 }

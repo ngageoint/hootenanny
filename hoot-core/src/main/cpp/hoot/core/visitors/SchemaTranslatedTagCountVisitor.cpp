@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SchemaTranslatedTagCountVisitor.h"
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
+#include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/schema/ScriptSchemaTranslator.h>
-#include <hoot/core/io/schema/Schema.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -46,34 +46,29 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
-SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor() :
-  _map(nullptr),
-  _populatedCount(0),
-  _defaultCount(0),
-  _nullCount(0),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor()
+  : _map(nullptr),
+    _populatedCount(0),
+    _defaultCount(0),
+    _nullCount(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
-SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
-  const std::shared_ptr<ScriptSchemaTranslator>& t) :
-  _map(nullptr),
-  _populatedCount(0),
-  _defaultCount(0),
-  _nullCount(0),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t)
+  : _map(nullptr),
+    _populatedCount(0),
+    _defaultCount(0),
+    _nullCount(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
-  {
-    throw HootException(
-      "Error allocating translator, the translation script must support converting to OGR.");
-  }
+    throw HootException("Error allocating translator, the translation script must support converting to OGR.");
   _schema = _translator->getOgrOutputSchema();
 }
 
-void SchemaTranslatedTagCountVisitor::setTranslator(
-  const std::shared_ptr<ScriptSchemaTranslator>& translator)
+void SchemaTranslatedTagCountVisitor::setTranslator(const std::shared_ptr<ScriptSchemaTranslator>& translator)
 {
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(translator);
   _schema = _translator->getOgrOutputSchema();
@@ -88,25 +83,16 @@ void SchemaTranslatedTagCountVisitor::_countTags(const std::shared_ptr<Feature>&
     std::shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
     const QVariantMap& vm = f->getValues();
     if (vm.contains(fd->getName()) == false)
-    {
       _nullCount++;
-    }
     else
     {
       QVariant v = vm[fd->getName()];
-
       if (v.isNull())
-      {
         _nullCount++;
-      }
       else if (fd->hasDefaultValue() && fd->getDefaultValue() == v)
-      {
         _defaultCount++;
-      }
       else
-      {
         _populatedCount++;
-      }
     }
   }
 }
@@ -115,42 +101,34 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {
-    std::shared_ptr<Geometry> g =
-      ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false);
+    std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false);
     if (!g || g->isEmpty())
-    {
       return;
-    }
-
+    //  Copy the tags to modify and translate
     Tags t = e->getTags();
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
     t[MetadataTags::HootStatus()] = e->getStatusString();
 
     // Remove all the empty tags.
-    for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+    for (auto it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")
-      {
         t.remove(it.key());
-      }
     }
 
     vector<ScriptToOgrSchemaTranslator::TranslatedFeature> f =
       _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
 
     // Only write the feature if it wasn't filtered by the translation script.
-    for (size_t i = 0; i < f.size(); i++)
-    {
-      _countTags(f[i].feature);
-    }
+    for (const auto& feat : f)
+      _countTags(feat.feature);
     _numAffected++;
   }
   _numProcessed++;
 
   if (_numProcessed % _taskStatusUpdateInterval == 0)
   {
-    PROGRESS_INFO(
-      "Processed  " <<  StringUtils::formatLargeNumber(_numProcessed) << " features...");
+    PROGRESS_INFO("Processed  " <<  StringUtils::formatLargeNumber(_numProcessed) << " features...");
   }
 }
 

@@ -53,19 +53,18 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 
   // Get a list of roundabouts in the map
   RoundaboutCriterion roundaboutCrit;
-  for (auto it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
+  const WayMap& ways = _pMap->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     if (roundaboutCrit.isSatisfied(it->second))
-    {
       _todoWays.push_back(it->first);
-    }
   }
   LOG_VART(_todoWays.size());
 
   // Make roundabout objects
-  for (size_t i = 0; i < _todoWays.size(); i++)
+  for (auto way_id : _todoWays)
   {
-    WayPtr pWay = _pMap->getWay(_todoWays[i]);
+    WayPtr pWay = _pMap->getWay(way_id);
     RoundaboutPtr rnd = Roundabout::makeRoundabout(_pMap, pWay);
     removed.push_back(rnd);
   }
@@ -100,10 +99,6 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
         removed[i]->overrideRoundabout();
       }
     }
-
-    // This could be very expensive...enable for debugging only.
-    //OsmMapWriterFactory::writeDebugMap(
-      //_pMap, "after-RemoveRoundabouts-handling-crossing-ways-" + QString::number(i + 1));
   }
 
   //  Mangle the last way if it doesn't have a sibling
@@ -120,10 +115,6 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
   {
     removed[i]->removeRoundabout(_pMap);
     _numAffected++;
-
-    // This could be very expensive...enable for debugging only.
-    //OsmMapWriterFactory::writeDebugMap(
-      //_pMap, "after-removing-roundabout-" + QString::number(i + 1));
   }
 }
 

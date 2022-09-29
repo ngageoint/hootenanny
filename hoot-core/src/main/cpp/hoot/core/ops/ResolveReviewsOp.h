@@ -54,7 +54,7 @@ public:
   /**
    * @brief The ResolveType enum Keep, Resolve, or Remove all reviews
    */
-  enum ResolveType
+  enum class ResolveType
   {
     KeepReviews,
     ResolveReviews,

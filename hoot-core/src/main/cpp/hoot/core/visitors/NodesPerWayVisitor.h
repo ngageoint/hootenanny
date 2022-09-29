@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NODES_PER_WAY_VISITOR_H
@@ -30,10 +30,10 @@
 
 // hoot
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {

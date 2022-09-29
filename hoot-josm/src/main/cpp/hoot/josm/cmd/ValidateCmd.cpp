@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -66,20 +66,16 @@ public:
     }
 
     if (showAvailableValidatorsOnly)
-    {
       MapValidator::printValidators();
-    }
     else
-    {
       _validate(args);
-    }
 
     return 0;
   }
 
 private:
 
-  void _validate(QStringList& args)
+  void _validate(QStringList& args) const
   {
     bool separateOutput = false;
     if (args.contains("--separate-output"))
@@ -98,9 +94,7 @@ private:
     }
 
     if (separateOutput && !output.isEmpty())
-    {
       throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
-    }
 
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
@@ -108,11 +102,7 @@ private:
     LOG_VARD(inputFilters);
 
     if (recursive && !separateOutput && output.isEmpty())
-    {
-      throw IllegalArgumentException(
-        QString("--output must be specified when --recursive is specified and ") +
-        QString("--separate-output is not specified."));
-    }
+      throw IllegalArgumentException("--output must be specified when --recursive is specified and --separate-output is not specified.");
 
     MapValidator validator;
 
@@ -138,13 +128,9 @@ private:
     // Everything left is an input.
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
     // Even though we have the cleaning routine available with --cleanValidatedOutput, we're still
     // going to clean out all previously validated files. Clearly will cause problems if anyone
     // want to validate files with "-validated" in the name.
@@ -153,13 +139,9 @@ private:
 
     const QString validationSummary = validator.validate(inputs, output);
     if (!reportOutput)
-    {
       std::cout << validationSummary << std::endl;
-    }
 
-    LOG_STATUS(
-      "Validate operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    LOG_STATUS("Validate operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
   }
 };
 

@@ -173,10 +173,8 @@ Settings::Settings()
 void Settings::prepend(const QString& key, const QStringList& values)
 {
   QStringList l = getList(key, QStringList());
-  //  TODO:  Logically this doesn't even work
-  for (int i = values.size() - 1; i == 0; i--)
+  for (int i = values.size() - 1; i >= 0; i--)
     l.prepend(values.at(i));
-
   set(key, l);
 }
 

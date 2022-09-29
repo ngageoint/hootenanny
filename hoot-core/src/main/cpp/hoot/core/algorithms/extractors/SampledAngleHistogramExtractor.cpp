@@ -75,7 +75,7 @@ public:
     else if (e->getElementType() == ElementType::Relation)
     {
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-      const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+      const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
       for (const auto& member : relationMembers)
       {
         if (member.getElementId().getType() == ElementType::Way)
@@ -98,12 +98,6 @@ private:
   {
     if (way)
     {
-      vector<long> wayNodes = way->getNodeIds();
-      LOG_VART(wayNodes.size());
-      if (wayNodes[0] != wayNodes[wayNodes.size() - 1])
-        wayNodes.push_back(wayNodes[0]);
-      LOG_VART(wayNodes.size());
-
       LOG_VART(_sampleDistance);
       LOG_VART(_headingDelta);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RemoveRef2Visitor.h"
 
@@ -101,10 +101,8 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
   QStringList refs = e->getTags().getList(key);
   QStringList refsCopy = refs;
 
-  for (int i = 0; i < refsCopy.size(); i++)
+  for (const auto& r : qAsConst(refsCopy))
   {
-    QString r = refsCopy[i];
-
     // if it isn't a valid ref, carry on.
     if (r == "todo" || r == "none" || r.isEmpty())
       continue;
@@ -113,9 +111,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     if (eid.isNull())
     {
-      const QString errMsg =
-        "Found a " + MetadataTags::Ref2() + " that references a non-existing " +
-         MetadataTags::Ref1() + ": " + r;
+      const QString errMsg = QString("Found a %1 that references a non-existing %2: %3").arg(MetadataTags::Ref2(), MetadataTags::Ref1(), r);
       if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(errMsg);
@@ -151,23 +147,21 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
 bool RemoveRef2Visitor::_hasRef2Tag(ElementPtr e) const
 {
-  for (int i = 0; i < _ref2Keys.size(); i++)
+  for (const auto& key : qAsConst(_ref2Keys))
   {
-    if (e->getTags().contains(_ref2Keys[i]))
+    if (e->getTags().contains(key))
     {
-      QString v = e->getTags().get(_ref2Keys[i]);
+      QString v = e->getTags().get(key);
       if (!v.isEmpty() && v != "none")
         return true;
     }
   }
-
   return false;
 }
 
 void RemoveRef2Visitor::setOsmMap(OsmMap* map)
 {
   _map = map;
-
   // traverse the map and create a REF1 to ElementId map.
   Ref1ToEidVisitor v;
   _map->visitRo(v);
@@ -183,8 +177,8 @@ void RemoveRef2Visitor::visit(const ElementPtr& e)
   if (_hasRef2Tag(e) && ref2CriterionSatisfied(e))
   {
     // go through each REF2 and evaluate for deletion
-    for (int i = 0; i < _ref2Keys.size(); i++)
-      _checkAndDeleteRef2(e, _ref2Keys[i]);
+    for (const auto& key : qAsConst(_ref2Keys))
+      _checkAndDeleteRef2(e, key);
 
     _numProcessed++;
   }
