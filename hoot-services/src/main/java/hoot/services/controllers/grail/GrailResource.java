@@ -341,7 +341,7 @@ public class GrailResource {
                     grailCommandClass = RunDiffCommand.class;
                 }
             } else {
-                if (deriveType.equals("Open in JOSM")) {
+                if (deriveType.equals("JOSM .osm")) {
                     outputFileName = "diff.osm";
                 }
                 grailCommandClass = DeriveChangesetCommand.class;
