@@ -11,7 +11,7 @@
         <nd ref="5"/>
         <tag k="key1" v="value1"/>
     </way>
-    <node id="-1" version="0" lat="46.0000000000000000" lon="-128.0000000000000000" timestamp=""/>
+    <node id="-1" version="0" action="modify" lat="46.0000000000000000" lon="-128.0000000000000000" timestamp=""/>
     <relation id="1" version="1" action="delete" timestamp="">
         <member type="node" ref="7" role="role1"/>
         <member type="way" ref="3" role="role2"/>
@@ -22,13 +22,13 @@
         <nd ref="10"/>
         <tag k="key1" v="value1"/>
     </way>
-    <node id="-2" version="0" lat="57.0000000000000000" lon="-31.0000000000000000" timestamp=""/>
+    <node id="-2" version="0" action="modify" lat="57.0000000000000000" lon="-31.0000000000000000" timestamp=""/>
     <way id="5" version="1" action="modify" timestamp="">
         <nd ref="12"/>
         <nd ref="13"/>
         <tag k="key1" v="value1"/>
     </way>
-    <relation id="-1" version="0" timestamp="">
+    <relation id="-1" version="0" action="modify" timestamp="">
         <member type="node" ref="14" role="role1"/>
         <member type="way" ref="6" role="role2"/>
         <tag k="key2" v="value2"/>
