@@ -686,8 +686,6 @@ void LinearSnapMerger::_handleSplitWay(const ElementPtr& e1, const ElementPtr& s
       LOG_TRACE("Swapping e1 match ID: " << eidm1 << " with e1 ID: " << eid1 << "...");
       //  Swap the old way ID back into the match element.
       IdSwapOp(eid1, eidm1).apply(_map);
-      //TODO: Replace e1's tags with the merged e1Match's tags?
-//      e1->setTags(e1Match->getTags());
       //  Remove the old way with a new swapped out ID.
       RemoveElementByEid(eidm1).apply(_map);
       //  Add the scraps element to all the relations that the match is in.

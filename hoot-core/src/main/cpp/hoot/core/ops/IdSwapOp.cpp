@@ -94,7 +94,6 @@ void IdSwapOp::apply(const std::shared_ptr<OsmMap>& map)
       long temp = way1->getPid();
       way1->setPid(way2->getPid());
       way2->setPid(temp);
-      //  TODO: Update any PIDs from element2 to element1
     }
     else if (element1->getElementType() == ElementType::Node)
     {
