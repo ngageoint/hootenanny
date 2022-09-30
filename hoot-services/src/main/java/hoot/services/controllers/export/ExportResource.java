@@ -327,7 +327,7 @@ public class ExportResource {
             } else {
                 exportFile = getExportFile(jobId, outputname, fileExt);
             }
-            String outFileName = jobId;
+            String outFileName = exportFile.getName();
             if (! StringUtils.isBlank(outputname)) {
                 outFileName = outputname;
             }
@@ -354,12 +354,12 @@ public class ExportResource {
                     }
                 };
                 responseBuilder = Response.ok(stream);
+                outFileName += ".zip";
             } else {
                 responseBuilder = Response.ok(exportFile);
             }
-            responseBuilder.header("Content-Disposition", "attachment; filename=\""+ outFileName + ".zip\"");
+            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName);
             responseBuilder.header("Content-Type", "application/zip");
-            //responseBuilder.header("Content-Disposition", "attachment; filename="+ exportFile.getName());
             response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
