@@ -104,6 +104,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.conflation.ConflateCommandFactory;
 import hoot.services.controllers.conflation.ConflateParams;
 import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
@@ -397,6 +398,11 @@ public class GrailResource {
             // commented out because we don't want to delete if error occurs so user can download error file
             // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             // workflow.add(cleanFolders);
+        } else {
+            //zip up result for possible download
+            //ZIPFileCommand(File targetZIP, File workDir, String file, Class<?> caller)
+            Command zipCommand = new ZIPFileCommand(new File(workDir, outputFileName + ".zip"), workDir, outputFileName, this.getClass());
+            workflow.add(zipCommand);
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
