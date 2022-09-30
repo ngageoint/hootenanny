@@ -46,9 +46,8 @@ public:
   static int logWarnCount;
 
   ScriptMerger() = default;
-  ScriptMerger(
-    const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
-    const std::set<std::pair<ElementId, ElementId>>& pairs);
+  ScriptMerger(const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
+               const std::set<std::pair<ElementId, ElementId>>& pairs);
   ~ScriptMerger() override = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
@@ -76,17 +75,14 @@ private:
   /**
    * Calls mergePair in the JS.
    */
-  virtual void _applyMergePair(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
+  virtual void _applyMergePair(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
   /**
    * Calls mergeSet in the JS.
    */
-  virtual void _applyMergeSets(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
+  virtual void _applyMergeSets(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
   v8::Local<v8::Value> _callMergePair(const OsmMapPtr& map) const;
-  void _callMergeSets(const OsmMapPtr& map,
-                      std::vector<std::pair<ElementId, ElementId>>& replaced) const;
+  void _callMergeSets(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 };
 
 }

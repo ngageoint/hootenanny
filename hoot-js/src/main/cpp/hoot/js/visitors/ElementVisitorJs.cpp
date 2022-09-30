@@ -27,10 +27,11 @@
 #include "ElementVisitorJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -43,8 +44,8 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementVisitorJs)
 
-ElementVisitorJs::ElementVisitorJs(std::shared_ptr<ElementVisitor> v) :
-_v(v)
+ElementVisitorJs::ElementVisitorJs(std::shared_ptr<ElementVisitor> v)
+  : _v(v)
 {
 }
 
@@ -53,17 +54,16 @@ void ElementVisitorJs::Init(Local<Object> target)
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
+  vector<QString> opNames = Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
 
-  for (size_t i = 0; i < opNames.size(); i++)
+  for (const auto& name : opNames)
   {
-    QByteArray utf8 = opNames[i].toUtf8();
+    QByteArray utf8 = name.toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(
@@ -82,8 +82,7 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = str(args.This()->GetConstructorName());
   LOG_VART(className);
-  std::shared_ptr<ElementVisitor> vis =
-    Factory::getInstance().constructObject<ElementVisitor>(className);
+  std::shared_ptr<ElementVisitor> vis = Factory::getInstance().constructObject<ElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(vis);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
@@ -94,4 +93,3 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
 }
 
 }
-

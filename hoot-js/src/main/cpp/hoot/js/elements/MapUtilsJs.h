@@ -28,8 +28,8 @@
 #define MAP_UTILS_JS_H
 
 // Hoot
-#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootBaseJs.h>
+#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {

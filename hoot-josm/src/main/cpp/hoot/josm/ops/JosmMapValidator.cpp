@@ -52,16 +52,12 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   if ((int)inputMap->size() > _maxElementsForMapString)
   {
     // Pass the map as temp file and get it back as a temp file.
-
     std::shared_ptr<QTemporaryFile> tempInputFile =
       std::make_shared<QTemporaryFile>(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm");
     tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
-    {
-      throw HootException(
-          "Unable to open temp input file for validation: " + tempInputFile->fileName() + ".");
-    }
+      throw HootException("Unable to open temp input file for validation: " + tempInputFile->fileName() + ".");
     LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
     OsmXmlWriter().write(inputMap, tempInputFile->fileName());
 
@@ -109,8 +105,7 @@ QString JosmMapValidator::_validate(const QStringList& validators, const QString
   return JniConversion::fromJavaString(_javaEnv, validatedMapJavaStr);
 }
 
-void JosmMapValidator::_validate(
-  const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath)
+void JosmMapValidator::_validate(const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath)
 {
   // JNI sig format: (input params...)return type
   _javaEnv->CallVoidMethod(

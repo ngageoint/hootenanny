@@ -64,9 +64,7 @@ void SublineStringMatcherFactoryJs::getMatcher(const v8::FunctionCallbackInfo<v8
     CreatorDescription::stringToBaseFeatureType(toCpp<QString>(args[0]));
   ConstOsmMapPtr map;
   if (args.Length() == 2)
-  {
     map = toCpp<ConstOsmMapPtr>(args[1]);
-  }
 
   SublineStringMatcherPtr matcher = SublineStringMatcherFactory::getMatcher(featureType, map);
   args.GetReturnValue().Set(toV8(matcher));

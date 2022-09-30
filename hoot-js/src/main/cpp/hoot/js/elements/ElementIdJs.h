@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/js/HootBaseJs.h>
-#include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 
@@ -75,23 +74,17 @@ inline void toCpp(v8::Local<v8::Value> v, ElementId& eid)
 
   // now try as an object
   if (v.IsEmpty() || !v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
 
   QString className = str(obj->Get(context, PopulateConsumersJs::baseClass()).ToLocalChecked());
   ElementIdJs* eidj = nullptr;
   if (obj->InternalFieldCount() >= 1 && className == ElementId::className())
-  {
     eidj = node::ObjectWrap::Unwrap<ElementIdJs>(obj);
-  }
 
   if (eidj)
-  {
     eid = eidj->getElementId();
-  }
   else if (obj->Has(context, v8::String::NewFromUtf8(current, "id").ToLocalChecked()).ToChecked() &&
            obj->Has(context, v8::String::NewFromUtf8(current, "type").ToLocalChecked()).ToChecked())
   {
@@ -102,9 +95,7 @@ inline void toCpp(v8::Local<v8::Value> v, ElementId& eid)
     eid = ElementId(ElementType::fromString(type), id);
   }
   else
-  {
     throw IllegalArgumentException("Expected an ElementId object, got: (" + toString(v) + ")");
-  }
 }
 
 inline v8::Local<v8::Value> toV8(const ElementId& eid)

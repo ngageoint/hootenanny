@@ -33,11 +33,11 @@
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;
 
@@ -74,7 +74,6 @@ void RelationMergerJs::merge(const FunctionCallbackInfo<Value>& args)
   try
   {
     merger.merge(eid1, eid2);
-
     args.GetReturnValue().SetUndefined();
   }
   catch (const HootException& err)

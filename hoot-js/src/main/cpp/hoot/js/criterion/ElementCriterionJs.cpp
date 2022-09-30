@@ -45,8 +45,8 @@ HOOT_JS_REGISTER(ElementCriterionJs)
 
 Persistent<Function> ElementCriterionJs::_constructor;
 
-ElementCriterionJs::ElementCriterionJs(ElementCriterionPtr c) :
-_c(c)
+ElementCriterionJs::ElementCriterionJs(ElementCriterionPtr c)
+  : _c(c)
 {
 }
 
@@ -55,17 +55,16 @@ void ElementCriterionJs::Init(Local<Object> target)
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+  vector<QString> opNames = Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
 
-  for (size_t i = 0; i < opNames.size(); i++)
+  for (const auto& name : opNames)
   {
-    QByteArray utf8 = opNames[i].toUtf8();
+    QByteArray utf8 = name.toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(

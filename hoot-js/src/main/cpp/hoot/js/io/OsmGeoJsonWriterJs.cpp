@@ -28,8 +28,9 @@
 
 // hoot
 #include <hoot/core/io/OsmGeoJsonWriter.h>
-#include <hoot/js/elements/ElementJs.h>
+
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;

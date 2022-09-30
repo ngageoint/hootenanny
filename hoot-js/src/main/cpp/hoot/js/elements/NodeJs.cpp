@@ -27,8 +27,8 @@
 #include "NodeJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 
 #include <hoot/js/JsRegistrar.h>
@@ -44,8 +44,8 @@ HOOT_JS_REGISTER(NodeJs)
 
 Persistent<Function> NodeJs::_constructor;
 
-NodeJs::NodeJs(ConstNodePtr n) :
-_constNode(n)
+NodeJs::NodeJs(ConstNodePtr n)
+  : _constNode(n)
 {
 }
 

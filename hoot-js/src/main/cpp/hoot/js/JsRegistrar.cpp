@@ -28,7 +28,6 @@
 
 #include <hoot/core/Hoot.h>
 
-
 #include <hoot/js/io/DataConvertJs.h>
 
 using namespace v8;

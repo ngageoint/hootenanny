@@ -27,21 +27,21 @@
 #include "OsmSchemaJs.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/RiverCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/HasNameCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/HasNameCriterion.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/JsRegistrar.h>

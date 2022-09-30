@@ -33,8 +33,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;
 

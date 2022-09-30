@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/Way.h>
+
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/SystemNodeJs.h>
 

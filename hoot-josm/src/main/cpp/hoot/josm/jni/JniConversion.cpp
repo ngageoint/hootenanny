@@ -40,9 +40,7 @@ QString JniConversion::fromJavaString(JNIEnv* javaEnv, jstring javaStr)
   LOG_TRACE("Converting from java string...");
 
   if (javaStr == nullptr)
-  {
     return "";
-  }
 
   jboolean isCopy;
   const char* data = javaEnv->GetStringUTFChars(javaStr, &isCopy);
@@ -59,16 +57,13 @@ jobject JniConversion::toJavaStringList(JNIEnv* javaEnv, const QStringList& cppS
 
   // see related note about method mappings in fromJavaStringMap
   jclass arrayListJavaClass = javaEnv->FindClass("java/util/ArrayList");
-  jmethodID arrayListConstructorMethod =
-    javaEnv->GetMethodID(arrayListJavaClass, "<init>", "(I)V");
-  jmethodID arrayListAddMethod =
-    javaEnv->GetMethodID(arrayListJavaClass, "add", "(Ljava/lang/Object;)Z");
+  jmethodID arrayListConstructorMethod = javaEnv->GetMethodID(arrayListJavaClass, "<init>", "(I)V");
+  jmethodID arrayListAddMethod = javaEnv->GetMethodID(arrayListJavaClass, "add", "(Ljava/lang/Object;)Z");
 
-  jobject result =
-    javaEnv->NewObject(arrayListJavaClass, arrayListConstructorMethod, cppStrList.size());
-  for (int i = 0; i < cppStrList.size(); i++)
+  jobject result = javaEnv->NewObject(arrayListJavaClass, arrayListConstructorMethod, cppStrList.size());
+  for (const auto& cpp_str : qAsConst(cppStrList))
   {
-    jstring str = toJavaString(javaEnv, cppStrList.at(i));
+    jstring str = toJavaString(javaEnv, cpp_str);
     javaEnv->CallObjectMethod(result, arrayListAddMethod, str);
     javaEnv->DeleteLocalRef(str);
   }
@@ -83,9 +78,7 @@ QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrS
   QSet<QString> result;
 
   if (javaStrSet == nullptr)
-  {
     return result;
-  }
 
   // see related note about method mappings in fromJavaStringMap
   jclass setClass = javaEnv->GetObjectClass(javaStrSet);
@@ -120,9 +113,7 @@ QMap<QString, QString> JniConversion::fromJavaStringMap(JNIEnv* javaEnv, jobject
   QMap<QString, QString> result;
 
   if (javaMap == nullptr)
-  {
     return result;
-  }
 
   // Creating these method mappings each time for now. If that proves to be a performance bottleneck
   // at some point, we can create some global refs.
@@ -185,21 +176,16 @@ QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnv, jobject 
   QMap<QString, int> result;
 
   if (javaMap == nullptr)
-  {
     return result;
-  }
 
   // yes, this is kind of kludgy...could time to come up with a templated version at some point
   QMap<QString, QString> tempResult = fromJavaStringMap(javaEnv, javaMap);
-  for (QMap<QString, QString>::const_iterator mapItr = tempResult.begin();
-       mapItr != tempResult.end(); ++mapItr)
+  for (auto mapItr = tempResult.begin(); mapItr != tempResult.end(); ++mapItr)
   {
     bool ok = false;
     const int val = mapItr.value().toInt(&ok);
     if (ok)
-    {
       result[mapItr.key()] = val;
-    }
   }
   javaEnv->DeleteLocalRef(javaMap);
 

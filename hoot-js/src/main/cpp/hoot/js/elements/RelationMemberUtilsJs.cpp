@@ -28,16 +28,16 @@
 
 // hoot
 #include <hoot/core/conflate/merging/RelationMerger.h>
-#include <hoot/core/elements/RelationMemberNodeCounter.h>
 #include <hoot/core/elements/ConnectedRelationMemberFinder.h>
+#include <hoot/core/elements/RelationMemberNodeCounter.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 
 using namespace v8;
@@ -76,8 +76,7 @@ void RelationMemberUtilsJs::isMemberOfRelationWithType(const FunctionCallbackInf
   ElementId childId = toCpp<ElementId>(args[1]);
   QString relationType = toCpp<QString>(args[2]);
 
-  const bool inRelationOfSpecifiedType =
-    RelationMemberUtils::isMemberOfRelationWithType(map, childId, relationType);
+  const bool inRelationOfSpecifiedType = RelationMemberUtils::isMemberOfRelationWithType(map, childId, relationType);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
 }
@@ -91,8 +90,7 @@ void RelationMemberUtilsJs::isMemberOfRelationInCategory(const FunctionCallbackI
   ElementId childId = toCpp<ElementId>(args[1]);
   QString schemaCategory = toCpp<QString>(args[2]);
 
-  const bool inRelationOfSpecifiedCategory =
-    RelationMemberUtils::isMemberOfRelationInCategory(map, childId, schemaCategory);
+  const bool inRelationOfSpecifiedCategory = RelationMemberUtils::isMemberOfRelationInCategory(map, childId, schemaCategory);
   LOG_VART(inRelationOfSpecifiedCategory);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
@@ -107,8 +105,7 @@ void RelationMemberUtilsJs::isMemberOfRelationWithTagKey(const FunctionCallbackI
   ElementId childId = toCpp<ElementId>(args[1]);
   QString tagKey = toCpp<QString>(args[2]);
 
-  const bool inRelationWithSpecifiedTagKey =
-    RelationMemberUtils::isMemberOfRelationWithTagKey(map, childId, tagKey);
+  const bool inRelationWithSpecifiedTagKey = RelationMemberUtils::isMemberOfRelationWithTagKey(map, childId, tagKey);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
 }
@@ -131,8 +128,7 @@ void RelationMemberUtilsJs::getNumRelationMemberNodes(const FunctionCallbackInfo
   args.GetReturnValue().Set(Number::New(current, numNodes));
 }
 
-void RelationMemberUtilsJs::relationsHaveConnectedWayMembers(
-  const FunctionCallbackInfo<Value>& args)
+void RelationMemberUtilsJs::relationsHaveConnectedWayMembers(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -140,12 +136,8 @@ void RelationMemberUtilsJs::relationsHaveConnectedWayMembers(
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
   ElementId relationId1 = toCpp<ElementId>(args[1]);
   ElementId relationId2 = toCpp<ElementId>(args[2]);
-  if (relationId1.getType() != ElementType::Relation ||
-      relationId2.getType() != ElementType::Relation)
-  {
-    throw IllegalArgumentException(
-      "Passed non-relation ID to relationsHaveConnectedWayMembers.");
-  }
+  if (relationId1.getType() != ElementType::Relation || relationId2.getType() != ElementType::Relation)
+    throw IllegalArgumentException("Passed non-relation ID to relationsHaveConnectedWayMembers.");
 
   ConnectedRelationMemberFinder finder;
   finder.setOsmMap(map.get());

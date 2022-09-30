@@ -49,7 +49,6 @@ private:
   static void createUuid5(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-
 }
 
 #endif // UUIDHELPERJS_H

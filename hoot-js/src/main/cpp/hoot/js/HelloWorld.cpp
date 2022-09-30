@@ -28,10 +28,11 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/js/elements/OsmMapJs.h>
+
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/HootJsStable.h>
+#include <hoot/js/elements/OsmMapJs.h>
 
 using namespace std;
 using namespace v8;

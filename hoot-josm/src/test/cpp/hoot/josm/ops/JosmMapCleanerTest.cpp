@@ -48,8 +48,8 @@ class JosmMapCleanerTest : public HootTestFixture
 
 public:
 
-  JosmMapCleanerTest() :
-  HootTestFixture("test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapCleanerTest")
+  JosmMapCleanerTest()
+    : HootTestFixture("test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapCleanerTest")
   {
   }
 

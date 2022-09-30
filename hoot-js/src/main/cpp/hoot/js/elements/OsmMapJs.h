@@ -72,9 +72,7 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, ConstOsmMapPtr& ptr)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);
@@ -84,9 +82,7 @@ inline void toCpp(v8::Local<v8::Value> v, ConstOsmMapPtr& ptr)
 inline void toCpp(v8::Local<v8::Value> v, OsmMapPtr& ptr)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);

@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/elements/NodeJs.h>
@@ -83,23 +84,23 @@ Local<Object> ElementJs::New(ConstElementPtr e)
   switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
-    {
-      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-      result = NodeJs::New(n);
-      break;
-    }
+  {
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
+    result = NodeJs::New(n);
+    break;
+  }
   case ElementType::Way:
-    {
-      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
-      result = WayJs::New(w);
-      break;
-    }
+  {
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+    result = WayJs::New(w);
+    break;
+  }
   case ElementType::Relation:
-    {
-      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-      result = RelationJs::New(r);
-      break;
-    }
+  {
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
+    result = RelationJs::New(r);
+    break;
+  }
   default:
     throw IllegalArgumentException("Unexpected element type.");
   }
@@ -116,23 +117,23 @@ Local<Object> ElementJs::New(ElementPtr e)
   switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
-    {
-      NodePtr n = std::dynamic_pointer_cast<Node>(e);
-      result = NodeJs::New(n);
-      break;
-    }
+  {
+    NodePtr n = std::dynamic_pointer_cast<Node>(e);
+    result = NodeJs::New(n);
+    break;
+  }
   case ElementType::Way:
-    {
-      WayPtr w = std::dynamic_pointer_cast<Way>(e);
-      result = WayJs::New(w);
-      break;
-    }
+  {
+    WayPtr w = std::dynamic_pointer_cast<Way>(e);
+    result = WayJs::New(w);
+    break;
+  }
   case ElementType::Relation:
-    {
-      RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
-      result = RelationJs::New(r);
-      break;
-    }
+  {
+    RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
+    result = RelationJs::New(r);
+    break;
+  }
   default:
     throw IllegalArgumentException("Unexpected element type.");
   }

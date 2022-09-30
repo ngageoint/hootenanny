@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 

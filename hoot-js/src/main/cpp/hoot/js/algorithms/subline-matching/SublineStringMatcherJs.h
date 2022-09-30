@@ -64,9 +64,7 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, SublineStringMatcherPtr& ptr)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   const SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);

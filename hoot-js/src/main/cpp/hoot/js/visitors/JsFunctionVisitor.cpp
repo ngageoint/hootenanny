@@ -41,8 +41,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, JsFunctionVisitor)
 
-JsFunctionVisitor::JsFunctionVisitor() :
-_map(nullptr)
+JsFunctionVisitor::JsFunctionVisitor()
+  : _map(nullptr)
 {
 }
 
@@ -56,9 +56,7 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   Local<Value> jsArgs[3];
 
   if (_func.IsEmpty())
-  {
     throw IllegalArgumentException("JsFunctionVisitor must have a valid function.");
-  }
 
   Local<Object> elementObj;
   if (_map)
@@ -67,16 +65,13 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
     elementObj = ElementJs::New(nonConst);
   }
   else
-  {
     elementObj = ElementJs::New(e);
-  }
 
   int argc = 0;
   jsArgs[argc++] = elementObj;
 
   TryCatch trycatch(current);
-  MaybeLocal<Value> funcResult =
-    ToLocal(&_func)->Call(context, current->GetCurrentContext()->Global(), argc, jsArgs);
+  MaybeLocal<Value> funcResult = ToLocal(&_func)->Call(context, current->GetCurrentContext()->Global(), argc, jsArgs);
 
   if (funcResult.IsEmpty())
   {
@@ -87,9 +82,7 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
       HootExceptionThrower::getInstance().rethrowPointer(ex);
     }
     else
-    {
       throw HootException(toJson(trycatch.Message()->Get()));
-    }
   }
 }
 

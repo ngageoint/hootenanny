@@ -45,9 +45,8 @@ class JosmMapValidatorTest : public HootTestFixture
 
 public:
 
-  JosmMapValidatorTest() :
-  HootTestFixture(
-    "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
+  JosmMapValidatorTest()
+    : HootTestFixture("test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
   }
 

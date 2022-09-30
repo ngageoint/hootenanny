@@ -33,9 +33,9 @@
 namespace hoot
 {
 
-JavaEnvironment::JavaEnvironment() :
-_vm(nullptr),
-_env(nullptr)
+JavaEnvironment::JavaEnvironment()
+  : _vm(nullptr),
+    _env(nullptr)
 {
   _initVm();
 }
@@ -66,8 +66,7 @@ JavaEnvironment::~JavaEnvironment()
     status = _vm->DetachCurrentThread();
     if (status != JNI_OK)
     {
-      LOG_ERROR(
-        "Unable to detach JVM from current thread. Error code: " << QString::number(status));
+      LOG_ERROR("Unable to detach JVM from current thread. Error code: " << QString::number(status));
     }
 
     // If this call hangs, its very likely there is a thread other than the one that launched this
@@ -94,21 +93,17 @@ void JavaEnvironment::_initVm()
   JavaVMInitArgs vm_args;
   int numOptions = 5;
   if (verbose)
-  {
     numOptions++;
-  }
   JavaVMOption options[numOptions];
 
   const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(":");
   QString classPathStrTemp = classPathStr;
   const QStringList jars = classPathStrTemp.remove("-Djava.class.path=").split(":");
-  for (int i = 0; i < jars.size(); i++)
+  for (const auto& jar : qAsConst(jars))
   {
-    QFile jarFile(jars.at(i));
+    QFile jarFile(jar);
     if (!jarFile.exists())
-    {
-      throw IllegalArgumentException("JAR file does not exist: " + jars.at(i));
-    }
+      throw IllegalArgumentException("JAR file does not exist: " + jar);
   }
   options[0].optionString = strdup(classPathStr.toStdString().c_str());
   LOG_VART(options[0].optionString);
@@ -144,9 +139,7 @@ void JavaEnvironment::_initVm()
 
   jint status = JNI_CreateJavaVM(&_vm, (void**)&_env, &vm_args);
   if (status != JNI_OK)
-  {
     throw HootException("Unable to initialize JVM. Error code: " + QString::number(status));
-  }
 }
 
 }

@@ -46,17 +46,10 @@ void NetworkVertex::reset()
 
 QString NetworkVertex::toString() const
 {
-  QString result;
   if (!_e.get())
-  {
-    result = "<null>";
-  }
+    return "<null>";
   else
-  {
-    result = QString("(%1) %2").arg(_uid).arg(_e->getElementId().toString());
-  }
-
-  return result;
+    return QString("(%1) %2").arg(_uid).arg(_e->getElementId().toString());
 }
 
 geos::geom::Coordinate NetworkVertex::getCentroid() const

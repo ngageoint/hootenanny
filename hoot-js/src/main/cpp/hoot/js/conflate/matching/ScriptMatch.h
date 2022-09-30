@@ -57,10 +57,9 @@ public:
    * mapObj could be derived from the map, but destructing an OsmMapJs object is quite expensive
    * due to the amount of memory cleanup we must do in the general case.
    */
-  ScriptMatch(
-    const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
-    const ConstOsmMapPtr& map, const v8::Local<v8::Object>& mapObj, const ElementId& eid1,
-    const ElementId& eid2, const ConstMatchThresholdPtr& mt);
+  ScriptMatch(const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
+              const ConstOsmMapPtr& map, const v8::Local<v8::Object>& mapObj, const ElementId& eid1,
+              const ElementId& eid2, const ConstMatchThresholdPtr& mt);
   ~ScriptMatch() override = default;
 
   const MatchClassification& getClassification() const override { return _p; }
@@ -73,9 +72,8 @@ public:
 
   double getProbability() const override;
 
-  bool isConflicting(
-    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   bool isWholeGroup() const override { return _isWholeGroup; }
 
@@ -121,24 +119,21 @@ private:
   using ConflictKey = std::pair<ElementId, ElementId>;
   mutable QHash<ConflictKey, bool> _conflicts;
 
-  void _calculateClassification(
-    const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
+  void _calculateClassification(const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
 
-  v8::Local<v8::Value> _call(
-    const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
+  v8::Local<v8::Value> _call(const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
 
   ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
 
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-    ElementId other1, ElementId other2,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
+                             ElementId other1, ElementId other2,
+                             const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 
   /*
    * Either creates a new match or retrieves an existing one from the global set of matches
    */
-  std::shared_ptr<const ScriptMatch> _getMatch(
-    OsmMapPtr map, v8::Local<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
-    const QHash<QString, ConstMatchPtr>& matches) const;
+  std::shared_ptr<const ScriptMatch> _getMatch(OsmMapPtr map, v8::Local<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+                                               const QHash<QString, ConstMatchPtr>& matches) const;
 
   v8::Local<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
 };

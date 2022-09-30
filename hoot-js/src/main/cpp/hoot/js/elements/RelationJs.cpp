@@ -27,10 +27,10 @@
 #include "RelationJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
-
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
@@ -45,8 +45,8 @@ HOOT_JS_REGISTER(RelationJs)
 
 Persistent<Function> RelationJs::_constructor;
 
-RelationJs::RelationJs(ConstRelationPtr r) :
-_constRelation(r)
+RelationJs::RelationJs(ConstRelationPtr r)
+  : _constRelation(r)
 {
 }
 

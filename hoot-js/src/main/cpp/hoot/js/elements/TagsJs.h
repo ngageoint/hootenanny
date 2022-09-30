@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/Node.h>
+
 #include <hoot/js/HootBaseJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -78,20 +79,14 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, Tags& t)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   TagsJs* js = nullptr;
   if (obj->InternalFieldCount() > 0)
-  {
     js = node::ObjectWrap::Unwrap<TagsJs>(obj);
-  }
   if (js)
-  {
     t = js->getTags();
-  }
 }
 
 }

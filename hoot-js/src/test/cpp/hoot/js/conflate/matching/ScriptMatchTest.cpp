@@ -28,9 +28,9 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
@@ -54,8 +54,8 @@ class ScriptMatchTest : public HootTestFixture
 
 public:
 
-  ScriptMatchTest() :
-  HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
+  ScriptMatchTest()
+    : HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
     setResetType(ResetConfigs);
   }

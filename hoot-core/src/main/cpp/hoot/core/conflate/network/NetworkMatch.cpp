@@ -40,13 +40,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, NetworkMatch)
 
-NetworkMatch::NetworkMatch(
-  const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch, double score,
-  ConstMatchThresholdPtr mt, double scoringFunctionMax, double scoringFunctionCurveMidpointX,
-  double scoringFunctionCurveSteepness) :
-Match(mt),
-_details(details),
-_edgeMatch(edgeMatch)
+NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch, double score,
+                           ConstMatchThresholdPtr mt, double scoringFunctionMax, double scoringFunctionCurveMidpointX,
+                           double scoringFunctionCurveSteepness)
+  : Match(mt),
+    _details(details),
+    _edgeMatch(edgeMatch)
 {
   double p;
 
@@ -66,9 +65,8 @@ _edgeMatch(edgeMatch)
     p = L / (1 + pow(M_E, -k * (score - x0)));
   }
   else
-  {
     p = score;
-  }
+
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
 
@@ -105,8 +103,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   {     
     ElementId element1Id = _toElement(string1->getEdge(i))->getElementId();
     LOG_VART(element1Id);
-    ElementId element2Id =
-      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
+    ElementId element2Id = _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
     LOG_VART(element2Id);
     _pairs.emplace(element1Id, element2Id);
 
@@ -114,8 +111,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
 
     element1Id = _toElement(string1->getEdge(i))->getElementId();
     LOG_VART(element1Id);
-    element2Id =
-      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
+    element2Id = _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
     LOG_VART(element2Id);
     _pairs.emplace(element1Id, element2Id);
   }
@@ -123,8 +119,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   Meters d2 = 0.0;
   for (int i = 0; i < string2->getMembers().size(); ++i)
   {
-    ElementId element1Id =
-      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
+    ElementId element1Id = _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
     LOG_VART(element1Id);
     ElementId element2Id = _toElement(string2->getEdge(i))->getElementId();
     LOG_VART(element2Id);
@@ -132,8 +127,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
-    element1Id =
-      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
+    element1Id = _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
     LOG_VART(element1Id);
     element2Id = _toElement(string2->getEdge(i))->getElementId();
     LOG_VART(element2Id);
@@ -143,22 +137,17 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   LOG_VART(_pairs);
 }
 
-bool NetworkMatch::isConflicting(
-  const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
-  const QHash<QString, ConstMatchPtr>& /*matches*/) const
+bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+                                 const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   set<pair<ElementId, ElementId>> s = other->getMatchPairs();
 
   // if any element ids overlap then they're conflicting.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
+  for (const auto& ip : s)
   {
-    const pair<ElementId, ElementId>& ip = *it;
-    for (set<pair<ElementId, ElementId>>::const_iterator jt = _pairs.begin(); jt != _pairs.end();
-         ++jt)
+    for (const auto& jp : _pairs)
     {
-      const pair<ElementId, ElementId>& jp = *jt;
-      if (ip.first == jp.first  || ip.first == jp.second ||
-          ip.second == jp.first || ip.second == jp.second)
+      if (ip.first == jp.first  || ip.first == jp.second || ip.second == jp.first || ip.second == jp.second)
       {
         LOG_TRACE("conflicting: " << other);
         return true;
@@ -171,20 +160,16 @@ bool NetworkMatch::isConflicting(
 
 QString NetworkMatch::toString() const
 {
-  return
-    QString("Network Match (%1) pairs: %2 score:%3")
-      .arg(getName())
-      .arg(hoot::toString(_pairs))
-      .arg(getScore());
+  return QString("Network Match (%1) pairs: %2 score:%3")
+          .arg(getName(),  hoot::toString(_pairs), QString::number(getScore()));
 }
 
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const
 {
   QList<ConstElementPtr> members = edge->getMembers();
   if (members.size() != 1)
-  {
     throw NotImplementedException("Only one member is support in the network edge at this time.");
-  }
+
   return members[0];
 }
 

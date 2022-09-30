@@ -29,8 +29,9 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/js/elements/ElementJs.h>
+
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/elements/ElementJs.h>
 
 namespace hoot
 {

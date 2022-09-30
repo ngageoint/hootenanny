@@ -27,7 +27,6 @@
 #include "MapValidator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
@@ -35,6 +34,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/validation/Validator.h>
 
@@ -51,12 +51,10 @@ const int MapValidator::FILE_PRINT_SIZE = 40;
 void MapValidator::setReportPath(const QString& filePath)
 {
   _reportFile = filePath;
+  // Write the output dir the report is in now so we don't get a nasty surprise at the end of a
+  // long job that it can't be written.
   if (!IoUtils::isUrl(_reportFile))
-  {
-    // Write the output dir the report is in now so we don't get a nasty surprise at the end of a
-    // long job that it can't be written.
     IoUtils::writeOutputDir(_reportFile);
-  }
 }
 
 void MapValidator::printValidators()
@@ -71,15 +69,11 @@ QString MapValidator::validate(const QStringList& inputs, const QString& output)
   LOG_VARD(inputs);
   LOG_VARD(output);
   if (output.trimmed().isEmpty())
-  {
     return _validateSeparateOutput(inputs);
-  }
   else
   {
     if (!IoUtils::isSupportedOutputFormat(output))
-    {
       throw IllegalArgumentException("Invalid output location: " + output);
-    }
     return _validate(inputs, output);
   }
 }
@@ -96,23 +90,20 @@ QMap<QString, QString> MapValidator::_getHootValidators()
   const QStringList hootValidators = ConfigOptions().getHootValidators();
   LOG_VARD(hootValidators);
   QMap<QString, QString> validatorsInfo;
-  for (int i = 0; i < hootValidators.size(); i++)
+  for (const auto& validator : qAsConst(hootValidators))
   {
     std::shared_ptr<ApiEntityInfo> validatorInfo =
       std::dynamic_pointer_cast<ApiEntityInfo>(
-        Factory::getInstance().constructObject<OsmMapOperation>(hootValidators.at(i)));
+        Factory::getInstance().constructObject<OsmMapOperation>(validator));
     if (validatorInfo)
-    {
       validatorsInfo[validatorInfo->getName()] = validatorInfo->getDescription();
-    }
   }
   return validatorsInfo;
 }
 
 void MapValidator::_printValidatorOutput(const QMap<QString, QString>& validatorInfo)
 {
-  for (QMap<QString, QString>::const_iterator itr = validatorInfo.begin();
-       itr != validatorInfo.end(); ++itr)
+  for (auto itr = validatorInfo.begin(); itr != validatorInfo.end(); ++itr)
   {
     const QString name = itr.key();
     const QString description = itr.value();
@@ -143,10 +134,9 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
   int numFeaturesValidated = 0;
   int numValidationErrors = 0;
   int numFailingValidators = 0;
-  for (int i = 0; i < hootValidators.size(); i++)
+  for (const auto& v : qAsConst(hootValidators))
   {
-    std::shared_ptr<OsmMapOperation> op =
-      Factory::getInstance().constructObject<OsmMapOperation>(hootValidators.at(i));
+    std::shared_ptr<OsmMapOperation> op = Factory::getInstance().constructObject<OsmMapOperation>(v);
     if (op)
     {
       std::shared_ptr<Validator> validator = std::dynamic_pointer_cast<Validator>(op);
@@ -158,9 +148,7 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
           op->apply(map);
           const QString validationErrorMessage = validator->getValidationErrorMessage();
           if (!validationErrorMessage.isEmpty())
-          {
             validationSummary += validationErrorMessage + "\n";
-          }
           numFeaturesValidated += validator->getNumFeaturesValidated();
           numValidationErrors += validator->getNumValidationErrors();
         }
@@ -171,11 +159,9 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
       }
     }
   }
-  validationSummary.prepend(
-    "Found " + QString::number(numValidationErrors) + " validation errors in " +
-    QString::number(numFeaturesValidated) + " features with Hootenanny.\n");
-  validationSummary +=
-    "Total failing Hootenanny validators: " + QString::number(numFailingValidators);
+  validationSummary.prepend(QString("Found %1 validation errors in %2 features with Hootenanny.\n")
+                             .arg(QString::number(numValidationErrors), QString::number(numFeaturesValidated)));
+  validationSummary += QString("Total failing Hootenanny validators: %1").arg(QString::number(numFailingValidators));
   return validationSummary.trimmed();
 }
 
@@ -192,25 +178,18 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
     if (inputs.size() == 1)
     {
       inputName = inputs.at(0);
-      IoUtils::loadMap(
-        map, inputName, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
+      IoUtils::loadMap(map, inputName, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
     }
     else
     {
       // Avoid ID conflicts across multiple inputs.
-      for (int i = 0; i < inputs.size(); i++)
-      {
-        inputName += inputs.at(i) + ";";
-      }
-      inputName.chop(1);
-      IoUtils::loadMaps(
-        map, inputs, false, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
+      inputName = inputs.join(";");
+      IoUtils::loadMaps(map, inputs, false, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
     }
   }
   catch (const HootException& e)
   {
-    errorMsg =
-      "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ": " + e.getWhat() + ".\n\n";
+    errorMsg = QString("Validation failed for ...%1: %2.\n\n").arg(inputName.right(FILE_PRINT_SIZE), e.getWhat());
     LOG_ERROR(errorMsg);
     return errorMsg;
   }
@@ -221,9 +200,7 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   // nothing.
   QString hootHome = ConfPath::getHootHome();
   if (!hootHome.endsWith("/"))
-  {
     hootHome += "/";
-  }
   QString inputDisplayName = inputName;
   inputDisplayName.replace(hootHome, "");
   QString validationSummary = "Input: " + inputDisplayName + "\n\n";
@@ -246,8 +223,7 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   }
   catch (const HootException& e)
   {
-    errorMsg =
-      "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ": " + e.getWhat() + ".\n\n";
+    errorMsg = QString("Validation failed for ...%1: %2.\n\n").arg(inputName.right(FILE_PRINT_SIZE), e.getWhat());
     LOG_ERROR(errorMsg);
     validationSummary += errorMsg;
   }
@@ -272,18 +248,15 @@ QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
     const QString input = inputs.at(i);
     LOG_VARD(input);
 
-    LOG_INFO(
-      "Loading map " << i + 1 << " of " << inputs.size() << ": ..." <<
-      input.right(FILE_PRINT_SIZE) << "...");
+    LOG_INFO("Loading map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(FILE_PRINT_SIZE) << "...");
     OsmMapPtr map = std::make_shared<OsmMap>();
     try
     {
-      IoUtils::loadMap(
-        map, input, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
+      IoUtils::loadMap(map, input, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
     }
     catch (const HootException& e)
     {
-      errorMsg = "Validation failed for ..." + input.right(FILE_PRINT_SIZE) + ".\n\n";
+      errorMsg = QString("Validation failed for ...%1.\n\n").arg(input.right(FILE_PRINT_SIZE));
       LOG_ERROR(errorMsg << ": " << e.getWhat());
       validationSummary += errorMsg;
       continue;
@@ -295,9 +268,7 @@ QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
     // See note above.
     QString hootHome = ConfPath::getHootHome();
     if (!hootHome.endsWith("/"))
-    {
       hootHome += "/";
-    }
     QString inputDisplayName = input;
     inputDisplayName.replace(hootHome, "");
     validationSummary += "Input: " + inputDisplayName + "\n\n";
@@ -322,7 +293,7 @@ QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
     }
     catch (const HootException& e)
     {
-      errorMsg = "Validation failed for ..." + input.right(FILE_PRINT_SIZE) + ".\n\n";
+      errorMsg = QString("Validation failed for ...%1.\n\n").arg(input.right(FILE_PRINT_SIZE));
       LOG_ERROR(errorMsg << ": " << e.getWhat());
       validationSummary += errorMsg;
     }

@@ -28,8 +28,9 @@
 
 // hoot
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/js/elements/ElementJs.h>
+
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;
@@ -57,9 +58,7 @@ void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
   bool formatXml = true;
   if (args.Length() > 1)
-  {
     formatXml = toCpp<bool>(args[1]);
-  }
 
   args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map, formatXml)));
 }

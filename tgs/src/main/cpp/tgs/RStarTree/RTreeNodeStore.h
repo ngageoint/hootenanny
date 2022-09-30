@@ -34,8 +34,8 @@
 
 // tgs
 #include <tgs/HashMap.h>
-#include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/RStarTree/PageStore.h>
+#include <tgs/RStarTree/RTreeNode.h>
 
 namespace Tgs
 {
@@ -80,7 +80,7 @@ private:
     }
 
     std::list<int>::iterator list_it;
-    RTreeNode * pNode;
+    RTreeNode* pNode;
   };
   using NodeMap = HashMap<int, RecItem*>;
 

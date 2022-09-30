@@ -210,10 +210,10 @@ bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, cons
   if (found)
   {
     LOG_INFO("Miss:");
-    for (set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
+    for (const auto& eid: s)
     {
       LOG_INFO("#############");
-      LOG_INFO(in->getElement(*it)->getTags().toString());
+      LOG_INFO(in->getElement(eid)->getTags().toString());
     }
   }
   return found;
@@ -230,10 +230,7 @@ double MatchComparator::getPertyScore() const
   LOG_VARD(_expected.size());
   LOG_VART(_expected);
   if(_expected.size() <= 0)
-  {
-    throw HootException(
-      "Expected matches size equal to zero. Are there any matches in the conflated data?");
-  }
+    throw HootException("Expected matches size equal to zero. Are there any matches in the conflated data?");
   set<UuidPair> intersection;
   set_intersection(_actual.begin(), _actual.end(), _expected.begin(), _expected.end(),
     insert_iterator<std::set<UuidPair>>(intersection, intersection.begin()));

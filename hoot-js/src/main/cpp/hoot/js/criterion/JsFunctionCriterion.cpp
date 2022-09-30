@@ -50,9 +50,7 @@ bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
   Local<Value> jsArgs[3];
 
   if (_func.IsEmpty())
-  {
     throw IllegalArgumentException("JsFunctionCriterion must have a valid function.");
-  }
 
   Local<Object> elementObj = ElementJs::New(e);
 
@@ -79,14 +77,9 @@ bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
   else if (maybe_funcResult.ToLocalChecked()->IsBoolean() == false)
-  {
-    throw IllegalArgumentException("Expected a boolean to be returned from JsFunctionCriterion "
-      "function.");
-  }
+    throw IllegalArgumentException("Expected a boolean to be returned from JsFunctionCriterion function.");
   else
-  {
     result = maybe_funcResult.ToLocalChecked()->BooleanValue(current);
-  }
 
   return result;
 }

@@ -81,17 +81,16 @@ void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
   Local<Context> context = current->GetCurrentContext();
   Local<Array> searchRadii = Array::New(current, searchRadiiList.size());
   searchRadii->Set(context, toV8(MetadataTags::Length()), Integer::New(current, searchRadiiList.size()));
-  for (int i = 0 ; i < searchRadiiList.size(); ++i)
+  int i = 0;
+  for (const auto& searchRadius : qAsConst(searchRadiiList))
   {
-    const PoiSearchRadius searchRadius = searchRadiiList.at(i);
     LOG_VART(searchRadius);
-
     Local<Object> searchRadiusObj = Object::New(current);
     searchRadiusObj->Set(context, toV8("key"), toV8(searchRadius.getKey()));
     if (!searchRadius.getValue().isEmpty())
       searchRadiusObj->Set(context, toV8("value"), toV8(searchRadius.getValue()));
     searchRadiusObj->Set(context, toV8("distance"), toV8(searchRadius.getDistance()));
-    searchRadii->Set(context, (uint32_t)i, searchRadiusObj);
+    searchRadii->Set(context, (uint32_t)i++, searchRadiusObj);
   }
   args.GetReturnValue().Set(searchRadii);
 }

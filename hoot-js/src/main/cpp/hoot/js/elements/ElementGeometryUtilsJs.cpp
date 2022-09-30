@@ -27,18 +27,19 @@
 #include "ElementGeometryUtilsJs.h"
 
 // hoot
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/js/util/HootExceptionJs.h> 
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/geometry/GeometricRelationship.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/Settings.h>
+
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
+#include <hoot/js/util/StringUtilsJs.h>
 
 using namespace v8;
 

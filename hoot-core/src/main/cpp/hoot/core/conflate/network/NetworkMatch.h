@@ -47,10 +47,9 @@ public:
   static QString className() { return "NetworkMatch"; }
 
   NetworkMatch() = default;
-  NetworkMatch(
-    const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
-    double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
-    double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
+  NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
+               double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
+               double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
   ~NetworkMatch() = default;
 
   /**
@@ -83,7 +82,7 @@ public:
    * Returns true if any of the elements in this are also in other's match pairs.
    */
   bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+                     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   /**
    * Returns true if either of the matched strings contains a non-whole edge.
