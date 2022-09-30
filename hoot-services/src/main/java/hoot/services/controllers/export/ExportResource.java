@@ -85,7 +85,9 @@ import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobType;
+import hoot.services.jobs.JobsStatusesManager;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -95,8 +97,12 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class ExportResource {
     private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
+
     @Autowired
     private JobProcessor jobProcessor;
+
+    @Autowired
+    private JobStatusManager jobStatusManager;
 
     @Autowired
     private UserAwareExportCommandFactory userAwareExportCommandFactory;
@@ -313,7 +319,14 @@ public class ExportResource {
 
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
-            File exportFile = getExportFile(jobId, outputname, fileExt);
+            //need to use job id to determine if this is changeset or export
+            File exportFile;
+            hoot.services.models.db.JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
+            if (JobType.fromInteger(jobStatus.getJobType()) == JobType.DERIVE_CHANGESET) {
+                exportFile = getChangesetFile(jobId, outputname, fileExt);
+            } else {
+                exportFile = getExportFile(jobId, outputname, fileExt);
+            }
             String outFileName = jobId;
             if (! StringUtils.isBlank(outputname)) {
                 outFileName = outputname;
@@ -346,6 +359,7 @@ public class ExportResource {
             }
             responseBuilder.header("Content-Disposition", "attachment; filename=\""+ outFileName + ".zip\"");
             responseBuilder.header("Content-Type", "application/zip");
+            //responseBuilder.header("Content-Disposition", "attachment; filename="+ exportFile.getName());
             response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
@@ -500,10 +514,12 @@ public class ExportResource {
     }
 
     private static File getExportFile(String jobId, String outputName, String fileExt) {
-        String path = TEMP_OUTPUT_PATH;
-        if (fileExt.equalsIgnoreCase("osc"))
-            path = CHANGESETS_FOLDER;
-
+        return getDownloadFile(jobId, outputName, fileExt, TEMP_OUTPUT_PATH);
+    }
+    private static File getChangesetFile(String jobId, String outputName, String fileExt) {
+        return getDownloadFile(jobId, outputName, fileExt, CHANGESETS_FOLDER);
+    }
+    private static File getDownloadFile(String jobId, String outputName, String fileExt, String path) {
         //check if the outputName already ends in the requested outputExt
         String outputExt = outputName.substring(outputName.lastIndexOf(".") + 1);
         if (!fileExt.equalsIgnoreCase(outputExt))
