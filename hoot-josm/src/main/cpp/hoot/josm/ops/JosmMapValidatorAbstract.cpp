@@ -28,12 +28,12 @@
 
 // hoot
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/josm/jni/JavaEnvironment.h>
-#include <hoot/josm/jni/JniConversion.h>
-#include <hoot/josm/jni/JniUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/josm/jni/JavaEnvironment.h>
+#include <hoot/josm/jni/JniConversion.h>
+#include <hoot/josm/jni/JniUtils.h>
 
 namespace hoot
 {

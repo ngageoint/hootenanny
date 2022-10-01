@@ -28,15 +28,16 @@
 
 // hoot
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/ConfigOptions.h>
+
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/SystemNodeJs.h>
 
 using namespace v8;
 using namespace node;
@@ -78,15 +79,11 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
 
     bool useFileId = true;
     if (args.Length() >= 3)
-    {
       useFileId = args[2]->BooleanValue(current);
-    }
 
     Status status = Status::Invalid;
     if (args.Length() >= 4)
-    {
       status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
-    }
 
     OsmMapReaderFactory::read(map->getMap(), url, useFileId, status);
 
@@ -109,9 +106,7 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
 
   OsmXmlReader reader;
   if (args.Length() >= 3)
-  {
     reader.setUseDataSourceIds(toCpp<bool>(args[2]));
-  }
   Status status = Status::Invalid;
   if (args.Length() >= 4)
   {
@@ -134,9 +129,7 @@ void MapIoJs::loadMapFromJSONString(const FunctionCallbackInfo<Value>& args)
 
   OsmJsonReader reader;
   if (args.Length() >= 3)
-  {
     reader.setUseDataSourceIds(toCpp<bool>(args[2]));
-  }
   Status status = Status::Invalid;
   if (args.Length() >= 4)
   {

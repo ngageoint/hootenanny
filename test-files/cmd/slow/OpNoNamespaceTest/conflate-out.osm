@@ -49,47 +49,6 @@
     <node visible="true" id="-1669727" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542471187715179" lon="-104.9010788637033329"/>
     <node visible="true" id="-1669725" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540851073630833" lon="-104.9014476647277121"/>
     <node visible="true" id="-1669723" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541670018907581" lon="-104.8997069874790355"/>
-    <way visible="true" id="-1669942" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1669731"/>
-        <nd ref="-1669791"/>
-        <nd ref="-1669793"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-1669939" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1669725"/>
-        <nd ref="-1669727"/>
-        <nd ref="-1669729"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:12386b08a9761ad483f6bc7bbc79741f5155d4f6;sha1sum:3fd86fa02c70df8cfc1cc9b8c2700da09880d6d5"/>
-        <tag k="note" v="2"/>
-    </way>
-    <way visible="true" id="-1669935" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1669729"/>
-        <nd ref="-1669735"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2"/>
-    </way>
-    <way visible="true" id="-1669932" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1669789"/>
-        <nd ref="-1669787"/>
-        <nd ref="-1669785"/>
-        <nd ref="-1669783"/>
-        <nd ref="-1669781"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-    </way>
-    <way visible="true" id="-1669928" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1669781"/>
-        <nd ref="-1669731"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-    </way>
     <way visible="true" id="-1669925" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1669897"/>
         <nd ref="-1669735"/>
@@ -97,7 +56,7 @@
         <tag k="highway" v="road"/>
         <tag k="note" v="0"/>
     </way>
-    <way visible="true" id="-1669921" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1669917" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1669894"/>
         <nd ref="-1669741"/>
         <nd ref="-1669743"/>
@@ -140,6 +99,28 @@
         <tag k="highway" v="road"/>
         <tag k="note" v="0"/>
     </way>
+    <way visible="true" id="-1669807" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669781"/>
+        <nd ref="-1669731"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+    </way>
+    <way visible="true" id="-1669806" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669729"/>
+        <nd ref="-1669735"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+    </way>
+    <way visible="true" id="-1669801" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669731"/>
+        <nd ref="-1669791"/>
+        <nd ref="-1669793"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+    </way>
     <way visible="true" id="-1669799" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1669729"/>
         <nd ref="-1669779"/>
@@ -147,5 +128,24 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
+    </way>
+    <way visible="true" id="-1669797" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669789"/>
+        <nd ref="-1669787"/>
+        <nd ref="-1669785"/>
+        <nd ref="-1669783"/>
+        <nd ref="-1669781"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+    </way>
+    <way visible="true" id="-1669795" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669725"/>
+        <nd ref="-1669727"/>
+        <nd ref="-1669729"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:12386b08a9761ad483f6bc7bbc79741f5155d4f6;sha1sum:3fd86fa02c70df8cfc1cc9b8c2700da09880d6d5"/>
+        <tag k="note" v="2"/>
     </way>
 </osm>

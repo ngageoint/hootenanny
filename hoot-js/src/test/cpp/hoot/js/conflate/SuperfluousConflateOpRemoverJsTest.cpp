@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+
 #include <hoot/js/conflate/matching/ScriptMatchCreator.h>
 
 namespace hoot
@@ -51,64 +52,54 @@ class SuperfluousConflateOpRemoverJsTest : public HootTestFixture
 public:
 
   SuperfluousConflateOpRemoverJsTest()
+    : _scriptMatchCreatorName(ScriptMatchCreator::className())
   {
     setResetType(ResetEnvironment);
-
-    _scriptMatchCreatorName = ScriptMatchCreator::className();
   }
 
   void runOpFilter1Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",Area.js"), 1, 12, 11);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",Area.js"), 1, 12, 11);
   }
 
   void runOpFilter2Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",Line.js"), 1, 12, 10);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",Line.js"), 1, 12, 10);
   }
 
   void runOpFilter3Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",Poi.js"), 1, 9, 7);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",Poi.js"), 1, 9, 7);
   }
 
   void runOpFilter4Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",Point.js"), 1, 9, 7);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",Point.js"), 1, 9, 7);
   }
 
   void runOpFilter5Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",PointPolygon.js"), 1, 12, 9);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",PointPolygon.js"), 1, 12, 9);
   }
 
   void runOpFilter6Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",Polygon.js"), 1, 12, 9);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",Polygon.js"), 1, 12, 9);
   }
 
   void runOpFilter7Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",PowerLine.js"), 1, 12, 11);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",PowerLine.js"), 1, 12, 11);
   }
 
   void runOpFilter8Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",Railway.js"), 1, 12, 11);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",Railway.js"), 1, 12, 11);
   }
 
   void runOpFilter9Test()
   {
-    TestUtils::runConflateOpReductionTest(
-      QStringList(_scriptMatchCreatorName + ",River.js"), 1, 12, 11);
+    TestUtils::runConflateOpReductionTest(QStringList(_scriptMatchCreatorName + ",River.js"), 1, 12, 11);
   }
 
   void runOpFilterCombinedTest()

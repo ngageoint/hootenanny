@@ -145,28 +145,18 @@
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
-        <nd ref="-2"/>
-        <nd ref="-1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-193"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-35"/>
         <nd ref="-34"/>
         <nd ref="-33"/>
         <nd ref="-30"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-177"/>
+        <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="3"/>
         <tag k="note" v="2"/>
     </way>
-    <way visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <nd ref="-5"/>
@@ -199,7 +189,7 @@
         <nd ref="-9"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-167"/>
+        <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="3"/>
         <tag k="note" v="0"/>
     </way>
@@ -212,5 +202,15 @@
         <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
         <tag k="note" v="3"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-32"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="note" v="1"/>
     </way>
 </osm>

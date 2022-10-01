@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NetworkVertex.h"
 
@@ -46,17 +46,10 @@ void NetworkVertex::reset()
 
 QString NetworkVertex::toString() const
 {
-  QString result;
   if (!_e.get())
-  {
-    result = "<null>";
-  }
+    return "<null>";
   else
-  {
-    result = QString("(%1) %2").arg(_uid).arg(_e->getElementId().toString());
-  }
-
-  return result;
+    return QString("(%1) %2").arg(_uid).arg(_e->getElementId().toString());
 }
 
 geos::geom::Coordinate NetworkVertex::getCentroid() const

@@ -71,8 +71,7 @@ void NetworkDetails::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
   _sublineMatcher = SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _classifier =
-    Factory::getInstance().constructObject<HighwayClassifier>(opts.getConflateMatchHighwayClassifier());
+  _classifier = Factory::getInstance().constructObject<HighwayClassifier>(opts.getConflateMatchHighwayClassifier());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
@@ -126,7 +125,7 @@ Meters NetworkDetails::calculateLength(ConstEdgeStringPtr e) const
 {
   Meters l = 0.0;
   for (const auto& ee : e->getAllEdges())
-    l+= calculateLength(ee.getSubline());
+    l += calculateLength(ee.getSubline());
 
   return l;
 }
@@ -564,8 +563,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
       WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(ws1, ws2);
       // Convert from a mapping to a WaySublineMatchString.
-      WaySublineMatchStringPtr matchString =
-        WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
+      WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
       MatchClassification c;
       // calculate the match score
@@ -683,10 +681,10 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkEdgePtr e) const
   }
   else
   {
-    for (int i = 0; i < e->getMembers().size(); ++i)
+    for (const auto& member : e->getMembers())
     {
-      if (ce < e->getMembers()[0]->getCircularError())
-        ce = e->getMembers()[0]->getCircularError();
+      if (ce < member->getCircularError())
+        ce = member->getCircularError();
     }
   }
 

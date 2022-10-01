@@ -3032,25 +3032,6 @@
         <tag k="source:datetime" v="2012-01-08T22:25:52.000Z;2020-01-17T17:39:21Z"/>
         <tag k="usage" v="main"/>
     </way>
-    <way visible="true" id="-98863327" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-98864026"/>
-        <nd ref="-98862045"/>
-        <nd ref="-98864034"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="electrified" v="no"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="1668"/>
-        <tag k="layer" v="2"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="name" v="Linha do Oeste"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:atc" v="no"/>
-        <tag k="railway:etcs" v="no"/>
-        <tag k="railway:lzb" v="no"/>
-        <tag k="railway:pzb" v="no"/>
-        <tag k="source:datetime" v="2014-02-07T17:23:06.000Z;2020-01-17T17:39:21Z"/>
-        <tag k="usage" v="main"/>
-    </way>
     <way visible="true" id="-98863325" timestamp="2020-01-17T17:39:21Z" version="7">
         <nd ref="-98864644"/>
         <nd ref="-98864990"/>
@@ -8416,6 +8397,25 @@
         <tag k="source:datetime" v="2008-08-05T01:55:45.000Z;2020-01-17T17:39:21Z"/>
         <tag k="usage" v="main"/>
     </way>
+    <way visible="true" id="-98855311" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98864026"/>
+        <nd ref="-98862045"/>
+        <nd ref="-98864034"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1668"/>
+        <tag k="layer" v="2"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="name" v="Linha do Oeste"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:atc" v="no"/>
+        <tag k="railway:etcs" v="no"/>
+        <tag k="railway:lzb" v="no"/>
+        <tag k="railway:pzb" v="no"/>
+        <tag k="source:datetime" v="2014-02-07T17:23:06.000Z;2020-01-17T17:39:21Z"/>
+        <tag k="usage" v="main"/>
+    </way>
     <way visible="true" id="-98855310" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-98863243"/>
         <nd ref="-98867072"/>
@@ -8525,7 +8525,7 @@
         <member type="way" ref="-98862628" role=""/>
         <member type="way" ref="-98862629" role=""/>
         <member type="way" ref="-98863373" role=""/>
-        <member type="way" ref="-98863327" role=""/>
+        <member type="way" ref="-98855311" role=""/>
         <member type="way" ref="-98855312" role=""/>
         <member type="way" ref="-98863325" role=""/>
         <member type="way" ref="-98862428" role=""/>

@@ -115,14 +115,14 @@ void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 
     ConstEdgeSublinePtr newEntry;
     if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
+        getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+        subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
     {
       newEntry = subline;
     }
     else if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
+            getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+            subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
     {
       EdgeSublinePtr copy = subline->clone();
       copy->reverse();
@@ -545,17 +545,13 @@ bool EdgeString::validate() const
 bool EdgeString::isValid() const
 {
   if (_edges.empty())
-  {
     return false;
-  }
 
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    ConstEdgeSublinePtr esi = _edges[i].getSubline();
+    ConstEdgeSublinePtr esi = edge.getSubline();
     if (esi->isZeroLength())
-    {
       return false;
-    }
   }
 
   return true;

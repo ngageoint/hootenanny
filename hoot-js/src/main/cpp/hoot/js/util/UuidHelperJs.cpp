@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UuidHelperJs.h"
 
 // hoot
 #include <hoot/core/util/UuidHelper.h>
+
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/StringUtilsJs.h>
 
 using namespace v8;
 
@@ -70,18 +71,11 @@ void UuidHelperJs::createUuid5(const FunctionCallbackInfo<Value>& args)
   QString result;
 
   if (args.Length() == 1)
-  {
     result = UuidHelper::createUuid5(toCpp<QString>(args[0])).toString();
-  }
   else
-  {
-    result = UuidHelper::createUuid5(toCpp<QString>(args[0]),
-                                     QUuid(toCpp<QString>(args[1]))).toString();
-  }
+    result = UuidHelper::createUuid5(toCpp<QString>(args[0]), QUuid(toCpp<QString>(args[1]))).toString();
 
   args.GetReturnValue().Set(toV8(result));
 }
-
-
 
 }

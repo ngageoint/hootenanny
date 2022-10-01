@@ -1,6 +1,6 @@
 Input: test-files/cases/reference/unifying/multiple/highway-3906/Output.osm
 
-Found 257 validation errors in 1,153 features with JOSM.
+Found 257 validation errors in 1,150 features with JOSM.
 Almost right angle buildings errors: 23
 Crossing boundaries errors: 8
 Crossing ways errors: 21
@@ -13,5 +13,5 @@ Tag checker (MapCSS based) errors: 21
 Untagged, empty and one node ways errors: 1
 Total failing JOSM validators: 0
 
-Found 0 validation errors in 154 features with Hootenanny.
+Found 0 validation errors in 151 features with Hootenanny.
 Total failing Hootenanny validators: 0

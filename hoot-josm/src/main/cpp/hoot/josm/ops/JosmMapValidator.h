@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef JOSM_MAP_VALIDATOR_H
 #define JOSM_MAP_VALIDATOR_H
@@ -83,8 +83,7 @@ private:
   /*
    * validate the map from a file and write the validated map out to another file
    */
-  void _validate(
-    const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath);
+  void _validate(const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath);
 };
 
 }

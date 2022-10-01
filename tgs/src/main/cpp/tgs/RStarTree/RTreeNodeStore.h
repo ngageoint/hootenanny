@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__RTREE_NODE_STORE_H__
@@ -34,8 +34,8 @@
 
 // tgs
 #include <tgs/HashMap.h>
-#include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/RStarTree/PageStore.h>
+#include <tgs/RStarTree/RTreeNode.h>
 
 namespace Tgs
 {
@@ -80,7 +80,7 @@ private:
     }
 
     std::list<int>::iterator list_it;
-    RTreeNode * pNode;
+    RTreeNode* pNode;
   };
   using NodeMap = HashMap<int, RecItem*>;
 

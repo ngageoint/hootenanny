@@ -27,6 +27,7 @@
 #include "HootExceptionJs.h"
 
 #include <hoot/core/util/Factory.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
@@ -88,21 +89,15 @@ void HootExceptionJs::Init(Local<Object> target)
 bool HootExceptionJs::isHootException(Local<Value> v)
 {
   bool result = false;
-
   if (v->IsObject())
   {
     Local<Object> obj = Local<Object>::Cast(v);
     const HootExceptionJs* e = nullptr;
     if (obj->InternalFieldCount() >= 1)
-    {
       e = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
-    }
     if (e)
-    {
       result = true;
-    }
   }
-
   return result;
 }
 
@@ -121,9 +116,7 @@ void HootExceptionJs::New(const FunctionCallbackInfo<Value>& args)
 void HootExceptionJs::checkV8Exception(Local<Value> result, const TryCatch& tc)
 {
   if (result.IsEmpty())
-  {
     throwAsHootException(tc);
-  }
 }
 
 void HootExceptionJs::throwAsHootException(const TryCatch& tc)
@@ -144,24 +137,18 @@ void HootExceptionJs::throwAsHootException(const TryCatch& tc)
     if (msg.IsEmpty())
     {
       if (exception.IsEmpty())
-      {
         throw HootException("Unidentified JavaScript Exception");
-      }
       else
-      {
         throw HootException(toJson(exception));
-      }
     }
     // if this is a generic error (e.g. throw Error("blah");) then just report the string.
     else if (exception->IsNativeError() &&
-      str(exception->ToObject(context).ToLocalChecked()->GetConstructorName()) == "Error")
+             str(exception->ToObject(context).ToLocalChecked()->GetConstructorName()) == "Error")
     {
       throw HootException(str(exception->ToDetailString(context).ToLocalChecked()));
     }
     else if (exception->IsString())
-    {
       throw HootException(str(exception));
-    }
     else
     {
       //  See ReportException in https://github.com/v8/v8/blob/master/samples/shell.cc

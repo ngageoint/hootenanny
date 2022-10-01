@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RelationMergerJs.h"
 
@@ -33,11 +33,11 @@
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;
 
@@ -74,7 +74,6 @@ void RelationMergerJs::merge(const FunctionCallbackInfo<Value>& args)
   try
   {
     merger.merge(eid1, eid2);
-
     args.GetReturnValue().SetUndefined();
   }
   catch (const HootException& err)
