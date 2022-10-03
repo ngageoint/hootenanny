@@ -343,7 +343,8 @@ public class GrailResource {
                 }
             } else {
                 if (deriveType.equals("JOSM .osm")) {
-                    outputFileName = "diff.osm";
+                    String name = reqParams.getOutput();
+                    outputFileName = ((name != null) ? name : "diff") + ".osm";
                 }
                 grailCommandClass = DeriveChangesetCommand.class;
             }
@@ -412,6 +413,7 @@ public class GrailResource {
         jobStatusTags.put("deriveType", deriveType);
         if (reqParams.getInput1() != null) jobStatusTags.put("input1", reqParams.getInput1());
         if (reqParams.getInput2() != null) jobStatusTags.put("input2", reqParams.getInput2());
+        if (reqParams.getOutput() != null) jobStatusTags.put("output", reqParams.getOutput());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), jobType, jobStatusTags));
 
