@@ -82,13 +82,13 @@ void OsmJosmXmlChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& w
   QString action;
   switch (_change.getType())
   {
-  case Change::ChangeType::Create:
   case Change::ChangeType::NoChange:
     //  Create doesn't require an 'action' attribute
     return;
   case Change::ChangeType::Delete:
     action = "delete";
     break;
+  case Change::ChangeType::Create:
   case Change::ChangeType::Modify:
     action = "modify";
     break;
