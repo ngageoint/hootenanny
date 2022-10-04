@@ -605,7 +605,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
     std::shared_ptr<geos::geom::Envelope> env2(testWay->getEnvelope(_map));
 
     // If envelopes intersect, they will be close
-    if (_wayToSnapCrit->isSatisfied(testWay) && env1->intersects(*env2))
+    if (LinearCriterion().isSatisfied(testWay) && env1->intersects(*env2))
     {
       // Now, do they cross?
       if (ElementGeometryUtils::haveGeometricRelationship(wayToSnap, testWay, GeometricRelationship::Crosses, _map))
@@ -639,14 +639,14 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
             {
               long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, testWay, _map);
               testWay->insertNode(nodeIdx, oldNodeId);
-              testWay->setStatus(Status::Conflated); // Is this needed?
+              testWay->setStatus(Status::Conflated);
               LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with one old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
             }
             else if (testWay->containsNodeId(oldNodeId))
             {
               long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, wayToSnap, _map);
               wayToSnap->insertNode(nodeIdx, oldNodeId);
-              wayToSnap->setStatus(Status::Conflated); // Is this needed?
+              wayToSnap->setStatus(Status::Conflated);
               LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with one old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
             }
             else
@@ -667,8 +667,8 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
               { // Keep this node, add it to the other way
                 long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, testWay, _map);
                 testWay->insertNode(nodeIdx, oldNodeId);
-                testWay->setStatus(Status::Conflated); // Is this needed?
-                wayToSnap->setStatus(Status::Conflated); // Is this needed?
+                testWay->setStatus(Status::Conflated);
+                wayToSnap->setStatus(Status::Conflated);
                 LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
               }
               else
