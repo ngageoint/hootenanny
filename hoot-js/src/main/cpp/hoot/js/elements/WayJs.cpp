@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "WayJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -43,8 +44,8 @@ HOOT_JS_REGISTER(WayJs)
 
 Persistent<Function> WayJs::_constructor;
 
-WayJs::WayJs(ConstWayPtr w) :
-_constWay(w)
+WayJs::WayJs(ConstWayPtr w)
+  : _constWay(w)
 {
 }
 

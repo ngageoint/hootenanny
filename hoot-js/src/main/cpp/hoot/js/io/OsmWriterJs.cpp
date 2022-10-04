@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmWriterJs.h"
 
 // hoot
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/js/elements/ElementJs.h>
+
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;
@@ -57,9 +58,7 @@ void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
   bool formatXml = true;
   if (args.Length() > 1)
-  {
     formatXml = toCpp<bool>(args[1]);
-  }
 
   args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map, formatXml)));
 }

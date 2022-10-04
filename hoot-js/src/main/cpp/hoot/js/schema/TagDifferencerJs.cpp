@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "TagDifferencerJs.h"
 
@@ -30,14 +30,15 @@
 #include <boost/any.hpp>
 
 // hoot
+#include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Factory.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/core/schema/TagDifferencer.h>
 
 using namespace std;
 using namespace v8;
@@ -47,8 +48,8 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagDifferencerJs)
 
-TagDifferencerJs::TagDifferencerJs(std::shared_ptr<TagDifferencer> op) :
-_td(op)
+TagDifferencerJs::TagDifferencerJs(std::shared_ptr<TagDifferencer> op)
+  : _td(op)
 {
 }
 
@@ -67,9 +68,7 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
     ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked())->getConstElement();
 
     if (!map || !e1 || !e2)
-    {
       throw IllegalArgumentException("You must specify a valid map, element 1 and element 2");
-    }
 
     LOG_VART(e1->getElementId());
     LOG_VART(e2->getElementId());
@@ -89,16 +88,15 @@ void TagDifferencerJs::Init(Local<Object> target)
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(TagDifferencer::className());
+  vector<QString> opNames = Factory::getInstance().getObjectNamesByBase(TagDifferencer::className());
 
-  for (size_t i = 0; i < opNames.size(); i++)
+  for (const auto& name : opNames)
   {
-    QByteArray utf8 = opNames[i].toUtf8();
+    QByteArray utf8 = name.toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(current, "diff", FunctionTemplate::New(current, diff));

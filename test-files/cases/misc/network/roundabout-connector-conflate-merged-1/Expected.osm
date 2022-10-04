@@ -3107,19 +3107,6 @@
         <tag k="hoot:id" v="4881737777"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-1064" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5"/>
-        <nd ref="4881732781"/>
-        <nd ref="-787"/>
-        <tag k="admin_level" v="8"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:7828268ef5ef862c3dc716e207c0dec79fd6ff1e;sha1sum:033958a03f57bd90637b45f428deedbb258eb891"/>
-        <tag k="hoot:id" v="-1064"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="source:datetime" v="2015-12-23T16:54:03.000Z;2015-12-23T16:54:03Z"/>
-    </way>
     <way visible="true" id="-1059" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881726693"/>
         <nd ref="4881726690"/>
@@ -4953,6 +4940,19 @@
         <tag k="source" v="TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)"/>
         <tag k="source:datetime" v="2020-02-28T16:41:05Z"/>
     </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="4881732781"/>
+        <nd ref="-787"/>
+        <tag k="admin_level" v="8"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:7828268ef5ef862c3dc716e207c0dec79fd6ff1e;sha1sum:033958a03f57bd90637b45f428deedbb258eb891"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="source:datetime" v="2015-12-23T16:54:03.000Z;2015-12-23T16:54:03Z"/>
+    </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="4881727362"/>
@@ -5478,7 +5478,7 @@
         <tag k="wikipedia" v="en:Delaware Route 1"/>
     </relation>
     <relation visible="true" id="7387470" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-1064" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
         <member type="way" ref="-18" role="outer"/>
         <member type="way" ref="496849545" role="outer"/>
         <member type="relation" ref="-1" role="outer"/>

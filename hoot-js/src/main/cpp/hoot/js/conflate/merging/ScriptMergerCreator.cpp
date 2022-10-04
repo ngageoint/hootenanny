@@ -22,16 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMergerCreator.h"
 
 // hoot
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
+
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/merging/ScriptMerger.h>
-#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 using namespace v8;
@@ -57,9 +58,8 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   QStringList matchType;
 
   // Go through all the matches.
-  for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  for (const auto& match : matches)
   {
-    ConstMatchPtr match = *it;;
     std::shared_ptr<const ScriptMatch> scriptMatch = dynamic_pointer_cast<const ScriptMatch>(match);
     // Check to make sure all the input matches are script matches.
     if (scriptMatch == nullptr)
@@ -81,9 +81,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
       set<pair<ElementId, ElementId>> s = scriptMatch->getMatchPairs();
       eids.insert(s.begin(), s.end());
       if (matchType.contains(scriptMatch->getName()) == false)
-      {
         matchType.append(scriptMatch->getName());
-      }
     }
   }
   LOG_VART(eids);
@@ -109,15 +107,12 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     else if (eids.size() > 1)
     { 
       LOG_TRACE("Overlapping matches:\n" << eids << "\nmatch types: " << matchType.join(";"));
-      mergers.push_back(
-        std::make_shared<MarkForReviewMerger>(
-          eids, "Overlapping matches", matchType.join(";"), 1.0));
+      mergers.push_back(std::make_shared<MarkForReviewMerger>(eids, "Overlapping matches", matchType.join(";"), 1.0));
       result = true;
     }
   }
 
-  LOG_TRACE(
-    "Created " << StringUtils::formatLargeNumber(mergers.size()) <<  " merger(s) for group.");
+  LOG_TRACE("Created " << StringUtils::formatLargeNumber(mergers.size()) <<  " merger(s) for group.");
   return result;
 }
 
@@ -132,18 +127,15 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
   return result;
 }
 
-bool ScriptMergerCreator::isConflicting(
-  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-  const QHash<QString, ConstMatchPtr>& matches) const
+bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                                        const QHash<QString, ConstMatchPtr>& matches) const
 {
   const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1.get());
   const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2.get());
 
   bool result = false;
   if (sm1 && sm2)
-  {
     result = m1->isConflicting(m2, map, matches);
-  }
 
   return result;
 }

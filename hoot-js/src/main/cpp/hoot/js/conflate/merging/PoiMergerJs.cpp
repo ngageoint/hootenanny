@@ -54,15 +54,12 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
   script->loadScript(ConfPath::search("Poi.js", "rules"), "plugin");
   Local<Object> global = script->getContext(current)->Global();
   if (global->Has(context, toV8("plugin")).ToChecked() == false)
-  {
     throw IllegalArgumentException("Expected the script to have exports.");
-  }
+
   Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
   Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-  {
     throw IllegalArgumentException("Expected plugin to be a valid object.");
-  }
 
   // Got in Map with POIs A, B, C, D, E
   //
@@ -73,7 +70,7 @@ void PoiMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* 
   int poisMerged = 0;
   //  Make a copy of the node map so that the iterators work while merging
   const NodeMap nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     const ConstNodePtr& node = it->second;
     if (node->getId() != mergeTargetId.getId() && PoiCriterion().isSatisfied(node))

@@ -83,7 +83,7 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  set<pair<ElementId, ElementId>>::iterator it = _pairs.begin();
+  auto it = _pairs.begin();
   while (it != _pairs.end())
   {
     ElementId eid1 = it->first;

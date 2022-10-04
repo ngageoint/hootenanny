@@ -668,58 +668,6 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-04T01:26:59Z"/>
     </way>
-    <way visible="true" id="-17141" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-282828"/>
-        <nd ref="-123094"/>
-        <nd ref="-123093"/>
-        <nd ref="-123092"/>
-        <nd ref="-123091"/>
-        <nd ref="-123090"/>
-        <nd ref="-123089"/>
-        <nd ref="-123088"/>
-        <nd ref="-123087"/>
-        <nd ref="-123086"/>
-        <nd ref="-123085"/>
-        <nd ref="-123084"/>
-        <nd ref="-251495"/>
-        <nd ref="-232484"/>
-        <nd ref="-232483"/>
-        <nd ref="-232482"/>
-        <nd ref="-232481"/>
-        <nd ref="-232480"/>
-        <nd ref="-232479"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2019-01-22T08:57:24Z;2020-02-20T19:51:47Z;2020-02-20T19:51:49Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
-    <way visible="true" id="-17136" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-347591"/>
-        <nd ref="-242726"/>
-        <nd ref="-242727"/>
-        <nd ref="-242728"/>
-        <nd ref="-396883"/>
-        <nd ref="-396884"/>
-        <nd ref="-396885"/>
-        <nd ref="-396886"/>
-        <nd ref="-396887"/>
-        <nd ref="-396888"/>
-        <nd ref="-396889"/>
-        <nd ref="-282828"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:2c4c517c6e87b238e23782dacb467fb9c28ee6c9;sha1sum:995b51e5c7793e2c8e48e9192dcde0f200a10960"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-22T08:57:24Z;2020-02-20T19:51:45Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
     <way visible="true" id="-17117" timestamp="2019-01-03T01:43:02Z" version="3">
         <nd ref="-424914"/>
         <nd ref="-424904"/>
@@ -735,21 +683,6 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T09:05:08Z"/>
     </way>
-    <way visible="true" id="-17095" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-266306"/>
-        <nd ref="-421957"/>
-        <nd ref="-421958"/>
-        <nd ref="-421959"/>
-        <nd ref="-424041"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="road"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-22T08:57:24Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
     <way visible="true" id="-17093" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-424894"/>
         <nd ref="-424104"/>
@@ -762,18 +695,6 @@
         <tag k="highway" v="path"/>
         <tag k="source:datetime" v="2019-01-17T09:12:55Z"/>
     </way>
-    <way visible="true" id="-17087" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424048"/>
-        <nd ref="-136545"/>
-        <nd ref="-136546"/>
-        <nd ref="-365540"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="Gulu - Kitgum Road"/>
-        <tag k="source" v="Bing"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:49Z;2019-11-13T19:13:38Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
     <way visible="true" id="-17085" timestamp="2019-01-19T08:25:38Z" version="4">
         <nd ref="-365548"/>
         <nd ref="-424372"/>
@@ -784,138 +705,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-19T08:25:38Z"/>
-    </way>
-    <way visible="true" id="-17083" timestamp="2020-02-20T19:51:45Z" version="1">
-        <nd ref="-365540"/>
-        <nd ref="-365541"/>
-        <nd ref="-365542"/>
-        <nd ref="-365543"/>
-        <nd ref="-365544"/>
-        <nd ref="-365545"/>
-        <nd ref="-365546"/>
-        <nd ref="-365547"/>
-        <nd ref="-365548"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-19T08:25:38Z"/>
-    </way>
-    <way visible="true" id="-17080" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-365540"/>
-        <nd ref="-43356"/>
-        <nd ref="-43357"/>
-        <nd ref="-43358"/>
-        <nd ref="-43359"/>
-        <nd ref="-43360"/>
-        <nd ref="-43361"/>
-        <nd ref="-43362"/>
-        <nd ref="-43363"/>
-        <nd ref="-43364"/>
-        <nd ref="-43365"/>
-        <nd ref="-424051"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="Gulu - Kitgum Road"/>
-        <tag k="source" v="Bing"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:50Z;2019-11-13T19:13:38Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
-    <way visible="true" id="-17077" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-328806"/>
-        <nd ref="-424052"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:50Z;2019-01-03T02:53:18Z"/>
-    </way>
-    <way visible="true" id="-17073" timestamp="2020-02-20T19:51:46Z" version="1">
-        <nd ref="-328803"/>
-        <nd ref="-328804"/>
-        <nd ref="-328805"/>
-        <nd ref="-328806"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:18Z"/>
-    </way>
-    <way visible="true" id="-17070" timestamp="2020-02-20T19:51:48Z" version="1">
-        <nd ref="-266404"/>
-        <nd ref="-196382"/>
-        <nd ref="-196383"/>
-        <nd ref="-196384"/>
-        <nd ref="-196385"/>
-        <nd ref="-196386"/>
-        <nd ref="-196387"/>
-        <nd ref="-196388"/>
-        <nd ref="-196389"/>
-        <nd ref="-196390"/>
-        <nd ref="-196391"/>
-        <nd ref="-196392"/>
-        <nd ref="-196393"/>
-        <nd ref="-196394"/>
-        <nd ref="-196395"/>
-        <nd ref="-196396"/>
-        <nd ref="-196397"/>
-        <nd ref="-266014"/>
-        <nd ref="-265864"/>
-        <nd ref="-265865"/>
-        <nd ref="-265866"/>
-        <nd ref="-265867"/>
-        <nd ref="-265868"/>
-        <nd ref="-265869"/>
-        <nd ref="-265870"/>
-        <nd ref="-266306"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="road"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:48Z;2019-01-22T08:57:24Z;2020-02-20T19:51:47Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
-    <way visible="true" id="-17063" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424043"/>
-        <nd ref="-291695"/>
-        <nd ref="-291696"/>
-        <nd ref="-291697"/>
-        <nd ref="-291698"/>
-        <nd ref="-291699"/>
-        <nd ref="-291700"/>
-        <nd ref="-291701"/>
-        <nd ref="-291702"/>
-        <nd ref="-291703"/>
-        <nd ref="-291704"/>
-        <nd ref="-291705"/>
-        <nd ref="-291706"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-16T07:51:17Z"/>
-        <tag k="surface" v="unpaved"/>
-    </way>
-    <way visible="true" id="-17059" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-291706"/>
-        <nd ref="-266287"/>
-        <nd ref="-266288"/>
-        <nd ref="-266289"/>
-        <nd ref="-266290"/>
-        <nd ref="-266291"/>
-        <nd ref="-266292"/>
-        <nd ref="-266293"/>
-        <nd ref="-266294"/>
-        <nd ref="-266295"/>
-        <nd ref="-266296"/>
-        <nd ref="-266297"/>
-        <nd ref="-266298"/>
-        <nd ref="-266299"/>
-        <nd ref="-266300"/>
-        <nd ref="-266301"/>
-        <nd ref="-266302"/>
-        <nd ref="-266303"/>
-        <nd ref="-266304"/>
-        <nd ref="-266305"/>
-        <nd ref="-266306"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-16T07:51:17Z"/>
-        <tag k="surface" v="unpaved"/>
     </way>
     <way visible="true" id="-17057" timestamp="2019-01-04T01:26:59Z" version="1">
         <nd ref="-266389"/>
@@ -998,35 +787,7 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2018-06-05T15:27:38Z"/>
     </way>
-    <way visible="true" id="-17018" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424042"/>
-        <nd ref="-371800"/>
-        <nd ref="-371801"/>
-        <nd ref="-371802"/>
-        <nd ref="-371803"/>
-        <nd ref="-371804"/>
-        <nd ref="-371805"/>
-        <nd ref="-371806"/>
-        <nd ref="-371807"/>
-        <nd ref="-371808"/>
-        <nd ref="-371809"/>
-        <nd ref="-371810"/>
-        <nd ref="-371811"/>
-        <nd ref="-371812"/>
-        <nd ref="-371813"/>
-        <nd ref="-371814"/>
-        <nd ref="-371815"/>
-        <nd ref="-371816"/>
-        <nd ref="-371817"/>
-        <nd ref="-371818"/>
-        <nd ref="-371819"/>
-        <nd ref="-371820"/>
-        <nd ref="-371821"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-23T03:33:03Z"/>
-    </way>
-    <way visible="true" id="-17014" timestamp="2020-02-20T19:51:47Z" version="1">
+    <way visible="true" id="-17011" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-371821"/>
         <nd ref="-224405"/>
         <nd ref="-224406"/>
@@ -1067,7 +828,7 @@
         <tag k="horse" v="no"/>
         <tag k="name" v="Unyama Pageya Road"/>
         <tag k="note" v="check_me"/>
-        <tag k="source:datetime" v="2019-01-16T08:36:40Z;2019-01-22T08:57:24Z;2020-02-20T19:51:47Z;2020-02-20T19:51:49Z;2020-02-20T19:51:48Z"/>
+        <tag k="source:datetime" v="2019-01-16T08:36:40Z;2019-01-22T08:57:24Z;2020-02-20T19:51:48Z"/>
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-16992" timestamp="2020-02-20T19:51:48Z" version="1">
@@ -1090,46 +851,6 @@
         <tag k="highway" v="residential"/>
         <tag k="note" v="check_me"/>
         <tag k="source:datetime" v="2019-01-16T08:36:40Z"/>
-    </way>
-    <way visible="true" id="-16982" timestamp="2020-02-20T19:51:46Z" version="1">
-        <nd ref="-297616"/>
-        <nd ref="-297617"/>
-        <nd ref="-297618"/>
-        <nd ref="-297619"/>
-        <nd ref="-297620"/>
-        <nd ref="-297621"/>
-        <nd ref="-297622"/>
-        <nd ref="-297623"/>
-        <nd ref="-297624"/>
-        <nd ref="-297625"/>
-        <nd ref="-297626"/>
-        <nd ref="-328803"/>
-        <nd ref="-297678"/>
-        <nd ref="-297679"/>
-        <nd ref="-297680"/>
-        <nd ref="-297681"/>
-        <nd ref="-297682"/>
-        <nd ref="-297683"/>
-        <nd ref="-297684"/>
-        <nd ref="-297685"/>
-        <nd ref="-297686"/>
-        <nd ref="-297687"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:20Z"/>
-    </way>
-    <way visible="true" id="-16967" timestamp="2020-02-20T19:51:46Z" version="1">
-        <nd ref="-347589"/>
-        <nd ref="-347590"/>
-        <nd ref="-347591"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="road"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-22T08:57:24Z"/>
-        <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-16965" timestamp="2019-01-03T01:43:02Z" version="3">
         <nd ref="-424852"/>
@@ -1453,6 +1174,33 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T09:05:08Z"/>
     </way>
+    <way visible="true" id="-15992" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-328806"/>
+        <nd ref="-424052"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:50Z;2019-01-03T02:53:18Z"/>
+    </way>
+    <way visible="true" id="-15991" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-365540"/>
+        <nd ref="-43356"/>
+        <nd ref="-43357"/>
+        <nd ref="-43358"/>
+        <nd ref="-43359"/>
+        <nd ref="-43360"/>
+        <nd ref="-43361"/>
+        <nd ref="-43362"/>
+        <nd ref="-43363"/>
+        <nd ref="-43364"/>
+        <nd ref="-43365"/>
+        <nd ref="-424051"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="Gulu - Kitgum Road"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:50Z;2019-11-13T19:13:38Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
     <way visible="true" id="-15990" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-297687"/>
         <nd ref="-100336"/>
@@ -1507,6 +1255,18 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:49Z;2019-01-03T02:53:20Z"/>
+    </way>
+    <way visible="true" id="-15988" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424048"/>
+        <nd ref="-136545"/>
+        <nd ref="-136546"/>
+        <nd ref="-365540"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="Gulu - Kitgum Road"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:49Z;2019-11-13T19:13:38Z"/>
+        <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-15987" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-424047"/>
@@ -1602,6 +1362,156 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z"/>
+    </way>
+    <way visible="true" id="-15983" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424043"/>
+        <nd ref="-291695"/>
+        <nd ref="-291696"/>
+        <nd ref="-291697"/>
+        <nd ref="-291698"/>
+        <nd ref="-291699"/>
+        <nd ref="-291700"/>
+        <nd ref="-291701"/>
+        <nd ref="-291702"/>
+        <nd ref="-291703"/>
+        <nd ref="-291704"/>
+        <nd ref="-291705"/>
+        <nd ref="-291706"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-16T07:51:17Z"/>
+        <tag k="surface" v="unpaved"/>
+    </way>
+    <way visible="true" id="-15982" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424042"/>
+        <nd ref="-371800"/>
+        <nd ref="-371801"/>
+        <nd ref="-371802"/>
+        <nd ref="-371803"/>
+        <nd ref="-371804"/>
+        <nd ref="-371805"/>
+        <nd ref="-371806"/>
+        <nd ref="-371807"/>
+        <nd ref="-371808"/>
+        <nd ref="-371809"/>
+        <nd ref="-371810"/>
+        <nd ref="-371811"/>
+        <nd ref="-371812"/>
+        <nd ref="-371813"/>
+        <nd ref="-371814"/>
+        <nd ref="-371815"/>
+        <nd ref="-371816"/>
+        <nd ref="-371817"/>
+        <nd ref="-371818"/>
+        <nd ref="-371819"/>
+        <nd ref="-371820"/>
+        <nd ref="-371821"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-23T03:33:03Z"/>
+    </way>
+    <way visible="true" id="-15981" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-266306"/>
+        <nd ref="-421957"/>
+        <nd ref="-421958"/>
+        <nd ref="-421959"/>
+        <nd ref="-424041"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-14995" timestamp="2020-02-20T19:51:45Z" version="1">
+        <nd ref="-242728"/>
+        <nd ref="-396883"/>
+        <nd ref="-396884"/>
+        <nd ref="-396885"/>
+        <nd ref="-396886"/>
+        <nd ref="-396887"/>
+        <nd ref="-396888"/>
+        <nd ref="-396889"/>
+        <nd ref="-282828"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-13673" timestamp="2020-02-20T19:51:45Z" version="1">
+        <nd ref="-365540"/>
+        <nd ref="-365541"/>
+        <nd ref="-365542"/>
+        <nd ref="-365543"/>
+        <nd ref="-365544"/>
+        <nd ref="-365545"/>
+        <nd ref="-365546"/>
+        <nd ref="-365547"/>
+        <nd ref="-365548"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-19T08:25:38Z"/>
+    </way>
+    <way visible="true" id="-12973" timestamp="2020-02-20T19:51:46Z" version="1">
+        <nd ref="-347589"/>
+        <nd ref="-347590"/>
+        <nd ref="-347591"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-12125" timestamp="2020-02-20T19:51:46Z" version="1">
+        <nd ref="-328803"/>
+        <nd ref="-328804"/>
+        <nd ref="-328805"/>
+        <nd ref="-328806"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:18Z"/>
+    </way>
+    <way visible="true" id="-10837" timestamp="2020-02-20T19:51:46Z" version="1">
+        <nd ref="-328803"/>
+        <nd ref="-297678"/>
+        <nd ref="-297679"/>
+        <nd ref="-297680"/>
+        <nd ref="-297681"/>
+        <nd ref="-297682"/>
+        <nd ref="-297683"/>
+        <nd ref="-297684"/>
+        <nd ref="-297685"/>
+        <nd ref="-297686"/>
+        <nd ref="-297687"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:20Z"/>
+    </way>
+    <way visible="true" id="-10835" timestamp="2020-02-20T19:51:46Z" version="1">
+        <nd ref="-297616"/>
+        <nd ref="-297617"/>
+        <nd ref="-297618"/>
+        <nd ref="-297619"/>
+        <nd ref="-297620"/>
+        <nd ref="-297621"/>
+        <nd ref="-297622"/>
+        <nd ref="-297623"/>
+        <nd ref="-297624"/>
+        <nd ref="-297625"/>
+        <nd ref="-297626"/>
+        <nd ref="-328803"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:20Z"/>
     </way>
     <way visible="true" id="-10517" timestamp="2020-02-20T19:51:46Z" version="1">
         <nd ref="-347591"/>
@@ -1724,6 +1634,33 @@
         <tag k="note" v="check_me"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-04T01:26:59Z"/>
     </way>
+    <way visible="true" id="-9655" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-291706"/>
+        <nd ref="-266287"/>
+        <nd ref="-266288"/>
+        <nd ref="-266289"/>
+        <nd ref="-266290"/>
+        <nd ref="-266291"/>
+        <nd ref="-266292"/>
+        <nd ref="-266293"/>
+        <nd ref="-266294"/>
+        <nd ref="-266295"/>
+        <nd ref="-266296"/>
+        <nd ref="-266297"/>
+        <nd ref="-266298"/>
+        <nd ref="-266299"/>
+        <nd ref="-266300"/>
+        <nd ref="-266301"/>
+        <nd ref="-266302"/>
+        <nd ref="-266303"/>
+        <nd ref="-266304"/>
+        <nd ref="-266305"/>
+        <nd ref="-266306"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-16T07:51:17Z"/>
+        <tag k="surface" v="unpaved"/>
+    </way>
     <way visible="true" id="-9643" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-265959"/>
         <nd ref="-265960"/>
@@ -1733,6 +1670,25 @@
         <tag k="highway" v="road"/>
         <tag k="note" v="check_me"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-16T08:36:40Z"/>
+    </way>
+    <way visible="true" id="-9639" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-266014"/>
+        <nd ref="-265864"/>
+        <nd ref="-265865"/>
+        <nd ref="-265866"/>
+        <nd ref="-265867"/>
+        <nd ref="-265868"/>
+        <nd ref="-265869"/>
+        <nd ref="-265870"/>
+        <nd ref="-266306"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-9401" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-424902"/>
@@ -1767,6 +1723,38 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-04T01:26:59Z"/>
     </way>
+    <way visible="true" id="-8790" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-347591"/>
+        <nd ref="-242726"/>
+        <nd ref="-242727"/>
+        <nd ref="-242728"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:2c4c517c6e87b238e23782dacb467fb9c28ee6c9;sha1sum:995b51e5c7793e2c8e48e9192dcde0f200a10960"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-8424" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-232479"/>
+        <nd ref="-232480"/>
+        <nd ref="-232481"/>
+        <nd ref="-232482"/>
+        <nd ref="-232483"/>
+        <nd ref="-232484"/>
+        <nd ref="-251495"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
     <way visible="true" id="-8128" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-224428"/>
         <nd ref="-224429"/>
@@ -1786,6 +1774,34 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-03T08:53:06Z"/>
     </way>
+    <way visible="true" id="-7036" timestamp="2020-02-20T19:51:48Z" version="1">
+        <nd ref="-266404"/>
+        <nd ref="-196382"/>
+        <nd ref="-196383"/>
+        <nd ref="-196384"/>
+        <nd ref="-196385"/>
+        <nd ref="-196386"/>
+        <nd ref="-196387"/>
+        <nd ref="-196388"/>
+        <nd ref="-196389"/>
+        <nd ref="-196390"/>
+        <nd ref="-196391"/>
+        <nd ref="-196392"/>
+        <nd ref="-196393"/>
+        <nd ref="-196394"/>
+        <nd ref="-196395"/>
+        <nd ref="-196396"/>
+        <nd ref="-196397"/>
+        <nd ref="-266014"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:48Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
     <way visible="true" id="-6520" timestamp="2020-02-20T19:51:48Z" version="1">
         <nd ref="-371821"/>
         <nd ref="-182861"/>
@@ -1800,6 +1816,29 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:48Z"/>
+    </way>
+    <way visible="true" id="-4266" timestamp="2020-02-20T19:51:49Z" version="1">
+        <nd ref="-251495"/>
+        <nd ref="-123084"/>
+        <nd ref="-123085"/>
+        <nd ref="-123086"/>
+        <nd ref="-123087"/>
+        <nd ref="-123088"/>
+        <nd ref="-123089"/>
+        <nd ref="-123090"/>
+        <nd ref="-123091"/>
+        <nd ref="-123092"/>
+        <nd ref="-123093"/>
+        <nd ref="-123094"/>
+        <nd ref="-282828"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="road"/>
+        <tag k="horse" v="no"/>
+        <tag k="name" v="Unyama Pageya Road"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:49Z;2019-01-22T08:57:24Z"/>
+        <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-689" timestamp="2020-02-20T19:51:50Z" version="1">
         <nd ref="-279406"/>

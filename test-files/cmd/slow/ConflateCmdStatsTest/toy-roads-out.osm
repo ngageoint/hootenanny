@@ -149,31 +149,29 @@
         <tag k="hoot:id" v="-1669723"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-1669992" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1669801" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1669731"/>
         <nd ref="-1669791"/>
         <nd ref="-1669793"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-1669992"/>
+        <tag k="hoot:id" v="-1669801"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="note" v="1"/>
     </way>
-    <way visible="true" id="-1669989" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1669725"/>
-        <nd ref="-1669727"/>
+    <way visible="true" id="-1669799" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1669729"/>
-        <nd ref="-1669735"/>
+        <nd ref="-1669779"/>
+        <nd ref="-1669781"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:12386b08a9761ad483f6bc7bbc79741f5155d4f6;sha1sum:3fd86fa02c70df8cfc1cc9b8c2700da09880d6d5"/>
-        <tag k="hoot:id" v="-1669989"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="4"/>
-        <tag k="note" v="2"/>
+        <tag k="hoot:id" v="-1669799"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="3"/>
     </way>
-    <way visible="true" id="-1669809" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1669797" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1669789"/>
         <nd ref="-1669787"/>
         <nd ref="-1669785"/>
@@ -208,20 +206,22 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:hash" v="sha1sum:8d8d88437860451b471e435a08e15713400c1028;sha1sum:cfd191a73acee954d48eb91b479e489829e87826"/>
-        <tag k="hoot:id" v="-1669809"/>
+        <tag k="hoot:id" v="-1669797"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="31"/>
         <tag k="note" v="0"/>
     </way>
-    <way visible="true" id="-1669799" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1669795" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669725"/>
+        <nd ref="-1669727"/>
         <nd ref="-1669729"/>
-        <nd ref="-1669779"/>
-        <nd ref="-1669781"/>
+        <nd ref="-1669735"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-1669799"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="note" v="3"/>
+        <tag k="hoot:hash" v="sha1sum:12386b08a9761ad483f6bc7bbc79741f5155d4f6;sha1sum:3fd86fa02c70df8cfc1cc9b8c2700da09880d6d5"/>
+        <tag k="hoot:id" v="-1669795"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="note" v="2"/>
     </way>
 </osm>

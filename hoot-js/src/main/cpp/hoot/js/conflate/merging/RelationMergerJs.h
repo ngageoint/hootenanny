@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_MERGER_JS_H
 #define RELATION_MERGER_JS_H
 
 // Hoot
-#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootBaseJs.h>
+#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {

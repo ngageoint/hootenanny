@@ -294,10 +294,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
     Local<Object> tObj = _gContext->getContext(current)->Global();
 
     if (!tObj->Has(context, toV8("getDbSchema")).ToChecked())
-    {
-      throw HootException("This translation file does not support converting to OGR. "
-                          "(Missing schema): ..." + _scriptPath.right(25));
-    }
+      throw HootException("This translation file does not support converting to OGR. (Missing schema): ..." + _scriptPath.right(25));
 
     Local<Value> schemaJs(_gContext->call(tObj, "getDbSchema"));
 

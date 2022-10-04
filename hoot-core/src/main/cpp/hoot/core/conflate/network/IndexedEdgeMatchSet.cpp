@@ -222,9 +222,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstN
   for (const auto& em : _vertexToMatch[v])
   {
     if (em->getString1()->containsInteriorVertex(v) || em->getString2()->containsInteriorVertex(v))
-    {
       result.insert(em);
-    }
   }
   return result;
 }

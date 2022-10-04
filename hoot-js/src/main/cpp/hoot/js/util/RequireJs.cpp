@@ -30,6 +30,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -81,13 +82,13 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     if (scriptName != QFileInfo(scriptName).baseName())
       throw HootException("Error: Script name is a path: " + scriptName);
 
-    for (int i = 0; i < libPath.size(); i++)
+    for (const auto& path : qAsConst(libPath))
     {
-      QString trimmed = libPath[i].trimmed();
+      QString trimmed = path.trimmed();
       if (trimmed.isEmpty() == false)
       {
         // This probably should be put into a config variable...
-        fullPath = hootHome + libPath[i].trimmed() + "/" + scriptName + ".js";
+        fullPath = hootHome + path.trimmed() + "/" + scriptName + ".js";
 
         QFileInfo info(fullPath);
         if (info.exists())

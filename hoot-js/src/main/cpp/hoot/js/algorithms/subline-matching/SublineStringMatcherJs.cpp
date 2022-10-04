@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SublineStringMatcherJs.h"
 
@@ -63,21 +63,19 @@ void SublineStringMatcherJs::Init(Local<Object> target)
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
+  vector<QString> opNames = Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
 
-  for (size_t i = 0; i < opNames.size(); i++)
+  for (const auto& name : qAsConst(opNames))
   {
-    QByteArray utf8 = opNames[i].toUtf8();
+    QByteArray utf8 = name.toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines",
-        FunctionTemplate::New(current, extractMatchingSublines));
+    tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines", FunctionTemplate::New(current, extractMatchingSublines));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(context, toV8(n), ToLocal(&_constructor));
@@ -90,8 +88,7 @@ void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = str(args.This()->GetConstructorName());
 
-  SublineStringMatcherPtr sm =
-    Factory::getInstance().constructObject<SublineStringMatcher>(className);
+  SublineStringMatcherPtr sm = Factory::getInstance().constructObject<SublineStringMatcher>(className);
   SublineStringMatcherJs* obj = new SublineStringMatcherJs(sm);
   PopulateConsumersJs::populateConsumers(sm, args);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
