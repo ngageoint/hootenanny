@@ -19,7 +19,11 @@ if (typeof hoot === 'undefined') {
     hoot.Settings.set({"ogr.note.extra": "attribute"});
     hoot.Settings.set({"reader.add.source.datetime": "false"});
     hoot.Settings.set({"writer.include.circular.error.tags": "false"});
+    hoot.Settings.set({"ogr.thematic.structure":"false"});
+
+    // LOTS of debug output on the console (journalctl -xe -u tomcat8)
     // hoot.Settings.set({"ogr.debug.dumptags": "true"});
+
 
     // Throw errors instead of returning partial translations/o2s_X features
     hoot.Settings.set({'ogr.throw.error':'true'});
@@ -132,18 +136,15 @@ var translationsMap = {
 var tLocal = {}
 try {
     tLocal = require(HOOT_HOME + '/translations-local/translationServerConfig.json');
-
     Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
     Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(HOOT_HOME + tLocal.schemaMap[k]); });
     Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(HOOT_HOME + tLocal.fcodeLookup[k])});
-
     Object.keys(tLocal.translationsMap.toogr).forEach(k => {
         translationsMap.toogr[k] = new hoot.SchemaTranslationOp({
                 'schema.translation.script': HOOT_HOME + tLocal.translationsMap.toogr[k],
                 'schema.translation.direction': 'toogr'
             });
     });
-
     Object.keys(tLocal.translationsMap.toosm).forEach(k => {
         translationsMap.toosm[k] = new hoot.SchemaTranslationOp({
                 'schema.translation.script': HOOT_HOME + tLocal.translationsMap.toosm[k],

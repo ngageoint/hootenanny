@@ -34,6 +34,7 @@
 
 var HOOT_HOME = process.env.HOOT_HOME;
 
+// Library functions
 transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 
 // Skip the TransportationGroundCrv type layers
@@ -42,6 +43,20 @@ hoot.Settings.set({"ogr.thematic.structure":"false"});
 // LOTS of debug output
 // hoot.Settings.set({"ogr.debug.dumptags":"true"});
 hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
+
+
+// ####################################################################################
+// getTranslations, getCapabilities,
+var tList = transTest.getThing('translations');
+console.log('\nTransList: ' + JSON.stringify(tList));
+
+tList = transTest.getThing('capabilities');
+console.log('\nCapabilities: ' + JSON.stringify(tList));
+
+tList = transTest.getThing('version');
+console.log('\nVersion: ' + JSON.stringify(tList));
+
+// process.exit();
 
 // ####################################################################################
 // The map of schema to test
@@ -62,30 +77,33 @@ var schemaMap = {
 // }
 
 // Test every fcode in a schema
-transTest.testSchema(schemaMap);
+// transTest.testSchema(schemaMap);
 
-process.exit();
+// process.exit();
 
 // ####################################################################################
 // Dump values from a schema
-// This dumps out what F_CODE has an attribute and if it is an enumeration, the consolidated list
+// This dumps out what F_CODE has an attribute and if it is an enumeration, the list of values
+console.log('\nMGCP F_CODES with FFN');
 transTest.dumpValues(schemaMap.MGCP,'FFN');
+
+console.log('\nMGCP F_CODES with WID');
 transTest.dumpValues(schemaMap.MGCP,'WID');
 
-// process.exit();
+process.exit();
 
 // ####################################################################################
 // List of geometries to test
 var geomList = ['Point','Line','Area'];
 
-// All of the possible export schema
+// All of the schema to test
 var schemaList = ['MGCP','DNC','ENCv311','TDSv40','TDSv61','TDSv70','TDSv71','GGDMv30'];
 
 // List of F_CODES to test
 // NOTE: "smurf" should send back an error
 var fCodeList = [
 // 'AA012',
-'smurf',
+  'smurf',
   'BB082',
   'AL015',
   'AL013',
@@ -108,7 +126,7 @@ var fCodeList = [
   // 'AD010'
   ];
 
-// Test a single F_CODE
+// Test a single F_CODE in multiple schema and with multiple geometry types
 // transTest.testF_CODE(fCodeList,schemaList,geomList);
 
 // End
