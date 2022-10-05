@@ -785,7 +785,7 @@ ggdm30 = {
     if (attrs.F_CODE == 'AQ075' && !tags.highway) tags.highway = 'road';
 
     // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
-    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
+    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
       // tags.highway = 'road';
@@ -1096,6 +1096,11 @@ ggdm30 = {
           delete tags.use;
           break;
       } // End switch
+      break;
+
+    case 'AL170': // Plaza
+      // Pedestrian areas go back to being Highway features.
+      if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
     case 'AN010': // Railway
@@ -1414,7 +1419,7 @@ ggdm30 = {
       }
     } // End cycleList
 
-    // SOme highway cleanup
+    // Some highway cleanup
     switch (tags.highway)
     {
       case undefined:
@@ -1446,6 +1451,17 @@ ggdm30 = {
         tags.junction = 'roundabout';
         break;
         // ['t.highway == "steps"','t.highway = "footway"'],
+
+      case 'pedestrian':
+        if (tags.area == 'yes')
+        {
+          attrs.F_CODE = 'AL170'  // Plaza vs Road
+        }
+        else
+        {
+          attrs.F_CODE = 'AP030'
+        }
+        break;
     } // End Highway cleanup
 
     // Ice roads are a special case.

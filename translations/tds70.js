@@ -1086,6 +1086,11 @@ tds70 = {
       } // End switch
       break;
 
+    case 'AL170': // Plaza
+      // Pedestrian areas go back to being Highway features.
+      if (tags.highway == 'pedestrian') delete tags.landuse;
+      break;
+
     case 'AN010': // Railway
       if (tags['railway:track'] == 'monorail')
       {
@@ -1425,7 +1430,7 @@ tds70 = {
       }
     } // End cycleList
 
-    // SOme highway cleanup
+    // Some highway cleanup
     switch (tags.highway)
     {
       case undefined:
@@ -1457,6 +1462,17 @@ tds70 = {
         tags.junction = 'roundabout';
         break;
         // ['t.highway == "steps"','t.highway = "footway"'],
+
+      case 'pedestrian':
+        if (tags.area == 'yes')
+        {
+          attrs.F_CODE = 'AL170'  // Plaza vs Road
+        }
+        else
+        {
+          attrs.F_CODE = 'AP030'
+        }
+        break;
     } // End Highway cleanup
 
     // Ice roads are a special case.

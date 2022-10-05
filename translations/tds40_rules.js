@@ -4100,7 +4100,7 @@ tds40.rules = {
 
     // ['RRC','-999999','railway','rail'], // Map to No Information
 
-    ['RTN_ROI','999','highway','other'],
+    // ['RTN_ROI','999','highway','other'],  // Removed to fix conflicts
 
     // ['TRE','-999999',undefined,undefined], // No Information
     ['TRE','1','wood','deciduous'], // Deciduous
