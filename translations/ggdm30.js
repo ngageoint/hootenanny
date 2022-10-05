@@ -785,7 +785,7 @@ ggdm30 = {
     if (attrs.F_CODE == 'AQ075' && !tags.highway) tags.highway = 'road';
 
     // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
-    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
+    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
       // tags.highway = 'road';
