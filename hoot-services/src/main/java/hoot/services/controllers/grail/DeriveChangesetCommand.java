@@ -57,7 +57,6 @@ class DeriveChangesetCommand extends GrailCommand {
 
         if(params.getOutput().endsWith(".osm")) {
             confFile = "DeriveJosmOsm.conf";
-            options.remove("bounds=" + params.getBounds());
         }
 
         List<String> hootOptions = toHootOptions(options);
