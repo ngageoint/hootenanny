@@ -41,6 +41,8 @@ class DeriveChangesetCommand extends GrailCommand {
     DeriveChangesetCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
 
+        String confFile = "DeriveChangeset.conf";
+
         List<String> options = new LinkedList<>();
         options.add("api.db.email=" + params.getUser().getEmail());
 
@@ -53,9 +55,15 @@ class DeriveChangesetCommand extends GrailCommand {
             options.add("bounds=" + params.getBounds());
         }
 
+        if(params.getOutput().endsWith(".osm")) {
+            confFile = "DeriveJosmOsm.conf";
+            options.remove("bounds=" + params.getBounds());
+        }
+
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("CONF_FILE", confFile);
         substitutionMap.put("INPUT1", params.getInput1());
         substitutionMap.put("INPUT2", params.getInput2());
         substitutionMap.put("OSC_FILE", params.getOutput());
@@ -63,7 +71,7 @@ class DeriveChangesetCommand extends GrailCommand {
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
-        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats ${STATS_FILE}";
+        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C ${CONF_FILE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats ${STATS_FILE}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
