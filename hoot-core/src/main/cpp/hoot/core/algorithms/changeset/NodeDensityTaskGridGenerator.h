@@ -53,7 +53,7 @@ public:
   NodeDensityTaskGridGenerator(const QStringList& inputs, const int maxNodesPerCell,
                                const QString& bounds = "", const QString& output = "");
 
-  virtual ~NodeDensityTaskGridGenerator() = default;
+  ~NodeDensityTaskGridGenerator() override = default;
 
   /**
    * @see TaskGridGenerator

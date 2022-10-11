@@ -67,7 +67,7 @@ public:
   static const char* const OSM_HEADER;
 
   OsmPbfWriter();
-  ~OsmPbfWriter();
+  ~OsmPbfWriter() override;
 
   /**
    * Used to finalize a call to writePartial.

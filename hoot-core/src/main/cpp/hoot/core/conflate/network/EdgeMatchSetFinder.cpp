@@ -338,7 +338,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     similarityValuesToIterate[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] = em->getFirstReversedSimilarityString();
     EdgeMatchScore existingSimilarMatch;
     // This will iterate over the similarity indexes in the order we want.
-    for (auto it = similarityValuesToIterate.begin(); it != similarityValuesToIterate.end(); ++it)
+    for (auto it = similarityValuesToIterate.cbegin(); it != similarityValuesToIterate.cend(); ++it)
     {
       existingSimilarMatch = _edgeMatchSimilarities[it.key()][it.value()];
       if (existingSimilarMatch.score != -1.0)
@@ -375,7 +375,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     EdgeMatchScore newMatch;
     newMatch.match = em;
     newMatch.score = score;
-    for (auto it = similarityValuesToIterate.begin(); it != similarityValuesToIterate.end(); ++it)
+    for (auto it = similarityValuesToIterate.cbegin(); it != similarityValuesToIterate.cend(); ++it)
       _edgeMatchSimilarities[it.key()][it.value()] = newMatch;
 
     // add our new match

@@ -28,7 +28,6 @@
 #define NETWORKDETAILS_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeString.h>
@@ -37,6 +36,7 @@
 #include <hoot/core/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -197,7 +197,7 @@ private:
   double _getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
                             ConstNetworkEdgePtr e2) const;
 
-  const SublineCache _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
+  SublineCache _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
   LegacyVertexMatcherPtr _getVertexMatcher();
 

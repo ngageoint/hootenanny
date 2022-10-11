@@ -47,7 +47,7 @@ public:
 
   WayData(const WayData& from);
 
-  ~WayData() = default;
+  ~WayData() override = default;
 
   void addNode(long id) { _nodes.push_back(id); }
   void insertNode(long index, long id ) { _nodes.insert(_nodes.begin() + index, id); }

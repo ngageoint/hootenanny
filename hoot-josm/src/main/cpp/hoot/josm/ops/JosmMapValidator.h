@@ -47,12 +47,12 @@ public:
   static QString className() { return "JosmMapValidator"; }
 
   JosmMapValidator() = default;
-  virtual ~JosmMapValidator() = default;
+  ~JosmMapValidator() override = default;
 
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const { return "Validating elements with JOSM..."; }
+  QString getInitStatusMessage() const override { return "Validating elements with JOSM..."; }
 
   /**
    * @see ApiEntityInfo
@@ -72,7 +72,7 @@ protected:
   /*
    * @see JosmMapValidatorAbstract
    */
-  virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
+  OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap) override;
 
 private:
 

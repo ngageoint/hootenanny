@@ -43,7 +43,7 @@ public:
   static QString className() { return "OsmApiDbReader"; }
 
   OsmApiDbReader();
-  ~OsmApiDbReader();
+  ~OsmApiDbReader() override;
 
   void open(const QString& urlStr) override;
 

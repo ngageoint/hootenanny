@@ -63,7 +63,8 @@ public:
    */
   UniformTaskGridGenerator(const QStringList& inputs, const int gridDimensionSize = 2,
                            const QString& output = "");
-  virtual ~UniformTaskGridGenerator() = default;
+
+  ~UniformTaskGridGenerator() override = default;
 
   /**
    * @see TaskGridGenerator

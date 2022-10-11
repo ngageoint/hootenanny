@@ -40,7 +40,7 @@ public:
   static QString className() { return "AddBboxVisitor"; }
 
   AddBboxVisitor() = default;
-  ~AddBboxVisitor() = default;
+  ~AddBboxVisitor() override = default;
 
   /**
    * @see ElementVisitor

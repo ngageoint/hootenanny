@@ -35,19 +35,17 @@ using namespace std;
 namespace Tgs
 {
 
-RStarTreePrinter::RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree) :
-_tree(tree)
+RStarTreePrinter::RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree)
+  : _tree(tree)
 {
 }
 
 string RStarTreePrinter::_indentStr(int size) const
 {
   string result;
-  for (int i = 0; i < size; i++)
-  {
-    result = result + "  ";
-  }
-
+  result.reserve(size * 2);
+  for (int i = 0; i < size * 2; i++)
+    result[i] = ' ';
   return result;
 }
 
@@ -72,9 +70,7 @@ void RStarTreePrinter::print(const RTreeNode *node, int indent)
   cout << is << "Envelope: " << node->calculateEnvelope().toString() << endl;
   cout << is << "Child Count: " << node->getChildCount() << endl;
   if (node->isLeafNode())
-  {
     cout << is << "Leaf Node" << endl;
-  }
 
   for (int i = 0; i < node->getChildCount(); i++)
   {
@@ -85,15 +81,11 @@ void RStarTreePrinter::print(const RTreeNode *node, int indent)
     }
     else
     {
-      RTreeNode* n = const_cast<RTreeNode*>(node);
-      if (n->getChildId(i) < 0)
-      {
-        cout << is << "  *** BAD *** user id: " << n->getChildId(i) << endl;
-      }
+      int childId = node->getChildId(i);
+      if (childId < 0)
+        cout << is << "  *** BAD *** user id: " << childId << endl;
       else
-      {
-        cout << is << "  user id: " << n->getChildId(i) << endl;
-      }
+        cout << is << "  user id: " << childId << endl;
     }
   }
 }

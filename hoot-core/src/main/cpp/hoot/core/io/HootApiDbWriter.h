@@ -45,7 +45,7 @@ public:
   static QString className() { return "HootApiDbWriter"; }
 
   HootApiDbWriter();
-  ~HootApiDbWriter();
+  ~HootApiDbWriter() override;
 
   void close() override;
   bool isSupported(const QString& urlStr) const override;

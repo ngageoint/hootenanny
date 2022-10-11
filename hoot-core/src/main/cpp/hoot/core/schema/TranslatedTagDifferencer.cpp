@@ -89,14 +89,12 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf1 = _translate(map, e1);
   vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf2 = _translate(map, e2);
 
-  class CostFunction :
-      public SingleAssignmentProblemSolver<
-        ScriptToOgrSchemaTranslator::TranslatedFeature,
-        ScriptToOgrSchemaTranslator::TranslatedFeature>::CostFunction
+  class CostFunction : public SingleAssignmentProblemSolver<ScriptToOgrSchemaTranslator::TranslatedFeature,
+                                                            ScriptToOgrSchemaTranslator::TranslatedFeature>::CostFunction
   {
   public:
     CostFunction() = default;
-    virtual ~CostFunction() = default;
+    ~CostFunction() override = default;
 
     const TranslatedTagDifferencer* ttd;
     /**
@@ -114,7 +112,7 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   CostFunction cost;
   cost.ttd = this;
   using Saps = SingleAssignmentProblemSolver<ScriptToOgrSchemaTranslator::TranslatedFeature,
-      ScriptToOgrSchemaTranslator::TranslatedFeature> ;
+                                             ScriptToOgrSchemaTranslator::TranslatedFeature> ;
   Saps sap(cost);
 
   for (const auto& feature1 : tf1)
@@ -142,8 +140,7 @@ std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTrans
 {
   if (_translator == nullptr)
   {
-    std::shared_ptr<ScriptSchemaTranslator> st =
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script);
+    std::shared_ptr<ScriptSchemaTranslator> st = ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script);
 
     st->setErrorTreatment(StrictOff);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);

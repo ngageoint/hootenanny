@@ -39,6 +39,9 @@ public:
 
   static QString className() { return "Validator"; }
 
+  Validator() = default;
+  virtual ~Validator() = default;
+
   /**
    * @brief Enables validation on the validator.
    *

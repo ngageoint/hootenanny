@@ -180,7 +180,7 @@ QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnv, jobject 
 
   // yes, this is kind of kludgy...could time to come up with a templated version at some point
   QMap<QString, QString> tempResult = fromJavaStringMap(javaEnv, javaMap);
-  for (auto mapItr = tempResult.begin(); mapItr != tempResult.end(); ++mapItr)
+  for (auto mapItr = tempResult.cbegin(); mapItr != tempResult.cend(); ++mapItr)
   {
     bool ok = false;
     const int val = mapItr.value().toInt(&ok);

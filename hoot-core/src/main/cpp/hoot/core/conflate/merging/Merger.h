@@ -55,8 +55,7 @@ public:
    *
    * @param replaced A deque of all element Ids that were replaced as part of this Merger operation.
    */
-  virtual void apply(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) = 0;
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) = 0;
 
   /**
    * Returns all the element ids that are impacted by this merger operation.
@@ -75,9 +74,9 @@ public:
   virtual void replace(ElementId oldEid, ElementId newEid) = 0;
 
   /**
-   * TODO: This already exists in ApiEntityInfo
+   * See ApiEntityInfo
    */
-  virtual QString toString() const = 0;
+  QString toString() const override { return className(); }
 };
 
 using MergerPtr = std::shared_ptr<Merger>;

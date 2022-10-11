@@ -66,7 +66,7 @@ namespace Tgs
   TGS_EXPORT std::ostream& operator<<(std::ostream & o, const NEWMAT::Matrix& matrix);
 #endif
 
-#include <tgs/StreamUtils.hh>
+#include <tgs/StreamUtils.hh> // Has to be last
 
 }
 

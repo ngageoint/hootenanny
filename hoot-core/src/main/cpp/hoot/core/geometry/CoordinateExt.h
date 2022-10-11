@@ -36,10 +36,10 @@ namespace hoot
 class CoordinateExt : public geos::geom::Coordinate
 {
 public:
+  //  Include base class constructors
+  using geos::geom::Coordinate::Coordinate;
 
   CoordinateExt(geos::geom::Coordinate c) : geos::geom::Coordinate(c) { }
-  CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = geos::DoubleNotANumber)
-    : Coordinate( xNew, yNew, zNew ) { }
 
   double length() const
   {
@@ -94,9 +94,8 @@ public:
   }
 
   // https://www.codeproject.com/Tips/862988/Find-the-Intersection-Point-of-Two-Line-Segments
-  static std::shared_ptr<CoordinateExt> lineSegementsIntersect(
-    const CoordinateExt& p1, const CoordinateExt& p2, const CoordinateExt& q1,
-    const CoordinateExt& q2)
+  static std::shared_ptr<CoordinateExt> lineSegementsIntersect(const CoordinateExt& p1, const CoordinateExt& p2,
+                                                               const CoordinateExt& q1, const CoordinateExt& q2)
   {
     std::shared_ptr<CoordinateExt> intersection;
 
