@@ -598,7 +598,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
 
   // Now find ways that are close to it
   // FUTURE: if we need this to be faster, we could probably use a spatial index
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   for (auto wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr testWay = wayItr->second;
@@ -659,7 +659,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
           else if (neighborIds.size() > 1)
           {
             // Uh, we have more than one node... find the one that is in the ref way (Unknown1) and keep it
-            for (auto it : neighborIds)
+            for (const auto& it : neighborIds)
             {
               long oldNodeId = it.getId();
               NodePtr oldNode = _map->getNode(oldNodeId);
