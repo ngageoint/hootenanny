@@ -124,7 +124,7 @@ void SplitNameVisitor::visit(const std::shared_ptr<Element>& e)
   Tags& t = e->getTags();
   QStringList extraNames;
   Tags copy = t;
-  for (auto it = copy.begin(); it != copy.end(); ++it)
+  for (auto it = copy.cbegin(); it != copy.cend(); ++it)
   {
     const QString& k = it.key();
     const QString& v = it.value();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef BOUNDS_FILE_TASK_GRID_GENERATOR_H
 #define BOUNDS_FILE_TASK_GRID_GENERATOR_H
@@ -47,7 +47,7 @@ public:
    * @param inputs one or more bounds file inputs
    */
   BoundsFileTaskGridGenerator(const QStringList& inputs);
-  virtual ~BoundsFileTaskGridGenerator() = default;
+  ~BoundsFileTaskGridGenerator() override = default;
 
   /**
    * @see TaskGridGenerator

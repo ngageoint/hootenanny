@@ -81,7 +81,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
   holes.reserve(outers.size());
 
   vector<LinearRing*> noHoles;
-  for (const auto outer : outers)
+  for (const auto& outer : outers)
   {
     Polygon* p = gf.createPolygon(*outer, noHoles);
     tmpPolygons.push_back(p);
@@ -285,12 +285,12 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
   // A list of things we haven't found yet.
   deque<LinearRing*> notFound;
 
-  for (const auto member : noRole)
+  for (const auto& member : noRole)
   {
     MultiPolygonRelationRole status = MultiPolygonRelationRole::NoRole;
 
     // Check if we have an inner polygon.
-    for (auto outer : outers)
+    for (const auto& outer : outers)
     {
       status = _findRelationship(member, outer);
 
@@ -311,7 +311,7 @@ void RelationToMultiPolygonConverter::_classifyRings(std::vector<LinearRing*>& n
     if (status == MultiPolygonRelationRole::NoRole)
     {
       // Look for an outer polygon
-      for (const auto inner : inners)
+      for (const auto& inner : inners)
       {
         status =_findRelationship(member, inner);
 

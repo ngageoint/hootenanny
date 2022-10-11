@@ -195,7 +195,7 @@ void JosmMapCleaner::_getStats()
 int JosmMapCleaner::_getNumElementsCleaned()
 {
   const int numCleaned =
-    (int)_javaEnv->CallIntMethod(
+    _javaEnv->CallIntMethod(
       _josmInterface,
       // Java sig: int getNumElementsCleaned()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumElementsCleaned", "()I"));

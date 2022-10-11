@@ -56,7 +56,7 @@ class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable
 public:
 
   JosmMapValidatorAbstract();
-  ~JosmMapValidatorAbstract();
+  ~JosmMapValidatorAbstract() override;
 
   /**
    * @see Configurable

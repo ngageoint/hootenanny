@@ -78,7 +78,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   QString coreLogLevel;
   // When testing, we're not interested in seeing logging from josm or hoot-josm.
   if (ConfigOptions().getTestValidationEnable())
-    coreLogLevel = Log::getInstance().levelToString(Log::None);
+    coreLogLevel = Log::levelToString(Log::None);
   else
     coreLogLevel = Log::getInstance().getLevelAsString();
 
@@ -178,15 +178,13 @@ void JosmMapValidatorAbstract::_getStats()
   _numFailingValidators = failingValidatorInfo.size();
 
   // TODO: Try to simplify this with SingleStat.
-  _errorSummary =
-    "Found " + StringUtils::formatLargeNumber(_numValidationErrors) +
-    " validation errors in " + StringUtils::formatLargeNumber(_numAffected) +
-    " features with JOSM.\n";
-  // convert the validation error info to a readable summary string
-  _errorSummary += _errorCountsByTypeToSummaryStr(_getValidationErrorCountsByType());
-  _errorSummary += "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
+  _errorSummary = QString("Found %1 validation errors in %2 features with JOSM.\n%3Total failing JOSM validators: %4\n")
+                    .arg(StringUtils::formatLargeNumber(_numValidationErrors),
+                         StringUtils::formatLargeNumber(_numAffected),
+                         _errorCountsByTypeToSummaryStr(_getValidationErrorCountsByType()),
+                         QString::number(_numFailingValidators));
   for (const auto& validatorName : failingValidatorInfo.keys())
-    _errorSummary += "Validator: " + validatorName + " failed with error: " + failingValidatorInfo[validatorName] + ".\n";
+    _errorSummary.append(QString("Validator: %1 failed with error: %2.\n").arg(validatorName, failingValidatorInfo[validatorName]));
 
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
@@ -195,7 +193,7 @@ void JosmMapValidatorAbstract::_getStats()
 int JosmMapValidatorAbstract::_getNumValidationErrors()
 {
   const int numValidationErrors =
-    (int)_javaEnv->CallIntMethod(
+    _javaEnv->CallIntMethod(
       _josmInterface,
       // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));

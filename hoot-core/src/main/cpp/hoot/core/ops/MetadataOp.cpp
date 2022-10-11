@@ -56,7 +56,7 @@ void MetadataOp::apply(std::shared_ptr<OsmMap>& pMap)
   if (_datasetIndicator.first.length() == 0)
     return;
 
-  _numProcessed = static_cast<size_t>(_pMap->getElementCount());
+  _numProcessed = _pMap->getElementCount();
 
   _apply();
 }

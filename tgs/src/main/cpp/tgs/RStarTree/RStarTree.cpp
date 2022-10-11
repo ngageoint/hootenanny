@@ -508,8 +508,7 @@ bool RStarTree::_sanityCheck(const RTreeNode* node) const
     }
     else
     {
-      RTreeNode* n = const_cast<RTreeNode*>(node);
-      if (n->getChildId(i) < 0)
+      if (node->getChildId(i) < 0)
         return false;
     }
   }

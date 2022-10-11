@@ -1120,10 +1120,13 @@ private:
     for (size_t i = 0; i < vid.size(); ++i)
     {
       bool aAncestor = false;
-      for (size_t j = 0; j < vid.size() && aAncestor == false; ++j)
+      for (size_t j = 0; j < vid.size(); ++j)
       {
         if (i != j && _isAncestor(vid[j], vid[i]))
+        {
           aAncestor = true;
+          break;
+        }
       }
       if (!aAncestor)
         result.push_back(vid[i]);

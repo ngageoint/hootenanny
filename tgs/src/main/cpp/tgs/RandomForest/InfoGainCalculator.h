@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __INFO_GAIN_CALCULATOR_H__
@@ -33,100 +33,100 @@
 
 namespace Tgs
 {
+/**
+*  This class handles all the information gain calculations
+* to find entropy with a dataset or subsets of the data
+*/
+class TGS_EXPORT InfoGainCalculator
+{
+public:
+
   /**
-  *  This class handles all the information gain calculations
-  * to find entropy with a dataset or subsets of the data
+  *  Constructor
   */
-  class TGS_EXPORT InfoGainCalculator
-  {
-  public:
+  InfoGainCalculator() = default;
 
-    /**
-    *  Constructor
-    */
-    InfoGainCalculator() = default;
+  /**
+  *  Destructor
+  */
+  ~InfoGainCalculator() = default;
 
-    /**
-    *  Destructor
-    */
-    ~InfoGainCalculator() = default;
+  /**
+  *  Computes the entropy of a dataset based only on the class label
+  *
+  *  @param df the source data set
+  *  @param indices a list of data vector indices in the data set
+  */
+  double computeEntropyByClass(const DataFrame& df, const std::vector<unsigned int>& indices) const;
 
-    /**
-    *  Computes the entropy of a dataset based only on the class label
-    *
-    *  @param df the source data set
-    *  @param indices a list of data vector indices in the data set
-    */
-    double computeEntropyByClass(
-      const DataFrame& df, const std::vector<unsigned int>& indices) const;
+  /**
+  * Using the list of data vector indices as input this method
+  * uses max information gain to find the best split resulting in
+  * the best information gain.
+  *
+  * @param df the source data set
+  * @param fIndices the list of factor indices to consider for this data split
+  * @param dIndices the input data vectors indices subset sorted on the factor fIdx
+  * @param splitIdx an output variable to hold the split index in indices
+  * @param fIdx an output variable to hold the factor index to split on
+  * @param splitVal an output variable to hold the factor value to split on
+  * @param purityDelta the contribution of the data split in increasing the info gain
+  * @return false if a split is not possible (all factor values are same across all factors)
+  */
+  bool findDataSplit(const DataFrame & df, std::vector<unsigned int> & fIndices, std::vector<unsigned int> & dIndices,
+                     unsigned int & splitIdx, unsigned int & fIdx, double & splitVal, double & purityDelta) const;
 
-    /**
-    * Using the list of data vector indices as input this method
-    * uses max information gain to find the best split resulting in
-    * the best information gain.
-    *
-    * @param df the source data set
-    * @param fIndices the list of factor indices to consider for this data split
-    * @param dIndices the input data vectors indices subset sorted on the factor fIdx
-    * @param splitIdx an output variable to hold the split index in indices
-    * @param fIdx an output variable to hold the factor index to split on
-    * @param splitVal an output variable to hold the factor value to split on
-    * @param purityDelta the contribution of the data split in increasing the info gain
-    * @return false if a split is not possible (all factor values are same across all factors)
-    */
-    bool findDataSplit(const DataFrame & df, std::vector<unsigned int> & fIndices,
-      std::vector<unsigned int> & dIndices, unsigned int & splitIdx, unsigned int & fIdx,
-      double & splitVal, double & purityDelta) const;
+  /**
+  * This method looks at a single factor and computes the maximum gain against
+  * all possible data splits and also provides the index for the best split
+  *
+  * @param df the source data set
+  * @param indices a subset of data vectors by their index value in the dataset sorted
+  * on the factor value specified by fIdx
+  * @param fIdx the factor index in the data vectors
+  * @param totalEntropy entropy for the subset of data referenced by indices
+  * @param bestSplit the index for the split in indices corresponding to the max gain
+  * @return the information gain corresponding to bestSplit
+  */
+  double getMaxInfoGainByFactor(const DataFrame& df, std::vector<unsigned int> & indices, unsigned int fIdx,
+                                double totalEntropy, unsigned int & bestSplit) const;
 
-    /**
-    * This method looks at a single factor and computes the maximum gain against
-    * all possible data splits and also provides the index for the best split
-    *
-    * @param df the source data set
-    * @param indices a subset of data vectors by their index value in the dataset sorted
-    * on the factor value specified by fIdx
-    * @param fIdx the factor index in the data vectors
-    * @param totalEntropy entropy for the subset of data referenced by indices
-    * @param bestSplit the index for the split in indices corresponding to the max gain
-    * @return the information gain corresponding to bestSplit
-    */
-    double getMaxInfoGainByFactor(const DataFrame& df, std::vector<unsigned int> & indices,
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
+  /**
+  * This method looks at a single factor and computes the maximum gain ratio against
+  * all possible data splits and also provides the index for the best split
+  *
+  * @param df the source data set
+  * @param indices a subset of data vectors by their index value in the dataset sorted
+  * on the factor value specified by fIdx
+  * @param fIdx the factor index in the data vectors
+  * @param totalEntropy entropy for the subset of data referenced by indices
+  * @param bestSplit the index for the split in indices corresponding to the max gain
+  * @return the information gain ratio corresponding to bestSplit
+  */
+  double getMaxInfoGainRatioByFactor(const DataFrame & df, std::vector<unsigned int> & indices, unsigned int fIdx,
+                                     double totalEntropy, unsigned int & bestSplit) const;
 
-    /**
-    * This method looks at a single factor and computes the maximum gain ratio against
-    * all possible data splits and also provides the index for the best split
-    *
-    * @param df the source data set
-    * @param indices a subset of data vectors by their index value in the dataset sorted
-    * on the factor value specified by fIdx
-    * @param fIdx the factor index in the data vectors
-    * @param totalEntropy entropy for the subset of data referenced by indices
-    * @param bestSplit the index for the split in indices corresponding to the max gain
-    * @return the information gain ratio corresponding to bestSplit
-    */
-    double getMaxInfoGainRatioByFactor(const DataFrame & df, std::vector<unsigned int> & indices,
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
+private:
 
-  private:
+  /**
+  *  Computes the entropy function -n * log2(n)
+  */
+  double _calcLogFunc(double n) const;
 
-    /**
-    *  Computes the entropy function -n * log2(n)
-    */
-    double _calcLogFunc(double n) const;
+  /**
+  * This methods takes a subset of data vectors held by indices and finds
+  * a list of candidate splits based on indices sorted on the factor value
+  * indexed by fIdx
+  *
+  * @param df the source data set
+  * @param indices a subset of data vectors by their index value in the dataset
+  * @param fIdx the factor index in the data vectors
+  * @param splits the potential splits in the data to consider
+  */
+  void _findCandidateSplits(const DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx,
+                            std::vector<unsigned int>& splits) const;
+};
 
-    /**
-    * This methods takes a subset of data vectors held by indices and finds
-    * a list of candidate splits based on indices sorted on the factor value
-    * indexed by fIdx
-    *
-    * @param df the source data set
-    * @param indices a subset of data vectors by their index value in the dataset 
-    * @param fIdx the factor index in the data vectors
-    * @param splits the potential splits in the data to consider 
-    */
-    void _findCandidateSplits(const DataFrame& df, std::vector<unsigned int>& indices,
-      unsigned int fIdx, std::vector<unsigned int>& splits) const;
-  };
 }  //End Namespace
+
 #endif 
