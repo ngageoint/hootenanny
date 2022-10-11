@@ -126,7 +126,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Co
     e->visitRo(*_constProvider, v);
     return v.createGeometry();
   }
-  else if (gid == GEOS_GEOMETRYCOLLECTION && e->isReview()) //  TODO: Expand this to other geometry collection relations and not just reviews?
+  else if (gid == GEOS_GEOMETRYCOLLECTION && (e->isReview() || e->isRestriction()))
   {
     //  Convert the reviewees to geometries and return the collection
     vector<const Geometry*> geometries;
@@ -355,12 +355,8 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(const Con
           r->getType() == MetadataTags::RelationSite() ||
           AreaCriterion().isSatisfied(r))
         return GEOS_MULTIPOLYGON;
-      // Restriction relations are empty geometry
-      else if (r->isRestriction())
-        return GEOS_GEOMETRYCOLLECTION;
-      // Need to find a better way of doing this.
-      // If we have a review, send back a collection. This gets converted into an empty geometry.
-      else if (r->isReview())
+      // Restriction relations and review relations are geometry collections
+      else if (r->isRestriction() || r->isReview())
         return GEOS_GEOMETRYCOLLECTION;
       // MultiPoint comes from GeoJSON
       else if (r->getType() == MetadataTags::RelationMultiPoint())
@@ -377,15 +373,10 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(const Con
     // We are going to throw an error so we save the type of relation
     QString relationType = r->getType().trimmed();
     if (relationType != "")
-    {
-      errorMsg =
-        QString("Unknown geometry type for %1 with type=%2").arg(e->getElementId().toString(), relationType);
-    }
+      errorMsg = QString("Unknown geometry type for %1 with type=%2").arg(e->getElementId().toString(), relationType);
     else
-    {
-      errorMsg =
-        QString("Unknown geometry type for %1 with missing type.").arg(e->getElementId().toString());
-    }
+      errorMsg = QString("Unknown geometry type for %1 with missing type.").arg(e->getElementId().toString());
+
     if (throwError)
       throw IllegalArgumentException(errorMsg);
     else
