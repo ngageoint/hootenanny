@@ -126,6 +126,23 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Co
     e->visitRo(*_constProvider, v);
     return v.createGeometry();
   }
+  else if (gid == GEOS_GEOMETRYCOLLECTION && e->isReview()) //  TODO: Expand this to other geometry collection relations and not just reviews?
+  {
+    //  Convert the reviewees to geometries and return the collection
+    vector<const Geometry*> geometries;
+    //  Cache the shared pointers to manage memory because createGeometryCollection does a deep copy
+    vector<std::shared_ptr<Geometry>> cache;
+    for (const auto& member : e->getMembers())
+    {
+      if (_constProvider->containsElement(member.getElementId()))
+      {
+        std::shared_ptr<Geometry> element = convertToGeometry(_constProvider->getElement(member.getElementId()));
+        cache.push_back(element);
+        geometries.push_back(element.get());
+      }
+    }
+    return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createGeometryCollection(geometries));
+  }
   else  // We don't recognize this geometry type.
     return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 }
