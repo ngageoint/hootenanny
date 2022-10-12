@@ -2,271 +2,272 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="37.7604" minlon="-122.4346" maxlat="37.7698" maxlon="-122.4074086639638"/>
     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7627177236164968" lon="-122.4318406705895086">
-        <tag k="amenity" v="clinic"/>
-        <tag k="address" v="3850 17th street�"/>
-        <tag k="name" v="Castro-Mission Health Center"/>
         <tag k="REF2" v="none"/>
+        <tag k="address" v="3850 17th street�"/>
+        <tag k="alt_address" v="3850 17 street�;3850 17 th street�"/>
+        <tag k="amenity" v="clinic"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Castro-Mission Health Center"/>
     </node>
     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7671972469306851" lon="-122.4293187837040762">
-        <tag k="name" v="CHURCH SUBSTATION"/>
-        <tag k="operator" v="SFMTA"/>
         <tag k="REF2" v="003c82"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="CHURCH SUBSTATION"/>
+        <tag k="operator" v="SFMTA"/>
     </node>
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7685527863620436" lon="-122.4098892685245943">
+        <tag k="REF2" v="none"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="POWER CONTROL CENTER"/>
         <tag k="operator" v="SFMTA"/>
-        <tag k="REF2" v="none"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7691906092001588" lon="-122.4160108968423657">
-        <tag k="name" v="1740 FOLSOM ST"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="1740 FOLSOM ST"/>
     </node>
     <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7631676737534079" lon="-122.4304989957326910">
+        <tag k="REF2" v="000cf9"/>
         <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Sanchez Preschool"/>
         <tag k="operator" v="San Francisco Unified School District"/>
-        <tag k="REF2" v="000cf9"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7680508352198956" lon="-122.4279354508585556">
-        <tag k="amenity" v="post_office"/>
+        <tag k="REF2" v="002c84"/>
         <tag k="address" v="2075 market street"/>
+        <tag k="amenity" v="post_office"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="18th Street Station"/>
         <tag k="phone" v="(415) 431-2701"/>
-        <tag k="REF2" v="002c84"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640343960752318" lon="-122.4185547704740173">
-        <tag k="amenity" v="clinic"/>
-        <tag k="address" v="165 capp street"/>
-        <tag k="name" v="MISSION NEIGHBORHOOD RESOURCE CENTER"/>
         <tag k="REF2" v="none"/>
+        <tag k="address" v="165 capp street"/>
+        <tag k="amenity" v="clinic"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="MISSION NEIGHBORHOOD RESOURCE CENTER"/>
     </node>
     <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7675939492466100" lon="-122.4129376219026852">
-        <tag k="name" v="Scott Maintenance Facility/Garage"/>
-        <tag k="operator" v="SFMTA"/>
         <tag k="REF2" v="0086d0"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Scott Maintenance Facility/Garage"/>
+        <tag k="operator" v="SFMTA"/>
     </node>
     <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652184103496324" lon="-122.4088707961895182">
-        <tag k="amenity" v="toilets"/>
-        <tag k="name" v="FRANKLIN SQUARE RESTROOM"/>
         <tag k="REF2" v="none"/>
+        <tag k="amenity" v="toilets"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="FRANKLIN SQUARE RESTROOM"/>
     </node>
     <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694837958366492" lon="-122.4199175015370997">
-        <tag k="amenity" v="clinic"/>
-        <tag k="address" v="1735 mission street"/>
-        <tag k="name" v="HAIGHT ASHBURY INTEGRATED CARE CENTER"/>
         <tag k="REF2" v="0078c9"/>
+        <tag k="address" v="1735 mission street"/>
+        <tag k="amenity" v="clinic"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="HAIGHT ASHBURY INTEGRATED CARE CENTER"/>
     </node>
     <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695725245931015" lon="-122.4345866472016411">
-        <tag k="name" v="PHOTO CENTER"/>
         <tag k="REF2" v="00a471"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="PHOTO CENTER"/>
     </node>
     <node visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7686873257950779" lon="-122.4098826226028507">
+        <tag k="REF2" v="none"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="BRYANT SUBST./CENTRAL CONTROL"/>
         <tag k="operator" v="SFMTA"/>
-        <tag k="REF2" v="none"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7626807028338334" lon="-122.4219696647950713">
-        <tag k="amenity" v="police"/>
-        <tag k="name" v="MISSION POLICE STATION"/>
         <tag k="REF2" v="007037"/>
+        <tag k="amenity" v="police"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="MISSION POLICE STATION"/>
     </node>
     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694065378408794" lon="-122.4220368829200396">
-        <tag k="amenity" v="social_facility"/>
-        <tag k="name" v="FCS FOSTER CARE"/>
         <tag k="REF2" v="none"/>
+        <tag k="amenity" v="social_facility"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="FCS FOSTER CARE"/>
     </node>
     <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7693305995509760" lon="-122.4207859598685104">
-        <tag k="name" v="Homeless Transitional Housing"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Homeless Transitional Housing"/>
     </node>
     <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636131011175635" lon="-122.4289773245242259">
+        <tag k="REF2" v="000e36"/>
         <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Everett Middle School"/>
         <tag k="operator" v="San Francisco Unified School District"/>
-        <tag k="REF2" v="000e36"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7633295825532258" lon="-122.4087926464841729">
-        <tag k="name" v="POTRERO DIVISION"/>
-        <tag k="REVIEW" v="0050eb"/>
-        <tag k="operator" v="SFMTA"/>
         <tag k="REF2" v="none"/>
+        <tag k="REVIEW" v="0050eb"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="POTRERO DIVISION"/>
+        <tag k="operator" v="SFMTA"/>
     </node>
     <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7673970190117956" lon="-122.4290569858967359">
-        <tag k="name" v="LRV STATION-CHURCH STREET"/>
-        <tag k="operator" v="SFMTA"/>
         <tag k="REF2" v="0001af"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="LRV STATION-CHURCH STREET"/>
+        <tag k="operator" v="SFMTA"/>
     </node>
     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664552307101502" lon="-122.4190074727190307">
-        <tag k="amenity" v="school"/>
-        <tag k="name" v="Marshall Elementary School"/>
-        <tag k="REVIEW" v="0086ed"/>
-        <tag k="operator" v="San Francisco Unified School District"/>
         <tag k="REF2" v="000904"/>
+        <tag k="REVIEW" v="0086ed"/>
+        <tag k="amenity" v="school"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Marshall Elementary School"/>
+        <tag k="operator" v="San Francisco Unified School District"/>
     </node>
     <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658462455378796" lon="-122.4202077713553081">
+        <tag k="REF2" v="none"/>
         <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Vacant Property"/>
         <tag k="operator" v="San Francisco Unified School District"/>
-        <tag k="REF2" v="none"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7621472465912404" lon="-122.4196947200801020">
-        <tag k="name" v="2176-2178 MISSION ST"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="2176-2178 MISSION ST"/>
     </node>
     <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7617742985568370" lon="-122.4271126758940653">
+        <tag k="REF2" v="00a3f8;000910"/>
         <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Mission High School"/>
         <tag k="operator" v="San Francisco Unified School District"/>
-        <tag k="REF2" v="00a3f8;000910"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7685644894593224" lon="-122.4102738607086280">
-        <tag k="name" v="OVERHEAD LINE STORAGE"/>
-        <tag k="operator" v="SFMTA"/>
         <tag k="REF2" v="0086e4"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="OVERHEAD LINE STORAGE"/>
+        <tag k="operator" v="SFMTA"/>
     </node>
     <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662023144899663" lon="-122.4143123770909511">
-        <tag k="name" v="H. WELTON FLYNN MOTORCOACH DIV"/>
-        <tag k="REVIEW" v="004ed5"/>
-        <tag k="operator" v="SFMTA"/>
         <tag k="REF2" v="none"/>
+        <tag k="REVIEW" v="004ed5"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="H. WELTON FLYNN MOTORCOACH DIV"/>
+        <tag k="operator" v="SFMTA"/>
     </node>
     <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7643533234119460" lon="-122.4208363559221482">
-        <tag k="amenity" v="parking"/>
-        <tag k="name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
         <tag k="REF2" v="00435f"/>
+        <tag k="amenity" v="parking"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
     </node>
     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640689593576653" lon="-122.4184599955690800">
-        <tag k="name" v="165 CAPP ST"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="165 CAPP ST"/>
     </node>
     <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670787069434084" lon="-122.4308741549800601">
-        <tag k="amenity" v="fire_station"/>
-        <tag k="name" v="Fire Station #6"/>
         <tag k="REF2" v="005aa8"/>
+        <tag k="amenity" v="fire_station"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Fire Station #6"/>
     </node>
     <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7621538786513256" lon="-122.4097875230872177">
-        <tag k="name" v="1975-1999 Bryant Street"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="1975-1999 Bryant Street"/>
     </node>
     <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670877004281209" lon="-122.4129735475949161">
-        <tag k="name" v="ANIMAL CONTROL FACILITY"/>
-        <tag k="REVIEW" v="0086b3"/>
         <tag k="REF2" v="none"/>
+        <tag k="REVIEW" v="0086b3"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="ANIMAL CONTROL FACILITY"/>
     </node>
     <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7665191742603952" lon="-122.4130147769938617">
-        <tag k="name" v="Bureau of Light, Heat &amp; Power"/>
-        <tag k="man_made" v="water_works"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="water_works"/>
+        <tag k="name" v="Bureau of Light, Heat &amp; Power"/>
     </node>
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694579079053838" lon="-122.4345649736533801">
-        <tag k="name" v="HARVEY MILK CENTER"/>
         <tag k="REF2" v="00a471"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="HARVEY MILK CENTER"/>
     </node>
     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641091532644850" lon="-122.4157580570984720">
-        <tag k="amenity" v="school"/>
-        <tag k="name" v="Mission Community College Center"/>
         <tag k="REF2" v="none"/>
+        <tag k="amenity" v="school"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Mission Community College Center"/>
     </node>
     <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641173338715603" lon="-122.4186650880898952">
-        <tag k="amenity" v="clinic"/>
-        <tag k="address" v="160 capp street"/>
-        <tag k="name" v="NATIVE AMERICAN HEALTH CENTER"/>
         <tag k="REF2" v="none"/>
+        <tag k="address" v="160 capp street"/>
+        <tag k="amenity" v="clinic"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="NATIVE AMERICAN HEALTH CENTER"/>
     </node>
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662290967751488" lon="-122.4104189262150157">
-        <tag k="amenity" v="post_office"/>
+        <tag k="REF2" v="0001cf"/>
         <tag k="address" v="1655 bryant street"/>
+        <tag k="amenity" v="post_office"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Potrero Center"/>
         <tag k="phone" v="(415) 861-8130"/>
-        <tag k="REF2" v="0001cf"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7688488203471167" lon="-122.4225393412085054">
-        <tag k="name" v="Valencia @ 14th Streets"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Valencia @ 14th Streets"/>
     </node>
     <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7634600734429853" lon="-122.4305000273713802">
+        <tag k="REF2" v="000cf9"/>
         <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Sanchez Elementary School"/>
         <tag k="operator" v="San Francisco Unified School District"/>
-        <tag k="REF2" v="000cf9"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7616538755655355" lon="-122.4074086639637926">
-        <tag k="name" v="626 Potrero Avenue"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="626 Potrero Avenue"/>
     </node>
     <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640603703279396" lon="-122.4318817168715725">
-        <tag k="amenity" v="library"/>
-        <tag k="name" v="EUREKA VALLEY BRANCH LIBRARY"/>
-        <tag k="building" v="civic"/>
         <tag k="REF2" v="000555"/>
+        <tag k="amenity" v="library"/>
+        <tag k="building" v="civic"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="EUREKA VALLEY BRANCH LIBRARY"/>
     </node>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695559269232817" lon="-122.4288693190185313">
+        <tag k="REF2" v="none"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="TRANS-STREET OPER-DISPATCH"/>
         <tag k="operator" v="SFMTA"/>
-        <tag k="REF2" v="none"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694418829474969" lon="-122.4220421207627822">
-        <tag k="name" v="225 Valencia Street"/>
         <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="225 Valencia Street"/>
     </node>
     <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647276834344652" lon="-122.4163534422246755">
-        <tag k="amenity" v="clinic"/>
-        <tag k="address" v="240 shotwell street"/>
-        <tag k="name" v="MISSION NEIGHBORHOOD HEALTH CENTER"/>
         <tag k="REF2" v="0019db"/>
+        <tag k="address" v="240 shotwell street"/>
+        <tag k="amenity" v="clinic"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="MISSION NEIGHBORHOOD HEALTH CENTER"/>
     </node>
     <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610291692260986" lon="-122.4168377428604089">
-        <tag k="name" v="755-761 South Van Ness Avenue"/>
-        <tag k="REVIEW" v="00a90a"/>
         <tag k="REF2" v="none"/>
+        <tag k="REVIEW" v="00a90a"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="755-761 South Van Ness Avenue"/>
     </node>
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7629491519083729" lon="-122.4318600822865335">
-        <tag k="name" v="HEALTH CENTER ONE"/>
-        <tag k="building" v="hospital"/>
         <tag k="REF2" v="none"/>
+        <tag k="building" v="hospital"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="HEALTH CENTER ONE"/>
     </node>
     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7622797615039758" lon="-122.4229162302347191"/>
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7624550211999122" lon="-122.4229330181382807"/>
@@ -298,170 +299,175 @@
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645243936961208" lon="-122.4082942594553316"/>
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645053152394610" lon="-122.4085699989071401"/>
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694999999999936" lon="-122.4326999999999970">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="0048cb"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94117"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="duboce street and scott street"/>
-        <tag k="name" v="Duboce Park Dog Play Area"/>
-        <tag k="addr:postcode" v="94117"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="dog_park"/>
-        <tag k="phone" v="(415) 717-2872"/>
-        <tag k="REF2" v="0048cb"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="dog_park"/>
+        <tag k="name" v="Duboce Park Dog Play Area"/>
+        <tag k="phone" v="(415) 717-2872"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4339999999999975">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="007a4b"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94117"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="duboce street and scott street"/>
-        <tag k="name" v="Duboce Park Children�s Play Area"/>
-        <tag k="addr:postcode" v="94117"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="phone" v="(415) 203-1299"/>
-        <tag k="REF2" v="007a4b"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Duboce Park Children�s Play Area"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7693999999999974" lon="-122.4342000000000041">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="007a4a"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94117"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="duboce street and scott street"/>
-        <tag k="name" v="Duboce Park Basketball Courts"/>
-        <tag k="addr:postcode" v="94117"/>
-        <tag k="sport" v="basketball"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="pitch"/>
-        <tag k="phone" v="(415) 203-1299"/>
-        <tag k="REF2" v="007a4a"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="name" v="Duboce Park Basketball Courts"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="sport" v="basketball"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640999999999991" lon="-122.4202999999999975">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="000d65"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="45 hoff street"/>
-        <tag k="name" v="Kid Power Park Children�s Play Area"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="phone" v="(415) 203-1299"/>
-        <tag k="REF2" v="000d65"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Kid Power Park Children�s Play Area"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649000000000044" lon="-122.4333999999999918">
-        <tag k="wheelchair" v="limited"/>
+        <tag k="REF2" v="005aa3"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94114"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="noe street and beaver street"/>
-        <tag k="name" v="Noe &amp; Beaver Mini Park Community Garden"/>
-        <tag k="addr:postcode" v="94114"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="garden"/>
-        <tag k="REF2" v="005aa3"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="garden"/>
+        <tag k="name" v="Noe &amp; Beaver Mini Park Community Garden"/>
+        <tag k="wheelchair" v="limited"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642000000000095" lon="-122.4202999999999975">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="009232"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="45 hoff street"/>
-        <tag k="name" v="Kid Power Park"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="REF2" v="009232"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Kid Power Park"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7639999999999958" lon="-122.4157999999999902">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="none"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="17th street and folsom street"/>
-        <tag k="name" v="17th &amp; Folsom Park"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="phone" v="(415) 831-2700"/>
-        <tag k="REF2" v="none"/>
+        <tag k="alt_address" v="17 street and folsom street"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="17th &amp; Folsom Park"/>
+        <tag k="phone" v="(415) 831-2700"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646999999999977" lon="-122.4099999999999824">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="001b68"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94103"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="16th street and bryant street"/>
-        <tag k="name" v="Franklin Square Children�s Play Area"/>
-        <tag k="addr:postcode" v="94103"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="phone" v="(415) 254-8030"/>
-        <tag k="REF2" v="001b68"/>
+        <tag k="alt_address" v="16 street and bryant street"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Franklin Square Children�s Play Area"/>
+        <tag k="phone" v="(415) 254-8030"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610999999999919" lon="-122.4268999999999892">
-        <tag k="wheelchair" v="limited"/>
+        <tag k="REF2" v="00a3e6"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="19th street and dolores street"/>
-        <tag k="name" v="Mission Dolores Park Tennis Courts"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="sport" v="tennis"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="pitch"/>
-        <tag k="phone" v="(415) 203-1299"/>
-        <tag k="REF2" v="00a3e6"/>
+        <tag k="alt_address" v="19 street and dolores street"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="name" v="Mission Dolores Park Tennis Courts"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="wheelchair" v="limited"/>
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650000000000006" lon="-122.4092999999999876">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="0063e6"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="16th street and bryant street"/>
-        <tag k="name" v="Franklin Square"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="REF2" v="0063e6"/>
+        <tag k="alt_address" v="16 street and bryant street"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Franklin Square"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641999999999953" lon="-122.4201999999999941">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="none"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="45 hoff street"/>
-        <tag k="name" v="Kid Power Park Community Garden"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="REF2" v="none"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Kid Power Park Community Garden"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4344999999999999">
-        <tag k="wheelchair" v="yes"/>
-        <tag k="amenity" v="arts_centre"/>
+        <tag k="REF2" v="00a471"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94117"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="50 scott street"/>
-        <tag k="name" v="Harvey Milk Photo Center"/>
-        <tag k="addr:postcode" v="94117"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="phone" v="(415) 554-9522"/>
-        <tag k="REF2" v="00a471"/>
+        <tag k="amenity" v="arts_centre"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Harvey Milk Photo Center"/>
+        <tag k="phone" v="(415) 554-9522"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4333999999999918">
-        <tag k="wheelchair" v="yes"/>
+        <tag k="REF2" v="009396"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94117"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="duboce street and scott street"/>
-        <tag k="name" v="Duboce Park"/>
-        <tag k="addr:postcode" v="94117"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="park"/>
-        <tag k="phone" v="(415) 717-2872"/>
-        <tag k="REF2" v="009396"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Duboce Park"/>
+        <tag k="phone" v="(415) 717-2872"/>
+        <tag k="wheelchair" v="yes"/>
     </node>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610000000000028" lon="-122.4274000000000058">
-        <tag k="wheelchair" v="limited"/>
+        <tag k="REF2" v="00a3e7"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
         <tag k="addr:state" v="CA"/>
         <tag k="address" v="19th street and dolores street"/>
-        <tag k="name" v="Mission Dolores Basketball Courts"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="sport" v="basketball"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="pitch"/>
-        <tag k="phone" v="(415) 203-1299"/>
-        <tag k="REF2" v="00a3e7"/>
+        <tag k="alt_address" v="19 street and dolores street"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="name" v="Mission Dolores Basketball Courts"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="sport" v="basketball"/>
+        <tag k="wheelchair" v="limited"/>
     </node>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697999999999965" lon="-122.4317901266244490"/>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7692210458706015" lon="-122.4346000000000032"/>
@@ -476,10 +482,10 @@
         <nd ref="-27"/>
         <nd ref="-26"/>
         <nd ref="-31"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Noe &amp; Beaver Mini Park"/>
         <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Noe &amp; Beaver Mini Park"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39"/>
@@ -491,10 +497,10 @@
         <nd ref="-33"/>
         <nd ref="-32"/>
         <nd ref="-39"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Kidpower Park"/>
         <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Kidpower Park"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-48"/>
@@ -502,10 +508,10 @@
         <nd ref="-46"/>
         <nd ref="-45"/>
         <nd ref="-48"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Dearborn Community Garden"/>
         <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Dearborn Community Garden"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
@@ -515,10 +521,10 @@
         <nd ref="-21"/>
         <nd ref="-20"/>
         <nd ref="-25"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Franklin Square"/>
         <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Franklin Square"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
@@ -526,10 +532,10 @@
         <nd ref="-4"/>
         <nd ref="-3"/>
         <nd ref="-5"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Duboce Park"/>
         <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Duboce Park"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
@@ -539,9 +545,9 @@
         <nd ref="-40"/>
         <nd ref="-1"/>
         <nd ref="-2"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Mission Dolores Park"/>
         <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Mission Dolores Park"/>
     </way>
 </osm>

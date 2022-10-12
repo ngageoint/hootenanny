@@ -44,8 +44,7 @@ LibPostalInit::LibPostalInit()
   // This init can take up to ~5 seconds.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
-      !libpostal_setup_language_classifier_datadir(
-        ConfigOptions().getLibpostalDataDir().toUtf8().data()))
+      !libpostal_setup_language_classifier_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()))
   {
     throw HootException("libpostal setup failed.");
   }

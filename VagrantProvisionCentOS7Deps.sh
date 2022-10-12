@@ -37,6 +37,9 @@ elif [[ $(yum versionlock list | wc -l) -gt 2 ]] ; then  # versionlock list retu
          liboauthcpp-devel \
          libphonenumber \
          libphonenumber-devel \
+         libpostal \
+         libpostal-data \
+         libpostal-devel \
          nodejs \
          nodejs-devel \
          nodejs-docs \
@@ -62,10 +65,13 @@ sudo yum install -y \
      google-chrome-stable-$GOOGLE_CHROME_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
-     libphonenumber-$LIBPHONENUMBER_VERSION \
-     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     libpostal-$LIBPOSTAL_VERSION \
+     libpostal-data-$LIBPOSTAL_VERSION \
+     libpostal-devel-$LIBPOSTAL_VERSION \
      npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
@@ -90,10 +96,13 @@ sudo yum versionlock add \
      google-chrome-stable-$GOOGLE_CHROME_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
-     libphonenumber-$LIBPHONENUMBER_VERSION \
-     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     libpostal-$LIBPOSTAL_VERSION \
+     libpostal-data-$LIBPOSTAL_VERSION \
+     libpostal-devel-$LIBPOSTAL_VERSION \
      npm-$NPM_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
@@ -141,8 +150,6 @@ sudo yum -y install \
     osmosis \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
-    libpostal-data \
-    libpostal-devel \
     parallel \
     postgresql${POSTGRESQL_VERSION_DOTLESS} \
     postgresql${POSTGRESQL_VERSION_DOTLESS}-contrib \
@@ -182,3 +189,4 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip
+
