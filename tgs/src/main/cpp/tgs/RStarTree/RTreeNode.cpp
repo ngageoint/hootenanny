@@ -237,10 +237,9 @@ BoxInternalData RTreeNode::getChildEnvelope(int childIndex) const
   return bid;
 }
 
-int RTreeNode::getChildId(int childIndex)
+int RTreeNode::getChildId(int childIndex) const
 {
-  int id = _getChildPtr(childIndex)->id;
-  return id;
+  return _getChildPtr(childIndex)->id;
 }
 
 int RTreeNode::getChildNodeId(int childIndex) const

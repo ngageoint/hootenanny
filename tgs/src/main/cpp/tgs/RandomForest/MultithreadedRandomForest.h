@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTITHREADEDRANDOMFOREST_H
 #define MULTITHREADEDRANDOMFOREST_H
@@ -36,81 +36,77 @@
 namespace Tgs
 {
 
+/**
+ * @brief The MultithreadedRandomForest class
+ */
+class MultithreadedRandomForest : public BaseRandomForest
+{
+public:
 
   /**
-   * @brief The MultithreadedRandomForest class
+   * @brief MultithreadedRandomForest Constructor
    */
-  class MultithreadedRandomForest : public BaseRandomForest
-  {
-  public:
+  MultithreadedRandomForest() = default;
+  /**
+   * @brief ~MultithreadedRandomForest destructor
+   */
+  ~MultithreadedRandomForest() override = default;
 
-    /**
-     * @brief MultithreadedRandomForest Constructor
-     */
-    MultithreadedRandomForest();
-    /**
-     * @brief ~MultithreadedRandomForest destructor
-     */
-    ~MultithreadedRandomForest() override = default;
+  /**
+  * Build the forest from a data set
+  *
+  * @param data the data set to train on
+  * @param numTrees the number of random trees to create
+  * @param numFactors the number of factors to randomly choose as candidates for node splitting
+  * @param posClass the name of the positive class
+  * @param nodeSize the minimum number of data vectors in a set to split a node
+  * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+  * and no retraining)
+  * @param balanced true if the forest will be balanced
+  */
+  void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                   const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0,
+                   bool balanced = false) override;
 
-    /**
-    * Build the forest from a data set
-    *
-    * @param data the data set to train on
-    * @param numTrees the number of random trees to create
-    * @param numFactors the number of factors to randomly choose as candidates for node splitting
-    * @param posClass the name of the positive class
-    * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
-    * and no retraining)
-    * @param balanced true if the forest will be balanced
-    */
-    void trainBinary(
-      const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
-      const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0,
-      bool balanced = false) override;
+  /**
+  * Build the forest from a data set
+  *
+  * @param data the data set to train on
+  * @param numTrees the number of random trees to create
+  * @param numFactors the number of factors to randomly choose as candidates for node splitting
+  * @param nodeSize the minimum number of data vectors in a set to split a node
+  * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+  * and no retraining)
+  * @param balanced true if the forest will be balanced
+  */
+  void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                       unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 
-    /**
-    * Build the forest from a data set
-    *
-    * @param data the data set to train on
-    * @param numTrees the number of random trees to create
-    * @param numFactors the number of factors to randomly choose as candidates for node splitting
-    * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
-    * and no retraining)
-    * @param balanced true if the forest will be balanced
-    */
-    void trainMulticlass(
-      const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
-      unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
+  /**
+   * @brief trainMulticlass the map class to train a tree
+   * @param tree the input tree
+   * @return the trained tree
+   */
+  static std::shared_ptr<RandomTree> train(const std::shared_ptr<RandomTree>& tree);
 
-    /**
-     * @brief trainMulticlass the map class to train a tree
-     * @param tree the input tree
-     * @return the trained tree
-     */
-    static std::shared_ptr<RandomTree> train(const std::shared_ptr<RandomTree>& tree);
+  /**
+  * Build the forest from a data set
+  *
+  * @param data the data set to train on
+  * @param numTrees the number of random trees to create
+  * @param numFactors the number of factors to randomly choose as candidates for node splitting
+  * @param posClass the name of the positive class
+  * @param negClass the name of the negative class
+  * @param nodeSize the minimum number of data vectors in a set to split a node
+  * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+  * and no retraining)
+  * @param balanced true if the forest will be balanced
+  */
+  void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+                       const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
+                       double retrain = 1.0, bool balanced = false) override;
+};
 
-    /**
-    * Build the forest from a data set
-    *
-    * @param data the data set to train on
-    * @param numTrees the number of random trees to create
-    * @param numFactors the number of factors to randomly choose as candidates for node splitting
-    * @param posClass the name of the positive class
-    * @param negClass the name of the negative class
-    * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
-    * and no retraining)
-    * @param balanced true if the forest will be balanced
-    */
-    void trainRoundRobin(
-      const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
-      const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
-      double retrain = 1.0, bool balanced = false) override;
-  };
 }
-
 
 #endif // MULTITHREADEDRANDOMFOREST_H

@@ -50,7 +50,7 @@ using namespace std;
 namespace hoot
 {
 
-void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names) const
+void MapStatsWriter::_appendUnique(const QList<SingleStat>& stats, QStringList& names) const
 {
   for (const auto& stat : qAsConst(stats))
   {
@@ -59,7 +59,7 @@ void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
   }
 }
 
-void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const
+void MapStatsWriter::writeStatsToJson(const QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const
 {
   try
   {
@@ -106,7 +106,7 @@ void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats, const QSt
   }
 }
 
-void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>>& stats, const QString &statsOutputFilePath) const
+void MapStatsWriter::writeStatsToText(const QList<QList<SingleStat>>& stats, const QString &statsOutputFilePath) const
 {
   LOG_INFO("Writing stats to file: " << statsOutputFilePath);
 
@@ -158,12 +158,12 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   }
 }
 
-QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString sep) const
+QString MapStatsWriter::statsToString(const QList<QList<SingleStat>>& stats, QString sep) const
 {
   QStringList allStatNames;
 
-  for (int i = 0; i < stats.size(); i++)
-    _appendUnique(stats[i], allStatNames);
+  for (const auto& stat_list : qAsConst(stats))
+    _appendUnique(stat_list, allStatNames);
 
   int precision = ConfigOptions().getWriterPrecision();
   QString result;
@@ -174,15 +174,15 @@ QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString s
     QStringList l;
     l << name;
 
-    for (int j = 0; j < stats.size(); j++)
+    for (const auto& stat_list : qAsConst(stats))
     {
       bool foundIt = false;
 
-      for (int k = 0; k < stats[j].size(); k++)
+      for (const auto& stat : qAsConst(stat_list))
       {
-        if (stats[j][k].name == name)
+        if (stat.name == name)
         {
-          QString value = QString::number(stats[j][k].value, 'g', precision);
+          QString value = QString::number(stat.value, 'g', precision);
           l << ((value != "nan") ? value : "-");
           foundIt = true;
         }

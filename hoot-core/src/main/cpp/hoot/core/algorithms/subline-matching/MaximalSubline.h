@@ -113,7 +113,7 @@ public:
   public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
-    virtual ~ThresholdMatchCriteria() = default;
+    ~ThresholdMatchCriteria() override = default;
 
     double match(int index1, int index2) const override;
 

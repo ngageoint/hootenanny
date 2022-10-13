@@ -54,7 +54,7 @@ public:
     @param map stats
     @param statsOutputFilePath path of the output stats file
     */
-  void writeStatsToJson(QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const;
+  void writeStatsToJson(const QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const;
 
   /**
     Write map stats to a text file
@@ -62,7 +62,7 @@ public:
     @param map stats
     @param statsOutputFilePath path of the output stats file
     */
-  void writeStatsToText(QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const;
+  void writeStatsToText(const QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const;
 
   /**
     Creates a string for map stats
@@ -70,11 +70,11 @@ public:
     @param stats the stats to create the string for
     @param stats string separator
     */
-  QString statsToString(QList<QList<SingleStat>>& stats, QString sep) const;
+  QString statsToString(const QList<QList<SingleStat>>& stats, QString sep) const;
 
 private:
 
-  void _appendUnique(QList<SingleStat>& stats, QStringList& names) const;
+  void _appendUnique(const QList<SingleStat>& stats, QStringList& names) const;
 
 };
 

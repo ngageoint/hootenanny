@@ -424,7 +424,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   QVariantMap vm = toCpp<QVariantMap>(v);
   long valCtr = 0;
   LOG_VART(vm.size());
-  for (auto it = vm.begin(); it != vm.end(); ++it)
+  for (auto it = vm.cbegin(); it != vm.cend(); ++it)
   {
     if (it.value().isNull() == false)
     {
