@@ -780,7 +780,7 @@ tds71 = {
         }
         else
         {
-          if (tags.highway !== 'road') tags.highway = 'unclassified';
+          if (tags.highway !== 'road' && tags.highway !== 'pedestrian') tags.highway = 'unclassified';
         }
       }
       else if (tags['ref:road:type'] == 'pedestrian')

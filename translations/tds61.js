@@ -806,7 +806,7 @@ tds61 = {
         }
         else
         {
-          if (tags.highway !== 'road') tags.highway = 'unclassified';
+          if (tags.highway !== 'road' && tags.highway !== 'pedestrian') tags.highway = 'unclassified';
         }
       }
       else if (tags['ref:road:type'] == 'pedestrian')
@@ -819,7 +819,7 @@ tds61 = {
       }
       else if (tags['ref:road:type'] == 'street') // RTY=4
       {
-          if (tags.highway !== 'road') tags.highway = 'unclassified';
+          if (tags.highway !== 'road' && tags.highway !== 'pedestrian') tags.highway = 'unclassified';
       }
       // Other should get picked up by the OTH field
       else if (tags['ref:road:type'] == 'other')
@@ -1063,6 +1063,11 @@ tds61 = {
         delete tags.use;
         break;
       } // End switch
+      break;
+
+    case 'AL170': // Plaza/Square
+      // Pedestrian areas go back to being Highway features.
+      if (tags.highway == 'pedestrian') delete tags.landuse;
       break;
 
     case 'AN010': // Railway
@@ -1455,8 +1460,18 @@ tds61 = {
         tags.junction = 'roundabout';
         break;
         // ['t.highway == "steps"','t.highway = "footway"'],
-    } // End Highway cleanup
 
+      case 'pedestrian':
+        if (tags.area == 'yes')
+        {
+          attrs.F_CODE = 'AL170'  // Plaza/Square vs Road
+        }
+        else
+        {
+          attrs.F_CODE = 'AP030'
+        }
+        break;
+    } // End Highway cleanup
 
     // Ice roads are a special case.
     if (tags.ice_road == 'yes')
