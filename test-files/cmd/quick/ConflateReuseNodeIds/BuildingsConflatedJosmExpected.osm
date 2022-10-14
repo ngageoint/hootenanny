@@ -35,6 +35,7 @@
         <nd ref="-7"/>
         <nd ref="104"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Panera Bread"/>
     </way>
 </osm>

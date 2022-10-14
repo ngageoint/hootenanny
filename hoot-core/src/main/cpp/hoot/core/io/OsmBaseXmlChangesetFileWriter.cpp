@@ -439,44 +439,20 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
 void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
 {
   LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
-
+  //  Remove all of the hoot tags
+  tags.removeHootTags();
+  //  Add back any tags needed
   _getOptionalTags(tags, element);
-
-  // Only report the circular error for changesets when debug tags are turned on, circular error
-  // tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is
-  // because changesets are meant for non-hoot related databases and circular error is a hoot tag.
-  if (_includeCircularErrorTags && element->hasCircularError() &&
-      (element->getElementType() != ElementType::Node ||
-      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)) &&
-      _includeDebugTags)
-  {
-    tags.set(MetadataTags::ErrorCircular(), QString("%1").arg(element->getCircularError()));
-  }
-
   //  Sort the keys for output
   QList<QString> keys = tags.keys();
   if (_sortTags)
     keys.sort();
-
-  // These should never be written in a changeset, even when debug tags are enabled, and will cause
-  // problems in ChangesetReplacementCreator if added to source data when read back out.
-  QStringList metadataAlwaysIgnore;
-  metadataAlwaysIgnore.append(MetadataTags::HootHash());
-  metadataAlwaysIgnore.append(MetadataTags::HootChangeExcludeDelete());
-  metadataAlwaysIgnore.append(MetadataTags::HootConnectedWayOutsideBounds());
-  metadataAlwaysIgnore.append(MetadataTags::HootSnapped());
 
   for (const auto& key : qAsConst(keys))
   {
     QString val = tags.get(key).trimmed();
     if (!key.isEmpty() && !val.isEmpty())
     {
-      // There are some instances where we want to explicitly allow some metadata tags.
-      if (metadataAlwaysIgnore.contains(key))
-        continue;
-      else if (!_includeDebugTags && key.startsWith("hoot:", Qt::CaseInsensitive) && !_metadataAllowKeys.contains(key))
-        continue;
-
       writer.writeStartElement("tag");
       writer.writeAttribute("k", _invalidCharacterHandler.removeInvalidCharacters(key));
       writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(val));
@@ -493,7 +469,6 @@ QString OsmBaseXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat&
     return _stats.toTableString();
   case ChangesetStatsFormat::JsonFormat:
     return _stats.toJsonString();
-    break;
   default:
     return "";
   }

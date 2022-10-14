@@ -546,9 +546,15 @@ bool Tags::hasSameNonMetadataTags(const Tags& other) const
   return otherCopy == thisCopy;
 }
 
+int Tags::removeHootTags()
+{
+  return removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+}
+
 int Tags::removeMetadata()
 {
-  int numRemoved = removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+  //  Remove the hoot:* tags first
+  int numRemoved = removeHootTags();
 
   // there are some other metadata keys that don't start with 'hoot:'
   QStringList keysToRemove;

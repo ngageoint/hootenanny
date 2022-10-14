@@ -6406,6 +6406,13 @@ When true, writers will include debug information (`hoot:*` tags). Not honored b
 If true, the `hoot:matchedBy` tag will be added to element output when
 `writer.include.debug.tags=true`.
 
+=== writer.include.status.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the `hoot:status` tag will be added to element output without having to enable all `hoot:*` tags.
+
 === writer.precision
 
 * Data Type: int
