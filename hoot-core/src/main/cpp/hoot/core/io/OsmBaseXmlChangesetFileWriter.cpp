@@ -128,7 +128,8 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
   //  Write out the header
   _writeXmlFileHeader(writer);
 
-  Change::ChangeType last = Change::ChangeType::Unknown;
+  Change::ChangeType last = Change::ChangeType::NoChange;
+  Change::ChangeType next = Change::ChangeType::NoChange;
 
   for (int i = 0; i < changesetProviders.size(); i++)
   {
@@ -154,6 +155,7 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
       _change = changesetProvider->readNextChange();
       LOG_VART(_change);
       changeElement = _change.getElement();
+      next = _change.getType();
 
       if (!changeElement)
         continue;
@@ -175,18 +177,18 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, _change.getType()))
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, next))
         continue;
 
-      if (_change.getType() != last && last != Change::ChangeType::Unknown)
+      if (next != last && last != Change::ChangeType::Unknown)
           _parsedChangeIds.append(changeElement->getElementId());
 
       _writeXmlFileSectionHeader(writer, last);
 
       //  Update the last type to now be the current type
-      if (_change.getType() != last)
-        last = _change.getType();
-      if (_change.getType() != Change::ChangeType::Unknown)
+      if (next != last && next != Change::ChangeType::Unknown)
+        last = next;
+      if (next != Change::ChangeType::Unknown)
       {
         ElementType::Type type = changeElement->getElementType().getEnum();
         switch (type)
