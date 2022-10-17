@@ -678,7 +678,7 @@ void LinearSnapMerger::_handleSplitWay(const ElementPtr& e1, const ElementPtr& s
   LOG_TRACE("Handling split way...");
 
   const ElementId eid1 = e1->getElementId();
-  if (e1 != e1Match && scraps1)
+  if (e1 != e1Match)
   {
     if (swapWayIds)
     {
@@ -704,6 +704,13 @@ void LinearSnapMerger::_handleSplitWay(const ElementPtr& e1, const ElementPtr& s
       LOG_TRACE("Replacing e1: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
       ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(_map);
     }
+    else
+    {
+      // Remove any reviews that contain this element. Don't remove the element itself yet. That may
+      // be done later.
+      LOG_TRACE("Removing reviews for e1: " << eid1 << "...");
+      RemoveReviewsByEidOp(eid1, true, false).apply(_map);
+    }
   }
   else
   {
@@ -722,9 +729,13 @@ void LinearSnapMerger::_handleSplitWay(const ElementId& eid1, const ElementPtr& 
 {
   if (!scraps1)
   {
-    LOG_TRACE("Replacing " << eid1 << " with " << e1Match->getElementId() << "...");
-    RemoveElementByEid(eid1).apply(_map);
-    replaced.emplace_back(eid1, e1Match->getElementId());
+    //  Don't delete and replace a way with itself
+    if (eid1 != e1Match->getElementId())
+    {
+      LOG_TRACE("Replacing " << eid1 << " with " << e1Match->getElementId() << "...");
+      RemoveElementByEid(eid1).apply(_map);
+      replaced.emplace_back(eid1, e1Match->getElementId());
+    }
 
     if (ConfigOptions().getDebugMapsWriteDetailed())
       OsmMapWriterFactory::writeDebugMap(_map, className(), "after-split-way-removal-2" + _eidLogString);

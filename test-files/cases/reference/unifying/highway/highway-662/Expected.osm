@@ -4,19 +4,19 @@
     <node visible="true" id="-99148" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0168446111400051" lon="-90.0150384323000026"/>
     <node visible="true" id="-99147" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0182380814100007" lon="-90.0160040275400064"/>
     <node visible="true" id="-99141" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0182938198199984" lon="-90.0150920764800020"/>
-    <way visible="true" id="-99162" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-99147"/>
-        <nd ref="-99141"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:11fe69eabacab979b78b3daaab67acd9d68562be;sha1sum:102fa2eb424887def1238ce66f6c4f68ea4097ea"/>
-        <tag k="note" v="2c;2a"/>
-    </way>
     <way visible="true" id="-99159" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-99141"/>
         <nd ref="-99148"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="2a"/>
+    </way>
+    <way visible="true" id="-99157" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-99147"/>
+        <nd ref="-99141"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:11fe69eabacab979b78b3daaab67acd9d68562be;sha1sum:102fa2eb424887def1238ce66f6c4f68ea4097ea"/>
+        <tag k="note" v="2c;2a"/>
     </way>
 </osm>

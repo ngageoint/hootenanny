@@ -1,7 +1,7 @@
-19:58:05.492 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
-19:58:05.512 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 167 elements from input in: 00:00.
-19:58:05.518 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 167 elements from input in: 00:00.
-19:58:05.520 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 156) Map difference calculated in 00:00 total.
+15:37:47.466 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 112) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
+15:37:47.488 STATUS ...ore/io/OsmMapReaderFactory.cpp( 176) Read 167 elements from input in: 00:00.
+15:37:47.494 STATUS ...ore/io/OsmMapReaderFactory.cpp( 176) Read 167 elements from input in: 00:00.
+15:37:47.496 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 146) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	16	
@@ -232,7 +232,7 @@ Line Reviews to be Made	0	0	0
 Unmatched Lines	4	4	1	
 Unmatched Lines From Map 1	4	0	1	
 Unmatched Lines From Map 2	0	4	0	
-Total Meters of Lines	1268.255775616008	1199.582447808015	1268.255386842966	
+Total Meters of Lines	1268.255775616008	1199.582447808015	1268.255386842967	
 Meters of Conflated Lines	0	0	1193.173985635746	
 Meters of Unmatched Lines From Map 1	1268.255775616008	0	75.08140120722001	
 Meters of Unmatched Lines From Map 2	0	1199.582447808015	0	
@@ -276,10 +276,10 @@ Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.12323
 Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.07991736179613	
 Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.920051984052825	
 Percentage of Length of Map 2 Lines Not Matched With Map 1 Lines			0	
-Calculate Stats for Input 1 Time (sec)				1.04840087890625
-Calculate Stats for Input 2 Time (sec)				0.8052849769592285
-Apply Pre-Conflate Ops Time (sec)				0.01133203506469727
-Apply Post-Conflate Ops Time (sec)				0.00726318359375
-Calculate Stats for Output Time (sec)				0.7925169467926025
+Calculate Stats for Input 1 Time (sec)				1.075518846511841
+Calculate Stats for Input 2 Time (sec)				0.8069651126861572
+Apply Pre-Conflate Ops Time (sec)				0.01336789131164551
+Apply Post-Conflate Ops Time (sec)				0.01035714149475098
+Calculate Stats for Output Time (sec)				0.8349521160125732
 
-19:58:05.119 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:03 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+15:37:47.092 STATUS ...pp/hoot/core/util/Progress.cpp(  80) Conflate (100%): Conflation job completed in 00:03 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

@@ -19,7 +19,11 @@ if (typeof hoot === 'undefined') {
     hoot.Settings.set({"ogr.note.extra": "attribute"});
     hoot.Settings.set({"reader.add.source.datetime": "false"});
     hoot.Settings.set({"writer.include.circular.error.tags": "false"});
+    hoot.Settings.set({"ogr.thematic.structure":"false"});
+
+    // LOTS of debug output on the console (journalctl -xe -u tomcat8)
     // hoot.Settings.set({"ogr.debug.dumptags": "true"});
+
 
     // Throw errors instead of returning partial translations/o2s_X features
     hoot.Settings.set({'ogr.throw.error':'true'});

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
@@ -72,9 +72,7 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, ConstOsmMapPtr& ptr)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);
@@ -84,9 +82,7 @@ inline void toCpp(v8::Local<v8::Value> v, ConstOsmMapPtr& ptr)
 inline void toCpp(v8::Local<v8::Value> v, OsmMapPtr& ptr)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);

@@ -290,7 +290,7 @@ bool TagInfo::_tagKeysMatch(const QString& tagKey) const
 
 void TagInfo::_parseElement(const ConstElementPtr& e, TagInfoHash& result) const
 {
-  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+  for (auto it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());

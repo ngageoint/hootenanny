@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
 
 // hoot
 #include <hoot/core/elements/Node.h>
+
 #include <hoot/js/HootBaseJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -78,20 +79,14 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, Tags& t)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   TagsJs* js = nullptr;
   if (obj->InternalFieldCount() > 0)
-  {
     js = node::ObjectWrap::Unwrap<TagsJs>(obj);
-  }
   if (js)
-  {
     t = js->getTags();
-  }
 }
 
 }

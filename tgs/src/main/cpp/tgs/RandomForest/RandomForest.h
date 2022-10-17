@@ -57,7 +57,7 @@ public:
   * Default Constructor/Destructor
   */
   RandomForest() = default;
-  ~RandomForest() = default;
+  ~RandomForest() override = default;
 
   /**
   * Build the forest from a data set

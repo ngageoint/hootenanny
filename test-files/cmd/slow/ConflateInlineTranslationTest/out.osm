@@ -951,20 +951,6 @@
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1277365448887799" lon="-97.7637000000000000"/>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1268999999999991" lon="-97.7617269756330387"/>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1331522167010952" lon="-97.7637000000000000"/>
-    <way visible="true" id="-2269" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-473"/>
-        <nd ref="-472"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:5bb52c116be9d35183733cd17c09bb63bfad43a9;sha1sum:3e5c77191056e5686272ace3a7d2d6d9d590555f"/>
-        <tag k="layer" v="1"/>
-        <tag k="name" v="Sadowski Road"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2014-08-28T14:13:38Z"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="tiger:zip_left" v="76544"/>
-        <tag k="tiger:zip_right" v="76544"/>
-    </way>
     <way visible="true" id="-352" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-490"/>
         <nd ref="-489"/>
@@ -979,27 +965,6 @@
         <tag k="highway" v="road"/>
         <tag k="source" v="maxar"/>
         <tag k="surface" v="unpaved"/>
-    </way>
-    <way visible="true" id="-349" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-926"/>
-        <nd ref="-927"/>
-        <nd ref="-928"/>
-        <nd ref="-929"/>
-        <nd ref="-930"/>
-        <nd ref="-585"/>
-        <nd ref="-584"/>
-        <nd ref="-583"/>
-        <nd ref="-582"/>
-        <nd ref="-581"/>
-        <nd ref="-580"/>
-        <nd ref="-579"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Patton Spur"/>
-        <tag k="source" v="maxar"/>
-        <tag k="source:datetime" v="2014-02-16T12:42:46Z"/>
-        <tag k="surface" v="paved"/>
-        <tag k="tiger:zip_left" v="76544"/>
-        <tag k="tiger:zip_right" v="76544"/>
     </way>
     <way visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1221"/>
@@ -1129,15 +1094,6 @@
         <tag k="source" v="maxar"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-244" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1138"/>
-        <nd ref="-1130"/>
-        <nd ref="-1129"/>
-        <nd ref="-1128"/>
-        <tag k="highway" v="road"/>
-        <tag k="source" v="maxar"/>
-        <tag k="surface" v="unpaved"/>
-    </way>
     <way visible="true" id="-243" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1172"/>
         <nd ref="-1126"/>
@@ -1165,6 +1121,9 @@
         <tag k="surface" v="unpaved"/>
     </way>
     <way visible="true" id="-241" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1138"/>
+        <nd ref="-1130"/>
+        <nd ref="-1129"/>
         <nd ref="-1128"/>
         <nd ref="-1110"/>
         <nd ref="-1109"/>
@@ -1179,11 +1138,15 @@
         <nd ref="-1084"/>
         <nd ref="-922"/>
         <nd ref="-578"/>
+        <nd ref="-577"/>
+        <nd ref="-576"/>
+        <nd ref="-575"/>
+        <nd ref="-574"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Marcinkiewicz Spur"/>
         <tag k="name_1" v="Marcinkiewkz Spur"/>
         <tag k="name_2" v="Marcinkewicz"/>
-        <tag k="source" v="maxar"/>
+        <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2018-10-05T18:56:44Z"/>
         <tag k="surface" v="unpaved"/>
         <tag k="tiger:zip_left" v="76544"/>
@@ -1273,16 +1236,6 @@
         <tag k="tiger:zip_left" v="76544"/>
         <tag k="tiger:zip_right" v="76544"/>
     </way>
-    <way visible="true" id="-233" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1044"/>
-        <nd ref="-1042"/>
-        <nd ref="-1041"/>
-        <nd ref="-1040"/>
-        <nd ref="-1039"/>
-        <tag k="highway" v="road"/>
-        <tag k="source" v="maxar"/>
-        <tag k="surface" v="unpaved"/>
-    </way>
     <way visible="true" id="-232" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1039"/>
         <nd ref="-1037"/>
@@ -1304,14 +1257,33 @@
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-231" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1044"/>
+        <nd ref="-1042"/>
+        <nd ref="-1041"/>
+        <nd ref="-1040"/>
         <nd ref="-1039"/>
         <nd ref="-1033"/>
         <nd ref="-1032"/>
         <nd ref="-925"/>
         <nd ref="-926"/>
-        <tag k="highway" v="road"/>
+        <nd ref="-927"/>
+        <nd ref="-928"/>
+        <nd ref="-929"/>
+        <nd ref="-930"/>
+        <nd ref="-585"/>
+        <nd ref="-584"/>
+        <nd ref="-583"/>
+        <nd ref="-582"/>
+        <nd ref="-581"/>
+        <nd ref="-580"/>
+        <nd ref="-579"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Patton Spur"/>
         <tag k="source" v="maxar"/>
+        <tag k="source:datetime" v="2014-02-16T12:42:46Z"/>
         <tag k="surface" v="paved"/>
+        <tag k="tiger:zip_left" v="76544"/>
+        <tag k="tiger:zip_right" v="76544"/>
     </way>
     <way visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1012"/>
@@ -1986,22 +1958,6 @@
         <tag k="source" v="maxar"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-578"/>
-        <nd ref="-577"/>
-        <nd ref="-576"/>
-        <nd ref="-575"/>
-        <nd ref="-574"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Marcinkiewicz Spur"/>
-        <tag k="name_1" v="Marcinkiewkz Spur"/>
-        <tag k="name_2" v="Marcinkewicz"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2018-10-05T18:56:44Z"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="tiger:zip_left" v="76544"/>
-        <tag k="tiger:zip_right" v="76544"/>
-    </way>
     <way visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-567"/>
         <nd ref="-566"/>
@@ -2456,6 +2412,20 @@
         <tag k="source:datetime" v="2021-04-16T11:37:32Z"/>
         <tag k="surface" v="unpaved"/>
         <tag k="tiger:zip_left" v="76544"/>
+    </way>
+    <way visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-473"/>
+        <nd ref="-472"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:5bb52c116be9d35183733cd17c09bb63bfad43a9;sha1sum:3e5c77191056e5686272ace3a7d2d6d9d590555f"/>
+        <tag k="layer" v="1"/>
+        <tag k="name" v="Sadowski Road"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:datetime" v="2014-08-28T14:13:38Z"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="tiger:zip_left" v="76544"/>
+        <tag k="tiger:zip_right" v="76544"/>
     </way>
     <way visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-512"/>

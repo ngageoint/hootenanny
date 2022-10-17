@@ -3229,452 +3229,6 @@
         <tag k="hoot:id" v="4881737777"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-1265" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5"/>
-        <nd ref="4881732781"/>
-        <nd ref="4881725755"/>
-        <tag k="admin_level" v="8"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:7828268ef5ef862c3dc716e207c0dec79fd6ff1e;sha1sum:033958a03f57bd90637b45f428deedbb258eb891"/>
-        <tag k="hoot:id" v="-1265"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="source:datetime" v="2015-12-23T16:54:03.000Z;2015-12-23T16:54:03Z"/>
-    </way>
-    <way visible="true" id="-1262" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-18"/>
-        <nd ref="4881735986"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:de6112a6cac6b71e266114db2953b0e4b5c3ea4c;sha1sum:10796bcf42de7bfa38878d0914fbf76daf5fda6a"/>
-        <tag k="hoot:id" v="-1262"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="name" v="Yorktown Road"/>
-        <tag k="source:datetime" v="2013-04-20T14:53:12.000Z;2013-04-20T14:53:12Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Yorktown"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1255" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="-787"/>
-        <nd ref="4881728060"/>
-        <nd ref="4881735675"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="destination" v="Dover;Wilmington"/>
-        <tag k="destination:ref" v="DE 1 North"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="expressway" v="yes"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="hoot:hash" v="sha1sum:29dad3ac6bf0fbfc35a03b52f24abce9fca9304f;sha1sum:2ede4bae3c00de3eb59f00da50336ff0b51a1df9"/>
-        <tag k="hoot:id" v="-1255"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Coastal Highway"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1"/>
-        <tag k="source:datetime" v="2015-09-14T14:50:34.000Z;2018-10-31T01:31:52Z;2019-12-09T01:12:49Z"/>
-        <tag k="tiger:cfcc" v="A35"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Coastal"/>
-        <tag k="tiger:name_base_1" v="State Highway 1"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-    </way>
-    <way visible="true" id="-1249" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881727171"/>
-        <nd ref="4881725005"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1249"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="name" v="Shelby Way"/>
-        <tag k="source:datetime" v="2007-12-19T16:52:02.000Z;2017-11-18T14:36:11Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Shelby"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1243" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881727239"/>
-        <nd ref="4881729207"/>
-        <nd ref="4881727246"/>
-        <nd ref="4881729187"/>
-        <nd ref="4881727230"/>
-        <nd ref="4881730426"/>
-        <nd ref="4881730877"/>
-        <nd ref="4881730608"/>
-        <nd ref="4881730864"/>
-        <nd ref="4881730472"/>
-        <nd ref="4881729133"/>
-        <nd ref="4881727226"/>
-        <nd ref="4881729120"/>
-        <nd ref="4881727230"/>
-        <tag k="alt_name" v="Rock Ledge Court"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1243"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="14"/>
-        <tag k="name" v="Little Birch Lane"/>
-        <tag k="source:datetime" v="2011-04-13T17:05:10.000Z;2018-03-18T02:33:10Z"/>
-    </way>
-    <way visible="true" id="-1237" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881724671"/>
-        <nd ref="4881736808"/>
-        <nd ref="4881736807"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1237"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="name" v="Valley Forge Drive"/>
-        <tag k="source:datetime" v="2013-04-20T15:00:38.000Z;2018-03-18T01:52:03Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Valley Forge"/>
-        <tag k="tiger:name_type" v="Dr"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1211" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881730462"/>
-        <nd ref="4881729194"/>
-        <nd ref="4881728587"/>
-        <nd ref="4881729212"/>
-        <nd ref="4881727239"/>
-        <nd ref="4881730424"/>
-        <nd ref="-29"/>
-        <tag k="alt_name" v="Little Birch Drive"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:b379cfdc139ef008f82cfa6cfb9b34ac0f0dd961;sha1sum:74a63c5dd3d21ae5f5a86206185cabecb96ff0ef;sha1sum:0fcecf482863867f13d87d252f868b2d99568bf6;sha1sum:3d73181dc08b3cf1f70e5d18409d9a6dfc995297"/>
-        <tag k="hoot:id" v="-1211"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="7"/>
-        <tag k="name" v="Little Birch Lane"/>
-        <tag k="source:datetime" v="2011-04-13T17:05:12.000Z;2018-03-18T02:33:12Z"/>
-    </way>
-    <way visible="true" id="-1208" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881735675"/>
-        <nd ref="4881731075"/>
-        <nd ref="4881731090"/>
-        <nd ref="-16"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="destination" v="Dover;Wilmington"/>
-        <tag k="destination:ref" v="DE 1 North"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="expressway" v="yes"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="hoot:hash" v="sha1sum:bce96111f72b79997fd2426b397e571c5fe824bf;sha1sum:fb7a1f67cefc60ecb69cbe7c4142e242a8618aa0"/>
-        <tag k="hoot:id" v="-1208"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="4"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Coastal Highway"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1"/>
-        <tag k="source:datetime" v="2015-09-14T14:50:43.000Z;2019-12-09T01:12:49Z"/>
-        <tag k="tiger:cfcc" v="A35"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Coastal"/>
-        <tag k="tiger:name_base_1" v="State Highway 1"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-    </way>
-    <way visible="true" id="-1195" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725014"/>
-        <nd ref="4881736592"/>
-        <nd ref="4881726863"/>
-        <nd ref="4881724997"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1195"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="4"/>
-        <tag k="name" v="Lindsay Lane"/>
-        <tag k="source:datetime" v="2012-04-28T19:05:05.000Z;2017-11-18T14:36:11Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Lindsay"/>
-        <tag k="tiger:name_type" v="Ln"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1189" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881725745"/>
-        <nd ref="-32"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:929490f0c324722b3bc919008b431a2849ffba3f;sha1sum:3bc571e441b684000ef9bf0b039ff612135da81f"/>
-        <tag k="hoot:id" v="-1189"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Coastal Highway"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1"/>
-        <tag k="source" v="Yahoo"/>
-        <tag k="source:datetime" v="2015-12-22T12:45:25.000Z;2019-06-09T00:35:12Z"/>
-        <tag k="tiger:cfcc" v="A35"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Coastal"/>
-        <tag k="tiger:name_base_1" v="State Highway 1"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-        <tag k="tiger:zip_left" v="19971"/>
-        <tag k="tiger:zip_right" v="19971"/>
-    </way>
-    <way visible="true" id="-1185" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881729921"/>
-        <nd ref="4881725745"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="hoot:hash" v="sha1sum:1aeddee0bc1d2a69f4e3da1da3b296a0da47938f;sha1sum:3bc571e441b684000ef9bf0b039ff612135da81f"/>
-        <tag k="hoot:id" v="-1185"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Coastal Highway"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1"/>
-        <tag k="source" v="Yahoo"/>
-        <tag k="source:datetime" v="2015-09-14T14:50:59.000Z;2019-06-09T00:35:12Z"/>
-        <tag k="tiger:cfcc" v="A35"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Coastal"/>
-        <tag k="tiger:name_base_1" v="State Highway 1"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-        <tag k="tiger:zip_left" v="19971"/>
-        <tag k="tiger:zip_right" v="19971"/>
-    </way>
-    <way visible="true" id="-1164" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725015"/>
-        <nd ref="4881736744"/>
-        <nd ref="4881724434"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1164"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="name" v="Joshua Drive"/>
-        <tag k="source:datetime" v="2012-12-22T09:18:56.000Z;2017-11-18T14:36:11Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Joshua"/>
-        <tag k="tiger:name_type" v="Dr"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1158" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-11"/>
-        <nd ref="4881725755"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:942c7d87838e4c37b8b2ed1d7165ddbcb47d8932;sha1sum:92f20c61ac3434b68d6ec8ac028c4f8575cf0cbd"/>
-        <tag k="hoot:id" v="-1158"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Coastal Highway"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1"/>
-        <tag k="source:datetime" v="2015-12-22T12:45:24.000Z;2019-06-09T00:35:12Z"/>
-        <tag k="tiger:cfcc" v="A35"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Coastal"/>
-        <tag k="tiger:name_base_1" v="State Highway 1"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-    </way>
-    <way visible="true" id="-1155" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881728060"/>
-        <nd ref="4881728073"/>
-        <nd ref="4881728072"/>
-        <nd ref="-10"/>
-        <tag k="destination" v="Milford"/>
-        <tag k="destination:ref" v="DE 1 Business"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:hash" v="sha1sum:fa6b95320a45113943353f50d9368b1407faf275;sha1sum:ac067c42a5982b4a207a14df3bd57ea215bb5f98"/>
-        <tag k="hoot:id" v="-1155"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="4"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1 Business"/>
-        <tag k="source:datetime" v="2015-09-14T14:50:57.000Z;2019-12-09T01:12:49Z"/>
-        <tag k="tiger:cfcc" v="A63"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1141" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735986"/>
-        <nd ref="4881735987"/>
-        <nd ref="4881735984"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:4940be3f35af7fbac5ede88faa6b6852feed238a;sha1sum:c64b559a9fe2389a5c7f39bf7954db00792620ae"/>
-        <tag k="hoot:id" v="-1141"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="name" v="West Yorktown Road"/>
-        <tag k="source:datetime" v="2013-04-20T14:52:29.000Z;2013-04-20T14:52:29Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Yorktown"/>
-        <tag k="tiger:name_direction_prefix" v="W"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1138" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2"/>
-        <nd ref="4881731232"/>
-        <nd ref="4881731231"/>
-        <nd ref="4881731240"/>
-        <nd ref="4881729921"/>
-        <nd ref="4881725745"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="expressway" v="yes"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="hoot:hash" v="sha1sum:20489d662fdb8982b3a54f4bdc1e408869558fa6;sha1sum:dd58078d8322046e8792f3aa7a55ff74d65fbeaa"/>
-        <tag k="hoot:id" v="-1138"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="6"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Coastal Highway"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1"/>
-        <tag k="source" v="Yahoo"/>
-        <tag k="source:datetime" v="2015-09-14T14:50:59.000Z;2019-12-09T01:12:49Z"/>
-        <tag k="tiger:cfcc" v="A35"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Coastal"/>
-        <tag k="tiger:name_base_1" v="State Highway 1"/>
-        <tag k="tiger:name_type" v="Hwy"/>
-        <tag k="tiger:zip_left" v="19971"/>
-        <tag k="tiger:zip_right" v="19971"/>
-    </way>
-    <way visible="true" id="-1135" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1111"/>
-        <nd ref="4881728581"/>
-        <nd ref="4881737755"/>
-        <nd ref="-1113"/>
-        <nd ref="4881737768"/>
-        <nd ref="4881737769"/>
-        <nd ref="4881729183"/>
-        <nd ref="4881735208"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:447cf5b95bdcb74226fd67865e1f1e8ea2a99fb4;sha1sum:363a26f860da8cc9c8ce03d7007ae44ecee26c05"/>
-        <tag k="hoot:id" v="-1135"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="8"/>
-        <tag k="name" v="Wilkins Road"/>
-        <tag k="name_1" v="Road 206"/>
-        <tag k="ref" v="(206)"/>
-        <tag k="source:datetime" v="2012-12-22T09:18:57.000Z;2018-03-18T02:45:46Z"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Wilkins"/>
-        <tag k="tiger:name_base_1" v="Road 206"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1132" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="4881729920"/>
-        <nd ref="4881729919"/>
-        <nd ref="4881729922"/>
-        <nd ref="4881729921"/>
-        <tag k="destination:ref" v="DE 1 South"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:hash" v="sha1sum:18767498bd49b18b201f375f7af55f11a8554c3a;sha1sum:f78511ee1d928e329a9c8d79d227f745e7c503bc"/>
-        <tag k="hoot:id" v="-1132"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="DE 1 Business"/>
-        <tag k="source:datetime" v="2015-09-14T14:50:58.000Z;2019-12-09T01:12:49Z"/>
-        <tag k="tiger:cfcc" v="A63"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
-    </way>
-    <way visible="true" id="-1129" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881724670"/>
-        <nd ref="4881724671"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1129"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="name" v="West Saratoga Road"/>
-        <tag k="source:datetime" v="2013-04-20T14:53:10.000Z;2018-03-18T01:52:03Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Saratoga"/>
-        <tag k="tiger:name_direction_prefix" v="W"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
-    <way visible="true" id="-1115" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725015"/>
-        <nd ref="4881725013"/>
-        <nd ref="4881725014"/>
-        <nd ref="4881725009"/>
-        <nd ref="4881726864"/>
-        <nd ref="4881726850"/>
-        <nd ref="4881724994"/>
-        <nd ref="4881726862"/>
-        <nd ref="4881725007"/>
-        <nd ref="4881726865"/>
-        <nd ref="4881726851"/>
-        <nd ref="4881725005"/>
-        <nd ref="-1118"/>
-        <nd ref="4881725003"/>
-        <nd ref="4881725004"/>
-        <nd ref="4881724997"/>
-        <nd ref="4881724443"/>
-        <nd ref="4881724434"/>
-        <nd ref="4881724433"/>
-        <nd ref="4881724436"/>
-        <nd ref="4881724449"/>
-        <nd ref="4881724447"/>
-        <nd ref="-1104"/>
-        <nd ref="4881725015"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-1115"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="24"/>
-        <tag k="name" v="Matthews Circle"/>
-        <tag k="source:datetime" v="2012-12-22T09:18:29.000Z;2017-11-18T14:36:11Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Matthews"/>
-        <tag k="tiger:name_type" v="Cir"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
     <way visible="true" id="-1087" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="4881727362"/>
@@ -3690,14 +3244,12 @@
         <nd ref="4881732574"/>
         <nd ref="-1093"/>
         <nd ref="4881727171"/>
-        <nd ref="4881732586"/>
-        <nd ref="-4"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:9ad82e2039a4fe2325537f37543641e05ac1ecbb;sha1sum:5f2ded44143b6c54e274afae403d558143c4610d;sha1sum:45c39d86ecd6306cdd1bfb96876053388a7a69e7;sha1sum:1da79530020285c96d6980433a03c312a307f096"/>
+        <tag k="hoot:hash" v="sha1sum:9ad82e2039a4fe2325537f37543641e05ac1ecbb;sha1sum:5f2ded44143b6c54e274afae403d558143c4610d"/>
         <tag k="hoot:id" v="-1087"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="16"/>
+        <tag k="hoot:way:node:count" v="14"/>
         <tag k="name" v="Cedar Creek Road"/>
         <tag k="ref" v="DE 30"/>
         <tag k="source:datetime" v="2015-12-22T03:22:33.000Z;2019-02-09T03:12:22Z"/>
@@ -3708,28 +3260,6 @@
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="tiger:reviewed" v="no"/>
     </way>
-    <way visible="true" id="-224" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881728060"/>
-        <nd ref="4881735675"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:41f38824a34e8f47cba636bd767f1bd6b78c7edf"/>
-        <tag k="hoot:id" v="-224"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:way:node:count" v="2"/>
-    </way>
-    <way visible="true" id="-169" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881729200"/>
-        <nd ref="4881730423"/>
-        <nd ref="4881730438"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:f8528c4c952bb52e9516b50253f2625315972875"/>
-        <tag k="hoot:id" v="-169"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
-        <tag k="name" v="Smithfield Circle"/>
-        <tag k="source:datetime" v="2011-04-13T17:04:54.000Z"/>
-    </way>
     <way visible="true" id="-140" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="-786"/>
         <nd ref="4881730846"/>
@@ -3738,7 +3268,7 @@
         <nd ref="4881730462"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:191cbdab33e8056326040afee2d324dcf08a7e01;sha1sum:2e6a5687b7021d35b7d4eaf1cd7fb5f9254f3d06;sha1sum:521064a3e9530b92587984ad5dc9f823909f30c0;sha1sum:87df3af9fcb38ea64e679a93eeb5a0414a858ff8"/>
+        <tag k="hoot:hash" v="sha1sum:521064a3e9530b92587984ad5dc9f823909f30c0;sha1sum:87df3af9fcb38ea64e679a93eeb5a0414a858ff8;sha1sum:191cbdab33e8056326040afee2d324dcf08a7e01;sha1sum:2e6a5687b7021d35b7d4eaf1cd7fb5f9254f3d06"/>
         <tag k="hoot:id" v="-140"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
@@ -5100,6 +4630,31 @@
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:reviewed" v="no"/>
     </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881725745"/>
+        <nd ref="-32"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:929490f0c324722b3bc919008b431a2849ffba3f;sha1sum:3bc571e441b684000ef9bf0b039ff612135da81f"/>
+        <tag k="hoot:id" v="-25"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="name" v="Coastal Highway"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2015-12-22T12:45:25.000Z;2019-06-09T00:35:12Z"/>
+        <tag k="tiger:cfcc" v="A35"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Coastal"/>
+        <tag k="tiger:name_base_1" v="State Highway 1"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+        <tag k="tiger:zip_left" v="19971"/>
+        <tag k="tiger:zip_right" v="19971"/>
+    </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881724671"/>
         <nd ref="-1116"/>
@@ -5144,6 +4699,24 @@
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
     </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881730462"/>
+        <nd ref="4881729194"/>
+        <nd ref="4881728587"/>
+        <nd ref="4881729212"/>
+        <nd ref="4881727239"/>
+        <nd ref="4881730424"/>
+        <nd ref="-29"/>
+        <tag k="alt_name" v="Little Birch Drive"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:b379cfdc139ef008f82cfa6cfb9b34ac0f0dd961;sha1sum:74a63c5dd3d21ae5f5a86206185cabecb96ff0ef;sha1sum:0fcecf482863867f13d87d252f868b2d99568bf6;sha1sum:3d73181dc08b3cf1f70e5d18409d9a6dfc995297"/>
+        <tag k="hoot:id" v="-22"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="7"/>
+        <tag k="name" v="Little Birch Lane"/>
+        <tag k="source:datetime" v="2011-04-13T17:05:12.000Z;2018-03-18T02:33:12Z"/>
+    </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="4881737764"/>
@@ -5155,11 +4728,19 @@
         <nd ref="4881737777"/>
         <nd ref="4881728583"/>
         <nd ref="-1111"/>
+        <nd ref="4881728581"/>
+        <nd ref="4881737755"/>
+        <nd ref="-1113"/>
+        <nd ref="4881737768"/>
+        <nd ref="4881737769"/>
+        <nd ref="4881729183"/>
+        <nd ref="4881735208"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:hash" v="sha1sum:447cf5b95bdcb74226fd67865e1f1e8ea2a99fb4;sha1sum:363a26f860da8cc9c8ce03d7007ae44ecee26c05"/>
         <tag k="hoot:id" v="-21"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="10"/>
+        <tag k="hoot:way:node:count" v="17"/>
         <tag k="name" v="Wilkins Road"/>
         <tag k="name_1" v="Road 206"/>
         <tag k="ref" v="(206)"/>
@@ -5296,6 +4877,25 @@
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:zip_right" v="19963"/>
     </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="4881735986"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:de6112a6cac6b71e266114db2953b0e4b5c3ea4c;sha1sum:10796bcf42de7bfa38878d0914fbf76daf5fda6a"/>
+        <tag k="hoot:id" v="-14"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Yorktown Road"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:12.000Z;2013-04-20T14:53:12Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Yorktown"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881735562"/>
         <nd ref="4881735563"/>
@@ -5308,6 +4908,33 @@
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="source" v="TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)"/>
         <tag k="source:datetime" v="2020-02-28T16:41:58Z"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881735675"/>
+        <nd ref="4881731075"/>
+        <nd ref="4881731090"/>
+        <nd ref="-16"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="destination" v="Dover;Wilmington"/>
+        <tag k="destination:ref" v="DE 1 North"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="expressway" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="hoot:hash" v="sha1sum:bce96111f72b79997fd2426b397e571c5fe824bf;sha1sum:fb7a1f67cefc60ecb69cbe7c4142e242a8618aa0"/>
+        <tag k="hoot:id" v="-12"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="2"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="name" v="Coastal Highway"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1"/>
+        <tag k="source:datetime" v="2015-09-14T14:50:43.000Z;2019-12-09T01:12:49Z"/>
+        <tag k="tiger:cfcc" v="A35"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Coastal"/>
+        <tag k="tiger:name_base_1" v="State Highway 1"/>
+        <tag k="tiger:name_type" v="Hwy"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15"/>
@@ -5368,6 +4995,48 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="3"/>
     </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="4881725755"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:942c7d87838e4c37b8b2ed1d7165ddbcb47d8932;sha1sum:92f20c61ac3434b68d6ec8ac028c4f8575cf0cbd"/>
+        <tag k="hoot:id" v="-8"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="name" v="Coastal Highway"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1"/>
+        <tag k="source:datetime" v="2015-12-22T12:45:24.000Z;2019-06-09T00:35:12Z"/>
+        <tag k="tiger:cfcc" v="A35"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Coastal"/>
+        <tag k="tiger:name_base_1" v="State Highway 1"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881728060"/>
+        <nd ref="4881728073"/>
+        <nd ref="4881728072"/>
+        <nd ref="-10"/>
+        <tag k="destination" v="Milford"/>
+        <tag k="destination:ref" v="DE 1 Business"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:hash" v="sha1sum:fa6b95320a45113943353f50d9368b1407faf275;sha1sum:ac067c42a5982b4a207a14df3bd57ea215bb5f98"/>
+        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1 Business"/>
+        <tag k="source:datetime" v="2015-09-14T14:50:57.000Z;2019-12-09T01:12:49Z"/>
+        <tag k="tiger:cfcc" v="A63"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="4881725301"/>
@@ -5401,16 +5070,30 @@
         <tag k="source" v="TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)"/>
         <tag k="source:datetime" v="2020-02-28T16:41:05Z"/>
     </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="4881732781"/>
+        <nd ref="4881725755"/>
+        <tag k="admin_level" v="8"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:7828268ef5ef862c3dc716e207c0dec79fd6ff1e;sha1sum:033958a03f57bd90637b45f428deedbb258eb891"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="source:datetime" v="2015-12-23T16:54:03.000Z;2015-12-23T16:54:03Z"/>
+    </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1093"/>
         <nd ref="4881727171"/>
         <nd ref="4881732586"/>
+        <nd ref="-4"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:608d21c84c144ec13a218123bead75c6d05f3ffd;sha1sum:5f2ded44143b6c54e274afae403d558143c4610d"/>
+        <tag k="hoot:hash" v="sha1sum:608d21c84c144ec13a218123bead75c6d05f3ffd;sha1sum:5f2ded44143b6c54e274afae403d558143c4610d;sha1sum:1da79530020285c96d6980433a03c312a307f096"/>
         <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
         <tag k="name" v="Cedar Creek Road"/>
         <tag k="ref" v="DE 30"/>
         <tag k="source:datetime" v="2015-12-22T03:22:33.000Z;2019-02-09T03:12:22Z"/>
@@ -5419,6 +5102,56 @@
         <tag k="tiger:name_base" v="Cedar Creek"/>
         <tag k="tiger:name_base_1" v="State Road 30"/>
         <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="4881731232"/>
+        <nd ref="4881731231"/>
+        <nd ref="4881731240"/>
+        <nd ref="4881729921"/>
+        <nd ref="4881725745"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="expressway" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="hoot:hash" v="sha1sum:20489d662fdb8982b3a54f4bdc1e408869558fa6;sha1sum:dd58078d8322046e8792f3aa7a55ff74d65fbeaa;sha1sum:1aeddee0bc1d2a69f4e3da1da3b296a0da47938f;sha1sum:3bc571e441b684000ef9bf0b039ff612135da81f"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="6"/>
+        <tag k="lanes" v="2"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="name" v="Coastal Highway"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2015-09-14T14:50:59.000Z;2019-12-09T01:12:49Z;2019-06-09T00:35:12Z"/>
+        <tag k="tiger:cfcc" v="A35"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Coastal"/>
+        <tag k="tiger:name_base_1" v="State Highway 1"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+        <tag k="tiger:zip_left" v="19971"/>
+        <tag k="tiger:zip_right" v="19971"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="4881729920"/>
+        <nd ref="4881729919"/>
+        <nd ref="4881729922"/>
+        <nd ref="4881729921"/>
+        <tag k="destination:ref" v="DE 1 South"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:hash" v="sha1sum:18767498bd49b18b201f375f7af55f11a8554c3a;sha1sum:f78511ee1d928e329a9c8d79d227f745e7c503bc"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1 Business"/>
+        <tag k="source:datetime" v="2015-09-14T14:50:58.000Z;2019-12-09T01:12:49Z"/>
+        <tag k="tiger:cfcc" v="A63"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="496849545" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
@@ -5442,12 +5175,6 @@
         <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="496849564" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881730438"/>
-        <nd ref="4881729144"/>
-        <nd ref="4881730613"/>
-        <nd ref="4881729121"/>
-        <nd ref="4881730470"/>
-        <nd ref="4881729201"/>
         <nd ref="4881730603"/>
         <nd ref="4881729112"/>
         <nd ref="4881730548"/>
@@ -5461,14 +5188,163 @@
         <nd ref="4881729191"/>
         <nd ref="4881730861"/>
         <nd ref="4881729200"/>
+        <nd ref="4881730423"/>
+        <nd ref="4881730438"/>
+        <nd ref="4881729144"/>
+        <nd ref="4881730613"/>
+        <nd ref="4881729121"/>
+        <nd ref="4881730470"/>
+        <nd ref="4881729201"/>
+        <nd ref="4881730603"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:e76d847403f7fc54649d70dfaea9218852ba39d7;sha1sum:3df1368b71e408e690f0fb1d32f8449bd010d580;sha1sum:4112740d63ea068117fc434d9a5be9421019a664;sha1sum:781f283740774449ff5f4caebdd6e1be03270d65;sha1sum:180ed1da6fea5474dba0ee4e4900fe217e81ac38;sha1sum:29a970deccd788f80706721a0b4a156da08c1fff;sha1sum:3f8f6fd7a7949a36f97c6d83b38ab029cb9ac91a;sha1sum:686ac7e2cf571df7de48e03b18aca63b7bec0ed1;sha1sum:e31cbbe1aea12ed53e47556e8e6f767726f076c7;sha1sum:0c27410e1615e9074313c761dd937ea88665f3e9"/>
+        <tag k="hoot:hash" v="sha1sum:e76d847403f7fc54649d70dfaea9218852ba39d7;sha1sum:3df1368b71e408e690f0fb1d32f8449bd010d580;sha1sum:4112740d63ea068117fc434d9a5be9421019a664;sha1sum:781f283740774449ff5f4caebdd6e1be03270d65;sha1sum:180ed1da6fea5474dba0ee4e4900fe217e81ac38;sha1sum:e31cbbe1aea12ed53e47556e8e6f767726f076c7;sha1sum:0c27410e1615e9074313c761dd937ea88665f3e9;sha1sum:f8528c4c952bb52e9516b50253f2625315972875;sha1sum:3f8f6fd7a7949a36f97c6d83b38ab029cb9ac91a;sha1sum:686ac7e2cf571df7de48e03b18aca63b7bec0ed1;sha1sum:29a970deccd788f80706721a0b4a156da08c1fff"/>
         <tag k="hoot:id" v="496849564"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="19"/>
+        <tag k="hoot:way:node:count" v="21"/>
         <tag k="name" v="Smithfield Circle"/>
         <tag k="source:datetime" v="2011-04-13T17:04:54.000Z;2011-04-13T17:04:54Z"/>
+    </way>
+    <way visible="true" id="496849588" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735986"/>
+        <nd ref="4881735987"/>
+        <nd ref="4881735984"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:4940be3f35af7fbac5ede88faa6b6852feed238a;sha1sum:c64b559a9fe2389a5c7f39bf7954db00792620ae"/>
+        <tag k="hoot:id" v="496849588"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="name" v="West Yorktown Road"/>
+        <tag k="source:datetime" v="2013-04-20T14:52:29.000Z;2013-04-20T14:52:29Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Yorktown"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849615" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881724670"/>
+        <nd ref="4881724671"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496849615"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="West Saratoga Road"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:10.000Z;2018-03-18T01:52:03Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Saratoga"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849654" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881727171"/>
+        <nd ref="4881725005"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496849654"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Shelby Way"/>
+        <tag k="source:datetime" v="2007-12-19T16:52:02.000Z;2017-11-18T14:36:11Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Shelby"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="496849838" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725015"/>
+        <nd ref="4881725013"/>
+        <nd ref="4881725014"/>
+        <nd ref="4881725009"/>
+        <nd ref="4881726864"/>
+        <nd ref="4881726850"/>
+        <nd ref="4881724994"/>
+        <nd ref="4881726862"/>
+        <nd ref="4881725007"/>
+        <nd ref="4881726865"/>
+        <nd ref="4881726851"/>
+        <nd ref="4881725005"/>
+        <nd ref="-1118"/>
+        <nd ref="4881725003"/>
+        <nd ref="4881725004"/>
+        <nd ref="4881724997"/>
+        <nd ref="4881724443"/>
+        <nd ref="4881724434"/>
+        <nd ref="4881724433"/>
+        <nd ref="4881724436"/>
+        <nd ref="4881724449"/>
+        <nd ref="4881724447"/>
+        <nd ref="-1104"/>
+        <nd ref="4881725015"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496849838"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="24"/>
+        <tag k="name" v="Matthews Circle"/>
+        <tag k="source:datetime" v="2012-12-22T09:18:29.000Z;2017-11-18T14:36:11Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Matthews"/>
+        <tag k="tiger:name_type" v="Cir"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850140" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="-787"/>
+        <nd ref="4881728060"/>
+        <nd ref="4881735675"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="destination" v="Dover;Wilmington"/>
+        <tag k="destination:ref" v="DE 1 North"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="expressway" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="hoot:hash" v="sha1sum:29dad3ac6bf0fbfc35a03b52f24abce9fca9304f;sha1sum:2ede4bae3c00de3eb59f00da50336ff0b51a1df9"/>
+        <tag k="hoot:id" v="496850140"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="2"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="name" v="Coastal Highway"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="DE 1"/>
+        <tag k="source:datetime" v="2015-09-14T14:50:34.000Z;2018-10-31T01:31:52Z;2019-12-09T01:12:49Z"/>
+        <tag k="tiger:cfcc" v="A35"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Coastal"/>
+        <tag k="tiger:name_base_1" v="State Highway 1"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+    </way>
+    <way visible="true" id="496850145" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725014"/>
+        <nd ref="4881736592"/>
+        <nd ref="4881726863"/>
+        <nd ref="4881724997"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496850145"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="name" v="Lindsay Lane"/>
+        <tag k="source:datetime" v="2012-04-28T19:05:05.000Z;2017-11-18T14:36:11Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Lindsay"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496850187" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729144"/>
@@ -5507,6 +5383,30 @@
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="name" v="Parkfield Lane"/>
         <tag k="source:datetime" v="2011-04-13T17:05:07.000Z"/>
+    </way>
+    <way visible="true" id="496850194" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881727239"/>
+        <nd ref="4881729207"/>
+        <nd ref="4881727246"/>
+        <nd ref="4881729187"/>
+        <nd ref="4881727230"/>
+        <nd ref="4881730426"/>
+        <nd ref="4881730877"/>
+        <nd ref="4881730608"/>
+        <nd ref="4881730864"/>
+        <nd ref="4881730472"/>
+        <nd ref="4881729133"/>
+        <nd ref="4881727226"/>
+        <nd ref="4881729120"/>
+        <nd ref="4881727230"/>
+        <tag k="alt_name" v="Rock Ledge Court"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496850194"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="14"/>
+        <tag k="name" v="Little Birch Lane"/>
+        <tag k="source:datetime" v="2011-04-13T17:05:10.000Z;2018-03-18T02:33:10Z"/>
     </way>
     <way visible="true" id="496850195" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729188"/>
@@ -5564,6 +5464,42 @@
         <tag k="name" v="Unionfield Lane"/>
         <tag k="source:datetime" v="2011-04-13T17:05:04.000Z"/>
     </way>
+    <way visible="true" id="496850232" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725015"/>
+        <nd ref="4881736744"/>
+        <nd ref="4881724434"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496850232"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="name" v="Joshua Drive"/>
+        <tag k="source:datetime" v="2012-12-22T09:18:56.000Z;2017-11-18T14:36:11Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Joshua"/>
+        <tag k="tiger:name_type" v="Dr"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850233" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881724671"/>
+        <nd ref="4881736808"/>
+        <nd ref="4881736807"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="496850233"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="name" v="Valley Forge Drive"/>
+        <tag k="source:datetime" v="2013-04-20T15:00:38.000Z;2018-03-18T01:52:03Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Valley Forge"/>
+        <tag k="tiger:name_type" v="Dr"/>
+        <tag k="tiger:reviewed" v="no"/>
+    </way>
     <relation visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="496850196" role="reviewee"/>
         <member type="way" ref="-107" role="reviewee"/>
@@ -5584,7 +5520,6 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="7387463" role="reviewee"/>
         <member type="relation" ref="-6" role="reviewee"/>
         <tag k="hoot:id" v="-44"/>
         <tag k="hoot:review:members" v="2"/>
@@ -5603,11 +5538,11 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-8" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-1138" role="forward"/>
-        <member type="way" ref="-1189" role="forward"/>
-        <member type="way" ref="-1158" role="forward"/>
-        <member type="way" ref="-1255" role="forward"/>
-        <member type="way" ref="-1208" role="forward"/>
+        <member type="way" ref="-2" role="forward"/>
+        <member type="way" ref="-25" role="forward"/>
+        <member type="way" ref="-8" role="forward"/>
+        <member type="way" ref="496850140" role="forward"/>
+        <member type="way" ref="-12" role="forward"/>
         <tag k="error:circular" v="15"/>
         <tag k="fixme" v="verify route in Milford, Lewes"/>
         <tag k="hoot:id" v="-8"/>
@@ -5622,8 +5557,8 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-6" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-1155" role="forward"/>
-        <member type="way" ref="-1132" role="forward"/>
+        <member type="way" ref="-7" role="forward"/>
+        <member type="way" ref="-1" role="forward"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-6"/>
         <tag k="hoot:status" v="2"/>
@@ -5634,11 +5569,11 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-5" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-1158" role="north"/>
-        <member type="way" ref="-1255" role="north"/>
-        <member type="way" ref="-1208" role="north"/>
-        <member type="way" ref="-1138" role="south"/>
-        <member type="way" ref="-1189" role="south"/>
+        <member type="way" ref="-8" role="north"/>
+        <member type="way" ref="496850140" role="north"/>
+        <member type="way" ref="-12" role="north"/>
+        <member type="way" ref="-2" role="south"/>
+        <member type="way" ref="-25" role="south"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="2"/>
@@ -5665,33 +5600,18 @@
         <tag k="source:datetime" v="2020-02-28T16:41:54Z;2018-03-18T02:45:47Z"/>
         <tag k="type" v="multilinestring"/>
     </relation>
-    <relation visible="true" id="7387463" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-224" role="north"/>
-        <member type="way" ref="-1138" role="south"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="7387463"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="network" v="US:DE"/>
-        <tag k="ref" v="1"/>
-        <tag k="route" v="road"/>
-        <tag k="source:datetime" v="2015-12-22T12:45:26.000Z"/>
-        <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_1.svg"/>
-        <tag k="type" v="route"/>
-        <tag k="wikipedia" v="en:Delaware Route 1"/>
-    </relation>
     <relation visible="true" id="7387470" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-18" role="outer"/>
         <member type="way" ref="496849545" role="outer"/>
         <member type="relation" ref="-1" role="outer"/>
         <member type="way" ref="-13" role="outer"/>
         <member type="way" ref="-5" role="outer"/>
-        <member type="way" ref="-224" role="outer"/>
         <member type="way" ref="-17" role="inner"/>
-        <member type="way" ref="-1265" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
         <member type="way" ref="-34" role="outer"/>
         <member type="way" ref="-51" role="outer"/>
-        <member type="way" ref="-1155" role="outer"/>
-        <member type="way" ref="-1255" role="outer"/>
+        <member type="way" ref="-7" role="outer"/>
+        <member type="way" ref="496850140" role="outer"/>
         <tag k="admin_level" v="8"/>
         <tag k="border_type" v="city"/>
         <tag k="boundary" v="administrative"/>
@@ -5727,8 +5647,8 @@
         <tag k="wikipedia" v="en:Milford, Delaware"/>
     </relation>
     <relation visible="true" id="7387471" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-1087" role=""/>
         <member type="way" ref="-3" role=""/>
+        <member type="way" ref="-1087" role=""/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="7387471"/>
         <tag k="hoot:status" v="3"/>

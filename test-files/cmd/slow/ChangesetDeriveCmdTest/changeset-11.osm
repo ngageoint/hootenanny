@@ -70,47 +70,47 @@
     <node id="-18968391" version="1" action="delete" lat="39.5942459154902124" lon="-104.8039041912925882" timestamp=""/>
     <node id="-18968389" version="1" action="delete" lat="39.5944194033784882" lon="-104.8041559931055815" timestamp=""/>
     <node id="-18968388" version="1" action="delete" lat="39.5942139571476162" lon="-104.8043781711758697" timestamp=""/>
-    <node id="-1" version="0" lat="39.5942093916699989" lon="-104.8043663216800070" timestamp=""/>
-    <node id="-2" version="0" lat="39.5944262515800034" lon="-104.8041767297300026" timestamp=""/>
-    <node id="-3" version="0" lat="39.5942322190599967" lon="-104.8038923417999939" timestamp=""/>
-    <node id="-4" version="0" lat="39.5940381859999988" lon="-104.8041530307300064" timestamp=""/>
-    <node id="-5" version="0" lat="39.5938190421300007" lon="-104.8043663216800070" timestamp=""/>
-    <node id="-6" version="0" lat="39.5938099111199975" lon="-104.8041115574900033" timestamp=""/>
-    <node id="-7" version="0" lat="39.5935656561600027" lon="-104.8041352564899995" timestamp=""/>
-    <node id="-8" version="0" lat="39.5935770699599985" lon="-104.8043722464300060" timestamp=""/>
-    <node id="-9" version="0" lat="39.5918443467099976" lon="-104.8051495036699947" timestamp=""/>
-    <node id="-10" version="0" lat="39.5918365088200019" lon="-104.8046341680300060" timestamp=""/>
-    <node id="-11" version="0" lat="39.5909325330099975" lon="-104.8046409487599959" timestamp=""/>
-    <node id="-12" version="0" lat="39.5909325330099975" lon="-104.8048206381599954" timestamp=""/>
-    <node id="-13" version="0" lat="39.5910657787400027" lon="-104.8048206381599954" timestamp=""/>
-    <node id="-14" version="0" lat="39.5910631660799979" lon="-104.8051528940300017" timestamp=""/>
-    <node id="-15" version="0" lat="39.5918286709299991" lon="-104.8037526728600000" timestamp=""/>
-    <node id="-16" version="0" lat="39.5911650597000033" lon="-104.8037458921299958" timestamp=""/>
-    <node id="-17" version="0" lat="39.5911571991300022" lon="-104.8046392635500013" timestamp=""/>
-    <node id="-18" version="0" lat="39.5909403710000021" lon="-104.8037425017700031" timestamp=""/>
-    <node id="-19" version="0" lat="39.5918195893000018" lon="-104.8027241458899965" timestamp=""/>
-    <node id="-20" version="0" lat="39.5912657094299973" lon="-104.8027275362599937" timestamp=""/>
-    <node id="-21" version="0" lat="39.5912735473900028" lon="-104.8028326376000052" timestamp=""/>
-    <node id="-22" version="0" lat="39.5914146304000027" lon="-104.8028394183399996" timestamp=""/>
-    <node id="-23" version="0" lat="39.5914041798200032" lon="-104.8034564649500027" timestamp=""/>
-    <node id="-24" version="0" lat="39.5912239069999998" lon="-104.8034598553199999" timestamp=""/>
-    <node id="-25" version="0" lat="39.5912317949799970" lon="-104.8037465740300007" timestamp=""/>
-    <node id="-26" version="0" lat="39.5932776007499996" lon="-104.8065567697200038" timestamp=""/>
-    <node id="-27" version="0" lat="39.5931137011600001" lon="-104.8065277660100065" timestamp=""/>
-    <node id="-28" version="0" lat="39.5931241311499988" lon="-104.8064523563499932" timestamp=""/>
-    <node id="-29" version="0" lat="39.5931062511699992" lon="-104.8064407548600059" timestamp=""/>
-    <node id="-30" version="0" lat="39.5931137011600001" lon="-104.8064001496600071" timestamp=""/>
-    <node id="-31" version="0" lat="39.5931151911600026" lon="-104.8063479429700067" timestamp=""/>
-    <node id="-32" version="0" lat="39.5932910106900025" lon="-104.8063692123599964" timestamp=""/>
-    <node id="-33" version="0" lat="39.5933074006300032" lon="-104.8063769466800039" timestamp=""/>
-    <node id="-34" version="0" lat="39.5932790907399976" lon="-104.8064697585799934" timestamp=""/>
-    <node id="-35" version="0" lat="39.5932969706700035" lon="-104.8062512639099992" timestamp=""/>
-    <node id="-36" version="0" lat="39.5933034489699978" lon="-104.8061230577099963" timestamp=""/>
-    <node id="-37" version="0" lat="39.5931271111399994" lon="-104.8060869095200047" timestamp=""/>
-    <node id="-38" version="0" lat="39.5931238599300031" lon="-104.8061136186200031" timestamp=""/>
-    <node id="-39" version="0" lat="39.5931524411000026" lon="-104.8061255811399946" timestamp=""/>
-    <node id="-40" version="0" lat="39.5931432865099993" lon="-104.8062152723099985" timestamp=""/>
-    <node id="-41" version="0" lat="39.5931217689499988" lon="-104.8062120958900039" timestamp=""/>
+    <node id="-1" version="0" action="modify" lat="39.5942093916699989" lon="-104.8043663216800070" timestamp=""/>
+    <node id="-2" version="0" action="modify" lat="39.5944262515800034" lon="-104.8041767297300026" timestamp=""/>
+    <node id="-3" version="0" action="modify" lat="39.5942322190599967" lon="-104.8038923417999939" timestamp=""/>
+    <node id="-4" version="0" action="modify" lat="39.5940381859999988" lon="-104.8041530307300064" timestamp=""/>
+    <node id="-5" version="0" action="modify" lat="39.5938190421300007" lon="-104.8043663216800070" timestamp=""/>
+    <node id="-6" version="0" action="modify" lat="39.5938099111199975" lon="-104.8041115574900033" timestamp=""/>
+    <node id="-7" version="0" action="modify" lat="39.5935656561600027" lon="-104.8041352564899995" timestamp=""/>
+    <node id="-8" version="0" action="modify" lat="39.5935770699599985" lon="-104.8043722464300060" timestamp=""/>
+    <node id="-9" version="0" action="modify" lat="39.5918443467099976" lon="-104.8051495036699947" timestamp=""/>
+    <node id="-10" version="0" action="modify" lat="39.5918365088200019" lon="-104.8046341680300060" timestamp=""/>
+    <node id="-11" version="0" action="modify" lat="39.5909325330099975" lon="-104.8046409487599959" timestamp=""/>
+    <node id="-12" version="0" action="modify" lat="39.5909325330099975" lon="-104.8048206381599954" timestamp=""/>
+    <node id="-13" version="0" action="modify" lat="39.5910657787400027" lon="-104.8048206381599954" timestamp=""/>
+    <node id="-14" version="0" action="modify" lat="39.5910631660799979" lon="-104.8051528940300017" timestamp=""/>
+    <node id="-15" version="0" action="modify" lat="39.5918286709299991" lon="-104.8037526728600000" timestamp=""/>
+    <node id="-16" version="0" action="modify" lat="39.5911650597000033" lon="-104.8037458921299958" timestamp=""/>
+    <node id="-17" version="0" action="modify" lat="39.5911571991300022" lon="-104.8046392635500013" timestamp=""/>
+    <node id="-18" version="0" action="modify" lat="39.5909403710000021" lon="-104.8037425017700031" timestamp=""/>
+    <node id="-19" version="0" action="modify" lat="39.5918195893000018" lon="-104.8027241458899965" timestamp=""/>
+    <node id="-20" version="0" action="modify" lat="39.5912657094299973" lon="-104.8027275362599937" timestamp=""/>
+    <node id="-21" version="0" action="modify" lat="39.5912735473900028" lon="-104.8028326376000052" timestamp=""/>
+    <node id="-22" version="0" action="modify" lat="39.5914146304000027" lon="-104.8028394183399996" timestamp=""/>
+    <node id="-23" version="0" action="modify" lat="39.5914041798200032" lon="-104.8034564649500027" timestamp=""/>
+    <node id="-24" version="0" action="modify" lat="39.5912239069999998" lon="-104.8034598553199999" timestamp=""/>
+    <node id="-25" version="0" action="modify" lat="39.5912317949799970" lon="-104.8037465740300007" timestamp=""/>
+    <node id="-26" version="0" action="modify" lat="39.5932776007499996" lon="-104.8065567697200038" timestamp=""/>
+    <node id="-27" version="0" action="modify" lat="39.5931137011600001" lon="-104.8065277660100065" timestamp=""/>
+    <node id="-28" version="0" action="modify" lat="39.5931241311499988" lon="-104.8064523563499932" timestamp=""/>
+    <node id="-29" version="0" action="modify" lat="39.5931062511699992" lon="-104.8064407548600059" timestamp=""/>
+    <node id="-30" version="0" action="modify" lat="39.5931137011600001" lon="-104.8064001496600071" timestamp=""/>
+    <node id="-31" version="0" action="modify" lat="39.5931151911600026" lon="-104.8063479429700067" timestamp=""/>
+    <node id="-32" version="0" action="modify" lat="39.5932910106900025" lon="-104.8063692123599964" timestamp=""/>
+    <node id="-33" version="0" action="modify" lat="39.5933074006300032" lon="-104.8063769466800039" timestamp=""/>
+    <node id="-34" version="0" action="modify" lat="39.5932790907399976" lon="-104.8064697585799934" timestamp=""/>
+    <node id="-35" version="0" action="modify" lat="39.5932969706700035" lon="-104.8062512639099992" timestamp=""/>
+    <node id="-36" version="0" action="modify" lat="39.5933034489699978" lon="-104.8061230577099963" timestamp=""/>
+    <node id="-37" version="0" action="modify" lat="39.5931271111399994" lon="-104.8060869095200047" timestamp=""/>
+    <node id="-38" version="0" action="modify" lat="39.5931238599300031" lon="-104.8061136186200031" timestamp=""/>
+    <node id="-39" version="0" action="modify" lat="39.5931524411000026" lon="-104.8061255811399946" timestamp=""/>
+    <node id="-40" version="0" action="modify" lat="39.5931432865099993" lon="-104.8062152723099985" timestamp=""/>
+    <node id="-41" version="0" action="modify" lat="39.5931217689499988" lon="-104.8062120958900039" timestamp=""/>
     <way id="-21128383" version="1" action="delete" timestamp="">
         <nd ref="-21128381"/>
         <nd ref="-21128382"/>
@@ -243,7 +243,7 @@
         <tag k="building" v="yes"/>
         <tag k="name" v="Cheddar's Casual Cafe"/>
     </way>
-    <way id="-1" version="0" timestamp="">
+    <way id="-1" version="0" action="modify" timestamp="">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
@@ -254,7 +254,7 @@
         <tag k="building" v="restaurant"/>
         <tag k="name" v="Cheddars"/>
     </way>
-    <way id="-2" version="0" timestamp="">
+    <way id="-2" version="0" action="modify" timestamp="">
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
@@ -263,7 +263,7 @@
         <tag k="REF2" v="Biondi"/>
         <tag k="building" v="yes"/>
     </way>
-    <way id="-3" version="0" timestamp="">
+    <way id="-3" version="0" action="modify" timestamp="">
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-17"/>
@@ -276,7 +276,7 @@
         <tag k="building" v="yes"/>
         <tag k="name" v="Target Grocery"/>
     </way>
-    <way id="-4" version="0" timestamp="">
+    <way id="-4" version="0" action="modify" timestamp="">
         <nd ref="-10"/>
         <nd ref="-15"/>
         <nd ref="-25"/>
@@ -287,7 +287,7 @@
         <tag k="building" v="yes"/>
         <tag k="name" v="Target - Aurora South"/>
     </way>
-    <way id="-5" version="0" timestamp="">
+    <way id="-5" version="0" action="modify" timestamp="">
         <nd ref="-17"/>
         <nd ref="-16"/>
         <nd ref="-18"/>
@@ -297,7 +297,7 @@
         <tag k="building" v="yes"/>
         <tag k="name" v="Target Pharmacy"/>
     </way>
-    <way id="-6" version="0" timestamp="">
+    <way id="-6" version="0" action="modify" timestamp="">
         <nd ref="-15"/>
         <nd ref="-19"/>
         <nd ref="-20"/>
@@ -310,7 +310,7 @@
         <tag k="building" v="yes"/>
         <tag k="name" v="Best Buy"/>
     </way>
-    <way id="-7" version="0" timestamp="">
+    <way id="-7" version="0" action="modify" timestamp="">
         <nd ref="-26"/>
         <nd ref="-27"/>
         <nd ref="-28"/>
@@ -325,7 +325,7 @@
         <tag k="building" v="yes"/>
         <tag k="name" v="Maid-Rite Diner"/>
     </way>
-    <way id="-8" version="0" timestamp="">
+    <way id="-8" version="0" action="modify" timestamp="">
         <nd ref="-32"/>
         <nd ref="-35"/>
         <nd ref="-36"/>

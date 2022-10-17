@@ -22,23 +22,24 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementGeometryUtilsJs.h"
 
 // hoot
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/js/util/HootExceptionJs.h> 
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/geometry/GeometricRelationship.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/Settings.h>
+
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
+#include <hoot/js/util/StringUtilsJs.h>
 
 using namespace v8;
 

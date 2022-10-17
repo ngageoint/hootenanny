@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MapUtilsJs.h"
 
@@ -33,8 +33,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;
 
@@ -67,9 +67,7 @@ void MapUtilsJs::getFirstElementWithTag(const FunctionCallbackInfo<Value>& args)
   const QString val = toCpp<QString>(args[2]);
   ElementType elementType = ElementType::Unknown;
   if (args.Length() == 4)
-  {
     elementType = ElementType::fromString(toCpp<QString>(args[3]));
-  }
 
   ElementPtr element = MapUtils::getFirstElementWithTag(map, key, val, elementType);
 
@@ -85,9 +83,7 @@ void MapUtilsJs::getFirstElementWithNote(const FunctionCallbackInfo<Value>& args
   const QString noteVal = toCpp<QString>(args[1]);
   ElementType elementType = ElementType::Unknown;
   if (args.Length() == 3)
-  {
     elementType = ElementType::fromString(toCpp<QString>(args[2]));
-  }
 
   ElementPtr element = MapUtils::getFirstElementWithNote(map, noteVal, elementType);
 

@@ -54,6 +54,8 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runSnapMultipleTypesTest);
   CPPUNIT_TEST(runSnapOneOfMultipleTypesTest);
   CPPUNIT_TEST(runSnapToDifferentTypeTest);
+  CPPUNIT_TEST(runSnapCrossingTest);
+  CPPUNIT_TEST(runSnapMultiCrossingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -475,6 +477,77 @@ public:
     CPPUNIT_ASSERT_EQUAL(131L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(125L, uut.getNumSnappedToWayNodes());
     CPPUNIT_ASSERT_EQUAL(6L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runSnapCrossingTest()
+  {
+    // Simple crossing test
+    const QString testName = "runSnapCrossingTest";
+
+    // Load maps
+    OsmXmlReader reader;
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    reader.setUseDataSourceIds(true);
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + testName + "In1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(_inputPath + testName + "In2.osm", map);
+
+    // Project the map
+    MapProjector::projectToPlanar(map);
+
+    // Object for testing
+    UnconnectedWaySnapper uut;
+    uut.apply(map);
+
+    // Test snap our way
+    WayPtr way1 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way1")[0]);
+    uut._snapUnconnectedWayCrossings(way1);
+
+    // Write it out...
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runSnapMultiCrossingTest()
+  {
+    // More complicated ways that cross in multiple locations
+    const QString testName = "runSnapMultiCrossingTest";
+
+    // Load maps
+    OsmXmlReader reader;
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    reader.setUseDataSourceIds(true);
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + testName + "In1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(_inputPath + testName + "In2.osm", map);
+
+    // Project the map
+    MapProjector::projectToPlanar(map);
+
+    // Object for testing
+    UnconnectedWaySnapper uut;
+    uut.apply(map);
+
+    // Test snap our ways
+    WayPtr way1 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way1")[0]);
+    uut._snapUnconnectedWayCrossings(way1);
+
+    WayPtr way2 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way2")[0]);
+    uut._snapUnconnectedWayCrossings(way2);
+
+    // Write it out...
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
+
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

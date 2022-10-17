@@ -48,7 +48,7 @@ void MembersPerRelationVisitor::visit(const ConstElementPtr& e)
   if (_crit.isSatisfied(e))
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-    const int numMembers = relation->getMemberCount();
+    const int numMembers = static_cast<int>(relation->getMemberCount());
     _totalMembers += numMembers;
     if (_minMembersPerRelation == 0 || numMembers < _minMembersPerRelation)
       _minMembersPerRelation = numMembers;

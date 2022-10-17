@@ -104,6 +104,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.conflation.ConflateCommandFactory;
 import hoot.services.controllers.conflation.ConflateParams;
 import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
@@ -265,6 +266,8 @@ public class GrailResource {
         GrailParams getRailsParams = new GrailParams(reqParams);
         GrailParams getOverpassParams = new GrailParams(reqParams);
 
+        String outputFileName = "diff.osc";
+
         if (deriveType.equals("Adds only")) {
             if (input1 == null) {
                 InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
@@ -339,12 +342,16 @@ public class GrailResource {
                     grailCommandClass = RunDiffCommand.class;
                 }
             } else {
+                if (deriveType.equals("JOSM .osm")) {
+                    String name = reqParams.getOutput();
+                    outputFileName = ((name != null) ? name : "diff") + ".osm";
+                }
                 grailCommandClass = DeriveChangesetCommand.class;
             }
         }
 
         // create output file
-        File geomDiffFile = new File(workDir, "diff.osc");
+        File geomDiffFile = new File(workDir, outputFileName);
         if (geomDiffFile.exists()) geomDiffFile.delete();
         try {
             geomDiffFile.createNewFile();
@@ -392,6 +399,11 @@ public class GrailResource {
             // commented out because we don't want to delete if error occurs so user can download error file
             // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             // workflow.add(cleanFolders);
+        } else {
+            //zip up result for possible download
+            //ZIPFileCommand(File targetZIP, File workDir, String file, Class<?> caller)
+            Command zipCommand = new ZIPFileCommand(new File(workDir, outputFileName + ".zip"), workDir, outputFileName, this.getClass());
+            workflow.add(zipCommand);
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
@@ -401,6 +413,7 @@ public class GrailResource {
         jobStatusTags.put("deriveType", deriveType);
         if (reqParams.getInput1() != null) jobStatusTags.put("input1", reqParams.getInput1());
         if (reqParams.getInput2() != null) jobStatusTags.put("input2", reqParams.getInput2());
+        if (reqParams.getOutput() != null) jobStatusTags.put("output", reqParams.getOutput());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), jobType, jobStatusTags));
 

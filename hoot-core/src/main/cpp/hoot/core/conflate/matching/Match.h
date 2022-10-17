@@ -74,11 +74,6 @@ public:
   virtual MatchMembers getMatchMembers() const { return MatchMembers::None; }
 
   /**
-   * TODO: This already exists in ApiEntityInfo
-   */
-  virtual QString getName() const = 0;
-
-  /**
    * Returns the score associated with this match. Score is a bit abstract at this point and may
    * end up being feature specific. In the case of roads it is the probability * length.
    */
@@ -151,9 +146,10 @@ public:
   virtual void setIsOneToMany(bool isOneToMany) { _isOneToMany = isOneToMany; }
 
   /**
-   * @todo This already exists in ApiEntityInfo
+   * See ApiEntityInfo
    */
-  virtual QString toString() const = 0;
+  QString getName() const override { return className(); }
+  QString toString() const override { return className(); }
 
   /**
    * Returns a collection of matches indexed by the IDs of the elements involved

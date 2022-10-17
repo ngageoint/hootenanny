@@ -235,7 +235,7 @@ describe("Node Export Server", function() {
                     expect(s).to.equal(400);
                 },
                 send: function(m) {
-                    expect(m).to.equal('Datasource not found');
+                    expect(m).to.equal('Datasource "foo" not found');
                 }
             }
             server.validateExportParams(req, res);
@@ -253,7 +253,7 @@ describe("Node Export Server", function() {
                     expect(s).to.equal(400);
                 },
                 send: function(m) {
-                    expect(m).to.equal('Schema not found');
+                    expect(m).to.equal('Schema "foo" not found');
                 }
             }
             server.validateExportParams(req, res);
@@ -271,7 +271,7 @@ describe("Node Export Server", function() {
                     expect(s).to.equal(400);
                 },
                 send: function(m) {
-                    expect(m).to.equal('Format not found');
+                    expect(m).to.equal('Format "foo" not found');
                 }
             }
             server.validateExportParams(req, res);

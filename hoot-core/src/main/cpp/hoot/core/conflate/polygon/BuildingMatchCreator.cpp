@@ -288,7 +288,7 @@ private:
   int _taskStatusUpdateInterval;
   int _memoryCheckUpdateInterval;
 
-  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches) const
+  void _markNonOneToOneMatchesAsReview(const std::vector<MatchPtr>& matches) const
   {
     for (const auto& match : matches)
     {
@@ -372,7 +372,7 @@ private:
       std::vector<MatchPtr> modifiedMatches;
       for (auto it = highestOverlapMatches.constBegin(); it != highestOverlapMatches.constEnd(); ++it)
         modifiedMatches.push_back(it.value());
-      matches = modifiedMatches;
+      matches = std::move(modifiedMatches);
     }
     highestOverlapMatches.clear();
     LOG_VART(matches);

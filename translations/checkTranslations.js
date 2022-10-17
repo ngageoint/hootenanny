@@ -126,6 +126,7 @@ function makeJson(OSM)
   return osmJson;
 };
 
+
 function getTranslationsList()
 {
   try {
@@ -140,6 +141,7 @@ function getTranslationsList()
     return {'error':err};
   }
 }; // End getTranslationsList
+
 
 // Wrapper for 'capabilities', 'translations','version' etc'
 function getThing(thing)
@@ -156,6 +158,25 @@ function getThing(thing)
     return {'error':err};
   }
 }; // End thing
+
+
+// Console.log version of translate.dumpSchema
+function dumpSchema(schema)
+{
+  schema.forEach( function(item) {
+    console.log('Feature: ' + item.name + '  Geom: ' + item.geom + '  FdName: ' + item.fdname);
+
+    item.columns.forEach( function (column) {
+      console.log('    Attr: ' + column.name + '  Desc: ' + column.desc + '  Type: ' + column.type + '  Default: ' + column.defValue);
+      if (column.type == 'enumeration')
+      {
+        column.enumerations.forEach( function (eValue) {console.log('        Value: ' + eValue.value + '  Name: ' + eValue.name); });
+      }
+    });
+
+    console.log(''); // just to get one blank line
+  });
+}
 
 
 function schemaFromFcode(F_CODE,geometry,schema)
@@ -225,7 +246,6 @@ var endLine = '</way></osm>'; // NOTE: This is also for Areas as well
 function testTranslated(schema,featureCode,tagList,geomList = ['Point','Line','Area'])
 {
   console.log('---------------');
-
   var osmFeatures = {};
 
   osmFeatures.Point = startPoint + '<tag k="F_CODE" v="' + featureCode + '"/>';
@@ -436,20 +456,19 @@ function testSchema(schemaMap)
 }; // End testSchema
 
 
-// Go through a schema looking for attributes
-// This is to help building a translation script
+// Dump out the F_CODES with a particular attribute.
+// If it is enumerzted, dump the values as well
 var dumpValues = function (schema,aName)
 {
   console.log('---------------');
-
   var enumList = {};
 
   schema.getDbSchema().forEach(feature => {
-    console.log('F_CODE: ' + feature.fcode + '  Geom: ' + feature.geom + '  Desc: ' + feature.desc);
 
     feature['columns'].forEach(attr => {
       if (attr.name == aName)
       {
+        console.log('F_CODE: ' + feature.fcode + '  Geom: ' + feature.geom + '  Desc: ' + feature.desc);
         if (attr['type'] == 'enumeration')
         {
           attr['enumerations'].forEach(enValue => {
@@ -461,15 +480,11 @@ var dumpValues = function (schema,aName)
         {
           console.log(' name:' + aName + '  Type:' + attr['type']);
         }
+        console.log('-----');
       }
     });
-    console.log('-----');
   }); // End single schema
-
-  // If we have an enumerated list, dump out the consolidated version
-  for (var i in enumList) console.log("    ['XXX','" + i + "','YYY','" + enumList[i] + "'],X");
 }; // End dumpValues
-
 
 
 if (typeof exports !== 'undefined') {
@@ -482,5 +497,6 @@ if (typeof exports !== 'undefined') {
     exports.testOSM = testOSM;
     exports.testSchema = testSchema;
     exports.dumpValues = dumpValues;
+    exports.dumpSchema = dumpSchema;
     exports.getThing = getThing;
 }

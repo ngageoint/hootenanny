@@ -240,7 +240,7 @@ public:
     // there should be one element replaced
     HOOT_STR_EQUALS("[1]{(Way(-2), Way(-6))}", replaced);
     // the end of Way:-4 should match up with Way:-6
-    HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-4)->getNodeIds());
+    HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-1)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-2, -4}", map->getWay(-6)->getNodeIds());
   }
 

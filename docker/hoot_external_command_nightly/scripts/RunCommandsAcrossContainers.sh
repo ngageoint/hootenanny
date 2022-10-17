@@ -31,6 +31,11 @@ run-translate-directory()
     fi
 }
 
+run-translate()
+{
+    hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT $FILE_NAME $OUTPUT_FILE
+}
+
 case "$1" in
     -c)
         HOOT_REF_FILE_NAME=$2
@@ -48,10 +53,15 @@ case "$1" in
         OUTPUT_GEOJSON=$3
         OUTPUT_SPLIT_OSM=$4
         run-split ;;
-    -r)
+    -d)
         AFTER_SPLIT=$2
         TRANSLATION_SCRIPT=$3
         DIR_PATH=$4
         run-translate-directory ;;
+    -r)
+        TRANSLATION_SCRIPT=$2
+        FILE_NAME=$3
+        OUTPUT_FILE=$4
+        run-translate ;;
 esac
 

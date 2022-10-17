@@ -186,8 +186,8 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
 
   result += QString("@RELATION manipulations\n\n");
 
-  for (set<QString>::const_iterator it = attributes.begin(); it != attributes.end(); ++it)
-    result += QString("@ATTRIBUTE %1 NUMERIC\n").arg(*it);
+  for (const auto& attribute : attributes)
+    result += QString("@ATTRIBUTE %1 NUMERIC\n").arg(attribute);
 
   result += QString("@ATTRIBUTE class {match,miss,review}\n\n");
   result += QString("@DATA\n");

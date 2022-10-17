@@ -56,8 +56,8 @@ fi
 if test "${GEOS_VERSION}" = "3.3.2" ; then
   AC_MSG_WARN([There is a serious bug in GEOS v3.3.2 distance calculations. GEOS v3.2.2 is known to work.]);
 fi
-if test "${GEOS_VERSION}" != "3.9.2" ; then
-  AC_MSG_WARN([Most development occurs with GEOS v3.9.2, using v$GEOS_VERSION. Please run all tests after build (make test).]);
+if test "${GEOS_VERSION}" != "3.9.3" ; then
+  AC_MSG_WARN([Most development occurs with GEOS v3.9.3, using v$GEOS_VERSION. Please run all tests after build (make test).]);
 fi
 
 # Python

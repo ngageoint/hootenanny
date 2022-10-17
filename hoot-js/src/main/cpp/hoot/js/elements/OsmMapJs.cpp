@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #define BUILDING_NODE_EXTENSION
 
@@ -35,9 +35,9 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
 
@@ -128,26 +128,18 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
   ConstOsmMapPtr newConstMap;
   OsmMapPtr newMap;
   if (from->isConst())
-  {
     newConstMap = std::make_shared<OsmMap>(from->getConstMap());
-  }
   else
-  {
     newMap = std::make_shared<OsmMap>(from->getMap());
-  }
 
   const unsigned argc = 1;
   Local<Value> argv[argc] = { args[0] };
   Local<Object> result = ToLocal(&_constructor)->NewInstance(context, argc, argv).ToLocalChecked();
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
   if (newConstMap)
-  {
     obj->_setMap(newConstMap);
-  }
   else
-  {
     obj->_setMap(newMap);
-  }
 
   args.GetReturnValue().Set(result);
 }
@@ -155,9 +147,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 OsmMapPtr& OsmMapJs::getMap()
 {
   if (_map.get() == nullptr && _constMap.get())
-  {
     throw IllegalArgumentException("This map is const and may not be modified.");
-  }
   assert(_map.get());
   return _map;
 }
@@ -173,13 +163,9 @@ void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
 
     ElementId eid = toCpp<ElementId>(args[0]);
     if (obj->isConst())
-    {
       args.GetReturnValue().Set(toV8(obj->getConstMap()->getElement(eid)));
-    }
     else
-    {
       args.GetReturnValue().Set(toV8(obj->getMap()->getElement(eid)));
-    }
   }
   catch (const HootException& e)
   {

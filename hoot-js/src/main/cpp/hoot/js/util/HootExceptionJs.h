@@ -83,13 +83,10 @@ inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)
   {
     v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
     const HootExceptionJs* ex = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
-
     e = ex->getException();
   }
   else
-  {
     throw IllegalArgumentException("Expected a HootExceptionJs, but got: " + toString(v));
-  }
 }
 
 }

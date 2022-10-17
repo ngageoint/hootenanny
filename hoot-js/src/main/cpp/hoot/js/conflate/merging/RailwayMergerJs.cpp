@@ -54,15 +54,12 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   script->loadScript(ConfPath::search("Railway.js", "rules"), "plugin");
   Local<Object> global = script->getContext(current)->Global();
   if (global->Has(context, toV8("plugin")).ToChecked() == false)
-  {
     throw IllegalArgumentException("Expected the script to have exports.");
-  }
+
   Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
   Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-  {
     throw IllegalArgumentException("Expected plugin to be a valid object.");
-  }
 
   int numMerged = 0;
   RailwayCriterion crit;

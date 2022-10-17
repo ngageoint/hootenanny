@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -93,9 +93,7 @@ inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
   v8::Local<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())
-  {
     return v8::Undefined(current);
-  }
   else
   {
     result->Set(context, toV8("name"), toV8(tv.getName()));

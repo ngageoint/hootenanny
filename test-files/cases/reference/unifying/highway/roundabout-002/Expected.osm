@@ -44,40 +44,21 @@
     <node visible="true" id="131" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5490360000000010" lon="-72.3487509983399946"/>
     <node visible="true" id="132" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5442159999999987" lon="-72.3479753262299994"/>
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465999000000004" lon="-72.3472215000000034"/>
-    <way visible="true" id="-73" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="7"/>
-        <nd ref="58"/>
-        <nd ref="8"/>
-        <nd ref="13"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-    </way>
-    <way visible="true" id="-69" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="132"/>
-        <nd ref="84"/>
-        <nd ref="110"/>
-        <nd ref="-40995"/>
-        <nd ref="63"/>
+    <way visible="true" id="-71" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="22"/>
         <nd ref="-41735"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:55Z"/>
     </way>
-    <way visible="true" id="-66" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="31"/>
-        <nd ref="30"/>
-        <nd ref="89"/>
-        <nd ref="29"/>
-        <nd ref="28"/>
-        <nd ref="99"/>
-        <nd ref="27"/>
-        <nd ref="131"/>
+    <way visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="18"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="78"/>
+        <nd ref="100"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -112,16 +93,51 @@
         <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
     </way>
     <way visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="18"/>
-        <nd ref="6"/>
-        <nd ref="5"/>
-        <nd ref="78"/>
         <nd ref="100"/>
         <nd ref="-41752"/>
         <nd ref="83"/>
         <nd ref="82"/>
         <nd ref="81"/>
         <nd ref="118"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+    </way>
+    <way visible="true" id="32" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="31"/>
+        <nd ref="30"/>
+        <nd ref="89"/>
+        <nd ref="29"/>
+        <nd ref="28"/>
+        <nd ref="99"/>
+        <nd ref="27"/>
+        <nd ref="131"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+    </way>
+    <way visible="true" id="33" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="22"/>
+        <nd ref="63"/>
+        <nd ref="-40995"/>
+        <nd ref="110"/>
+        <nd ref="84"/>
+        <nd ref="132"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+    </way>
+    <way visible="true" id="36" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="7"/>
+        <nd ref="58"/>
+        <nd ref="8"/>
+        <nd ref="13"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>

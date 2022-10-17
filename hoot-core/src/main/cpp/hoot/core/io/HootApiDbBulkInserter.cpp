@@ -102,8 +102,8 @@ void HootApiDbBulkInserter::_getOrCreateMap()
 
   if (_userEmail.isEmpty())
   {
-    throw HootException("Please set the user's email address via the '" +
-                        ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
+    throw HootException(QString("Please set the user's email address via the '%1' configuration setting.")
+                         .arg(ConfigOptions::getApiDbEmailKey()));
   }
 
   // create the user before we have a transaction so we can make sure the user gets added.
@@ -549,17 +549,17 @@ void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
   LOG_TRACE("Writing way nodes to stream...");
 
   unsigned int wayNodeIndex = 1;
-  for (std::vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
+  for (auto node_id : wayNodeIds)
   {
     unsigned long wayNodeIdVal;
     if (!_validateData)
-      wayNodeIdVal = abs(*it);
-    else if (_idMappings.nodeIdMap->contains(*it))
-      wayNodeIdVal = _idMappings.nodeIdMap->at(*it);
+      wayNodeIdVal = abs(node_id);
+    else if (_idMappings.nodeIdMap->contains(node_id))
+      wayNodeIdVal = _idMappings.nodeIdMap->at(node_id);
     else
     {
       throw UnsupportedException(
-            QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId).arg(*it));
+            QString("Unresolved way nodes are not supported.  Way %1 has reference to unknown node ID %2").arg(dbWayId).arg(node_id));
     }
 
     _outputSections[HootApiDb::getCurrentWayNodesTableName(_database.getMapId())]->write(

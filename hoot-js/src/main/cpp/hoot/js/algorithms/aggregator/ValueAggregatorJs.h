@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef VALUEAGGREGATORJS_H
@@ -30,8 +30,8 @@
 
 // hoot
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/HootBaseJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
@@ -62,21 +62,15 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, ValueAggregatorPtr& p)
 {
   if (!v->IsObject())
-  {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   const ValueAggregatorJs* vaj = nullptr;
   vaj = node::ObjectWrap::Unwrap<ValueAggregatorJs>(obj);
   if (vaj)
-  {
     p = vaj->getValueAggregator();
-  }
   else
-  {
     throw IllegalArgumentException("Expected a ValueAggregatorJs, got: (" + toJson(v) + ")");
-  }
 }
 
 }

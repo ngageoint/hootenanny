@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMerger.h"
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Factory.h>
+
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -48,11 +49,10 @@ HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
 
 int ScriptMerger::logWarnCount = 0;
 
-ScriptMerger::ScriptMerger(
-  const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
-  const set<pair<ElementId, ElementId>>& pairs) :
-MergerBase(pairs),
-_script(script)
+ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+                           const set<pair<ElementId, ElementId>>& pairs)
+  : MergerBase(pairs),
+    _script(script)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
@@ -67,21 +67,14 @@ void ScriptMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>
   bool hasMergePair = hasFunction("mergePair");
 
   if (hasMergeSet == hasMergePair)
-  {
     throw HootException("The merging script must implement exactly one of mergeSet or mergePair.");
-  }
   else if (hasMergeSet)
-  {
     _applyMergeSets(map, replaced);
-  }
   else
-  {
     _applyMergePair(map, replaced);
-  }
 }
 
-void ScriptMerger::_applyMergePair(
-  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
+void ScriptMerger::_applyMergePair(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
 {
   LOG_VART(_eid1);
   LOG_VART(_eid2);
@@ -142,24 +135,18 @@ void ScriptMerger::_applyMergePair(
   ConstElementPtr newElement = newElementJs->getConstElement();
 
   if (map->containsElement(newElement) == false)
-  {
     throw InternalErrorException("The merging script must add new elements to the map.");
-  }
 
   LOG_VART(map->containsElement(_eid1));
   if (map->containsElement(_eid1) == false)
-  {
     replaced.emplace_back(_eid1, newElement->getElementId());
-  }
+
   LOG_VART(map->containsElement(_eid2));
   if (map->containsElement(_eid2) == false)
-  {
     replaced.emplace_back(_eid2, newElement->getElementId());
-  }
 }
 
-void ScriptMerger::_applyMergeSets(
-  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
+void ScriptMerger::_applyMergeSets(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
 {
   _callMergeSets(map, replaced);
 
@@ -172,15 +159,11 @@ Local<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Local<Context> context = current->GetCurrentContext();
-  Local<Object> plugin =
-    Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Object> plugin = Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
   Local<Value> value = plugin->Get(context, toV8("mergePair")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
-  {
     throw IllegalArgumentException("The merge function 'mergePair' was not found.");
-  }
 
   Local<Function> func = Local<Function>::Cast(value);
   Local<Value> jsArgs[3];
@@ -197,30 +180,23 @@ Local<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   if (result.IsEmpty() || result == Undefined(current))
-  {
     throw IllegalArgumentException("The merge function must return a valid element as a result.");
-  }
 
   return handleScope.Escape(result);
 }
 
-void ScriptMerger::_callMergeSets(
-  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
+void ScriptMerger::_callMergeSets(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
 
-  Local<Object> plugin =
-    Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Object> plugin = Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
   Local<Value> value = plugin->Get(context, toV8("mergeSets")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
-  {
     throw IllegalArgumentException("The merge function 'mergeSets' was not found.");
-  }
 
   Local<Function> func = Local<Function>::Cast(value);
   Local<Value> jsArgs[3];
@@ -244,17 +220,10 @@ bool ScriptMerger::hasFunction(const QString& name) const
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
-  Local<Object> plugin =
-    Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Object> plugin = Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
   Local<Value> value = plugin->Get(context, toV8(name.toUtf8().data())).ToLocalChecked();
 
-  bool result = true;
-  if (value.IsEmpty() || value->IsFunction() == false)
-  {
-    result = false;
-  }
-  return result;
+  return !value.IsEmpty() && value->IsFunction();
 }
 
 }

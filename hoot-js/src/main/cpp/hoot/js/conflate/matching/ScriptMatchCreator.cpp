@@ -108,11 +108,9 @@ public:
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other *specific*
     // alg conflation routines (generic geometry algs should be ignored here), hence the use of
     // NonConflatableCriterion.
-    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit =
-      std::make_shared<NonConflatableCriterion>(map);
+    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit = std::make_shared<NonConflatableCriterion>(map);
     nonConflatableCrit->setIgnoreGenericConflators(true);
-    _pointPolyCrit =
-      std::make_shared<ChainCriterion>(std::make_shared<PolygonCriterion>(map), nonConflatableCrit);
+    _pointPolyCrit = std::make_shared<ChainCriterion>(std::make_shared<PolygonCriterion>(map), nonConflatableCrit);
 
     _timer.start();
   }
@@ -142,8 +140,7 @@ public:
     _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
 
     //this is meant to have been set externally in a js rules file
-    _customSearchRadius =
-      getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
+    _customSearchRadius = getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VARD(_customSearchRadius);
 
     Local<Value> value = plugin->Get(context, toV8("getSearchRadius")).ToLocalChecked();
@@ -213,11 +210,9 @@ public:
       if (attemptToMatch)
       {
         // Score each candidate and push it on the result vector.
-        std::shared_ptr<ScriptMatch> m =
-          std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, from, id, _mt);
+        std::shared_ptr<ScriptMatch> m = std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, from, id, _mt);
         m->setMatchMembers(
-          ScriptMatch::geometryTypeToMatchMembers(
-            GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
+          ScriptMatch::geometryTypeToMatchMembers(GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
         // if we're confident this is not a miss
         if (m->getType() != MatchType::Miss)
           _result.push_back(m);
@@ -371,14 +366,10 @@ public:
     LOG_DEBUG("Return value: " << c);
 
     // This could be an expensive call.
-    _customSearchRadius =
-      getNumber(
-        ToLocal(&plugin), "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
+    _customSearchRadius = getNumber(ToLocal(&plugin), "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
 
     QFileInfo scriptFileInfo(_scriptPath);
-    LOG_DEBUG(
-      "Search radius of: " << _customSearchRadius << " to be used for: " <<
-      scriptFileInfo.fileName());
+    LOG_DEBUG("Search radius of: " << _customSearchRadius << " to be used for: " << scriptFileInfo.fileName());
   }
 
   void cleanMapCache()
@@ -408,8 +399,7 @@ public:
       long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
-        std::function<bool (ConstElementPtr)> f =
-          std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
+        std::function<bool (ConstElementPtr)> f = std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
         std::shared_ptr<ArbitraryCriterion> pC = std::make_shared<ArbitraryCriterion>(f);
 
         SpatialIndexer v(_index,
@@ -504,8 +494,7 @@ public:
     // the crit instead of the function; doing so causes this to crash; see #3047 and the history
     // of this file for the failing code that needs to be re-enabled
 
-    Local<String> isMatchCandidateStr =
-      String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
+    Local<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
     if (ToLocal(&plugin)->Has(context, isMatchCandidateStr).ToChecked() == false)
       throw HootException("Error finding 'isMatchCandidate' function.");
     Local<Value> value = ToLocal(&plugin)->Get(context, isMatchCandidateStr).ToLocalChecked();
@@ -576,9 +565,7 @@ public:
     _scriptInfo = description;
 
     if (_scriptPath.toLower().contains("relation")) // hack
-    {
       _totalElementsToProcess = getMap()->getRelationCount();
-    }
     else
     {
       switch (_scriptInfo.getGeometryType())
@@ -739,7 +726,7 @@ void ScriptMatchCreator::_validatePluginConfig(const CreatorDescription::BaseFea
   if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
   {
     const double railwayTypeMatchThreshold = ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
-    if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
+    if (railwayTypeMatchThreshold < 0.0 || railwayTypeMatchThreshold > 1.0)
     {
       throw IllegalArgumentException(
         QString("Railway type match threshold out of range: %1.")
@@ -799,11 +786,8 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     Local<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    std::shared_ptr<ScriptMatch> match =
-      std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
-    match->setMatchMembers(
-      ScriptMatch::geometryTypeToMatchMembers(
-        GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
+    std::shared_ptr<ScriptMatch> match = std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
+    match->setMatchMembers(ScriptMatch::geometryTypeToMatchMembers(GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
     return match;
   }
 
@@ -939,8 +923,7 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(const 
 
     vector<ConstMatchPtr> emptyMatches;
     _cachedScriptVisitor =
-      std::make_shared<ScriptMatchVisitor>(
-        map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter);
+      std::make_shared<ScriptMatchVisitor>(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter);
 
     _cachedScriptVisitor->setScriptPath(scriptPath);
 
@@ -997,8 +980,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     result.setExperimental(toCpp<bool>(value));
   }
 
-  CreatorDescription::BaseFeatureType baseFeatureType =
-    CreatorDescription::BaseFeatureType::Unknown;
+  CreatorDescription::BaseFeatureType baseFeatureType = CreatorDescription::BaseFeatureType::Unknown;
   Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, featureTypeStr).ToChecked())
   {
@@ -1026,8 +1008,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   // radius auto-calc. Is does *not* actually cull features during matching.
   // exports.isMatchCandidate does that. So, there is a bit of a disconnect there. However, it
   // hasn't caused any problems so far.
-  Local<String> matchCandidateCriterionStr =
-    String::NewFromUtf8(current, "matchCandidateCriterion").ToLocalChecked();
+  Local<String> matchCandidateCriterionStr = String::NewFromUtf8(current, "matchCandidateCriterion").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, matchCandidateCriterionStr).ToChecked())
   {
     Local<Value> value = ToLocal(&plugin)->Get(context, matchCandidateCriterionStr).ToLocalChecked();
