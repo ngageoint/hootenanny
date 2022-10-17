@@ -27,7 +27,6 @@
 #include "RequireJs.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
 
@@ -69,8 +68,6 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     const QString hootHome = ConfPath::getHootHome();
     if (hootHome.isEmpty())
       throw HootException("$HOOT_HOME is empty.");
-
-    QStringList libPath = ConfigOptions().getJavascriptSchemaTranslatorPath();
 
     QString scriptName = toCpp<QString>(args[0]);
     QString fullPath; // the final script path
