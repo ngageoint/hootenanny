@@ -29,15 +29,14 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
-<<<<<<< HEAD
-=======
 #include <hoot/core/util/Settings.h>
 
->>>>>>> origin/master
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
+
+#include <QDirIterator>
 
 using namespace v8;
 
@@ -80,20 +79,17 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     if (scriptName != QFileInfo(scriptName).baseName())
       throw HootException("Error: Script name is a path: " + scriptName);
 
-    for (const auto& path : qAsConst(libPath))
-    {
-      QString trimmed = path.trimmed();
-      if (trimmed.isEmpty() == false)
-      {
-        // This probably should be put into a config variable...
-        fullPath = hootHome + path.trimmed() + "/" + scriptName + ".js";
+    // Look through all the translation directories in $HOOT_HOME - "translations", "translations-rules", "translations-local" etc
+    // This allows us to add more custom translation directories without hardcoding them
+    QDirIterator it (hootHome, {"translations*"}, QDir::Dirs | QDir::NoSymLinks);
+    while (it.hasNext()) {
+        fullPath = it.next() + "/" + scriptName + ".js";
 
         QFileInfo info(fullPath);
         if (info.exists())
           break;
 
         fullPath = "";
-      }
     }
 
     if (fullPath.isEmpty())
