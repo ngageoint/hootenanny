@@ -319,19 +319,15 @@ public class CustomScriptResource {
         File dir = new File(HOME_FOLDER);
         for (File file : dir.listFiles()) {
             if (file.isDirectory() && file.getName().startsWith("translations")) {
-        logger.error("XChecking - got Dir" + file.getName());
+                File confFile = new File(file,TRANSLATION_CONFIG);
 
-                File confFile = new File(file,"translationConfig.json");
-                if (confFile.exists()) {
-                    configFiles.add(confFile);
-                    logger.error("Found: " + confFile.getName());
+                // Sanity check
+                if (!confFile.exists()) {
+                    logger.error("Missing translation conf file: " + confFile.getName());
+                    continue;
                 }
-            }
-        }
 
-        for (File configFile : configFiles) {
-            if (configFile.exists()) {
-                try (FileReader reader = new FileReader(configFile)) {
+                try (FileReader reader = new FileReader(confFile)) {
                     JSONParser jsonParser = new JSONParser();
                     JSONArray defTranslations = (JSONArray) jsonParser.parse(reader);
                     for (Object defTranslation : defTranslations) {
