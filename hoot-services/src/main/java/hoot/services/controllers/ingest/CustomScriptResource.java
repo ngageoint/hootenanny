@@ -98,16 +98,6 @@ public class CustomScriptResource {
     private static final String HEADER_START = "/*<<<";
     private static final String HEADER_END = ">>>*/" + System.lineSeparator();
 
-    // static {
-    //     if ((new File(DEFAULT_FOUO_TRANSLATIONS_CONFIG)).exists()) {
-    //         FOUO_TRANSLATIONS_EXIST = true;
-    //         logger.info("FOUO translations are present.");
-    //     }
-    //     else {
-    //         FOUO_TRANSLATIONS_EXIST = false;
-    //         logger.info("FOUO translations are not present.");
-    //     }
-    // }
     /**
      * Returns the directory the scripts are stored in
      *

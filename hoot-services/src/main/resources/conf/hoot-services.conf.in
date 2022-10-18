@@ -67,7 +67,7 @@ BasemapRasterExtensions=png,tif
 ErrorLogPath=/var/log/tomcat8/catalina.out
 
 # The translations config file name
-translationsConfig=translationConfig.json
+translationConfig=translationConfig.json
 
 # Main document name
 documentName=HootenannyUserGuide.pdf

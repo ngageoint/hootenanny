@@ -66,7 +66,7 @@ public final class HootProperties {
     public static final String JS_HEADER_SCRIPT_PATH;
     public static final String CHANGESETS_FOLDER;
     public static final String SCRIPT_FOLDER;
-    public static final String TRANSLATIONS_CONFIG;
+    public static final String TRANSLATION_CONFIG;
     public static final String CORE_SCRIPT_PATH;
     public static final String ERROR_LOG_PATH;
     public static final String TEMP_OUTPUT_PATH;
@@ -223,7 +223,7 @@ public final class HootProperties {
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
-        TRANSLATIONS_CONFIG = getProperty("translationsConfig");
+        TRANSLATION_CONFIG = getProperty("translationsConfig");
         CORE_SCRIPT_PATH = getProperty("coreScriptPath");
         ERROR_LOG_PATH = getProperty("ErrorLogPath");
         ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
