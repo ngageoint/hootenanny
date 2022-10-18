@@ -37,6 +37,7 @@ if (typeof hoot === 'undefined') {
 
 // Setup the lists of schema
 var availableTrans = {};
+var availableTranslations = [];
 var schemaMap = {};
 var fcodeLookup = {};
 
@@ -47,51 +48,72 @@ var translationsMap = {
 
 
 // Loop through all "translations*" directories and load config files if they exist.
-
-// The structure of the translation config file is very basic json:
-// {
-// "availableTrans" : {"Smurf": {"isavailable": true}},
-// "schemaMap" : {"Smurf":"/Smurf_full_schema.js"},
-// "fcodeLookup" : {"Smurf": "eSmurf_osm.js"},
-// "translationsMap" : {
-//     "toogr": {"Smurf": "Smurf_to_OGR.js" },
-//     "toosm": {"Smurf": "Smurf_to_OSM.js"}
-//     }
-// }
+// The structure of the translation config file is very basic json array.
+// NOTE: This is also used by the Hoot services for the list of available translations
+// [
+//   {
+//     "name" : "smurf",
+//     "description" : "The name of the format",
+//     "canExport" : true,
+//     "schema":"smurf_schema.js",
+//     "path" : "Smurf.js"
+//   },
+//   {
+//     "name" : "anotherSmurf",
+//     "description" : "The name of the format",
+//     "canExport" : true,
+//     "schema":"anotherSmurf_schema.js",
+//     "importPath" : "import_smurf.js",
+//     "exportPath" : "export_smurf.js"
+//   }
+// ]
 
 fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => file.isDirectory() && (file.name.indexOf('translations') == 0)).forEach( function (file){
   var tLocal = {};
   var dirName = HOOT_HOME + '/' + file.name + '/';
-  var fullName = HOOT_HOME + '/' + file.name + '/translationServerConfig.json';
-  if (fs.existsSync(fullName))
+
+  // Should this be in a config var?
+  if (fs.existsSync(dirName + 'translationConfig.json'))
   {
     try {
-            tLocal = require(fullName);
-            Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
-            Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(dirName + tLocal.schemaMap[k].split('/').pop());});
+          tLocal = require(dirName + 'translationConfig.json');
 
-            Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(dirName + tLocal.fcodeLookup[k].split('/').pop())});
+          tLocal.forEach(function (fmt) {
+              // If we don't have a specified schema then we don't support schema switching in the UI
+              if (fmt.schema)
+              {
+                availableTrans[fmt.name] = {"isavailable":true};
+                availableTranslations.push(fmt.name);
+                schemaMap[fmt.name] = require(dirName + fmt.schema);
 
-            Object.keys(tLocal.translationsMap.toogr).forEach(k => {
-                translationsMap.toogr[k] = new hoot.SchemaTranslationOp({
-                        'schema.translation.script': dirName + tLocal.translationsMap.toogr[k].split('/').pop(),
-                        'schema.translation.direction':'toogr'
-                    });
-            });
-
-            Object.keys(tLocal.translationsMap.toosm).forEach(k => {
-                translationsMap.toosm[k] = new hoot.SchemaTranslationOp({
-                        'schema.translation.script': dirName + tLocal.translationsMap.toosm[k].split('/').pop(),
-                        'schema.translation.direction':'toosm'
-                    });
-            });
+                // Either a "path" or "importPath" and "exportPath"
+                if (fmt.path)
+                {
+                  fcodeLookup[fmt.name] = require(dirName + fmt.path);
+                  translationsMap.toogr[fmt.name] = new hoot.SchemaTranslationOp({
+                    'schema.translation.script': dirName + fmt.path,
+                    'schema.translation.direction':'toogr'});
+                  translationsMap.toosm[fmt.name] = new hoot.SchemaTranslationOp({
+                    'schema.translation.script': dirName + fmt.path,
+                    'schema.translation.direction':'toosm'});
+                }
+                else
+                {
+                  fcodeLookup[fmt.name] = require(dirName + fmt.importPath)
+                  translationsMap.toogr[fmt.name] = new hoot.SchemaTranslationOp({
+                    'schema.translation.script': dirName + fmt.exportPath,
+                    'schema.translation.direction':'toogr'});
+                  translationsMap.toosm[fmt.name] = new hoot.SchemaTranslationOp({
+                    'schema.translation.script': dirName + fmt.importPath,
+                    'schema.translation.direction':'toosm'});
+                }
+              }
+        });
     } catch (e) {
       console.log('Translation Config Error: ' + e);
     }
   }
 });
-
-availableTranslations = Object.keys(schemaMap);
 
 if (require.main === module) {
     //I'm a running server
