@@ -345,7 +345,6 @@ public class CustomScriptResource {
                         }
                     }
 
-                    // validate FOUO support
                     if (!defTranslations.isEmpty()) {
                         for (Object oTrans : defTranslations) {
                             JSONObject jsTrans = (JSONObject) oTrans;
