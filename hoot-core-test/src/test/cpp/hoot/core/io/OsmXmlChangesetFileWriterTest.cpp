@@ -71,7 +71,9 @@ public:
   {
     std::shared_ptr<ChangesetProvider> changesetProvider = std::make_shared<TestOsmChangesetProvider>(false);
     OsmJosmXmlChangesetFileWriter uut;
-    uut.setConfiguration(conf());
+    Settings s;
+    s.set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+    uut.setConfiguration(s);
     uut.write(_outputPath + "changeset.osm", changesetProvider);
     FileUtils::writeFully(_outputPath + "stats_osm", uut.getStatsTable(ChangesetStatsFormat::TextFormat));
     FileUtils::writeFully(_outputPath + "stats_osm.json", uut.getStatsTable(ChangesetStatsFormat::JsonFormat));

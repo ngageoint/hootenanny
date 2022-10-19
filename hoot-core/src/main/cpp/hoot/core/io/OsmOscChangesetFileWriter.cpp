@@ -58,13 +58,20 @@ void OsmOscChangesetFileWriter::_writeXmlFileHeader(QXmlStreamWriter& writer) co
 void OsmOscChangesetFileWriter::_writeXmlFileSectionHeader(QXmlStreamWriter& writer, Change::ChangeType last) const
 {
   LOG_VART(Change::changeTypeToString(last));
-  if (_change.getType() != last)
+  Change::ChangeType next = _change.getType();
+  if (next != last && next != Change::ChangeType::Unknown)
   {
-    //  Close the last open OSC section
-    if (last != Change::ChangeType::Unknown)
-      writer.writeEndElement();
+    //  Last will start with NoChange, don't close if that is the last
+    if (last != Change::ChangeType::NoChange)
+    {
+      //  Close the last open OSC section that isn't Unknown
+      if (last != Change::ChangeType::Unknown)
+        writer.writeEndElement();
+      else
+        return;
+    }
     //  Create the OSC section
-    switch (_change.getType())
+    switch (next)
     {
     case Change::ChangeType::Create:
       LOG_TRACE("Writing create start element...");

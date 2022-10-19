@@ -65,7 +65,8 @@ namespace hoot
 bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();
-  return inputLower.endsWith(".osm") || inputLower.endsWith(".osm.pbf") ||
+  return inputLower.endsWith(".osm") ||
+         inputLower.endsWith(".osm.pbf") ||
          inputLower.startsWith(MetadataTags::HootApiDbScheme() + "://") ||
          inputLower.startsWith(MetadataTags::OsmApiDbScheme() + "://");
 }
@@ -83,9 +84,8 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(justPath).isDir())
   {
-    return
-      justPath.endsWith(".gdb", Qt::CaseInsensitive) ||
-      FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
+    return justPath.endsWith(".gdb", Qt::CaseInsensitive) ||
+           FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
   // single input
   else
@@ -101,9 +101,7 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     }
     LOG_VART(OgrUtilities::getInstance().getSupportedFormats(false));
     LOG_VART(QFileInfo(justPath).suffix());
-    return
-      OgrUtilities::getInstance().getSupportedFormats(false).contains(
-        "." + QFileInfo(justPath).suffix());
+    return OgrUtilities::getInstance().getSupportedFormats(false).contains("." + QFileInfo(justPath).suffix());
   }
 }
 
@@ -260,9 +258,7 @@ bool IoUtils::areStreamableInputs(const QStringList& inputs, const bool logUnstr
     {
       if (logUnstreamable)
       {
-        LOG_INFO(
-          "Unable to stream inputs due to input: " << input.right(25) <<
-          ". Loading entire map into memory...");
+        LOG_INFO("Unable to stream inputs due to input: " << input.right(25) << ". Loading entire map into memory...");
       }
       return false;
     }
@@ -351,11 +347,8 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
   {
     if (!opName.trimmed().isEmpty())
     {
-      if (!Factory::getInstance().hasBase<ElementVisitor>(opName) &&
-          !Factory::getInstance().hasBase<ConstElementVisitor>(opName))
-      {
+      if (!Factory::getInstance().hasBase<ElementVisitor>(opName) && !Factory::getInstance().hasBase<ConstElementVisitor>(opName))
         throw IllegalArgumentException("Streaming operations must be an ElementVisitor or a ConstElementVisitor.");
-      }
 
       // When streaming we can't provide a reliable OsmMap.
       const QString osmMapConsumerErrorMsg = "A streaming operations may not be an OsmMapConsumer.";
@@ -394,7 +387,6 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(ElementInputStreamPtr stre
     if (!opName.trimmed().isEmpty())
     {
       // Can this be cleaned up?
-
       if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
         LOG_INFO("Initializing operation: " << opName << "...");
@@ -483,9 +475,8 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 
 void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds, const bool keepConnectedOobWays)
 {
-  LOG_INFO(
-    "Applying bounds filtering to input data: ..." <<
-    QString::fromStdString(bounds->toString()).right(50) << "...");
+  const int maxFilepathLength = ConfigOptions().getProgressVarPrintLengthMax();
+  LOG_INFO("Applying bounds filtering to input data: ..." << FileUtils::toLogFormat(QString::fromStdString(bounds->toString()), maxFilepathLength) << "...");
   LOG_VARD(keepConnectedOobWays);
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
@@ -495,6 +486,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
   const bool strictBoundsHandling = ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
   cropper.setRemoveMissingElements(ConfigOptions().getBoundsRemoveMissingElements());
+  cropper.setRemoveFromParentRelation(ConfigOptions().getCropRemoveFeaturesFromRelations());
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
@@ -544,16 +536,10 @@ void IoUtils::writeOutputDir(const QString& dirName)
 QString IoUtils::getOutputUrlFromInput(const QString& inputUrl, const QString& appendText, const QString& outputFormat)
 {
   if (DbUtils::isOsmApiDbUrl(inputUrl) || inputUrl.startsWith("http://"))
-  {
-    throw IllegalArgumentException(
-      QString("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API web (http://) inputs."));
-  }
+    throw IllegalArgumentException("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API web (http://) inputs.");
   // This check prevents the overwriting of the input URL.
   if (appendText.isEmpty() && outputFormat.isEmpty())
-  {
-    throw IllegalArgumentException(
-      QString("Either text to append or an output format must be specified when generating an output URL from an input URL."));
-  }
+    throw IllegalArgumentException("Either text to append or an output format must be specified when generating an output URL from an input URL.");
 
   LOG_VART(inputUrl);
   LOG_VART(outputFormat);
@@ -597,7 +583,7 @@ QString IoUtils::getOutputUrlFromInput(const QString& inputUrl, const QString& a
   LOG_VART(existingExtension);
 
   if (!existingExtension.isEmpty() && !outputFormat.isEmpty() && existingExtension == outputFormat)
-    throw IllegalArgumentException("Generated output URL for format: " + outputFormat + " will overwrite input URL: " + inputUrl);
+    throw IllegalArgumentException(QString("Generated output URL for format: %1 will overwrite input URL: %2").arg(outputFormat, inputUrl));
 
   // Create the output url to be the input url with the custom text appended to it. This prevents
   // us from overwriting any output.

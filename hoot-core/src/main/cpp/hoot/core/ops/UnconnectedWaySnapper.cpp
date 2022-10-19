@@ -570,7 +570,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(const NodePtr& unconnecte
   return snapOccurred;
 }
 
-void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap)
+void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap) const
 {  // Only snap 1 to 2, no need to snap 2 to 1
   if (wayToSnap->getStatus() != Status::Unknown1)
     return;
@@ -587,101 +587,97 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
     std::shared_ptr<geos::geom::Envelope> env2(testWay->getEnvelope(_map));
 
     // If envelopes intersect, they will be close
-    if (LinearCriterion().isSatisfied(testWay) && env1->intersects(*env2))
+    if (LinearCriterion().isSatisfied(testWay)
+        && env1->intersects(*env2) &&
+        ElementGeometryUtils::haveGeometricRelationship(wayToSnap, testWay, GeometricRelationship::Crosses, _map))
     {
-      // Now, do they cross?
-      if (ElementGeometryUtils::haveGeometricRelationship(wayToSnap, testWay, GeometricRelationship::Crosses, _map))
+      // Yes, now find intersection coords
+      // First, convert to geometries
+      ElementToGeometryConverter converter(_map);
+      std::shared_ptr<geos::geom::Geometry> lstr1 = converter.convertToGeometry(testWay);
+      std::shared_ptr<geos::geom::Geometry> lstr2 = converter.convertToGeometry(wayToSnap);
+
+      // Calculate intersections
+      std::unique_ptr<geos::geom::Geometry> pIntersection = lstr1->intersection(lstr2.get());
+
+      // Modify the map
+      std::unique_ptr<geos::geom::CoordinateSequence> seq = pIntersection->getCoordinates();
+      for (size_t i = 0; i < seq->getSize(); i++)
       {
-        // Yes, now find intersection coords
-        // First, convert to geometries
-        ElementToGeometryConverter converter(_map);
-        std::shared_ptr<geos::geom::Geometry> lstr1 = converter.convertToGeometry(testWay);
-        std::shared_ptr<geos::geom::Geometry> lstr2 = converter.convertToGeometry(wayToSnap);
-
-        // Calculate intersections
-        std::unique_ptr<geos::geom::Geometry> pIntersection = lstr1->intersection(lstr2.get());
-
-        // Modify the map
-        std::unique_ptr<geos::geom::CoordinateSequence> seq = pIntersection->getCoordinates();
-        for (size_t i = 0; i < seq->getSize(); i++)
+        bool makeNewNode = true;
+        // Do we have node(s) here?
+        geos::geom::Envelope nodeEnv(seq->getAt(i));
+        nodeEnv.expandBy(_maxSnapDistance);
+        std::set<ElementId> neighborIds = SpatialIndexer::findNeighbors(nodeEnv, _crossingWayNodeIndex, _crossingWayNodeIndexToEid, _map, ElementType::Node);
+        if (1 == neighborIds.size())
         {
-          bool makeNewNode = true;
-
-          // Do we have node(s) here?
-          geos::geom::Envelope nodeEnv(seq->getAt(i));
-          nodeEnv.expandBy(_maxSnapDistance);
-          std::set<ElementId> neighborIds = SpatialIndexer::findNeighbors(nodeEnv, _crossingWayNodeIndex, _crossingWayNodeIndexToEid, _map, ElementType::Node);
-
-          if (1 == neighborIds.size())
+          long oldNodeId = neighborIds.begin()->getId();
+          NodePtr oldNode = _map->getNode(oldNodeId);
+          // Figure out what node the way belongs to, and add it to the OTHER one
+          if (wayToSnap->containsNodeId(oldNodeId))
           {
-            long oldNodeId = neighborIds.begin()->getId();
+            long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, testWay, _map);
+            testWay->insertNode(nodeIdx, oldNodeId);
+            testWay->setStatus(Status::Conflated);
+            LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with one old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
+          }
+          else if (testWay->containsNodeId(oldNodeId))
+          {
+            long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, wayToSnap, _map);
+            wayToSnap->insertNode(nodeIdx, oldNodeId);
+            wayToSnap->setStatus(Status::Conflated);
+            LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with one old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
+          }
+          else
+          {
+            LOG_DEBUG(QString("Found node that doesn't belong to a way? %1").arg(oldNodeId));
+          }
+
+          makeNewNode = false;
+        }
+        else if (neighborIds.size() > 1)
+        {
+          // Uh, we have more than one node... find the one that is in the ref way (Unknown1) and keep it
+          for (const auto& it : neighborIds)
+          {
+            long oldNodeId = it.getId();
             NodePtr oldNode = _map->getNode(oldNodeId);
-            // Figure out what node the way belongs to, and add it to the OTHER one
             if (wayToSnap->containsNodeId(oldNodeId))
-            {
+            { // Keep this node, add it to the other way
               long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, testWay, _map);
               testWay->insertNode(nodeIdx, oldNodeId);
               testWay->setStatus(Status::Conflated);
-              LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with one old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
-            }
-            else if (testWay->containsNodeId(oldNodeId))
-            {
-              long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, wayToSnap, _map);
-              wayToSnap->insertNode(nodeIdx, oldNodeId);
               wayToSnap->setStatus(Status::Conflated);
-              LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with one old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
+              LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
             }
             else
-            {
-              LOG_DEBUG(QString("Found node that doesn't belong to a way? %1").arg(oldNodeId));
+            { // Remove dupe node
+              // crashes // testWay->removeNode(oldNodeId);
+              RemoveNodeByEid::removeNode(_map, oldNodeId, true);
+              LOG_DEBUG(QString("Orphaned old node %1").arg(oldNodeId));
             }
-
-            makeNewNode = false;
-          }
-          else if (neighborIds.size() > 1)
-          {
-            // Uh, we have more than one node... find the one that is in the ref way (Unknown1) and keep it
-            for (const auto& it : neighborIds)
-            {
-              long oldNodeId = it.getId();
-              NodePtr oldNode = _map->getNode(oldNodeId);
-              if (wayToSnap->containsNodeId(oldNodeId))
-              { // Keep this node, add it to the other way
-                long nodeIdx = WayUtils::closestWayNodeInsertIndex(oldNode, testWay, _map);
-                testWay->insertNode(nodeIdx, oldNodeId);
-                testWay->setStatus(Status::Conflated);
-                wayToSnap->setStatus(Status::Conflated);
-                LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with old node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(oldNodeId));
-              }
-              else
-              { // Remove dupe node
-                // crashes // testWay->removeNode(oldNodeId);
-                RemoveNodeByEid::removeNode(_map, oldNodeId, true);
-                LOG_DEBUG(QString("Orphaned old node %1").arg(oldNodeId));
-              }
-            }
-
-            makeNewNode = false;
           }
 
-          if (makeNewNode)
-          {
-            // Make a new node at the spot
-            NodePtr newNode = Node::newSp(Status::Unknown1, _map->createNextNodeId(), seq->getAt(i).x, seq->getAt(i).y);
-            _map->addNode(newNode);
-            long newNodeId = newNode->getId();
+          makeNewNode = false;
+        }
 
-            // Add it to both ways
-            long nodeIdx = WayUtils::closestWayNodeInsertIndex(newNode, wayToSnap, _map);
-            wayToSnap->insertNode(nodeIdx, newNodeId);
-            wayToSnap->setStatus(Status::Conflated);
+        if (makeNewNode)
+        {
+          // Make a new node at the spot
+          NodePtr newNode = Node::newSp(Status::Unknown1, _map->createNextNodeId(), seq->getAt(i).x, seq->getAt(i).y);
+          _map->addNode(newNode);
+          long newNodeId = newNode->getId();
 
-            nodeIdx = WayUtils::closestWayNodeInsertIndex(newNode, testWay, _map);
-            testWay->insertNode(nodeIdx, newNodeId);
-            testWay->setStatus(Status::Conflated);
+          // Add it to both ways
+          long nodeIdx = WayUtils::closestWayNodeInsertIndex(newNode, wayToSnap, _map);
+          wayToSnap->insertNode(nodeIdx, newNodeId);
+          wayToSnap->setStatus(Status::Conflated);
 
-            LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with new node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(newNodeId));
-          }
+          nodeIdx = WayUtils::closestWayNodeInsertIndex(newNode, testWay, _map);
+          testWay->insertNode(nodeIdx, newNodeId);
+          testWay->setStatus(Status::Conflated);
+
+          LOG_DEBUG(QString("Snapping crossing ways %1 and %2 with new node %3").arg(wayToSnap->getId()).arg(testWay->getId()).arg(newNodeId));
         }
       }
     }
@@ -767,9 +763,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(const NodePtr& n
   const QList<ElementId> wayNodesToSnapTo = _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Node);
   if (wayNodesToSnapTo.empty())
   {
-    LOG_TRACE(
-      "No nearby way nodes to snap to for " << nodeToSnap->getElementId() <<
-      ". Skipping snapping...");
+    LOG_TRACE("No nearby way nodes to snap to for " << nodeToSnap->getElementId() << ". Skipping snapping...");
   }
 
   OsmSchema& schema = OsmSchema::getInstance();
@@ -786,9 +780,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(const NodePtr& n
       NodePtr wayNodeToSnapTo = _map->getNode(wayNodeToSnapToId);
       if (!wayNodeToSnapTo)
       {
-        LOG_TRACE(
-          "Way node to snap to with ID: " << wayNodeToSnapToId <<
-          " does not exist in the map. Skipping snap...");
+        LOG_TRACE("Way node to snap to with ID: " << wayNodeToSnapToId << " does not exist in the map. Skipping snap...");
         continue;
       }
       LOG_VART(wayNodeToSnapTo->getId());

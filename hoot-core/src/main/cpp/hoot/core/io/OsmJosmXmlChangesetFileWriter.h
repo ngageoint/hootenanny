@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/io/OsmBaseXmlChangesetFileWriter.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
 class QXmlStreamWriter;
@@ -48,13 +49,15 @@ public:
 
   static QString className() { return "OsmJosmXmlChangesetFileWriter"; }
 
-  OsmJosmXmlChangesetFileWriter() = default;
+  OsmJosmXmlChangesetFileWriter();
   ~OsmJosmXmlChangesetFileWriter() override = default;
 
   /**
    * @see ChangesetFileWriter
    */
   bool isSupported(const QString& output) const override { return output.endsWith(".osm", Qt::CaseInsensitive); }
+
+  void setConfiguration(const Settings &conf) override;
 
 protected:
 
@@ -63,6 +66,10 @@ protected:
   void _writeXmlFileSectionHeader(QXmlStreamWriter& writer, Change::ChangeType last) const override;
   void _writeXmlActionAttribute(QXmlStreamWriter& writer) const override;
   void _getOptionalTags(Tags& tags, const Element* element) const override;
+
+private:
+
+  AddExportTagsVisitor _addExportTagsVisitor;
 };
 
 }

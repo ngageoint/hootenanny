@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDEXPORTTAGSVISITOR_H
 #define ADDEXPORTTAGSVISITOR_H
@@ -77,7 +77,8 @@ public:
    * @param pElement element to base the new tags on
    * @return all new export tags
    */
-  Tags getExportTags(const ConstElementPtr& pElement);
+  Tags getExportTags(const ConstElementPtr& pElement) const;
+  Tags getExportTags(const Element* pElement) const;
 
   void overrideDebugSettings();
 
@@ -93,6 +94,7 @@ public:
 private:
 
   bool _includeIds;
+  bool _includeStatus;
   bool _textStatus;
   bool _includeCircularError;
   bool _includeDebug;
