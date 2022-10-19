@@ -532,7 +532,7 @@ commands.
 * Data Type: bool
 * Default Value: `true`
 
-If enabled, any call to commands supporting the `bounds` option will emove missing references to
+If enabled, any call to commands supporting the `bounds` option will remove missing references to
 missing elements as a result of map cropping.
 
 === bounds.tag.immediately.connected.out.of.bounds.ways
@@ -1311,6 +1311,16 @@ The maximum number of nodes to be cropped out when running either the `crop-rand
 * Default Value: `0.001`
 
 The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
+
+=== crop.remove.features.from.relations
+
+* Data Type: bool
+* Default Value: `true`
+
+When cropping a map, ways are checked against the bounds and then removed if found to be outside of
+the bounds.  This flag indicates if those elements should be removed from their parent relations.  There
+are some cases (changesets) where the relations should stay keep the ways as members and not remove them.
+NOTE: When used relations can potentially contain way members that do not exist in the map.
 
 === data.summary.tag.sources
 

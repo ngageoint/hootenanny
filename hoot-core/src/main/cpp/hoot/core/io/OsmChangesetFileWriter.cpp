@@ -65,13 +65,16 @@ bool OsmChangesetFileWriter::_failsBoundsCheck(const ConstElementPtr& element, c
     return false;
   }
 
-  // If we're dealing with a relation from the new data (secondary; status = 2 or
+  // If we're creating a relation from the new data (secondary; status = 2 or
   // conflated), we're requiring that all of its members be within bounds for it to be used
   // in the changeset. If this isn't done, relations may end up incomplete with missing
   // members. We don't worry about this for ref data, as we're assuming our ref data store
   // has all of its relation member data intact.
-  if (element->getElementType() == ElementType::Relation && (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
+  if (element->getElementType() == ElementType::Relation && change_type == Change::ChangeType::Create &&
+      (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
+  {
     boundsCrit->setMustCompletelyContain(true);
+  }
   else
     boundsCrit->setMustCompletelyContain(ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds());
 

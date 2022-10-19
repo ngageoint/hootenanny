@@ -48,13 +48,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, MultiLineStringVisitor)
 
 std::shared_ptr<geos::geom::Geometry> MultiLineStringVisitor::createGeometry()
 {
-  if (_ways.empty())
-  {
-    //  Empty ways gets an empty multilinestring object
-    return
-      std::shared_ptr<geos::geom::Geometry>(
-        GeometryFactory::getDefaultInstance()->createMultiLineString().release());
-  }
+  if (_ways.empty())  //  Empty ways gets an empty multilinestring object
+    return std::shared_ptr<geos::geom::Geometry>(GeometryFactory::getDefaultInstance()->createMultiLineString().release());
   else
   {
     //  Check all of the ways to make sure that they are mergable
@@ -64,8 +59,7 @@ std::shared_ptr<geos::geom::Geometry> MultiLineStringVisitor::createGeometry()
     for (const auto& w : _ways)
     {
       const Tags& tags = w->getTags();
-      if (first_count != tags.getInformationCount() ||
-          TagComparator::getInstance().compareTags(tags, first_tags) > 0.0)
+      if (first_count != tags.getInformationCount() || TagComparator::getInstance().compareTags(tags, first_tags) > 0.0)
       {
         mergable = false;
         break;
@@ -94,22 +88,17 @@ std::shared_ptr<geos::geom::Geometry> MultiLineStringVisitor::createGeometry()
         }
       }
       //  Create a coordinate sequence that we pass ownership of to the new geos::geom::LineString object
-      CoordinateSequence* cs =
-        GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords).release();
-      return
-        std::shared_ptr<geos::geom::Geometry>(
-          GeometryFactory::getDefaultInstance()->createLineString(cs));
+      CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords).release();
+      return std::shared_ptr<geos::geom::Geometry>(GeometryFactory::getDefaultInstance()->createLineString(cs));
     }
     else
     {
       //  Create a vector of linestrings that will be passed to the geometry factory
-      vector<Geometry*>* ls = new vector<Geometry*>();
+      vector<const Geometry*> ls;
       for (const auto& w : _ways)
-        ls->push_back(ElementToGeometryConverter(_provider).convertToLineString(w)->clone().release());
+        ls.push_back(ElementToGeometryConverter(_provider).convertToLineString(w)->clone().release());
       //  Create the MultiLineString object
-      return
-        std::shared_ptr<geos::geom::MultiLineString>(
-          GeometryFactory::getDefaultInstance()->createMultiLineString(ls));
+      return std::shared_ptr<geos::geom::MultiLineString>(GeometryFactory::getDefaultInstance()->createMultiLineString(ls));
     }
   }
 }
@@ -120,10 +109,10 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
     return;
 
   if (e->getElementType() == ElementType::Way)
-    visit(std::dynamic_pointer_cast<const Way>(e));
+    _visit(std::dynamic_pointer_cast<const Way>(e));
 }
 
-void MultiLineStringVisitor::visit(const ConstWayPtr& w)
+void MultiLineStringVisitor::_visit(const ConstWayPtr& w)
 {
   if (!w || w->getNodeCount() < 2)
     return;

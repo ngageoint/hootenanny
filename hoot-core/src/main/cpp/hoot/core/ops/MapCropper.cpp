@@ -89,7 +89,8 @@ MapCropper::MapCropper()
     _numCrossingWaysKept(0),
     _numCrossingWaysRemoved(0),
     _numNodesRemoved(0),
-    _logWarningsForMissingElements(true)
+    _logWarningsForMissingElements(true),
+    _removeFromParentRelation(true)
 {
 }
 
@@ -129,10 +130,7 @@ void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
     _keepEntireFeaturesCrossingBounds = false;
   // this option is incomptible with the option to keep only features inside the bounds
   else if (keep && _keepOnlyFeaturesInsideBounds)
-  {
-    throw IllegalArgumentException(
-      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and _keepEntireFeaturesCrossingBounds cannot both be enabled."));
-  }
+    throw IllegalArgumentException("Incompatible crop options: _keepOnlyFeaturesInsideBounds and _keepEntireFeaturesCrossingBounds cannot both be enabled.");
   else
     _keepEntireFeaturesCrossingBounds = keep;
 }
@@ -144,10 +142,7 @@ void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
     _keepOnlyFeaturesInsideBounds = false;
   // this option is incomptible with the option to keep features crossing the bounds
   else if (keep && _keepEntireFeaturesCrossingBounds)
-  {
-    throw IllegalArgumentException(
-      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and _keepEntireFeaturesCrossingBounds cannot both be enabled."));
-  }
+    throw IllegalArgumentException("Incompatible crop options: _keepOnlyFeaturesInsideBounds and _keepEntireFeaturesCrossingBounds cannot both be enabled.");
   else
     _keepOnlyFeaturesInsideBounds = keep;
 }
@@ -170,6 +165,8 @@ void MapCropper::setConfiguration(const Settings& conf)
   setKeepOnlyFeaturesInsideBounds(confOpts.getCropKeepOnlyFeaturesInsideBounds());
 
   setLogWarningsForMissingElements(confOpts.getLogWarningsForMissingElements());
+
+  setRemoveFromParentRelation(confOpts.getCropRemoveFeaturesFromRelations());
 
   _statusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
 }
@@ -260,7 +257,11 @@ void MapCropper::apply(OsmMapPtr& map)
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(map, w->getId());
+      //  Removal is based on the parent setting, either remove it fully or leave it in the relation
+      if (_removeFromParentRelation)
+        RemoveWayByEid::removeWayFully(map, w->getId());
+      else
+        RemoveWayByEid::removeWay(map, w->getId());
       _numWaysOutOfBounds++;
       _numAffected++;
     }

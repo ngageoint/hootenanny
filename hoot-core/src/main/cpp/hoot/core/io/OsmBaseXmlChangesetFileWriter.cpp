@@ -71,8 +71,7 @@ void OsmBaseXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 void OsmBaseXmlChangesetFileWriter::_initStats()
 {
   _stats.clear();
-  _stats.resize(static_cast<size_t>(Change::ChangeType::Unknown),
-                static_cast<size_t>(ElementType::Unknown));
+  _stats.resize(static_cast<size_t>(Change::ChangeType::Unknown), static_cast<size_t>(ElementType::Unknown));
   vector<QString> rows({"Create", "Modify", "Delete"});
   vector<QString> columns({"Node", "Way", "Relation"});
   _stats.setLabels(rows, columns);
@@ -245,9 +244,7 @@ void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstEl
     // convention of iD editor, but that's not absolutely necessary to write the changeset to rails
     // port
     id = _newElementIdCtrs[ElementType::Node] * -1; // assuming no id's = 0
-    LOG_TRACE(
-      "Converting new element with id: " << n->getElementId() << " to id: " <<
-      ElementId(ElementType::Node, id));
+    LOG_TRACE("Converting new element with id: " << n->getElementId() << " to id: " << ElementId(ElementType::Node, id));
     _newElementIdCtrs[ElementType::Node] = _newElementIdCtrs[ElementType::Node] + 1;
     _newElementIdMappings[ElementType::Node].insert(n->getId(), id);
   }
@@ -259,8 +256,8 @@ void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstEl
   else if (n->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a "
-              "version greater than zero: %1").arg(n->getElementId().toString()));
+      QString("Elements being modified or deleted in an .osc changeset must always have a version greater than zero: %1")
+        .arg(n->getElementId().toString()));
   }
   else if (pn && pn->getVersion() < n->getVersion())
   {
@@ -303,9 +300,7 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Way] * -1;
-    LOG_TRACE(
-      "Converting new element with id: " << w->getElementId() << " to id: " <<
-      ElementId(ElementType::Way, id));
+    LOG_TRACE("Converting new element with id: " << w->getElementId() << " to id: " << ElementId(ElementType::Way, id));
     _newElementIdCtrs[ElementType::Way] = _newElementIdCtrs[ElementType::Way] + 1;
     _newElementIdMappings[ElementType::Way].insert(w->getId(), id);
   }
@@ -317,8 +312,8 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
   else if (w->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a "
-              "version greater than zero: %1").arg(w->getElementId().toString()));
+      QString("Elements being modified or deleted in an .osc changeset must always have a version greater than zero: %1")
+        .arg(w->getElementId().toString()));
   }
   else if (pw && pw->getVersion() < w->getVersion())
   {
@@ -346,9 +341,7 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
     if (_newElementIdMappings[ElementType::Node].contains(nodeRefId))
     {
       const long newNodeRefId = _newElementIdMappings[ElementType::Node][nodeRefId];
-      LOG_TRACE(
-        "Converting new node ref with id: " << nodeRefId << " to id: " <<
-        ElementId(ElementType::Node, newNodeRefId));
+      LOG_TRACE("Converting new node ref with id: " << nodeRefId << " to id: " << ElementId(ElementType::Node, newNodeRefId));
       nodeRefId = newNodeRefId;
     }
     writer.writeAttribute("ref", QString::number(nodeRefId));
@@ -373,9 +366,7 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Relation] * -1;
-    LOG_TRACE(
-      "Converting new element with id: " << r->getElementId() << " to id: " <<
-      ElementId(ElementType::Relation, id));
+    LOG_TRACE("Converting new element with id: " << r->getElementId() << " to id: " << ElementId(ElementType::Relation, id));
     _newElementIdCtrs[ElementType::Relation] = _newElementIdCtrs[ElementType::Relation] + 1;
     _newElementIdMappings[ElementType::Relation].insert(r->getId(), id);
   }
@@ -420,9 +411,7 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
     if (_newElementIdMappings[elementType.getEnum()].contains(memberId))
     {
       const long newMemberId = _newElementIdMappings[elementType.getEnum()][memberId];
-      LOG_TRACE(
-        "Converting new member with id: " << memberId << " to id: " <<
-        ElementId(elementType, newMemberId));
+      LOG_TRACE("Converting new member with id: " << memberId << " to id: " << ElementId(elementType, newMemberId));
       memberId = newMemberId;
     }
     writer.writeAttribute("ref", QString::number(memberId));
