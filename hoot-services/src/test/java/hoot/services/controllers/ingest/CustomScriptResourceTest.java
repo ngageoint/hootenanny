@@ -736,11 +736,6 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
                     validateExportMethod.invoke(null, sScript);
                 }
             }
-
-            if (jsTrans.get("fouoPath") != null) {
-                File fouo = new File(original_HOME_FOLDER, (String) jsTrans.get("fouoPath"));
-                assertTrue(fouo.exists());
-            }
         }
     }
 }
