@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -182,7 +182,7 @@ private:
     const QString outputFile = _outputPath + "normalizeAddressesVisitorBasicTest-out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
-    CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
+    CPPUNIT_ASSERT_EQUAL(28, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS(_inputPath + "normalizeAddressesVisitorBasicTest-out.osm", outputFile);
     OsmMap::resetCounters();
   }

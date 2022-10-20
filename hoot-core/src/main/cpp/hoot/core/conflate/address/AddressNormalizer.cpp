@@ -51,11 +51,11 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const
   LOG_VART(addressTagKeys);
   for (const auto& addressTagKey : qAsConst(addressTagKeys))
   {
-    // normalization may find multiple addresses; we'll arbitrarily take the first one and put the
-    // rest in an alt field
-    const QSet<QString> normalizedAddresses = normalizeAddress(e->getTags().get(addressTagKey));
+    // normalization may find multiple addresses; the first field should contain the "most correct" address, use
+    // that as the address field and put the rest in an alt field
+    const QVector<QString> normalizedAddresses = normalizeAddress(e->getTags().get(addressTagKey));
     bool firstAddressParsed = false;
-    QString altAddresses;
+    QStringList altAddresses;
     for (const auto& normalizedAddress : qAsConst(normalizedAddresses))
     {
       if (!firstAddressParsed)
@@ -65,23 +65,22 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const
         firstAddressParsed = true;
       }
       else
-        altAddresses += normalizedAddress + ";";
+        altAddresses.append(normalizedAddress);
     }
     if (!altAddresses.isEmpty())
     {
-      altAddresses.chop(1);
-      e->getTags().set("alt_address", altAddresses);
+      e->getTags().set("alt_address", altAddresses.join(";"));
       LOG_TRACE("Set alt normalized address(es): " << altAddresses << " for tag key: " << addressTagKey);
     }
   }
 }
 
-QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
+QVector<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 {
   if (!ConfigOptions().getAddressMatchEnabled())
   {
-    QSet<QString> addresses;
-    addresses.insert(address);
+    QVector<QString> addresses;
+    addresses.append(address);
     return addresses;
   }
 
@@ -92,14 +91,15 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
     return _normalizeAddressIntersection(addressToNormalize);
 }
 
-QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& address) const
+QVector<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& address) const
 {
   if (address.trimmed().isEmpty())
-    return QSet<QString>();
+    return QVector<QString>();
 
   LOG_TRACE("Normalizing " << address << " with libpostal...");
 
-  QSet<QString> normalizedAddresses;
+  QVector<QString> normalizedAddresses;
+  QSet<QString> addressSet;
   QString addressCopy = address;
 
   // See note about init of this in AddressParser::parseAddresses.
@@ -111,15 +111,17 @@ QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& a
   // specifying a language in the options is optional, but could we get better performance if
   // we did specify one when we know what it is (would have to check to see if it was supported
   // first, of course)?
-  char** expansions = libpostal_expand_address(addressCopy.toUtf8().data(), libpostal_get_default_options(), &num_expansions);
+  libpostal_normalize_options_t options = libpostal_get_default_options();
+  char** expansions = libpostal_expand_address(addressCopy.toUtf8().data(), options, &num_expansions);
   // add all the normalizations libpostal finds as possible addresses
   for (size_t i = 0; i < num_expansions; i++)
   {
     const QString normalizedAddress = QString::fromUtf8(expansions[i]);
     LOG_VART(normalizedAddress);
-    if (_isValidNormalizedAddress(addressCopy, normalizedAddress) && !normalizedAddresses.contains(normalizedAddress))
+    if (_isValidNormalizedAddress(addressCopy, normalizedAddress) && !addressSet.contains(normalizedAddress))
     {
-      normalizedAddresses.insert(normalizedAddress);
+      normalizedAddresses.append(normalizedAddress);
+      addressSet.insert(normalizedAddress);
       LOG_TRACE("Normalized address from: " << address << " to: " << normalizedAddress);
       _numNormalized++;
     }
@@ -133,7 +135,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& a
   return normalizedAddresses;
 }
 
-QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& address) const
+QVector<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& address) const
 {
   LOG_TRACE("Normalizing intersection: " << address << "...");
 

@@ -160,7 +160,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
     if (normalizeAddresses)
     {
       // normalize and translate the address strings, so we end up comparing apples to apples
-      const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
+      const QVector<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
       LOG_VART(normalizedAddresses);
 
       for (const auto& normalizedAddress : qAsConst(normalizedAddresses))
