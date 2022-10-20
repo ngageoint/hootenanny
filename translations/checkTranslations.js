@@ -48,6 +48,42 @@ var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var server = require(HOOT_HOME + '/translations/TranslationServer.js');
 
+
+function translateFcode(schema,f_code,geom = '')
+{
+  try {
+    var feature = server.handleInputs({
+        fcode: f_code,
+        translation: schema,
+        geom: geom,
+        method: 'GET',
+        path: '/translateFrom'
+    });
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+};
+
+
+function getFcodesForGeom(schema,geom)
+{
+  try {
+    var feature = server.getFCodes({
+        translation: schema,
+        geometry: geom,
+        method: 'GET',
+        path: '/translateFrom'
+    });
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+};
+
+
 // Handy Info:
 // translateTo:
 //    key | idelem = key to search for
@@ -71,7 +107,7 @@ function schemaFromFcode(F_CODE,geometry,schema)
   catch (err) {
     return {'error':err};
   }
-}; // End osmToOge
+}; // End schemaFromFcode
 
 
 function osmToOgr(feature,schema)
@@ -151,7 +187,6 @@ function getThing(thing)
       method: 'GET',
       path: '/' + thing
     });
-    // console.log(schema + ': ' + code + ' ' + geo + ' ' + feature.name + '  ' + feature.desc);
     return feature;
   }
   catch (err) {
@@ -179,28 +214,6 @@ function dumpSchema(schema)
 }
 
 
-function schemaFromFcode(F_CODE,geometry,schema)
-{
-  try {
-    var feature = server.handleInputs({
-      idelem: 'fcode',
-      idval: F_CODE,
-      geom: geometry,
-      translation: schema,
-      method: 'GET',
-      path: '/translateTo'
-    });
-    // console.log(schema + ': ' + code + ' ' + geo + ' ' + feature.name + '  ' + feature.desc);
-    return feature;
-  }
-  catch (err) {
-    return {'error':err};
-  }
-}; // End osmToOge
-
-
-
-
 // From the schema:
   // name: 'PAL015',
   // fcode: 'AL015',
@@ -209,7 +222,7 @@ function schemaFromFcode(F_CODE,geometry,schema)
   // geom: 'Point',
 
 // Test a list of F_CODES against a list of schema and geometries
-function testF_CODE(codeList,schemaList,geomList)
+function testF_CODE(codeList,schemaList,geomList = ['Point','Line','Area'])
 {
   codeList.forEach(code => {
     console.log('F_CODE: ' + code);
@@ -488,6 +501,8 @@ var dumpValues = function (schema,aName)
 
 
 if (typeof exports !== 'undefined') {
+    exports.translateFcode = translateFcode;
+    exports.getFcodesForGeom = getFcodesForGeom;
     exports.schemaFromFcode = schemaFromFcode;
     exports.osmToOgr = osmToOgr;
     exports.ogrToOsm = ogrToOsm;

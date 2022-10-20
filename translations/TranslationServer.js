@@ -423,7 +423,7 @@ var ogr2osm = function(params) {
         }, '', params.geom || '');
 
         if (JSON.stringify(osm) === '{}') {
-            return {'error':'Feature Code ' + params.fcode + ' is not valid for MGCP'};
+            return {'error':'Feature Code ' + params.fcode + ' is not valid for ' + params.translation};
         }
 
         return osm;
