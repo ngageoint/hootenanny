@@ -1137,6 +1137,11 @@ tds61 = {
       if (! tags.leisure) tags.leisure = 'garden';
       break;
 
+    case 'EA050': // Vineyard
+      // Landuse = vineyard implies crop=grape
+      if (tags.crop == 'grape') delete tags.crop;
+      break;
+
     case 'EC015': // Forest
       if (geometryType == 'Line')
       {
@@ -2292,6 +2297,19 @@ tds61 = {
       }
     }
 
+    // Vineyards
+    if (tags.landuse == 'vineyard')
+    {
+      // In the spec, this is the _only_ value for crop so we store orig value
+      if (tags.crop)
+      {
+        tags.tcrop = tags.crop;
+        delete tags.crop;
+      }
+
+      tags.crop = 'grape';
+    }
+
   }, // End applyToOgrPreProcessing
 
   // #####################################################################################################
@@ -2690,6 +2708,13 @@ tds61 = {
         delete attrs.ZI017_GAW;
         notUsedTags.gauge = tags.gauge;
       }
+    }
+
+    // Cleanup crop value if applicable
+    if (notUsedTags.tcrop)
+    {
+      notUsedTags.crop = notUsedTags.tcrop;
+      delete notUsedTags.tcrop;
     }
 
   }, // End applyToOgrPostProcessing
