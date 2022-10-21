@@ -784,6 +784,9 @@ translate = {
 
     tTags = tTags.split('}{').join(','); // Join the JSON if needed
 
+    // Now try to clean up the text
+    tTags = tTags.replace(/=>/g,':').replace(/\\/g,'').replace(/\"\"/g,'\"');
+
     try
     {
       outTags = JSON.parse(tTags);
