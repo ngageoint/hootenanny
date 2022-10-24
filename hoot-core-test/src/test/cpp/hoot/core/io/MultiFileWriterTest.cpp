@@ -137,7 +137,7 @@ public:
     }
     //  Write the footer
     writer.writeFooter("]");
-    writer.writeFooter("}");
+    writer.writeFooter("}\n");
   }
 
   void checkFiles(const QString& base, const QString& ext, const std::vector<QString>& indices)
