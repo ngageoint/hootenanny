@@ -1,0 +1,11 @@
+{"file": "This is the header",
+"contents": [
+{ "element-id": "0", "element-type": "Points" },
+{ "element-id": "1", "element-type": "Points" },
+{ "element-id": "2", "element-type": "Points" },
+{ "element-id": "3", "element-type": "Points" },
+{ "element-id": "4", "element-type": "Points" },
+{ "element-id": "5", "element-type": "Points" },
+{ "element-id": "6", "element-type": "Points" },
+{ "element-id": "7", "element-type": "Points" }
+]}
