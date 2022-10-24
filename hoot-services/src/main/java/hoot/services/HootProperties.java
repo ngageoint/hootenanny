@@ -223,7 +223,7 @@ public final class HootProperties {
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
-        TRANSLATION_CONFIG = getProperty("translationsConfig");
+        TRANSLATION_CONFIG = getProperty("translationConfig");
         CORE_SCRIPT_PATH = getProperty("coreScriptPath");
         ERROR_LOG_PATH = getProperty("ErrorLogPath");
         ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
