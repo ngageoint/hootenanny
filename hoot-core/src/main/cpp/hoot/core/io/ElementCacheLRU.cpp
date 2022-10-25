@@ -81,6 +81,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
         _removeOldest(ElementType::Node);
       _nodeList.push_front(newNode->getId());
       _nodes.insert(std::make_pair(newNode->getId(), std::make_pair(newNode, _nodeList.begin())));
+      resetNodeIterator(); // maintain interface contract
     }
     break;
   case ElementType::Way:
@@ -92,6 +93,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
         _removeOldest(ElementType::Way);
       _wayList.push_front(newWay->getId());
       _ways.insert(std::make_pair(newWay->getId(), std::make_pair(newWay, _wayList.begin())));
+      resetWayIterator(); // maintain interface contract
     }
     break;
   case ElementType::Relation:
@@ -103,14 +105,13 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
         _removeOldest(ElementType::Relation);
       _relationList.push_front(newRelation->getId());
       _relations.insert(std::make_pair(newRelation->getId(), std::make_pair(newRelation, _relationList.begin())));
+      resetRelationIterator(); // maintain interface contract
     }
     break;
   default:
     throw HootException(QString("Unexpected element type: %1").arg(newElement->getElementType().toString()));
     break;
   }
-  // Reset all iterators to maintain interface contract
-  resetElementIterators();
 }
 
 void ElementCacheLRU::close()
@@ -360,20 +361,22 @@ void ElementCacheLRU::removeElement(const ElementId &eid)
   case ElementType::Node:
     _nodeList.erase(_nodes.find(eid.getId())->second.second);
     _nodes.erase(_nodes.find(eid.getId()));
+    resetNodeIterator();
     break;
   case ElementType::Way:
     _wayList.erase(_ways.find(eid.getId())->second.second);
     _ways.erase(_ways.find(eid.getId()));
+    resetWayIterator();
     break;
   case ElementType::Relation:
     _relationList.erase(_relations.find(eid.getId())->second.second);
     _relations.erase(_relations.find(eid.getId()));
+    resetRelationIterator();
     break;
   default:
     throw HootException("Invalid type passed");
     break;
   }
-  resetElementIterators();
 }
 
 void ElementCacheLRU::removeElements(const ElementType::Type type)
@@ -383,20 +386,22 @@ void ElementCacheLRU::removeElements(const ElementType::Type type)
   case ElementType::Node:
     _nodeList.clear();
     _nodes.erase(_nodes.begin(), _nodes.end());
+    resetNodeIterator();
     break;
   case ElementType::Way:
     _wayList.clear();
     _ways.erase(_ways.begin(), _ways.end());
+    resetWayIterator();
     break;
   case ElementType::Relation:
     _relationList.clear();
     _relations.erase(_relations.begin(), _relations.end());
+    resetRelationIterator();
     break;
   default:
     throw HootException("Invalid type passed");
     break;
   }
-  resetElementIterators();
 }
 
 void ElementCacheLRU::_updateNodeAccess(long id)

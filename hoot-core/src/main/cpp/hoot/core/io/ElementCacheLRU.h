@@ -78,6 +78,9 @@ public:
   void addElement(ConstElementPtr& newElement) override;
 
   void resetElementIterators() override;
+  void resetNodeIterator();
+  void resetWayIterator();
+  void resetRelationIterator();
 
   ConstNodePtr getNextNode() override;
   ConstWayPtr getNextWay() override;
@@ -93,9 +96,7 @@ public:
   void writeElement(ElementPtr& element) override;
 
   // Functions for ElementProvider
-
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
   bool containsElement(const ElementId& eid) const override;
   ConstElementPtr getElement(const ElementId& id) const override;
   ConstNodePtr getNode(long id) const override;
@@ -136,16 +137,16 @@ private:
   // Iterator used to walk nodes in cache
   std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>>::iterator _nodesIter;
 
-  // List used to keep track of least-recently used nodes
+  // List used to keep track of least-recently used ways
   std::list<long> _wayList;
   // Ways in the cache (key is way ID, then value is pair for way and its pos in the wayList)
   std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>> _ways;
   // Iterator used to walk ways in cache
   std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>>::iterator _waysIter;
 
-  // List used to keep track of least-recently used nodes
+  // List used to keep track of least-recently used relations
   std::list<long> _relationList;
-  // Relations in the cache (key is relation ID, then value is pair for relation and access time)
+  // Relations in the cache (key is relation ID, then value is pair for relation and its pos in the relationList)
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>  _relations;
   // Iterator used to walk relations in cache
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator _relationsIter;
@@ -161,6 +162,22 @@ private:
 
 using ElementCacheLRUPtr = std::shared_ptr<ElementCacheLRU>;
 
+inline void ElementCacheLRU::resetNodeIterator()
+{
+  _nodesIter = _nodes.begin();
 }
+
+
+inline void ElementCacheLRU::resetWayIterator()
+{
+  _waysIter = _ways.begin();
+}
+
+inline void ElementCacheLRU::resetRelationIterator()
+{
+  _relationsIter = _relations.begin();
+}
+
+} // namespace
 
 #endif // ELEMENTCACHELRU_H
