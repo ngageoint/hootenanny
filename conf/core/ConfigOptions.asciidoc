@@ -2500,16 +2500,6 @@ corresponding implicit tag rules database.
 
 List of way IDs to find intersecting ways for when using `IntersectingWayCriterion`.
 
-=== javascript.schema.translator.path
-
-* Data Type: list
-* Default Value:
-** `${HOOT_HOME}/translations`
-** `${HOOT_HOME}/translations-local`
-** `${HOOT_HOME}/rules`
-
-A list of paths to include in the javascript translator search path.
-
 === in.bounds.criterion.bounds
 
 * Data Type: string
@@ -3878,21 +3868,6 @@ this to true can be useful when conforming to strict specifications.
 
 Text prepended to a layer name when writing an OGR format.
 
-=== ogr.writer.script
-
-* Data Type: string
-* Default Value: ``
-
-Set the script to use with OGR writer. For example:
-
-----
-hoot convert \
-  -D ogr.writer.script=test-files/io/SampleTranslation.js \
-  -D ogr.writer.pre.layer.name=bar \
-  test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
-----
-
 === ogr.writer.skip.failed.relations
 
 * Data Type: bool
@@ -5257,13 +5232,23 @@ before or after the translation. E.g.
 * Default Value: ``
 
 The script used by `SchemaTranslationVisitor` and `SchemaTranslationOp` for schema translation.
-Required if converting to/from an OGR format. Use either the base name of a Python translation
-file (without the `.py` extension) or the full path to a Javascript file (`.js`). If this
-configuration option is added to a call to the convert command and neither
-`SchemaTranslationVisitor` nor `SchemaTranslationOp` is specified the convert command will add the
-translation operation as the first conversion operation. If you want the translation operation to
-occur in a different order, then you must explicitly specify it in convert.ops. For more information
-on translation files read the "Translation" section of the User Guide.
+Required if converting to/from an OGR format. Optional for other output formats.
+Use either the base name of a Python translation file (without the `.py` extension) or the full
+path to a Javascript file (`.js`). If this configuration option is added to a call to the convert
+command and neither `SchemaTranslationVisitor` nor `SchemaTranslationOp` is specified the convert
+command will add the translation operation as the first conversion operation. If you want the
+translation operation to occur in a different order, then you must explicitly specify it in
+convert.ops. For more information on translation files read the "Translation" section of the
+User Guide.
+
+For example:
+----
+hoot convert \
+  -D schema.translation.script=test-files/io/SampleTranslation.js \
+  -D ogr.writer.pre.layer.name=bar \
+  test-files/io/SampleTranslation.osm \
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
+----
 
 === schema.translation.element.status
 

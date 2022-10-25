@@ -46,19 +46,6 @@ hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
 
 
 // ####################################################################################
-// getTranslations, getCapabilities,
-var tList = transTest.getThing('translations');
-console.log('\nTransList: ' + JSON.stringify(tList));
-
-tList = transTest.getThing('capabilities');
-console.log('\nCapabilities: ' + JSON.stringify(tList));
-
-tList = transTest.getThing('version');
-console.log('\nVersion: ' + JSON.stringify(tList));
-
-// process.exit();
-
-// ####################################################################################
 // The map of schema to test
 var schemaMap = {
   // DNC: require(HOOT_HOME + '/translations/dnc_schema.js'),
@@ -79,16 +66,24 @@ var schemaMap = {
 // Test every fcode in a schema
 // transTest.testSchema(schemaMap);
 
-// process.exit();
-
 // ####################################################################################
 // Dump values from a schema
-// This dumps out what F_CODE has an attribute and if it is an enumeration, the list of values
-console.log('\nMGCP F_CODES with FFN');
-transTest.dumpValues(schemaMap.MGCP,'FFN');
+// This dumps out what F_CODE has an attribute and if it is an enumeration, the consolidated list
+// transTest.dumpValues(schemaMap.MGCP,'FFN');
+// transTest.dumpValues(schemaMap.MGCP,'WID');
 
-console.log('\nMGCP F_CODES with WID');
-transTest.dumpValues(schemaMap.MGCP,'WID');
+
+// getTranslations, getCapabilities,
+var tList = transTest.getThing('translations');
+console.log('\nTransList: ' + JSON.stringify(tList));
+
+
+tList = transTest.getThing('capabilities');
+console.log('\nCapabilities: ' + JSON.stringify(tList));
+
+
+tList = transTest.getThing('version');
+console.log('\nVersion: ' + JSON.stringify(tList));
 
 process.exit();
 
@@ -126,7 +121,7 @@ var fCodeList = [
   // 'AD010'
   ];
 
-// Test a single F_CODE in multiple schema and with multiple geometry types
-// transTest.testF_CODE(fCodeList,schemaList,geomList);
+// Test a single F_CODE
+transTest.testF_CODE(fCodeList,schemaList,geomList);
 
 // End

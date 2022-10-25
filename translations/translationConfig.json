@@ -1,0 +1,94 @@
+[
+  {
+    "name" : "TDSv71",
+    "description" : "NSG Topographic Data Store (TDS) v7.1",
+    "canExport" : true,
+    "schema":"tds71_full_schema.js",
+    "path" : "TDSv71.js"
+  },
+  {
+    "name" : "MGCP",
+    "description" : "Multinational Geospatial Co-production Program (MGCP) TRD3&4",
+    "canExport" : true,
+    "schema":"mgcp_schema.js",
+    "path" : "MGCP_TRD4.js"
+  },
+  {
+    "name" : "MGCP - Cartographic",
+    "description" : "MGCP TRD4 For Cartographic Use Only",
+    "canExport" : true,
+    "path" : "MGCP_TRD4_Cartographic.js"
+  },
+  {
+    "name" : "GGDMv30",
+    "description" : "Ground-Warfighter Geospatial Data Model (GGDM) v3.0",
+    "canExport" : true,
+    "schema":"ggdm30_schema.js",
+    "path" : "GGDMv30.js"
+  },
+  {
+    "name" : "TDSv61",
+    "description" : "NSG Topographic Data Store (TDS) v6.1",
+    "canExport" : true,
+    "schema":"tds61_full_schema.js",
+    "path" : "TDSv61.js"
+  },
+  {
+    "name" : "TDSv40",
+    "description" : "NSG Topographic Data Store (TDS) v4.0",
+    "canExport" : true,
+    "schema" : "tds40_full_schema.js",
+    "path" : "TDSv40.js"
+  },
+  {
+    "name" : "TDSv70",
+    "description" : "NSG Topographic Data Store (TDS) v7.0",
+    "canExport" : true,
+    "schema":"tds70_full_schema.js",
+    "path" : "TDSv70.js"
+  },
+  {
+    "name" : "DNC",
+    "description" : "Digital Nautical Chart",
+    "canExport" : true,
+    "path" : "DNC.js"
+  },
+  {
+    "name" : "OSM",
+    "description" : "OpenStreetMap.org (OSM)",
+    "canExport" : true,
+    "importPath" : "OSM_Ingest.js",
+    "exportPath" : "RenderDb.js"
+  },
+  {
+    "name" : "ENC",
+    "description" : "S-57 Electronic Navigation Chart V3.1.1",
+    "canExport" : true,
+    "importPath" : "ENCv311_to_OSM.js",
+    "exportPath" : "ENCv311_to_OGR.js"
+  },
+  {
+    "name" : "GIFD D4",
+    "description" : "Geospatial Intelligence Feature Database (GIFD) D4",
+    "canExport" : false,
+    "path" : "GIFD_D4.js"
+  },
+  {
+    "name" : "UFD",
+    "description" : "Urban Feature Data (UFD) Levels 1-3",
+    "canExport" : false,
+    "path" : "UFD_to_OSM.js"
+  },
+  {
+    "name" : "WorldPortIndex",
+    "description" : "NGA World Port Index",
+    "canExport" : false,
+    "path" : "WorldPortIndex.js"
+  },
+  {
+    "name" : "GeoNames",
+    "description" : "GeoNames.org and geonames.nga.mil",
+    "canExport" : false,
+    "path" : "GeoNames_to_OSM.js"
+  }
+]

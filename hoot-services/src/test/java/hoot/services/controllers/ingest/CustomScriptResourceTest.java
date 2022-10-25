@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2021 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -684,12 +684,13 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         Method validateExportMethod = CustomScriptResource.class.getDeclaredMethod("validateExport", String.class);
         validateExportMethod.setAccessible(true);
 
-        Method getDefaultListMethod = CustomScriptResource.class.getDeclaredMethod("getDefaultList", List.class);
+        Method getDefaultListMethod = CustomScriptResource.class.getDeclaredMethod("getDefaultList");
         getDefaultListMethod.setAccessible(true);
 
-        List<String> configFiles = new ArrayList<>();
-        configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
-        JSONArray trans = (JSONArray) getDefaultListMethod.invoke(null, configFiles);
+        // List<String> configFiles = new ArrayList<>();
+        // configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
+        // JSONArray trans = (JSONArray) getDefaultListMethod.invoke(null, configFiles);
+        JSONArray trans = (JSONArray) getDefaultListMethod.invoke(null);
 
         for (Object o : trans) {
             JSONObject jsTrans = (JSONObject) o;
@@ -734,11 +735,6 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
                     String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
                     validateExportMethod.invoke(null, sScript);
                 }
-            }
-
-            if (jsTrans.get("fouoPath") != null) {
-                File fouo = new File(original_HOME_FOLDER, (String) jsTrans.get("fouoPath"));
-                assertTrue(fouo.exists());
             }
         }
     }
