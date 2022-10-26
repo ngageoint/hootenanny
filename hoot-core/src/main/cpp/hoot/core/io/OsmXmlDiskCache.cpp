@@ -130,7 +130,7 @@ bool OsmXmlDiskCache::containsElement(const ElementId& eid) const
   return false;
 }
 
-ConstElementPtr OsmXmlDiskCache::getElement(const ElementId& eid) const
+ElementPtr OsmXmlDiskCache::getElement(const ElementId& eid)
 {
   const long id = eid.getId();
   switch (eid.getType().getEnum())
@@ -149,12 +149,7 @@ ConstElementPtr OsmXmlDiskCache::getElement(const ElementId& eid) const
   }
 
   // Error!!!
-  return ConstElementPtr();
-}
-
-ConstNodePtr OsmXmlDiskCache::getNode(long id) const
-{
-  return std::const_pointer_cast<Node>(getNode(id));
+  return ElementPtr();
 }
 
 NodePtr OsmXmlDiskCache::getNode(long id)
@@ -172,11 +167,6 @@ NodePtr OsmXmlDiskCache::getNode(long id)
   return NodePtr();
 }
 
-ConstRelationPtr OsmXmlDiskCache::getRelation(long id) const
-{
-  return std::const_pointer_cast<Relation>(getRelation(id));
-}
-
 RelationPtr OsmXmlDiskCache::getRelation(long id)
 {
   auto it = _relation2pos.find(id);
@@ -190,11 +180,6 @@ RelationPtr OsmXmlDiskCache::getRelation(long id)
 
   // Error!
   return RelationPtr();
-}
-
-ConstWayPtr OsmXmlDiskCache::getWay(long id) const
-{
-  return std::const_pointer_cast<Way>(getWay(id));
 }
 
 WayPtr OsmXmlDiskCache::getWay(long id)

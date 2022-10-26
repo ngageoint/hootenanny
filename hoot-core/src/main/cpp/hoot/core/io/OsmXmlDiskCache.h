@@ -42,7 +42,7 @@ class OGRSpatialReference;
 namespace hoot
 {
 
-class OsmXmlDiskCache : ElementProvider
+class OsmXmlDiskCache
 {
 public:
 
@@ -51,23 +51,16 @@ public:
 
   void addElement(ConstElementPtr &newElement);
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  bool containsElement(const ElementId& eid) const;
 
-  bool containsElement(const ElementId& eid) const override;
-  ConstElementPtr getElement(const ElementId& eid) const override;
+  ElementPtr getElement(const ElementId& eid);
+  NodePtr getNode(long id);
+  RelationPtr getRelation(long id);
+  WayPtr getWay(long id);
 
-  ConstNodePtr getNode(long id) const override;
-  NodePtr getNode(long id) override;
-
-  ConstRelationPtr getRelation(long id) const override;
-  RelationPtr getRelation(long id) override;
-
-  ConstWayPtr getWay(long id) const override;
-  WayPtr getWay(long id) override;
-
-  bool containsNode(long id) const override;
-  bool containsRelation(long id) const override;
-  bool containsWay(long id) const override;
+  bool containsNode(long id) const;
+  bool containsRelation(long id) const;
+  bool containsWay(long id) const;
 
 private:
 
