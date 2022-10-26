@@ -186,6 +186,11 @@ void OsmXmlWriter::_initWriter()
   _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
+uint64_t OsmXmlWriter::getPos()
+{
+  return _fp->pos();
+}
+
 void OsmXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);

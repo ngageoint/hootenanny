@@ -283,6 +283,12 @@ bool OsmXmlReader::fatalError(const QXmlParseException& exception)
   return false;
 }
 
+bool OsmXmlReader::seek(uint64_t pos)
+{
+  //TODO: Some sort of error checking
+  _fp.seek(pos);
+}
+
 bool OsmXmlReader::isSupported(const QString& url) const
 {
   QStringList validExtensions = supportedFormats().split(";");

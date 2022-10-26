@@ -80,6 +80,7 @@ public:
   void finalizePartial() override;
   bool hasMoreElements() override;
   bool isSupported(const QString& url) const override;
+  bool seek(uint64_t pos);
   void read(const OsmMapPtr& map) override;
   void close() override;
   ElementPtr readNextElement() override;

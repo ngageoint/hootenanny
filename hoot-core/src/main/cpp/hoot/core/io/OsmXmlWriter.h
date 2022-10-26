@@ -53,6 +53,7 @@ public:
   void open(const QString& url) override;
   void close() override;
   QString supportedFormats() const override { return ".osm"; }
+  uint64_t getPos(); // Get underlying position from file handle
   void write(const ConstOsmMapPtr& map) override;
   void writePartial(const ConstNodePtr& node) override;
   void writePartial(const ConstWayPtr& way) override;
