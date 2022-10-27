@@ -345,7 +345,15 @@ public class CustomScriptResource {
                         }
 
                         //add relative translation folder path to path property
-                        oTrans.put("path", file.getName() + "/" + oTrans.get("path"));
+                        if (oTrans.get("path") != null) {
+                            oTrans.put("path", file.getName() + "/" + oTrans.get("path"));
+                        }
+                        if (oTrans.get("importPath") != null) {
+                            oTrans.put("importPath", file.getName() + "/" + oTrans.get("importPath"));
+                        }
+                        if (oTrans.get("exportPath") != null) {
+                            oTrans.put("exportPath", file.getName() + "/" + oTrans.get("exportPath"));
+                        }
                     }
 
                     if (!defTranslations.isEmpty()) {
