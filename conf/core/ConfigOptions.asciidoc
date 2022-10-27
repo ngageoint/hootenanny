@@ -4864,7 +4864,7 @@ too large to query at once (see `reader.http.bbox.max.size`).
 * Data Type: bool
 * Default Value: `false`
 
-If `reader.use.file.status` is true, the default action is to drop the status tag from the file
+If `reader.keep.status.tag` is true, the default action is to drop the status tag from the file
 during reading. Setting this to true preserves the status tag on the element. Not honored by all
 readers.
 
