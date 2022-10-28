@@ -161,8 +161,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
       }
       break;
     default:
-      throw IllegalArgumentException("Expected a valid element type, but got: " +
-        QString::number(oldId.getType().getEnum()));
+      throw IllegalArgumentException("Expected a valid element type, but got: " + QString::number(oldId.getType().getEnum()));
     }
   }
 
@@ -196,8 +195,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element) const
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-                   QString::number(element->getId()));
+          LOG_WARN("Invalid status: " + statusStr + " for element with ID: " + QString::number(element->getId()));
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -208,7 +206,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element) const
     }
     // We don't need to carry this tag around once the value is set on the element...it will
     // be reinstated by some writers, though.
-    if (!_keepStatusTag) { tags.remove(MetadataTags::HootStatus()); }
+    if (!_keepStatusTag)
+      tags.remove(MetadataTags::HootStatus());
   }
 
   if (tags.contains("type"))
@@ -501,9 +500,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
         if (!additionalNodeIds.empty())
         {
-          LOG_DEBUG(
-            "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<
-            "way...");
+          LOG_DEBUG("Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
           std::shared_ptr<QSqlQuery> additionalWayNodeItr = _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
           while (additionalWayNodeItr->next())
           {
@@ -519,9 +516,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     }
   }
 
-  LOG_DEBUG(
-    "Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) <<
-    " total elements.");
+  LOG_DEBUG("Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) << " total elements.");
   LOG_VART(boundedNodeCount);
   LOG_VART(boundedWayCount);
   LOG_VART(boundedRelationCount);
@@ -571,9 +566,7 @@ void ApiDbReader::read(const OsmMapPtr& map)
 
     if (!_readFullThenCropOnBounded)
     {
-      LOG_DEBUG(
-        "Executing API bounded read query via SQL filtering at bounds: ..." <<
-        GeometryUtils::envelopeToString(bounds).right(50) << "...");
+      LOG_DEBUG("Executing API bounded read query via SQL filtering at bounds: ..." << GeometryUtils::toLonLatString(bounds).right(50) << "...");
       _readByBounds(map, bounds);
     }
     else
@@ -584,9 +577,7 @@ void ApiDbReader::read(const OsmMapPtr& map)
       // large dataset, we can allow the full dataset to be read in from the db input and then crop
       // it after the fact as a runtime performance optimization at the expense of extra memory
       // usage.
-      LOG_DEBUG(
-        "Executing API bounded read query via read all then crop at bounds: ..." <<
-        GeometryUtils::envelopeToString(bounds).right(50) << "...");
+      LOG_DEBUG("Executing API bounded read query via read all then crop at bounds: ..." << GeometryUtils::toLonLatString(bounds).right(50) << "...");
       _readByBounds2(map, bounds);
     }
   }

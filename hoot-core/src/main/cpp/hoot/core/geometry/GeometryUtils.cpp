@@ -132,7 +132,7 @@ std::shared_ptr<OGREnvelope> GeometryUtils::toOGREnvelope(const geos::geom::Enve
   return result;
 }
 
-QString GeometryUtils::toString(const Envelope& e)
+QString GeometryUtils::toMinMaxString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4")
@@ -142,7 +142,7 @@ QString GeometryUtils::toString(const Envelope& e)
           .arg(e.getMaxY(), 0, 'f', precision);
 }
 
-QString GeometryUtils::toConfigString(const Envelope& e)
+QString GeometryUtils::toLonLatString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4")
@@ -150,6 +150,16 @@ QString GeometryUtils::toConfigString(const Envelope& e)
           .arg(e.getMinY(), 0, 'f', precision)
           .arg(e.getMaxX(), 0, 'f', precision)
           .arg(e.getMaxY(), 0, 'f', precision);
+}
+
+QString GeometryUtils::toLatLonString(const Envelope& e)
+{
+  const int precision = ConfigOptions().getWriterPrecision();
+  return QString("%1,%2,%3,%4")
+          .arg(e.getMinY(), 0, 'f', precision)
+          .arg(e.getMinX(), 0, 'f', precision)
+          .arg(e.getMaxY(), 0, 'f', precision)
+          .arg(e.getMaxX(), 0, 'f', precision);
 }
 
 bool GeometryUtils::isEnvelopeString(const QString& str)
@@ -180,18 +190,6 @@ bool GeometryUtils::isPolygonString(const QString& str)
   return poly.get() != nullptr;
 }
 
-QString GeometryUtils::envelopeToString(const Envelope& bounds)
-{
-  LOG_VART(bounds);
-  const int precision = ConfigOptions().getWriterPrecision();
-  return
-    QString("%1,%2,%3,%4")
-      .arg(QString::number(bounds.getMinX(), 'g', precision),
-           QString::number(bounds.getMinY(), 'g', precision),
-           QString::number(bounds.getMaxX(), 'g', precision),
-           QString::number(bounds.getMaxY(), 'g', precision));
-}
-
 Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
@@ -210,9 +208,8 @@ Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
   {
     throw IllegalArgumentException(errorMsg);
   }
-  return
-    Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
-      boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
+  return Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
+                  boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
 }
 
 std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(const geos::geom::Envelope& env)
@@ -221,8 +218,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(const geos
   if (env.isNull())
     return std::shared_ptr<geos::geom::Polygon>();
 
-  CoordinateSequence* coordSeq =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2).release();
+  CoordinateSequence* coordSeq = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2).release();
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 0);
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMaxY()), 1);
   coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMaxY()), 2);
@@ -292,9 +288,9 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
   return std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 }
 
-QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
+QString GeometryUtils::polygonStringToLonLatString(const QString& str)
 {
-  return envelopeToString(*(polygonFromString(str)->getEnvelopeInternal()));
+  return toLonLatString(*(polygonFromString(str)->getEnvelopeInternal()));
 }
 
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)

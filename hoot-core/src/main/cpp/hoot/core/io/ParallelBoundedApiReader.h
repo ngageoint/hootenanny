@@ -138,6 +138,8 @@ protected:
   bool _isPolygon;
   /** Value of the bounding box or polygon */
   std::shared_ptr<geos::geom::Geometry> _boundingPoly;
+  /** Flag indicating this query is an Overpass API query */
+  bool _isOverpass;
 
   /**
    * @brief _sleep Sleep the current thread
@@ -150,6 +152,7 @@ protected:
    * @return
    */
   bool _isQueryError(const QString& result, QString& error) const;
+  QString _parseOverpassError(const QString& result) const;
 
 private:
 

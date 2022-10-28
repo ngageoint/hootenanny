@@ -85,7 +85,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMaps(map, inputs, false, Status::Invalid);
 
-    const QString bounds = GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    const QString bounds = GeometryUtils::toLonLatString(CalculateMapBoundsVisitor::getGeosBounds(map));
     std::cout << "Map extent (minx,miny,maxx,maxy): " << bounds << std::endl;
 
     LOG_STATUS("Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
