@@ -129,17 +129,15 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
-  _changesetCreator =
-    Factory::getInstance().constructObject<ChangesetReplacement>(
-      ConfigOptions().getChangesetReplacementImplementation());
+  _changesetCreator =Factory::getInstance().constructObject<ChangesetReplacement>(ConfigOptions().getChangesetReplacementImplementation());
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
   LOG_VARD(_changesetCreator->toString());
 
   _changesetApplier = std::make_shared<OsmApiDbSqlChangesetApplier>(_dataToReplaceUrl);
 
   // for each task grid cell
-    // derive the difference between the replacement data and the being replaced
-    // apply the difference back to the data being replaced
+  // derive the difference between the replacement data and the being replaced
+  // apply the difference back to the data being replaced
 
   _numChangesetsDerived = 0;
   _totalChangesetDeriveTime = 0.0;
@@ -158,9 +156,8 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
     }
     else
     {
-      for (auto taskGridCellItr = taskGridCells.crbegin(); taskGridCellItr != taskGridCells.crend(); ++taskGridCellItr)
+      for (const auto& taskGridCell : qAsConst(taskGridCells))
       {
-        const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
         _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
         changesetCtr++;
       }
@@ -178,9 +175,7 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
     }
     else if (exceptionMsg.startsWith("error executing query"))
     {
-      LOG_ERROR(
-        "Error applying changeset at: " <<
-        StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
+      LOG_ERROR("Error applying changeset at: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
     }
     else
       throw;
@@ -193,8 +188,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(const TaskGrid::TaskGridCel
 
   // Include IDs override skip IDs. if include IDs is populated at all and this ID isn't in the
   // list, skip it. Otherwise, if the skip IDs have it, also skip it.
-  if ((!_taskCellIncludeIds.isEmpty() && !_taskCellIncludeIds.contains(taskGridCell.id)) ||
-      _taskCellSkipIds.contains(taskGridCell.id))
+  if ((!_taskCellIncludeIds.isEmpty() && !_taskCellIncludeIds.contains(taskGridCell.id)) || _taskCellSkipIds.contains(taskGridCell.id))
   {
     LOG_STATUS("***********Skipping task grid cell: " << taskGridCell.id << "*********");
     _subTaskTimer.restart();
@@ -205,13 +199,11 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(const TaskGrid::TaskGridCel
     _changesetsOutputDir + "/" + _jobName + "-changeset-cell-" +
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCell.id, 3) + ".osc.sql");
 
-  QString msg =
-    "***********Deriving changeset " +
-    QString::number(changesetNum) + " / " + StringUtils::formatLargeNumber(taskGridSize) +
-    " for task grid cell: " + QString::number(taskGridCell.id);
+  QString msg = QString("***********Deriving changeset %1 / %2 for task grid cell: %3")
+                  .arg(QString::number(changesetNum), StringUtils::formatLargeNumber(taskGridSize), QString::number(taskGridCell.id));
   if (taskGridCell.replacementNodeCount != -1)
-    msg += ", replacement nodes: " + StringUtils::formatLargeNumber(taskGridCell.replacementNodeCount);
-  msg+= "*********";
+    msg += QString(", replacement nodes: %1").arg(StringUtils::formatLargeNumber(taskGridCell.replacementNodeCount));
+  msg += "*********";
   LOG_STATUS(msg);
 
   _changesetCreator->setChangesetId(QString::number(taskGridCell.id));
@@ -228,7 +220,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(const TaskGrid::TaskGridCel
     "Applying changeset: " << changesetNum << " of " <<
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
     StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
-    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeToString(taskGridCell.bounds) <<
+    taskGridCell.id << ", over bounds: " << GeometryUtils::toLonLatString(taskGridCell.bounds) <<
     ", from file: ..." << FileUtils::toLogFormat(changesetFile.fileName(), 25) << "...");
 
   _changesetApplier->write(changesetFile);
@@ -239,26 +231,16 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(const TaskGrid::TaskGridCel
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
-  if (_killAfterNumChangesetDerivations > 0 &&
-      _numChangesetsDerived >= _killAfterNumChangesetDerivations)
-  {
-    throw HootException(
-      "Killing replacement after " + QString::number(_numChangesetsDerived) +
-      " changeset derivations...");
-  }
+  if (_killAfterNumChangesetDerivations > 0 && _numChangesetsDerived >= _killAfterNumChangesetDerivations)
+    throw HootException(QString("Killing replacement after %1 changeset derivations...").arg(QString::number(_numChangesetsDerived)));
 
   // VERY SLOW
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
-  {
-    _writeUpdatedData(
-      _changesetsOutputDir + "/" + _jobName + "-" + QString::number(taskGridCell.id) +
-      "-replaced-data.osm");
-  }
+    _writeUpdatedData(_changesetsOutputDir + "/" + _jobName + "-" + QString::number(taskGridCell.id) + "-replaced-data.osm");
 
   if (changesetNum < taskGridSize)
   {
-    LOG_STATUS(
-      "Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+    LOG_STATUS("Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
   }
 }
 
@@ -266,30 +248,18 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
 {
   const QMap<QString, long> changesetStats = _changesetApplier->getChangesetStats();
 
-  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY];
-  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] +=
-    changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY];
 
   LOG_STATUS(
     "\nNode Totals:\n" <<

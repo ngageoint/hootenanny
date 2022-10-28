@@ -58,7 +58,7 @@ geos::geom::Envelope TileUtils::getRandomTile(const std::vector<geos::geom::Enve
 {
   const int randomTileIndex = getRandomTileIndex(tiles, randomSeed);
   LOG_VARD(randomTileIndex);
-  LOG_DEBUG("Randomly selected tile: " << GeometryUtils::toConfigString(tiles[randomTileIndex]));
+  LOG_DEBUG("Randomly selected tile: " << GeometryUtils::toLonLatString(tiles[randomTileIndex]));
   return tiles[randomTileIndex];
 }
 

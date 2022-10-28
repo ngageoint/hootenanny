@@ -452,7 +452,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           {
             //  The changeset was closed already so set the ID to -1 and reprocess
             id = -1;
-
             //  Split the changeset into half so that it is smaller and won't fail
             if ((int)workInfo->size() > _maxChangesetSize / 2)
               _splitChangeset(workInfo);
@@ -483,8 +482,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             continue;
           }
           //  Split the changeset and retry
-          if (!_splitChangeset(workInfo, info->response) &&
-              !workInfo->getAttemptedResolveChangesetIssues())
+          if (!_splitChangeset(workInfo, info->response) && !workInfo->getAttemptedResolveChangesetIssues())
           {
             //  Set the attempt issues resolved flag
             workInfo->setAttemptedResolveChangesetIssues(true);
@@ -498,8 +496,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
-          if (!_splitChangeset(workInfo, info->response) &&
-              !workInfo->getAttemptedResolveChangesetIssues())
+          if (!_splitChangeset(workInfo, info->response) && !workInfo->getAttemptedResolveChangesetIssues())
           {
             //  Set the attempt issues resolved flag
             workInfo->setAttemptedResolveChangesetIssues(true);
@@ -750,7 +747,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
     QUrlQuery query(map);
     //  Use the correct type of bbox for this query
     geos::geom::Envelope envelope(-77.42249541, -77.42249539, 38.96003149, 38.96003151);
-    QString bboxQuery = GeometryUtils::toConfigString(envelope);
+    QString bboxQuery = GeometryUtils::toLonLatString(envelope);
     query.addQueryItem("bbox", bboxQuery);
     map.setQuery(query);
     request->networkRequest(map, _timeout);

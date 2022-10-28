@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "UniformTaskGridGenerator.h"
 
 // Hoot
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 namespace hoot
@@ -49,10 +49,10 @@ UniformTaskGridGenerator::UniformTaskGridGenerator(const QStringList& inputs, co
     _output(output)
 {
   OsmMapPtr map = std::make_shared<OsmMap>();
-  for (const auto& input : inputs)
+  for (const auto& input : qAsConst(inputs))
     IoUtils::loadMap(map, input, true, Status::Invalid);
 
-  _bounds = GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
+  _bounds = GeometryUtils::toLonLatString(CalculateMapBoundsVisitor::getGeosBounds(map));
 }
 
 TaskGrid UniformTaskGridGenerator::generateTaskGrid()

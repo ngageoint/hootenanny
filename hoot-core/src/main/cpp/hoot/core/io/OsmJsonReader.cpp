@@ -568,10 +568,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   long uid = _getUid(item);
 
   // Construct node
-  NodePtr pNode(
-    Node::newSp(
-      _defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+  NodePtr pNode(Node::newSp(_defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp, QString::fromStdString(user), uid));
 
   // Add tags
   _addTags(item, pNode);
@@ -624,7 +621,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   }
   _wayIdMap.insert(id, newId);
 
-  const QString msg = "Reading " + ElementId(ElementType::Way, newId).toString() + "...";
   long version = _getVersion(item, ElementType::Way, newId);
   long changeset = _getChangeset(item);
   unsigned int timestamp = _getTimestamp(item);
@@ -632,10 +628,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   long uid = _getUid(item);
 
   // Construct Way
-  WayPtr pWay =
-    std::make_shared<Way>(
-      _defaultStatus, newId, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid);
+  WayPtr pWay = std::make_shared<Way>(_defaultStatus, newId, _defaultCircErr, changeset, version, timestamp, QString::fromStdString(user), uid);
 
   // Add nodes
   if (item.not_found() != item.find("nodes"))
@@ -732,10 +725,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   long uid = _getUid(item);
 
   // Construct Relation
-  RelationPtr pRelation =
-    std::make_shared<Relation>(
-      _defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp,
-      QString::fromStdString(user), uid);
+  RelationPtr pRelation = std::make_shared<Relation>(_defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp, QString::fromStdString(user), uid);
 
   // Add members
   if (item.not_found() != item.find("members"))
@@ -879,6 +869,8 @@ void OsmJsonReader::_readFromHttp()
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
+  //  Tell the ParallelBoundedReader that this is an Overpass query
+  _isOverpass = true;
   //  Load the query from a file if requested
   if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
   {
