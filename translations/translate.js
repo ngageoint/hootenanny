@@ -1768,39 +1768,93 @@ translate = {
   unpackOtherTags: function(tags)
   {
     // Sanity check
-    if (tags.other_tags)
-    {
+    if (!tags.other_tags) return;
 
-      var string = tags['other_tags'].toString();
-      delete tags.other_tags;
+    var rString = tags['other_tags'].toString();
+    delete tags.other_tags; // Cleanup
 
-      // NOTE: This is not my code.I found it when looking for how to parse hstore format from StackOverflow.
-      // I have tweaked it a bit
+    // NOTE: This is not my code.I found it when looking for how to parse hstore format from StackOverflow.
+    // I have tweaked it a bit
 
-      //using [\s\S] to match any character, including line feed and carriage return,
-      var r = /(["])(?:\\\1|\\\\|[\s\S])*?\1|NULL/g,
-          matches = string.match(r);
+    //using [\s\S] to match any character, including line feed and carriage return,
+    var r = /(["])(?:\\\1|\\\\|[\s\S])*?\1|NULL/g,
+        matches = rString.match(r);
 
-      var clean = function (value) {
-                value = value.replace(/^\"|\"$/g, ""); // Remove leading double quotes
-                value = value.replace(/\\"/g, "\""); // Unescape quotes
-                value = value.replace(/\\\\/g,"\\"); //Unescape backslashes
-                value = value.replace(/''/g,"'"); //Unescape single quotes
+    var clean = function (value) {
+              value = value.replace(/^\"|\"$/g, ""); // Remove leading double quotes
+              value = value.replace(/\\"/g, "\""); // Unescape quotes
+              value = value.replace(/\\\\/g,"\\"); //Unescape backslashes
+              value = value.replace(/''/g,"'"); //Unescape single quotes
 
-                return value;
-            };
+              return value;
+          };
 
-        if(matches) {
-          for (var i = 0, l = matches.length; i < l; i+= 2) {
-            if (matches[i] && matches[i + 1]) {
-              var key = clean(matches[i]);
-              var value = matches[i + 1];
+    if(matches) {
+      // Debug
+      // print('Num Matches = ' + matches.length);
+      var gotTag = false;
+      for (var i = 0, l = matches.length; i < l; i+= 2) {
+        if (matches[i] && matches[i + 1]) {
+          var key = clean(matches[i]);
+          var value = matches[i + 1];
 
-              // Taking the chance that this may stomp on an existing tag value.
-              tags[key] = value=="NULL"?null:clean(value);
-            }
-          }
+          // Debug
+          // print('matches key: ' + key + '  value: ' + value);
+
+          // Taking the chance that this may stomp on an existing tag value.
+          tags[key] = value=="NULL"?null:clean(value);
+          gotTag = true;
         }
+      }
+      if (gotTag) return;
+    }
+
+    // If we get to here then the above code couldn't parse it
+    // First, try to sort out the other_tags tag
+    var otList = rString.replace(/\"/g,'').replace(/\\/g,'').split('=>');
+
+    if (otList.length > 1) // Sanity check. We should have an even number
+    {
+      for (var i = 0, iLen = otList.length; i < iLen; i=i+2)
+      {
+        tags[otList[i]] = otList[i+1];
+      }
+    }
+
+    // Now go looking for fragmented tags
+    for (var i in tags)
+    {
+      if (i.indexOf('=>') > -1) // Got one
+      {
+        tstr = i.toString();
+        if (tstr.charAt(0) !== '"') tstr = '"' + i;
+        if (tstr.substr(-1) !== '"') tstr += '"';
+
+        // Clean up
+        tstr = tstr.replace(/\\\"/g,'"').replace(/""/g,'\"').replace(/", "/g,'\",\"');
+
+        // Add the last value to the end
+        tstr = tstr + '=>' + '"' + tags[i] + '"';
+
+        // Convert to JSON
+        tstr = tstr.replace(/=>/g,':');
+
+        try
+        {
+          var tObj = JSON.parse('{' + tstr + '}');
+          for (var j in tObj)
+          {
+            tags[j] = tObj[j];
+          }
+
+          // It unpacked so we can delete the ugly tag
+          delete tags[i];
+        }
+        catch (error)
+        {
+          hoot.logWarn('Unable to unpack other_tags: ' + error);
+        }
+      }
     }
   }, // End unpackOtherTags
 
