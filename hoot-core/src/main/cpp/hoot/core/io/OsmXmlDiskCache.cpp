@@ -74,7 +74,7 @@ void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
     if (newWay != ConstWayPtr())
     {
       uint64_t id = newWay->getId();
-      if (_node2pos.find(id) != _node2pos.end())
+      if (_way2pos.find(id) != _way2pos.end())
       {
         uint64_t pos = _writer.getPos();
         _writer.writePartial(newWay);
