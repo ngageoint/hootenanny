@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="15.37247" minlon="38.90976145445" maxlat="15.3778967" maxlon="38.9119767"/>
+    <node visible="true" id="-692275" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3744695169911676" lon="38.9108255274114114">
+        <tag k="hoot:id" v="-692275"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
     <node visible="true" id="-692274" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3741472520299993" lon="38.9097614544499990">
         <tag k="hoot:id" v="-692274"/>
         <tag k="hoot:status" v="1"/>
@@ -40,11 +44,12 @@
     <way visible="true" id="-1144076" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-692274"/>
         <nd ref="-692273"/>
+        <nd ref="-692275"/>
         <nd ref="-692272"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-1144076"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="length" v="124.4"/>
         <tag k="note" v="way1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -63,7 +68,7 @@
     <way visible="true" id="-1143987" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-692114"/>
         <nd ref="7280"/>
-        <nd ref="-692272"/>
+        <nd ref="-692275"/>
         <nd ref="7281"/>
         <nd ref="7282"/>
         <nd ref="7273"/>
