@@ -100,6 +100,9 @@ void OsmOscChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& /*wri
 
 void OsmOscChangesetFileWriter::_getOptionalTags(Tags& tags, const Element* element) const
 {
+  //  Remove all of the hoot tags
+  tags.removeHootTags();
+  //  Add any debug tags that asked for
   if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
