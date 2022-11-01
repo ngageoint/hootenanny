@@ -16,18 +16,18 @@ Running conflation as part of a two step process...
 Applying changset...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=-13.1239318, max_lat=-12.9425864, min_lon=-76.47106669999999, max_lon=-76.2431759, num_changes=4806
-Node(s) Created: 2,888
-Node(s) Modified: 1,314
+Changeset Details: min_lat=-13.1239318, max_lat=-12.9425864, min_lon=-76.47106669999999, max_lon=-76.2431759, num_changes=4809
+Node(s) Created: 2,898
+Node(s) Modified: 1,308
 Node(s) Deleted: 0
 Way(s) Created: 511
-Way(s) Modified: 93
+Way(s) Modified: 92
 Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 3,399
-Total Modifications: 1,407
+Total Creations: 3,409
+Total Modifications: 1,400
 Total Deletions: 0
 
 Reading final data...
