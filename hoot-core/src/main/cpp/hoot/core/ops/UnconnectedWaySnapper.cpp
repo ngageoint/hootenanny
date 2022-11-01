@@ -282,8 +282,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     // Ensure the way has the status we require for snapping.
     if (_wayToSnapCrit->isSatisfied(wayToSnap))
     {
-      _snapUnconnectedWayCrossings(wayToSnap);
       _snapUnconnectedWayEndNodes(wayToSnap);
+      _snapUnconnectedWayCrossings(wayToSnap);
     }
 
     waysProcessed++;
@@ -607,7 +607,13 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
         bool makeNewNode = true;
         // Do we have node(s) here?
         geos::geom::Envelope nodeEnv(seq->getAt(i));
-        nodeEnv.expandBy(_maxSnapDistance);
+
+        // Used to be _maxSnapDistance
+        // But that caused unwanted map perturbations
+        // We want to re-use super-close nodes, AND de-dupe nodes, so we keep this code,
+        // but use a small envelope.
+        const double tenCentimeters = 0.10;
+        nodeEnv.expandBy(tenCentimeters);
         std::set<ElementId> neighborIds = SpatialIndexer::findNeighbors(nodeEnv, _crossingWayNodeIndex, _crossingWayNodeIndexToEid, _map, ElementType::Node);
         if (1 == neighborIds.size())
         {
@@ -653,7 +659,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayCrossings(const WayPtr& wayToSnap
             else
             { // Remove dupe node
               // crashes // testWay->removeNode(oldNodeId);
-              RemoveNodeByEid::removeNode(_map, oldNodeId, true);
+              RemoveNodeByEid::removeNodeFully(_map, oldNodeId);
               LOG_DEBUG(QString("Orphaned old node %1").arg(oldNodeId));
             }
           }
