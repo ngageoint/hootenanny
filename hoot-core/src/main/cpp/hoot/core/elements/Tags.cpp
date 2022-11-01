@@ -551,6 +551,22 @@ int Tags::removeHootTags()
   return removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
 }
 
+int Tags::removeNonReviewHootTags()
+{
+  QStringList keysToRemove;
+  for (auto it = constBegin(); it != constEnd(); ++it)
+  {
+    const QString key = it.key();
+    if (key.startsWith(MetadataTags::HootTagPrefix())  && !key.startsWith(MetadataTags::HootReviewTagPrefix()))
+      keysToRemove.append(key);
+  }
+
+  int numRemoved = 0;
+  for (const auto& key : qAsConst(keysToRemove))
+    numRemoved += remove(key);
+  return numRemoved;
+}
+
 int Tags::removeMetadata()
 {
   //  Remove the hoot:* tags first

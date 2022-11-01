@@ -430,8 +430,6 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
 void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
 {
   LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
-  //  Remove all of the hoot tags
-  tags.removeHootTags();
   //  Add back any tags needed
   _getOptionalTags(tags, element);
   //  Sort the keys for output
