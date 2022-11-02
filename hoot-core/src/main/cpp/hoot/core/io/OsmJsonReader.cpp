@@ -196,9 +196,10 @@ void OsmJsonReader::read(const OsmMapPtr& map)
 
   LOG_VARD(_map->getElementCount());
 
-  // See related note in OsmXmlReader::read.
-  if (_bounds.get())
+  //  Bounded network queries are already cropped
+  if (_bounds.get() && !_isWeb)
   {
+    // See related note in OsmXmlReader::read.
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
@@ -209,7 +210,8 @@ void OsmJsonReader::_readToMap()
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
-  if (_bounds.get())
+  //  Bounded network queries are already cropped
+  if (_bounds.get() && _isWeb)
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
@@ -268,6 +270,8 @@ bool OsmJsonReader::isValidJson(const QString& jsonStr)
 
 void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 {
+  _isFile = false;
+  _isWeb = false;
   _map = map;
   _loadJSON(jsonStr);
   _readToMap();
@@ -276,6 +280,8 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree& tree)
 {
+  _isFile = false;
+  _isWeb = false;
   _propTree = tree;
   _map = std::make_shared<OsmMap>();
   _readToMap();
@@ -288,6 +294,8 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   if (!infile.is_open())
     throw HootException("Unable to read JSON file: " + path);
 
+  _isFile = true;
+  _isWeb = false;
   _loadJSON(infile);
   _map = std::make_shared<OsmMap>();
   _readToMap();

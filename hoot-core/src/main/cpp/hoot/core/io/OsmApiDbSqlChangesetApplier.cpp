@@ -87,14 +87,14 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
   const QStringList sqlParts = sql.split(";");
   LOG_VARD(sqlParts.length());
 
-  if (!sqlParts[0].toUpper().startsWith("INSERT INTO CHANGESETS"))
+  if (!sqlParts[0].startsWith("INSERT INTO CHANGESETS", Qt::CaseInsensitive))
     throw HootException(QString("The first SQL statement in a changeset SQL file must create a changeset. Found: %1").arg(sqlParts[0].left(25)));
 
   for (const auto& sqlStatement : qAsConst(sqlParts))
   {
     LOG_VART(sqlStatement);
     QString changesetStatType;
-    if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
+    if (sqlStatement.startsWith("INSERT INTO CHANGESETS", Qt::CaseInsensitive))
     {
       // flush
       if (!changesetInsertStatement.isEmpty())
