@@ -554,7 +554,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
   }
   //this has to be prepared every time due to the varying number of IDs passed in
   QString sql = QString("SELECT DISTINCT way_id FROM %1 WHERE node_id IN (%2)")
-      .arg(tableTypeToTableName(TableType::WayNode), QStringList(nodeIds.toList()).join(","));
+      .arg(tableTypeToTableName(TableType::WayNode), nodeIds.toList().join(","));
   _selectWayIdsByWayNodeIds->prepare(sql);
   LOG_VART(_selectWayIdsByWayNodeIds->lastQuery().right(100));
 
