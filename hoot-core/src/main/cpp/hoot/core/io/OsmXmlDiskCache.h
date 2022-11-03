@@ -36,9 +36,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
-// GDAL
-class OGRSpatialReference;
-
 namespace hoot
 {
 

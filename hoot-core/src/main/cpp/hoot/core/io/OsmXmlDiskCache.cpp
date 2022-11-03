@@ -103,11 +103,6 @@ void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
   }
 }
 
-std::shared_ptr<OGRSpatialReference> OsmXmlDiskCache::getProjection() const
-{
-  return std::shared_ptr<OGRSpatialReference>();
-}
-
 bool OsmXmlDiskCache::containsElement(const ElementId& eid) const
 {
   const ElementType::Type type = eid.getType().getEnum();
