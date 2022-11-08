@@ -96,6 +96,8 @@ void TranslationInterface::translateToFeatures(const ElementProviderPtr& provide
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
     //  Copy the tags and remove any empty values from the tags
     Tags t = e->getTags();
+    // Add the element id as uuid:feature
+    t.appendValue("uuid:feature", e->getElementId().toString());
     QStringList keys = t.keys();
     for (const auto& key : qAsConst(keys))
     {
