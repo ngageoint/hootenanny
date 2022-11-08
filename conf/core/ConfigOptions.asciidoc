@@ -3954,7 +3954,7 @@ GeoJSON web sources.
 
 Pathname of Overpass Query Language query file.
 
-NOTE: The OQL file must contain either `{{bbox}}` or `{{polygon}}` that is replaced by `bounds` value.
+NOTE: The OQL file must contain `{{bbox}}` that is replaced by `bounds` value.
 
 === pbf.writer.compression.level
 
