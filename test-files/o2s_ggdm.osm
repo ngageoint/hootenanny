@@ -11,6 +11,7 @@
         <tag k="papa" v="smurf"/>
         <tag k="source" v="cartoon"/>
         <tag k="uuid" v="{bfbf2946-4342-444c-9926-1477c7bcce05}"/>
+        <tag k="uuid:feature" v="Node(-8)"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270165820404834" lon="153.1617843997499904"/>
@@ -22,6 +23,7 @@
         <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.965Z"/>
         <tag k="building" v="hut"/>
         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="uuid:feature" v="Node(-1)"/>
         <tag k="source" v="me"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="error:circular" v="15"/>
@@ -32,6 +34,7 @@
         <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.974Z"/>
         <tag k="waterway" v="river"/>
         <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
+        <tag k="uuid:feature" v="Way(-4)"/>
         <tag k="source" v="me"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="error:circular" v="15"/>
@@ -43,6 +46,7 @@
         <nd ref="-9"/>
         <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.971Z"/>
         <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
+        <tag k="uuid:feature" v="Way(-3)"/>
         <tag k="source" v="me"/>
         <tag k="landuse" v="orchard"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -55,6 +59,7 @@
         <tag k="papa" v="smurf"/>
         <tag k="source" v="cartoon"/>
         <tag k="uuid" v="{79cd86b0-882c-4d66-b7ec-60fed3cac8f7}"/>
+        <tag k="uuid:feature" v="Way(-2)"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -66,6 +71,7 @@
         <tag k="papa" v="smurf"/>
         <tag k="source" v="cartoon"/>
         <tag k="uuid" v="{c0b66070-d3be-44bd-bb52-03d34716cd49}"/>
+        <tag k="uuid:feature" v="Way(-1)"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
