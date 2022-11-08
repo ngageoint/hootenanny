@@ -1,8 +1,2 @@
 Split Test Complete
-19:25:49.270 WARN   ...core/scoring/MapComparator.cpp( 144) Tags do not match (ref: Way(-7), test: Way(-7):
-19:25:49.272 WARN   ...core/scoring/MapComparator.cpp( 157) < OSMTAGS2 = {"safe_clearance:horizontal":"0","source":"tdsv40:splitlongwaystest"}
-19:25:49.272 WARN   ...core/scoring/MapComparator.cpp( 158) > OSMTAGS2 = {"safe_clearance:horizontal":"0","source":"tdsv40:splitlongwaystest","uuid:feature":"Relation(-1)"}
-19:25:49.272 WARN   ...core/scoring/MapComparator.cpp( 144) Tags do not match (ref: Way(-6), test: Way(-6):
-19:25:49.272 WARN   ...core/scoring/MapComparator.cpp( 157) < OSMTAGS2 = {"safe_clearance:horizontal":"0","source":"tdsv40:splitlongwaystest"}
-19:25:49.272 WARN   ...core/scoring/MapComparator.cpp( 158) > OSMTAGS2 = {"safe_clearance:horizontal":"0","source":"tdsv40:splitlongwaystest","uuid:feature":"Relation(-2)"}
-19:25:49.272 WARN   ...core/scoring/MapComparator.cpp( 144) Tags do not match (ref: Way(-5), test: Way(-5):
+Join Test Complete
