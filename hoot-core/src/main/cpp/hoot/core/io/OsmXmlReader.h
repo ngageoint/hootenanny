@@ -80,7 +80,14 @@ public:
   void finalizePartial() override;
   bool hasMoreElements() override;
   bool isSupported(const QString& url) const override;
-  bool seek(uint64_t pos);
+
+  // These functions are used for random access to read elements out of an OsmXml file.
+  // Because you can seek backwards, and read the same elements again, seekAndReset
+  // resets the internal tracking of node/way/relation IDs, to allow intentional duplicate
+  // reading.
+  bool seekAndReset(uint64_t pos);
+  uint64_t pos();
+
   void read(const OsmMapPtr& map) override;
   void close() override;
   ElementPtr readNextElement() override;

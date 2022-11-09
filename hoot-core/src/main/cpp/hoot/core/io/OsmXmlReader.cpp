@@ -283,10 +283,19 @@ bool OsmXmlReader::fatalError(const QXmlParseException& exception)
   return false;
 }
 
-bool OsmXmlReader::seek(uint64_t pos)
+bool OsmXmlReader::seekAndReset(uint64_t pos)
 {
-  //TODO: Some sort of error checking
-  _fp.seek(pos);
+  _nodeIdMap.clear();
+  _wayIdMap.clear();
+  _relationIdMap.clear();
+  _inputFile.seek(pos);
+  _streamReader.setDevice(&_inputFile);
+  return true;
+}
+
+uint64_t OsmXmlReader::pos()
+{
+  return _inputFile.pos();
 }
 
 bool OsmXmlReader::isSupported(const QString& url) const

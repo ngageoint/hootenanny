@@ -35,14 +35,35 @@ namespace hoot
 OsmXmlDiskCache::OsmXmlDiskCache(QString tempFileName):
   _tempFileName(tempFileName)
 {
-  _writer.open(_tempFileName);
+  _writer.setIncludeIds(true);
+  _writer.setIncludeHootInfo(true);
+  _writer.setIncludePid(true);
+  _writer.setIncludeDebug(true);
+  _writer.openunbuff(_tempFileName);
+
+  _reader.setUseDataSourceIds(true);
+  _reader.setUseFileStatus(true);
+  _reader.setPreserveAllTags(true);
   _reader.open(_tempFileName);
+  _initCache();
 }
 
 OsmXmlDiskCache::~OsmXmlDiskCache()
 {
   _reader.close();
   _writer.close();
+}
+
+void OsmXmlDiskCache::_initCache()
+{
+  // Make a new node!
+  uint64_t nodeId(UINT64_MAX);
+  double lat(1.123456);
+  double lon(1.123456);
+  Meters circularError(13.13);
+  ConstElementPtr tempNode = std::make_shared<const Node>(Status::Unknown1, nodeId, lon, lat, circularError);
+  addElement(tempNode);
+  _reader.hasMoreElements();
 }
 
 void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
@@ -60,7 +81,7 @@ void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
     if (newNode != ConstNodePtr())
     {
       uint64_t id = newNode->getId();
-      if (_node2pos.find(id) != _node2pos.end())
+      if (_node2pos.find(id) == _node2pos.end())
       {
         uint64_t pos = _writer.getPos();
         _writer.writePartial(newNode);
@@ -74,7 +95,7 @@ void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
     if (newWay != ConstWayPtr())
     {
       uint64_t id = newWay->getId();
-      if (_way2pos.find(id) != _way2pos.end())
+      if (_way2pos.find(id) == _way2pos.end())
       {
         uint64_t pos = _writer.getPos();
         _writer.writePartial(newWay);
@@ -88,7 +109,7 @@ void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
     if (newRelation != ConstRelationPtr())
     {
       uint64_t id = newRelation->getId();
-      if (_relation2pos.find(id) != _relation2pos.end())
+      if (_relation2pos.find(id) == _relation2pos.end())
       {
         uint64_t pos = _writer.getPos();
         _writer.writePartial(newRelation);
@@ -153,9 +174,12 @@ NodePtr OsmXmlDiskCache::getNode(long id)
   if (it != _node2pos.end())
   {
     uint64_t pos = it.value();
-    _reader.seek(pos);
-    ElementPtr elmnt = _reader.readNextElement();
-    return std::dynamic_pointer_cast<Node, Element>(elmnt);
+    _reader.seekAndReset(pos);
+    if (_reader.hasMoreElements())
+    {
+      ElementPtr elmnt = _reader.readNextElement();
+      return std::dynamic_pointer_cast<Node, Element>(elmnt);
+    }
   }
 
   // Error!
@@ -168,9 +192,12 @@ RelationPtr OsmXmlDiskCache::getRelation(long id)
   if (it != _relation2pos.end())
   {
     uint64_t pos = it.value();
-    _reader.seek(pos);
-    ElementPtr elmnt = _reader.readNextElement();
-    return std::dynamic_pointer_cast<Relation, Element>(elmnt);
+    _reader.seekAndReset(pos);
+    if (_reader.hasMoreElements())
+    {
+      ElementPtr elmnt = _reader.readNextElement();
+      return std::dynamic_pointer_cast<Relation, Element>(elmnt);
+    }
   }
 
   // Error!
@@ -183,9 +210,12 @@ WayPtr OsmXmlDiskCache::getWay(long id)
   if (it != _way2pos.end())
   {
     uint64_t pos = it.value();
-    _reader.seek(pos);
-    ElementPtr elmnt = _reader.readNextElement();
-    return std::dynamic_pointer_cast<Way, Element>(elmnt);
+    _reader.seekAndReset(pos);
+    if (_reader.hasMoreElements())
+    {
+      ElementPtr elmnt = _reader.readNextElement();
+      return std::dynamic_pointer_cast<Way, Element>(elmnt);
+    }
   }
 
   // Error!

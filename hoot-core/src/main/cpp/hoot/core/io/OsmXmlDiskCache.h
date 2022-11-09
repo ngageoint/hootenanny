@@ -61,6 +61,7 @@ public:
 
 private:
 
+  void _initCache();
   QString _tempFileName;
   OsmXmlReader _reader;
   OsmXmlWriter _writer;

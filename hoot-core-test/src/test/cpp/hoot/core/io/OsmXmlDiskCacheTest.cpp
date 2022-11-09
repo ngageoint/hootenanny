@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Status.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlDiskCache.h>
+#include <hoot/core/elements/ElementComparer.h>
 
 namespace hoot
 {
@@ -41,6 +42,7 @@ class OsmXmlDiskCacheTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmXmlDiskCacheTest);
   CPPUNIT_TEST(runAddSingleNodeTest);
+  CPPUNIT_TEST(runMultipleNodeTest);
   CPPUNIT_TEST(runAddAllTypesTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -48,113 +50,166 @@ public:
 
   void runAddSingleNodeTest()
   {
-    OsmXmlDiskCache myCache("/tmp/hoot.disk.cache");
+    OsmXmlDiskCache myCache("/tmp/hoot.disk.cache.osm");
 
-    // Add new node
-    Status nodeStatus;
-    Meters circularError(3.0);
-    ConstElementPtr newNode = std::make_shared<const Node>(nodeStatus, 1, 2.0, 3.0, circularError);
-    myCache.addElement(newNode);
+    // Make a new node!
+    uint64_t nodeId(1);
+    uint64_t version(1);
+    double lat(1.001);
+    double lon(1.001);
+    Meters circularError(15.0);
+    ConstElementPtr refNode = std::make_shared<const Node>(Status::Unknown1,
+                                                           nodeId, lon, lat,
+                                                           circularError,
+                                                           ElementData::CHANGESET_EMPTY,
+                                                           version);
 
-    // Get element and check it
-    ElementPtr elmnt = myCache.getElement(newNode->getElementId());
-    CPPUNIT_ASSERT( elmnt->toString() == newNode->toString() );
+    // Cache the node
+    myCache.addElement(refNode);
 
-    //Get node and check it
-    NodePtr testNode = myCache.getNode(newNode->getId());
-    CPPUNIT_ASSERT( testNode->toString() == newNode->toString() );
+    // Fetch the node
+    NodePtr cachedNode = myCache.getNode(nodeId);
+
+    // Verify
+    ElementComparer comparitor;
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode), cachedNode));
+  }
+
+  void runMultipleNodeTest()
+  {
+    OsmXmlDiskCache myCache("/tmp/hoot.disk.cache.osm");
+
+    // Make a new node!
+    uint64_t nodeId(1);
+    uint64_t version(1);
+    double lat(1.001);
+    double lon(1.001);
+    Meters circularError(15.0);
+    ConstElementPtr refNode1 = std::make_shared<const Node>(Status::Unknown1,
+                                                            nodeId, lon, lat,
+                                                            circularError,
+                                                            ElementData::CHANGESET_EMPTY,
+                                                            version);
+    myCache.addElement(refNode1);
+
+    nodeId = 2;
+    lat = 1.002;
+    lon = 1.002;
+    ConstElementPtr refNode2 = std::make_shared<const Node>(Status::Unknown1,
+                                                            nodeId, lon, lat,
+                                                            circularError,
+                                                            ElementData::CHANGESET_EMPTY,
+                                                            version);
+    myCache.addElement(refNode2);
+
+    nodeId = 3;
+    lat = 1.003;
+    lon = 1.003;
+    ConstElementPtr refNode3 = std::make_shared<const Node>(Status::Unknown1,
+                                                            nodeId, lon, lat,
+                                                            circularError,
+                                                            ElementData::CHANGESET_EMPTY,
+                                                            version);
+    myCache.addElement(refNode3);
+
+    nodeId = 4;
+    lat = 1.004;
+    lon = 1.004;
+    ConstElementPtr refNode4 = std::make_shared<const Node>(Status::Unknown1,
+                                                            nodeId, lon, lat,
+                                                            circularError,
+                                                            ElementData::CHANGESET_EMPTY,
+                                                            version);
+    myCache.addElement(refNode4);
+
+    nodeId = 5;
+    lat = 1.005;
+    lon = 1.005;
+    ConstElementPtr refNode5 = std::make_shared<const Node>(Status::Unknown1,
+                                                            nodeId, lon, lat,
+                                                            circularError,
+                                                            ElementData::CHANGESET_EMPTY,
+                                                            version);
+    myCache.addElement(refNode5);
+
+    // Get node1 back & verify it's the same
+    ElementComparer comparitor;
+    NodePtr cachedNode = myCache.getNode(1);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode1), cachedNode));
+
+    // Get node2 back & verify it's the same
+    cachedNode = myCache.getNode(2);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode2), cachedNode));
+
+    // Verify it's not the same as node1
+    CPPUNIT_ASSERT(!comparitor.isSame(std::const_pointer_cast<Element>(refNode1), cachedNode));
+
+    // Get node3 & verify
+    cachedNode = myCache.getNode(3);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode3), cachedNode));
+
+    // Go get node1 and 2 again and verify
+    cachedNode = myCache.getNode(1);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode1), cachedNode));
+
+    cachedNode = myCache.getNode(2);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode2), cachedNode));
+
+    // Jump ahead to node5
+    cachedNode = myCache.getNode(5);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode5), cachedNode));
+
+    // Do node3, then node5 again
+    cachedNode = myCache.getNode(3);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode3), cachedNode));
+
+    cachedNode = myCache.getNode(5);
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(refNode5), cachedNode));
   }
 
   void runAddAllTypesTest()
   {
     OsmXmlDiskCache myCache("/tmp/hoot.disk.cache");
+    ElementComparer comparitor;
 
-    // Make sure we're empty
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), true );
     // Add new node
-    Status status;
-    Meters circularError(3.0);
-    ConstElementPtr newNode = std::make_shared<const Node>(status, 1, 2.0, 3.0, circularError);
+    uint64_t nodeId(321);
+    uint64_t version(1);
+    double lat(2.0);
+    double lon(3.0);
+    Meters circularError(15.0);
+    ConstElementPtr newNode = std::make_shared<const Node>(Status::Unknown1,
+                                                           nodeId, lon, lat,
+                                                           circularError,
+                                                           ElementData::CHANGESET_EMPTY,
+                                                           version);
     myCache.addElement(newNode);
-    // Now we should be not empty, iterators have work
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add new way
-    ConstElementPtr newWay = std::make_shared<const Way>(status, 10, circularError);
+    ConstElementPtr newWay = std::make_shared<const Way>(Status::Unknown1,
+                                                         10, circularError,
+                                                         ElementData::CHANGESET_EMPTY,
+                                                         version);
     myCache.addElement(newWay);
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add new relation
-    ConstElementPtr newRelation = std::make_shared<Relation>(status, 20, circularError);
+    ConstElementPtr newRelation = std::make_shared<Relation>(Status::Unknown1,
+                                                             20, circularError,
+                                                             "", ElementData::CHANGESET_EMPTY,
+                                                             version);
     myCache.addElement(newRelation);
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
 
-    // Read out node
-    ConstNodePtr emptyNode;
-    ConstNodePtr myNodeCopy = myCache.getNextNode();
-    CPPUNIT_ASSERT( emptyNode != myNodeCopy );
-    CPPUNIT_ASSERT( myNodeCopy->toString() == newNode->toString() );
+    // Check Node
+    NodePtr myNodeCopy = myCache.getNode(newNode->getId());
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(newNode), myNodeCopy));
 
-    // Check cache status
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
+    // Check Way
+    WayPtr myWayCopy = myCache.getWay(newWay->getId());
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(newWay), myWayCopy));
 
-    // Try to read one more node, should be empty
-    myNodeCopy = myCache.getNextNode();
-    CPPUNIT_ASSERT( emptyNode == myNodeCopy );
-
-    // Check cache status
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
-
-    // Read out way
-    ConstWayPtr emptyWay;
-    ConstWayPtr myWayCopy = myCache.getNextWay();
-    CPPUNIT_ASSERT( emptyWay != myWayCopy );
-    CPPUNIT_ASSERT( myWayCopy->toString() == newWay->toString() );
-
-    // Check cache status
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
-
-    // Try to read one more way, should be empty
-    myWayCopy = myCache.getNextWay();
-    CPPUNIT_ASSERT( emptyWay == myWayCopy );
-
-    // Check cache status
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
-
-    // Read out relation
-    ConstRelationPtr emptyRelation;
-    ConstRelationPtr myRelationCopy = myCache.getNextRelation();
-    CPPUNIT_ASSERT( emptyRelation != myRelationCopy );
-    CPPUNIT_ASSERT( myRelationCopy->toString() == newRelation->toString() );
-
-    // Check cache status -- all iterators are exhausted
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
-
-    // Try to read one more way, should be empty
-    myRelationCopy = myCache.getNextRelation();
-    CPPUNIT_ASSERT( emptyRelation == myRelationCopy );
-
-    // Check cache status
-    CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
-    CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(3) );
+    // Check Relation
+    RelationPtr myRelCopy = myCache.getRelation(newRelation->getId());
+    CPPUNIT_ASSERT(comparitor.isSame(std::const_pointer_cast<Element>(newRelation), myRelCopy));
   }
 
 };

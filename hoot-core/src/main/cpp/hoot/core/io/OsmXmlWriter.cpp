@@ -126,6 +126,21 @@ void OsmXmlWriter::open(const QString& url)
   _numWritten = 0;
 }
 
+void OsmXmlWriter::openunbuff(const QString& url)
+{
+  std::shared_ptr<QFile> f = std::make_shared<QFile>();
+  f->setFileName(url);
+  _fp = f;
+  if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Unbuffered))
+    throw HootException(QObject::tr("Error opening %1 for unbuffered writing").arg(url));
+
+  _initWriter();
+
+  _bounds.init();
+
+  _numWritten = 0;
+}
+
 void OsmXmlWriter::close()
 {
   if (_fp.get() && _fp->isOpen())
@@ -189,6 +204,12 @@ void OsmXmlWriter::_initWriter()
 uint64_t OsmXmlWriter::getPos()
 {
   return _fp->pos();
+}
+
+void OsmXmlWriter::flush()
+{
+  //if (_fp && _fp->isOpen())
+  //  _fp->
 }
 
 void OsmXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
