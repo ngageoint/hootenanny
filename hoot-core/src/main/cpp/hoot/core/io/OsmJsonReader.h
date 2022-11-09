@@ -263,8 +263,6 @@ private:
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
 
-  QString _queryFilepath;
-
   /**
    * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
    * child elements ref'd by parents that don't actually exist

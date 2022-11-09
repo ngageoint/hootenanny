@@ -78,8 +78,7 @@ OsmJsonReader::OsmJsonReader()
     _isWeb(false),
     _keepImmediatelyConnectedWaysOutsideBounds(ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
     _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
-    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements()),
-    _queryFilepath(ConfigOptions().getOverpassApiQueryPath())
+    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {
   setConfiguration(conf());
 }
@@ -100,8 +99,8 @@ bool OsmJsonReader::isSupported(const QString& url) const
   if ((isRelativeUrl || isLocalFile) && url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
     return true;
 
-  // Is it a web address?
-  if (myUrl.host() == ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() || "https" == myUrl.scheme()))
+  // Is it a JSON Overpass web address?
+  if (isOverpassJson(url))
     return true;
 
   // Default to not supported
@@ -137,7 +136,10 @@ void OsmJsonReader::open(const QString& url)
         throw std::runtime_error("Unable to open JSON file");
     }
     else
+    {
+      setOverpassUrl(url);
       _isWeb = true;
+    }
     LOG_VARD(_isFile);
     LOG_VARD(_isWeb);
   }
@@ -211,7 +213,7 @@ void OsmJsonReader::_readToMap()
   LOG_VARD(_map->getElementCount());
 
   //  Bounded network queries are already cropped
-  if (_bounds.get() && _isWeb)
+  if (_bounds.get() && !_isWeb)
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
@@ -310,7 +312,6 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   _threadCount = opts.getReaderHttpBboxThreadCount();
   setBounds(GeometryUtils::boundsFromString(opts.getBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
-  _queryFilepath = opts.getOverpassApiQueryPath();
   _boundsString = opts.getBounds();
   _boundsFilename = opts.getBoundsInputFile();
 }
@@ -868,6 +869,8 @@ void OsmJsonReader::_readFromHttp()
 {
   if (!_sourceUrl.isValid())
     throw HootException("Invalid URL: " + _sourceUrl.toString(QUrl::RemoveUserInfo));
+  if (!_isOverpass)
+    throw HootException("Unable to read non-Overpass JSON sources");
   //  When reading in from the Overpass there won't be duplicates unless we are
   //  dividing up the bounds into smaller quadrants that fit below the 0.25 degrees
   //  squared limits, when we do it is safe to ignore duplicate elements
@@ -877,8 +880,6 @@ void OsmJsonReader::_readFromHttp()
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
-  //  Tell the ParallelBoundedReader that this is an Overpass query
-  _isOverpass = true;
   //  Load the query from a file if requested
   if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
   {

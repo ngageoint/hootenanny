@@ -49,7 +49,6 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
     _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
     _isPolygon(false),
-    _isOverpass(false),
     _totalResults(0),
     _totalEnvelopes(0),
     _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
@@ -272,7 +271,7 @@ void ParallelBoundedApiReader::_process()
         {
           //  Overpass API 400 Bad Request means the query didn't parse correctly and the error is in the response
           std::lock_guard<std::mutex> error_lock(_errorMutex);
-          LOG_ERROR("Overpass Error: " + _parseOverpassError(QString::fromUtf8(request.getResponseContent().data())));
+          LOG_ERROR("Overpass Error: " + parseOverpassError(QString::fromUtf8(request.getResponseContent().data())));
           LOG_VARD(url);
           _fatalError = true;
         }
@@ -360,16 +359,6 @@ bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& err
     return true;
   }
   return false;
-}
-
-QString ParallelBoundedApiReader::_parseOverpassError(const QString& result) const
-{
-  //  <p><strong style="color:#FF0000">Error</strong>: line 1: parse error: Unknown query clause </p>
-  static QRegularExpression regex("<p><strong.*?>Error</strong>: (.*?)</p>", QRegularExpression::OptimizeOnFirstUsageOption);
-  QRegularExpressionMatch match = regex.match(result);
-  if (match.hasMatch())
-    return match.captured(1);
-  return "";
 }
 
 void ParallelBoundedApiReader::_splitEnvelope(const geos::geom::Envelope &envelope)

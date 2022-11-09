@@ -97,6 +97,9 @@ QString OsmApiReader::supportedFormats() const
 
 bool OsmApiReader::isSupported(const QString& url) const
 {
+  //  Check if it is an XML Overpass URL
+  if (isOverpassXml(url))
+    return true;
   QStringList validPrefixes = supportedFormats().split(";");
   const QString checkString(url.toLower());
   //  Check the OSM API endpoint
@@ -110,6 +113,14 @@ bool OsmApiReader::isSupported(const QString& url) const
   }
   //  If we fall out of loop, no dice
   return false;
+}
+
+void OsmApiReader::open(const QString& url)
+{
+  //  Base class open
+  OsmXmlReader::open(url);
+  //  Check if the URL is an Overpass URL
+  setOverpassUrl(url);
 }
 
 void OsmApiReader::read(const OsmMapPtr& map)

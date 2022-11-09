@@ -39,6 +39,9 @@
 //  Geos
 #include <geos/geom/Geometry.h>
 
+//  Hootenanny
+#include <hoot/core/io/OverpassReaderInterface.h>
+
 namespace hoot
 {
 
@@ -51,7 +54,7 @@ class HootNetworkRequest;
  *  example) that area is divided into quarters and reprocessed until all areas are successfully read.
  *  Also some responses may be too large to handle and those are split and re-handled.
  */
-class ParallelBoundedApiReader
+class ParallelBoundedApiReader : protected OverpassReaderInterface
 {
 public:
 
@@ -138,8 +141,6 @@ protected:
   bool _isPolygon;
   /** Value of the bounding box or polygon */
   std::shared_ptr<geos::geom::Geometry> _boundingPoly;
-  /** Flag indicating this query is an Overpass API query */
-  bool _isOverpass;
 
   /**
    * @brief _sleep Sleep the current thread
@@ -152,7 +153,6 @@ protected:
    * @return
    */
   bool _isQueryError(const QString& result, QString& error) const;
-  QString _parseOverpassError(const QString& result) const;
 
 private:
 
