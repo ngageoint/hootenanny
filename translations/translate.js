@@ -852,6 +852,9 @@ translate = {
       }
     }
 
+    // There is a special osm:id tag that should not be restored
+    delete outTags['osm:id'];
+
     return outTags;
   },
 

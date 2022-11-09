@@ -191,10 +191,10 @@ OGRFeature(foo_PAL015):0
  ARA (Real) = -999999.000000000000000
  POINT : 
 #### Test to make sure all layers are read from a data source. ####
-19:22:50.131 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 685) Truncating the tags attribute (504 characters) to the output field width (254 characters).
-19:22:50.140 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 685) Truncating the tags attribute (395 characters) to the output field width (254 characters).
-19:22:50.151 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 685) Truncating the tags attribute (453 characters) to the output field width (254 characters).
-19:22:50.153 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 689) OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+18:52:39.115 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 685) Truncating the tags attribute (498 characters) to the output field width (254 characters).
+18:52:39.125 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 685) Truncating the tags attribute (389 characters) to the output field width (254 characters).
+18:52:39.136 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 685) Truncating the tags attribute (447 characters) to the output field width (254 characters).
+18:52:39.138 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 689) OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Stat Name	test-output/cmd/slow/delaware-tds.shp
 Nodes	5664
 Ways	32
