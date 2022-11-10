@@ -45,7 +45,8 @@ ElementCacheLRU::ElementCacheLRU(const unsigned long maxNodeCount,
     _ways(),
     _waysIter(_ways.begin()),
     _relations(),
-    _relationsIter(_relations.begin())
+    _relationsIter(_relations.begin()),
+    _diskCache("/tmp/hoot.disk.cache.osm")
 {
   LOG_TRACE(
     "New LRU cache created, " << _maxNodeCount << " max entries for nodes, " <<
@@ -203,23 +204,30 @@ void ElementCacheLRU::resetElementIterators()
 void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 {
   long id = 0;
+  ConstElementPtr tmpElement;
   switch (typeToRemove)
   {
   case ElementType::Node:
     // Get ID of oldest & remove
     id = _nodeList.back();
+    tmpElement = std::dynamic_pointer_cast<const Element>(_nodes[id].first);
+    _diskCache.addElement(tmpElement);
     _nodeList.pop_back();
     _nodes.erase(id);
     LOG_TRACE("Removed node: " << id << " from cache.");
     break;
   case ElementType::Way:
     id = _wayList.back();
+    tmpElement = std::dynamic_pointer_cast<const Element>(_ways[id].first);
+    _diskCache.addElement(tmpElement);
     _wayList.pop_back();
     _ways.erase(id);
     LOG_TRACE("Removed way: " << id << " from cache.");
     break;
   case ElementType::Relation:
     id = _relationList.back();
+    tmpElement = std::dynamic_pointer_cast<const Element>(_relations[id].first);
+    _diskCache.addElement(tmpElement);
     _relationList.pop_back();
     _relations.erase(id);
     LOG_TRACE("Removed relation: " << id << " from cache.");

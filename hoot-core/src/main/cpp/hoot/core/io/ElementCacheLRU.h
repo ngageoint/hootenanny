@@ -35,6 +35,7 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ElementCache.h>
+#include <hoot/core/io/OsmXmlDiskCache.h>
 
 #include <ogr_spatialref.h>
 
@@ -150,6 +151,8 @@ private:
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>  _relations;
   // Iterator used to walk relations in cache
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator _relationsIter;
+
+  OsmXmlDiskCache _diskCache;
 
   // Removes the least recently used item from the cache
   void _removeOldest(const ElementType::Type typeToRemove);
