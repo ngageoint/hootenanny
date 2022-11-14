@@ -161,6 +161,9 @@ private:
   void _updateNodeAccess(long id);
   void _updateWayAccess(long id);
   void _updateRelationAccess(long id);
+
+  bool _isInMem(const ElementId& eid) const;
+  bool _isOnDisk(const ElementId& eid) const;
 };
 
 using ElementCacheLRUPtr = std::shared_ptr<ElementCacheLRU>;

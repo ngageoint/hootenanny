@@ -245,24 +245,7 @@ std::shared_ptr<OGRSpatialReference> ElementCacheLRU::getProjection() const
 
 bool ElementCacheLRU::containsElement(const ElementId& eid) const
 {
-  const ElementType::Type type = eid.getType().getEnum();
-  const long id = eid.getId();
-  switch (type)
-  {
-  case ElementType::Node:
-    return (_nodes.find(id) != _nodes.end());
-    break;
-  case ElementType::Way:
-    return (_ways.find(id) != _ways.end());
-    break;
-  case ElementType::Relation:
-    return (_relations.find(id) != _relations.end());
-    break;
-  default:
-    break;
-  }
-  // If we get to this point, it means we couldn't find it
-  return false;
+  return (_isInMem(eid) || _isOnDisk(eid));
 }
 
 ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
@@ -285,61 +268,118 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
   return ConstElementPtr();
 }
 
-// This const function kind of defeats the purpose of the LRU cache,
-// but it's necessary to conform to the interface. It should call
-// _updateNodeAccess(id) - but can't because of const
+// This function is const, but it needs to modify some members
+// to achieve the LRU functionality, as well as use the disk cache.
+// So it calls some non-const functions in a way that I'm not proud of.
 ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
-  return _nodes.find(id)->second.first;
+  ElementCacheLRU * pThis = const_cast<ElementCacheLRU *>(this);
+  if (_isInMem(ElementId(ElementType::Node, id)))
+  {
+    pThis->_updateNodeAccess(id);
+    return _nodes.find(id)->second.first;
+  }
+  else
+  {
+    LOG_TRACE("Disk Cache for node (const): " << id );
+    return pThis->_diskCache.getNode(id);
+  }
 }
 
 NodePtr ElementCacheLRU::getNode(long id)
 {
-  _updateNodeAccess(id);
-  return std::const_pointer_cast<Node>(_nodes.find(id)->second.first);
+  if (_isInMem(ElementId(ElementType::Node, id)))
+  {
+    _updateNodeAccess(id);
+    return std::const_pointer_cast<Node>(_nodes.find(id)->second.first);
+  }
+  else
+  {
+    LOG_TRACE("Disk cache for node: " << id);
+    return _diskCache.getNode(id);
+  }
 }
 
-// This const function kind of defeats the purpose of the LRU cache,
-// but it's necessary to conform to the interface. It should call
-// _updateWayAccess - but can't because of const
+// This function is const, but it needs to modify some members
+// to achieve the LRU functionality, as well as use the disk cache.
+// So it calls some non-const functions in a way that I'm not proud of.
 ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
-  return _ways.find(id)->second.first;
+  ElementCacheLRU * pThis = const_cast<ElementCacheLRU *>(this);
+  if (_isInMem(ElementId(ElementType::Way, id)))
+  {
+    pThis->_updateWayAccess(id);
+    return _ways.find(id)->second.first;
+  }
+  else
+  {
+    LOG_TRACE("Disk cache for way (const): " << id);
+    return pThis->_diskCache.getWay(id);
+  }
 }
 
 WayPtr ElementCacheLRU::getWay(long id)
 {
-  _updateWayAccess(id);
-  return std::const_pointer_cast<Way>(_ways.find(id)->second.first);
+  if (_isInMem(ElementId(ElementType::Way, id)))
+  {
+    _updateWayAccess(id);
+    return std::const_pointer_cast<Way>(_ways.find(id)->second.first);
+  }
+  else
+  {
+    LOG_TRACE("Disk cache for way: " << id);
+    return _diskCache.getWay(id);
+  }
 }
 
-// This const function kind of defeats the purpose of the LRU cache,
-// but it's necessary to conform to the interface. It should call
-// _updateRelationAccess - but can't becuase of const
+// This function is const, but it needs to modify some members
+// to achieve the LRU functionality, as well as use the disk cache.
+// So it calls some non-const functions in a way that I'm not proud of.
 ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 {
-  return _relations.find(id)->second.first;
+  ElementCacheLRU * pThis = const_cast<ElementCacheLRU *>(this);
+  if (_isInMem(ElementId(ElementType::Relation, id)))
+  {
+    pThis->_updateRelationAccess(id);
+    return _relations.find(id)->second.first;
+  }
+  else
+  {
+    LOG_TRACE("Disk cache for relation (const): " << id);
+    return pThis->_diskCache.getRelation(id);
+  }
 }
 
 RelationPtr ElementCacheLRU::getRelation(long id)
 {
   _updateRelationAccess(id);
-  return std::const_pointer_cast<Relation>(_relations.find(id)->second.first);
+  if (_isInMem(ElementId(ElementType::Relation, id)))
+  {
+    return std::const_pointer_cast<Relation>(_relations.find(id)->second.first);
+  }
+  else
+  {
+    LOG_TRACE("Disk cache for relation: " << id);
+    return _diskCache.getRelation(id);
+  }
 }
 
 bool ElementCacheLRU::containsNode(long id) const
 {
-  return (_nodes.find(id) != _nodes.end());
+  ElementId eid(ElementType::Node, id);
+  return (_isInMem(eid) || _isOnDisk(eid));
 }
 
 bool ElementCacheLRU::containsWay(long id) const
 {
-  return (_ways.find(id) != _ways.end());
+  ElementId eid(ElementType::Way, id);
+  return (_isInMem(eid) || _isOnDisk(eid));
 }
 
 bool ElementCacheLRU::containsRelation(long id) const
 {
-  return (_relations.find(id) != _relations.end());
+  ElementId eid(ElementType::Relation, id);
+  return (_isInMem(eid) || _isOnDisk(eid));
 }
 
 unsigned long ElementCacheLRU::typeCount(const ElementType::Type typeToCount) const
@@ -458,6 +498,34 @@ std::string ElementCacheLRU::getLRUString(const ElementType::Type type) const
     break;
   }
   return list.str();
+}
+
+bool ElementCacheLRU::_isInMem(const ElementId& eid) const
+{
+  bool found = false;
+  const ElementType::Type type = eid.getType().getEnum();
+  const long id = eid.getId();
+  switch (type)
+  {
+  case ElementType::Node:
+    found = (_nodes.find(id) != _nodes.end());
+    break;
+  case ElementType::Way:
+    found = (_ways.find(id) != _ways.end());
+    break;
+  case ElementType::Relation:
+    found = (_relations.find(id) != _relations.end());
+    break;
+  default:
+    break;
+  }
+
+  return found;
+}
+
+bool ElementCacheLRU::_isOnDisk(const ElementId& eid) const
+{
+  return _diskCache.containsElement(eid);
 }
 
 }
