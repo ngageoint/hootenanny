@@ -65,7 +65,7 @@ void NodeDensityPlotter::plot(const QString& input, const QString& output) const
   std::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::createReader(input, true);
   reader->open(input);
   geos::geom::Envelope env = _getEnvelope(reader);
-  LOG_DEBUG("Envelope: " << GeometryUtils::toString(env));
+  LOG_DEBUG("Envelope: " << GeometryUtils::toMinMaxString(env));
 
   const double pixelSize = _getPixelSize(env);
 

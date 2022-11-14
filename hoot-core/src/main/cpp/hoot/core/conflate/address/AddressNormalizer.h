@@ -57,7 +57,7 @@ public:
    * @param address the address to normalize
    * @return a collection of normalized addresses
    */
-  QSet<QString> normalizeAddress(const QString& address) const;
+  QVector<QString> normalizeAddress(const QString& address) const;
 
   int getNumNormalized() const { return _numNormalized; }
   AddressTagKeysPtr getAddressTagKeys() const { return _addressTagKeys; }
@@ -74,8 +74,8 @@ private:
    */
   static void _prepareAddressForLibPostalNormalization(QString& address);
 
-  QSet<QString> _normalizeAddressWithLibPostal(const QString& address) const;
-  QSet<QString> _normalizeAddressIntersection(const QString& address) const;
+  QVector<QString> _normalizeAddressWithLibPostal(const QString& address) const;
+  QVector<QString> _normalizeAddressIntersection(const QString& address) const;
 
   static bool _isValidNormalizedAddress(const QString& inputAddress,
                                         const QString& normalizedAddress);

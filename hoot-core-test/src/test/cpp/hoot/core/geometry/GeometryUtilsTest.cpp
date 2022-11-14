@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -91,9 +91,8 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
 
-    HOOT_STR_EQUALS(
-      "-71.48090000000001,-71.45688,42.4808,42.493",
-      GeometryUtils::envelopeToString(Envelope("-71.4809,42.4808,-71.45688,42.49368")));
+    HOOT_STR_EQUALS("-71.4809000000000054,-71.4568799999999982,42.4808000000000021,42.4930000000000021",
+                    GeometryUtils::toLonLatString(Envelope("-71.4809,42.4808,-71.45688,42.49368")));
   }
 
   void polygonTest()
@@ -101,24 +100,16 @@ public:
     QString exceptionMsg;
 
     // closed poly
-    CPPUNIT_ASSERT(
-      GeometryUtils::isPolygonString(
-        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
+    CPPUNIT_ASSERT(GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
     // not closed but valid b/c the parser will automatically close it up
-    CPPUNIT_ASSERT(
-      GeometryUtils::isPolygonString(
-        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839"));
+    CPPUNIT_ASSERT(GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839"));
     CPPUNIT_ASSERT(!GeometryUtils::isPolygonString(" "));
     // not enough points
-    CPPUNIT_ASSERT(
-      !GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,42.4918"));
-    CPPUNIT_ASSERT(
-      !GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,a;-71.4619,42.4839"));
+    CPPUNIT_ASSERT(!GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,42.4918"));
+    CPPUNIT_ASSERT(!GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,a;-71.4619,42.4839"));
 
-    HOOT_STR_EQUALS(
-      "POLYGON ((-71.4745000000000061 42.4840999999999980, -71.4668999999999954 42.4917999999999978, -71.4619000000000000 42.4838999999999984, -71.4745000000000061 42.4840999999999980))",
-      GeometryUtils::polygonFromString(
-        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
+    HOOT_STR_EQUALS("POLYGON ((-71.4745000000000061 42.4840999999999980, -71.4668999999999954 42.4917999999999978, -71.4619000000000000 42.4838999999999984, -71.4745000000000061 42.4840999999999980))",
+                    GeometryUtils::polygonFromString("-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
 
     exceptionMsg = "";
     try
@@ -153,19 +144,14 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid polygon y coordinate value"));
 
-    HOOT_STR_EQUALS(
-      "POLYGON ((-71.4745000000000061 42.4840999999999980, -71.4668999999999954 42.4917999999999978, -71.4619000000000000 42.4838999999999984, -71.4745000000000061 42.4840999999999980))",
-      GeometryUtils::polygonFromString(
-        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
+    HOOT_STR_EQUALS("POLYGON ((-71.4745000000000061 42.4840999999999980, -71.4668999999999954 42.4917999999999978, -71.4619000000000000 42.4838999999999984, -71.4745000000000061 42.4840999999999980))",
+                    GeometryUtils::polygonFromString("-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
 
-    HOOT_STR_EQUALS(
-      "POLYGON ((-71.4809000000000054 -71.4568799999999982, -71.4809000000000054 42.4930000000000021, 42.4808000000000021 42.4930000000000021, 42.4808000000000021 -71.4568799999999982, -71.4809000000000054 -71.4568799999999982))",
-      GeometryUtils::envelopeToPolygon(Envelope("-71.4809,42.4808,-71.45688,42.49368"))->toString());
+    HOOT_STR_EQUALS("POLYGON ((-71.4809000000000054 -71.4568799999999982, -71.4809000000000054 42.4930000000000021, 42.4808000000000021 42.4930000000000021, 42.4808000000000021 -71.4568799999999982, -71.4809000000000054 -71.4568799999999982))",
+                    GeometryUtils::envelopeToPolygon(Envelope("-71.4809,42.4808,-71.45688,42.49368"))->toString());
 
-    HOOT_STR_EQUALS(
-      "-71.47450000000001,42.4839,-71.4619,42.4918",
-      GeometryUtils::polygonStringToEnvelopeString(
-        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
+    HOOT_STR_EQUALS("-71.4745000000000061,42.4838999999999984,-71.4619000000000000,42.4917999999999978",
+                    GeometryUtils::polygonStringToLonLatString("-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
   }
 };
 

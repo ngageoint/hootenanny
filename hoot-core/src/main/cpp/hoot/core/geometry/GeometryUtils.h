@@ -76,15 +76,23 @@ public:
 
   static std::shared_ptr<OGREnvelope> toOGREnvelope(const geos::geom::Envelope& e);
 
-  /** Creates a bounds string in the format (minx,maxx,miny,maxy)
+  /** Creates a bounds string in the format
+   *  (minx,maxx,miny,maxy) or (min_lon,max_lon,min_lat,max_lat)
    *  from an envelope using the `writer.precision` value
    */
-  static QString toString(const geos::geom::Envelope& e);
+  static QString toMinMaxString(const geos::geom::Envelope& e);
 
-  /** Creates a bounds string in the format (minx,maxx,miny,maxy)
+  /** Creates a bounds string in the format
+   *  (minx,miny,maxx,maxy) or (min_lon,min_lat,max_lon,max_lat)
    *  from an envelope using the `writer.precision` value
    */
-  static QString toConfigString(const geos::geom::Envelope& e);
+  static QString toLonLatString(const geos::geom::Envelope& e);
+
+  /** Creates a bounds string in the format
+   *  (miny,minx,maxy,maxx) or (min_lat,min_lon,max_lat,max_lon)
+   *  from an envelope using the `writer.precision` value
+   */
+  static QString toLatLonString(const geos::geom::Envelope& e);
 
   /**
    * Determines if a string represents an envelope
@@ -93,16 +101,6 @@ public:
    * @return true if the input represents an envelope; false otherwise
    */
   static bool isEnvelopeString(const QString& str);
-
-  /**
-   * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
-   * from an envelope
-   *
-   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return an envelope string
-   * @todo This should be replaced by toConfigString.
-   */
-  static QString envelopeToString(const geos::geom::Envelope& bounds);
 
   /**
    * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
@@ -167,7 +165,7 @@ public:
    * @param str the string to convert
    * @return an envelope string
    */
-  static QString polygonStringToEnvelopeString(const QString& str);
+  static QString polygonStringToLonLatString(const QString& str);
 
   static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry* g);
 

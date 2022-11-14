@@ -40,6 +40,9 @@
 //  Run tests against a local test server
 //#define RUN_LOCAL_TEST_SERVER
 
+//  Run tests against a production (OSM API and Overpass API)
+//#define RUN_PRODUCTION_TESTS
+
 namespace hoot
 {
 
@@ -54,6 +57,11 @@ class OsmApiReaderTest : public HootTestFixture
   CPPUNIT_TEST(runSplitElementsTest);
   CPPUNIT_TEST(runFailureTest);
   CPPUNIT_TEST(runPolygonBoundsTest);
+#endif
+
+#ifdef RUN_PRODUCTION_TESTS
+  CPPUNIT_TEST(runOsmApiXmlTest);
+  CPPUNIT_TEST(runOverpassXmlTest);
 #endif
 
   CPPUNIT_TEST_SUITE_END();
@@ -248,6 +256,48 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "PolygonBoundsTestExpected.osm", output);
 #endif
 
+  }
+
+  void runOsmApiXmlTest()
+  {
+#ifdef RUN_PRODUCTION_TESTS
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
+    reader.setConfiguration(s);
+    //  Read XML from OSM API and parse it
+    reader.open(OSM_API_URL + OsmApiEndpoints::API_PATH_MAP);
+    reader.read(map);
+
+    QString output = _outputPath + "OsmApiOutput.osm";
+
+    OsmXmlWriter writer;
+    writer.write(map, output);
+    writer.close();
+#endif
+  }
+
+  void runOverpassXmlTest()
+  {
+#ifdef RUN_PRODUCTION_TESTS
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
+    reader.setConfiguration(s);
+    //  Read XML from Overpass and parse it
+    reader.open("https://overpass-api.de/api/interpreter?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;");
+    reader.read(map);
+
+    QString output = _outputPath + "OverpassOutput.osm";
+
+    OsmXmlWriter writer;
+    writer.write(map, output);
+    writer.close();
+#endif
   }
 };
 

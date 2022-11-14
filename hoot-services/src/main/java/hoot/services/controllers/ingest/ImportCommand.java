@@ -91,9 +91,9 @@ class ImportCommand extends ExternalCommand {
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + user.getEmail());
 
-        //Built-in translations are passed with the translations/ path in the name
+        //Built-in translations are passed with the translations/ or translations-local/ path in the name
         String translationPath;
-        if (translation.startsWith("translations/")) {
+        if (translation.matches("translations.*/.+")) {
             translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
         } else { //user submitted translations are in the customscript path
             translationPath = new File(new File(SCRIPT_FOLDER), translation).getAbsolutePath();

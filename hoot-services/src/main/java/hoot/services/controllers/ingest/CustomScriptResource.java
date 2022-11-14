@@ -95,20 +95,9 @@ import hoot.services.utils.DbUtils;
 @Transactional
 public class CustomScriptResource {
     private static final Logger logger = LoggerFactory.getLogger(CustomScriptResource.class);
-    private static final boolean FOUO_TRANSLATIONS_EXIST;
     private static final String HEADER_START = "/*<<<";
     private static final String HEADER_END = ">>>*/" + System.lineSeparator();
 
-    static {
-        if ((new File(DEFAULT_FOUO_TRANSLATIONS_CONFIG)).exists()) {
-            FOUO_TRANSLATIONS_EXIST = true;
-            logger.info("FOUO translations are present.");
-        }
-        else {
-            FOUO_TRANSLATIONS_EXIST = false;
-            logger.info("FOUO translations are not present.");
-        }
-    }
     /**
      * Returns the directory the scripts are stored in
      *
@@ -236,14 +225,7 @@ public class CustomScriptResource {
         JSONArray filesList = new JSONArray();
 
         try {
-            List<String> configFiles = new ArrayList<>();
-            configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
-
-            if (FOUO_TRANSLATIONS_EXIST) {
-                configFiles.add(DEFAULT_FOUO_TRANSLATIONS_CONFIG);
-            }
-
-            filesList.addAll(getDefaultList(configFiles));
+            filesList.addAll(getDefaultList());
 
             for (Object o : filesList) {
                 JSONObject cO = (JSONObject) o;
@@ -319,13 +301,23 @@ public class CustomScriptResource {
      * @return JSONArray of translation objects
      * @throws IOException, ParseException
      */
-    private static JSONArray getDefaultList(List<String> configFiles) throws IOException, ParseException {
+    private static JSONArray getDefaultList() throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
+        List<File> configFiles = new ArrayList<>();
 
-        for (String configFile : configFiles) {
-            File file = new File(configFile);
-            if (file.exists()) {
-                try (FileReader reader = new FileReader(configFile)) {
+        // List<File> fileList = File.listFiles(HOME_FOLDER,new String[] {},false);
+        File dir = new File(HOME_FOLDER);
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory() && file.getName().startsWith("translations")) {
+                File confFile = new File(file,TRANSLATION_CONFIG);
+
+                // Sanity check
+                if (!confFile.exists()) {
+                    logger.error("Missing translation conf file: " + confFile.getName());
+                    continue;
+                }
+
+                try (FileReader reader = new FileReader(confFile)) {
                     JSONParser jsonParser = new JSONParser();
                     JSONArray defTranslations = (JSONArray) jsonParser.parse(reader);
                     for (Object defTranslation : defTranslations) {
@@ -351,24 +343,23 @@ public class CustomScriptResource {
                                 }
                             }
                         }
+
+                        //add relative translation folder path to path property
+                        if (oTrans.get("path") != null) {
+                            oTrans.put("path", file.getName() + "/" + oTrans.get("path"));
+                        }
+                        if (oTrans.get("importPath") != null) {
+                            oTrans.put("importPath", file.getName() + "/" + oTrans.get("importPath"));
+                        }
+                        if (oTrans.get("exportPath") != null) {
+                            oTrans.put("exportPath", file.getName() + "/" + oTrans.get("exportPath"));
+                        }
                     }
 
-                    // validate FOUO support
                     if (!defTranslations.isEmpty()) {
                         for (Object oTrans : defTranslations) {
                             JSONObject jsTrans = (JSONObject) oTrans;
-                            if (jsTrans.get("fouoPath") != null) {
-                                // See if FOUO folder exists
-                                File fouoPath = new File(HOME_FOLDER + "/" + jsTrans.get("fouoPath"));
-                                if (fouoPath.exists()) {
-                                    filesList.add(jsTrans);
-                                }
-                            }
-                            else {
-                                // If there is no fouoPath then assume it is
-                                // not FOUO translation
-                                filesList.add(jsTrans);
-                            }
+                            filesList.add(jsTrans);
                         }
                     }
                 }
@@ -516,14 +507,7 @@ public class CustomScriptResource {
     public Response getDefaultScript(@QueryParam("scriptPath") String scriptPath) {
         String script = "";
         try {
-            List<String> configFiles = new ArrayList<>();
-
-            configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
-            if (FOUO_TRANSLATIONS_EXIST) {
-                configFiles.add(DEFAULT_FOUO_TRANSLATIONS_CONFIG);
-            }
-
-            JSONArray defList = getDefaultList(configFiles);
+            JSONArray defList = getDefaultList();
 
             // See Bug #6483 Read vulnerability in services script API
             boolean pathValidated = false;
@@ -532,12 +516,6 @@ public class CustomScriptResource {
 
                 Object path = item.get("path");
                 if ((path != null) && scriptPath.equals(path.toString())) {
-                    pathValidated = true;
-                    break;
-                }
-
-                Object fouoPath = item.get("fouoPath");
-                if ((fouoPath != null) && scriptPath.equals(fouoPath.toString())) {
                     pathValidated = true;
                     break;
                 }

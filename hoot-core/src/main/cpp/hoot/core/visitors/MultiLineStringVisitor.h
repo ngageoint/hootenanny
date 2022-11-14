@@ -59,7 +59,6 @@ public:
   std::shared_ptr<geos::geom::Geometry> createGeometry();
 
   void visit(const ConstElementPtr& e) override;
-  void visit(const ConstWayPtr& w);
 
   QString getInitStatusMessage() const override
   { return "Creating multi-linestrings..."; }
@@ -76,6 +75,8 @@ private:
 
   ConstElementProviderPtr _provider;
   std::vector<ConstWayPtr> _ways;
+
+  void _visit(const ConstWayPtr& w);
 };
 
 }

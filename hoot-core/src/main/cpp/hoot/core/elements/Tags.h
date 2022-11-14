@@ -230,6 +230,20 @@ public:
    */
   int removeMetadata();
 
+  /**
+   * Removes all hoot:* tags
+   *
+   * @return the number of tags removed
+   */
+  int removeHootTags();
+
+  /**
+   * Removes all hoot:* tags except hoot:review:* tags
+   *
+   * @return the number of tags removed
+   */
+  int removeNonReviewHootTags();
+
   // A single key removal can be done with the call to parent QHash::remove.
 
   /**

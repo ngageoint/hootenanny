@@ -537,6 +537,17 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflati
     hoot convert -D bounds.input.filename=bounds.osm https://osm-api-url/api/0.6/map output.osm
 -----
 
+==== Retrieve OSM data around Paris, France from the Overpass API
+-----
+    #  Download XML data from Overpass
+    hoot convert -D bounds=2.277303,48.851684,2.311635,48.864701 \
+      "https://overpass-api-url/api/interpreter?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;" output.osm
+
+    #  Download JSON data from Overpass
+    hoot convert -D bounds=2.277303,48.851684,2.311635,48.864701 \
+      "https://overpass-api-url/api/interpreter?data=[out:json];(node({{bbox}});(._;<;>;););out meta;" output.osm
+-----
+
 ==== Convert an OSM API database to a file geodatabase:
 
 -----

@@ -7,9 +7,7 @@
 "features": [
 {
 "type":"Feature",
-"id":"-2",
-"type":"way",
-"tags":{
+"properties":{
 "type":"way",
 "item_type":["building","restaurant"],
 "attributes":{"item_date":"2017-10-09T12:34:56.789Z","category_id":"123456","asset_id":"ABC123"},
@@ -39,9 +37,7 @@
 },
 {
 "type":"Feature",
-"id":"-1",
-"type":"way",
-"tags":{
+"properties":{
 "type":"way",
 "attributes":{"item_date":"2017-10-09T23:45:12.345Z","category_id":"654321","asset_id":"123ABC"},
 "name":"Bad Pair",

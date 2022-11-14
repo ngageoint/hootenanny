@@ -71,8 +71,7 @@ void OsmBaseXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 void OsmBaseXmlChangesetFileWriter::_initStats()
 {
   _stats.clear();
-  _stats.resize(static_cast<size_t>(Change::ChangeType::Unknown),
-                static_cast<size_t>(ElementType::Unknown));
+  _stats.resize(static_cast<size_t>(Change::ChangeType::Unknown), static_cast<size_t>(ElementType::Unknown));
   vector<QString> rows({"Create", "Modify", "Delete"});
   vector<QString> columns({"Node", "Way", "Relation"});
   _stats.setLabels(rows, columns);
@@ -128,7 +127,8 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
   //  Write out the header
   _writeXmlFileHeader(writer);
 
-  Change::ChangeType last = Change::ChangeType::Unknown;
+  Change::ChangeType last = Change::ChangeType::NoChange;
+  Change::ChangeType next = Change::ChangeType::NoChange;
 
   for (int i = 0; i < changesetProviders.size(); i++)
   {
@@ -154,6 +154,7 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
       _change = changesetProvider->readNextChange();
       LOG_VART(_change);
       changeElement = _change.getElement();
+      next = _change.getType();
 
       if (!changeElement)
         continue;
@@ -175,18 +176,18 @@ void OsmBaseXmlChangesetFileWriter::write(const QString& path, const QList<Chang
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, _change.getType()))
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, next))
         continue;
 
-      if (_change.getType() != last && last != Change::ChangeType::Unknown)
+      if (next != last && last != Change::ChangeType::Unknown)
           _parsedChangeIds.append(changeElement->getElementId());
 
       _writeXmlFileSectionHeader(writer, last);
 
       //  Update the last type to now be the current type
-      if (_change.getType() != last)
-        last = _change.getType();
-      if (_change.getType() != Change::ChangeType::Unknown)
+      if (next != last && next != Change::ChangeType::Unknown)
+        last = next;
+      if (next != Change::ChangeType::Unknown)
       {
         ElementType::Type type = changeElement->getElementType().getEnum();
         switch (type)
@@ -243,9 +244,7 @@ void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstEl
     // convention of iD editor, but that's not absolutely necessary to write the changeset to rails
     // port
     id = _newElementIdCtrs[ElementType::Node] * -1; // assuming no id's = 0
-    LOG_TRACE(
-      "Converting new element with id: " << n->getElementId() << " to id: " <<
-      ElementId(ElementType::Node, id));
+    LOG_TRACE("Converting new element with id: " << n->getElementId() << " to id: " << ElementId(ElementType::Node, id));
     _newElementIdCtrs[ElementType::Node] = _newElementIdCtrs[ElementType::Node] + 1;
     _newElementIdMappings[ElementType::Node].insert(n->getId(), id);
   }
@@ -257,8 +256,8 @@ void OsmBaseXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstEl
   else if (n->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a "
-              "version greater than zero: %1").arg(n->getElementId().toString()));
+      QString("Elements being modified or deleted in an .osc changeset must always have a version greater than zero: %1")
+        .arg(n->getElementId().toString()));
   }
   else if (pn && pn->getVersion() < n->getVersion())
   {
@@ -301,9 +300,7 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Way] * -1;
-    LOG_TRACE(
-      "Converting new element with id: " << w->getElementId() << " to id: " <<
-      ElementId(ElementType::Way, id));
+    LOG_TRACE("Converting new element with id: " << w->getElementId() << " to id: " << ElementId(ElementType::Way, id));
     _newElementIdCtrs[ElementType::Way] = _newElementIdCtrs[ElementType::Way] + 1;
     _newElementIdMappings[ElementType::Way].insert(w->getId(), id);
   }
@@ -315,8 +312,8 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
   else if (w->getVersion() < 1)
   {
     throw HootException(
-      QString("Elements being modified or deleted in an .osc changeset must always have a "
-              "version greater than zero: %1").arg(w->getElementId().toString()));
+      QString("Elements being modified or deleted in an .osc changeset must always have a version greater than zero: %1")
+        .arg(w->getElementId().toString()));
   }
   else if (pw && pw->getVersion() < w->getVersion())
   {
@@ -344,9 +341,7 @@ void OsmBaseXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstEle
     if (_newElementIdMappings[ElementType::Node].contains(nodeRefId))
     {
       const long newNodeRefId = _newElementIdMappings[ElementType::Node][nodeRefId];
-      LOG_TRACE(
-        "Converting new node ref with id: " << nodeRefId << " to id: " <<
-        ElementId(ElementType::Node, newNodeRefId));
+      LOG_TRACE("Converting new node ref with id: " << nodeRefId << " to id: " << ElementId(ElementType::Node, newNodeRefId));
       nodeRefId = newNodeRefId;
     }
     writer.writeAttribute("ref", QString::number(nodeRefId));
@@ -371,9 +366,7 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Relation] * -1;
-    LOG_TRACE(
-      "Converting new element with id: " << r->getElementId() << " to id: " <<
-      ElementId(ElementType::Relation, id));
+    LOG_TRACE("Converting new element with id: " << r->getElementId() << " to id: " << ElementId(ElementType::Relation, id));
     _newElementIdCtrs[ElementType::Relation] = _newElementIdCtrs[ElementType::Relation] + 1;
     _newElementIdMappings[ElementType::Relation].insert(r->getId(), id);
   }
@@ -418,9 +411,7 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
     if (_newElementIdMappings[elementType.getEnum()].contains(memberId))
     {
       const long newMemberId = _newElementIdMappings[elementType.getEnum()][memberId];
-      LOG_TRACE(
-        "Converting new member with id: " << memberId << " to id: " <<
-        ElementId(elementType, newMemberId));
+      LOG_TRACE("Converting new member with id: " << memberId << " to id: " << ElementId(elementType, newMemberId));
       memberId = newMemberId;
     }
     writer.writeAttribute("ref", QString::number(memberId));
@@ -439,44 +430,18 @@ void OsmBaseXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, Con
 void OsmBaseXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
 {
   LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
-
+  //  Add back any tags needed
   _getOptionalTags(tags, element);
-
-  // Only report the circular error for changesets when debug tags are turned on, circular error
-  // tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is
-  // because changesets are meant for non-hoot related databases and circular error is a hoot tag.
-  if (_includeCircularErrorTags && element->hasCircularError() &&
-      (element->getElementType() != ElementType::Node ||
-      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)) &&
-      _includeDebugTags)
-  {
-    tags.set(MetadataTags::ErrorCircular(), QString("%1").arg(element->getCircularError()));
-  }
-
   //  Sort the keys for output
   QList<QString> keys = tags.keys();
   if (_sortTags)
     keys.sort();
-
-  // These should never be written in a changeset, even when debug tags are enabled, and will cause
-  // problems in ChangesetReplacementCreator if added to source data when read back out.
-  QStringList metadataAlwaysIgnore;
-  metadataAlwaysIgnore.append(MetadataTags::HootHash());
-  metadataAlwaysIgnore.append(MetadataTags::HootChangeExcludeDelete());
-  metadataAlwaysIgnore.append(MetadataTags::HootConnectedWayOutsideBounds());
-  metadataAlwaysIgnore.append(MetadataTags::HootSnapped());
 
   for (const auto& key : qAsConst(keys))
   {
     QString val = tags.get(key).trimmed();
     if (!key.isEmpty() && !val.isEmpty())
     {
-      // There are some instances where we want to explicitly allow some metadata tags.
-      if (metadataAlwaysIgnore.contains(key))
-        continue;
-      else if (!_includeDebugTags && key.startsWith("hoot:", Qt::CaseInsensitive) && !_metadataAllowKeys.contains(key))
-        continue;
-
       writer.writeStartElement("tag");
       writer.writeAttribute("k", _invalidCharacterHandler.removeInvalidCharacters(key));
       writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(val));
@@ -493,7 +458,6 @@ QString OsmBaseXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat&
     return _stats.toTableString();
   case ChangesetStatsFormat::JsonFormat:
     return _stats.toJsonString();
-    break;
   default:
     return "";
   }

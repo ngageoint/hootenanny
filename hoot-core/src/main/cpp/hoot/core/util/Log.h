@@ -123,7 +123,7 @@ public:
 
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
-  WarningLevel getLevel() const { return _level; }
+  inline WarningLevel getLevel() const { return _level; }
   void setLevel(WarningLevel l);
 
   void setDecorateLogs(bool decorate) { _decorateLogs = decorate; }

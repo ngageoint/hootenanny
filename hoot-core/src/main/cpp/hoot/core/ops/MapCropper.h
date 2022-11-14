@@ -84,6 +84,7 @@ public:
   void setRemoveSuperflousFeatures(bool remove) { _removeSuperfluousFeatures = remove; }
   void setRemoveMissingElements(bool remove) { _removeMissingElements = remove; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
+  void setRemoveFromParentRelation(bool remove) { _removeFromParentRelation = remove; }
 
 private:
 
@@ -117,6 +118,10 @@ private:
 
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
+
+  /** When set to true the way ref is removed from any parent relations (generally should happen) */
+  bool _removeFromParentRelation;
+
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 

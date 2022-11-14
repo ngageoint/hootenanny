@@ -71,8 +71,7 @@ namespace hoot
  * if that can be addressed or not. Technically, the way joiner (maybe) run later on could fix the
  * problem.
  */
-class UnconnectedWaySnapper : public OsmMapOperation, public Configurable,
-  public ConflateInfoCacheConsumer
+class UnconnectedWaySnapper : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -290,7 +289,7 @@ private:
   /*
    * Finds ways that cross each other, makes a node, and snaps them
    */
-  void _snapUnconnectedWayCrossings(const WayPtr& wayToSnap);
+  void _snapUnconnectedWayCrossings(const WayPtr& wayToSnap) const;
 
   /*
    * Identifies unconnected way nodes

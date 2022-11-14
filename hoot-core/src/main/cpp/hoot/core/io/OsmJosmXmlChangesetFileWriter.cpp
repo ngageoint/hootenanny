@@ -48,6 +48,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmJosmXmlChangesetFileWriter)
 
+OsmJosmXmlChangesetFileWriter::OsmJosmXmlChangesetFileWriter()
+{
+  //  Only include circular error when explicitly requested
+  _addExportTagsVisitor.setIncludeCircularError(_includeCircularErrorTags);
+}
+
+void OsmJosmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
+{
+  OsmBaseXmlChangesetFileWriter::setConfiguration(conf);
+  _addExportTagsVisitor.setIncludeCircularError(_includeCircularErrorTags);
+}
+
+
 void OsmJosmXmlChangesetFileWriter::_writeXmlFileHeader(QXmlStreamWriter& writer) const
 {
   writer.writeStartElement("osm");
@@ -102,8 +115,13 @@ void OsmJosmXmlChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& w
 
 void OsmJosmXmlChangesetFileWriter::_getOptionalTags(Tags& tags, const Element* element) const
 {
-  if (_includeDebugTags)
-    tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
+  //  Remove all of the hoot tags execept for the review tags
+  if (element->getElementType() == ElementType::Relation)
+    tags.removeNonReviewHootTags();
+  else
+    tags.removeHootTags();
+  //  Rather than cloning the element, get the export tags from the visitor
+  tags.add(_addExportTagsVisitor.getExportTags(element));
 }
 
 }

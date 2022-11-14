@@ -120,6 +120,7 @@
         <tag k="REF1" v="Panera"/>
         <tag k="alt_name" v="Maid-Rite"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Panera Bread"/>
     </way>
     <way id="-21128042" version="1" action="delete" timestamp="">
@@ -130,6 +131,7 @@
         <nd ref="-21128040"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Bad Pair"/>
     </way>
     <way id="-21128033" version="1" action="delete" timestamp="">
@@ -140,6 +142,7 @@
         <nd ref="-21128031"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Bad Pair"/>
     </way>
     <way id="-21128024" version="1" action="delete" timestamp="">
@@ -150,6 +153,7 @@
         <nd ref="-21128022"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Bad Pair"/>
     </way>
     <way id="-21128014" version="1" action="delete" timestamp="">
@@ -160,6 +164,7 @@
         <nd ref="-21128012"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Bad Pair"/>
     </way>
     <way id="-21127941" version="1" action="delete" timestamp="">
@@ -171,6 +176,7 @@
         <nd ref="-21127939"/>
         <tag k="REF1" v="Convoluted No Match 1"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Convoluted Example"/>
     </way>
     <way id="-21127844" version="1" action="delete" timestamp="">
@@ -209,6 +215,7 @@
         <nd ref="-21127842"/>
         <tag k="REF1" v="Target"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Target"/>
     </way>
     <way id="-18968479" version="1" action="delete" timestamp="">
@@ -221,6 +228,7 @@
         <nd ref="-18968477"/>
         <tag k="REF1" v="Freddy's"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Freddy's"/>
     </way>
     <way id="-18968465" version="1" action="delete" timestamp="">
@@ -231,6 +239,7 @@
         <nd ref="-18968463"/>
         <tag k="REF1" v="Biondi"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
     </way>
     <way id="-18968390" version="1" action="delete" timestamp="">
         <nd ref="-18968388"/>
@@ -241,6 +250,7 @@
         <tag k="REF1" v="Cheddar's"/>
         <tag k="amenity" v="restaurant"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Cheddar's Casual Cafe"/>
     </way>
     <way id="-1" version="0" action="modify" timestamp="">
@@ -252,6 +262,7 @@
         <tag k="REF2" v="Cheddar's"/>
         <tag k="amenity" v="cafe"/>
         <tag k="building" v="restaurant"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cheddars"/>
     </way>
     <way id="-2" version="0" action="modify" timestamp="">
@@ -262,6 +273,7 @@
         <nd ref="-5"/>
         <tag k="REF2" v="Biondi"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
     </way>
     <way id="-3" version="0" action="modify" timestamp="">
         <nd ref="-9"/>
@@ -274,6 +286,7 @@
         <nd ref="-9"/>
         <tag k="REF2" v="Target"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Target Grocery"/>
     </way>
     <way id="-4" version="0" action="modify" timestamp="">
@@ -285,6 +298,7 @@
         <nd ref="-10"/>
         <tag k="REF2" v="Target"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Target - Aurora South"/>
     </way>
     <way id="-5" version="0" action="modify" timestamp="">
@@ -295,6 +309,7 @@
         <nd ref="-17"/>
         <tag k="REF2" v="Target"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Target Pharmacy"/>
     </way>
     <way id="-6" version="0" action="modify" timestamp="">
@@ -308,6 +323,7 @@
         <nd ref="-25"/>
         <nd ref="-15"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Best Buy"/>
     </way>
     <way id="-7" version="0" action="modify" timestamp="">
@@ -323,6 +339,7 @@
         <nd ref="-26"/>
         <tag k="REF2" v="Panera"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Maid-Rite Diner"/>
     </way>
     <way id="-8" version="0" action="modify" timestamp="">
@@ -338,6 +355,7 @@
         <nd ref="-32"/>
         <tag k="REF2" v="Panera"/>
         <tag k="building" v="yes"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Panera Bread"/>
     </way>
 </osm>

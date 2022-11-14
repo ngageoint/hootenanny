@@ -5,6 +5,8 @@ var uuid = require('uuid');
 var fs = require('fs');
 var archiver = require("archiver");
 var exec = require('child_process').exec;
+
+// The rest of the config is loaded below.
 var config = require('./config.json');
 var _ = require('lodash');
 var rmdir = require('rimraf');
@@ -17,6 +19,38 @@ var hootHome = process.env['HOOT_HOME'];
 var appDir = hootHome + '/node-export-server/';
 var runningStatus = 'running',
     completeStatus = 'complete';
+
+// Loop through all "hootHome/translations*" directories and load config files if they exist.
+fs.readdirSync(hootHome,{withFileTypes:true}).filter(file => file.isDirectory() && (file.name.indexOf('translations') == 0)).forEach( function (file){
+  var tLocal = {};
+  var dirName = hootHome + '/' + file.name + '/';
+
+  // The same file is used by the translationServer and hoot-services
+  if (fs.existsSync(dirName + 'translationConfig.json'))
+  {
+    try {
+          tLocal = require(dirName + 'translationConfig.json');
+
+          tLocal.forEach(function (fmt) {
+              // If we don't have a specified schema then we don't support schema switching in the UI
+              if (fmt.nodeExport) {
+                // Either a "path" or "importPath" and "exportPath"
+                if (fmt.path) {
+                  config.schemas[fmt.name] = file.name + '/' + fmt.path;
+                } else {
+                  config.schemas[fmt.name] = file.name + '/' + fmt.exportPath;
+                }
+
+                if (fmt.exportOptions) {
+                    config.schema_options[fmt.name] = fmt.exportOptions;
+                }
+              }
+        });
+    } catch (e) {
+      console.log('Translation Config Error: ' + e);
+    }
+  }
+});
 
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {

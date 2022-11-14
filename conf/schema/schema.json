@@ -55,6 +55,7 @@
     { "import": "is_divided.json" },
     { "import": "is_in.json" },
     { "import": "junction.json" },
+    { "import": "landcover.json" },
     { "import": "landuse.json" },
     { "import": "lanes.json" },
     { "import": "leisure.json" },

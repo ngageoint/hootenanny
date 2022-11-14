@@ -285,7 +285,7 @@ private:
   int _id;
 };
 
-inline std::ostream& operator<<(std::ostream & o, RTreeNode& n)
+inline std::ostream& operator<<(std::ostream & o, const RTreeNode& n)
 {
   int size = n.getChildCount();
   o << "id: " << n.getId() << " parent: " << n.getParentId() << " children: {";

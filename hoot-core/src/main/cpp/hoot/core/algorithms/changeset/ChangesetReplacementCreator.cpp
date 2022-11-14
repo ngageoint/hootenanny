@@ -68,26 +68,22 @@ ChangesetReplacementCreator::ChangesetReplacementCreator()
   _setGlobalOpts();
 }
 
-void ChangesetReplacementCreator::create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-                                         const QString& output)
+void ChangesetReplacementCreator::create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds, const QString& output)
 {
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
   create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
 }
 
-void ChangesetReplacementCreator::create(const QString& input1, const QString& input2, const std::shared_ptr<geos::geom::Polygon>& bounds,
-                                         const QString& output)
+void ChangesetReplacementCreator::create(const QString& input1, const QString& input2, const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output)
 {
   QElapsedTimer timer;
   timer.start();
 
   LOG_INFO("******************************************");
   _currentTask = 1;
-  _progress =
-    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
-  _progress->set(
-    0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
+  _progress = std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
+  _progress->set(0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
 
   // VALIDATION
 
@@ -301,13 +297,11 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
   _generateChangeset(refMap, combinedMap);
   _currentTask++;
 
-  _progress->set(
-    1.0, Progress::JobState::Successful,
-    "Derived replacement changeset: ..." + FileUtils::toLogFormat(_output, _maxFilePrintLength) + " with " +
-    StringUtils::formatLargeNumber(_numChanges) + " changes for " +
-    StringUtils::formatLargeNumber(refMapSize) + " features to replace and " +
-    StringUtils::formatLargeNumber(secMapSize)  + " replacement features in " +
-    StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
+  _progress->set(1.0, Progress::JobState::Successful,
+                 QString("Derived replacement changeset: ...%1 with %2 changes for %3 features to replace and %4 replacement features in %5 total.")
+                  .arg(FileUtils::toLogFormat(_output, _maxFilePrintLength), StringUtils::formatLargeNumber(_numChanges),
+                       StringUtils::formatLargeNumber(refMapSize), StringUtils::formatLargeNumber(secMapSize),
+                       StringUtils::millisecondsToDhms(timer.elapsed())));
 }
 
 void ChangesetReplacementCreator::_setGlobalOpts()
@@ -361,8 +355,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   _boundsOpts.loadSecKeepEntireCrossingBounds = true;
   _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
 
-  conf().set(ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-             _boundsOpts.changesetAllowDeletingRefOutsideBounds);
+  conf().set(ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(), _boundsOpts.changesetAllowDeletingRefOutsideBounds);
 
   LOG_VART(_boundsOpts.loadRefKeepEntireCrossingBounds);
   LOG_VART(_boundsOpts.loadRefKeepOnlyInsideBounds);
@@ -379,8 +372,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   LOG_VART(_boundsOpts.inBoundsStrict);
 }
 
-void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap,
-                                                     const OsmMapPtr& secMap) const
+void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap) const
 {
   LOG_STATUS("Synchronizing elements...");
 
@@ -460,9 +452,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   if (_geometryTypeFilter)
   {
     const Settings secFilterSettings = conf();
-    _filterFeatures(
-      secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings,
-      _changesetId + "-sec-after-pruning");
+    _filterFeatures(secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings, _changesetId + "-sec-after-pruning");
   }
 
   return secMap;
@@ -610,6 +600,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(OsmMapPtr& map,
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   cropper.setRemoveMissingElements(false);
+  cropper.setRemoveFromParentRelation(false);
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 

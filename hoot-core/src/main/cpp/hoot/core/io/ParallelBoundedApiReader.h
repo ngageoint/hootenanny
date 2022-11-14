@@ -39,6 +39,9 @@
 //  Geos
 #include <geos/geom/Geometry.h>
 
+//  Hootenanny
+#include <hoot/core/io/OverpassReaderInterface.h>
+
 namespace hoot
 {
 
@@ -51,7 +54,7 @@ class HootNetworkRequest;
  *  example) that area is divided into quarters and reprocessed until all areas are successfully read.
  *  Also some responses may be too large to handle and those are split and re-handled.
  */
-class ParallelBoundedApiReader
+class ParallelBoundedApiReader : protected OverpassReaderInterface
 {
 public:
 

@@ -27,7 +27,6 @@
 #include "OgrWriter.h"
 
 // geos
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
@@ -42,7 +41,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/ElementInputStream.h>
@@ -57,10 +55,6 @@
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/ScriptSchemaTranslator.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -96,7 +90,6 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 OgrWriter::OgrWriter()
   : _createAllLayers(ConfigOptions().getOgrWriterCreateAllLayers()),
     _appendData(ConfigOptions().getOgrAppendData()),
-    _strictChecking(StrictOn),
     _elementCache(std::make_shared<ElementCacheLRU>(
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
@@ -124,7 +117,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setCreateAllLayers(configOptions.getOgrWriterCreateAllLayers());
-  setSchemaTranslationScript(configOptions.getOgrWriterScript());
+  setSchemaTranslationScript(configOptions.getSchemaTranslationScript());
   setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
   _appendData = configOptions.getOgrAppendData();
@@ -223,25 +216,6 @@ bool OgrWriter::isSupported(const QString& url) const
   return OgrUtilities::getInstance().isReasonableUrl(url);
 }
 
-void OgrWriter::initTranslator()
-{
-  if (_scriptPath.isEmpty())
-    throw HootException("A script path must be set before the output data source is opened.");
-
-  if (_translator == nullptr)
-  {
-    // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st = ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
-    st->setErrorTreatment(_strictChecking);
-    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
-  }
-
-  if (!_translator)
-    throw HootException("Error allocating translator, the translation script must support converting to OGR.");
-
-  _schema = _translator->getOgrOutputSchema();
-}
-
 void OgrWriter::write(const ConstOsmMapPtr& map)
 {
   _numWritten = 0;
@@ -269,51 +243,6 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   LOG_DEBUG("Writing second pass relations...");
   for (auto relation_id : qAsConst(_unwrittenFirstPassRelationIds))
     _writePartial(provider, map->getRelation(relation_id));
-}
-
-void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const ConstElementPtr& e,
-                                    std::shared_ptr<Geometry> &g, // output
-                                    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const
-{
-  if (!_translator)
-    throw HootException("You must call open before attempting to write.");
-
-  if (e->getTags().getInformationCount() > 0)
-  {
-    // There is probably a cleaner way of doing this. convertToGeometry calls getGeometryType which
-    // will throw an exception if it gets a relation that it doesn't know about. E.g. "route",
-    // "superroute", "turnlanes:turns", etc.
-
-    try
-    {
-      g = ElementToGeometryConverter(provider).convertToGeometry(e, false);
-    }
-    catch (const IllegalArgumentException& err)
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-      g = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-    }
-
-    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
-    //  Copy the tags and remove any empty values from the tags
-    Tags t = e->getTags();
-    QStringList keys = t.keys();
-    for (const auto& key : qAsConst(keys))
-    {
-      if (t[key] == "")
-        t.remove(key);
-    }
-
-    tf = _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
-  }
 }
 
 void OgrWriter::writeTranslatedFeature(const std::shared_ptr<Geometry>& g,
@@ -690,11 +619,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
 
       int errCode = poLayer->CreateField(&oField);
       if (errCode != OGRERR_NONE)
-      {
-        throw HootException(
-          QString("Error creating field (%1)  OGR Error Code: (%2).")
-            .arg(f->getName(), QString::number(errCode)));
-      }
+        throw HootException(QString("Error creating field (%1)  OGR Error Code: (%2).").arg(f->getName(), QString::number(errCode)));
     }
   }
 }

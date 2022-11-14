@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services;
 
@@ -66,8 +66,7 @@ public final class HootProperties {
     public static final String JS_HEADER_SCRIPT_PATH;
     public static final String CHANGESETS_FOLDER;
     public static final String SCRIPT_FOLDER;
-    public static final String DEFAULT_TRANSLATIONS_CONFIG;
-    public static final String DEFAULT_FOUO_TRANSLATIONS_CONFIG;
+    public static final String TRANSLATION_CONFIG;
     public static final String CORE_SCRIPT_PATH;
     public static final String ERROR_LOG_PATH;
     public static final String TEMP_OUTPUT_PATH;
@@ -224,8 +223,7 @@ public final class HootProperties {
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
-        DEFAULT_TRANSLATIONS_CONFIG = getProperty("defaultTranslationsConfig");
-        DEFAULT_FOUO_TRANSLATIONS_CONFIG = getProperty("defaultFOUOTranslationsConfig");
+        TRANSLATION_CONFIG = getProperty("translationConfig");
         CORE_SCRIPT_PATH = getProperty("coreScriptPath");
         ERROR_LOG_PATH = getProperty("ErrorLogPath");
         ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
