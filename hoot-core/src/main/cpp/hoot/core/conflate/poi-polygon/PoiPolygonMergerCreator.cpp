@@ -334,16 +334,14 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(MatchSetVector& matc
   }
   LOG_VARD(elementIdsToMatchTypes.size());
   if (elementIdsToMatchTypes.isEmpty())
-  {
     return;
-  }
 
   // Find all elements involved in matches of multiple types.
   QSet<ElementId> elementIdsInvolvedInOverlappingMatch;
   const QList<ElementId> elementIds = elementIdsToMatchTypes.keys();
   for (const auto& elementId : elementIds)
   {
-    if (elementIdsToMatchTypes.values(elementId).size() > 1)
+    if (elementIdsToMatchTypes.value(elementId).size() > 1)
       elementIdsInvolvedInOverlappingMatch.insert(elementId);
   }
   LOG_VARD(elementIdsInvolvedInOverlappingMatch.size());

@@ -39,8 +39,7 @@ ManualMatchValidator::ManualMatchValidator()
     _allowUuidManualMatchIds(false),
     _fullDebugOutput(false)
 {
-  _uuidRegEx.setPattern(
-    "\\{[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\}");
+  _uuidRegEx.setPattern("\\{[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\}");
 }
 
 void ManualMatchValidator::apply(const OsmMapPtr& map)
@@ -56,25 +55,16 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 
   const NodeMap& nodes = map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
-  {
-    ConstNodePtr node = it->second;
-    _validate(node);
-  }
+    _validate(it->second);
 
   const WayMap& ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
-  {
-    ConstWayPtr way = it->second;
-    _validate(way);
-  }
+    _validate(it->second);
 
   // Can't remember right now if relations are ever manually matched...maybe?
   const RelationMap& relations = map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
-  {
-    ConstRelationPtr relation = it->second;
-    _validate(relation);
-  }
+    _validate(it->second);
 }
 
 void ManualMatchValidator::_validate(const ConstElementPtr& element)
@@ -83,7 +73,6 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   LOG_VART(_allowUuidManualMatchIds);
 
   // Just recording one error for each element for performance reasons, even if there are multiple.
-
   const Tags& tags = element->getTags();
 
   // if the tag key for the id exists, it can't be empty
@@ -172,8 +161,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
         break;
       }
       // make sure a ref1 exists for each ref2
-      else if (!_isValidNonUniqueMatchId(ref2Id) &&
-               !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2Id))
+      else if (!_isValidNonUniqueMatchId(ref2Id) && !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2Id))
       {
         if (_requireRef1)
           _recordIssue(element, "No REF1 exists for REF2=" + ref2Id);
@@ -201,8 +189,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
         _recordIssue(element, "Invalid REVIEW=" + reviewId);
         break;
       }
-      else if (!_isValidNonUniqueMatchId(reviewId) &&
-               !_ref1Mappings.getIdToTagValueMappings().values().contains(reviewId))
+      else if (!_isValidNonUniqueMatchId(reviewId) && !_ref1Mappings.getIdToTagValueMappings().values().contains(reviewId))
       {
         _recordIssue(element, "No REF1 exists for REVIEW=" + reviewId);
         break;
@@ -218,6 +205,7 @@ void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString 
 {
   // It can be tough to track down problems in elements without unique tags, since the source file
   // element IDs won't necessarily match the element IDs here.
+  //  Copy tags to modify and check
   Tags tags = element->getTags();
   tags.remove(MetadataTags::Ref1());
   tags.remove(MetadataTags::Ref2());
@@ -244,15 +232,13 @@ void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString 
 bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
 {
   const QString matchIdTemp = matchId.trimmed().toLower();
-  return !matchIdTemp.isEmpty() &&
-         (_isValidNonUniqueMatchId(matchIdTemp) || _isValidUniqueMatchId(matchIdTemp));
+  return !matchIdTemp.isEmpty() && (_isValidNonUniqueMatchId(matchIdTemp) || _isValidUniqueMatchId(matchIdTemp));
 }
 
 bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
 {
   const QString matchIdTemp = matchId.trimmed().toLower();
-  return !matchIdTemp.isEmpty() && !_isValidNonUniqueMatchId(matchIdTemp) &&
-         _isValidUniqueMatchId(matchIdTemp);
+  return !matchIdTemp.isEmpty() && !_isValidNonUniqueMatchId(matchIdTemp) && _isValidUniqueMatchId(matchIdTemp);
 }
 
 bool ManualMatchValidator::_isValidUniqueMatchId(const QString& matchId) const

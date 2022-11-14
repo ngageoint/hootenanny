@@ -22,12 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaTranslationVisitor.h"
-
-
 
 #include <geos/geom/Geometry.h>
 
@@ -41,8 +39,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
-
 using namespace geos::geom;
 using namespace std;
 
@@ -51,8 +47,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslationVisitor)
 
-SchemaTranslationVisitor::SchemaTranslationVisitor() :
-_toOgr(false)
+SchemaTranslationVisitor::SchemaTranslationVisitor()
+  : _toOgr(false)
 {
 }
 
@@ -62,8 +58,7 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
 
   LOG_VARD(conf.hasKey(c.getSchemaTranslationScriptKey()));
   LOG_VARD(c.getSchemaTranslationScript());
-  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) &&
-      c.getSchemaTranslationScript() != "")
+  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
   {
     setTranslationDirection(c.getSchemaTranslationDirection());
     setTranslationScript(c.getSchemaTranslationScript());
@@ -72,26 +67,18 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
   _circularErrorTagKeys = c.getCircularErrorTagKeys();
   const QString elementStatusFilter = c.getSchemaTranslationElementStatus();
   if (!elementStatusFilter.trimmed().isEmpty())
-  {
     _elementStatusFilter = Status::fromString(elementStatusFilter);
-  }
 }
 
 void SchemaTranslationVisitor::setTranslationDirection(QString direction)
 {
   LOG_VARD(direction);
   if (direction.toLower() == "toogr")
-  {
     _toOgr = true;
-  }
   else if (direction.toLower() == "toosm")
-  {
     _toOgr = false;
-  }
   else
-  {
     throw HootException("Expected a schema.translation.direction of 'toogr' or 'toosm'.");
-  }
 }
 
 void SchemaTranslationVisitor::setTranslationScript(QString path)
@@ -102,10 +89,7 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
   {
     _ogrTranslator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(_translator);
     if (_ogrTranslator == nullptr)
-    {
-      throw IllegalArgumentException(
-        "Translating to OGR requires a script that supports to OGR translations.");
-    }
+      throw IllegalArgumentException("Translating to OGR requires a script that supports to OGR translations.");
   }
 }
 
@@ -118,10 +102,8 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
 
     GeometryTypeId gtype = ElementToGeometryConverter::getGeometryType(e, false);
     // If we don't know what it is, no point in translating it.
-    if (gtype == ElementToGeometryConverter::UNKNOWN_GEOMETRY)
-    {
+    if (gtype == GeometryTypeId(ElementToGeometryConverter::UNKNOWN_GEOMETRY))
       return;
-    }
 
     if (_toOgr)
     {
@@ -142,9 +124,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
 
       QByteArray layerName;
       if (tags.contains(MetadataTags::HootLayername()))
-      {
         layerName = tags[MetadataTags::HootLayername()].toUtf8();
-      }
 
       QByteArray geomType;
 

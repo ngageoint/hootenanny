@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RANDOMFORESTMODELBUILDER_H
@@ -48,8 +48,7 @@ public:
    * @param exportArffOnly if true; will build an .arff file only (.arff is a pre-req for
    * generating the .rf file)
    */
-  static void build(
-    const QStringList& trainingData, QString& output, const bool exportArffOnly = false);
+  static void build(const QStringList& trainingData, QString& output, const bool exportArffOnly = false);
 };
 
 }

@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HAS_PHONE_NUMBER_CRITERION_H
 #define HAS_PHONE_NUMBER_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

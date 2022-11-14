@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ADDRESS_NORMALIZER_H
 #define ADDRESS_NORMALIZER_H
 
 // Hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -57,7 +57,7 @@ public:
    * @param address the address to normalize
    * @return a collection of normalized addresses
    */
-  QSet<QString> normalizeAddress(const QString& address) const;
+  QVector<QString> normalizeAddress(const QString& address) const;
 
   int getNumNormalized() const { return _numNormalized; }
   AddressTagKeysPtr getAddressTagKeys() const { return _addressTagKeys; }
@@ -74,8 +74,8 @@ private:
    */
   static void _prepareAddressForLibPostalNormalization(QString& address);
 
-  QSet<QString> _normalizeAddressWithLibPostal(const QString& address) const;
-  QSet<QString> _normalizeAddressIntersection(const QString& address) const;
+  QVector<QString> _normalizeAddressWithLibPostal(const QString& address) const;
+  QVector<QString> _normalizeAddressIntersection(const QString& address) const;
 
   static bool _isValidNormalizedAddress(const QString& inputAddress,
                                         const QString& normalizedAddress);

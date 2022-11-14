@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveInvalidReviewRelationsVisitor.h"
@@ -51,36 +51,27 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
     {
       bool invalidRelation = false;
       const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());
-      if (hasMemberCountTag &&
-          (int)r->getMembers().size() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())
-      {
+      if (hasMemberCountTag && (int)r->getMemberCount() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())
         invalidRelation = true;
-      }
       // in case the review member count tag didn't get added for some reason, go ahead and at least
       // remove empty relations
       else if (!hasMemberCountTag && r->getMembers().empty())
-      {
         invalidRelation = true;
-      }
       else
       {
         // In the cut and replace workflow (ChangesetReplacementCreator), there's a possibility that
         // we could have a relation with all references to members not actually in the data. If all
         // the members don't exist, let's drop the review.
         int nullMemberCount = 0;
-        const std::vector<RelationData::Entry> relationMembers = r->getMembers();
-        for (size_t i = 0; i < relationMembers.size(); i++)
+        const std::vector<RelationData::Entry>& relationMembers = r->getMembers();
+        for (const auto& m : relationMembers)
         {
-          ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
+          ConstElementPtr member = _map->getElement(m.getElementId());
           if (!member)
-          {
             nullMemberCount++;
-          }
         }
         if (nullMemberCount == (int)relationMembers.size())
-        {
           invalidRelation = true;
-        }
       }
 
       if (invalidRelation)

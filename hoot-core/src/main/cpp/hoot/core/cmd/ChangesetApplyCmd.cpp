@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -85,27 +85,17 @@ public:
           .arg(args.join(",")));
     }
 
-    _progress =
-      std::make_shared<Progress>(
-        ConfigOptions().getJobId(), "Apply Changeset", Progress::JobState::Running);
+    _progress = std::make_shared<Progress>(ConfigOptions().getJobId(), "Apply Changeset", Progress::JobState::Running);
 
     //  Write changeset/OSM XML to OSM API
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
-    {
       _writeXmlChangeset(showProgress, showStats, args);
-    }
-    //  Write changeset SQL directly to the database
-    else if (args[0].endsWith(".osc.sql"))
-    {
+    else if (args[0].endsWith(".osc.sql"))  //  Write changeset SQL directly to the database
       _writeSqlChangeset(args);
-    }
     else
-    {
       throw HootException("Invalid changeset file format: " + args[0]);
-    }
 
-    LOG_STATUS(
-      "Changeset applied in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Changeset applied in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return _success ? 0 : -1;
   }
@@ -115,49 +105,45 @@ private:
   std::shared_ptr<Progress> _progress;
   bool _success = true;
 
-  void _writeXmlChangeset(
-    const bool showProgress, const bool showStats, const QStringList& args)
+  void _writeXmlChangeset(const bool showProgress, const bool showStats, const QStringList& args)
   {
     //  Get the endpoint URL
     const QString urlStr = args[args.size() - 1].toLower();
     if (!urlStr.startsWith("http://") && !urlStr.startsWith("https://"))
     {
       throw IllegalArgumentException(
-        QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
-        QString("Tried to write to: " + urlStr));
+        QString("XML changesets must be written to an OpenStreetMap compatible web service. Tried to write to: %1").arg(urlStr));
     }
     QUrl osm;
-    osm.setUrl(args[args.size() - 1]);
+    osm.setUrl(args.last());
 
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
 
-    //  Grab all the changeset files
-    QList<QString> changesets;
-    for (int i = 0; i < args.size() - 1; ++i)
+    //  Grab all the changeset files (n - 1 args)
+    QList<QString> changesets = args;
+    changesets.removeLast();
+    for (const auto& input : qAsConst(changesets))
     {
       _progress->set(
         0.0,
-        "Adding changeset: ..." + FileUtils::toLogFormat(args[i], maxFilePrintLength) +
+        "Adding changeset: ..." + FileUtils::toLogFormat(input, maxFilePrintLength) +
         " for application to: " + FileUtils::toLogFormat(osm.toString(), maxFilePrintLength) +
         "...", true);
-      changesets.append(args[i]);
     }
 
     //  Get the error changeset pathname to pass to the writer
     QFileInfo path(args[0]);
-    QString errorFilename =
-      path.absolutePath() + QDir::separator() + path.baseName() + "-error." + path.completeSuffix();
+    QString errorFilename = path.absolutePath() + QDir::separator() + path.baseName() + "-error." + path.completeSuffix();
 
     //  Do the actual splitting and uploading
     OsmApiWriter writer(osm, changesets);
     writer.setErrorPathname(errorFilename);
     writer.showProgress(showProgress);
+    // OsmApiWriter is doing all the progress reporting but will pass a progress object in
+    // anyway, just in case we ever add any extra job steps outside of it.
     if (showProgress)
-    {
-      // OsmApiWriter is doing all the progress reporting but will pass a progress object in
-      // anyway, just in case we ever add any extra job steps outside of it.
       writer.setProgress(*_progress);
-    }
+
     writer.apply();
 
     _progress->set(
@@ -174,8 +160,7 @@ private:
     if (writer.containsFailed())
     {
       //  Output the errors from 'changeset.osc' to 'changeset-error.osc'
-      LOG_ERROR(
-        QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
+      LOG_ERROR(QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
       writer.writeErrorFile();
     }
 
@@ -208,7 +193,7 @@ private:
     QUrl url(args[1]);
     OsmApiDbSqlChangesetApplier changesetWriter(url);
     changesetWriter.write(changesetSqlFile);
-    //The tests rely on this being output, so leave it as a cout and not a log statement.
+    //  The tests rely on this being output, so leave it as a cout and not a log statement.
     cout << changesetWriter.getChangesetStatsSummary();
   }
 };

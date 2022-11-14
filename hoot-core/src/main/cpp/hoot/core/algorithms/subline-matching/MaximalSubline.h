@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
@@ -113,7 +113,7 @@ public:
   public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
-    virtual ~ThresholdMatchCriteria() = default;
+    ~ThresholdMatchCriteria() override = default;
 
     double match(int index1, int index2) const override;
 
@@ -228,15 +228,13 @@ private:
   /**
    * Finds the starting location for the given end match location.
    */
-  Sparse2dMatrix::CellId _findStartMatch(
-    const Sparse2dMatrix &sublines, Sparse2dMatrix::CellId end) const;
+  Sparse2dMatrix::CellId _findStartMatch(const Sparse2dMatrix &sublines, Sparse2dMatrix::CellId end) const;
 
   void _populateTotalScores(const Sparse2dMatrix& scores, Sparse2dMatrix& sublines,
-    Sparse2dMatrix::CellId& bestCid, double& bestScore) const;
+                            Sparse2dMatrix::CellId& bestCid, double& bestScore) const;
 
-  std::vector<WaySublineMatch> _snapIntersections(
-    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
-    std::vector<WaySublineMatch> &rawSublineMatches) const;
+  std::vector<WaySublineMatch> _snapIntersections(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                                                  std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   /**
    * If the Match Criteria considers these close enough to the ends of the line then they'll be

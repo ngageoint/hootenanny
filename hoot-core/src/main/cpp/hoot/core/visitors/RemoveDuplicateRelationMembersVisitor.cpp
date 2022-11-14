@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveDuplicateRelationMembersVisitor.h"
@@ -39,9 +39,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateRelationMembersVisitor)
 void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
 {
   if (!e)
-  {
     return;
-  }
 
   if (e->getElementType() == ElementType::Relation)
   {
@@ -53,13 +51,10 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
       // use an ordered collection here; entry doesn't have an < implementation, otherwise
       // std::set could be used
       QList<RelationData::Entry> uniqueMembers;
-      for (std::vector<RelationData::Entry>::const_iterator it = members.begin();
-           it != members.end(); ++it)
+      for (const auto& member : members)
       {
-        if (!uniqueMembers.contains(*it))
-        {
-          uniqueMembers.append(*it);
-        }
+        if (!uniqueMembers.contains(member))
+          uniqueMembers.append(member);
       }
 
       // no point in updating the members if there were no dupes

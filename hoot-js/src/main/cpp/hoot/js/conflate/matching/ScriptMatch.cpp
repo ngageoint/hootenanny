@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMatch.h"
 
@@ -56,20 +56,19 @@ HOOT_FACTORY_REGISTER(Match, ScriptMatch)
 
 int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
-  const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Local<Object>& mapObj,
-  const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
-Match(mt, eid1, eid2),
-_isWholeGroup(false),
-_neverCausesConflict(false),
-_script(script)
+ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+                         const ConstOsmMapPtr& map, const v8::Local<Object>& mapObj,
+                         const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt)
+  : Match(mt, eid1, eid2),
+    _isWholeGroup(false),
+    _neverCausesConflict(false),
+    _script(script)
 {
   _plugin.Reset(v8::Isolate::GetCurrent(), plugin);
   _calculateClassification(map, mapObj, ToLocal(&plugin));
 }
 
-void ScriptMatch::_calculateClassification(
-  const ConstOsmMapPtr& map, Local<Object> mapObj, Local<Object> plugin)
+void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Local<Object> mapObj, Local<Object> plugin)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -103,9 +102,7 @@ void ScriptMatch::_calculateClassification(
     Local<Value> v = _call(map, mapObj, plugin);
 
     if (v.IsEmpty() || v->IsObject() == false)
-    {
       throw IllegalArgumentException("Expected matchScore to return an associative array.");
-    }
 
     QVariantMap vm = toCpp<QVariantMap>(v);
     // grab the match, miss, review results. If they aren't populated they get a value of 0.
@@ -115,14 +112,11 @@ void ScriptMatch::_calculateClassification(
 
     _explainText = vm["explain"].toString();
     if (_explainText.isEmpty())
-    {
       _explainText = _threshold->getTypeDetail(_p);
-    }
     if (_threshold->getType(_p) == MatchType::Review && _explainText.isEmpty())
     {
       throw IllegalArgumentException(
-        "If the match is a review an appropriate explanation must be provided (E.g. "
-        "{ 'review': 1, 'explain': 'some reason' }.");
+        "If the match is a review an appropriate explanation must be provided (E.g. { 'review': 1, 'explain': 'some reason' }.");
     }
   }
   catch (const NeedsReviewException& ex)
@@ -147,40 +141,29 @@ double ScriptMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool ScriptMatch::isConflicting(
-  const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-  const QHash<QString, ConstMatchPtr>& matches) const
+bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+                                const QHash<QString, ConstMatchPtr>& matches) const
 {
   LOG_TRACE("Checking for match conflict...");
 
   if (_neverCausesConflict)
-  {
     return false;
-  }
 
   bool conflicting = true;
 
   const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(other.get());
   if (hm == nullptr)
-  {
     return true;
-  }
   if (hm == this)
-  {
     return false;
-  }
 
   // See ticket #5272
   if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
-  {
     return true;
-  }
 
   ElementId sharedEid;
   if (_eid1 == hm->_eid1 || _eid1 == hm->_eid2)
-  {
     sharedEid = _eid1;
-  }
 
   if (_eid2 == hm->_eid1 || _eid2 == hm->_eid2)
   {
@@ -191,9 +174,7 @@ bool ScriptMatch::isConflicting(
 
   // If the matches don't share at least one eid then it isn't a conflict.
   if (sharedEid.isNull())
-  {
     return false;
-  }
 
   // assign o1 and o2 to the non-shared eids
   ElementId o1 = _eid1 == sharedEid ? _eid2 : _eid1;
@@ -215,9 +196,7 @@ bool ScriptMatch::isConflicting(
   }
 
   if (foundCache)
-  {
     conflicting = cacheConflict;
-  }
   else
   {
     try
@@ -225,15 +204,7 @@ bool ScriptMatch::isConflicting(
       // We need to check for a conflict in two directions. If its conflicting when we merge the
       // shared EID with this class first, then is it a conflict if we merge with the other EID
       // first.
-      if (_isOrderedConflicting(map, sharedEid, o1, o2, matches) ||
-          hm->_isOrderedConflicting(map, sharedEid, o2, o1, matches))
-      {
-        conflicting = true;
-      }
-      else
-      {
-        conflicting = false;
-      }
+      conflicting = _isOrderedConflicting(map, sharedEid, o1, o2, matches) || hm->_isOrderedConflicting(map, sharedEid, o2, o1, matches);
     }
     catch (const NeedsReviewException& /*e*/)
     {
@@ -245,9 +216,8 @@ bool ScriptMatch::isConflicting(
   return conflicting;
 }
 
-bool ScriptMatch::_isOrderedConflicting(
-  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2,
-  const QHash<QString, ConstMatchPtr>& matches) const
+bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2,
+                                        const QHash<QString, ConstMatchPtr>& matches) const
 {
   LOG_TRACE("Checking " << other1 << " and " << other2 << " for order conflict...");
 
@@ -308,16 +278,12 @@ bool ScriptMatch::_isOrderedConflicting(
     mergers[0]->apply(copiedMap, replaced);
 
     // replace the element id in the second merger
-    for (size_t i = 0; i < replaced.size(); ++i)
+    for (const auto& rep : replaced)
     {
-      if (replaced[i].first == eid21)
-      {
-        eid21 = replaced[i].second;
-      }
-      if (replaced[i].first == eid22)
-      {
-        eid22 = replaced[i].second;
-      }
+      if (rep.first == eid21)
+        eid21 = rep.second;
+      if (rep.first == eid22)
+        eid22 = rep.second;
     }
 
     // If we can still find the second match after the merge was applied, then it isn't a conflict.
@@ -333,38 +299,30 @@ bool ScriptMatch::_isOrderedConflicting(
 //        return false;
 //      }
 
-      std::shared_ptr<const ScriptMatch> m2 =
-        _getMatch(copiedMap, copiedMapJs, eid21, eid22, matches);
+      std::shared_ptr<const ScriptMatch> m2 = _getMatch(copiedMap, copiedMapJs, eid21, eid22, matches);
       if (m2->getType() == MatchType::Match)
-      {
         return false;
-      }
     }
   }
 
   return true;
 }
 
-std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
-  OsmMapPtr map, Local<Object> mapJs, const ElementId& eid1, const ElementId& eid2,
-  const QHash<QString, ConstMatchPtr>& matches) const
+std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(OsmMapPtr map, Local<Object> mapJs, const ElementId& eid1,
+                                                          const ElementId& eid2, const QHash<QString, ConstMatchPtr>& matches) const
 {
   std::shared_ptr<const ScriptMatch> match;
 
   QString matchKey;
   if (eid1 < eid2)
-  {
     matchKey = eid1.toString() + "," + eid2.toString();
-  }
   else
-  {
     matchKey = eid2.toString() + "," + eid1.toString();
-  }
-  QHash<QString, ConstMatchPtr>::const_iterator itr = matches.find(matchKey);
+
+  auto itr = matches.find(matchKey);
   if (itr != matches.end())
   {
-    std::shared_ptr<const ScriptMatch> scriptMatch =
-      std::dynamic_pointer_cast<const ScriptMatch>(itr.value());
+    std::shared_ptr<const ScriptMatch> scriptMatch = std::dynamic_pointer_cast<const ScriptMatch>(itr.value());
     if (scriptMatch)
     {
       match = scriptMatch;
@@ -373,15 +331,12 @@ std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
   }
 
   if (!match)
-  {
     match = std::make_shared<ScriptMatch>(_script, _plugin, map, mapJs, eid1, eid2, _threshold);
-  }
 
   return match;
 }
 
-Local<Value> ScriptMatch::_call(
-  const ConstOsmMapPtr& map, Local<Object> mapObj, Local<Object> plugin)
+Local<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Local<Object> mapObj, Local<Object> plugin)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
@@ -422,16 +377,13 @@ Local<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map)
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
 
-  Local<Object> plugin =
-    Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Object> plugin = Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
   Local<Value> value = plugin->Get(context, toV8("getMatchFeatureDetails")).ToLocalChecked();
   Local<Function> func = Local<Function>::Cast(value);
   Local<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
-    throw IllegalArgumentException(
-      "getMatchFeatureDetails must be a valid function for match from: " + _matchName);
+    throw IllegalArgumentException("getMatchFeatureDetails must be a valid function for match from: " + _matchName);
 
   Local<Object> mapObj = OsmMapJs::create(map);
 
@@ -467,15 +419,12 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   Local<Value> v = _callGetMatchFeatureDetails(map);
 
   if (v.IsEmpty() || v->IsObject() == false)
-  {
-    throw IllegalArgumentException(
-      "Expected getMatchFeatureDetails to return an associative array.");
-  }
+    throw IllegalArgumentException("Expected getMatchFeatureDetails to return an associative array.");
 
   QVariantMap vm = toCpp<QVariantMap>(v);
   long valCtr = 0;
   LOG_VART(vm.size());
-  for (QVariantMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
+  for (auto it = vm.cbegin(); it != vm.cend(); ++it)
   {
     if (it.value().isNull() == false)
     {
@@ -508,27 +457,17 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
 MatchMembers ScriptMatch::geometryTypeToMatchMembers(const QString& geometryType)
 {
   if (geometryType == "point")
-  {
     return MatchMembers(MatchMembers::Poi);
-  }
   else if (geometryType == "line")
-  {
     return MatchMembers(MatchMembers::Polyline);
-  }
   else if (geometryType == "polygon")
-  {
     return MatchMembers(MatchMembers::Polygon);
-  }
+  // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
+  // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   else if (geometryType == "unknown")
-  {
-    // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
-    // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
     return MatchMembers(MatchMembers::Poi | MatchMembers::Polygon);
-  }
   else
-  {
     throw HootException("Invalid geometry type: " + geometryType);
-  }
 }
 
 QString ScriptMatch::toString() const

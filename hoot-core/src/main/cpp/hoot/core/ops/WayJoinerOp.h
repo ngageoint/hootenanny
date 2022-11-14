@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __WAY_JOINER_OP_H__
 #define __WAY_JOINER_OP_H__
 
 //  Hoot
+#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -65,8 +65,7 @@ public:
   { return "Rejoining ways split during conflation..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways.";
+    return "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways.";
   }
 
   /**

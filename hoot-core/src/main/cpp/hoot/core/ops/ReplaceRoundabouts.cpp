@@ -28,17 +28,17 @@
 #include "ReplaceRoundabouts.h"
 
 // Hoot
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 using namespace std;
 

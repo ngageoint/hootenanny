@@ -85,7 +85,9 @@ import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobType;
+import hoot.services.jobs.JobsStatusesManager;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -95,8 +97,12 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class ExportResource {
     private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
+
     @Autowired
     private JobProcessor jobProcessor;
+
+    @Autowired
+    private JobStatusManager jobStatusManager;
 
     @Autowired
     private UserAwareExportCommandFactory userAwareExportCommandFactory;
@@ -198,7 +204,7 @@ public class ExportResource {
                     }
                 }
 
-                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(rootfolder));
+                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(rootfolder), params.getOutputType());
                 workflow.add(zipCommand);
                 params.setInputType("folder");
 
@@ -214,11 +220,12 @@ public class ExportResource {
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
                 }
 
-                Command zipCommand = getZIPCommand(workDir, outputName); // zip maps into single folder...
+                Command zipCommand = getZIPCommand(workDir, outputName, params.getOutputType()); // zip maps into single folder...
                 workflow.add(zipCommand);
 
             //generates density tiles and alpha shape and clips the first with the second
             } else if (params.getOutputType().startsWith("alpha.tiles")) {
+                String initialOutputType = params.getOutputType();
                 params.setOutputType("tiles.geojson");
                 workflow.add(getCommand(user, jobId, params, debugLevel));
                 params.setOutputType("alpha.shp");
@@ -232,7 +239,9 @@ public class ExportResource {
                 workflow.add(ogrFormatCommand);
                 Command sedSourceCommand = new SedSourceCommand(jobId, params, this.getClass());
                 workflow.add(sedSourceCommand);
-                Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
+                params.setOutputType(initialOutputType);
+                String fileToZip = params.getOutputName() + "." + params.getOutputType();
+                Command zipCommand = new ZIPFileCommand(new File(workDir, fileToZip + ".zip"), workDir, fileToZip, this.getClass());
                 workflow.add(zipCommand);
 
             } else if (inputType.equalsIgnoreCase("changesets")) {
@@ -246,13 +255,14 @@ public class ExportResource {
                 MapResource.getMapForUser(user, params.getInput(), false, false);
 
                 workflow.add(getCommand(user, jobId, params, debugLevel));
-                Command zipCommand = getZIPCommand(workDir, outputName);
+                Command zipCommand = getZIPCommand(workDir, outputName, params.getOutputType());
                 workflow.add(zipCommand);
             }
 
             //Record output name in job status tag so output can be retrieved from job panel
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("outputname", outputName);
+            jobStatusTags.put("outputtype", params.getOutputType());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT, jobStatusTags));
         }
@@ -312,11 +322,16 @@ public class ExportResource {
 
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
-            File exportFile = getExportFile(jobId, outputname, fileExt);
-            String outFileName = jobId;
-            if (! StringUtils.isBlank(outputname)) {
-                outFileName = outputname;
+            //need to use job id to determine if this is changeset or export
+            File exportFile;
+            hoot.services.models.db.JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
+            //job status could be null
+            if (JobType.fromInteger(jobStatus.getJobType()) == JobType.DERIVE_CHANGESET) {
+                exportFile = getChangesetFile(jobId, outputname, fileExt);
+            } else {
+                exportFile = getExportFile(jobId, outputname, fileExt);
             }
+            String outFileName = exportFile.getName();
             ResponseBuilder responseBuilder;
             //Do some zipping if fileExt is not zip
             if (!fileExt.equalsIgnoreCase("zip")) {
@@ -340,10 +355,12 @@ public class ExportResource {
                     }
                 };
                 responseBuilder = Response.ok(stream);
+                outFileName += ".zip";
             } else {
                 responseBuilder = Response.ok(exportFile);
             }
-            responseBuilder.header("Content-Disposition", "attachment; filename="+ outFileName + ".zip");
+            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName);
+            responseBuilder.header("Content-Type", "application/zip");
             response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
@@ -483,17 +500,33 @@ public class ExportResource {
         return getZIPCommand(workDir, workDir, outputName);
     }
 
+    private Command getZIPCommand(File workDir, String outputName, String outputType) {
+        return getZIPCommand(workDir, workDir, outputName, outputType);
+    }
+
     private Command getZIPCommand(File workDir, File inputDir, String outputName) {
         File targetZIP = new File(workDir, outputName + ".zip");
         return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
     }
 
-    private static File getExportFile(String jobId, String outputName, String fileExt) {
-        String path = TEMP_OUTPUT_PATH;
-        if (fileExt.equalsIgnoreCase("osc"))
-            path = CHANGESETS_FOLDER;
+    private Command getZIPCommand(File workDir, File inputDir, String outputName, String outputType) {
+        File targetZIP = new File(workDir, outputName + "." + outputType + ".zip");
+        return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
+    }
 
-        File exportFile = new File(new File(path, jobId), outputName + "." + fileExt);
+    private static File getExportFile(String jobId, String outputName, String fileExt) {
+        return getDownloadFile(jobId, outputName, fileExt, TEMP_OUTPUT_PATH);
+    }
+    private static File getChangesetFile(String jobId, String outputName, String fileExt) {
+        return getDownloadFile(jobId, outputName, fileExt, CHANGESETS_FOLDER);
+    }
+    private static File getDownloadFile(String jobId, String outputName, String fileExt, String path) {
+        //check if the outputName already ends in the requested outputExt
+        String outputExt = outputName.substring(outputName.lastIndexOf(".") + 1);
+        if (!fileExt.equalsIgnoreCase(outputExt))
+            outputName += "." + fileExt;
+
+        File exportFile = new File(new File(path, jobId), outputName);
 
         if (!exportFile.exists()) {
             String errorMsg = "Error exporting data.  Missing output file.";

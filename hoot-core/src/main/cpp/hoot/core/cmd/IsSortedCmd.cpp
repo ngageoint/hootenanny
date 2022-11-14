@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -66,17 +66,12 @@ public:
 
     const QString input = args[0];
     const bool result = SortedElementsValidator::validate(input);
-    if (result)
-    {
-      std::cout << input << " is sorted." << std::endl;
-    }
-    else
-    {
-      std::cout << input << " is not sorted." << std::endl;
-    }
+    std::cout << input << " is ";
+    if (!result)
+      std::cout << "not ";
+    std::cout << "sorted." << std::endl;
 
-    LOG_STATUS(
-      "Map sorted check ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Map sorted check ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

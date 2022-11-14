@@ -476,12 +476,12 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   }
 
   long recordCtr = 0;
-  for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
+  for (const auto& name : qAsConst(_sectionNames))
   {
-    LOG_DEBUG("Parsing data for temp file " << *it);
-    if (_outputSections.find(*it) == _outputSections.end())
+    LOG_DEBUG("Parsing data for temp file " << name);
+    if (_outputSections.find(name) == _outputSections.end())
     {
-      LOG_DEBUG("No data for table " + *it);
+      LOG_DEBUG("No data for table " << name);
       continue;
     }
 
@@ -489,13 +489,13 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 
     //This file was originally opened as write only and has already been closed by this point,
     //so create a new readonly file for reading it back in.
-    QFile tempInputFile(_outputSections[*it]->fileName());
+    QFile tempInputFile(_outputSections[name]->fileName());
     try
     {
-      LOG_DEBUG("Opening file: " << _outputSections[*it]->fileName());
+      LOG_DEBUG("Opening file: " << _outputSections[name]->fileName());
       if (tempInputFile.open(QIODevice::ReadOnly))
       {
-        LOG_DEBUG("Parsing file for table: " << *it << "...");
+        LOG_DEBUG("Parsing file for table: " << name << "...");
 
         const bool updateIdOffsets = _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData;
         do
@@ -510,7 +510,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
           if (!line.trimmed().isEmpty() && line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
           {
             if (updateIdOffsets)
-              _updateRecordLineWithIdOffset(*it, line);
+              _updateRecordLineWithIdOffset(name, line);
             recordCtr++;
           }
 
@@ -531,11 +531,11 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
         while (!tempInputFile.atEnd());
 
         tempInputFile.close();
-        LOG_DEBUG("Closing file for " << *it << "...");
-        _outputSections[*it]->close();
+        LOG_DEBUG("Closing file for " << name << "...");
+        _outputSections[name]->close();
         //shouldn't need to do this since its a temp file
-        _outputSections[*it]->remove();
-        _outputSections[*it].reset();
+        _outputSections[name]->remove();
+        _outputSections[name].reset();
       }
       else
         throw HootException("Unable to open input file: " + tempInputFile.fileName());
@@ -547,7 +547,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
       throw;
     }
 
-    LOG_DEBUG("Wrote contents of section " << *it);
+    LOG_DEBUG("Wrote contents of section " << name);
   }
   LOG_DEBUG("Finished parsing temp files...");
   _sqlOutputCombinedFile->write("COMMIT;");
@@ -628,10 +628,7 @@ void OsmApiDbBulkInserter::_reserveIdsInDb()
   //this assumes the input data has already been written out to file once and _writeStats has valid
   //values for the number of elements written
   if (_writeStats.nodesWritten == 0)
-  {
-    throw HootException(
-      QString("OSM API database bulk writer cannot reserve element ID range if no elements have been parsed from the input."));
-  }
+    throw HootException("OSM API database bulk writer cannot reserve element ID range if no elements have been parsed from the input.");
 
   //get the next available id from the db for all sequence types
   _incrementAndGetLatestIdsFromDb();
@@ -717,8 +714,9 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   if (_includeDebugTags)
   {
+    //  TODO: Nothing is actually happening here, right?  Add a tag to a copy of the tags and then pop them off the stack?!
     Tags tags = node->getTags();
-    //keep the hoot:id tag in sync with what could be a newly assigned id
+    //  keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(nodeDbId));
   }
 
@@ -728,7 +726,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
     _outputSections[ApiDb::getNodeTagsTableName()],
     node->getVersion());
   _writeStats.nodesWritten++;
-  _writeStats.nodeTagsWritten += node->getTags().size();
+  _writeStats.nodeTagsWritten += node->getTagCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(node, nodeDbId);
@@ -770,12 +768,12 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   _writeWay(wayDbId, way->getVersion());
   _writeWayNodes(wayDbId, way->getNodeIds(), way->getVersion());
   _writeTags(way->getTags(), ElementType::Way, wayDbId,
-    _outputSections[ApiDb::getCurrentWayTagsTableName()],
-    _outputSections[ApiDb::getWayTagsTableName()],
-    way->getVersion());
+             _outputSections[ApiDb::getCurrentWayTagsTableName()],
+             _outputSections[ApiDb::getWayTagsTableName()],
+             way->getVersion());
   _writeStats.waysWritten++;
-  _writeStats.wayTagsWritten += way->getTags().size();
-  _writeStats.wayNodesWritten += way->getNodeIds().size();
+  _writeStats.wayTagsWritten += way->getTagCount();
+  _writeStats.wayNodesWritten += way->getNodeCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(way, wayDbId);
@@ -819,12 +817,12 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   _writeRelation(relationDbId, version);
   _writeRelationMembers(relation, relationDbId, version);
   _writeTags(tags, ElementType::Relation, relationDbId,
-    _outputSections[ApiDb::getCurrentRelationTagsTableName()],
-    _outputSections[ApiDb::getRelationTagsTableName()],
-    version);
+             _outputSections[ApiDb::getCurrentRelationTagsTableName()],
+             _outputSections[ApiDb::getRelationTagsTableName()],
+             version);
   _writeStats.relationsWritten++;
-  _writeStats.relationTagsWritten += relation->getTags().size();
-  _writeStats.relationMembersWritten += relation->getMembers().size();
+  _writeStats.relationTagsWritten += relation->getTagCount();
+  _writeStats.relationMembersWritten += relation->getMemberCount();
   _incrementChangesInChangeset();
   if (_validateData)
     _checkUnresolvedReferences(relation, relationDbId);
@@ -944,52 +942,52 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
 
   switch (sourceId.getType().getEnum())
   {
-    case ElementType::Node:
-      if (_validateData)
-      {
-        dbIdentifier = _idMappings.currentNodeId;
-        _idMappings.nodeIdMap->insert(sourceId.getId(), dbIdentifier);
-        _idMappings.currentNodeId++;
-      }
-      else
-      {
-        //be sure to use the std version of abs here, b/c the global one doesn't handle 8 byte
-        //long as expected
-        dbIdentifier = std::abs(sourceId.getId());
-        if (dbIdentifier > _idMappings.currentNodeId)
-          _idMappings.currentNodeId = dbIdentifier;
-      }
-      break;
-    case ElementType::Way:
-      if (_validateData)
-      {
-        dbIdentifier = _idMappings.currentWayId;
-        _idMappings.wayIdMap->insert(sourceId.getId(), dbIdentifier);
-        _idMappings.currentWayId++;
-      }
-      else
-      {
-        dbIdentifier = std::abs(sourceId.getId());
-        if (dbIdentifier > _idMappings.currentWayId)
-          _idMappings.currentWayId = dbIdentifier;
-      }
-      break;
-    case ElementType::Relation:
-      if (_validateData)
-      {
-        dbIdentifier = _idMappings.currentRelationId;
-        _idMappings.relationIdMap->insert(sourceId.getId(), dbIdentifier);
-        _idMappings.currentRelationId++;
-      }
-      else
-      {
-        dbIdentifier = std::abs(sourceId.getId());
-        if (dbIdentifier > _idMappings.currentRelationId)
-          _idMappings.currentRelationId = dbIdentifier;
-      }
-      break;
-    default:
-      throw UnsupportedException("Unsupported element type.");
+  case ElementType::Node:
+    if (_validateData)
+    {
+      dbIdentifier = _idMappings.currentNodeId;
+      _idMappings.nodeIdMap->insert(sourceId.getId(), dbIdentifier);
+      _idMappings.currentNodeId++;
+    }
+    else
+    {
+      //be sure to use the std version of abs here, b/c the global one doesn't handle 8 byte
+      //long as expected
+      dbIdentifier = std::abs(sourceId.getId());
+      if (dbIdentifier > _idMappings.currentNodeId)
+        _idMappings.currentNodeId = dbIdentifier;
+    }
+    break;
+  case ElementType::Way:
+    if (_validateData)
+    {
+      dbIdentifier = _idMappings.currentWayId;
+      _idMappings.wayIdMap->insert(sourceId.getId(), dbIdentifier);
+      _idMappings.currentWayId++;
+    }
+    else
+    {
+      dbIdentifier = std::abs(sourceId.getId());
+      if (dbIdentifier > _idMappings.currentWayId)
+        _idMappings.currentWayId = dbIdentifier;
+    }
+    break;
+  case ElementType::Relation:
+    if (_validateData)
+    {
+      dbIdentifier = _idMappings.currentRelationId;
+      _idMappings.relationIdMap->insert(sourceId.getId(), dbIdentifier);
+      _idMappings.currentRelationId++;
+    }
+    else
+    {
+      dbIdentifier = std::abs(sourceId.getId());
+      if (dbIdentifier > _idMappings.currentRelationId)
+        _idMappings.currentRelationId = dbIdentifier;
+    }
+    break;
+  default:
+    throw UnsupportedException("Unsupported element type.");
   }
   return dbIdentifier;
 }
@@ -1107,7 +1105,7 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
 
   unsigned int memberSequenceIndex = 1;
   const long relationId = relation->getId();
-  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   std::shared_ptr<Tgs::BigMap<long, unsigned long>> knownElementMap;
 
   for (const auto& member : relationMembers)
@@ -1169,9 +1167,8 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString& tableName, const QSt
 
   _outputSections[tableName] = std::make_shared<QTemporaryFile>(_tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql");
   if (!_outputSections[tableName]->open())
-  {
     throw HootException("Could not open file at: " + _outputSections[tableName]->fileName() + " for contents of table: " + tableName);
-  }
+
   //for debugging only
   //_outputSections[tableName]->setAutoRemove(false);
 

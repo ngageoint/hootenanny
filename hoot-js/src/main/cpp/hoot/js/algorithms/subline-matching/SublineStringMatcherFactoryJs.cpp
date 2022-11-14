@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "SublineStringMatcherFactoryJs.h"
 
@@ -64,9 +64,7 @@ void SublineStringMatcherFactoryJs::getMatcher(const v8::FunctionCallbackInfo<v8
     CreatorDescription::stringToBaseFeatureType(toCpp<QString>(args[0]));
   ConstOsmMapPtr map;
   if (args.Length() == 2)
-  {
     map = toCpp<ConstOsmMapPtr>(args[1]);
-  }
 
   SublineStringMatcherPtr matcher = SublineStringMatcherFactory::getMatcher(featureType, map);
   args.GetReturnValue().Set(toV8(matcher));

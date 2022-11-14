@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "CookieCutter.h"
@@ -31,10 +31,10 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/visitors/UnionPolygonsVisitor.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/visitors/UnionPolygonsVisitor.h>
 
 using namespace geos::geom;
 
@@ -42,22 +42,21 @@ namespace hoot
 {
 
 CookieCutter::CookieCutter(bool crop, double outputBuffer, bool keepEntireFeaturesCrossingBounds,
-                           bool keepOnlyFeaturesInsideBounds, bool removeMissingElements) :
-_crop(crop),
-_outputBuffer(outputBuffer),
-_keepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds),
-_keepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds),
-_removeMissingElements(removeMissingElements)
+                           bool keepOnlyFeaturesInsideBounds, bool removeMissingElements)
+  : _crop(crop),
+    _outputBuffer(outputBuffer),
+    _keepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds),
+    _keepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds),
+    _removeMissingElements(removeMissingElements)
 {
 }
 
 void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) const
 {
-  LOG_VARD(cutterShapeOutlineMap->getNodes().size());
+  LOG_VARD(cutterShapeOutlineMap->getNodeCount());
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    cutterShapeOutlineMap, className(), "cutter-shape-outline-map");
-  LOG_VARD(doughMap->getNodes().size());
+  OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, className(), "cutter-shape-outline-map");
+  LOG_VARD(doughMap->getNodeCount());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, className(), "dough-map");
 
@@ -74,15 +73,11 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) co
   cutterShapeOutlineMap->visitRo(v);
   std::shared_ptr<Geometry> cutterShape = v.getUnion();
   if (_outputBuffer != 0.0)
-  {
     cutterShape = cutterShape->buffer(_outputBuffer);
-  }
+  // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+  // clients who are expecting the cookie cutting to occur...
   if (cutterShape->getArea() == 0.0)
-  {
-    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
-    // clients who are expecting the cookie cutting to occur...
     throw HootException("Cutter area is zero. Try increasing the buffer size or check the input.");
-  }
   LOG_VART(cutterShape->toString());
 
   // free up a little RAM
@@ -102,7 +97,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) co
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 
   OsmMapPtr cookieCutMap = doughMap;
-  LOG_VARD(cookieCutMap->getNodes().size());
+  LOG_VARD(cookieCutMap->getNodeCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, className(), "cookie-cut-map");
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LinearMergerAbstract.h"
 
@@ -49,11 +49,10 @@ namespace hoot
 
 int LinearMergerAbstract::logWarnCount = 0;
 
-LinearMergerAbstract::LinearMergerAbstract(
-  const std::set<std::pair<ElementId, ElementId>>& pairs,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-MergerBase(pairs),
-_sublineMatcher(sublineMatcher)
+LinearMergerAbstract::LinearMergerAbstract(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                                           const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
+  : MergerBase(pairs),
+    _sublineMatcher(sublineMatcher)
 {
 }
 
@@ -65,39 +64,33 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
 
   vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-       ++it)
+  for (const auto& id_pair : _pairs)
   {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
+    ElementId eid1 = id_pair.first;
+    ElementId eid2 = id_pair.second;
 
     if (_map->containsElement(eid1) && _map->containsElement(eid2))
-    {
       pairs.emplace_back(eid1, eid2);
-    }
     else
     {
-      LOG_TRACE(
-        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
+      LOG_TRACE("Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
     }
   }
 
   _mergeShortestPairsFirst(pairs, replaced);
 }
 
-void LinearMergerAbstract::_mergeShortestPairsFirst(
-  std::vector<std::pair<ElementId, ElementId>>& pairs,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+void LinearMergerAbstract::_mergeShortestPairsFirst(std::vector<std::pair<ElementId, ElementId>>& pairs,
+                                                    std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
     ShortestFirstComparator shortestFirst;
     shortestFirst.setMap(_map);
     sort(pairs.begin(), pairs.end(), shortestFirst);
     LOG_VART(pairs);
-    for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin(); it != pairs.end();
-         ++it)
+    for (const auto& id_pair : pairs)
     {
-      ElementId eid1 = it->first;
-      ElementId eid2 = it->second;
+      ElementId eid1 = id_pair.first;
+      ElementId eid2 = id_pair.second;
 
       for (size_t i = 0; i < replaced.size(); i++)
       {
@@ -112,14 +105,12 @@ void LinearMergerAbstract::_mergeShortestPairsFirst(
           eid2 = replaced[i].second;
         }
       }
-
       _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
       _mergePair(eid1, eid2, replaced);
     }
 }
 
-void LinearMergerAbstract::_markNeedsReview(
-  ElementPtr e1, ElementPtr e2, QString note, QString reviewType)
+void LinearMergerAbstract::_markNeedsReview(ElementPtr e1, ElementPtr e2, QString note, QString reviewType)
 {
   if (!e1 && !e2)
   {
@@ -134,21 +125,14 @@ void LinearMergerAbstract::_markNeedsReview(
     logWarnCount++;
   }
   else if (e1 && e2)
-  {
     _reviewMarker.mark(_map, e1, e2, note, reviewType);
-  }
   else if (e1)
-  {
     _reviewMarker.mark(_map, e1, note, reviewType);
-  }
   else if (e2)
-  {
     _reviewMarker.mark(_map, e2, note, reviewType);
-  }
 }
 
-bool LinearMergerAbstract::_mergePair(
-  const ElementId& eid1, const ElementId& eid2, vector<pair<ElementId, ElementId>>& /*replaced*/)
+bool LinearMergerAbstract::_mergePair(const ElementId& eid1, const ElementId& eid2, vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
   ElementPtr e1 = _map->getElement(eid1);
   ElementPtr e2 = _map->getElement(eid2);
@@ -173,10 +157,7 @@ bool LinearMergerAbstract::_mergePair(
 void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& e2) const
 {
   if (e1->getElementType() != e2->getElementType())
-  {
-    throw InternalErrorException("Expected both elements to have the same type "
-                                 "when removing spans.");
-  }
+    throw InternalErrorException("Expected both elements to have the same type when removing spans.");
 
   if (e1->getElementType() == ElementType::Way)
   {
@@ -190,13 +171,10 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
     RelationPtr r1 = std::dynamic_pointer_cast<Relation>(e1);
     RelationPtr r2 = std::dynamic_pointer_cast<Relation>(e2);
 
-    if (r1->getMembers().size() != r2->getMembers().size())
-    {
-      throw InternalErrorException("Expected both relations to have the same number of children "
-                                   "when removing spans.");
-    }
+    if (r1->getMemberCount() != r2->getMemberCount())
+      throw InternalErrorException("Expected both relations to have the same number of children when removing spans.");
 
-    for (size_t i = 0; i < r1->getMembers().size(); i++)
+    for (size_t i = 0; i < r1->getMemberCount(); i++)
     {
       ElementId m1 = r1->getMembers()[i].getElementId();
       ElementId m2 = r2->getMembers()[i].getElementId();
@@ -206,9 +184,7 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
   }
 
   if (ConfigOptions().getDebugMapsWriteDetailed())
-  {
     OsmMapWriterFactory::writeDebugMap(_map, className(), "after-remove-spans" + _eidLogString);
-  }
 }
 
 void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) const
@@ -223,11 +199,11 @@ void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) cons
   const set<long>& wids2 = n2w->getWaysByNode(w1->getLastNodeId());
   wids.insert(wids2.begin(), wids2.end());
 
-  for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+  for (auto way_id : wids)
   {
-    if (*it != w1->getId() && *it != w2->getId())
+    if (way_id != w1->getId() && way_id != w2->getId())
     {
-      const WayPtr& w = _map->getWay(*it);
+      const WayPtr& w = _map->getWay(way_id);
       // if this isn't one of the ways we're evaluating for a connection between and it is part of
       // the data set we're conflating in
       if (w->getElementId() != w1->getElementId() &&
@@ -251,9 +227,7 @@ bool LinearMergerAbstract::_directConnect(WayPtr w) const
 {
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(w);
   if (!ls)
-  {
     return false;
-  }
 
   std::unique_ptr<CoordinateSequence> cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(2, 2);
@@ -282,4 +256,3 @@ QString LinearMergerAbstract::toString() const
 }
 
 }
-

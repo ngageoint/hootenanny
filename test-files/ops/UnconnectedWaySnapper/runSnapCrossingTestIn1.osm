@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='15.3724811' minlon='38.9090171' maxlat='15.3778057' maxlon='38.9164573' origin='hootenanny' />
+  <node id='-692271' timestamp='2019-01-28T17:16:50Z' visible='true' version='1' lat='15.37465233144' lon='38.91142132281' />
+  <node id='-692272' timestamp='2019-01-28T17:16:50Z' visible='true' version='1' lat='15.37448159304' lon='38.91086738017' />
+  <node id='-692273' timestamp='2019-01-28T17:16:50Z' visible='true' version='1' lat='15.37430733224' lon='38.91026343614' />
+  <node id='-692274' timestamp='2019-01-28T17:16:50Z' visible='true' version='1' lat='15.37414725203' lon='38.90976145445' />
+  <way id='-1144012' timestamp='2019-01-28T17:16:52Z' visible='true' version='1'>
+    <nd ref='-692272' />
+    <nd ref='-692271' />
+    <tag k='highway' v='residential' />
+    <tag k='source:datetime' v='2019-01-28T17:16:52Z' />
+  </way>
+  <way id='-1144076' action='modify' timestamp='2019-01-28T17:16:52Z' visible='true' version='1'>
+    <nd ref='-692274' />
+    <nd ref='-692273' />
+    <nd ref='-692272' />
+    <tag k='highway' v='residential' />
+    <tag k='length' v='124.4' />
+    <tag k='note' v='way1' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:datetime' v='2019-01-28T17:16:52Z' />
+    <tag k='source:imagery' v='Unknown' />
+  </way>
+</osm>

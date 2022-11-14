@@ -78,8 +78,7 @@ OsmJsonReader::OsmJsonReader()
     _isWeb(false),
     _keepImmediatelyConnectedWaysOutsideBounds(ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
     _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
-    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements()),
-    _queryFilepath(ConfigOptions().getOverpassApiQueryPath())
+    _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {
   setConfiguration(conf());
 }
@@ -100,8 +99,8 @@ bool OsmJsonReader::isSupported(const QString& url) const
   if ((isRelativeUrl || isLocalFile) && url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
     return true;
 
-  // Is it a web address?
-  if (myUrl.host() == ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() || "https" == myUrl.scheme()))
+  // Is it a JSON Overpass web address?
+  if (isOverpassJson(url))
     return true;
 
   // Default to not supported
@@ -137,7 +136,10 @@ void OsmJsonReader::open(const QString& url)
         throw std::runtime_error("Unable to open JSON file");
     }
     else
+    {
+      setOverpassUrl(url);
       _isWeb = true;
+    }
     LOG_VARD(_isFile);
     LOG_VARD(_isWeb);
   }
@@ -196,9 +198,10 @@ void OsmJsonReader::read(const OsmMapPtr& map)
 
   LOG_VARD(_map->getElementCount());
 
-  // See related note in OsmXmlReader::read.
-  if (_bounds.get())
+  //  Bounded network queries are already cropped
+  if (_bounds.get() && !_isWeb)
   {
+    // See related note in OsmXmlReader::read.
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
@@ -209,7 +212,8 @@ void OsmJsonReader::_readToMap()
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
-  if (_bounds.get())
+  //  Bounded network queries are already cropped
+  if (_bounds.get() && !_isWeb)
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
@@ -268,6 +272,8 @@ bool OsmJsonReader::isValidJson(const QString& jsonStr)
 
 void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 {
+  _isFile = false;
+  _isWeb = false;
   _map = map;
   _loadJSON(jsonStr);
   _readToMap();
@@ -276,6 +282,8 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree& tree)
 {
+  _isFile = false;
+  _isWeb = false;
   _propTree = tree;
   _map = std::make_shared<OsmMap>();
   _readToMap();
@@ -288,6 +296,8 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   if (!infile.is_open())
     throw HootException("Unable to read JSON file: " + path);
 
+  _isFile = true;
+  _isWeb = false;
   _loadJSON(infile);
   _map = std::make_shared<OsmMap>();
   _readToMap();
@@ -302,7 +312,6 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   _threadCount = opts.getReaderHttpBboxThreadCount();
   setBounds(GeometryUtils::boundsFromString(opts.getBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
-  _queryFilepath = opts.getOverpassApiQueryPath();
   _boundsString = opts.getBounds();
   _boundsFilename = opts.getBoundsInputFile();
 }
@@ -568,10 +577,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   long uid = _getUid(item);
 
   // Construct node
-  NodePtr pNode(
-    Node::newSp(
-      _defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+  NodePtr pNode(Node::newSp(_defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp, QString::fromStdString(user), uid));
 
   // Add tags
   _addTags(item, pNode);
@@ -624,7 +630,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   }
   _wayIdMap.insert(id, newId);
 
-  const QString msg = "Reading " + ElementId(ElementType::Way, newId).toString() + "...";
   long version = _getVersion(item, ElementType::Way, newId);
   long changeset = _getChangeset(item);
   unsigned int timestamp = _getTimestamp(item);
@@ -632,10 +637,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   long uid = _getUid(item);
 
   // Construct Way
-  WayPtr pWay =
-    std::make_shared<Way>(
-      _defaultStatus, newId, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid);
+  WayPtr pWay = std::make_shared<Way>(_defaultStatus, newId, _defaultCircErr, changeset, version, timestamp, QString::fromStdString(user), uid);
 
   // Add nodes
   if (item.not_found() != item.find("nodes"))
@@ -732,10 +734,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   long uid = _getUid(item);
 
   // Construct Relation
-  RelationPtr pRelation =
-    std::make_shared<Relation>(
-      _defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp,
-      QString::fromStdString(user), uid);
+  RelationPtr pRelation = std::make_shared<Relation>(_defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp, QString::fromStdString(user), uid);
 
   // Add members
   if (item.not_found() != item.find("members"))
@@ -870,6 +869,8 @@ void OsmJsonReader::_readFromHttp()
 {
   if (!_sourceUrl.isValid())
     throw HootException("Invalid URL: " + _sourceUrl.toString(QUrl::RemoveUserInfo));
+  if (!_isOverpass)
+    throw HootException("Unable to read non-Overpass JSON sources");
   //  When reading in from the Overpass there won't be duplicates unless we are
   //  dividing up the bounds into smaller quadrants that fit below the 0.25 degrees
   //  squared limits, when we do it is safe to ignore duplicate elements

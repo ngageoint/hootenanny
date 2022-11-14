@@ -311,9 +311,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     pMap = _map->shared_from_this();
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);
     if (m2e2.contains(ee))
-    {
       count += edgeLen;
-    }
     else // try the reverse
     {
       ee.reverse();

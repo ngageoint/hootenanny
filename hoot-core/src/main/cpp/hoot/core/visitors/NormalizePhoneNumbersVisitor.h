@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NORMALIZE_PHONE_NUMBERS_VISITOR_H
 #define NORMALIZE_PHONE_NUMBERS_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/phone/PhoneNumberNormalizer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -61,9 +61,7 @@ public:
   QString getInitStatusMessage() const override { return "Normalizing phone numbers..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Normalized " + QString::number(_phoneNumberNormalizer.getNumNormalized()) +
-      " phone numbers";
+    return QString("Normalized %1 phone numbers").arg(QString::number(_phoneNumberNormalizer.getNumNormalized()));
   }
 
   QString getName() const override { return className(); }

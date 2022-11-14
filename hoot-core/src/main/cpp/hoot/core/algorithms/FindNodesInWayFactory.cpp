@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "FindNodesInWayFactory.h"
@@ -49,12 +49,9 @@ void FindNodesInWayFactory::addWay(const ConstWayPtr& w)
   _nodesToSearch.insert(nids.begin(), nids.end());
 }
 
-NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map, const Coordinate& c,
-                                          Status s, double circularError)
+NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map, const Coordinate& c, Status s, double circularError)
 {
-  LOG_TRACE(
-    "Creating node with coord: " << c << ", status: " << s << ", and CE: " << circularError <<
-    "...");
+  LOG_TRACE("Creating node with coord: " << c << ", status: " << s << ", and CE: " << circularError << "...");
 
   long result = std::numeric_limits<long>::max();
 
@@ -68,8 +65,7 @@ NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map, const Coordinate
       // if there are multiple corresponding nodes, throw an exception.
       if (result != std::numeric_limits<long>::max() && result != nid)
       {
-        // Logging this as a warning, since it happens every once in awhile and life seems to go
-        // on...
+        // Logging this as a warning, since it happens every once in awhile and life seems to go on...
         const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
         if (logWarnCount < logWarnMessageLimit)
         {

@@ -22,24 +22,24 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "MembersPerRelationVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MembersPerRelationVisitor)
 
-MembersPerRelationVisitor::MembersPerRelationVisitor() :
-_totalMembers(0),
-_minMembersPerRelation(0),
-_maxMembersPerRelation(0)
+MembersPerRelationVisitor::MembersPerRelationVisitor()
+  : _totalMembers(0),
+    _minMembersPerRelation(0),
+    _maxMembersPerRelation(0)
 {
 }
 
@@ -48,16 +48,12 @@ void MembersPerRelationVisitor::visit(const ConstElementPtr& e)
   if (_crit.isSatisfied(e))
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-    const int numMembers = relation->getMembers().size();
+    const int numMembers = static_cast<int>(relation->getMemberCount());
     _totalMembers += numMembers;
     if (_minMembersPerRelation == 0 || numMembers < _minMembersPerRelation)
-    {
       _minMembersPerRelation = numMembers;
-    }
     if (numMembers > _maxMembersPerRelation)
-    {
       _maxMembersPerRelation = numMembers;
-    }
     _numAffected++;
   }
 }

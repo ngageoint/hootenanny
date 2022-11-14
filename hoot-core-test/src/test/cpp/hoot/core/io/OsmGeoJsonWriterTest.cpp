@@ -22,12 +22,8 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
-
-// geos
-#include <geos/io/WKTReader.h>
-#include <geos/geom/Point.h>
 
 // Hoot
 #include <hoot/core/TestUtils.h>
@@ -61,15 +57,12 @@ public:
 
   void runAllDataTypesTest()
   {
-    Settings s;
-    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
-    runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.geojson", &s);
+    runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.geojson");
   }
 
   void runDcTigerTest()
   {
     Settings s;
-    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
     runTest("test-files/DcTigerRoads.osm", "DcTigerRoads.geojson", &s);
   }
 
@@ -80,17 +73,13 @@ public:
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
     if (Log::getInstance().getLevel() >= Log::Info)
       Log::getInstance().setLevel(Log::Error);
-    Settings s;
-    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
-    runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson", &s);
+   runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson");
     Log::getInstance().setLevel(logLevel);
   }
 
   void runObjectGeoJsonTest()
   {
-    Settings s;
-    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
-    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriter.geojson", &s);
+    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
   }
 
   void runObjectGeoJsonHootTest()
@@ -124,6 +113,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonWriterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonWriterTest, "current");
 
 }

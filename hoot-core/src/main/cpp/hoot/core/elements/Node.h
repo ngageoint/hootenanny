@@ -71,7 +71,7 @@ public:
    * @return A newly allocated and initialized Node shared pointer.
    */
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y,
-    Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
+                                     Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
                                      long changeset, long version, quint64 timestamp,
                                      QString user = ElementData::USER_EMPTY,
@@ -119,13 +119,8 @@ public:
   /**
    * @see Element
    */
-  void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
-               const bool recursive = false) const override;
-  /**
-   * @see Element
-   */
-  void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
-               const bool recursive = false) override;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) const override;
+  void visitRw(ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) override;
 
   double getX() const { return _nodeData.getX(); }
   double getY() const { return _nodeData.getY(); }

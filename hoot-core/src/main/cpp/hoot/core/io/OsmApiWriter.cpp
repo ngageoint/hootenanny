@@ -452,7 +452,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           {
             //  The changeset was closed already so set the ID to -1 and reprocess
             id = -1;
-
             //  Split the changeset into half so that it is smaller and won't fail
             if ((int)workInfo->size() > _maxChangesetSize / 2)
               _splitChangeset(workInfo);
@@ -483,8 +482,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             continue;
           }
           //  Split the changeset and retry
-          if (!_splitChangeset(workInfo, info->response) &&
-              !workInfo->getAttemptedResolveChangesetIssues())
+          if (!_splitChangeset(workInfo, info->response) && !workInfo->getAttemptedResolveChangesetIssues())
           {
             //  Set the attempt issues resolved flag
             workInfo->setAttemptedResolveChangesetIssues(true);
@@ -498,8 +496,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
-          if (!_splitChangeset(workInfo, info->response) &&
-              !workInfo->getAttemptedResolveChangesetIssues())
+          if (!_splitChangeset(workInfo, info->response) && !workInfo->getAttemptedResolveChangesetIssues())
           {
             //  Set the attempt issues resolved flag
             workInfo->setAttemptedResolveChangesetIssues(true);
@@ -750,7 +747,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
     QUrlQuery query(map);
     //  Use the correct type of bbox for this query
     geos::geom::Envelope envelope(-77.42249541, -77.42249539, 38.96003149, 38.96003151);
-    QString bboxQuery = GeometryUtils::toConfigString(envelope);
+    QString bboxQuery = GeometryUtils::toLonLatString(envelope);
     query.addQueryItem("bbox", bboxQuery);
     map.setQuery(query);
     request->networkRequest(map, _timeout);
@@ -828,11 +825,8 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions) const
     {
       QStringRef name = reader.name();
       QXmlStreamAttributes attributes = reader.attributes();
-      if (name == "permission" && attributes.hasAttribute("name") &&
-          attributes.value("name") == "allow_write_api")
-      {
+      if (name == "permission" && attributes.hasAttribute("name") && attributes.value("name") == "allow_write_api")
         return true;
-      }
     }
   }
   return false;
@@ -1171,9 +1165,9 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
     request = std::make_shared<HootNetworkRequest>();
   }
   else if (!_consumerKey.isEmpty() &&
-      !_consumerSecret.isEmpty() &&
-      !_accessToken.isEmpty() &&
-      !_secretToken.isEmpty())
+           !_consumerSecret.isEmpty() &&
+           !_accessToken.isEmpty() &&
+           !_secretToken.isEmpty())
   {
     // Old, remove when oauth2 works
     //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
@@ -1187,8 +1181,7 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
   else if (!_oauth2AccessToken.isEmpty())
   {
     //  When OAuth2 token is present and authentication is requested, pass OAuth2 crendentials
-    request =
-      std::make_shared<HootNetworkRequest>(_oauth2AccessToken);
+    request = std::make_shared<HootNetworkRequest>(_oauth2AccessToken);
   }
   else
   {
@@ -1338,29 +1331,37 @@ void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId) c
   switch (info->status)
   {
   /** These error states are understandable and aren't "errors" per-se */
-  case HttpResponseCode::HTTP_CONFLICT:               //  Conflict, check for version conflicts and fix, or split and continue
+  case HttpResponseCode::HTTP_CONFLICT:
+    //  Conflict, check for version conflicts and fix, or split and continue
     LOG_STATUS("Version conflict in changeset " << changesetId << " upload. Updating element.");
     break;
-  case HttpResponseCode::HTTP_NOT_FOUND:              //  Diff contains elements where the given ID could not be found
+  case HttpResponseCode::HTTP_NOT_FOUND:
+    //  Diff contains elements where the given ID could not be found
     LOG_STATUS("Element with given ID not found in changeset " << changesetId << ", moving element to manual changeset.");
     break;
-  case HttpResponseCode::HTTP_PRECONDITION_FAILED:    //  Precondition Failed, Relation with id cannot be saved due to other member
+  case HttpResponseCode::HTTP_PRECONDITION_FAILED:
+    //  Precondition Failed, Relation with id cannot be saved due to other member
     LOG_STATUS("Required precondition not met in changeset " << changesetId << ", moving element to manual changeset.");
     break;
-  case HttpResponseCode::HTTP_GONE:                   //  Element has already been deleted, split and retry (error body is blank sometimes)
+  case HttpResponseCode::HTTP_GONE:
+    //  Element has already been deleted, split and retry (error body is blank sometimes)
     LOG_STATUS("Element to be deleted already deleted, removing from changeset " << changesetId);
     break;
-  case HttpResponseCode::HTTP_BAD_REQUEST:            //  Placeholder ID is missing or not unique
+  case HttpResponseCode::HTTP_BAD_REQUEST:
+    //  Placeholder ID is missing or not unique
     LOG_STATUS("Element placehoder ID is missing or not unique in changeset " << changesetId << ", moving element the manual changeset.");
     break;
   /** These error states are actual errors and the user should report them */
-  case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
+  case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:
+    //  Internal Server Error, could be caused by the database being saturated
     LOG_STATUS("API server responded with internal server error, API is not stable.  Changeset " << changesetId);
     break;
-  case HttpResponseCode::HTTP_BAD_GATEWAY:            //  Bad Gateway, there are issues with the gateway, split and retry
+  case HttpResponseCode::HTTP_BAD_GATEWAY:
+    //  Bad Gateway, there are issues with the gateway, split and retry
     LOG_STATUS("API server responded with bad gateway error, API is not stable.  Changeset " << changesetId);
     break;
-  case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:        //  Gateway Timeout, server is taking too long, split and retry
+  case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:
+    //  Gateway Timeout, server is taking too long, split and retry
     LOG_STATUS("API server responded with gateway timeout, API is not stable.  Changeset " << changesetId);
     break;
   case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef UNIFORM_TASK_GRID_GENERATOR_H
 #define UNIFORM_TASK_GRID_GENERATOR_H
@@ -63,7 +63,8 @@ public:
    */
   UniformTaskGridGenerator(const QStringList& inputs, const int gridDimensionSize = 2,
                            const QString& output = "");
-  virtual ~UniformTaskGridGenerator() = default;
+
+  ~UniformTaskGridGenerator() override = default;
 
   /**
    * @see TaskGridGenerator

@@ -104,8 +104,7 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
 
   // count the manual matches made
 
-  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor =
-    std::make_shared<CountManualMatchesVisitor>();
+  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor = std::make_shared<CountManualMatchesVisitor>();
   map1->visitRo(*manualMatchVisitor);
   const int numManualMatches1 = static_cast<int>(manualMatchVisitor->getStat());
   manualMatchVisitor = std::make_shared<CountManualMatchesVisitor>();
@@ -226,13 +225,9 @@ std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPat
 {
   std::shared_ptr<QFile> outputFile = std::make_shared<QFile>(outputPath);
   if (outputFile->exists())
-  {
     outputFile->remove();
-  }
   if (!outputFile->open(QFile::WriteOnly | QFile::Text))
-  {
     throw HootException("Unable to write to output file.");
-  }
   return outputFile;
 }
 
@@ -244,8 +239,7 @@ QSet<ElementId> ScoreMatchesDiff::_getAllIds(const ConstOsmMapPtr& map)
   return CollectionUtils::stdSetToQSet(idVis.getElementSet());
 }
 
-QMap<ElementId, QString> ScoreMatchesDiff::_getMatchStatuses(
-  const ConstOsmMapPtr& map, const QString& tagKey) const
+QMap<ElementId, QString> ScoreMatchesDiff::_getMatchStatuses(const ConstOsmMapPtr& map, const QString& tagKey) const
 {
   LOG_DEBUG("Retrieving match status: " << tagKey << " for " << map->getName() << "...");
   ElementIdToTagValueMapper vis;

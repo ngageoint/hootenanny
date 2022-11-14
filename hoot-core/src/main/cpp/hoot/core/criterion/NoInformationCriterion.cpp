@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "NoInformationCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -42,17 +42,16 @@ NoInformationCriterion::NoInformationCriterion()
   setConfiguration(conf());
 }
 
-NoInformationCriterion::NoInformationCriterion(bool treatReviewTagsAsMetadata) :
-_treatReviewTagsAsMetadata(treatReviewTagsAsMetadata)
+NoInformationCriterion::NoInformationCriterion(bool treatReviewTagsAsMetadata)
+  : _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata)
 {
 }
 
 bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags tags = e->getTags();
+  const Tags& tags = e->getTags();
   const int informationCount = tags.getInformationCount();
-  const int reviewTagCount =
-    tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
+  const int reviewTagCount = tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
 
   //LOG_VART(e);
   LOG_VART(e->getElementId());
@@ -62,9 +61,7 @@ bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 
   bool isSatisified = informationCount == 0;
   if (!_treatReviewTagsAsMetadata)
-  {
     isSatisified &= reviewTagCount == 0;
-  }
   LOG_VART(isSatisified);
   return isSatisified;
 }

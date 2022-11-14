@@ -70,11 +70,8 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstO
 void NetworkDetails::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _sublineMatcher =
-    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _classifier =
-    Factory::getInstance().constructObject<HighwayClassifier>(
-      opts.getConflateMatchHighwayClassifier());
+  _sublineMatcher = SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
+  _classifier = Factory::getInstance().constructObject<HighwayClassifier>(opts.getConflateMatchHighwayClassifier());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
@@ -88,8 +85,7 @@ Radians NetworkDetails::calculateHeading(ConstEdgeLocationPtr el) const
   return WayHeading::calculateHeading(wl);
 }
 
-Radians NetworkDetails::calculateHeadingAtVertex(
-  ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const
+Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const
 {  
   // Is it possible if e is a relation and has one way member, then we should use that for the way
   // here? Haven't seen evidence of that yet, so not implementing it.
@@ -129,7 +125,7 @@ Meters NetworkDetails::calculateLength(ConstEdgeStringPtr e) const
 {
   Meters l = 0.0;
   for (const auto& ee : e->getAllEdges())
-    l+= calculateLength(ee.getSubline());
+    l += calculateLength(ee.getSubline());
 
   return l;
 }
@@ -533,18 +529,13 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     // much noise.
     LOG_VART(e1->isPartial());
     LOG_VART(e2->isPartial());
-    if (ws1->calculateLength() < sr && ws2->calculateLength() < sr &&
-        (e1->isPartial() || e2->isPartial()))
-    {
+    if (ws1->calculateLength() < sr && ws2->calculateLength() < sr && (e1->isPartial() || e2->isPartial()))
       result = 0.0;
-    }
     else
     {
-      RelationPtr r1 =
-        std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
+      RelationPtr r1 = std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
       r1->setType(MetadataTags::RelationMultilineString());
-      RelationPtr r2 =
-        std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
+      RelationPtr r2 = std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
       r2->setType(MetadataTags::RelationMultilineString());
 
       // create a set of all the way IDs
@@ -572,8 +563,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
       WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(ws1, ws2);
       // Convert from a mapping to a WaySublineMatchString.
-      WaySublineMatchStringPtr matchString =
-        WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
+      WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
       MatchClassification c;
       // calculate the match score
@@ -691,10 +681,10 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkEdgePtr e) const
   }
   else
   {
-    for (int i = 0; i < e->getMembers().size(); ++i)
+    for (const auto& member : e->getMembers())
     {
-      if (ce < e->getMembers()[0]->getCircularError())
-        ce = e->getMembers()[0]->getCircularError();
+      if (ce < member->getCircularError())
+        ce = member->getCircularError();
     }
   }
 
@@ -749,7 +739,7 @@ Meters NetworkDetails::getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const
   return result;
 }
 
-const NetworkDetails::SublineCache NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
+NetworkDetails::SublineCache NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
 {
   ElementId e1 = w1->getElementId();
   ElementId e2 = w2->getElementId();

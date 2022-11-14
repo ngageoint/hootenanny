@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MultiUseBuildingCriterion.h"
 
@@ -48,11 +48,8 @@ bool MultiUseBuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 
   //(element is in a building category OR is an amenity) AND
   //(element has a multi-purpose building tag OR is in a multi-use category)
-  return
-    (osmSchema.getCategories(e->getTags()).intersects(OsmSchemaCategory::building()) ||
-      tags.contains("amenity")) &&
-    (tags.get("building:use") == "multipurpose" ||
-     osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
+  return (osmSchema.getCategories(e->getTags()).intersects(OsmSchemaCategory::building()) || tags.contains("amenity")) &&
+    (tags.get("building:use") == "multipurpose" || osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 }
 
 }

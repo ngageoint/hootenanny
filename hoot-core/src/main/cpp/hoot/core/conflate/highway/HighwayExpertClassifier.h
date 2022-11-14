@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAYEXPERTCLASSIFIER_H
 #define HIGHWAYEXPERTCLASSIFIER_H
@@ -43,15 +43,12 @@ public:
   HighwayExpertClassifier() = default;
   ~HighwayExpertClassifier() = default;
 
-  MatchClassification classify(
-    const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    const WaySublineMatchString& match) override;
-  MatchClassification classify(
-    const ConstOsmMapPtr& map, const WaySublineMatch& match) const;
+  MatchClassification classify(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+                               const WaySublineMatchString& match) override;
+  MatchClassification classify(const ConstOsmMapPtr& map, const WaySublineMatch& match) const;
 
-  std::map<QString, double> getFeatures(
-    const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
-    const WaySublineMatchString& match) const override;
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
+                                        const WaySublineMatchString& match) const override;
 };
 
 }

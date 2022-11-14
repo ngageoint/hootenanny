@@ -55,9 +55,8 @@ public:
   /**
    * Search the provided map for building matches and add the matches to the matches vector.
    */
-  virtual void createMatches(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-    ConstMatchThresholdPtr threshold);
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                             ConstMatchThresholdPtr threshold);
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take

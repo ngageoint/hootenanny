@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RandomTagModifier.h"
 
@@ -31,13 +31,13 @@
 #include <boost/random/uniform_real.hpp>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/util/Settings.h>
 
 // Standard
 #include <algorithm>
@@ -47,8 +47,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomTagModifier)
 
-RandomTagModifier::RandomTagModifier() :
-_localRng(std::make_shared<boost::minstd_rand>())
+RandomTagModifier::RandomTagModifier()
+  : _localRng(std::make_shared<boost::minstd_rand>())
 {
   _rng = _localRng.get();
 }
@@ -60,13 +60,9 @@ void RandomTagModifier::setConfiguration(const Settings& conf)
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
-  {
     _rng->seed(RandomNumberUtils::generateSeed());
-  }
   else
-  {
     _rng->seed(seed);
-  }
 
   _exemptTagKeys = configOptions.getRandomTagModifierExemptTagKeys();
   // hardcode adding REF1/REF2 here since they aren't metadata tags; should they be?
@@ -82,10 +78,9 @@ void RandomTagModifier::visit(const std::shared_ptr<Element>& e)
   boost::uniform_real<> uni(0.0, 1.0);
 
   OsmSchema& schema = OsmSchema::getInstance();
-  Tags t = e->getTags();
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  const QList<QString> keys = e->getTags().keys();
+  for (const auto& tagKey : keys)
   {
-    const QString tagKey = it.key();
     if (uni(*_rng) <= _p && !_exemptTagKeys.contains(tagKey) && !schema.isMetaData(tagKey, ""))
     {
       if (!_replacementTagKeys.contains(tagKey))

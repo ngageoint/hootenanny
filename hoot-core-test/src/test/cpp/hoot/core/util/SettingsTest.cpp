@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,6 +46,7 @@ class SettingsTest : public HootTestFixture
   CPPUNIT_TEST(baseSettingsTest);
   CPPUNIT_TEST(invalidOptionNameTest);
   CPPUNIT_TEST(invalidOperatorsTest);
+  CPPUNIT_TEST(prependTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -127,24 +128,19 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, uut.getBool("uuid.helper.repeatable"));
     //  Default value before change in AttributeConflation.conf
     HOOT_STR_EQUALS("OverwriteTag2Merger", uut.getString("tag.merger.default"));
-    HOOT_STR_EQUALS(
-      "LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
+    HOOT_STR_EQUALS("LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
     //  Default value before change in NetworkAlgorithm.conf
     HOOT_STR_EQUALS("HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS(
-      "MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
+    HOOT_STR_EQUALS("MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
 
-    uut.loadFromString(
-      "{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
+    uut.loadFromString("{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
     //  From the JSON
     CPPUNIT_ASSERT_EQUAL(true, uut.getBool("uuid.helper.repeatable"));
     //  From AttributeConflation.conf
     HOOT_STR_EQUALS("OverwriteTag1Merger", uut.getString("tag.merger.default"));
-    HOOT_STR_EQUALS(
-      "LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
+    HOOT_STR_EQUALS("LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
     //  From NetworkAlgorithm.conf
-    HOOT_STR_EQUALS(
-      "HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
     HOOT_STR_EQUALS("MaximalSublineMatcher", uut.getString("highway.subline.matcher"));
   }
 
@@ -162,8 +158,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Unknown settings option: (blah)").toStdString(), exceptionMsg.toStdString());
+    HOOT_STR_EQUALS("Unknown settings option: (blah)", exceptionMsg);
   }
 
   void invalidOperatorsTest()
@@ -189,8 +184,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    expectedErrorMessage =
-      "Invalid option operator class name: " + Node::className();
+    expectedErrorMessage = "Invalid option operator class name: " + Node::className();
     CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
 
     args.clear();
@@ -211,6 +205,17 @@ public:
     }
     expectedErrorMessage = "Invalid option operator class name: blah";
     CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
+  }
+
+  void prependTest()
+  {
+    Settings uut;
+    uut.loadDefaults();
+    //  Check the original value
+    HOOT_STR_EQUALS(QString("error:circular;accuracy"), uut.getString("circular.error.tag.keys"));
+    //  Prepend a few keys and check the new value
+    uut.prepend("circular.error.tag.keys", QStringList({"first", "second", "third"}));
+    HOOT_STR_EQUALS(QString("first;second;third;error:circular;accuracy"), uut.getString("circular.error.tag.keys"));
   }
 };
 

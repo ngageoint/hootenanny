@@ -22,33 +22,29 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementComparer.h"
 
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
 
 namespace hoot
 {
 
-ElementComparer::ElementComparer() :
-_ignoreElementId(false),
-_ignoreVersion(false)
+ElementComparer::ElementComparer()
+  : _ignoreElementId(false),
+    _ignoreVersion(false)
 {
 }
 
 QString ElementComparer::toHashString(const ConstElementPtr& e) const
 {
   if (!e)
-  {
     return "";
-  }
-
   ElementHashVisitor hashVis;
   hashVis.setOsmMap(_map.get());
   // This doesn't seem right, but its been working this way for awhile now...remove later?
@@ -59,50 +55,41 @@ QString ElementComparer::toHashString(const ConstElementPtr& e) const
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
   if (!e1 || !e2)
-  {
     return false;
-  }
-
   // different types?
   if (e1->getElementType() != e2->getElementType())
   {
     LOG_TRACE("Compare failed on type: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
-
   // different IDs?
   if (!_ignoreElementId && (e1->getElementId() != e2->getElementId()))
   {
     LOG_TRACE("Compare failed on ID: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
-
   // different versions?
   if (!_ignoreVersion && (e1->getVersion() != e2->getVersion()))
   {
     LOG_TRACE("Compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
-
   if (_ignoreElementId && !_map.get())
-  {
-    throw IllegalArgumentException(
-      "If ignoring element IDs in ElementComparer a map must be passed in.");
-  }
+    throw IllegalArgumentException("If ignoring element IDs in ElementComparer a map must be passed in.");
 
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
 
   switch (e1->getElementType().getEnum())
   {
-    case ElementType::Node:
-      return _compareNode(e1, e2);
-    case ElementType::Way:
-      return _compareWay(e1, e2);
-    case ElementType::Relation:
-      return _compareRelation(e1, e2);
-    default:
-      throw IllegalArgumentException("Unexpected element type.");
+  case ElementType::Node:
+    return _compareNode(e1, e2);
+  case ElementType::Way:
+    return _compareWay(e1, e2);
+  case ElementType::Relation:
+    return _compareRelation(e1, e2);
+  default:
+    throw IllegalArgumentException("Unexpected element type.");
   }
 }
 
@@ -114,9 +101,7 @@ void ElementComparer::_setHash(ElementPtr element) const
   // This doesn't seem right, but its been working this way for awhile now...remove later?
   hashVis.setIncludeCircularError(true);
   if (!element->getTags().contains(MetadataTags::HootHash()))
-  {
     hashVis.visit(element);
-  }
 }
 
 bool ElementComparer::_compareNode(ElementPtr re, ElementPtr e) const
@@ -227,7 +212,7 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
       return false;
     }
 
-    for (size_t i = 0; i < rr->getMembers().size(); i++)
+    for (size_t i = 0; i < rr->getMemberCount(); i++)
     {
       if (rr->getMembers()[i].getRole() != r->getMembers()[i].getRole() ||
           rr->getMembers()[i].getElementId() != r->getMembers()[i].getElementId())
@@ -252,14 +237,11 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
 
 bool ElementComparer::_haveSameHash(ElementPtr re, ElementPtr e) const
 {
-  if (!re->getTags().contains(MetadataTags::HootHash()) ||
-      !e->getTags().contains(MetadataTags::HootHash()))
+  if (!re->getTags().contains(MetadataTags::HootHash()) || !e->getTags().contains(MetadataTags::HootHash()))
   {
     throw HootException(
       QString("ElementComparer requires the %1 tag be set for element comparison. Elements: %2, %3")
-        .arg(MetadataTags::HootHash())
-        .arg(re->getElementId().toString())
-        .arg(e->getElementId().toString()));
+        .arg(MetadataTags::HootHash(), re->getElementId().toString(), e->getElementId().toString()));
   }
 
   bool same = false;

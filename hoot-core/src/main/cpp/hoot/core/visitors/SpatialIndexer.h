@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SpatialIndexer_H
 #define SpatialIndexer_H
@@ -60,10 +60,9 @@ public:
 
   static QString className() { return "SpatialIndexer"; }
 
-  explicit SpatialIndexer(
-    std::shared_ptr<Tgs::HilbertRTree>& index, std::deque<ElementId>& indexToEid,
-    const std::shared_ptr<ElementCriterion>& criterion,
-    const std::function<Meters (const ConstElementPtr&)>& getSearchRadius, ConstOsmMapPtr pMap);
+  explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index, std::deque<ElementId>& indexToEid,
+                          const std::shared_ptr<ElementCriterion>& criterion,
+                          const std::function<Meters (const ConstElementPtr&)>& getSearchRadius, ConstOsmMapPtr pMap);
   ~SpatialIndexer() override = default;
 
   /**
@@ -90,11 +89,10 @@ public:
    * elements found
    * @return element IDs of the neighbors
    */
-  static std::set<ElementId> findNeighbors(
-    const geos::geom::Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
-    const std::deque<ElementId>& indexToEid, ConstOsmMapPtr pMap,
-    const ElementType& elementType = ElementType::Unknown,
-    const bool includeContainingRelations = true);
+  static std::set<ElementId> findNeighbors(const geos::geom::Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
+                                           const std::deque<ElementId>& indexToEid, ConstOsmMapPtr pMap,
+                                           const ElementType& elementType = ElementType::Unknown,
+                                           const bool includeContainingRelations = true);
   /**
    * Find nodes nearby a specified node sorted by increasing distance given a bounds
    *
@@ -105,10 +103,9 @@ public:
    * @param pMap the map to search
    * @return element IDs of the neighbors
    */
-  static QList<ElementId> findSortedNodeNeighbors(
-    const ConstNodePtr& node, const geos::geom::Envelope& env,
-    const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
-    ConstOsmMapPtr pMap);
+  static QList<ElementId> findSortedNodeNeighbors(const ConstNodePtr& node, const geos::geom::Envelope& env,
+                                                  const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
+                                                  ConstOsmMapPtr pMap);
 
   QString getInitStatusMessage() const override
   { return "Indexing elements..."; }
@@ -131,7 +128,6 @@ private:
   std::vector<Tgs::Box> _boxes;
   std::vector<int> _fids;
 };
-
 
 }
 

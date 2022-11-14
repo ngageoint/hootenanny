@@ -359,7 +359,7 @@ QStringList Tags::getList(const QString& k) const
   return result;
 }
 
-QStringList Tags::getMatchingKeys(const QStringList& keys)
+QStringList Tags::getMatchingKeys(const QStringList& keys) const
 {
   QStringList result;
   for (const auto& key : qAsConst(keys))
@@ -412,7 +412,7 @@ QStringList Tags::getNames(const bool includeAltName) const
   // make sure the _nameKeys field is populated.
   getNameKeys();
 
-  for (auto key : qAsConst(_nameKeys))
+  for (const auto& key : qAsConst(_nameKeys))
   {
     if (includeAltName || (!includeAltName && key.toLower() != "alt_name"))
       readValues(key, result);
@@ -445,8 +445,7 @@ const QStringList& Tags::getNameKeys()
   // Getting the name tags can be a bit expensive, so we'll just do it once.
   if (_nameKeys.empty())
   {
-    const vector<SchemaVertex>& tags =
-      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
+    const vector<SchemaVertex>& tags = OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
     for (const auto& vertex : tags)
       _nameKeys.append(vertex.getKey());
   }
@@ -547,9 +546,31 @@ bool Tags::hasSameNonMetadataTags(const Tags& other) const
   return otherCopy == thisCopy;
 }
 
+int Tags::removeHootTags()
+{
+  return removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+}
+
+int Tags::removeNonReviewHootTags()
+{
+  QStringList keysToRemove;
+  for (auto it = constBegin(); it != constEnd(); ++it)
+  {
+    const QString key = it.key();
+    if (key.startsWith(MetadataTags::HootTagPrefix())  && !key.startsWith(MetadataTags::HootReviewTagPrefix()))
+      keysToRemove.append(key);
+  }
+
+  int numRemoved = 0;
+  for (const auto& key : qAsConst(keysToRemove))
+    numRemoved += remove(key);
+  return numRemoved;
+}
+
 int Tags::removeMetadata()
 {
-  int numRemoved = removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+  //  Remove the hoot:* tags first
+  int numRemoved = removeHootTags();
 
   // there are some other metadata keys that don't start with 'hoot:'
   QStringList keysToRemove;

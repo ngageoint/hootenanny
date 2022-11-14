@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "LibPostalInit.h"
 
@@ -39,16 +39,12 @@ LibPostalInit::LibPostalInit()
 {
   // failsafe
   if (!ConfigOptions().getAddressMatchEnabled())
-  {
-    throw IllegalArgumentException(
-      "libpostal cannot be initialized due to address matching being disabled.");
-  }
+    throw IllegalArgumentException("libpostal cannot be initialized due to address matching being disabled.");
 
   // This init can take up to ~5 seconds.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
-      !libpostal_setup_language_classifier_datadir(
-        ConfigOptions().getLibpostalDataDir().toUtf8().data()))
+      !libpostal_setup_language_classifier_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()))
   {
     throw HootException("libpostal setup failed.");
   }

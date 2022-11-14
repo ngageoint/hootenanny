@@ -129,13 +129,19 @@ tds71 = {
       });
     }
 
-    // Create a lookup table of Thematic structure attributes. Note this is <GLOBAL>
-    tds71.thematicLookup = translate.makeThematicAttrLookup(tds71.thematicSchema);
+    // Create a lookup table of thematic attributes. Note this is <GLOBAL>
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
+    {
+      tds71.thematicLookup = translate.makeThematicAttrLookup(translate.addTagFeatures(tds71.thematicSchema));
+    }
+    else
+    {
+      tds71.thematicLookup = translate.makeThematicAttrLookup(translate.addSingleTagFeature(tds71.thematicSchema));
+    }
     // Debug:
     // print("tds71.thematicLookup");
     // translate.dumpLookup(tds71.thematicLookup);
     // print('##########');
-
 
     // Build a lookup table  of F_CODE to Thematic layer names
     tds71.thematicGroupList = {}
@@ -152,7 +158,7 @@ tds71 = {
     if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
-      tds71.thematicSchema = translate.addO2sFeatures(translate.addTagFeatures(tds71.thematicSchema));
+      tds71.thematicSchema = translate.addO2sFeatures(tds71.thematicSchema);
     }
     else
     {
@@ -164,7 +170,7 @@ tds71 = {
       else
       {
         // Add O2S and OSMTAGS
-      tds71.thematicSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(tds71.thematicSchema));
+      tds71.thematicSchema = translate.addSingleO2sFeature(tds71.thematicSchema);
       }
     }
 
@@ -774,7 +780,7 @@ tds71 = {
         }
         else
         {
-          if (tags.highway !== 'road') tags.highway = 'unclassified';
+          if (tags.highway !== 'road' && tags.highway !== 'pedestrian') tags.highway = 'unclassified';
         }
       }
       else if (tags['ref:road:type'] == 'pedestrian')
@@ -1043,6 +1049,11 @@ tds71 = {
       } // End switch
       break;
 
+    case 'AL170': // Plaza
+      // Pedestrian areas go back to being Highway features.
+      if (tags.highway == 'pedestrian') delete tags.landuse;
+      break;
+
     case 'AN010': // Railway
       if (tags['railway:track'] == 'monorail')
       {
@@ -1114,9 +1125,13 @@ tds71 = {
       }
       break;
 
-
     case 'EA031': // Botanic Garden
       if (! tags.leisure) tags.leisure = 'garden';
+      break;
+
+    case 'EA050': // Vineyard
+      // Landuse = vineyard implies crop=grape
+      if (tags.crop == 'grape') delete tags.crop;
       break;
 
     case 'EC015': // Forest
@@ -1392,7 +1407,7 @@ tds71 = {
       }
     } // End cycleList
 
-    // SOme highway cleanup
+    // Some highway cleanup
     switch (tags.highway)
     {
       case undefined:
@@ -1424,6 +1439,18 @@ tds71 = {
         tags.junction = 'roundabout';
         break;
         // ['t.highway == "steps"','t.highway = "footway"'],
+
+      case 'pedestrian':
+        if (tags.area == 'yes')
+        {
+          attrs.F_CODE = 'AL170'  // Plaza vs Road
+        }
+        else
+        {
+          attrs.F_CODE = 'AP030'
+        }
+        break;
+
     } // End Highway cleanup
 
     // Ice roads are a special case.
@@ -2016,7 +2043,7 @@ tds71 = {
         'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
         'barrier':'AP040','tourism':'AL013','junction':'AP020',
         'mine:access':'AA010','cutting':'DB070','tomb':'AL036',
-        'shop':'AL015','office':'AL015'
+        'shop':'AL013','office':'AL013'
       };
 
       for (var i in fcodeMap)
@@ -2265,6 +2292,19 @@ tds71 = {
         tags.railway = tags['railway:type'];
         delete tags['railway:type']
       }
+    }
+
+    // Vineyards
+    if (tags.landuse == 'vineyard')
+    {
+      // In the spec, this is the _only_ value for crop so we store orig value
+      if (tags.crop)
+      {
+        tags.tcrop = tags.crop;
+        delete tags.crop;
+      }
+
+      tags.crop = 'grape';
     }
 
   }, // End applyToOgrPreProcessing
@@ -2675,6 +2715,14 @@ tds71 = {
         notUsedTags.gauge = tags.gauge;
       }
     }
+
+    // Cleanup crop value if applicable
+    if (notUsedTags.tcrop)
+    {
+      notUsedTags.crop = notUsedTags.tcrop;
+      delete notUsedTags.tcrop;
+    }
+
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
@@ -2711,6 +2759,9 @@ tds71 = {
     if (~layerName.indexOf('o2s_'))
     {
       tags = translate.unpackText(attrs,'tag');
+
+      // Throw out the reason for the o2s if it exists
+      delete tags.o2s_reason;
 
       // Add some metadata
       if (!tags.uuid && tds71.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
@@ -2937,13 +2988,13 @@ tds71 = {
       // Make the fuzzy lookup table
       tds71.fuzzy = schemaTools.generateToOgrTable(tds71.rules.fuzzyTable);
       // Debug
-      //             for (var k1 in tds71.fuzzy)
-      //             {
-      //                 for (var v1 in tds71.fuzzy[k1])
-      //                 {
-      //                     print(JSON.stringify([k1, v1, tds71.fuzzy[k1][v1][0], tds71.fuzzy[k1][v1][1], tds71.fuzzy[k1][v1][2]]));
-      //                 }
-      //             }
+      // for (var k1 in tds71.fuzzy)
+      // {
+      //     for (var v1 in tds71.fuzzy[k1])
+      //     {
+      //         print(JSON.stringify([k1, v1, tds71.fuzzy[k1][v1][0], tds71.fuzzy[k1][v1][1], tds71.fuzzy[k1][v1][2]]));
+      //     }
+      // }
     } // End tds71.lookup Undefined
 
     // Doing this early to help the debug output
@@ -3108,17 +3159,25 @@ tds71 = {
         if (! attrs.F_CODE)
         {
           returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-          return returnData;
         }
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
           returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv71'}, tableName: ''});
-          return returnData;
         }
+        return returnData;
       }
 
-      hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+      // Since we are not going to the UI, add the reason for dumping the feature to the list of 
+      // tags to help other tools.
+      if (! attrs.F_CODE)
+      {
+        tags.o2s_reason = 'Unable to assign an F_CODE';
+      }
+      else
+      {
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE;
+      }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
 

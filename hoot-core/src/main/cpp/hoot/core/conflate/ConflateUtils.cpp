@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "ConflateUtils.h"
@@ -42,36 +42,30 @@
 namespace hoot
 {
 
-int ConflateUtils::writeNonConflatable(
-  const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators)
+int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators)
 {
   LOG_STATUS("Writing non-conflatable data to: ..." << FileUtils::toLogFormat(output, 25) << " ...");
 
   OsmMapPtr nonConflatableMap = std::make_shared<OsmMap>(map);
   LOG_VART(nonConflatableMap->size());
-  std::shared_ptr<RemoveElementsVisitor> elementRemover =
-    std::make_shared<RemoveElementsVisitor>(true);
+  std::shared_ptr<RemoveElementsVisitor> elementRemover = std::make_shared<RemoveElementsVisitor>(true);
   elementRemover->setRecursive(true);
-  std::shared_ptr<NonConflatableCriterion> nonConflatableCrit =
-    std::make_shared<NonConflatableCriterion>(nonConflatableMap);
+  std::shared_ptr<NonConflatableCriterion> nonConflatableCrit = std::make_shared<NonConflatableCriterion>(nonConflatableMap);
   nonConflatableCrit->setIgnoreGenericConflators(ignoreGenericConflators);
   elementRemover->addCriterion(nonConflatableCrit);
   nonConflatableMap->visitRw(*elementRemover);
 
   LOG_VART(nonConflatableMap->size());
   if (nonConflatableMap->size() > 0)
-  {
     OsmMapWriterFactory::write(nonConflatableMap, output);
-  }
 
   return nonConflatableMap->size();
 }
 
-void ConflateUtils::writeDiff(
-  const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
-  const QString& output)
+void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
+                              const QString& output)
 {
-  conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::toConfigString(bounds));
+  conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::toLonLatString(bounds));
 
   ConflateExecutor conflator;
   conflator.setIsDiffConflate(true);
@@ -83,8 +77,7 @@ void ConflateUtils::writeDiff(
 bool ConflateUtils::isNetworkConflate()
 {
   // This could be brittle to future changes to how the Network alg is applied.
-  return
-    conf().getList(ConfigOptions::getMatchCreatorsKey()).contains(NetworkMatchCreator::className());
+  return conf().getList(ConfigOptions::getMatchCreatorsKey()).contains(NetworkMatchCreator::className());
 }
 
 }

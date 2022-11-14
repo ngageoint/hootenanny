@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -37,7 +37,8 @@ public class PullApiCommandTest {
 
     @Test
     public void testGetFilterPatternDefault() throws IOException {
-        String oql = "[out:json];\n" +
+        String overpassql =
+                "[out:json];\n" +
                 "(node({{bbox}});<;>;)->.all;\n" +
                 "(\n" +
                 "   relation({{bbox}})[natural=coastline];>;\n" +
@@ -49,7 +50,7 @@ public class PullApiCommandTest {
                 "(.all; - .exclude;);\n" +
                 "out meta;";
         String filter = null;
-        Matcher matcher = PullApiCommand.oqlFilterPattern.matcher(oql);
+        Matcher matcher = PullApiCommand.overpassqlFilterPattern.matcher(overpassql);
         if (matcher.find()) {
             filter = matcher.group(1);
         }
@@ -59,14 +60,15 @@ public class PullApiCommandTest {
 
     @Test
     public void testGetFilterPatternHighway() throws IOException {
-        String oql = "[out:json];\n" +
+        String overpassql =
+                "[out:json];\n" +
                 "(\n" +
                 "nwr[\"highway\"]({{bbox}});\n" +
                 ");\n" +
                 "(._;>;);\n" +
                 "out meta;";
         String filter = null;
-        Matcher matcher = PullApiCommand.oqlFilterPattern.matcher(oql);
+        Matcher matcher = PullApiCommand.overpassqlFilterPattern.matcher(overpassql);
         if (matcher.find()) {
             filter = matcher.group(1);
         }
@@ -76,14 +78,15 @@ public class PullApiCommandTest {
 
     @Test
     public void testGetFilterPatternHighwayBuilding() throws IOException {
-        String oql = "[out:json];\n" +
+        String overpassql =
+                "[out:json];\n" +
                 "(\n" +
                 "nwr[~\"^(highway|building)$\"~\".\"]({{bbox}})\n" +
                 ");\n" +
                 "(._;>;);\n" +
                 "out meta;";
         String filter = null;
-        Matcher matcher = PullApiCommand.oqlFilterPattern.matcher(oql);
+        Matcher matcher = PullApiCommand.overpassqlFilterPattern.matcher(overpassql);
         if (matcher.find()) {
             filter = matcher.group(1);
         }

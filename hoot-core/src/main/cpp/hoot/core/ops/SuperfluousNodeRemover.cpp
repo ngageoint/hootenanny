@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SuperfluousNodeRemover.h"
 
 // Hoot
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -49,11 +49,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
-SuperfluousNodeRemover::SuperfluousNodeRemover() :
-_removeNodes(true),
-_numExplicitlyExcluded(0),
-_ignoreInformationTags(false),
-_taskStatusUpdateInterval(1000)
+SuperfluousNodeRemover::SuperfluousNodeRemover()
+  : _removeNodes(true),
+    _numExplicitlyExcluded(0),
+    _ignoreInformationTags(false),
+    _taskStatusUpdateInterval(1000)
 {
   setConfiguration(conf());
 }
@@ -66,15 +66,12 @@ void SuperfluousNodeRemover::setConfiguration(const Settings& conf)
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 
   const QSet<QString> excludeIdsStrs = opts.getSuperfluousNodeRemoverExcludeIds().toSet();
-  for (QSet<QString>::const_iterator it = excludeIdsStrs.begin(); it != excludeIdsStrs.end(); ++it)
+  for (const auto& id : qAsConst(excludeIdsStrs))
   {
     bool ok = false;
-    _excludeIds.insert((*it).toLong(&ok));
+    _excludeIds.insert(id.toLong(&ok));
     if (!ok)
-    {
-      throw IllegalArgumentException(
-        QString("Invalid element exclude ID passed to ") + className());
-    }
+      throw IllegalArgumentException(QString("Invalid element exclude ID passed to ") + className());
   }
   LOG_VARD(_excludeIds.size());
 }
@@ -91,21 +88,17 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 
   LOG_VARD(map->getRelationCount());
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     ConstRelationPtr relation = it->second;
     if (!relation)
-    {
       continue;
-    }
+
     const vector<RelationData::Entry>& members = relation->getMembers();
-    for (size_t i = 0; i < members.size(); i++)
+    for (const auto& member : members)
     {
-      const RelationData::Entry member = members[i];
       if (member.getElementId().getType() == ElementType::Node)
-      {
         _usedNodeIds.insert(member.getElementId().getId());
-      }
     }
 
     _numProcessed++;
@@ -124,13 +117,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 
   LOG_VARD(map->getWayCount());
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
     if (!w)
-    {
       continue;
-    }
+
     const vector<long>& nodeIds = w->getNodeIds();
     LOG_TRACE("Nodes belonging to " << w->getElementId() << ": " << nodeIds);
     _usedNodeIds.insert(nodeIds.begin(), nodeIds.end());
@@ -151,14 +143,13 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     StringUtils::formatLargeNumber(_numProcessed) << " total elements.");
 
   LOG_VARD(map->getNodeCount());
-  const NodeMap nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  const NodeMap& nodes = map->getNodes();
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Node* n = it->second.get();
     if (!n)
-    {
       continue;
-    }
+
     LOG_VART(n->getElementId());
     LOG_VART(n->getTags().getNonDebugCount());
 
@@ -233,11 +224,10 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(nodesWgs84->size());
   }
 
-  // Now, let's remove any that aren't in our do not remove list.
-
+  // Now, let's find any that aren't in our do not remove list.
   _numProcessed = 0;
   ElementToGeometryConverter elementConverter(map);
-  for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
+  for (auto it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
     ConstNodePtr n = it->second;
     LOG_VART(n->getElementId());
@@ -246,19 +236,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_usedNodeIds.find(nodeId) == _usedNodeIds.end())
     {
       if (!_bounds.get() || _bounds->contains(elementConverter.convertToGeometry(n).get()))
-      {
         _superfluousNodeIds.insert(nodeId);
-        if (_removeNodes)
-        {
-          LOG_TRACE("Removing superfluous node: " << n->getElementId() << "...");
-          RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
-        }
-        else
-        {
-          LOG_TRACE("Counting superfluous node: " << n->getElementId() << "...");
-        }
-        _numAffected++;
-      }
       else
       {
         LOG_TRACE("Node not in bounds: " << n->getElementId());
@@ -271,13 +249,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     _numProcessed++;
 
-    if (_numAffected > 0 && _numAffected % _taskStatusUpdateInterval == 0)
-    {
-      PROGRESS_INFO(
-        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
-        " nodes / " << StringUtils::formatLargeNumber(_usedNodeIds.size()) << " total nodes.");
-    }
-    else if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
@@ -285,36 +257,52 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
   }
 
+  //  Finally remove any nodes found above
+  for (auto node_id : _superfluousNodeIds)
+  {
+    if (_removeNodes)
+    {
+      LOG_TRACE("Removing superfluous node: " << node_id << "...");
+      RemoveNodeByEid::removeNodeNoCheck(map, node_id);
+    }
+    else
+    {
+      LOG_TRACE("Counting superfluous node: " << node_id << "...");
+    }
+    _numAffected++;
+    if (_numAffected > 0 && _numAffected % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodeIds.size()) << " total nodes.");
+    }
+  }
+
   LOG_VARD(_numExplicitlyExcluded);
 }
 
-long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
-                                         const bool ignoreInformationTags,
+long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
                                          const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeRemover;
   nodeRemover.setIgnoreInformationTags(ignoreInformationTags);
   if (bounds.get())
-  {
     nodeRemover.setBounds(bounds);
-  }
+
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
   LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
   return nodeRemover.getNumFeaturesAffected();
 }
 
-std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
-  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
-  const std::shared_ptr<geos::geom::Geometry>& bounds)
+std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
+                                                                 const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeIdCollector;
   nodeIdCollector.setIgnoreInformationTags(ignoreInformationTags);
   nodeIdCollector.setRemoveNodes(false);
   if (bounds.get())
-  {
     nodeIdCollector.setBounds(bounds);
-  }
   QString msg = nodeIdCollector.getInitStatusMessage().replace("Removing", "Collecting");
   LOG_STATUS(msg);
   nodeIdCollector.apply(map);

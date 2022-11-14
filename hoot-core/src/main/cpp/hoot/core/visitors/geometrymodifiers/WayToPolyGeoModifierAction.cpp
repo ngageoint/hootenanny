@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WayToPolyGeoModifierAction.h"
@@ -48,7 +48,8 @@ const QString WayToPolyGeoModifierAction::DEFAULT_WIDTH_PARAM = "default_width_m
 bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process Ways
-  if (pElement->getElementType() != ElementType::Way) return false;
+  if (pElement->getElementType() != ElementType::Way)
+    return false;
 
   // process the way as requested
   const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
@@ -56,10 +57,11 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   bool isLoop = pWay->isSimpleLoop();
 
   // too small, nothing to do
-  if (nodeCount < 2) return false;
+  if (nodeCount < 2)
+    return false;
 
   // find out what width to use
-  Tags tags = pElement->getTags();
+  const Tags& tags = pElement->getTags();
   double currWidth = _width;
 
   // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag
@@ -67,17 +69,16 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   {
     double readWidth = tags[_widthTag].toDouble();
     if (readWidth > 0)
-    {
       currWidth = readWidth;
-    }
   }
 
   // build poly by 'extruding' existing nodes
-  const vector<long> nodeIds = pWay->getNodeIds();
+  const vector<long>& nodeIds = pWay->getNodeIds();
   assert(nodeCount == (long)nodeIds.size());
 
   // ignore duplicate last node for loops to properly calculate merged ends
-  if (isLoop) nodeCount--;
+  if (isLoop)
+    nodeCount--;
 
   // create coordinate arrays
   Coordinate polyPositions[2][nodeCount];
@@ -86,8 +87,8 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   for (long i = 0; i < nodeCount; i++)
   {
     long currId = nodeIds[i];
-    long prevId = (i > 0) ? nodeIds[i-1] : (isLoop ? nodeIds[nodeCount-1] : currId);
-    long nextId = (i < nodeCount-1) ? nodeIds[i+1] : (isLoop ? nodeIds[0] : currId);
+    long prevId = (i > 0) ? nodeIds[i - 1] : (isLoop ? nodeIds[nodeCount - 1] : currId);
+    long nextId = (i < nodeCount-1) ? nodeIds[i + 1] : (isLoop ? nodeIds[0] : currId);
 
     const NodePtr pCurrNode = pMap->getNode(currId);
     const NodePtr pPrevNode = pMap->getNode(prevId);
@@ -100,7 +101,8 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
     // find perpendicular vector to vector between previous and next point
     CoordinateExt c1 = currCoor - prevCoor;
     CoordinateExt c2 = nextCoor - currCoor;
-    if (c1.length() == 0) c1 = c2;             // correction for first way point
+    if (c1.length() == 0) // correction for first way point
+      c1 = c2;
     c1.normalize();
     c2.normalize();
     CoordinateExt vector = c1 + c2;
@@ -110,8 +112,10 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
     // fix for collapsing areas in corners with angles greater than 45 degrees,
     // smaller angles will push the points out too far
     double angle = fabs(atan2(perp.y,perp.x) - atan2(c1.y,c1.x));
-    if (angle > M_PI_2) angle = fabs(angle-M_PI);
-    if (angle < M_PI_4) angle = M_PI_4;
+    if (angle > M_PI_2)
+      angle = fabs(angle-M_PI);
+    if (angle < M_PI_4)
+      angle = M_PI_4;
 
     // apply requested width
     double width = currWidth / sin(angle);
@@ -178,8 +182,10 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   {
     // create poly way and add it to map
     WayPtr pPoly = std::make_shared<Way>(Status::Unknown1, pMap->createNextWayId(), -1);
-    for (long i = 0; i < nodeCount; i++) addNodeToPoly(polyPositions[0][i], pMap, pPoly);
-    for (long i = nodeCount-1; i >= 0; i--) addNodeToPoly(polyPositions[1][i], pMap, pPoly);
+    for (long i = 0; i < nodeCount; i++)
+      addNodeToPoly(polyPositions[0][i], pMap, pPoly);
+    for (long i = nodeCount - 1; i >= 0; i--)
+      addNodeToPoly(polyPositions[1][i], pMap, pPoly);
 
     // duplicate first id to close poly
     pPoly->addNode(pPoly->getNodeId(0));
@@ -194,8 +200,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   return true;
 }
 
-void WayToPolyGeoModifierAction::addNodeToPoly(
-  const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly) const
+void WayToPolyGeoModifierAction::addNodeToPoly(const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly) const
 {
   long nodeId = pMap->createNextNodeId();
   pMap->addElement(std::make_shared<Node>(Status::Unknown1, nodeId, pos));
@@ -208,19 +213,15 @@ void WayToPolyGeoModifierAction::parseArguments(const QHash<QString, QString>& a
   _widthTag = QString();
 
   // read width tag if specified
-  if (arguments.keys().contains(WIDTH_TAG_PARAM))
-  {
+  if (arguments.contains(WIDTH_TAG_PARAM))
     _widthTag = arguments[WIDTH_TAG_PARAM];
-  }
 
   // read default width if specified
-  if (arguments.keys().contains(DEFAULT_WIDTH_PARAM))
+  if (arguments.contains(DEFAULT_WIDTH_PARAM))
   {
     double width = arguments[DEFAULT_WIDTH_PARAM].toDouble();
     if (width > 0)
-    {
       _width = width;
-    }
   }
 }
 

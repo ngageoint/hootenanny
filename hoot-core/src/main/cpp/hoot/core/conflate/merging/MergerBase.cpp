@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MergerBase.h"
 
@@ -31,8 +31,8 @@ using namespace std;
 namespace hoot
 {
 
-MergerBase::MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs)
+MergerBase::MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs)
+  : _pairs(pairs)
 {
 }
 
@@ -41,14 +41,13 @@ set<ElementId> MergerBase::getImpactedElementIds() const
   set<ElementId> result;
 
   // Make sure the map contains all our elements and they aren't conflated.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end(); ++it)
+  for (const auto& id_pair : _pairs)
   {
-    LOG_VART(it->first);
-    LOG_VART(it->second);
+    LOG_VART(id_pair.first);
+    LOG_VART(id_pair.second);
 
-    result.insert(it->first);
-    result.insert(it->second);
+    result.insert(id_pair.first);
+    result.insert(id_pair.second);
   }
   LOG_VART(result);
 
@@ -60,20 +59,22 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
   bool result = true;
 
   // make sure the map contains all our elements and they aren't conflated.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end() && result; ++it)
+  for (const auto& id_pair : _pairs)
   {
-    LOG_VART(it->first);
-    LOG_VART(it->second);
+    LOG_VART(id_pair.first);
+    LOG_VART(id_pair.second);
 
-    result &= map->containsElement(it->first);
-    result &= map->containsElement(it->second);
+    result &= map->containsElement(id_pair.first);
+    result &= map->containsElement(id_pair.second);
 
     if (result)
     {
-      result &= map->getElement(it->first)->getStatus() != Status::Conflated;
-      result &= map->getElement(it->second)->getStatus() != Status::Conflated;
+      result &= map->getElement(id_pair.first)->getStatus() != Status::Conflated;
+      result &= map->getElement(id_pair.second)->getStatus() != Status::Conflated;
     }
+
+    if (!result)
+      break;
   }
   LOG_VART(result);
 
@@ -82,7 +83,7 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  set<pair<ElementId, ElementId>>::iterator it = _pairs.begin();
+  auto it = _pairs.begin();
   while (it != _pairs.end())
   {
     ElementId eid1 = it->first;
@@ -109,9 +110,7 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
       _pairs.erase(it++);
     }
     else
-    {
       ++it;
-    }
   }
 }
 

@@ -28,10 +28,10 @@
 #include "MatchCreator.h"
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
@@ -49,8 +49,7 @@ void MatchCreator::createMatches(const ConstOsmMapPtr& map,
   {
     // We weren't able to set the map when this filter was created by MatchFactory b/c we didn't
     // have one yet.
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_filter);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(_filter);
     if (mapConsumer)
       mapConsumer->setOsmMap(map.get());
   }

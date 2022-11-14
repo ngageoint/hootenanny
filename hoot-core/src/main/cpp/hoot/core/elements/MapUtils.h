@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MAP_UTILS_H
 #define MAP_UTILS_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -52,8 +52,7 @@ public:
    * @param copyChildren if true, child elements are copied
    * @return a copied subset map
    */
-  static OsmMapPtr getMapSubset(
-    const ConstOsmMapPtr& map, const ElementCriterionPtr& filter, const bool copyChildren = true);
+  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter, const bool copyChildren = true);
 
   /**
    * Determines if a map contains only nodes that are not way nodes
@@ -83,9 +82,8 @@ public:
    * @return returns the first element found with the intput tag key/value pair and element type, if
    * specified; returns a null element otherwise
    */
-  static ElementPtr getFirstElementWithNote(
-    const OsmMapPtr& map, const QString& note,
-    const ElementType& elementType = ElementType::Unknown);
+  static ElementPtr getFirstElementWithNote(const OsmMapPtr& map, const QString& note,
+                                            const ElementType& elementType = ElementType::Unknown);
   /**
    * Returns the first element with a specified tag
    *
@@ -96,9 +94,8 @@ public:
    * @return returns the first element found with the intput tag key/value pair and element type, if
    * specified; returns a null element otherwise
    */
-  static ElementPtr getFirstElementWithTag(
-    const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
-    const ElementType& elementType = ElementType::Unknown);
+  static ElementPtr getFirstElementWithTag(const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
+                                           const ElementType& elementType = ElementType::Unknown);
   /**
    * @brief getFirstElementWithStatus Returns the first element with a specified status
    * @param map map containing the element

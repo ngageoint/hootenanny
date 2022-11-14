@@ -22,35 +22,36 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "NonEnglishLanguageDetectionVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 
-#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
+#include <QTextStream>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, NonEnglishLanguageDetectionVisitor)
 
-NonEnglishLanguageDetectionVisitor::NonEnglishLanguageDetectionVisitor() :
-_ignorePreTranslatedTags(false),
-_writeDetectedLangTags(false),
-_parseNames(false),
-_detectionSummary(""),
-_currentElementHasSuccessfulTagDetection(false),
-_numTagDetectionsMade(0),
-_numElementsWithSuccessfulTagDetection(0),
-_numTotalElements(0),
-_numProcessedTags(0),
-_numProcessedElements(0),
-_taskStatusUpdateInterval(10000)
+NonEnglishLanguageDetectionVisitor::NonEnglishLanguageDetectionVisitor()
+  : _ignorePreTranslatedTags(false),
+    _writeDetectedLangTags(false),
+    _parseNames(false),
+    _detectionSummary(""),
+    _currentElementHasSuccessfulTagDetection(false),
+    _numTagDetectionsMade(0),
+    _numElementsWithSuccessfulTagDetection(0),
+    _numTotalElements(0),
+    _numProcessedTags(0),
+    _numProcessedElements(0),
+    _taskStatusUpdateInterval(10000)
 {
 }
 
@@ -73,9 +74,8 @@ QString NonEnglishLanguageDetectionVisitor::getCompletedStatusMessage() const
     _numElementsWithSuccessfulTagDetection++;
     _currentElementHasSuccessfulTagDetection = false;
   }
-  _detectionSummary +=
-    QString::number(_numTagDetectionsMade) + " successful tag detections made on " +
-    QString::number(_numElementsWithSuccessfulTagDetection) + " different elements.";
+  _detectionSummary += QString("%1 successful tag detections made on %2 different elements.")
+                        .arg(QString::number(_numTagDetectionsMade), QString::number(_numElementsWithSuccessfulTagDetection));
   return _detectionSummary;
 }
 
@@ -103,17 +103,12 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _infoClient =
-    Factory::getInstance().constructObject<LanguageInfoProvider>(
-      opts.getLanguageInfoProvider());
+  _infoClient = Factory::getInstance().constructObject<LanguageInfoProvider>(opts.getLanguageInfoProvider());
   _infoClient->setConfiguration(conf);
-  _langCodesToLangs =
-    HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
-      _infoClient->getAvailableLanguages("detectable"));
+  _langCodesToLangs = HootServicesLanguageInfoResponseParser::getLangCodesToLangs(_infoClient->getAvailableLanguages("detectable"));
   LOG_VART(_langCodesToLangs.size());
 
-  _langDetector =
-    Factory::getInstance().constructObject<LanguageDetector>(opts.getLanguageDetectionDetector());
+  _langDetector = Factory::getInstance().constructObject<LanguageDetector>(opts.getLanguageDetectionDetector());
   _langDetector->setConfiguration(conf);
 
   _tagKeys = opts.getLanguageTagKeys().toSet();
@@ -122,52 +117,40 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
   _writeDetectedLangTags = opts.getLanguageDetectionWriteDetectedLangTags();
   _parseNames = opts.getLanguageParseNames();
   if (_parseNames)
-  {
     _tagKeys = _tagKeys.unite(Tags::getNameKeys().toSet());
-  }
   LOG_VARD(_tagKeys);
 }
 
 QString NonEnglishLanguageDetectionVisitor::_getLangCountsSortedByLangName() const
 {
-  LOG_VART(_langNamesToCounts.keys().size());
-  QString langsStr = "Non-English language tag counts:\n";
-  for (QMap<QString, int>::const_iterator langsItr = _langNamesToCounts.begin();
-       langsItr != _langNamesToCounts.end(); ++langsItr)
-  {
-    langsStr += langsItr.key() + ": " + QString::number(langsItr.value()) + "\n";
-  }
-  langsStr.chop(1);
-  return langsStr;
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
+  ts << "Non-English language tag counts:";
+  for (auto langsItr = _langNamesToCounts.begin(); langsItr != _langNamesToCounts.end(); ++langsItr)
+    ts << "\n" << langsItr.key() << ": " << QString::number(langsItr.value());
+  return ts.readAll();
 }
 
 void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (_tagKeys.isEmpty())
-  {
     throw HootException("No tag keys specified for language detection.");
-  }
 
   LOG_VART(e);
   // Why would the element ever be null here?
   if (!e)
-  {
     return;
-  }
 
   //if this var was set while parsing the previous element, increment the counter now
   if (_currentElementHasSuccessfulTagDetection)
-  {
     _numElementsWithSuccessfulTagDetection++;
-  }
   _currentElementHasSuccessfulTagDetection = false;
 
   const Tags& tags = e->getTags();
   bool elementProcessed = false;
-  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin(); tagKeysItr != _tagKeys.end();
-       ++tagKeysItr)
+  for (const auto& tagKey : qAsConst(_tagKeys))
   {
-    const QString tagKey = *tagKeysItr;
     if (tags.contains(tagKey))
     {  
       const QString preTranslatedTagKey = tagKey + ":en";
@@ -185,21 +168,13 @@ void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e
         if (!detectedLangCode.isEmpty())
         {
           const QString langName = _langCodesToLangs[detectedLangCode];
-
           if (_writeDetectedLangTags)
-          {
             e->getTags().appendValue("hoot:detected:source:language:" + tagKey, langName);
-          }
 
           if (_langNamesToCounts.contains(langName))
-          {
             _langNamesToCounts[langName] = _langNamesToCounts[langName] + 1;
-          }
           else
-          {
             _langNamesToCounts[langName] = 1;
-          }
-          LOG_VART(_langNamesToCounts.keys().size());
 
           _numTagDetectionsMade++;
           _currentElementHasSuccessfulTagDetection = true;
@@ -221,9 +196,7 @@ void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e
   }
 
   if (elementProcessed)
-  {
     _numProcessedElements++;
-  }
 
   _numTotalElements++;
 }

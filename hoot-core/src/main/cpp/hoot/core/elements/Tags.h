@@ -130,7 +130,7 @@ public:
    * match one or more entries in the list and return it. Each key will only be returned at most
    * once.
    */
-  QStringList getMatchingKeys(const QStringList& keys);
+  QStringList getMatchingKeys(const QStringList& keys) const;
 
   /**
    * Return all the keys that are used in names.
@@ -229,6 +229,20 @@ public:
    * @return the number of tags removed
    */
   int removeMetadata();
+
+  /**
+   * Removes all hoot:* tags
+   *
+   * @return the number of tags removed
+   */
+  int removeHootTags();
+
+  /**
+   * Removes all hoot:* tags except hoot:review:* tags
+   *
+   * @return the number of tags removed
+   */
+  int removeNonReviewHootTags();
 
   // A single key removal can be done with the call to parent QHash::remove.
 

@@ -66,11 +66,8 @@ BasemapRasterExtensions=png,tif
 # Catalina log location
 ErrorLogPath=/var/log/tomcat8/catalina.out
 
-# Default translations config file
-defaultTranslationsConfig=$(homeFolder)/conf/services/DefaultTranslations.json
-
-# Default FOUO translations config file
-defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
+# The translations config file name
+translationConfig=translationConfig.json
 
 # Main document name
 documentName=HootenannyUserGuide.pdf
@@ -108,10 +105,10 @@ changesetApplyDebug=false
 changesetApplySingleThreaded=false
 
 # Grail pull overpass query file
-grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
+grailOverpassQueryPath=conf/services/grailOverpassQuery.overpassql
 
 # Grail pull connected ways overpass query file
-grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.oql
+grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.overpassql
 
 # Overpass sync polling interval and timeout
 overpassSyncTimeout=300000

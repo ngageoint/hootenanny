@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ElementIterator.h"
 
@@ -36,23 +36,17 @@ bool ElementIterator::hasNext()
 {
   LOG_VART(_pending.empty());
   if (_pending.empty())
-  {
     _next();
-  }
   return _pending.empty() == false;
 }
 
 const std::shared_ptr<Element>& ElementIterator::next()
 {
   if (_pending.empty())
-  {
     _next();
-  }
 
   if (_pending.empty())
-  {
     _current.reset();
-  }
   else
   {
     _current = _pending.front();

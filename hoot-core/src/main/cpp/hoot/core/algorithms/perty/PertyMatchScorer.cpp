@@ -108,8 +108,8 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor =
     std::make_shared<SetTagValueVisitor>(MetadataTags::ErrorCircular(), QString::number(_searchDistance));
   referenceMap->visitRw(*setAccuracyVisitor);
-  LOG_VARD(referenceMap->getNodes().size());
-  LOG_VARD(referenceMap->getWays().size());
+  LOG_VARD(referenceMap->getNodeCount());
+  LOG_VARD(referenceMap->getWayCount());
   OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "tagged-ref-map");
 
   OsmMapPtr referenceMapCopy(referenceMap);
@@ -140,8 +140,8 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor =
     std::make_shared<SetTagValueVisitor>(MetadataTags::ErrorCircular(), QString::number(_searchDistance));
   perturbedMap->visitRw(*setAccuracyVisitor);
-  LOG_VARD(perturbedMap->getNodes().size());
-  LOG_VARD(perturbedMap->getWays().size());
+  LOG_VARD(perturbedMap->getNodeCount());
+  LOG_VARD(perturbedMap->getWayCount());
   OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-tagged-map");
 
   LOG_DEBUG("Perturbing the copied reference data and saving it to: " << perturbedMapOutputPath);
@@ -149,8 +149,8 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   PertyOp pertyOp;
   pertyOp.setConfiguration(_settings);
   pertyOp.apply(perturbedMap);
-  LOG_VARD(perturbedMap->getNodes().size());
-  LOG_VARD(perturbedMap->getWays().size());
+  LOG_VARD(perturbedMap->getNodeCount());
+  LOG_VARD(perturbedMap->getWayCount());
 
   MapProjector::projectToWgs84(perturbedMap);
   IoUtils::saveMap(perturbedMap, perturbedMapOutputPath);
@@ -165,13 +165,13 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr&
   OsmMapPtr combinedMap(referenceMap);
   IoUtils::loadMap(combinedMap, perturbedMapInputPath, false, Status::Unknown2);
   OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "before-prepped-map");
-  LOG_VARD(combinedMap->getNodes().size());
-  LOG_VARD(combinedMap->getWays().size());
+  LOG_VARD(combinedMap->getNodeCount());
+  LOG_VARD(combinedMap->getWayCount());
 
   MatchScoringMapPreparer().prepMap(combinedMap, ConfigOptions().getScoreMatchesRemoveNodes());
   OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-prepped-map");
-  LOG_VARD(combinedMap->getNodes().size());
-  LOG_VARD(combinedMap->getWays().size());
+  LOG_VARD(combinedMap->getNodeCount());
+  LOG_VARD(combinedMap->getWayCount());
 
   if (ConfigOptions().getConflatePreOps().contains(RubberSheet::className()))
   {
@@ -182,8 +182,8 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr&
     rubberSheetOp->apply(combinedMap);
     OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-rubber-sheet");
 
-    LOG_VARD(combinedMap->getNodes().size());
-    LOG_VARD(combinedMap->getWays().size());
+    LOG_VARD(combinedMap->getNodeCount());
+    LOG_VARD(combinedMap->getWayCount());
   }
   return combinedMap;
 }
@@ -225,8 +225,8 @@ void PertyMatchScorer::_saveMap(OsmMapPtr& map, const QString& path) const
 {
   BuildingOutlineUpdateOp().apply(map);
 
-  LOG_VARD(map->getNodes().size());
-  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getNodeCount());
+  LOG_VARD(map->getWayCount());
 
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, path);

@@ -5,6 +5,8 @@ var uuid = require('uuid');
 var fs = require('fs');
 var archiver = require("archiver");
 var exec = require('child_process').exec;
+
+// The rest of the config is loaded below.
 var config = require('./config.json');
 var _ = require('lodash');
 var rmdir = require('rimraf');
@@ -17,6 +19,38 @@ var hootHome = process.env['HOOT_HOME'];
 var appDir = hootHome + '/node-export-server/';
 var runningStatus = 'running',
     completeStatus = 'complete';
+
+// Loop through all "hootHome/translations*" directories and load config files if they exist.
+fs.readdirSync(hootHome,{withFileTypes:true}).filter(file => file.isDirectory() && (file.name.indexOf('translations') == 0)).forEach( function (file){
+  var tLocal = {};
+  var dirName = hootHome + '/' + file.name + '/';
+
+  // The same file is used by the translationServer and hoot-services
+  if (fs.existsSync(dirName + 'translationConfig.json'))
+  {
+    try {
+          tLocal = require(dirName + 'translationConfig.json');
+
+          tLocal.forEach(function (fmt) {
+              // If we don't have a specified schema then we don't support schema switching in the UI
+              if (fmt.nodeExport) {
+                // Either a "path" or "importPath" and "exportPath"
+                if (fmt.path) {
+                  config.schemas[fmt.name] = file.name + '/' + fmt.path;
+                } else {
+                  config.schemas[fmt.name] = file.name + '/' + fmt.exportPath;
+                }
+
+                if (fmt.exportOptions) {
+                    config.schema_options[fmt.name] = fmt.exportOptions;
+                }
+              }
+        });
+    } catch (e) {
+      console.log('Translation Config Error: ' + e);
+    }
+  }
+});
 
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {
@@ -112,6 +146,9 @@ app.get('/job/:hash', function(req, res) {
 /* Post export */
 // export/Overpass/OSM/Shapefile
 app.post('/export/:datasource/:schema/:format', function(req, res) {
+    //validate the params
+    if (!validateExportParams(req, res)) return;
+
     writeExportFile(req, function(jobHash, input) {
         doExport(req, res, jobHash, input);
     })
@@ -122,19 +159,22 @@ function validateExportParams(req, res) {
     var message;
     // check the datasource
     if (!config.datasources[req.params.datasource]) {
-        message = 'Datasource not found';
+        message = `Datasource "${req.params.datasource}" not found`;
     }
     // check the schema
     if (!config.schemas[req.params.schema]) {
-        message = 'Schema not found';
+        message = `Schema "${req.params.schema}" not found`;
     }
     // check the format
     if (!config.formats[req.params.format]) {
-        message = 'Format not found';
+        message = `Format "${req.params.format}" not found`;
     }
     if (message) {
         res.status(400);
         res.send(message);
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -142,7 +182,7 @@ function validateExportParams(req, res) {
 app.get('/export/:datasource/:schema/:format', function(req, res) {
 
     //validate the params
-    validateExportParams(req, res);
+    if (!validateExportParams(req, res)) return;
 
     //Build a hash for the input params using base64
     var params = req.params.datasource
@@ -407,7 +447,7 @@ function buildCommand(params, queryOverrideTags, querybbox, querypoly, isFile, i
         if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
     }
 
-    //prevent negative id collision when mering multipolygon rings
+    //prevent negative id collision when merging multipolygon rings
     if (ignoreSourceIds)
         command += ' -D reader.use.data.source.ids=false'
 
@@ -538,7 +578,7 @@ function doExport(req, res, hash, input) {
         var child = null;
         var id = uuid.v4();
         var output = 'export_' + id;
-        var isFile = req.params.format === 'OSM XML';
+        var isFile = ['OSM XML', 'GeoPackage'].includes(req.params.format);
         var outDir = appDir + output;
         var outFile = outDir + config.formats[req.params.format];
         if (req.params.format === 'File Geodatabase') outDir = outFile;

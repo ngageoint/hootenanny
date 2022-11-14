@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -120,8 +120,8 @@ public:
       uut.parseBlob(v[i], input, map);
 
     // sanity check that it actually read the data.
-    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWayCount());
   }
 
   void runReadIncrementalTest()
@@ -160,8 +160,8 @@ public:
     reader.parse(ss, map);
 
     string expected("highway = road\nnote = test tag\nhello = world\n");
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(expected, map->getWay(42)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getWay(43)->getNodeCount());
@@ -192,8 +192,8 @@ public:
     reader.parseElements(ss, map);
 
     string expected("note = test tag\nhello = world\n");
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(expected, map->getNode(72)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(42.0, map->getNode(72)->getX(), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14159, map->getNode(72)->getY(), 0.0001);
@@ -263,8 +263,8 @@ public:
     reader.parseElements(ss, map);
 
     string expected("highway = road\nnote = test tag\nhello = world\n");
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(expected, map->getWay(42)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
     long nodeIds[] = {1, 3, 5, 7, 11};
@@ -405,12 +405,9 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
       reader.readPartial(map);
-      CPPUNIT_ASSERT_EQUAL(
-        chunkSize,
-        (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
+      CPPUNIT_ASSERT_EQUAL(chunkSize, (int)(map->getElementCount()));
 
-      QString outputFile(
-        _outputPath + "OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
+      QString outputFile(_outputPath + "OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
       writer.write(map, outputFile);
       HOOT_FILE_EQUALS(_inputPath + "OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm",
         outputFile);
@@ -449,16 +446,11 @@ public:
       reader.readPartial(map);
 
       //some of these before the last one don't read out the full buffer size..not sure why
-      CPPUNIT_ASSERT(
-        (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()) <=
-        chunkSize);
+      CPPUNIT_ASSERT((int)(map->getElementCount()) <= chunkSize);
 
-      QString outputFile(
-        _outputPath + "OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm");
+      QString outputFile(_outputPath + "OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm");
       writer.write(map, outputFile);
-      HOOT_FILE_EQUALS(
-        _inputPath + "OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm",
-        outputFile);
+      HOOT_FILE_EQUALS(_inputPath + "OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm", outputFile);
 
       ctr++;
       CPPUNIT_ASSERT(ctr < 5);  //to prevent an infinite loop if hasMoreElements fails
@@ -514,7 +506,7 @@ public:
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(true, reader.getSortedTypeThenId());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWay(-3)->getNodeCount());
@@ -537,7 +529,7 @@ public:
     reader1.read(map1);
 
     CPPUNIT_ASSERT_EQUAL(false, reader1.getSortedTypeThenId());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map1->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map1->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWay(-3)->getNodeCount());
@@ -554,7 +546,7 @@ public:
     Log::getInstance().setLevel(logLevel);
 
     CPPUNIT_ASSERT_EQUAL(false, reader2.getSortedTypeThenId());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map2->getWay(-3)->getNodeCount());

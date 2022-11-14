@@ -8,27 +8,19 @@
     },
     "RenderDb": {
       "conn": "PG:dbname='osmhaiti' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "Overpass": {
+      "conn": "https://overpass-api.de/api/interpreter"
     }
   },
   "formats": {
     "OSM XML": ".osm",
     "Shapefile": ".shp",
-    "File Geodatabase": ".gdb"
+    "File Geodatabase": ".gdb",
+    "GeoPackage": ".gpkg"
   },
-  "schemas": {
-    "OSM": "translations/RenderDb.js",
-    "TDSv40": "translations/TDSv40.js",
-    "TDSv61": "translations/TDSv61.js",
-    "TDSv70": "translations/TDSv70.js",
-    "TDSv71": "translations/TDSv71.js",
-    "MGCP": "translations/MGCP_TRD4.js",
-    "DNC": "translations/DNC.js",
-    "ENC": "translations/ENCv311_to_OGR.js",
-    "GGDMv30": "translations/GGDMv30.js"
-  },
-  "schema_options": {
-    "DNC": "ogr.strict.checking=off"
-  },
+  "schemas": {},
+  "schema_options": {},
   "tagOverrides": {
     "attribution":"",
     "security:resource_owner":"",

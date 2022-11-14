@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_MERGER_ABSTRACT_H
 #define LINEAR_MERGER_ABSTRACT_H
@@ -46,9 +46,8 @@ public:
   bool operator()(const std::pair<ElementId, ElementId>& p1,
                   const std::pair<ElementId, ElementId>& p2)
   {
-    return
-      std::min(getLength(p1.first), getLength(p1.second)) <
-        std::min(getLength(p2.first), getLength(p2.second));
+    return std::min(getLength(p1.first), getLength(p1.second)) <
+           std::min(getLength(p2.first), getLength(p2.second));
   }
 
   Meters getLength(const ElementId& eid)
@@ -92,9 +91,8 @@ public:
   static QString className() { return "LinearMergerAbstract"; }
 
   LinearMergerAbstract() = default;
-  LinearMergerAbstract(
-    const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  LinearMergerAbstract(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                       const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearMergerAbstract() = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
@@ -116,16 +114,13 @@ protected:
   /*
    * Return true if pair needs review.
    */
-  virtual bool _mergePair(
-    const ElementId& eid1, const ElementId& eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+  virtual bool _mergePair(const ElementId& eid1, const ElementId& eid2,
+                          std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  virtual void _markNeedsReview(
-    ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
+  virtual void _markNeedsReview(ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
 
-  void _mergeShortestPairsFirst(
-    std::vector<std::pair<ElementId, ElementId>>& pairs,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void _mergeShortestPairsFirst(std::vector<std::pair<ElementId, ElementId>>& pairs,
+                                std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /*
    * Finds a matching subline between two elements with the configured subline matcher

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef FITNESSFUNCTION_H
 #define FITNESSFUNCTION_H
@@ -38,9 +38,10 @@ public:
 
   /**
    * Calculates the fitness of the specified state. Lower values are better.
-   *
    * While not required fitness functions that return values from [0, 1] may work better.
    */
+  FitnessFunction() = default;
+  virtual ~FitnessFunction() = default;
   /**
    * @brief f Calculates the fitness of the specified state. Lower values are better.
    * @param s a simulated annealing state

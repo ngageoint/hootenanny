@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LOG_H
@@ -113,17 +113,17 @@ public:
 
   void log(WarningLevel level, const std::string& str);
   void log(WarningLevel level, const std::string& str, const std::string& filename,
-    const std::string& prettyFunction, int lineNumber);
+           const std::string& prettyFunction, int lineNumber);
   void log(WarningLevel level, const QString& str, const QString& filename,
-    const QString& prettyFunction, int lineNumber);
+           const QString& prettyFunction, int lineNumber);
   void progress(WarningLevel level, const std::string& str, const std::string& filename,
-    const std::string& functionName, int lineNumber);
+                const std::string& functionName, int lineNumber);
 
   static int getWarnMessageLimit();
 
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
-  WarningLevel getLevel() const { return _level; }
+  inline WarningLevel getLevel() const { return _level; }
   void setLevel(WarningLevel l);
 
   void setDecorateLogs(bool decorate) { _decorateLogs = decorate; }

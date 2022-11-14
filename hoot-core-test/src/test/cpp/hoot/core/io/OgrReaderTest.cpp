@@ -66,8 +66,8 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
-    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getWayCount());
   }
 
   void runBoundingBoxTest()
@@ -117,8 +117,8 @@ public:
     uut.setSchemaTranslationScript("translations/cloudmade.js");
     uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
-    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getWayCount());
 
     int shoreline = 0;
     int water = 0;
@@ -142,8 +142,8 @@ public:
     uut.setSchemaTranslationScript("cloudmade");
     uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
-    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getWayCount());
 
     int shoreline = 0;
     int water = 0;

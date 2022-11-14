@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -73,13 +73,9 @@ public:
 
     QStringList inputs;
     if (!recursive)
-    {
       inputs = IoUtils::expandInputs(args);
-    }
     else
-    {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }
 
     QElapsedTimer timer;
     timer.start();
@@ -89,12 +85,10 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMaps(map, inputs, false, Status::Invalid);
 
-    const QString bounds =
-      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    const QString bounds = GeometryUtils::toLonLatString(CalculateMapBoundsVisitor::getGeosBounds(map));
     std::cout << "Map extent (minx,miny,maxx,maxy): " << bounds << std::endl;
 
-    LOG_STATUS(
-      "Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS("Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

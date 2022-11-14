@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RailwayMergerJs.h"
 
@@ -54,19 +54,16 @@ void RailwayMergerJs::merge(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   script->loadScript(ConfPath::search("Railway.js", "rules"), "plugin");
   Local<Object> global = script->getContext(current)->Global();
   if (global->Has(context, toV8("plugin")).ToChecked() == false)
-  {
     throw IllegalArgumentException("Expected the script to have exports.");
-  }
+
   Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
   Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-  {
     throw IllegalArgumentException("Expected plugin to be a valid object.");
-  }
 
   int numMerged = 0;
   RailwayCriterion crit;
-
+  //  Make a copy of the way map so that the mergers can modify the original
   const WayMap ways = map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {

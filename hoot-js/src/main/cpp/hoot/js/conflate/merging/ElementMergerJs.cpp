@@ -94,14 +94,11 @@ void ElementMergerJs::merge(const FunctionCallbackInfo<Value>& args)
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
-        current->ThrowException(
-          HootExceptionJs::create(
-            IllegalArgumentException("Expected one argument passed to 'merge'."))));
+        current->ThrowException(HootExceptionJs::create(IllegalArgumentException("Expected one argument passed to 'merge'."))));
       return;
     }
 
-    OsmMapPtr map(
-      node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
+    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
 
     LOG_VART(map->getElementCount());
     _merge(map, current);
@@ -191,8 +188,7 @@ void ElementMergerJs::_merge(OsmMapPtr map, Isolate* current)
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
-  const bool containsAtLeastOneRailwayOneToManyMatchedElement =
-    CriterionUtils::containsSatisfyingElements<RailwayOneToManySourceCriterion>(map);
+  const bool containsAtLeastOneRailwayOneToManyMatchedElement = CriterionUtils::containsSatisfyingElements<RailwayOneToManySourceCriterion>(map);
   LOG_VART(containsAtLeastOneRailwayOneToManyMatchedElement);
   if (containsAtLeastOneRailwayOneToManyMatchedElement)
   {
@@ -201,14 +197,9 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
     // by Railway.js and exactly one reference feature to merge tags into.
 
     const long numOneToManySecondaryMatchElements =
-      (long)FilteredVisitor::getStat(
-        std::make_shared<RailwayOneToManySourceCriterion>(),
-        std::make_shared<ElementCountVisitor>(), map);
+      (long)FilteredVisitor::getStat(std::make_shared<RailwayOneToManySourceCriterion>(), std::make_shared<ElementCountVisitor>(), map);
     if (numOneToManySecondaryMatchElements != 1)
-    {
-      throw IllegalArgumentException(
-        "Input map for railway one-to-many merging must have exactly one qualifying secondary feature.");
-    }
+      throw IllegalArgumentException("Input map for railway one-to-many merging must have exactly one qualifying secondary feature.");
 
     // _determineMergeType has already validated the input feature types, so just check status here.
     // We can merge into either a reference or already conflated feature.
@@ -278,17 +269,13 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   MergeType mergeType;
 
   // This should be able to be made cleaner.
-  const bool containsPolys =
-    CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map);
+  const bool containsPolys = CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map);
   //non-building areas
-  const bool containsAreas =
-    CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map);
-  const bool containsBuildings =
-    CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map);
+  const bool containsAreas = CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map);
+  const bool containsBuildings = CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map);
   // You may occasionally see a POI node that is part of a linear or polygonal feature. That's
   // ok and we'll allow it.
-  const bool containsStandalonePois =
-    CriterionUtils::containsSatisfyingElements<StandalonePoiCriterion>(map);
+  const bool containsStandalonePois = CriterionUtils::containsSatisfyingElements<StandalonePoiCriterion>(map);
   const bool containsRailways = CriterionUtils::containsSatisfyingElements<RailwayCriterion>(map);
 
   if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&

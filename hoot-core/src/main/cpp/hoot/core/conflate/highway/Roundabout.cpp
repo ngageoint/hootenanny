@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Roundabout.h"
@@ -51,9 +51,9 @@ namespace hoot
 
 using GeomPtr = std::shared_ptr<geos::geom::Geometry>;
 
-Roundabout::Roundabout() :
-_status(Status::Invalid),
-_overrideStatus(false)
+Roundabout::Roundabout()
+  : _status(Status::Invalid),
+    _overrideStatus(false)
 {
 }
 
@@ -79,9 +79,8 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   double lon = 0;
   double count = 0;
 
-  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  for (const auto& pNode : _roundaboutNodes)
   {
-    ConstNodePtr pNode = _roundaboutNodes[i];
     lon += pNode->getX();
     lat += pNode->getY();
   }
@@ -105,10 +104,8 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
 
   // Get all the nodes from the way
   const std::vector<long> nodeIds = pWay->getNodeIds();
-  for (size_t i = 0; i < nodeIds.size(); i++)
-  {
-    rnd->addRoundaboutNode(pMap->getNode(nodeIds[i]));
-  }
+  for (auto node_id : nodeIds)
+    rnd->addRoundaboutNode(pMap->getNode(node_id));
 
   // Calculate and set center
   rnd->setRoundaboutCenter(rnd->getNewCenter(pMap));
@@ -148,12 +145,11 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
   ElementToGeometryConverter converter(pMap);
   GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
   if (!pRndGeo || pRndGeo->isEmpty())
-  {
     return;
-  }
-  for (size_t i = 0; i < intersectIds.size(); i++)
+
+  for (auto way_id : intersectIds)
   {
-    WayPtr pWay = pMap->getWay(intersectIds[i]);
+    WayPtr pWay = pMap->getWay(way_id);
 
     if (pWay->getStatus() == _status)
       continue; // Bail if this is the ref data
@@ -189,19 +185,19 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
 
         // Now what? Need to throw away the "interior" splits, and replace with wheel spokes.
         bool replace = false;
-        for (size_t j = 0; j < newWays.size(); j++)
+        for (const auto& way : newWays)
         {
-          if (newWays[j])
+          if (way)
           {
-            geos::geom::Coordinate midpoint = getCentroid(pMap, newWays[j]);
+            geos::geom::Coordinate midpoint = getCentroid(pMap, way);
 
             // If the midpoint of the split way is outside of our roundabout geometry, we want to
             // keep it. Otherwise, let it disappear.
             if (!rndEnv.contains(midpoint))
             {
-              pMap->addWay(newWays[j]);
+              pMap->addWay(way);
               // Add the ways outside of the to connect back up if needed
-              _connectingWays.push_back(newWays[j]);
+              _connectingWays.push_back(way);
 
               // Now make connector way
               WayPtr w = std::make_shared<Way>(_otherStatus, pMap->createNextWayId(), 15);
@@ -214,21 +210,17 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
 
               // Take the new way. Whichever is closest, first node or last, connect it to our
               // center point.
-              NodePtr pFirstNode = pMap->getNode(newWays[j]->getFirstNodeId());
-              NodePtr pLastNode = pMap->getNode(newWays[j]->getLastNodeId());
+              NodePtr pFirstNode = pMap->getNode(way->getFirstNodeId());
+              NodePtr pLastNode = pMap->getNode(way->getLastNodeId());
 
               double firstD = pFirstNode->toCoordinate().distance(pCenterNode->toCoordinate());
               double lastD = pLastNode->toCoordinate().distance(pCenterNode->toCoordinate());
 
               // Connect to center node
               if (firstD < lastD)
-              {
                 w->addNode(pFirstNode->getId());
-              }
               else
-              {
                 w->addNode(pLastNode->getId());
-              }
               pMap->addWay(w);
               replace = true;
             }
@@ -266,17 +258,13 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   // Find our connecting nodes & extra nodes.
   std::set<long> connectingNodeIDs;
   std::set<long> extraNodeIDs;
-  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  for (const auto& node : _roundaboutNodes)
   {
-    long nodeId = _roundaboutNodes[i]->getId();
+    long nodeId = node->getId();
     if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 1)
-    {
-      connectingNodeIDs.insert(_roundaboutNodes[i]->getId());
-    }
+      connectingNodeIDs.insert(node->getId());
     else
-    {
-      extraNodeIDs.insert(_roundaboutNodes[i]->getId());
-    }
+      extraNodeIDs.insert(node->getId());
   }
   //LOG_VART(connectingNodeIDs.size());
  // LOG_VART(extraNodeIDs.size());
@@ -291,12 +279,12 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getId() << "...");
   LOG_VART(WayUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
-  for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
+  for (auto node_id : extraNodeIDs)
   {
-    LOG_TRACE("Removing extra node with ID: " << *it << "...");
+    LOG_TRACE("Removing extra node with ID: " << node_id << "...");
     // There may be something off with the map index, as I found situation where one of these extra
     // nodes was still in use. So, changed the removal to only if unused here.
-    RemoveNodeByEid::removeNode(pMap, *it, true);
+    RemoveNodeByEid::removeNode(pMap, node_id, true);
   }
 
   // Add center node
@@ -305,11 +293,11 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
   // Connect it up
   LOG_TRACE("Connecting center node: " << _pCenterNode << "...");
-  for (std::set<long>::iterator it = connectingNodeIDs.begin(); it != connectingNodeIDs.end(); ++it)
+  for (auto node_id : connectingNodeIDs)
   {
     WayPtr pWay = std::make_shared<Way>(_status, pMap->createNextWayId(), 15);
     pWay->addNode(_pCenterNode->getId());
-    pWay->addNode(*it);
+    pWay->addNode(node_id);
     LOG_VART(pWay->getNodeIds());
     pWay->setTag("highway", "unclassified");
 
@@ -324,7 +312,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   LOG_VART(_tempWays.size());
 }
 
-void Roundabout::replaceRoundabout(OsmMapPtr pMap)
+void Roundabout::replaceRoundabout(OsmMapPtr pMap) const
 {
   /*
    * Go through our nodes... if they are still there, check location.
@@ -348,10 +336,9 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
   if (_status == Status::Unknown1 || _overrideStatus)
   {
     std::vector<ConstNodePtr> wayNodes;
-    for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+    for (const auto& thisNode : _roundaboutNodes)
     {
       bool found = false;
-      ConstNodePtr thisNode = _roundaboutNodes[i];
       long nodeId = thisNode->getId();
       if (pMap->getNodes().end() != pMap->getNodes().find(nodeId))
       {
@@ -361,14 +348,11 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         // If nodes differ by more than circular error, add the node as new
         LOG_VART(thisNode->toCoordinate().distance(otherNode->toCoordinate()));
         LOG_VART(thisNode->getCircularError());
-        if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) >
-            thisNode->getCircularError())
+        if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) > thisNode->getCircularError())
         {
           NodePtr pNewNode = std::make_shared<Node>(*thisNode);
           pNewNode->setId(pMap->createNextNodeId());
-          LOG_TRACE(
-            "Node with ID: " << nodeId << " found. Adding it with ID: " << pNewNode->getId() <<
-            "...");
+          LOG_TRACE("Node with ID: " << nodeId << " found. Adding it with ID: " << pNewNode->getId() << "...");
           pMap->addNode(pNewNode);
           wayNodes.push_back(pNewNode);
           found = true;
@@ -378,10 +362,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       // If not found, we need to add it back to the map
       if (!found)
       {
-        NodePtr pNewNode = std::make_shared<Node>(*(_roundaboutNodes[i]));
-        LOG_TRACE(
-          "Node with ID: " << nodeId << " not found. Adding new node: " << pNewNode->getId() <<
-          "...");
+        NodePtr pNewNode = std::make_shared<Node>(*thisNode);
+        LOG_TRACE("Node with ID: " << nodeId << " not found. Adding new node: " << pNewNode->getId() << "...");
         pMap->addNode(pNewNode);
         wayNodes.push_back(pNewNode);
       }
@@ -392,8 +374,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 
     // Make sure our nodes are set correctly
     std::vector<long> nodeIds;
-    for (size_t i = 0; i < wayNodes.size(); i++)
-      nodeIds.push_back(wayNodes[i]->getId());
+    for (const auto& node : wayNodes)
+      nodeIds.push_back(node->getId());
     pRoundabout->setNodes(nodeIds);
     LOG_VART(pRoundabout->getNodeIds());
     pMap->addWay(pRoundabout);
@@ -405,9 +387,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     //  Check all of the connecting ways (if they exist) for an endpoint on or near the roundabout
     LOG_VART(_connectingWays.size());
     int numAttemptedSnaps = 0;
-    for (size_t i = 0; i < _connectingWays.size(); ++i)
+    for (auto way : _connectingWays)
     {
-      WayPtr way = _connectingWays[i];
       bool foundValidWay = pMap->containsWay(way->getId());
       // If the way doesn't exist anymore check for ways with its ID as the parent ID before
       // ignoring it
@@ -420,10 +401,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         //  Validate the endpoints
         if (!node1 || !node2)
           continue;
-        std::shared_ptr<geos::geom::Geometry> ep1 =
-          converter.convertToGeometry(ConstNodePtr(node1));
-        std::shared_ptr<geos::geom::Geometry> ep2 =
-          converter.convertToGeometry(ConstNodePtr(node2));
+        std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(node1));
+        std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(node2));
         //  Use the distance to find the right end to use
         NodePtr endpoint;
         if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))
@@ -432,15 +411,14 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
           endpoint = node2;
         // If the way doesn't exist anymore because of splitting, find the ways with the right
         // endpoint
-        std::vector<long> waysWithNode =
-          ElementIdsVisitor::findWaysByNode(pMap, endpoint->getId());
+        std::vector<long> waysWithNode = ElementIdsVisitor::findWaysByNode(pMap, endpoint->getId());
         if (waysWithNode.size() < 1)
           continue;
 
         //  Find the way that contains the correct node endpoint but isn't a 'hoot:special' node
-        for (size_t index = 0; index < waysWithNode.size(); ++index)
+        for (auto way_id : waysWithNode)
         {
-          WayPtr w = pMap->getWay(waysWithNode[index]);
+          WayPtr w = pMap->getWay(way_id);
           if (w && !w->getTags().contains(MetadataTags::HootSpecial()))
           {
             way = w;
@@ -462,8 +440,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       if (!endpoint1 || !endpoint2)
         continue;
       //  Check if either of the endpoints are already part of the roundabout
-      if (pRoundabout->containsNodeId(endpoint1->getId()) ||
-          pRoundabout->containsNodeId(endpoint2->getId()))
+      if (pRoundabout->containsNodeId(endpoint1->getId()) || pRoundabout->containsNodeId(endpoint2->getId()))
         continue;
       //  Snap the closest
       UnconnectedWaySnapper::snapClosestWayEndpointToWay(pMap, way, pRoundabout);
@@ -473,9 +450,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 
     // Need to remove temp parts no matter what; delete temp ways we added
     LOG_VART(_tempWays.size());
-    for (size_t i = 0; i < _tempWays.size(); i++)
+    for (const auto& tempWay : _tempWays)
     {
-      ConstWayPtr tempWay = _tempWays[i];
       LOG_TRACE("Removing temp way: " << tempWay->getElementId() << "...");
       RemoveWayByEid::removeWayFully(pMap, tempWay->getId());
     }
@@ -499,7 +475,7 @@ QString Roundabout::toString() const
       .arg(_status.toString())
       .arg(_otherStatus.toString())
       .arg(QString::number(_roundaboutNodes.size()))
-      .arg(QString::number(_roundaboutWay->getNodeIds().size()))
+      .arg(QString::number(_roundaboutWay->getNodeCount()))
       .arg(_pCenterNode->getId())
       .arg(QString::number(_tempWays.size()))
       .arg(QString::number(_connectingWays.size()))
@@ -513,42 +489,31 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
 
   str += ", Original nodes size: " + QString::number(_roundaboutNodes.size());
   if (_roundaboutWay)
-  {
-    str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeIds().size());
-  }
+    str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeCount());
 
   bool nodeIdsMatch = false;
   const std::vector<ConstNodePtr> originalNodes = _roundaboutNodes;
   const std::vector<long> originalNodeIds = NodeUtils::nodesToNodeIds(originalNodes);
   if (_roundaboutWay)
-  {
     nodeIdsMatch = (originalNodeIds == _roundaboutWay->getNodeIds());
-  }
   if (nodeIdsMatch)
-  {
     str += ", original and current node IDs match";
-  }
   else
   {
-    str +=
-      ", original and current node IDs do not match, original nodes: " + getOriginalNodesString();
+    str +=", original and current node IDs do not match, original nodes: " + getOriginalNodesString();
     str += "; current nodes: " + getCurrentNodesString(map);
   }
 
   if (nodeIdsMatch)
   {
-    const std::vector<ConstNodePtr> currentNodes =
-      NodeUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
+    const std::vector<ConstNodePtr> currentNodes = NodeUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
     if (NodeUtils::nodeCoordsMatch(originalNodes, currentNodes))
-    {
       str += ", original and current node coordinates match.";
-    }
     else
     {
-      str +=
-        ", original and current node coordinates do not match. original node coords: " +
-        NodeUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
-        NodeUtils::nodeCoordsToString(currentNodes);
+      str += ", original and current node coordinates do not match. original node coords: " +
+             NodeUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
+             NodeUtils::nodeCoordsToString(currentNodes);
     }
   }
 
@@ -558,17 +523,12 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
 QString Roundabout::getOriginalNodesString() const
 {
   QString str;
-  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  for (const auto& node : _roundaboutNodes)
   {
-    ConstNodePtr node = _roundaboutNodes[i];
     if (node)
-    {
       str += QString::number(node->getId()) + ",";
-    }
     else
-    {
       str += "null node,";
-    }
   }
   str.chop(1);
   return str;
@@ -578,17 +538,13 @@ QString Roundabout::getCurrentNodesString(OsmMapPtr map) const
 {
   QString str;
   const std::vector<long> nodeIds = _roundaboutWay->getNodeIds();
-  for (size_t i = 0; i < nodeIds.size(); i++)
+  for (auto node_id : nodeIds)
   {
-    ConstNodePtr node = map->getNode(nodeIds[i]);
+    ConstNodePtr node = map->getNode(node_id);
     if (node)
-    {
       str += QString::number(node->getId()) + ", ";
-    }
     else
-    {
-      str += "ID: " + QString::number(nodeIds[i]) + " not found, ";
-    }
+      str += "ID: " + QString::number(node_id) + " not found, ";
   }
   str.chop(1);
   return str;

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "BBox.h"
 
 //std includes
+#include <limits>
 #include <math.h>
 #include <stdlib.h>
-#include <limits>
 
 //hoot includes
 
@@ -67,15 +67,12 @@ BBox::~BBox()
 bool BBox::in(const vector<double>& p) const
 {
   if (p.size() < _min.size() || p.size() < _max.size())
-  {
     throw HootException("Input vector size is less than min or max size.");
-  }
 
   bool result = true;
   for (uint i = 0; i < _min.size(); i++)
-  {
     result = result && (p[i] >= _min[i]) && (p[i] <= _max[i]);
-  }
+
   return result;
 }
 
@@ -95,9 +92,7 @@ QString BBox::toString() const
 {
   QString result = "{ ";
   for (uint i = 0; i < _min.size(); i++)
-  {
     result += QString::number(_min[i]) + " : " + QString::number(_max[i]) + " ";
-  }
   result += "}";
   return result;
 }
@@ -105,9 +100,7 @@ QString BBox::toString() const
 double BBox::getWidth(int d) const
 {
   if (d > (int)_min.size() || d > (int)_max.size())
-  {
     throw HootException("Index is greater than min or max size.");
-  }
   return _max[d] - _min[d];
 }
 
@@ -116,9 +109,7 @@ void BBox::_check() const
   for (uint i = 0; i < _min.size(); i++)
   {
     if (_min[i] > _max[i])
-    {
       throw HootException("Min is greater than max. " + toString());
-    }
   }
 }
 

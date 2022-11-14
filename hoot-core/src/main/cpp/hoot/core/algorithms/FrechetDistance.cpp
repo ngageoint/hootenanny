@@ -63,9 +63,9 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   _ls2 = ElementToGeometryConverter(_map).convertToLineString(_w2);
   //  Precalculate the locations and distances for way1
   LocationOfPoint locatorWay2(_map, _w2);
-  for (size_t i = 0; i < _w1->getNodeCount(); i++)
+  for (auto node_id : _w1->getNodeIds())
   {
-    Coordinate pointOnWay1 = _map->getNode(_w1->getNodeId(static_cast<int>(i)))->toCoordinate();
+    Coordinate pointOnWay1 = _map->getNode(node_id)->toCoordinate();
     WayLocation nearestPointOnWay2 = locatorWay2.locate(pointOnWay1);
     //  Save off the nearest point on way2 and the distance to it
     _locations_w1.push_back(nearestPointOnWay2);
@@ -73,9 +73,9 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   }
   //  Precalculate the locations and distances for way2
   LocationOfPoint locatorWay1(_map, _w1);
-  for (size_t i = 0; i < _w2->getNodeCount(); i++)
+  for (auto node_id : _w2->getNodeIds())
   {
-    Coordinate pointOnWay2 = _map->getNode(_w2->getNodeId(static_cast<int>(i)))->toCoordinate();
+    Coordinate pointOnWay2 = _map->getNode(node_id)->toCoordinate();
     WayLocation nearestPointOnWay1 = locatorWay1.locate(pointOnWay2);
     //  Save off the nearest point on way1 and the distance to it
     _locations_w2.push_back(nearestPointOnWay1);
@@ -295,12 +295,12 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
   }
 
   //  Iterate all of the valid starting points in order to reduce search
-  for (subline_entry::size_type i = 0; i < starts.size(); i++)
+  for (const auto& start : starts)
   {
     subline_entry sub;
 
-    int r = starts[i].first;
-    int c = starts[i].second;
+    int r = start.first;
+    int c = start.second;
     //  Use the starting position and modify it if the ways are reversed
     sub.push_back(vertex_match(r, c));
     //  The beginning frechet distance is between the two starting nodes

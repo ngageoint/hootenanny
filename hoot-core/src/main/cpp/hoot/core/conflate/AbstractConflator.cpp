@@ -138,8 +138,7 @@ void AbstractConflator::_createMatches()
   double findMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
-  _stats.append(
-    SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
+  _stats.append(SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 }
 
 MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& matches)
@@ -148,16 +147,14 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
 
   LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(matches.size()));
   _stats.append(SingleStat("Number of Matches Before Whole Groups", (double)matches.size()));
-  LOG_DEBUG(
-    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
+  LOG_DEBUG("Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(matches, matchSets);
   MemoryUsageChecker::getInstance().check();
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
-  LOG_DEBUG(
-    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
+  LOG_DEBUG("Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-whole-group-removal");
 
@@ -217,8 +214,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   double optimizeMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
   _stats.append(SingleStat("Number of Optimized Matches", (double)matches.size()));
-  _stats.append(SingleStat("Number of Matches Optimized per Second",
-    (double)matches.size() / optimizeMatchesTime));
+  _stats.append(SingleStat("Number of Matches Optimized per Second", (double)matches.size() / optimizeMatchesTime));
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   // TODO: this stat isn't right for the Network alg
   LOG_DEBUG("Post constraining match count: " << matches.size());
@@ -496,7 +492,7 @@ void AbstractConflator::_addConflateScoreTags(const ElementPtr& e, const MatchCl
   }
 }
 
-void AbstractConflator::_addConflateScoreTags()
+void AbstractConflator::_addConflateScoreTags() const
 {
   for (const auto& match : _matches)
   {

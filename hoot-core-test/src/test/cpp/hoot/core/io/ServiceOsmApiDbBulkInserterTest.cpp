@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -71,53 +71,35 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTagCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMemberCount());
 
     //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)14,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)5,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)7,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)16,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)1,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)3,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)7, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)16, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)1, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)3, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
 
     //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)4,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)4, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
     //file validation will have to be good enough
@@ -139,53 +121,35 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(1)->getTagCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(2)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(2)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(1)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMemberCount());
 
     //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)14,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)5,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)7,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)16,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)1,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)3,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)7, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)16, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)1, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)3, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
 
     //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)4,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)4, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
 //    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
@@ -207,53 +171,35 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTagCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(7)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(8)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(7)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(8)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(6)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(7)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(8)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(5)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(5)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(5)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(5)->getMemberCount());
 
     //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)14,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)5,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)7,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)16,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)1,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)3,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)7, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)16, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)1, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)3, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
 
     //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)4,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)4, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
 //    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
@@ -275,53 +221,35 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(3000000016)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)14, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(3000000016)->getTagCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000006)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000007)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(3000000008)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)5, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000006)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000007)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(3000000008)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000004)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000005)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3000000006)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3000000007)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000008)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3000000005)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3000000005)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3000000005)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3000000005)->getMemberCount());
 
     //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)14,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)5,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)7,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)16,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)1,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)3,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)14, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)7, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)16, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)1, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)3, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
 
     //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)4,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)4, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
 //    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
@@ -343,53 +271,35 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)16, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(17)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)16, map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(17)->getTagCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)6, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(5)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(7)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((long)6, map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(5)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(7)->getTagCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(5)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(6)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(7)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelations().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3)->getMembers().size());
+    CPPUNIT_ASSERT_EQUAL((long)2, map->getRelationCount());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3)->getTagCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3)->getMemberCount());
 
     //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)16,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)5,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)6,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)8,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)18,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)2,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)4,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)4,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)16, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)6, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)8, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)18, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)2, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)4, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)4, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
 
     //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)5,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
     std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
@@ -503,14 +413,10 @@ public:
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
     //write some data from somewhere else while before our writer starts writing data
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql"); //1 changeset
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "nodes.sql"); //2 nodes
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "ways.sql"); //1 way
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "relations.sql"); //1 relation
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql"); //1 changeset
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "nodes.sql"); //2 nodes
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "ways.sql"); //1 way
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "relations.sql"); //1 relation
 
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
@@ -628,29 +534,29 @@ public:
   void maxDataTypeSizeTest()
   {
     std::cout << "size of short: " << sizeof(short) << std::endl;
-    std::cout << "max size of short: " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<short>::max()) << std::endl;
+    std::cout << "max size of short: "
+              << StringUtils::formatLargeNumber(std::numeric_limits<short>::max()) << std::endl;
     std::cout << "size of unsigned short: " << sizeof(unsigned short) << std::endl;
-    std::cout << "max size of unsigned short: " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned short>::max()) << std::endl;
+    std::cout << "max size of unsigned short: "
+              << StringUtils::formatLargeNumber(std::numeric_limits<unsigned short>::max()) << std::endl;
     std::cout << "size of int: " << sizeof(int) << std::endl;
-    std::cout << "max size of int : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<int>::max()) << std::endl;
+    std::cout << "max size of int : "
+              << StringUtils::formatLargeNumber(std::numeric_limits<int>::max()) << std::endl;
     std::cout << "size of unsigned int: " << sizeof(unsigned int) << std::endl;
-    std::cout << "max size of unsigned int : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned int>::max()) << std::endl;
+    std::cout << "max size of unsigned int : "
+              << StringUtils::formatLargeNumber(std::numeric_limits<unsigned int>::max()) << std::endl;
     std::cout << "size of long: " << sizeof(long) << std::endl;
-    std::cout << "max size of long : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<long>::max()) << std::endl;
+    std::cout << "max size of long : "
+              << StringUtils::formatLargeNumber(std::numeric_limits<long>::max()) << std::endl;
     std::cout << "size of unsigned long: " << sizeof(unsigned long) << std::endl;
-    std::cout << "max size of unsigned long : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
+    std::cout << "max size of unsigned long : "
+              << StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
     std::cout << "size of float: " << sizeof(float) << std::endl;
-    std::cout << "max size of float : " <<
-                 StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<float>::max())) << std::endl;
+    std::cout << "max size of float : "
+              << StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<float>::max())) << std::endl;
     std::cout << "size of double: " << sizeof(double) << std::endl;
-    std::cout << "max size of double : " <<
-                 StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<double>::max())) << std::endl;
+    std::cout << "max size of double : "
+              << StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<double>::max())) << std::endl;
   }
 };
 

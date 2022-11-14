@@ -41,9 +41,48 @@ var assert = require('assert'),
 parser = new DOMParser();
 
 var HOOT_HOME = process.env.HOOT_HOME;
+
+console.log('HOOT_HOME is ' + HOOT_HOME);
+
 var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var server = require(HOOT_HOME + '/translations/TranslationServer.js');
+
+
+function translateFcode(schema,f_code,geom = '')
+{
+  try {
+    var feature = server.handleInputs({
+        fcode: f_code,
+        translation: schema,
+        geom: geom,
+        method: 'GET',
+        path: '/translateFrom'
+    });
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+};
+
+
+function getFcodesForGeom(schema,geom)
+{
+  try {
+    var feature = server.getFCodes({
+        translation: schema,
+        geometry: geom,
+        method: 'GET',
+        path: '/translateFrom'
+    });
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+};
+
 
 // Handy Info:
 // translateTo:
@@ -68,7 +107,7 @@ function schemaFromFcode(F_CODE,geometry,schema)
   catch (err) {
     return {'error':err};
   }
-}; // End osmToOge
+}; // End schemaFromFcode
 
 
 function osmToOgr(feature,schema)
@@ -124,6 +163,57 @@ function makeJson(OSM)
 };
 
 
+function getTranslationsList()
+{
+  try {
+    var feature = server.handleInputs({
+      method: 'GET',
+      path: '/getTranslations'
+    });
+    // console.log(schema + ': ' + code + ' ' + geo + ' ' + feature.name + '  ' + feature.desc);
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+}; // End getTranslationsList
+
+
+// Wrapper for 'capabilities', 'translations','version' etc'
+function getThing(thing)
+{
+  try {
+    var feature = server.handleInputs({
+      method: 'GET',
+      path: '/' + thing
+    });
+    return feature;
+  }
+  catch (err) {
+    return {'error':err};
+  }
+}; // End thing
+
+
+// Console.log version of translate.dumpSchema
+function dumpSchema(schema)
+{
+  schema.forEach( function(item) {
+    console.log('Feature: ' + item.name + '  Geom: ' + item.geom + '  FdName: ' + item.fdname);
+
+    item.columns.forEach( function (column) {
+      console.log('    Attr: ' + column.name + '  Desc: ' + column.desc + '  Type: ' + column.type + '  Default: ' + column.defValue);
+      if (column.type == 'enumeration')
+      {
+        column.enumerations.forEach( function (eValue) {console.log('        Value: ' + eValue.value + '  Name: ' + eValue.name); });
+      }
+    });
+
+    console.log(''); // just to get one blank line
+  });
+}
+
+
 // From the schema:
   // name: 'PAL015',
   // fcode: 'AL015',
@@ -132,7 +222,7 @@ function makeJson(OSM)
   // geom: 'Point',
 
 // Test a list of F_CODES against a list of schema and geometries
-function testF_CODE(codeList,schemaList,geomList)
+function testF_CODE(codeList,schemaList,geomList = ['Point','Line','Area'])
 {
   codeList.forEach(code => {
     console.log('F_CODE: ' + code);
@@ -165,11 +255,11 @@ var startArea = '<osm version="0.6" upload="true" generator="hootenanny">\
 var endPoint = '</node></osm>';
 var endLine = '</way></osm>'; // NOTE: This is also for Areas as well
 
-// Test a translated feature
+
+// Test translating OGR to and from OSM
 function testTranslated(schema,featureCode,tagList,geomList = ['Point','Line','Area'])
 {
   console.log('---------------');
-
   var osmFeatures = {};
 
   osmFeatures.Point = startPoint + '<tag k="F_CODE" v="' + featureCode + '"/>';
@@ -239,7 +329,80 @@ function testTranslated(schema,featureCode,tagList,geomList = ['Point','Line','A
 }; // End testTranslated
 
 
-// Test a translated feature
+// Test translating from OGR to OSM
+function testToOSM(schema,featureCode,tagList,geomList = ['Point','Line','Area'])
+{
+  console.log('---------------');
+  var osmFeatures = {};
+
+  osmFeatures.Point = startPoint + '<tag k="F_CODE" v="' + featureCode + '"/>';
+  for (var tag in tagList) { osmFeatures.Point += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Point += endPoint;
+
+  osmFeatures.Line = startLine + '<tag k="F_CODE" v="' + featureCode + '"/>';
+  for (var tag in tagList) { osmFeatures.Line += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Line += endLine;
+
+  osmFeatures.Area = startArea + '<tag k="F_CODE" v="' + featureCode + '"/>';
+  for (var tag in tagList) { osmFeatures.Area += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Area += endLine;
+
+  for (var geom of geomList)
+  {
+    console.log('' + schema + '  ' + featureCode + '  ' + geom);
+
+    // Raw input
+    var inputJson = makeJson(osmFeatures[geom]);
+    console.log('Raw: ' + JSON.stringify(inputJson,Object.keys(inputJson).sort()));
+
+    var toOsm = ogrToOsm(osmFeatures[geom],schema);
+    var osmJson = makeJson(toOsm);
+
+    if (Object.keys(osmJson).length > 0)
+    {
+      // console.log(osmJson);
+      console.log('OSM: ' + JSON.stringify(osmJson,Object.keys(osmJson).sort()));
+    }
+    else
+    {
+      console.log('  ## No OSM tags for ' + featureCode + ' ##');
+    }
+
+    var toOgr = osmToOgr(toOsm,schema);
+    var ogrJson = makeJson(toOgr);
+
+    if (Object.keys(ogrJson).length > 0)
+    {
+      // console.log(ogrJson);
+      console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+    }
+    else
+    {
+      console.log('  ## No Ogr tags for ' + featureCode + ' ##');
+    }
+
+    // Sanity Check
+    var backToOsm = ogrToOsm(toOgr,schema);
+    var secondJson = makeJson(backToOsm);
+    // console.log(secondJson);
+    console.log('OSM: ' + JSON.stringify(secondJson,Object.keys(secondJson).sort()));
+
+    if (JSON.stringify(osmJson,Object.keys(osmJson).sort()) !== JSON.stringify(secondJson,Object.keys(secondJson).sort()))
+    {
+      console.log('  ## Not Same OSM Tags: ' + ogrJson.F_CODE + ' vs ' + featureCode);
+    }
+
+    if (ogrJson.F_CODE !== featureCode)
+    {
+      console.log('  ## Not Same F_CODE: ' + ogrJson.F_CODE + ' vs ' + featureCode);
+    }
+
+    console.log('-----');
+  } // End geom
+}; // End testToOSM
+
+
+// Test translating OSM to and from OGR
 function testOSM(schema,tagList,geomList = ['Point','Line','Area'])
 {
   console.log('---------------');
@@ -306,6 +469,49 @@ function testOSM(schema,tagList,geomList = ['Point','Line','Area'])
     console.log('-----');
   } // End geom
 }; // End testOSM
+
+// Test translating from OSM to OGR
+function testToOGR(schema,tagList,geomList = ['Point','Line','Area'])
+{
+  console.log('---------------');
+
+  var osmFeatures = {};
+
+  osmFeatures.Point = startPoint;
+  for (var tag in tagList) { osmFeatures.Point += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Point += endPoint;
+
+  osmFeatures.Line = startLine;
+  for (var tag in tagList) { osmFeatures.Line += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Line += endLine;
+
+  osmFeatures.Area = startArea;
+  for (var tag in tagList) { osmFeatures.Area += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Area += endLine;
+
+  for (var geom of geomList)
+  {
+    console.log('' + schema + '  ' + geom + ':');
+
+    // Raw input
+    var inputJson = makeJson(osmFeatures[geom]);
+    console.log('Raw: ' + JSON.stringify(inputJson,Object.keys(inputJson).sort()));
+
+    var toOgr = osmToOgr(osmFeatures[geom],schema);
+    var ogrJson = makeJson(toOgr);
+
+    if (Object.keys(ogrJson).length > 0)
+    {
+      // console.log(ogrJson);
+      console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+    }
+    else
+    {
+      console.log('  ## No Ogr tags for ' + featureCode + ' ##');
+    }
+    console.log('-----');
+  } // End geom
+}; // End testToOGR
 
 
 // Go through a schema and test each feature
@@ -380,20 +586,19 @@ function testSchema(schemaMap)
 }; // End testSchema
 
 
-// Go through a schema looking for attributes
-// This is to help building a translation script
+// Dump out the F_CODES with a particular attribute.
+// If it is enumerzted, dump the values as well
 var dumpValues = function (schema,aName)
 {
   console.log('---------------');
-
   var enumList = {};
 
   schema.getDbSchema().forEach(feature => {
-    console.log('F_CODE: ' + feature.fcode + '  Geom: ' + feature.geom + '  Desc: ' + feature.desc);
 
     feature['columns'].forEach(attr => {
       if (attr.name == aName)
       {
+        console.log('F_CODE: ' + feature.fcode + '  Geom: ' + feature.geom + '  Desc: ' + feature.desc);
         if (attr['type'] == 'enumeration')
         {
           attr['enumerations'].forEach(enValue => {
@@ -405,18 +610,16 @@ var dumpValues = function (schema,aName)
         {
           console.log(' name:' + aName + '  Type:' + attr['type']);
         }
+        console.log('-----');
       }
     });
-    console.log('-----');
   }); // End single schema
-
-  // If we have an enumerated list, dump out the consolidated version
-  for (var i in enumList) console.log("    ['XXX','" + i + "','YYY','" + enumList[i] + "'],X");
 }; // End dumpValues
 
 
-
 if (typeof exports !== 'undefined') {
+    exports.translateFcode = translateFcode;
+    exports.getFcodesForGeom = getFcodesForGeom;
     exports.schemaFromFcode = schemaFromFcode;
     exports.osmToOgr = osmToOgr;
     exports.ogrToOsm = ogrToOsm;
@@ -424,6 +627,10 @@ if (typeof exports !== 'undefined') {
     exports.testF_CODE = testF_CODE;
     exports.testTranslated = testTranslated;
     exports.testOSM = testOSM;
+    exports.testToOSM = testToOSM;
+    exports.testToOGR = testToOGR;
     exports.testSchema = testSchema;
     exports.dumpValues = dumpValues;
+    exports.dumpSchema = dumpSchema;
+    exports.getThing = getThing;
 }

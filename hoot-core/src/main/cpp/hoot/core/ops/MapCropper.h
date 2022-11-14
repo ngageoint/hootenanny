@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MAPCROPPER_H
@@ -33,10 +33,10 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -73,9 +73,8 @@ public:
   QString getInitStatusMessage() const override;
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " elements";
+    return QString("Cropped %1 / %2 elements")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numProcessed));
   }
 
   void setInvert(bool invert);
@@ -85,6 +84,7 @@ public:
   void setRemoveSuperflousFeatures(bool remove) { _removeSuperfluousFeatures = remove; }
   void setRemoveMissingElements(bool remove) { _removeMissingElements = remove; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
+  void setRemoveFromParentRelation(bool remove) { _removeFromParentRelation = remove; }
 
 private:
 
@@ -118,6 +118,10 @@ private:
 
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
+
+  /** When set to true the way ref is removed from any parent relations (generally should happen) */
+  bool _removeFromParentRelation;
+
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 

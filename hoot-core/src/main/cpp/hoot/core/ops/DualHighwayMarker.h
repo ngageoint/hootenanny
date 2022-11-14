@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUAL_HIGHWAY_MARKER_H
 #define DUAL_HIGHWAY_MARKER_H
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCache.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -67,9 +67,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Marking roads that appear to be dual highways..."; }
   QString getCompletedStatusMessage() const override
-  {
-    return "Marked " + StringUtils::formatLargeNumber(_numAffected) + " dual highways.";
-  }
+  { return "Marked " + StringUtils::formatLargeNumber(_numAffected) + " dual highways."; }
 
   QString getDescription() const override { return "Marks dual highways with a custom tag."; }
   QString getName() const override { return className(); }

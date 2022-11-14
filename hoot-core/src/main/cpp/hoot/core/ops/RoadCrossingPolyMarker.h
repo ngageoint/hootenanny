@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ROAD_CROSSING_POLY_MARKER_H
 #define ROAD_CROSSING_POLY_MARKER_H
 
 // Hoot
+#include <hoot/core/conflate/highway/RoadCrossingPolyRule.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/conflate/highway/RoadCrossingPolyRule.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/validation/Validator.h>
 
@@ -69,9 +69,8 @@ public:
   QString getInitStatusMessage() const override { return "Marking roads crossing polygons..."; }
   QString getCompletedStatusMessage() const override
   {
-    return
-      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " roads crossing polygons " +
-      "out of " + StringUtils::formatLargeNumber(_numRoads) + " total roads .";
+    return QString("Marked %1 roads crossing polygons out of %2 total roads .")
+            .arg(StringUtils::formatLargeNumber(_numAffected), StringUtils::formatLargeNumber(_numRoads));
   }
 
   QString getDescription() const override { return "Marks roads crossing polygons"; }

@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OneWayRoadStandardizer.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/ReversedRoadCriterion.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -41,9 +41,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, OneWayRoadStandardizer)
 void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
 {
   if (!e)
-  {
     return;
-  }
 
   if (ReversedRoadCriterion(_map->shared_from_this()).isSatisfied(e))
   {
@@ -58,9 +56,9 @@ void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
     else
     {
       RelationPtr roadRelation = std::dynamic_pointer_cast<Relation>(e);
-      for (size_t i = 0; i < roadRelation->getMembers().size(); ++i)
+      for (const auto& m : roadRelation->getMembers())
       {
-        ElementPtr member = _map->getElement(roadRelation->getMembers()[i].getElementId());
+        ElementPtr member = _map->getElement(m.getElementId());
         if (member->getElementType() == ElementType::Way)
         {
           // assuming the oneway tag isn't also present on the member

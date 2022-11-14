@@ -41,7 +41,7 @@ BoundsStringTaskGridGenerator::BoundsStringTaskGridGenerator(const QString& boun
 
 TaskGrid BoundsStringTaskGridGenerator::generateTaskGrid()
 {
-  LOG_INFO("Generating task grid for bounds: " << GeometryUtils::envelopeToString(_bounds) << "...");
+  LOG_INFO("Generating task grid for bounds: " << GeometryUtils::toLonLatString(_bounds) << "...");
 
   TaskGrid taskGrid;
   TaskGrid::TaskGridCell taskGridCell;

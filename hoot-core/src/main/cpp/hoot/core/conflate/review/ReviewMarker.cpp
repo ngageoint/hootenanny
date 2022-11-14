@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ReviewMarker.h"
 
@@ -40,47 +40,38 @@ namespace hoot
 
 QString ReviewMarker::_complexGeometryType = "Bad Geometry";
 
-ReviewMarker::ReviewMarker() :
-_addReviewTagsToFeatures(ConfigOptions().getAddReviewTagsToFeatures())
+ReviewMarker::ReviewMarker()
+  : _addReviewTagsToFeatures(ConfigOptions().getAddReviewTagsToFeatures())
 {
 }
 
 set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr& map, ReviewUid uid)
 {
   set<ElementId> result;
-
   ConstRelationPtr r = map->getRelation(uid.getId());
   if (r)
   {
     const vector<RelationData::Entry>& entries = r->getMembers();
-    for (size_t i = 0; i < entries.size(); i++)
+    for (const auto& member : entries)
     {
-      const ElementId elementId = entries[i].getElementId();
+      const ElementId elementId = member.getElementId();
       if (map->containsElement(elementId))
-      {
         result.insert(elementId);
-      }
     }
   }
-
   return result;
 }
 
 set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr& map, ElementId eid)
 {
   set<ElementId> result = map->getParents(eid);
-
-  for (set<ElementId>::iterator it = result.begin(); it != result.end();)
+  for (auto it = result.begin(); it != result.end();)
   {
-    set<ElementId>::iterator current = it++;
+    auto current = it++;
     ElementId p = *current;
-    if (p.getType() != ElementType::Relation ||
-        map->getRelation(p.getId())->getType() != MetadataTags::RelationReview())
-    {
+    if (p.getType() != ElementType::Relation || map->getRelation(p.getId())->getType() != MetadataTags::RelationReview())
       result.erase(current);
-    }
   }
-
   return result;
 }
 
@@ -93,17 +84,13 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr& map, ReviewUid uid)
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr& map)
 {
   set<ElementId> result;
-
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
     if (relation->getElementType() == ElementType::Relation || relation->getType() == MetadataTags::RelationReview())
-    {
       result.insert(relation->getElementId());
-    }
   }
-
   return result;
 }
 
@@ -146,13 +133,7 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, 
 
 bool ReviewMarker::isReview(const ConstElementPtr& e)
 {
-  bool result = false;
-  if (e->getElementType() == ElementType::Relation &&
-      e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
-  {
-    result = true;
-  }
-  return result;
+  return (e->getElementType() == ElementType::Relation && e->getTags().isTrue(MetadataTags::HootReviewNeeds()));
 }
 
 bool ReviewMarker::isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid)
@@ -160,9 +141,8 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid)
   return isReview(map->getElement(uid));
 }
 
-void ReviewMarker::mark(
-  const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
-  const QString& reviewType, double score, const vector<QString>& choices) const
+void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
+                        const QString& reviewType, double score, const vector<QString>& choices) const
 {
   if (!e1 || !e2)
     return;
@@ -173,18 +153,16 @@ void ReviewMarker::mark(
   mark(map, ids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(
-  const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, const vector<QString>& choices) const
+void ReviewMarker::mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
+                        const QString& reviewType, double score, const vector<QString>& choices) const
 {
   //  Copy element IDs into a vector to preserve ordering used by other overloads of mark() function
   vector<ElementId> vids(ids.begin(), ids.end());
   mark(map, vids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(
-  const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
-  double score, const vector<QString>& choices) const
+void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
+                        double score, const vector<QString>& choices) const
 {
   if (!e)
     return;
@@ -195,25 +173,18 @@ void ReviewMarker::mark(
   LOG_TRACE("Marking review with note: " << note);
 }
 
-void ReviewMarker::mark(
-  const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, const vector<QString>& choices) const
+void ReviewMarker::mark(const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
+                        const QString& reviewType, double score, const vector<QString>& choices) const
 {
   if (note.isEmpty())
-  {
     throw IllegalArgumentException("You must specify a review note.");
-  }
 
-  RelationPtr r =
-    std::make_shared<Relation>(
-      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview());
+  RelationPtr r = std::make_shared<Relation>(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview());
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   if (_addReviewTagsToFeatures)
   {
-    for (vector<ElementId>::const_iterator itr = ids.begin(); itr != ids.end(); ++itr)
-    {
-      map->getElement(*itr)->getTags().set(MetadataTags::HootReviewNeeds(), true);
-    }
+    for (const auto& eid : ids)
+      map->getElement(eid)->getTags().set(MetadataTags::HootReviewNeeds(), true);
   }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
@@ -221,21 +192,16 @@ void ReviewMarker::mark(
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
-  for (vector<ElementId>::const_iterator it = ids.begin(); it != ids.end(); ++it)
-  {
-    ElementId id = *it;
-    r->addElement(MetadataTags::RoleReviewee(), id);
-  }
-  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
+  for (const auto& eid : ids)
+    r->addElement(MetadataTags::RoleReviewee(), eid);
+  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMemberCount());
   r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
 
   LOG_VART(r->getId());
   LOG_VART(ids);
 
   for (unsigned int i = 0; i < choices.size(); i++)
-  {
     r->getTags()[MetadataTags::HootReviewChoices() + ":" + QString::number(i+1)] = choices[i];
-  }
 
   map->addElement(r);
 

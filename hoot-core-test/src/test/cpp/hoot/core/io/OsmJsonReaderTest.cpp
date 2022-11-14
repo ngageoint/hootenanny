@@ -354,8 +354,7 @@ public:
     QString query = "[out:json][bbox];node;out;";
     queryOverpass(uut, QString("%1?data=%2").arg(url, query));
 
-    s.set(ConfigOptions::getOverpassApiQueryPathKey(), _inputPath + "/overpass_query.oql");
-    uut.setConfiguration(s);
+    uut.setQueryFilePath(_inputPath + "/overpass_query.overpassql");
 
     queryOverpass(uut, url);
 
@@ -465,8 +464,8 @@ public:
     CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
     CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
     //  If the url is of the correct scheme and matches the host, we use it.
-    CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
-    CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));
+    CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost + "?data=[out:json]"));
+    CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost + "?data=[out:json]"));
     //  wrong scheme
     CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
     //  If the url doesn't match with our configured Overpass host, skip it.
@@ -484,8 +483,8 @@ public:
     uut.read(map);
     uut.close();
 
-    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
   }
 
   void runBoundsLeaveConnectedOobWaysTest()

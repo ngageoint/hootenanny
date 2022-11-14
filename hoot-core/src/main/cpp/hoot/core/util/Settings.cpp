@@ -118,8 +118,7 @@ private:
     {
       //  Split the base configs and process them in order
       QString base = it->second.data().c_str();
-      const QStringList baseConfigs =
-        base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
+      const QStringList baseConfigs = base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
       for (const auto& value : qAsConst(baseConfigs))
       {
         LOG_DEBUG("Loading base config: " << value << "...");
@@ -174,10 +173,8 @@ Settings::Settings()
 void Settings::prepend(const QString& key, const QStringList& values)
 {
   QStringList l = getList(key, QStringList());
-  //  TODO:  Logically this doesn't even work
-  for (int i = values.size() - 1; i == 0; i--)
+  for (int i = values.size() - 1; i >= 0; i--)
     l.prepend(values.at(i));
-
   set(key, l);
 }
 

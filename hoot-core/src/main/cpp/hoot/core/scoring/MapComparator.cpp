@@ -106,10 +106,9 @@ public:
   {
     // e is the test element
 
-    CHECK_MSG(_refMap->containsElement(e->getElementId()), "Did not find element: " <<
-              e->getElementId());
+    CHECK_MSG(_refMap->containsElement(e->getElementId()), "Did not find element: " << e->getElementId());
     const std::shared_ptr<const Element>& refElement = _refMap->getElement(e->getElementId());
-
+    //  Copy the tags so that they can be modified and compared
     Tags refTags = refElement->getTags();
     Tags testTags = e->getTags();
 
@@ -142,9 +141,7 @@ public:
       _errorCount++;
       if (_errorCount <= _errorLimit)
       {
-        LOG_WARN(
-          "Tags do not match (ref: " << refElement->getElementId() << ", test: " <<
-          e->getElementId() << ":");
+        LOG_WARN("Tags do not match (ref: " << refElement->getElementId() << ", test: " << e->getElementId() << ":");
 
         QStringList keys = refTags.keys();
         keys.append(testTags.keys());
@@ -195,8 +192,7 @@ public:
     }
   }
 
-  void compareNode(const std::shared_ptr<const Element>& refElement,
-                   const std::shared_ptr<const Element>& testElement)
+  void compareNode(const std::shared_ptr<const Element>& refElement, const std::shared_ptr<const Element>& testElement)
   {
     ConstNodePtr refNode = std::dynamic_pointer_cast<const Node>(refElement);
     ConstNodePtr testNode = std::dynamic_pointer_cast<const Node>(testElement);
@@ -214,22 +210,20 @@ public:
     }
   }
 
-  void compareWay(const std::shared_ptr<const Element>& refElement,
-                  const std::shared_ptr<const Element>& testElement)
+  void compareWay(const std::shared_ptr<const Element>& refElement, const std::shared_ptr<const Element>& testElement)
   {
     ConstWayPtr refWay = std::dynamic_pointer_cast<const Way>(refElement);
     ConstWayPtr testWay = std::dynamic_pointer_cast<const Way>(testElement);
 
     CHECK_MSG(
-      refWay->getNodeIds().size() == testWay->getNodeIds().size(),
+      refWay->getNodeCount() == testWay->getNodeCount(),
       "Node count does not match. " << refWay->getElementId() << ": " <<
-      refWay->getNodeIds().size() << ", " << testWay->getElementId() << ": " <<
-      testWay->getNodeIds().size());
-    for (size_t i = 0; i < refWay->getNodeIds().size(); ++i)
+      refWay->getNodeCount() << ", " << testWay->getElementId() << ": " <<
+      testWay->getNodeCount());
+    for (size_t i = 0; i < refWay->getNodeCount(); ++i)
     {
       CHECK_MSG(refWay->getNodeIds()[i] == testWay->getNodeIds()[i],
-        QString("Node IDs don't match. (%1 vs. %2)").
-        arg(hoot::toString(refWay), hoot::toString(testWay)));
+        QString("Node IDs don't match. (%1 vs. %2)").arg(hoot::toString(refWay), hoot::toString(testWay)));
     }
   }
 
@@ -239,14 +233,11 @@ public:
     ConstRelationPtr refRelation = std::dynamic_pointer_cast<const Relation>(refElement);
     ConstRelationPtr testRelation = std::dynamic_pointer_cast<const Relation>(testElement);
 
-    QString relationStr =
-      QString("%1 vs. %2").arg(hoot::toString(refRelation), hoot::toString(testRelation));
+    QString relationStr = QString("%1 vs. %2").arg(hoot::toString(refRelation), hoot::toString(testRelation));
 
-    CHECK_MSG(
-      refRelation->getType() == testRelation->getType(), "Types do not match. " + relationStr);
-    CHECK_MSG(refRelation->getMembers().size() == testRelation->getMembers().size(),
-      "Member count does not match. " + relationStr);
-    for (size_t i = 0; i < refRelation->getMembers().size(); i++)
+    CHECK_MSG(refRelation->getType() == testRelation->getType(), "Types do not match. " + relationStr);
+    CHECK_MSG(refRelation->getMemberCount() == testRelation->getMemberCount(), "Member count does not match. " + relationStr);
+    for (size_t i = 0; i < refRelation->getMemberCount(); i++)
     {
       CHECK_MSG(
         refRelation->getMembers()[i].getRole() == testRelation->getMembers()[i].getRole(),
@@ -316,9 +307,7 @@ void MapComparator::_printIdDiff(const std::shared_ptr<OsmMap>& map1, const std:
      }
   }
   else
-  {
     idsIn1AndNotIn2Limited = idsIn1AndNotIn2;
-  }
 
   QSet<long> ids2Copy = ids2;
   const QSet<long> idsIn2AndNotIn1 = ids2Copy.subtract(ids1);
@@ -335,12 +324,9 @@ void MapComparator::_printIdDiff(const std::shared_ptr<OsmMap>& map1, const std:
      }
   }
   else
-  {
     idsIn2AndNotIn1Limited = idsIn2AndNotIn1;
-  }
 
-  const bool printFullElements =
-    ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
+  const bool printFullElements = ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
   if (!idsIn1AndNotIn2Limited.empty())
   {
     LOG_WARN(
@@ -373,30 +359,30 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
                             const std::shared_ptr<OsmMap>& testMap) const
 {
   bool mismatch = false;
-  if (refMap->getNodes().size() != testMap->getNodes().size())
+  if (refMap->getNodeCount() != testMap->getNodeCount())
   {
     LOG_WARN(
-      "Number of nodes does not match (1: " << refMap->getNodes().size() << "; 2: " <<
-      testMap->getNodes().size() << ")");
+      "Number of nodes does not match (1: " << refMap->getNodeCount() << "; 2: " <<
+      testMap->getNodeCount() << ")");
     // Yes, the two map could have the same number of the same type of elements and they still
     // might not completely match up, but we'll let CompareVisitor educate us on that. This gives
     // us a quick rundown of element ID diffs if count discrepancy is detected.
     _printIdDiff(refMap, testMap, ElementType::Node);
     mismatch = true;
   }
-  else if (refMap->getWays().size() != testMap->getWays().size())
+  else if (refMap->getWayCount() != testMap->getWayCount())
   {
     LOG_WARN(
-      "Number of ways does not match (1: " << refMap->getWays().size() << "; 2: " <<
-      testMap->getWays().size() << ")");
+      "Number of ways does not match (1: " << refMap->getWayCount() << "; 2: " <<
+      testMap->getWayCount() << ")");
     _printIdDiff(refMap, testMap, ElementType::Way);
     mismatch = true;
   }
-  else if (refMap->getRelations().size() != testMap->getRelations().size())
+  else if (refMap->getRelationCount() != testMap->getRelationCount())
   {
     LOG_WARN(
-      "Number of relations does not match (1: " << refMap->getRelations().size() << "; 2: " <<
-      testMap->getRelations().size() << ")");
+      "Number of relations does not match (1: " << refMap->getRelationCount() << "; 2: " <<
+      testMap->getRelationCount() << ")");
     _printIdDiff(refMap, testMap, ElementType::Relation);
     mismatch = true;
   }

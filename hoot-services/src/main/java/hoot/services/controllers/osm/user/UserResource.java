@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm.user;
 
@@ -160,6 +160,13 @@ public class UserResource {
                 .fetchOne();
 
         return userResponse(request, user);
+    }
+
+    @GET
+    @Path("/session")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getSession(@Context HttpServletRequest request) {
+        return Response.ok(request.getSession().getId()).build();
     }
 
     /**
@@ -390,7 +397,7 @@ public class UserResource {
 
             String getName = (String) json.get("name");
             String getFavorites = json.get("members").toString();
-	        tags.put(getName, getFavorites);
+            tags.put(getName, getFavorites);
 
             createQuery().update(users)
                 .where(users.id.eq(userId))

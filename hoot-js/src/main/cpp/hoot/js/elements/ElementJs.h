@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTJS_H
 #define ELEMENTJS_H
@@ -80,9 +80,7 @@ private:
 inline void toCpp(v8::Local<v8::Value> v, ConstElementPtr& e)
 {
   if (v.IsEmpty() || !v->IsObject())
-  {
     throw IllegalArgumentException("Expected input to be an ElementJs object type.");
-  }
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getConstElement();
 }
@@ -90,9 +88,7 @@ inline void toCpp(v8::Local<v8::Value> v, ConstElementPtr& e)
 inline void toCpp(v8::Local<v8::Value> v, ElementPtr& e)
 {
   if (v.IsEmpty() || !v->IsObject())
-  {
     throw IllegalArgumentException("Expected input to be an ElementJs object type.");
-  }
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getElement();
 }

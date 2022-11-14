@@ -65,8 +65,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
     catch (const boost::property_tree::json_parser::json_parser_error& e)
     {
       throw HootException(
-        QString("Error parsing JSON: %1 (line %2)")
-          .arg(QString::fromStdString(e.message()), QString::number(e.line())));
+        QString("Error parsing JSON: %1 (line %2)").arg(QString::fromStdString(e.message()), QString::number(e.line())));
     }
     catch (const std::exception& e)
     {
@@ -79,8 +78,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
   for (const auto& distProp : propTree->get_child("search_radii"))
   {
-    const QString key =
-      QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
+    const QString key = QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
     LOG_VART(key);
     if (key.isEmpty())
       throw IllegalArgumentException("Missing 'key' in POI search radius entry.");
@@ -106,7 +104,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
 QString PoiSearchRadius::toString() const
 {
-  return "Key: " + _key + ", Value: " + _value + ", distance: " + QString::number(_distance);
+  return QString("Key: %1, Value: %2, distance: %3").arg(_key, _value, QString::number(_distance));
 }
 
 }

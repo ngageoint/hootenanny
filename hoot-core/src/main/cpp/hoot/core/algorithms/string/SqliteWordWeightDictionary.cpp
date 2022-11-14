@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "SqliteWordWeightDictionary.h"
@@ -30,9 +30,10 @@
 namespace hoot
 {
 
-SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString& filePath) : _reader(filePath)
+SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString& filePath)
+  : _count(1),
+    _reader(filePath)
 {
-  _count = 1;
   _nonWord.setPattern("[^\\w]");
 }
 
@@ -48,15 +49,11 @@ double SqliteWordWeightDictionary::getWeight(const QString& word) const
   {
     c = _reader.readCount(normalized);
     if (c > 0)
-    {
       _weights[normalized] = c;
-    }
     return c;
   }
   else
-  {
     c = it->second;
-  }
 
   return c / (double)_count;
 }

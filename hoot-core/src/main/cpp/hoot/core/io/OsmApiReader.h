@@ -51,6 +51,8 @@ public:
   OsmApiReader();
   /** Destructor */
   ~OsmApiReader() override;
+
+  void open(const QString& url) override;
   /**
    * @brief close Close the reader
    */

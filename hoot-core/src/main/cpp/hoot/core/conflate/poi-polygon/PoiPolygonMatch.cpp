@@ -112,46 +112,34 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdP
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
 {
   if (distance < 0.0 || distance > 5000.0)  //upper limit is arbitrary
-  {
-    throw IllegalArgumentException(
-      QString("Invalid POI/Polygon match distance configuration option value: %1.  0 <= value <= 5000").arg(distance));
-  }
+    throw IllegalArgumentException(QString("Invalid POI/Polygon match distance configuration option value: %1.  0 <= value <= 5000").arg(distance));
   _matchDistanceThreshold = distance;
 }
 
 void PoiPolygonMatch::setReviewDistanceThreshold(double distance)
 {
   if (distance < 0.0 || distance > 5000.0)  //upper limit is arbitrary
-  {
-    throw IllegalArgumentException(
-      QString("Invalid POI/Polygon review distance configuration option value: %1.  0 <= value <= 5000").arg(distance));
-  }
+    throw IllegalArgumentException(QString("Invalid POI/Polygon review distance configuration option value: %1.  0 <= value <= 5000").arg(distance));
   _reviewDistanceThreshold = distance;
 }
 
 void PoiPolygonMatch::setNameScoreThreshold(double threshold)
 {
   if (threshold < 0.01 || threshold > 1.0)
-  {
-    throw IllegalArgumentException(
-      QString("Invalid POI/Polygon name score threshold configuration option value: %1.  0.01 <= value <= 1.0").arg(threshold));
-  }
+    throw IllegalArgumentException(QString("Invalid POI/Polygon name score threshold configuration option value: %1.  0.01 <= value <= 1.0").arg(threshold));
   _nameScoreThreshold = threshold;
 }
 
 void PoiPolygonMatch::setTypeScoreThreshold(double threshold)
 {
   if (threshold < 0.01 || threshold > 1.0)
-  {
-    throw IllegalArgumentException(
-      QString("Invalid POI/Polygon type score threshold configuration option value: %1.  0.01 <= value <= 1.0").arg(threshold));
-  }
+    throw IllegalArgumentException(QString("Invalid POI/Polygon type score threshold configuration option value: %1.  0.01 <= value <= 1.0").arg(threshold));
   _typeScoreThreshold = threshold;
 }
 
 void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 { 
-  for (auto kvp : types)
+  for (auto kvp : qAsConst(types))
   {
     //As a UI workaround, we're allowing the format "key,value" to be used instead of "key=value".
     kvp.replace(",", "=");
@@ -453,12 +441,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
           .arg(_reviewEvidenceThreshold)
           .arg(distanceMatchStr)
           .arg(round(_distance))
-          .arg(typeMatchStr)
-          .arg(QString::number(_typeScore))
-          .arg(nameMatchStr)
-          .arg(QString::number(_nameScore))
-          .arg(addressMatchStr)
-          .arg(QString::number(_addressScore))
+          .arg(typeMatchStr,
+               QString::number(_typeScore),
+               nameMatchStr,
+               QString::number(_nameScore),
+               addressMatchStr,
+               QString::number(_addressScore))
           .arg(_matchDistanceThreshold)
           .arg(_reviewDistancePlusCe);
     }
@@ -528,8 +516,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 
   //don't really need to put a distance == -1.0 check here for now, since we're assuming
   //PoiPolygonDistanceExtractor will always be run before this one
-  const double alphaShapeDist =
-    PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
+  const double alphaShapeDist = PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
   const bool convexPolyDistMatch = alphaShapeDist <= _matchDistanceThreshold;
   if (convexPolyDistMatch)

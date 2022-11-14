@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -100,12 +100,12 @@ public:
     v.setExemptTagKeys(exemptTagKeys);
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL(1, n1->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, n1->getTagCount());
     stringstream ss1;
     ss1 << n1->getTags().keys();
     CPPUNIT_ASSERT_EQUAL(string("[1]{" + MetadataTags::Ref1().toStdString() + "}"), ss1.str());
 
-    CPPUNIT_ASSERT_EQUAL(1, n2->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, n2->getTagCount());
     stringstream ss2;
     ss2 << n2->getTags().keys();
     CPPUNIT_ASSERT_EQUAL(string("[1]{" + MetadataTags::Ref1().toStdString() + "}"), ss2.str());
@@ -138,9 +138,9 @@ public:
     v.setReplacementTagValues(replacementTagValues);
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL(0, n1->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(0, n1->getTagCount());
 
-    CPPUNIT_ASSERT_EQUAL(1, n2->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(1, n2->getTagCount());
     stringstream ss2;
     ss2 << n2->getTags().keys() << n2->getTags().values();
     CPPUNIT_ASSERT_EQUAL(string("[1]{highway}[1]{road}"), ss2.str());

@@ -115,10 +115,9 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   SuperfluousNodeRemover::removeNodes(map);
 
   LOG_INFO("Starting map size: " << StringUtils::formatLargeNumber(startingMapSize));
-  LOG_DEBUG("Starting map bounds: " << GeometryUtils::envelopeToString(startingBounds));
+  LOG_DEBUG("Starting map bounds: " << GeometryUtils::toLonLatString(startingBounds));
   LOG_INFO("Cropped map size: " << StringUtils::formatLargeNumber(map->size()));
-  LOG_DEBUG("Cropped map bounds: " <<
-            GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map)));
+  LOG_DEBUG("Cropped map bounds: " << GeometryUtils::toLonLatString(CalculateMapBoundsVisitor::getGeosBounds(map)));
   LOG_INFO("Minimum nodes in a single tile: " << tileCalc.getMinNodeCountInOneTile());
   LOG_INFO("Maximum nodes in a single tile: " << tileCalc.getMaxNodeCountInOneTile());
 }

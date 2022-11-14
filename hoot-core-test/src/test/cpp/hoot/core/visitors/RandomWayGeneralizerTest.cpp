@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -69,15 +69,11 @@ public:
   {
     Log::WarningLevel levelBefore = Log::getInstance().getLevel();
     if (enableDebugLogging)
-    {
       Log::getInstance().setLevel(Log::Debug);
-    }
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     if (_inputMapCache.contains(inputFile))
-    {
       map = std::make_shared<OsmMap>(_inputMapCache[inputFile]);
-    }
     else
     {
       OsmXmlReader reader;
@@ -91,9 +87,9 @@ public:
       }
     }
 
-    const int numNodesBefore = map->getNodes().size();
+    const int numNodesBefore = static_cast<int>(map->getNodeCount());
     LOG_VARD(numNodesBefore);
-    const int numWaysBefore = map->getWays().size();
+    const int numWaysBefore = static_cast<int>(map->getWayCount());
     LOG_VARD(numWaysBefore);
 
     MapProjector::projectToPlanar(map);
@@ -107,10 +103,10 @@ public:
     map->visitRw(wayGeneralizeVisitor);
     MapProjector::projectToWgs84(map);
 
-    const int numNodesActuallyRemoved = numNodesBefore - map->getNodes().size();
+    const int numNodesActuallyRemoved = numNodesBefore - static_cast<int>(map->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(numNodesRemoved, numNodesActuallyRemoved);
     LOG_VARD(numNodesRemoved);
-    const int numWaysRemoved = numWaysBefore - map->getWays().size();
+    const int numWaysRemoved = numWaysBefore - static_cast<int>(map->getWayCount());
     CPPUNIT_ASSERT_EQUAL(0, numWaysRemoved);
     LOG_VARD(numWaysRemoved);
 
@@ -121,9 +117,7 @@ public:
     HOOT_FILE_EQUALS(outputCompareFile, outputFile);
 
     if (enableDebugLogging)
-    {
       Log::getInstance().setLevel(levelBefore);
-    }
   }
 
   void runTest1()

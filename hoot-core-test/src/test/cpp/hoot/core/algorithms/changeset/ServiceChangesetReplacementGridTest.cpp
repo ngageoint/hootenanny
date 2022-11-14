@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -102,6 +102,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   // allows for bypassing the metric asserts so you can view their values for update purposes
   const bool DISPLAY_METRICS_ONLY = false;
 
+  const int MAX_FILE_PRINT_LENGTH = ConfigOptions().getProgressVarPrintLengthMax();
+
 public:
 
   ServiceChangesetReplacementGridTest()
@@ -133,9 +135,7 @@ public:
     // the upper right node to drop out and mangle the poly.
 
     _testName = "badPolyIdSync1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -169,6 +169,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -183,9 +185,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(21L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
     }
   }
 
@@ -196,9 +196,7 @@ public:
     // right section to be truncated.
 
     _testName = "badPolyIdSync2Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -232,6 +230,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(6, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -246,9 +246,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(15L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(3L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
     }
   }
 
@@ -258,9 +256,7 @@ public:
     // refers to two service roads in the middle right section of the map.
 
     _testName = "deadEndRoadSnapTest";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -294,6 +290,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(11, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -309,8 +307,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(8L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -322,9 +318,7 @@ public:
     // different.
 
     _testName = "differingTypes1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -361,6 +355,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -376,8 +372,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -391,9 +385,7 @@ public:
     // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #3.
 
     _testName = "droppedNodes1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -427,6 +419,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(10, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -439,11 +433,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(445L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(158L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(97L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(14L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -462,9 +454,7 @@ public:
     DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -498,10 +488,12 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(463, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(9, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(9, uut.getOutputMetrics().getNumDuplicateElementPairs());  //  10
       CPPUNIT_ASSERT_EQUAL(986, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(17648L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
@@ -510,11 +502,10 @@ public:
       CPPUNIT_ASSERT_EQUAL(2496L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(189L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(157L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(281L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(288L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(24L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(48L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -527,9 +518,7 @@ public:
     // "Santa Barbara Drive".
 
     _testName = "orphanedNodes1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -561,6 +550,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -576,8 +567,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -591,9 +580,7 @@ public:
     // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #1.
 
     _testName = "orphanedNodes2Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -634,6 +621,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -648,9 +637,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(133L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(40L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
     }
   }
 
@@ -681,9 +668,7 @@ public:
     DisableLog dl;
 
     _testName = "outOfSpecMixedRelations1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -720,6 +705,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(12, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -734,9 +721,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(136L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(25L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(9L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
     }
   }
 
@@ -786,6 +771,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -801,8 +788,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -813,9 +798,7 @@ public:
     // occurs, unless the workflow is cut only, this test could possibly be removed.
 
     _testName = "refFilteredToEmpty1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -852,6 +835,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -867,8 +852,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -883,9 +866,7 @@ public:
     // some of what appear to be the same roads across input datasets.
 
     _testName = "refSinglePoint1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -922,6 +903,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(6, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -937,8 +920,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -948,9 +929,7 @@ public:
     // references.
 
     _testName = "relationCrop1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -987,6 +966,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -1002,8 +983,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(25L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -1012,9 +991,7 @@ public:
     // This tests replacement of water features.
 
     _testName = "riverbank1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -1051,6 +1028,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(7, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -1066,8 +1045,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
   }
 
@@ -1087,9 +1064,7 @@ public:
      */
 
     _testName = "roundabouts1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -1126,6 +1101,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -1141,9 +1118,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(73L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
     }
   }
 
@@ -1157,9 +1132,7 @@ public:
      */
 
     _testName = "secFilteredToEmpty1Test";
-    _prepInput(_inputPath + "/" + _testName + "-Input1.osm",
-               _inputPath + "/" + _testName + "-Input2.osm",
-               "");
+    _prepInput(_inputPath + "/" + _testName + "-Input1.osm", _inputPath + "/" + _testName + "-Input2.osm", "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
 
     ChangesetTaskGridReplacer uut;
@@ -1196,6 +1169,8 @@ public:
     }
     else
     {
+      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
@@ -1210,9 +1185,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
     }
   }
 
@@ -1244,10 +1217,7 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(rootDir + "/combined-data/NOMEData.osm",
-               rootDir + "/combined-data/OSMData.osm",
-               "-115.1260,36.1525,-115.0246,36.2227",
-               outDir);
+    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "-115.1260,36.1525,-115.0246,36.2227", outDir);
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
@@ -1265,15 +1235,12 @@ public:
     OsmMapPtr outputMap = uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
 
     if (WRITE_NON_CONFLATABLE)
-    {
       _writeNonConflatable(outputMap, finalOutput.replace(".osm", "-non-conflatable.osm"));
-    }
     if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
-    {
-      _writeDiffBetweenReplacedAndReplacement(
-        taskGrid.getBounds(), finalOutput.replace("-non-conflatable.osm", "-diff.osm"));
-    }
+      _writeDiffBetweenReplacedAndReplacement(taskGrid.getBounds(), finalOutput.replace("-non-conflatable.osm", "-diff.osm"));
   }
+
+//#define CELL_SUBSET_DEBUGGING
 
   void northVegasLargeUniformTest()
   {
@@ -1302,15 +1269,11 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(rootDir + "/combined-data/NOMEData.osm",
-               rootDir + "/combined-data/OSMData.osm",
-               "");
+    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
+#ifdef CELL_SUBSET_DEBUGGING
     // for cell subset debugging
-//    _prepInput(rootDir + "/combined-data/NOMEData.osm",
-//               rootDir + "/combined-data/OSMData.osm",
-//               "-115.1704,36.1514,-115.1117,36.1923",
-//               outDir);
-
+    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "-115.1704,36.1514,-115.1117,36.1923", outDir);
+#endif
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
     QString finalOutput = outDir + "/" + _testName + "-out.osm";
@@ -1318,33 +1281,31 @@ public:
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
+#ifdef CELL_SUBSET_DEBUGGING
     // for cell subset debugging
-//    QList<int> includeIds;
-//    includeIds.append(29);
-//    uut.setTaskCellIncludeIds(includeIds);
-    //uut.setKillAfterNumChangesetDerivations(2);
+    QList<int> includeIds;
+    includeIds.append(29);
+    uut.setTaskCellIncludeIds(includeIds);
+#endif
     const TaskGrid taskGrid =
       UniformTaskGridGenerator(
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid();
+#ifdef CELL_SUBSET_DEBUGGING
     // for cell subset debugging
-//    const TaskGrid taskGrid =
-//      UniformTaskGridGenerator(
-//        "-115.0280,36.2499,-114.9817,36.2817", 1,
-//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-//        .generateTaskGrid();
+    const TaskGrid taskGrid =
+      UniformTaskGridGenerator(
+        "-115.0280,36.2499,-114.9817,36.2817", 1,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid();
+#endif
     OsmMapPtr outputMap = uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
 
     if (WRITE_NON_CONFLATABLE)
-    {
       _writeNonConflatable(outputMap, finalOutput.replace(".osm", "-non-conflatable.osm"));
-    }
     if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
-    {
-      _writeDiffBetweenReplacedAndReplacement(
-        taskGrid.getBounds(), finalOutput.replace("-non-conflatable.osm", "-diff.osm"));
-    }
+      _writeDiffBetweenReplacedAndReplacement(taskGrid.getBounds(), finalOutput.replace("-non-conflatable.osm", "-diff.osm"));
   }
 
   void auditionTest()
@@ -1355,11 +1316,7 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/NOME_14992d.osm",
-      rootDir + "/OSM_14992d.osm"/*,
-      "-115.0317,36.2456,-114.9747,36.2870",
-      outDir*/);
+    _prepInput(rootDir + "/NOME_14992d.osm", rootDir + "/OSM_14992d.osm"/*, "-115.0317,36.2456,-114.9747,36.2870", outDir*/);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -1368,11 +1325,12 @@ public:
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
+#ifdef CELL_SUBSET_DEBUGGING
     // for cell subset debugging
-//    QList<int> includeIds;
-//    includeIds.append(59);
-//    uut.setTaskCellIncludeIds(includeIds);
-    //uut.setKillAfterNumChangesetDerivations(2);
+    QList<int> includeIds;
+    includeIds.append(59);
+    uut.setTaskCellIncludeIds(includeIds);
+#endif
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -1394,12 +1352,9 @@ private:
                   const QString& cropInputBounds = "", const QString& outDir = "",
                   const bool clearToReplaceDb = true)
   {
-    _loadDataToReplaceDb(toReplace, cropInputBounds, outDir + "/starting-cropped-to-replace.osm",
-                         clearToReplaceDb);
-
+    _loadDataToReplaceDb(toReplace, cropInputBounds, outDir + "/starting-cropped-to-replace.osm", clearToReplaceDb);
     _replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(_testName).toString();
-    _loadReplacementDataDb(
-      replacement, cropInputBounds, outDir + "/starting-cropped-replacement.osm");
+    _loadReplacementDataDb(replacement, cropInputBounds, outDir + "/starting-cropped-replacement.osm");
   }
 
   void _initConfig()
@@ -1416,6 +1371,7 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
+    conf().loadJson("DeriveChangeset.conf");
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
@@ -1432,14 +1388,11 @@ private:
       ApiDb::execSqlFile(DATA_TO_REPLACE_URL, "test-files/servicesdb/users.sql");
       OsmMapReaderFactory::read(map, DATA_TO_REPLACE_URL, true, Status::Unknown1);
       if (map->size() != 0)
-      {
         throw HootException("Data to replace db is not empty at start.");
-      }
     }
 
     map = std::make_shared<OsmMap>();
-    // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
-    LOG_STATUS("Reading the data to replace from: ..." << FileUtils::toLogFormat(input, 25) << "...");
+    LOG_STATUS("Reading the data to replace from: ..." << FileUtils::toLogFormat(input, MAX_FILE_PRINT_LENGTH) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " elements to replace read in: " <<
@@ -1451,20 +1404,16 @@ private:
       cropper.setBounds(GeometryUtils::boundsFromString(cropBounds));
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
-      LOG_STATUS(
-        "Data to replace pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
+      LOG_STATUS("Data to replace pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
-      LOG_STATUS(
-        "Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()) <<
+      LOG_STATUS("Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()) <<
         "; cropped in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       if (ConfigOptions().getDebugMapsWrite())
       {
         if (cropOut.trimmed().isEmpty())
-        {
           throw IllegalArgumentException("No crop output file path specified.");
-        }
-        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, 25) << "...");
+        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, MAX_FILE_PRINT_LENGTH) << "...");
         OsmMapWriterFactory::write(map, cropOut);
       }
       _subTaskTimer.restart();
@@ -1476,7 +1425,7 @@ private:
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
-    LOG_STATUS("Loading the data to replace db to: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
+    LOG_STATUS("Loading the data to replace db to: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, MAX_FILE_PRINT_LENGTH) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
     LOG_STATUS(
@@ -1491,7 +1440,7 @@ private:
     // TODO: Can this be converted over to use the bulk inserter?
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    LOG_STATUS("Reading the replacement data from: ..." << FileUtils::toLogFormat(input, 25) << "...");
+    LOG_STATUS("Reading the replacement data from: ..." << FileUtils::toLogFormat(input, MAX_FILE_PRINT_LENGTH) << "...");
     // Load in with the replacement source IDs to mimic production behavior.
     // ChangesetReplacementCreator will throw them out when the data is first loaded in to avoid ID
     // conflicts.
@@ -1506,8 +1455,7 @@ private:
       cropper.setBounds(GeometryUtils::boundsFromString(cropBounds));
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
-      LOG_STATUS(
-        "Replacement data pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
+      LOG_STATUS("Replacement data pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
       LOG_STATUS(
@@ -1516,10 +1464,8 @@ private:
       if (ConfigOptions().getDebugMapsWrite())
       {
         if (cropOut.trimmed().isEmpty())
-        {
           throw IllegalArgumentException("No crop output file path specified.");
-        }
-        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, 25) << "...");
+        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, MAX_FILE_PRINT_LENGTH) << "...");
         OsmMapWriterFactory::write(map, cropOut);
       }
       _subTaskTimer.restart();
@@ -1531,7 +1477,7 @@ private:
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
-    LOG_STATUS("Loading the replacement data db to: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
+    LOG_STATUS("Loading the replacement data db to: ..." << FileUtils::toLogFormat(_replacementDataUrl, MAX_FILE_PRINT_LENGTH) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
@@ -1565,8 +1511,7 @@ private:
     // diff out to the task grid bounds, b/c that's the data that was actually replaced.
     // use a lenient bounds
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
-    conf().set(
-      ConfigOptions::getBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    conf().set(ConfigOptions::getBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
     conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
     const QString replacedDataUrl = DATA_TO_REPLACE_URL;
     ConflateUtils::writeDiff(_replacementDataUrl, replacedDataUrl, bounds, output);
@@ -1574,8 +1519,7 @@ private:
 
   void _cleanupDataToReplace()
   {
-    LOG_STATUS(
-      "Cleaning up the data to replace db at: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
+    LOG_STATUS("Cleaning up the data to replace db at: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, MAX_FILE_PRINT_LENGTH) << "...");
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     LOG_INFO(
       "Data to replace db cleaned in: " <<
@@ -1586,7 +1530,7 @@ private:
   void _cleanupReplacementData()
   {
     LOG_STATUS(
-      "Cleaning up the replacement data db at: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
+      "Cleaning up the replacement data db at: ..." << FileUtils::toLogFormat(_replacementDataUrl, MAX_FILE_PRINT_LENGTH) << "...");
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     database.deleteMap(database.getMapIdByName(_testName));

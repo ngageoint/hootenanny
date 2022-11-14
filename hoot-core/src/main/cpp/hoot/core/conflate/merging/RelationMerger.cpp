@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RelationMerger.h"
 
@@ -39,55 +39,41 @@
 namespace hoot
 {
 
-RelationMerger::RelationMerger() :
-_mergeTags(true),
-_deleteRelation2(true)
+RelationMerger::RelationMerger()
+  : _mergeTags(true),
+    _deleteRelation2(true)
 {
 }
 
 void RelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1 == elementId2)
-  {
     return;
-  }
-  if (elementId1.getType() != ElementType::Relation ||
-      elementId2.getType() != ElementType::Relation)
-  {
-    throw IllegalArgumentException(
-      "Element types other than relation were passed to RelationMerger.");
-  }
+  if (elementId1.getType() != ElementType::Relation || elementId2.getType() != ElementType::Relation)
+    throw IllegalArgumentException("Element types other than relation were passed to RelationMerger.");
 
   RelationPtr relation1 = _map->getRelation(elementId1.getId());
   RelationPtr relation2 = _map->getRelation(elementId2.getId());
 
   if (!relation1 || !relation2)
-  {
     return;
-  }
 
   LOG_TRACE("Merging relations " << elementId1 << " and " << elementId2 << "...");
 
   if (relation1->contains(elementId2))
-  {
     relation1->removeElement(elementId2);
-  }
 
   if (_mergeTags)
   {
     LOG_TRACE("Merging tags...");
-    Tags newTags =
-      TagMergerFactory::mergeTags(
-        relation1->getTags(), relation2->getTags(), ElementType::Relation);
+    Tags newTags = TagMergerFactory::mergeTags(relation1->getTags(), relation2->getTags(), ElementType::Relation);
     relation1->setTags(newTags);
   }
 
   // copy relation 2's members into 1
   bool allMembersCopied = false;
   if (relation2->getMemberCount() > 0)
-  {
     allMembersCopied = _mergeMembers(relation1, relation2);
-  }
   LOG_VART(allMembersCopied);
 
   if (_deleteRelation2)
@@ -103,14 +89,10 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
 
   if (ConfigOptions().getDebugMapsWriteDetailed())
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, className(), elementId1.toString() + "-" + elementId2.toString());
-  }
+    OsmMapWriterFactory::writeDebugMap(_map, className(), elementId1.toString() + "-" + elementId2.toString());
 }
 
-bool RelationMerger::_mergeMembers(
-  RelationPtr replacingRelation, RelationPtr relationBeingReplaced) const
+bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced) const
 {
   LOG_TRACE("Merging members...");
 
@@ -121,43 +103,38 @@ bool RelationMerger::_mergeMembers(
 
   // Load up the relation members from both relations.
 
-  const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
+  const std::vector<RelationData::Entry>& replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());
-  const std::vector<RelationData::Entry> relationBeingReplacedMembers =
-    relationBeingReplaced->getMembers();
+  const std::vector<RelationData::Entry>& relationBeingReplacedMembers = relationBeingReplaced->getMembers();
   LOG_VART(relationBeingReplacedMembers.size());
 
   // If insertion ever proves too slow with these lists, then we can switch them over to linked
   // lists.
   QList<RelationMemberComparison> replacingRelationMemberComps;
-  for (size_t i = 0; i < replacingRelationMembers.size(); i++)
+  for (const auto& member : replacingRelationMembers)
   {
-    const RelationData::Entry member = replacingRelationMembers[i];
     if (member.getElementId() != relationBeingReplaced->getElementId())
     {
       ConstElementPtr memberElement = _map->getElement(member.getElementId());
       if (memberElement)
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        replacingRelationMemberComps.append(
-          RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
+        replacingRelationMemberComps.append(RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
       }
     }
   }
   LOG_VART(replacingRelationMemberComps.size());
 
   QList<RelationMemberComparison> relationBeingReplacedMemberComps;
-  for (size_t i = 0; i < relationBeingReplacedMembers.size(); i++)
+  for (const auto& member : relationBeingReplacedMembers)
   {
-    const RelationData::Entry member = relationBeingReplacedMembers[i];
     if (member.getElementId() != replacingRelation->getElementId())
     {
       ConstElementPtr memberElement = _map->getElement(member.getElementId());
       if (memberElement)
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        relationBeingReplacedMemberComps.append(
-          RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
+        relationBeingReplacedMemberComps.append(RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
       }
     }
   }
@@ -192,16 +169,13 @@ bool RelationMerger::_mergeMembers(
 
     RelationMemberComparison beforeMemberFromReplaced;
     RelationMemberComparison afterMemberFromReplaced;
+    // Find the member right before our current member in the relation being replaced.
     if (i != 0)
-    {
-      // Find the member right before our current member in the relation being replaced.
       beforeMemberFromReplaced = relationBeingReplacedMemberComps[i - 1];
-    }
+    // Find the member right after our current member in the relation being replaced.
     if (i != relationBeingReplacedMemberComps.size() - 1)
-    {
-      // Find the member right after our current member in the relation being replaced.
       afterMemberFromReplaced = relationBeingReplacedMemberComps[i + 1];
-    }
+
     if (!beforeMemberFromReplaced.isNull())
     {
       LOG_VART(beforeMemberFromReplaced);
@@ -221,9 +195,7 @@ bool RelationMerger::_mergeMembers(
       // replacing relation.
       const int index = replacingRelationMemberComps.indexOf(beforeMemberFromReplaced);
       if (index != -1)
-      {
         matchingFromReplacingBeforeIndex = index;
-      }
     }
     int matchingFromReplacingAfterIndex = relationBeingReplacedMemberComps.size();
     if (!afterMemberFromReplaced.isNull())
@@ -233,9 +205,7 @@ bool RelationMerger::_mergeMembers(
       // replacing relation.
       const int index = replacingRelationMemberComps.indexOf(afterMemberFromReplaced);
       if (index != -1)
-      {
         matchingFromReplacingAfterIndex = index;
-      }
     }
     if (matchingFromReplacingBeforeIndex != relationBeingReplacedMemberComps.size())
     {
@@ -284,8 +254,7 @@ bool RelationMerger::_mergeMembers(
         "Directly preceding member only. Inserting current member: " <<
         currentMemberFromReplaced << " after index " <<  matchingFromReplacingBeforeIndex <<
         "...");
-      replacingRelationMemberComps.insert(
-        matchingFromReplacingBeforeIndex + 1, currentMemberFromReplaced);
+      replacingRelationMemberComps.insert(matchingFromReplacingBeforeIndex + 1, currentMemberFromReplaced);
     }
     else if (matchingFromReplacingAfterIndex != relationBeingReplacedMemberComps.size() &&
              matchingFromReplacingBeforeIndex == relationBeingReplacedMemberComps.size())
@@ -296,8 +265,7 @@ bool RelationMerger::_mergeMembers(
       LOG_TRACE(
         "Directly following member only. Inserting current member: " <<
         currentMemberFromReplaced << " before index " <<  matchingFromReplacingAfterIndex << "...");
-      replacingRelationMemberComps.insert(
-        matchingFromReplacingAfterIndex - 1, currentMemberFromReplaced);
+      replacingRelationMemberComps.insert(matchingFromReplacingAfterIndex - 1, currentMemberFromReplaced);
     }
     else
     {
@@ -314,9 +282,8 @@ bool RelationMerger::_mergeMembers(
   LOG_VART(replacingRelationMemberComps);
 
   std::vector<RelationData::Entry> modifiedMembers;
-  for (int i = 0; i < replacingRelationMemberComps.size(); i++)
+  for (const auto& currentMemberFromReplaced : qAsConst(replacingRelationMemberComps))
   {
-    const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
     // Add the relation member to the relation we're keeping.
     modifiedMembers.emplace_back(
         currentMemberFromReplaced.getRole(),
@@ -326,9 +293,7 @@ bool RelationMerger::_mergeMembers(
     numMembersCopied++;
   }
   if (!modifiedMembers.empty())
-  {
     replacingRelation->setMembers(modifiedMembers);
-  }
 
   return numRelationBeingReplacedMembers == numMembersCopied;
 }

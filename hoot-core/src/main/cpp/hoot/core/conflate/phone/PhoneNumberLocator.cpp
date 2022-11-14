@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PhoneNumberLocator.h"
@@ -41,9 +41,9 @@ using namespace i18n::phonenumbers;
 namespace hoot
 {
 
-PhoneNumberLocator::PhoneNumberLocator() :
-_regionCode("US"),
-_numLocated(0)
+PhoneNumberLocator::PhoneNumberLocator()
+  : _regionCode("US"),
+    _numLocated(0)
 {
 }
 
@@ -59,12 +59,9 @@ void PhoneNumberLocator::setRegionCode(const QString& code)
   if (!_regionCode.isEmpty())
   {
     std::set<std::string> regions;
-      PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(_regionCode.toStdString());
-    if (it == regions.end())
-    {
+    PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
+    if (regions.find(_regionCode.toStdString()) == regions.end())
       throw HootException("Invalid phone number region code: " + _regionCode);
-    }
   }
 }
 
@@ -74,8 +71,7 @@ QString PhoneNumberLocator::getLocationDescription(const QString& phoneNumber) c
 
   PhoneNumber parsedPhoneNumber;
   PhoneNumberUtil::ErrorType error =
-    PhoneNumberUtil::GetInstance()->Parse(
-      phoneNumber.toStdString(), _regionCode.toStdString(), &parsedPhoneNumber);
+    PhoneNumberUtil::GetInstance()->Parse(phoneNumber.toStdString(), _regionCode.toStdString(), &parsedPhoneNumber);
   LOG_VART(error);
   if (error == PhoneNumberUtil::ErrorType::NO_PARSING_ERROR)
   {
@@ -84,8 +80,7 @@ QString PhoneNumberLocator::getLocationDescription(const QString& phoneNumber) c
     if (!_regionCode.isEmpty())
     {
       locationDescription =
-        QString::fromStdString(
-          _geocoder.GetDescriptionForNumber(parsedPhoneNumber, locale, _regionCode.toStdString()));
+        QString::fromStdString(_geocoder.GetDescriptionForNumber(parsedPhoneNumber, locale, _regionCode.toStdString()));
     }
     else
     {

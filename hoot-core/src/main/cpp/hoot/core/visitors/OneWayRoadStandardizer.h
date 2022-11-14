@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ONE_WAY_ROAD_STANDARDIZER_H
@@ -55,7 +55,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Standardizing one way roads..."; }
   QString getCompletedStatusMessage() const override
-  { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
+  { return QString("Standardized %1 one way roads.").arg(QString::number(_numAffected)); }
 
   /**
    * @see FilteredByGeometryTypeCriteria

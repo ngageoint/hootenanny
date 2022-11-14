@@ -1,16 +1,16 @@
 
 Calculating the extent of one input...
 
-Map extent (minx,miny,maxx,maxy): -77.0551,38.8845,-77.0281,38.9031
+Map extent (minx,miny,maxx,maxy): -77.055100000,38.884500000,-77.028100000,38.903100000
 
 Calculating the extent of multiple inputs...
 
-Map extent (minx,miny,maxx,maxy): -104.902432,38.8532424,-77.0281,38.9031
+Map extent (minx,miny,maxx,maxy): -104.902431610,38.853242427,-77.028100000,38.903100000
 
 Calculating the extent of data recursively in a directory structure...
 
-Map extent (minx,miny,maxx,maxy): -104.919759,38.8467218,-104.714569,39.5944194
+Map extent (minx,miny,maxx,maxy): -104.919758616,38.846721812,-104.714569365,39.594419403
 
 Calculating the extent of data recursively in a directory structure with one filter...
 
-Map extent (minx,miny,maxx,maxy): -104.919759,38.8467218,-104.714569,39.5944194
+Map extent (minx,miny,maxx,maxy): -104.919758616,38.846721812,-104.714569365,39.594419403

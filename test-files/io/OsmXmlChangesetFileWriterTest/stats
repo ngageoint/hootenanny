@@ -1,5 +1,0 @@
-
-|        | Node | Relation | Way | 
-| Create |    2 |        1 |   0 | 
-| Delete |    1 |        1 |   2 | 
-| Modify |    1 |        0 |   2 | 

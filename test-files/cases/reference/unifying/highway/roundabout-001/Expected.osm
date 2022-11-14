@@ -144,41 +144,6 @@
     <node visible="true" id="140" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5483079999999987" lon="-72.3468175999999943"/>
     <node visible="true" id="141" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5473271000000004" lon="-72.3470496999999995"/>
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465999000000004" lon="-72.3472215000000034"/>
-    <way visible="true" id="-932" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="134"/>
-        <nd ref="74"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="fixme" v="survey if oneway continues one/both directions"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:c309dbbc428533e5b8176301fe351658392872c7;sha1sum:9934311ec16bde6ae4bef02f51d75a0d57bfcbf4"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue Pavée"/>
-        <tag k="note" v="oneway very possibly continues both(?) directions"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:oneway" v="survey"/>
-        <tag k="surface" v="paved"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="uuid" v="{287bf291-fb97-4c17-9ebf-0246029b4f53};{{6b828d43-7973-4098-a098-d10430882622}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-    </way>
     <way visible="true" id="-909" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="4"/>
         <nd ref="79"/>
@@ -229,173 +194,7 @@
         <tag k="uuid" v="{{5cfcb674-fbc6-4c61-ac3f-e29f68dd8bf9}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
     </way>
-    <way visible="true" id="-900" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="124"/>
-        <nd ref="81"/>
-        <nd ref="74"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue Enterrement"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="uuid" v="{5ad58b3e-9d34-4f27-932d-510055c97ad4};{{bf4e75b9-d448-4509-a41f-d254d704fef9}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-    </way>
-    <way visible="true" id="-893" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="59"/>
-        <nd ref="87"/>
-        <nd ref="137"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:3fef0118f587da426a56988cd431cb543d40966b;sha1sum:18f5f47e63d73d5cd9271b0d1343ee4d9b6210f7;sha1sum:dc0531d8e8a340e381e7e0c75893b8db244fbfd7"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="loc_name" v="Grand Rue"/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="ref" v="RN 1"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="uuid" v="{9c7f2d0f-e445-447c-b5d3-97a8db294eae};{{57700a2f-b508-4758-bd8c-a156feade7b9}}"/>
-        <tag k="width:minimum_traveled_way" v="10"/>
-    </way>
-    <way visible="true" id="-871" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="22"/>
-        <nd ref="63"/>
-        <nd ref="110"/>
-        <nd ref="84"/>
-        <nd ref="132"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:74db20aeaafa8389482a18f5a7625704ee140d75;sha1sum:17ba3d8a229498fbade59466941590cda1857aa4"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="yes"/>
-        <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="uuid" v="{e2ee93da-504b-403b-8f6b-5d53482020e6};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-    </way>
-    <way visible="true" id="-856" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="74"/>
-        <nd ref="80"/>
-        <nd ref="76"/>
-        <nd ref="59"/>
-        <nd ref="101"/>
-        <nd ref="77"/>
-        <nd ref="140"/>
-        <nd ref="58"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue Pavée"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="uuid" v="{586bbde5-a2b1-4dc8-85e0-c0ca6892cb25};{{6b828d43-7973-4098-a098-d10430882622}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-    </way>
-    <way visible="true" id="-846" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="100"/>
-        <nd ref="83"/>
-        <nd ref="82"/>
-        <nd ref="81"/>
-        <nd ref="118"/>
-        <tag k="alt_name" v="Rue Paul VI"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:6ddc58634575968910dc99598ce7e5d64060f64e;sha1sum:28481e191694740088ab0203fd6f7b9f01ca9d1c;sha1sum:76ff8031d7d845904d84755c8635aa09f2484293;sha1sum:d853725af6829e4f7dac4e532919242887f60f60;sha1sum:1298453a4a6c486a1c988d5fc33afe587d62e61e;sha1sum:d0e2508bc191db210aeac399475db0cc471544b3"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue des Casernes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:oneway" v="survey"/>
-        <tag k="surface" v="paved"/>
-        <tag k="uuid" v="{aa585538-f526-4588-90bb-1ecb75f6e4c7};{{c6d3e710-ade5-42b6-b935-f17a2a510c96}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-    </way>
-    <way visible="true" id="-838" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="18"/>
         <nd ref="6"/>
         <nd ref="5"/>
@@ -428,38 +227,6 @@
         <tag k="surface" v="paved"/>
         <tag k="uuid" v="{bedb912f-331a-4271-8595-0731b4a42bc0};{{c6d3e710-ade5-42b6-b935-f17a2a510c96}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
-    </way>
-    <way visible="true" id="-835" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="130"/>
-        <nd ref="83"/>
-        <nd ref="59"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:78e93205b3494db5b04c669b3f25203fd65a6f2e;sha1sum:3ff44e7ff101ee08713652ef968c9cb6fb171ce2"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="loc_name" v="Grand Rue"/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="ref" v="RN 2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="uuid" v="{72466a5c-1197-4004-80ab-1965beeb6d89};{{57700a2f-b508-4758-bd8c-a156feade7b9}}"/>
-        <tag k="width:minimum_traveled_way" v="10"/>
     </way>
     <way visible="true" id="2" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="139"/>
@@ -590,6 +357,43 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{83455e56-898e-4fa5-8e16-7b62ddefa087}"/>
+    </way>
+    <way visible="true" id="11" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="74"/>
+        <nd ref="80"/>
+        <nd ref="76"/>
+        <nd ref="59"/>
+        <nd ref="101"/>
+        <nd ref="77"/>
+        <nd ref="140"/>
+        <nd ref="58"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="name" v="Rue Pavée"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="type:haiti" v="Autre Route"/>
+        <tag k="uuid" v="{586bbde5-a2b1-4dc8-85e0-c0ca6892cb25};{{6b828d43-7973-4098-a098-d10430882622}}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
     </way>
     <way visible="true" id="12" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="96"/>
@@ -789,6 +593,41 @@
         <tag k="surface" v="paved"/>
         <tag k="uuid" v="{048f14df-927e-46eb-bf4c-5b4a8e9878a0}"/>
     </way>
+    <way visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="100"/>
+        <nd ref="83"/>
+        <nd ref="82"/>
+        <nd ref="81"/>
+        <nd ref="118"/>
+        <tag k="alt_name" v="Rue Paul VI"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="hoot:hash" v="sha1sum:1298453a4a6c486a1c988d5fc33afe587d62e61e;sha1sum:d0e2508bc191db210aeac399475db0cc471544b3;sha1sum:6ddc58634575968910dc99598ce7e5d64060f64e;sha1sum:28481e191694740088ab0203fd6f7b9f01ca9d1c;sha1sum:76ff8031d7d845904d84755c8635aa09f2484293;sha1sum:d853725af6829e4f7dac4e532919242887f60f60"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="name" v="Rue des Casernes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:oneway" v="survey"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{aa585538-f526-4588-90bb-1ecb75f6e4c7};{{c6d3e710-ade5-42b6-b935-f17a2a510c96}}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+    </way>
     <way visible="true" id="23" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="119"/>
         <nd ref="85"/>
@@ -848,6 +687,35 @@
         <tag k="surface" v="paved"/>
         <tag k="surface_condition" v="Smooth_greater_than_40kph"/>
         <tag k="uuid" v="{bda03ea6-9749-4b9d-8656-7a75688fd3e0}"/>
+    </way>
+    <way visible="true" id="26" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="124"/>
+        <nd ref="81"/>
+        <nd ref="74"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="name" v="Rue Enterrement"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{5ad58b3e-9d34-4f27-932d-510055c97ad4};{{bf4e75b9-d448-4509-a41f-d254d704fef9}}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
     </way>
     <way visible="true" id="27" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="98"/>
@@ -918,6 +786,38 @@
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{0c8279b7-71f3-4f70-be9d-1b40a954cd69}"/>
     </way>
+    <way visible="true" id="31" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="130"/>
+        <nd ref="83"/>
+        <nd ref="59"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:78e93205b3494db5b04c669b3f25203fd65a6f2e;sha1sum:3ff44e7ff101ee08713652ef968c9cb6fb171ce2"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="loc_name" v="Grand Rue"/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="ref" v="RN 2"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{72466a5c-1197-4004-80ab-1965beeb6d89};{{57700a2f-b508-4758-bd8c-a156feade7b9}}"/>
+        <tag k="width:minimum_traveled_way" v="10"/>
+    </way>
     <way visible="true" id="32" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="31"/>
         <nd ref="30"/>
@@ -948,6 +848,74 @@
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
         <tag k="uuid" v="{d0f92e87-96d4-482e-8081-3c0a61e78517};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+    </way>
+    <way visible="true" id="33" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="22"/>
+        <nd ref="63"/>
+        <nd ref="110"/>
+        <nd ref="84"/>
+        <nd ref="132"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:74db20aeaafa8389482a18f5a7625704ee140d75;sha1sum:17ba3d8a229498fbade59466941590cda1857aa4"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="yes"/>
+        <tag k="name" v="Boulevard Harry Truman"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{e2ee93da-504b-403b-8f6b-5d53482020e6};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+    </way>
+    <way visible="true" id="35" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="134"/>
+        <nd ref="74"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="fixme" v="survey if oneway continues one/both directions"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:c309dbbc428533e5b8176301fe351658392872c7;sha1sum:9934311ec16bde6ae4bef02f51d75a0d57bfcbf4"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="name" v="Rue Pavée"/>
+        <tag k="note" v="oneway very possibly continues both(?) directions"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:oneway" v="survey"/>
+        <tag k="surface" v="paved"/>
+        <tag k="type:haiti" v="Autre Route"/>
+        <tag k="uuid" v="{287bf291-fb97-4c17-9ebf-0246029b4f53};{{6b828d43-7973-4098-a098-d10430882622}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
     </way>
     <way visible="true" id="36" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -989,6 +957,38 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{3ba8056c-2b4e-4105-a2ad-5809a6047816}"/>
+    </way>
+    <way visible="true" id="38" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="59"/>
+        <nd ref="87"/>
+        <nd ref="137"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:dc0531d8e8a340e381e7e0c75893b8db244fbfd7;sha1sum:18f5f47e63d73d5cd9271b0d1343ee4d9b6210f7;sha1sum:3fef0118f587da426a56988cd431cb543d40966b"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="loc_name" v="Grand Rue"/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="ref" v="RN 1"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{9c7f2d0f-e445-447c-b5d3-97a8db294eae};{{57700a2f-b508-4758-bd8c-a156feade7b9}}"/>
+        <tag k="width:minimum_traveled_way" v="10"/>
     </way>
     <way visible="true" id="39" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="138"/>

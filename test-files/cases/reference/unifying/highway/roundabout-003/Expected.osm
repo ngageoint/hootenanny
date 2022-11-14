@@ -47,48 +47,18 @@
     <node visible="true" id="132" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5442159999999987" lon="-72.3479753262299994"/>
     <node visible="true" id="135" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5490360000000010" lon="-72.3467378757499944"/>
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465999000000004" lon="-72.3472215000000034"/>
-    <way visible="true" id="-63" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="135"/>
-        <nd ref="7"/>
-        <nd ref="58"/>
-        <nd ref="8"/>
-        <nd ref="13"/>
+    <way visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="18"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="78"/>
+        <nd ref="100"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:b74474fb4e8d4019a49999175d4bb79b74341108;sha1sum:341142ceafe1950d331112c7b4a19b8398c76dff"/>
+        <tag k="hoot:hash" v="sha1sum:4e0a89fc23c809d0f758bd7b26628c173a777e69;sha1sum:8fdad9e48cbc158d8e6ba48beb059f657ce50027"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-    </way>
-    <way visible="true" id="-60" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="22"/>
-        <nd ref="63"/>
-        <nd ref="-41909"/>
-        <nd ref="110"/>
-        <nd ref="84"/>
-        <nd ref="132"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
-    </way>
-    <way visible="true" id="-57" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="31"/>
-        <nd ref="30"/>
-        <nd ref="89"/>
-        <nd ref="-42693"/>
-        <nd ref="-42713"/>
-        <nd ref="29"/>
-        <nd ref="28"/>
-        <nd ref="99"/>
-        <nd ref="27"/>
-        <nd ref="131"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
     </way>
     <way visible="true" id="6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="31"/>
@@ -119,10 +89,6 @@
         <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
     </way>
     <way visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="18"/>
-        <nd ref="6"/>
-        <nd ref="5"/>
-        <nd ref="78"/>
         <nd ref="100"/>
         <nd ref="-42764"/>
         <nd ref="83"/>
@@ -131,7 +97,50 @@
         <nd ref="118"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:8fdad9e48cbc158d8e6ba48beb059f657ce50027;sha1sum:4e0a89fc23c809d0f758bd7b26628c173a777e69"/>
+        <tag k="hoot:hash" v="sha1sum:8fdad9e48cbc158d8e6ba48beb059f657ce50027"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+    </way>
+    <way visible="true" id="32" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="31"/>
+        <nd ref="30"/>
+        <nd ref="89"/>
+        <nd ref="-42693"/>
+        <nd ref="-42713"/>
+        <nd ref="29"/>
+        <nd ref="28"/>
+        <nd ref="99"/>
+        <nd ref="27"/>
+        <nd ref="131"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
+    </way>
+    <way visible="true" id="33" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="22"/>
+        <nd ref="63"/>
+        <nd ref="-41909"/>
+        <nd ref="110"/>
+        <nd ref="84"/>
+        <nd ref="132"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
+    </way>
+    <way visible="true" id="36" timestamp="2017-06-07T15:16:56Z" version="1">
+        <nd ref="135"/>
+        <nd ref="7"/>
+        <nd ref="58"/>
+        <nd ref="8"/>
+        <nd ref="13"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:b74474fb4e8d4019a49999175d4bb79b74341108;sha1sum:341142ceafe1950d331112c7b4a19b8398c76dff"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>

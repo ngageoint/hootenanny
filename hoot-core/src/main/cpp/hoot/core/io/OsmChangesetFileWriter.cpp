@@ -41,43 +41,38 @@ OsmChangesetFileWriter::OsmChangesetFileWriter()
 }
 
 bool OsmChangesetFileWriter::_failsBoundsCheck(const ConstElementPtr& element, const ConstOsmMapPtr& map1,
-                                               const ConstOsmMapPtr& map2) const
+                                               const ConstOsmMapPtr& map2, Change::ChangeType change_type) const
 {
   if (!element || !map1 || !map2)
     return false;
 
   LOG_TRACE("Checking bounds requirement for " << element->getElementId() << "...");
 
-  // Pick the map and bounds crit based on the status of the element involved in the current
+  // Pick the map and bounds crit based on the change type and/or status of the element involved in the current
   // change being processed.
   std::shared_ptr<InBoundsCriterion> boundsCrit;
-  ConstOsmMapPtr map;
-  if (element->getStatus() == Status::Unknown1 && map1->containsElement(element))
-  {
-    map = map1;
-    boundsCrit = ConfigUtils::getBoundsFilter(map1);
-  }
-  else if ((element->getStatus() == Status::Unknown2 ||
-            element->getStatus() == Status::Conflated) &&
-           map2->containsElement(element))
-  {
-    map = map2;
+  if ((change_type == Change::ChangeType::Create || change_type == Change::ChangeType::Modify) && map2->containsElement(element))
     boundsCrit = ConfigUtils::getBoundsFilter(map2);
-  }
+  else if ((change_type == Change::ChangeType::Delete || change_type == Change::ChangeType::NoChange) && map1->containsElement(element))
+    boundsCrit = ConfigUtils::getBoundsFilter(map1);
+  else if (element->getStatus() == Status::Unknown1 && map1->containsElement(element))
+    boundsCrit = ConfigUtils::getBoundsFilter(map1);
+  else if ((element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated) && map2->containsElement(element))
+    boundsCrit = ConfigUtils::getBoundsFilter(map2);
   else
   {
     LOG_TRACE(element->getElementId() << " not found in map for bounds check.");
     return false;
   }
 
-  if (element->getElementType() == ElementType::Relation &&
+  // If we're creating a relation from the new data (secondary; status = 2 or
+  // conflated), we're requiring that all of its members be within bounds for it to be used
+  // in the changeset. If this isn't done, relations may end up incomplete with missing
+  // members. We don't worry about this for ref data, as we're assuming our ref data store
+  // has all of its relation member data intact.
+  if (element->getElementType() == ElementType::Relation && change_type == Change::ChangeType::Create &&
       (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
   {
-    // If we're dealing with a relation from the new data (secondary; status = 2 or
-    // conflated), we're requiring that all of its members be within bounds for it to be used
-    // in the changeset. If this isn't done, relations may end up incomplete with missing
-    // members. We don't worry about this for ref data, as we're assuming our ref data store
-    // has all of its relation member data intact.
     boundsCrit->setMustCompletelyContain(true);
   }
   else
@@ -86,8 +81,7 @@ bool OsmChangesetFileWriter::_failsBoundsCheck(const ConstElementPtr& element, c
   LOG_VART(boundsCrit->isSatisfied(element));
   if (!boundsCrit->isSatisfied(element))
   {
-    LOG_TRACE(
-      "Skipping change with out of bounds element: " << element->getElementId() << "...");
+    LOG_TRACE("Skipping change with out of bounds element: " << element->getElementId() << "...");
     return true;
   }
 

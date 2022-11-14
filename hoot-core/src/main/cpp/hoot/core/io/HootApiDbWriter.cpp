@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "HootApiDbWriter.h"
 
@@ -30,11 +30,11 @@
 #include <fstream>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -174,8 +174,7 @@ long HootApiDbWriter::_openDb(const QString& urlStr)
     throw HootException("An unsupported URL was passed into HootApiDbWriter: " + urlStr);
 
   if (_userEmail.isEmpty())
-    throw HootException("Please set the user's email address via the '" +
-                        ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
+    throw HootException("Please set the user's email address via the '" + ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
 
   // URL must have name in it
   QUrl url(urlStr);
@@ -299,8 +298,7 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
     if (_nodeRemap.count(nids[i]) == 1)
       result[i] = _nodeRemap.at(nids[i]);
     else
-      throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
-        + QString(" but it did not exist in mapping table")));
+      throw HootException(QString("Requested ID remap for node %1 but it did not exist in mapping table").arg(QString::number(nids[i])));
   }
 
   return result;
@@ -334,7 +332,7 @@ void HootApiDbWriter::_startNewChangeSet()
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());
-
+  //  Copy tags to update and add additional information
   Tags tags = n->getTags();
   _addElementTags(n, tags);
 
@@ -371,7 +369,7 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   LOG_TRACE("Writing way: " << w->getElementId());
 
   long wayId;
-
+  //  Copy tags to update and add additional information
   Tags tags = w->getTags();
   _addElementTags(w, tags);
 
@@ -411,7 +409,7 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
   LOG_TRACE("Writing relation: " << r->getElementId());
 
   long relationId;
-
+  //  Copy tags to update and add additional information
   Tags tags = r->getTags();
   _addElementTags(r, tags);
 
@@ -434,21 +432,18 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     relationId = r->getId();
   }
 
-  for (size_t i = 0; i < r->getMembers().size(); ++i)
+  for (size_t i = 0; i < r->getMemberCount(); ++i)
   {
-    RelationData::Entry e = r->getMembers()[i];
+    const RelationData::Entry& e = r->getMembers()[i];
 
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();
 
     if (_remapIds == true)
-    {
-      relationMemberElementId =
-        ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));
-    }
+      relationMemberElementId = ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));
 
-    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
-                                 relationMemberElementId.getId(), e.getRole(), i);
+    _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(), relationMemberElementId.getId(), e.getRole(),
+                                 static_cast<int>(i));
   }
 
   LOG_TRACE("All members added to relation " << QString::number(relationId));

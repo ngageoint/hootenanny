@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 #define SUPERFLUOUS_CONFLATE_OP_REMOVER_H
@@ -84,8 +84,7 @@ private:
    * @param removedOps a list of the operators removed
    * @return the input operator list with unnecessary ops filtered out
    */
-  static QStringList _filterOutUnneededOps(
-    const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
+  static QStringList _filterOutUnneededOps(const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
 
   static bool _isGeometryTypeCrit(const QString& className);
 };

@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmGeoJsonWriterJs.h"
 
 // hoot
 #include <hoot/core/io/OsmGeoJsonWriter.h>
-#include <hoot/js/elements/ElementJs.h>
+
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;

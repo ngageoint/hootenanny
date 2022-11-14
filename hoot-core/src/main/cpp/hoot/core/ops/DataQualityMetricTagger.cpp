@@ -22,34 +22,34 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "DataQualityMetricTagger.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
-#include <hoot/core/criterion/DisconnectedWayCriterion.h>
-#include <hoot/core/ops/DuplicateElementMarker.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/DisconnectedWayCriterion.h>
 #include <hoot/core/criterion/EmptyWayCriterion.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/WayEndNodeCriterion.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/ops/DuplicateElementMarker.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DataQualityMetricTagger)
 
-DataQualityMetricTagger::DataQualityMetricTagger() :
-_orphanedNodes(0),
-_disconnectedWays(0),
-_emptyWays(0),
-_duplicateElementPairs(0),
-_numWayEndNodes(0)
+DataQualityMetricTagger::DataQualityMetricTagger()
+  : _orphanedNodes(0),
+    _disconnectedWays(0),
+    _emptyWays(0),
+    _duplicateElementPairs(0),
+    _numWayEndNodes(0)
 {
 }
 
@@ -67,15 +67,11 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   // AOI.
 
   tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootSuperfluous(), "yes");
-  crit =
-    std::make_shared<ElementIdCriterion>(
-      ElementType::Node,
-      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _bounds));
+  crit = std::make_shared<ElementIdCriterion>(ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _bounds));
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _orphanedNodes = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
+  _orphanedNodes = static_cast<int>(tagVis->getNumFeaturesAffected());
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not, so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
@@ -86,41 +82,32 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   inBoundsCrit->setTreatWayNodesAsPartOfWays(false);
 
   tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootDisconnected(), "yes");
-  crit =
-    std::make_shared<ChainCriterion>(std::make_shared<DisconnectedWayCriterion>(map), inBoundsCrit);
+  crit = std::make_shared<ChainCriterion>(std::make_shared<DisconnectedWayCriterion>(map), inBoundsCrit);
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _disconnectedWays = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
-    " disconnected ways in output.");
+  _disconnectedWays = static_cast<int>(tagVis->getNumFeaturesAffected());
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) << " disconnected ways in output.");
 
   tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootEmptyWay(), "yes");
   crit = std::make_shared<ChainCriterion>(std::make_shared<EmptyWayCriterion>(), inBoundsCrit);
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _emptyWays = tagVis->getNumFeaturesAffected();
+  _emptyWays = static_cast<int>(tagVis->getNumFeaturesAffected());
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
   tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootWayEndNode(), "yes");
-  crit =
-    std::make_shared<ChainCriterion>(std::make_shared<WayEndNodeCriterion>(map, false),
-    inBoundsCrit);
+  crit = std::make_shared<ChainCriterion>(std::make_shared<WayEndNodeCriterion>(map, false), inBoundsCrit);
   filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
-  _numWayEndNodes = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_numWayEndNodes) << " way end nodes in output.");
+  _numWayEndNodes = static_cast<int>(tagVis->getNumFeaturesAffected());
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_numWayEndNodes) << " way end nodes in output.");
 
   DuplicateElementMarker dupeMarker;
   dupeMarker.setCoordinateComparisonSensitivity(8);
   dupeMarker.apply(map);
-  _duplicateElementPairs = dupeMarker.getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
-    " duplicate feature pairs in output.");
-  LOG_STATUS(
-    "Containing way types for duplicate way nodes: " << dupeMarker.getContainingWayTypes());
+  _duplicateElementPairs = static_cast<int>(dupeMarker.getNumFeaturesAffected());
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) << " duplicate feature pairs in output.");
+  LOG_STATUS("Containing way types for duplicate way nodes: " << dupeMarker.getContainingWayTypes());
 }
 
 }

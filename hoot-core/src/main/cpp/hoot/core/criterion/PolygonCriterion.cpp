@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PolygonCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/PolygonWayNodeCriterion.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
-PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map) :
-_map(map)
+PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map)
+  : _map(map)
 {
   // Set this to allow any on poly child member to satisfy the crit.
   _relationCrit.setAllowMixedChildren(true);
@@ -55,11 +55,12 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
 
-  if (e->getElementType() == ElementType::Node)
+  switch(e->getElementType().getEnum())
   {
+  default:
+  case ElementType::Node:
     return false;
-  }
-  else if (e->getElementType() == ElementType::Way)
+  case ElementType::Way:
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->isValidPolygon());
@@ -69,19 +70,18 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
       LOG_TRACE("Way is valid closed area; crit satisfied.");
       return true;
     }
+    break;
   }
-  else if (e->getElementType() == ElementType::Relation)
-  {
+  case ElementType::Relation:
     // We use to define poly relations using a static list of relation types. Now, we look at the
     // member contents instead. If any member is a poly, then we call it a poly relation.
-    const bool result = _relationCrit.isSatisfied(e);
-    if (result)
+    if (_relationCrit.isSatisfied(e))
     {
       LOG_TRACE("Relation has polygon members; crit satisified.");
+      return true;
     }
-    return result;
+    break;
   }
-
   return false;
 }
 
@@ -91,4 +91,3 @@ QStringList PolygonCriterion::getChildCriteria() const
 }
 
 }
-

@@ -171,9 +171,9 @@ public:
 
   /**
    * This method should rarely be used, and probably only be internal structure, not iterators
-   * You probably want to use either getChildUserId. This is not const for that reason.
+   * You probably want to use either getChildUserId.
    */
-  int getChildId(int childIndex);
+  int getChildId(int childIndex) const;
 
   /**
    * Returns the node ID for a specific child index. Calling this method is not valid if this
@@ -285,7 +285,7 @@ private:
   int _id;
 };
 
-inline std::ostream& operator<<(std::ostream & o, RTreeNode& n)
+inline std::ostream& operator<<(std::ostream & o, const RTreeNode& n)
 {
   int size = n.getChildCount();
   o << "id: " << n.getId() << " parent: " << n.getParentId() << " children: {";

@@ -61,7 +61,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
     // Only multilinestring relations
     if (r->getType() == MetadataTags::RelationMultilineString())
     {
-      vector<RelationData::Entry> multi_members = r->getMembers();
+      const vector<RelationData::Entry>& multi_members = r->getMembers();
       const Tags& tags = r->getTags();
       for (const auto& member : multi_members)
       {
@@ -92,6 +92,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 
           if (rev->getType() == MetadataTags::RelationReview())
           {
+            // Copy members here so that the original can be modified later
             vector<RelationData::Entry> members = rev->getMembers();
             // Iterate all of the members of the review looking for non-relation entities
             for (const auto& member : members)
@@ -121,7 +122,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
             }
 
             // There is a one-to-one relation here, replace the multilinestring with the only way
-            if (rev->getMembers().size() == 1 && r->getMembers().size() == 1)
+            if (rev->getMemberCount() == 1 && r->getMemberCount() == 1)
             {
               LOG_TRACE("Adding element as reviewee: " << r->getMembers()[0].getElementId() << "...");
               rev->addElement(MetadataTags::RoleReviewee(), r->getMembers()[0].getElementId());
@@ -129,7 +130,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 
             // Don't remove multilinestring relations that are members of a review relation
             // only contains one member that is the original multilinestring
-            if (rev->getMembers().size() > 1)
+            if (rev->getMemberCount() > 1)
             {
               LOG_TRACE("Removing: " << r->getElementId() << "...");
               rev->removeElement(r->getElementId());

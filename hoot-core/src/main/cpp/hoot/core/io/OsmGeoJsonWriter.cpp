@@ -60,8 +60,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
   : OsmGeoJsonWriterBase(precision)
 {
-  if (_useTaskingManagerFormat)
-    _writeHootFormat = false;
+  //  GeoJSON should always output valid GeoJSON and not the Hoot JSON format
+  _writeHootFormat = false;
 }
 
 void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
@@ -111,8 +111,8 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
 {
   OsmGeoJsonWriterBase::setConfiguration(conf);
   _useTaskingManagerFormat = ConfigOptions(conf).getJsonOutputTaskingManagerAoi();
-  if (_useTaskingManagerFormat)
-    _writeHootFormat = false;
+  //  GeoJSON should always output valid GeoJSON and not the Hoot JSON format
+  _writeHootFormat = false;
 }
 
 QString OsmGeoJsonWriter::_getBbox() const
@@ -215,8 +215,7 @@ void OsmGeoJsonWriter::_writeWays()
     _numWritten++;
     if (_numWritten % (_statusUpdateInterval) == 0)
     {
-      PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+      PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
 }

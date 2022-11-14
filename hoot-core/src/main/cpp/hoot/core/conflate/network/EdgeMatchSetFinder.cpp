@@ -35,10 +35,8 @@ namespace hoot
 {
 
 const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_KEY = "01-similar";
-const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY =
-  "03-similar-first-reversed";
-const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY =
-  "02-similar-second-reversed";
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY = "03-similar-first-reversed";
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY = "02-similar-second-reversed";
 
 EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
                                        ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2)
@@ -57,8 +55,7 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
 void EdgeMatchSetFinder::_resetEdgeMatchSimilarities()
 {
   _edgeMatchSimilarities.clear();
-  // purposefully mantaining this order (may not end up needing to actually having to keep it,
-  // though)
+  // purposefully mantaining this order (may not end up needing to actually having to keep it, though)
   _edgeMatchSimilarities[EDGE_MATCH_SIMILAR_KEY] = EdgeMatchSimilarity();
   _edgeMatchSimilarities[EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY] = EdgeMatchSimilarity();
   _edgeMatchSimilarities[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] = EdgeMatchSimilarity();
@@ -337,16 +334,13 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
 
     QMap<QString, QString> similarityValuesToIterate;
     similarityValuesToIterate[EDGE_MATCH_SIMILAR_KEY] = em->getSimilarityString();
-    similarityValuesToIterate[EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY] =
-      em->getSecondReversedSimilarityString();
-    similarityValuesToIterate[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] =
-      em->getFirstReversedSimilarityString();
+    similarityValuesToIterate[EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY] = em->getSecondReversedSimilarityString();
+    similarityValuesToIterate[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] = em->getFirstReversedSimilarityString();
     EdgeMatchScore existingSimilarMatch;
     // This will iterate over the similarity indexes in the order we want.
-    for (auto similarityValsItr = similarityValuesToIterate.begin();
-         similarityValsItr != similarityValuesToIterate.end(); ++similarityValsItr)
+    for (auto it = similarityValuesToIterate.cbegin(); it != similarityValuesToIterate.cend(); ++it)
     {
-      existingSimilarMatch = _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()];
+      existingSimilarMatch = _edgeMatchSimilarities[it.key()][it.value()];
       if (existingSimilarMatch.score != -1.0)
         break;
     }
@@ -381,11 +375,8 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     EdgeMatchScore newMatch;
     newMatch.match = em;
     newMatch.score = score;
-    for (auto similarityValsItr = similarityValuesToIterate.begin();
-         similarityValsItr != similarityValuesToIterate.end(); ++similarityValsItr)
-    {
-      _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()] = newMatch;
-    }
+    for (auto it = similarityValuesToIterate.cbegin(); it != similarityValuesToIterate.cend(); ++it)
+      _edgeMatchSimilarities[it.key()][it.value()] = newMatch;
 
     // add our new match
 

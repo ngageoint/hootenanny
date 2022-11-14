@@ -22,24 +22,24 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "CollapsePolyGeoModifierAction.h"
 
 // geos
 #include <geos/algorithm/MinimumDiameter.h>
-#include <geos/geom/Polygon.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Polygon.h>
 
 // Hoot
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/CoordinateExt.h>
 
-using namespace geos::geom;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -52,9 +52,11 @@ const QString CollapsePolyGeoModifierAction::MAX_LENGTH_PARAM = "max_length_in_m
 bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process closed area ways
-  if (pElement->getElementType() != ElementType::Way) return false;
+  if (pElement->getElementType() != ElementType::Way)
+    return false;
   const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
-  if (!pWay->isClosedArea()) return false;
+  if (!pWay->isClosedArea())
+    return false;
 
   OsmMapPtr mapPtr = pMap->shared_from_this();
   ElementToGeometryConverter ElementToGeometryConverter(mapPtr);
@@ -80,24 +82,19 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
 
       if (pMinRectCoords->getSize() > 2)
       {
-        double len1 =
-          (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
-        double len2 =
-          (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
+        double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
+        double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
         polyLength = std::max(len1,len2);
       }
     }
 
-    if ((checkArea && (polyArea < _area)) ||
-        (checkLength && (polyLength < _length)))
+    if ((checkArea && (polyArea < _area)) || (checkLength && (polyLength < _length)))
     {
       Coordinate centroid;
       if (pPoly->getCentroid(centroid) == false)
       {
         // throwing a HootException might be too harsh
-        LOG_ERROR(
-          "Collapse polygon modifier could not calculate centroid for element id " +
-          pElement->getId());
+        LOG_ERROR(QString("Collapse polygon modifier could not calculate centroid for element id %1").arg(pElement->getId()));
         return false;
       }
 
@@ -105,8 +102,9 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
 
       // copy tags from original way to node
       pNode->setTags(pWay->getTags());
-
-      std::vector<long> nodeIds = pWay->getNodeIds();
+      //  Copy the node IDs so that they can be removed
+      //  TODO: Test if this can be deleted
+      const std::vector<long>& nodeIds = pWay->getNodeIds();
 
       // replace original way with node
       pMap->replace(pWay, pNode);
@@ -117,11 +115,9 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
         RemoveNodeByEid removeOp(nodeId, true, false, true);
         removeOp.apply(mapPtr);
       }
-
       return true;
     }
   }
-
   return false;
 }
 
@@ -130,15 +126,11 @@ void CollapsePolyGeoModifierAction::parseArguments(const QHash<QString, QString>
   _area = DEFAULT_AREA;
   _length = DEFAULT_LENGTH;
 
-  if (arguments.keys().contains(MAX_AREA_PARAM))
-  {
+  if (arguments.contains(MAX_AREA_PARAM))
     _area = arguments[MAX_AREA_PARAM].toDouble();
-  }
 
-  if (arguments.keys().contains(MAX_LENGTH_PARAM))
-  {
+  if (arguments.contains(MAX_LENGTH_PARAM))
     _length = arguments[MAX_LENGTH_PARAM].toDouble();
-  }
 }
 
 }

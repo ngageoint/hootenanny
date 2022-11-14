@@ -784,6 +784,9 @@ translate = {
 
     tTags = tTags.split('}{').join(','); // Join the JSON if needed
 
+    // Now try to clean up the text
+    tTags = tTags.replace(/=>/g,':').replace(/\\/g,'').replace(/\"\"/g,'\"');
+
     try
     {
       outTags = JSON.parse(tTags);
@@ -1765,39 +1768,93 @@ translate = {
   unpackOtherTags: function(tags)
   {
     // Sanity check
-    if (tags.other_tags)
-    {
+    if (!tags.other_tags) return;
 
-      var string = tags['other_tags'].toString();
-      delete tags.other_tags;
+    var rString = tags['other_tags'].toString();
+    delete tags.other_tags; // Cleanup
 
-      // NOTE: This is not my code.I found it when looking for how to parse hstore format from StackOverflow.
-      // I have tweaked it a bit
+    // NOTE: This is not my code.I found it when looking for how to parse hstore format from StackOverflow.
+    // I have tweaked it a bit
 
-      //using [\s\S] to match any character, including line feed and carriage return,
-      var r = /(["])(?:\\\1|\\\\|[\s\S])*?\1|NULL/g,
-          matches = string.match(r);
+    //using [\s\S] to match any character, including line feed and carriage return,
+    var r = /(["])(?:\\\1|\\\\|[\s\S])*?\1|NULL/g,
+        matches = rString.match(r);
 
-      var clean = function (value) {
-                value = value.replace(/^\"|\"$/g, ""); // Remove leading double quotes
-                value = value.replace(/\\"/g, "\""); // Unescape quotes
-                value = value.replace(/\\\\/g,"\\"); //Unescape backslashes
-                value = value.replace(/''/g,"'"); //Unescape single quotes
+    var clean = function (value) {
+              value = value.replace(/^\"|\"$/g, ""); // Remove leading double quotes
+              value = value.replace(/\\"/g, "\""); // Unescape quotes
+              value = value.replace(/\\\\/g,"\\"); //Unescape backslashes
+              value = value.replace(/''/g,"'"); //Unescape single quotes
 
-                return value;
-            };
+              return value;
+          };
 
-        if(matches) {
-          for (var i = 0, l = matches.length; i < l; i+= 2) {
-            if (matches[i] && matches[i + 1]) {
-              var key = clean(matches[i]);
-              var value = matches[i + 1];
+    if(matches) {
+      // Debug
+      // print('Num Matches = ' + matches.length);
+      var gotTag = false;
+      for (var i = 0, l = matches.length; i < l; i+= 2) {
+        if (matches[i] && matches[i + 1]) {
+          var key = clean(matches[i]);
+          var value = matches[i + 1];
 
-              // Taking the chance that this may stomp on an existing tag value.
-              tags[key] = value=="NULL"?null:clean(value);
-            }
-          }
+          // Debug
+          // print('matches key: ' + key + '  value: ' + value);
+
+          // Taking the chance that this may stomp on an existing tag value.
+          tags[key] = value=="NULL"?null:clean(value);
+          gotTag = true;
         }
+      }
+      if (gotTag) return;
+    }
+
+    // If we get to here then the above code couldn't parse it
+    // First, try to sort out the other_tags tag
+    var otList = rString.replace(/\"/g,'').replace(/\\/g,'').split('=>');
+
+    if (otList.length > 1) // Sanity check. We should have an even number
+    {
+      for (var i = 0, iLen = otList.length; i < iLen; i=i+2)
+      {
+        tags[otList[i]] = otList[i+1];
+      }
+    }
+
+    // Now go looking for fragmented tags
+    for (var i in tags)
+    {
+      if (i.indexOf('=>') > -1) // Got one
+      {
+        tstr = i.toString();
+        if (tstr.charAt(0) !== '"') tstr = '"' + i;
+        if (tstr.substr(-1) !== '"') tstr += '"';
+
+        // Clean up
+        tstr = tstr.replace(/\\\"/g,'"').replace(/""/g,'\"').replace(/", "/g,'\",\"');
+
+        // Add the last value to the end
+        tstr = tstr + '=>' + '"' + tags[i] + '"';
+
+        // Convert to JSON
+        tstr = tstr.replace(/=>/g,':');
+
+        try
+        {
+          var tObj = JSON.parse('{' + tstr + '}');
+          for (var j in tObj)
+          {
+            tags[j] = tObj[j];
+          }
+
+          // It unpacked so we can delete the ugly tag
+          delete tags[i];
+        }
+        catch (error)
+        {
+          hoot.logWarn('Unable to unpack other_tags: ' + error);
+        }
+      }
     }
   }, // End unpackOtherTags
 
@@ -1869,6 +1926,67 @@ translate = {
       delete attrs[col];
     }
   }, // End attributeUntangle
+
+
+  // Find a general FCODE
+  // When specific rules fail, try something generic
+  findGeneralFCODE: function (attrs,tags)
+  {
+    // Some tags imply that they are buildings but don't actually say so
+    // Most of these are taken from raw OSM and the OSM Wiki
+    // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that are not buildings
+    // Taking "place_of_worship" out of this and making it a building
+    // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
+    var notBuildingList = [
+      'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+      'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+      'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+      'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+      'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+      'waste_basket','waste_disposal','water','water_point','watering_place','yes',
+      'fuel' // NOTE: Fuel goes to a different F_CODE
+    ]; // End notBuildingList
+
+    if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1))
+    {
+       attrs.F_CODE = 'AL013';
+       return;
+    }
+
+    // Look at roads
+    // var notRoad = [''];
+    // if (tags.highway && (![''].includes(tags.highway)))
+    //   {
+    //     attrs.F_CODE = 'AP030';
+    //     return;
+    //   }
+
+    // Very general groups.
+    var fcodeMap = {
+      'railway':'AN010',
+      'railway:in_road':'AN010',
+      'tourism':'AL013',
+      'shop':'AL013',
+      'office':'AL013',
+      'ford':'BH070',
+      'waterway':'BH140',
+      'bridge':'AQ040',
+      'barrier':'AP040',
+      'junction':'AP020',
+      'mine:access':'AA010',
+      'tomb':'AL036',
+      'building':'AL013'
+    };
+
+    for (var i in fcodeMap)
+    {
+      if (i in tags)
+      {
+        attrs.F_CODE = fcodeMap[i];
+        break; // Just grab the first match
+      }
+    }
+  }, // End findGeneralFCODE
 
 
   // Converting country codes to names to URN's

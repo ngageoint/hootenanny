@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "KnnWayIterator.h"
@@ -45,67 +45,53 @@ namespace hoot
 {
 
 KnnWayIterator::KnnWayIterator(const OsmMap& map, ConstWayPtr way,
-  const RStarTree* tree, const vector<long>& treeIdToWid, bool addError) :
-  KnnIterator(tree, 0.0, 0.0, Box()),
-  _map(map),
-  _treeIdToWid(treeIdToWid)
+                               const RStarTree* tree, const vector<long>& treeIdToWid, bool addError)
+  : KnnIterator(tree, 0.0, 0.0, Box()),
+    _map(map),
+    _indexSlush(_map.getIndex().getIndexSlush()),
+    _distanceCount(0),
+    _addError(addError),
+    _baseAccuracy(way->getCircularError()),
+    _treeIdToWid(treeIdToWid),
+    _wayId(way->getId()),
+    _ls(ElementToGeometryConverter(map.shared_from_this()).convertToLineString(way)),
+    _lsFast(_ls.get())
 {
-  _wayId = way->getId();
-  _ls = ElementToGeometryConverter(map.shared_from_this()).convertToLineString(way);
-  _lsFast = _ls.get();
-  _indexSlush = _map.getIndex().getIndexSlush();
-  _distanceCount = 0;
-  _addError = addError;
-  _baseAccuracy = way->getCircularError();
 }
 
 double KnnWayIterator::_calculateDistance(const BoxInternalData&, int id) const
 {
   // if the id in the index isn't valid, then report the maximum possible distance.
   double result = numeric_limits<double>::max();
-
   long otherWayId = _treeIdToWid[id];
   if (otherWayId == _wayId)
-  {
     result = 0.0;
-  }
-  // if this is a valid way id.
-  else if (_map.containsWay(otherWayId))
+  else if (_map.containsWay(otherWayId))  // if this is a valid way id.
   {
     ConstWayPtr w = _map.getWay(otherWayId);
-
     // grab the geometry for the way that we're comparing against.
     std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
-
     Meters d = ls->distance(_lsFast);
-
     if (_addError)
     {
       Meters acc = w->getCircularError();
-
       d = std::max(0.0, ls->distance(_lsFast) - (acc + _baseAccuracy));
     }
-
     _distanceCount++;
-
     result = d * d;
   }
-
   return result;
 }
 
-double KnnWayIterator::_calculateDistance(const BoxInternalData& box)
-  const
+double KnnWayIterator::_calculateDistance(const BoxInternalData& box) const
 {
   Envelope e(box.getLowerBound(0), box.getUpperBound(0),
              box.getLowerBound(1), box.getUpperBound(1));
 
   std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->toGeometry(&e));
-
   // be optimistic with the distance. This accounts for the fact that some ways may move around
   // without updating the index.
   double d = std::max(0.0, _lsFast->distance(g.get()) - _indexSlush);
-
   return d * d;
 }
 

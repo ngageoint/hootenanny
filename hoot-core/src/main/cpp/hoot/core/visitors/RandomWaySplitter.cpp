@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "RandomWaySplitter.h"
 
@@ -31,14 +31,14 @@
 #include <boost/random/uniform_int.hpp>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-#include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/RandomNumberUtils.h>
 
 // Tgs
 #include <tgs/System/Time.h>
@@ -50,9 +50,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomWaySplitter)
 
-RandomWaySplitter::RandomWaySplitter() :
-_localRng(std::make_shared<boost::minstd_rand>()),
-_splitRecursionLevel(0)
+RandomWaySplitter::RandomWaySplitter()
+  : _localRng(std::make_shared<boost::minstd_rand>()),
+    _splitRecursionLevel(0)
 {
   _rng = _localRng.get();
 }
@@ -71,31 +71,21 @@ void RandomWaySplitter::setConfiguration(const Settings& conf)
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
-  {
     _rng->seed(RandomNumberUtils::generateSeed());
-  }
   else
-  {
     _rng->seed(seed);
-  }
 }
 
 void RandomWaySplitter::visit(const std::shared_ptr<Element>& e)
 {
   if (!_map)
-  {
     throw IllegalArgumentException("No map passed to way splitter.");
-  }
   else if (_map->getProjection()->IsGeographic())
-  {
     throw IllegalArgumentException("Input map must be projected to planar.");
-  }
 
   LOG_TRACE(e->getElementType());
   if (HighwayCriterion().isSatisfied(e))
-  {
     _split(e);
-  }
 }
 
 vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
@@ -113,9 +103,9 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
     _splitRecursionLevel++;
     LOG_VART(_splitRecursionLevel);
 
-    const int numNodesBeforeSplit = _map->getNodes().size();
+    const int numNodesBeforeSplit = static_cast<int>(_map->getNodeCount());
     LOG_VART(numNodesBeforeSplit);
-    const int numWaysBeforeSplit = _map->getWays().size();
+    const int numWaysBeforeSplit = static_cast<int>(_map->getWayCount());
     LOG_VART(numWaysBeforeSplit);
 
     WayLocation waySplitPoint;
@@ -138,10 +128,7 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       waySplitPoint = multiLineSplitPoint.getWayLocation();
     }
 
-    const QString distanceMsgStrEnd =
-      QString("a minimum node spacing of ")
-        .append(QString::number(_minNodeSpacing))
-        .append(" meters");
+    const QString distanceMsgStrEnd = QString("a minimum node spacing of %1 meters").arg(QString::number(_minNodeSpacing));
     if (!waySplitPoint.isValid())
     {
       _splitRecursionLevel--;
@@ -165,12 +152,9 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
     if (element->getElementType() == ElementType::Way)
     {
       vector<WayPtr> newWaysAfterSplit =
-        WaySplitter::split(_map->shared_from_this(),
-          std::dynamic_pointer_cast<Way>(element), waySplitPoint);
-      for (size_t i = 0; i < newWaysAfterSplit.size(); i++)
-      {
-        newElementsAfterSplit.push_back(newWaysAfterSplit.at(i));
-      }
+        WaySplitter::split(_map->shared_from_this(), std::dynamic_pointer_cast<Way>(element), waySplitPoint);
+      for (const auto& way : newWaysAfterSplit)
+        newElementsAfterSplit.push_back(way);
     }
     else
     {
@@ -179,11 +163,11 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       newElementsAfterSplit.push_back(match);
     }
 
-    const int numNodesAfterSplit = _map->getNodes().size();
+    const int numNodesAfterSplit = static_cast<int>(_map->getNodeCount());
     LOG_VART(numNodesAfterSplit);
     const int numNewNodesCreatedBySplit = numNodesAfterSplit - numNodesBeforeSplit;
     LOG_VART(numNewNodesCreatedBySplit);
-    LOG_VART(_map->getWays().size());
+    LOG_VART(_map->getWayCount());
 
     if (numNewNodesCreatedBySplit > 0)
     {
@@ -205,11 +189,8 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
     }
 
     // recursive call
-    for (vector<ElementPtr>::const_iterator it = newElementsAfterSplit.begin();
-         it != newElementsAfterSplit.end(); ++it)
-    {
+    for (auto it = newElementsAfterSplit.begin(); it != newElementsAfterSplit.end(); ++it)
       _split(*it);
-    }
 
     return newElementsAfterSplit;
   }
@@ -229,12 +210,10 @@ WayLocation RandomWaySplitter::_calcSplitPoint(ConstWayPtr way) const
   //create a way location that is the minimum node spacing distance from the beginning of the way
   WayLocation splitWayStart(_map->shared_from_this(), way, _minNodeSpacing);
   //create a way location that is the minimum node spacing from the end of the way
-  WayLocation splitWayEnd =
-    WayLocation::createAtEndOfWay(_map->shared_from_this(), way).move(-1 * _minNodeSpacing);
+  WayLocation splitWayEnd = WayLocation::createAtEndOfWay(_map->shared_from_this(), way).move(-1 * _minNodeSpacing);
   //if the length between the way locations is greater than zero, then a way location can be
   //selected that doesn't violate the min node spacing
-  const double splitWayLength =
-    splitWayEnd.calculateDistanceOnWay() - splitWayStart.calculateDistanceOnWay();
+  const double splitWayLength = splitWayEnd.calculateDistanceOnWay() - splitWayStart.calculateDistanceOnWay();
   LOG_VART(splitWayLength);
   if (splitWayLength > 0)
   {
@@ -243,15 +222,11 @@ WayLocation RandomWaySplitter::_calcSplitPoint(ConstWayPtr way) const
     LOG_VART(splitPoint);
     return splitWayStart.move(splitPoint);
   }
-  //otherwise, return an empty location
-  else
-  {
+  else  //  otherwise, return an empty location
     return WayLocation();
-  }
 }
 
-MultiLineStringLocation RandomWaySplitter::_calcSplitPoint(ConstRelationPtr relation,
-                                                           ElementId& wayId) const
+MultiLineStringLocation RandomWaySplitter::_calcSplitPoint(ConstRelationPtr relation, ElementId& wayId) const
 {
   const vector<RelationData::Entry>& members = relation->getMembers();
   LOG_VART(members.size());
@@ -276,23 +251,13 @@ MultiLineStringLocation RandomWaySplitter::_calcSplitPoint(ConstRelationPtr rela
   WayLocation wayLocation = _calcSplitPoint(way);
   //return it, if its valid
   if (wayLocation.isValid())
-  {
-    return
-      MultiLineStringLocation(
-        _map->shared_from_this(),
-        relation,
-        wayIndex,
-        wayLocation);
-  }
-  //otherwise, return an empty location
-  else
-  {
+    return MultiLineStringLocation(_map->shared_from_this(), relation, wayIndex, wayLocation);
+  else  //otherwise, return an empty location
     return MultiLineStringLocation();
-  }
 }
 
 NodePtr RandomWaySplitter::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
-  const vector<ElementPtr>& newElementsAfterSplit) const
+                                                const vector<ElementPtr>& newElementsAfterSplit) const
 {
   //newElementsAfterSplit is assumed to only contain ways; find the new node created by the way
   //split; it will be the last node in the first way, which is the same as the first node in the
@@ -317,10 +282,8 @@ void RandomWaySplitter::_updateNewNodeProperties(NodePtr newNode,
   newNode->setStatus(firstSplitBetweenNode->getStatus());
   //add a circular error to the new node that's a weighted average of the circular error on the
   //two split between nodes
-  newNode->setCircularError(
-    (firstSplitBetweenNode->getCircularError() + lastSplitBetweenNode->getCircularError()) / 2);
-  LOG_TRACE(
-    "Updated the properties of a node created as a result of a way split: " << newNode->toString());
+  newNode->setCircularError((firstSplitBetweenNode->getCircularError() + lastSplitBetweenNode->getCircularError()) / 2);
+  LOG_TRACE("Updated the properties of a node created as a result of a way split: " << newNode->toString());
 }
 
 }

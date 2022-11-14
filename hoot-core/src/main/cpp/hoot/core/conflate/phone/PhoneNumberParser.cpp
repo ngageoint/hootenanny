@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PhoneNumberParser.h"
@@ -41,19 +41,17 @@ using namespace i18n::phonenumbers;
 namespace hoot
 {
 
-PhoneNumberParser::PhoneNumberParser() :
-_regionCode(""),
-_searchInText(false),
-_phoneNumbersProcessed(0)
+PhoneNumberParser::PhoneNumberParser()
+  : _regionCode(""),
+    _searchInText(false),
+    _phoneNumbersProcessed(0)
 {
 }
 
 void PhoneNumberParser::setSearchInText(bool search)
 {
   if (search && _regionCode.isEmpty())
-  {
     throw HootException("A region code must be set when searching for phone numbers in text.");
-  }
   _searchInText = search;
 }
 
@@ -63,12 +61,9 @@ void PhoneNumberParser::setRegionCode(const QString& code)
   if (!_regionCode.isEmpty())
   {
     std::set<std::string> regions;
-      PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(_regionCode.toStdString());
-    if (it == regions.end())
-    {
+    PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
+    if (regions.find(_regionCode.toStdString()) == regions.end())
       throw HootException("Invalid phone number region code: " + _regionCode);
-    }
   }
 }
 
@@ -109,13 +104,12 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
   //phone=* is the standard OSM tag, but have seen many others over time...keeping the allowed tags
   //fairly loose for now
   QList<ElementPhoneNumber> parsedPhoneNums;
-  for (Tags::const_iterator it = element.getTags().constBegin();
-       it != element.getTags().constEnd(); ++it)
+  const Tags& tags = element.getTags();
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);
-    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) ||
-        tagKey.contains("phone", Qt::CaseInsensitive))
+    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) || tagKey.contains("phone", Qt::CaseInsensitive))
     {
       const QString tagValue = it.value().toUtf8().trimmed().simplified();
       LOG_VART(tagValue);
@@ -126,9 +120,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
         // least one digit (vanity numbers can have letters).
         // consider getting rid of this, as its too weak of a check
         if (StringUtils::hasDigit(tagValue))
-        {
           _addPhoneNumber(element.getTags().getName(), tagKey, tagValue, parsedPhoneNums);
-        }
       }
       else
       {
@@ -136,11 +128,8 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
         {
           // IsPossibleNumber is a fairly quick check (IsValidNumber is more strict and a little
           // more expensive)
-          if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
-                tagValue.toStdString(), _regionCode.toStdString()))
-          {
+          if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(tagValue.toStdString(), _regionCode.toStdString()))
             _addPhoneNumber(element.getTags().getName(), tagKey, tagValue, parsedPhoneNums);
-          }
         }
         else
         {

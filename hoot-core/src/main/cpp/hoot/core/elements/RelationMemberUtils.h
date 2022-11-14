@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_MEMBER_UTILS_H
@@ -53,8 +53,7 @@ public:
    * @param map map owning the relation
    * @return a detailed relations members string
    */
-  static QString getRelationMembersDetailString(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationMembersDetailString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is a member of a relation of a given type
@@ -64,8 +63,7 @@ public:
    * @param relationType type of relation to search for
    * @return true if the element is a member of a relation of the specified type; false otherwise
    */
-  static bool isMemberOfRelationWithType(
-    const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType);
+  static bool isMemberOfRelationWithType(const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType);
 
   /**
    * Determines if an element is a member of a relation that is in a given schema category
@@ -76,8 +74,7 @@ public:
    * @return true if the element is a member of a relation that is in the specified schema category;
    * false otherwise
    */
-  static bool isMemberOfRelationInCategory(
-    const ConstOsmMapPtr& map, const ElementId& childId, const QString& schemaCategory);
+  static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId, const QString& schemaCategory);
 
   /**
    * Determines if an element is a member of a relation that has a given tag key
@@ -89,8 +86,7 @@ public:
    * otherwise
    * @todo This is redundant with isMemberOfRelationSatisfyingCriterion using a TagKeyCriterion.
    */
-  static bool isMemberOfRelationWithTagKey(
-    const ConstOsmMapPtr& map, const ElementId& childId, const QString& tagKey);
+  static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId, const QString& tagKey);
 
   /**
    * Determines if an element is contained by any relation in a map
@@ -109,8 +105,7 @@ public:
    * @param map the map owning the relation
    * @return true if at least one member element satisfies the criterion; false otherwise
    */
-  static bool containsMemberWithCriterion(
-    const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+  static bool containsMemberWithCriterion(const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
    * Determines if a relation contains only members that satisfy specified criterion
@@ -120,8 +115,7 @@ public:
    * @param map the map owning the relation
    * @return true if all member elements satisfy the criterion; false otherwise
    */
-  static bool containsOnlyMembersWithCriterion(
-    const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+  static bool containsOnlyMembersWithCriterion(const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is a member of a relation that satisfies a specified criterion
@@ -132,8 +126,7 @@ public:
    * @return true if the element is a member of any relation satisfying the specified criterion;
    * false otherwise
    */
-  static bool isMemberOfRelationSatisfyingCriterion(
-    const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+  static bool isMemberOfRelationSatisfyingCriterion(const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
    * Retrieves all relations containing a child element
@@ -143,8 +136,7 @@ public:
    * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of relations
    */
-  static std::vector<RelationPtr> getContainingRelations(
-    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
+  static std::vector<RelationPtr> getContainingRelations(const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 
   /**
    * Retrieves all relations containing a child element
@@ -154,8 +146,7 @@ public:
    * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of const relations
    */
-  static std::vector<ConstRelationPtr> getContainingRelationsConst(
-    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
+  static std::vector<ConstRelationPtr> getContainingRelationsConst(const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 
   /**
    * Retrieves the number of relations containing a child element
@@ -165,8 +156,7 @@ public:
    * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a relation count
    */
-  static int getContainingRelationCount(
-    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
+  static int getContainingRelationCount(const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 };
 
 }

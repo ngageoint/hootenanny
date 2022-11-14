@@ -62,10 +62,10 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
     writer = Factory::getInstance().constructObject<OsmMapWriter>(writerOverride);
 
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
-  for (size_t i = 0; i < names.size() && !writer; ++i)
+  for (const auto& name : names)
   {
-    LOG_VART(names[i]);
-    writer = Factory::getInstance().constructObject<OsmMapWriter>(names[i]);
+    LOG_VART(name);
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(name);
 
     // We may be able to make this a little more generic by referencing an interface instead.
     // Currently, OgrWriter is the only writer that runs a schema translation inline.
@@ -82,7 +82,8 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
 
     if (writer->isSupported(url))
     {
-      LOG_DEBUG("Using output writer: " << names[i]);
+      LOG_DEBUG("Using output writer: " << name);
+      break;
     }
     else
       writer.reset();
@@ -164,8 +165,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), includeClassFilter);
     StringUtils::removeEmptyStrings(includeClassFilter);
     LOG_VART(includeClassFilter);
-    if (includeClassFilter.isEmpty() ||
-        StringUtils::matchesWildcard(callingClass, includeClassFilter))
+    if (includeClassFilter.isEmpty() || StringUtils::matchesWildcard(callingClass, includeClassFilter))
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
       if (!debugMapFileName.endsWith(".osm", Qt::CaseInsensitive))

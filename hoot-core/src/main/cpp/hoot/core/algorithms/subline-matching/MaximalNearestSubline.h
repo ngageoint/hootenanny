@@ -23,16 +23,16 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MAXIMALNEARESTSUBLINE_H
 #define MAXIMALNEARESTSUBLINE_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
 
@@ -61,10 +61,9 @@ public:
   /**
    * @brief MaximalNearestSubline - Constructor that finds the subline in a based on b
    */
-  MaximalNearestSubline(
-    const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
-    Meters maxRelevantDistance, Radians maxRelevantAngle = -1,
-    Meters headingDelta = ConfigOptions().getWayMatcherHeadingDelta());
+  MaximalNearestSubline(const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
+                        Meters maxRelevantDistance, Radians maxRelevantAngle = -1,
+                        Meters headingDelta = ConfigOptions().getWayMatcherHeadingDelta());
 
   /**
    * @brief getInterval computes the interval (range) containing the Maximal Nearest Subline.
@@ -74,8 +73,8 @@ public:
    */
   const std::vector<WayLocation>& getInterval();
 
-  static WayPtr getMaximalNearestSubline(const OsmMapPtr& map, ConstWayPtr a,
-    ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance);
+  static WayPtr getMaximalNearestSubline(const OsmMapPtr& map, ConstWayPtr a, ConstWayPtr b,
+                                         Meters minSplitSize, Meters maxRelevantDistance);
 
   /**
    * @brief splitWay splits "a" into multiple ways with consistent topology based on "b".

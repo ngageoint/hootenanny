@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "RTreeNodeStore.h"
@@ -45,16 +45,16 @@ namespace Tgs
   RTreeNodeStore::~RTreeNodeStore()
   {
     _store->save();
-    NodeMap::iterator it = _availableNodes.begin();
+    auto it = _availableNodes.begin();
     while (it != _availableNodes.end())
     {
-      RecItem * item = it->second;
+      RecItem* item = it->second;
       delete item;
       ++it;
     }
   }
 
-  void RTreeNodeStore::_addNode( RecItem * item, int key )
+  void RTreeNodeStore::_addNode(RecItem * item, int key)
   {
     _availableNodes[key] = item;
   }
@@ -80,13 +80,13 @@ namespace Tgs
     RTreeNode * node;
 
     // if exists
-    NodeMap::const_iterator it = _availableNodes.find(id);
+    auto it = _availableNodes.find(id);
     if (it == _availableNodes.end())
     {
       RTreeNodeStore* me = const_cast<RTreeNodeStore*>(this);
       std::shared_ptr<Page> page = me->_store->getPage(id);
       node = new RTreeNode(_dimensions, page);
-      RecItem * item = new RecItem();
+      RecItem* item = new RecItem();
       item->pNode = node;
       item->list_it = _nodesList.insert(_nodesList.begin(), id);
       me->_addNode(item, node->getId());
@@ -107,7 +107,7 @@ namespace Tgs
     RTreeNode * node;
 
     // if exists
-    NodeMap::const_iterator it = _availableNodes.find(id);
+    auto it = _availableNodes.find(id);
     if (it != _availableNodes.end())
     {
       RecItem* item = it->second;
@@ -118,7 +118,7 @@ namespace Tgs
     {
       std::shared_ptr<Page> page = _store->getPage(id);
       node = new RTreeNode(_dimensions, page);
-      RecItem * item = new RecItem();
+      RecItem* item = new RecItem();
       item->pNode = node;
       item->list_it = _nodesList.insert(_nodesList.begin(), id);
       _addNode(item, node->getId());
@@ -135,7 +135,7 @@ namespace Tgs
       int keyVal = _nodesList.back();
       _nodesList.pop_back();
 
-      NodeMap::iterator it = _availableNodes.find(keyVal);
+      auto it = _availableNodes.find(keyVal);
       if (it != _availableNodes.end())
       {
         RecItem * item = it->second;

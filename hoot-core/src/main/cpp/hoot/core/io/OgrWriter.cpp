@@ -27,7 +27,6 @@
 #include "OgrWriter.h"
 
 // geos
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
@@ -42,7 +41,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/ElementInputStream.h>
@@ -57,10 +55,6 @@
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/ScriptSchemaTranslator.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -96,7 +90,6 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 OgrWriter::OgrWriter()
   : _createAllLayers(ConfigOptions().getOgrWriterCreateAllLayers()),
     _appendData(ConfigOptions().getOgrAppendData()),
-    _strictChecking(StrictOn),
     _elementCache(std::make_shared<ElementCacheLRU>(
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
@@ -124,7 +117,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setCreateAllLayers(configOptions.getOgrWriterCreateAllLayers());
-  setSchemaTranslationScript(configOptions.getOgrWriterScript());
+  setSchemaTranslationScript(configOptions.getSchemaTranslationScript());
   setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
   _appendData = configOptions.getOgrAppendData();
@@ -169,11 +162,18 @@ void OgrWriter::open(const QString& url)
 
 void OgrWriter::openOutput(const QString& url)
 {
+  bool retry = false;
+  QString open_except;
   try
   {
     _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
   catch (const HootException& openException)
+  {
+    retry = true;
+    open_except = openException.what();
+  }
+  if (retry)
   {
     try
     {
@@ -182,7 +182,7 @@ void OgrWriter::openOutput(const QString& url)
     catch (const HootException& createException)
     {
       throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
-        "Creating error: \"%2\"").arg(openException.what(), createException.what()));
+        "Creating error: \"%2\"").arg(open_except, createException.what()));
     }
   }
   if (_usesTransactions())
@@ -216,31 +216,10 @@ bool OgrWriter::isSupported(const QString& url) const
   return OgrUtilities::getInstance().isReasonableUrl(url);
 }
 
-void OgrWriter::initTranslator()
-{
-  if (_scriptPath.isEmpty())
-    throw HootException("A script path must be set before the output data source is opened.");
-
-  if (_translator == nullptr)
-  {
-    // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st =
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
-    st->setErrorTreatment(_strictChecking);
-    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
-  }
-
-  if (!_translator)
-    throw HootException("Error allocating translator, the translation script must support converting to OGR.");
-
-  _schema = _translator->getOgrOutputSchema();
-}
-
 void OgrWriter::write(const ConstOsmMapPtr& map)
 {
   _numWritten = 0;
-  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(
-    std::dynamic_pointer_cast<const ElementProvider>(map)));
+  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(map)));
 
   const NodeMap& nm = map->getNodes();
   for (auto it = nm.begin(); it != nm.end(); ++it)
@@ -264,51 +243,6 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   LOG_DEBUG("Writing second pass relations...");
   for (auto relation_id : qAsConst(_unwrittenFirstPassRelationIds))
     _writePartial(provider, map->getRelation(relation_id));
-}
-
-void OgrWriter::translateToFeatures(const ElementProviderPtr& provider, const ConstElementPtr& e,
-                                    std::shared_ptr<Geometry> &g, // output
-                                    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const
-{
-  if (!_translator)
-    throw HootException("You must call open before attempting to write.");
-
-  if (e->getTags().getInformationCount() > 0)
-  {
-    // There is probably a cleaner way of doing this. convertToGeometry calls getGeometryType which
-    // will throw an exception if it gets a relation that it doesn't know about. E.g. "route",
-    // "superroute", "turnlanes:turns", etc.
-
-    try
-    {
-      g = ElementToGeometryConverter(provider).convertToGeometry(e, false);
-    }
-    catch (const IllegalArgumentException& err)
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-      g = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-    }
-
-    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
-
-    Tags t = e->getTags();
-    QStringList keys = t.keys();
-    for (const auto& key : qAsConst(keys))
-    {
-      if (t[key] == "")
-        t.remove(key);
-    }
-
-    tf = _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
-  }
 }
 
 void OgrWriter::writeTranslatedFeature(const std::shared_ptr<Geometry>& g,
@@ -378,12 +312,12 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
    */
   if (way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
-    throw HootException("Cannot do partial write of Way ID " + QString::number(way->getId()) +
-      " as it contains " + QString::number(way->getNodeCount()) + " nodes, but our cache can" +
-      " only hold " + QString::number(_elementCache->getNodeCacheSize()) + ".  If you have enough" +
-      " memory to load this way, you can increase the element.cache.size.node setting to" +
-      " an appropriate value larger than " + QString::number(way->getNodeCount()) +
-      " to allow for loading it.");
+    throw HootException(
+      QString("Cannot do partial write of Way ID %1 as it contains %2 nodes, but our cache can only hold %3.  "
+              "If you have enough memory to load this way, you can increase the element.cache.size.node setting to "
+              "an appropriate value larger than %4 to allow for loading it.")
+        .arg(QString::number(way->getId()), QString::number(way->getNodeCount()),
+             QString::number(_elementCache->getNodeCacheSize()), QString::number(way->getNodeCount())));
   }
 
   // Make sure all the nodes in the way are in our cache
@@ -393,10 +327,11 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
   {
     if (_elementCache->containsNode(node_id) == false)
     {
-      throw HootException("Way " + QString::number(way->getId()) + " contains node " +
-        QString::number(node_id) + ", which is not present in the cache.  If you have the " +
-          "memory to support this number of nodes, you can increase the element.cache.size.node " +
-          "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
+      throw HootException(
+        QString("Way %1 contains node %2, which is not present in the cache.  If you have the "
+                "memory to support this number of nodes, you can increase the element.cache.size.node "
+                "setting above: %3.")
+          .arg(QString::number(way->getId()), QString::number(node_id), QString::number(_elementCache->getNodeCacheSize())));
     }
     LOG_TRACE("Way " << way->getId() << " contains node " << node_id <<
                  ": " << _elementCache->getNode(node_id)->getX() << ", " <<
@@ -434,35 +369,32 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
       nodeCount++;
       if (nodeCount > _elementCache->getNodeCacheSize())
       {
-        throw HootException("Relation with ID " +
-          QString::number(newRelation->getId()) + " contains more nodes than can fit in the " +
-          "cache (" + QString::number(_elementCache->getNodeCacheSize()) + ").  If you have enough " +
-          " memory to load this relation, you can increase the element.cache.size.node setting to " +
-          " an appropriate value larger than " + QString::number(nodeCount) + " to allow for loading it.");
+        throw HootException(
+          QString("Relation with ID %1 contains more nodes than can fit in the cache (%2).  If you have enough memory to load this relation, "
+                  "you can increase the element.cache.size.node setting to an appropriate value larger than %3 to allow for loading it.")
+            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getNodeCacheSize()), QString::number(nodeCount)));
       }
       break;
     case ElementType::Way:
       wayCount++;
       if (wayCount > _elementCache->getWayCacheSize())
       {
-        throw HootException("Relation with ID " +
-          QString::number(newRelation->getId()) + " contains more ways than can fit in the " +
-          "cache (" + QString::number(_elementCache->getWayCacheSize()) + ").  If you have enough " +
-          " memory to load this relation, you can increase the element.cache.size.way setting to " +
-          " an appropriate value larger than " + QString::number(wayCount) +
-          " to allow for loading it.");
+        throw HootException(
+          QString("Relation with ID %1 contains more ways than can fit in the cache (%2).  If you have enough "
+                  " memory to load this relation, you can increase the element.cache.size.way setting to "
+                  " an appropriate value larger than %3 to allow for loading it.")
+            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getWayCacheSize()), QString::number(wayCount)));
       }
       break;
     case ElementType::Relation:
       relationCount++;
       if (relationCount > _elementCache->getRelationCacheSize())
       {
-        throw HootException("Relation with ID " +
-          QString::number(newRelation->getId()) + " contains more relations than can fit in the " +
-          "cache (" + QString::number(_elementCache->getRelationCacheSize()) + ").  If you have enough " +
-          " memory to load this relation, you can increase the element.cache.size.relation setting to " +
-          " to an appropriate value larger than " + QString::number(relationCount) +
-          " to allow for loading it.");
+        throw HootException(
+          QString("Relation with ID %1 contains more relations than can fit in the cache (%2).  If you have enough "
+                  " memory to load this relation, you can increase the element.cache.size.relation setting to "
+                  " to an appropriate value larger than %3 to allow for loading it.")
+            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getRelationCacheSize()), QString::number(relationCount)));
       }
       break;
     default:
@@ -491,9 +423,10 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
         throw HootException("Relation contains unknown type");
         break;
       }
-      const QString msg = QString("Relation (%1) element (%2: %3) does not exist in the element "
-        "cache with size = %4. You may need to increase the following settings: "
-        "element.cache.size.node, element.cache.size.way, element.cache.size.relation")
+      const QString msg =
+        QString("Relation (%1) element (%2: %3) does not exist in the element "
+                "cache with size = %4. You may need to increase the following settings: "
+                "element.cache.size.node, element.cache.size.way, element.cache.size.relation")
           .arg(QString::number(newRelation->getElementId().getId()),
                QString::number(member.getElementId().getId()),
                member.getElementId().getType().toString(),
@@ -552,7 +485,7 @@ void OgrWriter::writeElement(ElementPtr& element)
   //  Do not attempt to write empty elements
   if (!element)
     return;
-  Tags sourceTags = element->getTags();
+  const Tags& sourceTags = element->getTags();
   Tags destTags;
   for (auto it = sourceTags.constBegin(); it != sourceTags.constEnd(); ++it)
   {
@@ -605,8 +538,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
       // if we're exporting point data, then export with x/y at the front
       if (gtype == wkbPoint)
         options["GEOMETRY"] = "AS_XY";
-      // if we're exporting other geometries then export w/ WKT at the front.
-      else
+      else // if we're exporting other geometries then export w/ WKT at the front.
         options["GEOMETRY"] = "AS_WKT";
 
       options["CREATE_CSVT"] = "YES";
@@ -661,8 +593,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
     std::shared_ptr<OGRSpatialReference> projection = MapProjector::createWgs84Projection();
-    poLayer =
-      _ds->CreateLayer(layerName.toLatin1(), projection.get(), gtype, options.getCrypticOptions());
+    poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(), gtype, options.getCrypticOptions());
 
     if (poLayer == nullptr)
       throw HootException(QString("Layer creation failed. %1").arg(layerName));
@@ -688,11 +619,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
 
       int errCode = poLayer->CreateField(&oField);
       if (errCode != OGRERR_NONE)
-      {
-        throw HootException(
-          QString("Error creating field (%1)  OGR Error Code: (%2).")
-            .arg(f->getName(), QString::number(errCode)));
-      }
+        throw HootException(QString("Error creating field (%1)  OGR Error Code: (%2).").arg(f->getName(), QString::number(errCode)));
     }
   }
 }
@@ -828,7 +755,6 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
 
 bool OgrWriter::_usesTransactions() const
 {
-//  return false;
   //  Right now OgrWriter will use transactions for GPKG files
   return (_ds && QString(_ds->GetDriverName()) == "GPKG");
 }

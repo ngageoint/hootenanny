@@ -86,7 +86,7 @@ void WayJoinerAdvanced::_joinParentChild()
 {
   LOG_INFO("\tJoining parent ways to children...");
 
-  WayMap ways = _map->getWays();
+  const WayMap& ways = _map->getWays();
   _totalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -106,19 +106,19 @@ void WayJoinerAdvanced::_joinParentChild()
   //  Iterate all of the ids
   for (auto id : ids)
   {
-    WayPtr way = ways[id];
-    if (way)
-    {
-      LOG_VART(way->getElementId());
-    }
+    WayPtr way = _map->getWay(id);
+    if (way == nullptr)
+      continue;
     long parent_id = way->getPid();
     LOG_VART(parent_id);
-    WayPtr parent = ways[parent_id];
-    Tags parentTags;
+    WayPtr parent = _map->getWay(parent_id);
+    //  Use a pointer to the tags instead of a full copy of the tags for conditional value
+    Tags empty;
+    Tags* parentTags = &empty;
     if (parent)
     {
       LOG_VART(parent->getElementId());
-      parentTags = parent->getTags();
+      parentTags = &parent->getTags();
     }
     else
     {
@@ -128,11 +128,11 @@ void WayJoinerAdvanced::_joinParentChild()
     }
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
-    Tags wayTags = way->getTags();
+    const Tags& wayTags = way->getTags();
     // TODO: use TagUtils::nameConflictExists here instead
     const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
-    if (parent && parentTags.hasName() && wayTags.hasName() &&
-        !Tags::haveMatchingName(parentTags, wayTags, strictNameMatch))
+    if (parent && parentTags->hasName() && wayTags.hasName() &&
+        !Tags::haveMatchingName(*parentTags, wayTags, strictNameMatch))
     {
       // TODO: move this check down to _joinWays?
       LOG_TRACE(
@@ -179,7 +179,7 @@ void WayJoinerAdvanced::_joinAtNode()
   {
     LOG_TRACE("joinAtNode iteration: " << numIterations + 1);
 
-    WayMap ways = _map->getWays();
+    const WayMap& ways = _map->getWays();
     ids.clear();
     //  Find all ways that have a split parent id
     for (auto it = ways.begin(); it != ways.end(); ++it)
@@ -210,12 +210,10 @@ void WayJoinerAdvanced::_joinAtNode()
     //  Iterate all of the nodes and check for compatible ways to join them to
     for (auto id : ids)
     {
-      WayPtr way = ways[id];
-      LOG_VART(way->getElementId());
-
-      if (way->getNodeCount() < 1)
+      WayPtr way = _map->getWay(id);
+      if (way == nullptr || way->getNodeCount() < 1)
         continue;
-
+      //  Copy tags to modify and apply later
       Tags pTags = way->getTags();
       // Ignoring length here during the parent/child tag equals check, since differing values in
       // that field can cause us to miss a way join.  We'll add that value up after joining the
@@ -246,6 +244,7 @@ void WayJoinerAdvanced::_joinAtNode()
           LOG_VART(child->getStatus());
           if (child && way->getId() != child->getId() && _areJoinable(way, child))
           {
+            //  Copy child tags to update length
             Tags cTags = child->getTags();
             // change for #2867
             cTags.remove(MetadataTags::Length());
@@ -292,7 +291,6 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
   LOG_TRACE("\tRejoining siblings...");
   LOG_VART(way_ids);
 
-  WayMap ways = _map->getWays();
   WayPtr start;
   WayPtr end;
   size_t failure_count = 0;
@@ -302,17 +300,15 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
   {
     long id = way_ids[0];
     way_ids.pop_front();
-    WayPtr way = ways[id];
+    WayPtr way = _map->getWay(id);
 
     if (!way)
     {
       LOG_TRACE(ElementId(ElementType::Way, id) << " does not exist.");
       continue;
     }
-    else
-    {
-      LOG_VART(way->getElementId());
-    }
+
+    LOG_VART(way->getElementId());
 
     if (sorted.empty())
     {
@@ -390,26 +386,24 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
   //  Iterate the sorted ways and merge them
   if (sorted.size() > 1)
   {
-    WayPtr parent = ways[sorted[0]];
+    WayPtr parent = _map->getWay(sorted[0]);
     if (parent)
     {
       LOG_VART(parent->getElementId());
     }
     for (auto way_id : sorted)
     {
-      WayPtr child = ways[way_id];
+      WayPtr child = _map->getWay(way_id);
       // don't try to join if there are explicitly conflicting names; fix for #2888
       bool childHasName = false;
-      Tags childTags;
-      if (child)
-      {
-        LOG_VART((child->getElementId()));
-        childTags = child->getTags();
-        childHasName = childTags.hasName();
-      }
-      else
+      if (!child)
         break;
-      const Tags parentTags = parent->getTags();
+
+      LOG_VART((child->getElementId()));
+      const Tags& childTags = child->getTags();
+      childHasName = childTags.hasName();
+
+      const Tags& parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
       // TODO: use TagUtils::nameConflictExists here instead
       const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
@@ -522,10 +516,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
-  const bool onlyOneIsABridge =
-    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
-  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
-      onlyOneIsABridge)
+  const bool onlyOneIsABridge = CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() && onlyOneIsABridge)
   {
     LOG_TRACE(
       "Only one of the features: " << wayWithIdToKeep->getElementId() << " and " <<
@@ -559,10 +551,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   wayWithIdToLose->resetPid();
 
   //  Merge the tags
-
   // #2888 fix
-  Tags tags1 = wayWithTagsToKeep->getTags();
-  Tags tags2 = wayWithTagsToLose->getTags();
+  const Tags& tags1 = wayWithTagsToKeep->getTags();
+  const Tags& tags2 = wayWithTagsToLose->getTags();
 
   // If each of these has a length tag, then we need to add up the new value for the joined ways.
   // This logic should possibly be a part of the default tag merging instead of being done here
@@ -708,8 +699,7 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
   toRemove = child;
   if (parent->getStatus() == Status::Unknown1)
   {
-    if (tagMergerClassName == "OverwriteTagMerger" ||
-        tagMergerClassName == "OverwriteTag2Merger")
+    if (tagMergerClassName == "OverwriteTagMerger" || tagMergerClassName == "OverwriteTag2Merger")
     {
       keeper = child;
       toRemove = parent;
@@ -723,8 +713,7 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
   else if (child->getStatus() == Status::Unknown1 ||
            (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
   {
-    if (tagMergerClassName == "OverwriteTagMerger" ||
-        tagMergerClassName == "OverwriteTag2Merger")
+    if (tagMergerClassName == "OverwriteTagMerger" || tagMergerClassName == "OverwriteTag2Merger")
     {
       keeper = parent;
       toRemove = child;

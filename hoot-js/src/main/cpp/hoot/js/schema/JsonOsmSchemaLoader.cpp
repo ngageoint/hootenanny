@@ -106,8 +106,8 @@ double JsonOsmSchemaLoader::_asDouble(const QVariant& v) const
   double result = v.toDouble(&ok);
   if (!ok)
   {
-    throw IllegalArgumentException(QString("Expected to receive a number, but got: %1 (%2)").
-      arg(toString(v)).arg(v.typeName()));
+    throw IllegalArgumentException(QString("Expected to receive a number, but got: %1 (%2)")
+                                    .arg(toString(v)).arg(v.typeName()));
   }
   return result;
 }
@@ -117,8 +117,8 @@ QString JsonOsmSchemaLoader::_asString(const QVariant& v) const
   if (v.type() == QVariant::String)
     return v.toString();
   else
-    throw IllegalArgumentException(QString("Expected to receive a string, but got: %1 (%2)").
-      arg(toString(v)).arg(v.typeName()));
+    throw IllegalArgumentException(QString("Expected to receive a string, but got: %1 (%2)")
+                                    .arg(toString(v)).arg(v.typeName()));
 }
 
 QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
@@ -135,8 +135,8 @@ QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
   }
   else
   {
-    throw IllegalArgumentException(QString("Expected to receive a list, but got: %1 (%2)").
-      arg(toString(v)).arg(v.typeName()));
+    throw IllegalArgumentException(QString("Expected to receive a list, but got: %1 (%2)")
+                                    .arg(toString(v)).arg(v.typeName()));
   }
 
   return result;

@@ -29,12 +29,12 @@
 #define UNCONNECTED_WAY_SNAPPER
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -71,8 +71,7 @@ namespace hoot
  * if that can be addressed or not. Technically, the way joiner (maybe) run later on could fix the
  * problem.
  */
-class UnconnectedWaySnapper : public OsmMapOperation, public Configurable,
-  public ConflateInfoCacheConsumer
+class UnconnectedWaySnapper : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -202,6 +201,10 @@ private:
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
 
+  // feature indexes used for crossing ways
+  std::shared_ptr<Tgs::HilbertRTree> _crossingWayNodeIndex;
+  std::deque<ElementId> _crossingWayNodeIndexToEid;
+
   // this can prevent very differently typed ways from being snapped to each other; valid range
   // greater than 0 and less than or equal to 1; a value of -1.0 ignores the setting completely
   double _minTypeMatchScore;
@@ -265,6 +268,7 @@ private:
    * Creates all necessary feature spatial indices
    */
   void _createFeatureIndexes();
+
   /*
    * Creates an individual feature spatial index needed when searching for features to snap to
    *
@@ -283,6 +287,11 @@ private:
   bool _snapUnconnectedWayEndNode(const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap);
 
   /*
+   * Finds ways that cross each other, makes a node, and snaps them
+   */
+  void _snapUnconnectedWayCrossings(const WayPtr& wayToSnap) const;
+
+  /*
    * Identifies unconnected way nodes
    *
    * @param way the way to examine
@@ -290,6 +299,7 @@ private:
    * @return a collection of node IDs
    */
   std::set<long> _getUnconnectedWayEndNodeIds(const ConstWayPtr& way, const ElementCriterionPtr& wayCrit = ElementCriterionPtr()) const;
+
   /*
    * Return feature candidates to snap to
    *
@@ -347,10 +357,12 @@ private:
    * Marks a snapped way with a custom tag
    */
   void _markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode) const;
+
   /*
    * Marks a snapped way with a review tag
    */
   void _reviewSnappedWay(const long idOfNodeBeingSnapped) const;
+
   /*
    * Setup the default criterion for the snapper
    */

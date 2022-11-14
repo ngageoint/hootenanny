@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny">
+    <way id="1" version="1" action="modify" timestamp="">
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <tag k="key1" v="value1"/>
+    </way>
+    <node id="3" version="1" action="modify" lat="-89.0000000000000000" lon="69.0000000000000000" timestamp=""/>
+    <way id="2" version="1" action="delete" timestamp="">
+        <nd ref="4"/>
+        <nd ref="5"/>
+        <tag k="key1" v="value1"/>
+    </way>
+    <node id="-1" version="0" action="modify" lat="46.0000000000000000" lon="-128.0000000000000000" timestamp=""/>
+    <relation id="1" version="1" action="delete" timestamp="">
+        <member type="node" ref="7" role="role1"/>
+        <member type="way" ref="3" role="role2"/>
+        <tag k="key2" v="value2"/>
+    </relation>
+    <way id="4" version="1" action="delete" timestamp="">
+        <nd ref="9"/>
+        <nd ref="10"/>
+        <tag k="key1" v="value1"/>
+    </way>
+    <node id="-2" version="0" action="modify" lat="57.0000000000000000" lon="-31.0000000000000000" timestamp=""/>
+    <way id="5" version="1" action="modify" timestamp="">
+        <nd ref="12"/>
+        <nd ref="13"/>
+        <tag k="key1" v="value1"/>
+    </way>
+    <relation id="-1" version="0" action="modify" timestamp="">
+        <member type="node" ref="14" role="role1"/>
+        <member type="way" ref="6" role="role2"/>
+        <tag k="key2" v="value2"/>
+    </relation>
+    <node id="16" version="1" action="delete" lat="-44.0000000000000000" lon="-7.0000000000000000" timestamp=""/>
+</osm>

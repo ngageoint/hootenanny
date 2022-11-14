@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateElementMarker.h"
 
 // Hoot
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/elements/ElementDeduplicator.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementDeduplicator.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateElementMarker)
 
-DuplicateElementMarker::DuplicateElementMarker() :
-_coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSensitivity())
+DuplicateElementMarker::DuplicateElementMarker()
+  : _coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSensitivity())
 {
 }
 
@@ -53,16 +53,13 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
   QMap<QString, ElementId> hashes;
   QSet<std::pair<ElementId, ElementId>> duplicates;
   LOG_VARD(_coordinateComparisonSensitivity);
-  ElementDeduplicator::calculateDuplicateElements(
-    map, hashes, duplicates, _coordinateComparisonSensitivity);
+  ElementDeduplicator::calculateDuplicateElements(map, hashes, duplicates, _coordinateComparisonSensitivity);
   // don't care about the hashes
   hashes.clear();
 
   WayNodeCriterion wayNodeCrit(map);
-  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates.begin();
-       itr != duplicates.end(); ++itr)
+  for (const auto& dupes : qAsConst(duplicates))
   {
-    const std::pair<ElementId, ElementId> dupes = *itr;
     ElementPtr dupe1 = map->getElement(dupes.first);
     ElementPtr dupe2 = map->getElement(dupes.second);
     if (dupe1 && dupe2 && dupe1->getElementId() != dupe2->getElementId())
@@ -74,14 +71,12 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
 
       if (wayNodeCrit.isSatisfied(dupe1))
       {
-        const std::set<QString> containingWayTypesTemp =
-          WayUtils::getContainingWaysMostSpecificTypes(dupe1->getId(), map);
+        const std::set<QString> containingWayTypesTemp = WayUtils::getContainingWaysMostSpecificTypes(dupe1->getId(), map);
         _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
       }
       if (wayNodeCrit.isSatisfied(dupe2))
       {
-        const std::set<QString> containingWayTypesTemp =
-          WayUtils::getContainingWaysMostSpecificTypes(dupe2->getId(), map);
+        const std::set<QString> containingWayTypesTemp = WayUtils::getContainingWaysMostSpecificTypes(dupe2->getId(), map);
         _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
       }
     }
@@ -95,9 +90,7 @@ QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstE
   QString uuidVal;
   QString existingUuid = element->getTag(MetadataTags::HootDuplicate()).trimmed();
   if (!existingUuid.isEmpty())
-  {
     uuidVal = existingUuid + ";";
-  }
   uuidVal += newUuid;
   return uuidVal;
 }

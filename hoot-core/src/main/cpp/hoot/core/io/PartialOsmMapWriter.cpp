@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PartialOsmMapWriter.h"
 
@@ -87,6 +87,7 @@ void PartialOsmMapWriter::writeElement(ElementPtr& element)
 Tags PartialOsmMapWriter::_getElementTags(const ConstElementPtr& element)
 {
   //  Tag order is important here, current tags first and then add export tags
+  //  Make a copy to modify and return
   Tags tags = element->getTags();
   //  Rather than cloning the element, get the export tags from the visitor
   tags.add(_addExportTagsVisitor.getExportTags(element));

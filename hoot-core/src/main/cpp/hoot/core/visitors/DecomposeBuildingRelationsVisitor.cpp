@@ -54,10 +54,8 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 
 void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr<Relation>& r)
 {
-  Tags baseTags = r->getTags();
-
+  //  Copy the members so that the relation can be modified below
   const vector<RelationData::Entry> members = r->getMembers();
-
   for (const auto& member : members)
   {
     ElementId eid = member.getElementId();
@@ -93,8 +91,8 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
 
     // ok, we've got a building part. Recompose it as a building.
     std::shared_ptr<Element> e = _map->getElement(member.getElementId());
-
-    Tags t = baseTags;
+    //  Copy the tags from the relation to the new element
+    Tags t = r->getTags();
     t.add(e->getTags());
     // don't need the building:part tag anymore.
     t.remove(MetadataTags::BuildingPart());

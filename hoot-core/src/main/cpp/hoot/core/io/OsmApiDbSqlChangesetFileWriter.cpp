@@ -135,11 +135,8 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path, const QList<Chan
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
-          _failsBoundsCheck(changeElement, map1, map2))
-      {
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() && _failsBoundsCheck(changeElement, map1, map2, change.getType()))
         continue;
-      }
 
       LOG_VART(change.getType());
       switch (change.getType())
@@ -207,16 +204,14 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
   LOG_DEBUG("Creating changeset with ID: " << _changesetId);
   _outputSql.write(
-    QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES "
-            "(%2, %3, %4, %4);\n")
+    QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES (%2, %3, %4, %4);\n")
       .arg(ApiDb::getChangesetsTableName())
       .arg(_changesetId)
       .arg(_changesetUserId)
       .arg(OsmApiDb::TIMESTAMP_FUNCTION)
     .toUtf8());
   _outputSql.write(
-    QString("INSERT INTO %1 (changeset_id, k, v) VALUES "
-            "(%2, 'written_by', 'Hootenanny');\n")
+    QString("INSERT INTO %1 (changeset_id, k, v) VALUES (%2, 'written_by', 'Hootenanny');\n")
       .arg(ApiDb::getChangesetTagsTableName(), QString::number(_changesetId)).toUtf8());
 }
 
@@ -338,10 +333,7 @@ QString OsmApiDbSqlChangesetFileWriter::_getUpdateValuesWayOrRelationStr(ConstEl
 void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr element)
 {
   if (element->getElementId().getId() <= 0)
-  {
-    throw HootException(
-      QString("SQL changesets can only modify positive element IDs: %1").arg(element->getElementId().toString()));
-  }
+    throw HootException(QString("SQL changesets can only modify positive element IDs: %1").arg(element->getElementId().toString()));
 
   LOG_TRACE("Writing update for: " << element->getElementId() << "...");
   const QString elementTypeStr = element->getElementType().toString().toLower();
@@ -376,8 +368,7 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   // <element-name> table contains all version of all elements of that type in a history, so insert
   // into that table.
   _outputSql.write(
-    QString("INSERT INTO %1s (%2_id, %3")
-      .arg(elementTypeStr, elementTypeStr, _getInsertValuesStr(changeElement)).toUtf8());
+    QString("INSERT INTO %1s (%2_id, %3").arg(elementTypeStr, elementTypeStr, _getInsertValuesStr(changeElement)).toUtf8());
   // current_<element-name> contains the single latest version of the element, so update that record
   _outputSql.write(
     QString("UPDATE current_%1s SET %2").arg(elementTypeStr, _getUpdateValuesStr(changeElement)).toUtf8());
@@ -408,8 +399,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   if (element->getElementId().getId() <= 0)
   {
     throw HootException(
-      QString("SQL changesets can only create relation members with positive element IDs: %1")
-        .arg(element->getElementId().toString()));
+      QString("SQL changesets can only create relation members with positive element IDs: %1").arg(element->getElementId().toString()));
   }
 
   const QString elementIdStr = QString::number(element->getId());
@@ -420,8 +410,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   if (currentVersion < 1)
   {
     throw HootException(
-      QString("Elements being deleted in an .osc.sql changeset must always have a version greater than one: %1")
-        .arg(element->getElementId().toString()));
+      QString("Elements being deleted in an .osc.sql changeset must always have a version greater than one: %1").arg(element->getElementId().toString()));
   }
   const long newVersion = currentVersion + 1;
 
@@ -439,8 +428,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
 
   //OSM API DB keeps history for all elements, so the existing element in the master table is not
   //modified and a new record is added with the updated version and visible set to false
-  _outputSql.write(
-    QString("INSERT INTO %1s (%2_id, %3").arg(elementTypeStr, elementTypeStr, _getInsertValuesStr(changeElement)).toUtf8());
+  _outputSql.write(QString("INSERT INTO %1s (%2_id, %3").arg(elementTypeStr, elementTypeStr, _getInsertValuesStr(changeElement)).toUtf8());
 
   _deleteCurrentTags(changeElement->getElementId());
 
@@ -448,28 +436,22 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   {
   case ElementType::Node:
     _outputSql.write(
-      QString("DELETE FROM %1 WHERE node_id=%2;\n")
-        .arg(ApiDb::getCurrentWayNodesTableName(), elementIdStr).toUtf8());
+      QString("DELETE FROM %1 WHERE node_id=%2;\n").arg(ApiDb::getCurrentWayNodesTableName(), elementIdStr).toUtf8());
     _outputSql.write(
-      QString("DELETE FROM %1 WHERE member_type='Node' AND member_id=%2;\n")
-        .arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
+      QString("DELETE FROM %1 WHERE member_type='Node' AND member_id=%2;\n").arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
     break;
   case ElementType::Way:
     //  all of its entries in current way nodes are removed
     _outputSql.write(
-      QString("DELETE FROM %1 WHERE way_id=%2;\n")
-        .arg(ApiDb::getCurrentWayNodesTableName(), elementIdStr).toUtf8());
+      QString("DELETE FROM %1 WHERE way_id=%2;\n").arg(ApiDb::getCurrentWayNodesTableName(), elementIdStr).toUtf8());
     _outputSql.write(
-      QString("DELETE FROM %1 WHERE member_type='Way' AND member_id=%2;\n")
-        .arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
+      QString("DELETE FROM %1 WHERE member_type='Way' AND member_id=%2;\n").arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
     break;
   case ElementType::Relation:
     _outputSql.write(
-      QString("DELETE FROM %1 WHERE relation_id=%2;\n")
-        .arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
+      QString("DELETE FROM %1 WHERE relation_id=%2;\n").arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
     _outputSql.write(
-      QString("DELETE FROM %1 WHERE member_type='Relation' AND member_id=%2;\n")
-        .arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
+      QString("DELETE FROM %1 WHERE member_type='Relation' AND member_id=%2;\n").arg(ApiDb::getCurrentRelationMembersTableName(), elementIdStr).toUtf8());
     break;
   default:
     throw HootException("Unknown element type");
@@ -482,7 +464,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
       .arg(_getVisibleStr(changeElement->getVisible()))
       .arg(changeElement->getVersion())
       .arg(changeElement->getId());
-  _outputSql.write(("UPDATE current_" + elementTypeStr + "s SET " + values).toUtf8());
+  _outputSql.write(QString("UPDATE current_%1s SET %2").arg(elementTypeStr, values).toUtf8());
 }
 
 QString OsmApiDbSqlChangesetFileWriter::_getInsertValuesStr(ConstElementPtr element) const
@@ -533,7 +515,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
   LOG_TRACE("Creating tags for: " << element->getElementId());
 
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
-
+  //  Copy tags to update and add additional information
   Tags tags = element->getTags();
   if (_includeDebugTags)
   {
@@ -589,10 +571,8 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
                val.replace('\'', "''"),
                QString::number(element->getVersion()));
 
-      _outputSql.write(
-        QString("INSERT INTO %1 %2").arg(tableNames.at(0), currentTagValues).toUtf8());
-      _outputSql.write(
-        QString("INSERT INTO %1 %2").arg(tableNames.at(1), tagValues).toUtf8());
+      _outputSql.write(QString("INSERT INTO %1 %2").arg(tableNames.at(0), currentTagValues).toUtf8());
+      _outputSql.write(QString("INSERT INTO %1 %2").arg(tableNames.at(1), tagValues).toUtf8());
     }
   }
 }
@@ -621,10 +601,7 @@ void OsmApiDbSqlChangesetFileWriter::_createWayNodes(ConstWayPtr way)
     {
       nodeElementId = _remappedIds[nodeElementId];
       if (nodeElementId.getId() <= 0)
-      {
-        throw HootException(
-          QString("SQL changesets can only create way nodes with positive element IDs: %1").arg(nodeElementId.toString()));
-      }
+        throw HootException(QString("SQL changesets can only create way nodes with positive element IDs: %1").arg(nodeElementId.toString()));
     }
     else if (nodeElementId.getId() <= 0)
     {
@@ -657,7 +634,7 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
 {
   LOG_TRACE("Creating relation members for: " << relation->getElementId());
 
-  const vector<RelationData::Entry> members = relation->getMembers();
+  const vector<RelationData::Entry>& members = relation->getMembers();
   size_t sequence_id = 0;
   for (const auto& member : members)
   {
@@ -679,8 +656,7 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
     else if (memberElementId.getId() <= 0)
     {
       ElementId newId =
-        ElementId(
-          memberElementId.getType().getEnum(), _db.getNextId(memberElementId.getType().getEnum()));
+        ElementId(memberElementId.getType().getEnum(), _db.getNextId(memberElementId.getType().getEnum()));
       _remappedIds[memberElementId] = newId;
       memberElementId = newId;
     }

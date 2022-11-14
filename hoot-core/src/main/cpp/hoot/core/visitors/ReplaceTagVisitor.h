@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef REPLACETAGVISITOR_H
 #define REPLACETAGVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -61,9 +61,8 @@ public:
    * @param replaceKey - key to use as a replacement
    * @param replaceValue - value to use as a replacement
    */
-  ReplaceTagVisitor(
-    const QString& matchKey, const QString& matchValue, const QString& replaceKey,
-    const QString& replaceValue);
+  ReplaceTagVisitor(const QString& matchKey, const QString& matchValue, const QString& replaceKey,
+                    const QString& replaceValue);
   ~ReplaceTagVisitor() override = default;
 
   /**
@@ -77,9 +76,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Replacing tags..."; }
   QString getCompletedStatusMessage() const override
-  {
-    return "Replaced " + QString::number(_numAffected) + " element tags";
-  }
+  { return QString("Replaced %1 element tags").arg(QString::number(_numAffected)); }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

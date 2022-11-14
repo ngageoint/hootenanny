@@ -119,7 +119,7 @@ Status::Type Status::fromString(QString statusString)
   if (statusString.contains(";"))
   {
     QStringList values = statusString.split(";");
-    if (values.size() > 0)
+    if (!values.empty())
       statusString = values[0];
     else
       return Invalid;
@@ -158,6 +158,5 @@ Status::Type Status::fromString(QString statusString)
     return Invalid;
   }
 }
-
 
 }

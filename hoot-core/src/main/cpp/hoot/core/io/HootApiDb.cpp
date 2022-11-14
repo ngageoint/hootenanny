@@ -709,9 +709,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   {
     QStringList columns({"id", "latitude", "longitude", "changeset_id", "timestamp", "tile", "version", "tags"});
 
-    _nodeBulkInsert =
-      std::make_shared<SqlBulkInsert>(
-        _db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts);
+    _nodeBulkInsert = std::make_shared<SqlBulkInsert>(_db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts);
   }
 
   QList<QVariant> v;
@@ -769,8 +767,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
     QStringList columns({"id", "changeset_id", "timestamp", "version", "tags"});
 
     _relationBulkInsert =
-      std::make_shared<SqlBulkInsert>(
-        _db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts);
+      std::make_shared<SqlBulkInsert>(_db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts);
   }
 
   QList<QVariant> v;
@@ -808,11 +805,16 @@ bool HootApiDb::insertRelationMember(const long relationId, const ElementType& t
 
   if (_insertRelationMembers == nullptr)
   {
+    QString sql = QString("INSERT INTO %1 (relation_id, member_type, member_id, member_role, sequence_id) "
+                          "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)")
+                      .arg(getCurrentRelationMembersTableName(mapId));
+    //  ON CONFLICT DO NOTHING simply ignores each inserted row that violates an
+    //  arbiter constraint or index
+    if (_ignoreInsertConflicts)
+      sql.append(" ON CONFLICT DO NOTHING");
+
     _insertRelationMembers = std::make_shared<QSqlQuery>(_db);
-    _insertRelationMembers->prepare(
-      QString("INSERT INTO %1 (relation_id, member_type, member_id, member_role, sequence_id) "
-              "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)")
-          .arg(getCurrentRelationMembersTableName(mapId)));
+    _insertRelationMembers->prepare(sql);
   }
 
   _insertRelationMembers->bindValue(":relation_id", (qlonglong)relationId);
@@ -1427,8 +1429,7 @@ bool HootApiDb::mapExists(const long id)
   if (_mapExistsById == nullptr)
   {
     _mapExistsById = std::make_shared<QSqlQuery>(_db);
-    _mapExistsById->prepare(
-      QString("SELECT display_name FROM %1 WHERE id = :mapId").arg(getMapsTableName()));
+    _mapExistsById->prepare(QString("SELECT display_name FROM %1 WHERE id = :mapId").arg(getMapsTableName()));
   }
   _mapExistsById->bindValue(":mapId", (qlonglong)id);
   if (_mapExistsById->exec() == false)
@@ -1670,8 +1671,7 @@ void HootApiDb::insertUserSession(const long userId, const QString& sessionId)
   }
 }
 
-void HootApiDb::updateUserAccessTokens(const long userId, const QString& accessToken,
-                                       const QString& accessTokenSecret)
+void HootApiDb::updateUserAccessTokens(const long userId, const QString& accessToken, const QString& accessTokenSecret)
 {
   if (_updateUserAccessTokens == nullptr)
   {
@@ -1958,7 +1958,7 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
 {
   long retVal = -1;
 
-  switch ( type )
+  switch (type)
   {
   case ElementType::Node:
     retVal = _getNextNodeId();

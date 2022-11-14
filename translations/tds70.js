@@ -817,7 +817,7 @@ tds70 = {
         }
         else
         {
-          if (tags.highway !== 'road') tags.highway = 'unclassified';
+          if (tags.highway !== 'road' && tags.highway !== 'pedestrian') tags.highway = 'unclassified';
         }
       }
       else if (tags['ref:road:type'] == 'pedestrian')
@@ -1086,6 +1086,11 @@ tds70 = {
       } // End switch
       break;
 
+    case 'AL170': // Plaza
+      // Pedestrian areas go back to being Highway features.
+      if (tags.highway == 'pedestrian') delete tags.landuse;
+      break;
+
     case 'AN010': // Railway
       if (tags['railway:track'] == 'monorail')
       {
@@ -1150,9 +1155,13 @@ tds70 = {
       }
       break;
 
-
     case 'EA031': // Botanic Garden
       if (! tags.leisure) tags.leisure = 'garden';
+      break;
+
+    case 'EA050': // Vineyard
+      // Landuse = vineyard implies crop=grape
+      if (tags.crop == 'grape') delete tags.crop;
       break;
 
     case 'EC015': // Forest
@@ -1425,7 +1434,7 @@ tds70 = {
       }
     } // End cycleList
 
-    // SOme highway cleanup
+    // Some highway cleanup
     switch (tags.highway)
     {
       case undefined:
@@ -1457,6 +1466,17 @@ tds70 = {
         tags.junction = 'roundabout';
         break;
         // ['t.highway == "steps"','t.highway = "footway"'],
+
+      case 'pedestrian':
+        if (tags.area == 'yes')
+        {
+          attrs.F_CODE = 'AL170'  // Plaza vs Road
+        }
+        else
+        {
+          attrs.F_CODE = 'AP030'
+        }
+        break;
     } // End Highway cleanup
 
     // Ice roads are a special case.
@@ -2041,7 +2061,7 @@ tds70 = {
         'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
         'barrier':'AP040','tourism':'AL013','junction':'AP020',
         'mine:access':'AA010','cutting':'DB070','tomb':'AL036',
-        'shop':'AL015','office':'AL015'
+        'shop':'AL013','office':'AL013'
       };
 
       for (var i in fcodeMap)
@@ -2290,6 +2310,19 @@ tds70 = {
         tags.railway = tags['railway:type'];
         delete tags['railway:type']
       }
+    }
+
+    // Vineyards
+    if (tags.landuse == 'vineyard')
+    {
+      // In the spec, this is the _only_ value for crop so we store orig value
+      if (tags.crop)
+      {
+        tags.tcrop = tags.crop;
+        delete tags.crop;
+      }
+
+      tags.crop = 'grape';
     }
 
   }, // End applyToOgrPreProcessing
@@ -2691,6 +2724,13 @@ tds70 = {
         notUsedTags.gauge = tags.gauge;
       }
     }
+
+    // Cleanup crop value if applicable
+    if (notUsedTags.tcrop)
+    {
+      notUsedTags.crop = notUsedTags.tcrop;
+      delete notUsedTags.tcrop;
+    }
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
@@ -2727,6 +2767,9 @@ tds70 = {
     if (~layerName.indexOf('o2s_'))
     {
       tags = translate.unpackText(attrs,'tag');
+
+      // Throw out the reason for the o2s if it exists
+      delete tags.o2s_reason;
 
       // Add some metadata
       if (!tags.uuid && tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
@@ -3135,17 +3178,25 @@ tds70 = {
         if (! attrs.F_CODE)
         {
           returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-          return returnData;
         }
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
           returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv70'}, tableName: ''});
-          return returnData;
         }
+        return returnData;
       }
 
-      hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+      // Since we are not going to the UI, add the reason for dumping the feature to the list of 
+      // tags to help other tools.
+      if (! attrs.F_CODE)
+      {
+        tags.o2s_reason = 'Unable to assign an F_CODE';
+      }
+      else
+      {
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE;
+      }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
 

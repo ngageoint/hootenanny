@@ -96,7 +96,7 @@ protected:
   void _init() override;
   void _finalize() override;
 
-  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
+  void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) override;
 
 private:
 
@@ -106,7 +106,6 @@ private:
   bool _error;
   std::shared_ptr<Schema> _schema;
   QString _scriptText;
-  Tags* _tags;
   std::vector<double> _timing;
   QHash<QString, int> _logs;
   v8::Local<v8::Value> _empty[0]; // For function calls
@@ -128,7 +127,7 @@ private:
   qint32 _toInt32(const QVariant& v) const;
   qint64 _toInt64(const QVariant& v) const;
 
-  QVariantList _translateToOgrVariants(Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType);
+  QVariantList _translateToOgrVariants(const Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "MaximalNearestSublineMatcher.h"
 
@@ -43,16 +43,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalNearestSublineMatcher)
 
-WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapPtr& map,
-  const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
+WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
+                                                              const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
   LOG_VART(way1->getElementId());
   LOG_VART(way2->getElementId());
 
   score = 0;
-  Meters mrd =
-    maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
-    maxRelevantDistance;
+  Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() : maxRelevantDistance;
 
   OsmMapPtr mapCopy = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
@@ -62,8 +60,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   LOG_VART(way1NonConst->getNodeIds());
   LOG_VART(way2NonConst->getNodeIds());
 
-  MaximalNearestSubline mns1(
-    mapCopy, way1NonConst, way2NonConst, _minSplitSize, mrd, _maxRelevantAngle, _headingDelta);
+  MaximalNearestSubline mns1(mapCopy, way1NonConst, way2NonConst, _minSplitSize, mrd, _maxRelevantAngle, _headingDelta);
 
   // Use the maximal nearest subline code to find the best subline.
   std::vector<WayLocation> interval1 = mns1.getInterval();
@@ -86,19 +83,14 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   }
   _snapToEnds(map, interval2);
 
-  WaySublineMatch match =
-    WaySublineMatch(
-      WaySubline(interval1[0], interval1[1]), WaySubline(interval2[0], interval2[1]));
+  WaySublineMatch match = WaySublineMatch(WaySubline(interval1[0], interval1[1]), WaySubline(interval2[0], interval2[1]));
   LOG_VART(match);
 
   if (subline1->getNodeCount() > 1)
   {
-    std::shared_ptr<LineString> ls =
-      ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
+    std::shared_ptr<LineString> ls = ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
     if (ls && ls->isValid())
-    {
       score = ls->getLength();
-    }
   }
   LOG_VART(score);
 
@@ -109,17 +101,12 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   return WaySublineMatchString(v);
 }
 
-void MaximalNearestSublineMatcher::_snapToEnds(const ConstOsmMapPtr &map,
-  vector<WayLocation>& wl) const
+void MaximalNearestSublineMatcher::_snapToEnds(const ConstOsmMapPtr &map, vector<WayLocation>& wl) const
 {
   if (wl[0].calculateDistanceOnWay() <= _minSplitSize)
-  {
     wl[0] = WayLocation(map, wl[0].getWay(), 0, 0);
-  }
   if (wl[1].calculateDistanceFromEnd() <= _minSplitSize)
-  {
     wl[1] = WayLocation::createAtEndOfWay(map, wl[1].getWay());
-  }
 }
 
 }

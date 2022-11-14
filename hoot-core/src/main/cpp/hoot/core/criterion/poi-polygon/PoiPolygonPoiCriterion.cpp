@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonPoiCriterion.h"
 
@@ -31,16 +31,16 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPoiCriterion)
 
-PoiPolygonPoiCriterion::PoiPolygonPoiCriterion() :
-_tagIgnoreList(ConfigOptions().getPoiPolygonPoiIgnoreTags())
+PoiPolygonPoiCriterion::PoiPolygonPoiCriterion()
+  : _tagIgnoreList(ConfigOptions().getPoiPolygonPoiIgnoreTags())
 {
   LOG_VART(_tagIgnoreList);
 }
@@ -51,9 +51,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   const bool isNode = e->getElementType() == ElementType::Node;
   if (!isNode)
-  {
     return false;
-  }
 
   // see note in PoiPolygonPolyCriterion::isSatisified
   if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
@@ -66,14 +64,11 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(tags.getNames());
   bool isPoi = false;
   if (!tags.getNames().empty())
-  {
     isPoi = true;
-  }
   else
   {
     const bool inABuildingOrPoiCategory =
-      OsmSchema::getInstance().getCategories(tags)
-        .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+      OsmSchema::getInstance().getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
     isPoi = inABuildingOrPoiCategory;
     LOG_VART(inABuildingOrPoiCategory);
   }

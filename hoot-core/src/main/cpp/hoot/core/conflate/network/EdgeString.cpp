@@ -115,14 +115,14 @@ void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 
     ConstEdgeSublinePtr newEntry;
     if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
+        getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+        subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
     {
       newEntry = subline;
     }
     else if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
+            getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+            subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
     {
       EdgeSublinePtr copy = subline->clone();
       copy->reverse();
@@ -329,30 +329,17 @@ ConstNetworkVertexPtr EdgeString::getToVertex() const
 
 bool EdgeString::isEdgeClosed() const
 {
-  bool result = false;
   // if the end of the subline isn't at a vertex.
-  if (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
-      _edges.back().getSubline()->isZeroLength())
-  {
-    result = true;
-  }
-  return result;
+  return (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
+          _edges.back().getSubline()->isZeroLength());
 }
 
 bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
 {
-  bool result = false;
-
   const ConstEdgeLocationPtr& start = getFrom();
   const ConstEdgeLocationPtr& end = getTo();
 
-  if ((start->isExtreme() && start->getVertex() == v) ||
-      (end->isExtreme() && end->getVertex() == v))
-  {
-    result = true;
-  }
-
-  return result;
+  return ((start->isExtreme() && start->getVertex() == v) || (end->isExtreme() && end->getVertex() == v));
 }
 
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
@@ -558,17 +545,13 @@ bool EdgeString::validate() const
 bool EdgeString::isValid() const
 {
   if (_edges.empty())
-  {
     return false;
-  }
 
-  for (int i = 0; i < _edges.size(); ++i)
+  for (const auto& edge : qAsConst(_edges))
   {
-    ConstEdgeSublinePtr esi = _edges[i].getSubline();
+    ConstEdgeSublinePtr esi = edge.getSubline();
     if (esi->isZeroLength())
-    {
       return false;
-    }
   }
 
   return true;

@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PhoneNumberNormalizer.h"
 
 // Hoot
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/Element.h>
 
 // libphonenumber
 #include <phonenumbers/phonenumbermatcher.h>
@@ -40,11 +40,11 @@ using namespace i18n::phonenumbers;
 namespace hoot
 {
 
-PhoneNumberNormalizer::PhoneNumberNormalizer() :
-_regionCode("US"),
-_searchInText(false),
-_format(PhoneNumberUtil::PhoneNumberFormat::NATIONAL),
-_numNormalized(0)
+PhoneNumberNormalizer::PhoneNumberNormalizer()
+  : _regionCode("US"),
+    _searchInText(false),
+    _format(PhoneNumberUtil::PhoneNumberFormat::NATIONAL),
+    _numNormalized(0)
 {
 }
 
@@ -59,42 +59,27 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
   if (!code.isEmpty())
   {
     std::set<std::string> regions;
-      PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(code.toStdString());
-    if (it == regions.end())
-    {
+    PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
+    if (regions.find(code.toStdString()) == regions.end())
       throw IllegalArgumentException("Invalid phone number region code: " + code);
-    }
     _regionCode = code;
   }
   else
-  {
     throw IllegalArgumentException("Empty phone number region code.");
-  }
 }
 
 void PhoneNumberNormalizer::setFormat(QString format)
 {
   if (format.toUpper() == "E164")
-  {
     _format = PhoneNumberUtil::PhoneNumberFormat::E164;
-  }
   else if (format.toUpper() == "INTERNATIONAL")
-  {
     _format = PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL;
-  }
   else if (format.toUpper() == "NATIONAL")
-  {
     _format = PhoneNumberUtil::PhoneNumberFormat::NATIONAL;
-  }
   else if (format.toUpper() == "RFC3966")
-  {
     _format = PhoneNumberUtil::PhoneNumberFormat::RFC3966;
-  }
   else
-  {
     throw HootException("Invalid phone number format: " + format);
-  }
 }
 
 void PhoneNumberNormalizer::setConfiguration(const Settings& conf)
@@ -109,41 +94,33 @@ void PhoneNumberNormalizer::setConfiguration(const Settings& conf)
 void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
 {
   if (_regionCode.isEmpty())
-  {
     throw HootException("Phone number normalization requires a region code.");
-  }
 
   // This method has a lot of similarity with PhoneNumberParser::parsePhoneNumber, so look there
   // for explanation detail.
-
-  for (Tags::const_iterator it = element->getTags().constBegin();
-       it != element->getTags().constEnd(); ++it)
+  const Tags& tags = element->getTags();
+  for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);
-    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) ||
-        tagKey.contains("phone", Qt::CaseInsensitive))
+    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) || tagKey.contains("phone", Qt::CaseInsensitive))
     {
       const QString tagValue = it.value().toUtf8().trimmed().simplified();
       LOG_VART(tagValue);
 
       if (!_searchInText)
       {
-        if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
-              tagValue.toStdString(), _regionCode.toStdString()))
+        if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(tagValue.toStdString(), _regionCode.toStdString()))
         {
           PhoneNumber parsedPhoneNumber;
           PhoneNumberUtil::ErrorType error =
-            PhoneNumberUtil::GetInstance()->Parse(
-              tagValue.toStdString(), _regionCode.toStdString(), &parsedPhoneNumber);
+            PhoneNumberUtil::GetInstance()->Parse(tagValue.toStdString(), _regionCode.toStdString(), &parsedPhoneNumber);
           if (error == PhoneNumberUtil::ErrorType::NO_PARSING_ERROR)
           {
             std::string formattedPhoneNumber;
-            PhoneNumberUtil::GetInstance()->Format(
-              parsedPhoneNumber, _format, &formattedPhoneNumber);
+            PhoneNumberUtil::GetInstance()->Format(parsedPhoneNumber, _format, &formattedPhoneNumber);
             element->getTags().set(tagKey, QString::fromStdString(formattedPhoneNumber));
-            LOG_TRACE(
-              "Normalized phone number from: " << tagValue << " to: " << formattedPhoneNumber);
+            LOG_TRACE("Normalized phone number from: " << tagValue << " to: " << formattedPhoneNumber);
             _numNormalized++;
           }
         }
@@ -168,21 +145,16 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
           PhoneNumberUtil::GetInstance()->Format(match.number(), _format, &formattedPhoneNumber);
           // appending all found phone numbers into a single tag value
           if (phoneNumberCount == 1)
-          {
             phoneNumber = QString::fromStdString(formattedPhoneNumber);
-          }
           else
-          {
             altPhoneNumbers += QString::fromStdString(formattedPhoneNumber) + ";";
-          }
           _numNormalized++;
         }
 
         if (phoneNumberCount > 0)
         {
           element->getTags().set(tagKey, phoneNumber);
-          LOG_TRACE(
-            "Normalized phone number from: " << tagValue << " to: " << phoneNumber);
+          LOG_TRACE("Normalized phone number from: " << tagValue << " to: " << phoneNumber);
           if (!altPhoneNumbers.isEmpty())
           {
             altPhoneNumbers.chop(1);

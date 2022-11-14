@@ -28,7 +28,6 @@
 
 #include <hoot/core/conflate/network/IndexedEdgeLinks.h>
 
-
 namespace hoot
 {
 
@@ -208,7 +207,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
 
   candidates = list.toSet();
 
-  for (const auto& em : candidates)
+  for (const auto& em : qAsConst(candidates))
   {
     if (em->getString1()->overlaps(e->getString1()) || em->getString2()->overlaps(e->getString2()))
       result.insert(em);
@@ -222,11 +221,8 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstN
   QSet<ConstEdgeMatchPtr> result;
   for (const auto& em : _vertexToMatch[v])
   {
-    if (em->getString1()->containsInteriorVertex(v) ||
-        em->getString2()->containsInteriorVertex(v))
-    {
+    if (em->getString1()->containsInteriorVertex(v) || em->getString2()->containsInteriorVertex(v))
       result.insert(em);
-    }
   }
   return result;
 }
@@ -237,7 +233,8 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetw
   QSet<ConstEdgeMatchPtr> result;
 
   // go through all the matches that contain v1 and v2
-  for (const auto& em : _vertexToMatch[v1] & _vertexToMatch[v2])
+  auto vertex_set = _vertexToMatch[v1] & _vertexToMatch[v2];
+  for (const auto& em : qAsConst(vertex_set))
   {
         //  FromOnVertex,  string1 -> v1, string2 ->v2
     if ((em->getString1()->isFromOnVertex() &&
@@ -291,11 +288,8 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocatio
 {
   QSet<ConstEdgeMatchPtr> result;
 
-  if (ela1->isExtreme() == false || ela2->isExtreme() == false || elb1->isExtreme() == false ||
-      elb2->isExtreme() == false)
-  {
+  if (ela1->isExtreme() == false || ela2->isExtreme() == false || elb1->isExtreme() == false || elb2->isExtreme() == false)
     return result;
-  }
 
   ConstNetworkVertexPtr va1 = ela1->getVertex();
   ConstNetworkVertexPtr va2 = ela2->getVertex();
@@ -309,7 +303,8 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocatio
   }
   else if (va1 == vb1)  // if the vertices in string 1 match
   {
-    for (const auto& em : _vertexToMatch[va1] & _vertexToMatch[va2] & _vertexToMatch[vb2])
+    auto vertex_set = _vertexToMatch[va1] & _vertexToMatch[va2] & _vertexToMatch[vb2];
+    for (const auto& em : qAsConst(vertex_set))
     {
       if (em->containsStub() && em->contains(va1) && em->contains(va2) && em->contains(vb2))
         result.insert(em);
@@ -317,7 +312,8 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocatio
   }
   else if (va2 == vb2)    // if the vertices in string 2 match
   {
-    for (const auto& em : _vertexToMatch[va1] & _vertexToMatch[va2] & _vertexToMatch[vb1])
+    auto vertex_set = _vertexToMatch[va1] & _vertexToMatch[va2] & _vertexToMatch[vb1];
+    for (const auto& em : qAsConst(vertex_set))
     {
       if (em->containsStub() && em->contains(va1) && em->contains(va2) && em->contains(vb1))
         result.insert(em);

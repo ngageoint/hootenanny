@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Units.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
@@ -69,8 +69,8 @@ public:
   quint64 getTimestamp() const { return _timestamp; }
   QString getUser() const { return _user; }
   long getUid() const { return _uid; }
-  const Tags& getTags() const { return _tags; }
-  Tags& getTags() { return _tags; }
+  inline const Tags& getTags() const { return _tags; }
+  inline Tags& getTags() { return _tags; }
   bool getVisible() const { return _visible; }
 
 

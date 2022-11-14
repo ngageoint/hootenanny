@@ -22,19 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "AddExportTagsVisitor.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
 AddExportTagsVisitor::AddExportTagsVisitor()
   : _includeIds(false),
+    _includeStatus(ConfigOptions().getWriterIncludeStatusTag()),
     _textStatus(ConfigOptions().getWriterTextStatus()),
     _includeCircularError(ConfigOptions().getWriterIncludeCircularErrorTags()),
     _includeDebug(ConfigOptions().getWriterIncludeDebugTags())
@@ -47,7 +48,12 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   pElement->addTags(getExportTags(pElement));
 }
 
-Tags AddExportTagsVisitor::getExportTags(const ConstElementPtr& pElement)
+Tags AddExportTagsVisitor::getExportTags(const ConstElementPtr& pElement) const
+{
+  return getExportTags(pElement.get());
+}
+
+Tags AddExportTagsVisitor::getExportTags(const Element* pElement) const
 {
   const Tags& tags = pElement->getTags();
   ElementType type = pElement->getElementType();
@@ -58,9 +64,9 @@ Tags AddExportTagsVisitor::getExportTags(const ConstElementPtr& pElement)
   bool hasStatus = tags.find(MetadataTags::HootStatus()) != tags.end();
   bool hasMappingTags = tags.getNonDebugCount() > 0;
 
-  // deciding on status based on previous OsmXmlWriter implementation
   bool addStatus = _includeDebug ||
-                   (_textStatus && (!isNode || (isNode && hasMappingTags))) ||
+                   // Include status on all elements except nodes unless the node has other tags
+                   ((_textStatus || _includeStatus) && (!isNode || (isNode && hasMappingTags))) ||
                    (hasStatus && (isRelation || (!isRelation && validStatus)));
 
   bool addCircularError = _includeCircularError &&
@@ -77,10 +83,10 @@ Tags AddExportTagsVisitor::getExportTags(const ConstElementPtr& pElement)
   return newTags;
 }
 
-
 void AddExportTagsVisitor::overrideDebugSettings()
 {
   _includeIds = true;
+  _includeStatus = true;
   _textStatus = false;
   _includeCircularError = true;
   _includeDebug = true;
@@ -89,13 +95,9 @@ void AddExportTagsVisitor::overrideDebugSettings()
 QString AddExportTagsVisitor::toCompatString(Status status) const
 {
   if (status.getEnum() <= Status::EnumEnd)
-  {
     return QString::number(status.getEnum());
-  }
   else
-  {
     return status.toString();
-  }
 }
 
 }

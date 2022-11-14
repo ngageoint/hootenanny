@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "TagKeyCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -71,12 +71,10 @@ void TagKeyCriterion::addKey(QString key)
 
 bool TagKeyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  for (int i = 0; i < _keys.size(); i++)
+  for (const auto& key : qAsConst(_keys))
   {
-    if (e->getTags().contains(_keys[i]))
-    {
+    if (e->getTags().contains(key))
       return true;
-    }
   }
   return false;
 }

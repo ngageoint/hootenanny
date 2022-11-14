@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "FindIntersectionsOp.h"
 
@@ -32,10 +32,11 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/NodeCriterion.h>
-#include <hoot/core/criterion/WayCriterion.h>
-#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/ops/MapCleaner.h>
@@ -43,7 +44,6 @@
 #include <hoot/core/ops/UnlikelyIntersectionRemover.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/FindIntersectionsVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
@@ -57,12 +57,11 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, FindRailwayIntersectionsOp)
 void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
-  LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
-  std::shared_ptr<RemoveElementsVisitor> removeRelationsVis =
-    std::make_shared<RemoveElementsVisitor>();
+  LOG_INFO(QString("%1 Relations found.").arg(map->getRelationCount()));
+  std::shared_ptr<RemoveElementsVisitor> removeRelationsVis = std::make_shared<RemoveElementsVisitor>();
   removeRelationsVis->addCriterion(std::make_shared<RelationCriterion>());
   VisitorOp(removeRelationsVis).apply(map);
-  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
+  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationCount()));
 
   // pragmatically remove "bad" data in OSM afghanistan
   // TODO: this really shouldn't be here
@@ -86,8 +85,7 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
   // remove all ways first
-  std::shared_ptr<RemoveElementsVisitor> removeWaysVis =
-    std::make_shared<RemoveElementsVisitor>();
+  std::shared_ptr<RemoveElementsVisitor> removeWaysVis = std::make_shared<RemoveElementsVisitor>();
   removeWaysVis->addCriterion(std::make_shared<WayCriterion>());
   VisitorOp(removeWaysVis).apply(map);
 

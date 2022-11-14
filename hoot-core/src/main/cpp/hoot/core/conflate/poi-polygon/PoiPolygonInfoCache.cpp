@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonInfoCache.h"
 
@@ -35,11 +35,11 @@
 namespace hoot
 {
 
-PoiPolygonInfoCache::PoiPolygonInfoCache(const ConstOsmMapPtr& map) :
-ConflateInfoCache(map),
-_isTypeCache(CACHE_SIZE_DEFAULT),
-_hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
-_reviewDistanceCache(CACHE_SIZE_DEFAULT)
+PoiPolygonInfoCache::PoiPolygonInfoCache(const ConstOsmMapPtr& map)
+  : ConflateInfoCache(map),
+    _isTypeCache(CACHE_SIZE_DEFAULT),
+    _hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
+    _reviewDistanceCache(CACHE_SIZE_DEFAULT)
 {
 }
 
@@ -55,9 +55,7 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
     _reviewDistanceCache.setMaxCost(maxCacheSize);
   }
   else
-  {
     _cachingEnabled = false;
-  }
 }
 
 void PoiPolygonInfoCache::clear()
@@ -76,9 +74,7 @@ void PoiPolygonInfoCache::clear()
 bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygonSchemaType& type)
 {
   if (!element)
-  {
     throw IllegalArgumentException("The input element is null.");
-  }
 
   QString key;
 
@@ -99,41 +95,41 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
   bool isType = false;
   switch (type.getEnum())
   {
-    case PoiPolygonSchemaType::Natural:
-      isType = PoiPolygonSchema::isNatural(element);
-      break;
-    case PoiPolygonSchemaType::Park:
-      isType = PoiPolygonSchema::isPark(element);
-      break;
-    case PoiPolygonSchemaType::Parking:
-      isType = PoiPolygonSchema::isParking(element);
-      break;
-    case PoiPolygonSchemaType::Parkish:
-      isType = PoiPolygonSchema::isParkish(element);
-      break;
-    case PoiPolygonSchemaType::Playground:
-      isType = PoiPolygonSchema::isPlayground(element);
-      break;
-    case PoiPolygonSchemaType::Restaurant:
-      isType = PoiPolygonSchema::isRestaurant(element);
-      break;
-    case PoiPolygonSchemaType::Religion:
-      isType = PoiPolygonSchema::isReligion(element);
-      break;
-    case PoiPolygonSchemaType::Restroom:
-      isType = PoiPolygonSchema::isRestroom(element);
-      break;
-    case PoiPolygonSchemaType::School:
-      isType = PoiPolygonSchema::isSchool(element);
-      break;
-    case PoiPolygonSchemaType::SpecificSchool:
-      isType = PoiPolygonSchema::isSpecificSchool(element);
-      break;
-    case PoiPolygonSchemaType::Sport:
-      isType = PoiPolygonSchema::isSport(element);
-      break;
-    default:
-      throw IllegalArgumentException("Unsupported POI/Polygon schema type.");
+  case PoiPolygonSchemaType::Natural:
+    isType = PoiPolygonSchema::isNatural(element);
+    break;
+  case PoiPolygonSchemaType::Park:
+    isType = PoiPolygonSchema::isPark(element);
+    break;
+  case PoiPolygonSchemaType::Parking:
+    isType = PoiPolygonSchema::isParking(element);
+    break;
+  case PoiPolygonSchemaType::Parkish:
+    isType = PoiPolygonSchema::isParkish(element);
+    break;
+  case PoiPolygonSchemaType::Playground:
+    isType = PoiPolygonSchema::isPlayground(element);
+    break;
+  case PoiPolygonSchemaType::Restaurant:
+    isType = PoiPolygonSchema::isRestaurant(element);
+    break;
+  case PoiPolygonSchemaType::Religion:
+    isType = PoiPolygonSchema::isReligion(element);
+    break;
+  case PoiPolygonSchemaType::Restroom:
+    isType = PoiPolygonSchema::isRestroom(element);
+    break;
+  case PoiPolygonSchemaType::School:
+    isType = PoiPolygonSchema::isSchool(element);
+    break;
+  case PoiPolygonSchemaType::SpecificSchool:
+    isType = PoiPolygonSchema::isSpecificSchool(element);
+    break;
+  case PoiPolygonSchemaType::Sport:
+    isType = PoiPolygonSchema::isSport(element);
+    break;
+  default:
+    throw IllegalArgumentException("Unsupported POI/Polygon schema type.");
   }
 
   if (_cachingEnabled)
@@ -148,9 +144,7 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
 bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
 {
   if (!element)
-  {
     throw IllegalArgumentException("The input element is null.");
-  }
 
   if (_cachingEnabled)
   {
@@ -176,9 +170,7 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
 bool PoiPolygonInfoCache::hasRelatedType(const ConstElementPtr& element) const
 {
   if (!element)
-  {
     throw IllegalArgumentException("The input element is null.");
-  }
 
   const bool hasRelatedType = PoiPolygonSchema::hasRelatedType(element);
   return hasRelatedType;
@@ -204,9 +196,7 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
   const Tags& tags = element->getTags();
   //these distances could be moved to a config
   if (tags.get("leisure") == "park")
-  {
     distance = 25.0;
-  }
   else if ((tags.get("station").toLower() == "light_rail" ||
             tags.get("railway").toLower() == "platform") &&
            (polyTags.get("subway").toLower() == "yes" ||
@@ -215,9 +205,7 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
     distance = 150.0;
   }
   else
-  {
     distance = reviewDistanceThresholdDefault;
-  }
 
   if (_cachingEnabled)
   {

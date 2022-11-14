@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -58,13 +58,11 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -76,8 +74,8 @@ public:
 
     //No elements should be removed.  Node 2 should not be removed, even though it has no info,
     //since its still owned by the way.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
 
     WayPtr parsedWay = map->getWay(way->getElementId());
     CPPUNIT_ASSERT_EQUAL(2, (int)parsedWay->getNodeCount());
@@ -87,20 +85,18 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     map->addNode(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     map->addNode(node2);
 
     NoInformationElementRemover().apply(map);
 
     //Node 2 has no info and isn't owned by a way, so it should be removed.
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeCount());
 
     ConstNodePtr parsedNode1 = map->getNode(node1->getElementId().getId());
     const Tags& node1Tags = parsedNode1->getTags();
@@ -116,13 +112,11 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -133,8 +127,8 @@ public:
 
     // Because the way contains nodes (even though they don't have any useful metadata)
     // neither the way nor the nodes should be removed
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
   }
 
   void runEmptyWayOrphanNodesTest()
@@ -142,13 +136,11 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
@@ -160,8 +152,8 @@ public:
     // Because the way doesn't contain any nodes or useful info, it should be removed.
     // Because the nodes don't belong to a way or relation, or have useful info, they should
     // be removed
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
   }
 
   void runWayWithoutInfoAllNodesWithoutInfoTest()
@@ -169,12 +161,10 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = TestUtils::createWay(map, nodes);
@@ -184,8 +174,8 @@ public:
 
     // Because the way contains nodes (even though they don't have any useful metadata)
     // neither the way nor the nodes should be removed
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWayCount());
   }
 
   void runRelationWithInfoOneElementWithoutInfoTest()
@@ -195,14 +185,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -225,9 +213,9 @@ public:
 
     //No elements should be removed.  The node 1 and way 2 should not be removed, even though they
     //have no info, since they are still owned by the relation.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
@@ -237,14 +225,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -264,9 +250,9 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All elements are interrelated - should not be removed
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
@@ -276,14 +262,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -303,9 +287,9 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All elements are interrelated - should not be removed
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 
   void runEmptyRelationWithoutInfoTest()
@@ -315,14 +299,12 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -343,21 +325,19 @@ public:
     NoInformationElementRemover().apply(map);
 
     // Nodes and Ways should not be removed, but relation should be
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
   }
 
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
@@ -375,23 +355,21 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All map items are unrelated, and have no info. They should be removed.
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationCount());
   }
 
   void runUnrelatedElementsWithInfoTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("name", "red house");
     map->addNode(node1);
 
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node2->getTags().appendValue("name", "blue house");
     map->addNode(node2);
@@ -415,9 +393,9 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All map items are not related, but have info. They should not be removed.
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWayCount());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationCount());
   }
 };
 

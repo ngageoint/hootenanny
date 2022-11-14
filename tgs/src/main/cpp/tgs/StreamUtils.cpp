@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "StreamUtils.h"
@@ -41,23 +41,17 @@ namespace Tgs
     for (int r = 0; r < matrix.Nrows(); r++)
     {
       if (r != 0)
-      {
         o << " ";
-      }
       o << "[";
       for (int c = 0; c < matrix.Ncols(); c++)
       {
         if (c != 0)
-        {
           o << ", ";
-        }
         o << matrix.element(r, c);
       }
       o << "]";
       if (r != matrix.Nrows() - 1)
-      {
         o << endl;
-      }
     }
     o << "]" << endl;
     return o;

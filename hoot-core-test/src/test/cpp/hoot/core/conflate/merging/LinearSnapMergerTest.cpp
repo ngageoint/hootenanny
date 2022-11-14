@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 // GEOS
@@ -68,10 +68,9 @@ class LinearSnapMergerTest : public HootTestFixture
 
 public:
 
-  LinearSnapMergerTest() :
-  HootTestFixture(
-    "test-files/conflate/merging/LinearSnapMergerTest/",
-    "test-output/conflate/merging/LinearSnapMergerTest/")
+  LinearSnapMergerTest()
+    : HootTestFixture("test-files/conflate/merging/LinearSnapMergerTest/",
+                      "test-output/conflate/merging/LinearSnapMergerTest/")
   {
   }
 
@@ -121,7 +120,7 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    RemoveTagsVisitor hashRemover({MetadataTags::HootHash()});
     map->visitRw(hashRemover);
 
     ElementToGeometryConverter ec(map);
@@ -191,11 +190,11 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    RemoveTagsVisitor hashRemover({MetadataTags::HootHash()});
     map->visitRw(hashRemover);
 
     HOOT_STR_EQUALS(0, replaced.size());
-    HOOT_STR_EQUALS(1, map->getWays().size());
+    HOOT_STR_EQUALS(1, map->getWayCount());
     HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -2}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
@@ -241,7 +240,7 @@ public:
     // there should be one element replaced
     HOOT_STR_EQUALS("[1]{(Way(-2), Way(-6))}", replaced);
     // the end of Way:-4 should match up with Way:-6
-    HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-4)->getNodeIds());
+    HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-1)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-2, -4}", map->getWay(-6)->getNodeIds());
   }
 
@@ -285,8 +284,7 @@ public:
     w3->getTags()["highway"] = "path";
     w3->getTags()["uuid"] = "w3";
 
-    RelationPtr r =
-      std::make_shared<Relation>(Status::Unknown1, 0, 15, MetadataTags::RelationMultilineString());
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, 0, 15, MetadataTags::RelationMultilineString());
     r->addElement("", w1);
     r->addElement("", w2);
     r->setTag("uuid", "r");
@@ -354,7 +352,7 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    RemoveTagsVisitor hashRemover({MetadataTags::HootHash()});
     map->visitRw(hashRemover);
 
     const QString testFileName = "runTagsSplitTest.json";
@@ -393,8 +391,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    RelationPtr r =
-      std::make_shared<Relation>(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString());
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString());
     r->addElement("", w2);
     r->setTag("uuid", "r");
     r->setTag("highway", "footway");
@@ -448,11 +445,10 @@ public:
 
     merger._markNeedsReview(w1, w2, "a review note", "a review type");
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL((long)1, map->getRelationCount());
     // will throw an exception on failure
     ConstRelationPtr reviewRelation =
-      std::dynamic_pointer_cast<Relation>(
-        MapUtils::getFirstElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
+      std::dynamic_pointer_cast<Relation>(MapUtils::getFirstElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
     HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get(MetadataTags::HootReviewType()));
   }
 };

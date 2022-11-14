@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "PolygonCompare.h"
@@ -51,10 +51,10 @@ using namespace Tgs;
 namespace hoot
 {
 
-PolygonCompare::PolygonCompare(const Envelope& e) :
-_e(e),
-_curve(std::make_shared<HilbertCurve>(2, 8)),
-_size((1 << 8) - 1)
+PolygonCompare::PolygonCompare(const Envelope& e)
+  : _e(e),
+    _curve(std::make_shared<HilbertCurve>(2, 8)),
+    _size((1 << 8) - 1)
 {
 }
 

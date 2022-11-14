@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "OsmMapOperationJs.h"
 
@@ -30,11 +30,12 @@
 #include <boost/any.hpp>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
@@ -49,8 +50,8 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
-OsmMapOperationJs::OsmMapOperationJs(std::shared_ptr<OsmMapOperation> op) :
-_op(op)
+OsmMapOperationJs::OsmMapOperationJs(std::shared_ptr<OsmMapOperation> op)
+  : _op(op)
 {
 }
 
@@ -59,16 +60,15 @@ void OsmMapOperationJs::Init(Local<Object> target)
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
+  vector<QString> opNames = Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
 
-  for (size_t i = 0; i < opNames.size(); i++)
+  for (const auto& name : opNames)
   {
-    QByteArray utf8 = opNames[i].toUtf8();
+    QByteArray utf8 = name.toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(current, "apply", FunctionTemplate::New(current, apply));
@@ -92,11 +92,9 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(
       current->ThrowException(
-        HootExceptionJs::create(
-          IllegalArgumentException("Invalid OsmMapOperation. Did you forget 'new'?"))));
+        HootExceptionJs::create(IllegalArgumentException("Invalid OsmMapOperation. Did you forget 'new'?"))));
   }
-  std::shared_ptr<OsmMapOperation> op =
-    Factory::getInstance().constructObject<OsmMapOperation>(className);
+  std::shared_ptr<OsmMapOperation> op = Factory::getInstance().constructObject<OsmMapOperation>(className);
   OsmMapOperationJs* obj = new OsmMapOperationJs(op);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
@@ -134,22 +132,13 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
   /// I'm sure there's a better way to do this...initially just supporting a small number of
   /// returned types here.
   if (result.type() == typeid(double))
-  {
     args.GetReturnValue().Set(Number::New(current, boost::any_cast<double>(result)));
-  }
   else if (result.type() == typeid(int))
-  {
     args.GetReturnValue().Set(Number::New(current, boost::any_cast<int>(result)));
-  }
   else if (result.type() == typeid(QString))
-  {
     args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()).ToLocalChecked());
-  }
   else
-  {
     throw HootException("Unsupported OsmMapOperation result type encountered by Javascript API.");
-  }
 }
 
 }
-

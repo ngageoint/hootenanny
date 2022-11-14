@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "ReplaceElementOp.h"
 
@@ -38,44 +38,34 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceElementOp)
 
-ReplaceElementOp::ReplaceElementOp() :
-_clearAndRemove(false),
-_removeParentRefs(false)
+ReplaceElementOp::ReplaceElementOp()
+  : _clearAndRemove(false),
+    _removeParentRefs(false)
 {
 }
 
-ReplaceElementOp::ReplaceElementOp(
-  ElementId from, ElementId to, bool clearAndRemove, bool removeParentRefs) :
-_from(from),
-_to(to),
-_clearAndRemove(clearAndRemove),
-_removeParentRefs(removeParentRefs)
+ReplaceElementOp::ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove, bool removeParentRefs)
+  : _from(from),
+    _to(to),
+    _clearAndRemove(clearAndRemove),
+    _removeParentRefs(removeParentRefs)
 {
 }
 
 void ReplaceElementOp::addElement(const ConstElementPtr& e)
 {
   if (_from.isNull())
-  {
     _from = e->getElementId();
-  }
   else if (_to.isNull())
-  {
     _to = e->getElementId();
-  }
   else
-  {
-    throw IllegalArgumentException("Error adding element. Only two elements can be added 'from' "
-      "and 'to'.");
-  }
+    throw IllegalArgumentException("Error adding element. Only two elements can be added 'from' and 'to'.");
 }
 
 void ReplaceElementOp::apply(const OsmMapPtr& map)
 {
   if (_from.isNull() || _to.isNull())
-  {
     throw IllegalArgumentException("You must specify a valid 'from' and 'to' element ID.");
-  }
 
   LOG_TRACE("Replacing " << _from << " with " << _to << "...");
 
@@ -92,38 +82,36 @@ void ReplaceElementOp::apply(const OsmMapPtr& map)
   assert(to);
 
   set<ElementId> parents = map->getParents(_from);
-  for (set<ElementId>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+  for (const auto& pid : parents)
   {
-    ElementId pid = *it;
 
     switch (pid.getType().getEnum())
     {
     case ElementType::Relation:
-      {
-        RelationPtr r = map->getRelation(pid.getId());
-        r->replaceElement(from, to);
-        break;
-      }
+    {
+      RelationPtr r = map->getRelation(pid.getId());
+      r->replaceElement(from, to);
+      break;
+    }
     case ElementType::Way:
+    {
+      // This should never happen.
+      if (from->getElementType() != ElementType::Node)
       {
-        // This should never happen.
-        if (from->getElementType() != ElementType::Node)
-        {
-          map->validate();
-          throw InternalErrorException(
-            "Internal Error: A non-node is being reported as part of a way. From element: " +
-            from->getElementId().toString() + ", To element: " + to->getElementId().toString());
-        }
-        else if (to->getElementType() == ElementType::Node)
-        {
-          WayPtr w = map->getWay(pid.getId());
-          w->replaceNode(_from.getId(), _to.getId());
-        }
-        break;
+        map->validate();
+        throw InternalErrorException(
+          "Internal Error: A non-node is being reported as part of a way. From element: " +
+          from->getElementId().toString() + ", To element: " + to->getElementId().toString());
       }
+      else if (to->getElementType() == ElementType::Node)
+      {
+        WayPtr w = map->getWay(pid.getId());
+        w->replaceNode(_from.getId(), _to.getId());
+      }
+      break;
+    }
     default:
-      throw InternalErrorException(
-        "Internal Error: Unexpected element reported as a parent. PID: " + pid.toString());
+      throw InternalErrorException("Internal Error: Unexpected element reported as a parent. PID: " + pid.toString());
     }
   }
 

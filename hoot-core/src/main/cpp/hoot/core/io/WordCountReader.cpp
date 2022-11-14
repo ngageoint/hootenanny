@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WordCountReader.h"
@@ -41,26 +41,17 @@ WordCountReader::WordCountReader(QString path)
     _db = QSqlDatabase::addDatabase("QSQLITE", path);
     _db.setDatabaseName(path);
     if (_db.open() == false)
-    {
       throw HootException("Error opening DB. " + path);
-    }
   }
   else
-  {
     _db = QSqlDatabase::database(path);
-  }
 
   if (_db.isOpen() == false)
-  {
     throw HootException("Error DB is not open. " + path);
-  }
 
   _select = QSqlQuery(_db);
   if (_select.prepare("SELECT count FROM words WHERE word=:word") == false)
-  {
     throw HootException(QString("Error preparing query: %1").arg(_select.lastError().text()));
-  }
-
 }
 
 long WordCountReader::readCount(QString word) const
@@ -68,9 +59,7 @@ long WordCountReader::readCount(QString word) const
   _select.bindValue(":word", word);
 
   if (_select.exec() == false)
-  {
     throw HootException(QString("Error executing query: %1").arg(_select.lastError().text()));
-  }
 
   bool ok = false;
   long result = 0;
@@ -78,11 +67,8 @@ long WordCountReader::readCount(QString word) const
   {
     result = _select.value(0).toLongLong(&ok);
     if (!ok)
-    {
       throw HootException("Error parsing value out of DB.");
-    }
   }
-
   return result;
 }
 

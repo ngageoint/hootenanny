@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmPbfReader.h"
@@ -93,9 +93,7 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
   _init(false);
 
   if (isSupported(urlString) == true)
-  {
     open(urlString);
-  }
 }
 
 void OsmPbfReader::_init(bool useFileId)
@@ -596,8 +594,7 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  std::shared_ptr<hoot::Relation> newRelation =
-    std::make_shared<Relation>(_status, newId, _defaultCircularError);
+  std::shared_ptr<hoot::Relation> newRelation = std::make_shared<Relation>(_status, newId, _defaultCircularError);
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
@@ -889,8 +886,8 @@ void OsmPbfReader::_parseBlob()
   _in->read(_getBuffer(size), size);
   if (_in->gcount() != size)
   {
-    throw HootException(QString("Did not read the expected number of bytes from blob. "
-                                "(%1 instead of %2)").arg(_in->gcount()).arg(size));
+    throw HootException(QString("Did not read the expected number of bytes from blob. (%1 instead of %2)")
+                          .arg(_in->gcount()).arg(size));
   }
   _d->blob.Clear();
   _d->blob.ParseFromArray(_buffer.data(), size);
@@ -905,8 +902,8 @@ void OsmPbfReader::_parseBlobHeader()
   _in->read(_getBuffer(size), size);
   if (_in->gcount() != size)
   {
-    throw HootException(QString("Did not read the expected number of bytes from blob header. "
-                                "(%1 instead of %2)").arg(_in->gcount()).arg(size));
+    throw HootException(QString("Did not read the expected number of bytes from blob header. (%1 instead of %2)")
+                          .arg(_in->gcount()).arg(size));
   }
   _d->blobHeader.Clear();
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
@@ -920,8 +917,8 @@ void OsmPbfReader::parseElements(std::shared_ptr<istream> strm, const OsmMapPtr&
   strm->read(_getBuffer(size), size);
   if (strm->gcount() != size)
   {
-    throw HootException(QString("Did not read the expected number of bytes from stream. "
-                                "(%1 instead of %2)").arg(strm->gcount()).arg(size));
+    throw HootException(QString("Did not read the expected number of bytes from stream. (%1 instead of %2)")
+                          .arg(strm->gcount()).arg(size));
   }
 
   _d->primitiveBlock.Clear();
@@ -1054,8 +1051,8 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
     QStringList filter;
     filter << "*.pbf";
     QFileInfoList files = d.entryInfoList(filter, QDir::Files, QDir::Name);
-    for (int i = 0; i < files.size(); i++)
-      _readFile(files.at(i).filePath(), map);
+    for (const auto& file : qAsConst(files))
+      _readFile(file.filePath(), map);
   }
   else
     _readFile(path, map);
@@ -1066,8 +1063,7 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 
 void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
 {
-  std::shared_ptr<fstream> input =
-    std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
+  std::shared_ptr<fstream> input = std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
   if (input->good() == false)
     throw HootException(QString("Error reading %1").arg(path));
   parse(input, map);
@@ -1164,9 +1160,9 @@ bool OsmPbfReader::hasMoreElements()
   else if (_blobIndex < (int)_blobs.size()) //  see if we've read all the blobs
     return true;
 
-  return (_partialNodesRead < static_cast<int>(_map->getNodes().size()) ||
-          _partialWaysRead < static_cast<int>(_map->getWays().size()) ||
-          _partialRelationsRead < static_cast<int>(_map->getRelations().size()));
+  return (_partialNodesRead < static_cast<int>(_map->getNodeCount()) ||
+          _partialWaysRead < static_cast<int>(_map->getWayCount()) ||
+          _partialRelationsRead < static_cast<int>(_map->getRelationCount()));
 }
 
 std::shared_ptr<Element> OsmPbfReader::readNextElement()
@@ -1176,9 +1172,9 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
 
   //if this is the first time through, or we've run out of an element buffer to read from
   if (!_firstPartialReadCompleted ||
-      (_partialNodesRead == int(_map->getNodes().size()) &&
-        _partialWaysRead == int(_map->getWays().size()) &&
-        _partialRelationsRead == int(_map->getRelations().size())))
+      (_partialNodesRead == (int)_map->getNodeCount() &&
+       _partialWaysRead == (int)_map->getWayCount() &&
+       _partialRelationsRead == (int)_map->getRelationCount()))
   {
     if (!_firstPartialReadCompleted)
     {
@@ -1222,7 +1218,7 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
   std::shared_ptr<Element> element;
-  if (_partialNodesRead < int(_map->getNodes().size()))
+  if (_partialNodesRead < (int)_map->getNodeCount())
   {
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
@@ -1232,13 +1228,13 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
     ++_nodesItr;
     _partialNodesRead++;
   }
-  else if (_partialWaysRead < int(_map->getWays().size()))
+  else if (_partialWaysRead < (int)_map->getWayCount())
   {
     element = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
     _partialWaysRead++;
   }
-  else if (_partialRelationsRead < int(_map->getRelations().size()))
+  else if (_partialRelationsRead < (int)_map->getRelationCount())
   {
     element = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
@@ -1276,9 +1272,8 @@ void OsmPbfReader::close()
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
-  if (_addSourceDateTime &&
-      t.getInformationCount() > 0 &&  // Make sure we actually have attributes.
-      info.has_timestamp())
+  // Make sure we actually have attributes.
+  if (_addSourceDateTime && t.getInformationCount() > 0 && info.has_timestamp())
   {
     long timestamp = info.timestamp() * _dateGranularity;
     if (timestamp != 0)

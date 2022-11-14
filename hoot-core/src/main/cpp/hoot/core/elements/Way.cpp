@@ -47,6 +47,9 @@
 using namespace geos::geom;
 using namespace std;
 
+//  Enable way debugging, checking for duplicated node IDs
+//#define WAY_DEBUGGING
+
 namespace hoot
 {
 
@@ -71,12 +74,14 @@ void Way::addNode(long id)
   _wayData->addNode(id);
   _postGeometryChange();
 
-//  // for debugging only; SLOW
-//  if (_nodeIdsAreDuplicated(getNodeIds()))
-//  {
-//    LOG_VARE(getNodeIds());
-//    throw IllegalArgumentException("Duplicate way node IDs: addNode");
-//  }
+#ifdef WAY_DEBUGGING
+  // for debugging only; SLOW
+  if (_nodeIdsAreDuplicated(getNodeIds()))
+  {
+    LOG_VARE(getNodeIds());
+    throw IllegalArgumentException("Duplicate way node IDs: addNode");
+  }
+#endif
 }
 
 void Way::insertNode(long index, long id)
@@ -86,24 +91,28 @@ void Way::insertNode(long index, long id)
   _wayData->insertNode(index, id);
   _postGeometryChange();
 
-//  // for debugging only; SLOW
-//  if (_nodeIdsAreDuplicated(getNodeIds()))
-//  {
-//    LOG_VARE(getNodeIds());
-//    throw IllegalArgumentException("Duplicate way node IDs: insertNode");
-//  }
+#ifdef WAY_DEBUGGING
+  // for debugging only; SLOW
+  if (_nodeIdsAreDuplicated(getNodeIds()))
+  {
+    LOG_VARE(getNodeIds());
+    throw IllegalArgumentException("Duplicate way node IDs: insertNode");
+  }
+#endif
 }
 
 void Way::addNodes(const vector<long>& ids)
 {
   addNodes(ids.begin(), ids.end());
 
-  //  // for debugging only; SLOW
-  //  if (_nodeIdsAreDuplicated(getNodeIds()))
-  //  {
-  //    LOG_VARE(getNodeIds());
-  //    throw IllegalArgumentException("Duplicate way node IDs: addNodes");
-  //  }
+#ifdef WAY_DEBUGGING
+  // for debugging only; SLOW
+  if (_nodeIdsAreDuplicated(getNodeIds()))
+  {
+    LOG_VARE(getNodeIds());
+    throw IllegalArgumentException("Duplicate way node IDs: addNodes");
+  }
+#endif
 }
 
 bool Way::_nodeIdsAreDuplicated(const vector<long>& ids) const
@@ -221,12 +230,14 @@ void Way::setNodes(const vector<long>& newNodes)
 
   _postGeometryChange();
 
-  //  // for debugging only; SLOW
-  //  if (_nodeIdsAreDuplicated(getNodeIds()))
-  //  {
-  //    LOG_VARE(getNodeIds());
-  //    throw IllegalArgumentException("Duplicate way node IDs: setNodes");
-  //  }
+#ifdef WAY_DEBUGGING
+  // for debugging only; SLOW
+  if (_nodeIdsAreDuplicated(getNodeIds()))
+  {
+    LOG_VARE(getNodeIds());
+    throw IllegalArgumentException("Duplicate way node IDs: setNodes");
+  }
+#endif
 }
 
 int Way::getNodeIndex(long nodeId) const
@@ -283,11 +294,11 @@ void Way::removeNode(long id) const
   std::vector<long>& nodes = _wayData->getNodeIds();
   size_t newCount = 0;
   // copy the array in place and remove the unwanted nodes.
-  for (size_t i = 0; i < nodes.size(); i++)
+  for (auto node_id : nodes)
   {
-    if (nodes[i] != id)
+    if (node_id != id)
     {
-      nodes[newCount] = nodes[i];
+      nodes[newCount] = node_id;
       newCount++;
     }
   }
@@ -343,16 +354,18 @@ void Way::replaceNode(long oldId, long newId)
 
     LOG_TRACE("IDs after replacement: " << getNodeIds());
 
-//    // for debugging only; SLOW
-//    if (_nodeIdsAreDuplicated(getNodeIds()))
-//    {
-//      LOG_ERROR(
-//        "Attempting to replace node: " << oldId << " with: " << newId << " in way: " << getId() <<
-//        "...");
-//      LOG_ERROR("Original IDs: " << oldIdsCopy);
-//      LOG_ERROR("New IDs: " << getNodeIds());
-//      throw IllegalArgumentException("Duplicate way node IDs: replaceNode");
-//    }
+#ifdef WAY_DEBUGGING
+    // for debugging only; SLOW
+    if (_nodeIdsAreDuplicated(getNodeIds()))
+    {
+      LOG_ERROR(
+        "Attempting to replace node: " << oldId << " with: " << newId << " in way: " << getId() <<
+        "...");
+      LOG_ERROR("Original IDs: " << oldIdsCopy);
+      LOG_ERROR("New IDs: " << getNodeIds());
+      throw IllegalArgumentException("Duplicate way node IDs: replaceNode");
+    }
+#endif
   }
 }
 
@@ -377,7 +390,7 @@ QString Way::toString() const
   Tgs::operator << (ss, getNodeIds());
   ss << endl;
   ss << "tags: " << getTags().toString().toStdString();
-  ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
+  ss << "cached envelope: " << GeometryUtils::toMinMaxString(_cachedEnvelope).toStdString() << endl;
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
   ss << "visible: " << getVisible() << endl;
@@ -430,15 +443,14 @@ bool Way::hasSharedNode(const Way& other) const
 
 bool Way::hasSharedEndNode(const Way& other) const
 {
-  const std::vector<long> nodeIds1 = getNodeIds();
-  const std::vector<long> nodeIds2 = other.getNodeIds();
+  const std::vector<long>& nodeIds1 = getNodeIds();
+  const std::vector<long>& nodeIds2 = other.getNodeIds();
   const long firstNodeId = nodeIds1.at(0);
   const long lastNodeId = nodeIds1.at(nodeIds1.size() - 1);
   const long otherFirstNodeId = nodeIds2.at(0);
   const long otherLastNodeId = nodeIds2.at(nodeIds2.size() - 1);
-  return
-    firstNodeId == otherFirstNodeId || firstNodeId == otherLastNodeId ||
-    lastNodeId == otherFirstNodeId || lastNodeId == otherLastNodeId;
+  return firstNodeId == otherFirstNodeId || firstNodeId == otherLastNodeId ||
+         lastNodeId == otherFirstNodeId || lastNodeId == otherLastNodeId;
 }
 
 }

@@ -295,14 +295,16 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shar
   result->importFromEPSG(3785);
   if (result->IsSame(srs.get()) && _toWkt(result.get()) != _toWkt(srs.get()))
   {
-    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: "
+             "https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     return result;
   }
 
   result->importFromEPSG(900913);
   if (result->IsSame(srs.get()) && _toWkt(result.get()) != _toWkt(srs.get()))
   {
-    LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: "
+             "https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     return result;
   }
 
@@ -310,19 +312,24 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shar
   if (result->IsSame(srs.get()) && _toWkt(result.get()) != _toWkt(srs.get()))
   {
     LOG_WARN(
-      "Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+      "Overriding input projection with proj4 compatible EPSG:3857. See this for details: "
+      "https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     return result;
   }
 
   // This check came from redmine issue 4399. The input isn't considered the same as EPSG:3857
   // according to OGR. Do this WKT level check to override the projection.
   const char* wkt3857 =
-    "PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_84\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0],PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0],UNIT[\"Meter\",1.0],AUTHORITY[\"EPSG\",\"3857\"]]";
+    "PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_84\",6378137.0,298.257223563]],"
+    "PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0],"
+    "PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0],PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0],"
+    "UNIT[\"Meter\",1.0],AUTHORITY[\"EPSG\",\"3857\"]]";
   result->importFromWkt(&wkt3857);
   if (result->IsSame(srs.get()))
   {
     LOG_WARN(
-      "Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+      "Overriding input projection with proj4 compatible EPSG:3857. See this for details: "
+      "https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     result->importFromEPSG(3857);
     return result;
   }
@@ -564,8 +571,7 @@ bool OgrReader::isSupported(const QString& url) const
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
   LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath));
   LOG_VART(IoUtils::isSupportedOgrFormat(url, true));
-  return OgrUtilities::getInstance().isReasonableUrl(justPath) ||
-         IoUtils::isSupportedOgrFormat(url, true);
+  return OgrUtilities::getInstance().isReasonableUrl(justPath) || IoUtils::isSupportedOgrFormat(url, true);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
@@ -783,8 +789,7 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   else
   {
     RelationPtr r =
-      std::make_shared<Relation>(
-        _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
+      std::make_shared<Relation>(_status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     r->setTags(t);
 
     for (int i = 0; i < nParts; i++)
@@ -851,8 +856,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   else
   {
     RelationPtr r =
-      std::make_shared<Relation>(
-        _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
+      std::make_shared<Relation>(_status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     if (areaCrit.isSatisfied(t, ElementType::Relation) == false && _importImpliedTags)
       t.setArea(true);
     r->setTags(t);
@@ -1197,8 +1201,7 @@ void OgrReaderInternal::_reproject(double& x, double& y)
       LOG_TRACE("Source y: " << iny);
       LOG_TRACE("Target x: " << x);
       LOG_TRACE("Target y: " << y);
-      throw IllegalArgumentException("Unable to transform point. Is the point outside the "
-                                     "projection bounds?");
+      throw IllegalArgumentException("Unable to transform point. Is the point outside the projection bounds?");
     }
   }
 }
@@ -1252,11 +1255,8 @@ bool OgrReaderInternal::hasMoreElements()
     return false;
 
   // Do we have data already in map from previous reads?
-  if ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) ||
-     (_relationsItr != _map->getRelations().end()))
-  {
+  if ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) || (_relationsItr != _map->getRelations().end()))
     return true;
-  }
 
   // Let's try a read and see if that put anything into the map. Do a read if the element maps are
   // empty.

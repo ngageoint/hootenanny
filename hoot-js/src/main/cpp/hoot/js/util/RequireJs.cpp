@@ -27,13 +27,15 @@
 #include "RequireJs.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
+
+#include <QDirIterator>
 
 using namespace v8;
 
@@ -63,16 +65,9 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     if (args.Length() != 1)
       throw IllegalArgumentException("Expected exactly one argument to 'require'.");
 
-    /*
-    The new Hoot "include" files are all under $HOOT_HOME/translations & $HOOT_HOME/translations_local
-    */
-
     const QString hootHome = ConfPath::getHootHome();
     if (hootHome.isEmpty())
       throw HootException("$HOOT_HOME is empty.");
-
-    Settings conf;
-    QStringList libPath = ConfigOptions(conf).getJavascriptSchemaTranslatorPath();
 
     QString scriptName = toCpp<QString>(args[0]);
     QString fullPath; // the final script path
@@ -81,20 +76,17 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     if (scriptName != QFileInfo(scriptName).baseName())
       throw HootException("Error: Script name is a path: " + scriptName);
 
-    for (int i = 0; i < libPath.size(); i++)
-    {
-      QString trimmed = libPath[i].trimmed();
-      if (trimmed.isEmpty() == false)
-      {
-        // This probably should be put into a config variable...
-        fullPath = hootHome + libPath[i].trimmed() + "/" + scriptName + ".js";
+    // Look through all the translation directories in $HOOT_HOME - "translations", "translations-rules", "translations-local" etc
+    // This allows us to add more custom translation directories without hardcoding them
+    QDirIterator it (hootHome, {"translations*"}, QDir::Dirs | QDir::NoSymLinks);
+    while (it.hasNext()) {
+        fullPath = it.next() + "/" + scriptName + ".js";
 
         QFileInfo info(fullPath);
         if (info.exists())
           break;
 
         fullPath = "";
-      }
     }
 
     if (fullPath.isEmpty())
