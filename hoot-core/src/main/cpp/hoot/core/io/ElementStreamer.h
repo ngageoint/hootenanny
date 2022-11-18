@@ -75,7 +75,8 @@ private:
    * @param convertOps conversion operations to apply to data
    * @return the number of elements written
    */
-  long _streamFromOgr(const OgrReader& reader, QString& input, ElementOutputStream& writer,
+  long _streamFromOgr(const std::shared_ptr<OgrReader>& reader, QString& input,
+                      const std::shared_ptr<ElementOutputStream>& writer,
                       const QStringList& convertOps = QStringList(), Progress progress = Progress()) const;
 };
 

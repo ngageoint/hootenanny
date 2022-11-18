@@ -60,6 +60,14 @@ public:
   virtual bool hasMoreElements() = 0;
 
   virtual ElementPtr readNextElement() = 0;
+
+  /**
+   * @brief canStreamBounded Most stream objects cannot stream correctly when bounded, some input streams
+   *  apply the bounds at the API level (for instance) and are applied outside of Hootenanny and therefore all
+   *  elements can be streamed.
+   * @return false The default is bounded inputs cannot stream.
+   */
+  virtual bool canStreamBounded() const { return false; }
 };
 
 using ElementInputStreamPtr = std::shared_ptr<ElementInputStream>;

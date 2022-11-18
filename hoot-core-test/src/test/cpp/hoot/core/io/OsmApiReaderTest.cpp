@@ -58,6 +58,7 @@ class OsmApiReaderTest : public HootTestFixture
   CPPUNIT_TEST(runFailureTest);
   CPPUNIT_TEST(runPolygonBoundsTest);
 #endif
+  CPPUNIT_TEST(runStreamTest);
 
 #ifdef RUN_PRODUCTION_TESTS
   CPPUNIT_TEST(runOsmApiXmlTest);
@@ -76,6 +77,7 @@ public:
   const int PORT_SPLIT_GEO =      9901;
   const int PORT_SPLIT_ELEMENTS = 9902;
   const int PORT_POLYGON =        9903;
+  const int PORT_STREAM =         9904;
 
   OsmApiReaderTest()
     : HootTestFixture("test-files/io/OsmApiReaderTest/",
@@ -298,6 +300,16 @@ public:
     writer.write(map, output);
     writer.close();
 #endif
+  }
+
+  void runStreamTest()
+  {
+//#ifdef RUN_LOCAL_TEST_SERVER
+    OverpassReaderTestServer server(PORT_STREAM);
+    server.start();
+    server.wait();
+    server.shutdown();
+//#endif
   }
 };
 

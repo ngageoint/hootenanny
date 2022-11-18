@@ -77,6 +77,21 @@ protected:
   bool _split_forced;
 };
 
+class OverpassReaderTestServer : public HttpSequencedServer
+{
+public:
+  /** Constructor */
+  OverpassReaderTestServer(int port)
+    : HttpSequencedServer(2, port)
+  { }
+
+protected:
+  /** respond() function that responds once to the OSM API Capabilities request */
+  virtual bool respond(HttpConnectionPtr& connection) override;
+  /** get_sequence_response() function that gets the response message based on the URL requested */
+  virtual HttpResponsePtr get_sequence_response(const std::string& url) override;
+};
+
 }
 
 #endif  //  OSM_API_READER_TEST_SERVER_H
