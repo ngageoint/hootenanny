@@ -34,7 +34,7 @@ namespace hoot
 {
 
 AddExportTagsVisitor::AddExportTagsVisitor()
-  : _includeIds(false),
+  : _includeIds(ConfigOptions().getWriterIncludeIdTag()),
     _includeStatus(ConfigOptions().getWriterIncludeStatusTag()),
     _textStatus(ConfigOptions().getWriterTextStatus()),
     _includeCircularError(ConfigOptions().getWriterIncludeCircularErrorTags()),
@@ -77,7 +77,9 @@ Tags AddExportTagsVisitor::getExportTags(const Element* pElement) const
   if (addStatus)
     newTags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString(status);
   if (_includeDebug || _includeIds)
+  {
     newTags[MetadataTags::HootId()] = QString::number(pElement->getId());
+  }
   if (addCircularError)
     newTags[MetadataTags::ErrorCircular()] = QString::number(pElement->getCircularError());
   return newTags;

@@ -1511,11 +1511,9 @@ dnc = {
     // Debug info. We use this in postprocessing via "tags"
     delete notUsedTags['hoot:id'];
 
-
     // Apply the simple number and text biased rules
     // NOTE: These use the transMap option. This will migrate to the other translations soon
     // NOTE: These delete tags as they are used
-
     translate.numToOgr(attrs, notUsedTags, dnc.rules.numBiased, dnc.rules.intList, transMap);
     translate.txtToOgr(attrs, notUsedTags, dnc.rules.txtBiased, transMap);
 

@@ -115,6 +115,7 @@ protected:
 private:
 
   bool _includeDebug;
+  bool _includeIds;
   // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
   bool _includeCompatibilityTags;
   bool _pretty;

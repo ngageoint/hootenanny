@@ -22,40 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
  */
-#ifndef ADDUSERIDVISITOR_H
-#define ADDUSERIDVISITOR_H
+#include "AddElementIdVisitor.h"
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Adds the username and user id as tags. If you want to limit the features that will be tagged then
- * look into FilteredVisitor.
- */
-class AddUserIdVisitor : public ElementVisitor
+HOOT_FACTORY_REGISTER(ElementVisitor, AddElementIdVisitor)
+
+void AddElementIdVisitor::visit(const ElementPtr& pElement)
 {
-public:
-
-  static QString className() { return "AddUserIdVisitor"; }
-
-  AddUserIdVisitor() = default;
-
-  /**
-   * Adds the user name and user id as tags to all valid elements.
-   */
-  void visit(const ElementPtr& e) override;
-
-  QString getDescription() const override
-  { return "Adds the user name and user id to elements as tags"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-};
-
+  Tags& tags = pElement->getTags();
+  tags[MetadataTags::HootId()] = QString::number(pElement->getId());
 }
 
-#endif // ADDUSERIDVISITOR_H
+}

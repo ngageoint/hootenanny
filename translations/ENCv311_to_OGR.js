@@ -597,7 +597,7 @@ enc311 = {
 
     delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    delete notUsedTags['hoot:id'];
+    // delete notUsedTags['hoot:id']; // Keeping this for a while
 
 
     // Make lookup tables.

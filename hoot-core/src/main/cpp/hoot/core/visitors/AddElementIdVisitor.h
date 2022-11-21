@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
  */
-#ifndef ADDUSERIDVISITOR_H
-#define ADDUSERIDVISITOR_H
+#ifndef ADDELEMENTIDVISITOR_H
+#define ADDELEMENTIDVISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementVisitor.h>
@@ -34,16 +34,20 @@ namespace hoot
 {
 
 /**
- * Adds the username and user id as tags. If you want to limit the features that will be tagged then
+ * Adds a hoot:id tag with the ID of the element as the value.
+ * For OGR exports, this can also be done with the "-D writer.include.id.tag"
+ * config option. The config option uses the "AddExportTags" visitor which runs
+ * BEFORE translation with OGR but AFTER translation when running convert.
+ * If you want to limit the features that will be tagged then
  * look into FilteredVisitor.
  */
-class AddUserIdVisitor : public ElementVisitor
+class AddElementIdVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "AddUserIdVisitor"; }
+  static QString className() { return "AddElementIdVisitor"; }
 
-  AddUserIdVisitor() = default;
+  AddElementIdVisitor() = default;
 
   /**
    * Adds the user name and user id as tags to all valid elements.
@@ -51,11 +55,11 @@ public:
   void visit(const ElementPtr& e) override;
 
   QString getDescription() const override
-  { return "Adds the user name and user id to elements as tags"; }
+  { return "Adds a hoot:id tag with the ID of the element as the value"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 };
 
 }
 
-#endif // ADDUSERIDVISITOR_H
+#endif // ADDELEMENTIDVISITOR_H
