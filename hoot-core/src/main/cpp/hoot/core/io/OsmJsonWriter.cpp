@@ -275,8 +275,7 @@ bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const
   return !e->getTags().empty() ||
           e->getElementType() != ElementType::Node ||
          (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
-          _includeDebug;
-//          _includeDebug || _includeIds;
+         _includeDebug || _includeIds;
 }
 
 void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& firstTag)
