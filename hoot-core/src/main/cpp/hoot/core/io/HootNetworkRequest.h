@@ -148,6 +148,8 @@ public:
    */
   void logConnectionError() const;
 
+  const std::map<QString, QString>& getResponseHeaders() const { return _responseHeaders; }
+
 private:
   /**
    * @brief _networkRequest Function to make the actual request
@@ -206,6 +208,8 @@ private:
   QString _key_path;
   /** Passphrase for PKCS-12 SSL key */
   QString _pass_phrase;
+  /** Response headers */
+  std::map<QString, QString> _responseHeaders;
 };
 
 using HootNetworkRequestPtr = std::shared_ptr<HootNetworkRequest>;

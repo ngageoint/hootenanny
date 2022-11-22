@@ -30,6 +30,7 @@
 //  Hootenanny
 #include <hoot/core/io/HootNetworkCookieJar.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/HootNetworkUtils.h>
 
 //  Qt
 #include <QEventLoop>
@@ -242,8 +243,12 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   _content = reply->readAll();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
+  //  Save off the reply headers
+  QList<QByteArray> headerList = reply->rawHeaderList();
+  for (const auto& header : qAsConst(headerList))
+    _responseHeaders[QString(header)] = QString(reply->rawHeader(header));
   //  Check error status on our reply
-  if (_status == 0 && QNetworkReply::NoError != reply->error())
+  if (_status != HttpResponseCode::HTTP_OK)
   {
     _error = reply->errorString();
     //  Remove authentication information if present
@@ -251,9 +256,13 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
       _error.replace(request.url().toString(), tempUrl.toString(QUrl::RemoveUserInfo), Qt::CaseInsensitive);
     //  Replace the IP address in the error string with <host-ip>
     HootNetworkRequest::removeIpFromUrlString(_error, request.url());
-    //  Negate the connection error as the status
-    _status = -1 * (int)reply->error();
-    return false;
+    //  Actual non-HTTP response code errors (i.e. network errors, etc.) are handled differently
+    if (_status == 0 && QNetworkReply::NoError != reply->error())
+    {
+      //  Negate the connection error as the status
+      _status = -1 * (int)reply->error();
+      return false;
+    }
   }
   //  return successfully
   return true;
