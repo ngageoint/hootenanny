@@ -66,8 +66,8 @@ TaskGrid UniformTaskGridGenerator::generateTaskGrid()
   const double widthPerCell = taskGridEnv.getWidth() / (double)_gridDimensionSize;
   const double heightPerCell = taskGridEnv.getHeight() / (double)_gridDimensionSize;
 
-  const int rows = ceil(taskGridEnv.getHeight() / heightPerCell);
-  const int cols = ceil(taskGridEnv.getWidth() / widthPerCell);
+  const int rows = static_cast<int>(ceil(taskGridEnv.getHeight() / heightPerCell));
+  const int cols = static_cast<int>(ceil(taskGridEnv.getWidth() / widthPerCell));
 
   const double cellXLeftOrigin = taskGridEnv.getMinX();
   const double cellXRightOrigin = taskGridEnv.getMinX() + widthPerCell;

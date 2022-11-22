@@ -59,7 +59,7 @@ int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString&
   if (nonConflatableMap->size() > 0)
     OsmMapWriterFactory::write(nonConflatableMap, output);
 
-  return nonConflatableMap->size();
+  return static_cast<int>(nonConflatableMap->size());
 }
 
 void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,

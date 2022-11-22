@@ -211,7 +211,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(const TaskGrid::TaskGridCel
   const int numChanges = _changesetCreator->getNumChanges();
 
   _numChangesetsDerived++;
-  _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
+  _totalChangesetDeriveTime += static_cast<double>(_subTaskTimer.elapsed()) / 1000.0;
   _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
   _subTaskTimer.restart();
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
