@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTINPUTSTREAM_H
 #define ELEMENTINPUTSTREAM_H
@@ -60,6 +60,14 @@ public:
   virtual bool hasMoreElements() = 0;
 
   virtual ElementPtr readNextElement() = 0;
+
+  /**
+   * @brief canStreamBounded Most stream objects cannot stream correctly when bounded, some input streams
+   *  apply the bounds at the API level (for instance) and are applied outside of Hootenanny and therefore all
+   *  elements can be streamed.
+   * @return false The default is bounded inputs cannot stream.
+   */
+  virtual bool canStreamBounded() const { return false; }
 };
 
 using ElementInputStreamPtr = std::shared_ptr<ElementInputStream>;

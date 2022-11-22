@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiWriterTestServer.h"
@@ -40,7 +40,7 @@ bool CapabilitiesTestServer::respond(HttpConnectionPtr &connection)
   parse_request(connection);
   //  Make sure that the capabilities were requested
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
   else
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
@@ -56,7 +56,7 @@ bool PermissionsTestServer::respond(HttpConnectionPtr &connection)
   parse_request(connection);
   //  Make sure that the permissions were requested
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
   else
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
@@ -74,18 +74,18 @@ bool RetryConflictsTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_METHOD_NOT_ALLOWED);
     response->add_header("Allow", "GET");
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -120,16 +120,16 @@ bool RetryVersionTestServer::respond(HttpConnectionPtr &connection)
   //  Determine the response message's HTTP response
   HttpResponsePtr response;
   //  Capabilities
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
   //  Permissions
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
   //  Create changeset
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   //  Upload changeset 1
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     //  The first time through, the 'version' of element 1 should fail.
     if (!_has_error)
@@ -141,10 +141,10 @@ bool RetryVersionTestServer::respond(HttpConnectionPtr &connection)
       response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE);
   }
   //  Get way 1's updated version
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE);
   //  Close changeset
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -169,11 +169,11 @@ bool ChangesetOutputTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
@@ -182,7 +182,7 @@ bool ChangesetOutputTestServer::respond(HttpConnectionPtr& connection)
     else
       response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SUCCESS_2_RESPONSE);
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -207,13 +207,13 @@ bool ChangesetOutputThrottleTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_MAP) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CGIMAP_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
@@ -222,7 +222,7 @@ bool ChangesetOutputThrottleTestServer::respond(HttpConnectionPtr& connection)
     else
       response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SUCCESS_2_RESPONSE);
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -247,11 +247,11 @@ bool ChangesetCreateFailureTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
   {
     static int count = 0;
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_UNAUTHORIZED, "User is not authorized");
@@ -278,11 +278,11 @@ bool CreateWaysFailNodesTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
@@ -291,7 +291,7 @@ bool CreateWaysFailNodesTestServer::respond(HttpConnectionPtr& connection)
     else
       response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_FAILURE_RESPONSE_2);
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -317,11 +317,11 @@ bool VersionFailureTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
@@ -330,13 +330,13 @@ bool VersionFailureTestServer::respond(HttpConnectionPtr& connection)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_CONFLICT,
                    QString(OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_RESPONSE).arg(v).arg(++version).toStdString());
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
   {
     //  Update the GET response with a different ID
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK,
                    QString(OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE).arg(++version).toStdString());
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -361,13 +361,13 @@ bool ElementGoneTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_MAP) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CGIMAP_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
@@ -376,7 +376,7 @@ bool ElementGoneTestServer::respond(HttpConnectionPtr& connection)
     else
       response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE);
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -402,13 +402,13 @@ bool ChangesetSplitDeleteTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_MAP) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CGIMAP_RESPONSE);
-  else if (_headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (_headers.find(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, "1");
   else if (_headers.find("POST") != std::string::npos)
   {
@@ -421,7 +421,7 @@ bool ChangesetSplitDeleteTestServer::respond(HttpConnectionPtr& connection)
     else
       response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_3);
   }
-  else if (_headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK);
     continue_processing = false;
@@ -461,7 +461,7 @@ bool ChangesetValidateUploadTestServer::respond(HttpConnectionPtr& connection)
   //  Determine the response message's HTTP response
   HttpResponsePtr response;
   //  Reply with the node information
-  if (_headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(1).toStdString()) != std::string::npos)
+  if (_headers.find(QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("node").arg(1).toStdString()) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::VALIDATE_NODE_RESPONSE);
   else
   {

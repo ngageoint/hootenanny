@@ -227,11 +227,7 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
     // The XML writer can't keep sorted output when streaming, so require an additional config
     // option be specified in order to stream when writing that format
     (writerName != OsmXmlWriter::className() ||
-     (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById())) &&
-    // No readers when using the bounds option are able to do streaming I/O at this point due to
-    // that for lines and polys, you need the entire feature in memory before you can determine
-    // whether its within bounds. Technically, could relax this for all point datasets.
-    !ConfigUtils::boundsOptionEnabled();
+    (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById()));
 }
 
 bool IoUtils::areStreamableIo(const QStringList& inputs, const QString& output)
@@ -271,8 +267,10 @@ bool IoUtils::isStreamableInput(const QString& url)
   bool result = false;
   std::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::createReader(url, true, Status::Unknown1);
   std::shared_ptr<ElementInputStream> eis = std::dynamic_pointer_cast<ElementInputStream>(reader);
+  //  Some input streams are streamable when bounded, i.e. bounds are passed to the API first, for instance
+  //  enable streaming for those bounded streams
   if (eis)
-    result = true;
+    result = (!ConfigUtils::boundsOptionEnabled() || eis->canStreamBounded());
   return result;
 }
 
@@ -294,7 +292,7 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
   {
     if (!opName.trimmed().isEmpty())
     {
-      const QString unstreamableMsg = "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
+      const QString unstreamableMsg = QString("Unable to stream I/O due to op: %1. Loading entire map...").arg(opName);
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {

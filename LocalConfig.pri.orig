@@ -8,7 +8,8 @@ CONFIG -= debug
 debug {
   DEFINES += DEBUG
 
-  QMAKE_CXXFLAGS+=-g -Og
+  # Generally -Og is recommended instead of -O0 but GDB and QtCreator struggle with -Og
+  QMAKE_CXXFLAGS+=-g -O0
   QMAKE_CXXFLAGS+=-fno-omit-frame-pointer
 
   # Runs expensive validation on several data structures to make sure everything is in sync.

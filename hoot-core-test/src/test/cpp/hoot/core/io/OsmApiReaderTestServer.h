@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_READER_TEST_SERVER_H
@@ -75,6 +75,21 @@ protected:
   virtual HttpResponsePtr get_sequence_response(const std::string& url) override;
   /** Force split based on "element count" */
   bool _split_forced;
+};
+
+class OverpassReaderTestServer : public HttpSequencedServer
+{
+public:
+  /** Constructor */
+  OverpassReaderTestServer(int port)
+    : HttpSequencedServer(2, port)
+  { }
+
+protected:
+  /** respond() function that responds once to the OSM API Capabilities request */
+  virtual bool respond(HttpConnectionPtr& connection) override;
+  /** get_sequence_response() function that gets the response message based on the URL requested */
+  virtual HttpResponsePtr get_sequence_response(const std::string& url) override;
 };
 
 }
