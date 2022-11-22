@@ -25,26 +25,50 @@
  * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
  */
 
-// hoot
-#include <hoot/core/elements/Element.h>
 #include "OsmXmlDiskCache.h"
+
+// Hoot includes
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/ConfPath.h>
+
+// QT includes
+#include <QFileInfo>
+
 
 namespace hoot
 {
 
-OsmXmlDiskCache::OsmXmlDiskCache(QString tempFileName):
-  _tempFileName(tempFileName)
+OsmXmlDiskCache::OsmXmlDiskCache()
 {
+  // Setup our temp file & get guaranteed unique name
+  QString tempFname = ConfPath::getHootHome() + "/"
+                    + ConfigOptions().getDebugMapsFilename();
+  QFileInfo fi(tempFname);
+  QString fnameTemplate = fi.absolutePath() + "/disk.cache.osm.XXXXXX";
+  _pTempFile = std::make_shared<QTemporaryFile>(fnameTemplate);
+  if (!_pTempFile->open())
+  {
+    LOG_ERROR("Could not open temporary cache file: " << fnameTemplate);
+  }
+  _tempFileName = _pTempFile->fileName();
+
+  // If we are writing debug maps, don't autoremove the cache
+  _pTempFile->setAutoRemove(!ConfigOptions().getDebugMapsWrite());
+
+  // Setup our writer
   _writer.setIncludeIds(true);
   _writer.setIncludeHootInfo(true);
   _writer.setIncludePid(true);
   _writer.setIncludeDebug(true);
   _writer.openunbuff(_tempFileName);
 
+  // Setup our reader
   _reader.setUseDataSourceIds(true);
   _reader.setUseFileStatus(true);
   _reader.setPreserveAllTags(true);
   _reader.open(_tempFileName);
+
+  // Initialize the cache
   _initCache();
 }
 
@@ -56,7 +80,7 @@ OsmXmlDiskCache::~OsmXmlDiskCache()
 
 void OsmXmlDiskCache::_initCache()
 {
-  // Make a new node!
+  // Make a bogus node for the cache, otherwise our reader gets angry
   uint64_t nodeId(UINT64_MAX);
   double lat(1.123456);
   double lon(1.123456);

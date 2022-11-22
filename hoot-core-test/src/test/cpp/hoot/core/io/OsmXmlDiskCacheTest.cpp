@@ -50,7 +50,7 @@ public:
 
   void runAddSingleNodeTest()
   {
-    OsmXmlDiskCache myCache("/tmp/hoot.disk.cache.osm");
+    OsmXmlDiskCache myCache;
 
     // Make a new node!
     uint64_t nodeId(1);
@@ -77,7 +77,7 @@ public:
 
   void runMultipleNodeTest()
   {
-    OsmXmlDiskCache myCache("/tmp/hoot.disk.cache.osm");
+    OsmXmlDiskCache myCache;
 
     // Make a new node!
     uint64_t nodeId(1);
@@ -169,7 +169,7 @@ public:
 
   void runAddAllTypesTest()
   {
-    OsmXmlDiskCache myCache("/tmp/hoot.disk.cache");
+    OsmXmlDiskCache myCache;
     ElementComparer comparitor;
 
     // Add new node

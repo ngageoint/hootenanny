@@ -27,6 +27,9 @@
 #ifndef __OSM_XML_DISK_CACHE_H__
 #define __OSM_XML_DISK_CACHE_H__
 
+// QT
+#include <QTemporaryFile>
+
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementId.h>
@@ -43,7 +46,7 @@ class OsmXmlDiskCache
 {
 public:
 
-  OsmXmlDiskCache(QString tempFileName);
+  OsmXmlDiskCache();
   ~OsmXmlDiskCache();
 
   void addElement(ConstElementPtr &newElement);
@@ -62,6 +65,7 @@ public:
 private:
 
   void _initCache();
+  std::shared_ptr<QTemporaryFile> _pTempFile;
   QString _tempFileName;
   OsmXmlReader _reader;
   OsmXmlWriter _writer;

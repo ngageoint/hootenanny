@@ -46,7 +46,7 @@ ElementCacheLRU::ElementCacheLRU(const unsigned long maxNodeCount,
     _waysIter(_ways.begin()),
     _relations(),
     _relationsIter(_relations.begin()),
-    _diskCache("/tmp/hoot.disk.cache.osm")
+    _diskCache()
 {
   LOG_TRACE(
     "New LRU cache created, " << _maxNodeCount << " max entries for nodes, " <<
