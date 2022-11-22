@@ -140,8 +140,6 @@ protected:
 
   long _numRead;
 
-private:
-
   static int logWarnCount;
 
   bool _osmFound;

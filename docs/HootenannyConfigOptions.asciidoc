@@ -17,7 +17,7 @@ An example using +-D+ is below:
 
 ------
 hoot convert \
-  -D ogr.writer.script=test-files/io/SampleTranslation.js \
+  -D schema.translation.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
@@ -28,7 +28,7 @@ can specify the settings in the `HOOT_OPTIONS` environment variables. This
 environment variable uses the same syntax as the command line. For example:
 
 -----
-export HOOT_OPTIONS="-D ogr.writer.script=test-files/io/SampleTranslation.js \
+export HOOT_OPTIONS="-D schema.translation.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar"
 hoot convert test-files/io/SampleTranslation.osm \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
@@ -39,7 +39,7 @@ within a JSON configuration file such as:
 
 ------
 {
-  "ogr.writer.script" : "test-files/io/SampleTranslation.js",
+  "schema.translation.script" : "test-files/io/SampleTranslation.js",
   "ogr.writer.pre.layer.name" : "bar"
 }
 ------

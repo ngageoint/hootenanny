@@ -225,6 +225,7 @@ public class ExportResource {
 
             //generates density tiles and alpha shape and clips the first with the second
             } else if (params.getOutputType().startsWith("alpha.tiles")) {
+                String initialOutputType = params.getOutputType();
                 params.setOutputType("tiles.geojson");
                 workflow.add(getCommand(user, jobId, params, debugLevel));
                 params.setOutputType("alpha.shp");
@@ -238,7 +239,9 @@ public class ExportResource {
                 workflow.add(ogrFormatCommand);
                 Command sedSourceCommand = new SedSourceCommand(jobId, params, this.getClass());
                 workflow.add(sedSourceCommand);
-                Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
+                params.setOutputType(initialOutputType);
+                String fileToZip = params.getOutputName() + "." + params.getOutputType();
+                Command zipCommand = new ZIPFileCommand(new File(workDir, fileToZip + ".zip"), workDir, fileToZip, this.getClass());
                 workflow.add(zipCommand);
 
             } else if (inputType.equalsIgnoreCase("changesets")) {
@@ -322,15 +325,13 @@ public class ExportResource {
             //need to use job id to determine if this is changeset or export
             File exportFile;
             hoot.services.models.db.JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
+            //job status could be null
             if (JobType.fromInteger(jobStatus.getJobType()) == JobType.DERIVE_CHANGESET) {
                 exportFile = getChangesetFile(jobId, outputname, fileExt);
             } else {
                 exportFile = getExportFile(jobId, outputname, fileExt);
             }
             String outFileName = exportFile.getName();
-            if (! StringUtils.isBlank(outputname)) {
-                outFileName = outputname;
-            }
             ResponseBuilder responseBuilder;
             //Do some zipping if fileExt is not zip
             if (!fileExt.equalsIgnoreCase("zip")) {

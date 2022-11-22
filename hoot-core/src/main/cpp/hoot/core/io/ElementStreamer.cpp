@@ -82,7 +82,6 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     reader->setConfiguration(conf());
     partialReader = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-    partialReader->initializePartial();
     std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
     std::shared_ptr<OgrWriter> ogrWriter = std::dynamic_pointer_cast<OgrWriter>(writer);
 
@@ -98,10 +97,12 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
     // Need to run separate logic for streaming from an OGR source with layers in order to support
     // the layer syntax.
     if (ogrReader && input.contains(";"))
-      numFeaturesWritten += _streamFromOgr(*ogrReader, input, *streamWriter);
+      numFeaturesWritten += _streamFromOgr(ogrReader, input, streamWriter);
     else
     {
       reader->open(input);
+      if (partialReader)
+        partialReader->initializePartial();
       // Add visitor/criterion operations if any of the convert ops are visitors.
       LOG_VARD(convertOps);
       ElementInputStreamPtr streamReader =
@@ -120,12 +121,14 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out, cons
     StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-long ElementStreamer::_streamFromOgr(const OgrReader& reader, QString& input, ElementOutputStream& writer,
+long ElementStreamer::_streamFromOgr(const std::shared_ptr<OgrReader>& reader, QString& input,
+                                     const std::shared_ptr<ElementOutputStream>& writer,
                                      const QStringList& convertOps, Progress /*progress*/) const
 {
   // TODO: run a separate progress for _streamFromOgr as part of #4856?
+  reader->initializePartial();
 
-  reader.setSchemaTranslationScript(_translationScript);
+  reader->setSchemaTranslationScript(_translationScript);
 
   QStringList layers;
   if (input.contains(";"))
@@ -135,7 +138,7 @@ long ElementStreamer::_streamFromOgr(const OgrReader& reader, QString& input, El
     layers.append(list.at(1));
   }
   else
-    layers = reader.getFilteredLayerNames(input);
+    layers = reader->getFilteredLayerNames(input);
 
   if (layers.empty())
   {
@@ -149,7 +152,7 @@ long ElementStreamer::_streamFromOgr(const OgrReader& reader, QString& input, El
   {
     LOG_TRACE("Reading: " << input + " " << layer << "...");
 
-    std::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layer));
+    std::shared_ptr<ElementIterator> iterator(reader->createIterator(input, layer));
     while (iterator->hasNext())
     {
       std::shared_ptr<Element> e = iterator->next();
@@ -160,7 +163,7 @@ long ElementStreamer::_streamFromOgr(const OgrReader& reader, QString& input, El
 
       if (e)
       {
-        writer.writeElement(e);
+        writer->writeElement(e);
         numFeaturesWritten++;
       }
     }

@@ -41,6 +41,9 @@
 //  Geos
 #include <geos/geom/GeometryFactory.h>
 
+//  Standard
+#include <map>
+
 namespace hoot
 {
 
@@ -71,10 +74,7 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
   //  Validate the size of the envelope, in square degrees, before beginning
   //  Don't allow the whole earth to be downloaded!
   if (envelope.getWidth() * envelope.getHeight() > _maxGridSize)
-  {
-    throw UnsupportedException(
-      QString("Cannot request areas larger than %1 square degrees.").arg(QString::number(_maxGridSize, 'f', 4)));
-  }
+    throw UnsupportedException(QString("Cannot request areas larger than %1 square degrees.").arg(QString::number(_maxGridSize, 'f', 4)));
   //  Save the endpoint URL to query
   _sourceUrl = endpoint;
   //  Split the envelope if it is bigger than the prescribed max
@@ -165,10 +165,10 @@ void ParallelBoundedApiReader::stop()
   wait();
 }
 
-void ParallelBoundedApiReader::_sleep() const
+void ParallelBoundedApiReader::_sleep(long milliseconds) const
 {
   //  Sleep for 10 milliseconds
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
 void ParallelBoundedApiReader::_process()
@@ -193,24 +193,47 @@ void ParallelBoundedApiReader::_process()
     if (!envelope.isNull())
     {
       //  Add the bbox to the query string
+      bool add_bbox = true;
       QUrl url = _sourceUrl;
       QUrlQuery query(_sourceUrl);
+      //  Remove any bbox that comes in so it can be updated
       if (query.hasQueryItem("bbox"))
         query.removeQueryItem("bbox");
       //  Use the correct type of bbox for this query
       QString bboxQuery;
       if (_useOsmApiBboxFormat)
-        bboxQuery = GeometryUtils::toConfigString(envelope);
+        bboxQuery = GeometryUtils::toLonLatString(envelope);
       else
-        bboxQuery = GeometryUtils::toString(envelope);
-      //  Some APIs require the bounding box's projection, add it here
-      if (_addProjection)
-        bboxQuery += ",EPSG:4326";
-      query.addQueryItem("bbox", bboxQuery);
+        bboxQuery = GeometryUtils::toMinMaxString(envelope);
+      //  Overpass queries operate a little differently with the bbox
+      if (_isOverpass)
+      {
+        //  Get the data parameter
+        QString data = query.queryItemValue("data");
+        //  Search the data parameter for {{bbox}} and replace it with the actual bounds
+        if (data.contains("{{bbox}}"))
+        {
+          //  Embedded {{bbox}} data requires a Lat/Lon string
+          bboxQuery = GeometryUtils::toLatLonString(envelope);
+          //  Remove the old 'data' query
+          query.removeQueryItem("data");
+          //  Replace the bbox place holder
+          data = data.replace("{{bbox}}", QString("%1").arg(bboxQuery));
+          //  Set the data query item back to the query
+          query.addQueryItem("data", data);
+          //  Don't add the bbox query item later because it is embedded in the data query item
+          add_bbox = false;
+        }
+      }
+      else if (_addProjection)
+        bboxQuery += ",EPSG:4326";  //  Some APIs require the bounding box's projection, add it here
+      //  Add the bbox query item if necessary
+      if (add_bbox)
+        query.addQueryItem("bbox", bboxQuery);
       url.setQuery(query);
 
       HootNetworkRequest request;
-      LOG_VART(url);
+      LOG_DEBUG(url);
       request.networkRequest(url, _timeout);
       //  Check the HTTP status code and result
       int status = request.getHttpStatus();
@@ -247,7 +270,19 @@ void ParallelBoundedApiReader::_process()
         }
         break;
       case HttpResponseCode::HTTP_BAD_REQUEST:
-        _splitEnvelope(envelope);
+        if (_isOverpass)
+        {
+          //  Overpass API 400 Bad Request means the query didn't parse correctly and the error is in the response
+          std::lock_guard<std::mutex> error_lock(_errorMutex);
+          LOG_ERROR("Overpass Error: " + parseOverpassError(QString::fromUtf8(request.getResponseContent().data())));
+          LOG_VARD(url);
+          _fatalError = true;
+        }
+        else
+        {
+          //  OSM API 400 Bad Request means the node/way/relation limit has been exceeded
+          _splitEnvelope(envelope);
+        }
         break;
       case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:        //  Bandwidth for downloads has been exceeded, fail immediately
       {
@@ -267,11 +302,42 @@ void ParallelBoundedApiReader::_process()
           _sleep();
           //  Retry
           _bboxes.push(envelope);
-          LOG_DEBUG("Gateway timed out while communicating with API, retrying.");
+          LOG_WARN("Gateway timed out while communicating with API, retrying.");
         }
         else
           _logNetworkError(request);
         break;
+      case HttpResponseCode::HTTP_TOO_MANY_REQUESTS:
+      {
+        const std::map<QString, QString>& headers = request.getResponseHeaders();
+        if (headers.find("Retry-After") != headers.end())
+        {
+          QString retry = headers.at("Retry-After");
+          int seconds = retry.toInt();
+          if (seconds <= 120)
+          {
+            LOG_WARN("Server responded: Too many requests.  Trying again in " << retry << " seconds.");
+            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+            _sleep(seconds * 1000);
+            _bboxes.push(envelope);
+          }
+          else
+          {
+            //  Log the unrecoverable error
+            std::lock_guard<std::mutex> error_lock(_errorMutex);
+            LOG_ERROR(request.getErrorString());
+            _fatalError = true;
+          }
+        }
+        else
+        {
+          //  Log the unrecoverable error
+          std::lock_guard<std::mutex> error_lock(_errorMutex);
+          LOG_ERROR(request.getErrorString());
+          _fatalError = true;
+        }
+        break;
+      }
       default:
         _logNetworkError(request);
         break;

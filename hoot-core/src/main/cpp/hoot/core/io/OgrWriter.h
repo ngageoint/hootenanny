@@ -31,8 +31,7 @@
 // hoot
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/schema/StrictChecking.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/io/TranslationInterface.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
@@ -48,7 +47,7 @@ class Layer;
 /**
  * Writes a file to an OGR data source.
  */
-class OgrWriter : public PartialOsmMapWriter, public Configurable
+class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface
 {
 public:
 
@@ -71,30 +70,15 @@ public:
   // leaving this empty for the time being
   QString supportedFormats() const override { return ""; }
 
-  void initTranslator();
-
   void openOutput(const QString& url);
 
   void createAllLayers();
-
-  /**
-   * @brief translateToFeatures Translates the element to a geometry and a
-   *        vector of features
-   * @param provider Should provide the element and all its children
-   * @param e Element to translate
-   * @param g Geometry output
-   * @param tf Vector of translated features output
-   */
-  void translateToFeatures(const ElementProviderPtr& provider, const ConstElementPtr& e,
-                           std::shared_ptr<geos::geom::Geometry>& g,
-                           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf) const;
 
   void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
                               const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
 
   void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
   void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
-  void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
   void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
 
 protected:
@@ -107,15 +91,11 @@ private:
 
   bool _createAllLayers;
   bool _appendData;
-  QString _scriptPath;
-  mutable std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   std::shared_ptr<GDALDataset> _ds;
   /* Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
   QHash<QString, OGRLayer*> _layers;
   QHash<QString, std::shared_ptr<OGRSpatialReference>> _projections;
   QString _prependLayerName;
-  std::shared_ptr<const Schema> _schema;
-  StrictChecking _strictChecking;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 

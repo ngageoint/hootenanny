@@ -40,6 +40,12 @@
 //  Run tests against a local test server
 //#define RUN_LOCAL_TEST_SERVER
 
+//  Run tests against a production (OSM API and Overpass API)
+//#define RUN_PRODUCTION_TESTS
+
+//  Qt
+#include <QProcess>
+
 namespace hoot
 {
 
@@ -54,6 +60,12 @@ class OsmApiReaderTest : public HootTestFixture
   CPPUNIT_TEST(runSplitElementsTest);
   CPPUNIT_TEST(runFailureTest);
   CPPUNIT_TEST(runPolygonBoundsTest);
+  CPPUNIT_TEST(runStreamTest);
+#endif
+
+#ifdef RUN_PRODUCTION_TESTS
+  CPPUNIT_TEST(runOsmApiXmlTest);
+  CPPUNIT_TEST(runOverpassXmlTest);
 #endif
 
   CPPUNIT_TEST_SUITE_END();
@@ -68,6 +80,7 @@ public:
   const int PORT_SPLIT_GEO =      9901;
   const int PORT_SPLIT_ELEMENTS = 9902;
   const int PORT_POLYGON =        9903;
+  const int PORT_STREAM =         9904;
 
   OsmApiReaderTest()
     : HootTestFixture("test-files/io/OsmApiReaderTest/",
@@ -248,6 +261,77 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "PolygonBoundsTestExpected.osm", output);
 #endif
 
+  }
+
+  void runOsmApiXmlTest()
+  {
+#ifdef RUN_PRODUCTION_TESTS
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
+    reader.setConfiguration(s);
+    //  Read XML from OSM API and parse it
+    reader.open(OSM_API_URL + OsmApiEndpoints::API_PATH_MAP);
+    reader.read(map);
+
+    QString output = _outputPath + "OsmApiOutput.osm";
+
+    OsmXmlWriter writer;
+    writer.write(map, output);
+    writer.close();
+#endif
+  }
+
+  void runOverpassXmlTest()
+  {
+#ifdef RUN_PRODUCTION_TESTS
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
+    reader.setConfiguration(s);
+    //  Read XML from Overpass and parse it
+    reader.open("https://overpass-api.de/api/interpreter?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;");
+    reader.read(map);
+
+    QString output = _outputPath + "OverpassOutput.osm";
+
+    OsmXmlWriter writer;
+    writer.write(map, output);
+    writer.close();
+#endif
+  }
+
+  void runStreamTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    OverpassReaderTestServer server(PORT_STREAM);
+    server.start();
+
+    QString output_dir = _outputPath + "stream_test";
+    QString output_file = output_dir + ".shp";
+
+    FileUtils::removeDir(output_dir);
+
+    QString cmd = "hoot";
+    QStringList args;
+    args << "convert"
+         << "-D reader.http.bbox.max.size=0.025"
+         << "-D schema.translation.script=translations/TDSv71.js"
+         << "-D bounds=2.277303,48.851684,2.311635,48.864701"
+         << "-D overpass.api.host=localhost"
+         << "\"http://localhost:9904/api/interpreter?data=[out:xml];(node({{bbox}});(._;<;>;););out meta;\""
+         << output_file;
+
+    QProcess p;
+    p.start(cmd, args,QIODevice::ReadOnly);
+    p.waitForFinished();
+
+    server.shutdown();
+#endif
   }
 };
 

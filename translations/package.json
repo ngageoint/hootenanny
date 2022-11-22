@@ -7,13 +7,13 @@
     "test": "test"
   },
   "devDependencies": {
-    "@xmldom/xmldom": "^0.8.3",
+    "@xmldom/xmldom": "^0.8.4",
     "artillery": "^1.7.9",
     "lodash": ">=4.17.21",
     "mocha": "^9.2.1",
     "node-mocks-http": "^1.11.0",
     "nyc": "^15.1.0",
-    "osmtogeojson": "~3.0.0-beta.4",
+    "osmtogeojson": "~3.0.0-beta.5",
     "xml2js": "^0.4.23",
     "xmlbuilder": "^15.1.1"
   },

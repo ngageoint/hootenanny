@@ -452,7 +452,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           {
             //  The changeset was closed already so set the ID to -1 and reprocess
             id = -1;
-
             //  Split the changeset into half so that it is smaller and won't fail
             if ((int)workInfo->size() > _maxChangesetSize / 2)
               _splitChangeset(workInfo);
@@ -483,8 +482,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             continue;
           }
           //  Split the changeset and retry
-          if (!_splitChangeset(workInfo, info->response) &&
-              !workInfo->getAttemptedResolveChangesetIssues())
+          if (!_splitChangeset(workInfo, info->response) && !workInfo->getAttemptedResolveChangesetIssues())
           {
             //  Set the attempt issues resolved flag
             workInfo->setAttemptedResolveChangesetIssues(true);
@@ -498,8 +496,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
-          if (!_splitChangeset(workInfo, info->response) &&
-              !workInfo->getAttemptedResolveChangesetIssues())
+          if (!_splitChangeset(workInfo, info->response) && !workInfo->getAttemptedResolveChangesetIssues())
           {
             //  Set the attempt issues resolved flag
             workInfo->setAttemptedResolveChangesetIssues(true);
@@ -704,7 +701,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
   try
   {
     QUrl capabilities = _url;
-    capabilities.setPath(OsmApiEndpoints::API_PATH_CAPABILITIES);
+    capabilities.setPath(OsmApiEndpoints::OSM_API_PATH_CAPABILITIES);
     request->networkRequest(capabilities, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     QString printableUrl = capabilities.toString(QUrl::RemoveUserInfo);
@@ -728,7 +725,7 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request) const
   try
   {
     QUrl permissions = _url;
-    permissions.setPath(OsmApiEndpoints::API_PATH_PERMISSIONS);
+    permissions.setPath(OsmApiEndpoints::OSM_API_PATH_PERMISSIONS);
     request->networkRequest(permissions, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     success = _parsePermissions(responseXml);
@@ -746,11 +743,11 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
   try
   {
     QUrl map = _url;
-    map.setPath(OsmApiEndpoints::API_PATH_MAP);
+    map.setPath(OsmApiEndpoints::OSM_API_PATH_MAP);
     QUrlQuery query(map);
     //  Use the correct type of bbox for this query
     geos::geom::Envelope envelope(-77.42249541, -77.42249539, 38.96003149, 38.96003151);
-    QString bboxQuery = GeometryUtils::toConfigString(envelope);
+    QString bboxQuery = GeometryUtils::toLonLatString(envelope);
     query.addQueryItem("bbox", bboxQuery);
     map.setQuery(query);
     request->networkRequest(map, _timeout);
@@ -845,7 +842,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
   try
   {
     QUrl changeset = _url;
-    changeset.setPath(OsmApiEndpoints::API_PATH_CREATE_CHANGESET);
+    changeset.setPath(OsmApiEndpoints::OSM_API_PATH_CREATE_CHANGESET);
     QString xml = QString(
       "<osm>"
       "  <changeset>"
@@ -884,7 +881,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
   try
   {
     QUrl changeset = _url;
-    changeset.setPath(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(changeset_id));
+    changeset.setPath(QString(OsmApiEndpoints::OSM_API_PATH_CLOSE_CHANGESET).arg(changeset_id));
     request->networkRequest(changeset, _timeout, QNetworkAccessManager::Operation::PutOperation);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
@@ -950,7 +947,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
   try
   {
     QUrl change = _url;
-    change.setPath(QString(OsmApiEndpoints::API_PATH_UPLOAD_CHANGESET).arg(id));
+    change.setPath(QString(OsmApiEndpoints::OSM_API_PATH_UPLOAD_CHANGESET).arg(id));
 
     QByteArray content = changeset.toUtf8();
     QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
@@ -1070,7 +1067,7 @@ QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id) const
   if (id < 1)
     return "";
   //  Get the node by ID
-  return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
+  return _getElement(request, QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("node").arg(id));
 }
 
 QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id) const
@@ -1079,7 +1076,7 @@ QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id) const
   if (id < 1)
     return "";
   //  Get the way by ID
-  return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
+  return _getElement(request, QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("way").arg(id));
 }
 
 QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id) const
@@ -1088,13 +1085,13 @@ QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id) const
   if (id < 1)
     return "";
   //  Get the relation by ID
-  return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("relation").arg(id));
+  return _getElement(request, QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("relation").arg(id));
 }
 
 QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint) const
 {
   //  Don't follow an uninitialized URL or empty endpoint
-  if (endpoint == OsmApiEndpoints::API_PATH_GET_ELEMENT || endpoint == "")
+  if (endpoint == OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT || endpoint == "")
     return "";
   try
   {
@@ -1119,7 +1116,7 @@ bool OsmApiWriter::_hasNode(HootNetworkRequestPtr request, long id) const
   if (id < 1)
     return false;
   //  Get the way by ID
-  return _hasElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
+  return _hasElement(request, QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("node").arg(id));
 }
 
 bool OsmApiWriter::_hasWay(HootNetworkRequestPtr request, long id) const
@@ -1128,7 +1125,7 @@ bool OsmApiWriter::_hasWay(HootNetworkRequestPtr request, long id) const
   if (id < 1)
     return false;
   //  Get the way by ID
-  return _hasElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
+  return _hasElement(request, QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("way").arg(id));
 }
 
 bool OsmApiWriter::_hasRelation(HootNetworkRequestPtr request, long id) const
@@ -1137,13 +1134,13 @@ bool OsmApiWriter::_hasRelation(HootNetworkRequestPtr request, long id) const
   if (id < 1)
     return false;
   //  Get the way by ID
-  return _hasElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("relation").arg(id));
+  return _hasElement(request, QString(OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT).arg("relation").arg(id));
 }
 
 bool OsmApiWriter::_hasElement(HootNetworkRequestPtr request, const QString& endpoint) const
 {
   //  Don't follow an uninitialized URL or empty endpoint
-  if (endpoint == OsmApiEndpoints::API_PATH_GET_ELEMENT || endpoint == "")
+  if (endpoint == OsmApiEndpoints::OSM_API_PATH_GET_ELEMENT || endpoint == "")
     return false;
   try
   {

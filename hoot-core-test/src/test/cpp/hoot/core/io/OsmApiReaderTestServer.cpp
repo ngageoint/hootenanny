@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReaderTestServer.h"
@@ -41,7 +41,7 @@ bool SimpleReaderTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   //  Reply with ToyTestA.osm or with an HTTP 404 error
   HttpResponsePtr response;
-  if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_MAP) != std::string::npos)
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, FileUtils::readFully("test-files/ToyTestA.osm").toStdString());
   else
     response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
@@ -58,7 +58,7 @@ bool GeographicSplitReaderTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   HttpResponsePtr response;
   //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
-  if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos && _current < _max)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_MAP) != std::string::npos && _current < _max)
   {
     response = get_sequence_response(_headers);
     //  After the fourth section, shutdown the test server
@@ -106,7 +106,7 @@ bool ElementSplitReaderTestServer::respond(HttpConnectionPtr& connection)
   parse_request(connection);
   HttpResponsePtr response;
   //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
-  if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos && _current < _max)
+  if (_headers.find(OsmApiEndpoints::OSM_API_PATH_MAP) != std::string::npos && _current < _max)
   {
     response = get_sequence_response(_headers);
     //  After the fourth section, shutdown the test server
@@ -152,6 +152,54 @@ HttpResponsePtr ElementSplitReaderTestServer::get_sequence_response(const std::s
         response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, FileUtils::readFully(path).toStdString());
         _sequence_responses[request] = response;
       }
+    }
+  }
+  return response;
+}
+
+bool OverpassReaderTestServer::respond(HttpConnectionPtr& connection)
+{
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request
+  parse_request(connection);
+  HttpResponsePtr response;
+  //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
+  if (_headers.find(OsmApiEndpoints::OVERPASS_API_PATH) != std::string::npos && _current < _max)
+  {
+    response = get_sequence_response(_headers);
+    //  After the fourth section, shutdown the test server
+    if (_current == _max)
+      continue_processing = false;
+  }
+  else
+  {
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Continue processing while there is still something to process or while he haven't been interupted
+  return continue_processing && !get_interupt();
+}
+
+HttpResponsePtr OverpassReaderTestServer::get_sequence_response(const std::string& request)
+{
+  HttpResponsePtr response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
+  //  Only respond up until the max is reached, then shutdown
+  if (_current < _max)
+  {
+    //  If the same thing is being requested again, respond with the previous value
+    std::map<std::string, HttpResponsePtr>::iterator it = _sequence_responses.find(request);
+    if (it != _sequence_responses.end())
+      response = it->second;
+    else
+    {
+      //  Increment the sequence
+      _current++;
+      QString path = QString("test-files/io/OsmApiReaderTest/ToyTestAOverpass%1.osm").arg(_current);
+      response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, FileUtils::readFully(path).toStdString());
+      _sequence_responses[request] = response;
     }
   }
   return response;

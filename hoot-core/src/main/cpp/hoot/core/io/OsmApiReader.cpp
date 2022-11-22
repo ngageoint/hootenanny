@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/criterion/ChildElementCriterion.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -40,9 +39,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-
-// Qt
-#include <QBuffer>
 
 //  Geos
 #include <geos/geom/GeometryFactory.h>
@@ -97,10 +93,13 @@ QString OsmApiReader::supportedFormats() const
 
 bool OsmApiReader::isSupported(const QString& url) const
 {
+  //  Check if it is an XML Overpass URL
+  if (isOverpassXml(url))
+    return true;
   QStringList validPrefixes = supportedFormats().split(";");
   const QString checkString(url.toLower());
   //  Check the OSM API endpoint
-  if (!checkString.endsWith(OsmApiEndpoints::API_PATH_MAP))
+  if (!checkString.endsWith(OsmApiEndpoints::OSM_API_PATH_MAP))
     return false;
   //  Support HTTP and HTTPS URLs to OSM API servers
   for (const auto& prefix : qAsConst(validPrefixes))
@@ -112,40 +111,21 @@ bool OsmApiReader::isSupported(const QString& url) const
   return false;
 }
 
+void OsmApiReader::open(const QString& url)
+{
+  //  Base class open
+  OsmXmlReader::open(url);
+  //  Check if the URL is an Overpass URL
+  setOverpassUrl(url);
+}
+
 void OsmApiReader::read(const OsmMapPtr& map)
 {
-  LOG_VART(_status);
-  LOG_VART(_useDataSourceId);
-  LOG_VART(_useFileStatus);
-  LOG_VART(_keepStatusTag);
-  LOG_VART(_preserveAllTags);
-
-  //  Set the bounds once we begin the read if setBounds() hasn't already been called
-  if (_bounds == nullptr && _loadBounds())
-    setBounds(_boundingPoly);
-
-  if (_bounds == nullptr)
-    throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
-
-  //  Reusing the reader for multiple reads has two options, the first is the
-  //  default where the reader is reset and duplicates error out.  The second
-  //  is where duplicates are ignored in the same dataset and across datasets
-  //  so the ID maps aren't reset
-  if (!_ignoreDuplicates)
-  {
-    _nodeIdMap.clear();
-    _relationIdMap.clear();
-    _wayIdMap.clear();
-
-    _numRead = 0;
-    finalizePartial();
-  }
   _map = map;
   _map->appendSource(_url);
 
-  //  Spin up the threads. Use the envelope of the boundsto throw away any non-retangular bounds
-  // that may have been  passed.
-  beginRead(_url, *(_bounds->getEnvelopeInternal()));
+  //  Initialize the object
+  initializePartial();
 
   //  Iterate all of the XML results
   while (hasMoreResults())
@@ -184,18 +164,16 @@ void OsmApiReader::read(const OsmMapPtr& map)
   if (_isPolygon)
   {
     size_t element_count = _map->getElementCount();
-    std::shared_ptr<InBoundsCriterion> crit = std::make_shared<InBoundsCriterion>(false);
-    crit->setBounds(_boundingPoly);
     //  Remove any elements that don't meet the criterion
     RemoveElementsVisitor v(true);
-    v.addCriterion(crit);
+    v.addCriterion(_polyCriterion);
     v.setRecursive(true);
     v.setOsmMap(_map.get());
     _map->visitRw(v);
     size_t elements_filtered = element_count - _map->getElementCount();
     if (elements_filtered > 0)
       LOG_STATUS("Filtered " << elements_filtered << " out of bounds elements from OSM API.");
- }
+  }
   _map.reset();
 }
 
@@ -210,6 +188,8 @@ void OsmApiReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
   //  Check if the bounds are rectangular
   _isPolygon = bounds ? !bounds->isRectangle() : false;
   _boundingPoly = bounds;
+  _polyCriterion = std::make_shared<InBoundsCriterion>(false);
+  _polyCriterion->setBounds(_boundingPoly);
   Boundable::setBounds(bounds);
 }
 
@@ -218,7 +198,118 @@ void OsmApiReader::setBounds(const geos::geom::Envelope& bounds)
   //  An envelope isn't a poly bounds
   _isPolygon = false;
   _boundingPoly.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release());
+  _polyCriterion = std::make_shared<InBoundsCriterion>(false);
+  _polyCriterion->setBounds(_boundingPoly);
   Boundable::setBounds(bounds);
+}
+
+void OsmApiReader::initializePartial()
+{
+  LOG_VART(_status);
+  LOG_VART(_useDataSourceId);
+  LOG_VART(_useFileStatus);
+  LOG_VART(_keepStatusTag);
+  LOG_VART(_preserveAllTags);
+
+  //  Set the bounds once we begin the read if setBounds() hasn't already been called
+  if (_bounds == nullptr && _loadBounds())
+    setBounds(_boundingPoly);
+
+  if (_bounds == nullptr)
+    throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
+
+  //  Reusing the reader for multiple reads has two options, the first is the
+  //  default where the reader is reset and duplicates error out.  The second
+  //  is where duplicates are ignored in the same dataset and across datasets
+  //  so the ID maps aren't reset
+  if (!_ignoreDuplicates)
+  {
+    _nodeIdMap.clear();
+    _relationIdMap.clear();
+    _wayIdMap.clear();
+
+    _numRead = 0;
+    finalizePartial();
+  }
+
+  //  Spin up the threads. Use the envelope of the boundsto throw away any non-retangular bounds
+  // that may have been  passed.
+  beginRead(_url, *(_bounds->getEnvelopeInternal()));
+}
+
+bool OsmApiReader::hasMoreElements()
+{
+  //  Check if there is anything to read and parse
+  if (!hasMoreResults() && _streamReader.atEnd())
+    return false;
+  //  Check if there is an open buffer to read from
+  if (!_xmlBuffer.isOpen())
+  {
+    finalizePartial();
+    //  map needed for assigning new element ids only (not actually putting any of the elements that
+    //  are read into this map, since this is the partial reading logic)
+    _map = std::make_shared<OsmMap>();
+
+    QString xmlResult;
+    //  Get one XML string to parse
+    while (!getSingleResult(xmlResult))
+    {
+      if (!hasMoreResults())
+        return false;
+      _sleep();
+    }
+
+    if (_xmlBuffer.isOpen())
+      _xmlBuffer.close();
+    _xmlBuffer.setData(xmlResult.toUtf8());
+    _xmlBuffer.open(QBuffer::ReadOnly);
+    _streamReader.setDevice(&_xmlBuffer);
+
+    //  check for a valid osm header as soon as the file is opened
+    while (!_foundOsmHeaderXmlStartElement() && !_streamReader.atEnd())
+      _streamReader.readNext();
+
+    if (!_osmFound)
+      throw HootException("Unable to parse XML result from " + _url);
+  }
+
+  //  chew up tokens until we find a node/way/relation start element or read to the end of the file
+  while (!_foundOsmElementXmlStartElement() && !_streamReader.atEnd())
+    _streamReader.readNext();
+
+  if ((_streamReader.isEndElement() && _streamReader.name().toString() == "osm") || _streamReader.atEnd())
+  {
+    //  Close the buffer
+    _xmlBuffer.close();
+    //  Check if there are more buffers coming in
+    if (hasMoreResults())
+      return hasMoreElements();
+    else
+      return false;
+  }
+  //  Read the next element and is available in _element
+  return true;
+}
+
+ElementPtr OsmApiReader::readNextElement()
+{
+  //  Grab the next element from the OsmXmlReader
+  ElementPtr result = OsmXmlReader::readNextElement();
+  //  Make sure that the element hasn't been read before, this can happen because elements
+  //  that span more than one bounding box will be returned from the API in each of the bounding
+  //  boxes.  Write the first, ignore the subsequent ones
+  while (!_canUseElement(result))
+  {
+    //  Check for the next element and read it, otherwise return an empty element
+    if (hasMoreElements())
+      result = OsmXmlReader::readNextElement();
+    else
+      return ElementPtr();
+  }
+  //  Add the element to the set
+  _elementSet.emplace(result->getElementType(), result->getId());
+  //  Return the element read
+  return result;
 }
 
 bool OsmApiReader::_loadBounds()
@@ -241,6 +332,18 @@ bool OsmApiReader::_loadBounds()
     return true;
   }
   return false;
+}
+
+bool OsmApiReader::_canUseElement(const ElementPtr& element) const
+{
+  if (!element)
+    return false;
+  else if (_elementSet.find(element->getElementId()) != _elementSet.end())
+    return false;
+  else if (_isPolygon && element->getElementType() != ElementType::Node && !_polyCriterion->isSatisfied(element))
+    return false;
+  else
+    return true;
 }
 
 }

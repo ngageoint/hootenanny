@@ -20,6 +20,11 @@ hoot changeset-derive -C Testing.conf -C DeriveJosmOsm.conf test-files/ToyBuildi
 diff $INPUT_DIR/changeset-11.osm $OUTPUT_DIR/changeset-11.osm
 diff $INPUT_DIR/changeset-stats-11.json $OUTPUT_DIR/changeset-stats-11.json
 
+echo "Deriving changeset with review to a JOSM OSM file..."
+hoot changeset-derive -C Testing.conf -C DeriveJosmOsm.conf $INPUT_DIR/AllDataTypesA.osm $INPUT_DIR/AllDataTypesConflated.osm  $OUTPUT_DIR/changeset-13.osm --stats $OUTPUT_DIR/changeset-stats-13.json
+diff $INPUT_DIR/changeset-13.osm $OUTPUT_DIR/changeset-13.osm
+diff $INPUT_DIR/changeset-stats-13.json $OUTPUT_DIR/changeset-stats-13.json
+
 echo "Deriving changeset single input with in-memory element sorting..."
 hoot changeset-derive -C Testing.conf -C DeriveChangeset.conf --stats $OUTPUT_DIR/changeset-stats-2.json $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-2.osc
 diff $INPUT_DIR/changeset-2.osc $OUTPUT_DIR/changeset-2.osc

@@ -1,0 +1,14 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [ "area" ],
+        "influence": 1,
+        "name": "landcover",
+        "objectType": "tag"
+    },
+    {
+        "isA": "landcover",
+        "name": "landcover=*",
+        "objectType": "tag"
+    }
+]

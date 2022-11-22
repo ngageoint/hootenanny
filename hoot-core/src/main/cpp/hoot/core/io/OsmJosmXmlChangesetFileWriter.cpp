@@ -115,6 +115,11 @@ void OsmJosmXmlChangesetFileWriter::_writeXmlActionAttribute(QXmlStreamWriter& w
 
 void OsmJosmXmlChangesetFileWriter::_getOptionalTags(Tags& tags, const Element* element) const
 {
+  //  Remove all of the hoot tags execept for the review tags
+  if (element->getElementType() == ElementType::Relation)
+    tags.removeNonReviewHootTags();
+  else
+    tags.removeHootTags();
   //  Rather than cloning the element, get the export tags from the visitor
   tags.add(_addExportTagsVisitor.getExportTags(element));
 }
