@@ -40,7 +40,7 @@ transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 hoot.Log.setLogLevel("warn");
 
 // Skip the TransportationGroundCrv type layers
-hoot.Settings.set({"ogr.thematic.structure":"true"});
+hoot.Settings.set({"writer.thematic.structure":"true"});
 
 // LOTS of debug output
 // hoot.Settings.set({"ogr.debug.dumptags":"true"});

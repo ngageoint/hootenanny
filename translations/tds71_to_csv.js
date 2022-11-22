@@ -55,7 +55,7 @@ require(HOOT_HOME + '/translations/fcode_common.js')
 
 // transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 // Skip the TransportationGroundCrv type layers
-// hoot.Settings.set({"ogr.thematic.structure":"false"});
+// hoot.Settings.set({"writer.thematic.structure":"false"});
 // LOTS of debug output
 // hoot.Settings.set({"ogr.debug.dumptags":"true"});
 // hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
