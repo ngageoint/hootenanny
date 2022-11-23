@@ -2,7 +2,7 @@
 set -e
 
 # Test adding a hood:id tag to output
-INPUT=test-files/RoadBridge.osm
+INPUT=test-files/building_Valqueire.osm
 OUTPUT=test-output/cmd/slow/hootId
 
 TRANS_GGDM="-D schema.translation.script=$HOOT_HOME/translations/GGDMv30.js"
@@ -44,7 +44,7 @@ hoot convert $CONFIG \
 
 
 # Now check that the inputs have hoot:id tags
-ogrinfo -ro -al -geom=no $OUTPUT/ogr/ROAD_C.shp  > $OUTPUT/out_shp.txt
+ogrinfo -ro -al -geom=no $OUTPUT/ogr/BUILDING_P.shp  > $OUTPUT/out_shp.txt
 
 echo "Expecting five outputs to have hoot:id tags."
 
