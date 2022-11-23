@@ -58,7 +58,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 
 OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
-  : OsmGeoJsonWriterBase(precision)
+  : OsmJsonWriter(precision),
+    _useTaskingManagerFormat(ConfigOptions().getJsonOutputTaskingManagerAoi())
 {
   //  GeoJSON should always output valid GeoJSON and not the Hoot JSON format
   _writeHootFormat = false;
@@ -109,7 +110,7 @@ QString OsmGeoJsonWriter::toString(const ConstOsmMapPtr& map)
 
 void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
 {
-  OsmGeoJsonWriterBase::setConfiguration(conf);
+  OsmJsonWriter::setConfiguration(conf);
   _useTaskingManagerFormat = ConfigOptions(conf).getJsonOutputTaskingManagerAoi();
   //  GeoJSON should always output valid GeoJSON and not the Hoot JSON format
   _writeHootFormat = false;
@@ -160,7 +161,6 @@ void OsmGeoJsonWriter::_writeNodes()
     }
   }
 }
-
 
 void OsmGeoJsonWriter::_writeWays()
 {
@@ -246,6 +246,203 @@ void OsmGeoJsonWriter::_writeRelations()
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
+}
+
+void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
+{
+  vector<long> node;
+  node.push_back(n->getId());
+  _writeGeometry(node, "Point");
+}
+
+void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
+{
+  const vector<long>& nodes = w->getNodeIds();
+  string geoType = "LineString";
+  if (_useTaskingManagerFormat)
+    geoType = "MultiPolygon";
+  else if (AreaCriterion().isSatisfied(w) || (!nodes.empty() && nodes[0] == nodes[nodes.size() - 1]))
+    geoType = "Polygon";
+  _writeGeometry(nodes, geoType);
+}
+
+void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
+{
+  const vector<RelationData::Entry>& members = r->getMembers();
+  _writeKvp("type", "GeometryCollection"); _write(",");
+  _write("\"geometries\": [");
+  bool first = true;
+  for (const auto& member : members)
+  {
+    ConstElementPtr e = _map->getElement(member.getElementId());
+    if (e.get() == nullptr)
+      continue;
+    if (first)
+      first = false;
+    else
+      _write(",");
+    _write("{");
+    _writeGeometry(e);
+    _write("}");
+  }
+  _write("]");
+}
+
+void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e)
+{
+  switch(e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    _writeGeometry(std::dynamic_pointer_cast<const Node>(e));
+    break;
+  case ElementType::Way:
+    _writeGeometry(std::dynamic_pointer_cast<const Way>(e));
+    break;
+  case ElementType::Relation:
+    _writeGeometry(std::dynamic_pointer_cast<const Relation>(e));
+    break;
+  default:
+    throw HootException(QString("Unexpected element type: %1").arg(e->getElementType().toString()));
+  }
+}
+
+void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
+{
+  //  Build a temporary vector of valid nodes
+  vector<long> temp_nodes;
+  for (auto node_id : nodes)
+  {
+    if (_map->getNode(node_id).get() != nullptr)
+      temp_nodes.push_back(node_id);
+  }
+  //  Empty nodes list should output an empty coordinate array
+  if (temp_nodes.empty())
+  {
+    _writeKvp("type", type.c_str());
+    _write(",");
+    _write("\"coordinates\": []");
+    return;
+  }
+  //  Update the geometry type if necessary
+  if (temp_nodes.size() < 2 && type.compare("Point") != 0)
+    type = "Point";
+  if (temp_nodes.size() < 4 && type.compare("Polygon") == 0)
+    type = "LineString";
+  if (type.compare("Polygon") == 0 && temp_nodes[0] != temp_nodes[temp_nodes.size() - 1])
+    type = "LineString";
+  _writeKvp("type", type.c_str());
+  _write(",");
+  _write("\"coordinates\": ");
+  bool point = (type.compare("Point") == 0);
+  bool polygon = (type.compare("Polygon") == 0);
+  bool multipoly = (type.compare("MultiPolygon") == 0);
+  if (!point)
+    _write("[");
+  if (polygon)
+    _write("[");
+  if (multipoly)
+    _write("[[");
+  bool first = true;
+  for (auto node_id : temp_nodes)
+  {
+    if (first)
+      first = false;
+    else
+      _write(",");
+    ConstNodePtr n = _map->getNode(node_id);
+    _write(QString("[%1, %2]").arg(QString::number(n->getX(), 'g', _precision), QString::number(n->getY(), 'g', _precision)));
+  }
+  if (multipoly)
+    _write("]]");
+  if (polygon)
+    _write("]");
+  if (!point)
+    _write("]");
+}
+
+void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
+{
+  _writeKvp("type", "Feature");
+  if (_writeHootFormat)
+  {
+    _write(",");
+    _writeKvp("id", QString::number(e->getId()));
+    _write(",");
+    _writeKvp("type", _typeName(e->getElementType()));
+  }
+  if (_hasTags(e))
+  {
+    _write(",");
+    _writeTags(e);
+  }
+  if (e->getElementType() == ElementType::Relation)
+  {
+    _write(",");
+    _writeRelationInfo(std::dynamic_pointer_cast<const Relation>(e));
+  }
+}
+
+void OsmGeoJsonWriter::_writeNode(ConstNodePtr node)
+{
+  if (node.get() == nullptr)
+    return;
+  _write("{");
+  _writeFeature(node);
+  _write(",");
+  _write("\"geometry\": {");
+  _writeGeometry(node);
+  _write("}");
+  _write("}", false);
+}
+
+void OsmGeoJsonWriter::_writeWay(ConstWayPtr way)
+{
+  if (way.get() == nullptr)
+    return;
+  //  Write out the way in geojson
+  _write("{");
+  _writeFeature(way);
+  _write(",");
+  _write("\"geometry\": {");
+  _writeGeometry(way);
+  _write("}");
+  _write("}", false);
+
+}
+
+void OsmGeoJsonWriter::_writeRelationInfo(ConstRelationPtr r)
+{
+  _writeKvp("relation-type", r->getType()); _write(",");
+  QString roles = _buildRoles(r).c_str();
+  _writeKvp("roles", roles);
+}
+
+string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r)
+{
+  bool first = true;
+  return _buildRoles(r, first);
+}
+
+string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
+{
+  stringstream ss;
+  const vector<RelationData::Entry>& members = r->getMembers();
+  //  Iterate all members and concatenate the roles separated by a semicolon
+  for (const auto& member : members)
+  {
+    ConstElementPtr e = _map->getElement(member.getElementId());
+    if (e.get() == nullptr)
+      continue;
+    if (first)
+      first = false;
+    else
+      ss << ";";
+    ss << member.getRole();
+    //  Recursively get the roles of the sub-relation that is valid
+    if (member.getElementId().getType() == ElementType::Relation && _map->getRelation(member.getElementId().getId()).get() != nullptr)
+      ss << ";" << _buildRoles(_map->getRelation(member.getElementId().getId()), first);
+  }
+  return ss.str();
 }
 
 }
