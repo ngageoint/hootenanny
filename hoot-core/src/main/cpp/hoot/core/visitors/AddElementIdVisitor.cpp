@@ -38,7 +38,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddElementIdVisitor)
 void AddElementIdVisitor::visit(const ElementPtr& pElement)
 {
   Tags& tags = pElement->getTags();
-  tags[MetadataTags::HootId()] = QString::number(pElement->getId());
+  tags[MetadataTags::HootId()] = pElement->getElementId().toString();
 }
 
 }
