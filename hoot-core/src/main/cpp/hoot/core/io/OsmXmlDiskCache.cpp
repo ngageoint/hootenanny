@@ -41,10 +41,7 @@ namespace hoot
 OsmXmlDiskCache::OsmXmlDiskCache()
 {
   // Setup our temp file & get guaranteed unique name
-  QString tempFname = ConfPath::getHootHome() + "/"
-                    + ConfigOptions().getDebugMapsFilename();
-  QFileInfo fi(tempFname);
-  QString fnameTemplate = fi.absolutePath() + "/disk.cache.osm.XXXXXX";
+  QString fnameTemplate = ConfPath::getHootHome() + "/tmp/disk.cache.osm.XXXXXX";
   _pTempFile = std::make_shared<QTemporaryFile>(fnameTemplate);
   if (!_pTempFile->open())
   {
