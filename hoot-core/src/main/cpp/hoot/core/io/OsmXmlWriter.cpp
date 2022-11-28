@@ -206,12 +206,6 @@ uint64_t OsmXmlWriter::getPos()
   return _fp->pos();
 }
 
-void OsmXmlWriter::flush()
-{
-  //if (_fp && _fp->isOpen())
-  //  _fp->
-}
-
 void OsmXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
