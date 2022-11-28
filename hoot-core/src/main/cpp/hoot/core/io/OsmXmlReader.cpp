@@ -283,6 +283,21 @@ bool OsmXmlReader::fatalError(const QXmlParseException& exception)
   return false;
 }
 
+bool OsmXmlReader::seekAndReset(uint64_t pos)
+{
+  _nodeIdMap.clear();
+  _wayIdMap.clear();
+  _relationIdMap.clear();
+  _inputFile.seek(pos);
+  _streamReader.setDevice(&_inputFile);
+  return true;
+}
+
+uint64_t OsmXmlReader::pos()
+{
+  return _inputFile.pos();
+}
+
 bool OsmXmlReader::isSupported(const QString& url) const
 {
   QStringList validExtensions = supportedFormats().split(";");

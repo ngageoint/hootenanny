@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -51,8 +51,10 @@ public:
 
   bool isSupported(const QString& url) const override { return url.endsWith(".osm", Qt::CaseInsensitive); }
   void open(const QString& url) override;
+  void openunbuff(const QString& url);
   void close() override;
   QString supportedFormats() const override { return ".osm"; }
+  uint64_t getPos(); // Get underlying position from file handle
   void write(const ConstOsmMapPtr& map) override;
   void writePartial(const ConstNodePtr& node) override;
   void writePartial(const ConstWayPtr& way) override;
