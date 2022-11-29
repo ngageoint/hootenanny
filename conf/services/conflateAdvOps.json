@@ -280,7 +280,7 @@
         "name":"General Conflation Options",
         "members":[
             {
-            	"id":"add_review_tags_to_features",
+                "id":"add_review_tags_to_features",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, not only will review relations receive the hoot:review:needs tag, the features involved in the review will receive them as well.",
@@ -335,7 +335,7 @@
                 "defaultvalue":"true"
             },
             {
-            	"id":"edge_distance_extractor_spacing",
+                "id":"edge_distance_extractor_spacing",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"The spacing used by the EdgeDistanceExtractor.  Units in meters.",
@@ -370,7 +370,7 @@
                 ]
             },
             {
-            	"id":"token_keep_non_words",
+                "id":"token_keep_non_words",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"This does a rudimentary check to see if the string contains any letters/numbers. If the string doesn't contain any letters or numbers then it will be dropped.",
@@ -378,7 +378,7 @@
                 "hoot_key":"token.keep.non.words"
             },
             {
-            	"id":"levenshtein_distance_alpha",
+                "id":"levenshtein_distance_alpha",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"Raise the Levenshtein score to this power before returning this result. If alpha is greater than 1 then this makes low scores even lower. Valid values are greater than 0.",
@@ -388,7 +388,7 @@
                 "hoot_key":"levenshtein.distance.alpha"
             },
             {
-            	"id":"duplicate_node_remover_distance_threshold",
+                "id":"duplicate_node_remover_distance_threshold",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"When merging nodes during convert, determines what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
@@ -398,7 +398,7 @@
                 "hoot_key":"duplicate.node.remover.distance.threshold"
             },
             {
-            	"id":"token_min_size",
+                "id":"token_min_size",
                 "minvalue":"0.0",
                 "elem_type":"double",
                 "description":"This is the minimum string size that the string tokenizer should accept as a token. If the string length is less than this value, then it will not be accepted. Set the value to 0 if you want to accept all strings.  This setting primarily applies to string comparison functions and will eliminate comparing very short strings.",
@@ -407,8 +407,8 @@
                 "defaultvalue":"3.0",
                 "hoot_key":"token.min.size"
             },
-	       {
-            	"id":"node_matcher_strictness",
+            {
+                "id":"node_matcher_strictness",
                 "minvalue":"0.0",
                 "elem_type":"double",
                 "description":"Determines how strictly the angle should be considered when calculating intersection tie points for rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more strict.",
@@ -426,15 +426,15 @@
                 "hoot_key":"ogr.esri.fcsubtype"
             },
             {
-                "id":"ogr_thematic_structure",
+                "id":"writer_thematic_structure",
                 "elem_type":"checkbox",
                 "description":"Export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).",
                 "name":"OGR Thematic Structure",
                 "defaultvalue":"true",
-                "hoot_key":"ogr.thematic.structure"
+                "hoot_key":"writer.thematic.structure"
             },
             {
-            	"id":"language_translation_string_distance_tokenize",
+                "id":"language_translation_string_distance_tokenize",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"Set to true if the strings should be tokenized (split into words) before translating the values.",
@@ -457,8 +457,8 @@
                 "name":"Preserve element ids from the Secondary layer during conflation",
                 "hoot_key":"conflate.use.data.source.ids.2"
             },
-	    {
-            	"id":"weighted_metric_distance_extractor_search_radius",
+            {
+                "id":"weighted_metric_distance_extractor_search_radius",
                 "minvalue":"-1.0",
                 "elem_type":"double",
                 "description":"The search radius used by the WeightedMetricDistanceExtractor.  Units in meters.  Defaults to a value computed from the circular error for each way being examined.",
@@ -494,7 +494,7 @@
                 "onchange":"true"
             },
             {
-            	"id":"search_radius_highway",
+                "id":"search_radius_highway",
                 "minvalue":"-1",
                 "elem_type":"double",
                 "description":"The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
@@ -502,12 +502,12 @@
                 "name":"Road Search Radius",
                 "defaultvalue":"-1",
                 "override":{
-                	"defaultvalue":"-1"
+                    "defaultvalue":"-1"
                 },
                 "hoot_key":"search.radius.highway"
             },
             {
-            	"id":"way_merger_min_split_size",
+                "id":"way_merger_min_split_size",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"The minimum size that a way should be split into for merging. Units in meters.",
@@ -583,15 +583,15 @@
                                 "hoot_key":"highway.matcher.max.angle"
                             },
                             {
-                		"id":"highway_max_enum_diff",
-                		"minvalue":"0.01",
-                		"elem_type":"double",
-                		"description":"If two highways have significantly different enumerated types then they will not be considered for match. For example: highway=primary vs highway=secondary has a diff of 0.2.  highway=primary vs highway=footway has a diff of 0.67.",
-                		"maxvalue":"1.0",
-                		"name":"Highway Max Enum Diff",
-                		"defaultvalue":"0.6",
-                		"hoot_key":"highway.max.enum.diff"
-           		    }
+                                "id":"highway_max_enum_diff",
+                                "minvalue":"0.01",
+                                "elem_type":"double",
+                                "description":"If two highways have significantly different enumerated types then they will not be considered for match. For example: highway=primary vs highway=secondary has a diff of 0.2.  highway=primary vs highway=footway has a diff of 0.67.",
+                                "maxvalue":"1.0",
+                                "name":"Highway Max Enum Diff",
+                                "defaultvalue":"0.6",
+                                "hoot_key":"highway.max.enum.diff"
+                            }
                         ]
                     },
                     {
@@ -648,7 +648,7 @@
         "name":"Differential Conflation Options",
         "members":[
             {
-            	"id":"differential_snap_unconnected_features",
+                "id":"differential_snap_unconnected_features",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected secondary feature endpoint nodes to the nearest reference feature.",
@@ -656,7 +656,7 @@
                 "hoot_key":"differential.snap.unconnected.features"
             },
             {
-            	"id":"differential_road_remove_reference_data",
+                "id":"differential_road_remove_reference_data",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"If false, when running Differential Conflation the reference elements will not be dropped from the output.",
@@ -664,7 +664,7 @@
                 "hoot_key":"differential.remove.reference.data"
             },
             {
-            	"id":"differential_feature_snap_tolerance",
+                "id":"differential_feature_snap_tolerance",
                 "elem_type":"double",
                 "description":"Maximum distance, in meters, allowed between an unconnected linear feature and a neighboring linear feature for the unconnected feature to be snapped to the closest section of the neighboring linear feature.",
                 "name":"Road Snap Tolerance",
@@ -674,7 +674,7 @@
                 "hoot_key":"snap.unconnected.ways.snap.tolerance"
             },
             {
-            	"id":"differential_feature_snap_use_existing_feature_nodes",
+                "id":"differential_feature_snap_use_existing_feature_nodes",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"If true, when feature nodes are snapped to neighboring features, Hootenanny will attempt to snap to existing feature nodes on instead of adding new ones.",
@@ -682,7 +682,7 @@
                 "hoot_key":"snap.unconnected.ways.use.existing.way.nodes"
             },
             {
-            	"id":"differential_feature_snap_existing_feature_node_tolerance",
+                "id":"differential_feature_snap_existing_feature_node_tolerance",
                 "elem_type":"double",
                 "description":"Maximum distance, in meters, allowed between an unconnected feature and a neighboring feature for the feature node to be snapped directly to the existing feature node.",
                 "name":"Name Score Threshold",
@@ -776,23 +776,23 @@
                 "required":"true"
             },
             {
-        	"id":"building_date_format",
-        	"elem_type":"string",
-        	"description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
-        	"name":"Date Format",
-        	"defaultvalue":"yyyy-MM-ddTHH:mm",
-        	"hoot_key":"building.date.format",
-        	"onchange":"true"
-    	    },
+                "id":"building_date_format",
+                "elem_type":"string",
+                "description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
+                "name":"Date Format",
+                "defaultvalue":"yyyy-MM-ddTHH:mm",
+                "hoot_key":"building.date.format",
+                "onchange":"true"
+            },
             {
-        	"id":"building_date_tag_key",
-        	"elem_type":"string",
-        	"description":"Tag key used by the building.review.if.secondary.newer configuration option.",
-        	"name":"Date Tag Key",
-        	"defaultvalue":"source:date",
-        	"hoot_key":"building.date.tag.key",
-        	"onchange":"true"
-    	    },
+                "id":"building_date_tag_key",
+                "elem_type":"string",
+                "description":"Tag key used by the building.review.if.secondary.newer configuration option.",
+                "name":"Date Tag Key",
+                "defaultvalue":"source:date",
+                "hoot_key":"building.date.tag.key",
+                "onchange":"true"
+            },
             {
               "id": "building_force_contained_match",
               "elem_type": "bool",
@@ -802,7 +802,7 @@
               "hoot_key": "building.force.contained.match"
             },
             {
-            	"id":"building_keep_more_complex_geometry_when_auto_merging",
+                "id":"building_keep_more_complex_geometry_when_auto_merging",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
@@ -819,7 +819,7 @@
               "hoot_key":"building.match.threshold"
             },
             {
-            	"id":"building_merge_many_to_many_matches",
+                "id":"building_merge_many_to_many_matches",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
@@ -827,7 +827,7 @@
                 "hoot_key":"building.merge.many.to.many.matches"
             },
             {
-            	"id":"building_review_if_secondary_newer",
+                "id":"building_review_if_secondary_newer",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, any buildings in the secondary layer will be automatically reviewed against potentially matching features in the reference layer if they are marked with a more recent date than that of the reference feature.",
@@ -835,7 +835,7 @@
                 "hoot_key":"building.review.if.secondary.newer"
             },
             {
-            	"id":"building_review_matches_other_than_one_to_one",
+                "id":"building_review_matches_other_than_one_to_one",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, any building matches other than 1:1 matches are automatically marked for review.",
@@ -859,7 +859,7 @@
                 "onchange":"true"
             },
             {
-            	"id":"poi_ignore_type_if_name_present",
+                "id":"poi_ignore_type_if_name_present",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, POI to POI conflation will ignore the types of the features being compared completely as long as those being compared have a populated name field.",
@@ -867,26 +867,26 @@
                 "hoot_key":"poi.ignore.type.if.name.present"
             },
             {
-            	"id":"poi_match_creator_unifying",
+                "id":"poi_match_creator_unifying",
                 "elem_type":"string",
                 "description":"",
                 "name":"Match Creator",
                 "required":"true",
                 "defaultvalue":"ScriptMatchCreator,Poi.js",
                 "override":{
-                	"defaultvalue":"ScriptMatchCreator,Poi.js"
+                    "defaultvalue":"ScriptMatchCreator,Poi.js"
                 },
-            	"hoot_key":"match.creators"
+                "hoot_key":"match.creators"
             },
             {
-            	"id":"poi_merger_creator_unifying",
+                "id":"poi_merger_creator_unifying",
                 "elem_type":"string",
                 "description":"",
                 "name":"Merger Creator",
                 "required":"true",
                 "defaultvalue":"ScriptMergerCreator",
                 "override":{
-                	"defaultvalue":"ScriptMergerCreator"
+                    "defaultvalue":"ScriptMergerCreator"
                 },
                 "hoot_key":"merger.creators"
             }
@@ -907,116 +907,117 @@
                 "onchange":"true"
             },
             {
-            	"id":"poi_poly_match_creator_unifying",
+                "id":"poi_poly_match_creator_unifying",
                 "elem_type":"string",
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-		"name":"Match Creator",
+                 "name":"Match Creator",
                 "required":"true",
                 "defaultvalue":"PoiPolygonMatchCreator",
                 "override":{
-                	"defaultvalue":"PoiPolygonMatchCreator"
-                	},
+                    "defaultvalue":"PoiPolygonMatchCreator"
+                },
                 "hoot_key":"match.creators"
             },
             {
-            	"id":"poi_poly_merger_creator_unifying",
+                "id":"poi_poly_merger_creator_unifying",
                 "elem_type":"string",
                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Merger Creator",
                 "required":"true",
                 "defaultvalue":"PoiPolygonMergerCreator",
                 "override":{
-                	"defaultvalue":"PoiPolygonMergerCreator"
+                    "defaultvalue":"PoiPolygonMergerCreator"
                 },
                 "hoot_key":"merger.creators"
             },
             {
-        	"id":"poipolygon_address_additional_tag_keys",
-        	"elem_type":"string",
-        	"description":"By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
-        	"name":"Address Additional Tag Keys",
-        	"defaultvalue":"",
-        	"hoot_key":"address.additional.tag.keys",
-        	"onchange":"true"
-    	    },
+                "id":"poipolygon_address_additional_tag_keys",
+                "elem_type":"string",
+                "description":"By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+                "name":"Address Additional Tag Keys",
+                "defaultvalue":"",
+                "hoot_key":"address.additional.tag.keys",
+                "onchange":"true"
+            },
+
             {
-        	"id":"poipolygon_address_allow_lenient_house_number_matching",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street",
-        	"name":"Allow Lenient House Number Matching",
-        	"hoot_key":"address.allow.lenient.house.number.matching"
-    	    },
+                "id":"poipolygon_address_allow_lenient_house_number_matching",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street",
+                "name":"Allow Lenient House Number Matching",
+                "hoot_key":"address.allow.lenient.house.number.matching"
+            },
             {
-        	"id":"address_match_enabled",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If true, conflators that support address matching will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
-        	"name":"Address Match Enabled",
-        	"hoot_key":"address.match.enabled"
-    	    },
+                "id":"address_match_enabled",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If true, conflators that support address matching will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
+                "name":"Address Match Enabled",
+                "hoot_key":"address.match.enabled"
+            },
             {
-        	"id":"poipolygon_allow_cross_conflation_merging",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
-        	"name":"Allow Cross Conflation Merging",
-        	"hoot_key":"poi.polygon.allow.cross.conflation.merging"
-    	    },
+                "id":"poipolygon_allow_cross_conflation_merging",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
+                "name":"Allow Cross Conflation Merging",
+                "hoot_key":"poi.polygon.allow.cross.conflation.merging"
+            },
             {
-        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
-		"name":"Merge Many POI to Single Polygon Matches",
-        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
-    	    },
+                "id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
+                "name":"Merge Many POI to Single Polygon Matches",
+                "hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
+            },
             {
-        	"id":"poipolygon_disable_same_source_conflation",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, POI to polygon conflation will not attempt to conflate two features with the same source tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when you have a data layer where data has been collected as both POIs and polygons for the same source and you never want the two source to be conflated together.",
-        	"name":"Disable Same Source Conflation",
-        	"hoot_key":"poi.polygon.disable.same.source.conflation"
-    	    },
+                "id":"poipolygon_disable_same_source_conflation",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, POI to polygon conflation will not attempt to conflate two features with the same source tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when you have a data layer where data has been collected as both POIs and polygons for the same source and you never want the two source to be conflated together.",
+                "name":"Disable Same Source Conflation",
+                "hoot_key":"poi.polygon.disable.same.source.conflation"
+            },
             {
-        	"id":"poipolygon_disable_same_source_conflation_match_tag_key_prefix_only",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation will disable conflation only between features who have the exact same source tag value.  e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is set to true, then the tag matcher is less strict and will attempt to match the prefix of the source tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.",
-        	"name":"Disable Same Source Conflation Match Tag Key Prefix Only",
-        	"hoot_key":"poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only"
-    	    },
+                "id":"poipolygon_disable_same_source_conflation_match_tag_key_prefix_only",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation will disable conflation only between features who have the exact same source tag value.  e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is set to true, then the tag matcher is less strict and will attempt to match the prefix of the source tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.",
+                "name":"Disable Same Source Conflation Match Tag Key Prefix Only",
+                "hoot_key":"poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only"
+            },
             {
-        	"id":"poipolygon_keep_closest_matches_only",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs only.  The conflation will not match additional features at greater distances, even if they are within the match distance threshold.  Multiple features matches are still possible in the case of exact distance ties.  If this setting is false, then multiple POIs found within the match distance threshold of a polygon are treated as reviews.",
+                "id":"poipolygon_keep_closest_matches_only",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs only.  The conflation will not match additional features at greater distances, even if they are within the match distance threshold.  Multiple features matches are still possible in the case of exact distance ties.  If this setting is false, then multiple POIs found within the match distance threshold of a polygon are treated as reviews.",
                 "name":"Keep Closest Matches Only",
-        	"hoot_key":"poi.polygon.keep.closest.matches.only"
-    	    },
+                "hoot_key":"poi.polygon.keep.closest.matches.only"
+            },
             {
-        	"id":"poipolygon_match_distance_threshold",
-        	"elem_type":"int",
-        	"description":"The maximum distance, in meters, between a POI and a polygon where they can still be considered a match based on distance criteria only.",
-        	"name":"Match Distance Threshold",
-        	"defaultvalue":"5",
-        	"minvalue":"0",
-        	"maxvalue":"",
-        	"hoot_key":"poi.polygon.match.distance.threshold"
-    	    },
+                "id":"poipolygon_match_distance_threshold",
+                "elem_type":"int",
+                "description":"The maximum distance, in meters, between a POI and a polygon where they can still be considered a match based on distance criteria only.",
+                "name":"Match Distance Threshold",
+                "defaultvalue":"5",
+                "minvalue":"0",
+                "maxvalue":"",
+                "hoot_key":"poi.polygon.match.distance.threshold"
+            },
             {
-        	"id":"poipolygon_match_evidence_threshold",
-        	"elem_type":"int",
-        	"description":"The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.  If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a review or miss, depending on the value of 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
-        	"name":"Match Evidence Threshold",
-        	"defaultvalue":"3",
-        	"minvalue":"1",
-        	"maxvalue":"4",
-        	"hoot_key":"poi.polygon.match.evidence.threshold"
-    	    },
+                "id":"poipolygon_match_evidence_threshold",
+                "elem_type":"int",
+                "description":"The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.  If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a review or miss, depending on the value of 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
+                "name":"Match Evidence Threshold",
+                "defaultvalue":"3",
+                "minvalue":"1",
+                "maxvalue":"4",
+                "hoot_key":"poi.polygon.match.evidence.threshold"
+            },
             {
-            	"id":"poipolygon_name_score_threshold",
+                "id":"poipolygon_name_score_threshold",
                 "elem_type":"double",
                 "description":"The minimum similarity the name scores of two features can have and be considered a name match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names present (null).",
                 "name":"Name Score Threshold",
@@ -1026,113 +1027,113 @@
                 "hoot_key":"poi.polygon.name.score.threshold"
             },
             {
-        	"id":"poipolygon_phone_number_additional_tag_keys",
-        	"elem_type":"string",
-        	"description":"By default, POI/Polygon conflation examines all tags with keys containing the text 'phone' for phone number comparisons.  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
-        	"name":"Phone Number Additional Tag Keys",
-        	"defaultvalue":"",
-        	"hoot_key":"phone.number.additional.tag.keys",
-        	"onchange":"true"
-    	    },
+                "id":"poipolygon_phone_number_additional_tag_keys",
+                "elem_type":"string",
+                "description":"By default, POI/Polygon conflation examines all tags with keys containing the text 'phone' for phone number comparisons.  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+                "name":"Phone Number Additional Tag Keys",
+                "defaultvalue":"",
+                "hoot_key":"phone.number.additional.tag.keys",
+                "onchange":"true"
+            },
             {
-        	"id":"poipolygon_phone_number_match_enabled",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If true, POI/Polygon conflation will compare phone number as one of the criteria for matching features.  If the data being conflated is known to have poor telephone number data, disabling this option may speed up conflation runtime performance.",
-        	"name":"Phone Number Match Enabled",
-        	"hoot_key":"poi.polygon.phone.number.match.enabled"
-    	    },
+                "id":"poipolygon_phone_number_match_enabled",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If true, POI/Polygon conflation will compare phone number as one of the criteria for matching features.  If the data being conflated is known to have poor telephone number data, disabling this option may speed up conflation runtime performance.",
+                "name":"Phone Number Match Enabled",
+                "hoot_key":"poi.polygon.phone.number.match.enabled"
+            },
             {
-        	"id":"poipolygon_phone_number_region_code",
-        	"elem_type":"string",
-        	"description":"Optional geographical region code used when comparing phone numbers.   See: http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region code, if known for the input data, may increase phone number matching accuracy but may also have runtime performance implications.",
-        	"name":"Phone Number Region Code",
-        	"defaultvalue":"",
-        	"hoot_key":"phone.number.region.code",
-        	"onchange":"true"
-    	    },
+                "id":"poipolygon_phone_number_region_code",
+                "elem_type":"string",
+                "description":"Optional geographical region code used when comparing phone numbers.   See: http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region code, if known for the input data, may increase phone number matching accuracy but may also have runtime performance implications.",
+                "name":"Phone Number Region Code",
+                "defaultvalue":"",
+                "hoot_key":"phone.number.region.code",
+                "onchange":"true"
+            },
             {
-        	"id":"poipolygon_phone_number_search_in_text",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
-        	"name":"Phone Number Search In Text",
-        	"hoot_key":"phone.number.search.in.text"
-    	    },
+                "id":"poipolygon_phone_number_search_in_text",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
+                "name":"Phone Number Search In Text",
+                "hoot_key":"phone.number.search.in.text"
+            },
             {
-        	"id":"poipolygon_promote_points_with_addresses_to_pois",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if they do not have specific type tags.",
-        	"name":"Promote Points With Addresses to POIs",
-        	"hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
-    	    },
+                "id":"poipolygon_promote_points_with_addresses_to_pois",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if they do not have specific type tags.",
+                "name":"Promote Points With Addresses to POIs",
+                "hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
+            },
             {
-        	"id":"poipolygon_additional_search_distance",
-        	"elem_type":"int",
-        	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
-        	"name":"Review Distance Threshold",
-        	"defaultvalue":"125",
-        	"minvalue":"0",
-        	"maxvalue":"",
-        	"hoot_key":"poi.polygon.additional.search.distance"
-    	    },
+                "id":"poipolygon_additional_search_distance",
+                "elem_type":"int",
+                "description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
+                "name":"Review Distance Threshold",
+                "defaultvalue":"125",
+                "minvalue":"0",
+                "maxvalue":"",
+                "hoot_key":"poi.polygon.additional.search.distance"
+            },
             {
-        	"id":"poipolygon_review_evidence_threshold",
-        	"elem_type":"int",
-        	"description":"The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'. Valid values are 0 to 3. If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a miss. If the value is set to 0, all feature pairs which did not match will be reviewed. If the value is set greater than or equal to 'poi.polygon.match.evidence.threshold', an error will occur. Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
-        	"name":"Review Evidence Threshold",
-        	"defaultvalue":"1",
-        	"minvalue":"0",
-        	"maxvalue":"3",
-        	"hoot_key":"poi.polygon.review.evidence.threshold"
-    	    },
+                "id":"poipolygon_review_evidence_threshold",
+                "elem_type":"int",
+                "description":"The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'. Valid values are 0 to 3. If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a miss. If the value is set to 0, all feature pairs which did not match will be reviewed. If the value is set greater than or equal to 'poi.polygon.match.evidence.threshold', an error will occur. Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
+                "name":"Review Evidence Threshold",
+                "defaultvalue":"1",
+                "minvalue":"0",
+                "maxvalue":"3",
+                "hoot_key":"poi.polygon.review.evidence.threshold"
+            },
             {
-        	"id":"poipolygon_review_if_matched_types",
-        	"elem_type":"string",
-        	"description":"List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.  e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from the command line, surround the entire value string in double quotes.",
-        	"name":"Review If Types Match",
-        	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.review.if.matched.types",
-        	"onchange":"true"
-    	    },
+                "id":"poipolygon_review_if_matched_types",
+                "elem_type":"string",
+                "description":"List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.  e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from the command line, surround the entire value string in double quotes.",
+                "name":"Review If Types Match",
+                "defaultvalue":"",
+                "hoot_key":"poi.polygon.review.if.matched.types",
+                "onchange":"true"
+            },
             {
-        	"id":"poipolygon_review_multiuse_buildings",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use buildings are present.  See the user documentation for how a multi-use building is defined.",
-		"name":"Review Matches Against Multi-Use Buildings",
-        	"hoot_key":"poi.polygon.review.multiuse.buildings"
-    	    },
+                "id":"poipolygon_review_multiuse_buildings",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use buildings are present.  See the user documentation for how a multi-use building is defined.",
+                "name":"Review Matches Against Multi-Use Buildings",
+                "hoot_key":"poi.polygon.review.multiuse.buildings"
+            },
             {
-        	"id":"poipolygon_source_tag_key",
-        	"elem_type":"string",
-        	"description":"The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.",
-        	"name":"Source Tag Key",
-        	"defaultvalue":"source",
-        	"hoot_key":"poi.polygon.source.tag.key",
-        	"onchange":"true"
-    	    },
+                "id":"poipolygon_source_tag_key",
+                "elem_type":"string",
+                "description":"The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.",
+                "name":"Source Tag Key",
+                "defaultvalue":"source",
+                "hoot_key":"poi.polygon.source.tag.key",
+                "onchange":"true"
+            },
             {
-        	"id":"poipolygon_tag_merger",
-        	"elem_type":"string",
-        	"description":"The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger' is always used.",
-        	"name":"Review If Types Match",
-        	"defaultvalue":"PreserveTypesTagMerger",
-		"required": "true",
-        	"hoot_key":"poi.polygon.tag.merger",
-        	"onchange":"true"
-    	    },
-    	    {
-        	"id":"poipolygon_type_score_threshold",
-        	"elem_type":"double",
-        	"description":"The minimum similarity the type scores a POI and polygon can have and be considered a type match, with 0.0 being the least similar and 1.0 being the most similar.",
-        	"name":"Type Score Threshold",
-        	"defaultvalue":"0.7",
-        	"minvalue":"0.01",
-        	"maxvalue":"1.0",
-        	"hoot_key":"poi.polygon.type.score.threshold"
-    	    }
+                "id":"poipolygon_tag_merger",
+                "elem_type":"string",
+                "description":"The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger' is always used.",
+                "name":"Review If Types Match",
+                "defaultvalue":"PreserveTypesTagMerger",
+                "required": "true",
+                "hoot_key":"poi.polygon.tag.merger",
+                "onchange":"true"
+            },
+            {
+                "id":"poipolygon_type_score_threshold",
+                "elem_type":"double",
+                "description":"The minimum similarity the type scores a POI and polygon can have and be considered a type match, with 0.0 being the least similar and 1.0 being the most similar.",
+                "name":"Type Score Threshold",
+                "defaultvalue":"0.7",
+                "minvalue":"0.01",
+                "maxvalue":"1.0",
+                "hoot_key":"poi.polygon.type.score.threshold"
+            }
         ]
     },
     {
