@@ -54,3 +54,11 @@ else
   echo "Nope"
   exit 1;
 fi
+
+echo "Expecting five outputs to have the verbose id tag."
+if [ `grep -l "Node(1468522996)" $OUTPUT/out* | wc -l` -eq "5" ]; then
+  echo "Found it in all five outputs"
+else
+  echo "Nope"
+  exit 1;
+fi

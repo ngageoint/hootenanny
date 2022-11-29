@@ -78,7 +78,9 @@ Tags AddExportTagsVisitor::getExportTags(const Element* pElement) const
     newTags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString(status);
   if (_includeDebug || _includeIds)
   {
-    newTags[MetadataTags::HootId()] = QString::number(pElement->getId());
+    // Keeping the old tag format while testing.
+    // newTags[MetadataTags::HootId()] = QString::number(pElement->getId());
+    newTags[MetadataTags::HootId()] = pElement->getElementId().toString();
   }
   if (addCircularError)
     newTags[MetadataTags::ErrorCircular()] = QString::number(pElement->getCircularError());
