@@ -60,6 +60,7 @@ OsmJsonWriter::OsmJsonWriter(int precision)
     _numWritten(0),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _includeIds(ConfigOptions().getWriterIncludeIdTag()),
     _includeCompatibilityTags(true),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
     _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags())
@@ -71,6 +72,7 @@ void OsmJsonWriter::setConfiguration(const Settings& conf)
   ConfigOptions options(conf);
   _precision = options.getWriterPrecision();
   _includeDebug = options.getWriterIncludeDebugTags();
+  _includeIds= options.getWriterIncludeIdTag();
   _writeHootFormat = options.getJsonFormatHootenanny();
   _pretty = options.getJsonPrettyPrint();
   _writeEmptyTags = options.getJsonPerserveEmptyTags();
@@ -273,7 +275,7 @@ bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const
   return !e->getTags().empty() ||
           e->getElementType() != ElementType::Node ||
          (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
-          _includeDebug;
+         _includeDebug || _includeIds;
 }
 
 void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& firstTag)

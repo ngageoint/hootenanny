@@ -6393,6 +6393,15 @@ useful for debugging.
 
 When true, writers will include debug information (`hoot:*` tags). Not honored by all writers.
 
+=== writer.include.id.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+When true, writers will include a `hoot:id` tag. This allows the output to have a `hoot:id` tag without
+the rest of the debug tags that you get with `writer.include.debug.tags`.
+Not honored by all writers.
+
 === writer.include.matched.by.tag
 
 * Data Type: bool

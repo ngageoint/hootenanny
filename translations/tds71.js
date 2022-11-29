@@ -3031,7 +3031,7 @@ tds71 = {
 
     delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    delete notUsedTags['hoot:id'];
+    // delete notUsedTags['hoot:id']; // Keeping this for a while
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!
