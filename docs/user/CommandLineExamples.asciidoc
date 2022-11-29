@@ -633,6 +633,20 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflati
       input.osm.pbf osmapidb://username:password@localhost:5432/database
 -----
 
+==== Convert OSM file to GeoJSON
+
+-----
+    hoot convert input.osm output.geojson
+-----
+
+==== Convert OSM file to GeoJSON, split output into thematic files (i.e. TransportationGroundCrv, FacilitySrf, etc.)
+
+-----
+    hoot convert -D geojson.write.thematic.structure=true \
+      -D schema.translation.script=translations/TDSv70.js \
+      input.osm output.geojson
+-----
+
 ==== Remove relations from a map:
 
 -----
