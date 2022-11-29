@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_NETWORK_UTILS_H
@@ -41,6 +41,7 @@ namespace HttpResponseCode
   const int HTTP_CONFLICT               = 409;
   const int HTTP_GONE                   = 410;
   const int HTTP_PRECONDITION_FAILED    = 412;
+  const int HTTP_TOO_MANY_REQUESTS      = 429;
   const int HTTP_INTERNAL_SERVER_ERROR  = 500;
   const int HTTP_BAD_GATEWAY            = 502;
   const int HTTP_SERVICE_UNAVAILABLE    = 503;

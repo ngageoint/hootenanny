@@ -41,6 +41,9 @@
 //  Geos
 #include <geos/geom/GeometryFactory.h>
 
+//  Standard
+#include <map>
+
 namespace hoot
 {
 
@@ -162,10 +165,10 @@ void ParallelBoundedApiReader::stop()
   wait();
 }
 
-void ParallelBoundedApiReader::_sleep() const
+void ParallelBoundedApiReader::_sleep(long milliseconds) const
 {
   //  Sleep for 10 milliseconds
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
 void ParallelBoundedApiReader::_process()
@@ -299,11 +302,42 @@ void ParallelBoundedApiReader::_process()
           _sleep();
           //  Retry
           _bboxes.push(envelope);
-          LOG_DEBUG("Gateway timed out while communicating with API, retrying.");
+          LOG_WARN("Gateway timed out while communicating with API, retrying.");
         }
         else
           _logNetworkError(request);
         break;
+      case HttpResponseCode::HTTP_TOO_MANY_REQUESTS:
+      {
+        const std::map<QString, QString>& headers = request.getResponseHeaders();
+        if (headers.find("Retry-After") != headers.end())
+        {
+          QString retry = headers.at("Retry-After");
+          int seconds = retry.toInt();
+          if (seconds <= 120)
+          {
+            LOG_WARN("Server responded: Too many requests.  Trying again in " << retry << " seconds.");
+            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+            _sleep(seconds * 1000);
+            _bboxes.push(envelope);
+          }
+          else
+          {
+            //  Log the unrecoverable error
+            std::lock_guard<std::mutex> error_lock(_errorMutex);
+            LOG_ERROR(request.getErrorString());
+            _fatalError = true;
+          }
+        }
+        else
+        {
+          //  Log the unrecoverable error
+          std::lock_guard<std::mutex> error_lock(_errorMutex);
+          LOG_ERROR(request.getErrorString());
+          _fatalError = true;
+        }
+        break;
+      }
       default:
         _logNetworkError(request);
         break;

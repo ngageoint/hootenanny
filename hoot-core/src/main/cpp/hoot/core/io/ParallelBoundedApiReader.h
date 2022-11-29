@@ -65,7 +65,7 @@ public:
    */
   ParallelBoundedApiReader(bool useOsmApiBboxFormat = true, bool addProjection = false);
   /** Destructor that stops all threads if necessary */
-  virtual ~ParallelBoundedApiReader();
+  ~ParallelBoundedApiReader() override;
   /**
    * @brief beginRead - Start the reading process by dividing up the envelope if necessary
    *   and starting the receiving threads
@@ -145,7 +145,7 @@ protected:
   /**
    * @brief _sleep Sleep the current thread
    */
-  void _sleep() const;
+  void _sleep(long milliseconds = 10) const;
   /**
    * @brief _isQueryError
    * @param result

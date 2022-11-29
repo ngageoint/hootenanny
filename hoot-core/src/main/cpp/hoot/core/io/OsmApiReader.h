@@ -28,10 +28,17 @@
 #define OSM_API_READER_H
 
 // Hoot
+#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/ParallelBoundedApiReader.h>
 #include <hoot/core/util/Units.h>
+
+// Qt
+#include <QBuffer>
+
+// Standard
+#include <set>
 
 namespace hoot
 {
@@ -89,6 +96,22 @@ public:
   void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override;
   void setBounds(const geos::geom::Envelope& bounds) override;
 
+  /**
+   * Perform any necessary initialization after the data source is opened.
+   */
+  void initializePartial() override;
+
+  /** See `ElementInputStream` class */
+  bool hasMoreElements() override;
+  ElementPtr readNextElement() override;
+
+  /**
+   * @brief canStreamBounded OSM/Overpass APIs apply bounds at the API level and therefore all
+   *  elements can be streamed.
+   * @return true bounds are applied inline and can be streamed bounded
+   */
+  bool canStreamBounded() const override { return true; }
+
 private:
   /**
    * @brief _loadBounds - Get either the `bounds` parameter value
@@ -96,9 +119,19 @@ private:
    * @return true if the bounds were parsed correctly
    */
   bool _loadBounds();
-
+  /**
+   * @brief _canUseElement
+   */
+  bool _canUseElement(const ElementPtr& element) const;
+  /** Bounds information */
   QString _boundsString;
   QString _boundsFilename;
+
+  QBuffer _xmlBuffer;
+
+  std::set<ElementId> _elementSet;
+
+  std::shared_ptr<InBoundsCriterion> _polyCriterion;
 
   /** For testing */
   friend class OsmApiReaderTest;
