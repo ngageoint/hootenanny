@@ -38,8 +38,7 @@ namespace hoot
 
 bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
 {
-  return
-    (int)FilteredVisitor::getStat(std::make_shared<HasTypeCriterion>(), std::make_shared<ElementCountVisitor>(), map) > 0;
+  return (int)FilteredVisitor::getStat(std::make_shared<HasTypeCriterion>(), std::make_shared<ElementCountVisitor>(), map) > 0;
 }
 
 void SchemaUtils::validateTranslationUrl(const QString& url)

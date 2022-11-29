@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/TranslationInterface.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -39,7 +40,7 @@ namespace hoot
  *
  * https://geojson.org/geojson-spec.html
  */
-class OsmGeoJsonWriter : public OsmJsonWriter
+class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface
 {
 public:
   static QString className() { return "OsmGeoJsonWriter"; }
@@ -51,6 +52,8 @@ public:
    * @param conf Configuration settings object
    */
   void setConfiguration(const Settings& conf) override;
+
+  void open(const QString& url) override;
   /**
    * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
    * @param map
@@ -64,7 +67,7 @@ public:
   bool isSupported(const QString& url) const override { return url.endsWith(".geojson", Qt::CaseInsensitive); }
   QString supportedFormats() const override { return ".geojson"; }
 
-  QString toString(const ConstOsmMapPtr& map);
+//  QString toString(const ConstOsmMapPtr& map);
 
 protected:
 
@@ -154,6 +157,11 @@ protected:
    * @return Semicolon separated list of roles
    */
   std::string _buildRoles(ConstRelationPtr relation, bool& first);
+  /**
+   * @brief _setWriterIndex Set the writer index for MultiFile objects
+   * @param e Element dictating the index
+   */
+  void _setWriterIndex(const ConstElementPtr& e) override;
 
   /** Tasking Manager requires that all bounding geometries are MultiPolygons and not Polygons or Linestrings,
    *  set to true when the GeoJSON output is being used for Tasking Manager bounding polygons.

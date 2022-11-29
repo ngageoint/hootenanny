@@ -28,6 +28,9 @@
 #define OSMJSONWRITER_H
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/io/MultiFileWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
@@ -59,7 +62,7 @@ public:
 
   bool isSupported(const QString& url) const override { return url.endsWith(".json", Qt::CaseInsensitive); }
   void open(const QString& url) override;
-  virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
+  virtual void close() { if (_writer.isOpen()) _writer.close(); }
   void write(const ConstOsmMapPtr& map) override;
   QString supportedFormats() const override { return ".json"; }
 
@@ -89,14 +92,18 @@ protected:
   ConstOsmMapPtr _map;
 
   int _precision;
-  QFile _fp;
-  QIODevice* _out;
+  MultiFileWriter _writer;
 
   bool _firstElement;
   bool _writeHootFormat;
 
   long _numWritten;
   long _statusUpdateInterval;
+
+  bool _writeThematicFiles;
+
+  AreaCriterion _areaCriterion;
+  LinearCriterion _linearCriterion;
 
   static QString _typeName(ElementType e);
 
@@ -111,6 +118,11 @@ protected:
   void _writeKvp(const QString& key, double value);
   bool _hasTags(const ConstElementPtr& e) const;
   void _writeTags(const ConstElementPtr& e);
+  /**
+   * @brief _setWriterIndex Set the writer index for MultiFile objects
+   * @param e Element dictating the index
+   */
+  virtual void _setWriterIndex(const ConstElementPtr& e);
 
 private:
 

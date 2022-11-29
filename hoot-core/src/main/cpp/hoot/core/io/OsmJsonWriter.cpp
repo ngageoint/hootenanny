@@ -55,10 +55,10 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
 OsmJsonWriter::OsmJsonWriter(int precision)
   : _precision(precision),
-    _out(nullptr),
     _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
     _numWritten(0),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+    _writeThematicFiles(false),
     _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _includeCompatibilityTags(true),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
@@ -96,20 +96,18 @@ QString OsmJsonWriter::markupString(const QString& str)
 
 void OsmJsonWriter::open(const QString& url)
 {
-  _fp.setFileName(url);
-  if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
-    throw HootException(QString("Error opening %1 for writing").arg(url));
-  _out = &_fp;
+  //  JSON files are always single files
+  _writer.setWriterType(MultiFileWriter::MultiFileWriterType::SingleFile);
+  //  Open the object
+  _writer.open(url);
 }
 
 QString OsmJsonWriter::toString(const ConstOsmMapPtr& map)
 {
-  QBuffer b;
-  b.open(QBuffer::WriteOnly);
-  _out = &b;
+  _writer.setWriterType(MultiFileWriter::MultiFileWriterType::SingleBuffer);
+  _writer.open();
   write(map);
-  _out = nullptr;
-  return QString::fromUtf8(b.buffer());
+  return _writer.getBuffer();
 }
 
 QString OsmJsonWriter::_typeName(ElementType e)
@@ -136,17 +134,23 @@ void OsmJsonWriter::write(const ConstOsmMapPtr& map, const QString& path)
 void OsmJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
-  if (_out->isWritable() == false)
+  if (!_writer.isOpen())
     throw HootException("Please open the file before attempting to write.");
 
+  //  Write the following to the header of the file
+  _writer.setHeaderSection();
   _write("{");
   _write("\"version\": 0.6,");
   _write("\"generator\": \"Hootenanny\",");
   _write("\"elements\": [", true);
   _firstElement = true;
+  //  Write the following to the body of the file
+  _writer.setBodySection();
   _writeNodes();
   _writeWays();
   _writeRelations();
+  //  Lastly write the footer of the file
+  _writer.setFooterSection();
   _writeLn("]");
   _writeLn("}");
 
@@ -219,7 +223,6 @@ void OsmJsonWriter::_writeNodes()
   const NodeMap& nodes = _map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
     nids.push_back(it->first);
-
   // sort the values to give consistent results.
   sort(nids.begin(), nids.end(), less<long>());
   for (auto node_id : nids)
@@ -235,8 +238,8 @@ void OsmJsonWriter::_writeNodes()
       LOG_VART(msg);
     }
 
-    if (!_firstElement) _write(",", true);
-    _firstElement = false;
+    if (_writer.isCurrentIndexWritten())
+      _write(",", true);
 
     _write("{");
     _writeKvp("type", "node");
@@ -249,7 +252,8 @@ void OsmJsonWriter::_writeNodes()
     _writeKvp("lat", n->getY());
     _write(",");
     _writeKvp("lon", n->getX());
-    if (_hasTags(n)) _write(",");
+    if (_hasTags(n))
+      _write(",");
     _writeTags(n);
     _write("}", false);
 
@@ -263,9 +267,9 @@ void OsmJsonWriter::_writeNodes()
 
 void OsmJsonWriter::_write(const QString& str, bool newLine)
 {
-  _out->write(str.toUtf8());
+  _writer.write(str.toUtf8());
   if (newLine)
-    _out->write(QString("\n").toUtf8());
+    _writer.write(QString("\n").toUtf8());
 }
 
 bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const
@@ -343,9 +347,10 @@ void OsmJsonWriter::_writeWays()
       LOG_VART(msg);
     }
 
-    if (!_firstElement)
+    _setWriterIndex(w);
+
+    if (_writer.isCurrentIndexWritten())
       _write(",", true);
-    _firstElement = false;
 
     _write("{");
     _writeKvp("type", "way");
@@ -402,9 +407,10 @@ void OsmJsonWriter::_writeRelations()
       LOG_VART(msg);
     }
 
-    if (!_firstElement)
+    _setWriterIndex(r);
+
+    if (_writer.isCurrentIndexWritten())
       _write(",", true);
-    _firstElement = false;
 
     _write("{");
     _writeKvp("type", "relation");
@@ -445,6 +451,11 @@ void OsmJsonWriter::_writeRelations()
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
+}
+
+void OsmJsonWriter::_setWriterIndex(const ConstElementPtr& /*e*/)
+{
+  //  Right now, all elements are written to the same file for JSON files
 }
 
 }

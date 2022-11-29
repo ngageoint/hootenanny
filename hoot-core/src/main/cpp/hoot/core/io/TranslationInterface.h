@@ -41,7 +41,7 @@ namespace hoot
 {
 
 /**
- * Writes a file to an OGR data source.
+ * Interface for writer classes to translate elements to features via a translation script
  */
 class TranslationInterface
 {
