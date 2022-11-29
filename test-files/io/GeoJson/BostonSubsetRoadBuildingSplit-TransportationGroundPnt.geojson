@@ -1,0 +1,18 @@
+{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"type":"Feature","properties":{"source":"massgis_import_v0.1_20071009100433","highway":"turning_circle","attribution":"Office of Geographic and Environmental Information (MassGIS)"},"geometry": {"type":"Point","coordinates": [-71.4686093, 42.4735655]}},
+{"type":"Feature","properties":{"source":"massgis_import_v0.1_20071009100433","highway":"turning_circle","attribution":"Office of Geographic and Environmental Information (MassGIS)"},"geometry": {"type":"Point","coordinates": [-71.4551017, 42.4894111]}},
+{"type":"Feature","properties":{"source":"massgis_import_v0.1_20071009100433","highway":"turning_circle","attribution":"Office of Geographic and Environmental Information (MassGIS)"},"geometry": {"type":"Point","coordinates": [-71.470561, 42.4774347]}},
+{"type":"Feature","properties":{"source":"massgis_import_v0.1_20071009100433","highway":"turning_circle","attribution":"Office of Geographic and Environmental Information (MassGIS)"},"geometry": {"type":"Point","coordinates": [-71.46855720000001, 42.4721979]}},
+{"type":"Feature","properties":{"source":"massgis_import_v0.1_20071009100433","highway":"turning_circle","attribution":"Office of Geographic and Environmental Information (MassGIS)"},"geometry": {"type":"Point","coordinates": [-71.47519010000001, 42.4828729]}},
+{"type":"Feature","properties":{"amenity":"fuel","name":"West Acton Mobil"},"geometry": {"type":"Point","coordinates": [-71.47249170000001, 42.4763037]}},
+{"type":"Feature","properties":{"railway":"level_crossing"},"geometry": {"type":"Point","coordinates": [-71.4773763, 42.4824917]}},
+{"type":"Feature","properties":{"railway":"level_crossing"},"geometry": {"type":"Point","coordinates": [-71.4731836, 42.4761161]}},
+{"type":"Feature","properties":{"railway":"level_crossing"},"geometry": {"type":"Point","coordinates": [-71.4735768, 42.476953]}},
+{"type":"Feature","properties":{"foot":"yes","bicycle":"yes","barrier":"gate"},"geometry": {"type":"Point","coordinates": [-71.4782799, 42.487686]}},
+{"type":"Feature","properties":{"highway":"turning_circle"},"geometry": {"type":"Point","coordinates": [-71.4850471, 42.4843495]}},
+{"type":"Feature","properties":{"highway":"turning_circle"},"geometry": {"type":"Point","coordinates": [-71.4836579, 42.487376]}},
+{"type":"Feature","properties":{"railway":"level_crossing"},"geometry": {"type":"Point","coordinates": [-71.4731367, 42.4761148]}},
+{"type":"Feature","properties":{"railway":"level_crossing"},"geometry": {"type":"Point","coordinates": [-71.4735269, 42.4769731]}},
+{"type":"Feature","properties":{"wikipedia":"en:West_Acton_(MBTA_station)","disused":"station","name":"West Acton (closed)","railway":"station","end_date":"1975","start_date":"1844","operator":"B&M"},"geometry": {"type":"Point","coordinates": [-71.4733725, 42.4765182]}},
+{"type":"Feature","properties":{"railway":"level_crossing"},"geometry": {"type":"Point","coordinates": [-71.47734869999999, 42.4825336]}}]
+}

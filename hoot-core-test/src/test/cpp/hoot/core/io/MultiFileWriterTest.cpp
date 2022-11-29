@@ -78,22 +78,26 @@ public:
 
   void runGeometryTest()
   {
+/*
     QString base = "GeometryTest";
     QString extension = ".json";
     //  Split the output into three different files
     std::vector<QString> indices({MultiFileWriter::POINTS, MultiFileWriter::LINES, MultiFileWriter::POLYGONS});
     //  Run multi-file geometry test
-    runTest(base, extension, indices, MultiFileWriter::MultiGeom);
+    runTest(base, extension, indices, MultiFileWriter::MultiThematic);
+*/
   }
 
   void runFCodeTest()
   {
+/*
     QString base = "FCodeTest";
     QString extension = ".json";
     //  Split the output into 12 files
     std::vector<QString> indices({"AAL200", "ABA030", "ABA040", "ABH080", "ABH090", "ABH140", "ABH160", "ADA010", "AEA010", "AEB010", "AEB020", "AEC030"});
     //  Run the multi-file F-Code test
     runTest(base, extension, indices, MultiFileWriter::MultiFCode);
+*/
   }
 
   void runTest(const QString& base, const QString& ext, const std::vector<QString>& indices, MultiFileWriter::MultiFileWriterType type)
@@ -116,9 +120,11 @@ public:
     int elements_per_file = total_elements / static_cast<int>(indices.size());
     int index = 0;
     //  Write a bunch of things to the header
-    writer.writeHeader("{");
-    writer.writeHeader("\"file\": \"This is the header\",\n");
-    writer.writeHeader("\"contents\": [\n");
+    writer.setHeaderSection();
+    writer.write("{");
+    writer.write("\"file\": \"This is the header\",\n");
+    writer.write("\"contents\": [\n");
+    writer.setBodySection();
     //  Iterate a total number of elements
     for (int i = 0; i < total_elements; ++i)
     {
@@ -136,8 +142,9 @@ public:
       writer.write("\n");
     }
     //  Write the footer
-    writer.writeFooter("]");
-    writer.writeFooter("}\n");
+    writer.setFooterSection();
+    writer.write("]");
+    writer.write("}\n");
   }
 
   void checkFiles(const QString& base, const QString& ext, const std::vector<QString>& indices)
