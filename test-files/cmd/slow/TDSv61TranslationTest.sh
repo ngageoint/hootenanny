@@ -37,4 +37,4 @@ hoot diff -C Testing.conf --error-limit 20 $outputDir/new_TDSv61.osm $inputDir/T
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
 hoot convert $HOOT_OPT \
   -D schema.translation.script=$TRANS \
-  -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp"  #> tmp/TDSv61_to_TDS.txt
+  -D writer.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp"  #> tmp/TDSv61_to_TDS.txt

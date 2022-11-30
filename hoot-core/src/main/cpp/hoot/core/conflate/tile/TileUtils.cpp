@@ -51,7 +51,7 @@ int TileUtils::getRandomTileIndex(const std::vector<geos::geom::Envelope>& tiles
 
   const size_t numBboxes = tiles.size();
   LOG_VARD(numBboxes);
-  return Tgs::Random::instance()->generateInt(numBboxes);
+  return Tgs::Random::instance()->generateInt(static_cast<int>(numBboxes));
 }
 
 geos::geom::Envelope TileUtils::getRandomTile(const std::vector<geos::geom::Envelope>& tiles, int randomSeed)

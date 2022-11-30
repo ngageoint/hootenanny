@@ -37,8 +37,7 @@ class MultiFileWriterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(MultiFileWriterTest);
   CPPUNIT_TEST(runBufferTest);
   CPPUNIT_TEST(runSingleFileTest);
-  CPPUNIT_TEST(runGeometryTest);
-  CPPUNIT_TEST(runFCodeTest);
+  CPPUNIT_TEST(runThematicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -76,24 +75,14 @@ public:
     runTest(base, extension, indices, MultiFileWriter::SingleFile);
   }
 
-  void runGeometryTest()
+  void runThematicTest()
   {
-    QString base = "GeometryTest";
+    QString base = "ThematicTest";
     QString extension = ".json";
-    //  Split the output into three different files
-    std::vector<QString> indices({MultiFileWriter::POINTS, MultiFileWriter::LINES, MultiFileWriter::POLYGONS});
-    //  Run multi-file geometry test
-    runTest(base, extension, indices, MultiFileWriter::MultiGeom);
-  }
-
-  void runFCodeTest()
-  {
-    QString base = "FCodeTest";
-    QString extension = ".json";
-    //  Split the output into 12 files
-    std::vector<QString> indices({"AAL200", "ABA030", "ABA040", "ABH080", "ABH090", "ABH140", "ABH160", "ADA010", "AEA010", "AEB010", "AEB020", "AEC030"});
-    //  Run the multi-file F-Code test
-    runTest(base, extension, indices, MultiFileWriter::MultiFCode);
+    //  Split the output into six different files
+    std::vector<QString> indices({"AgricultureSrf", "CultureSrf", "FacilitySrf", "HydrographyCrv", "HydrographySrf", "InformationPnt"});
+    //  Run multi-file thematic test
+    runTest(base, extension, indices, MultiFileWriter::MultiThematic);
   }
 
   void runTest(const QString& base, const QString& ext, const std::vector<QString>& indices, MultiFileWriter::MultiFileWriterType type)
@@ -116,9 +105,11 @@ public:
     int elements_per_file = total_elements / static_cast<int>(indices.size());
     int index = 0;
     //  Write a bunch of things to the header
-    writer.writeHeader("{");
-    writer.writeHeader("\"file\": \"This is the header\",\n");
-    writer.writeHeader("\"contents\": [\n");
+    writer.setHeaderSection();
+    writer.write("{");
+    writer.write("\"file\": \"This is the header\",\n");
+    writer.write("\"contents\": [\n");
+    writer.setBodySection();
     //  Iterate a total number of elements
     for (int i = 0; i < total_elements; ++i)
     {
@@ -136,8 +127,9 @@ public:
       writer.write("\n");
     }
     //  Write the footer
-    writer.writeFooter("]");
-    writer.writeFooter("}\n");
+    writer.setFooterSection();
+    writer.write("]");
+    writer.write("}\n");
   }
 
   void checkFiles(const QString& base, const QString& ext, const std::vector<QString>& indices)

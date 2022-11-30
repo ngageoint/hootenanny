@@ -267,13 +267,17 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
       break;
     }
   }
-  //  Add the ops if they are set in the settings
+  //  JSON types need some extra ops
   if (jsonType)
   {
     _addMergeNearbyNodesOps();
     _addSimplifyBuildingsOps();
     _addLongWaySplitterOps();
   }
+
+  //  Remove translations
+  if (output.endsWith(".geojson"))
+    _removeTranslationOps();
 
   if (!_convertOps.empty())
   {
@@ -450,8 +454,7 @@ void DataConverter::_setFromOgrOptions(const QStringList& inputs)
   }
 
   //  See similar note in _convertToOgr.
-  _convertOps.removeAll(SchemaTranslationOp::className());
-  _convertOps.removeAll(SchemaTranslationVisitor::className());
+  _removeTranslationOps();
   LOG_VARD(_convertOps);
 }
 
@@ -478,8 +481,7 @@ void DataConverter::_setToOgrOptions(const QString& output)
 
   //  Translation for going to OGR is always required and happens in the writer itself. It is not to
   //  be done with convert ops, so let's ignore any translation ops that were specified.
-  _convertOps.removeAll(SchemaTranslationOp::className());
-  _convertOps.removeAll(SchemaTranslationVisitor::className());
+  _removeTranslationOps();
 }
 
 void DataConverter::_handleNonOgrOutputTranslationOpts()
@@ -540,6 +542,12 @@ void DataConverter::_addLongWaySplitterOps()
   //  Some OGR sources can contain ways that are longer than the 2000 node limit and must be split
   if (ConfigOptions().getNonOsmConvertSplitLongWays() && !_convertOps.contains(SplitLongWaysVisitor::className()))
       _convertOps.append(SplitLongWaysVisitor::className());
+}
+
+void DataConverter::_removeTranslationOps()
+{
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
 }
 
 }

@@ -37,7 +37,7 @@ rm -rf $OUTPUT_FILE_MULTI
 hoot convert $LOG_LEVEL $CONFIG \
  $OUT_TRANSLATE \
  $DB_OPT \
- -D ogr.thematic.structure=true \
+ -D writer.thematic.structure=true \
  -D convert.translate.multithreaded=true \
  $DATABASE \
  $OUTPUT_FILE_MULTI
@@ -48,7 +48,7 @@ rm -rf $OUTPUT_FILE_SINGLE
 hoot convert $LOG_LEVEL $CONFIG \
  $OUT_TRANSLATE \
  $DB_OPT \
- -D ogr.thematic.structure=true \
+ -D writer.thematic.structure=true \
  -D convert.translate.multithreaded=false \
  $DATABASE \
  $OUTPUT_FILE_SINGLE

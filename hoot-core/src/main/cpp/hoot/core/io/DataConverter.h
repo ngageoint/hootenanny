@@ -135,6 +135,10 @@ private:
   void _addMergeNearbyNodesOps();
   void _addSimplifyBuildingsOps();
   void _addLongWaySplitterOps();
+  /**
+   * Remove option operations from the options if they are set
+   */
+  void _removeTranslationOps();
 
   // If specific columns were specified for export to a shape file, then this is called instaed of
   // using OgrWriter.

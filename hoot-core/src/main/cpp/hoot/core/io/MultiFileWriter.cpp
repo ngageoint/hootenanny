@@ -29,15 +29,13 @@
 namespace hoot
 {
 
-const QString MultiFileWriter::POINTS = "Points";
-const QString MultiFileWriter::LINES = "Lines";
-const QString MultiFileWriter::POLYGONS = "Polygons";
-
 MultiFileWriter::MultiFileWriter(MultiFileWriterType type)
   : _type(type),
+    _currentSection(SectionHeader),
     _currentDevice(nullptr),
     _header(&_fileHeader),
-    _footer(&_fileFooter)
+    _footer(&_fileFooter),
+    _isOpen(false)
 {
   _header.setCodec("UTF-8");
   _footer.setCodec("UTF-8");
@@ -47,6 +45,23 @@ MultiFileWriter::~MultiFileWriter()
 {
   //  Close  the file(s)/buffer
   close();
+}
+
+void MultiFileWriter::setWriterType(MultiFileWriterType type)
+{
+  //  Close the object if it is open
+  if (_isOpen)
+    close();
+  //  Reset the header and footer
+  _header.reset();
+  _footer.reset();
+  //  Set the type
+  _type = type;
+  //  Reset the internals
+  _currentDevice = nullptr;
+  _deviceMap.clear();
+  _files.clear();
+  _currentIndex = "";
 }
 
 void MultiFileWriter::setCurrentFileIndex(const QString& index)
@@ -61,9 +76,6 @@ void MultiFileWriter::setCurrentFileIndex(const QString& index)
     //  Only do something if the index is different
     if (_currentIndex != index)
     {
-      //  For multigeometry output check for `Points`, `Lines`, and `Polygons`
-      if (_type == MultiFileWriterType::MultiGeom && index != POINTS && index != LINES && index != POLYGONS)
-        throw HootException(QString("Illegal file index in multigeometry mode."));
       //  Reset the current device
       _currentDevice = nullptr;
       //  Set the index
@@ -73,10 +85,41 @@ void MultiFileWriter::setCurrentFileIndex(const QString& index)
   }
 }
 
-void MultiFileWriter::write(const QString& contents, MultiFileWriterSection section)
+bool MultiFileWriter::isCurrentIndexWritten() const
+{
+  //  Check if the value even exists and return it
+  if (_writtenMap.find(_currentIndex) != _writtenMap.end())
+    return _writtenMap.at(_currentIndex);
+  //  Nothing written if the value doesn't exist
+  return false;
+}
+
+void MultiFileWriter::writeHeader(const QString& contents)
+{
+  MultiFileWriterSection section = _currentSection;
+  //  Set the section to header
+  _currentSection = MultiFileWriterSection::SectionHeader;
+  //  Write to the header
+  write(contents);
+  //  Set the section to the previously selected section
+  _currentSection = section;
+}
+
+void MultiFileWriter::writeFooter(const QString& contents)
+{
+  MultiFileWriterSection section = _currentSection;
+  //  Set the section to footer
+  _currentSection = MultiFileWriterSection::SectionFooter;
+  //  Write to the footer
+  write(contents);
+  //  Set the section to the previously selected section
+  _currentSection = section;
+}
+
+void MultiFileWriter::write(const QString& contents)
 {
   //  Check the section
-  if (section == MultiFileWriterSection::SectionBody)
+  if (_currentSection == MultiFileWriterSection::SectionBody)
   {
     //  Check the current device before writing
     if (!_currentDevice)
@@ -127,11 +170,14 @@ void MultiFileWriter::write(const QString& contents, MultiFileWriterSection sect
         }
       }
     }
+    //  Record that something has been written to the file at the current
+    _writtenMap[_currentIndex] = true;
+    //  Do the actual writing
     _currentDevice->write(contents.toUtf8());
   }
-  else if (section == MultiFileWriterSection::SectionHeader)
+  else if (_currentSection == MultiFileWriterSection::SectionHeader)
     _header << contents;
-  else if (section == MultiFileWriterSection::SectionFooter)
+  else if (_currentSection == MultiFileWriterSection::SectionFooter)
     _footer << contents;
 }
 
@@ -151,6 +197,8 @@ void MultiFileWriter::open()
   //  Cannot re-open the file once it has been written to
   if (_stringBuffer.isOpen())
     throw HootException(QString("Cannot call open() on object that is already open."));
+  //  Set the open flag
+  _isOpen = true;
 }
 
 void MultiFileWriter::open(const QString& filename)
@@ -170,17 +218,16 @@ void MultiFileWriter::open(const QString& filename)
     _filePath.insert(_filePath.length() - (extension.length() + 1), "-%1");
     //  Don't open anything until something is actually written out the the file
   }
+  //  Set the open flag
+  _isOpen = true;
 }
 
 void MultiFileWriter::close()
 {
-  switch(_type)
-  {
-  case MultiFileWriterType::SingleBuffer:
-    //  Only need to close the string buffer
+  if (_type == MultiFileWriterType::SingleBuffer) //  Only need to close the string buffer
     _stringBuffer.close();
-    break;
-  default:
+  else
+  {
     //  Iterate all open devices
     for (auto device = _deviceMap.cbegin(); device != _deviceMap.cend(); ++device)
     {
@@ -193,6 +240,8 @@ void MultiFileWriter::close()
       }
     }
   }
+  //  Set the open flag to closed
+  _isOpen = false;
 }
 
 }

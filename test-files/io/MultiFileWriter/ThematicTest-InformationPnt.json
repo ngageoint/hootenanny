@@ -1,0 +1,7 @@
+{"file": "This is the header",
+"contents": [
+{ "element-id": "20", "element-type": "InformationPnt" },
+{ "element-id": "21", "element-type": "InformationPnt" },
+{ "element-id": "22", "element-type": "InformationPnt" },
+{ "element-id": "23", "element-type": "InformationPnt" }
+]}

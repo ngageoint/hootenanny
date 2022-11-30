@@ -69,7 +69,7 @@ tds40 = {
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds40.rawSchema
-    if (hoot.Settings.get('ogr.thematic.structure') == 'false')
+    if (hoot.Settings.get('writer.thematic.structure') == 'false')
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       tds40.layerNameLookup = translate.makeLayerNameLookup(tds40.rawSchema);
@@ -2778,7 +2778,7 @@ tds40 = {
       tds40.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
       tds40.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       tds40.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      tds40.configOut.OgrThematicStructure = hoot.Settings.get('ogr.thematic.structure');
+      tds40.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
       tds40.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       tds40.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 

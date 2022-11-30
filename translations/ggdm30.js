@@ -67,7 +67,7 @@ ggdm30 = {
 
     // Decide if we are going to use the Thematic structure or 1 FCODE / File
     // if we DON't want the new structure, just return the ggdm30.rawSchema
-    if (hoot.Settings.get('ogr.thematic.structure') == 'false')
+    if (hoot.Settings.get('writer.thematic.structure') == 'false')
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       ggdm30.layerNameLookup = translate.makeLayerNameLookup(ggdm30.rawSchema);
@@ -2864,7 +2864,7 @@ ggdm30 = {
       ggdm30.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
       ggdm30.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       ggdm30.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
-      ggdm30.configOut.OgrThematicStructure = hoot.Settings.get('ogr.thematic.structure');
+      ggdm30.configOut.OgrThematicStructure = hoot.Settings.get('writer.thematic.structure');
       ggdm30.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       ggdm30.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
       ggdm30.configOut.ReaderDropDefaults = hoot.Settings.get('reader.drop.defaults');

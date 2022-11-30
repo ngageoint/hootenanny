@@ -15,6 +15,7 @@
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap XML (.osm)
 * Overpass JSON (.json or http://overpass-api.de/[Overpass]) (memory bound)
+* Overpass XML (http://overpass-api.de/[Overpass])
 * Shapefile (.shp)
 * Zip files containing shape files and/or File Geodatabase files (.zip)
 * Any additional OGR supported format not listed here (untested)

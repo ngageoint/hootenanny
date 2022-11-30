@@ -1722,6 +1722,13 @@ elements not conflatable by specific conflation routines is considered to have s
 Tag similarity threshold, in the range (0.0, 1.0], at or above which an polygon element not
 conflatable by specific conflation routines is considered to have similar tags.
 
+=== geojson.write.thematic.structure
+
+* Data Type: bool
+* Default Value: `false`
+
+Split GeoJSON files by Thematic Groups (TransportationGroundCrv, StructurePnt etc)
+
 === geometry.linear.merger.default
 
 * Data Type: string
@@ -3836,14 +3843,6 @@ When exporting to TDSv40 and TDSv61:
 - "none" Don't save the unused tags, just drop them.
 
 NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
-
-=== ogr.thematic.structure
-
-* Data Type: bool
-* Default Value: `true`
-
-Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc)
-instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === ogr.throw.error
 
@@ -6445,6 +6444,14 @@ If true, sorts the `source:imagery` tag's value on output. Not honored by all wr
 
 Add `hoot:status` values as text: `Reference`, `Secondary`, or `Merged` instead of numbers: `1`,
 `2`, or `3`.
+
+=== writer.thematic.structure
+
+* Data Type: bool
+* Default Value: `true`
+
+Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc)
+instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === writer.xml.sort.by.id
 

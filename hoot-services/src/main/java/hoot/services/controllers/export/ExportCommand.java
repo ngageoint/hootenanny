@@ -171,7 +171,7 @@ class ExportCommand extends ExternalCommand {
 
         // Add the option to export thematic groups
         if (!params.getThematic()) {
-            options.add("ogr.thematic.structure=false");
+            options.add("writer.thematic.structure=false");
         }
 
         //Add the orders convert operations

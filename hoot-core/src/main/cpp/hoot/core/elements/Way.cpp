@@ -247,7 +247,7 @@ int Way::getNodeIndex(long nodeId) const
   for (size_t i = 0; i < ids.size(); i++)
   {
     if (ids[i] == nodeId)
-      return i;
+      return static_cast<int>(i);
   }
   assert(false);
   return -1;

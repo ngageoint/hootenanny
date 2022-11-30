@@ -25,14 +25,14 @@ HOOT_OPT="--warn -C Testing.conf"
 ##### Start Tests #####
 # Export files
 echo "### TDSv40 ###"
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_TDS40 -D ogr.thematic.structure=false $inputFile $outputDir/tds40.shp
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_TDS40 -D writer.thematic.structure=false $inputFile $outputDir/tds40.shp
 hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS_TDS40 $outputDir/tds40/HUT_P.shp $outputDir/tds40/o2s_*.shp $outputDir/tds40/ORCHARD_S.shp $outputDir/tds40/RIVER_C.shp $outputDir/tds40.osm
 
 hoot diff -C Testing.conf $outputDir/tds40.osm $tds40File || diff $outputDir/tds40.osm $tds40File
 
 echo
 echo "### TDSv61 ###"
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_TDS61 -D ogr.thematic.structure=false $inputFile $outputDir/tds61.shp
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_TDS61 -D writer.thematic.structure=false $inputFile $outputDir/tds61.shp
 hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS_TDS61 $outputDir/tds61/HUT_P.shp $outputDir/tds61/o2s_*.shp $outputDir/tds61/ORCHARD_S.shp $outputDir/tds61/RIVER_C.shp $outputDir/tds61.osm
 
 hoot diff -C Testing.conf $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inputFile
@@ -46,7 +46,7 @@ hoot diff -C Testing.conf $outputDir/mgcp.osm $inputFile || diff $outputDir/mgcp
 
 echo
 echo "### GGDM ###"
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_GGDM -D ogr.thematic.structure=false $inputFile $outputDir/ggdm.shp
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_GGDM -D writer.thematic.structure=false $inputFile $outputDir/ggdm.shp
 hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS_GGDM $outputDir/ggdm/HUT_P.shp $outputDir/ggdm/o2s_*.shp $outputDir/ggdm/ORCHARD_S.shp $outputDir/ggdm/RIVER_C.shp $outputDir/ggdm.osm
 
 hoot diff -C Testing.conf $outputDir/ggdm.osm $ggdmFile || diff $outputDir/ggdm.osm $ggdmFile
