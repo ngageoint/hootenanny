@@ -15,21 +15,21 @@ CONFIG="-C Testing.conf"
 # Make translated shapefiles
 hoot convert $CONFIG $TRANS_GGDM \
   -D writer.include.id.tag=true \
-  -D ogr.thematic.structure=false \
+  -D writer.thematic.structure=false \
   $INPUT $OUTPUT/ogr.shp
 
 # Make translated GeoJSON
 hoot convert $CONFIG $TRANS_GGDM \
   -D schema.translation.direction=toogr \
   -D convert.ops='AddElementIdVisitor;SchemaTranslationVisitor' \
-  -D ogr.thematic.structure=false \
+  -D writer.thematic.structure=false \
   $INPUT $OUTPUT/out.geojson
 
 # OSM to translated OSM
 hoot convert $CONFIG $TRANS_GGDM \
   -D schema.translation.direction=toogr \
   -D convert.ops='AddElementIdVisitor;SchemaTranslationVisitor' \
-  -D ogr.thematic.structure=false \
+  -D writer.thematic.structure=false \
   $INPUT $OUTPUT/out_trans.osm
 
 # OSM to OSM - visit
