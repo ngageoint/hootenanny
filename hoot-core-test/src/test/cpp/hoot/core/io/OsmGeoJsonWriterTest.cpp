@@ -43,7 +43,8 @@ class OsmGeoJsonWriterTest : public HootTestFixture
   CPPUNIT_TEST(runAllDataTypesTest);
   CPPUNIT_TEST(runDcTigerTest);
   CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
-  CPPUNIT_TEST(runSplitBostonRoadBuildingTest);
+  CPPUNIT_TEST(runSplitThematicBostonRoadBuildingTest);
+  CPPUNIT_TEST(runSplitFcodeBostonRoadBuildingTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonHootTest);
   CPPUNIT_TEST_SUITE_END();
@@ -77,9 +78,9 @@ public:
     Log::getInstance().setLevel(logLevel);
   }
 
-  void runSplitBostonRoadBuildingTest()
+  void runSplitThematicBostonRoadBuildingTest()
   {
-    //  The Boston data splits out into 18 different files
+    //  The Boston data splits out into 18 different thematic files
     QStringList multi_files({
             "AgricultureSrf",
             "CultureSrf",
@@ -108,9 +109,64 @@ public:
     if (Log::getInstance().getLevel() >= Log::Info)
       Log::getInstance().setLevel(Log::Error);
     Settings s;
-    s.set(ConfigOptions::getGeojsonWriteThematicStructureKey(), true);
+    s.set(ConfigOptions::getGeojsonWriteSplitFileStructureKey(), true);
+    s.set(ConfigOptions::getWriterThematicStructureKey(), true);
     s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/TDSv70.js");
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuildingSplit.geojson", &s, multi_files);
+    Log::getInstance().setLevel(logLevel);
+  }
+
+  void runSplitFcodeBostonRoadBuildingTest()
+  {
+    //  The Boston data splits out into 32 different FCODE files
+    QStringList multi_files({
+            "BRIDGE_C",
+            "BUILDING_P",
+            "BUILDING_S",
+            "BUILT_UP_AREA_P",
+            "CART_TRACK_C",
+            "CROP_LAND_S",
+            "CROSSING_P",
+            "CULVERT_C",
+            "ENGINEERED_TURNAROUND_SITE_P",
+            "FACILITY_S",
+            "GATE_P",
+            "INLAND_WATERBODY_S",
+            "MARSH_S",
+            "MOTOR_VEHICLE_STATION_P",
+            "NAMED_LOCATION_P",
+            "o2s_A",
+            "o2s_L",
+            "o2s_P",
+            "PARK_S",
+            "RAMP_C",
+            "RIVER_C",
+            "ROAD_C",
+            "SHED_S",
+            "SPORTS_GROUND_S",
+            "STAIR_C",
+            "TOWER_P",
+            "TRAFFIC_LIGHT_P",
+            "TRAIL_C",
+            "TRANSPORTATION_STATION_P",
+            "UNKNOWN_C",
+            "VEHICLE_LOT_S",
+            "WALL_C"
+          });
+    for (int i = 0; i < multi_files.size(); ++i)
+      multi_files[i] = QString("BostonSubsetRoadBuildingFcode-%1.geojson").arg(multi_files[i]);
+    //  Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
+    //  the log level.  We expect the nodes to be missing since the Boston data has issues
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Error);
+
+    Settings s;
+    s.set(ConfigOptions::getGeojsonWriteSplitFileStructureKey(), true);
+    s.set(ConfigOptions::getWriterThematicStructureKey(), false);
+    conf().set(ConfigOptions::getWriterThematicStructureKey(), false);
+    s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/GGDMv30.js");
+    runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuildingFcode.geojson", &s, multi_files);
     Log::getInstance().setLevel(logLevel);
   }
 
