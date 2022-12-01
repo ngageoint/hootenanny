@@ -642,7 +642,16 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflati
 ==== Convert OSM file to GeoJSON, split output into thematic files (i.e. TransportationGroundCrv, FacilitySrf, etc.)
 
 -----
-    hoot convert -D geojson.write.thematic.structure=true \
+    hoot convert -D geojson.write.split.file.structure=true \
+      -D schema.translation.script=translations/TDSv70.js \
+      input.osm output.geojson
+-----
+
+==== Convert OSM file to GeoJSON, split output into files based on FCODE
+
+-----
+    hoot convert -D geojson.write.split.file.structure=true \
+      -D writer.thematic.structure=false \
       -D schema.translation.script=translations/TDSv70.js \
       input.osm output.geojson
 -----

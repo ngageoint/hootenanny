@@ -60,7 +60,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 
 OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
   : OsmJsonWriter(precision),
-    _useTaskingManagerFormat(ConfigOptions().getJsonOutputTaskingManagerAoi())
+    _useTaskingManagerFormat(ConfigOptions().getJsonOutputTaskingManagerAoi()),
+    _useThematicLayers(ConfigOptions().getWriterThematicStructure())
 {
   setConfiguration(conf());
 }
@@ -69,8 +70,8 @@ void OsmGeoJsonWriter::open(const QString& url)
 {
   //  Open the writer
   _writer.open(url);
-  //  Initialize the translator for thematic files
-  if (_writeThematicFiles)
+  //  Initialize the translator for splitting files
+  if (_writeSplitFiles)
     initTranslator();
 }
 
@@ -118,13 +119,14 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
   //  Set the MultiFileWriter settings
   MultiFileWriter::MultiFileWriterType t = MultiFileWriter::SingleFile;
 
-  if (options.getGeojsonWriteThematicStructure())
+  if (options.getGeojsonWriteSplitFileStructure())
   {
     //  Thematic structure requires a translator
     QString script = options.getSchemaTranslationScript();
     if (script.isEmpty())
     {
-      LOG_ERROR("OsmGeoJsonWriter requires schema translation script when used with 'geojson.write.thematic.structure'. Reverting to non-thematic structure.");
+      LOG_ERROR("OsmGeoJsonWriter requires schema translation script when used with '" <<
+                ConfigOptions::getGeojsonWriteSplitFileStructureKey() << "'. Reverting to single file output.");
     }
     else
     {
@@ -134,11 +136,11 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
         SchemaUtils::validateTranslationUrl(script);
         setSchemaTranslationScript(script);
         t = MultiFileWriter::MultiThematic;
-        _writeThematicFiles = true;
+        _writeSplitFiles = true;
       }
       catch (const IllegalArgumentException& e)
       {
-        LOG_ERROR(e.getWhat() << "  Reverting to non-thematic structure.");
+        LOG_ERROR(e.getWhat() << "  Reverting to single file output.");
       }
     }
   }
@@ -173,10 +175,6 @@ void OsmGeoJsonWriter::_writeNodes()
   const NodeMap& nodes = _map->getNodes();
   for (auto it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (it->first == -1559825)
-    {
-      LOG_INFO("Got Here");
-    }
     if (!crit.isSatisfied(_map->getNode(it->first)))
       nids.push_back(it->first);
   }
@@ -481,43 +479,73 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
 
 void OsmGeoJsonWriter::_setWriterIndex(const ConstElementPtr& e)
 {
-  if (_writeThematicFiles)
+  if (_writeSplitFiles)
   {
     std::shared_ptr<geos::geom::Geometry> geometry;
     std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
     ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(_map)));
     //  Translate the feature
     translateToFeatures(provider, e, geometry, feature);
-    //  TODO: Check with Matt about multiple features
-    if (feature.size() > 0)
-    {
-      QString layer = feature[0].tableName;
-      if (layer.isEmpty())
-      {
-        layer = "Unknown";
-        if (geometry)
-        {
-          //  getDimension returns (0=point, 1=line, 2=surface)
-          switch(geometry->getDimension())
-          {
-          case 0: //  Point
-            layer.append("Pnt");
-            break;
-          case 1: //  Line
-            layer.append("Crv");
-            break;
-          case 2: //  Surface
-            layer.append("Srf");
-            break;
-          default:
-            //  Do nothing
-            break;
-          }
-        }
-      }
-      _writer.setCurrentFileIndex(layer);
-    }
+    QString layer = _getLayerName(feature, geometry);
+    _writer.setCurrentFileIndex(layer);
   }
 }
 
+QString OsmGeoJsonWriter::_getLayerName(const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& feature,
+                                        const std::shared_ptr<geos::geom::Geometry>& geometry) const
+{
+  //  TODO: Check with Matt about multiple features
+  if (feature.size() > 0 && !feature[0].tableName.isEmpty())
+      return feature[0].tableName;
+  else if (_useThematicLayers)
+    return _getThematicUnknown(geometry);
+  else
+    return _getFcodeUnknown(geometry);
+}
+
+QString OsmGeoJsonWriter::_getThematicUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+{
+  if (geometry)
+  {
+    //  getDimension returns (0=point, 1=line, 2=surface)
+    switch(geometry->getDimension())
+    {
+    case 0: //  Point
+      return "UnknownPnt";
+      break;
+    case 1: //  Line
+      return "UnknownCrv";
+      break;
+    case 2: //  Surface
+      return "UnknownSrf";
+      break;
+    default:
+      break;
+    }
+  }
+  return "Unknown";
+}
+
+QString OsmGeoJsonWriter::_getFcodeUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+{
+  if (geometry)
+  {
+    //  getDimension returns (0=point, 1=line, 2=surface)
+    switch(geometry->getDimension())
+    {
+    case 0: //  Point
+      return "UNKNOWN_P";
+      break;
+    case 1: //  Line
+      return "UNKNOWN_C";
+      break;
+    case 2: //  Surface
+      return "UNKNOWN_S";
+      break;
+    default:
+      break;
+    }
+  }
+  return "UNKNOWN";
+}
 }

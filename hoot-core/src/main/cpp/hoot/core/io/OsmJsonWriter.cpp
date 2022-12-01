@@ -58,7 +58,7 @@ OsmJsonWriter::OsmJsonWriter(int precision)
     _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
     _numWritten(0),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-    _writeThematicFiles(false),
+    _writeSplitFiles(false),
     _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _includeIds(ConfigOptions().getWriterIncludeIdTag()),
     _includeCompatibilityTags(true),

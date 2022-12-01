@@ -1722,12 +1722,12 @@ elements not conflatable by specific conflation routines is considered to have s
 Tag similarity threshold, in the range (0.0, 1.0], at or above which an polygon element not
 conflatable by specific conflation routines is considered to have similar tags.
 
-=== geojson.write.thematic.structure
+=== geojson.write.split.file.structure
 
 * Data Type: bool
 * Default Value: `false`
 
-Split GeoJSON files by Thematic Groups (TransportationGroundCrv, StructurePnt etc)
+Split GeoJSON files by Thematic Groups (TransportationGroundCrv, StructurePnt etc) or FCODEs
 
 === geometry.linear.merger.default
 

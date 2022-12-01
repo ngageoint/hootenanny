@@ -67,8 +67,6 @@ public:
   bool isSupported(const QString& url) const override { return url.endsWith(".geojson", Qt::CaseInsensitive); }
   QString supportedFormats() const override { return ".geojson"; }
 
-//  QString toString(const ConstOsmMapPtr& map);
-
 protected:
 
   /**
@@ -163,10 +161,21 @@ protected:
    */
   void _setWriterIndex(const ConstElementPtr& e) override;
 
+  QString _getLayerName(const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& feature,
+                        const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  QString _getThematicUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  QString _getFcodeUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+
+
   /** Tasking Manager requires that all bounding geometries are MultiPolygons and not Polygons or Linestrings,
    *  set to true when the GeoJSON output is being used for Tasking Manager bounding polygons.
    */
   bool _useTaskingManagerFormat;
+
+  /**
+   * @brief _useThematicLayers
+   */
+  bool _useThematicLayers;
 
 };
 
