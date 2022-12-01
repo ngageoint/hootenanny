@@ -495,7 +495,7 @@ QString OsmGeoJsonWriter::_getLayerName(const std::vector<ScriptToOgrSchemaTrans
                                         const std::shared_ptr<geos::geom::Geometry>& geometry) const
 {
   //  TODO: Check with Matt about multiple features
-  if (feature.size() > 0 && !feature[0].tableName.isEmpty())
+  if (!feature.empty() && !feature[0].tableName.isEmpty())
       return feature[0].tableName;
   else if (_useThematicLayers)
     return _getThematicUnknown(geometry);
