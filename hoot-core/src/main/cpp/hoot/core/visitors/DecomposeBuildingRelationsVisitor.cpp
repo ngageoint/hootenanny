@@ -43,7 +43,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
 void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
-  if (e->getElementType() == ElementType::Relation)
+  if (e == nullptr && e->getElementType() == ElementType::Relation)
   {
     const std::shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == MetadataTags::RelationBuilding())
@@ -54,6 +54,8 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 
 void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr<Relation>& r)
 {
+  if (r == nullptr)
+    return;
   //  Copy the members so that the relation can be modified below
   const vector<RelationData::Entry> members = r->getMembers();
   for (const auto& member : members)
@@ -91,6 +93,8 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
 
     // ok, we've got a building part. Recompose it as a building.
     std::shared_ptr<Element> e = _map->getElement(member.getElementId());
+    if (e == nullptr)
+      continue;
     //  Copy the tags from the relation to the new element
     Tags t = r->getTags();
     t.add(e->getTags());
