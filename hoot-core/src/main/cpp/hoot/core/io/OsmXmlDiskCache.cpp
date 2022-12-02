@@ -40,8 +40,15 @@ namespace hoot
 
 OsmXmlDiskCache::OsmXmlDiskCache()
 {
+  // Check for temp dir
+  // If $HOOT_HOME/tmp doesn't exist, and we can't make it, then use /tmp
+  QString tempDir = ConfPath::getHootHome() + "/tmp";
+  if (!QDir(tempDir).exists())
+    if (!QDir(tempDir).mkpath("."))
+      tempDir = "/tmp";
+
   // Setup our temp file & get guaranteed unique name
-  QString fnameTemplate = ConfPath::getHootHome() + "/tmp/disk.cache.osm.XXXXXX";
+  QString fnameTemplate = tempDir + "/disk.cache.osm.XXXXXX";
   _pTempFile = std::make_shared<QTemporaryFile>(fnameTemplate);
   if (!_pTempFile->open())
   {
