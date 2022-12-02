@@ -94,7 +94,7 @@ void OsmXmlDiskCache::_initCache()
   _reader.hasMoreElements();
 }
 
-void OsmXmlDiskCache::addElement(ConstElementPtr &newElement)
+void OsmXmlDiskCache::addElement(const ConstElementPtr &newElement)
 {
   LOG_TRACE("Adding element: " + newElement->toString() + " to cache...");
 

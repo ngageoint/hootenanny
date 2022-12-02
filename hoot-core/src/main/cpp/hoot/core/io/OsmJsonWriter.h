@@ -100,7 +100,7 @@ protected:
   long _numWritten;
   long _statusUpdateInterval;
 
-  bool _writeThematicFiles;
+  bool _writeSplitFiles;
 
   AreaCriterion _areaCriterion;
   LinearCriterion _linearCriterion;
