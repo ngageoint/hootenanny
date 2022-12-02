@@ -86,7 +86,7 @@ public:
   // resets the internal tracking of node/way/relation IDs, to allow intentional duplicate
   // reading.
   bool seekAndReset(uint64_t pos);
-  uint64_t pos();
+  uint64_t pos() const;
 
   void read(const OsmMapPtr& map) override;
   void close() override;

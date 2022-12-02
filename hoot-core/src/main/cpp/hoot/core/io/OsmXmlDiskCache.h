@@ -49,7 +49,7 @@ public:
   OsmXmlDiskCache();
   ~OsmXmlDiskCache();
 
-  void addElement(ConstElementPtr &newElement);
+  void addElement(const ConstElementPtr& newElement);
 
   bool containsElement(const ElementId& eid) const;
 
