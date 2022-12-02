@@ -201,7 +201,7 @@ void OsmXmlWriter::_initWriter()
   _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
-uint64_t OsmXmlWriter::getPos()
+uint64_t OsmXmlWriter::getPos() const
 {
   return _fp->pos();
 }

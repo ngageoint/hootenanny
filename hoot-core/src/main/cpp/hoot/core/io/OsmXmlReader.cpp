@@ -293,7 +293,7 @@ bool OsmXmlReader::seekAndReset(uint64_t pos)
   return true;
 }
 
-uint64_t OsmXmlReader::pos()
+uint64_t OsmXmlReader::pos() const
 {
   return _inputFile.pos();
 }
