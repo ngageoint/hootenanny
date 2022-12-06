@@ -118,11 +118,6 @@ protected:
   void _writeKvp(const QString& key, double value);
   bool _hasTags(const ConstElementPtr& e) const;
   void _writeTags(const ConstElementPtr& e);
-  /**
-   * @brief _setWriterIndex Set the writer index for MultiFile objects
-   * @param e Element dictating the index
-   */
-  virtual void _setWriterIndex(const ConstElementPtr& e);
 
 private:
 

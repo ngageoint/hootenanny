@@ -349,8 +349,6 @@ void OsmJsonWriter::_writeWays()
       LOG_VART(msg);
     }
 
-    _setWriterIndex(w);
-
     if (_writer.isCurrentIndexWritten())
       _write(",", true);
 
@@ -409,8 +407,6 @@ void OsmJsonWriter::_writeRelations()
       LOG_VART(msg);
     }
 
-    _setWriterIndex(r);
-
     if (_writer.isCurrentIndexWritten())
       _write(",", true);
 
@@ -453,11 +449,6 @@ void OsmJsonWriter::_writeRelations()
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
-}
-
-void OsmJsonWriter::_setWriterIndex(const ConstElementPtr& /*e*/)
-{
-  //  Right now, all elements are written to the same file for JSON files
 }
 
 }
