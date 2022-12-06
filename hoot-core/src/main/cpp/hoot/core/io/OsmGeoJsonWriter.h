@@ -95,15 +95,10 @@ protected:
    */
   QString _getBbox() const;
   /**
-   * @brief _writeNode Writes a single node; metadata, tags, and geometry
-   * @param node
+   * @brief _writeNode Writes a single element; metadata, tags, and geometry
+   * @param element
    */
-  void _writeNode(ConstNodePtr node);
-  /**
-   * @brief _writeWay Writes a single way; metadata, tags, and geometry
-   * @param way
-   */
-  void _writeWay(ConstWayPtr way);
+  void _writeElement(ConstElementPtr element);
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation
@@ -155,11 +150,8 @@ protected:
    * @return Semicolon separated list of roles
    */
   std::string _buildRoles(ConstRelationPtr relation, bool& first);
-  /**
-   * @brief _setWriterIndex Set the writer index for MultiFile objects
-   * @param e Element dictating the index
-   */
-  void _setWriterIndex(const ConstElementPtr& e) override;
+
+  ConstElementPtr _translateElement(const ConstElementPtr& e);
 
   QString _getLayerName(const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& feature,
                         const std::shared_ptr<geos::geom::Geometry>& geometry) const;
