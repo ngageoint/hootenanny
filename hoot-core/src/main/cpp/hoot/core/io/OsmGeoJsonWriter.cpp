@@ -70,8 +70,8 @@ void OsmGeoJsonWriter::open(const QString& url)
 {
   //  Open the writer
   _writer.open(url);
-  //  Initialize the translator for splitting files
-  if (_writeSplitFiles)
+  //  Initialize the translator if we have one
+  if (!_scriptPath.isEmpty())
     initTranslator();
 }
 
@@ -118,32 +118,37 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
   _writeHootFormat = false;
   //  Set the MultiFileWriter settings
   MultiFileWriter::MultiFileWriterType t = MultiFileWriter::SingleFile;
+  bool try_split = options.getGeojsonWriteSplitFileStructure();
 
-  if (options.getGeojsonWriteSplitFileStructure())
+  //  Thematic structure requires a translator
+  QString script = options.getSchemaTranslationScript();
+  if (script.isEmpty())
   {
-    //  Thematic structure requires a translator
-    QString script = options.getSchemaTranslationScript();
-    if (script.isEmpty())
+    if (try_split)
     {
       LOG_ERROR("OsmGeoJsonWriter requires schema translation script when used with '" <<
                 ConfigOptions::getGeojsonWriteSplitFileStructureKey() << "'. Reverting to single file output.");
     }
-    else
+  }
+  else
+  {
+    try
     {
-      try
+      //  Set the Translation
+      SchemaUtils::validateTranslationUrl(script);
+      setSchemaTranslationScript(script);
+      //  Translated files shouldn't include circular error values
+      setIncludeCircularError(false);
+      //  Spliting files requires a translation
+      if (try_split)
       {
-        //  Set the Translation
-        SchemaUtils::validateTranslationUrl(script);
-        setSchemaTranslationScript(script);
         t = MultiFileWriter::MultiThematic;
         _writeSplitFiles = true;
-        //  Translated files shouldn't include circular error values
-        setIncludeCircularError(false);
       }
-      catch (const IllegalArgumentException& e)
-      {
-        LOG_ERROR(e.getWhat() << "  Reverting to single file output.");
-      }
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      LOG_ERROR(e.getWhat() << "  Reverting to single file output.");
     }
   }
   _writer.setWriterType(t);

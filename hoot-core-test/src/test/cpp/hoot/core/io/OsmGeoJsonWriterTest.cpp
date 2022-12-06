@@ -43,6 +43,7 @@ class OsmGeoJsonWriterTest : public HootTestFixture
   CPPUNIT_TEST(runAllDataTypesTest);
   CPPUNIT_TEST(runDcTigerTest);
   CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
+  CPPUNIT_TEST(runBostonSubsetRoadBuildingTranslationTest);
   CPPUNIT_TEST(runSplitThematicBostonRoadBuildingTest);
   CPPUNIT_TEST(runSplitFcodeBostonRoadBuildingTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
@@ -75,6 +76,24 @@ public:
     if (Log::getInstance().getLevel() >= Log::Info)
       Log::getInstance().setLevel(Log::Error);
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson");
+    Log::getInstance().setLevel(logLevel);
+  }
+
+  void runBostonSubsetRoadBuildingTranslationTest()
+  {
+    //  Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
+    //  the log level.  We expect the nodes to be missing since the Boston data has issues
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Error);
+    //  Set global settings
+    conf().set(ConfigOptions::getOgrAddUuidKey(), false);
+    //  Set local settings
+    Settings s;
+    s.set(ConfigOptions::getOgrAddUuidKey(), false);
+    s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/TDSv70.js");
+
+    runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding-Translated.geojson", &s);
     Log::getInstance().setLevel(logLevel);
   }
 
