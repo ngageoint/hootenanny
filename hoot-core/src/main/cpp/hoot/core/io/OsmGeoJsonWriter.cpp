@@ -137,6 +137,8 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
         setSchemaTranslationScript(script);
         t = MultiFileWriter::MultiThematic;
         _writeSplitFiles = true;
+        //  Translated files shouldn't include circular error values
+        setIncludeCircularError(false);
       }
       catch (const IllegalArgumentException& e)
       {
@@ -183,12 +185,13 @@ void OsmGeoJsonWriter::_writeNodes()
 
   for (auto node_id : nids)
   {
-    ConstNodePtr n = _map->getNode(node_id);
-    _setWriterIndex(n);
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(_translateElement(_map->getNode(node_id)));
+    if (!n)
+      continue;
     if (_writer.isCurrentIndexWritten())
       _write(",", true);
 
-    _writeNode(n);
+    _writeElement(n);
 
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
@@ -203,8 +206,8 @@ void OsmGeoJsonWriter::_writeWays()
   const WayMap& ways = _map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
-    ConstWayPtr w = it->second;
-    if (w.get() == nullptr)
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_translateElement(it->second));
+    if (!w)
       continue;
     //  Skip any ways that have parents
     set<ElementId> parents = _map->getParents(w->getElementId());
@@ -217,8 +220,9 @@ void OsmGeoJsonWriter::_writeWays()
     {
       for (auto node_id : nodes)
       {
+        //  No need to translate the node, it is for validation only
         ConstNodePtr node = _map->getNode(node_id);
-        if (node.get() == nullptr)
+        if (!node)
         {
           valid = false;
           break;
@@ -228,22 +232,20 @@ void OsmGeoJsonWriter::_writeWays()
     //  Write out the way in geojson if valid
     if (valid)
     {
-      _setWriterIndex(w);
       if (_writer.isCurrentIndexWritten())
         _write(",", true);
-      _writeWay(w);
+      _writeElement(w);
     }
     else
     {
       for (auto node_id : nodes)
       {
-        ConstNodePtr node = _map->getNode(node_id);
-        if (node.get() != nullptr)
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(_translateElement(_map->getNode(node_id)));
+        if (!node)
         {
-          _setWriterIndex(node);
           if (_writer.isCurrentIndexWritten())
             _write(",", true);
-          _writeNode(node);
+          _writeElement(node);
         }
       }
     }
@@ -261,20 +263,14 @@ void OsmGeoJsonWriter::_writeRelations()
   const RelationMap& relations = _map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
   {
-    ConstRelationPtr r = it->second;
-
-    _setWriterIndex(r);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(_translateElement(it->second));
+    if (!r)
+      continue;
 
     if (_writer.isCurrentIndexWritten())
       _write(",", true);
-    //  Write out the relation (and all children) in geojson
-    _write("{");
-    _writeFeature(r);
-    _write(",");
-    _write("\"geometry\": {");
-    _writeGeometry(r);
-    _write("}");
-    _write("}", false);
+
+    _writeElement(r);
 
     _numWritten++;
     if (_numWritten % (_statusUpdateInterval) == 0)
@@ -313,7 +309,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
   for (const auto& member : members)
   {
     ConstElementPtr e = _map->getElement(member.getElementId());
-    if (e.get() == nullptr)
+    if (!e)
       continue;
     if (first)
       first = false;
@@ -413,32 +409,18 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
   }
 }
 
-void OsmGeoJsonWriter::_writeNode(ConstNodePtr node)
+void OsmGeoJsonWriter::_writeElement(ConstElementPtr element)
 {
-  if (node.get() == nullptr)
+  if (!element)
     return;
+  //  Write out the element in geojson
   _write("{");
-  _writeFeature(node);
+  _writeFeature(element);
   _write(",");
   _write("\"geometry\": {");
-  _writeGeometry(node);
+  _writeGeometry(element);
   _write("}");
   _write("}", false);
-}
-
-void OsmGeoJsonWriter::_writeWay(ConstWayPtr way)
-{
-  if (way.get() == nullptr)
-    return;
-  //  Write out the way in geojson
-  _write("{");
-  _writeFeature(way);
-  _write(",");
-  _write("\"geometry\": {");
-  _writeGeometry(way);
-  _write("}");
-  _write("}", false);
-
 }
 
 void OsmGeoJsonWriter::_writeRelationInfo(ConstRelationPtr r)
@@ -463,7 +445,7 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
   for (const auto& member : members)
   {
     ConstElementPtr e = _map->getElement(member.getElementId());
-    if (e.get() == nullptr)
+    if (!e)
       continue;
     if (first)
       first = false;
@@ -477,18 +459,63 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
   return ss.str();
 }
 
-void OsmGeoJsonWriter::_setWriterIndex(const ConstElementPtr& e)
+ConstElementPtr OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
 {
+  //  Don't translate without a translator
+  if (!_translator)
+    return e;
+  //  Translate the element and get the
+  ElementPtr c = e->clone();
+  std::shared_ptr<geos::geom::Geometry> geometry;
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
+  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(_map)));
+  //  Translate the feature
+  translateToFeatures(provider, e, geometry, feature);
+  if (feature.empty())
+    return e;
+  //  Convert the feature values to tags for output
+  Tags t;
+  const QVariantMap& vm = feature[0].feature->getValues();
+  for (auto it = vm.constBegin(); it != vm.constEnd(); ++it)
+  {
+    const QVariant& v = it.value();
+    QByteArray ba = it.key().toUtf8();
+    //  Convert the variant values, don't insert "empty" values (i.e. -999999 or 'No Information')
+    switch (v.type())
+    {
+    case QVariant::Invalid:
+      break;
+    case QVariant::Int:
+      if (v.toInt() != -999999)
+        t.set(ba.constData(), v.toInt());
+      break;
+    case QVariant::LongLong:
+      if (v.toLongLong() != -999999)
+        t.set(ba.constData(), QString::number(v.toLongLong()));
+      break;
+    case QVariant::Double:
+      if (v.toDouble() != -999999.0)
+        t.set(ba.constData(), v.toDouble());
+      break;
+    case QVariant::String:
+    {
+      QString value = v.toString();
+      if (value != "No Information" && value != "noInformation" && !value.isEmpty())
+        t.set(ba.constData(), v.toString());
+      break;
+    }
+    default:
+      LOG_WARN("Can't convert the provided value into an OGR value. (" << v.toString() << ")");
+      break;
+    }
+  }
+  c->setTags(t);
   if (_writeSplitFiles)
   {
-    std::shared_ptr<geos::geom::Geometry> geometry;
-    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
-    ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(_map)));
-    //  Translate the feature
-    translateToFeatures(provider, e, geometry, feature);
     QString layer = _getLayerName(feature, geometry);
     _writer.setCurrentFileIndex(layer);
   }
+  return c;
 }
 
 QString OsmGeoJsonWriter::_getLayerName(const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& feature,
