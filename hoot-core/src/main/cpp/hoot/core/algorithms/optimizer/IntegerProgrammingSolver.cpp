@@ -32,9 +32,9 @@ namespace hoot
 {
 
 IntegerProgrammingSolver::IntegerProgrammingSolver()
+  : _lp(glp_create_prob()),
+    _timeLimit(-1)
 {
-  _lp = glp_create_prob();
-  _timeLimit = -1;
 }
 
 IntegerProgrammingSolver::~IntegerProgrammingSolver()

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "WaySplitter.h"
@@ -31,14 +31,14 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -46,10 +46,10 @@ using namespace std;
 namespace hoot
 {
 
-WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr way) :
-_map(map),
-_way(way),
-_nf(std::make_shared<FindNodesInWayFactory>(_way))
+WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr way)
+  : _map(map),
+    _way(way),
+    _nf(std::make_shared<FindNodesInWayFactory>(_way))
 {
 }
 
@@ -70,9 +70,7 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl) const
       result[i] = WaySubline(last, curr).toWay(_map, _nf);
       result[i]->setPid(_way->getId());
       if (result[i]->getNodeCount() == 0)
-      {
         result[i].reset();
-      }
     }
     last = curr;
   }
@@ -105,10 +103,8 @@ void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
     WayLocation wl (map, w, l / 2.0);
     vector<WayPtr> children = WaySplitter(map, w).split(wl);
 
-    for (size_t i = 0; i < children.size(); i++)
-    {
-      split(map, children[i], maxSize);
-    }
+    for (const auto& child : children)
+      split(map, child, maxSize);
   }
 }
 
@@ -117,9 +113,7 @@ vector<WayPtr> WaySplitter::split(const WayLocation& splitPoint) const
   vector<WayPtr> result;
 
   if (splitPoint.isFirst() || splitPoint.isLast())
-  {
     result.push_back(_way);
-  }
   else
   {
     WayLocation first(_map, _way, 0, 0.0);

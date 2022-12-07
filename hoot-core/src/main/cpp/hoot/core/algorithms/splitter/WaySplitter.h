@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYSPLITTER_H
 #define WAYSPLITTER_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
 
-class WaySubline;
 class FindNodesInWayFactory;
 class WayLocation;
+class WaySubline;
 
 /**
  * @brief The WaySplitter class splits ways.

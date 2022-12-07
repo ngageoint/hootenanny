@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "IdwInterpolator.h"
 
@@ -46,9 +46,9 @@ namespace Tgs
 using namespace std;
 
 IdwInterpolator::IdwInterpolator(double p)
+  : _p(p),
+    _stopDelta(0.1)
 {
-  _p = p;
-  _stopDelta = 0.1;
 }
 
 class IdwOptimizeFunction : public NelderMead::Function
@@ -60,8 +60,7 @@ public:
   double f(Vector v) override
   {
     // a value less than zero isn't meaningful.
-    double p = std::max(0.0, v[0]);
-    _idw.setP(p);
+    _idw.setP(std::max(0.0, v[0]));
     return -_idw.estimateError();
   }
 
@@ -98,9 +97,7 @@ void IdwInterpolator::_buildModel()
       _p = result[0];
     }
     if (iterations > _iterations)
-    {
       _iterations = iterations;
-    }
   }
 }
 
@@ -138,15 +135,11 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
 
   _result.resize(_depColumns.size());
   for (size_t i = 0; i < _result.size(); i++)
-  {
     _result[i] = 0.0;
-  }
 
   vector<double> simplePoint(_indColumns.size());
   for (size_t i = 0; i < _indColumns.size(); i++)
-  {
     simplePoint[i] = point[_indColumns[i]];
-  }
 
   KnnIteratorNd it(_getIndex(), simplePoint);
   double wSum = 0.0;
@@ -154,18 +147,17 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
   int iterations = 0;
   while (it.next() && samples < 50 && iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
-    size_t i = it.getId();
-    if ((int)i == ignoreId)
-    {
+    int i = it.getId();
+    if (i == ignoreId)
       continue;
-    }
+
     const vector<double>& record = df.getDataVector(static_cast<unsigned int>(i));
 
     // figure out the distance between point and this data vector
     double d = 0;
-    for (size_t j = 0; j < _indColumns.size(); j++)
+    for (auto col : _indColumns)
     {
-      double v = point[_indColumns[j]] - record[_indColumns[j]];
+      double v = point[col] - record[col];
       d += v * v;
     }
     d = sqrt(d);
@@ -176,9 +168,7 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
 
       // Set the contribution equal to this value.
       for (size_t j = 0; j < _result.size(); j++)
-      {
         _result[j] += record[_depColumns[j]];
-      }
       break;
     }
 
@@ -188,21 +178,15 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
 
     // calculate the contribution to the predicted value.
     for (size_t j = 0; j < _result.size(); j++)
-    {
       _result[j] += (record[_depColumns[j]] * w);
-    }
 
     iterations++;
   }
   if (iterations > _iterations)
-  {
     _iterations = iterations;
-  }
 
   for (size_t j = 0; j < _result.size(); j++)
-  {
     _result[j] /= wSum;
-  }
 
   return _result;
 }
@@ -215,9 +199,7 @@ void IdwInterpolator::_readInterpolator(QIODevice& is)
   ds >> version;
 
   if (version != 0x0)
-  {
     throw Exception("Unexpected version.");
-  }
 
   ds >> _p;
   ds >> _stopDelta;

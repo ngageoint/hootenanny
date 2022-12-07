@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "Random.h"
@@ -33,72 +33,81 @@
 
 namespace Tgs
 {
-  std::shared_ptr<Random> Random::_instance;
 
-  Random::Random(unsigned int s) :
-  _is_single(false)
-  {
-    seed(s);
-  }
+std::shared_ptr<Random> Random::_instance;
 
-  Random::Random() :
-  _is_single(true)
-  {
-    seed(0);
-  }
+Random::Random(unsigned int s)
+  : _is_single(false)
+{
+  seed(s);
+}
 
-  double Random::generateGaussian(double mean, double sigma)
-  {
-    double x, y, r2;
-    do
-    {
-      // choose x,y in uniform square (-1,-1) to (+1,+1)
-      x = -1 + 2 * generateUniform();
-      y = -1 + 2 * generateUniform();
-      // see if it is in the unit circle
-      r2 = x * x + y * y;
-    }
-    while (r2 > 1.0 || r2 == 0);
-    // Box-Muller transform
-    return mean + sigma * y * sqrt (-2.0 * log (r2) / r2);
-  }
+Random::Random()
+  : _is_single(true)
+{
+  seed(0);
+}
 
-  double Random::generateUniform()
-  {
-    return (double)generateInt() / (double)RAND_MAX;
-  }
+std::shared_ptr<Random> Random::instance()
+{
+  if (!_instance)
+    _instance.reset(new Random());
+  return _instance;
+}
 
-  bool Random::coinToss()
+double Random::generateGaussian(double mean, double sigma)
+{
+  double x, y, r2;
+  do
   {
-    return (generateInt() % 2) == 1;
+    // choose x,y in uniform square (-1,-1) to (+1,+1)
+    x = -1 + 2 * generateUniform();
+    y = -1 + 2 * generateUniform();
+    // see if it is in the unit circle
+    r2 = x * x + y * y;
   }
+  while (r2 > 1.0 || r2 == 0);
+  // Box-Muller transform
+  return mean + sigma * y * sqrt (-2.0 * log (r2) / r2);
+}
 
-  int Random::generateInt(int max)
-  {
-    if (max <= 0)
-      return 0;
-    else
-      return generateInt() % max;
-  }
+double Random::generateUniform()
+{
+  return static_cast<double>(generateInt()) / static_cast<double>(RAND_MAX);
+}
 
-  int Random::generateInt()
-  {
-    if (_is_single)
-      return rand();
-    else
-      return rand_r(&_seed);
-  }
+bool Random::coinToss()
+{
+  return (generateInt() % 2) == 1;
+}
 
-  void Random::seed(unsigned int s)
-  {
-    if (_is_single)
-      srand(s);
-    else
-      _seed = s;
-  }
+int Random::generateInt(int max)
+{
+  if (max <= 0)
+    return 0;
+  else
+    return generateInt() % max;
+}
 
-  void Random::seed()
-  {
-    seed(0);
-  }
+int Random::generateInt()
+{
+  if (_is_single)
+    return rand();
+  else
+    return rand_r(&_seed);
+}
+
+void Random::seed(unsigned int s)
+{
+  if (_is_single)
+    srand(s);
+  else
+    _seed = s;
+}
+
+void Random::seed()
+{
+  seed(0);
+}
+
 }
