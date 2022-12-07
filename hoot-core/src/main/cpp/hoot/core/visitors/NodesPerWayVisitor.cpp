@@ -83,7 +83,7 @@ void NodesPerWayVisitor::visit(const ConstElementPtr& e)
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->getElementId());
 
-    const int numWayNodes = way->getNodeCount();
+    const int numWayNodes = static_cast<int>(way->getNodeCount());
     _totalWayNodes += numWayNodes;
     LOG_VART(_totalWayNodes);
     if (_minNodesPerWay == 0 || numWayNodes < _minNodesPerWay)

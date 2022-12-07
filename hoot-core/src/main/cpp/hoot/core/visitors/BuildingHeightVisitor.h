@@ -66,7 +66,7 @@ public:
   double getMax() const override { return _maxHeight; }
   double getAverage() const override
   {
-    const double average = _numAffected == 0 ? 0.0 : _totalHeight / _numAffected;
+    const double average = _numAffected == 0 ? 0.0 : _totalHeight / static_cast<double>(_numAffected);
     return average;
   }
 

@@ -107,7 +107,7 @@ int MapCompareUtils::getRasterComparisonFinalScore(const OsmMapPtr& map1, const 
 
 int MapCompareUtils::convertRawScoreToFinalScore(const double score)
 {
-  return score * 1000.0 + 0.5;
+  return static_cast<int>(score * 1000.0 + 0.5);
 }
 
 }

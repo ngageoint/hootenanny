@@ -78,8 +78,8 @@ void KernelEstimationInterpolator::_buildModel()
   {
     // calculate the standard deviation in x
     double mean = 0;
-    size_t n = df.getNumDataVectors();
-    for (size_t i = 0; i < n; ++i)
+    unsigned int n = df.getNumDataVectors();
+    for (unsigned int i = 0; i < n; ++i)
     {
       double v = df.getDataVector(i)[_indColumns[0]];
       mean += v;
@@ -87,13 +87,13 @@ void KernelEstimationInterpolator::_buildModel()
     mean /= df.getNumDataVectors();
 
     double sumDiff = 0;
-    for (size_t i = 0; i < n; ++i)
+    for (unsigned int i = 0; i < n; ++i)
     {
       double v = df.getDataVector(i)[_indColumns[0]];
       sumDiff += (v - mean) * (v - mean);
     }
 
-    double sdx = sqrt(1.0 / (n - 1) * sumDiff);
+    double sdx = sqrt(1.0 / static_cast<double>(n - 1) * sumDiff);
 
     // calculate a reasonable starting point w/ silverman's rule of thumb. Put a minimum at 1m to
     // prevent some edge conditions.
@@ -148,7 +148,7 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
   while (it.next() && it.getDistance() < _sigma * 3.0 &&
          iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
-    size_t i = it.getId();
+    unsigned int i = it.getId();
     if (i == index)
     {
       continue;
@@ -222,7 +222,7 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
   while (it.next() && it.getDistance() < _sigma * 3.0 &&
          iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
-    size_t i = it.getId();
+    unsigned int i = it.getId();
     const vector<double>& record = df.getDataVector(i);
 
     // figure out the distance between point and this data vector

@@ -71,8 +71,8 @@ namespace Tgs
     {
       for (unsigned int i = 0; i < v.size() * 2; i++)
         std::swap(
-          v[Random::instance()->generateInt(v.size())],
-          v[Random::instance()->generateInt(v.size())]);
+          v[Random::instance()->generateInt(static_cast<int>(v.size()))],
+          v[Random::instance()->generateInt(static_cast<int>(v.size()))]);
     }
 
   private:

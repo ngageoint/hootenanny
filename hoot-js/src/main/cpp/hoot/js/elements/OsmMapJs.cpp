@@ -180,7 +180,7 @@ void OsmMapJs::getElementCount(const FunctionCallbackInfo<Value>& args)
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-  args.GetReturnValue().Set(Number::New(current, obj->getConstMap()->getElementCount()));
+  args.GetReturnValue().Set(Number::New(current, static_cast<double>(obj->getConstMap()->getElementCount())));
 }
 
 void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)

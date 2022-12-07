@@ -87,8 +87,8 @@ public:
     Vec2d result;
 
     // calculate the grid cell that this point falls in.
-    int r = (p.y - _e.getMinY()) / _gridSpacing;
-    int c = (p.x - _e.getMinX()) / _gridSpacing;
+    int r = static_cast<int>((p.y - _e.getMinY()) / _gridSpacing);
+    int c = static_cast<int>((p.x - _e.getMinX()) / _gridSpacing);
     double dx = p.x - (_e.getMinX() + c * _gridSpacing);
     double dy = p.y - (_e.getMinY() + r * _gridSpacing);
 

@@ -50,7 +50,7 @@ public:
   MinIdVisitor();
   ~MinIdVisitor() override = default;
 
-  double getStat() const override { return _minId; }
+  double getStat() const override { return static_cast<double>(_minId); }
 
   void visit(const ConstElementPtr& e) override;
 

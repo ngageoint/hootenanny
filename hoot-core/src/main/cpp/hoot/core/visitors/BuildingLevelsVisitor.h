@@ -62,7 +62,7 @@ public:
   double getMax() const override { return _maxLevels; }
   double getAverage() const override
   {
-    const double average = _numAffected == 0 ? 0.0 : _totalLevels / _numAffected;
+    const double average = _numAffected == 0 ? 0.0 : _totalLevels / static_cast<double>(_numAffected);
     return average;
   }
 

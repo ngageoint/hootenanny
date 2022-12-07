@@ -49,9 +49,9 @@ public:
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
   bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
-  void setDefaultValue(double v) { _defaultValue = v; }
-  void setMaxValue(double max) { _max = max; }
-  void setMinValue(double min) { _min = min; }
+  void setDefaultValue(int v) { _defaultValue = v; }
+  void setMaxValue(int max) { _max = max; }
+  void setMinValue(int min) { _min = min; }
 
 private:
 

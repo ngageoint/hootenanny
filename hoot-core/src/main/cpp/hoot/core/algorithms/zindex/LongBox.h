@@ -55,7 +55,7 @@ public:
 
   LongBox expand(int size) const;
 
-  int getDimensions() const { return getMin().size(); }
+  int getDimensions() const { return static_cast<int>(getMin().size()); }
 
   std::vector<long int> getMax() const { return _max; }
   std::vector<long int> getMin() const { return _min; }

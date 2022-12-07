@@ -105,12 +105,12 @@ OsmPbfWriter::~OsmPbfWriter()
 
 long OsmPbfWriter::_convertLon(double lon) const
 {
-  return static_cast<long>((1000000000.0 * lon - _lonOffset) / _granularity);
+  return static_cast<long>((1000000000.0 * lon - static_cast<double>(_lonOffset)) / _granularity);
 }
 
 long OsmPbfWriter::_convertLat(double lat) const
 {
-  return static_cast<long>((1000000000.0 * lat - _latOffset) / _granularity);
+  return static_cast<long>((1000000000.0 * lat - static_cast<double>(_latOffset)) / _granularity);
 }
 
 int OsmPbfWriter::_convertString(const QString& s)

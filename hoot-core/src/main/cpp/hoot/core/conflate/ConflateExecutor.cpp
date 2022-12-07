@@ -284,11 +284,11 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   double timingOutput = _taskTimer.getElapsedAndRestart();
   double totalElapsed = totalTime.getElapsed();
   _stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
-                          initialElementCount / totalElapsed));
+                          static_cast<double>(initialElementCount) / totalElapsed));
   _stats.append(SingleStat("(Dubious) Final Elements Processed per Second",
-                          (double)map->getElementCount() / totalElapsed));
+                          static_cast<double>(map->getElementCount()) / totalElapsed));
   _stats.append(SingleStat("Write Output Time (sec)", timingOutput));
-  _stats.append(SingleStat("Final Element Count", (double)map->getElementCount()));
+  _stats.append(SingleStat("Final Element Count", static_cast<double>(map->getElementCount())));
   _stats.append(SingleStat("Total Time Elapsed (sec)", totalElapsed));
   _stats.append(IoSingleStat(IoSingleStat::RChar));
   _stats.append(IoSingleStat(IoSingleStat::WChar));
@@ -567,7 +567,7 @@ void ConflateExecutor::_writeChangesetStats()
 
 float ConflateExecutor::_getTaskWeight() const
 {
-  return 1.0 / (float)_numTotalTasks;
+  return 1.0f / (float)_numTotalTasks;
 }
 
 float ConflateExecutor::_getJobPercentComplete(const int currentTaskNum) const

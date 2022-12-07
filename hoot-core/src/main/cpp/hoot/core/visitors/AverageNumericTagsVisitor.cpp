@@ -101,7 +101,7 @@ double AverageNumericTagsVisitor::getStat() const
   LOG_VART(_sum);
   LOG_VART(_tagCount);
   if (_sum > 0.0 && _tagCount > 0)
-    return _sum / _tagCount;
+    return _sum / static_cast<double>(_tagCount);
   return 0.0;
 }
 

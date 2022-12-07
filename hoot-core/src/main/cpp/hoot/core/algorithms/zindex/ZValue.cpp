@@ -86,7 +86,7 @@ long int ZValue::calculateComponent(double v, int d)
 {
   if (d >= (int)_min.size() || d >= (int)_max.size())
     throw HootException("Input vector size is greater than min or max size.");
-  return round(((v - _min[d]) / (_max[d] - _min[d])) * _range);
+  return round(((v - _min[d]) / (_max[d] - _min[d])) * static_cast<double>(_range));
 }
 
 void ZValue::decompose(long int v, vector<long int>& point) const

@@ -81,7 +81,7 @@ public:
    */
   void loadMatrix(const std::vector<int>& i, const std::vector<int>& j, const std::vector<double>& r)
   {
-    glp_load_matrix(_lp, i.size() - 1, &(i[0]), &(j[0]), &(r[0]));
+    glp_load_matrix(_lp, static_cast<int>(i.size() - 1), &(i[0]), &(j[0]), &(r[0]));
   }
 
   /**

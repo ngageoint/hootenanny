@@ -400,7 +400,7 @@ void JavaScriptSchemaTranslator::_parseEnumerations(std::shared_ptr<LongIntegerF
     if (vm["value"].canConvert(QVariant::LongLong) == false)
       throw HootException("Expected each enumeration map to contain a valid value.");
 
-    int v = vm["value"].toLongLong();
+    qlonglong v = vm["value"].toLongLong();
     if (fd->hasEnumeratedValue(v))
     {
       if (logWarnCount < Log::getWarnMessageLimit())

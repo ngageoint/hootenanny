@@ -48,7 +48,7 @@ public:
   CountUniqueReviewsVisitor() = default;
   ~CountUniqueReviewsVisitor() override = default;
 
-  double getStat() const override { return _reviews.size(); }
+  double getStat() const override { return static_cast<double>(_reviews.size()); }
 
   /**
    * @see ElementVisitor

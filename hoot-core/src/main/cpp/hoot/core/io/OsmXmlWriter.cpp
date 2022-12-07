@@ -168,7 +168,7 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));
 
   writer.write(map);
-  return QString::fromUtf8(buf->data(), buf->size());
+  return QString::fromUtf8(buf->data(), static_cast<int>(buf->size()));
 }
 
 QString OsmXmlWriter::_typeName(ElementType e)

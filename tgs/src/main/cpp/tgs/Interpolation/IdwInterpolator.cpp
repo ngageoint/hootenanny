@@ -159,7 +159,7 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
     {
       continue;
     }
-    const vector<double>& record = df.getDataVector(i);
+    const vector<double>& record = df.getDataVector(static_cast<unsigned int>(i));
 
     // figure out the distance between point and this data vector
     double d = 0;

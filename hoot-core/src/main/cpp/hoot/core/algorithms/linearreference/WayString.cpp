@@ -229,7 +229,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     // add all the pre-existing nodes that we can.
     for (size_t i = formeri; i <= latteri; ++i)
     {
-      long nid = oldWay->getNodeId(i);
+      long nid = oldWay->getNodeId(static_cast<int>(i));
       newNids.push_back(nid);
       destination->addNode(std::make_shared<Node>(*map.getNode(nid)));
     }

@@ -72,7 +72,7 @@ void GeometryPainter::drawPoint(QPainter& pt, double x, double y, const QMatrix&
 
 void GeometryPainter::drawWay(QPainter& pt, const OsmMap* map, const Way* way, const QMatrix& m)
 {
-  int size = way->getNodeCount();
+  int size = static_cast<int>(way->getNodeCount());
   QPolygonF a(size);
 
   for (int j = 0; j < size; j++)

@@ -88,7 +88,7 @@ public:
 
   inline unsigned int _convertDegreesToNanodegrees(const double degrees) const
   {
-    return round(degrees * ApiDb::COORDINATE_SCALE);
+    return static_cast<unsigned int>(round(degrees * ApiDb::COORDINATE_SCALE));
   }
 
   inline static QStringList getNodeSqlHeaderStrings()

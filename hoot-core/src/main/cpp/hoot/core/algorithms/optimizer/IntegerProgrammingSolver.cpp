@@ -80,7 +80,7 @@ void IntegerProgrammingSolver::solveBranchAndCut()
   iocp.br_tech = GLP_BR_PCH;
   //  Setup the time limit if necessary
   if (_timeLimit > 0)
-    iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
+    iocp.tm_lim = static_cast<int>(_timeLimit * 1000.0 + 0.5);
   //  Setup message level
   if (Log::getInstance().getLevel() <= Log::Trace)
     iocp.msg_lev = GLP_MSG_ON;
@@ -117,7 +117,7 @@ void IntegerProgrammingSolver::solveSimplex()
   glp_init_smcp(&smcp);
   //  Setup the time limit if necessary
   if (_timeLimit > 0)
-    smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
+    smcp.tm_lim = static_cast<int>(_timeLimit * 1000.0 + 0.5);
   //  Setup message level
   if (Log::getInstance().getLevel() <= Log::Trace)
     smcp.msg_lev = GLP_MSG_ON;
