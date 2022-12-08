@@ -69,7 +69,7 @@ QString RandomElementRenamer::permuteName(const QString& s)
       // replace the letter with a random letter a-z or space
       case 0:
         {
-          char letter = uniLetter(*_rng);
+          char letter = static_cast<char>(uniLetter(*_rng));
           if (letter == 'z' + 1)
           {
             letter = ' ';
@@ -79,7 +79,7 @@ QString RandomElementRenamer::permuteName(const QString& s)
       // randomly swap a letter.
       case 1:
         {
-          int pos = max<int>(uni(*_rng) * result.size(), result.size() - 1);
+          int pos = max<int>(static_cast<int>(uni(*_rng) * result.size()), result.size() - 1);
           QChar c1 = result[i];
           result[i] = result[pos];
           result[pos] = c1;

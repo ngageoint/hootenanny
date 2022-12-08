@@ -96,7 +96,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
 {
   LOG_TRACE("Merging members...");
 
-  const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
+  const int numRelationBeingReplacedMembers = static_cast<int>(relationBeingReplaced->getMemberCount());
   int numMembersCopied = 0;
   // If a bounds was configured, we'll only merge in members that satisfy it.
   std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsFilter(_map);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef INTEGERPROGRAMMINGSOLVER_H
 #define INTEGERPROGRAMMINGSOLVER_H
@@ -81,7 +81,7 @@ public:
    */
   void loadMatrix(const std::vector<int>& i, const std::vector<int>& j, const std::vector<double>& r)
   {
-    glp_load_matrix(_lp, i.size() - 1, &(i[0]), &(j[0]), &(r[0]));
+    glp_load_matrix(_lp, static_cast<int>(i.size() - 1), &(i[0]), &(j[0]), &(r[0]));
   }
 
   /**

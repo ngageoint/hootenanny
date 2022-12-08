@@ -40,7 +40,7 @@ public:
   BBox(const geos::geom::Envelope& envelope);
   virtual ~BBox();
 
-  int getDimensions() const { return _max.size(); }
+  int getDimensions() const { return static_cast<int>(_max.size()); }
 
   std::vector<double> getMax() const { return _max; }
   std::vector<double> getMin() const { return _min; }

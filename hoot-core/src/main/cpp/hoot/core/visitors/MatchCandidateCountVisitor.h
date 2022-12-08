@@ -57,7 +57,7 @@ public:
    */
   void visit(const std::shared_ptr<const Element>& e) override;
 
-  double getStat() const override { return _totalCandidateCount; }
+  double getStat() const override { return static_cast<double>(_totalCandidateCount); }
 
   boost::any getData() const override { return _matchCandidateCountsByMatchCreator; }
 

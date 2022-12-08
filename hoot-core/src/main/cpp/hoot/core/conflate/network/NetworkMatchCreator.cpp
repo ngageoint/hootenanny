@@ -101,7 +101,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<C
     searchRadiusStr = "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VART(threshold);
-  const int matchesSizeBefore = matches.size();
+  const int matchesSizeBefore = static_cast<int>(matches.size());
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -169,7 +169,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<C
       matches.push_back(match);
     }
   }
-  const int matchesSizeAfter = matches.size();
+  const int matchesSizeAfter = static_cast<int>(matches.size());
 
   LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<

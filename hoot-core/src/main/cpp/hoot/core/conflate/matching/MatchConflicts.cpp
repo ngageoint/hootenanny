@@ -95,7 +95,7 @@ void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& m
       matchSet.clear();
     }
 
-    matchSet.push_back(it->second);
+    matchSet.push_back(static_cast<int>(it->second));
     lastEid = it->first;
 
     eidToMatchCount++;

@@ -59,7 +59,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
 {
   LOG_DEBUG("Merging " << StringUtils::formatLargeNumber(geometries.size()) << " geometries...");
   //  Get the geometry count
-  _geometryCount = geometries.size();
+  _geometryCount = static_cast<int>(geometries.size());
   //  Update the max threads to speed up smaller datasets
   _maxThreads = std::min(_maxThreads, static_cast<int>(geometries.size() / 2));
   //  Create and start the threads

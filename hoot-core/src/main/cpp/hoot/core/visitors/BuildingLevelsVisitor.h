@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef BUILDING_LEVELS_VISITOR_H
@@ -62,7 +62,7 @@ public:
   double getMax() const override { return _maxLevels; }
   double getAverage() const override
   {
-    const double average = _numAffected == 0 ? 0.0 : _totalLevels / _numAffected;
+    const double average = _numAffected == 0 ? 0.0 : _totalLevels / static_cast<double>(_numAffected);
     return average;
   }
 

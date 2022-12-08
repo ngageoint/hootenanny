@@ -50,12 +50,12 @@ double SqliteWordWeightDictionary::getWeight(const QString& word) const
     c = _reader.readCount(normalized);
     if (c > 0)
       _weights[normalized] = c;
-    return c;
+    return static_cast<double>(c);
   }
   else
     c = it->second;
 
-  return c / (double)_count;
+  return static_cast<double>(c) / static_cast<double>(_count);
 }
 
 }

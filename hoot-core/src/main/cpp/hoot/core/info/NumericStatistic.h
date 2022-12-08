@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef NUMERIC_STATISTIC_H
 #define NUMERIC_STATISTIC_H
@@ -53,7 +53,7 @@ public:
   virtual long getInformationCount() const { return 0; }
   virtual long getInformationMin() const { return 0; }
   virtual long getInformationMax() const { return 0; }
-  virtual long getInformationCountDiff() const { return getStat() - getInformationCount(); }
+  virtual long getInformationCountDiff() const { return static_cast<long>(getStat()) - getInformationCount(); }
   virtual double getInformationAverage() const { return 0; }
 };
 

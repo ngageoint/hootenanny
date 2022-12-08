@@ -720,7 +720,7 @@ void DiffConflator::_removeRefData(const bool removeSnapped)
   RemoveElementsVisitor removeRef1Visitor;
   removeRef1Visitor.setRecursive(true);
   removeRef1Visitor.addCriterion(removeCrit);
-  const int mapSizeBefore = _map->size();
+  const int mapSizeBefore = static_cast<int>(_map->size());
   _map->visitRw(removeRef1Visitor);
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-ref-elements");

@@ -221,7 +221,7 @@ void DataConverter::_convertStreamable(const QStringList& inputs, const QString&
 
   int numTasks = 1;  // Streaming combines reading/writing into a single step.
   int currentTask = 1;
-  const float taskWeight = 1.0 / (float)numTasks;
+  const float taskWeight = 1.0f / static_cast<float>(numTasks);
 
   //  Stream the i/o
   ElementStreamer(_translationScript).stream(
@@ -239,7 +239,7 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
     numTasks++;
 
   int currentTask = 1;
-  const float taskWeight = 1.0 / (float)numTasks;
+  const float taskWeight = 1.0f / static_cast<float>(numTasks);
 
   Progress inputLoadProgress(
     ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);

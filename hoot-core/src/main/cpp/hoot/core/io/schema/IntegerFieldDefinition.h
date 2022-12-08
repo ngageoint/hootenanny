@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef INTEGERFIELDDEFINITION_H
 #define INTEGERFIELDDEFINITION_H
@@ -49,9 +49,9 @@ public:
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
   bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
-  void setDefaultValue(double v) { _defaultValue = v; }
-  void setMaxValue(double max) { _max = max; }
-  void setMinValue(double min) { _min = min; }
+  void setDefaultValue(int v) { _defaultValue = v; }
+  void setMaxValue(int max) { _max = max; }
+  void setMinValue(int min) { _min = min; }
 
 private:
 

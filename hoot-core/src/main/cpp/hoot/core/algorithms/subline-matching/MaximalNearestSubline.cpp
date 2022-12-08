@@ -116,7 +116,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   // Heuristic #1: use every vertex of B as a test point
   for (size_t ib = 0; ib < _b->getNodeCount(); ib++)
   {
-    ConstNodePtr node = _map->getNode(_b->getNodeId((long)ib));
+    ConstNodePtr node = _map->getNode(_b->getNodeId(static_cast<int>(ib)));
     LOG_VART(node.get());
     if (node)
     {
@@ -138,7 +138,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   LocationOfPoint bPtLocator(_map, _b);
   for (size_t ia = 0; ia < _a->getNodeCount(); ia++)
   {
-    ConstNodePtr node = _map->getNode(_a->getNodeId((long)ia));
+    ConstNodePtr node = _map->getNode(_a->getNodeId(static_cast<int>(ia)));
     LOG_VART(node.get());
     if (node)
     {
@@ -280,12 +280,12 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // if this is a or b
   if (end.getSegmentIndex() < (int)_a->getNodeCount() - 1 || end.getSegmentFraction() < 1.0)
   {
-    WayPtr way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).toWay(map, nf);
+    WayPtr way3 = WaySubline(end, WayLocation(map, _a, static_cast<int>(_a->getNodeCount()) - 1, 0.0)).toWay(map, nf);
 
     double l = ElementToGeometryConverter(map).convertToLineString(way3)->getLength();
     // if the way is too short, round to the first way.
     if (l < _minSplitSize)
-      end = WayLocation(map, _a, _a->getNodeCount() - 1, 0.0);
+      end = WayLocation(map, _a, static_cast<int>(_a->getNodeCount()) - 1, 0.0);
     else
       result.push_back(way3);
   }
@@ -296,7 +296,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // if the way is big enough then add it on.
   if (l > _minSplitSize)
   {
-    mnsIndex = result.size();
+    mnsIndex = static_cast<int>(result.size());
     result.push_back(way2);
   }
   else

@@ -92,7 +92,7 @@ int InternalIdReserver::getNextId()
 {
   if (_closed)
     throw HootException("This reserver has already been closed.");
-  return _nextId++;
+  return static_cast<int>(_nextId++);
 }
 
 }

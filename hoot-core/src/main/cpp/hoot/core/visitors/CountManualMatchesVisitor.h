@@ -47,7 +47,7 @@ public:
   CountManualMatchesVisitor();
   ~CountManualMatchesVisitor() override = default;
 
-  double getStat() const override { return _numManualMatches; }
+  double getStat() const override { return static_cast<double>(_numManualMatches); }
 
   /**
    * @see ElementVisitor

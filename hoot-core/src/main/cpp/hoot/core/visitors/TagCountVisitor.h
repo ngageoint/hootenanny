@@ -56,12 +56,12 @@ public:
   void visit(const ConstElementPtr& e) override;
 
   long numWithStat() const override { return _numAffected; }
-  double getStat() const override { return _totalCount; }
-  double getMin() const override { return _smallestCount; }
-  double getMax() const override { return _largestCount; }
+  double getStat() const override { return static_cast<double>(_totalCount); }
+  double getMin() const override { return static_cast<double>(_smallestCount); }
+  double getMax() const override { return static_cast<double>(_largestCount); }
   double getAverage() const override
   {
-    const double average = _numAffected == 0 ? 0.0 : _totalCount / _numAffected;
+    const double average = _numAffected == 0 ? 0.0 : static_cast<double>(_totalCount) / static_cast<double>(_numAffected);
     return average;
   }
 

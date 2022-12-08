@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #include "KernelEstimationInterpolator.h"
 
@@ -46,9 +46,9 @@ namespace Tgs
 using namespace std;
 
 KernelEstimationInterpolator::KernelEstimationInterpolator(double sigma)
+  : _sigma(sigma),
+    _stopDelta(1.0)
 {
-  _sigma = sigma;
-  _stopDelta = 1.0;
 }
 
 class OptimizeFunction : public NelderMead::Function
@@ -59,8 +59,7 @@ public:
 
   double f(Vector v) override
   {
-    double s = std::max(0.1, v[0]);
-    _kei.setSigma(s);
+    _kei.setSigma(std::max(0.1, v[0]));
     return -_kei.estimateError();
   }
 
@@ -78,22 +77,19 @@ void KernelEstimationInterpolator::_buildModel()
   {
     // calculate the standard deviation in x
     double mean = 0;
-    size_t n = df.getNumDataVectors();
-    for (size_t i = 0; i < n; ++i)
-    {
-      double v = df.getDataVector(i)[_indColumns[0]];
-      mean += v;
-    }
+    unsigned int n = df.getNumDataVectors();
+    for (unsigned int i = 0; i < n; ++i)
+      mean += df.getDataVector(i)[_indColumns[0]];
     mean /= df.getNumDataVectors();
 
     double sumDiff = 0;
-    for (size_t i = 0; i < n; ++i)
+    for (unsigned int i = 0; i < n; ++i)
     {
       double v = df.getDataVector(i)[_indColumns[0]];
       sumDiff += (v - mean) * (v - mean);
     }
 
-    double sdx = sqrt(1.0 / (n - 1) * sumDiff);
+    double sdx = sqrt(1.0 / static_cast<double>(n - 1) * sumDiff);
 
     // calculate a reasonable starting point w/ silverman's rule of thumb. Put a minimum at 1m to
     // prevent some edge conditions.
@@ -122,9 +118,7 @@ void KernelEstimationInterpolator::_buildModel()
       _sigma = result[0];
     }
     if (iterations > _iterations)
-    {
       _iterations = iterations;
-    }
   }
 }
 
@@ -136,9 +130,7 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
   const vector<double>& uut = df.getDataVector(index);
   vector<double> simplePoint(_indColumns.size());
   for (size_t i = 0; i < _indColumns.size(); i++)
-  {
     simplePoint[i] = uut[_indColumns[i]];
-  }
 
   double n0 = Normal::normal(0, _sigma);
 
@@ -148,18 +140,16 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
   while (it.next() && it.getDistance() < _sigma * 3.0 &&
          iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
-    size_t i = it.getId();
+    unsigned int i = it.getId();
     if (i == index)
-    {
       continue;
-    }
     const vector<double>& record = df.getDataVector(i);
 
     // figure out the distance between point and this data vector
     double d = 0;
-    for (size_t j = 0; j < _indColumns.size(); j++)
+    for (auto col : _indColumns)
     {
-      double v = uut[_indColumns[j]] - record[_indColumns[j]];
+      double v = uut[col] - record[col];
       d += v * v;
     }
     d = sqrt(d);
@@ -173,9 +163,7 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
 
       // calculate the contribution to the predicted value.
       for (size_t j = 0; j < predicted.size(); j++)
-      {
         predicted[j] += (record[_depColumns[j]] * w);
-      }
     }
 
     iterations++;
@@ -186,14 +174,10 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
   double result = 0.0;
   for (size_t j = 0; j < predicted.size(); j++)
   {
-    //cout << "uut[_depColumns[" << j << "]] " << uut[_depColumns[j]] << endl;
-    //cout << "predicted[" << j << "] " << predicted[j] << endl;
     double diff = uut[_depColumns[j]] - (predicted[j] / wSum);
     result += diff * diff;
   }
   result = sqrt(result);
-
-  //cout << "wSum: " << wSum << " result: " << result << endl;
 
   return result;
 }
@@ -204,15 +188,11 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
 
   _result.resize(_depColumns.size());
   for (size_t i = 0; i < _result.size(); i++)
-  {
     _result[i] = 0.0;
-  }
 
   vector<double> simplePoint(_indColumns.size());
   for (size_t i = 0; i < _indColumns.size(); i++)
-  {
     simplePoint[i] = point[_indColumns[i]];
-  }
 
   double n0 = Normal::normal(0, _sigma);
 
@@ -222,14 +202,14 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
   while (it.next() && it.getDistance() < _sigma * 3.0 &&
          iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
-    size_t i = it.getId();
+    unsigned int i = it.getId();
     const vector<double>& record = df.getDataVector(i);
 
     // figure out the distance between point and this data vector
     double d = 0;
-    for (size_t j = 0; j < _indColumns.size(); j++)
+    for (auto col : _indColumns)
     {
-      double v = point[_indColumns[j]] - record[_indColumns[j]];
+      double v = point[col] - record[col];
       d += v * v;
     }
     d = sqrt(d);
@@ -243,9 +223,7 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
 
       // calculate the contribution to the predicted value.
       for (size_t j = 0; j < _result.size(); j++)
-      {
         _result[j] += (record[_depColumns[j]] * w);
-      }
     }
 
     iterations++;
@@ -254,9 +232,7 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
   wSum = std::max(wSum, n0);
 
   for (size_t j = 0; j < _result.size(); j++)
-  {
     _result[j] /= wSum;
-  }
 
   return _result;
 }
@@ -269,9 +245,7 @@ void KernelEstimationInterpolator::_readInterpolator(QIODevice& is)
   ds >> version;
 
   if (version != 0x0)
-  {
     throw Exception("Unexpected version.");
-  }
 
   ds >> _sigma;
   ds >> _stopDelta;

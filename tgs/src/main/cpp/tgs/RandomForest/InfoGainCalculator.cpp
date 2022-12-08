@@ -38,6 +38,7 @@
 
 namespace Tgs
 {
+
 double InfoGainCalculator::_calcLogFunc(double n) const
 {
   if (n < std::numeric_limits<double>::epsilon())
@@ -105,7 +106,6 @@ bool InfoGainCalculator::findDataSplit(const DataFrame& df, std::vector<unsigned
     unsigned int maxIdx = 0;
     for (unsigned int j = 0; j < fIndices.size(); j++)
     {
-      //std::cout << "IGC: " << infoGain[j] << " " << j << std::endl;
       if (infoGain[j] > maxGr)
       {
         maxGr = infoGain[j];  //Get the max info gain ratio
@@ -176,7 +176,7 @@ double InfoGainCalculator::getMaxInfoGainByFactor(const DataFrame& df, std::vect
     tmpIndices[0] = indices[i];
     df.getClassPopulations(tmpIndices, popMap);
 
-    int tmpSize = indices.size() - i;
+    size_t tmpSize = indices.size() - i;
     entSum = 0.0;
     for (auto itr = popMap.begin(); itr != popMap.end(); ++itr)
       entSum += _calcLogFunc((double)itr->second / (double)tmpSize);
@@ -254,10 +254,6 @@ double InfoGainCalculator::getMaxInfoGainRatioByFactor(const DataFrame& df, std:
       splitInfo = 1E-10;
 
     double gainRatio = infoGain / splitInfo;
-
-    //std::cout << " InfoGain1 " << infoGain << std::endl;
-    //std::cout << "left " << leftEnt << " right " << rightEnt << " split " << splitEnt << std::endl;
-    //std::cout << "leftSize " << leftSplit.size() << " rightSize " << rightSplit.size() << std::endl;
 
     if (gainRatio > maxGr)
     {

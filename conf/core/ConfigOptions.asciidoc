@@ -6045,7 +6045,7 @@ Examples that will be kept if the value is `true` include:
 
 === token.min.size
 
-* Data Type: double
+* Data Type: int
 * Default Value: `3`
 
 This is the minimum string size that the string tokenizer should accept as a token. If the string

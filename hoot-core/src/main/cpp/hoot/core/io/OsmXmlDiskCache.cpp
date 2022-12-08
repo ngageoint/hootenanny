@@ -43,9 +43,8 @@ OsmXmlDiskCache::OsmXmlDiskCache()
   // Check for temp dir
   // If $HOOT_HOME/tmp doesn't exist, and we can't make it, then use /tmp
   QString tempDir = ConfPath::getHootHome() + "/tmp";
-  if (!QDir(tempDir).exists())
-    if (!QDir(tempDir).mkpath("."))
-      tempDir = "/tmp";
+  if (!QDir(tempDir).exists() && !QDir(tempDir).mkpath("."))
+      tempDir = QDir::tempPath();
 
   // Setup our temp file & get guaranteed unique name
   QString fnameTemplate = tempDir + "/disk.cache.osm.XXXXXX";

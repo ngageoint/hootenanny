@@ -85,7 +85,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
     lat += pNode->getY();
   }
 
-  count = _roundaboutNodes.size();
+  count = static_cast<double>(_roundaboutNodes.size());
   lat = lat / count;
   lon = lon / count;
 

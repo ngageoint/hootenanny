@@ -50,7 +50,7 @@ public:
   MaxIdVisitor();
   ~MaxIdVisitor() override = default;
 
-  double getStat() const override { return _maxId; }
+  double getStat() const override { return static_cast<double>(_maxId); }
 
   void visit(const ConstElementPtr& e) override;
 

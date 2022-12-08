@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryPainter.h"
@@ -72,7 +72,7 @@ void GeometryPainter::drawPoint(QPainter& pt, double x, double y, const QMatrix&
 
 void GeometryPainter::drawWay(QPainter& pt, const OsmMap* map, const Way* way, const QMatrix& m)
 {
-  int size = way->getNodeCount();
+  int size = static_cast<int>(way->getNodeCount());
   QPolygonF a(size);
 
   for (int j = 0; j < size; j++)

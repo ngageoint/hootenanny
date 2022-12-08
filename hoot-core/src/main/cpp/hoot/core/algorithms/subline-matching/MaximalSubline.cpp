@@ -625,7 +625,7 @@ cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const
   if ((size_t)ends[last] != pairs.size() - 1)
   {
     finalStarts.push_back(ends[last] - (ends[last] - starts[last]) / 3);
-    finalEnds.push_back(pairs.size() - 1);
+    finalEnds.push_back(static_cast<int>(pairs.size()) - 1);
   }
 
   LOG_TRACE("finalStarts: " << finalStarts);

@@ -60,7 +60,7 @@ public:
    */
   void visit(const ConstElementPtr& e) override;
 
-  double getStat() const override { return _keyCount; }
+  double getStat() const override { return static_cast<double>(_keyCount); }
 
   /**
    * @see Configurable
