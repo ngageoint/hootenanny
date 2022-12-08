@@ -63,7 +63,7 @@ void TextFileWordWeightDictionary::_loadFile(const QString& path)
 
   first.replace(totalWordCount, "");
   bool ok;
-  _count += first.toDouble(&ok);
+  _count += static_cast<long>(first.toDouble(&ok));
   if (!ok)
     throw HootException("Bad double value in total word count: " + first);
 

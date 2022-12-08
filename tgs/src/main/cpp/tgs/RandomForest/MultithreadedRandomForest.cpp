@@ -83,7 +83,7 @@ void MultithreadedRandomForest::trainMulticlass(const std::shared_ptr<DataFrame>
 
     _factorLabels = data->getFactorLabels();
     _forest.clear();
-    numFactors = std::min<size_t>(data->getActiveFactorCount(), numFactors);
+    numFactors = std::min<unsigned int>(static_cast<unsigned int>(data->getActiveFactorCount()), numFactors);
     _numSplitFactors = numFactors;
 
     if (!data->empty())
@@ -112,7 +112,7 @@ void MultithreadedRandomForest::trainMulticlass(const std::shared_ptr<DataFrame>
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+        unsigned int cutOffIdx = static_cast<unsigned int>(topFactors.size() - (unsigned int)((double)topFactors.size() * retrain));
 
         //Create a map from lowest to highest of important mapped to factor type
         std::multimap<double, std::string> sortedFactors;

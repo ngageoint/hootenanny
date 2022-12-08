@@ -133,7 +133,7 @@ double AttributeComparator::compareMaps()
       for (auto score : scores)
         v += (score - _mean) * (score - _mean);
 
-      _s = sqrt(v / (scores.size() - 1));
+      _s = sqrt(v / static_cast<double>(scores.size() - 1));
       _ci = zalpha * _s / sqrt(scores.size());
     }
 

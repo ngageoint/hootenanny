@@ -112,7 +112,7 @@ inline uint qHash(const ElementId& eid)
 
 inline uint qHash(const std::pair<ElementId, ElementId>& peid)
 {
-  return Tgs::cantorPairing(qHash(peid.first), qHash(peid.second));
+  return static_cast<uint>(Tgs::cantorPairing(qHash(peid.first), qHash(peid.second)));
 }
 
 }

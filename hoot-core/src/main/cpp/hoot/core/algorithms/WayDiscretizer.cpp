@@ -119,7 +119,7 @@ bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result) con
   Meters wayLength = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
   LOG_VART(wayLength);
 
-  int count = ceil(wayLength / spacing);
+  int count = static_cast<int>(ceil(wayLength / spacing));
   LOG_VART(count);
   spacing = wayLength / double(count);
   LOG_VART(spacing);

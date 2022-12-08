@@ -117,7 +117,7 @@ QString toJson(const v8::Local<T> object)
     v8::Local<v8::Value> resultValue = JSON_stringify->Call(context, JSON, 1, args).ToLocalChecked();
     v8::Local<v8::String> s = v8::Local<v8::String>::Cast(resultValue);
 
-    size_t utf8Length = s->Utf8Length(current) + 1;
+    int utf8Length = s->Utf8Length(current) + 1;
     std::unique_ptr<char[]> buffer = std::make_unique<char[]>(utf8Length);
     s->WriteUtf8(current, buffer.get(), utf8Length);
 

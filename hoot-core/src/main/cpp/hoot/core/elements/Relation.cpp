@@ -186,7 +186,7 @@ void Relation::insertElement(const QString& role, const ElementId& elementId, si
 
 int Relation::numElementsByRole(const QString& role) const
 {
-  return getElementsByRole(role).size();
+  return static_cast<int>(getElementsByRole(role).size());
 }
 
 std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role) const

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__RANDOM_H__
@@ -44,12 +44,7 @@ namespace Tgs
 
     Random(unsigned int seed);
 
-    static std::shared_ptr<Random> instance()
-    {
-      if (!_instance)
-        _instance.reset(new Random());
-      return _instance;
-    }
+    static std::shared_ptr<Random> instance();
 
     bool coinToss();
 
@@ -69,10 +64,9 @@ namespace Tgs
     template<class _T>
     static void randomizeVector(std::vector<_T>& v)
     {
+      int s = static_cast<int>(v.size());
       for (unsigned int i = 0; i < v.size() * 2; i++)
-        std::swap(
-          v[Random::instance()->generateInt(v.size())],
-          v[Random::instance()->generateInt(v.size())]);
+        std::swap(v[Random::instance()->generateInt(s)], v[Random::instance()->generateInt(s)]);
     }
 
   private:

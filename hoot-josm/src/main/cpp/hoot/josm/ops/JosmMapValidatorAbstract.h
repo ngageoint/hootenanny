@@ -81,7 +81,7 @@ public:
   QString getCompletedStatusMessage() const override { return _errorSummary; }
 
   QString getSummary() const { return _errorSummary; }
-  int getNumElementsProcessed() const { return _numAffected; }
+  int getNumElementsProcessed() const { return static_cast<int>(_numAffected); }
   int getNumValidationErrors() const { return _numValidationErrors; }
   int getNumFailingValidators() const { return _numFailingValidators; }
 

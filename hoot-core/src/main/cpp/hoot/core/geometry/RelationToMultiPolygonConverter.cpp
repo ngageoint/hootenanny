@@ -121,7 +121,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(vector<LinearRing*>& outers
         else if (im->isIntersects())
         {
           contained = false;
-          polygonIndex = j;
+          polygonIndex = static_cast<int>(j);
         }
       }
     }

@@ -63,7 +63,7 @@ void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
       const long value = strValue.toLong(&parsed);
       if (parsed)
       {
-        _sum += value;
+        _sum += static_cast<double>(value);
         _numAffected++;
       }
       else

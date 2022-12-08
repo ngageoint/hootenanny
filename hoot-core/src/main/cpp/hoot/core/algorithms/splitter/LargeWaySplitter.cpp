@@ -49,8 +49,8 @@ namespace hoot
 int LargeWaySplitter::logWarnCount = 0;
 
 LargeWaySplitter::LargeWaySplitter(double threshold)
+  : _threshold(threshold)
 {
-  _threshold = threshold;
 }
 
 void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)

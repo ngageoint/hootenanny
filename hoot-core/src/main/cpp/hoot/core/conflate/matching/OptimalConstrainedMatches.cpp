@@ -92,14 +92,14 @@ void OptimalConstrainedMatches::_populateSolver(IntegerProgrammingSolver& solver
   solver.setObjectiveDirection(GLP_MAX);
 
   // each match is a column (variable) in the function that we want to maximize.
-  solver.addColumns(_matches.size());
+  solver.addColumns(static_cast<int>(_matches.size()));
   for (size_t i = 0; i < _matches.size(); i++)
   {
-    solver.setColumnKind(i + 1, GLP_BV);
+    solver.setColumnKind(static_cast<int>(i) + 1, GLP_BV);
     //solver.setColumnBounds(i + 1, GLP_DB, 0.0, 1.0);
     // The score of a match is the coefficient. This makes higher score matches worth
     // more in the function.
-    solver.setObjectiveCoefficient(i + 1, _matches[i]->getScore() + EPSILON);
+    solver.setObjectiveCoefficient(static_cast<int>(i) + 1, _matches[i]->getScore() + EPSILON);
   }
 
   // there is one row (constraint) for each conflict.

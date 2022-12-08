@@ -939,7 +939,7 @@ void BaseRandomForestManager::_trainRoundRobin(unsigned int numTrees, unsigned i
   {
     std::set<std::string> classNames = _data->getClassLabels();
 
-    unsigned int numClasses = _data->getClassLabels().size();
+    size_t numClasses = _data->getClassLabels().size();
 
     //Create one forest per class label
     _rfList.resize(numClasses * (numClasses - 1) / 2);

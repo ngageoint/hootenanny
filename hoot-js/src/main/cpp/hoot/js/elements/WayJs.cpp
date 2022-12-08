@@ -110,7 +110,7 @@ void WayJs::getNodeCount(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   ConstWayPtr way = ObjectWrap::Unwrap<WayJs>(args.This())->getConstWay();
-  args.GetReturnValue().Set(Number::New(current, way->getNodeCount()));
+  args.GetReturnValue().Set(Number::New(current, static_cast<double>(way->getNodeCount())));
 }
 
 }

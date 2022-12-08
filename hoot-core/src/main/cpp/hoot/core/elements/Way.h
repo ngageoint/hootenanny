@@ -107,7 +107,7 @@ public:
   int getNodeIndex(long nodeId) const;
 
   long getFirstNodeId() const { return getNodeId(0); }
-  long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
+  long getLastNodeId() const { return getNodeId(static_cast<int>(getNodeCount()) - 1); }
 
   /**
    * Determines if an index is the first or last

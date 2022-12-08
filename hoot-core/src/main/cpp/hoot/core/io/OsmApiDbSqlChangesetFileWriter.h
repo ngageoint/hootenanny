@@ -99,7 +99,7 @@ private:
   geos::geom::Envelope _changesetBounds;
 
   /** Settings from the config file */
-  double _changesetUserId;
+  long _changesetUserId;
 
   // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;

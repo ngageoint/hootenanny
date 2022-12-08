@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
  */
 #ifndef LONGBOX_H
 #define LONGBOX_H
@@ -55,7 +55,7 @@ public:
 
   LongBox expand(int size) const;
 
-  int getDimensions() const { return getMin().size(); }
+  int getDimensions() const { return static_cast<int>(getMin().size()); }
 
   std::vector<long int> getMax() const { return _max; }
   std::vector<long int> getMin() const { return _min; }

@@ -67,7 +67,7 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
-  int criteriaSize() const { return _criteria.size(); }
+  int criteriaSize() const { return static_cast<int>(_criteria.size()); }
 
 protected:
 

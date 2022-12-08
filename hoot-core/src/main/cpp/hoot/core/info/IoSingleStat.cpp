@@ -87,7 +87,7 @@ IoSingleStat::IoSingleStat(Type t)
       QStringList l = line.split(":");
 
       bool ok;
-      value = l[1].trimmed().toLong(&ok);
+      value = static_cast<double>(l[1].trimmed().toLong(&ok));
       if (!ok)
         throw HootException(QString("Error parsing %1 from /proc/self/io (%2).").arg(typeString, l[1]));
       found = true;

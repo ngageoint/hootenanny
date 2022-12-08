@@ -157,7 +157,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(cons
   LOG_TRACE("Converting " << w->getElementId() << " to line string...");
 
   const std::vector<long>& ids = w->getNodeIds();
-  int size = ids.size();
+  size_t size = ids.size();
   if (size == 1)
     size = 2;
 

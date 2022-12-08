@@ -139,10 +139,10 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(const C
     // non-linear function here instead that reduces the recursions allowed more quickly as the
     // total length increases in order to optimize the performance for river length counts in the
     // middle of the scale.
-    maxRecursions =
+    maxRecursions = static_cast<int>(
       std::round(
-        ((double)_maxIterationsScalingValue / _maxRiverLengthScalingValue) *
-        (_maxRiverLengthScalingValue - totalRiverLength));
+        (static_cast<double>(_maxIterationsScalingValue) / _maxRiverLengthScalingValue) *
+        (_maxRiverLengthScalingValue - totalRiverLength)));
     LOG_DEBUG(
       "Using maximum recursion value of: " << maxRecursions << " for total river length: " <<
       totalRiverLength);

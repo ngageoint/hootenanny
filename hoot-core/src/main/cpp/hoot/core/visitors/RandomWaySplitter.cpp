@@ -232,7 +232,7 @@ MultiLineStringLocation RandomWaySplitter::_calcSplitPoint(ConstRelationPtr rela
   LOG_VART(members.size());
 
   //find the way to split on
-  boost::uniform_int<> randomWayIndexDistribution(0, members.size() - 1);
+  boost::uniform_int<> randomWayIndexDistribution(0, static_cast<int>(members.size()) - 1);
   int wayIndex = randomWayIndexDistribution(*_rng);
   wayId = members.at(wayIndex).getElementId();
   LOG_VART(wayIndex);

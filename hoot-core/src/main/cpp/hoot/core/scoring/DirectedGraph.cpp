@@ -90,7 +90,7 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
       continue;
 
     long nStart = way->getNodeId(0);
-    long nEnd = way->getNodeId(way->getNodeCount() - 1);
+    long nEnd = way->getNodeId(static_cast<int>(way->getNodeCount()) - 1);
     if (cost >= 0)
     {
       if (isOneWay(way))
