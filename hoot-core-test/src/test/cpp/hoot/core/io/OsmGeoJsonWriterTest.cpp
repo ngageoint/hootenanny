@@ -121,7 +121,7 @@ public:
             "VegetationSrf"
           });
     for (int i = 0; i < multi_files.size(); ++i)
-      multi_files[i] = QString("BostonSubsetRoadBuildingSplit-%1.geojson").arg(multi_files[i]);
+      multi_files[i] = QString("BostonSubsetRoadBuildingSplit/%1.geojson").arg(multi_files[i]);
     //  Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //  the log level.  We expect the nodes to be missing since the Boston data has issues
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
@@ -177,7 +177,7 @@ public:
             "WALL_C"
           });
     for (int i = 0; i < multi_files.size(); ++i)
-      multi_files[i] = QString("BostonSubsetRoadBuildingFcode-%1.geojson").arg(multi_files[i]);
+      multi_files[i] = QString("BostonSubsetRoadBuildingFcode/%1.geojson").arg(multi_files[i]);
     //  Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //  the log level.  We expect the nodes to be missing since the Boston data has issues
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
