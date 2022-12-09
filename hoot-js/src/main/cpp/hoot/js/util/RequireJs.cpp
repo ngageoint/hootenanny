@@ -49,8 +49,7 @@ void RequireJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  exports->Set(context, toV8("require"),
-               FunctionTemplate::New(current, jsRequire)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("require"), FunctionTemplate::New(current, jsRequire)->GetFunction(context).ToLocalChecked());
 }
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
@@ -78,15 +77,16 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     // Look through all the translation directories in $HOOT_HOME - "translations", "translations-rules", "translations-local" etc
     // This allows us to add more custom translation directories without hardcoding them
-    QDirIterator it (hootHome, {"translations*"}, QDir::Dirs | QDir::NoSymLinks);
-    while (it.hasNext()) {
-        fullPath = it.next() + "/" + scriptName + ".js";
+    QDirIterator it (hootHome, {"translations*"}, QDir::Dirs);
+    while (it.hasNext())
+    {
+      fullPath = QString("%1/%2.js").arg(it.next(), scriptName);
 
-        QFileInfo info(fullPath);
-        if (info.exists())
-          break;
+      QFileInfo info(fullPath);
+      if (info.exists())
+        break;
 
-        fullPath = "";
+      fullPath = "";
     }
 
     if (fullPath.isEmpty())
@@ -129,12 +129,6 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     // Run the script to get the result.
     HootExceptionJs::checkV8Exception(result.ToLocalChecked(), try_catch);
-
-    // Debug: Dump the Object
-    //  Local<Object> tObj = current->GetCurrentContext()->Global();
-    //  cout << "jsRequire" << endl;
-    //  cout << "tObj Properties: " << tObj->GetPropertyNames() << endl;
-    //  cout << endl;
 
     args.GetReturnValue().Set(exports);
   }
