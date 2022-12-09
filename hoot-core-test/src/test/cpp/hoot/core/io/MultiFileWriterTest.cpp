@@ -137,9 +137,9 @@ public:
     //  Test the output
     for (const auto& index : indices)
     {
-      QString dash = (index.isEmpty() ? "" : "-");
-      HOOT_FILE_EQUALS(QString("%1%2%3%4%5").arg(_inputPath, base, dash, index, ext),
-                       QString("%1%2%3%4%5").arg(_outputPath, base, dash, index, ext));
+      QString slash = (index.isEmpty() ? "" : "/");
+      HOOT_FILE_EQUALS(QString("%1%2%3%4%5").arg(_inputPath, base, slash, index, ext),
+                       QString("%1%2%3%4%5").arg(_outputPath, base, slash, index, ext));
     }
   }
 
