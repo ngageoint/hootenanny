@@ -26,6 +26,9 @@
  */
 #include "MultiFileWriter.h"
 
+//  Hoot includes
+#include <hoot/core/util/FileUtils.h>
+
 namespace hoot
 {
 
@@ -156,8 +159,11 @@ void MultiFileWriter::write(const QString& contents)
           _currentDevice = _deviceMap[_currentIndex];
         else
         {
+          //  Make the output directory if it doesn't exist
+          if (!QDir(_filePath).exists())
+            FileUtils::makeDir(_filePath);
           //  Open a new device and add it to the map
-          QString filename = _filePath.arg(_currentIndex);
+          QString filename = QString("%1/%2.%3").arg(_filePath, _currentIndex, _fileExtension);
           //  Create the file object, push it to the back
           _files.push_back(std::make_shared<QFile>(filename));
           _currentDevice = _files.back().get();
@@ -210,12 +216,10 @@ void MultiFileWriter::open(const QString& filename)
     _filePath = filename;
   else
   {
-    _filePath = filename;
-    //  MultiFile writer will update the filename in QString::arg() format so files can be created
-    QFileInfo fi(_filePath);
-    QString extension = fi.suffix();
-    //  Update the filename
-    _filePath.insert(_filePath.length() - (extension.length() + 1), "-%1");
+    //  MultiFile writer will write the set of files into a directory (minus the extension)
+    QFileInfo fi(filename);
+    _fileExtension = fi.suffix();
+    _filePath = filename.left(filename.length() - _fileExtension.length() - 1);
     //  Don't open anything until something is actually written out the the file
   }
   //  Set the open flag

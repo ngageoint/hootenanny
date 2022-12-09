@@ -103,6 +103,7 @@ private:
    *  for MultiFileWriterType::MultiThematic objects.
    */
   QString _filePath;
+  QString _fileExtension;
   /** Map of indices with device pointers used for changing between files for each element */
   std::map<QString, QIODevice*> _deviceMap;
   /** Map of indices with flag if the file has been written to yet */
