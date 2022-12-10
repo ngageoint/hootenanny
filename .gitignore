@@ -100,7 +100,7 @@ Output.osm
 /output.osm
 /output.pgm
 .qmake.stash
-translations-local
+translations-*
 **/*.pro.user*
 *.pro.user*
 progress/
