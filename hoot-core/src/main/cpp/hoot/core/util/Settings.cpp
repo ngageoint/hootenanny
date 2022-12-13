@@ -636,7 +636,10 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
       LOG_VART(optionVal);
 
       if (!conf().hasKey(optionName))
-        throw IllegalArgumentException("Unknown settings option: (" + optionName + ")");
+      {
+        LOG_ERROR("Skipping unknown settings option: (" + optionName + ")");
+        continue;
+      }
 
       const QStringList values = optionVal.split(";", QString::SkipEmptyParts);
       LOG_VART(values);
