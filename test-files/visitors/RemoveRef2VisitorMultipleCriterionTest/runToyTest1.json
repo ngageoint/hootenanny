@@ -1,14 +1,14 @@
 {"version": 0.6,"generator": "Hootenanny","elements": [
 {"type":"node","id":-861057,"lat":37.801136,"lon":-122.41677,"tags":{"REF2":"C","error:circular":"15"}},
-{"type":"node","id":-861056,"lat":37.801136,"lon":-122.41677,"tags":{"REF1":"C","poi":"yes","error:circular":"15"}},
-{"type":"node","id":-861055,"lat":37.801128,"lon":-122.41674,"tags":{"REF2":"A","poi":"yes","error:circular":"15"}},
-{"type":"node","id":-861054,"lat":37.801136,"lon":-122.41677,"tags":{"REF1":"B","poi":"yes","error:circular":"15"}},
+{"type":"node","id":-861056,"lat":37.801136,"lon":-122.41677,"tags":{"REF1":"C","error:circular":"15","poi":"yes"}},
+{"type":"node","id":-861055,"lat":37.801128,"lon":-122.41674,"tags":{"REF2":"A","error:circular":"15","poi":"yes"}},
+{"type":"node","id":-861054,"lat":37.801136,"lon":-122.41677,"tags":{"REF1":"B","error:circular":"15","poi":"yes"}},
 {"type":"node","id":-861038,"lat":37.801294,"lon":-122.41694},
 {"type":"node","id":-861035,"lat":37.801179,"lon":-122.41703},
 {"type":"node","id":-861032,"lat":37.80132,"lon":-122.41689},
 {"type":"node","id":-861027,"lat":37.801158,"lon":-122.41708},
-{"type":"way","id":-861037,"nodes":[-861035,-861038],"tags":{"building":"yes","REF1":"A","error:circular":"15"}},
+{"type":"way","id":-861037,"nodes":[-861035,-861038],"tags":{"REF1":"A","building":"yes","error:circular":"15"}},
 {"type":"way","id":-861031,"nodes":[-861027,-861032],"tags":{"REF2":"D","error:circular":"15"}},
-{"type":"way","id":-861030,"nodes":[-861027,-861032],"tags":{"building":"yes","REF2":"none","error:circular":"15"}},
-{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"building":"yes","REF2":"none","error:circular":"15"}}]
+{"type":"way","id":-861030,"nodes":[-861027,-861032],"tags":{"REF2":"none","building":"yes","error:circular":"15"}},
+{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"REF2":"none","building":"yes","error:circular":"15"}}]
 }

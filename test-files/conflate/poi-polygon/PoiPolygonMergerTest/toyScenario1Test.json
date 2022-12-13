@@ -23,5 +23,5 @@
 {"type":"way","ref":-22,"role":"outer"},
 {"type":"way","ref":-21,"role":"outer"},
 {"type":"way","ref":-20,"role":"outer"},
-{"type":"way","ref":-19,"role":"outer"}],"tags":{"hoot:poipolygon:poismerged":"1","hoot:poipolygon:poismerged:1":"0","hoot:poipolygon:poismerged:2":"1","name":"A","alt_name":"B;C;D;E;F","note":"Toy Scenario 1","building":"yes","poi":"yes","error:circular":"15"}}]
+{"type":"way","ref":-19,"role":"outer"}],"tags":{"alt_name":"B;C;D;E;F","building":"yes","error:circular":"15","hoot:poipolygon:poismerged":"1","hoot:poipolygon:poismerged:1":"0","hoot:poipolygon:poismerged:2":"1","name":"A","note":"Toy Scenario 1","poi":"yes"}}]
 }
