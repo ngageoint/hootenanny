@@ -233,7 +233,7 @@ public:
                     "{\"type\":\"node\",\"ref\":2,\"role\":\"t\"},\n"
                     "{\"type\":\"node\",\"ref\":3,\"role\":\"u\"},\n"
                     "{\"type\":\"way\",\"ref\":1,\"role\":\"f\"},\n"
-                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"highway\":\"road\",\"note\":\"test tag\",\"hello\":\"world\",\"" + MetadataTags::ErrorCircular() + "\":\"1.7\"}}]\n"
+                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"1.7\",\"hello\":\"world\",\"highway\":\"road\",\"note\":\"test tag\"}}]\n"
                     "}\n",
                     actual);
     CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));

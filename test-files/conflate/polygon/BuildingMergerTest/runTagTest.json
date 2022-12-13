@@ -19,5 +19,5 @@
 {"type":"way","id":-25,"nodes":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],"tags":{"building":"yes","error:circular":"15"}},
 {"type":"relation","id":-1,"members":[
 {"type":"way","ref":-26,"role":"outer"},
-{"type":"way","ref":-25,"role":"outer"}],"tags":{"name":"Panera Bread","alt_name":"Maid-Rite;Maid-Rite Diner","hoot:building:match":"true","building":"yes","REF1":"Panera","REF2":"Panera","error:circular":"15"}}]
+{"type":"way","ref":-25,"role":"outer"}],"tags":{"REF1":"Panera","REF2":"Panera","alt_name":"Maid-Rite;Maid-Rite Diner","building":"yes","error:circular":"15","hoot:building:match":"true","name":"Panera Bread"}}]
 }

@@ -1,4 +1,4 @@
 {"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
-{"type":"Feature","properties":{"F_CODE":"AQ065","OSMTAGS":{"name":"Fort Pond Brook","waterway":"stream"},"ZI026_CTUC":"5","FCSUBTYPE":"100170","ZI001_SDV":"2015-01-17T06:31:58Z"},"geometry": {"type":"LineString","coordinates": [[-71.4796109, 42.4851566],[-71.47971699999999, 42.4851053]]}},
-{"type":"Feature","properties":{"F_CODE":"AQ065","OSMTAGS":{"waterway":"stream"},"ZI026_CTUC":"5","FCSUBTYPE":"100170","ZI001_SDV":"2015-01-17T06:31:57Z"},"geometry": {"type":"LineString","coordinates": [[-71.4835157, 42.4897066],[-71.483419, 42.4897611]]}}]
+{"type":"Feature","properties":{"FCSUBTYPE":"100170","F_CODE":"AQ065","OSMTAGS":{"name":"Fort Pond Brook","waterway":"stream"},"ZI001_SDV":"2015-01-17T06:31:58Z","ZI026_CTUC":"5"},"geometry": {"type":"LineString","coordinates": [[-71.4796109, 42.4851566],[-71.47971699999999, 42.4851053]]}},
+{"type":"Feature","properties":{"FCSUBTYPE":"100170","F_CODE":"AQ065","OSMTAGS":{"waterway":"stream"},"ZI001_SDV":"2015-01-17T06:31:57Z","ZI026_CTUC":"5"},"geometry": {"type":"LineString","coordinates": [[-71.4835157, 42.4897066],[-71.483419, 42.4897611]]}}]
 }

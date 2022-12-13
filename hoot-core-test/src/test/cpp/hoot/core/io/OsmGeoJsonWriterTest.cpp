@@ -56,6 +56,7 @@ public:
     : HootTestFixture("test-files/io/GeoJson/",
                       "test-output/io/GeoJson/")
   {
+    setResetType(ResetConfigs);
   }
 
   void runAllDataTypesTest()
@@ -92,6 +93,7 @@ public:
     Settings s;
     s.set(ConfigOptions::getOgrAddUuidKey(), false);
     s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/TDSv70.js");
+    s.set(ConfigOptions::getWriterSortTagsByKeyKey(), true);
 
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding-Translated.geojson", &s);
     Log::getInstance().setLevel(logLevel);
@@ -135,6 +137,7 @@ public:
     s.set(ConfigOptions::getWriterThematicStructureKey(), true);
     s.set(ConfigOptions::getOgrAddUuidKey(), false);
     s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/TDSv70.js");
+    s.set(ConfigOptions::getWriterSortTagsByKeyKey(), true);
 
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuildingSplit.geojson", &s, multi_files);
     Log::getInstance().setLevel(logLevel);
@@ -192,6 +195,7 @@ public:
     s.set(ConfigOptions::getWriterThematicStructureKey(), false);
     s.set(ConfigOptions::getOgrAddUuidKey(), false);
     s.set(ConfigOptions::getSchemaTranslationScriptKey(), "translations/GGDMv30.js");
+    s.set(ConfigOptions::getWriterSortTagsByKeyKey(), true);
 
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuildingFcode.geojson", &s, multi_files);
     Log::getInstance().setLevel(logLevel);

@@ -190,13 +190,20 @@ void OsmGeoJsonWriter::_writeNodes()
 
   for (auto node_id : nids)
   {
-    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(_translateElement(_map->getNode(node_id)));
-    if (!n)
-      continue;
-    if (_writer.isCurrentIndexWritten())
-      _write(",", true);
+    //  Translate the element
+    _translateElement(_map->getNode(node_id));
+    //  Iterate all translations
+    for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
+    {
+      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(translation_it->second);
+      if (!n)
+        continue;
+      _writer.setCurrentFileIndex(translation_it->first);
+      if (_writer.isCurrentIndexWritten())
+        _write(",", true);
 
-    _writeElement(n);
+      _writeElement(n);
+    }
 
     _numWritten++;
     if (_numWritten % _statusUpdateInterval == 0)
@@ -211,50 +218,64 @@ void OsmGeoJsonWriter::_writeWays()
   const WayMap& ways = _map->getWays();
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
-    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_translateElement(it->second));
-    if (!w)
-      continue;
-    //  Skip any ways that have parents
-    set<ElementId> parents = _map->getParents(w->getElementId());
-    if (!parents.empty())
-      continue;
-    //  Make sure that building ways are "complete"
-    const vector<long>& nodes = w->getNodeIds();
-    bool valid = true;
-    if (_areaCriterion.isSatisfied(w))
+    //  Translate the element
+    _translateElement(it->second);
+    //  Iterate all translations
+    for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
     {
-      for (auto node_id : nodes)
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(translation_it->second);
+      if (!w)
+        continue;
+      //  Skip any ways that have parents
+      set<ElementId> parents = _map->getParents(w->getElementId());
+      if (!parents.empty())
+        continue;
+      //  Make sure that building ways are "complete"
+      const vector<long>& nodes = w->getNodeIds();
+      bool valid = true;
+      if (_areaCriterion.isSatisfied(w))
       {
-        //  No need to translate the node, it is for validation only
-        ConstNodePtr node = _map->getNode(node_id);
-        if (!node)
+        for (auto node_id : nodes)
         {
-          valid = false;
-          break;
+          //  No need to translate the node, it is for validation only
+          ConstNodePtr node = _map->getNode(node_id);
+          if (!node)
+          {
+            valid = false;
+            break;
+          }
+        }
+      }
+      //  Write out the way in geojson if valid
+      if (valid)
+      {
+        //  Set the current index
+        _writer.setCurrentFileIndex(translation_it->first);
+        if (_writer.isCurrentIndexWritten())
+          _write(",", true);
+        _writeElement(w);
+      }
+      else
+      {
+        for (auto node_id : nodes)
+        {
+          //  Translate the element
+          _translateElement(_map->getNode(node_id));
+          //  Iterate all translations
+          for (auto node_translation_it = _translatedElementMap.begin(); node_translation_it != _translatedElementMap.end(); ++node_translation_it)
+          {
+            ConstNodePtr node = std::dynamic_pointer_cast<const Node>(node_translation_it->second);
+            if (!node)
+            {
+              _writer.setCurrentFileIndex(node_translation_it->first);
+              if (_writer.isCurrentIndexWritten())
+                _write(",", true);
+              _writeElement(node);
+            }
+          }
         }
       }
     }
-    //  Write out the way in geojson if valid
-    if (valid)
-    {
-      if (_writer.isCurrentIndexWritten())
-        _write(",", true);
-      _writeElement(w);
-    }
-    else
-    {
-      for (auto node_id : nodes)
-      {
-        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(_translateElement(_map->getNode(node_id)));
-        if (!node)
-        {
-          if (_writer.isCurrentIndexWritten())
-            _write(",", true);
-          _writeElement(node);
-        }
-      }
-    }
-
     _numWritten++;
     if (_numWritten % (_statusUpdateInterval) == 0)
     {
@@ -268,20 +289,27 @@ void OsmGeoJsonWriter::_writeRelations()
   const RelationMap& relations = _map->getRelations();
   for (auto it = relations.begin(); it != relations.end(); ++it)
   {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(_translateElement(it->second));
-    if (!r)
-      continue;
-
-    if (_writer.isCurrentIndexWritten())
-      _write(",", true);
-
-    _writeElement(r);
-
-    _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    //  Translate the element
+    _translateElement(it->second);
+    //  Iterate all translations
+    for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
     {
-      PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(translation_it->second);
+      if (!r)
+        continue;
+
+      _writer.setCurrentFileIndex(translation_it->first);
+
+      if (_writer.isCurrentIndexWritten())
+        _write(",", true);
+
+      _writeElement(r);
+
+      _numWritten++;
+      if (_numWritten % (_statusUpdateInterval) == 0)
+      {
+        PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+      }
     }
   }
 }
@@ -464,71 +492,104 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
   return ss.str();
 }
 
-ConstElementPtr OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
+void OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
 {
+  //  Clear out the map of
+  _translatedElementMap.clear();
   //  Don't translate without a translator
   if (!_translator)
-    return e;
+  {
+    QString table = _getLayerName(nullptr);
+    _translatedElementMap[table] = e;
+    return;
+  }
   //  Translate the element and get the
-  ElementPtr c = e->clone();
   std::shared_ptr<geos::geom::Geometry> geometry;
   std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
   ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(_map)));
   //  Translate the feature
   translateToFeatures(provider, e, geometry, feature);
   if (feature.empty())
-    return e;
-  //  Convert the feature values to tags for output
-  Tags t;
-  const QVariantMap& vm = feature[0].feature->getValues();
-  for (auto it = vm.constBegin(); it != vm.constEnd(); ++it)
   {
-    const QVariant& v = it.value();
-    QByteArray ba = it.key().toUtf8();
-    //  Convert the variant values, don't insert "empty" values (i.e. -999999 or 'No Information')
-    switch (v.type())
-    {
-    case QVariant::Invalid:
-      break;
-    case QVariant::Int:
-      if (v.toInt() != -999999)
-        t.set(ba.constData(), v.toInt());
-      break;
-    case QVariant::LongLong:
-      if (v.toLongLong() != -999999)
-        t.set(ba.constData(), QString::number(v.toLongLong()));
-      break;
-    case QVariant::Double:
-      if (v.toDouble() != -999999.0)
-        t.set(ba.constData(), v.toDouble());
-      break;
-    case QVariant::String:
-    {
-      QString value = v.toString();
-      if (value != "No Information" && value != "noInformation" && !value.isEmpty())
-        t.set(ba.constData(), v.toString());
-      break;
-    }
-    default:
-      LOG_WARN("Can't convert the provided value into an OGR value. (" << v.toString() << ")");
-      break;
-    }
+    QString table = _getLayerName(geometry);
+    _translatedElementMap[table] = e;
+    return;
   }
-  c->setTags(t);
-  if (_writeSplitFiles)
+  //  Iterate all features and put them into the translated map
+  for (const auto& f : feature)
   {
-    QString layer = _getLayerName(feature, geometry);
-    _writer.setCurrentFileIndex(layer);
+    if (!f.feature)
+    {
+      QString table = _getLayerName(geometry);
+      _translatedElementMap[table] = e;
+      continue;
+    }
+    ElementPtr c = e->clone();
+    Tags t;
+    const QVariantMap& vm = f.feature->getValues();
+    for (auto it = vm.constBegin(); it != vm.constEnd(); ++it)
+    {
+      const QVariant& v = it.value();
+      QByteArray ba = it.key().toUtf8();
+      //  Convert the variant values, don't insert "empty" values (i.e. -999999 or 'No Information')
+      switch (v.type())
+      {
+      case QVariant::Invalid:
+        break;
+      case QVariant::Int:
+      {
+        int value = v.toInt();
+        if (value != -999999)
+          t.set(ba.constData(), value);
+        break;
+      }
+      case QVariant::LongLong:
+      {
+        qlonglong value = v.toLongLong();
+        if (value != -999999)
+          t.set(ba.constData(), QString::number(value));
+        break;
+      }
+      case QVariant::Double:
+      {
+        double value = v.toDouble();
+        if (value != -999999.0)
+          t.set(ba.constData(), value);
+        break;
+      }
+      case QVariant::String:
+      {
+        QString value = v.toString();
+        if (!value.isEmpty() && value != "noInformation" && value != "No Information")
+          t.set(ba.constData(), v.toString());
+        break;
+      }
+      default:
+        LOG_WARN("Can't convert the provided value into an OGR value. (" << v.toString() << ")");
+        break;
+      }
+    }
+    c->setTags(t);
+    QString layer = "";
+    if (_writeSplitFiles)
+      layer = _getLayerName(f, geometry);
+    _translatedElementMap[layer] = c;
   }
-  return c;
 }
 
-QString OsmGeoJsonWriter::_getLayerName(const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& feature,
+QString OsmGeoJsonWriter::_getLayerName(const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
                                         const std::shared_ptr<geos::geom::Geometry>& geometry) const
 {
-  //  TODO: Check with Matt about multiple features
-  if (!feature.empty() && !feature[0].tableName.isEmpty())
-      return feature[0].tableName;
+  if (!feature.tableName.isEmpty())
+    return feature.tableName;
+  else
+    return _getLayerName(geometry);
+}
+
+QString OsmGeoJsonWriter::_getLayerName(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+{
+  if (!_writeSplitFiles)
+    return "";
   else if (_useThematicLayers)
     return _getThematicUnknown(geometry);
   else

@@ -17,5 +17,5 @@
 {"type":"relation","id":-1,"members":[
 {"type":"way","ref":-10,"role":"outer"},
 {"type":"way","ref":-9,"role":"outer"},
-{"type":"way","ref":-8,"role":"outer"}],"tags":{"hoot:poipolygon:poismerged":"2","hoot:poipolygon:poismerged:1":"1","hoot:poipolygon:poismerged:2":"1","name":"G","alt_name":"A;B;C;E;F;bar;foo","note":"Toy Scenario 4","building":"yes","poi":"yes","error:circular":"15"}}]
+{"type":"way","ref":-8,"role":"outer"}],"tags":{"alt_name":"A;B;C;E;F;bar;foo","building":"yes","error:circular":"15","hoot:poipolygon:poismerged":"2","hoot:poipolygon:poismerged:1":"1","hoot:poipolygon:poismerged:2":"1","name":"G","note":"Toy Scenario 4","poi":"yes"}}]
 }

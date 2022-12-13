@@ -78,6 +78,7 @@ public:
   /** Get the current file index */
   QString getCurrentFileIndex() const { return _currentIndex; }
   bool isCurrentIndexWritten() const;
+  MultiFileWriterType getWriterType() const { return _type; }
   /** Writer functions */
   void write(const QString& contents);
   void writeHeader(const QString& contents);

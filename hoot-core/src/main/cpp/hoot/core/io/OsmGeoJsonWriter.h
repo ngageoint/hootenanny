@@ -52,23 +52,29 @@ public:
    * @param conf Configuration settings object
    */
   void setConfiguration(const Settings& conf) override;
-
+  /**
+   * @brief open Open the writer and get everything ready to write()
+   * @param url URL to open
+   */
   void open(const QString& url) override;
   /**
    * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
-   * @param map
+   * @param map Map to write out to file(s)
    */
   void write(const ConstOsmMapPtr& map) override;
   /**
-   * @brief isSupported returns true if the URL is likely supported
+   * @brief isSupported checks if this URL is supported
    * @param url Filename ending in ".geojson"
-   * @return
+   * @return true if the URL is likely supported
    */
   bool isSupported(const QString& url) const override { return url.endsWith(".geojson", Qt::CaseInsensitive); }
+  /**
+   * @brief supportedFormats List of supported file formats
+   * @return Only .geojson is supported at this time
+   */
   QString supportedFormats() const override { return ".geojson"; }
 
 protected:
-
   /**
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
    *   them out to the GeoJSON file
@@ -86,29 +92,28 @@ protected:
   void _writeRelations() override;
   /**
    * @brief _writeMeta Write node/way/relation metadata, i.e. timestamp, version, and visible
-   * @param element
+   * @param element Element to write out
    */
   void _writeMeta(ConstElementPtr element);
   /**
    * @brief _getBbox Create a bounding box array in GeoJSON format
-   * @return
+   * @return Bounding box string
    */
   QString _getBbox() const;
   /**
    * @brief _writeNode Writes a single element; metadata, tags, and geometry
-   * @param element
+   * @param element Element to write out
    */
   void _writeElement(ConstElementPtr element);
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
-   * @param relation
+   * @param relation Relation to write out
    */
   void _writeRelationInfo(ConstRelationPtr relation);
-
   /**
    * @brief _writeFeature Calls _writeNode(), _writeWay(), or _writeRelation()
    *   based on the type of element e
-   * @param element
+   * @param element Element to write out
    */
   void _writeFeature(ConstElementPtr element);
   /**
@@ -119,22 +124,22 @@ protected:
   void _writeGeometry(const std::vector<long>& nodes, std::string type);
   /**
    * @brief _writeGeometry Write out geometry for any element
-   * @param element
+   * @param element Element to write out
    */
   void _writeGeometry(ConstElementPtr element);
   /**
    * @brief _writeGeometry Write out geometry for a single node
-   * @param node
+   * @param node Node to write out
    */
   void _writeGeometry(ConstNodePtr node);
   /**
    * @brief _writeGeometry Write out geometry for a single way
-   * @param way
+   * @param way Way to write out
    */
   void _writeGeometry(ConstWayPtr way);
   /**
    * @brief _writeGeometry Write out geometry for a single relation
-   * @param relation
+   * @param relation Relation to write out
    */
   void _writeGeometry(ConstRelationPtr relation);
   /**
@@ -150,24 +155,41 @@ protected:
    * @return Semicolon separated list of roles
    */
   std::string _buildRoles(ConstRelationPtr relation, bool& first);
-
-  ConstElementPtr _translateElement(const ConstElementPtr& e);
-
-  QString _getLayerName(const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& feature,
+  /**
+   * @brief _translateElement Translate the provided element, pushes at least one element onto the _translatedElementQueue map
+   * @param e Element to be translated
+   */
+  void _translateElement(const ConstElementPtr& e);
+  /**
+   * @brief _getLayerName Get the layer name based on the translation or geometry type
+   * @param feature Translated feature information (i.e. translated tags and layer name)
+   * @param geometry Used in case of no translation information
+   * @return Layer name appropriate for this element
+   */
+  QString _getLayerName(const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
                         const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  QString _getLayerName(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  /**
+   * @brief _getThematicUnknown Returns unknown layername based on geometry for thematic files
+   * @param geometry Geometry to check type
+   * @return Layername for unknown geometries (i.e. Unknown, UnknownPnt, UnknownCrv, UnknownSrf)
+   */
   QString _getThematicUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  /**
+   * @brief _getFcodeUnknown Returns unknown layername based on geometry for FCODE files
+   * @param geometry Geometry to check type
+   * @return Layername for unknown geometries (i.e. UNKNOWN, UNKNOWN_P, UNKNOWN_C, UNKNOWN_S)
+   */
   QString _getFcodeUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
-
 
   /** Tasking Manager requires that all bounding geometries are MultiPolygons and not Polygons or Linestrings,
    *  set to true when the GeoJSON output is being used for Tasking Manager bounding polygons.
    */
   bool _useTaskingManagerFormat;
-
-  /**
-   * @brief _useThematicLayers
-   */
+  /** Flag set to true when the output is into different layers (thematic or FCODE) */
   bool _useThematicLayers;
+  /** Map of translated features with the layer name as the key and the value is a translated element */
+  std::map<QString, ConstElementPtr> _translatedElementMap;
 
 };
 
