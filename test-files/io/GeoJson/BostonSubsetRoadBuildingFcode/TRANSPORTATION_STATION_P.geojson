@@ -1,3 +1,3 @@
 {"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
-{"type":"Feature","properties":{"ZI005_FNA":"West Acton (closed)","OTH":"(CAA:B&M)","FFN":"482","F_CODE":"AQ125","OSMTAGS":{"disused":"station","end_date":"1975","start_date":"1844","wikipedia":"en:West_Acton_(MBTA_station)"},"ZI026_CTUC":"5","CAA":"999","TRS":"12","FCSUBTYPE":"100186"},"geometry": {"type":"Point","coordinates": [-71.4733725, 42.4765182]}}]
+{"type":"Feature","properties":{"CAA":"999","FCSUBTYPE":"100186","FFN":"482","F_CODE":"AQ125","OSMTAGS":{"disused":"station","end_date":"1975","start_date":"1844","wikipedia":"en:West_Acton_(MBTA_station)"},"OTH":"(CAA:B&M)","TRS":"12","ZI005_FNA":"West Acton (closed)","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4733725, 42.4765182]}}]
 }

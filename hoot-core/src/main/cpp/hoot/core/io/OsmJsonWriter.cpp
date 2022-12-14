@@ -59,6 +59,7 @@ OsmJsonWriter::OsmJsonWriter(int precision)
     _numWritten(0),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _writeSplitFiles(false),
+    _sortTags(ConfigOptions().getWriterSortTagsByKey()),
     _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _includeIds(ConfigOptions().getWriterIncludeIdTag()),
     _includeCompatibilityTags(true),
@@ -71,6 +72,7 @@ void OsmJsonWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _precision = options.getWriterPrecision();
+  _sortTags = options.getWriterSortTagsByKey();
   _includeDebug = options.getWriterIncludeDebugTags();
   _includeIds= options.getWriterIncludeIdTag();
   _writeHootFormat = options.getJsonFormatHootenanny();
@@ -307,12 +309,17 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 
   bool firstTag = true;
   const Tags& tags = eClone->getTags();
-  if (!tags.empty())
+  //  Sort the keys for output
+  QList<QString> keys = tags.keys();
+  if (_sortTags)
+    keys.sort();
+
+  //  Write out the tags with their key/value pairs
+  for (const auto& key : qAsConst(keys))
   {
-    for (auto it = tags.constBegin(); it != tags.constEnd(); ++it)
+    QString value = tags.get(key).trimmed();
+    if (!value.isEmpty())
     {
-      QString key = it.key();
-      QString value = it.value();
       if (key == "uuid")
         value = value.replace("{", "").replace("}", "");
       _writeTag(key, value, firstTag);

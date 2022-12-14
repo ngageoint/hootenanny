@@ -1,8 +1,8 @@
 {"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
-{"type":"Feature","properties":{"TRS2":"13","F_CODE":"AQ062","ZI026_CTUC":"5","TRS":"12","FCSUBTYPE":"100168"},"geometry": {"type":"Point","coordinates": [-71.4773763, 42.4824917]}},
-{"type":"Feature","properties":{"TRS2":"13","F_CODE":"AQ062","ZI026_CTUC":"5","TRS":"12","FCSUBTYPE":"100168"},"geometry": {"type":"Point","coordinates": [-71.4731836, 42.4761161]}},
-{"type":"Feature","properties":{"TRS2":"13","F_CODE":"AQ062","ZI026_CTUC":"5","TRS":"12","FCSUBTYPE":"100168"},"geometry": {"type":"Point","coordinates": [-71.4735768, 42.476953]}},
-{"type":"Feature","properties":{"TRS2":"13","F_CODE":"AQ062","ZI026_CTUC":"5","TRS":"12","FCSUBTYPE":"100168"},"geometry": {"type":"Point","coordinates": [-71.4731367, 42.4761148]}},
-{"type":"Feature","properties":{"TRS2":"13","F_CODE":"AQ062","ZI026_CTUC":"5","TRS":"12","FCSUBTYPE":"100168"},"geometry": {"type":"Point","coordinates": [-71.4735269, 42.4769731]}},
-{"type":"Feature","properties":{"TRS2":"13","F_CODE":"AQ062","ZI026_CTUC":"5","TRS":"12","FCSUBTYPE":"100168"},"geometry": {"type":"Point","coordinates": [-71.47734869999999, 42.4825336]}}]
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4773763, 42.4824917]}},
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4731836, 42.4761161]}},
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4735768, 42.476953]}},
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4731367, 42.4761148]}},
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4735269, 42.4769731]}},
+{"type":"Feature","properties":{"FCSUBTYPE":"100168","F_CODE":"AQ062","TRS":"12","TRS2":"13","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.47734869999999, 42.4825336]}}]
 }

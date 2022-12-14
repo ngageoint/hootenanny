@@ -157,8 +157,9 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
 /* Validate export params */
 function validateExportParams(req, res) {
     var message;
-    // check the datasource
-    if (!config.datasources[req.params.datasource]) {
+    // check the datasource if request is GET
+    // POST requests supplying own data can send whatever datasource string they want
+    if (req.method === 'GET' && !config.datasources[req.params.datasource]) {
         message = `Datasource "${req.params.datasource}" not found`;
     }
     // check the schema

@@ -105,6 +105,8 @@ protected:
   AreaCriterion _areaCriterion;
   LinearCriterion _linearCriterion;
 
+  bool _sortTags;
+
   static QString _typeName(ElementType e);
 
   virtual void _writeNodes();
