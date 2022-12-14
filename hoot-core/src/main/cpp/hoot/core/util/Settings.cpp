@@ -142,7 +142,10 @@ private:
 
       //  Throw an exception for unrecognized keys
       if (!_s->hasKey(optionName))
-        throw IllegalArgumentException("Unknown JSON setting: (" + optionName + ")");
+      {
+        LOG_ERROR("Skipping unknown JSON setting: (" + optionName + ")");
+        continue;
+      }
 
       //  Set key/value pair as name and data, data() turns everything to a string
       const QString optionVal = QString::fromUtf8(element.second.data().c_str());
