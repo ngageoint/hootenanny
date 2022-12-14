@@ -5,9 +5,6 @@
     },
     "APIDB": {
       "conn": "osmapidb://vagrant:vagrant!@192.168.33.12:5432/openstreetmap"
-    },
-    "RenderDb": {
-      "conn": "PG:dbname='osmhaiti' host='192.168.33.12' port='5432' user='vagrant' password=''"
     }
   },
   "formats": {
