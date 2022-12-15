@@ -23,10 +23,10 @@
         "isA": "landuse",
         "name": "landuse=cemetery",
         "objectType": "tag",
-        "similarTo": {
-                "name": "cemetery",
-                "weight": 0.8
-         }
+        "similarTo": [
+            { "name": "cemetery", "weight": 0.8 },
+            { "name": "amenity=cemetery", "weight": 0.8 }
+         ]
     },
     {
         "#": "TODO: This doesn't seem to exist in public OSM.",

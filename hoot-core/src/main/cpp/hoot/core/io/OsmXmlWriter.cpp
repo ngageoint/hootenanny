@@ -360,6 +360,13 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
 
 void OsmXmlWriter::_writeBounds(const Envelope& bounds) const
 {
+  //  Validate the bounds before writing the "bounds" XML element
+  if (bounds.getMinX() == geos::DoubleNegInfinity || bounds.getMaxX() == geos::DoubleInfinity ||
+      bounds.getMinY() == geos::DoubleNegInfinity || bounds.getMaxY() == geos::DoubleInfinity ||
+      bounds.isNull())
+  {
+    return;
+  }
   _writer->writeStartElement("bounds");
   _writer->writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));
   _writer->writeAttribute("minlon", QString::number(bounds.getMinX(), 'g', _precision));

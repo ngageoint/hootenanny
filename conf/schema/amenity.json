@@ -755,15 +755,12 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
         "isA": "amenity",
         "name": "amenity=grave_yard",
         "objectType": "tag",
         "similarTo": [
-            { "name": "amenity=cemetery", "weight": 0.6 },
-            { "name": "landuse=cemetery", "weight": 0.6 }
+            { "name": "amenity=cemetery", "weight": 0.8 },
+            { "name": "landuse=cemetery", "weight": 0.8 }
         ]
     },
     {
