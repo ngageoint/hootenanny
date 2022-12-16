@@ -50,7 +50,7 @@ describe('Power Lines', function () {
 
             var tags = osmtogeojson(xml).features[0].properties;
             assert.equal(tags[fcode_key], 'AT005');
-            assert.equal(tags['CAB'], '2');
+            assert.equal(tags['CAB'], '6');
             assert.equal(tags['UFI'], 'd7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1');
 
             var osm_xml = server.handleInputs({osm: trans_xml, method: 'POST', translation: schema, path: '/translateFrom'});

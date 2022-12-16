@@ -54,8 +54,12 @@ mgcp = {
   // print(mgcp.layerNameLookup);
   // print('###');
 
-  // Quick lookup list for valid FCODES
-  // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
+  // Yet Another lookup. FCODE and English name
+  // Used for O2S reasons
+  mgcp.fcodeNameLookup = translate.makeFcodeNameLookup(mgcp.rawSchema);
+  // print("mgcp.fcodeNameLookup");
+  // translate.dumpLookup(mgcp.fcodeNameLookup);
+  // print("##########");
 
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
   // if (config.getOgrOutputFormat() == 'shp')
@@ -1327,6 +1331,7 @@ mgcp = {
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
       // ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+      ["t.power == 'minor_line'","t.spower = 'minor_line'"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
       ["t.resource","t.product = t.resource; delete t.resource"],
       ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
@@ -2385,6 +2390,13 @@ mgcp = {
         notUsedTags.gauge = tags.gauge;
       }
     }
+
+    // Uglyness needed to save a powerline type
+    if (tags.spower)
+    {
+      notUsedTags.power = tags.spower;
+      delete notUsedTags.spower;
+    }
   }, // End of applyToOgrPostProcessing
 
   // ##### End of the xxToOgrxx Block #####
@@ -2786,7 +2798,7 @@ mgcp = {
       }
       else
       {
-        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE;
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' (' + mgcp.fcodeNameLookup[attrs.F_CODE] + ')';;
       }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
