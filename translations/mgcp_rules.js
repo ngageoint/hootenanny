@@ -136,6 +136,7 @@ mgcp.rules = {
     // ['F_CODE','AP050','highway','cycleway'],
     // ['F_CODE','AP050','highway','footway'],
     ['F_CODE','AQ125','amenity','bus_station'],
+    ['F_CODE','AT030','power','minor_line'], // Power Line - NFDD AT005
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water

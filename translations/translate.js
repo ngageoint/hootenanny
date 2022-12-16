@@ -1488,11 +1488,11 @@ translate = {
   },
 
 
-  // makeLayerNameLookup - build a lookup table for FCODE to LayerName
-  makeFcodeList : function(schema)
+  // makeFcodeNameLookup - List of FCodes and their english name
+  makeFcodeNameLookup : function(schema)
   {
-    var lookup = [];
-    schema.forEach( function (item) { if (lookup.indexOf(item.fcode) == -1) lookup.push(item.fcode); });
+    var lookup = {};
+    schema.forEach( function (item) { if (!lookup[item.fcode]) lookup[item.fcode] = item.desc; });
     return lookup;
   },
 

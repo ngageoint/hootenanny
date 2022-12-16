@@ -4667,12 +4667,6 @@ tds71.rules = {
     ['ZI004_RCG','39','attribution','mapping_service_(hungary)'], // Mapping Service (Hungary)
     ['ZI004_RCG','45','attribution','geospatial_intelligence_organisation_(new_zealand)'], // Geospatial Intelligence Organisation (New Zealand)
 
-    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
-    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
-    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
-    ['ZSAX_RS0','S','security:classification','SECRET'],
-    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
-
     // OTH Filler.  These are to build OTH values
     // ['RTY','999','highway','other'],
 

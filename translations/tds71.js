@@ -74,6 +74,13 @@ tds71 = {
 
     // print("##########");
 
+    // Yet Another lookup. FCODE and English name
+    // Used for O2S reasons
+    tds71.fcodeNameLookup = translate.makeFcodeNameLookup(tds71.rawSchema);
+    // print("tds71.fcodeNameLookup");
+    // translate.dumpLookup(tds71.fcodeNameLookup);
+    // print("##########");
+
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds71.rawSchema
     if (hoot.Settings.get('writer.thematic.structure') == 'false')
@@ -834,7 +841,8 @@ tds71 = {
         ['t.boundary == "protected_area" && !(t.protect_class)','t.protect_class = "4"'],
         ['t.bunker_type && !(t.military)','t.military = "bunker"'],
         ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
-        ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
+        ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "minor_line"; delete t.cable; delete t["cable:type"]'],
+        ['t.cable =="yes" && t["cable:type"] == "transmission"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
@@ -1494,7 +1502,8 @@ tds71 = {
         ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
-        ['t.power == "line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
+        ['t.power == "line"','t["cable:type"] = "transmission"; t.cable = "yes"; delete t.power'],
+        ['t.power == "minor_line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
         ['t.rapids == "yes"','t.waterway = "rapids"; delete t.rapids'],
         ['t.railway == "station"','t.public_transport = "station";  t["transport:type"] = "railway"'],
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type:2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
@@ -3176,7 +3185,7 @@ tds71 = {
       }
       else
       {
-        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE;
+        tags.o2s_reason = geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' (' + tds71.fcodeNameLookup[attrs.F_CODE] + ')';
       }
 
       tableName = 'o2s_' + geometryType.toString().charAt(0);
