@@ -102,8 +102,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 {
   LOG_TRACE("Checking review reduction rules...");
   _triggeredRuleDescription = "";
-  //QElapsedTimer timer;
-  //const int timingThreshold = 1000000;  //nanosec
 
   const Tags& poiTags = poi->getTags();
   const Tags& polyTags = poly->getTags();
@@ -409,7 +407,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   // Don't review park poi's against large non-park polys.
   ruleDescription = "#22: park poi/poly 1";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
-  if (poiHasType && polyHasType && !_nameMatch && !polyIsPark &&
+  if (poiHasType && polyHasType && !_nameMatch && poiIsParkish && !polyIsPark &&
       (((polyHasLanduse && !poiHasLanduse) ||
        (polyIsNatural && !poiIsNatural) ||
         polyLeisureVal == QLatin1String("common")) ||
@@ -451,6 +449,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       // relation member.
       if (numPolyAddresses < 2 && _infoCache->containsMember(poly, poi->getElementId()))
       {
+        //  Do nothing
       }
       else if (_addressScore < 0.8)
       {
@@ -516,8 +515,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         //timer.restart();
         if (poiIsSport && _infoCache->isType(polyNeighbor, PoiPolygonSchemaType::Sport) &&
             _infoCache->elementContains(polyNeighbor, poi) &&
-            PoiPolygonTypeScoreExtractor(_infoCache).extract(*_map, poi, polyNeighbor) >=
-             _typeScoreThreshold)
+            PoiPolygonTypeScoreExtractor(_infoCache).extract(*_map, poi, polyNeighbor) >= _typeScoreThreshold)
         {
           sportPoiOnOtherSportPolyWithTypeMatch = true;
         }
