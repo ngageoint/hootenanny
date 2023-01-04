@@ -64,7 +64,9 @@ public:
 
 private:
 
+  void _initCacheDir();
   void _initCache();
+  QString _tempDir;
   std::shared_ptr<QTemporaryFile> _pTempFile;
   QString _tempFileName;
   OsmXmlReader _reader;

@@ -40,14 +40,10 @@ namespace hoot
 
 OsmXmlDiskCache::OsmXmlDiskCache()
 {
-  // Check for temp dir
-  // If $HOOT_HOME/tmp doesn't exist, and we can't make it, then use /tmp
-  QString tempDir = ConfPath::getHootHome() + "/tmp";
-  if (!QDir(tempDir).exists() && !QDir(tempDir).mkpath("."))
-      tempDir = QDir::tempPath();
+  _initCacheDir();
 
   // Setup our temp file & get guaranteed unique name
-  QString fnameTemplate = tempDir + "/disk.cache.osm.XXXXXX";
+  QString fnameTemplate = _tempDir + "/disk.cache.osm.XXXXXX";
   _pTempFile = std::make_shared<QTemporaryFile>(fnameTemplate);
   if (!_pTempFile->open())
   {
@@ -79,6 +75,38 @@ OsmXmlDiskCache::~OsmXmlDiskCache()
 {
   _reader.close();
   _writer.close();
+}
+
+// We need to make sure we have a temp dir that we can write to.
+// We prefer the hoot temp pdir ($HOOT_HOME/tmp), and fall back to /tmp
+// If $HOOT_HOME/tmp doesn't exist, try to make it.
+// If we make it, set its permissions.
+// If it does exist, make sure we can write to it
+// If we can't make it, use /tmp
+void OsmXmlDiskCache::_initCacheDir()
+{
+  _tempDir = ConfPath::getHootHome() + "/tmp";
+  if (QDir(_tempDir).exists() && !QFileInfo(_tempDir).isWritable())
+  {
+    // If it exists, and we can't write to it, use system temp
+    _tempDir = QDir::tempPath();
+  }
+  else if (!QDir(_tempDir).exists())
+  {
+    // Try to make it
+    if (QDir(_tempDir).mkpath("."))
+    {
+      QFile(_tempDir).setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner
+                                     | QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ExeGroup
+                                     | QFileDevice::ReadOther | QFileDevice::WriteOther | QFileDevice::ExeOther);
+    }
+    else
+    {
+      _tempDir = QDir::tempPath();
+    }
+  }
+
+  LOG_DEBUG(QString("OsmXmlDiskCache: using temp dir: %1").arg(_tempDir));
 }
 
 void OsmXmlDiskCache::_initCache()
