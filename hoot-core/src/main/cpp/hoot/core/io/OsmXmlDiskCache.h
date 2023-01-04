@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef __OSM_XML_DISK_CACHE_H__
 #define __OSM_XML_DISK_CACHE_H__
