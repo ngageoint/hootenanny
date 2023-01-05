@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef __OSM_XML_DISK_CACHE_H__
 #define __OSM_XML_DISK_CACHE_H__
@@ -64,7 +64,9 @@ public:
 
 private:
 
+  void _initCacheDir();
   void _initCache();
+  QString _tempDir;
   std::shared_ptr<QTemporaryFile> _pTempFile;
   QString _tempFileName;
   OsmXmlReader _reader;
