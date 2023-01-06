@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReader.h"
@@ -76,8 +76,7 @@ void OsmApiReader::setConfiguration(const Settings& conf)
   setMaxThreads(config.getReaderHttpBboxThreadCount());
   setCoordGridSize(config.getReaderHttpBboxMaxSize());
   setMaxGridSize(config.getReaderHttpBboxMaxDownloadSize());
-  _boundsString = config.getBounds();
-  _boundsFilename = config.getBoundsInputFile();
+  setBounds(Boundable::loadBounds(config));
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
@@ -212,8 +211,8 @@ void OsmApiReader::initializePartial()
   LOG_VART(_preserveAllTags);
 
   //  Set the bounds once we begin the read if setBounds() hasn't already been called
-  if (_bounds == nullptr && _loadBounds())
-    setBounds(_boundingPoly);
+  if (_bounds == nullptr)
+    _loadBounds();
 
   if (_bounds == nullptr)
     throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
@@ -314,24 +313,9 @@ ElementPtr OsmApiReader::readNextElement()
 
 bool OsmApiReader::_loadBounds()
 {
-  bool isEnvelope = false;
-  //  Try to read the bounds from the `bounds` string
-  if (_boundsString != ConfigOptions::getBoundsDefaultValue())
-  {
-    _boundingPoly = GeometryUtils::boundsFromString(_boundsString, isEnvelope);
-    _bounds = _boundingPoly;
-    _isPolygon = !isEnvelope;
-    return true;
-  }
-  //  Try to read the bounds from the `bounds.input.file` file
-  else if (_boundsFilename != ConfigOptions::getBoundsInputFileDefaultValue())
-  {
-    _boundingPoly = GeometryUtils::readBoundsFromFile(_boundsFilename, isEnvelope);
-    _bounds = _boundingPoly;
-    _isPolygon = !isEnvelope;
-    return true;
-  }
-  return false;
+  setBounds(Boundable::loadBounds());
+  //  Return true if the bounds object was created
+  return _bounds != nullptr;
 }
 
 bool OsmApiReader::_canUseElement(const ElementPtr& element) const

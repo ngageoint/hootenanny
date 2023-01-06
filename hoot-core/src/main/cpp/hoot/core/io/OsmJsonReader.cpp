@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmJsonReader.h"
@@ -180,8 +180,8 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   LOG_DEBUG("Reading map...");
 
   //  Set the bounds once we begin the read if setBounds() hasn't already been called
-  if (_bounds == nullptr && _loadBounds())
-    setBounds(_boundingPoly);
+  if (_bounds == nullptr)
+    _loadBounds();
 
   if (_bounds == nullptr && !_isFile)
     throw IllegalArgumentException("OsmJsonReader requires rectangular bounds");
@@ -310,10 +310,8 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
-  setBounds(GeometryUtils::boundsFromString(opts.getBounds()));
+  setBounds(Boundable::loadBounds(opts));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
-  _boundsString = opts.getBounds();
-  _boundsFilename = opts.getBoundsInputFile();
 }
 
 void OsmJsonReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
@@ -334,24 +332,9 @@ void OsmJsonReader::setBounds(const geos::geom::Envelope& bounds)
 
 bool OsmJsonReader::_loadBounds()
 {
-  bool isEnvelope = false;
-  //  Try to read the bounds from the `bounds` string
-  if (_boundsString != ConfigOptions::getBoundsDefaultValue())
-  {
-    _boundingPoly = GeometryUtils::boundsFromString(_boundsString, isEnvelope);
-    _bounds = _boundingPoly;
-    _isPolygon = !isEnvelope;
-    return true;
-  }
-  //  Try to read the bounds from the `bounds.input.file` file
-  else if (_boundsFilename != ConfigOptions::getBoundsInputFileDefaultValue())
-  {
-    _boundingPoly = GeometryUtils::readBoundsFromFile(_boundsFilename, isEnvelope);
-    _bounds = _boundingPoly;
-    _isPolygon = !isEnvelope;
-    return true;
-  }
-  return false;
+  setBounds(Boundable::loadBounds());
+  //  Return true if the bounds object was created
+  return _bounds != nullptr;
 }
 
 void OsmJsonReader::_parseOverpassJson()
@@ -726,7 +709,6 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   }
   _relationIdMap.insert(id, newId);
 
-  const QString msg = "Reading " + ElementId(ElementType::Relation, newId).toString() + "...";
   long version = _getVersion(item, ElementType::Relation, newId);
   long changeset = _getChangeset(item);
   unsigned int timestamp = _getTimestamp(item);

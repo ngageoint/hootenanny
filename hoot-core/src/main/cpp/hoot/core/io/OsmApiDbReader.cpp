@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbReader.h"
 
@@ -233,7 +233,7 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());
-  setBoundingBox(configOptions.getBounds());
+  setBounds(Boundable::loadBounds(configOptions));
   setOverrideBoundingBox(configOptions.getBoundsOsmApiDatabase());
 }
 

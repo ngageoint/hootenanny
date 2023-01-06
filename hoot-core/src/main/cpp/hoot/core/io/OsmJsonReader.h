@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -307,9 +307,6 @@ private:
    * @return true if the bounds were parsed correctly
    */
   bool _loadBounds();
-
-  QString _boundsString;
-  QString _boundsFilename;
 
 protected:
 
