@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "InBoundsCriterion.h"
@@ -67,7 +67,7 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
   LOG_VART(_mustCompletelyContain);
-  setBounds(GeometryUtils::boundsFromString(config.getInBoundsCriterionBounds()));
+  setBounds(Boundable::loadInBoundsCriterionBounds(config));
 }
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)

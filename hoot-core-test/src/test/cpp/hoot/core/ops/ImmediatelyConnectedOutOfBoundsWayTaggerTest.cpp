@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -45,10 +45,9 @@ class ImmediatelyConnectedOutOfBoundsWayTaggerTest : public HootTestFixture
 
 public:
 
-  ImmediatelyConnectedOutOfBoundsWayTaggerTest() :
-  HootTestFixture(
-    "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/",
-    "test-output/ops/ImmediatelyConnectedOutOfBoundsWayTagger/")
+  ImmediatelyConnectedOutOfBoundsWayTaggerTest()
+    : HootTestFixture("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/",
+                      "test-output/ops/ImmediatelyConnectedOutOfBoundsWayTagger/")
   {
   }
 
@@ -56,8 +55,7 @@ public:
   {
     const QString testName = "runStrictBoundsTest";
     geos::geom::Envelope bounds(38.91362, 38.915478, 15.37365, 15.37506);
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
@@ -80,8 +78,7 @@ public:
   {
     const QString testName = "runLenientBoundsTest";
     geos::geom::Envelope bounds(38.91404, 38.91506, 15.3740, 15.37513);
-    OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");

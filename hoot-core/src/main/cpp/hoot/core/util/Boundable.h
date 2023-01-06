@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2020, 2021, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef BOUNDABLE_H
 #define BOUNDABLE_H
@@ -65,9 +65,78 @@ public:
     setBounds(GeometryUtils::envelopeToPolygon(bounds));
   }
 
-protected:
+  /**
+   * @brief loadBounds - Attempts to load bounds from string then from file
+   * @param options - Configuration options
+   * @param forceEnvelopeBounds - Force the function to return a bounding envelope even if the
+   *   geometry is a polygon
+   * @return geometry of the bounds or nullptr
+   */
+  static std::shared_ptr<geos::geom::Geometry> loadBounds(const ConfigOptions& options, bool forceEnvelopeBounds = false);
+  static std::shared_ptr<geos::geom::Geometry> loadBounds(bool forceEnvelopeBounds = false)
+  {
+    return loadBounds(ConfigOptions(), forceEnvelopeBounds);
+  }
 
+  /**
+   * @brief loadBoundsString - Attempts to load bounds from string
+   * @param options - Configuration options
+   * @param forceEnvelopeBounds - Force the function to return a bounding envelope even if the
+   *   geometry is a polygon
+   * @return geometry of the bounds or nullptr
+   */
+  static std::shared_ptr<geos::geom::Geometry> loadBoundsString(const ConfigOptions& options, bool forceEnvelopeBounds = false);
+  static std::shared_ptr<geos::geom::Geometry> loadBoundsString(bool forceEnvelopeBounds = false)
+  {
+    return loadBoundsString(ConfigOptions(), forceEnvelopeBounds);
+  }
+
+  /**
+   * @brief loadBoundsFile - Attempts to load bounds from file
+   * @param options - Configuration options
+   * @param forceEnvelopeBounds - Force the function to return a bounding envelope even if the
+   *   geometry is a polygon
+   * @return geometry of the bounds or nullptr
+   */
+  static std::shared_ptr<geos::geom::Geometry> loadBoundsFile(const ConfigOptions& options, bool forceEnvelopeBounds = false);
+  static std::shared_ptr<geos::geom::Geometry> loadBoundsFile(bool forceEnvelopeBounds = false)
+  {
+    return loadBoundsFile(ConfigOptions(), forceEnvelopeBounds);
+  }
+
+  /**
+   * @brief loadCropBounds - Attempts to load crop bounds from string
+   * @param options - Configuration options
+   * @param forceEnvelopeBounds - Force the function to return a bounding envelope even if the
+   *   geometry is a polygon
+   * @return geometry of the bounds or nullptr
+   */
+  static std::shared_ptr<geos::geom::Geometry> loadCropBounds(const ConfigOptions& options, bool forceEnvelopeBounds = false);
+  static std::shared_ptr<geos::geom::Geometry> loadCropBounds(bool forceEnvelopeBounds = false)
+  {
+    return loadCropBounds(ConfigOptions(), forceEnvelopeBounds);
+  }
+
+  /**
+   * @brief loadCropBounds - Attempts to load crop bounds from string
+   * @param options - Configuration options
+   * @param forceEnvelopeBounds - Force the function to return a bounding envelope even if the
+   *   geometry is a polygon
+   * @return geometry of the bounds or nullptr
+   */
+  static std::shared_ptr<geos::geom::Geometry> loadInBoundsCriterionBounds(const ConfigOptions& options, bool forceEnvelopeBounds = false);
+  static std::shared_ptr<geos::geom::Geometry> loadInBoundsCriterionBounds(bool forceEnvelopeBounds = false)
+  {
+    return loadInBoundsCriterionBounds(ConfigOptions(), forceEnvelopeBounds);
+  }
+
+protected:
+  /** Bounding envelope or polygon */
   std::shared_ptr<geos::geom::Geometry> _bounds;
+
+private:
+  /** Convert string to geometry, used by loadBoundsString, loadCropBounds, and loadInBoundsCriterionBounds functions */
+  static std::shared_ptr<geos::geom::Geometry> loadBoundsByString(const QString& bounds, bool forceEnvelopeBounds);
 };
 
 }

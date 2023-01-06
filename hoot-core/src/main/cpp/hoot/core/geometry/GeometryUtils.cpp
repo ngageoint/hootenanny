@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryUtils.h"
@@ -481,7 +481,7 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
   return bbox->getElementId();
 }
 
-OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
+OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<Geometry>& bounds)
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   WayPtr boundsWay = std::make_shared<Way>(Status::Unknown1, boundaryMap->createNextWayId());
