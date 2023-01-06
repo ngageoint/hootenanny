@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "BoundedCommand.h"
@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -55,18 +56,16 @@ int BoundedCommand::runSimple(QStringList& args)
 void BoundedCommand::_writeBoundsFile()
 {
   ConfigOptions opts;
-  // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
-  // eventually cause a problem.
-  QString boundsStr = opts.getBounds().trimmed();
-  if (!boundsStr.isEmpty())
+  std::shared_ptr<geos::geom::Geometry> bounds = Boundable::loadBounds();
+  if (bounds)
   {
-    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromString(boundsStr)), opts.getBoundsOutputFile());
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(bounds), opts.getBoundsOutputFile());
 
-    if (_writeInternalEnvelope && GeometryUtils::isEnvelopeString(boundsStr))
+    if (_writeInternalEnvelope)
     {
       QString outputFile = opts.getBoundsOutputFile();
       outputFile = outputFile.replace(".osm", "-envelope-internal.osm");
-      OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(*(GeometryUtils::boundsFromString(boundsStr)->getEnvelopeInternal())), outputFile);
+      OsmMapWriterFactory::write(GeometryUtils::createMapFromBounds(*bounds->getEnvelopeInternal()), outputFile);
     }
   }
 }

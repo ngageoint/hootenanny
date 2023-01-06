@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "MapCropper.h"
@@ -151,13 +151,7 @@ void MapCropper::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
 
-  std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(confOpts.getCropBounds());
-  LOG_VART(bounds.get());
-  if (bounds)
-  {
-    _bounds = bounds;
-    LOG_VARD(_bounds);
-  }
+  setBounds(Boundable::loadCropBounds(confOpts));
 
   // invert must be set before the two options following it
   setInvert(confOpts.getCropInvert());

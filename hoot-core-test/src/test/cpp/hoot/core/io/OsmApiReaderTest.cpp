@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReaderTestServer.h"
@@ -96,35 +96,30 @@ public:
     s.set(ConfigOptions::getBoundsKey(), "38.4902,35.7982,38.6193,35.8536");
     s.set(ConfigOptions::getBoundsInputFileKey(), "");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._loadBounds());
     CPPUNIT_ASSERT(!reader._isPolygon);
 
     //  Use a bounding polygon that is a rectangle in `bounds`
     s.set(ConfigOptions::getBoundsKey(), "-72.474,18.545;-72.474,18.548;-72.471,18.548;-72.471,18.545;-72.474,18.545");
     s.set(ConfigOptions::getBoundsInputFileKey(), "");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._loadBounds());
     CPPUNIT_ASSERT(!reader._isPolygon);
 
     //  Use a bounding polygon in `bounds`
     s.set(ConfigOptions::getBoundsKey(), "-72.474,18.545;-72.471,18.548;-72.471,18.545;-72.474,18.545");
     s.set(ConfigOptions::getBoundsInputFileKey(), "");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._loadBounds());
     CPPUNIT_ASSERT(reader._isPolygon);
 
     //  Use a bounding box in `bounds.input.file`
     s.set(ConfigOptions::getBoundsKey(), "");
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestBboxBounds.osm");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._loadBounds());
     CPPUNIT_ASSERT(!reader._isPolygon);
 
     //  Use a bounding polygon in `bounds.input.file`
     s.set(ConfigOptions::getBoundsKey(), "");
     s.set(ConfigOptions::getBoundsInputFileKey(), _inputPath + "ToyTestPolyBounds.osm");
     reader.setConfiguration(s);
-    CPPUNIT_ASSERT(reader._loadBounds());
     CPPUNIT_ASSERT(reader._isPolygon);
   }
 
