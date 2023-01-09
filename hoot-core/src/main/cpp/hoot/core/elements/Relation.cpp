@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "Relation.h"
 
@@ -74,7 +74,7 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset, long version,
-                   quint64 timestamp, QString user, long uid, bool visible)
+                   OsmTimestamp timestamp, QString user, long uid, bool visible)
   : Element(s),
     _relationData(std::make_shared<RelationData>(id, changeset, version, timestamp, user, uid, visible))
 {

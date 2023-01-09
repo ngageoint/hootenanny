@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "AddressParser.h"
 
@@ -517,7 +517,7 @@ QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
   //may be able to clean some of this up with better use of regex's
 
   const QStringList addressParts = address.split(QRegExp("\\s"));
-  if (addressParts.length() == 0)
+  if (addressParts.empty())
     return "";
 
   QString addressTemp = addressParts[0];

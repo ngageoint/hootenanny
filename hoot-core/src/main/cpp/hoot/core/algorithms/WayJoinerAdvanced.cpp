@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "WayJoinerAdvanced.h"
@@ -87,7 +87,7 @@ void WayJoinerAdvanced::_joinParentChild()
   LOG_INFO("\tJoining parent ways to children...");
 
   const WayMap& ways = _map->getWays();
-  _totalWays = ways.size();
+  _totalWays = static_cast<int>(ways.size());
   vector<long> ids;
   //  Find all ways that have a split parent id
   for (auto it = ways.begin(); it != ways.end(); ++it)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_H
 #define ELEMENT_H
@@ -151,7 +151,7 @@ public:
   long getChangeset() const { return _getElementData().getChangeset(); }
   Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
   long getVersion() const { return _getElementData().getVersion(); }
-  quint64 getTimestamp() const { return _getElementData().getTimestamp(); }
+  OsmTimestamp getTimestamp() const { return _getElementData().getTimestamp(); }
   QString getUser() const { return _getElementData().getUser(); }
   long getUid() const { return _getElementData().getUid(); }
   inline const Tags& getTags() const { return _getElementData().getTags(); }
@@ -173,7 +173,7 @@ public:
   void setCircularError(Meters circularError) { _getElementData().setCircularError(circularError); }
   void setUid(long uid) { _getElementData().setUid(uid); }
   void setUser(QString user) { _getElementData().setUser(user); }
-  void setTimestamp(quint64 timestamp) { _getElementData().setTimestamp(timestamp); }
+  void setTimestamp(OsmTimestamp timestamp) { _getElementData().setTimestamp(timestamp); }
   void setVersion(long version) { _getElementData().setVersion(version); }
   void setChangeset(long changeset) { _getElementData().setChangeset(changeset); }
   void removeTag(QString k) { _getElementData().getTags().remove(k); }

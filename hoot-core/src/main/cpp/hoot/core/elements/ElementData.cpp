@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "Element.h"
@@ -32,7 +32,7 @@ namespace hoot
 
 long ElementData::CHANGESET_EMPTY = 0;
 long ElementData::VERSION_EMPTY = 0;
-quint64 ElementData::TIMESTAMP_EMPTY = 0;
+OsmTimestamp ElementData::TIMESTAMP_EMPTY = 0;
 QString ElementData::USER_EMPTY = QString();
 long ElementData::UID_EMPTY = 0;
 bool ElementData::VISIBLE_EMPTY = true;

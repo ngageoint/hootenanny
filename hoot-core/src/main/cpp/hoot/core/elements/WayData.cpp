@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023 Maxar (http://www.maxar.com/)
  */
 #include "WayData.h"
 
@@ -33,7 +33,7 @@ namespace hoot
 
 long WayData::PID_EMPTY = 0;
 
-WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
+WayData::WayData(long id, long changeset, long version, OsmTimestamp timestamp, QString user,
                  long uid, bool visible, long pid)
   : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible),
     _pid(pid)
