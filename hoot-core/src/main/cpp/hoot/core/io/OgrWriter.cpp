@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "OgrWriter.h"
 
@@ -134,6 +134,8 @@ void OgrWriter::setConfiguration(const Settings& conf)
   _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
   _forceSkipFailedRelations = configOptions.getOgrWriterSkipFailedRelations();
   _transactionSize = configOptions.getOgrWriterTransactionSize();
+  //  Set the bounds for cropped lines and polygons
+  setBounds(Boundable::loadBounds(configOptions));
 }
 
 void OgrWriter::_strictError(const QString& warning) const
@@ -721,24 +723,28 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
 void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
                                    const Geometry* g, OGRFeature* poFeature) const
 {
-  std::string wkt = g->toString();
+  if (g == nullptr)
+    return;
+  std::string wkt;
+  //  Get the WKT of the geometry (full or intersection) to convert to OGR geometry
+  if (_bounds && g->intersects(_bounds.get()))
+  {
+    //  Get the intersection of the geometry with the bounding envelope
+    std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
+    wkt = intersection->toString();
+  }
+  else
+    wkt = g->toString();
+  //  Convert the WKT to an OGR geometry for saving
   const char* t = wkt.data();
   OGRGeometry* geom;
   int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
   if (errCode != OGRERR_NONE)
-  {
-    throw HootException(
-      QString("Error parsing WKT (%1).  OGR Error Code: (%2)")
-        .arg(QString::fromStdString(wkt), QString::number(errCode)));
-  }
+    throw HootException(QString("Error parsing WKT (%1).  OGR Error Code: (%2)").arg(QString::fromStdString(wkt), QString::number(errCode)));
 
   errCode = poFeature->SetGeometryDirectly(geom);
   if (errCode != OGRERR_NONE)
-  {
-    throw HootException(
-      QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)")
-        .arg(QString::number(errCode), QString::fromStdString(g->toString())));
-  }
+    throw HootException(QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode), QString::fromStdString(g->toString())));
 
   // Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same
   // feature object for sequential insertions
@@ -746,11 +752,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
 
   errCode = layer->CreateFeature(poFeature);
   if (errCode != OGRERR_NONE)
-  {
-    throw HootException(
-      QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)")
-        .arg(QString::number(errCode), f->toString()));
-  }
+    throw HootException(QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)").arg(QString::number(errCode), f->toString()));
 }
 
 bool OgrWriter::_usesTransactions() const

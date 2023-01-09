@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -32,6 +32,7 @@
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
@@ -47,7 +48,7 @@ class Layer;
 /**
  * Writes a file to an OGR data source.
  */
-class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface
+class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface, public Boundable
 {
 public:
 
