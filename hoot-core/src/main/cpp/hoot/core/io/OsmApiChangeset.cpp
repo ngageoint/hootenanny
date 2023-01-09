@@ -373,7 +373,7 @@ void XmlChangeset::fixMalformedInput()
       //  Mark for removal all nodes with negative IDs that don't exist
       long nodeId = way->getNode(i);
       if (nodeId < 0 && _allNodes.find(nodeId) == _allNodes.end())
-        remove_nodes.push(nodeId);
+        remove_nodes.push(static_cast<int>(nodeId));
     }
     //  Remove any node with a negative ID (add) that doesn't exist in this changeset
     while (!remove_nodes.empty())

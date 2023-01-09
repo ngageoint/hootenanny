@@ -69,7 +69,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
     _waySublineString.addSubline(
       WaySubline(
         WayLocation(map, way, 0, 0.0),
-        WayLocation(map, way, way->getNodeCount() - 1, 0.0)));
+        WayLocation(map, way, static_cast<int>(way->getNodeCount()) - 1, 0.0)));
   }
 
   //add line from start of way where way location resides up to the split point

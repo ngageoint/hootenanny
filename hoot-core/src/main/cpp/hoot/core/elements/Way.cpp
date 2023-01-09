@@ -54,7 +54,7 @@ namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         quint64 timestamp, QString user, long uid, bool visible, long pid)
+         OsmTimestamp timestamp, QString user, long uid, bool visible, long pid)
   : Element(s)
 {
   _wayData = std::make_shared<WayData>(id, changeset, version, timestamp, user, uid, visible, pid);

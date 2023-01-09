@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot
@@ -48,7 +49,7 @@ public:
 
   static long CHANGESET_EMPTY;
   static long VERSION_EMPTY;
-  static quint64 TIMESTAMP_EMPTY;
+  static OsmTimestamp TIMESTAMP_EMPTY;
   static QString USER_EMPTY;
   static long UID_EMPTY;
   static bool VISIBLE_EMPTY;
@@ -66,7 +67,7 @@ public:
   long getChangeset() const { return _changeset; }
   Meters getRawCircularError() const { return _circularError; }
   long getVersion() const { return _version; }
-  quint64 getTimestamp() const { return _timestamp; }
+  OsmTimestamp getTimestamp() const { return _timestamp; }
   QString getUser() const { return _user; }
   long getUid() const { return _uid; }
   inline const Tags& getTags() const { return _tags; }
@@ -77,7 +78,7 @@ public:
   void setId(long id) { _id = id; }
   void setChangeset(long changeset) { _changeset = changeset; }
   void setVersion(long version) { _version = version; }
-  void setTimestamp(quint64 timestamp) { _timestamp = timestamp; }
+  void setTimestamp(OsmTimestamp timestamp) { _timestamp = timestamp; }
   void setUser(QString user) { _user = user; }
   void setUid(long uid) { _uid = uid; }
   void setCircularError(Meters circularError) { _circularError = circularError; }
@@ -93,7 +94,7 @@ protected:
   // sensible default value.
   ElementData(long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = CIRCULAR_ERROR_EMPTY,
               long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
-              quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+              OsmTimestamp timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
               long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
 
   long _id;
@@ -101,7 +102,7 @@ protected:
   Meters _circularError;
   long _changeset;
   long _version;
-  quint64 _timestamp;
+  OsmTimestamp _timestamp;
   QString _user;
   long _uid;
   bool _visible;
@@ -113,7 +114,7 @@ private:
   Meters _defaultCircularError;
 };
 
-inline ElementData::ElementData(long id, const Tags& tags, Meters circularError, long changeset, long version, quint64 timestamp,
+inline ElementData::ElementData(long id, const Tags& tags, Meters circularError, long changeset, long version, OsmTimestamp timestamp,
                                 QString user, long uid, bool visible)
   : _id(id),
     _tags(tags),

@@ -43,7 +43,7 @@ public:
 
   void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
             long version = ElementData::VERSION_EMPTY,
-            quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
+            OsmTimestamp timestamp = ElementData::TIMESTAMP_EMPTY,
             QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
             bool visible = ElementData::VISIBLE_EMPTY);
 
@@ -61,7 +61,7 @@ private:
 };
 
 inline void NodeData::init(long id, double x, double y, long changeset, long version,
-                           quint64 timestamp, QString user, long uid, bool visible)
+                           OsmTimestamp timestamp, QString user, long uid, bool visible)
 {
   _id = id;
   _x = x;

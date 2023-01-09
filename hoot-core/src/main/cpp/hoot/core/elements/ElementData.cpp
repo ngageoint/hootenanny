@@ -32,7 +32,7 @@ namespace hoot
 
 long ElementData::CHANGESET_EMPTY = 0;
 long ElementData::VERSION_EMPTY = 0;
-quint64 ElementData::TIMESTAMP_EMPTY = 0;
+OsmTimestamp ElementData::TIMESTAMP_EMPTY = 0;
 QString ElementData::USER_EMPTY = QString();
 long ElementData::UID_EMPTY = 0;
 bool ElementData::VISIBLE_EMPTY = true;

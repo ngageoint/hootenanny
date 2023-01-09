@@ -517,7 +517,7 @@ QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
   //may be able to clean some of this up with better use of regex's
 
   const QStringList addressParts = address.split(QRegExp("\\s"));
-  if (addressParts.length() == 0)
+  if (addressParts.empty())
     return "";
 
   QString addressTemp = addressParts[0];

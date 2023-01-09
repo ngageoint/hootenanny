@@ -129,10 +129,10 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<co
     description = _getNonMatchDescription(map, type, element1, element2);
 
   //  Join the string descriptions together or generate the default
-  if (description.length() > 0)
-    _explainText = description.join(" ");
-  else
+  if (description.empty())
     _explainText = mt->getTypeDetail(_p);
+  else
+    _explainText = description.join(" ");
   LOG_VART(toString());
   LOG_VART(_explainText);
 }

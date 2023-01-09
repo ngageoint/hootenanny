@@ -33,7 +33,7 @@ namespace hoot
 
 long WayData::PID_EMPTY = 0;
 
-WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
+WayData::WayData(long id, long changeset, long version, OsmTimestamp timestamp, QString user,
                  long uid, bool visible, long pid)
   : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible),
     _pid(pid)

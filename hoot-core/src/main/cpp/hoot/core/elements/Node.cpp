@@ -50,7 +50,7 @@ Node::Node(Status s, long id, const Coordinate& c, Meters circularError)
 }
 
 Node::Node(Status s, long id, double x, double y, Meters circularError, long changeset,
-           long version, unsigned int timestamp, QString user, long uid, bool visible)
+           long version, OsmTimestamp timestamp, QString user, long uid, bool visible)
   : Element(s)
 {
   _nodeData.init(id, x, y, changeset, version, timestamp, user, uid, visible);

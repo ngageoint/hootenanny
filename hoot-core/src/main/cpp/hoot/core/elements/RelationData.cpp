@@ -31,7 +31,7 @@ using namespace std;
 namespace hoot
 {
 
-RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp, QString user, long uid, bool visible)
+RelationData::RelationData(long id, long changeset, long version, OsmTimestamp timestamp, QString user, long uid, bool visible)
   : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible)
 {
 }

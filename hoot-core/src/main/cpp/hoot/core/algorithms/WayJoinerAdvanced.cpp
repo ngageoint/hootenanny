@@ -87,7 +87,7 @@ void WayJoinerAdvanced::_joinParentChild()
   LOG_INFO("\tJoining parent ways to children...");
 
   const WayMap& ways = _map->getWays();
-  _totalWays = ways.size();
+  _totalWays = static_cast<int>(ways.size());
   vector<long> ids;
   //  Find all ways that have a split parent id
   for (auto it = ways.begin(); it != ways.end(); ++it)

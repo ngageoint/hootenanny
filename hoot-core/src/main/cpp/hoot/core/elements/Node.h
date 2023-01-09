@@ -50,7 +50,7 @@ public:
   Node(Status s, long id, double x, double y,
        Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
        long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
-       unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+       OsmTimestamp timestamp = ElementData::TIMESTAMP_EMPTY,
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
        bool visible = ElementData::VISIBLE_EMPTY);
   ~Node() override = default;
@@ -73,7 +73,7 @@ public:
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y,
                                      Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
-                                     long changeset, long version, quint64 timestamp,
+                                     long changeset, long version, OsmTimestamp timestamp,
                                      QString user = ElementData::USER_EMPTY,
                                      long uid = ElementData::UID_EMPTY,
                                      bool visible = ElementData::VISIBLE_EMPTY);
@@ -160,7 +160,7 @@ inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circula
 }
 
 inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError,
-                           long changeset, long version, quint64 timestamp, QString user,
+                           long changeset, long version, OsmTimestamp timestamp, QString user,
                            long uid, bool visible)
 {
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();

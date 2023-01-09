@@ -508,7 +508,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(OsmMapPtr doughM
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
-  const int cutterMapToUseSize = cutterMapToUse->getNodeCount();
+  const int cutterMapToUseSize = static_cast<int>(cutterMapToUse->getNodeCount());
   if (cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
