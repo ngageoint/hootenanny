@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "DateTimeUtils.h"
@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-QString DateTimeUtils::toTimeString(quint64 timestamp)
+QString DateTimeUtils::toTimeString(OsmTimestamp timestamp)
 {
   // convert time in seconds since epoch into timestamp string
   QDateTime dt;
@@ -43,7 +43,7 @@ QString DateTimeUtils::toTimeString(quint64 timestamp)
   return dt.toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-quint64 DateTimeUtils::fromTimeString(QString timestamp)
+OsmTimestamp DateTimeUtils::fromTimeString(QString timestamp)
 {
   //2016-05-04T22:07:19Z
   static QRegularExpression timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z*",
@@ -56,7 +56,7 @@ quint64 DateTimeUtils::fromTimeString(QString timestamp)
   strptime(timestamp.toStdString().c_str(), "%Y-%m-%dT%H:%M:%SZ", &t);
 
   // calc time in seconds since epoch
-  return (quint64)(t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
+  return (OsmTimestamp)(t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
     (t.tm_year-70)*31536000 + ((t.tm_year-69)/4)*86400 -
     ((t.tm_year-1)/100)*86400 + ((t.tm_year+299)/400)*86400);
 }

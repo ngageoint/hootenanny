@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "ZValue.h"
 
@@ -86,7 +86,7 @@ long int ZValue::calculateComponent(double v, int d)
 {
   if (d >= (int)_min.size() || d >= (int)_max.size())
     throw HootException("Input vector size is greater than min or max size.");
-  return round(((v - _min[d]) / (_max[d] - _min[d])) * static_cast<double>(_range));
+  return static_cast<long>(round(((v - _min[d]) / (_max[d] - _min[d])) * static_cast<double>(_range)));
 }
 
 void ZValue::decompose(long int v, vector<long int>& point) const

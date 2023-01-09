@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "RelationData.h"
 
@@ -31,7 +31,7 @@ using namespace std;
 namespace hoot
 {
 
-RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp, QString user, long uid, bool visible)
+RelationData::RelationData(long id, long changeset, long version, OsmTimestamp timestamp, QString user, long uid, bool visible)
   : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible)
 {
 }

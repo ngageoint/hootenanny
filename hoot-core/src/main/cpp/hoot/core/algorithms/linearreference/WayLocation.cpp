@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "WayLocation.h"
@@ -82,7 +82,7 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance)
       _segmentFraction = 0.0;
       for (size_t i = 1; i < way->getNodeCount(); i++)
       {
-        ConstNodePtr n = _map->getNode(_way->getNodeId(i));
+        ConstNodePtr n = _map->getNode(_way->getNodeId(static_cast<int>(i)));
         Coordinate next = n->toCoordinate();
         double delta = next.distance(last);
         last = next;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "Way.h"
@@ -54,7 +54,7 @@ namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         quint64 timestamp, QString user, long uid, bool visible, long pid)
+         OsmTimestamp timestamp, QString user, long uid, bool visible, long pid)
   : Element(s)
 {
   _wayData = std::make_shared<WayData>(id, changeset, version, timestamp, user, uid, visible, pid);

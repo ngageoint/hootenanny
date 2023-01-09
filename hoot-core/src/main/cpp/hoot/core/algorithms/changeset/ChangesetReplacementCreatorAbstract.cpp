@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCutOnlyCreator.h"
 
@@ -508,7 +508,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(OsmMapPtr doughM
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
-  const int cutterMapToUseSize = cutterMapToUse->getNodeCount();
+  const int cutterMapToUseSize = static_cast<int>(cutterMapToUse->getNodeCount());
   if (cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");

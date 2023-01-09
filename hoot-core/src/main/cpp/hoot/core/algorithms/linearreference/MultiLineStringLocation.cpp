@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "MultiLineStringLocation.h"
 
@@ -69,7 +69,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
     _waySublineString.addSubline(
       WaySubline(
         WayLocation(map, way, 0, 0.0),
-        WayLocation(map, way, way->getNodeCount() - 1, 0.0)));
+        WayLocation(map, way, static_cast<int>(way->getNodeCount()) - 1, 0.0)));
   }
 
   //add line from start of way where way location resides up to the split point
