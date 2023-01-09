@@ -32,6 +32,7 @@
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
@@ -47,7 +48,7 @@ class Layer;
 /**
  * Writes a file to an OGR data source.
  */
-class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface
+class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface, public Boundable
 {
 public:
 

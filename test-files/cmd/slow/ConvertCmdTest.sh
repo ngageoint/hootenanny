@@ -20,6 +20,13 @@ GOLD_FILE_CONTAINER_OUTPUT=$INPUT_DIR/combined_shapefile.osm
 CONFIG="-C Testing.conf"
 LOG_LEVEL="--warn"
 
+TRANSLATION="-D schema.translation.script=translations"
+TRANSLATION_TDR4="$TRANSLATION/MGCP_TRD4.js"
+TRANSLATION_GGDM="$TRANSLATION/GGDMv30.js"
+TRANSLATION_MGCP="$TRANSLATION/MgcpTest.js"
+TRANSLATION_DNC="$TRANSLATION/DNC.js"
+TRANSLATION_TDS="$TRANSLATION/TDSv70.js"
+
 echo ""
 echo "Multiple OSM to single OSM..."
 echo ""
@@ -82,7 +89,7 @@ echo ""
 echo "Translation check..."
 echo ""
 # This wasn't working at one point.
-hoot convert $LOG_LEVEL $CONFIG -D convert.ops=SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+hoot convert $LOG_LEVEL $CONFIG -D convert.ops=SchemaTranslationVisitor -D schema.translation.direction=toogr $TRANSLATION_TDR4 test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
 echo ""
 echo "Multi-layer GDB to OSM..."
@@ -119,10 +126,10 @@ hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPU
 echo ""
 echo "OSM to GPKG..."
 echo ""
-hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv30.js" \
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_GGDM \
   test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
 # Do it again to make sure we can overwrite an existing layer.
-hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv30.js" \
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_GGDM \
   test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
 #hoot diff $LOG_LEVEL $CONFIG -D map.comparator.ignore.tag.keys="UFI" \
 #  $INPUT_DIR/ToyTestA.gpkg $OUTPUT_DIR/ToyTestA.gpkg
@@ -130,21 +137,21 @@ hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/GGDMv
 echo ""
 echo "ZIP of SHP to OSM..."
 echo ""
-hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_MGCP \
   test-files/MGCPv3.zip $OUTPUT_DIR/zip_convert.osm
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/zip_convert.osm
 
 echo ""
 echo "TAR of SHP to OSM..."
 echo ""
-hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_MGCP \
   test-files/MGCPv3.tar $OUTPUT_DIR/tar_convert.osm
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/tar_convert.osm
 
 echo ""
 echo "TAR GZ of SHP to OSM..."
 echo ""
-hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_MGCP \
   test-files/MGCPv3.tar.gz $OUTPUT_DIR/tar_gz_convert.osm
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/tar_gz_convert.osm
 
@@ -159,3 +166,24 @@ hoot convert $LOG_LEVEL $CONFIG -D ogr.add.uuid=false -D reader.add.source.datet
 # the outputs just ensure that no errors show up in the command output
 #hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/dnc_test.osm $OUTPUT_DIR/dnc_test.osm
 
+echo ""
+echo "Bounded OSM to SHP - Polygons"
+echo ""
+rm -rf $OUTPUT_DIR/clipped_poly/
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
+  -D bounds="-104.80643134164,39.59123123677,-104.8042456804,39.59369827561" \
+  test-files/ToyBuildingsTestA.osm $OUTPUT_DIR/clipped_poly.shp
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
+  $OUTPUT_DIR/clipped_poly/ $OUTPUT_DIR/clipped_poly.osm
+hoot diff $LOG_LEVEL $CONFIG --ignore-uuid $INPUT_DIR/clipped_poly.osm $OUTPUT_DIR/clipped_poly.osm
+
+echo ""
+echo "Bounded OSM to SHP - Linestrings"
+echo ""
+rm -rf $OUTPUT_DIR/clipped_lines/
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
+  -D bounds="-104.90022388323,38.85350714489,-104.8983212846,38.85504576826" \
+  test-files/ToyTestA.osm $OUTPUT_DIR/clipped_lines.shp
+hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
+  $OUTPUT_DIR/clipped_lines/ $OUTPUT_DIR/clipped_lines.osm
+hoot diff $LOG_LEVEL $CONFIG --ignore-uuid $INPUT_DIR/clipped_lines.osm $OUTPUT_DIR/clipped_lines.osm
