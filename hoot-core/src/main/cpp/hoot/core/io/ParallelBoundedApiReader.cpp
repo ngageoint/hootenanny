@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ParallelBoundedApiReader.h"
@@ -385,12 +385,22 @@ void ParallelBoundedApiReader::_logNetworkError(const HootNetworkRequest& reques
 
 bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& error) const
 {
-  static QRegularExpression regex("[\"|\']remark[\"|\']: *[\"|\'](.*)[\"|\']", QRegularExpression::OptimizeOnFirstUsageOption);
-  QRegularExpressionMatch match = regex.match(result);
-  if (match.hasMatch())
+  //  XML handling regular expression
+  // <remark> runtime error: Query ran out of memory in "query" at line 10. It would need at least 0 MB of RAM to continue. </remark>
+  static QRegularExpression regexXml("<remark> (.*) </remark>", QRegularExpression::OptimizeOnFirstUsageOption);
+  //  JSON handling regular expression
+  //  "remark": "runtime error: Query ran out of memory in \"query\" at line 10. It would need at least 0 MB of RAM to continue."
+  static QRegularExpression regexJson("[\"|\']remark[\"|\'|>]: *[\"|\']?(.*)[\"|\']", QRegularExpression::OptimizeOnFirstUsageOption);
+  static std::vector<QRegularExpression> regexes({regexXml, regexJson});
+
+  for (const auto& regex : regexes)
   {
-    error = match.captured(1);
-    return true;
+    QRegularExpressionMatch match = regex.match(result);
+    if (match.hasMatch())
+    {
+      error = match.captured(1);
+      return true;
+    }
   }
   return false;
 }
@@ -407,12 +417,12 @@ void ParallelBoundedApiReader::_splitEnvelope(const geos::geom::Envelope &envelo
   double lat3 = envelope.getMaxY();
   //  Create the four envelopes
   std::vector<geos::geom::Envelope> envelopes(
-        {
-          geos::geom::Envelope(lon1, lon2, lat1, lat2),
-          geos::geom::Envelope(lon2, lon3, lat1, lat2),
-          geos::geom::Envelope(lon1, lon2, lat2, lat3),
-          geos::geom::Envelope(lon2, lon3, lat2, lat3)
-        });
+    {
+      geos::geom::Envelope(lon1, lon2, lat1, lat2),
+      geos::geom::Envelope(lon2, lon3, lat1, lat2),
+      geos::geom::Envelope(lon1, lon2, lat2, lat3),
+      geos::geom::Envelope(lon2, lon3, lat2, lat3)
+    });
   //  Lock down the _bbox queue
   std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
   if (_isPolygon)
