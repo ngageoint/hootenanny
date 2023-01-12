@@ -167,7 +167,7 @@ void ParallelBoundedApiReader::stop()
 
 void ParallelBoundedApiReader::_sleep(long milliseconds) const
 {
-  //  Sleep for 10 milliseconds
+  //  Sleep (default for 10 milliseconds)
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
@@ -178,6 +178,18 @@ void ParallelBoundedApiReader::_process()
   //  Continue working until all of the results are back
   while (!isComplete() && _continueRunning && !_fatalError)
   {
+    //  Don't allow the results list to get too large, i.e larger than the thread count
+    bool isFull = false;
+    {
+      std::lock_guard<std::mutex> results_lock(_resultsMutex);
+      isFull = _resultsList.size() >= _threadCount;
+    }
+    if (isFull)
+    {
+      //  The results buffer is full, so there is no work to be done yet
+      _sleep();
+      continue;
+    }
     //  Try to grab the next envelope on the queue
     geos::geom::Envelope envelope;
     envelope.setToNull();
@@ -260,6 +272,10 @@ void ParallelBoundedApiReader::_process()
             _totalResults++;
             //  Write out a "debug map" for each result that comes in
             _writeDebugMap(result, "bounded-reader-result");
+            //  Reset the timeout because this thread has successfully received a response
+            timeout = 0;
+            //  Update the user status
+            LOG_STATUS("Downloaded area (" << GeometryUtils::toMinMaxString(envelope) << ")");
           }
         }
         catch(const std::bad_alloc&)
@@ -293,19 +309,31 @@ void ParallelBoundedApiReader::_process()
       }
       case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:
       case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:
+      case HttpResponseCode::HTTP_BAD_GATEWAY:
         timeout++;
         if (timeout <= max_timeout)
         {
-          //  The gateway timed out, retry the bbox
-          std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
           //  Sleep before retrying, inside of the mutex so that other threads wait too
-          _sleep();
-          //  Retry
-          _bboxes.push(envelope);
-          LOG_WARN("Gateway timed out while communicating with API, retrying.");
+          {
+            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+            _sleep();
+          }
+          //  Retry, splitting the bbox for overpass timeouts
+          if (_isOverpass)
+            _splitEnvelope(envelope);
+          else
+          {
+            //  The gateway timed out, retry the bbox
+            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+            _bboxes.push(envelope);
+          }
+          LOG_WARN("Gateway error (" << status << ") while communicating with API, retrying.");
         }
         else
-          _logNetworkError(request);
+        {
+          //  Log the error after max_time out number of errors in this thread
+          LOG_ERROR(request.getErrorString());
+        }
         break;
       case HttpResponseCode::HTTP_TOO_MANY_REQUESTS:
       {

@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "HootNetworkRequest.h"
 
 //  Hootenanny
+#include <hoot/core/info/Version.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootNetworkUtils.h>
@@ -166,6 +167,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
     tempUrl.setUserInfo("");
   }
+  //  Add the User-agent header
+  request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, QString(Version::getFullVersion()));
   //  Add the known headers
   for (auto it = headers.begin(); it != headers.end(); ++it)
     request.setHeader(it.key(), it.value());
