@@ -77,6 +77,14 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
     throw UnsupportedException(QString("Cannot request areas larger than %1 square degrees.").arg(QString::number(_maxGridSize, 'f', 4)));
   //  Save the endpoint URL to query
   _sourceUrl = endpoint;
+  //  Load the query from a file if requested
+  if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
+  {
+    QString query = FileUtils::readFully(_queryFilepath).replace("\r", "").replace("\n", "");
+    //  Should the query be validated here?
+    urlQuery.addQueryItem("data", query);
+  }
+  _sourceUrl.setQuery(urlQuery);
   //  Split the envelope if it is bigger than the prescribed max
   int lon_div = 1;
   int lat_div = 1;
@@ -275,7 +283,7 @@ void ParallelBoundedApiReader::_process()
             //  Reset the timeout because this thread has successfully received a response
             timeout = 0;
             //  Update the user status
-            LOG_STATUS("Downloaded area (" << GeometryUtils::toMinMaxString(envelope) << ")");
+            LOG_STATUS("Downloaded area (" << GeometryUtils::toLonLatString(envelope) << ")");
           }
         }
         catch(const std::bad_alloc&)
