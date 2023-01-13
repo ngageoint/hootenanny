@@ -231,8 +231,8 @@ void OsmApiReader::initializePartial()
     finalizePartial();
   }
 
-  //  Spin up the threads. Use the envelope of the boundsto throw away any non-retangular bounds
-  // that may have been  passed.
+  //  Spin up the threads. Use the envelope of the bounds to throw away any non-retangular bounds
+  //  that may have been passed.
   beginRead(_url, *(_bounds->getEnvelopeInternal()));
 }
 

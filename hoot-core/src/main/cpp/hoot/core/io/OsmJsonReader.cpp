@@ -862,13 +862,6 @@ void OsmJsonReader::_readFromHttp()
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
-  //  Load the query from a file if requested
-  if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
-  {
-    QString query = FileUtils::readFully(_queryFilepath).replace("\r", "").replace("\n", "");
-    //  Should the query be validated here?
-    urlQuery.addQueryItem("data", query);
-  }
   _sourceUrl.setQuery(urlQuery);
   geos::geom::Envelope env;
 

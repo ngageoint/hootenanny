@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-typedef quint64 OsmTimestamp;
+using OsmTimestamp = quint64;
 
 /**
  * Utilities for date/time manipulation
