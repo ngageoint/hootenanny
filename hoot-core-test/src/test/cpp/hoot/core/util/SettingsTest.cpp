@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -146,19 +146,18 @@ public:
 
   void invalidOptionNameTest()
   {
+    QString log;
     QStringList args;
     args.append("-D");
     args.append("blah=true");
-    QString exceptionMsg;
-    try
+    //  Capture the log output in a nested scope
     {
+      CaptureLog capture;
       Settings::parseCommonArguments(args);
+      log = capture.getLogsStripped();
     }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS("Unknown settings option: (blah)", exceptionMsg);
+    //  Compare the captured log output
+    HOOT_STR_EQUALS("Skipping unknown settings option: (blah)", log);
   }
 
   void invalidOperatorsTest()

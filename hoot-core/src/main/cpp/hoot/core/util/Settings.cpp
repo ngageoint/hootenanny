@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "Settings.h"
@@ -142,7 +142,10 @@ private:
 
       //  Throw an exception for unrecognized keys
       if (!_s->hasKey(optionName))
-        throw IllegalArgumentException("Unknown JSON setting: (" + optionName + ")");
+      {
+        LOG_ERROR("Skipping unknown JSON setting: (" << optionName << ")");
+        continue;
+      }
 
       //  Set key/value pair as name and data, data() turns everything to a string
       const QString optionVal = QString::fromUtf8(element.second.data().c_str());
@@ -636,7 +639,12 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
       LOG_VART(optionVal);
 
       if (!conf().hasKey(optionName))
-        throw IllegalArgumentException("Unknown settings option: (" + optionName + ")");
+      {
+        LOG_ERROR("Skipping unknown settings option: (" << optionName << ")");
+        // move on to the next argument
+        args = args.mid(2);
+        continue;
+      }
 
       const QStringList values = optionVal.split(";", QString::SkipEmptyParts);
       LOG_VART(values);
