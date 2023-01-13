@@ -146,19 +146,18 @@ public:
 
   void invalidOptionNameTest()
   {
+    QString log;
     QStringList args;
     args.append("-D");
     args.append("blah=true");
-    QString exceptionMsg;
-    try
+    //  Capture the log output in a nested scope
     {
+      CaptureLog capture;
       Settings::parseCommonArguments(args);
+      log = capture.getLogsStripped();
     }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS("Unknown settings option: (blah)", exceptionMsg);
+    //  Compare the captured log output
+    HOOT_STR_EQUALS("Skipping unknown settings option: (blah)", log);
   }
 
   void invalidOperatorsTest()

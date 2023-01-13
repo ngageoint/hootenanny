@@ -36,6 +36,7 @@
 
 // Standard
 #include <deque>
+#include <iostream>
 #include <set>
 #include <string>
 #include <vector>
@@ -128,6 +129,9 @@ public:
 
   void setDecorateLogs(bool decorate) { _decorateLogs = decorate; }
 
+  std::ostream* getStream() const { return _stream; }
+  void setStream(std::ostream* stream) { _stream = stream; }
+
 private:
 
   WarningLevel _level;
@@ -135,6 +139,9 @@ private:
   QStringList _includeClassFilter;
   QStringList _excludeClassFilter;
   bool _decorateLogs;
+
+  /** By default all logging goes to std::cout */
+  std::ostream* _stream = &std::cout;
 
   Log();
   /** Default destructor */
@@ -187,6 +194,35 @@ public:
 private:
 
   Log::WarningLevel _oldLevel;
+};
+
+class CaptureLog
+{
+public:
+  CaptureLog(Log::WarningLevel level = Log::Error)
+  {
+    Log& log = Log::getInstance();
+    _stream = log.getStream();
+    _level = log.getLevel();
+    log.setLevel(level);
+    log.setStream(&_strstream);
+  }
+
+  ~CaptureLog()
+  {
+    Log& log = Log::getInstance();
+    log.setLevel(_level);
+    log.setStream(_stream);
+  }
+
+  QString getLogs() const { return QString(_strstream.str().c_str()); }
+  QString getLogsStripped() const;
+
+private:
+
+  Log::WarningLevel _level;
+  std::ostream* _stream;
+  std::stringstream _strstream;
 };
 
 // recreate the TGS stream utils within our namespace. I haven't found an elegant way to reliably
