@@ -143,7 +143,7 @@ private:
       //  Throw an exception for unrecognized keys
       if (!_s->hasKey(optionName))
       {
-        LOG_ERROR("Skipping unknown JSON setting: (" + optionName + ")");
+        LOG_ERROR("Skipping unknown JSON setting: (" << optionName << ")");
         continue;
       }
 
@@ -640,7 +640,9 @@ void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnor
 
       if (!conf().hasKey(optionName))
       {
-        LOG_ERROR("Skipping unknown settings option: (" + optionName + ")");
+        LOG_ERROR("Skipping unknown settings option: (" << optionName << ")");
+        // move on to the next argument
+        args = args.mid(2);
         continue;
       }
 
