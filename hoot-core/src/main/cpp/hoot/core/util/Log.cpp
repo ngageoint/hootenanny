@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "Log.h"
@@ -116,12 +116,13 @@ void Log::log(WarningLevel level, const string& str, const string& filename,
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
-    cout << beginDecoration(level)
-         << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << Log::levelToString(level)
-         << " " << ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " "
-         << str
-         << endDecoration()
-         << endl;
+    std::ostream& s = *_stream;
+    s << beginDecoration(level)
+      << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << Log::levelToString(level)
+      << " " << ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " "
+      << str
+      << endDecoration()
+      << endl;
   }
 }
 
@@ -133,12 +134,13 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
-    cout << beginDecoration(level)
-         << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << Log::levelToString(level)
-         << " " << ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " "
-         << str << "        \r"
-         << endDecoration()
-         << flush;
+    std::ostream& s = *_stream;
+    s << beginDecoration(level)
+      << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << Log::levelToString(level)
+      << " " << ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " "
+      << str << "        \r"
+      << endDecoration()
+      << flush;
   }
 }
 
@@ -293,6 +295,18 @@ const char* Log::endDecoration() const
     return LogColor::None();
   else
     return "";
+}
+
+QString CaptureLog::getLogsStripped() const
+{
+  static QRegularExpression regex(".*?\\( *\\d+\\) (.*)", QRegularExpression::OptimizeOnFirstUsageOption);
+
+  QString logs = getLogs();
+  QStringList matches;
+  auto match_it = regex.globalMatch(logs);
+  while (match_it.hasNext())
+    matches << match_it.next().captured(1);
+  return matches.join("\n");
 }
 
 }
