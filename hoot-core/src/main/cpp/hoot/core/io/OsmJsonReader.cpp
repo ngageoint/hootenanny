@@ -862,6 +862,7 @@ void OsmJsonReader::_readFromHttp()
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
+  _sourceUrl.setQuery(urlQuery);
   geos::geom::Envelope env;
 
   if (!_bounds) // If no bounds was set, the read method still expects an empty one.

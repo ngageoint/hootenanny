@@ -78,6 +78,7 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
   //  Save the endpoint URL to query
   _sourceUrl = endpoint;
   //  Load the query from a file if requested
+  QUrlQuery urlQuery(_sourceUrl);
   if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
   {
     QString query = FileUtils::readFully(_queryFilepath).replace("\r", "").replace("\n", "");
