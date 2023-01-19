@@ -142,6 +142,7 @@ turned off when running certain unit tests which are incompatible with it being 
 ** `avenue=ave`
 ** `boulevard=blvd`
 ** `circle=cir`
+** `drive=dr`
 ** `freeway=fwy`
 ** `highway=hwy`
 ** `lane=ln`
