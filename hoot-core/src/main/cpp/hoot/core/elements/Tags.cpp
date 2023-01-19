@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "Tags.h"
 
 // Hoot
+#include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -393,9 +394,15 @@ bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2, const bool str
   const QStringList tag2Names = tags2.getNames(!strictNameMatch);
   for (const auto& tag1Name : tag1Names)
   {
+    Address addr1(tag1Name);
+    if (!strictNameMatch)
+      addr1.removeStreetTypes();
     for (const auto& tag2Name : tag2Names)
     {
-      if (tag1Name.compare(tag2Name, Qt::CaseInsensitive) == 0)
+      Address addr2(tag2Name);
+      if (!strictNameMatch)
+        addr2.removeStreetTypes();
+      if (addr1.getAddressStr().compare(addr2.getAddressStr(), Qt::CaseInsensitive) == 0)
         return true;
     }
   }
