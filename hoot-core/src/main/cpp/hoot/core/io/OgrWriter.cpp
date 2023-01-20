@@ -100,7 +100,8 @@ OgrWriter::OgrWriter()
     _numWritten(0),
     _transactionSize(ConfigOptions().getOgrWriterTransactionSize()),
     _inTransaction(false),
-    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+    _cropFeaturesCrossingBounds(ConfigOptions().getOgrWriterCropFeaturesCrossingBounds())
 {
   setConfiguration(conf());
 
@@ -134,6 +135,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
   _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
   _forceSkipFailedRelations = configOptions.getOgrWriterSkipFailedRelations();
   _transactionSize = configOptions.getOgrWriterTransactionSize();
+  _cropFeaturesCrossingBounds = configOptions.getOgrWriterCropFeaturesCrossingBounds();
   //  Set the bounds for cropped lines and polygons
   setBounds(Boundable::loadBounds(configOptions));
 }
@@ -727,7 +729,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
     return;
   std::string wkt;
   //  Get the WKT of the geometry (full or intersection) to convert to OGR geometry
-  if (_bounds && g->intersects(_bounds.get()))
+  if (_cropFeaturesCrossingBounds && _bounds && g->intersects(_bounds.get()))
   {
     //  Get the intersection of the geometry with the bounding envelope
     std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
