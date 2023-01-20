@@ -36,6 +36,13 @@ run-translate()
     hoot convert -D schema.translation.script=$TRANSLATION_SCRIPT $FILE_NAME $OUTPUT_FILE
 }
 
+run-owt()
+{
+    hoot convert -D bounds=$MIN_LON,$MIN_LAT,$MAX_LON,$MAX_LAT -D overpass.api.query.path=$OQF -D schema.translation.script=$TRANSLATE_SCRIPT \
+        -D hoot.pkcs12.key.path=$CERT_PATH -D hoot.pkcs12.key.phrase=$CERT_PW -D overpass.api.host=owt.maxarmaps.com \
+        "${OP_URL}" $OUTPUT_GDB
+}
+
 case "$1" in
     -c)
         HOOT_REF_FILE_NAME=$2
@@ -63,5 +70,17 @@ case "$1" in
         FILE_NAME=$3
         OUTPUT_FILE=$4
         run-translate ;;
+    -o)
+        MIN_LON=$2
+        MIN_LAT=$3
+        MAX_LON=$4
+        MAX_LAT=$5
+        OQF=$6
+        TRANSLATE_SCRIPT=$7
+        CERT_PATH=$8
+        CERT_PW=$9
+        OP_URL=${10}
+        OUTPUT_GDB=${11}
+        run-owt ;;
 esac
 
