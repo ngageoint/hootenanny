@@ -461,6 +461,12 @@ function buildCommand(params, queryOverrideTags, querybbox, querypoly, isFile, i
     if (convertOpts.length > 0)
         command += ' -D convert.ops="' + convertOpts.join(';') + '"';
 
+    // Add a conf file if it exists
+    var eConf = hootHome + '/' + config.schemas[paramschema].replace('.js','') + 'Export.conf';
+    if (fs.existsSync(eConf)) {
+        command += ' -C "' + eConf + '"';
+    }
+
     command += ' ' + input + ' ' + outFile;
 
     //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
