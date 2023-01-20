@@ -3861,6 +3861,13 @@ from a translation.
 Create all layers when using the OGR writer whether or not the layers contain features. Setting
 this to true can be useful when conforming to strict specifications.
 
+=== ogr.writer.crop.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+The OGR writer can crop linear and polygon elements to the `bounds` of the operation if set to true.
+
 === ogr.writer.pre.layer.name
 
 * Data Type: string
