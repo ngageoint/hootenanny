@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -643,7 +643,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
 
 void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g) const
 {
-  OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
+  OGRFeature* poFeature = OGRFeature::CreateFeature(layer->GetLayerDefn());
 
   // set all the column values.
   const QVariantMap& vm = f->getValues();
@@ -730,19 +730,95 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
   if (_bounds && g->intersects(_bounds.get()))
   {
     //  Get the intersection of the geometry with the bounding envelope
-    std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
-    wkt = intersection->toString();
+    try
+    {
+      std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
+      wkt = intersection->toString();
+    }
+    catch (const geos::util::TopologyException& ex)
+    {
+      LOG_ERROR("Did this fail? - " << ex.what());
+    }
+    catch (...)
+    {
+      LOG_ERROR("Got an error here.");
+    }
+
+/*
+    switch (intersection->getGeometryTypeId())
+    {
+    default:
+    case GEOS_POINT:
+    case GEOS_LINESTRING:
+    case GEOS_LINEARRING:
+    case GEOS_POLYGON:
+    case GEOS_MULTIPOINT:
+    case GEOS_MULTILINESTRING:
+    case GEOS_MULTIPOLYGON:
+    case GEOS_GEOMETRYCOLLECTION:
+      layer->GetGeomType();
+      wkbPoint = 1,
+      wkbLineString = 2,
+      wkbPolygon = 3,
+      wkbMultiPoint = 4,
+      wkbMultiLineString = 5,
+      wkbMultiPolygon = 6,
+      wkbGeometryCollection = 7
+
+      break;
+    }
+    if (intersection->getGeometryTypeId())
+*/
   }
   else
     wkt = g->toString();
   //  Convert the WKT to an OGR geometry for saving
   const char* t = wkt.data();
   OGRGeometry* geom;
-  int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
+  //Catch here and do something with the self intersecting geometries
+  int errCode;
+  try
+  {
+    errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
+  }
+  catch (...)
+  {
+    LOG_ERROR("createFromWkt() error");
+    //  TODO: Try again with:
+    //    std::shared_ptr<Geometry> cleanedGeom(GeometryUtils::validateGeometry(pGeometry.get()));
+    return;
+  }
   if (errCode != OGRERR_NONE)
     throw HootException(QString("Error parsing WKT (%1).  OGR Error Code: (%2)").arg(QString::fromStdString(wkt), QString::number(errCode)));
+/*
+  OGRwkbGeometryType layerType = layer->GetGeomType();
+  OGRwkbGeometryType geomType = geom->getGeometryType();
 
+  if (geomType == wkbMultiPolygon && layerType == wkbPolygon)
+  {
+    LOG_ERROR("Multipolygon into Polygon layer");
+  }
+  else if (geomType == wkbMultiLineString && layerType == wkbLineString)
+  {
+    LOG_ERROR("Multipolygon into Polygon layer");
+  }
+*/
+//  if (geom->getGeometryType() != layer->GetGeomType())
+//  {
+//    LOG_ERROR("Layer-type mismatch.");
+//    return;
+//  }
+
+  try
+  {
   errCode = poFeature->SetGeometryDirectly(geom);
+  }
+  catch (...)
+  {
+    LOG_ERROR("SetGeometryDirectly() Error");
+    return;
+  }
+
   if (errCode != OGRERR_NONE)
     throw HootException(QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode), QString::fromStdString(g->toString())));
 
@@ -750,7 +826,15 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
   // feature object for sequential insertions
   poFeature->SetFID(-1);
 
-  errCode = layer->CreateFeature(poFeature);
+  try
+  {
+    errCode = layer->CreateFeature(poFeature);
+  }
+  catch (...)
+  {
+    LOG_ERROR("CreateFeature() error");
+    return;
+  }
   if (errCode != OGRERR_NONE)
     throw HootException(QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)").arg(QString::number(errCode), f->toString()));
 }
