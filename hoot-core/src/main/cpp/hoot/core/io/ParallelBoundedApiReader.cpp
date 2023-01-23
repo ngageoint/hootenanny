@@ -427,7 +427,7 @@ bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& err
   static QRegularExpression regexXml("<remark> (.*) </remark>", QRegularExpression::OptimizeOnFirstUsageOption);
   //  JSON handling regular expression
   //  "remark": "runtime error: Query ran out of memory in \"query\" at line 10. It would need at least 0 MB of RAM to continue."
-  static QRegularExpression regexJson("[\"|\']remark[\"|\'|>]: *[\"|\']?(.*)[\"|\']", QRegularExpression::OptimizeOnFirstUsageOption);
+  static QRegularExpression regexJson("[\"|\']remark[\"|\'|>]: *[\"|\']?(runtime error.*)[\"|\']", QRegularExpression::OptimizeOnFirstUsageOption);
   static std::vector<QRegularExpression> regexes({regexXml, regexJson});
 
   for (const auto& regex : regexes)

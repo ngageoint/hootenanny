@@ -46,23 +46,23 @@ public:
   {
     QString expected_result = "runtime error: Query ran out of memory in \"query\" at line 1. It would need at least 95 MB of RAM to continue.";
     ParallelBoundedApiReader uut;
-    QString json_result =
+    QString json_error_result =
         "{"
         "\"version\": 0.6,"
         "\"generator\": \"NOME Overpass API 0.7.57 c954ae26\","
         "\"osm3s\": {"
-        "  \"timestamp_osm_base\": \"2021-09-09T17:21:17Z\","
-        "  \"copyright\": \"The data included in this document is from NOME and OpenStreetMap. The data is made available under ODbL. data included in this document falls under NOME Terms of Use https://nome.vgihub.geointservices.io/disclaimer/NOME_Enclave_Disclaimer_V4.pdf\""
+        "\"timestamp_osm_base\": \"2021-09-09T17:21:17Z\","
+        "\"copyright\": \"The data included in this document is from NOME and OpenStreetMap. The data is made available under ODbL. data included in this document falls under NOME Terms of Use https://nome.vgihub.geointservices.io/disclaimer/NOME_Enclave_Disclaimer_V4.pdf\""
         "},"
         "\"elements\": ["
         "],"
         "\"remark\": \"runtime error: Query ran out of memory in \"query\" at line 1. It would need at least 95 MB of RAM to continue.\""
         "}";
     QString error;
-    CPPUNIT_ASSERT(uut._isQueryError(json_result, error));
+    CPPUNIT_ASSERT(uut._isQueryError(json_error_result, error));
     HOOT_STR_EQUALS(expected_result, error);
 
-    QString xml_result =
+    QString xml_error_result =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         "<osm version=\"0.6\" generator=\"NOME Overpass API 0.7.57 c954ae26\">"
         "<note>The data included in this document is from NOME and OpenStreetMap. The data is made available under ODbL. data included in this document falls under NOME Terms of Use https://nome.vgihub.geointservices.io/disclaimer/NOME_Enclave_Disclaimer_V4.pdf</note>"
@@ -70,8 +70,23 @@ public:
         "<remark> runtime error: Query ran out of memory in \"query\" at line 1. It would need at least 95 MB of RAM to continue. </remark>"
         "</osm>";
     error = "";
-    CPPUNIT_ASSERT(uut._isQueryError(xml_result, error));
+    CPPUNIT_ASSERT(uut._isQueryError(xml_error_result, error));
     HOOT_STR_EQUALS(expected_result, error);
+
+    /** This data caused infinite splitting in JOSM because of the 'remark' tag */
+    QString json_success =
+        "{"
+        "\"version\": 0.6,"
+        "\"generator\": \"NOME Overpass API 0.7.57 c954ae26\","
+        "\"osm3s\": {"
+        "\"timestamp_osm_base\": \"2023-01-20T20:40:19Z\","
+        "\"copyright\": \"The data included in this document is from NOME and OpenStreetMap. The data is made available under ODbL. data included in this document falls under NOME Terms of Use https://nome.vgihub.geointservices.io/disclaimer/NOME_Enclave_Disclaimer_V4.pdf\""
+        "},"
+        "\"elements\": ["
+        "\"{\"type\": \"node\",\"id\": 3767576613,\"lat\": 47.8026036,\"lon\": 18.9633523,\"tags\": {\"name\": \"Nagyne Marika\",\"remark\": \"2012-2014\"}}]}}";
+    error = "";
+    CPPUNIT_ASSERT(!uut._isQueryError(json_success, error));
+    HOOT_STR_EQUALS("", error);
   }
 
 };
@@ -79,4 +94,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ParallelBoundedApiReaderTest, "quick");
 
 }
-

@@ -645,7 +645,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
 
 void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g) const
 {
-  OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
+  OGRFeature* poFeature = OGRFeature::CreateFeature(layer->GetLayerDefn());
 
   // set all the column values.
   const QVariantMap& vm = f->getValues();
