@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -59,6 +59,10 @@ public:
   // sense for it to remain public. Possibly, we need a separate class for HootSettings that would
   // then be a true Singleton?
   Settings();
+  Settings(const Settings& s) = default;
+  Settings(Settings && s) noexcept;
+
+  Settings& operator=(const Settings& s) = default;
 
   using SettingsMap = QHash<QString, QVariant>;
 
