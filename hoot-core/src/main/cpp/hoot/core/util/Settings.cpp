@@ -173,6 +173,17 @@ Settings::Settings()
   _staticRegex.optimize();
 }
 
+Settings::Settings(Settings && s) noexcept
+  : _settings{s._settings},
+    _settingsStack{s._settingsStack}
+{
+  s._settings.clear();
+  while (!s._settingsStack.empty())
+    s._settingsStack.pop();
+  _dynamicRegex.swap(s._dynamicRegex);
+  _staticRegex.swap(s._staticRegex);
+}
+
 void Settings::prepend(const QString& key, const QStringList& values)
 {
   QStringList l = getList(key, QStringList());
