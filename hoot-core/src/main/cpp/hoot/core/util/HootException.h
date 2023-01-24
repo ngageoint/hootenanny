@@ -56,7 +56,10 @@ public:
   HootException(const std::string& str) { _what = QString::fromStdString(str); }
   HootException(QString str) { _what = str; }
   HootException(const HootException& e) { _what = e._what; }
+  HootException(HootException && e) noexcept;
   virtual ~HootException() throw() = default;
+
+  HootException& operator=(const HootException&) = default;
 
   virtual std::shared_ptr<HootException> clone() const
   { return std::make_shared<HootException>(*this); }

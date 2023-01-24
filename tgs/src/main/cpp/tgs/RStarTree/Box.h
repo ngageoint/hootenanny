@@ -49,6 +49,7 @@ public:
   Box();
   Box(const Box& b);
   Box(int dimensions);
+  Box(Box && b) noexcept;
   // yes, technically this introduces a circular dependency, but the alternative is horribly
   // slow. Bleh! :P
   Box& expand(const BoxInternalData& b);

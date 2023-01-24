@@ -63,6 +63,18 @@ Box::Box(int dimensions)
     _lowerBound[i] = _upperBound[i] = 0.0;
 }
 
+Box::Box(Box && b) noexcept
+  : _valid{b._valid},
+    _dimensions{b._dimensions}
+{
+  _copyArray(_lowerBound, b._lowerBound);
+  _copyArray(_upperBound, b._upperBound);
+  b._valid = false;
+  b._dimensions = 0;
+  for (int i = 0; i < MAX_DIMENSIONS; ++i)
+    b._lowerBound[i] = b._upperBound[i] = 0.0;
+}
+
 double Box::calculateOverlap(const Box& b) const
 {
   assert(b.getDimensions() == getDimensions());

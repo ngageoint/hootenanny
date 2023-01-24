@@ -48,6 +48,10 @@ class RoadCrossingPolyRule
 public:
 
   RoadCrossingPolyRule(ConstOsmMapPtr map);
+  RoadCrossingPolyRule(RoadCrossingPolyRule && rule) noexcept;
+
+  RoadCrossingPolyRule(const RoadCrossingPolyRule& rule) = default;
+  RoadCrossingPolyRule& operator=(const RoadCrossingPolyRule& s) = default;
 
   /**
    * Reads a road crossing poly rules file and creates a collection of rules

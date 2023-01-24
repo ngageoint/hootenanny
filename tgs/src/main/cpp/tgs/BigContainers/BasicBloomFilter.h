@@ -237,7 +237,7 @@ namespace boost
         this->bits.reset();
       }
 
-      void swap(basic_bloom_filter& other)
+      void swap(basic_bloom_filter& other) noexcept
       {
         basic_bloom_filter tmp = other;
         other = *this;
@@ -310,7 +310,7 @@ namespace boost
     template<class _T, size_t _Size, class _HashFunctions>
     void
     swap(basic_bloom_filter<_T, _Size, _HashFunctions>& lhs,
-         basic_bloom_filter<_T, _Size, _HashFunctions>& rhs)
+         basic_bloom_filter<_T, _Size, _HashFunctions>& rhs) noexcept
     {
       lhs.swap(rhs);
     }

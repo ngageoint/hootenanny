@@ -44,6 +44,13 @@ HOOT_REGISTER_EXCEPTION(UnsupportedException)
 HOOT_REGISTER_EXCEPTION(NotImplementedException)
 HOOT_REGISTER_EXCEPTION(EmptyMapInputException)
 
+HootException::HootException(HootException && e) noexcept
+  : _what{e._what}
+{
+  e._what.clear();
+  e._tmp.clear();
+}
+
 HootExceptionThrower& HootExceptionThrower::getInstance()
 {
   //  Local static singleton instance
