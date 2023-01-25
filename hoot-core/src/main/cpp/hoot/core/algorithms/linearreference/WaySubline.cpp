@@ -64,6 +64,15 @@ WaySubline::WaySubline(const WayLocation& start, const WayLocation& end)
 {
 }
 
+WaySubline::WaySubline(WaySubline && subline) noexcept
+  : _start{subline._start},
+    _end{subline._end}
+{
+  subline._start = WayLocation();
+  subline._end = WayLocation();
+}
+
+
 WaySubline& WaySubline::operator=(const WaySubline& from)
 {
   if (this != &from)

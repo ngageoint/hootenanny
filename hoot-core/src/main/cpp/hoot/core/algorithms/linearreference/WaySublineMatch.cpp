@@ -32,8 +32,8 @@ namespace hoot
 {
 
 WaySublineMatch::WaySublineMatch()
+  : _reversed(false)
 {
-  _reversed = false;
 }
 
 WaySublineMatch::WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr& newMap)
@@ -49,6 +49,15 @@ WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, b
     _reversed(reversed)
 {
   assert(_ws1.getWay() != _ws2.getWay());
+}
+
+WaySublineMatch::WaySublineMatch(WaySublineMatch && match) noexcept
+  : _ws1{match._ws1},
+    _ws2{match._ws2},
+    _reversed{match._reversed}
+{
+  match._ws1 = WaySubline();
+  match._ws2 = WaySubline();
 }
 
 WaySublineCollection WaySublineMatch::getSublineString1() const

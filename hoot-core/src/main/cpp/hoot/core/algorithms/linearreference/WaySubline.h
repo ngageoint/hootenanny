@@ -50,6 +50,7 @@ public:
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
   WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap);
+  WaySubline(WaySubline && subline) noexcept;
 
   WaySubline& operator=(const WaySubline& from);
 

@@ -42,6 +42,9 @@ public:
   WaySublineMatch();
   WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr& newMap);
   WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed = false);
+  WaySublineMatch(WaySublineMatch && match) noexcept;
+  WaySublineMatch(const WaySublineMatch& other) = default;
+  WaySublineMatch& operator=(const WaySublineMatch&) = default;
 
   /**
    * @brief getLength returns the mean length of subline1 and subline2.
