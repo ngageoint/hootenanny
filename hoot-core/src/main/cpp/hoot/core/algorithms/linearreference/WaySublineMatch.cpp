@@ -52,9 +52,9 @@ WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, b
 }
 
 WaySublineMatch::WaySublineMatch(WaySublineMatch && match) noexcept
-  : _ws1{match._ws1},
-    _ws2{match._ws2},
-    _reversed{match._reversed}
+  : _ws1(match._ws1),
+    _ws2(match._ws2),
+    _reversed(match._reversed)
 {
   match._ws1 = WaySubline();
   match._ws2 = WaySubline();

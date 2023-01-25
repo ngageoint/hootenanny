@@ -146,6 +146,18 @@ WayLocation::WayLocation(const WayLocation& other)
 {
 }
 
+WayLocation::WayLocation(WayLocation && loc) noexcept
+  : _map(loc._map),
+    _way(loc._way),
+    _segmentIndex(loc._segmentIndex),
+    _segmentFraction(loc._segmentFraction)
+{
+  loc._map.reset();
+  loc._way.reset();
+  loc._segmentIndex = -1;
+  loc._segmentFraction = -1.0;
+}
+
 Meters WayLocation::calculateDistanceFromEnd() const
 {
   return ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() - calculateDistanceOnWay();

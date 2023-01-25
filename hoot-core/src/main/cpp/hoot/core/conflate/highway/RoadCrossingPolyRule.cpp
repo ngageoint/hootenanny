@@ -54,14 +54,14 @@ RoadCrossingPolyRule::RoadCrossingPolyRule(ConstOsmMapPtr map)
 }
 
 RoadCrossingPolyRule::RoadCrossingPolyRule(RoadCrossingPolyRule && rule) noexcept
-  : _map{rule._map},
-    _name{rule._name},
-    _polyFilterStr{rule._polyFilterStr},
-    _polyFilter{rule._polyFilter},
-    _allowedRoadTagFilterStr{rule._allowedRoadTagFilterStr},
-    _allowedRoadTagFilter{rule._allowedRoadTagFilter},
-    _index{rule._index},
-    _indexToEid{rule._indexToEid}
+  : _map(rule._map),
+    _name(rule._name),
+    _polyFilterStr(rule._polyFilterStr),
+    _polyFilter(rule._polyFilter),
+    _allowedRoadTagFilterStr(rule._allowedRoadTagFilterStr),
+    _allowedRoadTagFilter(rule._allowedRoadTagFilter),
+    _index(rule._index),
+    _indexToEid(rule._indexToEid)
 {
   rule._map.reset();
   rule._name.clear();

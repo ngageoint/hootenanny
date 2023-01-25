@@ -64,8 +64,8 @@ Box::Box(int dimensions)
 }
 
 Box::Box(Box && b) noexcept
-  : _valid{b._valid},
-    _dimensions{b._dimensions}
+  : _valid(b._valid),
+    _dimensions(b._dimensions)
 {
   _copyArray(_lowerBound, b._lowerBound);
   _copyArray(_upperBound, b._upperBound);

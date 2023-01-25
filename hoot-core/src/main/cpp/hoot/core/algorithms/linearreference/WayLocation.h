@@ -67,7 +67,10 @@ public:
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance);
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
   WayLocation(const WayLocation& other);
+  WayLocation(WayLocation && loc) noexcept;
   virtual ~WayLocation() = default;
+
+  WayLocation& operator=(const WayLocation&) = default;
 
   Meters calculateDistanceFromEnd() const;
   /**
