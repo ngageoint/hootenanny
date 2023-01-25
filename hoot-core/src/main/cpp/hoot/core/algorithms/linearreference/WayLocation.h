@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -67,7 +67,10 @@ public:
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance);
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
   WayLocation(const WayLocation& other);
+  WayLocation(WayLocation && loc) noexcept;
   virtual ~WayLocation() = default;
+
+  WayLocation& operator=(const WayLocation&) = default;
 
   Meters calculateDistanceFromEnd() const;
   /**
