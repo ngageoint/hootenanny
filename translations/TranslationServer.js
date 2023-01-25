@@ -85,7 +85,8 @@ fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => file.isDirectory()
               {
                 availableTrans[fmt.name] = {"isavailable":true};
                 availableTranslations.push(fmt.name);
-                availablePresets[fmt.name] = fmt.name + '_preset.xml';
+                availablePresets[fmt.name] = ((dirName !== 'translations') ? dirName : '')
+                    + fmt.name + '_preset.xml';
                 schemaMap[fmt.name] = require(dirName + fmt.schema);
 
                 // Either a "path" or "importPath" and "exportPath"
