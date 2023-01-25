@@ -15,36 +15,36 @@ var crypto = require('crypto');
 
 
 const objs = {
-    tds40: {
+    TDSv40: {
         schema: tds40_schema,
         name: 'TDSv40',
         icon: 'presets/misc/nga_logo.png'
     },
-    tds61: {
+    TDSv61: {
         schema: tds61_schema,
         name: 'TDSv61',
         icon: 'presets/misc/nga_logo.png'
     },
-    tds70: {
+    TDSv70: {
         schema: tds70_schema,
         name: 'TDSv70',
         icon: 'presets/misc/nga_logo.png'
     },
-    tds71: {
+    TDSv71: {
         schema: tds71_schema,
         name: 'TDSv71',
         icon: 'presets/misc/nga_logo.png'
     },
-    mgcp: {
+    MGCP: {
         schema: mgcp_schema,
         name: 'MGCP',
         icon: 'presets/misc/MGCP_logo.png'
     },
-    ggdm30: {
+    GGDMv30: {
         schema: ggdm30_schema,
         name: 'GGDMv30',
         icon: 'presets/misc/usace_logo.png'
-    },
+    }
 };
 
 function lookupType(geom) {
