@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "RoadCrossingPolyRule.h"
@@ -51,6 +51,26 @@ namespace hoot
 RoadCrossingPolyRule::RoadCrossingPolyRule(ConstOsmMapPtr map)
   : _map(map)
 {
+}
+
+RoadCrossingPolyRule::RoadCrossingPolyRule(RoadCrossingPolyRule && rule) noexcept
+  : _map(rule._map),
+    _name(rule._name),
+    _polyFilterStr(rule._polyFilterStr),
+    _polyFilter(rule._polyFilter),
+    _allowedRoadTagFilterStr(rule._allowedRoadTagFilterStr),
+    _allowedRoadTagFilter(rule._allowedRoadTagFilter),
+    _index(rule._index),
+    _indexToEid(rule._indexToEid)
+{
+  rule._map.reset();
+  rule._name.clear();
+  rule._polyFilterStr.clear();
+  rule._polyFilter.reset();
+  rule._allowedRoadTagFilterStr.clear();
+  rule._allowedRoadTagFilter.reset();
+  rule._index.reset();
+  rule._indexToEid.clear();
 }
 
 bool RoadCrossingPolyRule::operator<(const RoadCrossingPolyRule& other) const

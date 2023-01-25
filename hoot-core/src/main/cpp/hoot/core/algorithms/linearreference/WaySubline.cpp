@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "WaySubline.h"
 
@@ -63,6 +63,15 @@ WaySubline::WaySubline(const WayLocation& start, const WayLocation& end)
     _end(end)
 {
 }
+
+WaySubline::WaySubline(WaySubline && subline) noexcept
+  : _start(subline._start),
+    _end(subline._end)
+{
+  subline._start = WayLocation();
+  subline._end = WayLocation();
+}
+
 
 WaySubline& WaySubline::operator=(const WaySubline& from)
 {

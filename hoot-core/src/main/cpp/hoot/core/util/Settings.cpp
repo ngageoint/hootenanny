@@ -174,8 +174,8 @@ Settings::Settings()
 }
 
 Settings::Settings(Settings && s) noexcept
-  : _settings{s._settings},
-    _settingsStack{s._settingsStack}
+  : _settings(s._settings),
+    _settingsStack(s._settingsStack)
 {
   s._settings.clear();
   while (!s._settingsStack.empty())

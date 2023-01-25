@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYMATCHLOCATION_H
 #define WAYMATCHLOCATION_H
@@ -42,6 +42,9 @@ public:
   WaySublineMatch();
   WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr& newMap);
   WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed = false);
+  WaySublineMatch(WaySublineMatch && match) noexcept;
+  WaySublineMatch(const WaySublineMatch& other) = default;
+  WaySublineMatch& operator=(const WaySublineMatch&) = default;
 
   /**
    * @brief getLength returns the mean length of subline1 and subline2.

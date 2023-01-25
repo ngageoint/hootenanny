@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ROAD_CROSSING_POLY_RULE_H
@@ -48,6 +48,10 @@ class RoadCrossingPolyRule
 public:
 
   RoadCrossingPolyRule(ConstOsmMapPtr map);
+  RoadCrossingPolyRule(RoadCrossingPolyRule && rule) noexcept;
+
+  RoadCrossingPolyRule(const RoadCrossingPolyRule& rule) = default;
+  RoadCrossingPolyRule& operator=(const RoadCrossingPolyRule& s) = default;
 
   /**
    * Reads a road crossing poly rules file and creates a collection of rules
