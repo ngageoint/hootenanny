@@ -38,6 +38,7 @@ if (typeof hoot === 'undefined') {
 // Setup the lists of schema
 var availableTrans = {};
 var availableTranslations = [];
+var availablePresets = {};
 var schemaMap = {};
 var fcodeLookup = {};
 
@@ -84,6 +85,8 @@ fs.readdirSync(HOOT_HOME,{withFileTypes:true}).filter(file => file.isDirectory()
               {
                 availableTrans[fmt.name] = {"isavailable":true};
                 availableTranslations.push(fmt.name);
+                availablePresets[fmt.name] = ((dirName !== 'translations') ? dirName : '')
+                    + fmt.name + '_preset.xml';
                 schemaMap[fmt.name] = require(dirName + fmt.schema);
 
                 // Either a "path" or "importPath" and "exportPath"
@@ -197,9 +200,15 @@ function TranslationServer(request, response) {
             params.method = request.method;
             params.path = request.path || urlbits.pathname;
             var result = handleInputs(params);
-            header['Content-Type'] = 'application/json';
+
+            if (params.path === '/presets') {
+                header['Content-Type'] = 'application/xml';
+            } else {
+                header['Content-Type'] = 'application/json';
+                result = JSON.stringify(result);
+            }
             response.writeHead(200, header);
-            response.end(JSON.stringify(result));
+            response.end(result);
         } else if (request.method === 'OPTIONS') {
             header["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS";
             header["Access-Control-Allow-Credentials"] = false;
@@ -250,8 +259,11 @@ function handleInputs(params) {
         case '/translations':
             result = getTranslations(params);
             break;
+        case '/presets':
+            result = getPresets(params);
+            break;
         case '/version':
-            result = {version: '0.0.4'};
+            result = {version: '0.0.5'};
             break;
         default:
             throw new Error('Not found');
@@ -284,6 +296,19 @@ var getCapabilities = function(params) {
 var getTranslations = function(params) {
     if (params.method === 'GET'){
         return availableTranslations;
+    } else {
+        throw new Error('Unsupported method');
+    }
+};
+
+var getPresets = function(params) {
+    if (params.method === 'GET') {
+        var presetFile = availablePresets[params.translation];
+        if (fs.existsSync(presetFile)) {
+            return fs.readFileSync(presetFile);
+        } else {
+            throw new Error('Not found');
+        }
     } else {
         throw new Error('Unsupported method');
     }
