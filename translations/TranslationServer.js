@@ -251,10 +251,10 @@ function handleInputs(params) {
             result = getTranslations(params);
             break;
         case '/fieldMappings':
-            result = getFieldMappings(params)
+            result = getFieldMappings(params);
             break;
         case '/columns':
-            result = getColumn(params)
+            result = getColumn(params);
             break;
         case '/version':
             result = {version: '0.0.4'};
@@ -517,10 +517,8 @@ var getFieldMappings = function(options) {
         fcode.columns.forEach(function(col){
             var colName = col.name + '::' + col.desc;
             if (!columnTracker.hasOwnProperty(colName)) {
-                columnTracker[colName] = true
-                fieldMappings.push({
-                    "key": colName
-                })
+                columnTracker[colName] = true;
+                fieldMappings.push(colName);
             }
         })
     })
@@ -532,18 +530,17 @@ var getColumn = function(options) {
     var translation = options.translation || 'TDSv61';
     var column = options.column;
     var schema = schemaMap[translation].getDbSchema();
-    var columnSchema = {};
+    var columnSchema = [];
 
     schema.forEach(function(fcode) {
         fcode.columns.forEach(function(c) {
             if (c.name === column) {
-                if (!columnSchema.hasOwnProperty('key')) {
-                    columnSchema.key = column;
-                    columnSchema.value = c.type === 'enumeration' ? c.enumerations.map(function(e) { return e.name }) : ['Value'];
+                if (columnSchema.length === 0) {
+                    columnSchema = c.type === 'enumeration' ? c.enumerations.map(function(e) { return e.name }) : ['Value'];
                 } else if (c.type === 'enumeration') {
                     c.enumerations.forEach(function(e) {
-                        if (columnSchema.value.indexOf(e.name) === -1) {
-                            columnSchema.value.push(e.name)
+                        if (columnSchema.indexOf(e.name) === -1) {
+                            columnSchema.push(e.name);
                         }
                     })
                 }
