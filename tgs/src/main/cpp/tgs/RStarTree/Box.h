@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__BOX_H__
@@ -49,6 +49,7 @@ public:
   Box();
   Box(const Box& b);
   Box(int dimensions);
+  Box(Box && b) noexcept;
   // yes, technically this introduces a circular dependency, but the alternative is horribly
   // slow. Bleh! :P
   Box& expand(const BoxInternalData& b);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2018, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "Box.h"
@@ -61,6 +61,18 @@ Box::Box(int dimensions)
   _dimensions = dimensions;
   for (int i = 0; i < MAX_DIMENSIONS; ++i)
     _lowerBound[i] = _upperBound[i] = 0.0;
+}
+
+Box::Box(Box && b) noexcept
+  : _valid(b._valid),
+    _dimensions(b._dimensions)
+{
+  _copyArray(_lowerBound, b._lowerBound);
+  _copyArray(_upperBound, b._upperBound);
+  b._valid = false;
+  b._dimensions = 0;
+  for (int i = 0; i < MAX_DIMENSIONS; ++i)
+    b._lowerBound[i] = b._upperBound[i] = 0.0;
 }
 
 double Box::calculateOverlap(const Box& b) const

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "HootException.h"
@@ -43,6 +43,13 @@ HOOT_REGISTER_EXCEPTION(NeedsReviewException)
 HOOT_REGISTER_EXCEPTION(UnsupportedException)
 HOOT_REGISTER_EXCEPTION(NotImplementedException)
 HOOT_REGISTER_EXCEPTION(EmptyMapInputException)
+
+HootException::HootException(HootException && e) noexcept
+  : _what(e._what)
+{
+  e._what.clear();
+  e._tmp.clear();
+}
 
 HootExceptionThrower& HootExceptionThrower::getInstance()
 {

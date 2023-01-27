@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef BASICBLOOMFILTER_H
 #define BASICBLOOMFILTER_H
@@ -237,7 +237,7 @@ namespace boost
         this->bits.reset();
       }
 
-      void swap(basic_bloom_filter& other)
+      void swap(basic_bloom_filter& other) noexcept
       {
         basic_bloom_filter tmp = other;
         other = *this;
@@ -310,7 +310,7 @@ namespace boost
     template<class _T, size_t _Size, class _HashFunctions>
     void
     swap(basic_bloom_filter<_T, _Size, _HashFunctions>& lhs,
-         basic_bloom_filter<_T, _Size, _HashFunctions>& rhs)
+         basic_bloom_filter<_T, _Size, _HashFunctions>& rhs) noexcept
     {
       lhs.swap(rhs);
     }

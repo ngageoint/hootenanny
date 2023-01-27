@@ -13,39 +13,47 @@ var crypto = require('crypto');
 // <?xml version="1.0" encoding="UTF-8"?>
 // <presets xmlns="http://josm.openstreetmap.de/tagging-preset-1.0">
 
+var objs;
 
-const objs = {
-    tds40: {
-        schema: tds40_schema,
-        name: 'TDSv40',
-        icon: 'presets/misc/nga_logo.png'
-    },
-    tds61: {
-        schema: tds61_schema,
-        name: 'TDSv61',
-        icon: 'presets/misc/nga_logo.png'
-    },
-    tds70: {
-        schema: tds70_schema,
-        name: 'TDSv70',
-        icon: 'presets/misc/nga_logo.png'
-    },
-    tds71: {
-        schema: tds71_schema,
-        name: 'TDSv71',
-        icon: 'presets/misc/nga_logo.png'
-    },
-    mgcp: {
-        schema: mgcp_schema,
-        name: 'MGCP',
-        icon: 'presets/misc/MGCP_logo.png'
-    },
-    ggdm30: {
-        schema: ggdm30_schema,
-        name: 'GGDMv30',
-        icon: 'presets/misc/usace_logo.png'
-    },
-};
+if (process.argv.length === 3) {
+    objs = require(process.cwd() + '/' + process.argv[2]);
+    Object.keys(objs).forEach(s => {
+        objs[s].schema = require(process.cwd() + '/' + objs[s].schema).getDbSchema();
+    });
+} else {
+    objs = {
+        TDSv40: {
+            schema: tds40_schema,
+            name: 'TDSv40',
+            icon: 'presets/misc/nga_logo.png'
+        },
+        TDSv61: {
+            schema: tds61_schema,
+            name: 'TDSv61',
+            icon: 'presets/misc/nga_logo.png'
+        },
+        TDSv70: {
+            schema: tds70_schema,
+            name: 'TDSv70',
+            icon: 'presets/misc/nga_logo.png'
+        },
+        TDSv71: {
+            schema: tds71_schema,
+            name: 'TDSv71',
+            icon: 'presets/misc/nga_logo.png'
+        },
+        MGCP: {
+            schema: mgcp_schema,
+            name: 'MGCP',
+            icon: 'presets/misc/MGCP_logo.png'
+        },
+        GGDMv30: {
+            schema: ggdm30_schema,
+            name: 'GGDMv30',
+            icon: 'presets/misc/usace_logo.png'
+        }
+    };
+}
 
 function lookupType(geom) {
     let set = new Set();

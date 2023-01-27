@@ -728,14 +728,24 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
   if (g == nullptr)
     return;
   std::string wkt;
-  //  Get the WKT of the geometry (full or intersection) to convert to OGR geometry
-  if (_cropFeaturesCrossingBounds && _bounds && g->intersects(_bounds.get()))
+  //  Treat bounded vs unbounded differently
+  if (_bounds)
   {
-    //  Get the intersection of the geometry with the bounding envelope
-    std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
-    wkt = intersection->toString();
+    if (g->intersects(_bounds.get()))
+    {
+      if (_cropFeaturesCrossingBounds)
+      {
+        //  Get the intersection of the geometry with the bounding envelope
+        std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
+        wkt = intersection->toString();
+      }
+      else  //  Geometry doesn't need to be cropped
+        wkt = g->toString();
+    }
+    else  //  Geometry is outside of the bounds, eliminate it
+      return;
   }
-  else
+  else  //  No bounds to change the geometry
     wkt = g->toString();
   //  Convert the WKT to an OGR geometry for saving
   const char* t = wkt.data();
