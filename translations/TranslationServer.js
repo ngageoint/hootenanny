@@ -262,6 +262,12 @@ function handleInputs(params) {
         case '/presets':
             result = getPresets(params);
             break;
+        case '/fieldMappings':
+            result = getFieldMappings(params);
+            break;
+        case '/columns':
+            result = getColumn(params);
+            break;
         case '/version':
             result = {version: '0.0.5'};
             break;
@@ -524,6 +530,50 @@ var getFilteredSchema = function(params) {
             maxLeinDistance: maxLeinDistance
         });
     }
+}
+
+var getFieldMappings = function(options) {
+    var translation = options.translation || 'TDSv61';
+    var schema = schemaMap[translation].getDbSchema();
+    var fieldMappings = [];
+    var columnTracker = {};
+
+    schema.forEach(function(fcode) {
+        fcode.columns.forEach(function(col){
+            var colName = col.name + '::' + col.desc;
+            if (!columnTracker.hasOwnProperty(colName)) {
+                columnTracker[colName] = true;
+                fieldMappings.push(colName);
+            }
+        });
+    });
+
+    return fieldMappings;
+}
+
+var getColumn = function(options) {
+    var translation = options.translation || 'TDSv61';
+    var column = options.column;
+    var schema = schemaMap[translation].getDbSchema();
+    var columnSchema = [];
+
+    schema.forEach(function(fcode) {
+        fcode.columns.forEach(function(c) {
+            if (c.name === column) {
+                if (columnSchema.length === 0) {
+                    columnSchema = c.type === 'enumeration' ? c.enumerations.map(function(e) { return e.name }) : ['Value'];
+                } else if (c.type === 'enumeration') {
+                    c.enumerations.forEach(function(e) {
+                        if (columnSchema.indexOf(e.name) === -1) {
+                            columnSchema.push(e.name);
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    return columnSchema;
 }
 
 var searchSchema = function(options) {
