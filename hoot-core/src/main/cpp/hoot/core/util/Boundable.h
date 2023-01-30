@@ -49,7 +49,7 @@ class Boundable
 {
 public:
 
-  Boundable() = default;
+  Boundable();
   virtual ~Boundable() = default;
 
   /**
@@ -130,9 +130,14 @@ public:
     return loadInBoundsCriterionBounds(ConfigOptions(), forceEnvelopeBounds);
   }
 
+  bool getCropOnReadIfBounded() const { return _cropOnReadIfBounded; }
+  void setCropOnReadIfBounded(bool crop) { _cropOnReadIfBounded = crop; }
+
 protected:
   /** Bounding envelope or polygon */
   std::shared_ptr<geos::geom::Geometry> _bounds;
+  /** Flag to indicate if the bounding should happen on read if _bounds is valid */
+  bool _cropOnReadIfBounded;
 
 private:
   /** Convert string to geometry, used by loadBoundsString, loadCropBounds, and loadInBoundsCriterionBounds functions */

@@ -84,7 +84,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& url, bool useDataSourceIds, Status defaultStatus)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& url, bool useDataSourceIds, Status defaultStatus, bool cropOnReadIfBounded)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -93,10 +93,13 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& u
   std::shared_ptr<OsmMapReader> reader = _createReader(url);
   reader->setUseDataSourceIds(useDataSourceIds);
   reader->setDefaultStatus(defaultStatus);
+  std::shared_ptr<Boundable> bounded = std::dynamic_pointer_cast<Boundable>(reader);
+  if (bounded)
+    bounded->setCropOnReadIfBounded(cropOnReadIfBounded);
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds, bool useFileStatus, const QString& url)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds, bool useFileStatus, const QString& url, bool cropOnReadIfBounded)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -105,6 +108,9 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSour
   std::shared_ptr<OsmMapReader> reader = _createReader(url);
   reader->setUseDataSourceIds(useDataSourceIds);
   reader->setUseFileStatus(useFileStatus);
+  std::shared_ptr<Boundable> bounded = std::dynamic_pointer_cast<Boundable>(reader);
+  if (bounded)
+    bounded->setCropOnReadIfBounded(cropOnReadIfBounded);
   return reader;
 }
 
@@ -129,18 +135,18 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   return "";
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus, bool cropOnReadIfBounded)
 {
   LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
-  std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
+  std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus, cropOnReadIfBounded);
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url, bool cropOnReadIfBounded)
 {
   LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
   LOG_VART(useFileStatus);
-  std::shared_ptr<OsmMapReader> reader = createReader(useDataSourceIds, useFileStatus, url);
+  std::shared_ptr<OsmMapReader> reader = createReader(useDataSourceIds, useFileStatus, url, cropOnReadIfBounded);
   _read(map, reader, url);
 }
 

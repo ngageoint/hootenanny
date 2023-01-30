@@ -33,6 +33,11 @@
 namespace hoot
 {
 
+Boundable::Boundable()
+  : _cropOnReadIfBounded(true)
+{
+}
+
 std::shared_ptr<geos::geom::Geometry> Boundable::loadBounds(const ConfigOptions& options, bool forceEnvelopeBounds)
 {
   //  First try loading the bounds from the `bounds` setting

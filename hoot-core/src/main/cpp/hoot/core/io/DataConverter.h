@@ -97,6 +97,8 @@ private:
   Progress _progress;
   int _printLengthMax;
 
+  bool _cropReadIfBounded;
+
   void _validateInput(const QStringList& inputs, const QString& output) const;
 
   /**

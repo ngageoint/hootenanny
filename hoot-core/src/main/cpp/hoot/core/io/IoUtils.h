@@ -206,48 +206,44 @@ public:
                                                       const QStringList& ops);
 
   /**
-    Loads an OSM map into an OsmMap object
-
-    @param map the object to load the map into
-    @param path the file path to load the map from
-    @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
-    element ID's
-    @param defaultStatus the hoot status to assign to all elements
-    @param translationScript script used to translate data; required only if the input is an OGR
-    format; ignored otherwise
-    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only;
-    ignored otherwise
-    @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
-    @param numTasks number of job tasks being performed for status reporting; applicable to OGR
-    inputs only; ignored otherwise
-    */
+   * Loads an OSM map into an OsmMap object
+   *
+   * @param map the object to load the map into
+   * @param path the file path to load the map from
+   * @param useFileId if true, uses the element ID's in the map file; otherwise, generates new element ID's
+   * @param defaultStatus the hoot status to assign to all elements
+   * @param translationScript script used to translate data; required only if the input is an OGR format; ignored otherwise
+   * @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only; ignored otherwise
+   * @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
+   * @param numTasks number of job tasks being performed for status reporting; applicable to OGR inputs only; ignored otherwise
+   * @param cropOnReadIfBounded tell the reader to crop the input if it is bounded; applicable to bounded readers only; ignored otherwise
+   */
   static void loadMap(const OsmMapPtr& map, const QString& path, bool useFileId = true,
                       Status defaultStatus = Status::Invalid, const QString& translationScript = "",
-                      const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
+                      const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1,
+                      bool cropOnReadIfBounded = true);
   /**
-    Loads multiple OSM maps into an OsmMap object
-
-    @param map the object to load the map into
-    @param paths the file paths to load the maps from
-    @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
-    element ID's
-    @param defaultStatus the hoot status to assign to all elements
-    @param translationScript script used to translate data; required only if the input is an OGR
-    format; ignored otherwise
-    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only;
-    ignored otherwise
-    @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
-    @param numTasks number of job tasks being performed for status reporting; applicable to OGR
-    inputs only; ignored otherwise
-    */
+   * Loads multiple OSM maps into an OsmMap object
+   *
+   * @param map the object to load the map into
+   * @param paths the file paths to load the maps from
+   * @param useFileId if true, uses the element ID's in the map file; otherwise, generates new element ID's
+   * @param defaultStatus the hoot status to assign to all elements
+   * @param translationScript script used to translate data; required only if the input is an OGR format; ignored otherwise
+   * @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only; ignored otherwise
+   * @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
+   * @param numTasks number of job tasks being performed for status reporting; applicable to OGR inputs only; ignored otherwise
+   * @param cropOnReadIfBounded tell the reader to crop the input if it is bounded; applicable to bounded readers only; ignored otherwise
+   */
   static void loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
                        Status defaultStatus = Status::Invalid, const QString& translationScript = "",
-                       const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
+                       const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1,
+                       bool cropOnReadIfBounded = true);
   /**
-    Saves an OSM map to an OsmMap object
-
-    @param map the map object to save
-    @param path the file path to save the map to
+   * Saves an OSM map to an OsmMap object
+   *
+   * @param map the map object to save
+   * @param path the file path to save the map to
    */
   static void saveMap(const OsmMapPtr& map, const QString& path);
 

@@ -68,7 +68,8 @@ int DataConverter::logWarnCount = 0;
 DataConverter::DataConverter()
   : _translateMultithreaded(false),
     _ogrFeatureReadLimit(0),
-    _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
+    _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax()),
+    _cropReadIfBounded(true)
 {
 }
 
@@ -106,6 +107,9 @@ void DataConverter::convert(const QString& input, const QString& output)
 void DataConverter::convert(const QStringList& inputs, const QString& output)
 {
   _validateInput(inputs, output);
+
+  if (!IoUtils::areSupportedOgrFormats(inputs, true) && IoUtils::isSupportedOgrFormat(output))
+    _cropReadIfBounded = false;
 
   _progress.setJobId(ConfigOptions().getJobId());
   _progress.setSource(JOB_SOURCE);
@@ -241,8 +245,7 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
   int currentTask = 1;
   const float taskWeight = 1.0f / static_cast<float>(numTasks);
 
-  Progress inputLoadProgress(
-    ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
+  Progress inputLoadProgress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
   OsmMapPtr map = std::make_shared<OsmMap>();
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -252,7 +255,7 @@ void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString
     IoUtils::loadMap(
       map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translationScript,
-      _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
+      _ogrFeatureReadLimit, JOB_SOURCE, numTasks, _cropReadIfBounded);
   }
   currentTask++;
   //  JSON and GeoJSON files do not share nodes between ways and/or relations so there are duplicates

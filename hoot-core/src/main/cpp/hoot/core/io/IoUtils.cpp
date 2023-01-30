@@ -425,7 +425,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(ElementInputStreamPtr stre
 
 void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus,
                       const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
-                      const int numTasks)
+                      const int numTasks, bool cropOnReadIfBounded)
 {
   const QStringList pathLayer = path.split(";");
   const QString justPath = pathLayer[0];
@@ -447,16 +447,16 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
   }
   else  // This handles all non-OGR format reading.
-    OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
+    OsmMapReaderFactory::read(map, path, useFileId, defaultStatus, cropOnReadIfBounded);
 }
 
 void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus,
                        const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
-                       const int numTasks)
+                       const int numTasks, bool cropOnReadIfBounded)
 {
   // TODO: it would be nice to allow this to take in Progress for updating
   for (const auto& path : paths)
-    loadMap(map, path, useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource, numTasks);
+    loadMap(map, path, useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource, numTasks, cropOnReadIfBounded);
 }
 
 void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)

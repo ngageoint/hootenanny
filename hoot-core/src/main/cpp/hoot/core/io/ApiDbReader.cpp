@@ -66,6 +66,8 @@ ApiDbReader::ApiDbReader()
     _numRelationsRead(0),
     _keepImmediatelyConnectedWaysOutsideBounds(ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds())
 {
+  //  API reads always crop bounds
+  _cropOnReadIfBounded = true;
 }
 
 bool ApiDbReader::isSupported(const QString& urlStr) const

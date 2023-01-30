@@ -199,7 +199,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   LOG_VARD(_map->getElementCount());
 
   //  Bounded network queries are already cropped
-  if (_bounds.get() && !_isWeb)
+  if (_bounds.get() && !_isWeb && _cropOnReadIfBounded)
   {
     // See related note in OsmXmlReader::read.
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
@@ -213,7 +213,7 @@ void OsmJsonReader::_readToMap()
   LOG_VARD(_map->getElementCount());
 
   //  Bounded network queries are already cropped
-  if (_bounds.get() && !_isWeb)
+  if (_bounds.get() && !_isWeb && _cropOnReadIfBounded)
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));

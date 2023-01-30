@@ -44,20 +44,20 @@ class OsmMapReaderFactory
 
 public:
 
-  static std::shared_ptr<OsmMapReader> createReader(const QString& url, bool useFileId = true, Status defaultStatus = Status::Invalid);
+  static std::shared_ptr<OsmMapReader> createReader(const QString& url, bool useFileId = true, Status defaultStatus = Status::Invalid, bool cropOnReadIfBounded = true);
   // Note the url as the last param here...was getting runtime overlap between these two where
   // bools were being passed as status ints and vice versa. May need to do some more refactoring
   // here to make things cleaner.
-  static std::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus, const QString& url);
+  static std::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus, const QString& url, bool cropOnReadIfBounded = true);
 
   /**
    * Returns true if a partial reader is available for the given URL.
    */
   static bool supportsPartialReading(const QString& url);
 
-  static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true, Status defaultStatus = Status::Invalid);
+  static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true, Status defaultStatus = Status::Invalid, bool cropOnReadIfBounded = true);
   // See note for createReader.
-  static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus, const QString& url);
+  static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus, const QString& url, bool cropOnReadIfBounded = true);
 
   static QString getReaderName(const QString& url);
 
