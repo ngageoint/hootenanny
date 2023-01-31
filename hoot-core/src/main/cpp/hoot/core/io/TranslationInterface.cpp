@@ -65,8 +65,8 @@ void TranslationInterface::initTranslator()
 }
 
 void TranslationInterface::translateToFeatures(const ElementProviderPtr& provider, const ConstElementPtr& e,
-                                    std::shared_ptr<Geometry> &g, // output
-                                    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const
+                                               std::shared_ptr<Geometry> &g, // output
+                                               std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const
 {
   if (!_translator)
     throw HootException("You must call open before attempting to write.");
@@ -92,6 +92,12 @@ void TranslationInterface::translateToFeatures(const ElementProviderPtr& provide
       }
       logWarnCount++;
       g = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
+    }
+    //  Validate the geometry before using it
+    if (!g)
+    {
+      LOG_DEBUG("Geometry not created for: " << e->getElementId());
+      return;
     }
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
     //  Copy the tags and remove any empty values from the tags

@@ -161,8 +161,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(cons
   if (size == 1)
     size = 2;
 
-  CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -218,6 +217,15 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(cons
 
 std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const ConstWayPtr& w) const
 {
+  //  Ignore bad data, unclosed, area=yes, with no other information
+  if (w->getTags().contains("area") &&
+      w->getTags().get("area").compare("yes", Qt::CaseInsensitive) == 0 &&    //  Area (area=yes)
+      w->getNodeIds().at(0) != w->getNodeIds().at(w->getNodeCount() - 1) &&   //  Unclosed way
+      w->getTags().getInformationCount() <= 1)                                //  No-information (aside from area=yes)
+  {
+    LOG_TRACE("Unclosed, area, no information: " << w->getElementId());
+    return nullptr;
+  }
   const std::vector<long>& ids = w->getNodeIds();
   LOG_VART(ids);
   size_t size = ids.size();
@@ -231,8 +239,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   if (size <= 3)
     return std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
 
-  CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   size_t i;
   for (i = 0; i < ids.size(); i++)
@@ -287,8 +294,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
-  std::shared_ptr<Polygon> result(
-    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  std::shared_ptr<Polygon> result(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 
   return result;
 }

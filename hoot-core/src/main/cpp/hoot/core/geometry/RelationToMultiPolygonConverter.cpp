@@ -450,7 +450,7 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<Cons
     ConstWayPtr wi = partials[i];
     if (!wi)
       continue;
-    for (size_t j = i; j < partials.size(); j++)
+    for (size_t j = i + 1; j < partials.size(); j++)
     {
       ConstWayPtr wj = partials[j];
       if (!wj)
@@ -476,8 +476,7 @@ void RelationToMultiPolygonConverter::_createSingleRing(const vector<ConstWayPtr
   LOG_TRACE("Creating single ring...");
 
   deque<ConstWayPtr> orderedWays = _orderWaysForRing(partials);
-  CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create((size_t)0, (size_t)2).release();
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create((size_t)0, (size_t)2).release();
 
   for (const auto& way : orderedWays)
     _addWayToSequence(way, *cs, false);
