@@ -739,8 +739,16 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
       if (_cropFeaturesCrossingBounds)
       {
         //  Get the intersection of the geometry with the bounding envelope
-        std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
-        wkt = intersection->toString();
+        try
+        {
+          std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
+          wkt = intersection->toString();
+        }
+        catch (const geos::util::TopologyException& e)
+        {
+          LOG_WARN(e.what());
+          return;
+        }
       }
       else  //  Geometry doesn't need to be cropped
         wkt = g->toString();

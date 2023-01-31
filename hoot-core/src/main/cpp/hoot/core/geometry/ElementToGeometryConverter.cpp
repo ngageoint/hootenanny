@@ -217,15 +217,6 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(cons
 
 std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const ConstWayPtr& w) const
 {
-  //  Ignore bad data, unclosed, area=yes, with no other information
-  if (w->getTags().contains("area") &&
-      w->getTags().get("area").compare("yes", Qt::CaseInsensitive) == 0 &&    //  Area (area=yes)
-      w->getNodeIds().at(0) != w->getNodeIds().at(w->getNodeCount() - 1) &&   //  Unclosed way
-      w->getTags().getInformationCount() <= 1)                                //  No-information (aside from area=yes)
-  {
-    LOG_TRACE("Unclosed, area, no information: " << w->getElementId());
-    return nullptr;
-  }
   const std::vector<long>& ids = w->getNodeIds();
   LOG_VART(ids);
   size_t size = ids.size();
