@@ -450,7 +450,7 @@ void RelationToMultiPolygonConverter::_createRingsFromPartials(const vector<Cons
     ConstWayPtr wi = partials[i];
     if (!wi)
       continue;
-    for (size_t j = i + 1; j < partials.size(); j++)
+    for (size_t j = i; j < partials.size(); j++)
     {
       ConstWayPtr wj = partials[j];
       if (!wj)

@@ -328,6 +328,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(QL
     if (xmlReader.get())
     {
       xmlReader->setAddChildRefsWhenMissing(true);
+      xmlReader->setCropOnReadIfBounded(false);
     }
 
     reader->setUseDataSourceIds(true);
