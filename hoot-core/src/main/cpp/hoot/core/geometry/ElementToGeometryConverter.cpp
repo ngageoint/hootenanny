@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementToGeometryConverter.h"
@@ -161,8 +161,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(cons
   if (size == 1)
     size = 2;
 
-  CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -231,8 +230,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   if (size <= 3)
     return std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
 
-  CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   size_t i;
   for (i = 0; i < ids.size(); i++)
@@ -287,8 +285,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
-  std::shared_ptr<Polygon> result(
-    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  std::shared_ptr<Polygon> result(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 
   return result;
 }

@@ -65,6 +65,7 @@ OsmXmlDiskCache::OsmXmlDiskCache()
   _reader.setUseDataSourceIds(true);
   _reader.setUseFileStatus(true);
   _reader.setPreserveAllTags(true);
+  _reader.setCropOnReadIfBounded(false);
   _reader.open(_tempFileName);
 
   // Initialize the cache

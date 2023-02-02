@@ -390,7 +390,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
   // cropping during streaming, and there is a check in IoUtils::isStreamableIo to make
   // sure nothing tries to stream with this reader when a bounds has been set.
-  if (_bounds.get())
+  if (_bounds.get() && getCropOnReadIfBounded())
   {
     LOG_VARD(_bounds->toString());
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);

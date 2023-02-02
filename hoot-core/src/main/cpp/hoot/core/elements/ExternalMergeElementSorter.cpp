@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ExternalMergeElementSorter.h"
@@ -328,6 +328,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(QL
     if (xmlReader.get())
     {
       xmlReader->setAddChildRefsWhenMissing(true);
+      xmlReader->setCropOnReadIfBounded(false);
     }
 
     reader->setUseDataSourceIds(true);

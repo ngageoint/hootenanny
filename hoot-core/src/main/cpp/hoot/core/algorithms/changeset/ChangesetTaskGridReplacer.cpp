@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetTaskGridReplacer.h"
 
@@ -81,9 +81,7 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(const QString& toReplace, const QSt
   try
   {
     _replaceEntireTaskGrid(taskGrid);
-    LOG_STATUS(
-      "Task grid cell replacement operation successfully completed in: " <<
-      StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+    LOG_STATUS("Task grid cell replacement operation successfully completed in: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     return _writeUpdatedData(_finalOutput);
   }
   catch (const HootException& e)
@@ -129,7 +127,7 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
-  _changesetCreator =Factory::getInstance().constructObject<ChangesetReplacement>(ConfigOptions().getChangesetReplacementImplementation());
+  _changesetCreator = Factory::getInstance().constructObject<ChangesetReplacement>(ConfigOptions().getChangesetReplacementImplementation());
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
   LOG_VARD(_changesetCreator->toString());
 

@@ -252,6 +252,9 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
 void OgrWriter::writeTranslatedFeature(const std::shared_ptr<Geometry>& g,
                                        const vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf)
 {
+  //  Cannot write translated feature if there is no geometry
+  if (!g)
+    return;
   // only write the feature if it wasn't filtered by the translation script.
   for (size_t i = 0; i < tf.size(); i++)
   {
@@ -736,8 +739,16 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
       if (_cropFeaturesCrossingBounds)
       {
         //  Get the intersection of the geometry with the bounding envelope
-        std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
-        wkt = intersection->toString();
+        try
+        {
+          std::unique_ptr<geos::geom::Geometry> intersection = g->intersection(_bounds.get());
+          wkt = intersection->toString();
+        }
+        catch (const geos::util::TopologyException& e)
+        {
+          LOG_WARN(e.what());
+          return;
+        }
       }
       else  //  Geometry doesn't need to be cropped
         wkt = g->toString();
