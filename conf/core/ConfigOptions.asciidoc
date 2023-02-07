@@ -5501,6 +5501,13 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
+=== shift.nodes.xy
+
+* Data Type: string
+* Default Value: `0.0,0.0`
+
+Shift all nodes in the map by x, y meters when using the `NodesShiftVisitor`
+
 === small.disconnected.way.remover.max.node.count
 
 * Data Type: int
