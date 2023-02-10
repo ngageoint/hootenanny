@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDRESSS_H
 #define ADDRESSS_H
@@ -146,12 +146,15 @@ private:
 
   // see getStreetTypes
   static QSet<QString> _streetTypes;
+  static bool _streetTypesIncludesAbbreviations;
   // see getStreetFullTypesToTypeAbbreviations
   static QMap<QString, QString> _streetFullTypesToTypeAbbreviations;
   // see getStreetTypeAbbreviationsToFullTypes
   static QMap<QString, QString> _streetTypeAbbreviationsToFullTypes;
 
   void _initializeStringComparator() const;
+
+  static void _loadStreetTypes(const bool includeAbbreviations);
 };
 
 }
