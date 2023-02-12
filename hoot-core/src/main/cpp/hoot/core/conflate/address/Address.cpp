@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "Address.h"
 
@@ -38,6 +38,7 @@ namespace hoot
 {
 
 QSet<QString> Address::_streetTypes;
+bool Address::_streetTypesIncludesAbbreviations = false;
 QMap<QString, QString> Address::_streetFullTypesToTypeAbbreviations;
 QMap<QString, QString> Address::_streetTypeAbbreviationsToFullTypes;
 StringDistancePtr Address::_stringComp;
@@ -111,22 +112,7 @@ QList<QRegExp> Address::getIntersectionSplitTokens()
 
 QSet<QString> Address::getStreetTypes(const bool includeAbbreviations)
 {
-  if (_streetTypes.isEmpty())
-  {
-    // Possibly, this could be expanded to use something like:
-    // https://pe.usps.com/text/pub28/28apc_002.htm[this] instead.
-    const QStringList streetTypesRaw = ConfigOptions().getAddressStreetTypes();
-    for (const auto& streetTypeEntry : qAsConst(streetTypesRaw))
-    {
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
-      // Currently we only support 1:1 street type to abbreviation pairings.
-      if (streetTypeEntryParts.size() != 2)
-        throw HootException("Invalid street type entry: " + streetTypeEntry);
-      _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
-      if (includeAbbreviations)
-        _streetTypes.insert(streetTypeEntryParts.at(1).toLower());
-    }
-  }
+  _loadStreetTypes(includeAbbreviations);
   return _streetTypes;
 }
 
@@ -197,7 +183,8 @@ bool Address::isStreetIntersectionAddress(const Address& address,
 void Address::removeStreetTypes()
 {
   LOG_TRACE(_address);
-
+  //  When removing street types, reload them with abbreviations
+  _loadStreetTypes(true);
   // If its a non-intersection, just remove the last street type token. We're assuming its at the
   // end, which may not be alway true.
   if (!isStreetIntersectionAddress(_address, !_parsedFromAddressTag))
@@ -229,6 +216,31 @@ void Address::removeHouseNumber()
   if (!isStreetIntersectionAddress(_address, false))
     StringUtils::splitAndRemoveAtIndex(_address, QRegExp("\\s+"), 0);
   LOG_VART(_address);
+}
+
+void Address::_loadStreetTypes(const bool includeAbbreviations)
+{
+  if (_streetTypesIncludesAbbreviations != includeAbbreviations || _streetTypes.isEmpty())
+  {
+    //  Remember what the current settings are
+    _streetTypesIncludesAbbreviations = includeAbbreviations;
+    //  Clear the set in all cases
+    _streetTypes.clear();
+    // Possibly, this could be expanded to use something like:
+    // https://pe.usps.com/text/pub28/28apc_002.htm[this] instead.
+    const QStringList streetTypesRaw = ConfigOptions().getAddressStreetTypes();
+    for (const auto& streetTypeEntry : qAsConst(streetTypesRaw))
+    {
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
+      // Currently we only support 1:1 street type to abbreviation pairings.
+      if (streetTypeEntryParts.size() != 2)
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
+      if (includeAbbreviations)
+        _streetTypes.insert(streetTypeEntryParts.at(1).toLower());
+    }
+  }
+
 }
 
 }
