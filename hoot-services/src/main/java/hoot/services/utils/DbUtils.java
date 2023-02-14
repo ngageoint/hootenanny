@@ -991,7 +991,7 @@ public class DbUtils {
             else {
                 String queryUpdate = String.format(
                         "UPDATE command_status " +
-                        "SET stdout = '%s', stderr = '%s', percent_complete = '%d' " +
+                        "SET stdout = concat(stdout, '%s'), stderr = concat(stderr, '%s'), percent_complete = '%d' " +
                         "WHERE id=%d",
                         commandResult.getStdout(), commandResult.getStderr(), commandResult.getPercentProgress(), commandResult.getId());
 
