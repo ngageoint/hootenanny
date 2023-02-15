@@ -23,7 +23,7 @@ all: build
 always:
 
 # builds everything
-build: core ui-build
+build: core
 
 # This is a bit of misnomer, as it builds core and services. It should be modified to build core and
 # the services db only.
@@ -38,7 +38,7 @@ makedirs:
 	mkdir -p $$HOOT_HOME/userfiles/reports
 	mkdir -p $$HOOT_HOME/userfiles/tmp/upload
 
-clean: Makefile.qmake ui-clean services-clean clean-coverage
+clean: Makefile.qmake services-clean clean-coverage
 	$(MAKE) -f Makefile.qmake clean 2>&1 \
 	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
@@ -71,16 +71,13 @@ ifeq ($(BUILD_SERVICES),services)
 	scripts/database/CleanOsmApiDB.sh
 	rm -f scripts/database/blank_osmapidb.sql
 endif
-ifeq ($(BUILD_UI_TESTS),uitests)
-	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
-endif
 
 clean-db: services-clean-db
 
 # start over as close to a new build as is reasonable
 clean-all: clean clean-db clean-ccache clean-coverage
 
-clean-coverage: services-clean-coverage ui-clean-coverage
+clean-coverage: services-clean-coverage
 	rm -rf coverage
 	rm -f `find . -name *.gcda`
 
@@ -107,7 +104,7 @@ test-all-core: services-test-all translations-test node-export-test
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
 test-all-no-core: services-test-all translations-test node-export-test
-	$(MAKE) ui-test ui2x-test
+	$(MAKE) ui2x-test
 
 test-all: test-all-no-core
 	# Don't run services tests at the same time as glacial -- that may stomp
@@ -371,32 +368,11 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile test-all
 endif
 
-ui-build: HOOT_VERSION_FILE
-ifeq ($(BUILD_SERVICES),services)
-	cd hoot-ui && $(MAKE) -f Makefile clean && $(MAKE) -f Makefile all
-endif
-
-ui-clean:
-ifeq ($(BUILD_UI_TESTS),uitests)
-	cd test-files/ui && $(MAKE) -f Makefile clean
-endif
-
 ui2x-build:
 ifeq ($(BUILD_SERVICES),services)
 	cd $$HOOT_HOME/hoot-ui-2x && \
 	(npm i $(NPM_QUIET) || npm i $(NPM_QUIET)) && \
 	(npm run production $(NPM_QUIET) || npm run production $(NPM_QUIET))
-endif
-
-ui-test: services-build build docs
-ifeq ($(BUILD_UI_TESTS),uitests)
-ifeq ($(BUILD_SERVICES),services)
-	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test CUKE_OPTS=--fail-fast
-else
-	echo "UI tests must specify both --with-services and --with-uitests."
-endif
-else
-	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 
 ui2x-test: services-build build
@@ -411,28 +387,6 @@ else
 endif
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
-endif
-
-ui-coverage: services-build build
-ifeq ($(BUILD_UI_TESTS),uitests)
-ifeq ($(BUILD_SERVICES),services)
-	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile coverage
-else
-	echo "UI coverage must specify both --with-services and --with-uitests."
-endif
-else
-	echo "UI coverage must specify both --with-services and --with-uitests."
-endif
-
-ui-clean-coverage:
-ifeq ($(BUILD_UI_TESTS),uitests)
-ifeq ($(BUILD_SERVICES),services)
-	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean-coverage
-else
-	echo "UI clean coverage must specify both --with-services and --with-uitests."
-endif
-else
-	echo "UI clean coverage must specify both --with-services and --with-uitests."
 endif
 
 FORCE: vagrant
@@ -536,7 +490,7 @@ endif
 
 core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html coverage/core/tgs/index.html coverage/core/cmd/index.html coverage/core/js/index.html coverage/core/josm/index.html
 
-coverage: services-coverage ui-coverage core-coverage
+coverage: services-coverage core-coverage
 
 conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

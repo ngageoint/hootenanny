@@ -110,10 +110,6 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-# Install gems with bundler and strict versioning (see Gemfile)
-bundle config set --local path vendor/bundle
-bundle install
-
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
@@ -133,12 +129,6 @@ cd $HOOT_HOME
 echo "$HOOT_HOME"
 echo `pwd`
 source ./SetupEnv.sh
-
-if [ ! "$(ls -A hoot-ui)" ]; then
-    echo "hoot-ui is empty"
-    echo "init'ing and updating submodule"
-    git submodule init && git submodule update
-fi
 
 echo "### Installing Tomcat8..."
 TOMCAT_HOME=/usr/share/tomcat8

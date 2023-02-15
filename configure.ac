@@ -86,9 +86,9 @@ AC_COMPILE_IFELSE(
 # include <opencv/cv.h>
 #endif
 using namespace cv;
-]], 
+]],
         [[
-Mat m1, m2, m3; 
+Mat m1, m2, m3;
 calcCovarMatrix(m1, m2, m3, COVAR_NORMAL | COVAR_ROWS | COVAR_SCALE, CV_64F);
 ]])
     ],
@@ -145,7 +145,6 @@ GRAPHVIZ_INIT()
 
 # Include UI tests
 m4_include([m4/ax_compare_version.m4])
-m4_include([m4/ruby.m4])
 m4_include([m4/ui-tests.m4])
 UI_TESTS_INIT()
 
