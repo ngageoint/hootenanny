@@ -101,4 +101,3 @@ case "$1" in
         OUTPUT_OSM=$7
         run-owt-export-osm ;;
 esac
-
