@@ -121,7 +121,13 @@ app.use(function(req, res, next) {
 /* Get service options */
 app.get('/options', function(req, res) {
     res.json({
-        Datasource: _.keys(config.datasources),
+        Datasource: _.keys(config.datasources).map(k => {
+            const source = { source: k };
+            if (config.datasources[k].label) {
+                source.label = config.datasources[k].label;
+            }
+            return source;
+        }),
         Schema: _.keys(config.schemas),
         Format: _.keys(config.formats)
     });
