@@ -269,13 +269,6 @@ void OsmJsonWriter::_writeNodes()
   }
 }
 
-void OsmJsonWriter::_write(const QString& str, bool newLine)
-{
-  _writer.write(str.toUtf8());
-  if (newLine)
-    _writer.write(QString("\n").toUtf8());
-}
-
 bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const
 {
   return !e->getTags().empty() ||

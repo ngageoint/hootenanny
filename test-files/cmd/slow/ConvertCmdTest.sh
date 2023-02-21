@@ -172,7 +172,7 @@ echo ""
 rm -rf $OUTPUT_DIR/clipped_poly/
 hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
   -D bounds="-104.80643134164,39.59123123677,-104.8042456804,39.59369827561" \
-  -D ogr.writer.crop.features.crossing.bounds=true \
+  -D writer.crop.features.crossing.bounds=true \
   test-files/ToyBuildingsTestA.osm $OUTPUT_DIR/clipped_poly.shp
 hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
   $OUTPUT_DIR/clipped_poly/ $OUTPUT_DIR/clipped_poly.osm
@@ -184,7 +184,7 @@ echo ""
 rm -rf $OUTPUT_DIR/clipped_lines/
 hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
   -D bounds="-104.90022388323,38.85350714489,-104.8983212846,38.85504576826" \
-  -D ogr.writer.crop.features.crossing.bounds=true \
+  -D writer.crop.features.crossing.bounds=true \
   test-files/ToyTestA.osm $OUTPUT_DIR/clipped_lines.shp
 hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
   $OUTPUT_DIR/clipped_lines/ $OUTPUT_DIR/clipped_lines.osm

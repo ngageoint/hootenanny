@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -40,7 +41,7 @@ namespace hoot
  *
  * https://geojson.org/geojson-spec.html
  */
-class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface
+class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface, public Boundable
 {
 public:
   static QString className() { return "OsmGeoJsonWriter"; }
@@ -103,8 +104,9 @@ protected:
   /**
    * @brief _writeNode Writes a single element; metadata, tags, and geometry
    * @param element Element to write out
+   * @param geometry Element geometry to write out
    */
-  void _writeElement(ConstElementPtr element);
+  void _writeElement(ConstElementPtr element, ConstElementPtr translated_element, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation Relation to write out
@@ -118,30 +120,42 @@ protected:
   void _writeFeature(ConstElementPtr element);
   /**
    * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
-   * @param nodes Vector of node ids in OsmMap
+   * @param nodes Coordinate sequence
    * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
    */
-  void _writeGeometry(const std::vector<long>& nodes, std::string type);
+//  void _writeGeometry(const std::shared_ptr<geos::geom::CoordinateSequence>& nodes, std::string type);
   /**
    * @brief _writeGeometry Write out geometry for any element
    * @param element Element to write out
    */
-  void _writeGeometry(ConstElementPtr element);
+  void _writeGeometry(ConstElementPtr element, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeGeometry Write out geometry for a single node
    * @param node Node to write out
    */
-  void _writeGeometry(ConstNodePtr node);
+  void _writeGeometry(ConstNodePtr node, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeGeometry Write out geometry for a single way
    * @param way Way to write out
    */
-  void _writeGeometry(ConstWayPtr way);
+  void _writeGeometry(ConstWayPtr way, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeGeometry Write out geometry for a single relation
    * @param relation Relation to write out
    */
-  void _writeGeometry(ConstRelationPtr relation);
+  void _writeGeometry(ConstRelationPtr relation, const std::shared_ptr<geos::geom::Geometry>& geometry);
+
+  void _writeComplexGeometry(const std::shared_ptr<geos::geom::Geometry>& geometry, const QString& type, const QString& sub_type);
+
+  void _writePointGeometry(const geos::geom::Geometry* geometry);
+  void _writeLineStringGeometry(const geos::geom::Geometry* geometry);
+  void _writePolygonGeometry(const geos::geom::Geometry* geometry);
+  void _writeMultiLineStringGeometry(const geos::geom::Geometry* geometry);
+  void _writeMultiPolygonGeometry(const geos::geom::Geometry* geometry);
+  void _writeGeometryCollectionGeometry(const geos::geom::Geometry* geometry);
+  void _writeCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates);
+  void _writeCoordinate(const geos::geom::Coordinate& coordinate);
+  void _writePolygonCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates);
   /**
    * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
    * @param relation
@@ -158,8 +172,9 @@ protected:
   /**
    * @brief _translateElement Translate the provided element, pushes at least one element onto the _translatedElementQueue map
    * @param e Element to be translated
+   * @return Element converted to GEOS geometry
    */
-  void _translateElement(const ConstElementPtr& e);
+  std::shared_ptr<geos::geom::Geometry> _translateElement(const ConstElementPtr& e);
   /**
    * @brief _getLayerName Get the layer name based on the translation or geometry type
    * @param feature Translated feature information (i.e. translated tags and layer name)
@@ -181,6 +196,12 @@ protected:
    * @return Layername for unknown geometries (i.e. UNKNOWN, UNKNOWN_P, UNKNOWN_C, UNKNOWN_S)
    */
   QString _getFcodeUnknown(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
+  /**
+   * @brief _cropGeometryToBounds Crops geometry to the _bounds if needed
+   * @param geometry Geometry to crop
+   * @return whole geometry if inside the bounds (or no crop is desired), cropped geometry if on the border, nullptr if outside of bounds
+   */
+  std::shared_ptr<geos::geom::Geometry> _cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
 
   /** Tasking Manager requires that all bounding geometries are MultiPolygons and not Polygons or Linestrings,
    *  set to true when the GeoJSON output is being used for Tasking Manager bounding polygons.
@@ -190,7 +211,8 @@ protected:
   bool _useThematicLayers;
   /** Map of translated features with the layer name as the key and the value is a translated element */
   std::map<QString, ConstElementPtr> _translatedElementMap;
-
+  /** Crop any features that cross the `bounds` of the operation */
+  bool _cropFeaturesCrossingBounds;
 };
 
 }

@@ -50,6 +50,9 @@
 #include <QXmlStreamWriter>
 #include <QtCore/QStringBuilder>
 
+//  GEOS
+#include <geos/geom/GeometryFactory.h>
+
 using namespace geos::geom;
 using namespace std;
 
@@ -61,7 +64,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
   : OsmJsonWriter(precision),
     _useTaskingManagerFormat(ConfigOptions().getJsonOutputTaskingManagerAoi()),
-    _useThematicLayers(ConfigOptions().getWriterThematicStructure())
+    _useThematicLayers(ConfigOptions().getWriterThematicStructure()),
+    _cropFeaturesCrossingBounds(ConfigOptions().getWriterCropFeaturesCrossingBounds())
 {
   setConfiguration(conf());
 }
@@ -153,7 +157,10 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
   }
   _writer.setWriterType(t);
   //  Set the OsmGeoJsonWriter configuration
-  _useTaskingManagerFormat = ConfigOptions(conf).getJsonOutputTaskingManagerAoi();
+  _useTaskingManagerFormat = options.getJsonOutputTaskingManagerAoi();
+  _cropFeaturesCrossingBounds = options.getWriterCropFeaturesCrossingBounds();
+  //  Set the bounds for cropped lines and polygons
+  setBounds(Boundable::loadBounds(options));
 }
 
 QString OsmGeoJsonWriter::_getBbox() const
@@ -190,19 +197,22 @@ void OsmGeoJsonWriter::_writeNodes()
 
   for (auto node_id : nids)
   {
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(_map->getNode(node_id));
+    if (!n)
+      continue;
     //  Translate the element
-    _translateElement(_map->getNode(node_id));
+    std::shared_ptr<geos::geom::Geometry> geometry = _translateElement(n);
+    geometry = _cropGeometryToBounds(geometry);
+    if (!geometry)
+      continue;
     //  Iterate all translations
     for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
     {
-      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(translation_it->second);
-      if (!n)
-        continue;
       _writer.setCurrentFileIndex(translation_it->first);
       if (_writer.isCurrentIndexWritten())
         _write(",", true);
 
-      _writeElement(n);
+      _writeElement(n, translation_it->second, geometry);
     }
 
     _numWritten++;
@@ -219,7 +229,10 @@ void OsmGeoJsonWriter::_writeWays()
   for (auto it = ways.begin(); it != ways.end(); ++it)
   {
     //  Translate the element
-    _translateElement(it->second);
+    std::shared_ptr<geos::geom::Geometry> geometry = _translateElement(it->second);
+    geometry = _cropGeometryToBounds(geometry);
+    if (!geometry)
+      continue;
     //  Iterate all translations
     for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
     {
@@ -253,14 +266,18 @@ void OsmGeoJsonWriter::_writeWays()
         _writer.setCurrentFileIndex(translation_it->first);
         if (_writer.isCurrentIndexWritten())
           _write(",", true);
-        _writeElement(w);
+        _writeElement(it->second, w, geometry);
       }
       else
       {
         for (auto node_id : nodes)
         {
           //  Translate the element
-          _translateElement(_map->getNode(node_id));
+          ConstNodePtr n = _map->getNode(node_id);
+          geometry = _translateElement(n);
+          geometry = _cropGeometryToBounds(geometry);
+          if (!geometry)
+            continue;
           //  Iterate all translations
           for (auto node_translation_it = _translatedElementMap.begin(); node_translation_it != _translatedElementMap.end(); ++node_translation_it)
           {
@@ -270,7 +287,7 @@ void OsmGeoJsonWriter::_writeWays()
               _writer.setCurrentFileIndex(node_translation_it->first);
               if (_writer.isCurrentIndexWritten())
                 _write(",", true);
-              _writeElement(node);
+              _writeElement(n, node, geometry);
             }
           }
         }
@@ -290,7 +307,10 @@ void OsmGeoJsonWriter::_writeRelations()
   for (auto it = relations.begin(); it != relations.end(); ++it)
   {
     //  Translate the element
-    _translateElement(it->second);
+    std::shared_ptr<geos::geom::Geometry> geometry = _translateElement(it->second);
+    geometry = _cropGeometryToBounds(geometry);
+    if (!geometry)
+      continue;
     //  Iterate all translations
     for (auto translation_it = _translatedElementMap.begin(); translation_it != _translatedElementMap.end(); ++translation_it)
     {
@@ -303,7 +323,7 @@ void OsmGeoJsonWriter::_writeRelations()
       if (_writer.isCurrentIndexWritten())
         _write(",", true);
 
-      _writeElement(r);
+      _writeElement(it->second, r, geometry);
 
       _numWritten++;
       if (_numWritten % (_statusUpdateInterval) == 0)
@@ -314,76 +334,251 @@ void OsmGeoJsonWriter::_writeRelations()
   }
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
+void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr /*n*/, const std::shared_ptr<geos::geom::Geometry>& geometry)
 {
-  vector<long> node;
-  node.push_back(n->getId());
-  _writeGeometry(node, "Point");
+  _writePointGeometry(geometry.get());
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
+void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w, const std::shared_ptr<geos::geom::Geometry>& geometry)
 {
-  const vector<long>& nodes = w->getNodeIds();
-  string geoType = "LineString";
-  if (_useTaskingManagerFormat)
-    geoType = "MultiPolygon";
-  else if (AreaCriterion().isSatisfied(w) || (!nodes.empty() && nodes[0] == nodes[nodes.size() - 1]))
-    geoType = "Polygon";
-  _writeGeometry(nodes, geoType);
+  size_t count = w->getNodeCount();
+  if (count == 1 || (count == 2 && w->getNodeId(0) == w->getNodeId(1)))
+    _writePointGeometry(geometry.get());
+  else if (_useTaskingManagerFormat)
+    _writeMultiPolygonGeometry(geometry.get());
+  else if (AreaCriterion().isSatisfied(w) && count > 3)
+    _writePolygonGeometry(geometry.get());
+  else
+    _writeLineStringGeometry(geometry.get());
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
+void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr /*r*/, const std::shared_ptr<geos::geom::Geometry>& geometry)
 {
-  const vector<RelationData::Entry>& members = r->getMembers();
+  switch (geometry->getGeometryTypeId())
+  {
+  case GeometryTypeId::GEOS_POINT:
+    _writePointGeometry(geometry.get());
+    break;
+  case GeometryTypeId::GEOS_LINESTRING:
+  case GeometryTypeId::GEOS_LINEARRING:
+    _writeLineStringGeometry(geometry.get());
+    break;
+  case GeometryTypeId::GEOS_POLYGON:
+    _writePolygonGeometry(geometry.get());
+    break;
+  case GeometryTypeId::GEOS_MULTILINESTRING:
+    _writeMultiLineStringGeometry(geometry.get());
+    break;
+  case GeometryTypeId::GEOS_MULTIPOLYGON:
+    _writeMultiPolygonGeometry(geometry.get());
+    break;
+  case GeometryTypeId::GEOS_GEOMETRYCOLLECTION:
+    _writeGeometryCollectionGeometry(geometry.get());
+    break;
+  default:
+    LOG_ERROR("Unknown geometry type: " << geometry->getGeometryType() << "...skipping");
+    break;
+  }
+}
+
+void OsmGeoJsonWriter::_writeGeometryCollectionGeometry(const geos::geom::Geometry* geometry)
+{
   _writeKvp("type", "GeometryCollection");
   _write(",");
   _write("\"geometries\": [");
   bool first = true;
-  for (const auto& member : members)
+  size_t count = geometry->getNumGeometries();
+  for (size_t index = 0; index < count; ++index)
   {
-    ConstElementPtr e = _map->getElement(member.getElementId());
-    if (!e)
+    const Geometry* sub = geometry->getGeometryN(index);
+    if (!sub)
       continue;
     if (first)
       first = false;
     else
       _write(",");
     _write("{");
-    _writeGeometry(e);
+    switch (sub->getGeometryTypeId())
+    {
+    case GeometryTypeId::GEOS_POINT:
+      _writePointGeometry(sub);
+      break;
+    case GeometryTypeId::GEOS_LINESTRING:
+    case GeometryTypeId::GEOS_LINEARRING:
+      _writeLineStringGeometry(sub);
+      break;
+    case GeometryTypeId::GEOS_POLYGON:
+      _writePolygonGeometry(sub);
+      break;
+    case GeometryTypeId::GEOS_MULTILINESTRING:
+      _writeMultiLineStringGeometry(sub);
+      break;
+    case GeometryTypeId::GEOS_MULTIPOLYGON:
+      _writeMultiPolygonGeometry(sub);
+      break;
+    case GeometryTypeId::GEOS_GEOMETRYCOLLECTION:
+      _writeGeometryCollectionGeometry(sub);
+      break;
+    default:
+      LOG_ERROR("Unknown geometry type: " << sub->getGeometryType() << "...skipping");
+      break;
+    }
     _write("}");
+  }
+  _write("]");
+
+}
+
+void OsmGeoJsonWriter::_writePointGeometry(const geos::geom::Geometry* geometry)
+{
+  _writeKvp("type", "Point");
+  _write(",");
+  _write("\"coordinates\": ");
+  std::shared_ptr<geos::geom::CoordinateSequence> cs(geometry->getCoordinates().release());
+  _writeCoordinate(cs->getAt(0));
+}
+
+void OsmGeoJsonWriter::_writeLineStringGeometry(const geos::geom::Geometry* geometry)
+{
+  _writeKvp("type", "LineString");
+  _write(",");
+  _write("\"coordinates\": [");
+  std::shared_ptr<geos::geom::CoordinateSequence> cs(geometry->getCoordinates().release());
+  _writeCoordinateSequence(cs);
+  _write("]");
+}
+
+void OsmGeoJsonWriter::_writePolygonGeometry(const geos::geom::Geometry* geometry)
+{
+  _writeKvp("type", "Polygon");
+  _write(",");
+  _write("\"coordinates\": ");
+  _write("[");
+  _write("[");
+  std::shared_ptr<geos::geom::CoordinateSequence> cs(geometry->getCoordinates().release());
+  _writePolygonCoordinateSequence(cs);
+  _write("]");
+  _write("]");
+}
+
+void OsmGeoJsonWriter::_writeMultiLineStringGeometry(const geos::geom::Geometry* geometry)
+{
+  _writeKvp("type", "MultiLineString");
+  _write(",");
+  _write("\"coordinates\": [");
+  bool first = true;
+  for (size_t index = 0; index < geometry->getNumGeometries(); ++index)
+  {
+    const Geometry* line = geometry->getGeometryN(index);
+    std::shared_ptr<geos::geom::CoordinateSequence> cs(line->getCoordinates().release());
+    if (first)
+      first = false;
+    else
+      _write(",");
+    _write("[");
+    _writeCoordinateSequence(cs);
+    _write("]");
   }
   _write("]");
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e)
+void OsmGeoJsonWriter::_writeMultiPolygonGeometry(const geos::geom::Geometry* geometry)
+{
+  _writeKvp("type", "MultiPolygon");
+  _write(",");
+  _write("\"coordinates\": [[");
+  bool first = true;
+  for (size_t index = 0; index < geometry->getNumGeometries(); ++index)
+  {
+    const Geometry* line = geometry->getGeometryN(index);
+    std::shared_ptr<geos::geom::CoordinateSequence> cs(line->getCoordinates().release());
+    if (first)
+      first = false;
+    else
+      _write(",");
+    _write("[");
+    _writePolygonCoordinateSequence(cs);
+    _write("]");
+  }
+  _write("]]");
+}
+
+void OsmGeoJsonWriter::_writeCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates)
+{
+  bool first = true;
+  for (size_t i = 0; i < coordinates->getSize(); ++i)
+  {
+    if (first)
+      first = false;
+    else
+      _write(",");
+    _writeCoordinate(coordinates->getAt(i));
+  }
+}
+
+void OsmGeoJsonWriter::_writeCoordinate(const geos::geom::Coordinate& coordinate)
+{
+  _write(QString("[%1, %2]").arg(QString::number(coordinate.x, 'g', _precision), QString::number(coordinate.y, 'g', _precision)));
+}
+
+void OsmGeoJsonWriter::_writePolygonCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates)
+{
+  bool first = true;
+  bool divide = false;
+  double first_x = std::numeric_limits<double>::max();
+  double first_y = std::numeric_limits<double>::max();
+  size_t start_index = 0;
+  for (size_t i = 0; i < coordinates->getSize(); ++i)
+  {
+    double x = coordinates->getAt(i).x;
+    double y = coordinates->getAt(i).y;
+    if (first)
+    {
+      first = false;
+      first_x = x;
+      first_y = y;
+      if (divide)
+      {
+        divide = false;
+        _write(",[");
+      }
+    }
+    else
+      _write(",");
+    _writeCoordinate(coordinates->getAt(i));
+    if (first_x == x && first_y == y && i != coordinates->getSize() - 1 && i != start_index)
+    {
+      divide = true;
+      first = true;
+      start_index = i + 1;
+      _write("]");
+    }
+  }
+}
+
+void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e, const std::shared_ptr<geos::geom::Geometry>& geometry)
 {
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    _writeGeometry(std::dynamic_pointer_cast<const Node>(e));
+    _writeGeometry(std::dynamic_pointer_cast<const Node>(e), geometry);
     break;
   case ElementType::Way:
-    _writeGeometry(std::dynamic_pointer_cast<const Way>(e));
+    _writeGeometry(std::dynamic_pointer_cast<const Way>(e), geometry);
     break;
   case ElementType::Relation:
-    _writeGeometry(std::dynamic_pointer_cast<const Relation>(e));
+    _writeGeometry(std::dynamic_pointer_cast<const Relation>(e), geometry);
     break;
   default:
     throw HootException(QString("Unexpected element type: %1").arg(e->getElementType().toString()));
   }
 }
 
-void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
+/*
+void OsmGeoJsonWriter::_writeGeometry(const std::shared_ptr<geos::geom::CoordinateSequence>& nodes, string type)
 {
-  //  Build a temporary vector of valid nodes
-  vector<long> temp_nodes;
-  for (auto node_id : nodes)
-  {
-    if (_map->getNode(node_id).get() != nullptr)
-      temp_nodes.push_back(node_id);
-  }
   //  Empty nodes list should output an empty coordinate array
-  if (temp_nodes.empty())
+  if (nodes->isEmpty())
   {
     _writeKvp("type", type.c_str());
     _write(",");
@@ -391,11 +586,11 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
     return;
   }
   //  Update the geometry type if necessary
-  if (temp_nodes.size() < 2 && type.compare("Point") != 0)
+  if (nodes->size() < 2 && type.compare("Point") != 0)
     type = "Point";
-  if (temp_nodes.size() < 4 && type.compare("Polygon") == 0)
+  if (nodes->size() < 4 && type.compare("Polygon") == 0)
     type = "LineString";
-  if (type.compare("Polygon") == 0 && temp_nodes[0] != temp_nodes[temp_nodes.size() - 1])
+  if (type.compare("Polygon") == 0 && nodes->getAt(0) != nodes->getAt(nodes->size() - 1))
     type = "LineString";
   _writeKvp("type", type.c_str());
   _write(",");
@@ -405,27 +600,28 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
   bool multipoly = (type.compare("MultiPolygon") == 0);
   if (!point)
     _write("[");
-  if (polygon)
+  else if (polygon)
     _write("[");
-  if (multipoly)
+  else if (multipoly)
     _write("[[");
   bool first = true;
-  for (auto node_id : temp_nodes)
+  for (size_t index = 0; index < nodes->getSize(); ++index)
   {
     if (first)
       first = false;
     else
       _write(",");
-    ConstNodePtr n = _map->getNode(node_id);
-    _write(QString("[%1, %2]").arg(QString::number(n->getX(), 'g', _precision), QString::number(n->getY(), 'g', _precision)));
+    const geos::geom::Coordinate& coord = nodes->getAt(index);
+    _write(QString("[%1, %2]").arg(QString::number(coord.x, 'g', _precision), QString::number(coord.y, 'g', _precision)));
   }
   if (multipoly)
     _write("]]");
-  if (polygon)
+  else if (polygon)
     _write("]");
-  if (!point)
+  else if (!point)
     _write("]");
 }
+*/
 
 void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
 {
@@ -442,16 +638,16 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
   }
 }
 
-void OsmGeoJsonWriter::_writeElement(ConstElementPtr element)
+void OsmGeoJsonWriter::_writeElement(ConstElementPtr element, ConstElementPtr translated_element, const std::shared_ptr<geos::geom::Geometry>& geometry)
 {
   if (!element)
     return;
   //  Write out the element in geojson
   _write("{");
-  _writeFeature(element);
+  _writeFeature(translated_element);  //  Use the translated element to write out the tags
   _write(",");
   _write("\"geometry\": {");
-  _writeGeometry(element);
+  _writeGeometry(element, geometry);  //  Use the original element to specify the geometry
   _write("}");
   _write("}", false);
 }
@@ -459,9 +655,12 @@ void OsmGeoJsonWriter::_writeElement(ConstElementPtr element)
 void OsmGeoJsonWriter::_writeRelationInfo(ConstRelationPtr r)
 {
   _writeKvp("relation-type", r->getType());
-  _write(",");
   QString roles = _buildRoles(r).c_str();
-  _writeKvp("roles", roles);
+  if (!roles.isEmpty())
+  {
+    _write(",");
+    _writeKvp("roles", roles);
+  }
 }
 
 string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r)
@@ -480,6 +679,14 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
     ConstElementPtr e = _map->getElement(member.getElementId());
     if (!e)
       continue;
+    QString role = member.getRole();
+    if (role.isEmpty())
+    {
+      if (member.getElementId().getType() != ElementType::Relation)
+        continue;
+      if (_buildRoles(_map->getRelation(member.getElementId().getId()), first).empty())
+        continue;
+    }
     if (first)
       first = false;
     else
@@ -492,8 +699,11 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
   return ss.str();
 }
 
-void OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
+std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
 {
+  std::shared_ptr<geos::geom::Geometry> geometry;
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
+  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(_map)));
   //  Clear out the map of
   _translatedElementMap.clear();
   //  Don't translate without a translator
@@ -501,19 +711,16 @@ void OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
   {
     QString table = _getLayerName(nullptr);
     _translatedElementMap[table] = e;
-    return;
+    return convertGeometry(provider, e);
   }
   //  Translate the element and get the
-  std::shared_ptr<geos::geom::Geometry> geometry;
-  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> feature;
-  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(std::dynamic_pointer_cast<const ElementProvider>(_map)));
   //  Translate the feature
   translateToFeatures(provider, e, geometry, feature);
   if (feature.empty())
   {
     QString table = _getLayerName(geometry);
     _translatedElementMap[table] = e;
-    return;
+    return geometry;
   }
   //  Iterate all features and put them into the translated map
   for (const auto& f : feature)
@@ -575,6 +782,7 @@ void OsmGeoJsonWriter::_translateElement(const ConstElementPtr& e)
       layer = _getLayerName(f, geometry);
     _translatedElementMap[layer] = c;
   }
+  return geometry;
 }
 
 QString OsmGeoJsonWriter::_getLayerName(const ScriptToOgrSchemaTranslator::TranslatedFeature& feature,
@@ -641,4 +849,33 @@ QString OsmGeoJsonWriter::_getFcodeUnknown(const std::shared_ptr<geos::geom::Geo
   }
   return "UNKNOWN";
 }
+
+std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const
+{
+  //  Treat bounded vs unbounded differently
+  if (_bounds)
+  {
+    if (geometry->intersects(_bounds.get()))
+    {
+      if (_cropFeaturesCrossingBounds)
+      {
+        //  Get the intersection of the geometry with the bounding envelope
+        try
+        {
+          std::unique_ptr<geos::geom::Geometry> intersection = geometry->intersection(_bounds.get());
+          return std::shared_ptr<geos::geom::Geometry>(intersection.release());
+        }
+        catch (const geos::util::TopologyException& e)
+        {
+          LOG_WARN(e.what());
+          return nullptr;
+        }
+      }
+    }
+    else  //  Geometry is outside of the bounds, eliminate it
+      return nullptr;
+  }
+  return geometry;
+}
+
 }

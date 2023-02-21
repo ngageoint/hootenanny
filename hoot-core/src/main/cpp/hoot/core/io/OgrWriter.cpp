@@ -101,7 +101,7 @@ OgrWriter::OgrWriter()
     _transactionSize(ConfigOptions().getOgrWriterTransactionSize()),
     _inTransaction(false),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-    _cropFeaturesCrossingBounds(ConfigOptions().getOgrWriterCropFeaturesCrossingBounds())
+    _cropFeaturesCrossingBounds(ConfigOptions().getWriterCropFeaturesCrossingBounds())
 {
   setConfiguration(conf());
 
@@ -135,7 +135,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
   _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
   _forceSkipFailedRelations = configOptions.getOgrWriterSkipFailedRelations();
   _transactionSize = configOptions.getOgrWriterTransactionSize();
-  _cropFeaturesCrossingBounds = configOptions.getOgrWriterCropFeaturesCrossingBounds();
+  _cropFeaturesCrossingBounds = configOptions.getWriterCropFeaturesCrossingBounds();
   //  Set the bounds for cropped lines and polygons
   setBounds(Boundable::loadBounds(configOptions));
 }

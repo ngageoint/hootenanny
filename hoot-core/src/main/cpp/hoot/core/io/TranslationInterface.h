@@ -69,6 +69,8 @@ public:
 
   void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
 
+  std::shared_ptr<geos::geom::Geometry> convertGeometry(const ElementProviderPtr& provider, const ConstElementPtr& e) const;
+
 protected:
 
   static int logWarnCount;
