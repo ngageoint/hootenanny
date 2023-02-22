@@ -61,7 +61,6 @@ public:
 
   void runAllDataTypesTest()
   {
-    //runTest("/fouo/temp-data/geojson/alltypes.osm", "temp.geojson");
     runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.geojson");
   }
 

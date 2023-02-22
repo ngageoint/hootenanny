@@ -576,55 +576,6 @@ void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e, const std::shared_ptr<g
   }
 }
 
-/*
-void OsmGeoJsonWriter::_writeGeometry(const std::shared_ptr<geos::geom::CoordinateSequence>& nodes, string type)
-{
-  //  Empty nodes list should output an empty coordinate array
-  if (nodes->isEmpty())
-  {
-    _writeKvp("type", type.c_str());
-    _write(",");
-    _write("\"coordinates\": []");
-    return;
-  }
-  //  Update the geometry type if necessary
-  if (nodes->size() < 2 && type.compare("Point") != 0)
-    type = "Point";
-  if (nodes->size() < 4 && type.compare("Polygon") == 0)
-    type = "LineString";
-  if (type.compare("Polygon") == 0 && nodes->getAt(0) != nodes->getAt(nodes->size() - 1))
-    type = "LineString";
-  _writeKvp("type", type.c_str());
-  _write(",");
-  _write("\"coordinates\": ");
-  bool point = (type.compare("Point") == 0);
-  bool polygon = (type.compare("Polygon") == 0);
-  bool multipoly = (type.compare("MultiPolygon") == 0);
-  if (!point)
-    _write("[");
-  else if (polygon)
-    _write("[");
-  else if (multipoly)
-    _write("[[");
-  bool first = true;
-  for (size_t index = 0; index < nodes->getSize(); ++index)
-  {
-    if (first)
-      first = false;
-    else
-      _write(",");
-    const geos::geom::Coordinate& coord = nodes->getAt(index);
-    _write(QString("[%1, %2]").arg(QString::number(coord.x, 'g', _precision), QString::number(coord.y, 'g', _precision)));
-  }
-  if (multipoly)
-    _write("]]");
-  else if (polygon)
-    _write("]");
-  else if (!point)
-    _write("]");
-}
-*/
-
 void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
 {
   _writeKvp("type", "Feature");

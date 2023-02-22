@@ -103,7 +103,8 @@ protected:
   QString _getBbox() const;
   /**
    * @brief _writeNode Writes a single element; metadata, tags, and geometry
-   * @param element Element to write out
+   * @param element Original element
+   * @param translated_element Element with translated tags to write out
    * @param geometry Element geometry to write out
    */
   void _writeElement(ConstElementPtr element, ConstElementPtr translated_element, const std::shared_ptr<geos::geom::Geometry>& geometry);
@@ -113,17 +114,10 @@ protected:
    */
   void _writeRelationInfo(ConstRelationPtr relation);
   /**
-   * @brief _writeFeature Calls _writeNode(), _writeWay(), or _writeRelation()
-   *   based on the type of element e
+   * @brief _writeFeature Calls _writeNode(), _writeWay(), or _writeRelation() based on the type of element e
    * @param element Element to write out
    */
   void _writeFeature(ConstElementPtr element);
-  /**
-   * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
-   * @param nodes Coordinate sequence
-   * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
-   */
-//  void _writeGeometry(const std::shared_ptr<geos::geom::CoordinateSequence>& nodes, std::string type);
   /**
    * @brief _writeGeometry Write out geometry for any element
    * @param element Element to write out
@@ -132,21 +126,25 @@ protected:
   /**
    * @brief _writeGeometry Write out geometry for a single node
    * @param node Node to write out
+   * @param geometry GEOS geometry for the element
    */
   void _writeGeometry(ConstNodePtr node, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeGeometry Write out geometry for a single way
    * @param way Way to write out
+   * @param geometry GEOS geometry for the element
    */
   void _writeGeometry(ConstWayPtr way, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeGeometry Write out geometry for a single relation
    * @param relation Relation to write out
+   * @param geometry GEOS geometry for the element
    */
   void _writeGeometry(ConstRelationPtr relation, const std::shared_ptr<geos::geom::Geometry>& geometry);
-
-  void _writeComplexGeometry(const std::shared_ptr<geos::geom::Geometry>& geometry, const QString& type, const QString& sub_type);
-
+  /**
+   * @brief Write geometry functions
+   * @param geometry GEOS geometry for the element to write to GeoJSON
+   */
   void _writePointGeometry(const geos::geom::Geometry* geometry);
   void _writeLineStringGeometry(const geos::geom::Geometry* geometry);
   void _writePolygonGeometry(const geos::geom::Geometry* geometry);
