@@ -486,7 +486,7 @@ void OsmGeoJsonWriter::_writeMultiPolygonGeometry(const geos::geom::Geometry* ge
 {
   _writeKvp("type", "MultiPolygon");
   _write(",");
-  _write("\"coordinates\": [[");
+  _write("\"coordinates\": [");
   bool first = true;
   for (size_t index = 0; index < geometry->getNumGeometries(); ++index)
   {
@@ -497,10 +497,12 @@ void OsmGeoJsonWriter::_writeMultiPolygonGeometry(const geos::geom::Geometry* ge
     else
       _write(",");
     _write("[");
+    _write("[");
     _writePolygonCoordinateSequence(cs);
     _write("]");
+    _write("]");
   }
-  _write("]]");
+  _write("]");
 }
 
 void OsmGeoJsonWriter::_writeCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates)
