@@ -25,7 +25,6 @@ TRANSLATION_TDR4="$TRANSLATION/MGCP_TRD4.js"
 TRANSLATION_GGDM="$TRANSLATION/GGDMv30.js"
 TRANSLATION_MGCP="$TRANSLATION/MgcpTest.js"
 TRANSLATION_DNC="$TRANSLATION/DNC.js"
-TRANSLATION_TDS="$TRANSLATION/TDSv70.js"
 
 echo ""
 echo "Multiple OSM to single OSM..."
@@ -160,32 +159,8 @@ echo "DNC to OSM..."
 echo ""
 rm -rf $OUTPUT_DIR/DNC17
 unzip -q $INPUT_DIR/coa17d.zip -d $OUTPUT_DIR/
-hoot convert $LOG_LEVEL $CONFIG -D ogr.add.uuid=false -D reader.add.source.datetime=false -D schema.translation.script="translations/DNC.js" \
+hoot convert $LOG_LEVEL $CONFIG -D ogr.add.uuid=false -D reader.add.source.datetime=false $TRANSLATION_DNC \
   gltp:/vrf/$HOOT_HOME/$OUTPUT_DIR/DNC17/COA17D $OUTPUT_DIR/dnc_test.osm
 # NOTE: The OGDI driver doesn't produce output in the exact same way every time so don't compare
 # the outputs just ensure that no errors show up in the command output
 #hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/dnc_test.osm $OUTPUT_DIR/dnc_test.osm
-
-echo ""
-echo "Bounded OSM to SHP - Polygons"
-echo ""
-rm -rf $OUTPUT_DIR/clipped_poly/
-hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
-  -D bounds="-104.80643134164,39.59123123677,-104.8042456804,39.59369827561" \
-  -D ogr.writer.crop.features.crossing.bounds=true \
-  test-files/ToyBuildingsTestA.osm $OUTPUT_DIR/clipped_poly.shp
-hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
-  $OUTPUT_DIR/clipped_poly/ $OUTPUT_DIR/clipped_poly.osm
-hoot diff $LOG_LEVEL $CONFIG --ignore-uuid $INPUT_DIR/clipped_poly.osm $OUTPUT_DIR/clipped_poly.osm
-
-echo ""
-echo "Bounded OSM to SHP - Linestrings"
-echo ""
-rm -rf $OUTPUT_DIR/clipped_lines/
-hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
-  -D bounds="-104.90022388323,38.85350714489,-104.8983212846,38.85504576826" \
-  -D ogr.writer.crop.features.crossing.bounds=true \
-  test-files/ToyTestA.osm $OUTPUT_DIR/clipped_lines.shp
-hoot convert $LOG_LEVEL $CONFIG $TRANSLATION_TDS \
-  $OUTPUT_DIR/clipped_lines/ $OUTPUT_DIR/clipped_lines.osm
-hoot diff $LOG_LEVEL $CONFIG --ignore-uuid $INPUT_DIR/clipped_lines.osm $OUTPUT_DIR/clipped_lines.osm

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmJsonWriter.h"
 
@@ -267,13 +267,6 @@ void OsmJsonWriter::_writeNodes()
       PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
   }
-}
-
-void OsmJsonWriter::_write(const QString& str, bool newLine)
-{
-  _writer.write(str.toUtf8());
-  if (newLine)
-    _writer.write(QString("\n").toUtf8());
 }
 
 bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const

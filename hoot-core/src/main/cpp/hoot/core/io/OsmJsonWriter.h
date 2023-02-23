@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -112,8 +112,13 @@ protected:
   virtual void _writeNodes();
   virtual void _writeWays();
   virtual void _writeRelations();
-  void _write(const QString& str) { _write(str, _pretty); }
-  void _write(const QString& str, bool newLine);
+  inline void _write(const QString& str) { _write(str, _pretty); }
+  inline void _write(const QString& str, bool newLine)
+  {
+    _writer.write(str.toUtf8());
+    if (newLine)
+      _writer.write(QString("\n").toUtf8());
+  }
   void _writeLn(const QString& str) { _write(str, true); }
   void _writeKvp(const QString& key, const QString& value);
   void _writeKvp(const QString& key, long value);

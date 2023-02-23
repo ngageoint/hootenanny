@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
  */
 #include "AreaCriterion.h"
 
@@ -53,7 +53,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   if (elementType == ElementType::Node)
     return false;
 
-  // Putting this check here to shortcircut the criterion. If the tag is explicitly set to flase other tests don't matter.
+  // Putting this check here to shortcircut the criterion. If the tag is explicitly set to false other tests don't matter.
   if (tags.isFalse(MetadataTags::Area()))
   {
     LOG_TRACE("Found an area tag with a false value. crit failed.");
