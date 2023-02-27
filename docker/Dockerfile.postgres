@@ -1,0 +1,35 @@
+FROM centos:7
+
+ARG postgresql_version
+ARG pgdata=/var/lib/pgsql/$postgresql_version/data
+
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    PGDATA=${pgdata}
+
+COPY scripts/yum/geoint-repo.sh \
+     scripts/yum/pgdg-repo.sh \
+     docker/scripts/postgres-install.sh \
+     /tmp/
+
+RUN --mount=type=cache,target=/var/cache/yum \
+    /tmp/geoint-repo.sh && \
+    /tmp/pgdg-repo.sh ${postgresql_version} && \
+    yum-config-manager --save \
+        --setopt=base.repo_gpgcheck=1 \
+        --setopt=extras.repo_gpgcheck=1 \
+        --setopt=updates.repo_gpgcheck=1 &> /dev/null && \
+    yum -q -y install epel-release
+
+RUN /tmp/postgres-install.sh $postgresql_version && rm -f /tmp/*.sh
+
+COPY docker/scripts/postgres-entrypoint.sh /docker-entrypoint.sh
+COPY docker/scripts/postgres-healthcheck.sh /docker-healthcheck.sh
+
+# Set up data volume, entrypoint, etc.
+USER postgres
+ENTRYPOINT ["/docker-entrypoint.sh"]
+EXPOSE 5432/tcp
+HEALTHCHECK --interval=15s CMD ["/docker-healthcheck.sh"]
+CMD ["postgres"]
+VOLUME ${pgdata}

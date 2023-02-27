@@ -1,0 +1,64 @@
+version: "3.7"
+x-args: &default-args
+  hoot_uid: "${HOOT_UID}"
+  hoot_gid: "${HOOT_GID}"
+  hoot_user: "${HOOT_USER}"
+  hoot_group: "${HOOT_GROUP}"
+  hoot_home: "${HOOT_HOME}"
+  postgresql_version: "${POSTGRESQL_VERSION}"
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args: *default-args
+    hostname: frontend
+    ports:
+      - 8080:8080
+    env_file:
+      - hoot.env
+    volumes:
+      - ./hoot-ui-2x/package.json:${HOOT_HOME}/hoot-ui-2x/package.json
+      - ./hoot-ui-2x/data:${HOOT_HOME}/hoot-ui-2x/data
+      - ./hoot-ui-2x/css:${HOOT_HOME}/hoot-ui-2x/css
+      - ./hoot-ui-2x/dist:${HOOT_HOME}/hoot-ui-2x/dist:rw
+      - ./hoot-ui-2x/img:${HOOT_HOME}/hoot-ui-2x/img
+      - ./hoot-ui-2x/modules:${HOOT_HOME}/hoot-ui-2x/modules:rw
+      - ./hoot-ui-2x/node_modules:${HOOT_HOME}/hoot-ui-2x/node_modules
+      - ./hoot-ui-2x/scripts:${HOOT_HOME}/hoot-ui-2x/scripts
+      - ./hoot-ui-2x/svg:${HOOT_HOME}/hoot-ui-2x/svg
+      - ./hoot-ui-2x/webpack-config:${HOOT_HOME}/hoot-ui-2x/webpack-config:rw
+      - ./hoot-ui-2x/webpack.config.babel.js:${HOOT_HOME}/hoot-ui-2x/webpack.config.babel.js
+      - ./hoot-ui-2x/build_data.js:${HOOT_HOME}/hoot-ui-2x/build_data.js
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
+      args: *default-args
+    hostname: postgres
+    env_file:
+      - hoot.env
+    volumes:
+      - postgres-data:/var/lib/${POSTGRESQL_VERSION}/data:rw
+  core-services:
+    depends_on:
+      postgres:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.core-services
+      args: *default-args
+    hostname: core-services
+    env_file:
+      - hoot.env
+    ports:
+      - 8888:8080
+      - 8094:8094
+      - 8096:8096
+      - 8101:8101
+    volumes:
+      - ./:${HOOT_HOME}:rw
+volumes:
+  postgres-data:

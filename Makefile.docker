@@ -1,0 +1,48 @@
+UID=$(shell id -u)
+GID=$(shell id -g)
+
+hoot.env:
+	cp hoot.env.example hoot.env
+
+.env:
+	touch .env
+	mkdir bin lib .ccache
+	echo "HOOT_UID=$(UID)" >> .env
+	echo "HOOT_GID=$(GID)" >> .env
+	echo "HOOT_USER=hoot" >> .env
+	echo "HOOT_GROUP=hoot" >> .env
+	echo "HOOT_HOME=/var/lib/hootenanny" >> .env
+	echo "POSTGRESQL_VERSION=14" >> .env
+
+conf/database/DatabaseConfigLocal.sh:
+	touch conf/database/DatabaseConfigLocal.sh
+	chmod +x conf/database/DatabaseConfigLocal.sh
+	echo "#!/bin/bash;" >> conf/database/DatabaseConfigLocal.sh
+	echo "set -euo pipefail;" >> conf/database/DatabaseConfigLocal.sh
+	echo "export DB_HOST=postgres\n" >> conf/database/DatabaseConfigLocal.sh
+
+hoot-ui-2x/README.md:
+	git submodule update --init
+
+build: .env hoot.env conf/database/DatabaseConfigLocal.sh hoot-ui-2x/README.md
+	DOCKER_BUILDKIT=1 docker compose build --no-cache
+
+up: .env hoot.env conf/database/DatabaseConfigLocal.sh build hoot-ui-2x/README.md
+	DOCKER_BUILDKIT=1 docker compose up -d
+
+down: .env hoot.env
+	DOCKER_BUILDKIT=1 docker compose down
+
+distclean: .env hoot.env
+	DOCKER_BUILDKIT=1 docker compose down --volumes --rmi all
+	rm -fr .ccache lib bin \
+		.env hoot.env hoot-ui/node_modules hoot-ui-2x/node_modules \
+		conf/database/DatabaseConfigLocal.sh
+
+PHONY: \
+	build \
+	distclean \
+	down \
+	up
+
+
