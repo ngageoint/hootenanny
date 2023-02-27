@@ -11,61 +11,83 @@ from subprocess import Popen, PIPE
 import sys
 import traceback
 
-# Given a file determine which years it was changed in git.
+# Given a file determine first and last years it was changed in git.
 def findCopyrightYears(fileName, debugMode):
     dates = run(["git", "log", "--date=short", "--format=format:%ad", fileName]).split()
-    years = set()
+    years = []
     print("\tfileName: " + fileName if debugMode else '')
     for l in dates:
         print("\tl: " + l  if debugMode else '')
-        years.add(l[0:4])
+        years.append(eval(l[0:4]))
+    years.sort()
+    length = len(years)
     # If it isn't in git then just give it the current year as the copyright.
-    if len(years) == 0:
-        years = [str(date.today().year)]
-    return ", ".join(sorted(years))
-
-# Copyright years are pulled from existing copyright headers AND they are determined separately from
-# the git logs. Sometimes the copyright years in existing copyright headers are not reflected in the
-# git logs. The goal here is not lose/replace those existing years but to combine them with the years from
-# the git logs. In order to combine them they need to be sorted and have duplicates removed/ignored.
-def sortDedupeYears(copyrightYears):
-    # Declare return var.
-    rtnCopyrightYears = ""
-    
-    # Remove all whitespace.
-    copyrightYears = copyrightYears.replace(" ", "")
-    
-    # Split copyrightYears into a list.
-    allCopyrightYears = copyrightYears.split(",")
-    
-    # Sort the list into another list.
-    allCopyrightYearsSorted = sorted(allCopyrightYears, key=int)
-    
-    # Help for determining initial loop iteration.
-    firstIteration = True
-       
-    # Loop through the sorted list while not allowing dupes to be concatenated to the return string.
-    for copyrightYear in allCopyrightYearsSorted:
-        if copyrightYear != "" and copyrightYear not in rtnCopyrightYears:
-            if firstIteration:
-                rtnCopyrightYears = copyrightYear
-                firstIteration = False
-            else:
-                rtnCopyrightYears = rtnCopyrightYears + ", " + copyrightYear
-        
-    return rtnCopyrightYears
+    if length == 0:
+        return [date.today().year]
+    elif length == 1 or years[0] == years[length - 1]:
+        return [years[0]]
+    else:
+        return [years[0], years[length - 1]]
 
 def compareCopyrightYears(gitCopyrightYears, existingCopyrightYears):
-    if gitCopyrightYears != existingCopyrightYears:
-        # Split the git years
-        gitCopyrightYears = gitCopyrightYears.replace(" ", "")
-        gitYears = gitCopyrightYears.split(",")
-        # Loop through and make sure that all of the git years exist in the existing file header
-        for git_year in gitYears:
-            # If the git year is not in the existing file years
-            if git_year != "" and git_year not in existingCopyrightYears:
-                return False
-    return True
+    gitLen = len(gitCopyrightYears)
+    fileLen = len(existingCopyrightYears)
+    if gitLen > 2 or fileLen > 2:
+        return False
+    if gitLen != fileLen:
+        # Check the year values
+        return gitLen == 1 and existingCopyrightYears[0] <= gitCopyrightYears[0] and existingCopyrightYears[1] >= gitCopyrightYears[0]
+    else:
+        # Arrays are the same size, compare the values
+        if gitLen == 1:
+            return gitCopyrightYears[0] == existingCopyrightYears[0]
+        else:
+            return gitCopyrightYears[0] >= existingCopyrightYears[0] and gitCopyrightYears[1] <= existingCopyrightYears[1]
+
+def combineYears(years1, years2):
+    combined = years1 + years2
+    combined.sort()
+    length = len(combined)
+    if length == 1:
+        return combined
+    elif length == 2 and combined[0] == combined[1]:
+        return [combined[0]]
+    elif combined[0] == combined[length - 1]:
+        return [combined[0]]
+    else:
+        return [combined[0], combined[length - 1]]
+
+def getYearArray(copyrightYearString):
+    # split on spaces, commas, and dashes
+    allYears = re.split(", *| ?- ?| +", copyrightYearString)
+    intYears = [eval(i) for i in allYears]
+    intYears.sort()
+    length = len(intYears)
+
+    if length == 1:
+        return intYears
+    elif length == 2:
+        # Don't put duplicates in an array i.e. [2023, 2023]
+        if intYears[0] == intYears[1]:
+            return [intYears[0]]
+        else:
+            return intYears
+    else:
+        # Don't put duplicates in an array i.e. [2023, 2023]
+        if intYears[0] == intYears[length - 1]:
+            return [intYears[0]]
+        else:
+            return [intYears[0], intYears[length - 1]]
+
+def yearsToString(copyrightYears):
+    length = len(copyrightYears)
+    if length == 0:
+        return ""
+    elif length == 1 or copyrightYears[0] == copyrightYears[length - 1]:
+        return str(copyrightYears[0])
+    else:
+        return "" + str(copyrightYears[0]) + "-" + str(copyrightYears[length - 1])
+
 
 def run(args):
     p = Popen(args, stdout=PIPE)
@@ -207,18 +229,18 @@ try:
     # B) Read in the given file line by line looking to replace the copyright header
     reFirstHeaderLine = re.compile(r"/\\*.*")
     reLastHeaderLine = re.compile(r".*\\*/.*")
-    
+
     fileLines = open(options.fileName, 'r').readlines()
-    
+
     copyrights = []
-    
+
     # See if the first line is #!
     print("fileLines[0] = '"+fileLines[0]+"'" if options.debugMode else '')
     if options.scriptMode and fileLines[0][0:2] == "#!":
       firstLineIsSheBang = True
     else:
       firstLineIsSheBang = False
-    
+
     # Look for the header
     oldHeaderBlock = ""
     foundSheBang = False
@@ -227,7 +249,7 @@ try:
     lowerNewFileStr = ""
     doneWithHeader = False
     lineCount = 0
-    existingCopyrightYears = "" # New variable as of 2-2-2017
+    existingCopyrightYears = [] # New variable as of 2-2-2017
     for line in fileLines:
       print("line: '"+line+"'" if options.debugMode else '')
       if firstLineIsSheBang and not foundSheBang:
@@ -256,64 +278,56 @@ try:
                 m = p.search(line)
                 # If there is a match then assign it to existingCopyrightYears
                 if m:
-                    existingCopyrightYears = m.group(1)
-                    print("existingCopyrightYears: " + existingCopyrightYears if options.debugMode else '')
+                    existingCopyrightYears = getYearArray(m.group(1))
+                    print("existingCopyrightYears: " + yearsToString(existingCopyrightYears) if options.debugMode else '')
         lineCount += 1
         oldHeaderBlock += line
       else:
         print("Augmenting line!" if options.debugMode else '')
         lowerNewFileStr += line
         lineCount += 1
-        
+
+
     # Determine copyright years by examining git log.
     # Set the condition for whether or not the copyright header needs updating.
     copyrightYears = findCopyrightYears(options.fileName, options.debugMode)
     updateNeeded = False
-    print("\t        copyrightYears: " + copyrightYears if options.debugMode else '')
-    print("\texistingCopyrightYears: " + existingCopyrightYears if options.debugMode else '')
-    if (copyrightYears == existingCopyrightYears):
-        print("\tcopyrightYears match existingCopyrightYears" if options.debugMode else '')
-        copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " Maxar (http://www.maxar.com/)")
+    print("\t        copyrightYears: " + yearsToString(copyrightYears) if options.debugMode else '')
+    print("\texistingCopyrightYears: " + yearsToString(existingCopyrightYears) if options.debugMode else '')
+    if compareCopyrightYears(copyrightYears, existingCopyrightYears):
+        print("\tcopyrightYears match or cover existingCopyrightYears" if options.debugMode else '')
+        copyrights.append(" * @copyright Copyright (C) " + yearsToString(copyrightYears) + " Maxar (http://www.maxar.com/)")
     else:
-        print("\tcopyrightYears do NOT match existingCopyrightYears" if options.debugMode else '')
-        if existingCopyrightYears != "":
-            # There are existing copyright years, we need to find out if the years identified in the git logs
-            # are already in the existing copyright years.
-            if compareCopyrightYears(copyrightYears, existingCopyrightYears):
-                print("\tcopyrightYears are already included in existingCopyrightYears" if options.debugMode else '')
-            else:
-                # The years from the git logs are NOT in the existing copyright years, so combine the two strings of
-                # years and run them through the sorting and deduping process (ignores any overlap and sorts the years).
-                combinedCopyrightYears = sortDedupeYears(existingCopyrightYears + ", " + copyrightYears)
-                print("\tcombinedCopyrightYears: " + combinedCopyrightYears if options.debugMode else '')
-                copyrights.append(" * @copyright Copyright (C) " + combinedCopyrightYears + " Maxar (http://www.maxar.com/)")
-                updateNeeded = True
-        else:
-            copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " Maxar (http://www.maxar.com/)")
-            updateNeeded = True
-    
+        print("\tcopyrightYears do NOT match or cover existingCopyrightYears" if options.debugMode else '')
+        # The years from the git logs are NOT in the existing copyright years, so combine the two strings of
+        # years and run them through the sorting and deduping process (ignores any overlap and sorts the years).
+        combinedCopyrightYears = combineYears(existingCopyrightYears, copyrightYears)
+        print("\tcombinedCopyrightYears: " + yearsToString(combinedCopyrightYears) if options.debugMode else '')
+        copyrights.append(" * @copyright Copyright (C) " + yearsToString(combinedCopyrightYears) + " Maxar (http://www.maxar.com/)")
+        updateNeeded = True
+
     # Assemble the header lines.
     lines = copyrightHeaderStr.splitlines()
     endLine = lines.pop()
     lines = lines + copyrights + [endLine]
-    
+
     # Create a new header that includes all necessary copyrights.
     copyrightHeaderStr = "\n".join(lines) + "\n"
-    
+
     print("\n\nfirstLineStr =", firstLineStr if options.debugMode else '')
     print("\n\nlowerNewFileStr:\n----------\n"+lowerNewFileStr+"-----------\n" if options.debugMode else '')
-    
+
     # C) If an existing header was never found, then add one at the top of the file.
     newFileStr = firstLineStr + \
       copyrightHeaderStr + \
       lowerNewFileStr
-    
+
     print("Checking copyright header: " + options.fileName if options.debugMode else '')
-    
+
     # D) Write the new file.
     # The *elif* portion of the following condition is being changed because the LicenseTemplate.txt file has a space character
     # at the end of line 8 in that file. Some of our files containing copyright headers DO NOT have a space at that position in
-    # their copyright header. That causes a false positive condition to occur when comparing oldHeaderBlock to copyrightHeaderStr. 
+    # their copyright header. That causes a false positive condition to occur when comparing oldHeaderBlock to copyrightHeaderStr.
     # This change will fix that issue.
     if "DO NOT ALTER OR REMOVE COPYRIGHT NOTICES" in oldHeaderBlock:
         print "Skipping header: " + options.fileName
