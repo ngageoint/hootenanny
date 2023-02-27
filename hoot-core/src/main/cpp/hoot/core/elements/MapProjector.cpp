@@ -480,6 +480,29 @@ Coordinate MapProjector::project(const Coordinate& c,
   return result;
 }
 
+std::vector<Coordinate> MapProjector::project(const std::vector<Coordinate>& c,
+                                              const OGRSpatialReferencePtr& srs1,
+                                              const OGRSpatialReferencePtr& srs2)
+{
+  OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
+
+  if (t == nullptr)
+    throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
+
+  LOG_TRACE("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs2) << "...");
+
+  std::vector<Coordinate> result;
+  std::copy(c.begin(), c.end(), std::back_inserter(result));
+  ReprojectCoordinateFilter filter(t);
+  for (auto& coord : result)
+    filter.project(&coord);
+
+  OGRCoordinateTransformation::DestroyCT(t);
+
+  return result;
+}
+
+
 void MapProjector::project(const std::shared_ptr<OsmMap>& map,
                            const OGRSpatialReferencePtr& ref)
 {

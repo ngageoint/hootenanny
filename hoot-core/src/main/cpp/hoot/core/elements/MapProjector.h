@@ -146,6 +146,10 @@ public:
                                         const OGRSpatialReferencePtr& srs1,
                                         const OGRSpatialReferencePtr& srs2);
 
+  static std::vector<geos::geom::Coordinate> project(const std::vector<geos::geom::Coordinate>& c,
+                                                     const OGRSpatialReferencePtr& srs1,
+                                                     const OGRSpatialReferencePtr& srs2);
+
   static QString toWkt(const OGRSpatialReferencePtr& srs) { return toWkt(srs.get()); }
   static QString toWkt(const OGRSpatialReference* srs);
 
