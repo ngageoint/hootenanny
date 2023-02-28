@@ -67,3 +67,4 @@ export GDAL_DATA=$(gdal-config --datadir)
 copy_war_and_frontend_to_tomcat
 npm start --prefix "${HOOT_HOME}/node-export-server" &
 start_tomcat
+
