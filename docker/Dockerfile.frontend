@@ -38,4 +38,3 @@ USER ${hoot_user}
 WORKDIR ${hoot_home}/hoot-ui-2x
 ENTRYPOINT /docker-entrypoint.sh
 HEALTHCHECK --interval=15s --start-period=1m CMD ["/docker-healthcheck.sh"]
-

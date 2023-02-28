@@ -4,9 +4,9 @@ GID=$(shell id -g)
 hoot.env:
 	cp hoot.env.example hoot.env
 
-.env:
+.env: hoot-ui-2x/README.md
 	touch .env
-	mkdir bin lib .ccache
+	mkdir -p bin lib .ccache
 	echo "HOOT_UID=$(UID)" >> .env
 	echo "HOOT_GID=$(GID)" >> .env
 	echo "HOOT_USER=hoot" >> .env
@@ -27,7 +27,7 @@ hoot-ui-2x/README.md:
 build: .env hoot.env conf/database/DatabaseConfigLocal.sh hoot-ui-2x/README.md
 	DOCKER_BUILDKIT=1 docker compose build --no-cache
 
-up: .env hoot.env conf/database/DatabaseConfigLocal.sh hoot-ui-2x/README.md
+up: .env hoot.env conf/database/DatabaseConfigLocal.sh build hoot-ui-2x/README.md
 	DOCKER_BUILDKIT=1 docker compose up -d
 
 down: .env hoot.env
@@ -44,4 +44,3 @@ PHONY: \
 	distclean \
 	down \
 	up
-

@@ -26,4 +26,3 @@ set -eu
     --silent \
     --user-agent docker-healthcheck \
     "http://0.0.0.0:8101/options"
-
