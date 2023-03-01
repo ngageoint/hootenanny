@@ -154,6 +154,8 @@ protected:
   void _writeCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates);
   void _writeCoordinate(const geos::geom::Coordinate& coordinate);
   void _writePolygonCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates);
+  void _writeGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type);
+  void _writeMultiGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type);
   /**
    * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
    * @param relation
