@@ -119,8 +119,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         // Element criteria are used to control what gets rubbersheeted at conflate time. An
         // additional check is done here against the conflate configuration to ensure we don't
         // rubbersheet any elements we're not conflating.
-        if (_conflateInfoCache &&
-            !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
+        if (_conflateInfoCache && !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
         {
           LOG_TRACE(
             "Excluding " << critName << " filter due it not being in use by an active conflate " <<
@@ -128,36 +127,24 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
           continue;
         }
 
-        ElementCriterionPtr crit =
-          Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed());
+        ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed());
         LOG_VART(crit.get());
 
-        std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-          std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+        std::shared_ptr<ConflatableElementCriterion> conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
         LOG_VART(conflatableCrit.get());
-        std::shared_ptr<WayNodeCriterion> wayNodeCrit =
-          std::dynamic_pointer_cast<WayNodeCriterion>(crit);
+        std::shared_ptr<WayNodeCriterion> wayNodeCrit = std::dynamic_pointer_cast<WayNodeCriterion>(crit);
         LOG_VART(wayNodeCrit.get());
         if (!conflatableCrit && !wayNodeCrit)
-        {
-          throw IllegalArgumentException(
-            "RubberSheet ElementCrition must be a ConflatableElementCriterion or WayNodeCriterion.");
-        }
+          throw IllegalArgumentException("RubberSheet ElementCrition must be a ConflatableElementCriterion or WayNodeCriterion.");
 
         if (conflatableCrit)
         {
-          const GeometryTypeCriterion::GeometryType geometryType =
-            conflatableCrit->getGeometryType();
-          if (geometryType != GeometryTypeCriterion::GeometryType::Line &&
-              geometryType != GeometryTypeCriterion::GeometryType::Polygon)
-          {
-            throw IllegalArgumentException(
-              "RubberSheet element criterion must have a linear geometry type.");
-          }
+          const GeometryTypeCriterion::GeometryType geometryType = conflatableCrit->getGeometryType();
+          if (geometryType != GeometryTypeCriterion::GeometryType::Line && geometryType != GeometryTypeCriterion::GeometryType::Polygon)
+            throw IllegalArgumentException("RubberSheet element criterion must have a linear geometry type.");
         }
 
-        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+        std::shared_ptr<ConstOsmMapConsumer> mapConsumer = std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
         LOG_VART(mapConsumer.get());
         if (mapConsumer)
         {
@@ -244,9 +231,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   LOG_VARD(_criteria->toString());
   mapCopier = std::make_shared<CopyMapSubsetOp>(map, _criteria);
   mapCopier->apply(toModify);
-  LOG_DEBUG(
-    "Element count for map being modified: " <<
-    StringUtils::formatLargeNumber(toModify->getElementCount()));
+  LOG_DEBUG("Element count for map being modified: " << StringUtils::formatLargeNumber(toModify->getElementCount()));
   // nothing to rubbersheet
   if (toModify->size() == 0)
     return;
@@ -267,9 +252,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   OsmMapPtr toNotModify = std::make_shared<OsmMap>();
   mapCopier = std::make_shared<CopyMapSubsetOp>(map, std::make_shared<NotCriterion>(_criteria));
   mapCopier->apply(toNotModify);
-  LOG_DEBUG(
-    "Element count for map not being modified: " <<
-    StringUtils::formatLargeNumber(toNotModify->getElementCount()));
+  LOG_DEBUG("Element count for map not being modified: " << StringUtils::formatLargeNumber(toNotModify->getElementCount()));
   OsmMapWriterFactory::writeDebugMap(toNotModify, className(), "to-not-modify");
 
   // run the rubbersheeting on just the elements we want to modify
@@ -302,7 +285,7 @@ bool RubberSheet::applyTransform(const OsmMapPtr& map)
 
   _map = map;
 
-  if (!_interpolator2to1)
+  if (!_interpolator2to1 && !_interpolator1to2)
   {
     const QString msg = "No appropriate interpolator was specified, skipping rubber sheet transform.";
     if (_logWarningWhenRequirementsNotFound)
@@ -468,6 +451,18 @@ bool RubberSheet::calculateTransform(const OsmMapPtr& map)
   return _findTies();
 }
 
+void RubberSheet::createTransform(const std::vector<Tie>& tiepoints)
+{
+  _ties.clear();
+  //  Capture the list of tie points
+  for (const auto& tp : tiepoints)
+    _ties.push_back(tp);
+  if (!_projection)
+    _projection = MapProjector::createWgs84Projection();
+
+  _createInterpolators();
+}
+
 bool RubberSheet::_findTies()
 {
   _nm.setMap(_map);
@@ -563,11 +558,9 @@ bool RubberSheet::_findTies()
       {
         n1->getTags()[MetadataTags::HootMatchScore()] = QString("%1").arg(_finalPairs[i].score);
         n1->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
-        n1->getTags()[MetadataTags::HootMatchOrder()] =
-          QString("%1 of %2").arg(i).arg(_finalPairs.size());
+        n1->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
         n2->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
-        n2->getTags()[MetadataTags::HootMatchOrder()] =
-          QString("%1 of %2").arg(i).arg(_finalPairs.size());
+        n2->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
       }
     }
 
@@ -587,18 +580,7 @@ bool RubberSheet::_findTies()
     LOG_DEBUG(
       "Found " << StringUtils::formatLargeNumber(_ties.size()) << " tie points out of a " <<
       "required minimum of " << _minimumTies << ", which is enough to perform rubbersheeting.");
-
-    // experimentally determine the best interpolator.
-    _interpolatorClassName = "";
-    _interpolator2to1 = _buildInterpolator(Status::Unknown2);
-    // make sure we use the same interpolator for both directions.
-    _interpolatorClassName = _interpolator2to1->getName();
-    LOG_DEBUG(_interpolator2to1->toString());
-    if (_ref == false)
-    {
-      _interpolator1to2 = _buildInterpolator(Status::Unknown1);
-      LOG_DEBUG(_interpolator1to2->toString());
-    }
+    _createInterpolators();
   }
   else
   {
@@ -606,15 +588,13 @@ bool RubberSheet::_findTies()
     if (_failWhenMinTiePointsNotFound)
     {
       throw HootException(
-        QString("Error rubbersheeting due to not finding enough tie points.  "
-                "The minimum allowable tie points configured is %1 and %2 tie points were found.")
+        QString("Error rubbersheeting due to not finding enough tie points. The minimum allowable tie points configured is %1 and %2 tie points were found.")
           .arg(QString::number(_minimumTies), QString::number(_ties.size())));
     }
     else
     {
       const QString msg =
-        QString("Skipping rubbersheeting due to not finding enough tie points.  "
-                "The minimum allowable tie points configured is %1 and %2 tie points were found.")
+        QString("Skipping rubbersheeting due to not finding enough tie points. The minimum allowable tie points configured is %1 and %2 tie points were found.")
           .arg(QString::number(_minimumTies), QString::number(_ties.size()));
       if (_logWarningWhenRequirementsNotFound)
       {
@@ -728,10 +708,10 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   sum = max(1.0, sum);
   LOG_VART(sum);
 
-  for (auto it = matches.begin(); it != matches.end(); ++it)
+  for (auto& match : matches)
   {
-    it->p = it->score / sum;
-    LOG_VART(it->p);
+    match.p = match.score / sum;
+    LOG_VART(match.p);
   }
 }
 
@@ -748,6 +728,21 @@ void RubberSheet::_writeInterpolator(const std::shared_ptr<const Interpolator>& 
 
   ds << interpolator->getName();
   interpolator->writeInterpolator(os);
+}
+
+void RubberSheet::_createInterpolators()
+{
+  // experimentally determine the best interpolator.
+  _interpolatorClassName = "";
+  _interpolator2to1 = _buildInterpolator(Status::Unknown2);
+  // make sure we use the same interpolator for both directions.
+  _interpolatorClassName = _interpolator2to1->getName();
+  LOG_DEBUG(_interpolator2to1->toString());
+  if (_ref == false)
+  {
+    _interpolator1to2 = _buildInterpolator(Status::Unknown1);
+    LOG_DEBUG(_interpolator1to2->toString());
+  }
 }
 
 vector<double> RubberSheet::calculateTiePointDistances() const

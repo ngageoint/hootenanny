@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. Maxar
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2023 Maxar (http://www.maxar.com/)
+ */
 #include "RubberSheetCreator.h"
 
 // Hoot
@@ -42,8 +68,6 @@ void RubberSheetCreator::create(const QString& tiepoints, const QString& input, 
     //  Parse the JSON tie-point tree
     for (const auto& points_array : json.get_child("tie-points"))
     {
-//      geos::geom::Coordinate coords[2];
-//      int coord_idx = 0;
       for (const auto& coords_array : points_array.second)
       {
         //  Latitude (0), Longitude (1)
@@ -54,13 +78,9 @@ void RubberSheetCreator::create(const QString& tiepoints, const QString& input, 
           lat_lon[index] = coord.second.get_value<double>();
           index++;
         }
-        coords.emplace_back(lat_lon[1], lat_lon[0]);
         //  Convert the array to a coordinate
-//        coords[coord_idx].x = lat_lon[1];
-//        coords[coord_idx].y = lat_lon[0];
-//        coord_idx++;
+        coords.emplace_back(lat_lon[1], lat_lon[0]);
       }
-//      ties.emplace_back(coords[0], coords[1]);
     }
     //  Reproject the tie-points to planar
     std::vector<geos::geom::Coordinate> post = MapProjector::project(coords, prepojection, projection);
