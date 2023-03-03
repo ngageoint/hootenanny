@@ -28,6 +28,40 @@ hoot align (input1) (input2) (output)
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment[Examples]
 
+=== Description With Create Option
+
+Use the `--create` option to create a rubber sheet transform file from a JSON array of tie-points for manual rubbersheeting. The
+file contains a `tie-points` object which is an array of coordinate pair arrays, i.e. `[[lat2, lon2], [lat1, lon1]]`.
+
+* `tie-points.json`  - JSON tie-point array.  See format description below.
+* `input`            - Input file used to drive the manual tie-points
+* `transform2to1.rs` - Output transform rubber sheet spec. provides a transform for moving input 2 towards input 1.
+* `transform1to2.rs` - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required
+                       if --ref is not specified.
+* `--ref `           - If specified, treat input1 as a reference layer and only produce one output transform.
+
+Each tie-point element is a lat/lon pair beginning with the coordinate in the `input2` dataset followed by the coordinate
+in the `input1`
+
+=== Usage With Derive Option
+
+--------------------------------------
+hoot align --create (tie-points.json) (input) (transform2to1.rs) [transform1to2.rs] [--ref]
+--------------------------------------
+
+Tie-point file example:
+-----
+{
+    "tie-points":
+    [
+      [ [0.0, 0.0], [1.0, 1.1] ],
+      [ [2.1, 3.1], [3.1, 4.2] ],
+      ...
+      [ [3.5, 1.9], [4.5, 3.0] ]
+    ]
+}
+-----
+
 === Description With Derive Option
 
 To just derive a transform file that can be used separately to rubber sheet data, used the --derive option.  When using the 
