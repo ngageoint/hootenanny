@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 #include "OsmGeoJsonWriter.h"
 
@@ -431,60 +431,92 @@ void OsmGeoJsonWriter::_writeGeometryCollectionGeometry(const geos::geom::Geomet
 
 void OsmGeoJsonWriter::_writePointGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeKvp("type", "Point");
-  _write(",");
-  _write("\"coordinates\": ");
-  std::shared_ptr<geos::geom::CoordinateSequence> cs(geometry->getCoordinates().release());
-  _writeCoordinate(cs->getAt(0));
+  _writeGeometry(geometry, GeometryTypeId::GEOS_POINT);
 }
 
 void OsmGeoJsonWriter::_writeLineStringGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeKvp("type", "LineString");
-  _write(",");
-  _write("\"coordinates\": [");
-  std::shared_ptr<geos::geom::CoordinateSequence> cs(geometry->getCoordinates().release());
-  _writeCoordinateSequence(cs);
-  _write("]");
+  _writeGeometry(geometry, GeometryTypeId::GEOS_LINESTRING);
 }
 
 void OsmGeoJsonWriter::_writePolygonGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeKvp("type", "Polygon");
+  _writeGeometry(geometry, GeometryTypeId::GEOS_POLYGON);
+}
+
+void OsmGeoJsonWriter::_writeGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type)
+{
+  QString typeName, openBracket, closeBracket;
+  bool isPoint = false;
+  bool isLine = false;
+  switch (type)
+  {
+  case GeometryTypeId::GEOS_POINT:
+    typeName = "Point";
+    isPoint = true;
+    break;
+  case GeometryTypeId::GEOS_LINESTRING:
+    typeName = "LineString";
+    openBracket = "[";
+    closeBracket = "]";
+    isLine = true;
+    break;
+  case GeometryTypeId::GEOS_POLYGON:
+    typeName = "Polygon";
+    openBracket = "[[";
+    closeBracket = "]]";
+    break;
+  default:
+    LOG_ERROR("Unknown Multi-Geometry type, skipping.");
+    return;
+  }
+  _writeKvp("type", typeName);
   _write(",");
   _write("\"coordinates\": ");
-  _write("[");
-  _write("[");
+  _write(openBracket);
   std::shared_ptr<geos::geom::CoordinateSequence> cs(geometry->getCoordinates().release());
-  _writePolygonCoordinateSequence(cs);
-  _write("]");
-  _write("]");
+  if (isPoint)
+    _writeCoordinate(cs->getAt(0));
+  else if (isLine)
+    _writeCoordinateSequence(cs);
+  else
+    _writePolygonCoordinateSequence(cs);
+  _write(closeBracket);
+
 }
 
 void OsmGeoJsonWriter::_writeMultiLineStringGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeKvp("type", "MultiLineString");
-  _write(",");
-  _write("\"coordinates\": [");
-  bool first = true;
-  for (size_t index = 0; index < geometry->getNumGeometries(); ++index)
-  {
-    const Geometry* line = geometry->getGeometryN(index);
-    std::shared_ptr<geos::geom::CoordinateSequence> cs(line->getCoordinates().release());
-    if (first)
-      first = false;
-    else
-      _write(",");
-    _write("[");
-    _writeCoordinateSequence(cs);
-    _write("]");
-  }
-  _write("]");
+  _writeMultiGeometry(geometry, GeometryTypeId::GEOS_MULTILINESTRING);
 }
 
 void OsmGeoJsonWriter::_writeMultiPolygonGeometry(const geos::geom::Geometry* geometry)
 {
-  _writeKvp("type", "MultiPolygon");
+  _writeMultiGeometry(geometry, GeometryTypeId::GEOS_MULTIPOLYGON);
+}
+
+void OsmGeoJsonWriter::_writeMultiGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type)
+{
+  QString typeName, openBracket, closeBracket;
+  bool isPolygon = false;
+  switch (type)
+  {
+  case GeometryTypeId::GEOS_MULTILINESTRING:
+    typeName = "MultiLineString";
+    openBracket = "[";
+    closeBracket = "]";
+    break;
+  case GeometryTypeId::GEOS_MULTIPOLYGON:
+    typeName = "MultiPolygon";
+    openBracket = "[[";
+    closeBracket = "]]";
+    isPolygon = true;
+    break;
+  default:
+    LOG_ERROR("Unknown Multi-Geometry type, skipping.");
+    return;
+  }
+  _writeKvp("type", typeName);
   _write(",");
   _write("\"coordinates\": [");
   bool first = true;
@@ -496,13 +528,15 @@ void OsmGeoJsonWriter::_writeMultiPolygonGeometry(const geos::geom::Geometry* ge
       first = false;
     else
       _write(",");
-    _write("[");
-    _write("[");
-    _writePolygonCoordinateSequence(cs);
-    _write("]");
-    _write("]");
+    _write(openBracket);
+    if (isPolygon)
+      _writePolygonCoordinateSequence(cs);
+    else
+      _writeCoordinateSequence(cs);
+    _write(closeBracket);
   }
   _write("]");
+
 }
 
 void OsmGeoJsonWriter::_writeCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2017-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef OSM_GEOJSON_WRITER_H
 #define OSM_GEOJSON_WRITER_H
@@ -154,6 +154,8 @@ protected:
   void _writeCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates);
   void _writeCoordinate(const geos::geom::Coordinate& coordinate);
   void _writePolygonCoordinateSequence(const std::shared_ptr<geos::geom::CoordinateSequence>& coordinates);
+  void _writeGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type);
+  void _writeMultiGeometry(const geos::geom::Geometry* geometry, geos::geom::GeometryTypeId type);
   /**
    * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
    * @param relation
