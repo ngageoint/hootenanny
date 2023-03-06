@@ -35,14 +35,8 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#ifdef WIN32
-// Qt
-#include <QFile>
-#endif
-
 // Tgs
 #include "../PluginFactory.h"
-#include <tgs/RStarTree/FilePageStore.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/KnnIterator.h>
@@ -56,9 +50,6 @@ class RStarTreeTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(RStarTreeTest);
   CPPUNIT_TEST(test1);
   CPPUNIT_TEST(test2);
-#ifdef WIN32
-  CPPUNIT_TEST(fileTest);
-#endif
   // benchmarking test
   //CPPUNIT_TEST(timingTest);
   CPPUNIT_TEST_SUITE_END();
@@ -139,47 +130,13 @@ public:
      validateTreeBounds(uut);
    }
 
-#ifdef WIN32
-   void fileTest()
-   {
-     {
-       if (QFile::exists("fileTest.dat"))
-       {
-         QFile::remove("fileTest.dat");
-       }
-
-       RStarTree uut(std::make_shared<FilePageStore>(256, "fileTest.dat"), 2);
-
-       Box b(2);
-       for (int i = 0; i < 3000; i++)
-       {
-         double l1 = Tgs::Random::instance()->generate(10000);
-         double u1 = l1 + Tgs::Random::instance()->generate(100);
-         double l2 = Tgs::Random::instance()->generate(10000);
-         double u2 = l2 + Tgs::Random::instance()->generate(100);
-         b.setBounds(0, l1, u1);
-         b.setBounds(1, l2, u2);
-         uut.insert(b, i);
-       }
-       validateTreeBounds(uut);
-     }
-     {
-       RStarTree uut(std::make_shared<FilePageStore>(256, "fileTest.dat"), 2);
-
-       validateTreeBounds(uut);
-     }
-   }
-#endif
-
    void timingTest()
    {
     std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
     std::shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
      RStarTree& uut = *rst;
 
-//      Timer t;
      Box b(2);
-//      t.start();
      for (int i = 0; i < 20000; i++)
      {
        double l1 = Tgs::Random::instance()->generateInt(10000);
@@ -190,10 +147,8 @@ public:
        b.setBounds(1, l2, u2);
        uut.insert(b, i);
      }
-//      std::cout << t.elapsed() << "sec" << std::endl;
 
      std::cout << "Searching..." << std::endl;
-//      t.restart();
 
      for (int i = 0; i < 2000; i++)
      {
@@ -201,12 +156,7 @@ public:
        double y = Tgs::Random::instance()->generateInt(20000) - 5000;
        KnnIterator it(rst.get(), x, y);
        it.next();
-//        if (i % 1000 == 0)
-//        {
-//          std::cout << t.elapsed() << "sec" << std::endl;
-//        }
      }
-//      std::cout << t.elapsed() << "sec" << std::endl;
    }
 
    void validateTreeBounds(RStarTree& uut)
@@ -252,13 +202,10 @@ public:
 
    void validateTreeEntries(RStarTree& uut, int cc)
    {
-     //qDebug("*** Begin Validation ***");
      std::vector<bool> found;
      found.resize(cc);
      for (unsigned int i = 0; i < found.size(); i++)
-     {
        found[i] = false;
-     }
 
      int rootId = uut.getRoot()->getId();
      std::list<const RTreeNode*> nodes;
@@ -275,26 +222,9 @@ public:
        Box bounds(2);
        if (n->isLeafNode())
        {
-         //qDebug("Leaf Node %d contains: (parent %d)", n->getId(), n->getParentId());
-         //int lastId = -100;
          for (int i = 0; i < n->getChildCount(); i++)
          {
            int id = n->getChildUserId(i);
-
-           //if (i == 0)
-           //{
-           //  qDebug("  %d", id);
-           //}
-           //else if (id != lastId + 1)
-           //{
-           //  qDebug("  -> %d", lastId);
-           //  qDebug("  %d", id);
-           //}
-           //else if (i == n->getChildCount() - 1)
-           //{
-           //  qDebug("  -> %d", id);
-           //}
-           //lastId = id;
 
            CPPUNIT_ASSERT(id < (int)found.size());
            CPPUNIT_ASSERT(found[id] == false);
@@ -310,11 +240,9 @@ public:
        }
        else
        {
-         //qDebug("Node %d contains: (parent %d)", n->getId(), n->getParentId());
          for (int i = 0; i < n->getChildCount(); i++)
          {
            int id = n->getChildNodeId(i);
-           //qDebug("  %d", id);
            nodes.push_back(uut.getNode(id));
            bounds.expand(uut.getNode(id)->calculateEnvelope());
          }
@@ -324,10 +252,6 @@ public:
 
      for (unsigned int i = 0; i < found.size(); i++)
      {
-       //if (found[i] != true)
-       //{
-       //  qDebug("Didn't find %d", i);
-       //}
        CPPUNIT_ASSERT(found[i] == true);
      }
    }

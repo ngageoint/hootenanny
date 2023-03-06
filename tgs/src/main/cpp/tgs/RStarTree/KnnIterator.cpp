@@ -39,7 +39,6 @@
 // tgs
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
-#include <tgs/RStarTree/FilePageStore.h>
 
 namespace Tgs
 {
@@ -134,7 +133,7 @@ void KnnIterator::_calculateNextNn()
     {
       if (currNode->isLeafNode())
       {
-        for (int i=0; i<currNode->getChildCount(); i++)
+        for (int i = 0; i < currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpId = currNode->getChildUserId(i);
@@ -148,7 +147,7 @@ void KnnIterator::_calculateNextNn()
       }
       else
       {
-        for (int i=0; i<currNode->getChildCount(); i++)
+        for (int i = 0; i < currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpDistance = _calculateDistance(b);

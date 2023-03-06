@@ -4,7 +4,6 @@ QT += xml \
     concurrent \
 
 TEMPLATE = lib
-win32:CONFIG += dll
 
 TARGET=Tgs
 
@@ -20,7 +19,6 @@ DESTDIR = ../lib/
 LIBS -= -lhdfs
 
 # allow the <algorithm> std::min
-win32:QMAKE_CXXFLAGS += /EHsc
 unix:QMAKE_CXXFLAGS += -Wno-deprecated
 #unix:QT -= core
 unix:QT -= gui
@@ -30,16 +28,6 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DEPENDPATH += ./src/main/cpp/
 INCLUDEPATH += $${DEPENDPATH}
-win32:INCLUDEPATH += $${PWD}/../../
-win32 { 
-    MAKEFILE = Tgs$${BRANCH_APPEND}
-    debug:TARGET = $${MAKEFILE}d
-    release:TARGET = $${MAKEFILE}
-    DEFINES += TGS_BUILD_DLL
-    DEFINES *= _CRT_SECURE_NO_WARNINGS
-    PRECOMPILED_HEADER = src/TgsStable.h
-    DLLDESTDIR = $${TGS_DLL_OUTPUT_DIR}
-}
 MISC_FILES += Tgs.pro
 
 # When this list of classes is updated, also update docs/CoreAPI.dox. Maybe eventually we can
@@ -51,6 +39,7 @@ HEADERS += \
     src/main/cpp/tgs/Progress.h \
     src/main/cpp/tgs/StreamUtils.h \
     src/main/cpp/tgs/StreamUtils.hh \
+    src/main/cpp/tgs/TgsConfig.h \
     src/main/cpp/tgs/TgsException.h \
     src/main/cpp/tgs/TgsExport.h \
     src/main/cpp/tgs/Version.h \
@@ -62,6 +51,7 @@ HEADERS += \
     src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.h \
     src/main/cpp/tgs/DisjointSet/DisjointSet.h \
     src/main/cpp/tgs/DisjointSet/DisjointSetMap.h \
+    src/main/cpp/tgs/Heap/JHeap.h \
     src/main/cpp/tgs/Interpolation/BaseInterpolator.h \
     src/main/cpp/tgs/Interpolation/DelaunayInterpolator.h \
     src/main/cpp/tgs/Interpolation/IdwInterpolator.h \
@@ -108,9 +98,6 @@ HEADERS += \
     src/main/cpp/tgs/System/SystemInfo.h \
     src/main/cpp/tgs/System/Time.h \
     src/main/cpp/tgs/System/Timer.h \
-
-win32:HEADERS += \
-    src/main/cpp/tgs/RStarTree/FilePageStore.h \
 
 SOURCES += \
     src/main/cpp/tgs/StreamUtils.cpp \
@@ -179,17 +166,3 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/RStarTree/HilbertCurveTest.cpp \
     src/test/cpp/tgs/RStarTree/KnnIteratorNdTest.cpp \
     src/test/cpp/tgs/System/SystemInfoTest.cpp \
-
-win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
-    src/test/cpp/tgs/RStarTree/PageStoreTest.cpp \
-
-win32:INCLUDEPATH += $${THIRDPARTY_PATH}/NewMat/include
-
-release { 
-    win32::LIBS += $${THIRDPARTY_PATH}/Newmat/Lib/newmat.lib
-    win32:LIBS += $${THIRDPARTY_PATH}/boost/lib/libboost_thread-vc80-mt-1_34_1.lib
-}
-else { 
-    win32::LIBS += $${THIRDPARTY_PATH}/Newmat/Lib/newmatd.lib
-    win32:LIBS += $${THIRDPARTY_PATH}/boost/lib/libboost_thread-vc80-mt-gd-1_34_1.lib
-}
