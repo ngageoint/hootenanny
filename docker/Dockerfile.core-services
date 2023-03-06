@@ -170,7 +170,8 @@ export HOOT_HOME=$HOOT_HOME\n\
 export HOOT_WORKING_NAME=hootenanny\n\
 export JAVA_HOME=$JRE_HOME\n\
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib\n\
-export PATH=$HOOT_HOME/bin:$PATH\n'\
+export PATH=$HOOT_HOME/bin:$PATH\n\
+export JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"\n'\
 >> $tomcat_config/conf.d/hoot.conf
 
 RUN install -d -m 0775 $tomcat_logs

@@ -47,6 +47,7 @@ services:
       - 8094:8094
       - 8096:8096
       - 8101:8101
+      - 8000:8585
     volumes:
       - ./:${HOOT_HOME}:rw
       - tomcat8-hoot-services:/var/lib/tomcat8/webapps/hoot-services:rw
