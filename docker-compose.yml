@@ -28,7 +28,7 @@ services:
     env_file:
       - hoot.env
     volumes:
-      - postgres-data:/var/lib/${POSTGRESQL_VERSION}/data:rw
+      - postgres-data:/var/lib/pgsql/${POSTGRESQL_VERSION}/data:rw
   core-services:
     depends_on:
       postgres:
@@ -49,5 +49,10 @@ services:
       - 8101:8101
     volumes:
       - ./:${HOOT_HOME}:rw
+      - tomcat8-hoot-services:/var/lib/tomcat8/webapps/hoot-services:rw
+      - tomcat8-hootenanny-id:/var/lib/tomcat8/webapps/hootenanny-id:rw
+
 volumes:
   postgres-data:
+  tomcat8-hoot-services:
+  tomcat8-hootenanny-id:

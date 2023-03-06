@@ -21,14 +21,16 @@ stop_tomcat()
 
 copy_war_and_frontend_to_tomcat()
 {
-    rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/
-    cp -R hoot-ui-2x/dist $TOMCAT8_HOME/webapps/hootenanny-id/
-    chown -R $HOOT_USER:tomcat $TOMCAT8_HOME/webapps/hootenanny-id/
+    rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/*
+    cp -R hoot-ui-2x/dist/ $TOMCAT8_HOME/webapps/hootenanny-id/
 
     rm -f $TOMCAT8_HOME/webapps/hoot-services.war
-    rm -rf $TOMCAT8_HOME/webapps/hoot-services/
+    rm -rf $TOMCAT8_HOME/webapps/hoot-services/*
     cp hoot-services/target/hoot-services-$HOOT_USER.war $TOMCAT8_HOME/webapps/hoot-services.war
+    cp -R hoot-services/target/hoot-services-$HOOT_USER/* $TOMCAT8_HOME/webapps/hoot-services
 }
+
+touch core-services-building.txt
 
 if [ ! -f configure ]; then
     ./docker/scripts/core-services-configure.sh
@@ -66,4 +68,7 @@ export GDAL_DATA=$(gdal-config --datadir)
 
 copy_war_and_frontend_to_tomcat
 npm start --prefix "${HOOT_HOME}/node-export-server" &
+
+rm -f core-services-building.txt
+
 start_tomcat
