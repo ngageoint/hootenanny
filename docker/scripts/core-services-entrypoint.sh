@@ -19,15 +19,18 @@ stop_tomcat()
     /usr/libexec/tomcat8/server stop
 }
 
-copy_war_and_frontend_to_tomcat()
+copy_war_to_tomcat()
+{
+    rm -f $TOMCAT8_HOME/webapps/hoot-services.war
+    cp hoot-services/target/hoot-services-$HOOT_USER.war $TOMCAT8_HOME/webapps/hoot-services.war
+    rm -rf $TOMCAT8_HOME/webapps/hoot-services/*
+    cp -R hoot-services/target/hoot-services-$HOOT_USER/* $TOMCAT8_HOME/webapps/hoot-services
+}
+
+copy_frontend_to_tomcat()
 {
     rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/*
     cp -R hoot-ui-2x/dist/ $TOMCAT8_HOME/webapps/hootenanny-id/
-
-    rm -f $TOMCAT8_HOME/webapps/hoot-services.war
-    rm -rf $TOMCAT8_HOME/webapps/hoot-services/*
-    cp hoot-services/target/hoot-services-$HOOT_USER.war $TOMCAT8_HOME/webapps/hoot-services.war
-    cp -R hoot-services/target/hoot-services-$HOOT_USER/* $TOMCAT8_HOME/webapps/hoot-services
 }
 
 touch core-services-building.txt
@@ -47,11 +50,13 @@ fi
 
 if [ "${HOOT_BUILD_HOOT_SERVICES_UI:-0}" = "1" ] || [ ! -f hoot-services/target/hoot-services-$HOOT_USER.war ]; then
     make services-build
+    copy_war_to_tomcat
 fi;
 
 # translation server is tied to services so need to build schema files and its dependencies
 if [ "${HOOT_BUILD_JS_SCHEMA:-0}" = "1" ] || [ ! -f translations/tds71_schema.js ]; then
     make -f Makefile.hoot js-make
+    copy_frontend_to_tomcat
 fi
 
 if [ "${HOOT_BUILD_TRANSLATION_SERVER:-0}" = "1" ] || [ ! -d translations/node_modules ]; then
@@ -66,9 +71,6 @@ fi;
 
 export GDAL_DATA=$(gdal-config --datadir)
 
-copy_war_and_frontend_to_tomcat
-npm start --prefix "${HOOT_HOME}/node-export-server" &
-
 rm -f core-services-building.txt
-
+npm start --prefix "${HOOT_HOME}/node-export-server" &
 start_tomcat
