@@ -1,6 +1,5 @@
 
 TEMPLATE = lib
-win32:CONFIG += dll
 
 TARGET=tbs
 
