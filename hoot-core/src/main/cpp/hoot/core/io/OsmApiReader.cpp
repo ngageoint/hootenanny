@@ -163,12 +163,11 @@ void OsmApiReader::read(const OsmMapPtr& map)
   if (_isPolygon)
   {
     size_t element_count = _map->getElementCount();
-    //  The map object is guaranteed to be valid here, set it in the poly criterion
-    _polyCriterion->setOsmMap(_map.get());
     //  Remove any elements that don't meet the criterion
     RemoveElementsVisitor v(true);
     v.addCriterion(_polyCriterion);
     v.setRecursive(true);
+    v.setOsmMap(_map.get());
     _map->visitRw(v);
     size_t elements_filtered = element_count - _map->getElementCount();
     if (elements_filtered > 0)
