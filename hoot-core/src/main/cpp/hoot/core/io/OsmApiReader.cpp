@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReader.h"
@@ -163,11 +163,12 @@ void OsmApiReader::read(const OsmMapPtr& map)
   if (_isPolygon)
   {
     size_t element_count = _map->getElementCount();
+    //  The map object is guaranteed to be valid here, set it in the poly criterion
+    _polyCriterion->setOsmMap(_map.get());
     //  Remove any elements that don't meet the criterion
     RemoveElementsVisitor v(true);
     v.addCriterion(_polyCriterion);
     v.setRecursive(true);
-    v.setOsmMap(_map.get());
     _map->visitRw(v);
     size_t elements_filtered = element_count - _map->getElementCount();
     if (elements_filtered > 0)
@@ -248,6 +249,8 @@ bool OsmApiReader::hasMoreElements()
     //  map needed for assigning new element ids only (not actually putting any of the elements that
     //  are read into this map, since this is the partial reading logic)
     _map = std::make_shared<OsmMap>();
+    //  Update the map in the polygon criterion everytime a new one is created
+    _polyCriterion->setOsmMap(_map.get());
 
     QString xmlResult;
     //  Get one XML string to parse
