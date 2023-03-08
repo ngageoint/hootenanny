@@ -26,13 +26,24 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PHRASE;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
+import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.SCRIPT_FOLDER;
+import static hoot.services.HootProperties.replaceSensitiveData;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,16 +52,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
+import hoot.services.controllers.grail.GrailParams;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Users;
 
 
-class ImportCommand extends ExternalCommand {
+public class ImportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ImportCommand.class);
 
     private final File workDir;
@@ -168,6 +185,100 @@ class ImportCommand extends ExternalCommand {
         String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    ImportCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+        super(jobId);
+
+        if (params.getBounds() == null) {
+            throw new IllegalArgumentException("bounds params cannot be null for Overpass ImportCommand");
+        }
+
+        if (params.getOutput() == null) {
+            throw new IllegalArgumentException("outputPath param cannot be null for Overpass ImportCommand");
+        }
+
+        this.workDir = params.getWorkDir();
+
+        boolean isPrivateOverpass = params.getPullUrl().equals(PRIVATE_OVERPASS_URL);
+        boolean isOverpass = isPrivateOverpass || params.getPullUrl().equals(PUBLIC_OVERPASS_URL);
+        String url = HootProperties.replaceSensitiveData(params.getPullUrl());
+        Users user = params.getUser();
+        String bounds = params.getBounds();
+        BoundingBox bbox = new BoundingBox(params.getBounds());
+        double bboxArea = bbox.getArea();
+
+        List<String> options = new ArrayList<String>();
+        options.add("job.id=" + jobId);
+
+        if (isOverpass) {
+            File grailOverpassQueryFile;
+            try {
+                if (params.getCustomQuery() == null) {
+                    grailOverpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+                } else {
+                    grailOverpassQueryFile = createTempGrailOverpassQueryFile(jobId, params.getCustomQuery());
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to create temp overpass query file", e);
+            }
+
+            String overpassHost;
+            try {
+                overpassHost = new URL(url).getHost();
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Provided grail pull url is not a valid url.", e);
+            }
+
+            // add overpass specific options
+            options.add("overpass.api.query.path=" + grailOverpassQueryFile.getAbsolutePath());
+            options.add("overpass.api.host=" + overpassHost);
+            options.add("reader.http.bbox.max.download.size=" + bboxArea);
+
+            if (isPrivateOverpass) {
+                options.add("hoot.pkcs12.key.path=" + replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH));
+                options.add("hoot.pkcs12.key.phrase=" + replaceSensitiveData(PRIVATE_OVERPASS_CERT_PHRASE));
+            }
+        } else {
+            double maxBboxArea = params.getMaxBoundsSize();
+            if (bboxArea > maxBboxArea) {
+                String errorMsg = "The bounding box area (" + bboxArea + ") is too large for OSM API. It must be less than " + maxBboxArea + " degrees";
+                throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(errorMsg).build());
+            }
+        }
+
+        if(user == null) {
+            options.add("api.db.email=test@test.com");
+        } else {
+            options.add("api.db.email=" + user.getEmail());
+        }
+
+        if (!bounds.contains(";")) {
+            bounds = bbox.getMinLon() + "," + bbox.getMinLat() + "," + bbox.getMaxLon() + "," + bbox.getMaxLat();
+        }
+
+        options.add("bounds=" + bounds);
+
+        List<String> hootOptions = toHootOptions(options);
+
+        java.util.Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT_PATH", url);
+        substitutionMap.put("OUTPUT_PATH", params.getOutput());
+
+        String command = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
+        super.configureCommand(command, substitutionMap, caller);
+    }
+
+    private File createTempGrailOverpassQueryFile(String jobId, String overpassQuery) throws IOException {
+        File tempQueryFile = File.createTempFile(jobId + "_temp_query", ".oql");
+        tempQueryFile.deleteOnExit();
+        BufferedWriter queryFileWriter = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream(tempQueryFile.getAbsolutePath()), "utf-8"));
+        queryFileWriter.write(overpassQuery);
+        queryFileWriter.close();
+        return tempQueryFile;
     }
 
     @Override

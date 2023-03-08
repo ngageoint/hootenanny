@@ -107,6 +107,8 @@ import hoot.services.command.InternalCommand;
 import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.conflation.ConflateCommandFactory;
 import hoot.services.controllers.conflation.ConflateParams;
+import hoot.services.controllers.ingest.ImportCommand;
+import hoot.services.controllers.ingest.ImportCommandFactory;
 import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
@@ -142,6 +144,9 @@ public class GrailResource {
     private PullApiCommandFactory apiCommandFactory;
 
     @Autowired
+    private ImportCommandFactory importCommandFactory;
+
+    @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
 
     @Autowired
@@ -172,10 +177,11 @@ public class GrailResource {
         return railsPortCapabilities;
     }
 
-    private InternalCommand getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
+    private ImportCommand getRailsPortApiCommand(String jobId, GrailParams params, String debugLevel) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
         if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
+            params.setWorkDir(null);
         } else {
             APICapabilities railsPortCapabilities = railsOnlineCheck();
 
@@ -187,7 +193,7 @@ public class GrailResource {
         params.setOutput(referenceOSMFile.getAbsolutePath());
         if (referenceOSMFile.exists()) referenceOSMFile.delete();
 
-        InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
+        ImportCommand command = importCommandFactory.build(jobId, params, debugLevel, this.getClass());
         return command;
     }
 
@@ -198,15 +204,14 @@ public class GrailResource {
         return command;
     }
 
-    private InternalCommand getPublicOverpassCommand(String jobId, File workDir, GrailParams params) {
+    private ExternalCommand getPublicOverpassCommand(String jobId, File workDir, GrailParams params, String debugLevel) {
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
         File overpassFile = new File(workDir, SECONDARY + ".osm");
         params.setOutput(overpassFile.getAbsolutePath());
         if (overpassFile.exists()) overpassFile.delete();
 
-        InternalCommand command = overpassCommandFactory.build(jobId, params, this.getClass());
-        return command;
+        return importCommandFactory.build(jobId, params, debugLevel, getClass());
     }
 
     /**
@@ -270,7 +275,7 @@ public class GrailResource {
 
         if (deriveType.equals("Adds only")) {
             if (input1 == null) {
-                InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
+                ExternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel);
                 workflow.add(getOverpassCommand);
                 input1 = getOverpassParams.getOutput();
             }
@@ -285,7 +290,7 @@ public class GrailResource {
                 // can't have the cut and replace options for hoot convert. used for DeriveChangesetReplacementCommand
                 getRailsParams.setAdvancedOptions(null);
                 try {
-                    workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
+                    workflow.addAll(setupRailsPull(jobId, getRailsParams, null, debugLevel));
                 } catch (UnavailableException ex) {
                     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
                 }
@@ -293,7 +298,7 @@ public class GrailResource {
             }
 
             if (input2 == null) {
-                InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
+                ExternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel);
                 workflow.add(getOverpassCommand);
 
                 input2 = getOverpassParams.getOutput();
@@ -303,7 +308,7 @@ public class GrailResource {
         } else {
             if (input1 == null) {
                 try {
-                    workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
+                    workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
                 } catch (UnavailableException ex) {
                     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
                 }
@@ -311,7 +316,7 @@ public class GrailResource {
             }
 
             if (input2 == null) {
-                InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
+                ExternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel);
                 workflow.add(getOverpassCommand);
 
                 input2 = getOverpassParams.getOutput();
@@ -692,6 +697,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
             @QueryParam("folderId") Long folderId,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
             GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
@@ -714,14 +720,13 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         GrailParams getOverpassParams = new GrailParams(reqParams);
-        workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams));
+        workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
 
         // Write the data to the hoot db
         GrailParams params = new GrailParams(reqParams);
-        params.setInput1(getOverpassParams.getOutput());
-        params.setOutput(layerName);
-        ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
-        workflow.add(importOverpass);
+        params.setOutput(HOOTAPI_DB_URL + "/" + layerName);
+        params.setPullUrl(PUBLIC_OVERPASS_URL);
+        workflow.add(importCommandFactory.build(jobId, params, debugLevel, getClass()));
 
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
@@ -923,6 +928,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
             @QueryParam("folderId") Long folderId,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
             GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
@@ -943,7 +949,7 @@ public class GrailResource {
 
         List<Command> workflow;
         try {
-            workflow = setupRailsPull(jobId, params, folderId);
+            workflow = setupRailsPull(jobId, params, folderId, debugLevel);
         }
         catch(UnavailableException exc) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
@@ -958,7 +964,7 @@ public class GrailResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-    private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {
+    private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId, String debugLevel) throws UnavailableException {
         List<Command> workflow = new LinkedList<>();
         boolean usingPrivateOverpass = isPrivateOverpassActive();
         String layerName = params.getInput1();
@@ -971,10 +977,11 @@ public class GrailResource {
         if (usingPrivateOverpass) {
             String queryWithConnectedWays = PullApiCommand.connectedWaysQuery(getRailsParams.getCustomQuery());
             getRailsParams.setCustomQuery(queryWithConnectedWays);
+            getRailsParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
         }
 
         try {
-            workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
+            workflow.add(getRailsPortApiCommand(jobId, getRailsParams, debugLevel));
         } catch (UnavailableException exc) {
             throw new UnavailableException("The Rails port API is offline.");
         }
@@ -1007,19 +1014,20 @@ public class GrailResource {
             ingestFile = new File(params.getWorkDir(), "merge.osm");
             mergeRefParams.setOutput(ingestFile.getAbsolutePath());
             workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+            // set output so the output file can be used outside this function
+            params.setOutput(ingestFile.getAbsolutePath());
         }
-
-        // set output so the output file can be used outside this function
-        params.setOutput(ingestFile.getAbsolutePath());
 
         // let parentFolderId decide if data should be written to database
         if ( parentFolderId != null ) {
-            // Write the data to the hoot db
-            GrailParams pushParams = new GrailParams(params);
-            pushParams.setInput1(ingestFile.getAbsolutePath());
-            pushParams.setOutput(layerName);
-            ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
-            workflow.add(importRailsPort);
+            if (!usingPrivateOverpass) {
+                // Write the data to the hoot db
+                GrailParams pushParams = new GrailParams(params);
+                pushParams.setInput1(ingestFile.getAbsolutePath());
+                pushParams.setOutput(layerName);
+                ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
+                workflow.add(importRailsPort);
+            }
 
             // Set map tags marking dataset as eligible for derive changeset
             Map<String, String> tags = new HashMap<>();
@@ -1033,11 +1041,13 @@ public class GrailResource {
             InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, layerName, params.getUser(), this.getClass());
             workflow.add(setFolder);
 
-            // Clean up pulled files
-            ArrayList<File> deleteFiles = new ArrayList<>();
-            deleteFiles.add(params.getWorkDir());
-            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-            workflow.add(cleanFolders);
+            if (!usingPrivateOverpass) {
+                // Clean up pulled files
+                ArrayList<File> deleteFiles = new ArrayList<>();
+                deleteFiles.add(params.getWorkDir());
+                InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+                workflow.add(cleanFolders);
+            }
         }
 
         return workflow;
