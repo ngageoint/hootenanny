@@ -840,7 +840,7 @@ QString OsmGeoJsonWriter::_getFcodeUnknown(const std::shared_ptr<geos::geom::Geo
 std::shared_ptr<geos::geom::Geometry> OsmGeoJsonWriter::_cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const
 {
   //  Treat bounded vs unbounded differently
-  if (_bounds)
+  if (geometry && _bounds)
   {
     if (geometry->intersects(_bounds.get()))
     {
