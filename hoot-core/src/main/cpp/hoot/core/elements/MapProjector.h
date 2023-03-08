@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
@@ -145,6 +145,10 @@ public:
   static geos::geom::Coordinate project(const geos::geom::Coordinate& c,
                                         const OGRSpatialReferencePtr& srs1,
                                         const OGRSpatialReferencePtr& srs2);
+
+  static std::vector<geos::geom::Coordinate> project(const std::vector<geos::geom::Coordinate>& c,
+                                                     const OGRSpatialReferencePtr& srs1,
+                                                     const OGRSpatialReferencePtr& srs2);
 
   static QString toWkt(const OGRSpatialReferencePtr& srs) { return toWkt(srs.get()); }
   static QString toWkt(const OGRSpatialReference* srs);

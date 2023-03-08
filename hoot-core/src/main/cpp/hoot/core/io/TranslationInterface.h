@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022, 2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TRANSLATION_INTERFACE_H
@@ -68,6 +68,8 @@ public:
                            std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf) const;
 
   void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
+
+  std::shared_ptr<geos::geom::Geometry> convertGeometry(const ElementProviderPtr& provider, const ConstElementPtr& e) const;
 
 protected:
 

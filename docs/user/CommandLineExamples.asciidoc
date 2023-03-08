@@ -667,8 +667,8 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflati
 
 -----
     hoot convert -D convert.ops="RemoveElementsVisitor" \
-    -D remove.elements.visitor.element.criteria="ElementIdCriterion" 
-    -D element.id.criterion.ids="Relation:-1;Relation:7387470" 
+    -D remove.elements.visitor.element.criteria="ElementIdCriterion" \
+    -D element.id.criterion.ids="Relation:-1;Relation:7387470" \
     -D element.criteria.negate=true input.osm output.osm
 -----
 

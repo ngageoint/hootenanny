@@ -73,26 +73,7 @@ void TranslationInterface::translateToFeatures(const ElementProviderPtr& provide
 
   if (e->getTags().getInformationCount() > 0)
   {
-    // There is probably a cleaner way of doing this. convertToGeometry calls getGeometryType which
-    // will throw an exception if it gets a relation that it doesn't know about. E.g. "route",
-    // "superroute", "turnlanes:turns", etc.
-    try
-    {
-      g = ElementToGeometryConverter(provider).convertToGeometry(e, false);
-    }
-    catch (const IllegalArgumentException& err)
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-      g = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-    }
+    g = convertGeometry(provider, e);
     //  Validate the geometry before using it
     if (!g)
     {
@@ -110,6 +91,33 @@ void TranslationInterface::translateToFeatures(const ElementProviderPtr& provide
     }
     tf = _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
   }
+}
+
+std::shared_ptr<geos::geom::Geometry> TranslationInterface::convertGeometry(const ElementProviderPtr& provider, const ConstElementPtr& e) const
+{
+  if (e->getTags().getInformationCount() > 0)
+  {
+    // There is probably a cleaner way of doing this. convertToGeometry calls getGeometryType which
+    // will throw an exception if it gets a relation that it doesn't know about. E.g. "route",
+    // "superroute", "turnlanes:turns", etc.
+    try
+    {
+      return ElementToGeometryConverter(provider).convertToGeometry(e, false);
+    }
+    catch (const IllegalArgumentException& err)
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
+  }
+  return GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 }
 
 }
