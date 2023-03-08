@@ -32,11 +32,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import hoot.services.controllers.grail.GrailParams;
 import hoot.services.models.db.Users;
-import hoot.services.controllers.ingest.UploadClassification;
 
 @Component
-class ImportCommandFactory {
+public class ImportCommandFactory {
 
     ImportCommand build(String jobId, File workDir, List<File> filesToImport,
                          List<File> zipsToImport, String translation, String advUploadOpts, String etlName, Boolean isNoneTranslation,
@@ -51,4 +51,7 @@ return new ImportCommand(jobId, url, username, password, translation, advUploadO
                     debugLevel, uploadClassification, caller, user);
 }
 
+    public ImportCommand build(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+        return new Impor    tCommand(jobId, params, debugLevel, caller);
+    }
 }
