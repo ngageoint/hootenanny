@@ -90,10 +90,6 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 OgrWriter::OgrWriter()
   : _createAllLayers(ConfigOptions().getOgrWriterCreateAllLayers()),
     _appendData(ConfigOptions().getOgrAppendData()),
-    _elementCache(std::make_shared<ElementCacheLRU>(
-      ConfigOptions().getElementCacheSizeNode(),
-      ConfigOptions().getElementCacheSizeWay(),
-      ConfigOptions().getElementCacheSizeRelation())),
     _wgs84(),
     _failOnSkipRelation(false),
     _maxFieldWidth(-1), // We set this if we really need to.
@@ -301,9 +297,8 @@ void OgrWriter::writePartial(const ConstNodePtr& newNode)
   LOG_TRACE("Writing node " << newNode->getId());
 
   // Add to the element cache
-  ConstElementPtr myNode(newNode);
-  _elementCache->addElement(myNode);
-  ElementProviderPtr cacheProvider(_elementCache);
+  _addElementToCache(newNode);
+  ElementProviderPtr cacheProvider = _getElementProvider();
 
   // It's a base datatype, so can write immediately
   _writePartial(cacheProvider, newNode);
@@ -317,14 +312,14 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?)
    */
-  if (way->getNodeCount() > _elementCache->getNodeCacheSize())
+  if (way->getNodeCount() > getNodeCacheSize())
   {
     throw HootException(
       QString("Cannot do partial write of Way ID %1 as it contains %2 nodes, but our cache can only hold %3.  "
               "If you have enough memory to load this way, you can increase the element.cache.size.node setting to "
               "an appropriate value larger than %4 to allow for loading it.")
         .arg(QString::number(way->getId()), QString::number(way->getNodeCount()),
-             QString::number(_elementCache->getNodeCacheSize()), QString::number(way->getNodeCount())));
+             QString::number(getNodeCacheSize()), QString::number(way->getNodeCount())));
   }
 
   // Make sure all the nodes in the way are in our cache
@@ -332,13 +327,13 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
 
   for (auto node_id : wayNodeIds)
   {
-    if (_elementCache->containsNode(node_id) == false)
+    if (cacheContainsElement(ElementId(ElementType::Node, node_id)) == false)
     {
       throw HootException(
         QString("Way %1 contains node %2, which is not present in the cache.  If you have the "
                 "memory to support this number of nodes, you can increase the element.cache.size.node "
                 "setting above: %3.")
-          .arg(QString::number(way->getId()), QString::number(node_id), QString::number(_elementCache->getNodeCacheSize())));
+          .arg(QString::number(way->getId()), QString::number(node_id), QString::number(getNodeCacheSize())));
     }
     LOG_TRACE("Way " << way->getId() << " contains node " << node_id <<
                  ": " << _elementCache->getNode(node_id)->getX() << ", " <<
@@ -346,10 +341,9 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
   }
 
   // Add to the element cache
-  ConstElementPtr constWay(way);
-  _elementCache->addElement(constWay);
+  _addElementToCache(way);
 
-  ElementProviderPtr cacheProvider(_elementCache);
+  ElementProviderPtr cacheProvider = _getElementProvider();
   _writePartial(cacheProvider, way);
 }
 
@@ -374,34 +368,34 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
     {
     case ElementType::Node:
       nodeCount++;
-      if (nodeCount > _elementCache->getNodeCacheSize())
+      if (nodeCount > getNodeCacheSize())
       {
         throw HootException(
           QString("Relation with ID %1 contains more nodes than can fit in the cache (%2).  If you have enough memory to load this relation, "
                   "you can increase the element.cache.size.node setting to an appropriate value larger than %3 to allow for loading it.")
-            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getNodeCacheSize()), QString::number(nodeCount)));
+            .arg(QString::number(newRelation->getId()), QString::number(getNodeCacheSize()), QString::number(nodeCount)));
       }
       break;
     case ElementType::Way:
       wayCount++;
-      if (wayCount > _elementCache->getWayCacheSize())
+      if (wayCount > getWayCacheSize())
       {
         throw HootException(
           QString("Relation with ID %1 contains more ways than can fit in the cache (%2).  If you have enough "
                   " memory to load this relation, you can increase the element.cache.size.way setting to "
                   " an appropriate value larger than %3 to allow for loading it.")
-            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getWayCacheSize()), QString::number(wayCount)));
+            .arg(QString::number(newRelation->getId()), QString::number(getWayCacheSize()), QString::number(wayCount)));
       }
       break;
     case ElementType::Relation:
       relationCount++;
-      if (relationCount > _elementCache->getRelationCacheSize())
+      if (relationCount > getRelationCacheSize())
       {
         throw HootException(
           QString("Relation with ID %1 contains more relations than can fit in the cache (%2).  If you have enough "
                   " memory to load this relation, you can increase the element.cache.size.relation setting to "
                   " to an appropriate value larger than %3 to allow for loading it.")
-            .arg(QString::number(newRelation->getId()), QString::number(_elementCache->getRelationCacheSize()), QString::number(relationCount)));
+            .arg(QString::number(newRelation->getId()), QString::number(getRelationCacheSize()), QString::number(relationCount)));
       }
       break;
     default:
@@ -412,19 +406,19 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
     LOG_TRACE("Checking to see if element with ID: " << member.getElementId().getId() <<
               " and type: " << member.getElementId().getType() <<
               " contained by relation " << newRelation->getId() << " is in the element cache...");
-    if (_elementCache->containsElement(member.getElementId()) == false )
+    if (cacheContainsElement(member.getElementId()) == false )
     {
       unsigned long cacheSize;
       switch (member_type)
       {
       case ElementType::Node:
-        cacheSize =  _elementCache->getNodeCacheSize();
+        cacheSize =  getNodeCacheSize();
         break;
       case ElementType::Way:
-        cacheSize =  _elementCache->getWayCacheSize();
+        cacheSize =  getWayCacheSize();
         break;
       case ElementType::Relation:
-        cacheSize =  _elementCache->getRelationCacheSize();
+        cacheSize =  getRelationCacheSize();
         break;
       default:
         throw HootException("Relation contains unknown type");
@@ -481,9 +475,9 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
   }
 
   // Add to the cache
-  _elementCache->addElement(constRelation);
+  _addElementToCache(constRelation);
   //  Write out the element
-  ElementProviderPtr cacheProvider(_elementCache);
+  ElementProviderPtr cacheProvider = _getElementProvider();
   _writePartial(cacheProvider, constRelation);
 }
 

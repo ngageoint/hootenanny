@@ -29,7 +29,7 @@
 #define OGRWRITER_H
 
 // hoot
-#include <hoot/core/io/ElementCache.h>
+#include <hoot/core/io/CachedElementWriterInterface.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
 #include <hoot/core/util/Boundable.h>
@@ -48,7 +48,7 @@ class Layer;
 /**
  * Writes a file to an OGR data source.
  */
-class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface, public Boundable
+class OgrWriter : public PartialOsmMapWriter, public Configurable, public TranslationInterface, public Boundable, public CachedElementWriterInterface
 {
 public:
 
@@ -80,7 +80,6 @@ public:
 
   void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
   void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
-  void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
 
 protected:
 
@@ -97,7 +96,6 @@ private:
   QHash<QString, OGRLayer*> _layers;
   QHash<QString, std::shared_ptr<OGRSpatialReference>> _projections;
   QString _prependLayerName;
-  ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
   // contains relations that weren't written on a first pass b/c they contained relations as a
