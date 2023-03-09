@@ -122,47 +122,36 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         this.stdout = new LogOutputStream() {
             @Override
             protected void processLine(String line, int level) {
-                //String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
                 String currentLine = obfuscateConsoleLog(line) + "\n";
 
-                // Had to add because ran into case where same line was processed twice in a row
-               // if(!currentOut.equals(currentLine)) {
-                //    currentOut = currentOut.concat(currentLine);
-                    commandResult.setStdout(currentLine);
+                commandResult.setStdout(currentLine);
 
-                    if (trackable) {
-                        // if includes percent progress, update that as well
-                        Matcher matcher = pattern.matcher(currentLine);
-                        if (matcher.find()) {
-                            commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
-                        }
-
-                        // update command status table stdout
-                        DbUtils.upsertCommandStatus(commandResult);
-                        logger.info("Command stdout: {}", currentLine);
+                if (trackable) {
+                    // if includes percent progress, update that as well
+                    Matcher matcher = pattern.matcher(currentLine);
+                    if (matcher.find()) {
+                        commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
                     }
-             //   }
+
+                    // update command status table stdout
+                    DbUtils.upsertCommandStatus(commandResult);
+                    logger.info("Command stdout: {}", currentLine);
+                }
             }
         };
 
         this.stderr = new LogOutputStream() {
             @Override
             protected void processLine(String line, int level) {
-                //String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
                 String currentLine = obfuscateConsoleLog(line) + "\n";
+                logger.error(line);
 
-                // Had to add because ran into case where same line was processed twice in a row
-                //if(!currentErr.equals(currentLine)) {
-                    logger.error(line);
+                commandResult.setStderr(currentLine);
 
-               //     currentErr = currentErr.concat(currentLine);
-                    commandResult.setStderr(currentLine);
-
-                    if (trackable) {
-                        // update command status table stderr
-                        DbUtils.upsertCommandStatus(commandResult);
-                    }
-               // }
+                if (trackable) {
+                    // update command status table stderr
+                    DbUtils.upsertCommandStatus(commandResult);
+                }
             }
         };
 
