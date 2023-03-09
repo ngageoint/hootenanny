@@ -210,13 +210,6 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
             }
         }
-// NOTE: UI 1 tests are consistently failing, disable them
-//        stage("UI Hoot 1 Tests") {
-//            when { expression { return params.UI_hoot1_tests } }
-//            steps {
-//                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
-//            }
-//        }
         stage("UI Hoot 2 Tests") {
             when { expression { return params.UI_hoot2_tests } }
             steps {
