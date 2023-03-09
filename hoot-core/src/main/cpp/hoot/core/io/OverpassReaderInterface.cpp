@@ -98,12 +98,18 @@ void OverpassReaderInterface::setOverpassUrl(const QString& url)
 
 QString OverpassReaderInterface::_readOverpassQueryFile(const QString& path) const
 {
+  //  C-Style comments are valid and should be removed
+  static QRegularExpression singleLineComment("\\s*//.*", QRegularExpression::OptimizeOnFirstUsageOption);
+  static QRegularExpression multiLineComment("/\\*.*?\\*/", QRegularExpression::OptimizeOnFirstUsageOption | QRegularExpression::DotMatchesEverythingOption);
   QString query;
   try
   {
     //  Load the contents of the overpass query file
     if (!path.isEmpty())
-      query = FileUtils::readFully(path);
+    {
+      //  Remove all of the comment lines from the file
+      query = FileUtils::readFully(path).replace(singleLineComment, "").replace(multiLineComment, "");
+    }
   }
   catch (const HootException&)
   {
