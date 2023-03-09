@@ -130,6 +130,12 @@ echo "$HOOT_HOME"
 echo `pwd`
 source ./SetupEnv.sh
 
+if [ ! "$(ls -A hoot-ui-2x)" ]; then
+    echo "hoot-ui-2x is empty"
+    echo "init'ing and updating submodule"
+    git submodule init && git submodule update
+fi
+
 echo "### Installing Tomcat8..."
 TOMCAT_HOME=/usr/share/tomcat8
 
