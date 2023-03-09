@@ -20,3 +20,4 @@ fi
 mkdir -p $TOMCAT8_HOME/webapps/{hootenanny-id,hoot-services}
 chown -R $HOOT_USER:tomcat $TOMCAT8_HOME/webapps/hootenanny-id/
 chown -R $HOOT_USER:tomcat $TOMCAT8_HOME/webapps/hoot-services/
+
