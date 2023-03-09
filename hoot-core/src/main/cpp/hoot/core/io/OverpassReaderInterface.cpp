@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OverpassReaderInterface.h"
@@ -98,12 +98,18 @@ void OverpassReaderInterface::setOverpassUrl(const QString& url)
 
 QString OverpassReaderInterface::_readOverpassQueryFile(const QString& path) const
 {
+  //  C-Style comments are valid and should be removed
+  static QRegularExpression singleLineComment("\\s*//.*", QRegularExpression::OptimizeOnFirstUsageOption);
+  static QRegularExpression multiLineComment("/\\*.*?\\*/", QRegularExpression::OptimizeOnFirstUsageOption | QRegularExpression::DotMatchesEverythingOption);
   QString query;
   try
   {
     //  Load the contents of the overpass query file
     if (!path.isEmpty())
-      query = FileUtils::readFully(path);
+    {
+      //  Remove all of the comment lines from the file
+      query = FileUtils::readFully(path).replace(singleLineComment, "").replace(multiLineComment, "");
+    }
   }
   catch (const HootException&)
   {
