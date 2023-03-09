@@ -20,7 +20,7 @@ conf/database/DatabaseConfigLocal.sh:
 	echo "#!/bin/bash;" >> conf/database/DatabaseConfigLocal.sh
 	echo "set -euo pipefail;" >> conf/database/DatabaseConfigLocal.sh
 	echo "export DB_HOST=postgres" >> conf/database/DatabaseConfigLocal.sh
-	echo "export DB_OSMAPI_HOST=postgres" >> conf/database/DatabaseConfigLocal.sh
+	echo "export DB_HOST_OSMAPI=postgres" >> conf/database/DatabaseConfigLocal.sh
 
 hoot-ui-2x/README.md:
 	git submodule update --init
