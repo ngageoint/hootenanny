@@ -52,6 +52,6 @@ return new ImportCommand(jobId, url, username, password, translation, advUploadO
 }
 
     public ImportCommand build(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
-        return new Impor    tCommand(jobId, params, debugLevel, caller);
+        return new ImportCommand(jobId, params, debugLevel, caller);
     }
 }
