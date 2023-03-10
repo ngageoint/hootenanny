@@ -181,7 +181,6 @@ public class GrailResource {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
         if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
-            params.setWorkDir(null);
         } else {
             APICapabilities railsPortCapabilities = railsOnlineCheck();
 
@@ -189,9 +188,12 @@ public class GrailResource {
             params.setPullUrl(RAILSPORT_PULL_URL);
         }
 
-        File referenceOSMFile = new File(params.getWorkDir(), REFERENCE + ".osm");
-        params.setOutput(referenceOSMFile.getAbsolutePath());
-        if (referenceOSMFile.exists()) referenceOSMFile.delete();
+        if (params.getOutput() == null) {
+            File referenceOSMFile = new File(params.getWorkDir(), REFERENCE + ".osm");
+            params.setOutput(referenceOSMFile.getAbsolutePath());
+            if (referenceOSMFile.exists()) referenceOSMFile.delete();
+            params.setWorkDir(null);
+        }
 
         ImportCommand command = importCommandFactory.build(jobId, params, debugLevel, this.getClass());
         return command;
@@ -207,9 +209,12 @@ public class GrailResource {
     private ExternalCommand getPublicOverpassCommand(String jobId, File workDir, GrailParams params, String debugLevel) {
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
-        File overpassFile = new File(workDir, SECONDARY + ".osm");
-        params.setOutput(overpassFile.getAbsolutePath());
-        if (overpassFile.exists()) overpassFile.delete();
+        if (params.getOutput() == null) {
+            File overpassFile = new File(workDir, SECONDARY + ".osm");
+            params.setOutput(overpassFile.getAbsolutePath());
+            if (overpassFile.exists()) overpassFile.delete();
+            params.setWorkDir(null);
+        }
 
         return importCommandFactory.build(jobId, params, debugLevel, getClass());
     }
@@ -720,13 +725,10 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         GrailParams getOverpassParams = new GrailParams(reqParams);
+        getOverpassParams.setOutput(HOOTAPI_DB_URL + "/" + layerName);
         workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams, debugLevel));
 
-        // Write the data to the hoot db
         GrailParams params = new GrailParams(reqParams);
-        params.setOutput(HOOTAPI_DB_URL + "/" + layerName);
-        params.setPullUrl(PUBLIC_OVERPASS_URL);
-        workflow.add(importCommandFactory.build(jobId, params, debugLevel, getClass()));
 
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
