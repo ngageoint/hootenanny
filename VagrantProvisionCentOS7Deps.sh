@@ -165,9 +165,6 @@ sudo yum -y install \
     python3-matplotlib \
     python3-pip \
     python3-setuptools \
-    ruby \
-    ruby-devel \
-    rubygem-bundler \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \

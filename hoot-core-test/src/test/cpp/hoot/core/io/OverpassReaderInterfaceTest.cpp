@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -96,6 +96,9 @@ public:
     //  Check a bad filename, disable warnings beforehand
     DisableLog disable;
     HOOT_STR_EQUALS("", uut._readOverpassQueryFile("/this/file/should/never/exist/right"));
+    //  Test out removing comments from the query file
+    QString comment_query = uut._readOverpassQueryFile("test-files/io/OsmJsonReaderTest/overpass_comments_query.overpassql");
+    HOOT_STR_EQUALS(overpass_expected, comment_query);
   }
 
   void parseOverpassErrorTest()

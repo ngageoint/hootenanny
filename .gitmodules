@@ -1,6 +1,3 @@
-[submodule "hoot-ui"]
-	path = hoot-ui
-	url = https://github.com/ngageoint/hootenanny-ui.git
 [submodule "hoot-ui-2x"]
 	path = hoot-ui-2x
 	url = https://github.com/ngageoint/hootenanny-ui.git
