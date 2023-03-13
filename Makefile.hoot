@@ -118,7 +118,17 @@ licenses:
 	scripts/copyright/UpdateAllCopyrightHeaders.sh
 
 translations-test: build
-	cd translations; npm install && npm test
+	for i in translations*/; do \
+		if [ -d "$$i/test" ]; then \
+			echo "Running npm tests in $$i"; \
+			pushd $$i; \
+			npm install --quiet && npm run test; \
+			[ "$${PIPESTATUS[0]}" == "0" ] && true || false \
+			popd; \
+    fi; \
+	done
+
+
 
 node-export-test: build
 	cd node-export-server; npm install && npm test
