@@ -91,14 +91,17 @@ public:
         "relation;\n"
         ");\n"
         "out;\n";
-    QString overpass_query = uut._readOverpassQueryFile("test-files/io/OsmJsonReaderTest/overpass_query.overpassql");
+    QString overpass_query = uut._readOverpassQueryFile("test-files/io/OsmJsonReaderTest/overpass_query.overpassql", false);
     HOOT_STR_EQUALS(overpass_expected, overpass_query);
     //  Check a bad filename, disable warnings beforehand
     DisableLog disable;
     HOOT_STR_EQUALS("", uut._readOverpassQueryFile("/this/file/should/never/exist/right"));
     //  Test out removing comments from the query file
-    QString comment_query = uut._readOverpassQueryFile("test-files/io/OsmJsonReaderTest/overpass_comments_query.overpassql");
+    QString comment_query = uut._readOverpassQueryFile("test-files/io/OsmJsonReaderTest/overpass_comments_query.overpassql", false);
     HOOT_STR_EQUALS(overpass_expected, comment_query);
+    //  Test out stripping comments and new lines
+    comment_query = uut._readOverpassQueryFile("test-files/io/OsmJsonReaderTest/overpass_comments_query.overpassql", true);
+    HOOT_STR_EQUALS(overpass_expected.replace("\n", ""), comment_query);
   }
 
   void parseOverpassErrorTest()
