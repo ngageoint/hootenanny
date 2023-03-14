@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"100156","F_CODE":"AP050","OSMTAGS":{"highway":"footway"},"ZI001_SDV":"2012-08-05T16:55:54Z","ZI026_CTUC":"5"},"geometry": {"type":"LineString","coordinates": [[-71.4716717, 42.4761425],[-71.4716682, 42.4762629]]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100156","F_CODE":"AP050","OSMTAGS":{"highway":"footway"},"ZI001_SDV":"2012-08-05T16:55:54Z","ZI026_CTUC":"5"},"geometry": {"type":"LineString","coordinates": [[-71.4716676, 42.4762853],[-71.47166489999999, 42.476379]]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100156","F_CODE":"AP050","OSMTAGS":{"access":"private","highway":"footway"},"ZI001_SDV":"2012-07-15T19:11:16Z","ZI026_CTUC":"5"},"geometry": {"type":"LineString","coordinates": [[-71.47814649999999, 42.4829485],[-71.4779645, 42.4830524],[-71.4777936, 42.4831476],[-71.4777945, 42.4832255]]}},
