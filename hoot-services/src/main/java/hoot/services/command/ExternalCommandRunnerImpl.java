@@ -55,6 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
+import hoot.services.controllers.conflation.AdvancedConflationOptionsResource;
 import hoot.services.utils.DbUtils;
 
 
@@ -124,6 +125,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             protected void processLine(String line, int level) {
                 String currentLine = obfuscateConsoleLog(line) + "\n";
 
+                if (caller.equals(AdvancedConflationOptionsResource.class.getName())) {
+                    currentLine = commandResult.getStdout().concat(currentLine);
+                }
+
                 commandResult.setStdout(currentLine);
 
                 if (trackable) {
@@ -132,6 +137,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     if (matcher.find()) {
                         commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
                     }
+
 
                     // update command status table stdout
                     DbUtils.upsertCommandStatus(commandResult);
