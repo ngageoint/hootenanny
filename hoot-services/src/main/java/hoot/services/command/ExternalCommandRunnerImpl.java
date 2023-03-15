@@ -55,7 +55,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.controllers.conflation.AdvancedConflationOptionsResource;
 import hoot.services.utils.DbUtils;
 
 
@@ -125,23 +124,20 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             protected void processLine(String line, int level) {
                 String currentLine = obfuscateConsoleLog(line) + "\n";
 
-                if (caller.equals(AdvancedConflationOptionsResource.class.getName())) {
-                    currentLine = commandResult.getStdout().concat(currentLine);
-                }
-
-                commandResult.setStdout(currentLine);
-
                 if (trackable) {
+                    commandResult.setStdout(currentLine);
+
                     // if includes percent progress, update that as well
                     Matcher matcher = pattern.matcher(currentLine);
                     if (matcher.find()) {
                         commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
                     }
 
-
                     // update command status table stdout
                     DbUtils.upsertCommandStatus(commandResult);
                     logger.info("Command stdout: {}", currentLine);
+                } else {
+                    commandResult.setStdout(commandResult.getStdout().concat(currentLine));
                 }
             }
         };
@@ -152,11 +148,13 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 String currentLine = obfuscateConsoleLog(line) + "\n";
                 logger.error(line);
 
-                commandResult.setStderr(currentLine);
-
                 if (trackable) {
+                    commandResult.setStderr(currentLine);
+
                     // update command status table stderr
                     DbUtils.upsertCommandStatus(commandResult);
+                } else {
+                    commandResult.setStderr(commandResult.getStderr().concat(currentLine));
                 }
             }
         };
