@@ -124,9 +124,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             protected void processLine(String line, int level) {
                 String currentLine = obfuscateConsoleLog(line) + "\n";
 
-                commandResult.setStdout(currentLine);
-
                 if (trackable) {
+                    commandResult.setStdout(currentLine);
+
                     // if includes percent progress, update that as well
                     Matcher matcher = pattern.matcher(currentLine);
                     if (matcher.find()) {
@@ -136,6 +136,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     // update command status table stdout
                     DbUtils.upsertCommandStatus(commandResult);
                     logger.info("Command stdout: {}", currentLine);
+                } else {
+                    commandResult.setStdout(commandResult.getStdout().concat(currentLine));
                 }
             }
         };
@@ -146,11 +148,13 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 String currentLine = obfuscateConsoleLog(line) + "\n";
                 logger.error(line);
 
-                commandResult.setStderr(currentLine);
-
                 if (trackable) {
+                    commandResult.setStderr(currentLine);
+
                     // update command status table stderr
                     DbUtils.upsertCommandStatus(commandResult);
+                } else {
+                    commandResult.setStderr(commandResult.getStderr().concat(currentLine));
                 }
             }
         };
