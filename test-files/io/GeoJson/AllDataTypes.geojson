@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-104.92, 38.847, -104.71, 39.594],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-104.92, 38.847, -104.71, 39.594],"features": [
 {"type":"Feature","properties":{"amenity":"cafe","name":"Starbucks","note":"1-a","poi":"yes"},"geometry": {"type":"Point","coordinates": [-104.7145693652068, 38.91096927679354]}},
 {"type":"Feature","properties":{"leisure":"park","name":"Red Rock Canyon","poi":"yes"},"geometry": {"type":"Point","coordinates": [-104.8852148410949, 38.84672181207975]}},
 {"type":"Feature","properties":{"amenity":"cafe","name":"Starbucks","poi":"yes"},"geometry": {"type":"Point","coordinates": [-104.8439481192894, 38.92397740402272]}},

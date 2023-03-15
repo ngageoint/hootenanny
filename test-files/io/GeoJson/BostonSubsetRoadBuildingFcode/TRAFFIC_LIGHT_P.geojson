@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"100194","F_CODE":"AQ160","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4747, 42.476152]}},
 {"type":"Feature","properties":{"FCSUBTYPE":"100194","F_CODE":"AQ160","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.45376400000001, 42.474867]}}]
 }
