@@ -276,7 +276,7 @@ public class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", url);
         substitutionMap.put("OUTPUT_PATH", params.getOutput());
 
-        String command = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
+        String command = "hoot.bin convert --${DEBUG_LEVEL} -C ImportOverpass.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
         super.configureCommand(command, substitutionMap, caller);
     }
 
