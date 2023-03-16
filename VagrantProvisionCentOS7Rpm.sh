@@ -75,12 +75,12 @@ hoot version
 echo "### Enable SSL for Tomcat ###" | tee -a CentOS_install.txt
 sudo $HOOT_HOME/scripts/tomcat/configure_tomcat_ssl.sh
 
-echo "### Configure OAuth redirect url for port 8888 ###" | tee -a CentOS_install.txt
-sudo $HOOT_HOME/scripts/tomcat/configure_oauth_8888.sh
+echo "### Configure OAuth redirect url for port 8443 ###" | tee -a CentOS_install.txt
+sudo $HOOT_HOME/scripts/tomcat/configure_oauth_8443.sh
 
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
-echo "If the webApp is installed, it is at http://localhost:8888/hootenanny-id"
+echo "If the webApp is installed, it is at http://localhost:8443/hootenanny-id"
 
 ##########################################
