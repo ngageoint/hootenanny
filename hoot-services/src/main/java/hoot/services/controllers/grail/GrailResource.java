@@ -138,12 +138,6 @@ public class GrailResource {
     private SetMapTagsCommandFactory setMapTagsCommandFactory;
 
     @Autowired
-    private PullOverpassCommandFactory overpassCommandFactory;
-
-    @Autowired
-    private PullApiCommandFactory apiCommandFactory;
-
-    @Autowired
     private ImportCommandFactory importCommandFactory;
 
     @Autowired
