@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021, 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2019-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "ParallelBoundedApiReader.h"
@@ -81,7 +81,7 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
   QUrlQuery urlQuery(_sourceUrl);
   if (!urlQuery.hasQueryItem("data") && !_queryFilepath.isEmpty())
   {
-    QString query = FileUtils::readFully(_queryFilepath).replace("\r", "").replace("\n", "");
+    QString query = _readOverpassQueryFile(_queryFilepath);
     //  Should the query be validated here?
     urlQuery.addQueryItem("data", query);
   }

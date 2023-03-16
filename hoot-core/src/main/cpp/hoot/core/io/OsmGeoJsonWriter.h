@@ -28,6 +28,7 @@
 #define OSM_GEOJSON_WRITER_H
 
 // hoot
+#include <hoot/core/io/CachedElementWriterInterface.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/TranslationInterface.h>
 #include <hoot/core/util/Boundable.h>
@@ -41,7 +42,7 @@ namespace hoot
  *
  * https://geojson.org/geojson-spec.html
  */
-class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface, public Boundable
+class OsmGeoJsonWriter : public OsmJsonWriter, public TranslationInterface, public Boundable, public CachedElementWriterInterface
 {
 public:
   static QString className() { return "OsmGeoJsonWriter"; }
@@ -75,6 +76,13 @@ public:
    */
   QString supportedFormats() const override { return ".geojson"; }
 
+  /** See PartialOsmMapWriter */
+  void initializePartial() override;
+  void finalizePartial() override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
+
 protected:
   /**
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
@@ -107,17 +115,17 @@ protected:
    * @param translated_element Element with translated tags to write out
    * @param geometry Element geometry to write out
    */
-  void _writeElement(ConstElementPtr element, ConstElementPtr translated_element, const std::shared_ptr<geos::geom::Geometry>& geometry);
+  void _writeElement(const ElementProviderPtr& provider, ConstElementPtr element, ConstElementPtr translated_element, const std::shared_ptr<geos::geom::Geometry>& geometry);
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation Relation to write out
    */
-  void _writeRelationInfo(ConstRelationPtr relation);
+  void _writeRelationInfo(const ElementProviderPtr& provider, ConstRelationPtr relation);
   /**
    * @brief _writeFeature Calls _writeNode(), _writeWay(), or _writeRelation() based on the type of element e
    * @param element Element to write out
    */
-  void _writeFeature(ConstElementPtr element);
+  void _writeFeature(const ElementProviderPtr& provider, ConstElementPtr element);
   /**
    * @brief _writeGeometry Write out geometry for any element
    * @param element Element to write out
@@ -161,20 +169,21 @@ protected:
    * @param relation
    * @return Semicolon separated list of roles
    */
-  std::string _buildRoles(ConstRelationPtr relation);
+  std::string _buildRoles(const ElementProviderPtr& provider, ConstRelationPtr relation);
   /**
    * @brief _buildRoles Recursive version of _buildRoles, called my previous version
    * @param relation
    * @param first Flag used for semicolon separation
    * @return Semicolon separated list of roles
    */
-  std::string _buildRoles(ConstRelationPtr relation, bool& first);
+  std::string _buildRoles(const ElementProviderPtr& provider, ConstRelationPtr relation, bool& first);
   /**
    * @brief _translateElement Translate the provided element, pushes at least one element onto the _translatedElementQueue map
+   * @param provider Element provider (map or cache)
    * @param e Element to be translated
    * @return Element converted to GEOS geometry
    */
-  std::shared_ptr<geos::geom::Geometry> _translateElement(const ConstElementPtr& e);
+  std::shared_ptr<geos::geom::Geometry> _translateElement(const ElementProviderPtr& provider, const ConstElementPtr& e);
   /**
    * @brief _getLayerName Get the layer name based on the translation or geometry type
    * @param feature Translated feature information (i.e. translated tags and layer name)
@@ -202,7 +211,10 @@ protected:
    * @return whole geometry if inside the bounds (or no crop is desired), cropped geometry if on the border, nullptr if outside of bounds
    */
   std::shared_ptr<geos::geom::Geometry> _cropGeometryToBounds(const std::shared_ptr<geos::geom::Geometry>& geometry) const;
-
+  /** writePartial functions that do the actual writing with the ElementProvider to look up "cached" elements */
+  void _writePartial(ElementProviderPtr& provider, const ConstNodePtr& n);
+  void _writePartial(ElementProviderPtr& provider, const ConstWayPtr& w);
+  void _writePartial(ElementProviderPtr& provider, const ConstRelationPtr& r);
   /** Tasking Manager requires that all bounding geometries are MultiPolygons and not Polygons or Linestrings,
    *  set to true when the GeoJSON output is being used for Tasking Manager bounding polygons.
    */

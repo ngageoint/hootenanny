@@ -1,3 +1,3 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.45, 42.5],"features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox":[-71.485, 42.472, -71.45, 42.5],"features": [
 {"type":"Feature","properties":{"FCSUBTYPE":"100122","F_CODE":"AL241","OSMTAGS":{"ele":"65","gnis:county_id":"017","gnis:created":"08/01/1994","gnis:feature_id":"618930","gnis:state_id":"25"},"ZI005_FNA":"WHAB-FM (Acton)","ZI026_CTUC":"5"},"geometry": {"type":"Point","coordinates": [-71.4572853, 42.4800929]}}]
 }

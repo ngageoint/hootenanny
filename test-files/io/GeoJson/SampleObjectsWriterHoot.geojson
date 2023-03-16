@@ -1,9 +1,7 @@
 {
 "generator":"Hootenanny",
 "type":"FeatureCollection",
-"bbox": 
-[-104.81, 39.591, -104.81, 39.593]
-,
+"bbox":[-104.81, 39.591, -104.81, 39.593],
 "features": [
 {
 "type":"Feature",

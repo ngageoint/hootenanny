@@ -105,6 +105,7 @@ def createUiJSON(groups, options):
                                                     categoryKey = categoryObj['key']
                                                     objKeys.append('key')
                                                     memberObject['key'] = categoryKey
+                                                    memberObject['id'] = memberObject['id'] + '_' + categoryKey
                                                 else:
                                                     categoryKey = ''
 
@@ -112,8 +113,10 @@ def createUiJSON(groups, options):
                                                     categoryVal = categoryObj['value']
                                                     objKeys.append('value')
                                                     memberObject['value'] = categoryVal
+                                                    memberObject['id'] = memberObject['id'] + '_' + categoryVal
                                                 else:
                                                     categoryVal = '*'
+                                                    memberObject['id'] = memberObject['id'] + '_' + 'all'
 
                                                 if 'distance' in categoryObj:
                                                     categoryDefault = categoryObj['distance']

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022, 2023 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmXmlDiskCache.h"
@@ -66,6 +66,7 @@ OsmXmlDiskCache::OsmXmlDiskCache()
   _reader.setUseFileStatus(true);
   _reader.setPreserveAllTags(true);
   _reader.setCropOnReadIfBounded(false);
+  _reader.setAddChildRefsWhenMissing(true);
   _reader.open(_tempFileName);
 
   // Initialize the cache
