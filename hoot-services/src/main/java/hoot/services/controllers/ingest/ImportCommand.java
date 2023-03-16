@@ -72,6 +72,9 @@ public class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
+    /*
+     * This is the import command to load data from a local file that has been uploaded
+     */
     ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
@@ -140,6 +143,9 @@ public class ImportCommand extends ExternalCommand {
         return hootOptions;
     }
 
+    /*
+     * This is the import command for pulling remote data from a url
+     */
     ImportCommand(String jobId, String url, String username, String password, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
@@ -187,6 +193,9 @@ public class ImportCommand extends ExternalCommand {
         super.configureCommand(command, substitutionMap, caller);
     }
 
+    /*
+     * This is the import command to pull data from Overpass API
+     */
     ImportCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId);
 
