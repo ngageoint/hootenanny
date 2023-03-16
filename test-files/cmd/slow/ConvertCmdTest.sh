@@ -164,3 +164,9 @@ hoot convert $LOG_LEVEL $CONFIG -D ogr.add.uuid=false -D reader.add.source.datet
 # NOTE: The OGDI driver doesn't produce output in the exact same way every time so don't compare
 # the outputs just ensure that no errors show up in the command output
 #hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/dnc_test.osm $OUTPUT_DIR/dnc_test.osm
+
+echo ""
+echo "Streaming XML read and GeoJSON write..."
+echo ""
+hoot convert $CONFIG test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.geojson
+hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/ToyTestA.geojson $OUTPUT_DIR/ToyTestA.geojson

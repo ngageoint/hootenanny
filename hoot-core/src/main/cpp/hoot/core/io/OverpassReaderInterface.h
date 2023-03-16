@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2022-2023 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OVERPASS_READER_INTERFACE_H
@@ -69,7 +69,7 @@ protected:
   /** Overpass */
   QString _queryFilepath;
 
-  QString _readOverpassQueryFile(const QString& path) const;
+  QString _readOverpassQueryFile(const QString& path, bool stripNewLines = true) const;
 
   /**  Allow test class to access protected members for white box testing */
   friend class OverpassReaderInterfaceTest;
