@@ -54,7 +54,6 @@ Please note, cloning using SSH is supported only with an authenticated GitHub ac
 
     git clone https://github.com/ngageoint/hootenanny.git hoot --config core.autocrlf=input
     
-
 Log into the Hootenanny virtual machine:
 
     vagrant ssh
@@ -106,7 +105,7 @@ Make sure you are using PowerShell and not PSCore to run Vagrant, otherwise it w
    
 ==== Using Hootenanny
 
-To access the Hoot2x iD Editor web user interface: http://localhost:8888/hootenanny-id/[local Chrome browser].
+To access the Hoot2x iD Editor web user interface: https://localhost:8443/hootenanny-id/[local Chrome browser].
 
 To run Hootenanny from the command line:
 
