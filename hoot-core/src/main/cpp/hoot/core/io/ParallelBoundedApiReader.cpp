@@ -51,16 +51,16 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
   : _dataType(DataType::PlainText),
     _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
-    _isPolygon(false),
     _totalResults(0),
-    _totalEnvelopes(0),
+    _totalWork(0),
     _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
     _fatalError(false),
     _useOsmApiBboxFormat(useOsmApiBboxFormat),
     _addProjection(addProjection),
     _continueRunning(true),
     _filenumber(0),
-    _timeout(ConfigOptions().getApiTimeout())
+    _timeout(ConfigOptions().getApiTimeout()),
+    _isPolygon(false)
 {
 }
 
@@ -86,29 +86,12 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
     urlQuery.addQueryItem("data", query);
   }
   _sourceUrl.setQuery(urlQuery);
-  //  Split the envelope if it is bigger than the prescribed max
-  int lon_div = 1;
-  int lat_div = 1;
-  if (envelope.getWidth() > _coordGridSize)
-    lon_div = (int)std::ceil(envelope.getWidth() / _coordGridSize);
-  if (envelope.getHeight() > _coordGridSize)
-    lat_div = (int)std::ceil(envelope.getHeight() / _coordGridSize);
-  //  Record the number of envelopes to start with
-  _totalEnvelopes = lat_div * lon_div;
-  //  Setup the envelopes to query in a grid
-  for (int i = 0; i < lon_div; ++i)
-  {
-    double lon = envelope.getMinX() + _coordGridSize * i;
-    double lon2 = std::min(lon + _coordGridSize, envelope.getMaxX());
-    for (int j = 0; j < lat_div; ++j)
-    {
-      double lat = envelope.getMinY() + _coordGridSize * j;
-      double lat2 = std::min(lat + _coordGridSize, envelope.getMaxY());
-      //  Start at the upper right corner and create boxes left to right, top to bottom
-      std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-      _bboxes.emplace(lon, lon2, lat, lat2);
-    }
-  }
+
+  std::vector<std::shared_ptr<ParallelApiJob>> splits = std::make_shared<BoundedParallelApiJob>(envelope, _coordGridSize)->CreateInitialJob();
+  //  No need to lock the mutex here because the other threads that access these member variables haven't started up yet
+  _totalWork = static_cast<int>(splits.size());
+  for (const auto& j : splits)
+    _workQueue.emplace(j);
   //  Start up the processing threads
   for (int i = 0; i < _threadCount; ++i)
     _threads.push_back(std::thread(&ParallelBoundedApiReader::_process, this));
@@ -119,8 +102,8 @@ bool ParallelBoundedApiReader::isComplete()
   //  Get the total number of envelopes
   int envelopes = 0;
   {
-    std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-    envelopes = _totalEnvelopes;
+    std::lock_guard<std::mutex> work_lock(_workMutex);
+    envelopes = _totalWork;
   }
   //  Get the total number of results
   int results = 0;
@@ -128,7 +111,7 @@ bool ParallelBoundedApiReader::isComplete()
     std::lock_guard<std::mutex> results_lock(_resultsMutex);
     results = _totalResults;
   }
-  //  Done means there is one result for each envelope
+  //  Done means there is one result for each job
   return envelopes == results && results > 0;
 }
 
@@ -180,6 +163,20 @@ void ParallelBoundedApiReader::_sleep(long milliseconds) const
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
+void ParallelBoundedApiReader::_setBoundingPoly(const std::shared_ptr<geos::geom::Geometry>& poly)
+{
+  _boundingPoly = poly;
+  //  Let all parallel bounded jobs know of the bounding poly
+  BoundedParallelApiJob::setBoundingPolygon(poly);
+}
+
+void ParallelBoundedApiReader::_setIsBoundsPoly(bool isPoly)
+{
+  _isPolygon = isPoly;
+  //  Let all parallel bounded jobs know if the bounds is a polygon
+  BoundedParallelApiJob::setBoundsIsPolygon(isPoly);
+}
+
 void ParallelBoundedApiReader::_process()
 {
   int timeout = 0;
@@ -199,19 +196,18 @@ void ParallelBoundedApiReader::_process()
       _sleep();
       continue;
     }
-    //  Try to grab the next envelope on the queue
-    geos::geom::Envelope envelope;
-    envelope.setToNull();
+    //  Try to grab the next job on the queue
+    ParallelApiJobPtr job;
     {
-      std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-      if (!_bboxes.empty())
+      std::lock_guard<std::mutex> work_lock(_workMutex);
+      if (!_workQueue.empty())
       {
-        envelope = _bboxes.front();
-        _bboxes.pop();
+        job = _workQueue.front();
+        _workQueue.pop();
       }
     }
     //  Make sure that we got a valid envelope
-    if (!envelope.isNull())
+    if (job)
     {
       //  Add the bbox to the query string
       bool add_bbox = true;
@@ -223,9 +219,9 @@ void ParallelBoundedApiReader::_process()
       //  Use the correct type of bbox for this query
       QString bboxQuery;
       if (_useOsmApiBboxFormat)
-        bboxQuery = GeometryUtils::toLonLatString(envelope);
+        bboxQuery = GeometryUtils::toLonLatString(job->getBounds());
       else
-        bboxQuery = GeometryUtils::toMinMaxString(envelope);
+        bboxQuery = GeometryUtils::toMinMaxString(job->getBounds());
       //  Overpass queries operate a little differently with the bbox
       if (_isOverpass)
       {
@@ -235,7 +231,7 @@ void ParallelBoundedApiReader::_process()
         if (data.contains("{{bbox}}"))
         {
           //  Embedded {{bbox}} data requires a Lat/Lon string
-          bboxQuery = GeometryUtils::toLatLonString(envelope);
+          bboxQuery = GeometryUtils::toLatLonString(job->getBounds());
           //  Remove the old 'data' query
           query.removeQueryItem("data");
           //  Replace the bbox place holder
@@ -271,8 +267,8 @@ void ParallelBoundedApiReader::_process()
           {
             //  Log the error
             LOG_DEBUG(error);
-            //  Split the envelope into quads and retry
-            _splitEnvelope(envelope);
+            //  Split the job and retry
+            _splitJob(job);
           }
           else
           {
@@ -284,14 +280,14 @@ void ParallelBoundedApiReader::_process()
             //  Reset the timeout because this thread has successfully received a response
             timeout = 0;
             //  Update the user status
-            LOG_STATUS("Downloaded area (" << GeometryUtils::toLonLatString(envelope) << ")");
+            LOG_STATUS("Downloaded area (" << GeometryUtils::toLonLatString(job->getBounds()) << ")");
           }
         }
         catch(const std::bad_alloc&)
         {
           //  It is possible that the response is so big that Qt cannot handle it,
-          //  split the envelope and try again
-          _splitEnvelope(envelope);
+          //  split the job and try again
+          _splitJob(job);
         }
         break;
       case HttpResponseCode::HTTP_BAD_REQUEST:
@@ -306,7 +302,7 @@ void ParallelBoundedApiReader::_process()
         else
         {
           //  OSM API 400 Bad Request means the node/way/relation limit has been exceeded
-          _splitEnvelope(envelope);
+          _splitJob(job);
         }
         break;
       case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:        //  Bandwidth for downloads has been exceeded, fail immediately
@@ -324,17 +320,17 @@ void ParallelBoundedApiReader::_process()
         {
           //  Sleep before retrying, inside of the mutex so that other threads wait too
           {
-            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+            std::lock_guard<std::mutex> work_lock(_workMutex);
             _sleep();
           }
-          //  Retry, splitting the bbox for overpass timeouts
+          //  Retry, splitting the job for overpass timeouts
           if (_isOverpass)
-            _splitEnvelope(envelope);
+            _splitJob(job);
           else
           {
-            //  The gateway timed out, retry the bbox
-            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-            _bboxes.push(envelope);
+            //  The gateway timed out, retry the job
+            std::lock_guard<std::mutex> job_lock(_workMutex);
+            _workQueue.push(job);
           }
           LOG_WARN("Gateway error (" << status << ") while communicating with API, retrying.");
         }
@@ -354,9 +350,9 @@ void ParallelBoundedApiReader::_process()
           if (seconds <= 120)
           {
             LOG_WARN("Server responded: Too many requests.  Trying again in " << retry << " seconds.");
-            std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
+            std::lock_guard<std::mutex> work_lock(_workMutex);
             _sleep(seconds * 1000);
-            _bboxes.push(envelope);
+            _workQueue.push(job);
           }
           else
           {
@@ -442,56 +438,16 @@ bool ParallelBoundedApiReader::_isQueryError(const QString& result, QString& err
   return false;
 }
 
-void ParallelBoundedApiReader::_splitEnvelope(const geos::geom::Envelope &envelope)
+void ParallelBoundedApiReader::_splitJob(const ParallelApiJobPtr& job)
 {
-  //  Split the envelope in quarters and push them all back on the queue
-  double lon1 = envelope.getMinX();
-  double lon2 = envelope.getMinX() + envelope.getWidth() / 2.0f;
-  double lon3 = envelope.getMaxX();
-
-  double lat1 = envelope.getMinY();
-  double lat2 = envelope.getMinY() + envelope.getHeight() / 2.0f;
-  double lat3 = envelope.getMaxY();
-  //  Create the four envelopes
-  std::vector<geos::geom::Envelope> envelopes(
-    {
-      geos::geom::Envelope(lon1, lon2, lat1, lat2),
-      geos::geom::Envelope(lon2, lon3, lat1, lat2),
-      geos::geom::Envelope(lon1, lon2, lat2, lat3),
-      geos::geom::Envelope(lon2, lon3, lat2, lat3)
-    });
-  //  Lock down the _bbox queue
-  std::lock_guard<std::mutex> bbox_lock(_bboxMutex);
-  if (_isPolygon)
-  {
-    //  Split the envelope and remove any sub-envelopes that don't intersect the original polygon
-    int envelope_count = 0;
-    const geos::geom::GeometryFactory* factory = geos::geom::GeometryFactory::getDefaultInstance();
-    //  Convert all of the envelopes
-    for (const auto& e : envelopes)
-    {
-      //  Convert the envelope to a geometry
-      std::unique_ptr<geos::geom::Geometry> g = factory->toGeometry(&e);
-      //  Don't push envelopes that don't intersect the original geometry
-      if (g->intersects(_boundingPoly.get()))
-      {
-        _bboxes.emplace(e);
-        envelope_count++;
-      }
-    }
-    //  Update the number of envelopes after the split
-    if (envelope_count > 1)
-      _totalEnvelopes += (envelope_count - 1);
-  }
-  else
-  {
-    //  Split the boxes into quads and push them all onto the queue
-    for (const auto& e : envelopes)
-      _bboxes.emplace(e);
-    //  Increment by three because 1 turned into 4, i.e. 3 more were added
-    _totalEnvelopes += 3;
-  }
+  //  Split the job
+  std::vector<ParallelApiJobPtr> splits = job->SplitJob();
+  //  Lock down the _workQueue
+  std::lock_guard<std::mutex> bbox_lock(_workMutex);
+  //  Add the work to the queue and update the total work
+  for (const auto& split : splits)
+    _workQueue.push(split);
+  _totalWork += static_cast<int>(splits.size() - 1);
 }
-
 
 }

@@ -317,16 +317,17 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
 void OsmJsonReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
 {
   //  Check if the bounds are rectangular
-  _isPolygon = bounds ? !bounds->isRectangle() : false;
-  _boundingPoly = bounds;
+  _setIsBoundsPoly(bounds ? !bounds->isRectangle() : false);
+  _setBoundingPoly(bounds);
   Boundable::setBounds(bounds);
 }
 
 void OsmJsonReader::setBounds(const geos::geom::Envelope& bounds)
 {
+  std::shared_ptr<geos::geom::Geometry> geometry(std::shared_ptr<geos::geom::Geometry>(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release()));
   //  An envelope isn't a poly bounds
-  _isPolygon = false;
-  _boundingPoly.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release());
+  _setIsBoundsPoly(false);
+  _setBoundingPoly(geometry);
   Boundable::setBounds(bounds);
 }
 
