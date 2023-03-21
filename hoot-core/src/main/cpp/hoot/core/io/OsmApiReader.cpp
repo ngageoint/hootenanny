@@ -160,7 +160,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
 
   //  Filter the map based on the polygon
-  if (_isPolygon)
+  if (_getIsBoundsPoly())
   {
     size_t element_count = _map->getElementCount();
     //  Remove any elements that don't meet the criterion
@@ -185,20 +185,21 @@ void OsmApiReader::close()
 void OsmApiReader::setBounds(std::shared_ptr<geos::geom::Geometry> bounds)
 {
   //  Check if the bounds are rectangular
-  _isPolygon = bounds ? !bounds->isRectangle() : false;
-  _boundingPoly = bounds;
+  _setIsBoundsPoly(bounds ? !bounds->isRectangle() : false);
+  _setBoundingPoly(bounds);
   _polyCriterion = std::make_shared<InBoundsCriterion>(false);
-  _polyCriterion->setBounds(_boundingPoly);
+  _polyCriterion->setBounds(bounds);
   Boundable::setBounds(bounds);
 }
 
 void OsmApiReader::setBounds(const geos::geom::Envelope& bounds)
 {
+  std::shared_ptr<geos::geom::Geometry> geometry(std::shared_ptr<geos::geom::Geometry>(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release()));
   //  An envelope isn't a poly bounds
-  _isPolygon = false;
-  _boundingPoly.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds).release());
+  _setIsBoundsPoly(false);
+  _setBoundingPoly(geometry);
   _polyCriterion = std::make_shared<InBoundsCriterion>(false);
-  _polyCriterion->setBounds(_boundingPoly);
+  _polyCriterion->setBounds(geometry);
   Boundable::setBounds(bounds);
 }
 
@@ -326,7 +327,7 @@ bool OsmApiReader::_canUseElement(const ElementPtr& element) const
     return false;
   else if (_elementSet.find(element->getElementId()) != _elementSet.end())
     return false;
-  else if (_isPolygon && element->getElementType() != ElementType::Node && !_polyCriterion->isSatisfied(element))
+  else if (_getIsBoundsPoly() && element->getElementType() != ElementType::Node && !_polyCriterion->isSatisfied(element))
     return false;
   else
     return true;
