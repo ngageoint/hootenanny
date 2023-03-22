@@ -197,7 +197,9 @@ function translateToOgr(tags, elementType, geometryType)
 
   if (tags['hoot:id'] && !(tags.osm_id))
   {
-    tags.osm_id = tags['hoot:id'];
+    // The format of the hoot:id tag was changed. We now need to strip out the text and just keep the number
+    // E.g. Way(-12345)
+    tags.osm_id = tags['hoot:id'].split('(')[1].split(')')[0];
     delete tags['hoot:id'];
   }
 
