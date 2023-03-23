@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015-2023 Maxar (http://www.maxar.com/)
  */
 
 // Boost
@@ -106,7 +106,7 @@ public:
     if (!args.empty())
       throw HootException(QString("%1 takes no parameters.").arg(getName()));
 
-    cout << Version::getFullVersion() << " Built By: " << Version::getBuiltBy() << endl;
+    cout << Version::getFullVersion() << " " << Version::getDate()  << " built by " << Version::getBuiltBy() << endl;
     LOG_DEBUG("GEOS Version:\t" << geosversion());
     LOG_DEBUG("GDAL Version:\t" << GDALVersionInfo("RELEASE_NAME"));
     LOG_DEBUG("GLPK Version:\t" << glp_version());
