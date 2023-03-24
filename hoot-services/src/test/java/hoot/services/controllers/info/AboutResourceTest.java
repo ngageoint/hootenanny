@@ -132,20 +132,20 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
         privateMethod.setAccessible(true);
 
         String returnValue = (String) privateMethod.invoke(aboutResource,
-                "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", false);
-        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
+                "Hootenanny 0.2.23_1036_ga13f8a9_dirty built by vagrant", false);
+        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty built by vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
                 "This is just a line" + System.lineSeparator() +
-                        "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", true);
-        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
+                        "Hootenanny 0.2.23_1036_ga13f8a9_dirty built by vagrant", true);
+        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty built by vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
                 "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
                         + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)" + System.lineSeparator() +
-                        "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant",
+                        "Hootenanny 0.2.23_1036_ga13f8a9_dirty built by vagrant",
                 true);
-        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
+        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty built by vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
                 "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
