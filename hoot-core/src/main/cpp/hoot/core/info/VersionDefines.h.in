@@ -32,6 +32,9 @@
 #ifndef HOOT_FULL_VERSION
 # define HOOT_FULL_VERSION "Hootenanny @HOOT_VERSION@"
 #endif
+#ifndef HOOT_DATE
+# define HOOT_DATE "@HOOT_DATE@"
+#endif
 #ifndef HOOT_BUILT_BY
 # define HOOT_BUILT_BY "@HOOT_BUILT_BY@"
 #endif

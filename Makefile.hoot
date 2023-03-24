@@ -399,9 +399,7 @@ else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 
-FORCE: vagrant
-
-HOOT_VERSION_FILE: FORCE
+HOOT_VERSION_FILE:
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
 -include HOOT_VERSION_FILE
 
@@ -540,7 +538,3 @@ eclipse:
 ifeq ($(BUILD_SERVICES),services)
 	scripts/maven/mvn-build $(MVN_QUIET) eclipse
 endif
-
-vagrant:
-	# Check the Vagrant.marker file data to see if provisioning needs to run
-	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo; echo; echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision' or"; echo "run 'touch Vagrant.marker' and re-run 'make' to continue."; echo; echo; false; fi fi
