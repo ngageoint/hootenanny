@@ -399,7 +399,7 @@ else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 
-HOOT_VERSION_FILE: FORCE
+HOOT_VERSION_FILE:
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
 -include HOOT_VERSION_FILE
 
